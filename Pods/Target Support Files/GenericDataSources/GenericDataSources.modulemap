@@ -1,0 +1,6 @@
+framework module GenericDataSources {
+  umbrella header "GenericDataSources-umbrella.h"
+
+  export *
+  module * { export * }
+}

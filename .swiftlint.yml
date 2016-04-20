@@ -1,0 +1,16 @@
+included:
+  - Quran
+
+
+type_name:
+  max_length: 60
+  
+variable_name:
+  min_length: 1
+  max_length: 60
+  
+file_length: 600
+
+line_length: 150 # Needs to configure it correctly!
+
+type_body_length: 300 

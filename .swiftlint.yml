@@ -1,6 +1,11 @@
 included:
   - Quran
 
+disabled_rules:
+  - cyclomatic_complexity
+
+opt_in_rules:
+  - force_unwrapping
 
 type_name:
   max_length: 60
@@ -14,3 +19,7 @@ file_length: 600
 line_length: 150 # Needs to configure it correctly!
 
 type_body_length: 300 
+
+function_parameter_count: 10
+
+function_body_length: 80

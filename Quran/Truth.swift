@@ -12,12 +12,14 @@ typealias Rect = CGRect
 typealias Size = CGSize
 
 struct Truth {
+
     static var Host: NSURL = {
         guard let url = NSURL(string: "http://android.quran.com/") else {
             fatalError("Invalid Host URL")
         }
         return url
     }()
+    static var AudioDatabaseURL: NSURL = Host.URLByAppendingPathComponent("data/databases/audio/")
 
     static let QuranPagesRange: Range<Int> = 1..<604
     static var QuranSurasRange: Range<Int> = 1..<114

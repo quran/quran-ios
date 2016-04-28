@@ -16,5 +16,4 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
 }

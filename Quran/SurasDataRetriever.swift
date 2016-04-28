@@ -8,6 +8,8 @@
 
 import Foundation
 
-protocol SurasDataRetriever {
-    func retrieveSuras(onCompletion onCompletion: [(Juz, [Sura])] -> Void)
+struct SurasDataRetriever: DataRetriever {
+    func retrieve(onCompletion onCompletion: [(Juz, [Sura])] -> Void) {
+        unimplemented()
+    }
 }

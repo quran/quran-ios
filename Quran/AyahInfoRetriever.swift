@@ -10,5 +10,5 @@ import Foundation
 
 // Implementation should use reasonable caching and preloading next pages
 protocol AyahInfoRetriever {
-    func retrieveAyahs(page: Int, onCompletion: Result<[AyahNumber: [AyahInfo]], PersistenceError> -> Void)
+    func retrieveAyahsAtPage(page: Int, onCompletion: Result<[AyahNumber: [AyahInfo]], PersistenceError> -> Void)
 }

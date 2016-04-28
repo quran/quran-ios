@@ -8,6 +8,8 @@
 
 import Foundation
 
-protocol QuartersDataRetriever {
-    func retrieveSuras(onCompletion onCompletion: [(Juz, [Quarter])] -> Void)
+struct QuartersDataRetriever: DataRetriever {
+    func retrieve(onCompletion onCompletion: [(Juz, [Quarter])] -> Void) {
+        unimplemented()
+    }
 }

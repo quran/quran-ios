@@ -10,5 +10,4 @@ import Foundation
 
 enum PersistenceError: ErrorType {
     case Unknown
-    case Test
 }

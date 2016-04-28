@@ -8,7 +8,15 @@
 
 import Foundation
 
-struct Juz {
+struct Juz: Hashable {
     let order: Int
     let startPageNumber: Int
+
+    var hashValue: Int {
+        return order.hashValue
+    }
+}
+
+func == (lhs: Juz, rhs: Juz) -> Bool {
+    return lhs.order == rhs.order
 }

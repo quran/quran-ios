@@ -21,9 +21,9 @@ struct Truth {
     }()
     static var AudioDatabaseURL: NSURL = Host.URLByAppendingPathComponent("data/databases/audio/")
 
-    static let QuranPagesRange: Range<Int> = 1..<604
-    static let QuranSurasRange: Range<Int> = 1..<114
-    static let QuranJuzsRange: Range<Int>  = 1..<30
+    static let QuranPagesRange: Range<Int> = 1...PageSuraStart.count
+    static let QuranSurasRange: Range<Int> = 1...SuraPageStart.count
+    static let QuranJuzsRange: Range<Int>  = 1...JuzPageStart.count
 
 
     static let SuraPageStart: [Int] = [

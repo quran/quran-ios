@@ -68,6 +68,7 @@
 		54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */; };
 		54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */; };
 		54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */; };
+		54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +138,7 @@
 		54B266C31CD2B6D100D3AEF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266C61CD2B76B00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266C71CD2B76C00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranUtilities.swift; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -337,6 +339,7 @@
 		54B2661A1CC6D73B00D3AEF8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */,
 				54B266531CCA87FC00D3AEF8 /* Result.swift */,
 				54B2667F1CCAAE4900D3AEF8 /* Truth.swift */,
 				54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */,
@@ -725,6 +728,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */,
 				54B266BA1CD16DD400D3AEF8 /* AudioRepeat.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,

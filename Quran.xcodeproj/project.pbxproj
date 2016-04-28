@@ -10,7 +10,6 @@
 		0D60CFFB64E35521B54DF6DA /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
-		54B265F31CC57D8F00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B265F11CC57D8F00D3AEF8 /* LaunchScreen.storyboard */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
 		54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */; };
 		54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */; };
@@ -68,6 +67,7 @@
 		54B266BA1CD16DD400D3AEF8 /* AudioRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */; };
 		54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */; };
 		54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */; };
+		54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,7 +76,6 @@
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		54B265F21CC57D8F00D3AEF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		54B265F41CC57D8F00D3AEF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurasNavigationController.swift; sourceTree = "<group>"; };
@@ -135,6 +134,9 @@
 		54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRepeat.swift; sourceTree = "<group>"; };
 		54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranViewController.swift; sourceTree = "<group>"; };
 		54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotImplemented.swift; sourceTree = "<group>"; };
+		54B266C31CD2B6D100D3AEF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		54B266C61CD2B76B00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		54B266C71CD2B76C00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,6 +182,7 @@
 		54B265FA1CC57E2000D3AEF8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */,
 				54B2664A1CC95DAC00D3AEF8 /* images */,
 				54B265F41CC57D8F00D3AEF8 /* Info.plist */,
 				54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */,
@@ -438,7 +441,6 @@
 		54B2666D1CCA93C800D3AEF8 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
-				54B265F11CC57D8F00D3AEF8 /* LaunchScreen.storyboard */,
 			);
 			name = Launch;
 			sourceTree = "<group>";
@@ -628,6 +630,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
 			);
 			mainGroup = 54B265DA1CC57D8E00D3AEF8;
 			productRefGroup = 54B265E41CC57D8F00D3AEF8 /* Products */;
@@ -644,8 +647,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54B265F31CC57D8F00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranPageCollectionViewCell.xib in Resources */,
+				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,
@@ -781,20 +784,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		54B265F11CC57D8F00D3AEF8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				54B265F21CC57D8F00D3AEF8 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 		54B266671CCA917700D3AEF8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				54B266661CCA917700D3AEF8 /* Base */,
+				54B266C71CD2B76C00D3AEF8 /* ar */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54B266C31CD2B6D100D3AEF8 /* en */,
+				54B266C61CD2B76B00D3AEF8 /* ar */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -1,0 +1,18 @@
+/* Error description */
+"NetworkError_ConnectionLost" = "NetworkError_ConnectionLost";
+
+/* Error description */
+"NetworkError_IncorrectDataReturned" = "NetworkError_IncorrectDataReturned";
+
+/* Error description */
+"NetworkError_InternationalRoamingOff" = "NetworkError_InternationalRoamingOff";
+
+/* Error description */
+"NetworkError_NotConnectedToInternet" = "NetworkError_NotConnectedToInternet";
+
+/* Error description */
+"NetworkError_NotReachedServer" = "NetworkError_NotReachedServer";
+
+/* Error description */
+"NetworkError_Unknown" = "NetworkError_Unknown";
+

@@ -11,7 +11,6 @@ import Foundation
 
 struct Sura {
     let order: Int
-    let name: String
     let isMAkki: Bool
     let numberOfAyahs: Int
     let startPageNumber: Int

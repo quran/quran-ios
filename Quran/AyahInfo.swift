@@ -10,8 +10,7 @@ import Foundation
 
 struct AyahInfo {
     let pageNumber: Int
-    let sura: Int
-    let ayah: Int
+    let ayah: AyahNumber
     let position: Int
     let bound: Rect
     let maxX: Int

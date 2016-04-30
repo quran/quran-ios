@@ -9,15 +9,12 @@
 import Foundation
 
 struct Quarter {
-    let quarter: Int
+    let order: Int
 
-    let ayah: Int
-    let sura: Int
-    let juz: Int
+    let ayah: AyahNumber
+    let juz: Juz
 
-    let numberOfAyahs: Int
     let startPageNumber: Int
 
-    let suraName: String
     let ayahText: String
 }

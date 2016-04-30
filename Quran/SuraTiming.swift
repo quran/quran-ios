@@ -9,7 +9,6 @@
 import Foundation
 
 struct SuraTiming {
-    let sura: Int
-    let ayah: Int
+    let ayah: AyahNumber
     let timing: Int
 }

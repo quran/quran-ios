@@ -50,6 +50,7 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
             }
 
             self.dataSource.setSections(data) { self.createItemsDataSource() }
+            self.tableView.reloadData()
         }
     }
 

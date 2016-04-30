@@ -27,7 +27,7 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
         let madani = NSLocalizedString("madani", comment: "")
 
         cell.order.text = format(item.order)
-        cell.name.text = item.name
+        cell.name.text = NSLocalizedString("sura_names[\(item.order - 1)]", comment: "")
         cell.descriptionLabel.text = String(format: descriptionFormat, item.isMAkki ? makki : madani, format(item.numberOfAyahs))
         cell.startPage.text = format(item.startPageNumber)
     }

@@ -11,29 +11,32 @@ import Foundation
 struct SurasDataRetriever: DataRetriever {
     func retrieve(onCompletion onCompletion: [(Juz, [Sura])] -> Void) {
 
-        let juzs = Juz.getJuzs()
+        Queue.background.async {
+            let juzs = Juz.getJuzs()
+            let suras = Sura.getSuras()
 
-        let suras = Sura.getSuras()
+            var juzsGroup: [(Juz, [Sura])] = []
 
-        var juzsGroup: [(Juz, [Sura])] = []
+            var suraIndex = 0
+            for juzIndex in 0..<juzs.count {
 
-        var suraIndex = 0
-        for juzIndex in 0..<juzs.count {
+                let juz = juzs[juzIndex]
+                let nextJuzStartPage = juz == juzs.last ? Truth.QuranPagesRange.endIndex + 1 : juzs[juzIndex + 1].startPageNumber
 
-            let juz = juzs[juzIndex]
-            let nextJuzStartPage = juz == juzs.last ? Truth.QuranPagesRange.endIndex + 1 : juzs[juzIndex + 1].startPageNumber
-
-            var currentSuras: [Sura] = []
-            while suraIndex < suras.count {
-                let sura = suras[suraIndex]
-                guard sura.startPageNumber < nextJuzStartPage else {
-                    break
+                var currentSuras: [Sura] = []
+                while suraIndex < suras.count {
+                    let sura = suras[suraIndex]
+                    guard sura.startPageNumber < nextJuzStartPage else {
+                        break
+                    }
+                    currentSuras.append(sura)
+                    suraIndex += 1
                 }
-                currentSuras.append(sura)
-                suraIndex += 1
+                juzsGroup.append((juz, currentSuras))
             }
-            juzsGroup.append((juz, currentSuras))
+            Queue.main.async {
+                onCompletion(juzsGroup)
+            }
         }
-        onCompletion(juzsGroup)
     }
 }

@@ -25,7 +25,6 @@ extension Sura {
         for i in 0..<Truth.SuraPageStart.count {
             suras.append(Sura(
                 order: i + 1,
-                name: NSLocalizedString("sura_names[\(i)]", comment: ""),
                 isMAkki: Truth.SuraIsMakki[i],
                 numberOfAyahs: Truth.SuraNumberOfAyahs[i],
                 startPageNumber: Truth.SuraPageStart[i]))

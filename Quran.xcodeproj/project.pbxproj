@@ -75,6 +75,7 @@
 		54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */; };
 		54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D91CD4F25900D3AEF8 /* Files.swift */; };
 		54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DB1CD4F48900D3AEF8 /* Queue.swift */; };
+		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -151,6 +152,7 @@
 		54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = quarter_prefix_array.plist; sourceTree = "<group>"; };
 		54B266D91CD4F25900D3AEF8 /* Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
 		54B266DB1CD4F48900D3AEF8 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -455,6 +457,7 @@
 		54B2666D1CCA93C800D3AEF8 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
+				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
 			);
 			name = Launch;
 			sourceTree = "<group>";
@@ -685,6 +688,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranPageCollectionViewCell.xib in Resources */,
 				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,

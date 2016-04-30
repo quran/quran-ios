@@ -34,7 +34,7 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
         setUpViews()
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.imageWithRenderingMode(.AlwaysTemplate))
-        
+
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70

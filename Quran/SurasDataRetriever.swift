@@ -32,9 +32,7 @@ struct SurasDataRetriever: DataRetriever {
                 currentSuras.append(sura)
                 suraIndex += 1
             }
-            if !suras.isEmpty {
-                juzsGroup.append((juz, suras))
-            }
+            juzsGroup.append((juz, currentSuras))
         }
         onCompletion(juzsGroup)
     }

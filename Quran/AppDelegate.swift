@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func configureAppAppearance() {
-//        window?.tintColor = UIColor.appIdentity()
-//        UINavigationBar.appearance().tintColor = UIColor.appIdentity()
+        window?.tintColor = UIColor.appIdentity()
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor.appIdentity()
     }
 }

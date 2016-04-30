@@ -41,7 +41,6 @@
 		54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266771CCAAA5200D3AEF8 /* Sura.swift */; };
 		54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266791CCAAB6600D3AEF8 /* Juz.swift */; };
 		54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */; };
-		54B2667E1CCAACED00D3AEF8 /* BaseJuzsHeaderDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2667D1CCAACEC00D3AEF8 /* BaseJuzsHeaderDataSource.swift */; };
 		54B266801CCAAE4900D3AEF8 /* Truth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2667F1CCAAE4900D3AEF8 /* Truth.swift */; };
 		54B266821CCAC82600D3AEF8 /* QuranPagesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */; };
 		54B266851CCAC91000D3AEF8 /* QuranSizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266841CCAC91000D3AEF8 /* QuranSizeService.swift */; };
@@ -69,6 +68,9 @@
 		54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */; };
 		54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */; };
 		54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */; };
+		54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */; };
+		54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266CE1CD31CA600D3AEF8 /* Cast.swift */; };
+		54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,7 +111,6 @@
 		54B266771CCAAA5200D3AEF8 /* Sura.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sura.swift; sourceTree = "<group>"; };
 		54B266791CCAAB6600D3AEF8 /* Juz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Juz.swift; sourceTree = "<group>"; };
 		54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuartersDataSource.swift; sourceTree = "<group>"; };
-		54B2667D1CCAACEC00D3AEF8 /* BaseJuzsHeaderDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseJuzsHeaderDataSource.swift; sourceTree = "<group>"; };
 		54B2667F1CCAAE4900D3AEF8 /* Truth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Truth.swift; sourceTree = "<group>"; };
 		54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataSource.swift; sourceTree = "<group>"; };
 		54B266841CCAC91000D3AEF8 /* QuranSizeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranSizeService.swift; sourceTree = "<group>"; };
@@ -135,10 +136,13 @@
 		54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRepeat.swift; sourceTree = "<group>"; };
 		54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranViewController.swift; sourceTree = "<group>"; };
 		54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotImplemented.swift; sourceTree = "<group>"; };
-		54B266C31CD2B6D100D3AEF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266C61CD2B76B00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266C71CD2B76C00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranUtilities.swift; sourceTree = "<group>"; };
+		54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzsMutlipleSectionDataSource.swift; sourceTree = "<group>"; };
+		54B266CE1CD31CA600D3AEF8 /* Cast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cast.swift; sourceTree = "<group>"; };
+		54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AutoLayout.swift"; sourceTree = "<group>"; };
+		54B266D21CD3F15200D3AEF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -284,7 +288,6 @@
 		54B266041CC6D20300D3AEF8 /* Suras */ = {
 			isa = PBXGroup;
 			children = (
-				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
 				54B266161CC6D5BF00D3AEF8 /* SurasViewController.swift */,
 			);
 			name = Suras;
@@ -293,7 +296,6 @@
 		54B266071CC6D33300D3AEF8 /* Juzs */ = {
 			isa = PBXGroup;
 			children = (
-				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
 				54B266141CC6D5A900D3AEF8 /* JuzsViewController.swift */,
 			);
 			name = Juzs;
@@ -302,7 +304,6 @@
 		54B2660A1CC6D35C00D3AEF8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
 				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
 			);
 			name = Settings;
@@ -311,7 +312,6 @@
 		54B2660B1CC6D37800D3AEF8 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
 				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
 			);
 			name = Search;
@@ -332,6 +332,7 @@
 			children = (
 				54B2661C1CC7F29C00D3AEF8 /* UIColor+Theme.swift */,
 				54B2661E1CC7F2DA00D3AEF8 /* UIColor+Extension.swift */,
+				54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -357,7 +358,7 @@
 		54B266201CC8010A00D3AEF8 /* BaseControllers */ = {
 			isa = PBXGroup;
 			children = (
-				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
+				54B266CA1CD3157400D3AEF8 /* Navigations */,
 			);
 			name = BaseControllers;
 			sourceTree = "<group>";
@@ -397,10 +398,10 @@
 		54B2664D1CCA871E00D3AEF8 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				54B2667D1CCAACEC00D3AEF8 /* BaseJuzsHeaderDataSource.swift */,
 				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
 				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
+				54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -524,6 +525,7 @@
 				54B266AA1CD1642600D3AEF8 /* QariDataRetriever.swift */,
 				54B266A01CCD8D3200D3AEF8 /* SurasDataRetriever.swift */,
 				54B266A51CCD944600D3AEF8 /* QuartersDataRetriever.swift */,
+				54B266CE1CD31CA600D3AEF8 /* Cast.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -568,6 +570,18 @@
 				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
 			);
 			name = Quran;
+			sourceTree = "<group>";
+		};
+		54B266CA1CD3157400D3AEF8 /* Navigations */ = {
+			isa = PBXGroup;
+			children = (
+				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
+				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
+				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
+				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
+				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
+			);
+			name = Navigations;
 			sourceTree = "<group>";
 		};
 		592CC022D16F23D7A76EAC85 /* Pods */ = {
@@ -623,6 +637,7 @@
 				TargetAttributes = {
 					54B265E21CC57D8E00D3AEF8 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = MKP73M5X4A;
 					};
 				};
 			};
@@ -731,6 +746,7 @@
 				54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */,
 				54B266BA1CD16DD400D3AEF8 /* AudioRepeat.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
+				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
@@ -743,6 +759,7 @@
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
+				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
 				54B266581CCA888F00D3AEF8 /* SqliteRow.swift in Sources */,
 				54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */,
@@ -762,7 +779,6 @@
 				54B2660F1CC6D39300D3AEF8 /* SearchNavigationController.swift in Sources */,
 				54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */,
 				54B2665D1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift in Sources */,
-				54B2667E1CCAACED00D3AEF8 /* BaseJuzsHeaderDataSource.swift in Sources */,
 				54B2666B1CCA93C500D3AEF8 /* SuraTableViewCell.swift in Sources */,
 				54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
@@ -772,6 +788,7 @@
 				54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */,
 				54B266971CCACEB400D3AEF8 /* QuranImageService.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
+				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
 				54B266801CCAAE4900D3AEF8 /* Truth.swift in Sources */,
@@ -800,8 +817,8 @@
 		54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				54B266C31CD2B6D100D3AEF8 /* en */,
 				54B266C61CD2B76B00D3AEF8 /* ar */,
+				54B266D21CD3F15200D3AEF8 /* Base */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -899,6 +916,8 @@
 			baseConfigurationReference = 1D928AFCCBFC69297B5F7606 /* Pods-Quran.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -912,6 +931,8 @@
 			baseConfigurationReference = FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

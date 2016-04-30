@@ -10,12 +10,16 @@ import UIKit
 
 class JuzsNavigationController: BaseNavigationController {
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            return UITabBarItem(title: "Juz'", image: nil, selectedImage: nil)
-        }
-        set {
-            super.tabBarItem = newValue
-        }
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_juz2", comment: ""), image: UIImage(named: "pie_chart-25"), selectedImage: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

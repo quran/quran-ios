@@ -13,3 +13,22 @@ protocol DataRetriever {
 
     func retrieve(onCompletion onCompletion: Data -> Void)
 }
+
+struct AnyDataRetriever<Data> {
+
+    let retrieveClosure: (Data -> Void) -> Void
+
+    init<DataRetrieverType: DataRetriever where DataRetrieverType.Data == Data>(dataRetriever: DataRetrieverType) {
+        retrieveClosure = dataRetriever.retrieve
+    }
+
+    func retrieve(onCompletion onCompletion: Data -> Void) {
+        retrieveClosure(onCompletion)
+    }
+}
+
+extension DataRetriever {
+    func erasedType() -> AnyDataRetriever<Data> {
+        return AnyDataRetriever(dataRetriever: self)
+    }
+}

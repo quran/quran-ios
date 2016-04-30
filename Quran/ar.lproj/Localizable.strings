@@ -571,8 +571,8 @@
 "bookmarks_current_page" = "الصفحة الحالية";
 "index_loading" = "جاري التحميل…";
 "canceling" = "جاري إلغاء اﻷمر…";
-"juz2_description" = "الجزء %1$s";
-"page_description" = "صفحة %1$s, جزء %2$s";
+"juz2_description" = "الجزء %1$d";
+"page_description" = "صفحة %1$d, جزء %2$d";
 "highlighting_database" = "جاري تحميل الملفات المطلوبة";
 "timing_database" = "جاري تحميل الملفات المطلوبة";
 "infinity" = "";

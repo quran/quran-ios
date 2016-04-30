@@ -14,17 +14,15 @@ class Container {
     static var defaultContainer: Container = Container()
 
     func createRootViewController() -> UIViewController {
-        let controller = UITabBarController()
+        let controller = MainTabBarController()
         controller.viewControllers = [createSurasController(),
                                       createJuzsController(),
-                                      createSearchController(),
                                       createSettingsController()]
-//        controller.selectedIndex = 0
         return controller
     }
 
     func createSurasController() -> UIViewController {
-        return SurasNavigationController(rootViewController: SurasViewController())
+        return SurasNavigationController(rootViewController: SurasViewController(dataRetriever: createSurasRetriever()))
     }
 
     func createJuzsController() -> UIViewController {
@@ -37,5 +35,9 @@ class Container {
 
     func createSettingsController() -> UIViewController {
         return SettingsNavigationController(rootViewController: SettingsViewController())
+    }
+
+    func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
+        return SurasDataRetriever().erasedType()
     }
 }

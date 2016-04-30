@@ -9,6 +9,10 @@
 import UIKit
 
 class SuraTableViewCell: UITableViewCell {
+    @IBOutlet weak var order: UILabel!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var startPage: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

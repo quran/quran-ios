@@ -10,12 +10,16 @@ import UIKit
 
 class SurasNavigationController: BaseNavigationController {
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            return UITabBarItem(title: "Suras", image: UIImage(named: "first"), selectedImage: nil)
-        }
-        set {
-            super.tabBarItem = newValue
-        }
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_sura", comment: ""), image: UIImage(named: "list"), selectedImage: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

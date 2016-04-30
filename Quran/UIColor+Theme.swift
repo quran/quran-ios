@@ -14,10 +14,10 @@ import UIKit
 extension UIColor {
 
     class func appIdentity() -> UIColor {
-        return UIColor(rgb: 0xb2dfdb)
+        return UIColor(rgb: 0x1B6B71)
     }
 
     class func secondaryColor() -> UIColor {
-        return UIColor(rgb: 0x131313)
+        return UIColor.whiteColor()
     }
 }

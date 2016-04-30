@@ -571,8 +571,8 @@
 "bookmarks_current_page" = "Current Page";
 "index_loading" = "Loading…";
 "canceling" = "Canceling…";
-"juz2_description" = "Juz' %1$s";
-"page_description" = "page %1$s, Juz' %2$s";
+"juz2_description" = "Juz' %1$d";
+"page_description" = "page %1$d, Juz' %2$d";
 "highlighting_database" = "Required Files";
 "timing_database" = "Required Files";
 "infinity" = "∞";
@@ -686,3 +686,5 @@
 
 /*Error description*/
 "NetworkError_Unknown" = "Unknown error occurred. Check internet connection and try again.";
+
+"suraDescriptionMakkiAndVerses" = "%1$@ - %2$@ verses";

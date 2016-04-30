@@ -10,12 +10,16 @@ import UIKit
 
 class SearchNavigationController: BaseNavigationController {
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            return UITabBarItem(title: "Search", image: nil, selectedImage: nil)
-        }
-        set {
-            super.tabBarItem = newValue
-        }
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+        tabBarItem = UITabBarItem(title: "Search", image: nil, selectedImage: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -10,12 +10,16 @@ import UIKit
 
 class SettingsNavigationController: BaseNavigationController {
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            return UITabBarItem(title: "Settings", image: nil, selectedImage: nil)
-        }
-        set {
-            super.tabBarItem = newValue
-        }
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("menu_settings", comment: ""), image: UIImage(named: "settings-25"), selectedImage: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -9,12 +9,10 @@
 import Foundation
 import GenericDataSources
 
-class QuartersDataSource: BaseJuzsHeaderDataSource<Quarter, QuarterTableViewCell> {
+class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
 
-    let dataRetriever: QuartersDataRetriever
-
-    init(reuseIdentifier: String, juz: Juz, dataRetriever: QuartersDataRetriever) {
-        self.dataRetriever = dataRetriever
-        super.init(reuseIdentifier: reuseIdentifier, juz: juz)
+    // this is needed as of swift 2.2 as class don't inherit constructors from generic based.
+    override init(reuseIdentifier: String) {
+        super.init(reuseIdentifier: reuseIdentifier)
     }
 }

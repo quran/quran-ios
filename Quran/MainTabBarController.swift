@@ -12,12 +12,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.barStyle = .Black
-        delegate = self
-    }
-
-    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        print("Should select viewController: \(viewController.title) ?")
-        return true
+        tabBar.barStyle = .Default
     }
 }

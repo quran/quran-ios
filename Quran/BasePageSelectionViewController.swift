@@ -28,6 +28,7 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
     }
 
     let tableView = UITableView()
+    let statusView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +55,18 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
         }
     }
 
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        coordinator.animateAlongsideTransition({ [weak self] (_) in
+            self?.statusView.alpha = size.width > size.height ? 0 : 1
+            }, completion: nil)
+    }
+
     private func setUpViews() {
         view.addAutoLayoutSubview(tableView)
         view.pinParentAllDirections(tableView)
 
-        let statusView = UIView()
+
         statusView.backgroundColor = UIColor.appIdentity()
         view.addAutoLayoutSubview(statusView)
         view.pinParentHorizontal(statusView)

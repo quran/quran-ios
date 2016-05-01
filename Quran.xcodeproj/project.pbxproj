@@ -76,6 +76,8 @@
 		54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D91CD4F25900D3AEF8 /* Files.swift */; };
 		54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DB1CD4F48900D3AEF8 /* Queue.swift */; };
 		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
+		54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DF1CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift */; };
+		54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +155,8 @@
 		54B266D91CD4F25900D3AEF8 /* Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
 		54B266DB1CD4F48900D3AEF8 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		54B266DF1CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSNumberFormatter+Extension.swift"; sourceTree = "<group>"; };
+		54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -343,6 +347,8 @@
 				54B2661C1CC7F29C00D3AEF8 /* UIColor+Theme.swift */,
 				54B2661E1CC7F2DA00D3AEF8 /* UIColor+Extension.swift */,
 				54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */,
+				54B266DF1CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift */,
+				54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -535,9 +541,9 @@
 			isa = PBXGroup;
 			children = (
 				54B266B11CD1687100D3AEF8 /* DataRetriever.swift */,
-				54B266AA1CD1642600D3AEF8 /* QariDataRetriever.swift */,
 				54B266A01CCD8D3200D3AEF8 /* SurasDataRetriever.swift */,
 				54B266A51CCD944600D3AEF8 /* QuartersDataRetriever.swift */,
+				54B266AA1CD1642600D3AEF8 /* QariDataRetriever.swift */,
 				54B266CE1CD31CA600D3AEF8 /* Cast.swift */,
 			);
 			name = Data;
@@ -774,6 +780,7 @@
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
+				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
@@ -789,6 +796,7 @@
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
 				54B266581CCA888F00D3AEF8 /* SqliteRow.swift in Sources */,
+				54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */,
 				54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */,
 				54B266891CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift in Sources */,
 				54B266B51CD16C3000D3AEF8 /* QarisSelectionViewController.swift in Sources */,

@@ -19,7 +19,7 @@ struct AyahNumber: Hashable {
     func getStartPage() -> Int {
 
         // sura start index
-        var index = Truth.SuraPageStart[sura] - 1
+        var index = Truth.SuraPageStart[sura - 1] - 1
         while index < Truth.QuranPagesRange.endIndex {
             // what's the first sura in that page?
             let ss = Truth.PageSuraStart[index]

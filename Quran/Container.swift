@@ -18,6 +18,7 @@ class Container {
         controller.viewControllers = [createSurasController(),
                                       createJuzsController(),
                                       createSettingsController()]
+        controller.selectedIndex = 1
         return controller
     }
 
@@ -26,7 +27,7 @@ class Container {
     }
 
     func createJuzsController() -> UIViewController {
-        return JuzsNavigationController(rootViewController: JuzsViewController())
+        return JuzsNavigationController(rootViewController: JuzsViewController(dataRetriever: createQuartersRetriever()))
     }
 
     func createSearchController() -> UIViewController {
@@ -39,5 +40,9 @@ class Container {
 
     func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
         return SurasDataRetriever().erasedType()
+    }
+
+    func createQuartersRetriever() -> AnyDataRetriever<[(Juz, [Quarter])]> {
+        return QuartersDataRetriever().erasedType()
     }
 }

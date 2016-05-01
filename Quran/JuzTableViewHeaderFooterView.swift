@@ -10,7 +10,8 @@ import UIKit
 
 class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
 
-    let label: UILabel = UILabel()
+    let titleLabel: UILabel = UILabel()
+    let subtitleLabel: UILabel = UILabel()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -24,9 +25,16 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
 
     private func setUp() {
         contentView.backgroundColor = UIColor(rgb: 0xEEEEEE)
-        label.textColor = UIColor(rgb: 0x323232)
-        label.font = UIFont.boldSystemFontOfSize(15)
-        contentView.addAutoLayoutSubview(label)
-        contentView.pinParentAllDirections(label, leadingValue: 20, trailingValue: 20, topValue: 0, bottomValue: 0)
+
+        titleLabel.textColor = UIColor(rgb: 0x323232)
+        titleLabel.font = UIFont.boldSystemFontOfSize(15)
+        contentView.addAutoLayoutSubview(titleLabel)
+        contentView.pinParentAllDirections(titleLabel, leadingValue: 20, trailingValue: 20, topValue: 0, bottomValue: 0)
+
+        subtitleLabel.textColor = UIColor(rgb: 0x4B4B4B)
+        subtitleLabel.font = UIFont.systemFontOfSize(12)
+        subtitleLabel.textAlignment = .Right
+        contentView.addAutoLayoutSubview(subtitleLabel)
+        contentView.pinParentAllDirections(subtitleLabel, leadingValue: 20, trailingValue: 10, topValue: 0, bottomValue: 0)
     }
 }

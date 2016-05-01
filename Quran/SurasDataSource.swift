@@ -26,13 +26,9 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
         let makki = NSLocalizedString("makki", comment: "")
         let madani = NSLocalizedString("madani", comment: "")
 
-        cell.order.text = format(item.order)
+        cell.order.text = numberFormatter.format(item.order)
         cell.name.text = NSLocalizedString("sura_names[\(item.order - 1)]", comment: "")
-        cell.descriptionLabel.text = String(format: descriptionFormat, item.isMAkki ? makki : madani, format(item.numberOfAyahs))
-        cell.startPage.text = format(item.startPageNumber)
-    }
-
-    private func format(int: Int) -> String {
-        return numberFormatter.stringFromNumber(int) ?? int.description
+        cell.descriptionLabel.text = String(format: descriptionFormat, item.isMAkki ? makki : madani, numberFormatter.format(item.numberOfAyahs))
+        cell.startPage.text = numberFormatter.format(item.startPageNumber)
     }
 }

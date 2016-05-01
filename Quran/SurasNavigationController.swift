@@ -16,7 +16,7 @@ class SurasNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_sura", comment: ""), image: UIImage(named: "list"), selectedImage: nil)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_sura", comment: ""), image: UIImage(named: "Page_icon-25"), selectedImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

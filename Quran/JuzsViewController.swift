@@ -7,12 +7,20 @@
 //
 
 import UIKit
+import GenericDataSources
 
-class JuzsViewController: UITableViewController {
+class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell> {
+
+    override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>) {
+        super.init(dataRetriever: dataRetriever)
+    }
+
+    override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
+        return QuartersDataSource(reuseIdentifier: "cell")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.secondaryColor()
-        title = navigationController?.tabBarItem.title
+        tableView.registerNib(UINib(nibName: "QuarterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
 }

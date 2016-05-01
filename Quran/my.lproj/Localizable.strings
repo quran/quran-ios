@@ -1,0 +1,220 @@
+/*
+  Localizable.strings
+  Quran
+
+  Created by Mohamed Afifi on 4/22/16.
+  Copyright © 2016 Quran.com. All rights reserved.
+*/
+"qari_minshawi_murattal_gapless" = "Minshawi Murattal (tiada jurang)";
+"qari_husary_gapless" = "Husary (tiada jurang)";
+"qari_sudais_gapless" = "Abdurrahman As-Sudais (tiada jurang)";
+"qari_qatami_gapless" = "Nasser Al Qatami (tiada jurang)";
+"qari_abdulbaset" = "Abd Al-Basit";
+"qari_abdulbaset_mujawwad" = "Abd Al-Basit Mujawwad";
+"qari_basfar" = "Abdullah Basfar";
+"qari_suadis" = "Abdurrahmaan As-Sudais";
+"qari_shatri" = "Abu Bakr Ash-Shatri";
+"qari_afasy" = "Mishary Al-Afasy";
+"qari_saad_al_ghamdi" = "Saad Al-Ghamdi";
+"qari_walk" = "Ibrahim Walk (English Trans.)";
+"qari_hani_rifai" = "Hani Ar-Rifai";
+"qari_husary_mujawwad" = "Husary Mujawwad";
+"qari_hudhayfi" = "Ali Al-Hudhaify";
+"qari_muaiqly" = "Maher Al Muaiqly";
+"qari_minshawi_mujawwad" = "Minshawy Mujawwad";
+"qari_tablawy" = "Mohammad al Tablaway";
+"qari_ayyoub" = "Muhammad Ayyoub";
+"qari_jibreel" = "Muhammad Jibreel";
+"qari_shuraym" = "Saood Ash-Shuraym";
+"qari_dussary" = "Yasser Ad-Dussary";
+
+
+// FIX ME: sura_names are missing
+
+
+"app_name" = "Quran";
+"downloadPrompt_title" = "Muat turun fail yang diperlukan?";
+"downloadPrompt" = "Untuk prestasi yang optimal, beberapa fail perlu dimuat turun. Jika anda memilih untuk tidak melakukannya sekarang, setiap halaman yang dibuka nanti akan mengambil lebih masa. Apakah anda ingin memuat turun fail yang diperlukan sekarang?";
+"downloadTabletPrompt" = "Kami baru saja meningkatkan kualiti halaman untuk tablet. Apakah anda ingin memuat turun sekarang?";
+"downloadImportantPrompt" = "Terdapat kemas kini penting untuk halaman Quran peranti anda. Apakah anda ingin memuat turun sekarang?";
+"downloadPrompt_ok" = "Ya";
+"downloadPrompt_no" = "Tidak";
+"downloading_title" = "Sedang memuat turun…";
+"downloading_message" = "Sila tunggu fail dimuat turun. (Boleh menyambung semula)";
+"extracting_title" = "Sedang Proses…";
+"menu_about" = "Tentang Kami";
+"menu_settings" = "Tetapan";
+"menu_jump_last_page" = "Halaman terakhir";
+"menu_tags" = "Label";
+"menu_bookmarks" = "Penanda";
+"menu_bookmarks_page" = "Penanda Halaman";
+"menu_bookmarks_ayah" = "Penanda Ayat";
+"menu_sort" = "Susunan";
+"menu_sort_date" = "Tarikh Dibuat";
+"menu_sort_location" = "Lokasi dalam Quran";
+"menu_translation" = "Tunjukkan Terjemahan";
+"menu_back_to_page" = "Tunjukkan Mushaf";
+"menu_help" = "Bantuan";
+"menu_search" = "Cari";
+"menu_get_translations" = "Dapatkan Terjemahan";
+"menu_jump" = "Capaian cepat";
+"gotoPage" = "Ke halaman";
+"cancel" = "Batal";
+
+/* help */
+"help_title" = "Soalan yang sering ditanya (FAQ)";
+"help" = "<b>Bagaimana cara memainkan audio tilawah?</b>\n<br/>Buka Quran pada halaman yang anda inginkan. Tekan pada skrin. Di bahagian bawah, anda akan lihat butang play dan beberapa teks dengan nama qari. Klik nama qari untuk mengganti pilihan qari. Klik butang play untuk memuat turun dan/atau memainkan audio dari halaman yang terpapar.\n<br/>\n<br/><b>Bagaimana cara memaparkan terjemahan?</b>\n<br/>Buka Quran pada halaman yang anda inginkan. Tekan pada layar. Di bahagian atas, tekan pada ikon dunia. Atau, jika tiada, anda mungkin melihat ikon dengan tiga titik. Tekan ikon tersebut dan pilih terjemahan).\n<br/>Jika anda tidak memiliki set data terjemahan yang diperlukan, anda akan diminta untuk memuat turun fail terjemahan yang diperlukan. Pilih dan muat turun terjemahan, kemudian kembali ke halaman ulangi proses di atas untuk melihat terjemahan.\n<br/>\n<br/><b>Bagaimana cara menanda halaman?</b>\n<br/>Buka Quran pada halaman yang anda inginkan. Tekan pada layar. Di bahagian kanan atas, anda akan melihat ikon bintang. Tekan ikon bintang untuk menandanya (akan berwarna putih sepenuhnya). Tekan ikon bintang sekali lagi untuk membuang penanda.\n<br/>\n<br/><b>Bagaimana cara membesarkan teks?</b>\n<br/>Pada mod halaman arab (paparan mushaf), pegang peranti anda dalam posisi melintang (landscape). Ini akan membuat teks lebih besar (bergantung pada tetapan). Pada mod terjemahan, masuk ke tetapan dan pilih saiz teks terjemahan.\n<br/>\n<br/><b>Bagaimana cara berkongsi ayat? </b>\n<br/>Pada mod halaman arab, tekan dan tahan pada ayat yang diinginkan, sebuah menu akan terpapar dimana anda boleh memilih untuk menanda, berkongsi, lihat terjemahan atau menyalin ayat.\n<br/>\n<br/><b>Font Malayalam/Tamil/Bangla/Urdu tidak berfungsi! </b>\n<br/>Android sebelum versi 4.0 memang tidak menyokong font tersebut.";
+"search_hint" = "Cari dalam Quran";
+"quranSearchType" = "Ayat Quran";
+
+/* Shown above search results when we receive a search request. */
+"search_results" = "%2$d hasil carian untuk \"%1$s\":";
+
+/* Search messages */
+"found_in_sura" = "Dijumpai dalam Surah";
+"no_results" = "Tidak dijumpai \"%s\"";
+"no_active_translation" = "Anda belum menetapkan terjemahan yang aktif. Ubah sesuai terjemahan pada menu tetapan, kemudian ulangi pencarian.";
+"translation_settings" = "Tetapan Terjemahan";
+"no_arabic_search_available" = "Anda belum memuat turun paket pencarian Arab. Sila muat turun dan ulangi pencarian";
+"get_arabic_search_db" = "Dapatkan Database Pencarian Arab";
+
+/* Quran Preference Activity */
+"prefs_category_navigation" = "Navigasi";
+"prefs_volume_key_navigation_title" = "Navigasi butang volume";
+"prefs_volume_key_navigation_summary" = "Berpindah halaman dengan menggunakan butang volume";
+"prefs_category_reading" = "Keutamaan Bacaan";
+"prefs_category_translation" = "Keutamaan Terjemahan";
+"prefs_category_display_settings" = "Tetapan Paparan";
+"prefs_use_arabic_title" = "Mod Aplikasi Arab";
+"prefs_use_arabic_summary_on" = "Aplikasi keseluruhan akan menggunakan tulisan dan bahasa Arab";
+"prefs_new_background_title" = "Latar beakang baru";
+"prefs_lock_orientation_title" = "Kunci orientasi layar";
+"prefs_lock_orientation_summary_on" = "Halaman Quran akan berada dalam mod orientasi tetap";
+"prefs_lock_orientation_summary_off" = "Penyesuaian orientasi layar secara automatik";
+"prefs_landscape_orientation_title" = "Orientasi Landscape";
+"prefs_landscape_orientation_summary_on" = "Menggunakan orientasi layar landscape (melintang)";
+"prefs_landscape_orientation_summary_off" = "Menggunakan orientasi layar portrait (tegak)";
+"prefs_night_mode_title" = "Mod malam";
+"prefs_night_mode_summary" = "Menggunakan latar belakang gelap dan teks terang";
+"prefs_night_mode_text_brightness_title" = "Kecerahan teks";
+"prefs_night_mode_text_brightness_summary" = "Kecerahan teks ketika mod malam aktif";
+"prefs_overlay_page_info_title" = "Papar maklumat halaman";
+"prefs_overlay_page_info_summary" = "Nombor halaman, nama surah dan nomor juz' akan dipaparkan";
+"prefs_display_marker_title" = "Paparkan popup penanda";
+"prefs_display_marker_summary" = "Paparkan popup ketika mencapai pergantian juz', hizb, dll";
+"prefs_translation_text_title" = "Saiz teks terjemahan";
+"prefs_translations" = "Terjemahan";
+"prefs_translations_summary" = "Muat turun dan penetapan terjemahan";
+"prefs_ayah_before_translation_title" = "Papar ayat sebelum terjemahan";
+"prefs_ayah_before_translation_summary" = "Papar ayat (dalam bahasa Arab) di atas terjemahan";
+"prefs_category_download" = "Pilihan Muat Turun";
+"prefs_streaming_title" = "Streaming";
+"prefs_streaming_summary" = "Stream audio apabila boleh (hanya audio berjurang)";
+"prefs_download_amount_title" = "Paket Muat Turun";
+"prefs_download_amount_summary" = "Paket fail setiap muat turun untuk audio berjurang.";
+"downloaded_translations" = "Telah dimuat turun";
+"available_translations" = "Boleh untuk dimuat turun";
+"remove_button" = "Hapus";
+"dialog_ok" = "OK";
+"prefs_app_location_title" = "Lokasi aplikasi";
+"prefs_app_location_summary" = "Pilih lokasi untuk menyimpan fail";
+"prefs_sdcard_internal" = "Simpanan Dalaman";
+"prefs_sdcard_external" = "SD Card Luar %1$d";
+"prefs_app_size" = "Saiz aplikasi";
+"prefs_calculating_app_size" = "Mengira saiz aplikasi";
+"prefs_copying_app_files" = "Menyalin fail aplikasi";
+"prefs_err_moving_app_files" = "Gagal memindahkan fail aplikasi";
+"prefs_no_enough_space_to_move_files" = "Tidak cukup ruang untuk memindahkan fail aplikasi";
+"prefs_tablet_mode_title" = "Mod Tablet";
+"prefs_tablet_mode_enabled" = "Dalam mod landscape, dua halaman akan muncul bersebelahan.";
+"prefs_tablet_mode_disabled" = "Dalam mod landscape, hanya paparkan satu halaman.";
+
+/* Preferences End
+ translation updates */
+"update_available" = "Kemaskini Ada";
+"translation_updates_available" = "Terdapat kemaskini untuk terjemahan anda. Paparkan terjemahan sekarang?";
+"translation_dialog_yes" = "Ya";
+"translation_dialog_later" = "Nanti";
+
+/* End Number picker Strings */
+"quran_rob3" = "¼";
+"quran_nos" = "½";
+"quran_talt_arb3" = "¾";
+"quran_hizb" = "Hizb";
+"quran_juz2" = "Juz'";
+"quran_page" = "Halaman";
+"quran_sura" = "Surah";
+"quran_ayah" = "Ayat %1$d";
+"quran_sura_title" = "Surah %1$s";
+"sura_ayah_notification_str" = "Surah %1$s, Ayat %2$d";
+"bookmarks_current_page" = "Halaman Ketika Ini";
+"index_loading" = "Memuat…";
+"canceling" = "Membatalkan…";
+"juz2_description" = "Juz' %1$s";
+"page_description" = "Halaman %1$s, Juz' %2$s";
+"highlighting_database" = "Fail yang Diperlukan";
+"timing_database" = "Fail yang Diperlukan";
+
+/* download statuses and errors */
+"download_successful" = "Muat Turun Berjaya";
+"download_processing" = "Proses Muat Turun…";
+"download_error_general" = "Muat turun gagal";
+"download_error_disk" = "Tidak cukup ruangan untuk memuat turun";
+"download_error_network" = "Tidak dapat memuat turun kerana ralat jaringan";
+"download_error_perms" = "Tidak dapat memuat turun kerana ralat keizinan pada peranti";
+"download_error_invalid_download" = "Fail dimuat turun tidak lengkap";
+"download_error_invalid_download_retry" = "Fail dimuat turun tidak lengkap, mencuba untuk muat turun semula";
+"download_error_network_retry" = "Ralat jaringan, mencuba semula…";
+"notification_download_canceled" = "Muat turun dibatalkan";
+"download_non_wifi_prompt" = "Anda tidak berada pada jaringan wifi. Teruskan juga muat turun data?";
+
+/* downloading dialogs */
+"download_progress" = "Muat turun %1$s / %2$s";
+"process_progress" = "Memproses fail %1$d / %2$d";
+"download_retry" = "Cuba semula";
+"download_cancel" = "Batal";
+"download_extra_data" = "Perlu memuat turun beberapa fail kecil untuk menyokong kemampuan berkongsi dan terjemahan. Muat turun sekarang?";
+
+/* translation database stuff */
+"remove_dlg_title" = "Hapus Terjemahan?";
+"remove_dlg_msg" = "Apakah anda yakin ingin menghapuskan %1$s?";
+"error_getting_translation_list" = "Tidak dapat memuat turun daftar terjemahan. Sila cuba lagi nanti.";
+"search_data" = "Cari Data";
+"need_translation" = "Anda belum memuat turun fail terjemahan/tafsir.";
+"get_translations" = "Muat Turun Terjemahan";
+
+/* help */
+"email_us" = "Jika soalan anda tidak terjawab di atas, anda boleh cuba untuk menghantar email kepada quranandroid@gmail.com untuk sokongan. Sila maklum bahawa kami menerima banyak email dan mungkin tidak mampu menjawab kesemuanya.";
+
+/* sura metainfo */
+"makki" = "Makkiyah";
+"madani" = "Madaniyah";
+"verses" = "%s ayat-ayat";
+
+/* long press */
+"bookmark_ayah" = "Penanda ayat ini";
+"tag_ayah" = "Beri label ayat ini";
+"share_ayah" = "Kongsikan pautan (URL) ayat";
+"share_ayah_text" = "Kongsikan teks ayat";
+"translation_ayah" = "Terjemah/tafsir ayat";
+"play_from_here" = "Mainkan tilawah dari sini";
+"via_string" = "via @QuranAndroid";
+"search_key" = "Tekan butang carian untuk mencari ayat";
+"copy_ayah" = "Salin ayat";
+"ayah_copied_popup" = "Ayat telah disalin";
+
+/* bookmarks & tags contextual action bar */
+"delete_bookmark" = "Hapus Penanda";
+"tag_bookmark" = "Beri Label pada Penanda";
+"delete_tag" = "Hapus Label";
+"edit_tag" = "Sunting Label";
+"new_tag" = "Label Baru";
+"not_tagged" = "Penanda tanpa Label";
+
+/* tag dialog */
+"tag_dlg_title" = "Label";
+"tag_name" = "Nama";
+
+/* penanda & tag list */
+"bookmarks_list_empty" = "Tidak ada Penanda";
+"tags_list_empty" = "Tidak ada Label";

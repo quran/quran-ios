@@ -1,0 +1,422 @@
+/*
+  Localizable.strings
+  Quran
+
+  Created by Mohamed Afifi on 4/22/16.
+  Copyright © 2016 Quran.com. All rights reserved.
+*/
+
+"qari_minshawi_murattal_gapless" = "Мұхаммед Сыддық Миншәуи (тұтас)";
+"qari_husary_gapless" = "Махмұд Һәлил Хусари (тұтас)";
+"qari_sudais_gapless" = "Әбдурахман Судаис (тұтас)";
+"qari_qatami_gapless" = "Насыр Қатами (тұтас)";
+"qari_abdulbaset" = "Әбдүлбәсит Әбдусамад";
+"qari_abdulbaset_mujawwad" = "Әбдүлбәсит Әбдусамад (тәжуид)";
+"qari_basfar" = "Абдуллах Басфар";
+"qari_suadis" = "Әбдурахман Судаис";
+"qari_shatri" = "Әбу Бәкр Шатри";
+"qari_afasy" = "Мишәри Әфаси";
+"qari_saad_al_ghamdi" = "Сәид Ғамиди";
+"qari_walk" = "Ибрахим Уолк (ағылшынша)";
+"qari_hani_rifai" = "Һәни Рифаи";
+"qari_husary_mujawwad" = "Махмұд Һәлил Хусари (тәжуид)";
+"qari_hudhayfi" = "Әли Хұзайфи";
+"qari_muaiqly" = "Мәһир Мұғайкли";
+"qari_minshawi_mujawwad" = "Мұхаммед Сыддық Миншәуи (тәжуид)";
+"qari_tablawy" = "Мұхаммед Таблауи";
+"qari_ayyoub" = "Мұхаммед Әйюб";
+"qari_jibreel" = "Мұхаммед Жибрил";
+"qari_shuraym" = "Сауд Шураим";
+"qari_dussary" = "Ясир Дусари";
+"qari_abdulbaset_gapless" = "Әбдүлбәсит Әбдусамад (тұтас)";
+"qari_abdulbaset_mujawwad_gapless" = "Әбдүлбәсит Әбдусамад (тәжуид, тұтас)";
+"qari_aziz_alili_gapless" = "Әзиз Әлили (тұтас)";
+"qari_salah_budair_gapless" = "Салах Бұдаир (тұтас)";
+"qari_shuraym_gapless" = "Сауд Шураим (тұтас)";
+"qari_yasser_dussary_gapless" = "Ясир Дусари (тұтас)";
+"qari_mohammad_altablawi_gapless" = "Мұхаммед Таблауи (тұтас)";
+"qari_sahl_yaseen_gapless" = "Сәһил Йасин (тұтас)";
+"qari_shatri_gapless" = "Әбу Бәкр Шатри (тұтас)";
+"qari_ahmad_nauina_gapless" = "Ахмед Науина (тұтас)";
+"qari_akram_al_alaqmi" = "Әкрам Ғалақми (тұтас)";
+"qari_ali_hajjaj_alsouasi_gapless" = "Әли Хажаж Суайси (тұтас)";
+
+
+
+"sura_names[0]" = "Фатиха";
+"sura_names[1]" = "Бақара";
+"sura_names[2]" = "Әли Имран";
+"sura_names[3]" = "Ниса";
+"sura_names[4]" = "Мәида";
+"sura_names[5]" = "Әнʼам";
+"sura_names[6]" = "Аʼраф";
+"sura_names[7]" = "Әнфал";
+"sura_names[8]" = "Тәубә";
+"sura_names[9]" = "Юнус";
+"sura_names[10]" = "Һуд";
+"sura_names[11]" = "Юсуф";
+"sura_names[12]" = "Раʼд";
+"sura_names[13]" = "Ибрахим";
+"sura_names[14]" = "Хижр";
+"sura_names[15]" = "Нахл";
+"sura_names[16]" = "Исра";
+"sura_names[17]" = "Кәһф";
+"sura_names[18]" = "Мәриәм";
+"sura_names[19]" = "Таһа";
+"sura_names[20]" = "Әнбия";
+"sura_names[21]" = "Хаж";
+"sura_names[22]" = "Муʻминун";
+"sura_names[23]" = "Нур";
+"sura_names[24]" = "Фурқан";
+"sura_names[25]" = "Шуʻара";
+"sura_names[26]" = "Нәмл";
+"sura_names[27]" = "Қасас";
+"sura_names[28]" = "ʻАнкәбут";
+"sura_names[29]" = "Рум";
+"sura_names[30]" = "Луқман";
+"sura_names[31]" = "Сәждә";
+"sura_names[32]" = "Ахзаб";
+"sura_names[33]" = "Сәбәʼ";
+"sura_names[34]" = "Фатыр";
+"sura_names[35]" = "Йасин";
+"sura_names[36]" = "Саффат";
+"sura_names[37]" = "Сад";
+"sura_names[38]" = "Зумәр";
+"sura_names[39]" = "Муʻмин";
+"sura_names[40]" = "Фуссиләт";
+"sura_names[41]" = "Шура";
+"sura_names[42]" = "Зухруф";
+"sura_names[43]" = "Духан";
+"sura_names[44]" = "Жәсия";
+"sura_names[45]" = "Ахқаф";
+"sura_names[46]" = "Мухаммәд";
+"sura_names[47]" = "Фәтих";
+"sura_names[48]" = "Хужурат";
+"sura_names[49]" = "Қаф";
+"sura_names[50]" = "Зарият";
+"sura_names[51]" = "Тур";
+"sura_names[52]" = "Нәжм";
+"sura_names[53]" = "Қамар";
+"sura_names[54]" = "Рахман";
+"sura_names[55]" = "Уақиʼа";
+"sura_names[56]" = "Хадид";
+"sura_names[57]" = "Мужәдәлә";
+"sura_names[58]" = "Хашр";
+"sura_names[59]" = "Мумтәхинә";
+"sura_names[60]" = "Сафф";
+"sura_names[61]" = "Жумʼа";
+"sura_names[62]" = "Мунафиқун";
+"sura_names[63]" = "Тәғабун";
+"sura_names[64]" = "Таләқ";
+"sura_names[65]" = "Тахрим";
+"sura_names[66]" = "Мүлк";
+"sura_names[67]" = "Қалам";
+"sura_names[68]" = "Хаққа";
+"sura_names[69]" = "Мәʼариж";
+"sura_names[70]" = "Нух";
+"sura_names[71]" = "Жин";
+"sura_names[72]" = "Муззәмил";
+"sura_names[73]" = "Муддәссир";
+"sura_names[74]" = "Қиямә";
+"sura_names[75]" = "Инсан";
+"sura_names[76]" = "Мурсәләт";
+"sura_names[77]" = "Нәбәʼ";
+"sura_names[78]" = "Назиʼат";
+"sura_names[79]" = "ʼАбәсә";
+"sura_names[80]" = "Тәкуир";
+"sura_names[81]" = "Инфитар";
+"sura_names[82]" = "Мутаффифин";
+"sura_names[83]" = "Иншиқақ";
+"sura_names[84]" = "Буруж";
+"sura_names[85]" = "Тариқ";
+"sura_names[86]" = "Аʼлә";
+"sura_names[87]" = "Ғашия";
+"sura_names[88]" = "Фәжр";
+"sura_names[89]" = "Бәләд";
+"sura_names[90]" = "Шәмс";
+"sura_names[91]" = "Ләил";
+"sura_names[92]" = "Духа";
+"sura_names[93]" = "Инширах";
+"sura_names[94]" = "Тин";
+"sura_names[95]" = "ʼАләқ";
+"sura_names[96]" = "Қадр";
+"sura_names[97]" = "Бәйинә";
+"sura_names[98]" = "Зилзал";
+"sura_names[99]" = "ʼАдият";
+"sura_names[100]" = "Қариʼа";
+"sura_names[101]" = "Тәкәсур";
+"sura_names[102]" = "ʼАср";
+"sura_names[103]" = "Һумәзә";
+"sura_names[104]" = "Фил";
+"sura_names[105]" = "Қурәиш";
+"sura_names[106]" = "Мәʼун";
+"sura_names[107]" = "Кәусәр";
+"sura_names[108]" = "Кафирун";
+"sura_names[109]" = "Наср";
+"sura_names[110]" = "Тәббәт";
+"sura_names[111]" = "Ихлас";
+"sura_names[112]" = "Фәләқ";
+"sura_names[113]" = "Нас";
+
+"app_name" = "Құран";
+"downloadPrompt_title" = "Керекті файлдар жүктелінсін бе?";
+"downloadPrompt" = "Бағдарламаның дұрыс істеуі үшін тағы басқа файлдар жазу керек.\n        Егер файлдар дәл қазір жазылмаса, Құран беттерінің жүктелуі біраз уақыт алуы мүмкін\n        және Интернет қосылысы қажет болады. Файлдар қазір жазылсын ба?";
+"downloadTabletPrompt" = "Планшеттер үшін суреттер жаңартылды. Жаңа файлдар жүктелінсін бе?";
+"downloadImportantPrompt" = "Құран суреттері үшін кішігірім, бірақ маңызды өзгерістер пайда болды.\n        Жаңа файлдар қазір жүктелінсін бе?";
+"downloadPrompt_ok" = "Иә";
+"downloadPrompt_no" = "Жоқ";
+"downloading_title" = "Жүктеу…";
+"downloading_message" = "Файлдар толық жазылғанша күтіңіз";
+"extracting_title" = "Шығару…";
+"menu_about" = "Бағдарлама туралы";
+"menu_other_apps" = "Басқа бағдарламалар";
+"menu_settings" = "Баптау";
+"menu_jump_last_page" = "Соңғы бет";
+"menu_tags" = "Белгілер";
+"menu_bookmarks" = "Бетбелгілер";
+"menu_bookmarks_page" = "Бет белгілері";
+"menu_bookmarks_ayah" = "Аят белгілері";
+"menu_sort" = "Сұрыптау";
+"menu_sort_date" = "Қосылған күні бойынша";
+"menu_sort_location" = "Құрандағы реті бойынша";
+"menu_sort_group_by_tags" = "Белгілер бойынша топтау";
+"menu_translation" = "Аудармалар";
+"menu_back_to_page" = "Құран";
+"menu_help" = "Көмек";
+"menu_search" = "Іздеу";
+"menu_get_translations" = "Аударма жүктеу";
+"menu_jump" = "Өту";
+"gotoPage" = "Бетке өту";
+"cancel" = "Болдырмау";
+
+/* about */
+"about_description" = "Quran for Android - тегін Құран бағдарламасы.\n        Осы бағдарламаны жасаушыларға дұға жасауды ұмытпаңыз;)";
+"about_data_sources" = "Деректер көзі";
+"about_images" = "Суреттер";
+"about_madani_images" = "Құран суреттері King Fahd Quran Printing Complex шрифттері бойынша жасалынды";
+"about_naskh_images" = "Naskh бағдарламасының суреттері SHL Info Systems рұқсатымен алынды";
+"about_qaloon_images" = "Qaloon бағдарламасының суреттері Nous Memes Editions Et Diffusion (Тунис) рұқсатымен алынды";
+"about_quranicaudio_summary" = "Құранның біріктіріліп (интервалсыз) оқылуы";
+"about_quran_ksu" = "Электронды Мұсхаф жобасы";
+"about_quran_ksu_summary" = "Арабша тәпсір мен аудармалар Сауд королі университетінің Электронды Мұсхаф жобасынан алынды";
+"about_tanzil_summary" = "Бірнеше тілдегі Құран аудармалары";
+"about_noorhidayat_summary" = "Noorehira шрифті және Мүфти Мұхаммед Тақи Усмани аудармасы";
+"about_open_source" = "Ашық кодты жобалар";
+"about_others" = "Басқалар";
+"about_contributors" = "Жасаушылар";
+"about_contributors_summary" = "Quran for Android бағдарламасының дамуына үлес қосқандар";
+
+/* help */
+"help_title" = "Жиі қойылатын сұрақтар (FAQ)";
+"help" = "<b>Аудиоларды қалай тыңдауға болады?</b>\n        <br/>Құран бетін ашып экранды бір рет басыңыз.\n        Экранның төменгі жағынан ойнату батырмасы мен қари есімін көресіз.\n        Есімнің үстіне басып басқа қариды таңдауға болады.\n        Ойнату батырмасын басып ашық тұрған бетті немесе сүрені тыңдауға болады.\n        <br/>\n        <br/><b>Аудармаларды қалай көруге болады?</b>\n        <br/>Құран бетін ашып экранды бір рет басыңыз. \n        Экранның жоғарғы жағынан глобус суретін көресіз. \n        Глобусты басып аудармасын көре аласыз.\n        <br/>\n        Егер бұрын жүктелген аудармалар болмаса, аудармалар жүктеу беті ашылады.\n        Керекті аударманы жүктеп кері қайтыңыз. Қайта глобусты басып аударманы көре аласыз.\n        <br/>\n        <br/><b>Бетке қалай белгі қоюға болады?</b>\n        <br/>Құран бетін ашып экранды бір рет басыңыз. \n        Экранның жоғарғы оң жағынан бетбелгі суретін көресіз. Белгі қою үшін соны басыңыз \n        (бетбелгі ақ түске боялады). Белгіні жою үшін батырманы қайта басыңыз.\n        <br/>\n        <br/><b>Мәтінді қалай үлкейтуге болады?</b>\n        <br/>Арабша мәтінді үлкейту үшін құрылғыны көлденеңінен ұстаңыз (көлденең режимі).\n        Аударма мәтінін үлкейту үшін баптаулардан шрифт өлшемін таңдаңыз.\n        <br/>\n        <br/><b>Қалай аяттарды басқа адамдармен бөлісуге болады?</b>\n        <br/>Құран бетін ашып арабша аяттың үстінен басып тұрыңыз.\n        Ашылған мәзір арқылы аятқа белгі қоюға, бөлісуге, аудармасын көруге,\n        көшіруге және қырағатын тыңдауға болады.\n        <br/>\n        <br/><b>Malayalam/Tamil/Bengali/Urdu шрифттері істемейді!</b>\n        <br/>Өкінішке орай Android 4.0-тен төменгі нұсқалар бұл шрифттерді қолдамайды.";
+"search_hint" = "Іздеу";
+"quranSearchType" = "Сүрелер";
+"files_downloaded" = "1 сүре жазылды";
+"x-s-re-zhazyldy" = "%1$d сүре жазылды";
+
+/* Shown above search results when we receive a search request. */
+"search_results" = "\"%1$s\" бойынша 1 нәтиже:";
+
+/* Shown above search results when we receive a search request. */
+"x-boiynsha-x-n-tizhe-3d3a73e7b92d91c9f810e200e282f848" = "\"%1$s\" бойынша %2$d нәтиже:";
+
+/* m permissions stuff */
+"storage_permission_rationale" = "Құран деректерін сыртқы қоймаға сақтау үшін\n        рұқсат сұралуда. Құран бағдарламасы рұқсат берілмесе де істей береді, бірақ бағдарлама\n        жойылғанда немесе деректер тазартылғанда жүктелген беттер, аудиолар және басқа да мәліметтер\n        бірге жойылып кетеді. Сыртқы қоймаға сақтауға рұқсат бересіз бе?";
+"storage_permission_please_restart" = "Өзгерістер күшіне ену үшін\n        бағдарламаны қайта қосу керек.";
+
+/* Search messages */
+"found_in_sura" = "Сүреде табылды";
+"no_results" = "\"%s\" бойынша нәтиже табылмады";
+"no_active_translation" = "Белсенді аударма таңдалмаған.\n    Алдымен белсенді аударма таңдап, қайта іздеп көріңіз.";
+"translation_settings" = "Аударма баптаулары";
+"no_arabic_search_available" = "Арабша іздеу деректері орнатылмаған.\n        Алдымен оны жүктеңіз. Кейін қайта іздеп көріңіз.";
+"get_arabic_search_db" = "Арабша іздеу деректерін орнату";
+
+/* Quran Preference Activity */
+"prefs_category_navigation" = "Парақтау";
+"prefs_volume_key_navigation_title" = "Дауыс пернелерін пайдалану";
+"prefs_volume_key_navigation_summary" = "Дауыс пернелері арқылы бет аудару";
+"prefs_category_reading" = "Оқу";
+"prefs_category_translation" = "Аударма баптаулары";
+"prefs_category_display_settings" = "Көрініс";
+"prefs_use_arabic_title" = "Арабша режим";
+"prefs_use_arabic_summary_on" = "Бағдарлама араб тілінде істейді";
+"prefs_new_background_title" = "Жаңа фон";
+"prefs_lock_orientation_title" = "Экран бағытын құлыптау";
+"prefs_lock_orientation_summary_on" = "Құран беттері экранның белгіленген бағытында ұсталады";
+"prefs_lock_orientation_summary_off" = "Ағымдық бағытта пайдалану";
+"prefs_landscape_orientation_title" = "Көлденең бағыт";
+"prefs_landscape_orientation_summary_on" = "Көлденең бағытта пайдалану";
+"prefs_landscape_orientation_summary_off" = "Тік бағытта пайдалану";
+"prefs_night_mode_title" = "Түнгі режим";
+"prefs_night_mode_summary" = "Қара фон мен ашық түсті шрифт қолданылады";
+"prefs_night_mode_text_brightness_title" = "Мәтін ашықтығы";
+"prefs_night_mode_text_brightness_summary" = "Түнгі режимдегі мәтін ашықтығы";
+"prefs_overlay_page_info_title" = "Бет деректері";
+"prefs_overlay_page_info_summary" = "Сүре аты, бет және пара ретін көрсету";
+"prefs_display_marker_title" = "Бөлім деректері";
+"prefs_display_marker_summary" = "Пара, хизб және т.б. бөлімдерге жеткенде мәлімет көрсету";
+"prefs_highlight_bookmarks_title" = "Бетбелгі деректері";
+"prefs_highlight_bookmarks_summary" = "Белгіленген аяттарды ажыратып көрсету";
+"prefs_translation_text_title" = "Аударма мәтіні өлшемі";
+"prefs_translations" = "Аудармалар";
+"prefs_translations_summary" = "Аудармалар жүктеу және басқару";
+"prefs_ayah_before_translation_title" = "Алдымен аятты көрсету";
+"prefs_ayah_before_translation_summary" = "Арабша аяттарды аудармалардың үстінен көрсету";
+"prefs_category_download" = "Жүктеу";
+"prefs_streaming_title" = "Ағындық";
+"prefs_streaming_summary" = "Мүмкіндігінше ағындық аудио пайдалану (тек үзіктерге бөлінген аудио)";
+"prefs_download_amount_title" = "Жүктеу мөлшері";
+"prefs_download_amount_summary" = "Үзіктерге бөлінген аудио файлдарын жүктеу мөлшері";
+"prefs_audio_manager" = "Аудио менеджер (эксперименттік)";
+"prefs_audio_manager_summary" = "Құран аудио файлдарын жүктеу және басқару";
+"downloaded_translations" = "Жүктелгендер";
+"available_translations" = "Жүктеуге болатындар";
+"remove_button" = "Жою";
+"dialog_ok" = "OK";
+"prefs_app_location_title" = "Деректер орны";
+"prefs_app_location_summary" = "Құран файлдары сақталған орын";
+"prefs_sdcard_internal" = "Ішкі жады";
+"prefs_sdcard_external" = "Сыртқы жады (SD карта %1$d)";
+"prefs_app_size" = "Файлдар өлшемі:";
+"prefs_calculating_app_size" = "Бағдарлама өлшемі есептелуде…";
+"prefs_copying_app_files" = "Бағдарлама файлдары көшірілуде…";
+"prefs_err_moving_app_files" = "Файлдарды көшіру барсындағы қателік";
+"prefs_no_enough_space_to_move_files" = "Файлдарды көшіруге бос орын жетпейді";
+"prefs_megabytes_int" = "%1$d Mб";
+"prefs_megabytes_str" = "%s Mб";
+"prefs_tablet_mode_title" = "Планшет режимі";
+"prefs_tablet_mode_enabled" = "Көлденең режимде екі бет қатарынан көрсетіледі.";
+"prefs_tablet_mode_disabled" = "Көлденең режимде тек бір бет көрсетіледі.";
+"prefs_category_advanced" = "Қосымша";
+"prefs_export_title" = "Экспорт";
+"prefs_export_summary" = "Бетбелгілерді экспорттау";
+"import_data_permissions_error" = "Рұқсат қателіктеріне байланысты резервтік файлдарды оқу мүмкін емес.";
+"import_data_error" = "Жарамсыз резервтік файл (немесе резервтік файл оқылмайды).";
+"import_data" = "Импорт";
+"import_data_and_override" = "Бұл импорт барлық бетбелгілерді %1$d бетбелгі(лер) және %2$d белгі(лер)ге алмастырады.\n        Импорттау керек пе?";
+"import_successful" = "Деректер импортталды";
+"export_data_error" = "Экспорт қателігі";
+"exported_data" = "Деректер %1$s жеріне экспортталды";
+"warning" = "Назар аударыңыз";
+"kitkat_external_message" = "Бағдарлама сыртқы жадқа (SD карта) көшірілген соң жойылып қайта орнатылса\n        немесе деректер тазаланса барлық Құран суреттері мен аудиолары жойылады және ол деректерді қайта жүктеу керек болады.\n        Сыртқы жадты пайдалануға сенімдімісіз?";
+"please_grant_permissions" = "Өтініш, бағдарлама баптаулары арқылы керекті рұқсаттарды беріңіз";
+
+/* Preferences End
+ translation updates */
+"update_available" = "Жаңа файлдар пайда болды";
+"translation_updates_available" = "Жаңа аудармалар пайда болды. Қазір тексеру керек пе?";
+"translation_dialog_yes" = "Иә";
+"translation_dialog_later" = "Кейін";
+
+/* End Number picker Strings */
+"quran_rob3" = "¼";
+"quran_nos" = "½";
+"quran_talt_arb3" = "¾";
+"quran_hizb" = "Хизб";
+"quran_juz2" = "Пара";
+"quran_page" = "Бет";
+"quran_sura" = "Сүре";
+"quran_ayah" = "%1$d-аят";
+"quran_ayah_details" = "%1$s %2$s-аят, %3$s-пара";
+"quran_sura_title" = "%1$s сүресі";
+"sura_ayah_notification_str" = "%1$s сүресі, %2$d-аят";
+"bookmarks_current_page" = "Ашылған бет";
+"index_loading" = "Жүктеу…";
+"canceling" = "Болдырмау…";
+"juz2_description" = "%1$s-пара";
+"page_description" = "%1$s-бет, %2$s-пара";
+"highlighting_database" = "Керекті файлдар";
+"timing_database" = "Керекті файлдар";
+
+/* download statuses and errors */
+"sdcard_error" = "SD карта табылмады. Картаны салып қайта байқап көріңіз.";
+"download_successful" = "Жүктелді";
+"download_processing" = "Жүктеу…";
+"download_error_general" = "Жүктелмеді";
+"download_error_disk" = "Құрылғыда бос орын жоқ";
+"download_error_network" = "Байланыс қателігі";
+"download_error_perms" = "Рұқсат қателігі";
+"download_error_invalid_download" = "Жүктелген файлдар бүлінген";
+"download_error_invalid_download_retry" = "Файл бүлінген; қайта жүктелуде…";
+"download_error_network_retry" = "Байланыс қателігі; қайта қосылуда…";
+"notification_download_canceled" = "Жүктелу тоқтатылды";
+"download_non_wifi_prompt" = "Wi-Fi қосылмаған. Бәрібір жүктелсін бе?";
+
+/* downloading dialogs */
+"download_progress" = "%1$s/%2$s жүктелді";
+"download_sura_progress" = "%3$d-сүренің %1$s жүктелді (барлығы: %2$s)…";
+"download_sura_ayah_progress" = "%1$d-сүре %2$d-аят жүктелуде…";
+"process_progress" = "%1$d/%2$d жүктелді";
+"download_retry" = "Қайталау";
+"download_cancel" = "Болдырмау";
+"download_extra_data" = "Бөлісу және аудармаларды пайдалану үшін бір-екі файл жүктеу керек. Қазір жүктелсін бе?";
+
+/* translation database stuff */
+"remove_dlg_title" = "Аударма жойылсын ба?";
+"remove_dlg_msg" = "%1$s аудармасын жоюға сенімдімісіз?";
+"error_getting_translation_list" = "Аударма тізімі жүктелмеді. Кейінірек байқап көріңіз.";
+"search_data" = "Деректерді іздеу";
+"need_translation" = "Аударма/тәпсір жүктелмеген.";
+"get_translations" = "Аударма жүктеу";
+
+/* help */
+"email_us" = "Қалаған жауабыңызды алмасаңыз quranandroid@gmail.com поштасына жазыңыз. Бірақ, поштаға\n        көп хаттардың келу себебінен, жауап кешігіп келуі мүмкін. Өтініш, хабарламаны ағылшын тілінде жазыңыз.";
+
+/* sura metainfo */
+"makki" = "Мекке";
+"madani" = "Мәдина";
+"verses" = "1 аят";
+"x-ayat" = "%s аят";
+
+/* ayah action panel */
+"play_from" = "Басы";
+"play_to" = "Соңы";
+"play_restrict_range" = "Тек жоғарыдағы аяттарды тыңдау";
+"play_verses_range" = "Аят топтамасын тыңдау:";
+"play_each_verse" = "Әр бір аятты тыңдау:";
+"play_apply" = "Қолдану";
+"play_apply_and_play" = "Қолдану және тыңдау";
+"previous" = "Алдыңғы";
+"play" = "Тыңдау";
+"pause" = "Кідірту";
+"stop" = "Тоқтату";
+"next" = "Келесі";
+"repeatValues[0]" = "1 рет";
+"repeatValues[1]" = "2 рет";
+"repeatValues[2]" = "3 рет";
+"repeatValues[3]" = "шексіз";
+
+/* long press */
+"bookmark_ayah" = "Аятқа бетбелгі қою";
+"tag_ayah" = "Аятты белгілеу";
+"share_ayah" = "Аятпен бөлісу";
+"share_ayah_text" = "Аят мәтінімен бөлісу";
+"translation_ayah" = "Аят аудармасы/тәпсірі";
+"play_from_here" = "Осы жерден бастап тыңдау";
+"via_string" = "@QuranAndroid арқылы";
+"search_key" = "Сүрені табу үшін іздеу батырмасын басыңыз";
+"copy_ayah" = "Аятты көшіру";
+"ayah_copied_popup" = "Аят көшірілді";
+
+/* bookmarks & tags contextual action bar */
+"delete_bookmark" = "Бетбелгіні жою";
+"tag_bookmark" = "Бетбелгіні белгілеу";
+"delete_tag" = "Белгіні жою";
+"edit_tag" = "Белгіні өзгерту";
+"new_tag" = "Жаңа белгі";
+"not_tagged" = "Белгілеусіз";
+"bookmark_tag_deleted" = "1 элемент өшірілді";
+"x-element-shirildi" = "%d элемент өшірілді";
+
+/* tag dialog */
+"tag_dlg_title" = "Белгі";
+"tag_name" = "Аты";
+
+/* bookmark & tag list */
+"bookmarks_list_empty" = "Бетбелгі жоқ";
+"tags_list_empty" = "Белгі жоқ";
+
+/* audio manager */
+"audio_manager" = "Аудио менеджер";
+"undo" = "@string/cancel";

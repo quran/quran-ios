@@ -41,347 +41,123 @@
 "qari_akram_al_alaqmi" = "Akram Al-Alaqmi (gapless)";
 "qari_ali_hajjaj_alsouasi_gapless" = "Ali Hajjaj Alsouasi (gapless)";
 
-/*en.lproj/Localizable.strings*/
+
 "sura_names[0]" = "Al-Fatihah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[1]" = "Al-Baqarah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[2]" = "Aal-E-Imran";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[3]" = "An-Nisa'";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[4]" = "Al-Ma'idah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[5]" = "Al-An'am";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[6]" = "Al-A'raf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[7]" = "Al-Anfal";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[8]" = "At-Tawbah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[9]" = "Yunus";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[10]" = "Hud";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[11]" = "Yusuf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[12]" = "Ar-Ra'd";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[13]" = "Ibrahim";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[14]" = "Al-Hijr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[15]" = "An-Nahl";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[16]" = "Al-Isra'";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[17]" = "Al-Kahf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[18]" = "Maryam";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[19]" = "Ta-Ha";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[20]" = "Al-Anbiya'";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[21]" = "Al-Hajj";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[22]" = "Al-Mu'minun";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[23]" = "An-Nur";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[24]" = "Al-Furqan";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[25]" = "Ash-Shu'ara";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[26]" = "An-Naml";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[27]" = "Al-Qasas";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[28]" = "Al-Ankabut";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[29]" = "Ar-Rum";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[30]" = "Luqman";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[31]" = "As-Sajdah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[32]" = "Al-Ahzab";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[33]" = "Saba'";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[34]" = "Fatir";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[35]" = "Ya-Seen";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[36]" = "As-Saaffat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[37]" = "Sad";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[38]" = "Az-Zumar";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[39]" = "Ghafir";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[40]" = "Fussilat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[41]" = "Ash-Shura";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[42]" = "Az-Zukhruf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[43]" = "Ad-Dukhan";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[44]" = "Al-Jathiya";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[45]" = "Al-Ahqaf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[46]" = "Muhammad";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[47]" = "Al-Fath";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[48]" = "Al-Hujurat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[49]" = "Qaf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[50]" = "Adh-Dhariyat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[51]" = "At-Tur";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[52]" = "An-Najm";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[53]" = "Al-Qamar";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[54]" = "Ar-Rahman";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[55]" = "Al-Waqi'ah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[56]" = "Al-Hadid";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[57]" = "Al-Mujadila";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[58]" = "Al-Hashr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[59]" = "Al-Mumtahana";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[60]" = "As-Saf";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[61]" = "Al-Jumu'ah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[62]" = "Al-Munafiqun";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[63]" = "At-Taghabun";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[64]" = "At-Talaq";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[65]" = "At-Tahrim";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[66]" = "Al-Mulk";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[67]" = "Al-Qalam";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[68]" = "Al-Haqqah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[69]" = "Al-Ma'arij";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[70]" = "Nuh";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[71]" = "Al-Jinn";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[72]" = "Al-Muzzammil";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[73]" = "Al-Muddaththir";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[74]" = "Al-Qiyamah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[75]" = "Al-Insan";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[76]" = "Al-Mursalat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[77]" = "An-Naba'";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[78]" = "An-Nazi'at";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[79]" = "'Abasa";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[80]" = "At-Takwir";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[81]" = "Al-Infitar";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[82]" = "Al-Mutaffifin";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[83]" = "Al-Inshiqaq";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[84]" = "Al-Buruj";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[85]" = "At-Tariq";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[86]" = "Al-A'la";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[87]" = "Al-Ghashiyah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[88]" = "Al-Fajr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[89]" = "Al-Balad";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[90]" = "Ash-Shams";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[91]" = "Al-Layl";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[92]" = "Ad-Dhuhaa";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[93]" = "Al-Sharh";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[94]" = "At-Tin";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[95]" = "Al-Alaq";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[96]" = "Al-Qadr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[97]" = "Al-Bayyinah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[98]" = "Az-Zalzalah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[99]" = "Al-Adiyat";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[100]" = "Al-Qari'ah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[101]" = "At-Takathur";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[102]" = "Al-Asr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[103]" = "Al-Humazah";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[104]" = "Al-Fil";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[105]" = "Quraysh";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[106]" = "Al-Ma'un";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[107]" = "Al-Kawthar";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[108]" = "Al-Kafirun";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[109]" = "An-Nasr";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[110]" = "Al-Masad";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[111]" = "Al-Ikhlas";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[112]" = "Al-Falaq";
-
-/*en.lproj/Localizable.strings*/
 "sura_names[113]" = "An-Nas";
+
+
 "app_name" = "Quran";
 "downloadPrompt_title" = "Download Required Files?";
 "downloadPrompt" = "In order for Quran Android to work properly,\n        we need to download some files. If you do not do this now, the app\n        may not work reliably and will require an Internet connection for reading.\n        Would you like to download the required files now?\n    ";
@@ -462,7 +238,7 @@
 "files_downloaded" = "1 sura downloaded";
 
 /*Shown above search results when we receive a search request.*/
-"search_results" = "One result for \"%1$s\": ";
+"search_results" = "One result for \"%1$@\": ";
 
 /*m permissions stuff*/
 "storage_permission_rationale" = "Quran wants your permission to store its data on\n        external storage. Quran will work without this permission, but if you clear data or\n        uninstall the app, all downloaded pages, audio, and data will be removed. Grant\n        Quran permission?";
@@ -470,7 +246,7 @@
 
 /*Search messages*/
 "found_in_sura" = "Found in Sura";
-"no_results" = "No results found for \"%s\"";
+"no_results" = "No results found for \"%@\"";
 "no_active_translation" = "You have no active translation set. Please set an active translation first and then search again.";
 "translation_settings" = "Translation Settings";
 "no_arabic_search_available" = "You have not downloaded the Arabic search pack. Please download it and try your search again.";
@@ -530,7 +306,7 @@
 "prefs_err_moving_app_files" = "Failed to move app files";
 "prefs_no_enough_space_to_move_files" = "Insufficient space to move app files";
 "prefs_megabytes_int" = "%1$d MB";
-"prefs_megabytes_str" = "%s MB";
+"prefs_megabytes_str" = "%@ MB";
 "prefs_tablet_mode_title" = "Tablet Mode";
 "prefs_tablet_mode_enabled" = "In landscape, two pages will appear side by side.";
 "prefs_tablet_mode_disabled" = "In landscape, only one page will appear.";
@@ -543,7 +319,7 @@
 "import_data_and_override" = "If you import this file, it will replace all your \\\n        bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?";
 "import_successful" = "Import Successful";
 "export_data_error" = "Error exporting data.";
-"exported_data" = "Data exported to %1$s.";
+"exported_data" = "Data exported to %1$@.";
 "logs_email" = "quranandroid+logs@gmail.com";
 "warning" = "Warning";
 "kitkat_external_message" = "Due to Android limitations, if you choose to place Quran\n        data on your external SD card and later uninstall or clear data for Quran Android, all Quran\n        Android pages and audio will be deleted and you will have to download them again. Are you\n        sure you want to use the external SD card?";
@@ -565,9 +341,9 @@
 "quran_page" = "Page";
 "quran_sura" = "Surahs";
 "quran_ayah" = "Ayah %1$d";
-"quran_ayah_details" = "%1$s - Ayah %2$s, Juz' %3$s";
-"quran_sura_title" = "Surat %1$s";
-"sura_ayah_notification_str" = "Sura %1$s, Ayah %2$d";
+"quran_ayah_details" = "%1$@ - Ayah %2$@, Juz' %3$@";
+"quran_sura_title" = "Surat %1$@";
+"sura_ayah_notification_str" = "Sura %1$@, Ayah %2$d";
 "bookmarks_current_page" = "Current Page";
 "index_loading" = "Loading…";
 "canceling" = "Canceling…";
@@ -592,8 +368,8 @@
 "download_non_wifi_prompt" = "You are not on Wi-Fi. Download data anyway?";
 
 /*downloading dialogs*/
-"download_progress" = "Downloaded %1$s / %2$s";
-"download_sura_progress" = "Downloaded %1$s / %2$s of sura %3$d";
+"download_progress" = "Downloaded %1$@ / %2$@";
+"download_sura_progress" = "Downloaded %1$@ / %2$@ of sura %3$d";
 "download_sura_ayah_progress" = "Downloading sura %1$d ayah %2$d";
 "process_progress" = "Processing file %1$d / %2$d";
 "download_retry" = "Retry";
@@ -602,7 +378,7 @@
 
 /*translation database stuff*/
 "remove_dlg_title" = "Remove Translation?";
-"remove_dlg_msg" = "Are you sure you would like to remove the %1$s?";
+"remove_dlg_msg" = "Are you sure you would like to remove the %1$@?";
 "error_getting_translation_list" = "Unable to download the list of translations. Please try again later.";
 "search_data" = "Search Data";
 "need_translation" = "You don't have any translations/tafaseer downloaded yet.";
@@ -663,28 +439,15 @@
 /*audio manager*/
 "audio_manager" = "Audio Manager";
 
-/*Localizable.strings
- Quran
- 
- Created by Mohamed Afifi on 4/22/16.
- Copyright © 2016 Quran.com. All rights reserved.
- 
- Error description*/
+/*
+ New Localizations
+ */
+
 "NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
-
-/*Error description*/
 "NetworkError_IncorrectDataReturned" = "Incorrect data returned from Pixabay server. Try again, or wait until Pixabay fixes the problem.";
-
-/*Error description*/
 "NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
-
-/*Error description*/
 "NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-
-/*Error description*/
 "NetworkError_NotReachedServer" = "Could not reach the Pixabay server. Check the internet connection, or wait until the server becomes accessible.";
-
-/*Error description*/
 "NetworkError_Unknown" = "Unknown error occurred. Check internet connection and try again.";
 
 "suraDescriptionMakkiAndVerses" = "%1$@ - %2$@ verses";

@@ -1,0 +1,312 @@
+/*
+  Localizable.strings
+  Quran
+
+  Created by Mohamed Afifi on 4/22/16.
+  Copyright © 2016 Quran.com. All rights reserved.
+*/
+"qari_minshawi_murattal_gapless" = "المنشاوي (متصل)";
+"qari_husary_gapless" = "الحصري (متصل)";
+"qari_sudais_gapless" = "عبد الرحمن السديس (متصل)";
+"qari_qatami_gapless" = "ناصر القطامي (متصل)";
+"qari_abdulbaset" = "عبد الباسط عبد الصمد";
+"qari_abdulbaset_mujawwad" = "عبد الباسط عبد الصمد مجود";
+"qari_basfar" = "عبد الله بصفر";
+"qari_suadis" = "عبد الرحمن السديس";
+"qari_shatri" = "أبو بكر الشاطري";
+"qari_afasy" = "مشاري بن راشد العفاسي";
+"qari_saad_al_ghamdi" = "سعد الغامدي";
+"qari_walk" = "إبراهيم والك (ترجمه انگلیسی)";
+"qari_hani_rifai" = "هاني الرفاعي";
+"qari_husary_mujawwad" = "الحصري مجود";
+"qari_hudhayfi" = "الحذيفي";
+"qari_muaiqly" = "ماهر المعيلقي";
+"qari_minshawi_mujawwad" = "المنشاوي مجود";
+"qari_tablawy" = "محمد الطبلاوي";
+"qari_ayyoub" = "محمد أيوب";
+"qari_jibreel" = "محمد جبريل";
+"qari_shuraym" = "سعود الشريم";
+"qari_dussary" = "ياسر الدوسري";
+
+
+"sura_names[0]" = "الفاتحة";
+"sura_names[1]" = "البقرة";
+"sura_names[2]" = "آل عمران";
+"sura_names[3]" = "النساء";
+"sura_names[4]" = "المائدة";
+"sura_names[5]" = "اﻷنعام";
+"sura_names[6]" = "اﻷعراف";
+"sura_names[7]" = "اﻷنفال";
+"sura_names[8]" = "التوبة";
+"sura_names[9]" = "يونس";
+"sura_names[10]" = "هود";
+"sura_names[11]" = "يوسف";
+"sura_names[12]" = "الرعد";
+"sura_names[13]" = "إبراهيم";
+"sura_names[14]" = "الحجر";
+"sura_names[15]" = "النحل";
+"sura_names[16]" = "اﻹسراء";
+"sura_names[17]" = "الكهف";
+"sura_names[18]" = "مريم";
+"sura_names[19]" = "طه";
+"sura_names[20]" = "اﻷنبياء";
+"sura_names[21]" = "الحج";
+"sura_names[22]" = "المؤمنون";
+"sura_names[23]" = "النور";
+"sura_names[24]" = "الفرقان";
+"sura_names[25]" = "الشعراء";
+"sura_names[26]" = "النمل";
+"sura_names[27]" = "القصص";
+"sura_names[28]" = "العنكبوت";
+"sura_names[29]" = "الروم";
+"sura_names[30]" = "لقمان";
+"sura_names[31]" = "السجدة";
+"sura_names[32]" = "اﻷحزاب";
+"sura_names[33]" = "سبأ";
+"sura_names[34]" = "فاطر";
+"sura_names[35]" = "يس";
+"sura_names[36]" = "الصافات";
+"sura_names[37]" = "ص";
+"sura_names[38]" = "الزمر";
+"sura_names[39]" = "غافر";
+"sura_names[40]" = "فصلت";
+"sura_names[41]" = "الشورى";
+"sura_names[42]" = "الزخرف";
+"sura_names[43]" = "الدخان";
+"sura_names[44]" = "الجاثية";
+"sura_names[45]" = "اﻷحقاف";
+"sura_names[46]" = "محمد";
+"sura_names[47]" = "الفتح";
+"sura_names[48]" = "الحجرات";
+"sura_names[49]" = "ق";
+"sura_names[50]" = "الذاريات";
+"sura_names[51]" = "الطور";
+"sura_names[52]" = "النجم";
+"sura_names[53]" = "القمر";
+"sura_names[54]" = "الرحمن";
+"sura_names[55]" = "الواقعة";
+"sura_names[56]" = "الحديد";
+"sura_names[57]" = "المجادلة";
+"sura_names[58]" = "الحشر";
+"sura_names[59]" = "الممتحنة";
+"sura_names[60]" = "الصف";
+"sura_names[61]" = "الجمعة";
+"sura_names[62]" = "المنافقون";
+"sura_names[63]" = "التغابن";
+"sura_names[64]" = "الطلاق";
+"sura_names[65]" = "التحريم";
+"sura_names[66]" = "الملك";
+"sura_names[67]" = "القلم";
+"sura_names[68]" = "الحاقة";
+"sura_names[69]" = "المعارج";
+"sura_names[70]" = "نوح";
+"sura_names[71]" = "الجن";
+"sura_names[72]" = "المزمل";
+"sura_names[73]" = "المدثر";
+"sura_names[74]" = "القيامة";
+"sura_names[75]" = "اﻹنسان";
+"sura_names[76]" = "المرسلات";
+"sura_names[77]" = "النبأ";
+"sura_names[78]" = "النازعات";
+"sura_names[79]" = "عبس";
+"sura_names[80]" = "التكوير";
+"sura_names[81]" = "الانفطار";
+"sura_names[82]" = "المطففين";
+"sura_names[83]" = "الانشقاق";
+"sura_names[84]" = "البروج";
+"sura_names[85]" = "الطارق";
+"sura_names[86]" = "اﻷعلى";
+"sura_names[87]" = "الغاشية";
+"sura_names[88]" = "الفجر";
+"sura_names[89]" = "البلد";
+"sura_names[90]" = "الشمس";
+"sura_names[91]" = "الليل";
+"sura_names[92]" = "الضحى";
+"sura_names[93]" = "الشرح";
+"sura_names[94]" = "التين";
+"sura_names[95]" = "العلق";
+"sura_names[96]" = "القدر";
+"sura_names[97]" = "البينة";
+"sura_names[98]" = "الزلزلة";
+"sura_names[99]" = "العاديات";
+"sura_names[100]" = "القارعة";
+"sura_names[101]" = "التكاثر";
+"sura_names[102]" = "العصر";
+"sura_names[103]" = "الهمزة";
+"sura_names[104]" = "الفيل";
+"sura_names[105]" = "قريش";
+"sura_names[106]" = "الماعون";
+"sura_names[107]" = "الكوثر";
+"sura_names[108]" = "الكافرون";
+"sura_names[109]" = "النصر";
+"sura_names[110]" = "المسد";
+"sura_names[111]" = "اﻹخلاص";
+"sura_names[112]" = "الفلق";
+"sura_names[113]" = "الناس";
+
+
+"app_name" = "قرآن";
+"downloadPrompt_title" = "فايلهاي مورد نياز بارگذاري شود؟";
+"downloadPrompt" = "براي عملکرد بهينه، برخي از فايل ها را بايد دريافت کنيد، ممکن است اين کار مقداري به طول بيانجامد، آيا براي اين کار آماده هستيد؟";
+"downloadPrompt_ok" = "بله";
+"downloadPrompt_no" = "خير";
+"downloading_title" = "بارگيري";
+"downloading_message" = "لطفا براي بارگيري فايلها صبر نماييد. (از ادامه پشتیبانی می‌شود)";
+"extracting_title" = "پردازش";
+"menu_about" = "درباره ما";
+"menu_settings" = "تنظيمات";
+"menu_jump_last_page" = "آخرين صفحه";
+"menu_tags" = "برچسب ها";
+"menu_bookmarks" = "نشانکها";
+"menu_bookmarks_page" = "صفحه نشانکها";
+"menu_bookmarks_ayah" = "نشانکهاي آيه";
+"menu_sort" = "مرتب سازی";
+"menu_sort_date" = "تاریخ اضافه شدن";
+"menu_sort_location" = "محل در قرآن";
+"menu_translation" = "مشاهده ترجمه";
+"menu_back_to_page" = "مشاهده قرآن";
+"menu_help" = "راهنما";
+"menu_search" = "جستجو";
+"menu_get_translations" = "دريافت ترجمه";
+"menu_jump" = "پرش";
+"gotoPage" = "برو به صفحه";
+"cancel" = "لغو";
+
+/* help */
+"help_title" = "پرسش و پاسخ هاي متداول";
+"help" = "<b>چگونه صوت را فعال کنم؟</b>\n        <br/>براي فعال کردن صوت در اين برنامه کافي است روي صفحه مورد نظر کليک کنيد بعد دکمه صدا را مشاهده خواهيد کرد مي توانيد آن را فعال نماييد.\n        <br/>\n        <br/><b>چگونه مي توانم ترجمه را مشاهده نمايم؟</b>\n        <br/>کافي است صفحه مورد نظر را کليک نماييد سپس علامت جهان  يا در برخي دستگاه ها علامت سه نقطه را کليک کنيد.\n        <br/>\n       اگر شما هيچ ترجمه اي را بر روي دستگاه خود نداريد مي توانيد ابتدا آن را از قسمت تنظيمات بارگذاري نماييد.\n        <br/>\n        <br/><b>چگونه مي توانم يک صفحه را نشانه گذاري کنم</b>\n        <br/>صفحه مورد نظر خود را انتخاب نماييد سپس صفحه را کليک کنيد و روبان را لمس نماييد.\n        <br/>\n        <br/><b>چگونه مي توانم فونت را بزرگتر کنم؟</b>\n        <br/>براي متن عربي گوشي خود را عمودي کنيد و براي اندازه متن ترجمه به قسمت تنظيمات مراجعه نماييد.\n        <br/>\n        <br/><b>چگونه يک آيه را به اشتراک بگذارم؟</b>\n        <br/>کافي است آيه مورد نظر خود را براي مدت زمان کوتاهي لمس نماييد.\n        <br/>\n        <br/><b>در ديدن فونت مشکل دارم؟</b>\n        <br/>متاسفانه برخي از فونت هاي  براي آندرويد 4 پيش بيني نشده است.";
+"search_hint" = "جستجو در قرآن";
+"quranSearchType" = "آيات قرآن";
+
+/* Shown above search results when we receive a search request. */
+"search_results" = "جستجو براي \"%1$s\":";
+
+/* Shown above search results when we receive a search request. */
+"x-x-19da05fd9748c67cec848e35d5b154a4" = "%2$d جستجو براي \"%1$s\":";
+
+/* Search messages */
+"found_in_sura" = "در سوره";
+"no_results" = "هيچ نتيجه اي يافت نشد براي \"%s\"";
+"no_active_translation" = "شما هيچ ترجمه را فعال نکرده ايد";
+"translation_settings" = "تنظيمات ترجمه";
+"no_arabic_search_available" = "شما متن عربي قرآن را براي جستجو بارگذاري نکرده ايد، لطفا آنرا ابتدا دريافت نماييد";
+"get_arabic_search_db" = "دريافت متن عربي قرآن براي جستجوي در متن";
+
+/* Quran Preference Activity */
+"prefs_category_reading" = "تنظيمات خواندن";
+"prefs_category_translation" = "تنظيمات ترجمه";
+"prefs_category_display_settings" = "تنظيمات صفحه";
+"prefs_use_arabic_title" = "حالت عربي";
+"prefs_use_arabic_summary_on" = "به عربي برگردان خواهد شد";
+"prefs_lock_orientation_title" = "جهت قفل شدن صفحه نمايش";
+"prefs_lock_orientation_summary_on" = "تنظيمات جهت نمايش";
+"prefs_lock_orientation_summary_off" = "تطبيق به حالت جهت گيري فعلي";
+"prefs_landscape_orientation_title" = "جهت عمودي";
+"prefs_landscape_orientation_summary_on" = "استفاده در جهت عمودي";
+"prefs_landscape_orientation_summary_off" = "استفاده در جهت افقي";
+"prefs_night_mode_title" = "نمايش شبانه";
+"prefs_night_mode_summary" = "تاريک نمودن صفحه و روشن نمودن متن";
+"prefs_night_mode_text_brightness_title" = "روشنایی متن";
+"prefs_night_mode_text_brightness_summary" = "روشنایی متن در هنگام شب فعال می‌شود.";
+"prefs_display_marker_title" = "نمايش پيغام";
+"prefs_display_marker_summary" = "نمايش پيغام ها فعال گردد";
+"prefs_translation_text_title" = "اندازه قلم ترجمه";
+"prefs_translations" = "ترجمه ها";
+"prefs_translations_summary" = "بارگذاري و مديريت ترجمه";
+"prefs_ayah_before_translation_title" = "آيه قبل از ترجمه";
+"prefs_ayah_before_translation_summary" = "نشان دادن آيه عربي بعد از ترجمه";
+"prefs_category_download" = "بارگذاري تنظيمات";
+"prefs_streaming_title" = "جريان";
+"prefs_streaming_summary" = "زماني که صوت فعال است";
+"prefs_download_amount_title" = "بارگذاري مقدار";
+"prefs_download_amount_summary" = "مقدار ترجيهي بارگذاري صوت";
+"downloaded_translations" = "بارگذاري شد";
+"available_translations" = "فعال براي بارگذاي";
+"remove_button" = "حذف";
+"dialog_ok" = "بله";
+
+/* translation updates */
+"update_available" = "به روز رسانی موجود است";
+"translation_updates_available" = "برای برخی از ترجمه ها، به روز رسانی موجود است. صفحه ترجمه ها را مشاهده می‌کنید؟";
+"translation_dialog_yes" = "بله";
+"translation_dialog_later" = "بعدا";
+
+/* End Number picker Strings */
+"quran_rob3" = "¼";
+"quran_nos" = "½";
+"quran_talt_arb3" = "¾";
+"quran_hizb" = "حزب";
+"quran_juz2" = "جزء";
+"quran_page" = "صفحه";
+"quran_sura" = "سوره";
+"quran_ayah" = "%1$d آية";
+"quran_sura_title" = "سوره %1$s";
+"sura_ayah_notification_str" = "سوره %1$s, آيه %2$d";
+"bookmarks_current_page" = "صفحه کنوني";
+"index_loading" = "بارگذاري…";
+"canceling" = "در حال لغو";
+"page_description" = "صفحه %1$s, جزء %2$s";
+"highlighting_database" = "فايل هاي مورد نياز";
+"timing_database" = "فايل هاي مورد نياز";
+
+/* download statuses and errors */
+"download_successful" = "با موفقيت بارگذاري انجام شد";
+"download_processing" = "در حال بارگذاري;";
+"download_error_general" = "خطا در بارگذاري";
+"download_error_disk" = "فضاي کافي براي بارگذاري وجود ندارد";
+"download_error_network" = "خطاي در شبکه ديتا";
+"download_error_perms" = "خطا در دسترسي";
+"download_error_invalid_download" = "بارگذاري با خطا مواجه شد";
+"download_error_invalid_download_retry" = "فايل خراب است، دوباره بارگذاري نماييد";
+"download_error_network_retry" = "خطاي شبکه;";
+"notification_download_canceled" = "بارگذاري لغو شده ها";
+"download_non_wifi_prompt" = "شبکه بي سيم شما خاموش است، در هر صورت بارگذاري نمايد؟";
+
+/* downloading dialogs */
+"download_progress" = "بارگذاري %1$s / %2$s";
+"process_progress" = "پردازش %1$d / %2$d";
+"download_retry" = "تلاش دوباره";
+"download_cancel" = "لغو";
+
+/* translation database stuff */
+"remove_dlg_title" = "حذف ترجمه";
+"remove_dlg_msg" = "آيا مطمئن هستيد که مي خواهيد حذف کنيد %1$s?";
+"error_getting_translation_list" = "مشکلي وجود دارد، لطفا بعداً دوباره تلاش نماييد.";
+"search_data" = "جستجو";
+
+/* help */
+"email_us" = "اگر جواب سوال شما در بالا پیدا نشد، می‌توانید برای پشتیبانی با رایانامه quranandroid@gmail.com تماس حاصل نمایید. لطفا توجه داشته باشید که نامه های زیادی دریافت می‌شود، پاسخ به نامه شما ممکن است کمی طول بکشد.";
+
+/* sura metainfo */
+"makki" = "مکي";
+"madani" = "مدني";
+"verses" = "%s آيه";
+"x" = "%s آيات";
+
+/* long press */
+"bookmark_ayah" = "نشانه گذاري آيه";
+"tag_ayah" = "برچسب گذاری آیه";
+"share_ayah" = "اشتراک گذاري آيه";
+"translation_ayah" = "ترجمه آيه";
+"play_from_here" = "شروع از اينجا";
+"via_string" = "توسط @QuranAndroid";
+"search_key" = "کليد جستجو را کليک نماييد";
+"copy_ayah" = "کپي کردن آيه";
+"ayah_copied_popup" = "آيه کپي شد";
+
+/* bookmarks & tags contextual action bar */
+"delete_bookmark" = "حذف نشانک";
+"tag_bookmark" = "نشانک برچسب";
+"delete_tag" = "حذف برچسب";
+"edit_tag" = "تغییر برچسب";
+"new_tag" = "برچسب جدید";
+"not_tagged" = "بدون برچسب";
+
+/* tag dialog */
+"tag_dlg_title" = "برچسب";
+"tag_name" = "نام";
+
+/* bookmark & tag list */
+"bookmarks_list_empty" = "لیست نشانه خالی است";
+"tags_list_empty" = "لیست برچسب خالی است.";
+

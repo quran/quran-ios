@@ -18,7 +18,6 @@ class Container {
         controller.viewControllers = [createSurasController(),
                                       createJuzsController(),
                                       createSettingsController()]
-        controller.selectedIndex = 1
         return controller
     }
 

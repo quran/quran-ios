@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Quarter {
+struct Quarter: QuranPageReference {
     let order: Int
 
     let ayah: AyahNumber

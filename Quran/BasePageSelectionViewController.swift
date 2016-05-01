@@ -9,13 +9,16 @@
 import UIKit
 import GenericDataSources
 
-class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewController {
+class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: UIViewController {
 
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
+    let quranControllerCreator: AnyCreator<QuranViewController>
+
     let dataSource = JuzsMutlipleSectionDataSource(type: .MultiSection, headerReuseIdentifier: "header")
 
-    init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>) {
+    init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
         self.dataRetriever = dataRetriever
+        self.quranControllerCreator = quranControllerCreator
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -27,12 +30,29 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
         return .LightContent
     }
 
-    let tableView = UITableView()
-    let statusView = UIView()
+    weak var tableView: UITableView!
+    weak var statusView: UIView?
+
+    override func loadView() {
+        super.loadView()
+
+        let tableView = UITableView()
+        view.addAutoLayoutSubview(tableView)
+        view.pinParentAllDirections(tableView)
+
+        let statusView = UIView()
+        statusView.backgroundColor = UIColor.appIdentity()
+        view.addAutoLayoutSubview(statusView)
+        view.pinParentHorizontal(statusView)
+        view.addParentTopConstraint(statusView)
+        statusView.addHeightConstraint(20)
+
+        self.tableView = tableView
+        self.statusView = statusView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpViews()
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.imageWithRenderingMode(.AlwaysTemplate))
 
@@ -50,31 +70,50 @@ class BasePageSelectionViewController<ItemType, CellType: ReusableCell>: UIViewC
                 return
             }
 
-            self.dataSource.setSections(data) { self.createItemsDataSource() }
+            self.dataSource.setSections(data) { self.wrappedCreateItemsDataSource() }
             self.tableView.reloadData()
         }
     }
 
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        coordinator.animateAlongsideTransition({ [weak self] (_) in
-            self?.statusView.alpha = size.width > size.height ? 0 : 1
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.hidesBarsOnSwipe = true
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.hidesBarsOnSwipe = false
+    }
+
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection,
+                                                  withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        let isCompact = newCollection.containsTraitsInCollection(UITraitCollection(verticalSizeClass: .Compact))
+        coordinator.animateAlongsideTransition({ [weak self] _ in
+            self?.statusView?.alpha = isCompact ? 0 : 1
             }, completion: nil)
     }
 
-    private func setUpViews() {
-        view.addAutoLayoutSubview(tableView)
-        view.pinParentAllDirections(tableView)
+    private func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
+        let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
+        selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
+            let item = ds.itemAtIndexPath(index)
+            self?.navigateToPage(item.startPageNumber)
+        }
 
-
-        statusView.backgroundColor = UIColor.appIdentity()
-        view.addAutoLayoutSubview(statusView)
-        view.pinParentHorizontal(statusView)
-        view.addParentTopConstraint(statusView)
-        statusView.addHeightConstraint(20)
+        let dataSource = createItemsDataSource()
+        dataSource.setSelectionHandler(selectionHandler)
+        return dataSource
     }
 
     func createItemsDataSource() -> BasicDataSource<ItemType, CellType> {
         fatalError("Should be implemented by subclasses")
+    }
+
+    private func navigateToPage(page: Int) {
+        let controller = self.quranControllerCreator.create()
+        controller.currentPage = page
+        controller.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(controller, animated: true)
     }
 }

@@ -10,23 +10,28 @@ import UIKit
 
 class Container {
 
-    // service registery
-    static var defaultContainer: Container = Container()
-
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
-        controller.viewControllers = [createSurasController(),
-                                      createJuzsController(),
+        controller.viewControllers = [createSurasNavigationController(),
+                                      createJuzsNavigationController(),
                                       createSettingsController()]
         return controller
     }
 
-    func createSurasController() -> UIViewController {
-        return SurasNavigationController(rootViewController: SurasViewController(dataRetriever: createSurasRetriever()))
+    func createSurasNavigationController() -> UIViewController {
+        return SurasNavigationController(rootViewController: createSurasViewController())
     }
 
-    func createJuzsController() -> UIViewController {
-        return JuzsNavigationController(rootViewController: JuzsViewController(dataRetriever: createQuartersRetriever()))
+    func createJuzsNavigationController() -> UIViewController {
+        return JuzsNavigationController(rootViewController: createJuzsViewController())
+    }
+
+    func createSurasViewController() -> UIViewController {
+        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createControllerCreator())
+    }
+
+    func createJuzsViewController() -> UIViewController {
+        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createControllerCreator())
     }
 
     func createSearchController() -> UIViewController {
@@ -43,5 +48,13 @@ class Container {
 
     func createQuartersRetriever() -> AnyDataRetriever<[(Juz, [Quarter])]> {
         return QuartersDataRetriever().erasedType()
+    }
+
+    func createQuranController() -> QuranViewController {
+        return QuranViewController()
+    }
+
+    func createControllerCreator<ViewController: UIViewController>() -> AnyCreator<ViewController> {
+        return ViewControllersCreator().erasedType()
     }
 }

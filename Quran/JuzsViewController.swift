@@ -11,8 +11,8 @@ import GenericDataSources
 
 class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell> {
 
-    override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>) {
-        super.init(dataRetriever: dataRetriever)
+    override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
+        super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {

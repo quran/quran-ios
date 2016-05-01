@@ -78,6 +78,9 @@
 		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
 		54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DF1CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift */; };
 		54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */; };
+		54B267011CD6ADE000D3AEF8 /* Creator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267001CD6ADE000D3AEF8 /* Creator.swift */; };
+		54B267051CD6AEBE00D3AEF8 /* ViewControllersCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */; };
+		54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +184,9 @@
 		54B266FC1CD657DE00D3AEF8 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B266FD1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266FE1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54B267001CD6ADE000D3AEF8 /* Creator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creator.swift; sourceTree = "<group>"; };
+		54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllersCreator.swift; sourceTree = "<group>"; };
+		54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageReference.swift; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -268,8 +274,6 @@
 				54B266201CC8010A00D3AEF8 /* BaseControllers */,
 				54B2660A1CC6D35C00D3AEF8 /* Settings */,
 				54B2660B1CC6D37800D3AEF8 /* Search */,
-				54B266071CC6D33300D3AEF8 /* Juzs */,
-				54B266041CC6D20300D3AEF8 /* Suras */,
 				54B266011CC6CF1400D3AEF8 /* TabController */,
 			);
 			name = Controllers;
@@ -288,6 +292,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				54B267021CD6ADF000D3AEF8 /* Creator */,
 				54B266A71CD1628500D3AEF8 /* Timing */,
 				54B2669F1CCD8D1100D3AEF8 /* Data */,
 				54B266951CCACE8100D3AEF8 /* Reading & Listening */,
@@ -313,6 +318,7 @@
 				54B266A81CD1632F00D3AEF8 /* Qari.swift */,
 				54B266AF1CD166B200D3AEF8 /* SuraTiming.swift */,
 				54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */,
+				54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -323,20 +329,6 @@
 				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
 			);
 			name = TabController;
-			sourceTree = "<group>";
-		};
-		54B266041CC6D20300D3AEF8 /* Suras */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Suras;
-			sourceTree = "<group>";
-		};
-		54B266071CC6D33300D3AEF8 /* Juzs */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Juzs;
 			sourceTree = "<group>";
 		};
 		54B2660A1CC6D35C00D3AEF8 /* Settings */ = {
@@ -637,6 +629,23 @@
 			name = PageSelection;
 			sourceTree = "<group>";
 		};
+		54B267021CD6ADF000D3AEF8 /* Creator */ = {
+			isa = PBXGroup;
+			children = (
+				54B267031CD6AEA300D3AEF8 /* Controllers */,
+				54B267001CD6ADE000D3AEF8 /* Creator.swift */,
+			);
+			name = Creator;
+			sourceTree = "<group>";
+		};
+		54B267031CD6AEA300D3AEF8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		592CC022D16F23D7A76EAC85 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -816,6 +825,7 @@
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
+				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
 				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
@@ -838,6 +848,7 @@
 				54B266B51CD16C3000D3AEF8 /* QarisSelectionViewController.swift in Sources */,
 				54B2668F1CCACC9400D3AEF8 /* QuranPageCollectionViewCell.swift in Sources */,
 				54B2660D1CC6D38600D3AEF8 /* SettingsNavigationController.swift in Sources */,
+				54B267051CD6AEBE00D3AEF8 /* ViewControllersCreator.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
 				54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */,
 				54B2669E1CCD21F800D3AEF8 /* AyahNumber.swift in Sources */,
@@ -854,6 +865,7 @@
 				54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
+				54B267011CD6ADE000D3AEF8 /* Creator.swift in Sources */,
 				54B266501CCA876600D3AEF8 /* SQLitePersistenceStorage.swift in Sources */,
 				54B266931CCACCBF00D3AEF8 /* CircleView.swift in Sources */,
 				54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */,

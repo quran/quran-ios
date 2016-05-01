@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Juz: Hashable {
+struct Juz: QuranPageReference, Hashable {
     let order: Int
     let startPageNumber: Int
 

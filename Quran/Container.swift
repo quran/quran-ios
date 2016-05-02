@@ -27,11 +27,11 @@ class Container {
     }
 
     func createSurasViewController() -> UIViewController {
-        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createControllerCreator())
+        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createBlockCreator(createQuranController))
     }
 
     func createJuzsViewController() -> UIViewController {
-        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createControllerCreator())
+        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createBlockCreator(createQuranController))
     }
 
     func createSearchController() -> UIViewController {
@@ -51,10 +51,14 @@ class Container {
     }
 
     func createQuranController() -> QuranViewController {
-        return QuranViewController()
+        return QuranViewController(imageService: createQuranImageService())
     }
 
-    func createControllerCreator<ViewController: UIViewController>() -> AnyCreator<ViewController> {
-        return ViewControllersCreator().erasedType()
+    func createBlockCreator<CreatedObject>(creationClosure: () -> CreatedObject) -> AnyCreator<CreatedObject> {
+        return BlockCreator(creationClosure: creationClosure).erasedType()
+    }
+
+    func createQuranImageService() -> QuranImageService {
+        return DefaultQuranImageService()
     }
 }

@@ -9,21 +9,28 @@
 import Foundation
 import GenericDataSources
 
-class QuranPagesDataSource: BasicDataSource<QuranPage, UITableViewCell> {
+class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell> {
 
-    let sizeService: QuranSizeService
+    let imageService: QuranImageService
 
-    init(reuseIdentifier: String, sizeService: QuranSizeService) {
-        self.sizeService = sizeService
+    init(reuseIdentifier: String, imageService: QuranImageService) {
+        self.imageService = imageService
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override func ds_shouldConsumeItemSizeDelegateCalls() -> Bool {
-        return true
-    }
+    override func ds_collectionView(collectionView: GeneralCollectionView,
+                                    configureCell cell: QuranPageCollectionViewCell,
+                                    withItem item: QuranPage,
+                                    atIndexPath indexPath: NSIndexPath) {
 
-    override func ds_collectionView(collectionView: GeneralCollectionView, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return sizeService.pageSizeForBounds(collectionView.ds_scrollView.bounds)
-    }
+        let size = ds_collectionView(collectionView, sizeForItemAtIndexPath: indexPath)
 
+        cell.page = item
+        imageService.getImageOfPage(item, forSize: size) { (image) in
+            guard cell.page == item else {
+                return
+            }
+            cell.mainImageView.image = image
+        }
+    }
 }

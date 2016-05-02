@@ -1,5 +1,5 @@
 //
-//  ViewControllersCreator.swift
+//  BlockCreator.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/1/16.
@@ -8,8 +8,11 @@
 
 import UIKit
 
-struct ViewControllersCreator<CreatedObject: UIViewController>: Creator {
+struct BlockCreator<CreatedObject>: Creator {
+
+    let creationClosure: () -> CreatedObject
+
     func create() -> CreatedObject {
-        return CreatedObject()
+        return creationClosure()
     }
 }

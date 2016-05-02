@@ -12,7 +12,7 @@ struct Files {
     static let QuarterPrefixArray: NSURL = fileURL("quarter_prefix_array", withExtension: "plist")
 }
 
-func fileURL(fileName: String, withExtension: String) -> NSURL {
+private func fileURL(fileName: String, withExtension: String) -> NSURL {
     guard let url = NSBundle.mainBundle().URLForResource(fileName, withExtension: withExtension) else {
         fatalError("Couldn't find file `\(fileName).\(withExtension)` locally ")
     }

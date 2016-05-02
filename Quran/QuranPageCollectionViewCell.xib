@@ -1,18 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="QuranPageCollectionViewCell" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="QuranPageCollectionViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="586" height="474"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="586" height="474"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qex-Ar-4zg" customClass="HighlightingView" customModule="Quran" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="586" height="474"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pnK-Pe-VL3">
+                        <rect key="frame" x="0.0" y="5" width="586" height="464"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rM9-YG-1dz">
+                        <rect key="frame" x="290.5" y="462" width="5" height="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="pnK-Pe-VL3" secondAttribute="trailing" id="0hZ-yE-iki"/>
+                <constraint firstAttribute="trailing" secondItem="qex-Ar-4zg" secondAttribute="trailing" id="6UF-zv-h0h"/>
+                <constraint firstItem="qex-Ar-4zg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="D4F-mg-4Vc"/>
+                <constraint firstItem="pnK-Pe-VL3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="EhY-Bj-0P7"/>
+                <constraint firstAttribute="bottom" secondItem="pnK-Pe-VL3" secondAttribute="bottom" constant="5" id="XnX-K5-y71"/>
+                <constraint firstAttribute="bottom" secondItem="qex-Ar-4zg" secondAttribute="bottom" id="c0c-p1-4ic"/>
+                <constraint firstItem="rM9-YG-1dz" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="dNU-dg-jNF"/>
+                <constraint firstItem="pnK-Pe-VL3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="dfX-hJ-w3T"/>
+                <constraint firstItem="qex-Ar-4zg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="mih-UC-aFG"/>
+                <constraint firstAttribute="bottom" secondItem="rM9-YG-1dz" secondAttribute="bottom" id="vFy-g6-mJg"/>
+            </constraints>
+            <size key="customSize" width="586" height="474"/>
+            <connections>
+                <outlet property="highlightingView" destination="qex-Ar-4zg" id="d28-rD-SMq"/>
+                <outlet property="mainImageView" destination="pnK-Pe-VL3" id="xkf-1P-Ppg"/>
+                <outlet property="pageLabel" destination="rM9-YG-1dz" id="hRd-Qr-Arf"/>
+            </connections>
+            <point key="canvasLocation" x="428" y="402"/>
         </collectionViewCell>
     </objects>
 </document>

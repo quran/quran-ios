@@ -43,7 +43,6 @@
 		54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */; };
 		54B266801CCAAE4900D3AEF8 /* Truth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2667F1CCAAE4900D3AEF8 /* Truth.swift */; };
 		54B266821CCAC82600D3AEF8 /* QuranPagesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */; };
-		54B266851CCAC91000D3AEF8 /* QuranSizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266841CCAC91000D3AEF8 /* QuranSizeService.swift */; };
 		54B266871CCACA2F00D3AEF8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266861CCACA2F00D3AEF8 /* NetworkManager.swift */; };
 		54B266891CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266881CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift */; };
 		54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2668A1CCACC4A00D3AEF8 /* QuranPage.swift */; };
@@ -79,8 +78,14 @@
 		54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DF1CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift */; };
 		54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */; };
 		54B267011CD6ADE000D3AEF8 /* Creator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267001CD6ADE000D3AEF8 /* Creator.swift */; };
-		54B267051CD6AEBE00D3AEF8 /* ViewControllersCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */; };
+		54B267051CD6AEBE00D3AEF8 /* BlockCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267041CD6AEBE00D3AEF8 /* BlockCreator.swift */; };
 		54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */; };
+		54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C88F1CD7D5DF0045F18F /* URL.swift */; };
+		54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8951CD7DAA60045F18F /* Timer.swift */; };
+		54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8991CD7E3980045F18F /* Aliases.swift */; };
+		54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89B1CD7E42B0045F18F /* DefaultQuranImageService.swift */; };
+		54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89D1CD7EF5D0045F18F /* Once.swift */; };
+		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,7 +128,6 @@
 		54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuartersDataSource.swift; sourceTree = "<group>"; };
 		54B2667F1CCAAE4900D3AEF8 /* Truth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Truth.swift; sourceTree = "<group>"; };
 		54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataSource.swift; sourceTree = "<group>"; };
-		54B266841CCAC91000D3AEF8 /* QuranSizeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranSizeService.swift; sourceTree = "<group>"; };
 		54B266861CCACA2F00D3AEF8 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		54B266881CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahInfoRetriever.swift; sourceTree = "<group>"; };
 		54B2668A1CCACC4A00D3AEF8 /* QuranPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPage.swift; sourceTree = "<group>"; };
@@ -185,8 +189,14 @@
 		54B266FD1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266FE1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B267001CD6ADE000D3AEF8 /* Creator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creator.swift; sourceTree = "<group>"; };
-		54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllersCreator.swift; sourceTree = "<group>"; };
+		54B267041CD6AEBE00D3AEF8 /* BlockCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockCreator.swift; sourceTree = "<group>"; };
 		54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageReference.swift; sourceTree = "<group>"; };
+		54C3C88F1CD7D5DF0045F18F /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		54C3C8951CD7DAA60045F18F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		54C3C8991CD7E3980045F18F /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
+		54C3C89B1CD7E42B0045F18F /* DefaultQuranImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultQuranImageService.swift; sourceTree = "<group>"; };
+		54C3C89D1CD7EF5D0045F18F /* Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Once.swift; sourceTree = "<group>"; };
+		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -256,6 +266,7 @@
 		54B265FC1CC57E2D00D3AEF8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				54B266831CCAC8F800D3AEF8 /* Size Layout */,
 				54B266A41CCD936A00D3AEF8 /* Navigation */,
 				54B266911CCACCA300D3AEF8 /* Circle */,
 				54B2668C1CCACC6300D3AEF8 /* Quran */,
@@ -372,12 +383,14 @@
 		54B2661A1CC6D73B00D3AEF8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				54C3C88E1CD7D5C50045F18F /* Constants */,
 				54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */,
 				54B266531CCA87FC00D3AEF8 /* Result.swift */,
-				54B2667F1CCAAE4900D3AEF8 /* Truth.swift */,
 				54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */,
-				54B266D91CD4F25900D3AEF8 /* Files.swift */,
 				54B266DB1CD4F48900D3AEF8 /* Queue.swift */,
+				54C3C8951CD7DAA60045F18F /* Timer.swift */,
+				54C3C8991CD7E3980045F18F /* Aliases.swift */,
+				54C3C89D1CD7EF5D0045F18F /* Once.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -434,8 +447,8 @@
 			children = (
 				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
-				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 				54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */,
+				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -493,12 +506,12 @@
 			name = Quarter;
 			sourceTree = "<group>";
 		};
-		54B266831CCAC8F800D3AEF8 /* Size */ = {
+		54B266831CCAC8F800D3AEF8 /* Size Layout */ = {
 			isa = PBXGroup;
 			children = (
-				54B266841CCAC91000D3AEF8 /* QuranSizeService.swift */,
+				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
 			);
-			name = Size;
+			name = "Size Layout";
 			sourceTree = "<group>";
 		};
 		54B2668C1CCACC6300D3AEF8 /* Quran */ = {
@@ -523,6 +536,7 @@
 			isa = PBXGroup;
 			children = (
 				54B266961CCACEB400D3AEF8 /* QuranImageService.swift */,
+				54C3C89B1CD7E42B0045F18F /* DefaultQuranImageService.swift */,
 			);
 			name = Image;
 			sourceTree = "<group>";
@@ -531,7 +545,6 @@
 			isa = PBXGroup;
 			children = (
 				54B266941CCACE7500D3AEF8 /* Image */,
-				54B266831CCAC8F800D3AEF8 /* Size */,
 			);
 			name = "Reading & Listening";
 			sourceTree = "<group>";
@@ -632,18 +645,20 @@
 		54B267021CD6ADF000D3AEF8 /* Creator */ = {
 			isa = PBXGroup;
 			children = (
-				54B267031CD6AEA300D3AEF8 /* Controllers */,
+				54B267041CD6AEBE00D3AEF8 /* BlockCreator.swift */,
 				54B267001CD6ADE000D3AEF8 /* Creator.swift */,
 			);
 			name = Creator;
 			sourceTree = "<group>";
 		};
-		54B267031CD6AEA300D3AEF8 /* Controllers */ = {
+		54C3C88E1CD7D5C50045F18F /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				54B267041CD6AEBE00D3AEF8 /* ViewControllersCreator.swift */,
+				54B266D91CD4F25900D3AEF8 /* Files.swift */,
+				54B2667F1CCAAE4900D3AEF8 /* Truth.swift */,
+				54C3C88F1CD7D5DF0045F18F /* URL.swift */,
 			);
-			name = Controllers;
+			name = Constants;
 			sourceTree = "<group>";
 		};
 		592CC022D16F23D7A76EAC85 /* Pods */ = {
@@ -821,17 +836,21 @@
 			files = (
 				54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */,
 				54B266BA1CD16DD400D3AEF8 /* AudioRepeat.swift in Sources */,
+				54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */,
+				54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */,
+				54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
+				54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
 				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
 				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
+				54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
-				54B266851CCAC91000D3AEF8 /* QuranSizeService.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
@@ -848,11 +867,12 @@
 				54B266B51CD16C3000D3AEF8 /* QarisSelectionViewController.swift in Sources */,
 				54B2668F1CCACC9400D3AEF8 /* QuranPageCollectionViewCell.swift in Sources */,
 				54B2660D1CC6D38600D3AEF8 /* SettingsNavigationController.swift in Sources */,
-				54B267051CD6AEBE00D3AEF8 /* ViewControllersCreator.swift in Sources */,
+				54B267051CD6AEBE00D3AEF8 /* BlockCreator.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
 				54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */,
 				54B2669E1CCD21F800D3AEF8 /* AyahNumber.swift in Sources */,
 				54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */,
+				54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */,
 				54B266821CCAC82600D3AEF8 /* QuranPagesDataSource.swift in Sources */,
 				54B266871CCACA2F00D3AEF8 /* NetworkManager.swift in Sources */,
 				54B266541CCA87FC00D3AEF8 /* Result.swift in Sources */,

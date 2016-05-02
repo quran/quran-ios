@@ -8,6 +8,14 @@
 
 import Foundation
 
-struct QuranPage {
+struct QuranPage: Hashable {
     let pageNumber: Int
+
+    var hashValue: Int {
+        return pageNumber.hashValue
+    }
+}
+
+func == (lhs: QuranPage, rhs: QuranPage) -> Bool {
+    return lhs.pageNumber == rhs.pageNumber
 }

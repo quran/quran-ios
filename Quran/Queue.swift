@@ -18,4 +18,8 @@ struct Queue {
     func async(block: () -> Void) {
         dispatch_async(queue, block)
     }
+
+    func after(timerInterval: NSTimeInterval, block: () -> Void) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(timerInterval * Double(NSEC_PER_SEC))), queue, block)
+    }
 }

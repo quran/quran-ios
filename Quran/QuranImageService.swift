@@ -10,5 +10,5 @@ import UIKit
 
 // Implementation should use reasonable caching and preloading next pages
 protocol QuranImageService {
-    func getImageOfPage(page: Int, forSize size: CGSize, onCompletion: UIImage -> Void)
+    func getImageOfPage(page: QuranPage, forSize size: CGSize, onCompletion: UIImage -> Void)
 }

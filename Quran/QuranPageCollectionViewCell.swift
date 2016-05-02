@@ -10,10 +10,13 @@ import UIKit
 
 class QuranPageCollectionViewCell: UICollectionViewCell {
 
-    let highlightingView = HighlightingView()
+    @IBOutlet weak var highlightingView: HighlightingView!
+    @IBOutlet weak var mainImageView: UIImageView!
+    @IBOutlet weak var pageLabel: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    var page: QuranPage? {
+        didSet {
+            pageLabel.text = page?.pageNumber.description
+        }
     }
 }

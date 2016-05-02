@@ -6,20 +6,7 @@
 //  Copyright © 2016 Quran.com. All rights reserved.
 //
 
-import UIKit
-
-typealias Rect = CGRect
-typealias Size = CGSize
-
 struct Truth {
-
-    static var Host: NSURL = {
-        guard let url = NSURL(string: "http://android.quran.com/") else {
-            fatalError("Invalid Host URL")
-        }
-        return url
-    }()
-    static var AudioDatabaseURL: NSURL = Host.URLByAppendingPathComponent("data/databases/audio/")
 
     static let QuranPagesRange: Range<Int> = 1...PageSuraStart.count
     static let QuranSurasRange: Range<Int> = 1...SuraPageStart.count

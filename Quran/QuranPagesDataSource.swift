@@ -13,6 +13,8 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     let imageService: QuranImageService
 
+    let numberFormatter = NSNumberFormatter()
+
     init(reuseIdentifier: String, imageService: QuranImageService) {
         self.imageService = imageService
         super.init(reuseIdentifier: reuseIdentifier)
@@ -26,6 +28,8 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         let size = ds_collectionView(collectionView, sizeForItemAtIndexPath: indexPath)
 
         cell.page = item
+        cell.pageLabel.text = numberFormatter.format(item.pageNumber)
+
         imageService.getImageOfPage(item, forSize: size) { (image) in
             guard cell.page == item else {
                 return

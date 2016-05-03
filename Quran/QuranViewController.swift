@@ -15,7 +15,7 @@ class QuranViewController: UIViewController {
 //    let audioView: AudioBannerView = unimplemented()
     let pageDataSource: QuranPagesDataSource
 
-    let pagesRange = Truth.QuranPagesRange
+    let scrollToPageToken = Once()
 
     init(imageService: QuranImageService) {
         pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
@@ -83,7 +83,7 @@ class QuranViewController: UIViewController {
         super.viewDidLoad()
 
         // load the list of items
-        pageDataSource.items = pagesRange.map { QuranPage(pageNumber: $0) }
+        pageDataSource.items = Truth.QuranPagesRange.map { QuranPage(pageNumber: $0) }
 
         print(currentPage)
 
@@ -96,32 +96,16 @@ class QuranViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
-    var scrollToPageToken = Once()
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         scrollToPageToken.once {
-            guard let index = self.pagesRange.indexOf(self.currentPage) else {
+            guard let index = pageDataSource.items.indexOf(QuranPage(pageNumber: currentPage)) else {
                 return
             }
-            self.scrollToIndexPath(NSIndexPath(forItem: index - self.pagesRange.startIndex, inSection: 0), animated: false)
+            scrollToIndexPath(NSIndexPath(forItem: index, inSection: 0), animated: false)
         }
     }
-
-//    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-//        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-//
-//        coordinator.animateAlongsideTransition({ (_) in
-//            self.layout?.invalidateLayout()
-//            }, completion: nil)
-//
-////        guard let visibleIndex = collectionView?.indexPathsForVisibleItems().first else {
-////            return
-////        }
-//
-//
-//    }
 
     func onViewTapped(sender: UITapGestureRecognizer) {
         setBarsHidden(navigationController?.navigationBarHidden == false)
@@ -144,11 +128,8 @@ class QuranViewController: UIViewController {
     }
 
     private func scrollToIndexPath(indexPath: NSIndexPath, animated: Bool) {
-        // The 0 delay is a workaround for semanticContentAttribute = .ForceRightToLeft
-        Queue.main.after(0) {
-            self.collectionView?.scrollToItemAtIndexPath(indexPath,
-                                                    atScrollPosition: .CenteredHorizontally,
-                                                    animated: false)
-        }
+        collectionView?.scrollToItemAtIndexPath(indexPath,
+                                                atScrollPosition: .CenteredHorizontally,
+                                                animated: false)
     }
 }

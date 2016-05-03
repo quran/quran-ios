@@ -8,11 +8,15 @@
 
 import Foundation
 
-struct Once {
+// class not struct to allow let declaration because once will be a mutating function.
+final class Once {
 
-    private var once: dispatch_once_t = 0
+    private (set) var exuected = false
 
-    mutating func once(block: () -> Void) {
-        dispatch_once(&once, block)
+    func once(@noescape block: () -> Void) {
+        guard !exuected else {
+            return
+        }
+        block()
     }
 }

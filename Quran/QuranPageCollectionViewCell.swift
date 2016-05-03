@@ -14,9 +14,5 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var pageLabel: UILabel!
 
-    var page: QuranPage? {
-        didSet {
-            pageLabel.text = page?.pageNumber.description
-        }
-    }
+    var page: QuranPage?
 }

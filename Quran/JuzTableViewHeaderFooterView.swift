@@ -35,6 +35,7 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         subtitleLabel.font = UIFont.systemFontOfSize(12)
         subtitleLabel.textAlignment = .Right
         contentView.addAutoLayoutSubview(subtitleLabel)
-        contentView.pinParentAllDirections(subtitleLabel, leadingValue: 20, trailingValue: 10, topValue: 0, bottomValue: 0)
+        contentView.pinParentVertical(subtitleLabel)
+        contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
     }
 }

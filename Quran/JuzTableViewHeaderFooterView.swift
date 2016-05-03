@@ -29,7 +29,8 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         titleLabel.textColor = UIColor(rgb: 0x323232)
         titleLabel.font = UIFont.boldSystemFontOfSize(15)
         contentView.addAutoLayoutSubview(titleLabel)
-        contentView.pinParentAllDirections(titleLabel, leadingValue: 20, trailingValue: 20, topValue: 0, bottomValue: 0)
+        contentView.pinParentVertical(titleLabel)
+        contentView.addParentLeadingConstraint(titleLabel, value: 20)
 
         subtitleLabel.textColor = UIColor(rgb: 0x4B4B4B)
         subtitleLabel.font = UIFont.systemFontOfSize(12)

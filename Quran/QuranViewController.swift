@@ -85,9 +85,7 @@ class QuranViewController: UIViewController {
         // load the list of items
         pageDataSource.items = Truth.QuranPagesRange.map { QuranPage(pageNumber: $0) }
 
-        print(currentPage)
-
-        // start bars timer
+        // start hidding bars timer
         startHiddenBarsTimer()
     }
 

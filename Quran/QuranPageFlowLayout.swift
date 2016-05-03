@@ -24,7 +24,6 @@ class QuranPageFlowLayout: UICollectionViewFlowLayout {
     }
 
     override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint) -> CGPoint {
-        print("called", collectionView?.indexPathsForVisibleItems())
         if let visibleItem = collectionView?.indexPathsForVisibleItems().first,
             let attributes = layoutAttributesForItemAtIndexPath(visibleItem) {
 

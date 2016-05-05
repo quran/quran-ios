@@ -74,8 +74,8 @@ class DefaultQuranImageService: QuranImageService {
             return
         }
 
-        // preload requested page
-        preload(page) { (page, image) in
+        // preload requested page with very high priority and QoS
+        preload(page, priority: .VeryHigh, qualityOfService: .UserInitiated) { (page, image) in
             Queue.main.async {
                 onCompletion(image)
             }
@@ -103,7 +103,10 @@ class DefaultQuranImageService: QuranImageService {
         }
     }
 
-    func preload(page: Int, onCompletion: (Int, UIImage) -> Void) {
+    func preload(page: Int,
+                 priority: NSOperationQueuePriority = .Normal,
+                 qualityOfService: NSQualityOfService = .Background,
+                 onCompletion: (Int, UIImage) -> Void) {
         guard Truth.QuranPagesRange.contains(page) else {
             return // does nothing
         }

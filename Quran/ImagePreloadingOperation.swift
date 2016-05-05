@@ -37,7 +37,6 @@ class ImagePreloadingOperation: NSOperation {
 
         // preload the image
         self.image = image.preloadedImage()
-        print("Image \(page) loaded")
     }
 
     func addCompletionBlock(block: (Int, UIImage) -> Void) {

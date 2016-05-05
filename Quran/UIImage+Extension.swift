@@ -19,7 +19,8 @@ extension UIImage {
         let colourSpace = CGColorSpaceCreateDeviceRGB()
         let imageContext =  CGBitmapContextCreate(nil,
                                                   width,
-                                                  height, 8,
+                                                  height,
+                                                  8,
                                                   width * 4,
                                                   colourSpace,
                                                   CGImageAlphaInfo.PremultipliedFirst.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue)

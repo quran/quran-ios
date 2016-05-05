@@ -56,8 +56,12 @@ class Container {
         return QuartersDataRetriever().erasedType()
     }
 
+    func createQuranPagesRetriever() -> AnyDataRetriever<[QuranPage]> {
+        return QuranPagesDataRetriever().erasedType()
+    }
+
     func createQuranController() -> QuranViewController {
-        return QuranViewController(imageService: createQuranImageService())
+        return QuranViewController(imageService: createQuranImageService(), dataRetriever: createQuranPagesRetriever())
     }
 
     func createBlockCreator<CreatedObject>(creationClosure: () -> CreatedObject) -> AnyCreator<CreatedObject> {

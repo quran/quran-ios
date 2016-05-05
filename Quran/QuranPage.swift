@@ -9,7 +9,12 @@
 import Foundation
 
 struct QuranPage: Hashable {
+
     let pageNumber: Int
+
+    let startAyah: AyahNumber
+
+    let juzNumber: Int
 
     var hashValue: Int {
         return pageNumber.hashValue

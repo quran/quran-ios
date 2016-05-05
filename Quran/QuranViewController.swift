@@ -13,12 +13,16 @@ private let cellReuseId = "cell"
 class QuranViewController: UIViewController {
 
 //    let audioView: AudioBannerView = unimplemented()
+
+    let dataRetriever: AnyDataRetriever<[QuranPage]>
     let pageDataSource: QuranPagesDataSource
 
     let scrollToPageToken = Once()
+    let didLayoutSubviewToken = Once()
 
-    init(imageService: QuranImageService) {
-        pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
+    init(imageService: QuranImageService, dataRetriever: AnyDataRetriever<[QuranPage]>) {
+        self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
+        self.dataRetriever = dataRetriever
         super.init(nibName: nil, bundle: nil)
         automaticallyAdjustsScrollViewInsets = false
     }
@@ -27,7 +31,7 @@ class QuranViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var currentPage: Int = 0
+    var initialPage: Int = 0
 
     weak var collectionView: UICollectionView?
     weak var layout: UICollectionViewFlowLayout?
@@ -82,8 +86,11 @@ class QuranViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // load the list of items
-        pageDataSource.items = Truth.QuranPagesRange.map { QuranPage(pageNumber: $0) }
+        dataRetriever.retrieve { [weak self] (data: [QuranPage]) in
+            self?.pageDataSource.items = data
+            self?.collectionView?.reloadData()
+            self?.scrollToFirstPage()
+        }
 
         // start hidding bars timer
         startHiddenBarsTimer()
@@ -96,11 +103,16 @@ class QuranViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        didLayoutSubviewToken.once {}
+        scrollToFirstPage()
+    }
+
+    private func scrollToFirstPage() {
+        guard let index = pageDataSource.items.indexOf({ $0.pageNumber == initialPage }) where didLayoutSubviewToken.executed else {
+            return
+        }
 
         scrollToPageToken.once {
-            guard let index = pageDataSource.items.indexOf(QuranPage(pageNumber: currentPage)) else {
-                return
-            }
             scrollToIndexPath(NSIndexPath(forItem: index, inSection: 0), animated: false)
         }
     }

@@ -9,11 +9,17 @@
 import UIKit
 import AVFoundation
 
+private let imageHeightDiff: CGFloat = 34
+
 class QuranPageCollectionViewCell: UICollectionViewCell {
+
+    @IBOutlet weak var juzLabel: UILabel!
+    @IBOutlet weak var suraLabel: UILabel!
+    @IBOutlet weak var pageLabel: UILabel!
 
     @IBOutlet weak var highlightingView: HighlightingView!
     @IBOutlet weak var mainImageView: UIImageView!
-    @IBOutlet weak var pageLabel: UILabel!
+
     @IBOutlet weak var scrollView: UIScrollView!
 
     var page: QuranPage?
@@ -41,7 +47,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
             sizeConstraints.append(mainImageView.addHeightConstraint(height))
         } else {
             // add fit height
-            sizeConstraints.append(mainImageView.addHeightConstraint(bounds.height - 10))
+            sizeConstraints.append(mainImageView.addHeightConstraint(bounds.height - imageHeightDiff))
         }
     }
 }

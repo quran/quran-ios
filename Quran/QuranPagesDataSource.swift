@@ -29,6 +29,9 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
         cell.page = item
         cell.pageLabel.text = numberFormatter.format(item.pageNumber)
+        cell.suraLabel.text = NSLocalizedString("sura_names[\(item.startAyah.sura - 1)]", comment: "")
+        cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", comment: ""), item.juzNumber)
+
         cell.mainImageView.image = nil
 
         imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in

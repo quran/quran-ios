@@ -10,6 +10,12 @@ import UIKit
 
 class Container {
 
+    private let imagesCache: Cache = {
+        let cache = NSCache()
+        cache.countLimit = 10
+        return cache
+    }()
+
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
@@ -59,6 +65,10 @@ class Container {
     }
 
     func createQuranImageService() -> QuranImageService {
-        return DefaultQuranImageService()
+        return DefaultQuranImageService(imagesCache: createImagesCache())
+    }
+
+    func createImagesCache() -> Cache {
+        return imagesCache
     }
 }

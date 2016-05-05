@@ -20,6 +20,11 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
 
     var sizeConstraints: [NSLayoutConstraint] = []
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        scrollView.contentOffset = CGPoint.zero
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 

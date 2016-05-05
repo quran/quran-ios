@@ -29,8 +29,9 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
         cell.page = item
         cell.pageLabel.text = numberFormatter.format(item.pageNumber)
+        cell.mainImageView.image = nil
 
-        imageService.getImageOfPage(item, forSize: size) { (image) in
+        imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in
             guard cell.page == item else {
                 return
             }

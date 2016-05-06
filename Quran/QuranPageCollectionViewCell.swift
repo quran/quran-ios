@@ -34,14 +34,10 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let imageSize = mainImageView.image?.size else {
-            return
-        }
-
         sizeConstraints.forEach { mainImageView.removeConstraint($0) }
         sizeConstraints.removeAll()
 
-        if bounds.width > bounds.height {
+        if let imageSize = mainImageView.image?.size where bounds.width > bounds.height {
             // add fill height
             let height = bounds.width * (imageSize.height / imageSize.width)
             sizeConstraints.append(mainImageView.addHeightConstraint(height))

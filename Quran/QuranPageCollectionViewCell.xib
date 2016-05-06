@@ -22,7 +22,6 @@
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pnK-Pe-VL3">
                                 <rect key="frame" x="0.0" y="17" width="586" height="440"/>
-                                <color key="tintColor" white="0.10113225067221879" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rM9-YG-1dz">
                                 <rect key="frame" x="289.5" y="457" width="6.5" height="17"/>
@@ -43,7 +42,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="qex-Ar-4zg" firstAttribute="leading" secondItem="pnK-Pe-VL3" secondAttribute="leading" id="2fJ-Xw-Ii0"/>
                             <constraint firstAttribute="bottom" secondItem="rM9-YG-1dz" secondAttribute="bottom" id="3gD-Qd-06h"/>
@@ -82,7 +81,7 @@
                 <outlet property="scrollView" destination="Eup-hy-sZl" id="UT1-ow-sL6"/>
                 <outlet property="suraLabel" destination="gjl-Mj-52u" id="O7Y-Lu-p5h"/>
             </connections>
-            <point key="canvasLocation" x="428" y="402"/>
+            <point key="canvasLocation" x="516" y="341"/>
         </collectionViewCell>
     </objects>
 </document>

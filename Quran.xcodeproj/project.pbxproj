@@ -85,6 +85,7 @@
 		54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */; };
 		54C0DBBA1CDB38C0009AAD8D /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBB91CDB38C0009AAD8D /* Cache.swift */; };
 		54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */; };
+		54C0DBC11CDBC764009AAD8D /* ScrollViewPageBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBC01CDBC764009AAD8D /* ScrollViewPageBehavior.swift */; };
 		54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C88F1CD7D5DF0045F18F /* URL.swift */; };
 		54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8951CD7DAA60045F18F /* Timer.swift */; };
 		54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8991CD7E3980045F18F /* Aliases.swift */; };
@@ -201,6 +202,7 @@
 		54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageReference.swift; sourceTree = "<group>"; };
 		54C0DBB91CDB38C0009AAD8D /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataRetriever.swift; sourceTree = "<group>"; };
+		54C0DBC01CDBC764009AAD8D /* ScrollViewPageBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewPageBehavior.swift; sourceTree = "<group>"; };
 		54C3C88F1CD7D5DF0045F18F /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		54C3C8951CD7DAA60045F18F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		54C3C8991CD7E3980045F18F /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 		54B265FE1CC57E4000D3AEF8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBBF1CDBC752009AAD8D /* Behaviors */,
 				54B2664D1CCA871E00D3AEF8 /* DataSources */,
 				54B265FD1CC57E3200D3AEF8 /* Controllers */,
 				54B265FC1CC57E2D00D3AEF8 /* Views */,
@@ -531,6 +534,7 @@
 		54B2668C1CCACC6300D3AEF8 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBC21CDBD986009AAD8D /* Title */,
 				54B266B61CD16CD500D3AEF8 /* AudioBannerView */,
 				54B2669A1CCD207400D3AEF8 /* Highlighting */,
 				54B266991CCD206A00D3AEF8 /* cell */,
@@ -672,6 +676,21 @@
 				54C0DBB91CDB38C0009AAD8D /* Cache.swift */,
 			);
 			name = Cache;
+			sourceTree = "<group>";
+		};
+		54C0DBBF1CDBC752009AAD8D /* Behaviors */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBC01CDBC764009AAD8D /* ScrollViewPageBehavior.swift */,
+			);
+			name = Behaviors;
+			sourceTree = "<group>";
+		};
+		54C0DBC21CDBD986009AAD8D /* Title */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Title;
 			sourceTree = "<group>";
 		};
 		54C3C88E1CD7D5C50045F18F /* Constants */ = {
@@ -930,6 +949,7 @@
 				54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */,
 				54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */,
 				54B266A61CCD944600D3AEF8 /* QuartersDataRetriever.swift in Sources */,
+				54C0DBC11CDBC764009AAD8D /* ScrollViewPageBehavior.swift in Sources */,
 				54B266151CC6D5A900D3AEF8 /* JuzsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1073,7 +1093,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1088,7 +1108,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

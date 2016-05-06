@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import KVOController_Swift
 
 private let cellReuseId = "cell"
 
@@ -24,14 +25,26 @@ class QuranViewController: UIViewController {
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
         self.dataRetriever = dataRetriever
         super.init(nibName: nil, bundle: nil)
+
         automaticallyAdjustsScrollViewInsets = false
+
+        // page behavior
+        let behavior = ScrollViewPageBehavior()
+        pageDataSource.scrollViewDelegate = behavior
+        observe(retainedObservable: behavior, keyPath: "currentPage", options: [.New]) { [weak self] (observable, change: ChangeData<Int>) in
+            self?.onPageChanged()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var initialPage: Int = 0
+    var initialPage: Int = 0 {
+        didSet {
+            title = NSLocalizedString("sura_names[\(Truth.PageSuraStart[initialPage - 1] - 1)]", comment: "")
+        }
+    }
 
     weak var collectionView: UICollectionView?
     weak var layout: UICollectionViewFlowLayout?
@@ -73,6 +86,7 @@ class QuranViewController: UIViewController {
 
         collectionView.backgroundColor = UIColor.whiteColor()
         collectionView.pagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.registerNib(UINib(nibName: "QuranPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseId)
         collectionView.ds_useDataSource(pageDataSource)
 
@@ -113,7 +127,8 @@ class QuranViewController: UIViewController {
         }
 
         scrollToPageToken.once {
-            scrollToIndexPath(NSIndexPath(forItem: index, inSection: 0), animated: false)
+            let indexPath = NSIndexPath(forItem: index, inSection: 0)
+            scrollToIndexPath(indexPath, animated: false)
         }
     }
 
@@ -141,5 +156,18 @@ class QuranViewController: UIViewController {
         collectionView?.scrollToItemAtIndexPath(indexPath,
                                                 atScrollPosition: .CenteredHorizontally,
                                                 animated: false)
+    }
+
+    private func onPageChanged() {
+        guard let visibleIndexPath = collectionView?.indexPathsForVisibleItems().first else {
+            return
+        }
+        let page = pageDataSource.itemAtIndexPath(visibleIndexPath)
+        updateBarToPage(page)
+    }
+
+    private func updateBarToPage(page: QuranPage) {
+        print(page.pageNumber)
+        title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
     }
 }

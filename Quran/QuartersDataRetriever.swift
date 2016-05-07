@@ -20,7 +20,7 @@ struct QuartersDataRetriever: DataRetriever {
 
             var juzsGroup: [(Juz, [Quarter])] = []
 
-            let numberOfQuarters = Truth.Quarters.count / juzs.count
+            let numberOfQuarters = Quran.Quarters.count / juzs.count
 
             for (juzIndex, juz) in juzs.enumerate() {
 
@@ -28,7 +28,7 @@ struct QuartersDataRetriever: DataRetriever {
                 for i in 0..<numberOfQuarters {
 
                     let order = juzIndex * numberOfQuarters + i
-                    let ayah = Truth.Quarters[order]
+                    let ayah = Quran.Quarters[order]
 
                     let quarter = Quarter(order: order,
                         ayah: ayah,

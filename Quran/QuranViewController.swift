@@ -42,7 +42,7 @@ class QuranViewController: UIViewController {
 
     var initialPage: Int = 0 {
         didSet {
-            title = NSLocalizedString("sura_names[\(Truth.PageSuraStart[initialPage - 1] - 1)]", comment: "")
+            title = NSLocalizedString("sura_names[\(Quran.PageSuraStart[initialPage - 1] - 1)]", comment: "")
         }
     }
 

@@ -107,7 +107,7 @@ class DefaultQuranImageService: QuranImageService {
                  priority: NSOperationQueuePriority = .Normal,
                  qualityOfService: NSQualityOfService = .Background,
                  onCompletion: (Int, UIImage) -> Void) {
-        guard Truth.QuranPagesRange.contains(page) else {
+        guard Quran.QuranPagesRange.contains(page) else {
             return // does nothing
         }
 

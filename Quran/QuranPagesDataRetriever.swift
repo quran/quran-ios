@@ -15,12 +15,12 @@ struct QuranPagesDataRetriever: DataRetriever {
 
             var pages: [QuranPage] = []
 
-            let startIndex = Truth.QuranPagesRange.startIndex
-            for i in 0..<Truth.QuranPagesRange.count {
+            let startIndex = Quran.QuranPagesRange.startIndex
+            for i in 0..<Quran.QuranPagesRange.count {
 
                 let pageNumber = i + startIndex
-                let sura = Truth.PageSuraStart[i]
-                let ayah = Truth.PageAyahStart[i]
+                let sura = Quran.PageSuraStart[i]
+                let ayah = Quran.PageAyahStart[i]
                 let juzNumber = juzNumberForPage(pageNumber)
 
                 let page = QuranPage(pageNumber: pageNumber, startAyah: AyahNumber(sura: sura, ayah: ayah), juzNumber: juzNumber)
@@ -35,10 +35,10 @@ struct QuranPagesDataRetriever: DataRetriever {
 }
 
 private func juzNumberForPage(page: Int) -> Int {
-    for (index, juzStartPage) in Truth.JuzPageStart.enumerate() {
+    for (index, juzStartPage) in Quran.JuzPageStart.enumerate() {
         if page < juzStartPage {
-            return index - 1 + Truth.QuranJuzsRange.startIndex
+            return index - 1 + Quran.QuranJuzsRange.startIndex
         }
     }
-    return Truth.QuranJuzsRange.endIndex - 1
+    return Quran.QuranJuzsRange.endIndex - 1
 }

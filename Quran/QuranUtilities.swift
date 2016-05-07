@@ -11,7 +11,7 @@ import Foundation
 extension Juz {
 
     static func getJuzs() -> [Juz] {
-        let juzs = Truth.JuzPageStart.enumerate().map { Juz(order: $0 + 1, startPageNumber: $1) }
+        let juzs = Quran.JuzPageStart.enumerate().map { Juz(order: $0 + 1, startPageNumber: $1) }
         return juzs
     }
 }
@@ -22,12 +22,12 @@ extension Sura {
 
         var suras: [Sura] = []
 
-        for i in 0..<Truth.SuraPageStart.count {
+        for i in 0..<Quran.SuraPageStart.count {
             suras.append(Sura(
                 order: i + 1,
-                isMAkki: Truth.SuraIsMakki[i],
-                numberOfAyahs: Truth.SuraNumberOfAyahs[i],
-                startPageNumber: Truth.SuraPageStart[i]))
+                isMAkki: Quran.SuraIsMakki[i],
+                numberOfAyahs: Quran.SuraNumberOfAyahs[i],
+                startPageNumber: Quran.SuraPageStart[i]))
         }
         return suras
     }

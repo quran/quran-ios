@@ -11,12 +11,17 @@ import UIKit
 class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
 
     let qariRetreiver: AnyDataRetriever<[Qari]>
+    let persistence: SimplePersistence
 
     weak var view: AudioBannerView?
 
     weak var delegate: AudioBannerViewPresenterDelegate?
 
-    var selectedQariIndex = 0
+    var selectedQariIndex: Int = 0 {
+        didSet {
+            persistence.setValue(selectedQari.id, forKey: .LastSelectedQariId)
+        }
+    }
     var qaris: [Qari] = []
 
     var selectedQari: Qari {
@@ -39,7 +44,8 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
         }
     }
 
-    init(qariRetreiver: AnyDataRetriever<[Qari]>) {
+    init(persistence: SimplePersistence, qariRetreiver: AnyDataRetriever<[Qari]>) {
+        self.persistence = persistence
         self.qariRetreiver = qariRetreiver
     }
 
@@ -50,7 +56,16 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
             guard let `self` = self else {
                 return
             }
+
             self.qaris = qaris
+
+            // get last selected qari id
+            let lastSelectedQariId = self.persistence.valueForKey(.LastSelectedQariId)
+            let index = qaris.indexOf { $0.id == lastSelectedQariId }
+            if let selectedIndex = index {
+                self.selectedQariIndex = selectedIndex
+            }
+
             self.setQariIndex(self.selectedQariIndex)
         }
     }

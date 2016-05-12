@@ -13,22 +13,27 @@ private let cellReuseId = "cell"
 
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
+    let persistence: SimplePersistence
     let dataRetriever: AnyDataRetriever<[QuranPage]>
+
     let pageDataSource: QuranPagesDataSource
+
     let audioViewPresenter: AudioBannerViewPresenter
     let qarisControllerCreator: AnyCreator<QariTableViewController>
 
     let scrollToPageToken = Once()
     let didLayoutSubviewToken = Once()
 
-    init(imageService: QuranImageService,
+    init(persistence: SimplePersistence,
+         imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          audioViewPresenter: AudioBannerViewPresenter,
          qarisControllerCreator: AnyCreator<QariTableViewController>) {
-        self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
+        self.persistence = persistence
         self.dataRetriever = dataRetriever
         self.audioViewPresenter = audioViewPresenter
         self.qarisControllerCreator = qarisControllerCreator
+        self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
@@ -227,13 +232,13 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         guard let visibleIndexPath = collectionView?.indexPathsForVisibleItems().first else {
             return
         }
-        let page = pageDataSource.itemAtIndexPath(visibleIndexPath)
-        updateBarToPage(page)
+        updateBarToPage(pageDataSource.itemAtIndexPath(visibleIndexPath))
     }
 
     private func updateBarToPage(page: QuranPage) {
         print(page.pageNumber)
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
+        persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
     }
 
     func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {

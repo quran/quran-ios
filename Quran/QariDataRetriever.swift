@@ -63,7 +63,6 @@ struct QariDataRetriever: DataRetriever {
 
             var qaris: [Qari] = []
 
-            var id = 1
             for i in 0..<names.count {
 
                 guard !haveGaplessEquivalents[i] else {
@@ -87,13 +86,12 @@ struct QariDataRetriever: DataRetriever {
                 }
 
                 let qari = Qari(
-                    id: id,
+                    id: i,
                     name: NSLocalizedString(names[i], comment: ""),
                     path: localPaths[i],
                     audioURL: NSURL(validURL: remoteURLs[i]),
                     audioType: type,
                     imageName: imageName)
-                id += 1
                 qaris.append(qari)
             }
 

@@ -32,7 +32,7 @@
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iN0-l3-epB">
                     <rect key="frame" x="196" y="0.0" width="208" height="44"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Abdurrahman As-Sudais" translatesAutoresizingMaskIntoConstraints="NO" id="dTH-Zk-EFD">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Abdurrahman As-Sudais" translatesAutoresizingMaskIntoConstraints="NO" id="dTH-Zk-EFD">
                             <rect key="frame" x="0.0" y="7" width="30" height="30"/>
                             <color key="backgroundColor" white="0.85010696308724842" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>

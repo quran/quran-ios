@@ -70,6 +70,7 @@ class Container {
 
     func createQuranController() -> QuranViewController {
         return QuranViewController(
+            persistence: createSimplePersistence(),
             imageService: createQuranImageService(),
             dataRetriever: createQuranPagesRetriever(),
             audioViewPresenter: createAudioBannerViewPresenter(),
@@ -90,6 +91,15 @@ class Container {
     }
 
     func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
-        return DefaultAudioBannerViewPresenter(qariRetreiver: createQarisDataRetriever())
+        return DefaultAudioBannerViewPresenter(persistence: createSimplePersistence(),
+                                               qariRetreiver: createQarisDataRetriever())
+    }
+
+    func createUserDefaults() -> NSUserDefaults {
+        return NSUserDefaults.standardUserDefaults()
+    }
+
+    func createSimplePersistence() -> SimplePersistence {
+        return UserDefaultsSimplePersistence(userDefaults: createUserDefaults())
     }
 }

@@ -106,6 +106,8 @@
 		54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */; };
 		54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */; };
 		54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */; };
+		54C0DBFD1CE5237E009AAD8D /* SimplePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBFC1CE5237E009AAD8D /* SimplePersistence.swift */; };
+		54C0DBFF1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBFE1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift */; };
 		54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C88F1CD7D5DF0045F18F /* URL.swift */; };
 		54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8951CD7DAA60045F18F /* Timer.swift */; };
 		54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8991CD7E3980045F18F /* Aliases.swift */; };
@@ -243,6 +245,8 @@
 		54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QariTableViewCell.xib; sourceTree = "<group>"; };
 		54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QarisDataSource.swift; sourceTree = "<group>"; };
 		54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariNavigationController.swift; sourceTree = "<group>"; };
+		54C0DBFC1CE5237E009AAD8D /* SimplePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePersistence.swift; sourceTree = "<group>"; };
+		54C0DBFE1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsSimplePersistence.swift; sourceTree = "<group>"; };
 		54C3C88F1CD7D5DF0045F18F /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		54C3C8951CD7DAA60045F18F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		54C3C8991CD7E3980045F18F /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -358,6 +362,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBFB1CE52368009AAD8D /* Persistence */,
 				54C0DBB81CDB38B8009AAD8D /* Cache */,
 				54B267021CD6ADF000D3AEF8 /* Creator */,
 				54B266A71CD1628500D3AEF8 /* Timing */,
@@ -793,6 +798,15 @@
 			name = cell;
 			sourceTree = "<group>";
 		};
+		54C0DBFB1CE52368009AAD8D /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBFC1CE5237E009AAD8D /* SimplePersistence.swift */,
+				54C0DBFE1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
 		54C3C88E1CD7D5C50045F18F /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,6 +1006,7 @@
 				54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */,
 				54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */,
 				54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */,
+				54C0DBFF1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
@@ -1070,6 +1085,7 @@
 				54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
+				54C0DBFD1CE5237E009AAD8D /* SimplePersistence.swift in Sources */,
 				54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */,
 				54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */,
 				54B266A61CCD944600D3AEF8 /* QuartersDataRetriever.swift in Sources */,

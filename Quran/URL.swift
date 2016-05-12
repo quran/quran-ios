@@ -10,12 +10,7 @@ import Foundation
 
 struct URL {
 
-    static var Host: NSURL = {
-        guard let url = NSURL(string: "http://android.quran.com/") else {
-            fatalError("Invalid Host URL")
-        }
-        return url
-    }()
+    static var Host: NSURL = NSURL(validURL: "http://android.quran.com/")
 
     static var AudioDatabaseURL: NSURL = Host.URLByAppendingPathComponent("data/databases/audio/")
 }

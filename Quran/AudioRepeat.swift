@@ -16,6 +16,17 @@ enum AudioRepeat {
     case Infinite
 
     func next() -> AudioRepeat {
-        unimplemented()
+        switch  self {
+        case .None:
+            return .Once
+        case .Once:
+            return .Twice
+        case .Twice:
+            return .ThreeTimes
+        case .ThreeTimes:
+            return .Infinite
+        case .Infinite:
+            return .None
+        }
     }
 }

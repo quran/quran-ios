@@ -11,20 +11,24 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
-class QuranViewController: UIViewController {
-
-//    let audioView: AudioBannerView = unimplemented()
+class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
     let dataRetriever: AnyDataRetriever<[QuranPage]>
     let pageDataSource: QuranPagesDataSource
+    let audioViewPresenter: AudioBannerViewPresenter
 
     let scrollToPageToken = Once()
     let didLayoutSubviewToken = Once()
 
-    init(imageService: QuranImageService, dataRetriever: AnyDataRetriever<[QuranPage]>) {
+    init(imageService: QuranImageService,
+         dataRetriever: AnyDataRetriever<[QuranPage]>,
+         audioViewPresenter: AudioBannerViewPresenter) {
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
         self.dataRetriever = dataRetriever
+        self.audioViewPresenter = audioViewPresenter
         super.init(nibName: nil, bundle: nil)
+
+        audioViewPresenter.delegate = self
 
         automaticallyAdjustsScrollViewInsets = false
 
@@ -46,8 +50,19 @@ class QuranViewController: UIViewController {
         }
     }
 
+    weak var audioView: DefaultAudioBannerView? {
+        didSet {
+            audioView?.onTouchesBegan = { [weak self] in
+                self?.stopBarHiddenTimer()
+            }
+            audioViewPresenter.view = audioView
+            audioView?.delegate = audioViewPresenter
+        }
+    }
+
     weak var collectionView: UICollectionView?
     weak var layout: UICollectionViewFlowLayout?
+    weak var bottomBarConstraint: NSLayoutConstraint?
 
     var timer: Timer?
 
@@ -70,8 +85,25 @@ class QuranViewController: UIViewController {
     }
 
     override func loadView() {
-        super.loadView()
+        view = QuranView()
 
+        createCollectionView()
+        createAudioBanner()
+
+        // hide bars on tap
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
+    }
+
+    private func createAudioBanner() {
+        let audioView = DefaultAudioBannerView()
+        view.addAutoLayoutSubview(audioView)
+        view.pinParentHorizontal(audioView)
+        bottomBarConstraint = view.addParentBottomConstraint(audioView)
+
+        self.audioView = audioView
+    }
+
+    private func createCollectionView() {
         let layout = QuranPageFlowLayout()
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 0
@@ -84,7 +116,7 @@ class QuranViewController: UIViewController {
         view.addAutoLayoutSubview(collectionView)
         view.pinParentAllDirections(collectionView)
 
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.pagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.registerNib(UINib(nibName: "QuranPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseId)
@@ -92,9 +124,6 @@ class QuranViewController: UIViewController {
 
         self.layout = layout
         self.collectionView = collectionView
-
-        // hide bars on tap
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
     }
 
     override func viewDidLoad() {
@@ -106,13 +135,24 @@ class QuranViewController: UIViewController {
             self?.scrollToFirstPage()
         }
 
+        audioViewPresenter.onViewDidLoad()
+
         // start hidding bars timer
         startHiddenBarsTimer()
     }
 
+    private var interactivePopGestureOldEnabled: Bool?
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.enabled
+        navigationController?.interactivePopGestureRecognizer?.enabled = false
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.enabled = interactivePopGestureOldEnabled ?? true
     }
 
     override func viewDidLayoutSubviews() {
@@ -132,18 +172,40 @@ class QuranViewController: UIViewController {
         }
     }
 
+    func stopBarHiddenTimer() {
+        timer?.cancel()
+        timer = nil
+    }
+
     func onViewTapped(sender: UITapGestureRecognizer) {
+        guard let audioView = audioView where !audioView.bounds.contains(sender.locationInView(audioView)) else {
+            return
+        }
+
         setBarsHidden(navigationController?.navigationBarHidden == false)
     }
 
     private func setBarsHidden(hidden: Bool) {
         navigationController?.setNavigationBarHidden(hidden, animated: true)
+
+        if let bottomBarConstraint = bottomBarConstraint {
+            view.removeConstraint(bottomBarConstraint)
+        }
+        if let audioView = audioView {
+            if hidden {
+                bottomBarConstraint = view.addSiblingVerticalContiguous(top: view, bottom: audioView)
+            } else {
+                bottomBarConstraint = view.addParentBottomConstraint(audioView)
+            }
+        }
+
         UIView.animateWithDuration(0.3) {
-            self.statusBarHidden = self.navigationController?.navigationBarHidden == true
+            self.statusBarHidden = hidden
+            self.view.layoutIfNeeded()
         }
 
         // remove the timer
-        timer = nil
+        stopBarHiddenTimer()
     }
 
     private func startHiddenBarsTimer() {
@@ -169,5 +231,9 @@ class QuranViewController: UIViewController {
     private func updateBarToPage(page: QuranPage) {
         print(page.pageNumber)
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
+    }
+
+    func showQariListSelectionWithQari(qaris: [Qari]) {
+        // show vc
     }
 }

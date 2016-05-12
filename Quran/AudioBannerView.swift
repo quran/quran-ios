@@ -10,25 +10,27 @@ import UIKit
 
 protocol AudioBannerViewDelegate: class {
 
-    func onPlay()
-    func onPause()
-    func onStop()
-    func onForward()
-    func onBackward()
-    func onRepeat(`repeat`: AudioRepeat)
+    func onPlayTapped()
+
+    func onPauseResumeTapped()
+    func onStopTapped()
+    func onForwardTapped()
+    func onBackwardTapped()
+    func onRepeatTapped()
+
+    func onQariTapped()
+
+    func onCancelDownloadTapped()
 }
 
-class AudioBannerView: UIView {
+protocol AudioBannerView: class {
 
-    func setQariName(name: String) {
-        unimplemented()
-    }
+    weak var delegate: AudioBannerViewDelegate? { get set }
 
-    func setPlaying() {
-        unimplemented()
-    }
-
-    func setDownloadingWithProgress(progress: NSProgress) {
-        unimplemented()
-    }
+    func hideAllControls()
+    func setQari(name name: String, image: UIImage?)
+    func setDownloading(progress: Float)
+    func setPlaying()
+    func setPaused()
+    func setRepeatCount(count: AudioRepeat)
 }

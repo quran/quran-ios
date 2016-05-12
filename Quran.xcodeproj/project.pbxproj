@@ -86,6 +86,21 @@
 		54C0DBBA1CDB38C0009AAD8D /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBB91CDB38C0009AAD8D /* Cache.swift */; };
 		54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */; };
 		54C0DBC11CDBC764009AAD8D /* ScrollViewPageBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBC01CDBC764009AAD8D /* ScrollViewPageBehavior.swift */; };
+		54C0DBC61CDE5C2A009AAD8D /* NSURL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBC51CDE5C2A009AAD8D /* NSURL+Extension.swift */; };
+		54C0DBC81CDE6484009AAD8D /* readers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBC71CDE6484009AAD8D /* readers.plist */; };
+		54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */; };
+		54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */; };
+		54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */; };
+		54C0DBD51CDF7250009AAD8D /* AudioBannerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBD41CDF7250009AAD8D /* AudioBannerViewPresenter.swift */; };
+		54C0DBD81CDF7447009AAD8D /* BackgroundColorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBD71CDF7447009AAD8D /* BackgroundColorButton.swift */; };
+		54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */; };
+		54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */; };
+		54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */; };
+		54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */; };
+		54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBE21CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift */; };
+		54C0DBE51CE479D7009AAD8D /* DefaultAudioBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBE41CE479D7009AAD8D /* DefaultAudioBannerView.swift */; };
+		54C0DBE81CE48DF8009AAD8D /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBE71CE48DF8009AAD8D /* QuranView.swift */; };
+		54C0DBED1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBEC1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift */; };
 		54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C88F1CD7D5DF0045F18F /* URL.swift */; };
 		54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8951CD7DAA60045F18F /* Timer.swift */; };
 		54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C8991CD7E3980045F18F /* Aliases.swift */; };
@@ -203,6 +218,21 @@
 		54C0DBB91CDB38C0009AAD8D /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataRetriever.swift; sourceTree = "<group>"; };
 		54C0DBC01CDBC764009AAD8D /* ScrollViewPageBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewPageBehavior.swift; sourceTree = "<group>"; };
+		54C0DBC51CDE5C2A009AAD8D /* NSURL+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+Extension.swift"; sourceTree = "<group>"; };
+		54C0DBC71CDE6484009AAD8D /* readers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = readers.plist; sourceTree = "<group>"; };
+		54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Readers.xcassets; sourceTree = "<group>"; };
+		54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioQariBarView.xib; sourceTree = "<group>"; };
+		54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQariBarView.swift; sourceTree = "<group>"; };
+		54C0DBD41CDF7250009AAD8D /* AudioBannerViewPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBannerViewPresenter.swift; sourceTree = "<group>"; };
+		54C0DBD71CDF7447009AAD8D /* BackgroundColorButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundColorButton.swift; sourceTree = "<group>"; };
+		54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayBarView.swift; sourceTree = "<group>"; };
+		54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioPlayBarView.xib; sourceTree = "<group>"; };
+		54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioDownloadingBarView.xib; sourceTree = "<group>"; };
+		54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadingBarView.swift; sourceTree = "<group>"; };
+		54C0DBE21CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioBannerViewPresenter.swift; sourceTree = "<group>"; };
+		54C0DBE41CE479D7009AAD8D /* DefaultAudioBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioBannerView.swift; sourceTree = "<group>"; };
+		54C0DBE71CE48DF8009AAD8D /* QuranView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranView.swift; sourceTree = "<group>"; };
+		54C0DBEC1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimultenousGestureDelegate.swift; sourceTree = "<group>"; };
 		54C3C88F1CD7D5DF0045F18F /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		54C3C8951CD7DAA60045F18F /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		54C3C8991CD7E3980045F18F /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -260,6 +290,8 @@
 				54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */,
 				54B266671CCA917700D3AEF8 /* Localizable.strings */,
 				54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */,
+				54C0DBC71CDE6484009AAD8D /* readers.plist */,
+				54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -278,6 +310,7 @@
 		54B265FC1CC57E2D00D3AEF8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBD21CDF6EAF009AAD8D /* Shared */,
 				54B266831CCAC8F800D3AEF8 /* Size Layout */,
 				54B266A41CCD936A00D3AEF8 /* Navigation */,
 				54B266911CCACCA300D3AEF8 /* Circle */,
@@ -305,6 +338,7 @@
 		54B265FE1CC57E4000D3AEF8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBD31CDF723D009AAD8D /* Presenter */,
 				54C0DBBF1CDBC752009AAD8D /* Behaviors */,
 				54B2664D1CCA871E00D3AEF8 /* DataSources */,
 				54B265FD1CC57E3200D3AEF8 /* Controllers */,
@@ -392,6 +426,7 @@
 				54B266E11CD5FFEA00D3AEF8 /* CALayer+Extension.swift */,
 				5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */,
 				5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */,
+				54C0DBC51CDE5C2A009AAD8D /* NSURL+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -415,6 +450,7 @@
 		54B2661B1CC6D74100D3AEF8 /* Behavior */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBEC1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift */,
 			);
 			name = Behavior;
 			sourceTree = "<group>";
@@ -534,6 +570,7 @@
 		54B2668C1CCACC6300D3AEF8 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBE61CE48DED009AAD8D /* View */,
 				54C0DBC21CDBD986009AAD8D /* Title */,
 				54B266B61CD16CD500D3AEF8 /* AudioBannerView */,
 				54B2669A1CCD207400D3AEF8 /* Highlighting */,
@@ -626,7 +663,11 @@
 		54B266B61CD16CD500D3AEF8 /* AudioBannerView */ = {
 			isa = PBXGroup;
 			children = (
+				54C0DBDD1CDF7E95009AAD8D /* Downloading */,
+				54C0DBD61CDF7415009AAD8D /* Play */,
+				54C0DBCD1CDF6342009AAD8D /* QariBarView */,
 				54B266B71CD16CED00D3AEF8 /* AudioBannerView.swift */,
+				54C0DBE41CE479D7009AAD8D /* DefaultAudioBannerView.swift */,
 			);
 			name = AudioBannerView;
 			sourceTree = "<group>";
@@ -693,6 +734,58 @@
 			name = Title;
 			sourceTree = "<group>";
 		};
+		54C0DBCD1CDF6342009AAD8D /* QariBarView */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */,
+				54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */,
+			);
+			name = QariBarView;
+			sourceTree = "<group>";
+		};
+		54C0DBD21CDF6EAF009AAD8D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBD71CDF7447009AAD8D /* BackgroundColorButton.swift */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		54C0DBD31CDF723D009AAD8D /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBD41CDF7250009AAD8D /* AudioBannerViewPresenter.swift */,
+				54C0DBE21CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift */,
+			);
+			name = Presenter;
+			sourceTree = "<group>";
+		};
+		54C0DBD61CDF7415009AAD8D /* Play */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */,
+				54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */,
+			);
+			name = Play;
+			sourceTree = "<group>";
+		};
+		54C0DBDD1CDF7E95009AAD8D /* Downloading */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */,
+				54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */,
+			);
+			name = Downloading;
+			sourceTree = "<group>";
+		};
+		54C0DBE61CE48DED009AAD8D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				54C0DBE71CE48DF8009AAD8D /* QuranView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		54C3C88E1CD7D5C50045F18F /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -757,6 +850,11 @@
 					54B265E21CC57D8E00D3AEF8 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = MKP73M5X4A;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -796,15 +894,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */,
 				5421D8C91CD9684400E6B019 /* images_1920 in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranPageCollectionViewCell.xib in Resources */,
+				54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */,
 				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
+				54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */,
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,
+				54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */,
 				54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
+				54C0DBC81CDE6484009AAD8D /* readers.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -885,14 +988,17 @@
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */,
+				54C0DBC61CDE5C2A009AAD8D /* NSURL+Extension.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* URL.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
 				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
+				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,
 				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
 				54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
+				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
@@ -901,9 +1007,11 @@
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
+				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
+				54C0DBD51CDF7250009AAD8D /* AudioBannerViewPresenter.swift in Sources */,
 				54C0DBBA1CDB38C0009AAD8D /* Cache.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
 				54B266581CCA888F00D3AEF8 /* SqliteRow.swift in Sources */,
@@ -912,15 +1020,19 @@
 				54B266891CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift in Sources */,
 				54B266B51CD16C3000D3AEF8 /* QarisSelectionViewController.swift in Sources */,
 				54B2668F1CCACC9400D3AEF8 /* QuranPageCollectionViewCell.swift in Sources */,
+				54C0DBD81CDF7447009AAD8D /* BackgroundColorButton.swift in Sources */,
 				54B2660D1CC6D38600D3AEF8 /* SettingsNavigationController.swift in Sources */,
 				54B267051CD6AEBE00D3AEF8 /* BlockCreator.swift in Sources */,
+				54C0DBE81CE48DF8009AAD8D /* QuranView.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
+				54C0DBE51CE479D7009AAD8D /* DefaultAudioBannerView.swift in Sources */,
 				54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */,
 				54B2669E1CCD21F800D3AEF8 /* AyahNumber.swift in Sources */,
 				54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */,
 				54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */,
 				54B266821CCAC82600D3AEF8 /* QuranPagesDataSource.swift in Sources */,
 				54B266871CCACA2F00D3AEF8 /* NetworkManager.swift in Sources */,
+				54C0DBED1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift in Sources */,
 				54B266541CCA87FC00D3AEF8 /* Result.swift in Sources */,
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
@@ -945,6 +1057,7 @@
 				54B266801CCAAE4900D3AEF8 /* Quran.swift in Sources */,
 				54B2669C1CCD208800D3AEF8 /* HighlightingView.swift in Sources */,
 				54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */,
+				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */,
 				54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */,

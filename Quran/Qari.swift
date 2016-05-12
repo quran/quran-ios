@@ -8,9 +8,16 @@
 
 import Foundation
 
+enum AudioType {
+    case Gapless(databaseName: String)
+    case Gapped
+}
+
 struct Qari {
+    let id: Int
     let name: String
-    let audioBaseURL: NSURL
-    let localPath: NSURL
-    let databaseName: String
+    let path: String
+    let audioURL: NSURL
+    let audioType: AudioType
+    let imageName: String
 }

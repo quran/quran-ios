@@ -26,6 +26,11 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
 
     var sizeConstraints: [NSLayoutConstraint] = []
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        scrollView.backgroundColor = UIColor.readingBackground()
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         scrollView.contentOffset = CGPoint.zero

@@ -20,4 +20,8 @@ extension UIColor {
     class func secondaryColor() -> UIColor {
         return UIColor.whiteColor()
     }
+
+    class func readingBackground() -> UIColor {
+        return UIColor(rgb: 0xF5F5F5)
+    }
 }

@@ -60,8 +60,16 @@ class Container {
         return QuranPagesDataRetriever().erasedType()
     }
 
+    func createQarisDataRetriever() -> AnyDataRetriever<[Qari]> {
+        return QariDataRetriever().erasedType()
+    }
+
     func createQuranController() -> QuranViewController {
-        return QuranViewController(imageService: createQuranImageService(), dataRetriever: createQuranPagesRetriever())
+        return QuranViewController(
+            imageService: createQuranImageService(),
+            dataRetriever: createQuranPagesRetriever(),
+            audioViewPresenter: createAudioBannerViewPresenter()
+        )
     }
 
     func createBlockCreator<CreatedObject>(creationClosure: () -> CreatedObject) -> AnyCreator<CreatedObject> {
@@ -74,5 +82,9 @@ class Container {
 
     func createImagesCache() -> Cache {
         return imagesCache
+    }
+
+    func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
+        return DefaultAudioBannerViewPresenter(qariRetreiver: createQarisDataRetriever())
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 
 struct Files {
     static let QuarterPrefixArray: NSURL = fileURL("quarter_prefix_array", withExtension: "plist")
+    static let Readers: NSURL = fileURL("readers", withExtension: "plist")
 }
 
 private func fileURL(fileName: String, withExtension: String) -> NSURL {

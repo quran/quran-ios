@@ -16,6 +16,13 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
 
     weak var delegate: AudioBannerViewPresenterDelegate?
 
+    var selectedQariIndex = 0
+    var qaris: [Qari] = []
+
+    var selectedQari: Qari {
+        return qaris[selectedQariIndex]
+    }
+
     private var repeatCount: AudioRepeat = .None {
         didSet {
             view?.setRepeatCount(repeatCount)
@@ -37,11 +44,20 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
     }
 
     func onViewDidLoad() {
-        view?.setQari(name: "Mohamed", image: UIImage(named: "aAbdurrahman As-Sudais"))
+        view?.hideAllControls()
+
+        qariRetreiver.retrieve { [weak self] (qaris) in
+            guard let `self` = self else {
+                return
+            }
+            self.qaris = qaris
+            self.setQariIndex(self.selectedQariIndex)
+        }
     }
 
-    func setQari(qari: Qari) {
-        view?.setQari(name: qari.name, image: UIImage(named: qari.imageName))
+    func setQariIndex(index: Int) {
+        selectedQariIndex = index
+        view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
     }
 
     // MARK:- AudioBannerViewDelegate
@@ -72,7 +88,7 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
     }
 
     func onQariTapped() {
-        // show qari list
+        delegate?.showQariListSelectionWithQari(qaris, selectedIndex: selectedQariIndex)
     }
 
     func onCancelDownloadTapped() {

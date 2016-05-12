@@ -48,6 +48,10 @@ class Container {
         return SettingsNavigationController(rootViewController: SettingsViewController())
     }
 
+    func createQariTableViewController() -> QariTableViewController {
+        return QariTableViewController(style: .Plain)
+    }
+
     func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
         return SurasDataRetriever().erasedType()
     }
@@ -68,7 +72,8 @@ class Container {
         return QuranViewController(
             imageService: createQuranImageService(),
             dataRetriever: createQuranPagesRetriever(),
-            audioViewPresenter: createAudioBannerViewPresenter()
+            audioViewPresenter: createAudioBannerViewPresenter(),
+            qarisControllerCreator: createBlockCreator(createQariTableViewController)
         )
     }
 

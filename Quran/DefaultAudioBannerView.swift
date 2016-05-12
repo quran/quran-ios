@@ -46,12 +46,14 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         addAutoLayoutSubview(visualEffect)
         pinParentAllDirections(visualEffect)
 
+        let borderHeight: CGFloat = UIScreen.mainScreen().scale < 2 ? 1 : 0.5
+
         let topBorder = UIView()
         topBorder.backgroundColor = UIColor.lightGrayColor()
-        topBorder.addHeightConstraint(0.5)
+        topBorder.addHeightConstraint(borderHeight)
         addAutoLayoutSubview(topBorder)
         pinParentHorizontal(topBorder)
-        addParentTopConstraint(topBorder, value: -0.5)
+        addParentTopConstraint(topBorder, value: -borderHeight)
 
         for view in [qariView, playView, downloadView] {
             visualEffect.contentView.addAutoLayoutSubview(view)

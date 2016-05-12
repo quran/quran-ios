@@ -9,7 +9,7 @@
 
 
 protocol AudioBannerViewPresenterDelegate: class {
-    func showQariListSelectionWithQari(qaris: [Qari])
+    func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int)
 }
 
 protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
@@ -18,5 +18,5 @@ protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
     weak var view: AudioBannerView? { get set }
 
     func onViewDidLoad()
-    func setQari(qari: Qari)
+    func setQariIndex(index: Int)
 }

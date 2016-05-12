@@ -63,6 +63,7 @@ struct QariDataRetriever: DataRetriever {
 
             var qaris: [Qari] = []
 
+            var id = 1
             for i in 0..<names.count {
 
                 guard !haveGaplessEquivalents[i] else {
@@ -77,14 +78,27 @@ struct QariDataRetriever: DataRetriever {
                     type = .Gapless(databaseName: databaseName)
                 }
 
+                let image = images[i]
+                let imageName: String?
+                if image.isEmpty {
+                    imageName = nil
+                } else {
+                    imageName = image
+                }
+
                 let qari = Qari(
-                    id: i,
-                    name: names[i],
+                    id: id,
+                    name: NSLocalizedString(names[i], comment: ""),
                     path: localPaths[i],
                     audioURL: NSURL(validURL: remoteURLs[i]),
                     audioType: type,
-                    imageName: images[i])
+                    imageName: imageName)
+                id += 1
                 qaris.append(qari)
+            }
+
+            qaris.sortInPlace {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .OrderedAscending
             }
 
 

@@ -13,11 +13,19 @@ enum AudioType {
     case Gapped
 }
 
-struct Qari {
+struct Qari: Hashable {
     let id: Int
     let name: String
     let path: String
     let audioURL: NSURL
     let audioType: AudioType
-    let imageName: String
+    let imageName: String?
+
+    var hashValue: Int {
+        return id.hashValue
+    }
+}
+
+func == (lhs: Qari, rhs: Qari) -> Bool {
+    return lhs.id == rhs.id
 }

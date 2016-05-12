@@ -16,16 +16,19 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     let dataRetriever: AnyDataRetriever<[QuranPage]>
     let pageDataSource: QuranPagesDataSource
     let audioViewPresenter: AudioBannerViewPresenter
+    let qarisControllerCreator: AnyCreator<QariTableViewController>
 
     let scrollToPageToken = Once()
     let didLayoutSubviewToken = Once()
 
     init(imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
-         audioViewPresenter: AudioBannerViewPresenter) {
+         audioViewPresenter: AudioBannerViewPresenter,
+         qarisControllerCreator: AnyCreator<QariTableViewController>) {
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
         self.dataRetriever = dataRetriever
         self.audioViewPresenter = audioViewPresenter
+        self.qarisControllerCreator = qarisControllerCreator
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
@@ -233,7 +236,29 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
     }
 
-    func showQariListSelectionWithQari(qaris: [Qari]) {
-        // show vc
+    func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {
+        let controller = qarisControllerCreator.create()
+        controller.setQaris(qaris)
+        controller.selectedIndex = selectedIndex
+        controller.onSelectedIndexChanged = { [weak self] index in
+            self?.audioViewPresenter.setQariIndex(index)
+        }
+
+        controller.preferredContentSize = CGSize(width: 400, height: 500)
+        controller.modalPresentationStyle = .Popover
+        controller.popoverPresentationController?.delegate = self
+        controller.popoverPresentationController?.sourceView = audioView
+        controller.popoverPresentationController?.sourceRect = audioView?.bounds ?? CGRect.zero
+        controller.popoverPresentationController?.permittedArrowDirections = .Down
+        presentViewController(controller, animated: true, completion: nil)
+
+    }
+}
+
+extension QuranViewController: UIPopoverPresentationControllerDelegate {
+
+    func presentationController(controller: UIPresentationController,
+                                viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
+        return QariNavigationController(rootViewController: controller.presentedViewController)
     }
 }

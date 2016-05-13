@@ -10,9 +10,20 @@ import Foundation
 
 struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
 
-    let persistence: SQLitePersistenceStorage
+    let persistence: AyahInfoStorage
 
     func retrieveAyahsAtPage(page: Int, onCompletion: Result<[AyahNumber : [AyahInfo]], PersistenceError> -> Void) {
-        unimplemented()
+        Queue.background.async {
+            do {
+                let result = try self.persistence.getAyahInfoForPage(page)
+                Queue.main.async {
+                    onCompletion(Result.Success(result))
+                }
+            } catch {
+                Queue.main.async({
+                    onCompletion(Result.Failure(error as? PersistenceError ?? PersistenceError.QueryError(error: error)))
+                })
+            }
+        }
     }
 }

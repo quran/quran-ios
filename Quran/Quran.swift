@@ -12,6 +12,8 @@ struct Quran {
     static let QuranSurasRange: Range<Int> = 1...SuraPageStart.count
     static let QuranJuzsRange: Range<Int>  = 1...JuzPageStart.count
 
+    static let NumberOfQuartersPerJuz = Quarters.count / JuzPageStart.count
+
 
     static let SuraPageStart: [Int] = [
         1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262,

@@ -27,10 +27,32 @@ enum NetworkRequestParameterEncoding {
 }
 
 protocol NetworkManager {
-    func performRequest(
-        method method: HTTPMethod,
-               url: NSURL,
-               parameters: [String: AnyObject]?,
-               parameterEncoding: NetworkRequestParameterEncoding,
-               headers: [String: String]?)
+
+    var startRequestsImmediately: Bool { get set }
+
+    func download(
+        method: HTTPMethod,
+        url: NSURL,
+        parameters: [String: AnyObject]?,
+        parameterEncoding: NetworkRequestParameterEncoding,
+        headers: [String: String]?,
+        completionHandler: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -> Void) -> NetworkRequest
+}
+
+extension NetworkManager {
+
+    func download(
+        method: HTTPMethod,
+        url: NSURL,
+        parameters: [String: AnyObject]? = nil,
+        parameterEncoding: NetworkRequestParameterEncoding = .URL,
+        headers: [String: String]? = nil,
+        completionHandler: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -> Void) -> NetworkRequest {
+        return download(method,
+                        url: url,
+                        parameters: parameters,
+                        parameterEncoding: parameterEncoding,
+                        headers: headers,
+                        completionHandler: completionHandler)
+    }
 }

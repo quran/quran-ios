@@ -77,6 +77,10 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
 
     // MARK:- AudioBannerViewDelegate
     func onPlayTapped() {
+        // 1. Get required Audio and Database files to play.
+        // 2. Download them if needed.
+        // 3. Start audio
+
         if !playing {
             repeatCount = .None
         }

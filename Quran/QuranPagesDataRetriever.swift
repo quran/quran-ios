@@ -21,7 +21,7 @@ struct QuranPagesDataRetriever: DataRetriever {
                 let pageNumber = i + startIndex
                 let sura = Quran.PageSuraStart[i]
                 let ayah = Quran.PageAyahStart[i]
-                let juzNumber = juzNumberForPage(pageNumber)
+                let juzNumber = Juz.juzFromPage(pageNumber).order
 
                 let page = QuranPage(pageNumber: pageNumber, startAyah: AyahNumber(sura: sura, ayah: ayah), juzNumber: juzNumber)
                 pages.append(page)
@@ -32,13 +32,4 @@ struct QuranPagesDataRetriever: DataRetriever {
             }
         }
     }
-}
-
-private func juzNumberForPage(page: Int) -> Int {
-    for (index, juzStartPage) in Quran.JuzPageStart.enumerate() {
-        if page < juzStartPage {
-            return index - 1 + Quran.QuranJuzsRange.startIndex
-        }
-    }
-    return Quran.QuranJuzsRange.endIndex - 1
 }

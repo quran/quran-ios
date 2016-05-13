@@ -2,15 +2,18 @@ PODS:
   - Alamofire (3.3.1)
   - GenericDataSources (1.0.0)
   - KVOController-Swift (1.2.0)
+  - SQLite.swift (0.10.1)
 
 DEPENDENCIES:
   - Alamofire (~> 3.3)
   - GenericDataSources
   - KVOController-Swift
+  - SQLite.swift (~> 0.10.1)
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
   GenericDataSources: 80ac8e170a19f0290572b9a7be39b972f7d1c26f
   KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
+  SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
 
 COCOAPODS: 0.39.0

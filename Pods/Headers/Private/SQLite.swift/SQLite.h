@@ -1,0 +1,1 @@
+../../../SQLite.swift/SQLite/SQLite.h

@@ -17,6 +17,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     let dataRetriever: AnyDataRetriever<[QuranPage]>
 
     let pageDataSource: QuranPagesDataSource
+    let ayahInfoRetriever: AyahInfoRetriever?
 
     let audioViewPresenter: AudioBannerViewPresenter
     let qarisControllerCreator: AnyCreator<QariTableViewController>
@@ -24,9 +25,12 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     let scrollToPageToken = Once()
     let didLayoutSubviewToken = Once()
 
+    var ayahInfo: [AyahNumber : [AyahInfo]]?
+
     init(persistence: SimplePersistence,
          imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
+         ayahInfoRetriever: AyahInfoRetriever?,
          audioViewPresenter: AudioBannerViewPresenter,
          qarisControllerCreator: AnyCreator<QariTableViewController>) {
         self.persistence = persistence
@@ -34,6 +38,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         self.audioViewPresenter = audioViewPresenter
         self.qarisControllerCreator = qarisControllerCreator
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
+        self.ayahInfoRetriever = ayahInfoRetriever
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
@@ -100,6 +105,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
         // hide bars on tap
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
+
+        // detect long taps on the page
+        view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onViewLongTapped(_:))))
     }
 
     private func createAudioBanner() {
@@ -177,6 +185,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         scrollToPageToken.once {
             let indexPath = NSIndexPath(forItem: index, inSection: 0)
             scrollToIndexPath(indexPath, animated: false)
+            ayahInfoRetriever?.retrieveAyahsAtPage(initialPage) { (result) in
+                self.ayahInfo = result.value
+            }
         }
     }
 
@@ -191,6 +202,45 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         }
 
         setBarsHidden(navigationController?.navigationBarHidden == false)
+    }
+
+    func onViewLongTapped(sender: UILongPressGestureRecognizer) {
+        guard sender.state == UIGestureRecognizerState.Ended else { return }
+        guard let ayahLocations = ayahInfo else { return }
+
+        let screenSize = self.view.bounds.size
+        let screenRatio: Float = Float(screenSize.height / screenSize.width)
+        let imageRatio: Float = 3106 / 1920
+
+        let scaledPageHeight: Float
+        let scaledPageWidth: Float
+        if screenRatio < imageRatio {
+            scaledPageHeight = Float(screenSize.height)
+            scaledPageWidth = scaledPageHeight / 3106 * 1920
+        } else {
+            scaledPageWidth = Float(screenSize.width)
+            scaledPageHeight = scaledPageWidth / 1920 * 3106
+        }
+        let widthFactor = scaledPageWidth / 1920
+        let heightFactor = scaledPageHeight / 3106
+
+        let offsetX = (Float(screenSize.width) - scaledPageWidth) / 2
+        let offsetY = (Float(screenSize.height) - scaledPageHeight) / 2
+
+        let location = sender.locationInView(nil)
+        let actualX = Float(location.x) / widthFactor - offsetX
+        let actualY = Float(location.y) / heightFactor - offsetY
+        NSLog("clicked at %f %f - actual %f %f", location.x, location.y, actualX, actualY)
+        let actualPoint = CGPoint(x: CGFloat(actualX), y: CGFloat(actualY))
+
+        for (_, info) in ayahLocations {
+            for line in info {
+                if line.rect.contains(actualPoint) {
+                    NSLog("Long pressed on ayah %d", line.ayah.ayah)
+                    return
+                }
+            }
+        }
     }
 
     private func setBarsHidden(hidden: Bool) {
@@ -239,6 +289,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         print(page.pageNumber)
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
         persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
+        ayahInfoRetriever?.retrieveAyahsAtPage(page.pageNumber) { (result) in
+            self.ayahInfo = result.value
+        }
     }
 
     func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {

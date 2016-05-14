@@ -12,8 +12,13 @@ struct AyahInfo {
     let pageNumber: Int
     let ayah: AyahNumber
     let position: Int
-    let bound: Rect
+    let minX: Int
     let maxX: Int
     let minY: Int
     let maxY: Int
+    var rect: Rect {
+        get {
+            return Rect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+        }
+    }
 }

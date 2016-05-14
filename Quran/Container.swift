@@ -68,11 +68,16 @@ class Container {
         return QariDataRetriever().erasedType()
     }
 
+    func createAyahInfoRetriever() -> AyahInfoRetriever? {
+        return try? SQLiteAyahInfoRetriever(persistence: AyahInfoPersistenceStorage())
+    }
+
     func createQuranController() -> QuranViewController {
         return QuranViewController(
             persistence: createSimplePersistence(),
             imageService: createQuranImageService(),
             dataRetriever: createQuranPagesRetriever(),
+            ayahInfoRetriever: createAyahInfoRetriever(),
             audioViewPresenter: createAudioBannerViewPresenter(),
             qarisControllerCreator: createBlockCreator(createQariTableViewController)
         )

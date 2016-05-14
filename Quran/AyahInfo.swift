@@ -16,4 +16,9 @@ struct AyahInfo {
     let maxX: Int
     let minY: Int
     let maxY: Int
+    var rect: Rect {
+        get {
+            return Rect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+        }
+    }
 }

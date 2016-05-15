@@ -17,6 +17,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     let dataRetriever: AnyDataRetriever<[QuranPage]>
 
     let pageDataSource: QuranPagesDataSource
+    let ayahInfoRetriever: AyahInfoRetriever
 
     let audioViewPresenter: AudioBannerViewPresenter
     let qarisControllerCreator: AnyCreator<QariTableViewController>
@@ -24,9 +25,12 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     let scrollToPageToken = Once()
     let didLayoutSubviewToken = Once()
 
+    var ayahInfo: [AyahNumber : [AyahInfo]]?
+
     init(persistence: SimplePersistence,
          imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
+         ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
          qarisControllerCreator: AnyCreator<QariTableViewController>) {
         self.persistence = persistence
@@ -34,6 +38,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         self.audioViewPresenter = audioViewPresenter
         self.qarisControllerCreator = qarisControllerCreator
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService)
+        self.ayahInfoRetriever = ayahInfoRetriever
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
@@ -177,6 +182,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         scrollToPageToken.once {
             let indexPath = NSIndexPath(forItem: index, inSection: 0)
             scrollToIndexPath(indexPath, animated: false)
+            ayahInfoRetriever.retrieveAyahsAtPage(initialPage) { (result) in
+                self.ayahInfo = result.value
+            }
         }
     }
 
@@ -239,6 +247,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         print(page.pageNumber)
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
         persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
+        ayahInfoRetriever.retrieveAyahsAtPage(page.pageNumber) { (result) in
+            self.ayahInfo = result.value
+        }
     }
 
     func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {

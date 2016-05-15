@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import KVOController_Swift
 
-class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
+class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate {
 
     let qariRetreiver: AnyDataRetriever<[Qari]>
     let persistence: SimplePersistence
+    let audioPlayer: AudioPlayerInteractor
+
+    var currentPage: QuranPage = Quran.firstPage()
 
     weak var view: AudioBannerView?
 
@@ -44,9 +48,12 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
         }
     }
 
-    init(persistence: SimplePersistence, qariRetreiver: AnyDataRetriever<[Qari]>) {
+    init(persistence: SimplePersistence, qariRetreiver: AnyDataRetriever<[Qari]>, audioPlayer: AudioPlayerInteractor) {
         self.persistence = persistence
         self.qariRetreiver = qariRetreiver
+        self.audioPlayer = audioPlayer
+        super.init()
+        self.audioPlayer.delegate = self
     }
 
     func onViewDidLoad() {
@@ -56,7 +63,6 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
             guard let `self` = self else {
                 return
             }
-
             self.qaris = qaris
 
             // get last selected qari id
@@ -66,26 +72,28 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
                 self.selectedQariIndex = selectedIndex
             }
 
-            self.setQariIndex(self.selectedQariIndex)
+            self.audioPlayer.checkIfDownloading { [weak self] (downloading) in
+                if !downloading {
+                    Queue.main.async { self?.showQariView() }
+                }
+            }
         }
+    }
+
+    private func showQariView() {
+        view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
     }
 
     func setQariIndex(index: Int) {
         selectedQariIndex = index
-        view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
+        showQariView()
     }
 
     // MARK:- AudioBannerViewDelegate
     func onPlayTapped() {
-        // 1. Get required Audio and Database files to play.
-        // 2. Download them if needed.
-        // 3. Start audio
-
-        if !playing {
-            repeatCount = .None
-        }
-
-        view?.setPlaying()
+        repeatCount = .None
+        // start downloading & playing
+        audioPlayer.playAudioForQari(selectedQari, atPage: currentPage)
     }
 
     func onPauseResumeTapped() {
@@ -93,15 +101,18 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
     }
 
     func onStopTapped() {
-        view?.setQari(name: "Afifi", image: nil)
+        audioPlayer.stopAudio()
+        showQariView()
     }
 
     func onForwardTapped() {
-
+        audioPlayer.goForward()
     }
+
     func onBackwardTapped() {
-
+        audioPlayer.goBackward()
     }
+
     func onRepeatTapped() {
         repeatCount = repeatCount.next()
     }
@@ -111,6 +122,43 @@ class DefaultAudioBannerViewPresenter: AudioBannerViewPresenter {
     }
 
     func onCancelDownloadTapped() {
+        audioPlayer.cancelDownload()
+        showQariView()
+    }
 
+    // MARK:- AudioPlayerInteractorDelegate
+    let progressKeyPath = "fractionCompleted"
+    var progress: NSProgress? {
+        didSet {
+            if let oldValue = oldValue {
+                unobserve(oldValue, keyPath: progressKeyPath)
+            }
+            if let newValue = progress {
+                observe(retainedObservable: newValue,
+                        keyPath: progressKeyPath,
+                        options: [.Initial, .New]) { [weak self] (observable, change: ChangeData<Double>) in
+                            if let newValue = change.newValue {
+                                Queue.main.async { self?.view?.setDownloading(Float(newValue)) }
+                            }
+                }
+            }
+        }
+    }
+
+    func willStartDownloadingAudioFiles(progress progress: NSProgress) {
+        self.progress = progress
+    }
+
+    func onPlayingAyah(ayah: AyahNumber) {
+        self.progress = nil
+        Queue.main.async { self.playing = true }
+    }
+
+    func onFailedDownloadingWithError(error: ErrorType) {
+        Queue.main.async {
+            self.showQariView()
+            let message = (error as? CustomStringConvertible)?.description ?? "Error downloading files"
+            UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
+        }
     }
 }

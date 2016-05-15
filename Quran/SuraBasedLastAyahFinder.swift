@@ -18,6 +18,6 @@ struct SuraBasedLastAyahFinder: LastAyahFinder {
 
         // different suras
         let sura = pageLastAyah.sura != startAyah.sura ? pageLastAyah.sura : startAyah.sura
-        return AyahNumber(sura: sura, ayah: Quran.SuraNumberOfAyahs[sura - 1])
+        return AyahNumber(sura: sura, ayah: Quran.numberOfAyahsForSura(sura))
     }
 }

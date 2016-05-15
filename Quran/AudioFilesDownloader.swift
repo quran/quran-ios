@@ -8,9 +8,15 @@
 
 import Foundation
 
-protocol AudioFilesDownloader {
+protocol AudioFilesDownloader: class {
 
-    func allFilesDownloaded(startAyah startAyah: AyahNumber, endAyah: AyahNumber, completion: (Bool) -> Void)
+    func cancel()
+    func resume()
+    func suspend()
 
-    func downloadFiles(startAyah startAyah: AyahNumber, endAyah: AyahNumber, completionHandler: Result<(), NetworkError> -> Void)
+    func needsToDownloadFiles(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
+
+    func getCurrentDownloadRequest(completion: Request? -> Void)
+
+    func download(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request?
 }

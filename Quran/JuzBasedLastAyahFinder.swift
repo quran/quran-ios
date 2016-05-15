@@ -20,7 +20,7 @@ struct JuzBasedLastAyahFinder: LastAyahFinder {
         // if last juz, get last ayah
         guard juz.order != Quran.QuranJuzsRange.endIndex.predecessor() else {
             let lastSura = Quran.QuranSurasRange.endIndex.predecessor()
-            return AyahNumber(sura: lastSura, ayah: Quran.SuraNumberOfAyahs[lastSura - 1])
+            return AyahNumber(sura: lastSura, ayah: Quran.numberOfAyahsForSura(lastSura))
         }
 
         let endJuz = Quran.Quarters[juz.order * Quran.NumberOfQuartersPerJuz]

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum HTTPMethod {
+enum HTTPMethod: String {
     case OPTIONS
     case GET
     case HEAD
@@ -20,23 +20,13 @@ enum HTTPMethod {
     case CONNECT
 }
 
-enum NetworkRequestParameterEncoding {
-    case URL
-    case URLEncodedInURL
-    case JSON
-}
+protocol NetworkManager: class {
 
-protocol NetworkManager {
+    var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    var startRequestsImmediately: Bool { get set }
+    func getCurrentTasks(completion: (downloads: [Request]) -> Void)
 
-    func download(
-        method: HTTPMethod,
-        url: NSURL,
-        parameters: [String: AnyObject]?,
-        parameterEncoding: NetworkRequestParameterEncoding,
-        headers: [String: String]?,
-        completionHandler: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -> Void) -> NetworkRequest
+    func download(request: NSURLRequest, destination: String, resumeDestination: String) -> Request
 }
 
 extension NetworkManager {
@@ -44,15 +34,12 @@ extension NetworkManager {
     func download(
         method: HTTPMethod,
         url: NSURL,
-        parameters: [String: AnyObject]? = nil,
-        parameterEncoding: NetworkRequestParameterEncoding = .URL,
         headers: [String: String]? = nil,
-        completionHandler: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -> Void) -> NetworkRequest {
-        return download(method,
-                        url: url,
-                        parameters: parameters,
-                        parameterEncoding: parameterEncoding,
-                        headers: headers,
-                        completionHandler: completionHandler)
+        destination: String,
+        resumeDestination: String) -> Request {
+
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = method.rawValue
+        return download(request, destination: destination, resumeDestination: resumeDestination)
     }
 }

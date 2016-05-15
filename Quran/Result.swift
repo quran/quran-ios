@@ -28,9 +28,9 @@ import Foundation
  - Success: The operation were successful.
  - Failure: The operation encountered an error resulting in a failure.
  */
-public enum Result<Value, Error: ErrorType> {
+public enum Result<Value> {
     case Success(Value)
-    case Failure(Error)
+    case Failure(ErrorType)
 
     /// Returns `true` if the result is a success, `false` otherwise.
     public var isSuccess: Bool {
@@ -58,7 +58,7 @@ public enum Result<Value, Error: ErrorType> {
     }
 
     /// Returns the associated error value if the result is a failure, `nil` otherwise.
-    public var error: Error? {
+    public var error: ErrorType? {
         switch self {
         case .Success:
             return nil

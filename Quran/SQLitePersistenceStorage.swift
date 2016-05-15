@@ -14,5 +14,5 @@ protocol SQLitePersistenceStorage {
                       `where`: String?,
                       groupBy: String?,
                       orderBy: String?,
-                      onCompletion: Result<[SqliteRow], PersistenceError> -> Void)
+                      onCompletion: Result<[SqliteRow]> -> Void)
 }

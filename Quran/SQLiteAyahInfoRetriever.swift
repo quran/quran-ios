@@ -12,7 +12,7 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
 
     let persistence: SQLitePersistenceStorage
 
-    func retrieveAyahsAtPage(page: Int, onCompletion: Result<[AyahNumber : [AyahInfo]], PersistenceError> -> Void) {
+    func retrieveAyahsAtPage(page: Int, onCompletion: Result<[AyahNumber : [AyahInfo]]> -> Void) {
         unimplemented()
     }
 }

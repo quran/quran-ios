@@ -364,3 +364,17 @@ struct Quran {
         AyahNumber(sura:87, ayah:1), AyahNumber(sura:90, ayah:1), AyahNumber(sura:94, ayah:1), AyahNumber(sura:100, ayah:9),
         ]
 }
+
+extension Quran {
+    static func startAyahForPage(page: Int) -> AyahNumber {
+        return AyahNumber(sura: PageSuraStart[page - 1], ayah: PageAyahStart[page - 1])
+    }
+
+    static func numberOfAyahsForSura(sura: Int) -> Int {
+        return SuraNumberOfAyahs[sura - 1]
+    }
+
+    static func firstPage() -> QuranPage {
+        return QuranPage(pageNumber: 1, startAyah: startAyahForPage(1), juzNumber: 1)
+    }
+}

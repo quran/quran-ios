@@ -60,6 +60,9 @@ struct QariDataRetriever: DataRetriever {
                 fatalError("Incorrect readers array count")
             }
 
+            guard Set(localPaths).count == localPaths.count else {
+                fatalError("quran_readers_path should have unique values")
+            }
 
             var qaris: [Qari] = []
 

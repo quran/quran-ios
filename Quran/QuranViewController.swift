@@ -177,6 +177,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         scrollToPageToken.once {
             let indexPath = NSIndexPath(forItem: index, inSection: 0)
             scrollToIndexPath(indexPath, animated: false)
+            onPageChangedToPage(pageDataSource.itemAtIndexPath(indexPath))
         }
     }
 
@@ -232,11 +233,15 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         guard let visibleIndexPath = collectionView?.indexPathsForVisibleItems().first else {
             return
         }
-        updateBarToPage(pageDataSource.itemAtIndexPath(visibleIndexPath))
+        onPageChangedToPage(pageDataSource.itemAtIndexPath(visibleIndexPath))
+    }
+
+    private func onPageChangedToPage(page: QuranPage) {
+        audioViewPresenter.currentPage = page
+        updateBarToPage(page)
     }
 
     private func updateBarToPage(page: QuranPage) {
-        print(page.pageNumber)
         title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
         persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
     }

@@ -18,7 +18,7 @@ struct PageBasedLastAyahFinder: LastAyahFinder {
         guard page < lastPage else {
             // last page, then get last ayah
             let lastSura = Quran.QuranSurasRange.endIndex.predecessor()
-            return AyahNumber(sura: lastSura, ayah: Quran.SuraNumberOfAyahs[lastSura - 1])
+            return AyahNumber(sura: lastSura, ayah: Quran.numberOfAyahsForSura(lastSura))
         }
 
         let nextPageIndex = (page - 1) + 1
@@ -28,7 +28,7 @@ struct PageBasedLastAyahFinder: LastAyahFinder {
         // if next page is a new sura
         if nextPageAyah == 1 {
             let sura = nextPageSura - 1
-            return AyahNumber(sura: sura, ayah: Quran.SuraNumberOfAyahs[sura - 1])
+            return AyahNumber(sura: sura, ayah: Quran.numberOfAyahsForSura(sura))
         } else {
             return AyahNumber(sura: nextPageSura, ayah: nextPageAyah - 1)
         }

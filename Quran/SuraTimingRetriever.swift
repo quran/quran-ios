@@ -9,5 +9,5 @@
 import Foundation
 
 protocol SuraTimingRetriever {
-    func retrieveSuraTiming(sura: Int, onCompletion: Result<[SuraTiming], PersistenceError> -> Void)
+    func retrieveSuraTiming(sura: Int, onCompletion: Result<[SuraTiming]> -> Void)
 }

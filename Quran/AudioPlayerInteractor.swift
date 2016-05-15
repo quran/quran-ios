@@ -8,12 +8,21 @@
 
 import Foundation
 
-protocol AudioPlayerDelegate {
+protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloadingAudioFiles(progress progress: NSProgress)
+
     func onPlayingAyah(ayah: AyahNumber)
+
+    func onFailedDownloadingWithError(error: ErrorType)
 }
 
 protocol AudioPlayerInteractor {
+
+    weak var delegate: AudioPlayerInteractorDelegate? { get set }
+
+    // will call willStartDownloadingAudioFiles if there is downloads
+    func checkIfDownloading(completion: (downloading: Bool) -> Void)
+
     func playAudioForQari(qari: Qari, atPage page: QuranPage)
 
     func cancelDownload()

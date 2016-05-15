@@ -14,6 +14,8 @@ protocol AudioBannerViewPresenterDelegate: class {
 
 protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
 
+    var currentPage: QuranPage { get set }
+
     weak var delegate: AudioBannerViewPresenterDelegate? { get set }
     weak var view: AudioBannerView? { get set }
 

@@ -30,4 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().barTintColor = UIColor.appIdentity()
     }
+
+    func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) {
+        let networkManager = container.createNetworkManager()
+        networkManager.backgroundSessionCompletionHandler = completionHandler
+    }
 }

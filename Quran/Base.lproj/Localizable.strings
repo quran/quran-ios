@@ -444,11 +444,15 @@
  */
 
 "NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
-"NetworkError_IncorrectDataReturned" = "Incorrect data returned from Pixabay server. Try again, or wait until Pixabay fixes the problem.";
 "NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
 "NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-"NetworkError_NotReachedServer" = "Could not reach the Pixabay server. Check the internet connection, or wait until the server becomes accessible.";
+"NetworkError_ServerNotReachable" = "Could not reach the Pixabay server. Check the internet connection, or wait until the server becomes accessible.";
 "NetworkError_Unknown" = "Unknown error occurred. Check internet connection and try again.";
 
 "suraDescriptionMakkiAndVerses" = "%1$@ - %2$@ verses";
 "quarterDescriptionSuraAndVerses" = "%1$@ - Ayah %2$@";
+
+
+
+"FileSystemError_Unknown" = "Unkown error occurred while accessing device hard disk";
+"FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";

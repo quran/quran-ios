@@ -9,8 +9,17 @@
 import Foundation
 
 struct Files {
+
+    static let AudioExtension = "mp3"
+    static let DownloadResumeDataExtension = "resume"
+    static let DatabaseRemoteFileExtension = "zip"
+
     static let QuarterPrefixArray: NSURL = fileURL("quarter_prefix_array", withExtension: "plist")
     static let Readers: NSURL = fileURL("readers", withExtension: "plist")
+
+    static var DocumentsFolder: NSURL = {
+        return NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    }()
 }
 
 private func fileURL(fileName: String, withExtension: String) -> NSURL {
@@ -18,4 +27,26 @@ private func fileURL(fileName: String, withExtension: String) -> NSURL {
         fatalError("Couldn't find file `\(fileName).\(withExtension)` locally ")
     }
     return url
+}
+
+extension Qari {
+    func localFolder() -> NSURL {
+        return Files.DocumentsFolder.URLByAppendingPathComponent(path)
+    }
+}
+
+extension NSURL {
+    func resumeURL() -> NSURL {
+        return URLByAppendingPathExtension(Files.DownloadResumeDataExtension)
+    }
+}
+
+extension String {
+    func stringByAppendingPath(path: String) -> String {
+        return (self as NSString).stringByAppendingPathComponent(path)
+    }
+
+    func stringByAppendingExtension(pathExtension: String) -> String {
+        return (self as NSString).stringByAppendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
+    }
 }

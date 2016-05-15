@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GappedAudioPlayerInteractor: AudioPlayerInteractor {
+struct GappedAudioPlayerInteractor {
 
     func playAudioForQari(qari: Qari, atPage page: QuranPage) {
         unimplemented()

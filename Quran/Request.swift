@@ -8,9 +8,11 @@
 
 import Foundation
 
-protocol NetworkRequest {
+protocol Request: class {
 
     var progress: NSProgress { get }
+
+    var onCompletion: (Result<()> -> Void)? { get set }
 
     func resume()
     func suspend()

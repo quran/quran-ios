@@ -8,12 +8,44 @@
 
 import Foundation
 
-struct GappedAudioFilesDownloader: AudioFilesDownloader {
-    func allFilesDownloaded(startAyah startAyah: AyahNumber, endAyah: AyahNumber, completion: (Bool) -> Void) {
-        unimplemented()
+class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
+
+    let downloader: NetworkManager
+
+    var request: Request? = nil
+
+    init(downloader: NetworkManager) {
+        self.downloader = downloader
     }
 
-    func downloadFiles(startAyah startAyah: AyahNumber, endAyah: AyahNumber, completionHandler: Result<(), NetworkError> -> Void) {
-        unimplemented()
+    func filesForQari(qari: Qari,
+                      startAyah: AyahNumber,
+                      endAyah: AyahNumber) -> [(remoteURL: NSURL, destination: String, resumeURL: String)] {
+
+        var files = [(remoteURL: NSURL, destination: String, resumeURL: String)]()
+        for sura in startAyah.sura...endAyah.sura {
+
+            let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : Quran.numberOfAyahsForSura(sura)
+            let endAyahNumber = sura == endAyah.sura ? endAyah.ayah : Quran.numberOfAyahsForSura(sura)
+
+            for ayah in startAyahNumber...endAyahNumber {
+                files.append(createRequestInfo(qari: qari, sura: sura, ayah: ayah))
+            }
+        }
+
+        // add besm Allah
+        if startAyah.sura != 1 || startAyah.ayah == 1 {
+            files.append(createRequestInfo(qari: qari, sura: 1, ayah: 1))
+        }
+
+        return files
+    }
+
+    private func createRequestInfo(qari qari: Qari, sura: Int, ayah: Int) -> (remoteURL: NSURL, destination: String, resumeURL: String) {
+        let fileName = String(format: "%03d%03d", sura, ayah)
+        let remoteURL = qari.audioURL.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(Files.AudioExtension)
+        let localURL = qari.path.stringByAppendingPath(fileName).stringByAppendingExtension(Files.AudioExtension)
+        let resumeURL = localURL.stringByAppendingExtension(Files.DownloadResumeDataExtension)
+        return (remoteURL: remoteURL, destination: localURL, resumeURL: resumeURL)
     }
 }

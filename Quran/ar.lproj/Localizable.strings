@@ -439,26 +439,5 @@
 /*audio manager*/
 "audio_manager" = "إدارة الصوتيات";
 
-/*Localizable.strings
- Quran
- 
- Created by Mohamed Afifi on 4/22/16.
- Copyright © 2016 Quran.com. All rights reserved.
- 
- Error description*/
-"NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
 
-/*Error description*/
-"NetworkError_IncorrectDataReturned" = "Incorrect data returned from Pixabay server. Try again, or wait until Pixabay fixes the problem.";
 
-/*Error description*/
-"NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
-
-/*Error description*/
-"NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-
-/*Error description*/
-"NetworkError_NotReachedServer" = "Could not reach the Pixabay server. Check the internet connection, or wait until the server becomes accessible.";
-
-/*Error description*/
-"NetworkError_Unknown" = "Unknown error occurred. Check internet connection and try again.";

@@ -17,7 +17,7 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
             do {
                 let result = try self.persistence.getAyahInfoForPage(page)
                 Queue.main.async {
-                    onCompletion(Result.Success(result))
+                    onCompletion(Result.Success(self.processAyahInfo(result)))
                 }
             } catch {
                 Queue.main.async({
@@ -25,5 +25,25 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
                 })
             }
         }
+    }
+
+    private func processAyahInfo(info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
+        var result = [AyahNumber: [AyahInfo]]()
+        for (ayah, pieces) in info {
+            guard pieces.count > 0 else { continue }
+            var ayahResult: [AyahInfo] = []
+            ayahResult += [pieces[0]]
+            var lastAyah = ayahResult[0]
+            for i in 1..<pieces.count {
+                if pieces[i].line != lastAyah.line {
+                    lastAyah = pieces[i]
+                    ayahResult += [ pieces[i] ]
+                } else {
+                    ayahResult += [ ayahResult.removeLast().engulf(pieces[i]) ]
+                }
+            }
+            result[ayah] = ayahResult
+        }
+        return result
     }
 }

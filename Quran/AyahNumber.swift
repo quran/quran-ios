@@ -39,5 +39,5 @@ struct AyahNumber: Hashable {
 }
 
 func == (lhs: AyahNumber, rhs: AyahNumber) -> Bool {
-    return lhs.sura == rhs.sura && lhs.ayah == lhs.ayah
+    return lhs.sura == rhs.sura && lhs.ayah == rhs.ayah
 }

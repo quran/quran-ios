@@ -12,11 +12,13 @@ import GenericDataSources
 class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell> {
 
     let imageService: QuranImageService
+    let ayahInfoRetriever: AyahInfoRetriever
 
     let numberFormatter = NSNumberFormatter()
 
-    init(reuseIdentifier: String, imageService: QuranImageService) {
+    init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever) {
         self.imageService = imageService
+        self.ayahInfoRetriever = ayahInfoRetriever
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
@@ -39,6 +41,13 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                 return
             }
             cell.mainImageView.image = image
+        }
+
+        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { (data) in
+            guard cell.page == item else {
+                return
+            }
+            cell.setAyahInfo(data.value)
         }
     }
 }

@@ -10,11 +10,11 @@ import Foundation
 
 class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
 
-    let downloader: NetworkManager
+    let downloader: DownloadManager
 
     var request: Request? = nil
 
-    init(downloader: NetworkManager) {
+    init(downloader: DownloadManager) {
         self.downloader = downloader
     }
 
@@ -22,7 +22,17 @@ class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
                       startAyah: AyahNumber,
                       endAyah: AyahNumber) -> [(remoteURL: NSURL, destination: String, resumeURL: String)] {
 
+        guard case AudioType.Gapped = qari.audioType else {
+            fatalError("Unsupported qari type gapless. Only gapless qaris can be downloaded here.")
+        }
+
         var files = [(remoteURL: NSURL, destination: String, resumeURL: String)]()
+
+        // add besm Allah for all except Al-Fatihah
+        if startAyah.sura != 1 && startAyah.ayah != 1 {
+            files.append(createRequestInfo(qari: qari, sura: 1, ayah: 1))
+        }
+
         for sura in startAyah.sura...endAyah.sura {
 
             let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : 1
@@ -31,11 +41,6 @@ class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
             for ayah in startAyahNumber...endAyahNumber {
                 files.append(createRequestInfo(qari: qari, sura: sura, ayah: ayah))
             }
-        }
-
-        // add besm Allah
-        if startAyah.sura != 1 || startAyah.ayah == 1 {
-            files.append(createRequestInfo(qari: qari, sura: 1, ayah: 1))
         }
 
         return files

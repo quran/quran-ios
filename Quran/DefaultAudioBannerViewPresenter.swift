@@ -51,9 +51,9 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     private var playing: Bool = false {
         didSet {
             if playing {
-                view?.setPaused()
-            } else {
                 view?.setPlaying()
+            } else {
+                view?.setPaused()
             }
         }
     }
@@ -114,11 +114,15 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func onPauseResumeTapped() {
         playing = !playing
+        if playing {
+            audioPlayer.resumeAudio()
+        } else {
+            audioPlayer.pauseAudio()
+        }
     }
 
     func onStopTapped() {
         audioPlayer.stopAudio()
-        showQariView()
     }
 
     func onForwardTapped() {
@@ -139,7 +143,6 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func onCancelDownloadTapped() {
         audioPlayer.cancelDownload()
-        showQariView()
     }
 
     // MARK:- AudioPlayerInteractorDelegate
@@ -161,7 +164,11 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         }
     }
 
-    func willStartDownloadingAudioFiles(progress progress: NSProgress) {
+    func willStartDownloading() {
+        Queue.main.async { self.view?.setDownloading(0)  }
+    }
+
+    func didStartDownloadingAudioFiles(progress progress: NSProgress) {
         self.progress = progress
     }
 
@@ -172,9 +179,12 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func onFailedDownloadingWithError(error: ErrorType) {
         Queue.main.async {
-            self.showQariView()
             let message = (error as? CustomStringConvertible)?.description ?? "Error downloading files"
             UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
         }
+    }
+
+    func onPlaybackDownloadingCompleted() {
+        Queue.main.async { self.showQariView() }
     }
 }

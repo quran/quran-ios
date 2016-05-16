@@ -10,11 +10,11 @@ import Foundation
 
 class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
 
-    let downloader: NetworkManager
+    let downloader: DownloadManager
 
     var request: Request? = nil
 
-    init(downloader: NetworkManager) {
+    init(downloader: DownloadManager) {
         self.downloader = downloader
     }
 
@@ -22,11 +22,7 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
                               startAyah: AyahNumber,
                               endAyah: AyahNumber) -> [(remoteURL: NSURL, destination: String, resumeURL: String)] {
 
-        let databaseFileName: String
-        switch qari.audioType {
-        case .Gapless(let databaseName):
-            databaseFileName = databaseName
-        case .Gapped:
+        guard case AudioType.Gapless(let databaseFileName) = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")
         }
 

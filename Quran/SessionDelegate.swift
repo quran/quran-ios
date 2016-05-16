@@ -62,11 +62,13 @@ class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate,
         return !dataRequests.isEmpty
     }
 
-    func addRequestData(request: NSURLRequest, downloadRequest: DownloadNetworkRequest) {
-        dataRequests[request] = RequestData(request: request,
-                                            destination: downloadRequest.destination,
-                                            resumeDataURL: downloadRequest.resumeDestination)
-        addRequest(request, downloadRequest: downloadRequest)
+    func addRequestsData(requests: [(NSURLRequest, DownloadNetworkRequest)]) {
+        for (request, downloadRequest) in requests {
+            dataRequests[request] = RequestData(request: request,
+                                                destination: downloadRequest.destination,
+                                                resumeDataURL: downloadRequest.resumeDestination)
+            addRequest(request, downloadRequest: downloadRequest)
+        }
         updatePersistence()
     }
 

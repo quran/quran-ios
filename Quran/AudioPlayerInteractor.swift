@@ -9,11 +9,14 @@
 import Foundation
 
 protocol AudioPlayerInteractorDelegate: class {
-    func willStartDownloadingAudioFiles(progress progress: NSProgress)
+    func willStartDownloading()
+    func didStartDownloadingAudioFiles(progress progress: NSProgress)
 
     func onPlayingAyah(ayah: AyahNumber)
 
     func onFailedDownloadingWithError(error: ErrorType)
+
+    func onPlaybackDownloadingCompleted()
 }
 
 protocol AudioPlayerInteractor: class {

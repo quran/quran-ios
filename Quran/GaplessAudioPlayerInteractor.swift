@@ -14,10 +14,16 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
 
     let downloader: AudioFilesDownloader
 
+    let player: AudioPlayer
+
     let lastAyahFinder: LastAyahFinder
 
-    init(downloader: AudioFilesDownloader, lastAyahFinder: LastAyahFinder) {
+    var downloadCancelled: Bool = false
+
+    init(downloader: AudioFilesDownloader, lastAyahFinder: LastAyahFinder, player: AudioPlayer) {
         self.downloader = downloader
         self.lastAyahFinder = lastAyahFinder
+        self.player = player
+        self.player.delegate = self
     }
 }

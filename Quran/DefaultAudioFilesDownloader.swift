@@ -10,7 +10,7 @@ import Foundation
 
 protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
-    var downloader: NetworkManager { get }
+    var downloader: DownloadManager { get }
 
     var request: Request? { set get }
 
@@ -60,9 +60,12 @@ extension DefaultAudioFilesDownloader {
         print("Will download files: \(filesToDownload.map { ($0.remoteURL, $0.destination) })")
 
         // create downloads
-        let requests = filesToDownload.map {
-            return downloader.download(.GET, url: $0.remoteURL, destination: $0.destination, resumeDestination: $0.resumeURL)
-        }
+        let requests = downloader.download(filesToDownload.map { (
+            method: .GET,
+            url: $0.remoteURL,
+            headers: nil,
+            destination: $0.destination,
+            resumeDestination: $0.resumeURL) })
         // wrap the requests
         self.createRequestWithDownloads(requests)
         return self.request

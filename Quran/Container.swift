@@ -18,11 +18,11 @@ class Container {
         return cache
     }()
 
-    private var networkManager: NetworkManager! = nil
+    private var downloadManager: DownloadManager! = nil
 
     init() {
         let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("DownloadsBackgroundIdentifier")
-        networkManager = URLSessionNetworkManager(configuration: configuration, persistence: createSimplePersistence())
+        downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createSimplePersistence())
     }
 
     func createRootViewController() -> UIViewController {
@@ -111,8 +111,8 @@ class Container {
     func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
         return DefaultAudioBannerViewPresenter(persistence: createSimplePersistence(),
                                                qariRetreiver: createQarisDataRetriever(),
-                                               gaplessAudioPlayer: createGaplessAudioPlayer(),
-                                               gappedAudioPlayer: createGappedAudioPlayer())
+                                               gaplessAudioPlayer: createGaplessAudioPlayerInteractor(),
+                                               gappedAudioPlayer: createGappedAudioPlayerInteractor())
     }
 
     func createUserDefaults() -> NSUserDefaults {
@@ -135,23 +135,35 @@ class Container {
         return JuzBasedLastAyahFinder()
     }
 
-    func createNetworkManager() -> NetworkManager {
-        return networkManager
+    func createDownloadManager() -> DownloadManager {
+        return downloadManager
     }
 
     func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return GappedAudioFilesDownloader(downloader: createNetworkManager())
+        return GappedAudioFilesDownloader(downloader: createDownloadManager())
     }
 
     func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return GaplessAudioFilesDownloader(downloader: createNetworkManager())
+        return GaplessAudioFilesDownloader(downloader: createDownloadManager())
     }
 
-    func createGaplessAudioPlayer() -> AudioPlayerInteractor {
-        return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(), lastAyahFinder: createSuraLastAyahFinder())
+    func createGappedAudioPlayer() -> AudioPlayer {
+        return GappedAudioPlayer()
     }
 
-    func createGappedAudioPlayer() -> AudioPlayerInteractor {
-        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(), lastAyahFinder: createSuraLastAyahFinder())
+    func createGaplessAudioPlayer() -> AudioPlayer {
+        return GaplessAudioPlayer()
+    }
+
+    func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
+        return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(),
+                                            lastAyahFinder: createSuraLastAyahFinder(),
+                                            player: createGaplessAudioPlayer())
+    }
+
+    func createGappedAudioPlayerInteractor() -> AudioPlayerInteractor {
+        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
+                                           lastAyahFinder: createSuraLastAyahFinder(),
+                                           player: createGappedAudioPlayer())
     }
 }

@@ -1,5 +1,5 @@
 //
-//  URLSessionNetworkManager.swift
+//  URLSessionDownloadManager.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/14/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class URLSessionNetworkManager: NetworkManager {
+class URLSessionDownloadManager: DownloadManager {
 
     let session: NSURLSession
     private let delegate: SessionDelegate
@@ -39,6 +39,7 @@ class URLSessionNetworkManager: NetworkManager {
                 return
             }
             var downloads: [Request] = []
+            var requests = [(NSURLRequest, DownloadNetworkRequest)]()
             for task in downloadTakss {
                 if let request = task.originalRequest, let data = self.delegate.getRequestDataForRequest(request) {
 
@@ -47,33 +48,38 @@ class URLSessionNetworkManager: NetworkManager {
                         destination: data.destination,
                         resumeDestination: data.resumeData,
                         progress: progress)
-                    self.delegate.addRequestData(request, downloadRequest: downloadRequest)
+                    requests.append((request, downloadRequest: downloadRequest))
                     downloads.append(downloadRequest)
                 }
             }
+            self.delegate.addRequestsData(requests)
             completion(downloads: downloads)
         }
     }
 
-    func download(request: NSURLRequest, destination: String, resumeDestination: String) -> Request {
+    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [Request] {
 
-        let task: NSURLSessionDownloadTask
-        let resumeURL = Files.DocumentsFolder.URLByAppendingPathComponent(resumeDestination)
-        if let data = NSData(contentsOfURL: resumeURL) {
-            task = session.downloadTaskWithResumeData(data)
-        } else {
-            task = session.downloadTaskWithRequest(request)
+        var downloadRequests = [(NSURLRequest, DownloadNetworkRequest)]()
+        for details in requests {
+            let task: NSURLSessionDownloadTask
+            let resumeURL = Files.DocumentsFolder.URLByAppendingPathComponent(details.resumeDestination)
+            if let data = NSData(contentsOfURL: resumeURL) {
+                task = session.downloadTaskWithResumeData(data)
+            } else {
+                task = session.downloadTaskWithRequest(details.request)
+            }
+            let progress = NSProgress(totalUnitCount: 1)
+            let downloadRequest = DownloadNetworkRequest(task: task,
+                                                         destination: details.destination,
+                                                         resumeDestination: details.resumeDestination,
+                                                         progress: progress)
+            // start the task
+            task.resume()
+
+            downloadRequests.append((details.request, downloadRequest))
         }
-        let progress = NSProgress(totalUnitCount: 1)
-        let downloadRequest = DownloadNetworkRequest(task: task,
-                                             destination: destination,
-                                             resumeDestination: resumeDestination,
-                                             progress: progress)
 
-        delegate.addRequestData(request, downloadRequest: downloadRequest)
-
-        // start the task
-        task.resume()
-        return downloadRequest
+        delegate.addRequestsData(downloadRequests)
+        return downloadRequests.map { $1 }
     }
 }

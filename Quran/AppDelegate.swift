@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) {
-        let networkManager = container.createNetworkManager()
-        networkManager.backgroundSessionCompletionHandler = completionHandler
+        let downloadManager = container.createDownloadManager()
+        downloadManager.backgroundSessionCompletionHandler = completionHandler
     }
 }

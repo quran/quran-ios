@@ -16,8 +16,14 @@ class GappedAudioPlayerInteractor: DefaultAudioPlayerInteractor {
 
     let lastAyahFinder: LastAyahFinder
 
-    init(downloader: AudioFilesDownloader, lastAyahFinder: LastAyahFinder) {
+    let player: AudioPlayer
+
+    var downloadCancelled: Bool = false
+
+    init(downloader: AudioFilesDownloader, lastAyahFinder: LastAyahFinder, player: AudioPlayer) {
         self.downloader = downloader
         self.lastAyahFinder = lastAyahFinder
+        self.player = player
+        self.player.delegate = self
     }
 }

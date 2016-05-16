@@ -13,7 +13,17 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     let qariRetreiver: AnyDataRetriever<[Qari]>
     let persistence: SimplePersistence
-    let audioPlayer: AudioPlayerInteractor
+    let gaplessAudioPlayer: AudioPlayerInteractor
+    let gappedAudioPlayer: AudioPlayerInteractor
+
+    var audioPlayer: AudioPlayerInteractor {
+        switch selectedQari.audioType {
+        case .Gapless:
+            return gaplessAudioPlayer
+        case .Gapped:
+            return gappedAudioPlayer
+        }
+    }
 
     var currentPage: QuranPage = Quran.firstPage()
 
@@ -48,12 +58,18 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         }
     }
 
-    init(persistence: SimplePersistence, qariRetreiver: AnyDataRetriever<[Qari]>, audioPlayer: AudioPlayerInteractor) {
+    init(persistence: SimplePersistence,
+         qariRetreiver: AnyDataRetriever<[Qari]>,
+         gaplessAudioPlayer: AudioPlayerInteractor,
+         gappedAudioPlayer: AudioPlayerInteractor) {
         self.persistence = persistence
         self.qariRetreiver = qariRetreiver
-        self.audioPlayer = audioPlayer
+        self.gaplessAudioPlayer = gaplessAudioPlayer
+        self.gappedAudioPlayer = gappedAudioPlayer
         super.init()
-        self.audioPlayer.delegate = self
+
+        self.gaplessAudioPlayer.delegate = self
+        self.gappedAudioPlayer.delegate = self
     }
 
     func onViewDidLoad() {

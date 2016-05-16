@@ -8,29 +8,16 @@
 
 import Foundation
 
-struct GappedAudioPlayerInteractor {
+class GappedAudioPlayerInteractor: DefaultAudioPlayerInteractor {
 
-    func playAudioForQari(qari: Qari, atPage page: QuranPage) {
-        unimplemented()
-    }
+    weak var delegate: AudioPlayerInteractorDelegate? = nil
 
-    func cancelDownload() {
-        unimplemented()
-    }
+    let downloader: AudioFilesDownloader
 
-    func pauseAudio() {
-        unimplemented()
-    }
-    func resumeAudio() {
-        unimplemented()
-    }
-    func stopAudio() {
-        unimplemented()
-    }
-    func goForward() {
-        unimplemented()
-    }
-    func goBackward() {
-        unimplemented()
+    let lastAyahFinder: LastAyahFinder
+
+    init(downloader: AudioFilesDownloader, lastAyahFinder: LastAyahFinder) {
+        self.downloader = downloader
+        self.lastAyahFinder = lastAyahFinder
     }
 }

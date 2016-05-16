@@ -25,7 +25,7 @@ class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
         var files = [(remoteURL: NSURL, destination: String, resumeURL: String)]()
         for sura in startAyah.sura...endAyah.sura {
 
-            let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : Quran.numberOfAyahsForSura(sura)
+            let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : 1
             let endAyahNumber = sura == endAyah.sura ? endAyah.ayah : Quran.numberOfAyahsForSura(sura)
 
             for ayah in startAyahNumber...endAyahNumber {

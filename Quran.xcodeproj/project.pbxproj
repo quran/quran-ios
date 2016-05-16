@@ -12,6 +12,7 @@
 		5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */; };
 		5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
+		548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
@@ -144,6 +145,7 @@
 		5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
+		548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayerInteractor.swift; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 			isa = PBXGroup;
 			children = (
 				54C0DC091CE66B20009AAD8D /* AudioPlayerInteractor.swift */,
+				548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */,
 				54C0DC0B1CE68F46009AAD8D /* GaplessAudioPlayerInteractor.swift */,
 				54C0DC0D1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift */,
 			);
@@ -1167,6 +1170,7 @@
 				54B267011CD6ADE000D3AEF8 /* Creator.swift in Sources */,
 				54C0DC041CE63387009AAD8D /* SuraBasedLastAyahFinder.swift in Sources */,
 				54B266501CCA876600D3AEF8 /* SQLitePersistenceStorage.swift in Sources */,
+				548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */,
 				54C0DC0C1CE68F46009AAD8D /* GaplessAudioPlayerInteractor.swift in Sources */,
 				54B266931CCACCBF00D3AEF8 /* CircleView.swift in Sources */,
 				54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */,

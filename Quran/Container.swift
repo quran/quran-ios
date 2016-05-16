@@ -111,7 +111,8 @@ class Container {
     func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
         return DefaultAudioBannerViewPresenter(persistence: createSimplePersistence(),
                                                qariRetreiver: createQarisDataRetriever(),
-                                               audioPlayer: createGaplessAudioPlayer())
+                                               gaplessAudioPlayer: createGaplessAudioPlayer(),
+                                               gappedAudioPlayer: createGappedAudioPlayer())
     }
 
     func createUserDefaults() -> NSUserDefaults {
@@ -148,5 +149,9 @@ class Container {
 
     func createGaplessAudioPlayer() -> AudioPlayerInteractor {
         return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(), lastAyahFinder: createSuraLastAyahFinder())
+    }
+
+    func createGappedAudioPlayer() -> AudioPlayerInteractor {
+        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(), lastAyahFinder: createSuraLastAyahFinder())
     }
 }

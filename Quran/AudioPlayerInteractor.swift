@@ -16,7 +16,7 @@ protocol AudioPlayerInteractorDelegate: class {
     func onFailedDownloadingWithError(error: ErrorType)
 }
 
-protocol AudioPlayerInteractor {
+protocol AudioPlayerInteractor: class {
 
     weak var delegate: AudioPlayerInteractorDelegate? { get set }
 

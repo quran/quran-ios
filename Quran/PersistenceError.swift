@@ -9,5 +9,7 @@
 import Foundation
 
 enum PersistenceError: ErrorType {
+    case OpenDatabase(error: ErrorType)
+    case QueryError(error: ErrorType)
     case Unknown
 }

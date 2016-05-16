@@ -119,7 +119,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
 
     private func navigateToPage(page: Int) {
         let controller = self.quranControllerCreator.create()
-        controller.initialPage = 604// page // TODO: reset it
+        controller.initialPage = page
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

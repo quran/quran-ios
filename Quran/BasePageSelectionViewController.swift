@@ -53,7 +53,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.title = ""
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.imageWithRenderingMode(.AlwaysTemplate))
 
         tableView.sectionHeaderHeight = 44

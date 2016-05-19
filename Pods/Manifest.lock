@@ -2,15 +2,18 @@ PODS:
   - GenericDataSources (1.0.0)
   - KVOController-Swift (1.2.0)
   - SQLite.swift (0.10.1)
+  - Zip (0.4.1)
 
 DEPENDENCIES:
   - GenericDataSources
   - KVOController-Swift
   - SQLite.swift (~> 0.10.1)
+  - Zip (~> 0.4)
 
 SPEC CHECKSUMS:
   GenericDataSources: 80ac8e170a19f0290572b9a7be39b972f7d1c26f
   KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
   SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
+  Zip: 5bbe261a6c2c41b7b4e8e55c4a0a03be68ab4c4c
 
 COCOAPODS: 0.39.0

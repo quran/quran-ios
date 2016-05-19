@@ -6,4 +6,5 @@ target 'Quran' do
     pod 'GenericDataSources'
     pod 'KVOController-Swift'
     pod 'SQLite.swift', '~> 0.10.1'
+    pod 'Zip', '~> 0.4'
 end

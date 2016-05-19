@@ -13,6 +13,7 @@ struct Files {
     static let AudioExtension = "mp3"
     static let DownloadResumeDataExtension = "resume"
     static let DatabaseRemoteFileExtension = "zip"
+    static let DatabaseLocalFileExtension = "db"
 
     static let QuarterPrefixArray: NSURL = fileURL("quarter_prefix_array", withExtension: "plist")
     static let Readers: NSURL = fileURL("readers", withExtension: "plist")

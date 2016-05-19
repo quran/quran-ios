@@ -17,11 +17,17 @@ protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegat
     var lastAyahFinder: LastAyahFinder { get }
 
     var downloadCancelled: Bool { get set }
+
+    func prePlayOperation(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void)
 }
 
 extension DefaultAudioPlayerInteractor {
 
     private typealias PlaybackInfo = (qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
+
+    func prePlayOperation(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void) {
+        completion()
+    }
 
     func checkIfDownloading(completion: (downloading: Bool) -> Void) {
         downloader.getCurrentDownloadRequest { [weak self] (request) in
@@ -115,7 +121,9 @@ extension DefaultAudioPlayerInteractor {
     }
 
     private func startPlaying(playbackInfo: PlaybackInfo) {
-        delegate?.onPlayingAyah(AyahNumber(sura: 0, ayah: 0))
-        player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
+        prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
+            self?.delegate?.onPlayingAyah(AyahNumber(sura: 0, ayah: 0))
+            self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
+        }
     }
 }

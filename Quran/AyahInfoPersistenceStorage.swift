@@ -16,6 +16,7 @@ class AyahInfoPersistenceStorage: AyahInfoStorage {
         let page = Expression<Int>("page_number")
         let sura = Expression<Int>("sura_number")
         let ayah = Expression<Int>("ayah_number")
+        let line = Expression<Int>("line_number")
         let position = Expression<Int>("position")
         let minX = Expression<Int>("min_x")
         let maxX = Expression<Int>("max_x")
@@ -73,7 +74,8 @@ class AyahInfoPersistenceStorage: AyahInfoStorage {
     }
 
     private func getAyahInfoFromRow(row: Row, ayah: AyahNumber) -> AyahInfo {
-        return AyahInfo(pageNumber: row[columns.page],
+        return AyahInfo(page: row[columns.page],
+                        line: row[columns.line],
                         ayah: ayah,
                         position: row[columns.position],
                         minX: row[columns.minX],

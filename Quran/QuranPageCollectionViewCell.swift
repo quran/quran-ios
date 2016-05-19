@@ -23,7 +23,6 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var scrollView: UIScrollView!
 
     var page: QuranPage?
-
     var sizeConstraints: [NSLayoutConstraint] = []
 
     override func awakeFromNib() {
@@ -34,6 +33,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         scrollView.contentOffset = CGPoint.zero
+        highlightingView.reset()
     }
 
     override func layoutSubviews() {
@@ -50,5 +50,26 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
             // add fit height
             sizeConstraints.append(mainImageView.addHeightConstraint(bounds.height - imageHeightDiff))
         }
+        mainImageView.layoutIfNeeded()
+
+        if let imageSize = mainImageView.image?.size {
+            let scale: CGFloat
+            if imageSize.width / imageSize.height < mainImageView.frame.size.width / mainImageView.frame.size.height {
+                scale = mainImageView.frame.size.height / imageSize.height
+            } else {
+                scale = mainImageView.frame.size.width / imageSize.width
+            }
+            let deltaX = (mainImageView.frame.size.width - (scale * imageSize.width)) / 2
+            let deltaY = (mainImageView.frame.size.height - (scale * imageSize.height)) / 2
+            highlightingView.setScaleInfo(scale, xOffset: deltaX, yOffset: deltaY)
+        }
+    }
+
+    func setAyahInfo(ayahInfoData: [AyahNumber: [AyahInfo]]?) {
+        highlightingView.ayahInfoData = ayahInfoData
+    }
+
+    func highlightAyah(ayat: Set<AyahNumber>) {
+        highlightingView.highlightedAyat = ayat
     }
 }

@@ -23,9 +23,17 @@ protocol DefaultAudioPlayer: class, AudioPlayer {
     var observingObject: NSObject { get }
 
     func onPlayerItemChangedTo(newItem: AVPlayerItem)
+
+    func prepareToPlayForFirstTime(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, playBlock: () -> Void)
+
+    func onPlayingStopped()
 }
 
 extension DefaultAudioPlayer {
+
+    func prepareToPlayForFirstTime(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, playBlock: () -> Void) {
+        playBlock()
+    }
 
     func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         Queue.main.async {
@@ -33,11 +41,10 @@ extension DefaultAudioPlayer {
             self.playingItems = items
 
             self.player.removeAllItems()
-            for item in items {
-                self.player.insertItem(cast(item), afterItem: nil)
-            }
+            items.forEach { self.player.insertItem(cast($0), afterItem: nil) }
+
             self.willStartPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
-            self.player.play()
+            self.prepareToPlayForFirstTime(qari: qari, startAyah: startAyah, endAyah: endAyah) { [weak self] in self?.player.play() }
         }
     }
 
@@ -50,16 +57,18 @@ extension DefaultAudioPlayer {
     }
 
     func stop() {
-        self.player.removeAllItems()
-        self.onPlayingStopped()
+        _onPlayingStopped()
     }
 
-    func playNextAudio() {
+    func playNextAudio(starting timeInSeconds: Double) {
+        startFromBegining()
+
         player.advanceToNextItem()
-        player.seekToTime(kCMTimeZero, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        seekTo(timeInSeconds)
+        player.play()
     }
 
-    func playPreviousAudio() {
+    func playPreviousAudio(starting timeInSeconds: Double) {
         guard let currentItem = player.currentItem,
             var index = playingItems.indexOf(currentItem) else {
             return
@@ -71,16 +80,26 @@ extension DefaultAudioPlayer {
             return
         }
 
+        startFromBegining()
+
         removeCurrentItemObserver()
-        player.pause()
         player.removeAllItems()
-        player.seekToTime(kCMTimeZero, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         for i in index..<playingItems.count {
             player.insertItem(cast(playingItems[i]), afterItem: nil)
         }
         addCurrentItemObserver()
-        player.seekToTime(kCMTimeZero, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        seekTo(timeInSeconds)
         player.play()
+    }
+
+    private func startFromBegining() {
+        player.pause()
+        seekTo(0)
+    }
+
+    func seekTo(timeInSeconds: Double) {
+        let time = CMTime(seconds: timeInSeconds, preferredTimescale: 1000)
+        player.seekToTime(time)
     }
 
     func onPlayerItemChangedTo(newItem: AVPlayerItem) {
@@ -90,32 +109,33 @@ extension DefaultAudioPlayer {
         addCurrentItemObserver()
     }
 
-    private func onPlayingStopped() {
+    func onPlayingStopped() {
+    }
+
+    private func _onPlayingStopped() {
+        player.removeAllItems()
         playingItems = []
-        self.inAudioSession = false
+        inAudioSession = false
         removeCurrentItemObserver()
-        self.delegate?.onPlaybackEnded()
+        onPlayingStopped()
+        delegate?.onPlaybackEnded()
     }
 
     private func addCurrentItemObserver() {
-        observingObject.observe(retainedObservable: player, keyPath: "currentItem",
-                                options: [.New]) { [weak self] (observable, change: ChangeData<AVPlayerItem>) in
-                                    guard let `self` = self else {
-                                        return
-                                    }
-
-                                    guard let newValue = change.newValue else {
-                                        print("New item: nil")
-                                        if self.inAudioSession {
-                                            self.onPlayingStopped()
-                                        }
-                                        return
-                                    }
-                                    print("New item: \(self.playingItems.indexOf(newValue))")
-
-                                    self.inAudioSession = true
-                                    self.onPlayerItemChangedTo(newValue)
+        observingObject.observe(retainedObservable: player, keyPath: "currentItem", options: [.New]) { [weak self] (observable, change) in
+            self?._currentItemChanged(change.newValue)
         }
+    }
+
+    private func _currentItemChanged(newValue: AVPlayerItem?) {
+        guard let newValue = newValue else {
+            if inAudioSession {
+                _onPlayingStopped()
+            }
+            return
+        }
+        inAudioSession = true
+        onPlayerItemChangedTo(newValue)
     }
 
     private func removeCurrentItemObserver() {

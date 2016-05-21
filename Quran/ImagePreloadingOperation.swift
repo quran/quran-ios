@@ -44,10 +44,6 @@ class ImagePreloadingOperation: NSOperation {
     }
 }
 
-
-
-private let imageSize = "1920"
-
 private func fullPathForPage(page: Int) -> String? {
     let relativePath = fileNameForPage(page)
     return NSBundle.mainBundle().pathForResource(relativePath, ofType: nil)

@@ -36,6 +36,31 @@ struct AyahNumber: Hashable {
 
         return index
     }
+
+    func nextAyah() -> AyahNumber? {
+        if ayah < Quran.numberOfAyahsForSura(sura) {
+            // next ayah
+            return AyahNumber(sura: sura, ayah: ayah + 1)
+        } else {
+            if sura < Quran.SuraIsMakki.count {
+                // next sura
+                return AyahNumber(sura: sura + 1, ayah: 1)
+            } else {
+                return nil // last ayah
+            }
+        }
+    }
+
+    func previousAyah() -> AyahNumber? {
+        if ayah > 1 {
+            return AyahNumber(sura: sura, ayah: ayah - 1)
+        } else if sura > 1 {
+            let newSura = sura - 1
+            return AyahNumber(sura: newSura, ayah: Quran.numberOfAyahsForSura(newSura))
+        } else {
+            return nil
+        }
+    }
 }
 
 func == (lhs: AyahNumber, rhs: AyahNumber) -> Bool {

@@ -152,7 +152,7 @@ class Container {
     }
 
     func createGaplessAudioPlayer() -> AudioPlayer {
-        return GaplessAudioPlayer()
+        return GaplessAudioPlayer(timingRetriever: createQariTimingRetriever())
     }
 
     func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
@@ -165,5 +165,13 @@ class Container {
         return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
                                            lastAyahFinder: createSuraLastAyahFinder(),
                                            player: createGappedAudioPlayer())
+    }
+
+    func createQariTimingRetriever() -> QariTimingRetriever {
+        return SQLiteQariTimingRetriever(persistence: createQariAyahTimingPersistenceStorage())
+    }
+
+    func createQariAyahTimingPersistenceStorage() -> QariAyahTimingPersistenceStorage {
+        return SQLiteAyahTimingPersistenceStorage()
     }
 }

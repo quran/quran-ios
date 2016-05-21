@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-class AyahInfoPersistenceStorage: AyahInfoStorage {
+struct AyahInfoPersistenceStorage: AyahInfoStorage {
 
     private struct Columns {
         let id = Expression<Int>("glyph_id")
@@ -24,21 +24,16 @@ class AyahInfoPersistenceStorage: AyahInfoStorage {
         let maxY = Expression<Int>("max_y")
     }
 
-    private let imageSize = "1920"
     private let glyphsTable = Table("glyphs")
     private let columns = Columns()
 
-    private lazy var db: Connection = {
-        let file = String(format: "images_\(self.imageSize)/databases/ayahinfo_\(self.imageSize)")
+    private var db: LazyConnectionWrapper = {
+        let file = String(format: "images_\(imageSize)/databases/ayahinfo_\(imageSize)")
         guard let path = NSBundle.mainBundle().pathForResource(file, ofType: "db") else {
             fatalError("Unable to find ayahinfo database in resources")
         }
 
-        do {
-            return try Connection(path, readonly: true)
-        } catch {
-            fatalError()
-        }
+        return LazyConnectionWrapper(sqliteFilePath: path, readonly: true)
     }()
 
     func getAyahInfoForPage(page: Int) throws -> [AyahNumber : [AyahInfo]] {
@@ -46,7 +41,7 @@ class AyahInfoPersistenceStorage: AyahInfoStorage {
 
         var result = [AyahNumber : [AyahInfo]]()
         do {
-            for row in try db.prepare(query) {
+            for row in try db.connection.prepare(query) {
                 let ayah = AyahNumber(sura: row[columns.sura], ayah: row[columns.ayah])
                 var ayahInfoList = result[ayah] ?? []
                 ayahInfoList += [ getAyahInfoFromRow(row, ayah: ayah) ]
@@ -64,7 +59,7 @@ class AyahInfoPersistenceStorage: AyahInfoStorage {
         var result: [AyahInfo] = []
         let ayah = AyahNumber(sura: sura, ayah: ayah)
         do {
-            for row in try db.prepare(query) {
+            for row in try db.connection.prepare(query) {
                 result += [ getAyahInfoFromRow(row, ayah: ayah) ]
             }
             return result

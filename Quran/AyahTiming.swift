@@ -1,5 +1,5 @@
 //
-//  SuraTiming.swift
+//  AyahTiming.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/27/16.
@@ -8,7 +8,11 @@
 
 import Foundation
 
-struct SuraTiming {
+struct AyahTiming {
     let ayah: AyahNumber
-    let timing: Int
+    let time: Int
+
+    var timeInSeconds: Double {
+        return Double(time) / 1000
+    }
 }

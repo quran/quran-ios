@@ -46,6 +46,23 @@ class GappedAudioPlayer: NSObject, DefaultAudioPlayer {
         return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GappedPlayerItem(URL: $0, ayah: $1) }
     }
 
+    func goForward() {
+        playNextAudio(starting: 0)
+    }
+
+    func goBackward() {
+        playPreviousAudio(starting: 0)
+    }
+
+    func onPlayerItemChangedTo(newItem: AVPlayerItem) {
+        if let newItem = newItem as? GappedPlayerItem {
+            delegate?.playingAyah(newItem.ayah)
+        }
+    }
+}
+
+extension GappedAudioPlayer {
+
     private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, AyahNumber)] {
 
         guard case AudioType.Gapped = qari.audioType else {
@@ -68,7 +85,6 @@ class GappedAudioPlayer: NSObject, DefaultAudioPlayer {
                 files.append((createRequestInfo(qari: qari, sura: sura, ayah: ayah), AyahNumber(sura: sura, ayah: ayah)))
             }
         }
-
         return files
     }
 
@@ -76,19 +92,5 @@ class GappedAudioPlayer: NSObject, DefaultAudioPlayer {
         let fileName = String(format: "%03d%03d", sura, ayah)
         let url = qari.localFolder().URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(Files.AudioExtension)
         return url
-    }
-
-    func goForward() {
-        playNextAudio()
-    }
-
-    func goBackward() {
-        playPreviousAudio()
-    }
-
-    func onPlayerItemChangedTo(newItem: AVPlayerItem) {
-        if let newItem = newItem as? GappedPlayerItem {
-            delegate?.playingAyah(newItem.ayah)
-        }
     }
 }

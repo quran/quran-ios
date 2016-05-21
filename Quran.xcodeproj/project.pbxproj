@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0D60CFFB64E35521B54DF6DA /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */; };
+		5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */; };
+		5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */; };
 		5421D8C91CD9684400E6B019 /* images_1920 in Resources */ = {isa = PBXBuildFile; fileRef = 5421D8C81CD9684400E6B019 /* images_1920 */; };
 		5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */; };
 		5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */; };
@@ -17,6 +19,10 @@
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
 		5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */; };
 		548746211CEA0D0B00EED886 /* DefaultAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */; };
+		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
+		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
+		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
+		5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
@@ -32,10 +38,8 @@
 		54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2661E1CC7F2DA00D3AEF8 /* UIColor+Extension.swift */; };
 		54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */; };
 		54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266251CC80AFD00D3AEF8 /* Container.swift */; };
-		54B266501CCA876600D3AEF8 /* SQLitePersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2664F1CCA876600D3AEF8 /* SQLitePersistenceStorage.swift */; };
 		54B266541CCA87FC00D3AEF8 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266531CCA87FC00D3AEF8 /* Result.swift */; };
 		54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266551CCA887200D3AEF8 /* PersistenceError.swift */; };
-		54B266581CCA888F00D3AEF8 /* SqliteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266571CCA888F00D3AEF8 /* SqliteRow.swift */; };
 		54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2665A1CCA8CE900D3AEF8 /* AyahInfo.swift */; };
 		54B2665D1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B2665C1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift */; };
 		54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266611CCA908900D3AEF8 /* NetworkError.swift */; };
@@ -66,7 +70,7 @@
 		54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266A81CD1632F00D3AEF8 /* Qari.swift */; };
 		54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266AA1CD1642600D3AEF8 /* QariDataRetriever.swift */; };
 		54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266AD1CD1665500D3AEF8 /* SuraTimingRetriever.swift */; };
-		54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266AF1CD166B200D3AEF8 /* SuraTiming.swift */; };
+		54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266AF1CD166B200D3AEF8 /* AyahTiming.swift */; };
 		54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266B11CD1687100D3AEF8 /* DataRetriever.swift */; };
 		54B266B51CD16C3000D3AEF8 /* QarisSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266B41CD16C3000D3AEF8 /* QarisSelectionViewController.swift */; };
 		54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266B71CD16CED00D3AEF8 /* AudioBannerView.swift */; };
@@ -146,6 +150,8 @@
 /* Begin PBXFileReference section */
 		1D928AFCCBFC69297B5F7606 /* Pods-Quran.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.debug.xcconfig"; sourceTree = "<group>"; };
 		35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
+		5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
 		5421D8C81CD9684400E6B019 /* images_1920 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1920; sourceTree = "<group>"; };
 		5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
@@ -155,6 +161,10 @@
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
 		5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaplessAudioPlayer.swift; sourceTree = "<group>"; };
 		548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayer.swift; sourceTree = "<group>"; };
+		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
+		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
+		5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQariTimingRetriever.swift; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -172,10 +182,8 @@
 		54B2661E1CC7F2DA00D3AEF8 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		54B266251CC80AFD00D3AEF8 /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
-		54B2664F1CCA876600D3AEF8 /* SQLitePersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLitePersistenceStorage.swift; sourceTree = "<group>"; };
 		54B266531CCA87FC00D3AEF8 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		54B266551CCA887200D3AEF8 /* PersistenceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceError.swift; sourceTree = "<group>"; };
-		54B266571CCA888F00D3AEF8 /* SqliteRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqliteRow.swift; sourceTree = "<group>"; };
 		54B2665A1CCA8CE900D3AEF8 /* AyahInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfo.swift; sourceTree = "<group>"; };
 		54B2665C1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoRetriever.swift; sourceTree = "<group>"; };
 		54B266611CCA908900D3AEF8 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
@@ -206,7 +214,7 @@
 		54B266A81CD1632F00D3AEF8 /* Qari.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Qari.swift; sourceTree = "<group>"; };
 		54B266AA1CD1642600D3AEF8 /* QariDataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariDataRetriever.swift; sourceTree = "<group>"; };
 		54B266AD1CD1665500D3AEF8 /* SuraTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuraTimingRetriever.swift; sourceTree = "<group>"; };
-		54B266AF1CD166B200D3AEF8 /* SuraTiming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuraTiming.swift; sourceTree = "<group>"; };
+		54B266AF1CD166B200D3AEF8 /* AyahTiming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTiming.swift; sourceTree = "<group>"; };
 		54B266B11CD1687100D3AEF8 /* DataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRetriever.swift; sourceTree = "<group>"; };
 		54B266B41CD16C3000D3AEF8 /* QarisSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QarisSelectionViewController.swift; sourceTree = "<group>"; };
 		54B266B71CD16CED00D3AEF8 /* AudioBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBannerView.swift; sourceTree = "<group>"; };
@@ -322,6 +330,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5416B4BE1CEE7C3F0062FF54 /* AyahInfo */ = {
+			isa = PBXGroup;
+			children = (
+				C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */,
+				C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */,
+			);
+			name = AyahInfo;
+			sourceTree = "<group>";
+		};
+		5416B4BF1CEE7C4B0062FF54 /* QariAyahTiming */ = {
+			isa = PBXGroup;
+			children = (
+				5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */,
+				5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */,
+			);
+			name = QariAyahTiming;
+			sourceTree = "<group>";
+		};
 		548746191CE9F4DD00EED886 /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +367,15 @@
 				54B266231CC80AE800D3AEF8 /* Interactors */,
 			);
 			name = "Download & Audio";
+			sourceTree = "<group>";
+		};
+		5494CCB31CEFAB4200031686 /* Timing */ = {
+			isa = PBXGroup;
+			children = (
+				5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */,
+				5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */,
+			);
+			name = Timing;
 			sourceTree = "<group>";
 		};
 		54B265DA1CC57D8E00D3AEF8 = {
@@ -437,20 +472,20 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DC291CE7A318009AAD8D /* Request.swift */,
-				548746221CEA115400EED886 /* Download & Audio */,
-				54C0DC001CE62D2B009AAD8D /* LastAyahFinder */,
-				54C0DBFB1CE52368009AAD8D /* Persistence */,
+				5494CCB31CEFAB4200031686 /* Timing */,
+				54B266591CCA891A00D3AEF8 /* AyahInfo */,
 				54C0DBB81CDB38B8009AAD8D /* Cache */,
 				54B267021CD6ADF000D3AEF8 /* Creator */,
-				54B266A71CD1628500D3AEF8 /* Timing */,
 				54B2669F1CCD8D1100D3AEF8 /* Data */,
-				54B266941CCACE7500D3AEF8 /* QuranImage */,
-				54B266601CCA907A00D3AEF8 /* Errors */,
-				54B266591CCA891A00D3AEF8 /* AyahInfo */,
-				54B2664E1CCA873B00D3AEF8 /* Persistence */,
-				54B266471CC81AC600D3AEF8 /* Network */,
 				54B266241CC80AEC00D3AEF8 /* Dependency Injection Container */,
+				548746221CEA115400EED886 /* Download & Audio */,
+				54B266601CCA907A00D3AEF8 /* Errors */,
+				54C0DC001CE62D2B009AAD8D /* LastAyahFinder */,
+				54B266471CC81AC600D3AEF8 /* Network */,
+				54B2664E1CCA873B00D3AEF8 /* Persistence */,
+				54B266941CCACE7500D3AEF8 /* QuranImage */,
+				54C0DC291CE7A318009AAD8D /* Request.swift */,
+				54B266A71CD1628500D3AEF8 /* Timing */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -465,7 +500,7 @@
 				54B2669D1CCD21F800D3AEF8 /* AyahNumber.swift */,
 				54B266A21CCD918400D3AEF8 /* Quarter.swift */,
 				54B266A81CD1632F00D3AEF8 /* Qari.swift */,
-				54B266AF1CD166B200D3AEF8 /* SuraTiming.swift */,
+				54B266AF1CD166B200D3AEF8 /* AyahTiming.swift */,
 				54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */,
 				54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */,
 			);
@@ -607,9 +642,10 @@
 		54B2664E1CCA873B00D3AEF8 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				54B2664F1CCA876600D3AEF8 /* SQLitePersistenceStorage.swift */,
-				54B266571CCA888F00D3AEF8 /* SqliteRow.swift */,
-				C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */,
+				54C0DBFB1CE52368009AAD8D /* Defaults */,
+				5416B4BF1CEE7C4B0062FF54 /* QariAyahTiming */,
+				5416B4BE1CEE7C3F0062FF54 /* AyahInfo */,
+				5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -619,7 +655,6 @@
 			children = (
 				54B2665C1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift */,
 				54B266881CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift */,
-				C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */,
 			);
 			name = AyahInfo;
 			sourceTree = "<group>";
@@ -877,13 +912,13 @@
 			name = cell;
 			sourceTree = "<group>";
 		};
-		54C0DBFB1CE52368009AAD8D /* Persistence */ = {
+		54C0DBFB1CE52368009AAD8D /* Defaults */ = {
 			isa = PBXGroup;
 			children = (
 				54C0DBFC1CE5237E009AAD8D /* SimplePersistence.swift */,
 				54C0DBFE1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift */,
 			);
-			name = Persistence;
+			name = Defaults;
 			sourceTree = "<group>";
 		};
 		54C0DC001CE62D2B009AAD8D /* LastAyahFinder */ = {
@@ -926,6 +961,7 @@
 				54B266D91CD4F25900D3AEF8 /* Files.swift */,
 				54B2667F1CCAAE4900D3AEF8 /* Quran.swift */,
 				54C3C88F1CD7D5DF0045F18F /* URL.swift */,
+				5494CCB11CEFA5F700031686 /* Constants.swift */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -1139,11 +1175,12 @@
 				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,
+				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
 				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
 				54C0DC221CE7695E009AAD8D /* URLSessionDownloadManager.swift in Sources */,
 				548746211CEA0D0B00EED886 /* DefaultAudioPlayer.swift in Sources */,
 				54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */,
-				54B266B01CD166B200D3AEF8 /* SuraTiming.swift in Sources */,
+				54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */,
 				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
@@ -1164,7 +1201,7 @@
 				54C0DBBA1CDB38C0009AAD8D /* Cache.swift in Sources */,
 				54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
-				54B266581CCA888F00D3AEF8 /* SqliteRow.swift in Sources */,
+				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
 				54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */,
 				54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */,
 				54B266891CCACB8F00D3AEF8 /* SQLiteAyahInfoRetriever.swift in Sources */,
@@ -1199,15 +1236,18 @@
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
+				5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */,
 				54C0DC1D1CE69BF6009AAD8D /* GaplessAudioFilesDownloader.swift in Sources */,
 				54C0DC121CE692FC009AAD8D /* DownloadNetworkRequest.swift in Sources */,
+				5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift in Sources */,
 				54B267011CD6ADE000D3AEF8 /* Creator.swift in Sources */,
+				5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift in Sources */,
 				54C0DC041CE63387009AAD8D /* SuraBasedLastAyahFinder.swift in Sources */,
-				54B266501CCA876600D3AEF8 /* SQLitePersistenceStorage.swift in Sources */,
 				548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */,
 				5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */,
 				54C0DC0C1CE68F46009AAD8D /* GaplessAudioPlayerInteractor.swift in Sources */,
 				54B266931CCACCBF00D3AEF8 /* CircleView.swift in Sources */,
+				5494CCB21CEFA5F700031686 /* Constants.swift in Sources */,
 				54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */,
 				54B266971CCACEB400D3AEF8 /* QuranImageService.swift in Sources */,
 				54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */,

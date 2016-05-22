@@ -42,9 +42,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         automaticallyAdjustsScrollViewInsets = false
 
         // page behavior
-        let behavior = ScrollViewPageBehavior()
-        pageDataSource.scrollViewDelegate = behavior
-        observe(retainedObservable: behavior, keyPath: "currentPage", options: [.New]) { [weak self] (observable, change: ChangeData<Int>) in
+        let pageBehavior = ScrollViewPageBehavior()
+        pageDataSource.scrollViewDelegate = pageBehavior
+        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.New]) { [weak self] (observable, change: ChangeData<Int>) in
             self?.onPageChanged()
         }
     }
@@ -232,14 +232,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     }
 
     private func onPageChanged() {
-        guard let visibleIndexPath = collectionView?.indexPathsForVisibleItems().first else {
-            return
-        }
-        onPageChangedToPage(pageDataSource.itemAtIndexPath(visibleIndexPath))
+        onPageChangedToPage(currentPage())
     }
 
     private func onPageChangedToPage(page: QuranPage) {
-        audioViewPresenter.currentPage = page
         updateBarToPage(page)
     }
 
@@ -264,6 +260,25 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         controller.popoverPresentationController?.permittedArrowDirections = .Down
         presentViewController(controller, animated: true, completion: nil)
 
+    }
+
+    func highlightAyah(ayah: AyahNumber) {
+        var set = Set<AyahNumber>()
+        set.insert(ayah)
+        pageDataSource.highlightAyaht(set)
+    }
+
+    func removeHighlighting() {
+        pageDataSource.highlightAyaht(Set())
+    }
+
+    func currentPage() -> QuranPage {
+        guard let indexPath = collectionView?.indexPathsForVisibleItems().first else {
+            return Quran.firstPage()
+        }
+        let page = pageDataSource.itemAtIndexPath(indexPath)
+        print(page)
+        return page
     }
 }
 

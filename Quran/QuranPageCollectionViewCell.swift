@@ -42,34 +42,53 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
         sizeConstraints.forEach { mainImageView.removeConstraint($0) }
         sizeConstraints.removeAll()
 
+        let imageViewHeight: CGFloat
         if let imageSize = mainImageView.image?.size where bounds.width > bounds.height {
             // add fill height
-            let height = bounds.width * (imageSize.height / imageSize.width)
-            sizeConstraints.append(mainImageView.addHeightConstraint(height))
+            imageViewHeight = bounds.width * (imageSize.height / imageSize.width)
+
         } else {
             // add fit height
-            sizeConstraints.append(mainImageView.addHeightConstraint(bounds.height - imageHeightDiff))
+            imageViewHeight = bounds.height - imageHeightDiff
         }
-        mainImageView.layoutIfNeeded()
+        sizeConstraints.append(mainImageView.addHeightConstraint(imageViewHeight))
 
+        let imageViewSize = CGSize(width: bounds.width, height: imageViewHeight)
         if let imageSize = mainImageView.image?.size {
             let scale: CGFloat
-            if imageSize.width / imageSize.height < mainImageView.frame.size.width / mainImageView.frame.size.height {
-                scale = mainImageView.frame.size.height / imageSize.height
+            if imageSize.width / imageSize.height < imageViewSize.width / imageViewSize.height {
+                scale = imageViewSize.height / imageSize.height
             } else {
-                scale = mainImageView.frame.size.width / imageSize.width
+                scale = imageViewSize.width / imageSize.width
             }
-            let deltaX = (mainImageView.frame.size.width - (scale * imageSize.width)) / 2
-            let deltaY = (mainImageView.frame.size.height - (scale * imageSize.height)) / 2
+            let deltaX = (imageViewSize.width - (scale * imageSize.width)) / 2
+            let deltaY = (imageViewSize.height - (scale * imageSize.height)) / 2
             highlightingView.setScaleInfo(scale, xOffset: deltaX, yOffset: deltaY)
+            scrollToHighlightedAyat()
         }
     }
 
     func setAyahInfo(ayahInfoData: [AyahNumber: [AyahInfo]]?) {
         highlightingView.ayahInfoData = ayahInfoData
+        scrollToHighlightedAyat()
     }
 
-    func highlightAyah(ayat: Set<AyahNumber>) {
+    func highlightAyat(ayat: Set<AyahNumber>) {
         highlightingView.highlightedAyat = ayat
+        scrollToHighlightedAyat()
+    }
+
+    private func scrollToHighlightedAyat() {
+        guard let first = highlightingView.highlightingRectangles.first else {
+            return
+        }
+
+        layoutIfNeeded()
+
+        var union = first
+        highlightingView.highlightingRectangles.forEach { union.unionInPlace($0) }
+
+        let contentOffset = min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height)
+        scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
     }
 }

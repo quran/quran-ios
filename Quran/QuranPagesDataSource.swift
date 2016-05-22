@@ -16,6 +16,8 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     let numberFormatter = NSNumberFormatter()
 
+    var highlightedAyat: Set<AyahNumber> = Set()
+
     init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
@@ -35,6 +37,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", comment: ""), item.juzNumber)
 
         cell.mainImageView.image = nil
+        cell.highlightAyat(highlightedAyat)
 
         imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in
             guard cell.page == item else {
@@ -48,6 +51,37 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                 return
             }
             cell.setAyahInfo(data.value)
+        }
+    }
+
+    func removeHighlighting() {
+        highlightedAyat.removeAll(keepCapacity: true)
+        for cell in ds_reusableViewDelegate?.ds_visibleCells() as? [QuranPageCollectionViewCell] ?? [] {
+            cell.highlightAyat(highlightedAyat)
+        }
+    }
+
+    func highlightAyaht(ayat: Set<AyahNumber>) {
+        highlightedAyat = ayat
+
+        guard let ayah = ayat.first else {
+            removeHighlighting()
+            return
+        }
+
+        Queue.background.async {
+            let page = ayah.getStartPage()
+
+            Queue.main.async {
+                let index = NSIndexPath(forItem: page - 1, inSection: 0)
+                // if the cell is there, highlight the ayah.
+                if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
+                    cell.highlightAyat(ayat)
+                } else {
+                    // scroll to the cell
+                    self.ds_reusableViewDelegate?.ds_scrollToItemAtIndexPath(index, atScrollPosition: .CenteredHorizontally, animated: true)
+                }
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ extension DefaultAudioPlayer {
     func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         Queue.main.async {
             let items = self.playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+            print(items)
             self.playingItems = items
 
             self.player.removeAllItems()
@@ -89,6 +90,7 @@ extension DefaultAudioPlayer {
         }
         addCurrentItemObserver()
         seekTo(timeInSeconds)
+        _currentItemChanged(player.currentItem)
         player.play()
     }
 

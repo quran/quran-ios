@@ -62,14 +62,14 @@ extension DefaultAudioPlayerInteractor {
             print("playing audio")
             player.play(qari: qari, startAyah: startAyah, endAyah: endAyah)
             startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
-            delegate?.onPlayingAyah(startAyah)
+            playingAyah(startAyah)
         }
     }
 
     func cancelDownload() {
         downloadCancelled = true
         downloader.cancel()
-        delegate?.onPlaybackDownloadingCompleted()
+        delegate?.onPlaybackOrDownloadingCompleted()
     }
 
     func pauseAudio() {
@@ -95,11 +95,11 @@ extension DefaultAudioPlayerInteractor {
     // MARK:- AudioPlayerDelegate
 
     func onPlaybackEnded() {
-        delegate?.onPlaybackDownloadingCompleted()
+        delegate?.onPlaybackOrDownloadingCompleted()
     }
 
     func playingAyah(ayah: AyahNumber) {
-        // highlight the ayah
+        delegate?.onPlayingAyah(ayah)
     }
 
     private func gotDownloadRequest(request: Request, playbackInfo: PlaybackInfo?) {
@@ -111,10 +111,10 @@ extension DefaultAudioPlayerInteractor {
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {
-                    self?.delegate?.onPlaybackDownloadingCompleted()
+                    self?.delegate?.onPlaybackOrDownloadingCompleted()
                 }
             case .Failure(let error):
-                self?.delegate?.onPlaybackDownloadingCompleted()
+                self?.delegate?.onPlaybackOrDownloadingCompleted()
                 self?.delegate?.onFailedDownloadingWithError(error)
             }
         }
@@ -122,7 +122,6 @@ extension DefaultAudioPlayerInteractor {
 
     private func startPlaying(playbackInfo: PlaybackInfo) {
         prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
-            self?.delegate?.onPlayingAyah(AyahNumber(sura: 0, ayah: 0))
             self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
         }
     }

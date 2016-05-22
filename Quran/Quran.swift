@@ -375,6 +375,10 @@ extension Quran {
     }
 
     static func firstPage() -> QuranPage {
-        return QuranPage(pageNumber: 1, startAyah: startAyahForPage(1), juzNumber: 1)
+        return quranPageForPageNumber(1)
+    }
+
+    static func quranPageForPageNumber(page: Int) -> QuranPage {
+        return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).order)
     }
 }

@@ -25,8 +25,6 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         }
     }
 
-    var currentPage: QuranPage = Quran.firstPage()
-
     weak var view: AudioBannerView?
 
     weak var delegate: AudioBannerViewPresenterDelegate?
@@ -107,6 +105,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     // MARK:- AudioBannerViewDelegate
     func onPlayTapped() {
+        guard let currentPage = delegate?.currentPage() else { return }
         repeatCount = .None
         // start downloading & playing
         audioPlayer.playAudioForQari(selectedQari, atPage: currentPage)
@@ -174,7 +173,10 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func onPlayingAyah(ayah: AyahNumber) {
         self.progress = nil
-        Queue.main.async { self.playing = true }
+        Queue.main.async {
+            self.playing = true
+            self.delegate?.highlightAyah(ayah)
+        }
     }
 
     func onFailedDownloadingWithError(error: ErrorType) {
@@ -184,7 +186,10 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         }
     }
 
-    func onPlaybackDownloadingCompleted() {
-        Queue.main.async { self.showQariView() }
+    func onPlaybackOrDownloadingCompleted() {
+        Queue.main.async {
+            self.showQariView()
+            self.delegate?.removeHighlighting()
+        }
     }
 }

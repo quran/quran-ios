@@ -16,7 +16,7 @@ protocol AudioPlayerInteractorDelegate: class {
 
     func onFailedDownloadingWithError(error: ErrorType)
 
-    func onPlaybackDownloadingCompleted()
+    func onPlaybackOrDownloadingCompleted()
 }
 
 protocol AudioPlayerInteractor: class {

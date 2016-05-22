@@ -88,7 +88,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
         var union = first
         highlightingView.highlightingRectangles.forEach { union.unionInPlace($0) }
 
-        let contentOffset = min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height)
+        let contentOffset = max(0, min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height))
         scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
     }
 }

@@ -35,4 +35,21 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
             fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
         }
     }
+
+    func getOrderedTimingForSura(startAyah startAyah: AyahNumber, databaseFileURL: NSURL) -> [AyahTiming] {
+        let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
+        let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
+        do {
+            var timings: [AyahTiming] = []
+            let rows = try db.connection.prepare(query)
+            for row in rows {
+                let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
+                let timing = AyahTiming(ayah: ayah, time: row[Column.time])
+                timings.append(timing)
+            }
+            return timings
+        } catch {
+            fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
+        }
+    }
 }

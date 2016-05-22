@@ -142,6 +142,7 @@
 		54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89B1CD7E42B0045F18F /* DefaultQuranImageService.swift */; };
 		54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89D1CD7EF5D0045F18F /* Once.swift */; };
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
+		54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63031CF216C4003D1ABA /* QueuePlayer.swift */; };
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */; };
 		C1F63E251CE58B460026E263 /* AyahInfoPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */; };
@@ -312,6 +313,7 @@
 		54C3C89B1CD7E42B0045F18F /* DefaultQuranImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultQuranImageService.swift; sourceTree = "<group>"; };
 		54C3C89D1CD7EF5D0045F18F /* Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Once.swift; sourceTree = "<group>"; };
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
+		54EA63031CF216C4003D1ABA /* QueuePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuePlayer.swift; sourceTree = "<group>"; };
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 		548746191CE9F4DD00EED886 /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				54EA63021CF216A8003D1ABA /* QueuePlayer */,
 				5487461A1CE9F4E900EED886 /* AudioPlayer.swift */,
 				548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */,
 				5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */,
@@ -966,6 +969,14 @@
 			name = Constants;
 			sourceTree = "<group>";
 		};
+		54EA63021CF216A8003D1ABA /* QueuePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				54EA63031CF216C4003D1ABA /* QueuePlayer.swift */,
+			);
+			name = QueuePlayer;
+			sourceTree = "<group>";
+		};
 		592CC022D16F23D7A76EAC85 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1189,6 +1200,7 @@
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
+				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,

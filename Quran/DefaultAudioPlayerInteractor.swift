@@ -53,16 +53,13 @@ extension DefaultAudioPlayerInteractor {
                     if self.downloadCancelled {
                         request.cancel()
                     } else {
-                        print("downloading")
                         self.gotDownloadRequest(request, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
                     }
                 }
             }
         } else {
-            print("playing audio")
             player.play(qari: qari, startAyah: startAyah, endAyah: endAyah)
             startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
-            playingAyah(startAyah)
         }
     }
 
@@ -99,7 +96,7 @@ extension DefaultAudioPlayerInteractor {
     }
 
     func playingAyah(ayah: AyahNumber) {
-        delegate?.onPlayingAyah(ayah)
+        delegate?.highlight(ayah)
     }
 
     private func gotDownloadRequest(request: Request, playbackInfo: PlaybackInfo?) {
@@ -123,6 +120,7 @@ extension DefaultAudioPlayerInteractor {
     private func startPlaying(playbackInfo: PlaybackInfo) {
         prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
             self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
+            self?.delegate?.onPlaying()
         }
     }
 }

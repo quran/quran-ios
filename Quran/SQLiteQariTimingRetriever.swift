@@ -24,4 +24,23 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
             }
         }
     }
+
+    func retrieveTimingForQari(qari: Qari, suras: [Int], onCompletion: [Int : [AyahTiming]] -> Void) {
+        guard case .Gapless(let databaseName) = qari.audioType else {
+            fatalError("Gapped qaris are not supported.")
+        }
+        Queue.background.async {
+            let fileURL = qari.localFolder().URLByAppendingPathComponent(databaseName).URLByAppendingPathExtension(Files.DatabaseLocalFileExtension)
+
+            var result: [Int: [AyahTiming]] = [:]
+            for sura in suras {
+                let timings = self.persistence.getOrderedTimingForSura(startAyah: AyahNumber(sura: sura, ayah: 1), databaseFileURL: fileURL)
+                result[sura] = timings
+            }
+
+            Queue.main.async {
+                onCompletion(result)
+            }
+        }
+    }
 }

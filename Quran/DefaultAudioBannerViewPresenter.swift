@@ -171,12 +171,13 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         self.progress = progress
     }
 
-    func onPlayingAyah(ayah: AyahNumber) {
+    func onPlaying() {
         self.progress = nil
-        Queue.main.async {
-            self.playing = true
-            self.delegate?.highlightAyah(ayah)
-        }
+        Queue.main.async { self.playing = true }
+    }
+
+    func highlight(ayah: AyahNumber) {
+        Queue.main.async { self.delegate?.highlightAyah(ayah) }
     }
 
     func onFailedDownloadingWithError(error: ErrorType) {

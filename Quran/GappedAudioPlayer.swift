@@ -21,47 +21,46 @@ private class GappedPlayerItem: AVPlayerItem {
     }
 }
 
-class GappedAudioPlayer: NSObject, DefaultAudioPlayer {
+class GappedAudioPlayer: AudioPlayer {
 
     weak var delegate: AudioPlayerDelegate?
 
-    var inAudioSession: Bool = false
+    let player = QueuePlayer()
 
-    let player = AVQueuePlayer()
-
-    var playingItems: [AVPlayerItem] = []
-
-    var observingObject: NSObject {
-        return self
+    func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
+//        let items = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+//        let times = items.reduce([AVPlayerItem: Double](), combine: { $0[$1] = 0 })
+//        for item in items {
+//
+//        }
     }
 
-    override init() {
-        super.init()
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
-                                                                 withOptions: [.DefaultToSpeaker, .AllowBluetooth])
-        player.actionAtItemEnd = .Advance
+    func pause() {
+
     }
 
-    func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [AVPlayerItem] {
-        return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GappedPlayerItem(URL: $0, ayah: $1) }
+    func resume() {
+
+    }
+
+    func stop() {
+
     }
 
     func goForward() {
-        playNextAudio(starting: 0)
+
     }
 
     func goBackward() {
-        playPreviousAudio(starting: 0)
-    }
 
-    func onPlayerItemChangedTo(newItem: AVPlayerItem) {
-        if let newItem = newItem as? GappedPlayerItem {
-            delegate?.playingAyah(newItem.ayah)
-        }
     }
 }
 
 extension GappedAudioPlayer {
+
+    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [AVPlayerItem] {
+        return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GappedPlayerItem(URL: $0, ayah: $1) }
+    }
 
     private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, AyahNumber)] {
 

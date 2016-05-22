@@ -273,7 +273,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     }
 
     func currentPage() -> QuranPage {
-        guard let indexPath = collectionView?.indexPathsForVisibleItems().first else {
+        guard let offset = collectionView?.contentOffset,
+            let indexPath = collectionView?.indexPathForItemAtPoint(CGPoint(x: offset.x + view.bounds.width / 2, y: 0)) else {
             return Quran.firstPage()
         }
         let page = pageDataSource.itemAtIndexPath(indexPath)

@@ -11,4 +11,5 @@ import Foundation
 protocol QariAyahTimingPersistenceStorage {
 
     func getTimingForSura(startAyah startAyah: AyahNumber, databaseFileURL: NSURL) -> [AyahNumber: AyahTiming]
+    func getOrderedTimingForSura(startAyah startAyah: AyahNumber, databaseFileURL: NSURL) -> [AyahTiming]
 }

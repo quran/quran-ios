@@ -28,37 +28,51 @@ class GappedAudioPlayer: AudioPlayer {
     let player = QueuePlayer()
 
     func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
-//        let items = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
-//        let times = items.reduce([AVPlayerItem: Double](), combine: { $0[$1] = 0 })
-//        for item in items {
-//
-//        }
+        let items = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+
+        var times: [AVPlayerItem: [Double]] = [:]
+        for item in items {
+            times[item] = [0]
+        }
+
+        player.onPlaybackEnded = { [weak self] in
+            self?.delegate?.onPlaybackEnded()
+        }
+        player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, _) in
+            guard let item = item as? GappedPlayerItem else { return }
+            self?.delegate?.playingAyah(item.ayah)
+        }
+
+        player.play(startTimeInSeconds: 0, items: items, playingItemBoundaries: times)
     }
 
     func pause() {
-
+        player.pause()
     }
 
     func resume() {
-
+        player.resume()
     }
 
     func stop() {
-
+        player.stop()
+        player.onPlaybackEnded = nil
+        player.onPlayerItemChangedTo = nil
+        player.onPlaybackStartingTimeFrame = nil
     }
 
     func goForward() {
-
+        player.onStepForward()
     }
 
     func goBackward() {
-
+        player.onStepBackward()
     }
 }
 
 extension GappedAudioPlayer {
 
-    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [AVPlayerItem] {
+    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [GappedPlayerItem] {
         return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GappedPlayerItem(URL: $0, ayah: $1) }
     }
 

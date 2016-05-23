@@ -27,12 +27,6 @@ class QueuePlayer: NSObject {
     var onPlayerItemChangedTo: (AVPlayerItem? -> Void)?
     var onPlaybackStartingTimeFrame: ((item: AVPlayerItem, timeIndex: Int) -> Void)?
 
-    private var currentTimeIndex: Int? {
-        didSet {
-            print(currentTimeIndex)
-        }
-    }
-
     private var timeObserver: AnyObject? {
         didSet {
             if let oldValue = oldValue {
@@ -73,18 +67,15 @@ class QueuePlayer: NSObject {
             return
         }
 
-        let currentIndex = currentTimeIndex ?? 0
+        let currentIndex = findCurrentTimeIndexUsingBinarySearch()
 
-        let newTimeIndex: Int
         if currentIndex + 1 < boundaries.count {
-            newTimeIndex = currentIndex + 1
+            let newTimeIndex = currentIndex + 1
             seekTo(boundaries[newTimeIndex])
         } else {
-            newTimeIndex = 0
             playNextAudio(starting: 0)
         }
-        currentTimeIndex = newTimeIndex
-        handleTimeBoundaryReached()
+        recalculateAndNotifyCurrentTimeChange()
     }
 
     func onStepBackward() {
@@ -93,11 +84,10 @@ class QueuePlayer: NSObject {
                 return
         }
 
-        let currentIndex = currentTimeIndex ?? 0
+        let currentIndex = findCurrentTimeIndexUsingBinarySearch()
 
-        let newTimeIndex: Int
         if currentIndex - 1 >= 0 {
-            newTimeIndex = currentIndex - 1
+            let newTimeIndex = currentIndex - 1
             seekTo(boundaries[newTimeIndex])
         } else {
 
@@ -108,11 +98,10 @@ class QueuePlayer: NSObject {
             }
             guard let previousBoundaries = playingItemBoundaries[playingItems[index - 1]] else { return }
 
-            newTimeIndex = previousBoundaries.count - 1
+            let newTimeIndex = previousBoundaries.count - 1
             playPreviousAudio(starting: previousBoundaries[newTimeIndex])
         }
-        currentTimeIndex = newTimeIndex
-        handleTimeBoundaryReached()
+        recalculateAndNotifyCurrentTimeChange()
     }
 
     private func playNextAudio(starting timeInSeconds: Double) {
@@ -183,7 +172,7 @@ class QueuePlayer: NSObject {
                                                          object: newValue)
         startBoundaryObserver(newValue)
         notifyPlayerItemChangedTo(newValue)
-        handleTimeBoundaryReached()
+        recalculateAndNotifyCurrentTimeChange()
     }
 
     func onCurrentItemReachedEnd() {
@@ -198,28 +187,22 @@ class QueuePlayer: NSObject {
     private func startBoundaryObserver(newItem: AVPlayerItem) {
         guard let times = playingItemBoundaries[newItem] else { return }
 
-        currentTimeIndex = nil
         let timeValues = times.map { NSValue(CMTime: CMTime(seconds: $0, preferredTimescale: 1000)) }
         timeObserver = player.addBoundaryTimeObserverForTimes(timeValues, queue: nil) { [weak self] in
-            self?.handleTimeBoundaryReached()
+            self?.onTimeBoundaryReached()
         }
     }
 
-    private func handleTimeBoundaryReached() {
-        guard let currentItem = player.currentItem, let times = playingItemBoundaries[currentItem] else {
-            return
+    private func onTimeBoundaryReached() {
+        recalculateAndNotifyCurrentTimeChange()
+    }
+
+    private func recalculateAndNotifyCurrentTimeChange() {
+        Queue.main.after(0.1) {
+            guard let currentItem = self.player.currentItem else { return }
+            let timeIndex = self.findCurrentTimeIndexUsingBinarySearch()
+            self.notifyCurrentTimeChanged(currentItem, timeIndex: timeIndex)
         }
-
-        let time = player.currentTime().seconds
-
-        var currentIndex = currentTimeIndex.map { $0 + 1 } ?? 0
-        while currentIndex < times.count && times[currentIndex] < time {
-            currentIndex += 1
-        }
-
-        let finalIndex = max(currentIndex - 1, 0)
-        currentTimeIndex = finalIndex
-        notifyCurrentTimeChanged(currentItem, timeIndex: finalIndex)
     }
 
     private func removeCurrentItemObserver() {
@@ -246,5 +229,44 @@ class QueuePlayer: NSObject {
 
     private func notifyCurrentTimeChanged(newItem: AVPlayerItem, timeIndex: Int) {
         onPlaybackStartingTimeFrame?(item: newItem, timeIndex: timeIndex)
+    }
+
+    private func findCurrentTimeIndexUsingBinarySearch() -> Int {
+        guard let currentItem = player.currentItem,
+            let times = playingItemBoundaries[currentItem] else {
+            fatalError("Cannot find current time when there are no audio playing.")
+        }
+        let time = player.currentTime().seconds
+
+        if times.isEmpty {
+            guard var index = playingItems.indexOf(currentItem) else {
+                fatalError("Couldn't find current item in the play list.")
+            }
+            while index > 0 {
+                guard let times = playingItemBoundaries[playingItems[index - 1]] else {
+                    fatalError("Cannot find previous times in the array.")
+                }
+                if !times.isEmpty {
+                    return times.count - 1
+                }
+                index -= 1
+            }
+            fatalError("First item should have a monitor location")
+        }
+
+        // search through the array
+        return binarySearch(times, value: time + 0.2)
+    }
+
+    private func binarySearch(values: [Double], value: Double) -> Int {
+        let index = values.binarySearch(value)
+        guard index < values.count else {
+            return values.count - 1
+        }
+        if value < values[index] && index > 0 {
+            return index - 1
+        } else {
+            return index
+        }
     }
 }

@@ -22,7 +22,6 @@ class ImagePreloadingOperation: NSOperation {
 
         completionBlock = { [weak self] in
             guard let image = self?.image else {
-                print("Couldn't load image at page: \(page)")
                 return
             }
             self?.completionBlocks.forEach { $0(page, image) }

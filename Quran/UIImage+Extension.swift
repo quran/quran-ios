@@ -33,8 +33,6 @@ extension UIImage {
             let cachedImage = UIImage(CGImage: outputImage)
             return cachedImage
         }
-
-        print("Failed to preload the image")
         return self
     }
 }

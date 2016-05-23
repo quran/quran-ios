@@ -18,7 +18,6 @@
 		5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461A1CE9F4E900EED886 /* AudioPlayer.swift */; };
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
 		5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */; };
-		548746211CEA0D0B00EED886 /* DefaultAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -162,7 +161,6 @@
 		5487461A1CE9F4E900EED886 /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
 		5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaplessAudioPlayer.swift; sourceTree = "<group>"; };
-		548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayer.swift; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -357,7 +355,6 @@
 			children = (
 				54EA63021CF216A8003D1ABA /* QueuePlayer */,
 				5487461A1CE9F4E900EED886 /* AudioPlayer.swift */,
-				548746201CEA0D0B00EED886 /* DefaultAudioPlayer.swift */,
 				5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */,
 				5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */,
 			);
@@ -1192,7 +1189,6 @@
 				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
 				54B266E01CD5759A00D3AEF8 /* NSNumberFormatter+Extension.swift in Sources */,
 				54C0DC221CE7695E009AAD8D /* URLSessionDownloadManager.swift in Sources */,
-				548746211CEA0D0B00EED886 /* DefaultAudioPlayer.swift in Sources */,
 				54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */,
 				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,

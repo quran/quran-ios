@@ -58,7 +58,6 @@ extension DefaultAudioPlayerInteractor {
                 }
             }
         } else {
-            player.play(qari: qari, startAyah: startAyah, endAyah: endAyah)
             startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
         }
     }

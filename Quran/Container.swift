@@ -157,13 +157,13 @@ class Container {
 
     func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
         return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(),
-                                            lastAyahFinder: createSuraLastAyahFinder(),
+                                            lastAyahFinder: createJuzLastAyahFinder(),
                                             player: createGaplessAudioPlayer())
     }
 
     func createGappedAudioPlayerInteractor() -> AudioPlayerInteractor {
         return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
-                                           lastAyahFinder: createSuraLastAyahFinder(),
+                                           lastAyahFinder: createJuzLastAyahFinder(),
                                            player: createGappedAudioPlayer())
     }
 

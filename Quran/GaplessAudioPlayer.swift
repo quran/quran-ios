@@ -29,6 +29,8 @@ class GaplessAudioPlayer: AudioPlayer {
 
     let timingRetriever: QariTimingRetriever
 
+    private var ayahsDictionary: [AVPlayerItem: [AyahNumber]] = [:]
+
     init(timingRetriever: QariTimingRetriever) {
         self.timingRetriever = timingRetriever
     }
@@ -43,12 +45,17 @@ class GaplessAudioPlayer: AudioPlayer {
                 mutableTimings[startAyah.sura] = Array(timeArray.dropFirst(startAyah.ayah - 1))
             }
 
-            let times = items.reduce([:]) { (value, item) -> [AVPlayerItem: [Double]] in
-                var mutableValue = value
-                let array: [AyahTiming] = cast(mutableTimings[item.sura])
-                mutableValue[item] = array.enumerate().dropLast().map { $0 == 0 ? 0 : $1.seconds }
-                return mutableValue
+            var times: [AVPlayerItem: [Double]] = [:]
+            var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
+            for item in items {
+                var array: [AyahTiming] = cast(mutableTimings[item.sura])
+                if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
+                    array = Array(array.dropLast())
+                }
+                times[item] = array.enumerate().map { $0 == 0 ? 0 : $1.seconds }
+                ayahs[item] = array.map { $0.ayah }
             }
+            self?.ayahsDictionary = ayahs
 
             let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
             let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
@@ -57,9 +64,8 @@ class GaplessAudioPlayer: AudioPlayer {
                 self?.delegate?.onPlaybackEnded()
             }
             self?.player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, timeIndex: Int) in
-                guard let item = item as? GaplessPlayerItem else { return }
-                let offset = item.sura == startAyah.sura ? startAyah.ayah - 1 : 0
-                self?.delegate?.playingAyah(AyahNumber(sura: item.sura, ayah: timeIndex + 1 + offset))
+                guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
+                self?.delegate?.playingAyah(ayahs[timeIndex])
             }
 
             self?.player.play(startTimeInSeconds: startTime, items: items, playingItemBoundaries: times)

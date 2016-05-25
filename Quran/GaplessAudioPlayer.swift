@@ -21,7 +21,7 @@ private class GaplessPlayerItem: AVPlayerItem {
     }
 }
 
-class GaplessAudioPlayer: AudioPlayer {
+class GaplessAudioPlayer: DefaultAudioPlayer {
 
     weak var delegate: AudioPlayerDelegate?
 
@@ -60,39 +60,15 @@ class GaplessAudioPlayer: AudioPlayer {
             let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
             let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
 
-            self?.player.onPlaybackEnded = { [weak self] in
-                self?.delegate?.onPlaybackEnded()
-            }
+            self?.player.onPlaybackEnded = self?.onPlaybackEnded()
+            self?.player.onPlaybackRateChanged = self?.onPlaybackRateChanged()
+
             self?.player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, timeIndex: Int) in
                 guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
                 self?.delegate?.playingAyah(ayahs[timeIndex])
             }
-
             self?.player.play(startTimeInSeconds: startTime, items: items, playingItemBoundaries: times)
         }
-    }
-
-    func pause() {
-        player.pause()
-    }
-
-    func resume() {
-        player.resume()
-    }
-
-    func stop() {
-        player.stop()
-        player.onPlaybackEnded = nil
-        player.onPlayerItemChangedTo = nil
-        player.onPlaybackStartingTimeFrame = nil
-    }
-
-    func goForward() {
-        player.onStepForward()
-    }
-
-    func goBackward() {
-        player.onStepBackward()
     }
 }
 

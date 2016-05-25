@@ -9,8 +9,13 @@
 import Foundation
 
 protocol AudioPlayerDelegate: class {
-    func onPlaybackEnded()
+
     func playingAyah(ayah: AyahNumber)
+
+    func onPlaybackEnded()
+
+    func onPlaybackPaused()
+    func onPlaybackResumed()
 }
 
 protocol AudioPlayer {

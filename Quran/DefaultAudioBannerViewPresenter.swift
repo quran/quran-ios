@@ -171,9 +171,17 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         self.progress = progress
     }
 
-    func onPlaying() {
+    func onPlayingStarted() {
         self.progress = nil
         Queue.main.async { self.playing = true }
+    }
+
+    func onPlaybackResumed() {
+        Queue.main.async { self.playing = true }
+    }
+
+    func onPlaybackPaused() {
+        Queue.main.async { self.playing = false }
     }
 
     func highlight(ayah: AyahNumber) {

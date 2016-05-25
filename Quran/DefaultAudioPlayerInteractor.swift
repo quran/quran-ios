@@ -90,6 +90,14 @@ extension DefaultAudioPlayerInteractor {
 
     // MARK:- AudioPlayerDelegate
 
+    func onPlaybackPaused() {
+        delegate?.onPlaybackPaused()
+    }
+
+    func onPlaybackResumed() {
+        delegate?.onPlaybackResumed()
+    }
+
     func onPlaybackEnded() {
         delegate?.onPlaybackOrDownloadingCompleted()
     }
@@ -119,7 +127,7 @@ extension DefaultAudioPlayerInteractor {
     private func startPlaying(playbackInfo: PlaybackInfo) {
         prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
             self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
-            self?.delegate?.onPlaying()
+            self?.delegate?.onPlayingStarted()
         }
     }
 }

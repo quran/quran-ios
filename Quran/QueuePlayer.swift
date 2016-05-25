@@ -15,9 +15,15 @@ class QueuePlayer: NSObject {
     let player: AVQueuePlayer = AVQueuePlayer()
 
     override init() {
+        super.init()
+
         let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
                                                                  withOptions: [.DefaultToSpeaker, .AllowBluetooth])
         player.actionAtItemEnd = .Advance
+
+        observe(retainedObservable: player, keyPath: "rate", options: [.New]) { [weak self] (observable, change: ChangeData<Float>) in
+            self?.onPlaybackRateChanged?(playing: change.newValue != 0)
+        }
     }
 
     private (set) var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
@@ -26,6 +32,7 @@ class QueuePlayer: NSObject {
     var onPlaybackEnded: (() -> Void)?
     var onPlayerItemChangedTo: (AVPlayerItem? -> Void)?
     var onPlaybackStartingTimeFrame: ((item: AVPlayerItem, timeIndex: Int) -> Void)?
+    var onPlaybackRateChanged: ((playing: Bool) -> Void)?
 
     private var timeObserver: AnyObject? {
         didSet {

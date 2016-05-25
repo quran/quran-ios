@@ -21,7 +21,7 @@ private class GappedPlayerItem: AVPlayerItem {
     }
 }
 
-class GappedAudioPlayer: AudioPlayer {
+class GappedAudioPlayer: DefaultAudioPlayer {
 
     weak var delegate: AudioPlayerDelegate?
 
@@ -35,38 +35,15 @@ class GappedAudioPlayer: AudioPlayer {
             times[item] = [0]
         }
 
-        player.onPlaybackEnded = { [weak self] in
-            self?.delegate?.onPlaybackEnded()
-        }
+        player.onPlaybackEnded = onPlaybackEnded()
+        player.onPlaybackRateChanged = onPlaybackRateChanged()
+
         player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, _) in
             guard let item = item as? GappedPlayerItem else { return }
             self?.delegate?.playingAyah(item.ayah)
         }
 
         player.play(startTimeInSeconds: 0, items: items, playingItemBoundaries: times)
-    }
-
-    func pause() {
-        player.pause()
-    }
-
-    func resume() {
-        player.resume()
-    }
-
-    func stop() {
-        player.stop()
-        player.onPlaybackEnded = nil
-        player.onPlayerItemChangedTo = nil
-        player.onPlaybackStartingTimeFrame = nil
-    }
-
-    func goForward() {
-        player.onStepForward()
-    }
-
-    func goBackward() {
-        player.onStepBackward()
     }
 }
 

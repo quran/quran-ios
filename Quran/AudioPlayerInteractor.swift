@@ -12,7 +12,11 @@ protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloading()
     func didStartDownloadingAudioFiles(progress progress: NSProgress)
 
-    func onPlaying()
+    func onPlayingStarted()
+
+    func onPlaybackPaused()
+
+    func onPlaybackResumed()
 
     func highlight(ayah: AyahNumber)
 

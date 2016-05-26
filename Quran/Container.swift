@@ -29,7 +29,7 @@ class Container {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
-                                      createSettingsController()]
+                                      createBookmarksController()]
         return controller
     }
 
@@ -55,6 +55,15 @@ class Container {
 
     func createSettingsController() -> UIViewController {
         return SettingsNavigationController(rootViewController: SettingsViewController())
+    }
+
+    func createBookmarksController() -> UIViewController {
+        return BookmarksNavigationController(rootViewController: createBookmarksViewController())
+    }
+
+    func createBookmarksViewController() -> UIViewController {
+        return BookmarksTableViewController(persistence: createSimplePersistence(),
+                                            quranControllerCreator: createBlockCreator(createQuranController))
     }
 
     func createQariTableViewController() -> QariTableViewController {

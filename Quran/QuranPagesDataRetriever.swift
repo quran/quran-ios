@@ -19,11 +19,10 @@ struct QuranPagesDataRetriever: DataRetriever {
             for i in 0..<Quran.QuranPagesRange.count {
 
                 let pageNumber = i + startIndex
-                let sura = Quran.PageSuraStart[i]
-                let ayah = Quran.PageAyahStart[i]
+                let ayah = Quran.startAyahForPage(pageNumber)
                 let juzNumber = Juz.juzFromPage(pageNumber).order
 
-                let page = QuranPage(pageNumber: pageNumber, startAyah: AyahNumber(sura: sura, ayah: ayah), juzNumber: juzNumber)
+                let page = QuranPage(pageNumber: pageNumber, startAyah: ayah, juzNumber: juzNumber)
                 pages.append(page)
             }
 

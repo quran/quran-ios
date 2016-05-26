@@ -23,6 +23,12 @@
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
 		5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */; };
 		54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA21CF64671003995AE /* DefaultAudioPlayer.swift */; };
+		54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */; };
+		54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */; };
+		54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */; };
+		54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */; };
+		54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */; };
+		54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
@@ -167,6 +173,12 @@
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
 		5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQariTimingRetriever.swift; sourceTree = "<group>"; };
 		54A99CA21CF64671003995AE /* DefaultAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayer.swift; sourceTree = "<group>"; };
+		54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksNavigationController.swift; sourceTree = "<group>"; };
+		54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTableViewController.swift; sourceTree = "<group>"; };
+		54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksDataSource.swift; sourceTree = "<group>"; };
+		54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageBookmarkDataSource.swift; sourceTree = "<group>"; };
+		54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
+		54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookmarkTableViewCell.xib; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -383,6 +395,23 @@
 			name = Timing;
 			sourceTree = "<group>";
 		};
+		54A99CA81CF7959A003995AE /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */,
+			);
+			name = Bookmarks;
+			sourceTree = "<group>";
+		};
+		54A99CAF1CF7A632003995AE /* Bookmark */ = {
+			isa = PBXGroup;
+			children = (
+				54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */,
+				54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */,
+			);
+			name = Bookmark;
+			sourceTree = "<group>";
+		};
 		54B265DA1CC57D8E00D3AEF8 = {
 			isa = PBXGroup;
 			children = (
@@ -449,6 +478,7 @@
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				54A99CA81CF7959A003995AE /* Bookmarks */,
 				54C0DBEE1CE4B0A9009AAD8D /* QariList */,
 				54B266D41CD4E6C400D3AEF8 /* PageSelection */,
 				54B266BB1CD16E9800D3AEF8 /* Quran */,
@@ -641,6 +671,8 @@
 				54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */,
 				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
+				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
+				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -759,6 +791,7 @@
 		54B266A41CCD936A00D3AEF8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				54A99CAF1CF7A632003995AE /* Bookmark */,
 				54B266731CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift */,
 				54B266681CCA936400D3AEF8 /* Suras */,
 				54B2666E1CCA93CF00D3AEF8 /* Quarter */,
@@ -807,6 +840,7 @@
 			isa = PBXGroup;
 			children = (
 				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
+				54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */,
 				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
 				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
 				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
@@ -1081,6 +1115,7 @@
 				54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */,
 				5421D8C91CD9684400E6B019 /* images_1920 in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
+				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranPageCollectionViewCell.xib in Resources */,
 				54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */,
@@ -1169,6 +1204,7 @@
 				54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */,
 				54C0DC2E1CE87E60009AAD8D /* Progress.swift in Sources */,
 				54C0DC0E1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift in Sources */,
+				54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */,
 				54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */,
 				54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */,
 				54C0DC241CE76EF4009AAD8D /* SessionDelegate.swift in Sources */,
@@ -1201,6 +1237,7 @@
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
 				54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */,
+				54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
@@ -1248,10 +1285,12 @@
 				54B2665D1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift in Sources */,
 				54B2666B1CCA93C500D3AEF8 /* SuraTableViewCell.swift in Sources */,
 				54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */,
+				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
+				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
 				5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */,
 				54C0DC1D1CE69BF6009AAD8D /* GaplessAudioFilesDownloader.swift in Sources */,
 				54C0DC121CE692FC009AAD8D /* DownloadNetworkRequest.swift in Sources */,
@@ -1269,6 +1308,7 @@
 				54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */,
 				5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
+				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,

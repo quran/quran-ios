@@ -7,4 +7,6 @@ target 'Quran' do
     pod 'KVOController-Swift'
     pod 'SQLite.swift', '~> 0.10.1'
     pod 'Zip', '~> 0.4'
+    pod 'Fabric'
+    pod 'Crashlytics'
 end

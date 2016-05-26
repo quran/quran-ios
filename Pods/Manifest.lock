@@ -1,16 +1,23 @@
 PODS:
+  - Crashlytics (3.7.0):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.7)
   - GenericDataSources (1.0.0)
   - KVOController-Swift (1.2.0)
   - SQLite.swift (0.10.1)
   - Zip (0.4.1)
 
 DEPENDENCIES:
+  - Crashlytics
+  - Fabric
   - GenericDataSources
   - KVOController-Swift
   - SQLite.swift (~> 0.10.1)
   - Zip (~> 0.4)
 
 SPEC CHECKSUMS:
+  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   GenericDataSources: 80ac8e170a19f0290572b9a7be39b972f7d1c26f
   KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
   SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570

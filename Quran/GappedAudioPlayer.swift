@@ -8,6 +8,8 @@
 
 import Foundation
 import AVFoundation
+import UIKit
+import MediaPlayer
 
 private class GappedPlayerItem: AVPlayerItem {
     let ayah: AyahNumber
@@ -23,12 +25,14 @@ private class GappedPlayerItem: AVPlayerItem {
 
 class GappedAudioPlayer: DefaultAudioPlayer {
 
+    let numberFormatter = NSNumberFormatter()
+
     weak var delegate: AudioPlayerDelegate?
 
     let player = QueuePlayer()
 
     func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
-        let items = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+        let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
         var times: [AVPlayerItem: [Double]] = [:]
         for item in items {
@@ -43,14 +47,26 @@ class GappedAudioPlayer: DefaultAudioPlayer {
             self?.delegate?.playingAyah(item.ayah)
         }
 
-        player.play(startTimeInSeconds: 0, items: items, playingItemBoundaries: times)
+        player.play(startTimeInSeconds: 0, items: items, info: info, boundaries: times)
     }
 }
 
 extension GappedAudioPlayer {
 
-    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [GappedPlayerItem] {
-        return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GappedPlayerItem(URL: $0, ayah: $1) }
+    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GappedPlayerItem], [PlayerItemInfo]) {
+        let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
+        let items = files.map { GappedPlayerItem(URL: $0, ayah: $1) }
+        let info: [PlayerItemInfo] = files.map { (url, ayah) in
+            let descriptionFormat = NSLocalizedString("suraNameAndAyahNumber", comment: "")
+            let suraName = NSLocalizedString("sura_names[\(ayah.sura - 1)]", comment: "")
+            let title = String(format: descriptionFormat, suraName, numberFormatter.format(ayah.ayah))
+
+            return PlayerItemInfo(
+                title: title,
+                artist: qari.name,
+                artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
+        }
+        return (items, info)
     }
 
     private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, AyahNumber)] {

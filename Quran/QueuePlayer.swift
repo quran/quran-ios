@@ -9,25 +9,22 @@
 import Foundation
 import AVFoundation
 import KVOController_Swift
+import MediaPlayer
+
+struct PlayerItemInfo {
+    let title: String
+    let artist: String
+    let artwork: MPMediaItemArtwork?
+}
+
 
 class QueuePlayer: NSObject {
 
     let player: AVQueuePlayer = AVQueuePlayer()
 
-    override init() {
-        super.init()
-
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
-                                                                 withOptions: [.DefaultToSpeaker, .AllowBluetooth])
-        player.actionAtItemEnd = .Advance
-
-        observe(retainedObservable: player, keyPath: "rate", options: [.New]) { [weak self] (observable, change: ChangeData<Float>) in
-            self?.onPlaybackRateChanged?(playing: change.newValue != 0)
-        }
-    }
-
     private (set) var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
     var playingItems: [AVPlayerItem] = []
+    var playingItemsInfo: [PlayerItemInfo] = []
 
     var onPlaybackEnded: (() -> Void)?
     var onPlayerItemChangedTo: (AVPlayerItem? -> Void)?
@@ -42,9 +39,86 @@ class QueuePlayer: NSObject {
         }
     }
 
-    func play(startTimeInSeconds startTimeInSeconds: Double = 0, items: [AVPlayerItem], playingItemBoundaries: [AVPlayerItem: [Double]]) {
+    private var durationObserver: Controller<ClosureObserverWay<AVPlayerItem, CMTime>>? {
+        didSet {
+            oldValue?.unobserve()
+        }
+    }
+
+    private var rateObserver: Controller<ClosureObserverWay<AVQueuePlayer, Float>>? {
+        didSet {
+            oldValue?.unobserve()
+        }
+    }
+
+    override init() {
+        super.init()
+
+        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
+                                                                 withOptions: [.DefaultToSpeaker, .AllowBluetooth])
+        player.actionAtItemEnd = .Advance
+
+        setUpRemoteControlEvents()
+    }
+
+    private func setUpRemoteControlEvents() {
+        let center = MPRemoteCommandCenter.sharedCommandCenter()
+        center.playCommand.addTargetWithHandler { [weak self] _ in
+            self?.resume()
+            return .Success
+        }
+        center.pauseCommand.addTargetWithHandler { [weak self] _ in
+            self?.pause()
+            return .Success
+        }
+        center.togglePlayPauseCommand.addTargetWithHandler { [weak self] _ in
+            if self?.player.rate == 0 {
+                self?.resume()
+            } else {
+                self?.pause()
+            }
+            return .Success
+        }
+        center.nextTrackCommand.addTargetWithHandler { [weak self] _ in
+            self?.onStepForward()
+            return .Success
+        }
+        center.previousTrackCommand.addTargetWithHandler { [weak self] _ in
+            self?.onStepBackward()
+            return .Success
+        }
+        setCommandsEnabled(false)
+
+        // disabled unused command
+        [center.enableLanguageOptionCommand, center.disableLanguageOptionCommand,
+            center.seekForwardCommand, center.seekBackwardCommand, center.skipForwardCommand,
+            center.skipBackwardCommand, center.ratingCommand, center.changePlaybackRateCommand,
+            center.likeCommand, center.dislikeCommand, center.bookmarkCommand, center.changePlaybackPositionCommand].forEach { $0.enabled = false }
+    }
+
+    func setCommandsEnabled(enabled: Bool) {
+        let center = MPRemoteCommandCenter.sharedCommandCenter()
+        [center.playCommand, center.pauseCommand, center.togglePlayPauseCommand,
+            center.nextTrackCommand, center.previousTrackCommand].forEach { $0.enabled = enabled }
+    }
+
+    func play(startTimeInSeconds startTimeInSeconds: Double = 0,
+                                 items: [AVPlayerItem],
+                                 info: [PlayerItemInfo],
+                                 boundaries: [AVPlayerItem: [Double]]) {
+
+        guard items.count == info.count && items.count == boundaries.count else {
+            fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
+        }
+
         playingItems = items
-        self.playingItemBoundaries = playingItemBoundaries
+        playingItemsInfo = info
+        self.playingItemBoundaries = boundaries
+
+        rateObserver = observe(retainedObservable: player, keyPath: "rate", options: [.New]) { [weak self] (observable, change: ChangeData<Float>) in
+            self?.updatePlayNowInfo()
+            self?.onPlaybackRateChanged?(playing: change.newValue != 0)
+        }
 
         // enqueue new items
         player.removeAllItems()
@@ -54,6 +128,7 @@ class QueuePlayer: NSObject {
         player.play()
         addCurrentItemObserver()
         _currentItemChanged(player.currentItem)
+        setCommandsEnabled(true)
     }
 
     func pause() {
@@ -177,9 +252,17 @@ class QueuePlayer: NSObject {
                                                          selector: #selector(onCurrentItemReachedEnd),
                                                          name: AVPlayerItemDidPlayToEndTimeNotification,
                                                          object: newValue)
+
+        durationObserver = observe(retainedObservable: newValue,
+                                   keyPath: "duration",
+                                   options: [.Initial, .New]) { [weak self] (observable, change: ChangeData<CMTime>) in
+                                    self?.updatePlayNowInfo()
+        }
+
         startBoundaryObserver(newValue)
         notifyPlayerItemChangedTo(newValue)
         recalculateAndNotifyCurrentTimeChange()
+        updatePlayNowInfo()
     }
 
     func onCurrentItemReachedEnd() {
@@ -189,6 +272,32 @@ class QueuePlayer: NSObject {
             // last item finished playing
             stop()
         }
+    }
+
+    private func updatePlayNowInfo() {
+        let center = MPNowPlayingInfoCenter.defaultCenter()
+
+        guard let currentItem = player.currentItem, let index = playingItems.indexOf(currentItem) else {
+            if playingItems.isEmpty {
+                center.nowPlayingInfo = nil
+            }
+            return
+        }
+
+        let itemInfo = playingItemsInfo[index]
+
+        var info: [String: AnyObject] = [:]
+        info[MPNowPlayingInfoPropertyPlaybackQueueCount] = playingItems.count
+        if let index = playingItems.indexOf(currentItem) {
+            info[MPNowPlayingInfoPropertyPlaybackQueueIndex] = index
+        }
+        info[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        info[MPMediaItemPropertyPlaybackDuration] = currentItem.duration.seconds
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentItem.currentTime().seconds
+        info[MPMediaItemPropertyTitle] = itemInfo.title
+        info[MPMediaItemPropertyArtist] = itemInfo.artist
+        info[MPMediaItemPropertyArtwork] = itemInfo.artwork
+        center.nowPlayingInfo = info
     }
 
     private func startBoundaryObserver(newItem: AVPlayerItem) {
@@ -218,11 +327,15 @@ class QueuePlayer: NSObject {
     }
 
     private func stopPlayback() {
+        setCommandsEnabled(false)
         removeCurrentItemObserver()
+        rateObserver = nil
         timeObserver = nil
+        durationObserver = nil
         playingItems.removeAll(keepCapacity: true)
         playingItemBoundaries.removeAll(keepCapacity: true)
         player.removeAllItems()
+        updatePlayNowInfo()
         notifyPlaybackEnded()
     }
 

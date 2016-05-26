@@ -450,7 +450,7 @@
 "NetworkError_Unknown" = "Unknown error occurred. Check internet connection and try again.";
 
 "suraDescriptionMakkiAndVerses" = "%1$@ - %2$@ verses";
-"quarterDescriptionSuraAndVerses" = "%1$@ - Ayah %2$@";
+"suraNameAndAyahNumber" = "%1$@ - Ayah %2$@";
 
 
 

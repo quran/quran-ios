@@ -22,7 +22,7 @@ class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
                                     configureCell cell: QuarterTableViewCell,
                                     withItem item: Quarter,
                                     atIndexPath indexPath: NSIndexPath) {
-        let descriptionFormat = NSLocalizedString("quarterDescriptionSuraAndVerses", comment: "")
+        let descriptionFormat = NSLocalizedString("suraNameAndAyahNumber", comment: "")
         let suraName = NSLocalizedString("sura_names[\(item.ayah.sura)]", comment: "")
         let progress = CGFloat(item.order % 4) / 4
         let circleProgress = progress == 0 ? 1 : progress

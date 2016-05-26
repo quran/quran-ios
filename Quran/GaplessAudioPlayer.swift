@@ -8,6 +8,8 @@
 
 import Foundation
 import AVFoundation
+import UIKit
+import MediaPlayer
 
 private class GaplessPlayerItem: AVPlayerItem {
     let sura: Int
@@ -36,7 +38,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
     }
 
     func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
-        let items = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+        let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
         timingRetriever.retrieveTimingForQari(qari, suras: items.map { $0.sura }) { [weak self] timings in
 
@@ -67,15 +69,23 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
                 self?.delegate?.playingAyah(ayahs[timeIndex])
             }
-            self?.player.play(startTimeInSeconds: startTime, items: items, playingItemBoundaries: times)
+            self?.player.play(startTimeInSeconds: startTime, items: items, info: info, boundaries: times)
         }
     }
 }
 
 extension GaplessAudioPlayer {
 
-    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [GaplessPlayerItem] {
-        return filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah).map { GaplessPlayerItem(URL: $0, sura: $1) }
+    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GaplessPlayerItem], [PlayerItemInfo]) {
+        let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
+        let items = files.map { GaplessPlayerItem(URL: $0, sura: $1) }
+        let info = files.map {
+            PlayerItemInfo(
+                title: NSLocalizedString("sura_names[\($1 - 1)]", comment: ""),
+                artist: qari.name,
+                artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
+        }
+        return (items, info)
     }
 
     private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, Int)] {

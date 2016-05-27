@@ -28,10 +28,8 @@ class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
 
         var files = [(remoteURL: NSURL, destination: String, resumeURL: String)]()
 
-        // add besm Allah for all except Al-Fatihah
-        if startAyah.sura != 1 && startAyah.ayah != 1 {
-            files.append(createRequestInfo(qari: qari, sura: 1, ayah: 1))
-        }
+        // add besm Allah for all gapped
+        files.append(createRequestInfo(qari: qari, sura: 1, ayah: 1))
 
         for sura in startAyah.sura...endAyah.sura {
 

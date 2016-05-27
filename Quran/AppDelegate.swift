@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let container = Container()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        Fabric.with([Crashlytics.self])
+        Fabric.with([Crashlytics.self, Answers.self])
 
         let window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window = window

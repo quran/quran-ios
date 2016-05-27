@@ -54,7 +54,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
                     array = Array(array.dropLast())
                 }
-                times[item] = array.enumerate().map { $0 == 0 ? 0 : $1.seconds }
+                times[item] = array.enumerate().map { $0 == 0 && $1.ayah.ayah == 1 ? 0 : $1.seconds }
                 ayahs[item] = array.map { $0.ayah }
             }
             self?.ayahsDictionary = ayahs

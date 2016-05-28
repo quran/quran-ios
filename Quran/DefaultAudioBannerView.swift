@@ -80,13 +80,13 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
             playView.pauseResumeButton,
             playView.nextButton,
             playView.previousButton,
-            playView.repeatButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), forControlEvents: .TouchDown) }
+            playView.repeatButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), forControlEvents: .TouchDown) }
 
         playView.stopButton.addTarget(self, action: #selector(stopPlayingTapped), forControlEvents: .TouchUpInside)
         playView.pauseResumeButton.addTarget(self, action: #selector(onPauseResumeTapped), forControlEvents: .TouchUpInside)
         playView.nextButton.addTarget(self, action: #selector(nextTapped), forControlEvents: .TouchUpInside)
         playView.previousButton.addTarget(self, action: #selector(previousTapped), forControlEvents: .TouchUpInside)
-        playView.repeatButton.addTarget(self, action: #selector(repeatTapped), forControlEvents: .TouchUpInside)
+        playView.repeatButton?.addTarget(self, action: #selector(repeatTapped), forControlEvents: .TouchUpInside)
     }
 
     private func setUpDownloadView() {
@@ -143,7 +143,7 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         case .Infinite:
             text = "∞"
         }
-        playView.repeatCountLabel.text = text
+        playView.repeatCountLabel?.text = text
     }
 
     private func hideAllExcept(view: UIView) {

@@ -14,8 +14,8 @@ class AudioPlayBarView: UIView {
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var pauseResumeButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var repeatButton: UIButton!
-    @IBOutlet weak var repeatCountLabel: UILabel!
+    @IBOutlet weak var repeatButton: UIButton?
+    @IBOutlet weak var repeatCountLabel: UILabel?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

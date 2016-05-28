@@ -129,6 +129,11 @@ class QueuePlayer: NSObject {
         addCurrentItemObserver()
         _currentItemChanged(player.currentItem)
         setCommandsEnabled(true)
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(onAudioInterruptionStateChanged(_:)),
+                                                         name: AVAudioSessionInterruptionNotification,
+                                                         object: nil)
     }
 
     func pause() {
@@ -322,12 +327,17 @@ class QueuePlayer: NSObject {
     }
 
     private func removeCurrentItemObserver() {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: nil)
         unobserve(self.player, keyPath: "currentItem")
+    }
+
+    private func removeInterruptionNotification() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: nil)
     }
 
     private func stopPlayback() {
         setCommandsEnabled(false)
+        removeInterruptionNotification()
         removeCurrentItemObserver()
         rateObserver = nil
         timeObserver = nil
@@ -337,6 +347,27 @@ class QueuePlayer: NSObject {
         player.removeAllItems()
         updatePlayNowInfo()
         notifyPlaybackEnded()
+    }
+
+    func onAudioInterruptionStateChanged(notification: NSNotification) {
+        guard let info = notification.userInfo where notification.name == AVAudioSessionInterruptionNotification else {
+            return
+        }
+
+        guard let rawType = info[AVAudioSessionInterruptionTypeKey] as? UInt, let type = AVAudioSessionInterruptionType(rawValue: rawType) else {
+            return
+        }
+
+        switch type {
+        case .Began: break
+        case .Ended:
+            if let rawOptions = info[AVAudioSessionInterruptionOptionKey] as? UInt {
+                let options = AVAudioSessionInterruptionOptions(rawValue: rawOptions)
+                if options.contains(.ShouldResume) {
+                    player.play()
+                }
+            }
+        }
     }
 
     private func notifyPlaybackEnded() {

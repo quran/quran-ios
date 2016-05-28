@@ -1489,7 +1489,7 @@
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.quran.Quran;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1504,7 +1504,7 @@
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.quran.Quran;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

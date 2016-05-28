@@ -2,6 +2,10 @@
 
 Quran application build for iOS.
 
+## Beta Testing
+
+It would be great if you could send and e-mail to ios@quran.com then we will enroll you to HockyApp as a tester and you can then download beta builds and help us find bugs before going live.
+
 ## Set up & More Info
 
 App is under very early development.

@@ -57,12 +57,8 @@ extension GappedAudioPlayer {
         let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
         let items = files.map { GappedPlayerItem(URL: $0, ayah: $1) }
         let info: [PlayerItemInfo] = files.map { (url, ayah) in
-            let descriptionFormat = NSLocalizedString("suraNameAndAyahNumber", comment: "")
-            let suraName = NSLocalizedString("sura_names[\(ayah.sura - 1)]", comment: "")
-            let title = String(format: descriptionFormat, suraName, numberFormatter.format(ayah.ayah))
-
             return PlayerItemInfo(
-                title: title,
+                title: ayah.localizedName,
                 artist: qari.name,
                 artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
         }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Resultados para \&quot;%d\&quot;:</string>
+                <key>other</key>
+                <string>Resultados para \&quot;%d\&quot;:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>versículo</string>
+                <key>other</key>
+                <string>versículos</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

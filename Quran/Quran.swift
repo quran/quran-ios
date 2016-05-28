@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 4/22/16.
 //  Copyright © 2016 Quran.com. All rights reserved.
 //
+import Foundation
 
 struct Quran {
 
@@ -380,5 +381,19 @@ extension Quran {
 
     static func quranPageForPageNumber(page: Int) -> QuranPage {
         return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).order)
+    }
+
+    static func nameForSura(sura: Int) -> String {
+        return NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
+    }
+}
+
+
+extension AyahNumber {
+
+    var localizedName: String {
+        let ayahNumberString = String.localizedStringWithFormat(NSLocalizedString("quran_ayah", tableName: "Android", comment: ""), ayah)
+        let suraName = Quran.nameForSura(sura)
+        return "\(suraName), \(ayahNumberString)"
     }
 }

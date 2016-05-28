@@ -90,7 +90,7 @@ struct QariDataRetriever: DataRetriever {
 
                 let qari = Qari(
                     id: i,
-                    name: NSLocalizedString(names[i], comment: ""),
+                    name: NSLocalizedString(names[i], tableName: "Readers", comment: ""),
                     path: localPaths[i],
                     audioURL: NSURL(validURL: remoteURLs[i]),
                     audioType: type,

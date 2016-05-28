@@ -22,13 +22,15 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
                                     configureCell cell: SuraTableViewCell,
                                     withItem item: Sura,
                                     atIndexPath indexPath: NSIndexPath) {
-        let descriptionFormat = NSLocalizedString("suraDescriptionMakkiAndVerses", comment: "")
-        let makki = NSLocalizedString("makki", comment: "")
-        let madani = NSLocalizedString("madani", comment: "")
+
+        let ayahsString = String.localizedStringWithFormat(NSLocalizedString("verses", tableName: "Android", comment: ""), item.numberOfAyahs)
+        let makki = NSLocalizedString("makki", tableName: "Android", comment: "")
+        let madani = NSLocalizedString("madani", tableName: "Android", comment: "")
+        let suraType = item.isMAkki ? makki : madani
 
         cell.order.text = numberFormatter.format(item.order)
-        cell.name.text = NSLocalizedString("sura_names[\(item.order - 1)]", comment: "")
-        cell.descriptionLabel.text = String(format: descriptionFormat, item.isMAkki ? makki : madani, numberFormatter.format(item.numberOfAyahs))
+        cell.name.text = Quran.nameForSura(item.order)
+        cell.descriptionLabel.text = "\(suraType) - \(ayahsString)"
         cell.startPage.text = numberFormatter.format(item.startPageNumber)
     }
 }

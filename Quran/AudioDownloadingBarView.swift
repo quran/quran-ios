@@ -26,7 +26,7 @@ class AudioDownloadingBarView: UIView {
 
     func setUp() {
         loadViewFromNib()
-        infoLabel.text = NSLocalizedString("downloading_title", comment: "")
+        infoLabel.text = NSLocalizedString("downloading_title", tableName: "Android", comment: "")
     }
 
     func loadViewFromNib() {

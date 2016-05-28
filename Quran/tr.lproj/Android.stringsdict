@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>\&quot;%1$s\&quot; için bir arama sonucu:</string>
+                <key>other</key>
+                <string>\&quot;%1$s\&quot; için %2$d arama sonuçları:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 âyet</string>
+                <key>other</key>
+                <string>%d âyet</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 Sure heruntergeladen</string>
+                <key>other</key>
+                <string>%1$d Suren heruntergeladen</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Resultat für \&quot;%1$s\&quot;:</string>
+                <key>other</key>
+                <string>%2$d Resultate für \&quot;%1$s\&quot;:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>%d Vers</string>
+                <key>other</key>
+                <string>%d Verse</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

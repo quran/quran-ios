@@ -81,7 +81,7 @@ extension GaplessAudioPlayer {
         let items = files.map { GaplessPlayerItem(URL: $0, sura: $1) }
         let info = files.map {
             PlayerItemInfo(
-                title: NSLocalizedString("sura_names[\($1 - 1)]", comment: ""),
+                title: Quran.nameForSura($1),
                 artist: qari.name,
                 artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
         }

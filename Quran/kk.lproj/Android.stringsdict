@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 сүре жазылды</string>
+                <key>other</key>
+                <string>%1$d сүре жазылды</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>\&quot;%1$s\&quot; бойынша 1 нәтиже:</string>
+                <key>other</key>
+                <string>\&quot;%1$s\&quot; бойынша %2$d нәтиже:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 аят</string>
+                <key>other</key>
+                <string>%d аят</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 элемент өшірілді</string>
+                <key>other</key>
+                <string>%d элемент өшірілді</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

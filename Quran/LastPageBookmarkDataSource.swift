@@ -27,11 +27,11 @@ class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
                                                            atIndexPath indexPath: NSIndexPath) {
         let ayah = Quran.startAyahForPage(item)
 
-        let suraFormat = NSLocalizedString("quran_sura_title", comment: "")
-        let suraName = NSLocalizedString("sura_names[\(ayah.sura - 1)]", comment: "")
+        let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
+        let suraName = Quran.nameForSura(ayah.sura)
 
-        let pageDescriptionFormat = NSLocalizedString("page_description", comment: "")
-        let pageDescription = String(format: pageDescriptionFormat, item, Juz.juzFromPage(item).order)
+        let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item, Juz.juzFromPage(item).order)
 
         cell.name.text = String(format: suraFormat, suraName)
         cell.descriptionLabel.text = pageDescription

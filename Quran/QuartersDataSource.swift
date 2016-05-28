@@ -22,8 +22,7 @@ class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
                                     configureCell cell: QuarterTableViewCell,
                                     withItem item: Quarter,
                                     atIndexPath indexPath: NSIndexPath) {
-        let descriptionFormat = NSLocalizedString("suraNameAndAyahNumber", comment: "")
-        let suraName = NSLocalizedString("sura_names[\(item.ayah.sura - 1)]", comment: "")
+
         let progress = CGFloat(item.order % 4) / 4
         let circleProgress = progress == 0 ? 1 : progress
         let hizb = item.order / 4 + 1
@@ -32,7 +31,7 @@ class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
         cell.circleLabel.hidden = circleProgress != 1
         cell.circleView.progress = circleProgress
         cell.name.text = item.ayahText
-        cell.descriptionLabel.text = String(format: descriptionFormat, suraName, numberFormatter.format(item.ayah.ayah))
+        cell.descriptionLabel.text = item.ayah.localizedName
         cell.startPage.text = numberFormatter.format(item.startPageNumber)
     }
 }

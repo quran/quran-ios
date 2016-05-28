@@ -55,7 +55,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
     var initialPage: Int = 0 {
         didSet {
-            title = NSLocalizedString("sura_names[\(Quran.PageSuraStart[initialPage - 1] - 1)]", comment: "")
+            title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
         }
     }
 
@@ -240,7 +240,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     }
 
     private func updateBarToPage(page: QuranPage) {
-        title = NSLocalizedString("sura_names[\(page.startAyah.sura - 1)]", comment: "")
+        title = Quran.nameForSura(page.startAyah.sura)
         persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
     }
 

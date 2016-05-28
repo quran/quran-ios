@@ -16,7 +16,9 @@ class BookmarksNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: NSLocalizedString("menu_bookmarks", comment: ""), image: UIImage(named: "bookmark-25"), selectedImage: nil)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("menu_bookmarks", tableName: "Android", comment: ""),
+                                  image: UIImage(named: "bookmark-25"),
+                                  selectedImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

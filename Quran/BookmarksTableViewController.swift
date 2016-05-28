@@ -18,7 +18,7 @@ class BookmarksTableViewController: UITableViewController {
     init(persistence: SimplePersistence, quranControllerCreator: AnyCreator<QuranViewController>) {
         self.quranControllerCreator = quranControllerCreator
         lastPageDS = LastPageBookmarkDataSource(reuseIdentifier: "cell", persistence: persistence)
-        dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", comment: ""))
+        dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: ""))
 
         super.init(style: .Plain)
 

@@ -1,0 +1,146 @@
+"app_name" = "قرآن";
+"downloadPrompt_title" = "فايلهاي مورد نياز بارگذاري شود؟";
+"downloadPrompt" = "براي عملکرد بهينه، برخي از فايل ها را بايد دريافت کنيد، ممکن است اين کار مقداري به طول بيانجامد، آيا براي اين کار آماده هستيد؟";
+"downloadPrompt_ok" = "بله";
+"downloadPrompt_no" = "خير";
+"downloading_title" = "بارگيري";
+"downloading_message" = "لطفا براي بارگيري فايلها صبر نماييد. (از ادامه پشتیبانی می‌شود)";
+"extracting_title" = "پردازش";
+"menu_about" = "درباره ما";
+"menu_settings" = "تنظيمات";
+"menu_jump_last_page" = "آخرين صفحه";
+"menu_tags" = "برچسب ها";
+"menu_bookmarks" = "نشانکها";
+"menu_bookmarks_page" = "صفحه نشانکها";
+"menu_bookmarks_ayah" = "نشانکهاي آيه";
+"menu_sort" = "مرتب سازی";
+"menu_sort_date" = "تاریخ اضافه شدن";
+"menu_sort_location" = "محل در قرآن";
+"menu_translation" = "مشاهده ترجمه";
+"menu_back_to_page" = "مشاهده قرآن";
+"menu_help" = "راهنما";
+"menu_search" = "جستجو";
+"menu_get_translations" = "دريافت ترجمه";
+"menu_jump" = "پرش";
+"gotoPage" = "برو به صفحه";
+"cancel" = "لغو";
+"help_title" = "پرسش و پاسخ هاي متداول";
+"help" = "<b>چگونه صوت را فعال کنم؟</b>\
+<br/>براي فعال کردن صوت در اين برنامه کافي است روي صفحه مورد نظر کليک کنيد بعد دکمه صدا را مشاهده خواهيد کرد مي توانيد آن را فعال نماييد.\
+<br/>\
+<br/><b>چگونه مي توانم ترجمه را مشاهده نمايم؟</b>\
+<br/>کافي است صفحه مورد نظر را کليک نماييد سپس علامت جهان  يا در برخي دستگاه ها علامت سه نقطه را کليک کنيد.\
+<br/>\
+اگر شما هيچ ترجمه اي را بر روي دستگاه خود نداريد مي توانيد ابتدا آن را از قسمت تنظيمات بارگذاري نماييد.\
+<br/>\
+<br/><b>چگونه مي توانم يک صفحه را نشانه گذاري کنم</b>\
+<br/>صفحه مورد نظر خود را انتخاب نماييد سپس صفحه را کليک کنيد و روبان را لمس نماييد.\
+<br/>\
+<br/><b>چگونه مي توانم فونت را بزرگتر کنم؟</b>\
+<br/>براي متن عربي گوشي خود را عمودي کنيد و براي اندازه متن ترجمه به قسمت تنظيمات مراجعه نماييد.\
+<br/>\
+<br/><b>چگونه يک آيه را به اشتراک بگذارم؟</b>\
+<br/>کافي است آيه مورد نظر خود را براي مدت زمان کوتاهي لمس نماييد.\
+<br/>\
+<br/><b>در ديدن فونت مشکل دارم؟</b>\
+<br/>متاسفانه برخي از فونت هاي  براي آندرويد 4 پيش بيني نشده است.";
+"search_hint" = "جستجو در قرآن";
+"quranSearchType" = "آيات قرآن";
+"found_in_sura" = "در سوره";
+"no_results" = "هيچ نتيجه اي يافت نشد براي \"%s\"";
+"no_active_translation" = "شما هيچ ترجمه را فعال نکرده ايد";
+"translation_settings" = "تنظيمات ترجمه";
+"no_arabic_search_available" = "شما متن عربي قرآن را براي جستجو بارگذاري نکرده ايد، لطفا آنرا ابتدا دريافت نماييد";
+"get_arabic_search_db" = "دريافت متن عربي قرآن براي جستجوي در متن";
+"prefs_category_reading" = "تنظيمات خواندن";
+"prefs_category_translation" = "تنظيمات ترجمه";
+"prefs_category_display_settings" = "تنظيمات صفحه";
+"prefs_use_arabic_title" = "حالت عربي";
+"prefs_use_arabic_summary_on" = "به عربي برگردان خواهد شد";
+"prefs_lock_orientation_title" = "جهت قفل شدن صفحه نمايش";
+"prefs_lock_orientation_summary_on" = "تنظيمات جهت نمايش";
+"prefs_lock_orientation_summary_off" = "تطبيق به حالت جهت گيري فعلي";
+"prefs_landscape_orientation_title" = "جهت عمودي";
+"prefs_landscape_orientation_summary_on" = "استفاده در جهت عمودي";
+"prefs_landscape_orientation_summary_off" = "استفاده در جهت افقي";
+"prefs_night_mode_title" = "نمايش شبانه";
+"prefs_night_mode_summary" = "تاريک نمودن صفحه و روشن نمودن متن";
+"prefs_night_mode_text_brightness_title" = "روشنایی متن";
+"prefs_night_mode_text_brightness_summary" = "روشنایی متن در هنگام شب فعال می‌شود.";
+"prefs_display_marker_title" = "نمايش پيغام";
+"prefs_display_marker_summary" = "نمايش پيغام ها فعال گردد";
+"prefs_translation_text_title" = "اندازه قلم ترجمه";
+"prefs_translations" = "ترجمه ها";
+"prefs_translations_summary" = "بارگذاري و مديريت ترجمه";
+"prefs_ayah_before_translation_title" = "آيه قبل از ترجمه";
+"prefs_ayah_before_translation_summary" = "نشان دادن آيه عربي بعد از ترجمه";
+"prefs_category_download" = "بارگذاري تنظيمات";
+"prefs_streaming_title" = "جريان";
+"prefs_streaming_summary" = "زماني که صوت فعال است";
+"prefs_download_amount_title" = "بارگذاري مقدار";
+"prefs_download_amount_summary" = "مقدار ترجيهي بارگذاري صوت";
+"downloaded_translations" = "بارگذاري شد";
+"available_translations" = "فعال براي بارگذاي";
+"remove_button" = "حذف";
+"dialog_ok" = "بله";
+"update_available" = "به روز رسانی موجود است";
+"translation_updates_available" = "برای برخی از ترجمه ها، به روز رسانی موجود است. صفحه ترجمه ها را مشاهده می‌کنید؟";
+"translation_dialog_yes" = "بله";
+"translation_dialog_later" = "بعدا";
+"quran_rob3" = "¼";
+"quran_nos" = "½";
+"quran_talt_arb3" = "¾";
+"quran_hizb" = "حزب";
+"quran_juz2" = "جزء";
+"quran_page" = "صفحه";
+"quran_sura" = "سوره";
+"quran_ayah" = "%1$d آية";
+"quran_sura_title" = "سوره %1$@";
+"sura_ayah_notification_str" = "سوره %1$s, آيه %2$d";
+"bookmarks_current_page" = "صفحه کنوني";
+"index_loading" = "بارگذاري…";
+"canceling" = "در حال لغو";
+"page_description" = "صفحه %1$d, جزء %2$d";
+"highlighting_database" = "فايل هاي مورد نياز";
+"timing_database" = "فايل هاي مورد نياز";
+"download_successful" = "با موفقيت بارگذاري انجام شد";
+"download_processing" = "در حال بارگذاري;";
+"download_error_general" = "خطا در بارگذاري";
+"download_error_disk" = "فضاي کافي براي بارگذاري وجود ندارد";
+"download_error_network" = "خطاي در شبکه ديتا";
+"download_error_perms" = "خطا در دسترسي";
+"download_error_invalid_download" = "بارگذاري با خطا مواجه شد";
+"download_error_invalid_download_retry" = "فايل خراب است، دوباره بارگذاري نماييد";
+"download_error_network_retry" = "خطاي شبکه;";
+"notification_download_canceled" = "بارگذاري لغو شده ها";
+"download_non_wifi_prompt" = "شبکه بي سيم شما خاموش است، در هر صورت بارگذاري نمايد؟";
+"download_progress" = "بارگذاري %1$s / %2$s";
+"process_progress" = "پردازش %1$d / %2$d";
+"download_retry" = "تلاش دوباره";
+"download_cancel" = "لغو";
+"remove_dlg_title" = "حذف ترجمه";
+"remove_dlg_msg" = "آيا مطمئن هستيد که مي خواهيد حذف کنيد %1$s?";
+"error_getting_translation_list" = "مشکلي وجود دارد، لطفا بعداً دوباره تلاش نماييد.";
+"search_data" = "جستجو";
+"email_us" = "اگر جواب سوال شما در بالا پیدا نشد، می‌توانید برای پشتیبانی با رایانامه quranandroid@gmail.com تماس حاصل نمایید. لطفا توجه داشته باشید که نامه های زیادی دریافت می‌شود، پاسخ به نامه شما ممکن است کمی طول بکشد.";
+"makki" = "مکي";
+"madani" = "مدني";
+"bookmark_ayah" = "نشانه گذاري آيه";
+"tag_ayah" = "برچسب گذاری آیه";
+"share_ayah" = "اشتراک گذاري آيه";
+"translation_ayah" = "ترجمه آيه";
+"play_from_here" = "شروع از اينجا";
+"via_string" = "توسط @QuranAndroid";
+"search_key" = "کليد جستجو را کليک نماييد";
+"copy_ayah" = "کپي کردن آيه";
+"ayah_copied_popup" = "آيه کپي شد";
+"delete_bookmark" = "حذف نشانک";
+"tag_bookmark" = "نشانک برچسب";
+"delete_tag" = "حذف برچسب";
+"edit_tag" = "تغییر برچسب";
+"new_tag" = "برچسب جدید";
+"not_tagged" = "بدون برچسب";
+"tag_dlg_title" = "برچسب";
+"tag_name" = "نام";
+"bookmarks_list_empty" = "لیست نشانه خالی است";
+"tags_list_empty" = "لیست برچسب خالی است.";

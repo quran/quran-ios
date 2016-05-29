@@ -220,7 +220,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     }
 
     private func startHiddenBarsTimer() {
-        timer = Timer(interval: 2) { [weak self] in
+        timer = Timer(interval: 3) { [weak self] in
             self?.setBarsHidden(true)
         }
     }

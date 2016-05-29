@@ -8,4 +8,4 @@
 
 import Foundation
 
-let imageSize = "1920"
+let quranImagesSize = "1280"

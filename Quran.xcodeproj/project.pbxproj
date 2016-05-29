@@ -14,7 +14,6 @@
 		5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E50E1CFA2BA700071A6D /* Suras.strings */; };
 		5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E5201CFA2BC100071A6D /* Readers.strings */; };
 		5419E5301CFA3F0300071A6D /* Android.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 5419E5321CFA3F0300071A6D /* Android.stringsdict */; };
-		5421D8C91CD9684400E6B019 /* images_1920 in Resources */ = {isa = PBXBuildFile; fileRef = 5421D8C81CD9684400E6B019 /* images_1920 */; };
 		5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */; };
 		5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
@@ -154,6 +153,7 @@
 		54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63031CF216C4003D1ABA /* QueuePlayer.swift */; };
 		54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */; };
 		54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */; };
+		54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */ = {isa = PBXBuildFile; fileRef = 54F5B4371CFAF96B0002A3B8 /* images_1280 */; };
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */; };
 		C1F63E251CE58B460026E263 /* AyahInfoPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */; };
@@ -220,7 +220,6 @@
 		5419E5401CFA46A200071A6D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5411CFA46A300071A6D /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = zh; path = zh.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5421CFA46A500071A6D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Android.stringsdict; sourceTree = "<group>"; };
-		5421D8C81CD9684400E6B019 /* images_1920 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1920; sourceTree = "<group>"; };
 		5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
@@ -388,6 +387,7 @@
 		54EA63031CF216C4003D1ABA /* QueuePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuePlayer.swift; sourceTree = "<group>"; };
 		54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionType+Extension.swift"; sourceTree = "<group>"; };
 		54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		54F5B4371CFAF96B0002A3B8 /* images_1280 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1280; sourceTree = "<group>"; };
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
@@ -729,7 +729,7 @@
 		54B2664A1CC95DAC00D3AEF8 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				5421D8C81CD9684400E6B019 /* images_1920 */,
+				54F5B4371CFAF96B0002A3B8 /* images_1280 */,
 			);
 			name = images;
 			path = Resources/images;
@@ -1186,7 +1186,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */,
-				5421D8C91CD9684400E6B019 /* images_1920 in Resources */,
 				5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
@@ -1199,6 +1198,7 @@
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,
 				54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */,
 				54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */,
+				54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,

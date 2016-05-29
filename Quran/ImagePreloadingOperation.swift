@@ -49,6 +49,6 @@ private func fullPathForPage(page: Int) -> String? {
 }
 
 private func fileNameForPage(page: Int) -> String {
-    let file = String(format: "images_\(imageSize)/width_\(imageSize)/page%03d.png", page)
+    let file = String(format: "images_\(quranImagesSize)/width_\(quranImagesSize)/page%03d.png", page)
     return file
 }

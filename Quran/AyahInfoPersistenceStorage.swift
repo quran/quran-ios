@@ -28,7 +28,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
     private let columns = Columns()
 
     private var db: LazyConnectionWrapper = {
-        let file = String(format: "images_\(imageSize)/databases/ayahinfo_\(imageSize)")
+        let file = String(format: "images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)")
         guard let path = NSBundle.mainBundle().pathForResource(file, ofType: "db") else {
             fatalError("Unable to find ayahinfo database in resources")
         }

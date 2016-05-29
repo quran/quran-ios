@@ -57,7 +57,6 @@ extension DefaultAudioFilesDownloader {
         // filter out existing files
         let filesToDownload = files.filter { !Files.DocumentsFolder.URLByAppendingPathComponent(
             $0.destination).checkResourceIsReachableAndReturnError(nil) }
-        print("Will download files: \(filesToDownload.map { ($0.remoteURL, $0.destination) })")
 
         // create downloads
         let requests = downloader.download(filesToDownload.map { (

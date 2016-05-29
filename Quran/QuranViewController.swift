@@ -277,7 +277,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
             return Quran.firstPage()
         }
         let page = pageDataSource.itemAtIndexPath(indexPath)
-        print(page)
         return page
     }
 }

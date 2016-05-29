@@ -259,7 +259,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         controller.popoverPresentationController?.sourceRect = audioView?.bounds ?? CGRect.zero
         controller.popoverPresentationController?.permittedArrowDirections = .Down
         presentViewController(controller, animated: true, completion: nil)
-
     }
 
     func highlightAyah(ayah: AyahNumber) {
@@ -284,6 +283,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 }
 
 extension QuranViewController: UIPopoverPresentationControllerDelegate {
+
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .FullScreen
+    }
 
     func presentationController(controller: UIPresentationController,
                                 viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {

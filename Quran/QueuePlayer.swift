@@ -90,8 +90,7 @@ class QueuePlayer: NSObject {
         setCommandsEnabled(false)
 
         // disabled unused command
-        [center.enableLanguageOptionCommand, center.disableLanguageOptionCommand,
-            center.seekForwardCommand, center.seekBackwardCommand, center.skipForwardCommand,
+        [center.seekForwardCommand, center.seekBackwardCommand, center.skipForwardCommand,
             center.skipBackwardCommand, center.ratingCommand, center.changePlaybackRateCommand,
             center.likeCommand, center.dislikeCommand, center.bookmarkCommand, center.changePlaybackPositionCommand].forEach { $0.enabled = false }
     }

@@ -9,7 +9,7 @@
 import UIKit
 import GenericDataSources
 
-class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: UIViewController {
+class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableViewController {
 
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController>
@@ -28,27 +28,6 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
-    }
-
-    weak var tableView: UITableView!
-    weak var statusView: UIView?
-
-    override func loadView() {
-        super.loadView()
-
-        let tableView = UITableView()
-        view.addAutoLayoutSubview(tableView)
-        view.pinParentAllDirections(tableView)
-
-        let statusView = UIView()
-        statusView.backgroundColor = UIColor.appIdentity()
-        view.addAutoLayoutSubview(statusView)
-        view.pinParentHorizontal(statusView)
-        view.addParentTopConstraint(statusView)
-        statusView.addHeightConstraint(20)
-
-        self.tableView = tableView
-        self.statusView = statusView
     }
 
     override func viewDidLoad() {
@@ -75,13 +54,6 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        if let indexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRowAtIndexPath(indexPath, animated: animated)
-        }
-    }
-
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.hidesBarsOnSwipe = true
@@ -90,15 +62,6 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.hidesBarsOnSwipe = false
-    }
-
-    override func willTransitionToTraitCollection(newCollection: UITraitCollection,
-                                                  withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        let isCompact = newCollection.containsTraitsInCollection(UITraitCollection(verticalSizeClass: .Compact))
-        coordinator.animateAlongsideTransition({ [weak self] _ in
-            self?.statusView?.alpha = isCompact ? 0 : 1
-            }, completion: nil)
     }
 
     private func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {

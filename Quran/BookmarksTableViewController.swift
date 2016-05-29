@@ -9,7 +9,7 @@
 import UIKit
 import GenericDataSources
 
-class BookmarksTableViewController: UITableViewController {
+class BookmarksTableViewController: BaseTableViewController {
 
     let dataSource: BookmarksDataSource = BookmarksDataSource(type: .MultiSection, headerReuseIdentifier: "header")
     let lastPageDS: LastPageBookmarkDataSource
@@ -20,7 +20,7 @@ class BookmarksTableViewController: UITableViewController {
         lastPageDS = LastPageBookmarkDataSource(reuseIdentifier: "cell", persistence: persistence)
         dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: ""))
 
-        super.init(style: .Plain)
+        super.init(nibName: nil, bundle: nil)
 
         let selectionHandler = BlockSelectionHandler<Int, BookmarkTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in

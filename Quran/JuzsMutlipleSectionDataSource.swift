@@ -18,6 +18,8 @@ class JuzsMutlipleSectionDataSource: CompositeDataSource {
 
     var juzs: [Juz] = []
 
+    var onJuzHeaderSelected: (Juz -> Void)? = nil
+
     init(type: Type, headerReuseIdentifier: String) {
         self.headerReuseIdentifier = headerReuseIdentifier
         super.init(type: type)
@@ -44,6 +46,13 @@ class JuzsMutlipleSectionDataSource: CompositeDataSource {
 
         header.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), juz.order)
         header.subtitleLabel.text = numberFormatter.format(juz.startPageNumber)
+
+        header.object = juz
+        header.onTapped = { [weak self] in
+            guard let object = header.object as? Juz else { return }
+
+            self?.onJuzHeaderSelected?(object)
+        }
         return header
     }
 }

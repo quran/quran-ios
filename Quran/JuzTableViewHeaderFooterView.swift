@@ -13,6 +13,12 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
     let titleLabel: UILabel = UILabel()
     let subtitleLabel: UILabel = UILabel()
 
+    let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
+
+    var object: Any?
+
+    var onTapped: (() -> Void)?
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setUp()
@@ -24,6 +30,9 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
     }
 
     private func setUp() {
+        addGestureRecognizer(tapGesture)
+        tapGesture.addTarget(self, action: #selector(onViewTapped))
+
         contentView.backgroundColor = UIColor(rgb: 0xEEEEEE)
 
         titleLabel.textColor = UIColor(rgb: 0x323232)
@@ -38,5 +47,9 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         contentView.addAutoLayoutSubview(subtitleLabel)
         contentView.pinParentVertical(subtitleLabel)
         contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
+    }
+
+    func onViewTapped() {
+        onTapped?()
     }
 }

@@ -52,6 +52,10 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
             self.dataSource.setSections(data) { self.wrappedCreateItemsDataSource() }
             self.tableView.reloadData()
         }
+
+        dataSource.onJuzHeaderSelected = { [weak self] juz in
+            self?.navigateToPage(juz.startPageNumber)
+        }
     }
 
     override func viewDidAppear(animated: Bool) {

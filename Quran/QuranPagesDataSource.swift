@@ -22,6 +22,15 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
         super.init(reuseIdentifier: reuseIdentifier)
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(applicationBecomeActive),
+                                                         name: UIApplicationDidBecomeActiveNotification,
+                                                         object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     override func ds_collectionView(collectionView: GeneralCollectionView,
@@ -69,6 +78,16 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             return
         }
 
+        scrollToHighlightedAya(ayah, ayaht: ayat)
+    }
+
+    func applicationBecomeActive() {
+        if let ayah = highlightedAyat.first {
+            scrollToHighlightedAya(ayah, ayaht: highlightedAyat)
+        }
+    }
+
+    private func scrollToHighlightedAya(ayah: AyahNumber, ayaht: Set<AyahNumber>) {
         Queue.background.async {
             let page = ayah.getStartPage()
 
@@ -76,7 +95,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                 let index = NSIndexPath(forItem: page - 1, inSection: 0)
                 // if the cell is there, highlight the ayah.
                 if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
-                    cell.highlightAyat(ayat)
+                    cell.highlightAyat(ayaht)
                 } else {
                     // scroll to the cell
                     self.ds_reusableViewDelegate?.ds_scrollToItemAtIndexPath(index, atScrollPosition: .CenteredHorizontally, animated: true)

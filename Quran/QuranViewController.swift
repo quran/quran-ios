@@ -154,6 +154,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        UIApplication.sharedApplication().idleTimerDisabled = true
         navigationController?.setNavigationBarHidden(false, animated: animated)
         interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.enabled
         navigationController?.interactivePopGestureRecognizer?.enabled = false
@@ -161,6 +162,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
+        UIApplication.sharedApplication().idleTimerDisabled = false
         navigationController?.interactivePopGestureRecognizer?.enabled = interactivePopGestureOldEnabled ?? true
     }
 

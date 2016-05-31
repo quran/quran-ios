@@ -168,7 +168,13 @@ class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate,
             }
 
             if error as? NSURLError != NSURLError.Cancelled { // not cancelled by user
-                downloadRequest?.onCompletion?(.Failure(NetworkError(error: error)))
+                let finalError: ErrorType
+                if error is POSIXError && Int32(error.code) == ENOENT {
+                    finalError = FileSystemError.NoDiskSpace
+                } else {
+                    finalError = NetworkError(error: error)
+                }
+                downloadRequest?.onCompletion?(.Failure(finalError))
             }
         } else {
             // success

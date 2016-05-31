@@ -27,7 +27,7 @@ class URLSessionDownloadManager: DownloadManager {
         session = NSURLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
     }
 
-    func getCurrentTasks(completion: (downloads: [Request]) -> Void) {
+    func getCurrentTasks(completion: (downloads: [DownloadNetworkRequest]) -> Void) {
         // only query if there is download
         guard delegate.downloadRequests.isEmpty && delegate.isDownloading else {
             completion(downloads: delegate.downloadRequests.map { $1 })
@@ -38,7 +38,7 @@ class URLSessionDownloadManager: DownloadManager {
             guard let `self` = self else {
                 return
             }
-            var downloads: [Request] = []
+            var downloads: [DownloadNetworkRequest] = []
             var requests = [(NSURLRequest, DownloadNetworkRequest)]()
             for task in downloadTakss {
                 if let request = task.originalRequest, let data = self.delegate.getRequestDataForRequest(request) {
@@ -57,9 +57,10 @@ class URLSessionDownloadManager: DownloadManager {
         }
     }
 
-    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [Request] {
+    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
         var downloadRequests = [(NSURLRequest, DownloadNetworkRequest)]()
+        var tasks: [NSURLSessionDownloadTask] = []
         for details in requests {
             let task: NSURLSessionDownloadTask
             let resumeURL = Files.DocumentsFolder.URLByAppendingPathComponent(details.resumeDestination)
@@ -73,13 +74,14 @@ class URLSessionDownloadManager: DownloadManager {
                                                          destination: details.destination,
                                                          resumeDestination: details.resumeDestination,
                                                          progress: progress)
-            // start the task
-            task.resume()
-
+            tasks.append(task)
             downloadRequests.append((details.request, downloadRequest))
         }
 
         delegate.addRequestsData(downloadRequests)
+        // start the tasks after the requests info are saved
+        tasks.forEach { $0.resume() }
+
         return downloadRequests.map { $1 }
     }
 }

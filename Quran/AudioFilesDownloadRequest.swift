@@ -12,9 +12,9 @@ class AudioFilesDownloadRequest: Request {
 
     let progress: NSProgress
 
-    let requests: [Request]
+    let requests: [DownloadNetworkRequest]
 
-    init(requests: [Request], progress: NSProgress) {
+    init(requests: [DownloadNetworkRequest], progress: NSProgress) {
         self.requests = requests
         self.progress = progress
     }

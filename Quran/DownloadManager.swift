@@ -24,9 +24,9 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getCurrentTasks(completion: (downloads: [Request]) -> Void)
+    func getCurrentTasks(completion: (downloads: [DownloadNetworkRequest]) -> Void)
 
-    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [Request]
+    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest]
 }
 
 extension DownloadManager {
@@ -36,7 +36,7 @@ extension DownloadManager {
         url: NSURL,
         headers: [String: String]?,
         destination: String,
-        resumeDestination: String)]) -> [Request] {
+        resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
         let requests: [(request: NSURLRequest, destination: String, resumeDestination: String)] = requestDetails.map { details in
             let request = NSMutableURLRequest(URL: details.url)

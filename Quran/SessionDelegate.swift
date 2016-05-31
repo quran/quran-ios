@@ -144,6 +144,8 @@ class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate,
                 let (_, downloadRequest) = removeRequest(request)
                 downloadRequest?.onCompletion?(.Failure(FileSystemError(error: error)))
             }
+        } else {
+            print("Missked saving task", downloadTask.currentRequest?.URL)
         }
     }
 

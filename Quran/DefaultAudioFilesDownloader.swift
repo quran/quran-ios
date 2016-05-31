@@ -54,9 +54,15 @@ extension DefaultAudioFilesDownloader {
     func download(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request? {
         // get all files
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
-        // filter out existing files
-        let filesToDownload = files.filter { !Files.DocumentsFolder.URLByAppendingPathComponent(
-            $0.destination).checkResourceIsReachableAndReturnError(nil) }
+        var uniqueFiles = Set<NSURL>()
+        // filter out existing and duplicate files
+        let filesToDownload = files.filter { (remoteURL, destination, _) in
+            if !uniqueFiles.contains(remoteURL) {
+                uniqueFiles.insert(remoteURL)
+                return !Files.DocumentsFolder.URLByAppendingPathComponent(destination).checkResourceIsReachableAndReturnError(nil)
+            }
+            return false
+        }
 
         // create downloads
         let requests = downloader.download(filesToDownload.map { (
@@ -70,7 +76,7 @@ extension DefaultAudioFilesDownloader {
         return self.request
     }
 
-    private func createRequestWithDownloads(downloads: [Request]) {
+    private func createRequestWithDownloads(downloads: [DownloadNetworkRequest]) {
         guard !downloads.isEmpty else { return }
 
         let progress = Progress(totalUnitCount: Int64(downloads.count))
@@ -78,22 +84,31 @@ extension DefaultAudioFilesDownloader {
         let request = AudioFilesDownloadRequest(requests: downloads, progress: progress)
         self.request = request
 
+        let completionLock = NSLock()
+
         var completed = 0
         let total = downloads.count
         for download in downloads {
             download.onCompletion = { [weak self] result in
-                completed += 1
+                guard let `self` = self else {
+                    return
+                }
+
+                let allCompleted: Bool = completionLock.execute {
+                    completed += 1
+                    return completed == total
+                }
 
                 // if error occurred, stop downloads
                 if let error = result.error {
-                    let request = self?.request
-                    self?.request = nil
+                    let request = self.request
+                    self.request = nil
                     request?.cancel() // cancel other downloads
                     request?.onCompletion?(.Failure(error))
                 } else {
-                    if completed == total {
-                        let request = self?.request
-                        self?.request = nil
+                    if allCompleted {
+                        let request = self.request
+                        self.request = nil
                         request?.onCompletion?(.Success())
                     }
                 }

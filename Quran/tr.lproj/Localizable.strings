@@ -1,16 +1,18 @@
 
 /*
  New Localizations in Quran for iOS. TODO: need to be reviewed by a native speaker.
+ Translated by Ismail Uslu
+ PR by Abdelouali Benkheil
  */
 
-"NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
-"NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
-"NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-"NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
-"NetworkError_Unknown" = "Oops! Something went wrong. Please try again.";
+"NetworkError_ConnectionLost" = "Internet bağlantısı kaybedildi. Daha stabil bir internet baglantisi için lütfen yer degistirin veya baglanti yapmak için tekrar deneyiniz.";
+"NetworkError_InternationalRoamingOff" = "Uluslararası dolaşım için izin verilmiyor. Dolasim ayarini degistirin ya da Wi-Fi baglantisini açiniz.";
+"NetworkError_NotConnectedToInternet" = "internete bağlı değil. Wi-Fi açiniz veya hücresel veri bağlantısı’ni aktif ediniz.";
+"NetworkError_ServerNotReachable" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
+"NetworkError_Unknown" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
 
 
 
 
-"FileSystemError_Unknown" = "Unkown error occurred while accessing device hard disk";
-"FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+"FileSystemError_Unknown" = "Cihazi disk’e erişirken bilinmeyen bir hata oluştu";
+"FileSystemError_NoDiskSpace" = "Indirmenizi kaydetmek için hiçbir kullanılabilir disk alani bulunmamaktadir ";

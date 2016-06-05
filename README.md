@@ -2,7 +2,6 @@
 
 [<img src="https://dl.dropboxusercontent.com/u/60435436/Quran/iOS/Download_on_the_App_Store_Badge_US-UK_135x40.svg" />](https://itunes.apple.com/app/id1118663303)
 
-Quran application built for iOS.
 
 [<img align="right" src="https://raw.githubusercontent.com/quran/quran-ios/master/Quran/Assets.xcassets/AppIcon.appiconset/Icon-83.5%402x.png" />](https://itunes.apple.com/app/id1118663303)
 

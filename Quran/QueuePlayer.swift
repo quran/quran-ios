@@ -61,6 +61,10 @@ class QueuePlayer: NSObject {
         setUpRemoteControlEvents()
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     private func setUpRemoteControlEvents() {
         let center = MPRemoteCommandCenter.sharedCommandCenter()
         center.playCommand.addTargetWithHandler { [weak self] _ in

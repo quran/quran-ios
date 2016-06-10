@@ -12,7 +12,7 @@ protocol AudioBannerViewPresenterDelegate: class {
     func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int)
     func highlightAyah(ayah: AyahNumber)
     func removeHighlighting()
-    func currentPage() -> QuranPage
+    func currentPage() -> QuranPage?
 }
 
 protocol AudioBannerViewPresenter: AudioBannerViewDelegate {

@@ -95,6 +95,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     private func showQariView() {
+        Crash.setValue(selectedQariIndex, forKey: .QariId)
         view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
     }
 
@@ -164,6 +165,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func willStartDownloading() {
+        Crash.setValue(true, forKey: .DownloadingQuran)
         Queue.main.async { self.view?.setDownloading(0)  }
     }
 
@@ -172,6 +174,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onPlayingStarted() {
+        Crash.setValue(false, forKey: .DownloadingQuran)
         self.progress = nil
         Queue.main.async { self.playing = true }
     }
@@ -185,6 +188,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func highlight(ayah: AyahNumber) {
+        Crash.setValue(ayah, forKey: .PlayingAyah)
         Queue.main.async { self.delegate?.highlightAyah(ayah) }
     }
 
@@ -196,6 +200,8 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onPlaybackOrDownloadingCompleted() {
+        Crash.setValue(nil, forKey: .PlayingAyah)
+        Crash.setValue(false, forKey: .DownloadingQuran)
         Queue.main.async {
             self.showQariView()
             self.delegate?.removeHighlighting()

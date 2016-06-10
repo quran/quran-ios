@@ -234,7 +234,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     }
 
     private func onPageChanged() {
-        onPageChangedToPage(currentPage())
+        guard let page = currentPage() else { return }
+        onPageChangedToPage(page)
     }
 
     private func onPageChangedToPage(page: QuranPage) {
@@ -243,7 +244,12 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
     private func updateBarToPage(page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
-        persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
+
+        // only persist if active
+        if UIApplication.sharedApplication().applicationState == .Active {
+            persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
+            Crash.setValue(page.pageNumber, forKey: .QuranPage)
+        }
     }
 
     func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {
@@ -267,16 +273,24 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         var set = Set<AyahNumber>()
         set.insert(ayah)
         pageDataSource.highlightAyaht(set)
+
+        // persist if not active
+        guard UIApplication.sharedApplication().applicationState != .Active else { return }
+        Queue.background.async {
+            let page = ayah.getStartPage()
+            self.persistence.setValue(page, forKey: PersistenceKeyBase.LastViewedPage)
+            Crash.setValue(page, forKey: .QuranPage)
+        }
     }
 
     func removeHighlighting() {
         pageDataSource.highlightAyaht(Set())
     }
 
-    func currentPage() -> QuranPage {
+    func currentPage() -> QuranPage? {
         guard let offset = collectionView?.contentOffset,
             let indexPath = collectionView?.indexPathForItemAtPoint(CGPoint(x: offset.x + view.bounds.width / 2, y: 0)) else {
-            return Quran.firstPage()
+            return nil
         }
         let page = pageDataSource.itemAtIndexPath(indexPath)
         return page

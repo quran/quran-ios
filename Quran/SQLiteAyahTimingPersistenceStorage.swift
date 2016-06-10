@@ -32,6 +32,7 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
             }
             return timings
         } catch {
+            Crash.recordError(error)
             fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
         }
     }
@@ -49,6 +50,7 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
             }
             return timings
         } catch {
+            Crash.recordError(error)
             fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
         }
     }

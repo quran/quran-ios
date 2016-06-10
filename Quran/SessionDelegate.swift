@@ -140,6 +140,7 @@ class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate,
                 }
                 try fileManager.copyItemAtURL(location, toURL: destinationURL)
             } catch let error {
+                Crash.recordError(error)
                 // early exist with error
                 let (_, downloadRequest) = removeRequest(request)
                 downloadRequest?.onCompletion?(.Failure(FileSystemError(error: error)))

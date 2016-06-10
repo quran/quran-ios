@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D60CFFB64E35521B54DF6DA /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */; };
+		080D89402819A7792ECFDB98 /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808F06B08E788D2B407A3ED5 /* Pods_Quran.framework */; };
 		5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */; };
 		5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */; };
 		5419E4BB1CFA26B900071A6D /* Android.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E4BD1CFA26B900071A6D /* Android.strings */; };
@@ -152,6 +152,7 @@
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 		54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63031CF216C4003D1ABA /* QueuePlayer.swift */; };
 		54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */; };
+		54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EB823E1D0A35EA00CBA802 /* Crash.swift */; };
 		54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */; };
 		54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */ = {isa = PBXBuildFile; fileRef = 54F5B4371CFAF96B0002A3B8 /* images_1280 */; };
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
@@ -160,8 +161,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1D928AFCCBFC69297B5F7606 /* Pods-Quran.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.debug.xcconfig"; sourceTree = "<group>"; };
-		35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		44EAC2075E69DAC8D8108C7D /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 		5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
 		5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
 		5419E4BC1CFA26B900071A6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Android.strings; sourceTree = "<group>"; };
@@ -386,12 +386,14 @@
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		54EA63031CF216C4003D1ABA /* QueuePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuePlayer.swift; sourceTree = "<group>"; };
 		54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionType+Extension.swift"; sourceTree = "<group>"; };
+		54EB823E1D0A35EA00CBA802 /* Crash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crash.swift; sourceTree = "<group>"; };
 		54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		54F5B4371CFAF96B0002A3B8 /* images_1280 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1280; sourceTree = "<group>"; };
+		808F06B08E788D2B407A3ED5 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC52771A0C3FD64184BD0FE5 /* Pods-Quran.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.debug.xcconfig"; sourceTree = "<group>"; };
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
-		FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -399,13 +401,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D60CFFB64E35521B54DF6DA /* Pods_Quran.framework in Frameworks */,
+				080D89402819A7792ECFDB98 /* Pods_Quran.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47F384E7C03983E6DA7993EE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BC52771A0C3FD64184BD0FE5 /* Pods-Quran.debug.xcconfig */,
+				44EAC2075E69DAC8D8108C7D /* Pods-Quran.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		5416B4BE1CEE7C3F0062FF54 /* AyahInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -489,8 +500,8 @@
 			children = (
 				54B265E51CC57D8F00D3AEF8 /* Quran */,
 				54B265E41CC57D8F00D3AEF8 /* Products */,
-				592CC022D16F23D7A76EAC85 /* Pods */,
-				6EC532BAF4F8F98D5FD1BEC2 /* Frameworks */,
+				47F384E7C03983E6DA7993EE /* Pods */,
+				6DF047ADC272678615511459 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -678,6 +689,7 @@
 				54C3C89D1CD7EF5D0045F18F /* Once.swift */,
 				54B266CE1CD31CA600D3AEF8 /* Cast.swift */,
 				54C0DC0F1CE69272009AAD8D /* Either.swift */,
+				54EB823E1D0A35EA00CBA802 /* Crash.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1086,19 +1098,10 @@
 			name = BaseTableViewController;
 			sourceTree = "<group>";
 		};
-		592CC022D16F23D7A76EAC85 /* Pods */ = {
+		6DF047ADC272678615511459 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1D928AFCCBFC69297B5F7606 /* Pods-Quran.debug.xcconfig */,
-				FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		6EC532BAF4F8F98D5FD1BEC2 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				35DCAA70A6DAB2CE396A2FA8 /* Pods_Quran.framework */,
+				808F06B08E788D2B407A3ED5 /* Pods_Quran.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1110,14 +1113,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 54B265F71CC57D8F00D3AEF8 /* Build configuration list for PBXNativeTarget "Quran" */;
 			buildPhases = (
-				50A649BE7F920DF63EC3F644 /* Check Pods Manifest.lock */,
+				F5004A9E45213C2123D235F0 /* [CP] Check Pods Manifest.lock */,
 				54B265DF1CC57D8E00D3AEF8 /* Sources */,
 				54B265E01CC57D8E00D3AEF8 /* Frameworks */,
 				54B265E11CC57D8E00D3AEF8 /* Resources */,
-				6E834A8514A99978720ABEB4 /* Embed Pods Frameworks */,
-				5BD276E316995F79858778D3 /* Copy Pods Resources */,
 				54B266481CC81D6500D3AEF8 /* ShellScript */,
 				54A99CB41CF7BDF2003995AE /* ShellScript */,
+				DFD6894E479FCE5F236F6F3B /* [CP] Embed Pods Frameworks */,
+				BD4D676BE19B71EC741EE315 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1211,21 +1214,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		50A649BE7F920DF63EC3F644 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		54A99CB41CF7BDF2003995AE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1252,14 +1240,14 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
-		5BD276E316995F79858778D3 /* Copy Pods Resources */ = {
+		BD4D676BE19B71EC741EE315 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1267,19 +1255,34 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6E834A8514A99978720ABEB4 /* Embed Pods Frameworks */ = {
+		DFD6894E479FCE5F236F6F3B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F5004A9E45213C2123D235F0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1400,6 +1403,7 @@
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
+				54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
 				54B266801CCAAE4900D3AEF8 /* Quran.swift in Sources */,
@@ -1640,7 +1644,7 @@
 		};
 		54B265F81CC57D8F00D3AEF8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D928AFCCBFC69297B5F7606 /* Pods-Quran.debug.xcconfig */;
+			baseConfigurationReference = BC52771A0C3FD64184BD0FE5 /* Pods-Quran.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1656,7 +1660,7 @@
 		};
 		54B265F91CC57D8F00D3AEF8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FDDFCBD3365C76F87CCD5A44 /* Pods-Quran.release.xcconfig */;
+			baseConfigurationReference = 44EAC2075E69DAC8D8108C7D /* Pods-Quran.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

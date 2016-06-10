@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AyahNumber: Hashable {
+struct AyahNumber: Hashable, CustomStringConvertible {
     let sura: Int
     let ayah: Int
 
@@ -60,6 +60,10 @@ struct AyahNumber: Hashable {
         } else {
             return nil
         }
+    }
+
+    var description: String {
+        return "<AyahNumber sura=\(sura) ayah=\(ayah)>"
     }
 }
 

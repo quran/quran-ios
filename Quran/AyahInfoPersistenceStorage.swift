@@ -49,6 +49,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             }
             return result
         } catch {
+            Crash.recordError(error)
             throw PersistenceError.QueryError(error: error)
         }
     }
@@ -64,6 +65,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             }
             return result
         } catch {
+            Crash.recordError(error)
             throw PersistenceError.QueryError(error: error)
         }
     }

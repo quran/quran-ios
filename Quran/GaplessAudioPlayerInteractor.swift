@@ -45,6 +45,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             do {
                 try Zip.unzipFile(zipFile, destination: qari.localFolder(), overwrite: true, password: nil, progress: nil)
             } catch {
+                Crash.recordError(error)
                 // delete the zip and try to re-download it again, next time.
                 let _ = try? NSFileManager.defaultManager().removeItemAtURL(zipFile)
             }

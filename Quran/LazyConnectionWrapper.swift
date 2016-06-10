@@ -30,6 +30,7 @@ class LazyConnectionWrapper {
             instance = connection
             return connection
         } catch {
+            Crash.recordError(error)
             fatalError("Cannot open connection to sqlite file '\(sqliteFilePath)'. '\(error)'")
         }
     }

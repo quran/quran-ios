@@ -20,6 +20,7 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
                     onCompletion(Result.Success(self.processAyahInfo(result)))
                 }
             } catch {
+                Crash.recordError(error)
                 Queue.main.async({
                     onCompletion(Result.Failure(error as? PersistenceError ?? PersistenceError.QueryError(error: error)))
                 })

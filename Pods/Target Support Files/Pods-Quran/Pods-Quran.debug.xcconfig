@@ -1,10 +1,11 @@
 EMBEDDED_CONTENT_CONTAINS_SWIFT = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Crashlytics/iOS" "${PODS_ROOT}/Fabric/iOS"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/GenericDataSources" "$PODS_CONFIGURATION_BUILD_DIR/KVOController-Swift" "$PODS_CONFIGURATION_BUILD_DIR/SQLite.swift" "$PODS_CONFIGURATION_BUILD_DIR/Zip" "${PODS_ROOT}/Crashlytics/iOS" "${PODS_ROOT}/Fabric/iOS"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Crashlytics" "${PODS_ROOT}/Headers/Public/Fabric"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "$CONFIGURATION_BUILD_DIR/GenericDataSources.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/KVOController_Swift.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/SQLite.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/Zip.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/Crashlytics" -isystem "${PODS_ROOT}/Headers/Public/Fabric"
+OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/GenericDataSources/GenericDataSources.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/KVOController-Swift/KVOController_Swift.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SQLite.swift/SQLite.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Zip/Zip.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/Crashlytics" -isystem "${PODS_ROOT}/Headers/Public/Fabric"
 OTHER_LDFLAGS = $(inherited) -ObjC -l"c++" -l"z" -framework "Crashlytics" -framework "Fabric" -framework "GenericDataSources" -framework "KVOController_Swift" -framework "SQLite" -framework "Security" -framework "SystemConfiguration" -framework "UIKit" -framework "Zip"
 OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
-PODS_FRAMEWORK_BUILD_PATH = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-Quran
+PODS_BUILD_DIR = $BUILD_DIR
+PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}/Pods

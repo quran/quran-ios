@@ -1,4 +1,4 @@
-# Quran for iOS
+# Quran - by Quran.com - قرآن
 
 [<img src="https://dl.dropboxusercontent.com/u/60435436/Quran/iOS/Download_on_the_App_Store_Badge_US-UK_135x40.svg" />](https://itunes.apple.com/app/id1118663303)
 
@@ -22,4 +22,4 @@ Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contrib
 
 ## License
 
-Quran for iOS is available under the MIT license. See the LICENSE file for more info.
+Quran - by Quran.com - قرآن is available under the MIT license. See the LICENSE file for more info.

@@ -73,4 +73,72 @@ class HighlightingView: UIView {
 
         setNeedsDisplay()
     }
+    
+    //MARK: - Highlighting Verse on touch -
+    
+    func highlightVerseAtLocation(location: CGPoint) -> Bool{
+        
+        if let ayah = ayahNumberForTouchLocation(location){
+            var set = Set<AyahNumber>()
+            set.insert(ayah)
+            self.highlightedAyat = set
+            
+            guard let ayahInfo = ayahInfoData?[ayah] else { return true}
+            if let firstPiece = ayahInfo.first{
+                let rectangle = firstPiece.rect.applyScale(imageScale, xOffset: xOffset, yOffset: yOffset)
+                
+                showMenuControllerAtRect(rectangle)
+                
+            }
+            
+            return true
+        }
+        return false
+    }
+    
+    private func ayahNumberForTouchLocation(location: CGPoint) -> AyahNumber!{
+        if let ayahInfoData = self.ayahInfoData{
+            for (ayahNumber, ayahInfo) in ayahInfoData{
+                for piece in ayahInfo{
+                    let rectangle = piece.rect.applyScale(imageScale, xOffset: xOffset, yOffset: yOffset)
+                    if rectangle.contains(location){
+                        return ayahNumber
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    //MARK: - Menu Controller (Clipboard) -
+    
+    private func showMenuControllerAtRect(rect: CGRect){
+        self.becomeFirstResponder()
+        UIMenuController.sharedMenuController().setTargetRect(rect, inView: self)
+        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+    }
+    
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        print(action)
+        if action == Selector("copy:") || action == Selector("_share:"){
+            return true
+        }
+        return false
+    }
+    
+    override func copy(sender: AnyObject?) {
+        let pasteBoard = UIPasteboard.generalPasteboard()
+        pasteBoard.string = "Aya text goes here"
+    }
+    
+    
+    func _share(sender: AnyObject?){
+        print("Sharing goes here!")
+    }
+    
 }

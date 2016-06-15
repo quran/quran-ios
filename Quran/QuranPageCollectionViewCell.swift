@@ -28,6 +28,8 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         scrollView.backgroundColor = UIColor.readingBackground()
+        
+        setupLongPressGestureRecognizer()
     }
 
     override func prepareForReuse() {
@@ -66,6 +68,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
             highlightingView.setScaleInfo(scale, xOffset: deltaX, yOffset: deltaY)
             scrollToHighlightedAyat()
         }
+        print(">>>\(self.highlightingView.frame)")
     }
 
     func setAyahInfo(ayahInfoData: [AyahNumber: [AyahInfo]]?) {
@@ -90,5 +93,21 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
 
         let contentOffset = max(0, min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height))
         scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
+    }
+    
+    // MARK: - Gesture recognizer -
+    private func setupLongPressGestureRecognizer(){
+    
+        // Long press gesture on verses to select
+        self.contentView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
+    }
+    
+    func onLongPress(sender: UILongPressGestureRecognizer){
+        
+        if sender.state == .Began {
+            let touchLocation = sender.locationInView(self.highlightingView)
+            print("long press \(touchLocation)")
+            self.highlightingView.highlightVerseAtLocation(touchLocation)
+        }
     }
 }

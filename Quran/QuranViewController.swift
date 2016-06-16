@@ -198,6 +198,15 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         guard let audioView = audioView where !audioView.bounds.contains(sender.locationInView(audioView)) else {
             return
         }
+        if let currentPage = currentPage(){
+            if self.pageDataSource.shouldListenToTapGestureAtPage(currentPage.pageNumber) {
+                
+                // No bars animation
+                
+                return
+            }
+        }
+        
 
         setBarsHidden(navigationController?.navigationBarHidden == false)
     }

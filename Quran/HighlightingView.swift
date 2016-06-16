@@ -14,6 +14,9 @@ class HighlightingView: UIView {
 
     @IBInspectable var highlightColor: UIColor = UIColor.appIdentity().colorWithAlphaComponent(0.25)
 
+    /// is true when user long pressed on verse to select and a menu controller is displayed.
+    var isSelectingVerse = false
+    
     var highlightedAyat: Set<AyahNumber> = Set<AyahNumber>() {
         didSet {
             updateRectangleBounds()
@@ -57,6 +60,7 @@ class HighlightingView: UIView {
         imageScale = 0.0
         xOffset = 0.0
         yOffset = 0.0
+        isSelectingVerse = false
     }
 
     private func updateRectangleBounds() {
@@ -76,6 +80,20 @@ class HighlightingView: UIView {
     
     //MARK: - Highlighting Verse on touch -
     
+    func deselectTheSelectedVerse(){
+        // set no highlighed ayaat
+        highlightedAyat = Set<AyahNumber>()
+        isSelectingVerse = false
+        
+        // hide the menu controller
+        UIMenuController.sharedMenuController().setMenuVisible(false, animated: true)
+    }
+    
+    /**
+     Highlight a verse that contains a given touch location. The verse will be highlighted and a menu controller will be displayed with options like Copy and Share the verse.
+     - Parameter location: The touch location where we check the verse that match the location to highlight
+     - Returns: true if a verse is found and match the location, false otherwise.
+     */
     func highlightVerseAtLocation(location: CGPoint) -> Bool{
         
         if let ayah = ayahNumberForTouchLocation(location){
@@ -88,13 +106,14 @@ class HighlightingView: UIView {
                 let rectangle = firstPiece.rect.applyScale(imageScale, xOffset: xOffset, yOffset: yOffset)
                 
                 showMenuControllerAtRect(rectangle)
-                
+                isSelectingVerse = true
             }
             
             return true
         }
         return false
     }
+    
     
     private func ayahNumberForTouchLocation(location: CGPoint) -> AyahNumber!{
         if let ayahInfoData = self.ayahInfoData{

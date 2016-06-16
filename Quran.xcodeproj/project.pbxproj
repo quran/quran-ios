@@ -158,7 +158,6 @@
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */; };
 		C1F63E251CE58B460026E263 /* AyahInfoPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */; };
-		DA86E0E01D120A8300F2AEBF /* ActionSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86E0DF1D120A8300F2AEBF /* ActionSheetController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -395,7 +394,6 @@
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
-		DA86E0DF1D120A8300F2AEBF /* ActionSheetController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -553,7 +551,6 @@
 		54B265FC1CC57E2D00D3AEF8 /* Shared Views */ = {
 			isa = PBXGroup;
 			children = (
-				DA86E0DE1D1209DA00F2AEBF /* ActionSheetController */,
 				54C0DBD71CDF7447009AAD8D /* BackgroundColorButton.swift */,
 				54B266911CCACCA300D3AEF8 /* Circle */,
 				54B2666D1CCA93C800D3AEF8 /* Launch */,
@@ -1109,14 +1106,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DA86E0DE1D1209DA00F2AEBF /* ActionSheetController */ = {
-			isa = PBXGroup;
-			children = (
-				DA86E0DF1D120A8300F2AEBF /* ActionSheetController.swift */,
-			);
-			path = ActionSheetController;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1411,7 +1400,6 @@
 				54B266971CCACEB400D3AEF8 /* QuranImageService.swift in Sources */,
 				54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */,
 				5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */,
-				DA86E0E01D120A8300F2AEBF /* ActionSheetController.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,

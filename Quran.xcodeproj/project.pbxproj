@@ -158,6 +158,9 @@
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */; };
 		C1F63E251CE58B460026E263 /* AyahInfoPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */; };
+		DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */; };
+		DA0B7E191D1753C900F92AA3 /* AyahTextStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E181D1753C900F92AA3 /* AyahTextStorageProtocol.swift */; };
+		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -394,6 +397,9 @@
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
+		DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistenceStorage.swift; sourceTree = "<group>"; };
+		DA0B7E181D1753C900F92AA3 /* AyahTextStorageProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextStorageProtocol.swift; sourceTree = "<group>"; };
+		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,7 +427,9 @@
 			isa = PBXGroup;
 			children = (
 				C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */,
+				DA0B7E181D1753C900F92AA3 /* AyahTextStorageProtocol.swift */,
 				C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */,
+				DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */,
 			);
 			name = AyahInfo;
 			sourceTree = "<group>";
@@ -551,6 +559,7 @@
 		54B265FC1CC57E2D00D3AEF8 /* Shared Views */ = {
 			isa = PBXGroup;
 			children = (
+				DA0B7E1A1D175D9300F92AA3 /* ShareController */,
 				54C0DBD71CDF7447009AAD8D /* BackgroundColorButton.swift */,
 				54B266911CCACCA300D3AEF8 /* Circle */,
 				54B2666D1CCA93C800D3AEF8 /* Launch */,
@@ -1106,6 +1115,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DA0B7E1A1D175D9300F92AA3 /* ShareController */ = {
+			isa = PBXGroup;
+			children = (
+				DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */,
+			);
+			path = ShareController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1143,7 +1160,6 @@
 				TargetAttributes = {
 					54B265E21CC57D8E00D3AEF8 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = MKP73M5X4A;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1335,6 +1351,7 @@
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				DA0B7E191D1753C900F92AA3 /* AyahTextStorageProtocol.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
@@ -1381,6 +1398,7 @@
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
+				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
@@ -1401,6 +1419,7 @@
 				54B266DA1CD4F25900D3AEF8 /* Files.swift in Sources */,
 				5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
+				DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
 				54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */,

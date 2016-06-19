@@ -152,12 +152,34 @@ class HighlightingView: UIView {
     
     override func copy(sender: AnyObject?) {
         let pasteBoard = UIPasteboard.generalPasteboard()
-        pasteBoard.string = "Aya text goes here"
+        pasteBoard.string = currentHighlightedAyahText()
     }
     
     
     func _share(sender: AnyObject?){
-        print("Sharing goes here!")
+        let text = currentHighlightedAyahText()
+        if text.characters.count != 0{
+            ShareController.showShareActivityWithText(text, image: nil, url: nil, handler: nil)
+        }
     }
     
+    private func currentHighlightedAyahText() -> String{
+        
+        if let number = self.highlightedAyat.first{
+            return ayahTextFromNumber(number)
+        }
+        return ""
+    }
+    private func ayahTextFromNumber(number: AyahNumber) -> String{
+        let storage = AyahTextPersistenceStorage()
+        do{
+            let text = try storage.getAyahTextForNumber(number)
+            return text
+        }
+        catch{
+            print(error)
+        }
+        
+        return ""
+    }
 }

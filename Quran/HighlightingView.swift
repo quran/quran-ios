@@ -149,20 +149,27 @@ class HighlightingView: UIView {
         }
         return false
     }
-    
+    /// Did click on copy menu item
     override func copy(sender: AnyObject?) {
         let pasteBoard = UIPasteboard.generalPasteboard()
         pasteBoard.string = currentHighlightedAyahText()
+        self.deselectTheSelectedVerse()
     }
     
-    
+    /// Did click on share menu item
     func _share(sender: AnyObject?){
         let text = currentHighlightedAyahText()
         if text.characters.count != 0{
             ShareController.showShareActivityWithText(text, image: nil, url: nil, handler: nil)
         }
+        
+        self.deselectTheSelectedVerse()
     }
     
+    /**
+     Get the current highlighted ayah text. 
+     - Returns: String value representing the ayah
+     */
     private func currentHighlightedAyahText() -> String{
         
         if let number = self.highlightedAyat.first{
@@ -170,6 +177,12 @@ class HighlightingView: UIView {
         }
         return ""
     }
+    
+    /**
+     Get ayah text given AyahNumber. Function connects AyahTextPersistenceStorage to get the text. 
+     - Parameter number: AyahNumber object represting the ayah number that you need its text.
+     - Returns: the arabic text of ayah.
+     */
     private func ayahTextFromNumber(number: AyahNumber) -> String{
         let storage = AyahTextPersistenceStorage()
         do{

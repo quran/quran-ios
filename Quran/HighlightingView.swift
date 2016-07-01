@@ -143,8 +143,8 @@ class HighlightingView: UIView {
         return true
     }
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        print(action)
-        if action == Selector("copy:") || action == Selector("_share:"){
+        
+        if action == #selector(NSObject.copy(_:)) || action == #selector(HighlightingView._share(_:)){
             return true
         }
         return false
@@ -190,7 +190,6 @@ class HighlightingView: UIView {
             return text
         }
         catch{
-            print(error)
         }
         
         return ""

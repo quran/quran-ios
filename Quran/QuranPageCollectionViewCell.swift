@@ -68,7 +68,6 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
             highlightingView.setScaleInfo(scale, xOffset: deltaX, yOffset: deltaY)
             scrollToHighlightedAyat()
         }
-        print(">>>\(self.highlightingView.frame)")
     }
 
     func setAyahInfo(ayahInfoData: [AyahNumber: [AyahInfo]]?) {
@@ -106,7 +105,6 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
         
         if sender.state == .Began {
             let touchLocation = sender.locationInView(self.highlightingView)
-            print("long press \(touchLocation)")
             self.highlightingView.highlightVerseAtLocation(touchLocation)
         }
     }

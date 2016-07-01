@@ -18,6 +18,8 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     var highlightedAyat: Set<AyahNumber> = Set()
 
+    weak var pageCellDelegate: QuranPageCollectionCellDelegate!
+
     init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
@@ -47,6 +49,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
         cell.mainImageView.image = nil
         cell.highlightAyat(highlightedAyat)
+        cell.cellDelegate = self.pageCellDelegate
 
         imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in
             guard cell.page == item else {
@@ -103,17 +106,22 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             }
         }
     }
-    
-    func shouldListenToTapGestureAtPage(page: Int) -> Bool{
+
+    /**
+        Deselect the current selected verse if we already have a currently selected one.
+        - Parameter page: The Quran page which we check if it has a selected verse to deselect it.
+        - Returns: *true* if a selected verse has been found and is already unselected. *false* otherwise.
+     */
+    func deselectSelectedVerseIfAny(page: Int) -> Bool {
         let index = NSIndexPath(forItem: page - 1, inSection: 0)
         // if the cell is there, highlight the ayah.
         if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
-            if cell.highlightingView.isSelectingVerse{
+            if cell.highlightingView.isSelectingVerse {
                 cell.highlightingView.deselectTheSelectedVerse()
                 return true
             }
         }
-        
+
         return false
     }
 }

@@ -89,8 +89,8 @@ class Container {
     func createAyahInfoStorage() -> AyahInfoStorage {
         return AyahInfoPersistenceStorage()
     }
-    
-    func createAyahTextStorage() -> AyahTextStorageProtocol{
+
+    func createAyahTextStorage() -> AyahTextStorageProtocol {
         return AyahTextPersistenceStorage()
     }
 

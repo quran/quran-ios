@@ -103,17 +103,17 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             }
         }
     }
-    
-    func shouldListenToTapGestureAtPage(page: Int) -> Bool{
+
+    func shouldListenToTapGestureAtPage(page: Int) -> Bool {
         let index = NSIndexPath(forItem: page - 1, inSection: 0)
         // if the cell is there, highlight the ayah.
         if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
-            if cell.highlightingView.isSelectingVerse{
+            if cell.highlightingView.isSelectingVerse {
                 cell.highlightingView.deselectTheSelectedVerse()
                 return true
             }
         }
-        
+
         return false
     }
 }

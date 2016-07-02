@@ -10,28 +10,28 @@ import UIKit
 
 class ShareController: NSObject {
 
-    
-    class func showShareActivityWithText(text: String, image: UIImage!, url: NSURL!, handler: UIActivityViewControllerCompletionWithItemsHandler!){
+
+    class func showShareActivityWithText(text: String, image: UIImage!, url: NSURL!, handler: UIActivityViewControllerCompletionWithItemsHandler!) {
         var itemsToShare = [AnyObject]()
         itemsToShare.append(text)
-        if image != nil{
+        if image != nil {
             itemsToShare.append(image)
         }
-        if url != nil{
+        if url != nil {
             itemsToShare.append(url)
         }
-        
+
         let activityViewController = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
-        if let handler = handler{
+        if let handler = handler {
             activityViewController.completionWithItemsHandler = handler
         }
-        
-        let keyWindow = UIApplication.sharedApplication().keyWindow;
-        var viewController = keyWindow!.rootViewController;
+
+        let keyWindow = UIApplication.sharedApplication().keyWindow
+        var viewController = keyWindow!.rootViewController
         while (viewController?.presentedViewController != nil) {
             viewController = viewController!.presentedViewController
         }
         viewController?.presentViewController(activityViewController, animated: true, completion: nil)
-        
+
     }
 }

@@ -101,7 +101,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
         // hide bars on tap
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
-        
+
     }
 
     private func createAudioBanner() {
@@ -190,23 +190,23 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         timer?.cancel()
         timer = nil
     }
-    
+
 
     //MARK: - Gestures recognizers handlers -
-    
+
     func onViewTapped(sender: UITapGestureRecognizer) {
         guard let audioView = audioView where !audioView.bounds.contains(sender.locationInView(audioView)) else {
             return
         }
-        if let currentPage = currentPage(){
+        if let currentPage = currentPage() {
             if self.pageDataSource.shouldListenToTapGestureAtPage(currentPage.pageNumber) {
-                
+
                 // No bars animation
-                
+
                 return
             }
         }
-        
+
 
         setBarsHidden(navigationController?.navigationBarHidden == false)
     }

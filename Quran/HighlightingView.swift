@@ -8,6 +8,11 @@
 
 import UIKit
 
+@objc protocol HighlightingViewDelegate {
+
+    func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String)
+}
+
 // This class is expected to be implemented using CoreAnimation with CAShapeLayers.
 // It's also expected to reuse layers instead of dropping & creating new ones.
 class HighlightingView: UIView {
@@ -16,6 +21,8 @@ class HighlightingView: UIView {
 
     /// is true when user long pressed on verse to select and a menu controller is displayed.
     var isSelectingVerse = false
+
+    weak var delegate: HighlightingViewDelegate!
 
     var highlightedAyat: Set<AyahNumber> = Set<AyahNumber>() {
         didSet {
@@ -160,7 +167,10 @@ class HighlightingView: UIView {
     func _share(sender: AnyObject?) {
         let text = currentHighlightedAyahText()
         if text.characters.count != 0 {
-            ShareController.showShareActivityWithText(text, image: nil, url: nil, handler: nil)
+
+            if let delegate = self.delegate {
+                delegate.highlightingView(self, didShareAyahText: text)
+            }
         }
 
         self.deselectTheSelectedVerse()

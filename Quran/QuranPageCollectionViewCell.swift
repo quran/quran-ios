@@ -11,7 +11,12 @@ import AVFoundation
 
 private let imageHeightDiff: CGFloat = 34
 
-class QuranPageCollectionViewCell: UICollectionViewCell {
+@objc protocol QuranPageCollectionCellDelegate {
+
+    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
+}
+
+class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegate {
 
     @IBOutlet weak var juzLabel: UILabel!
     @IBOutlet weak var suraLabel: UILabel!
@@ -22,13 +27,15 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var scrollView: UIScrollView!
 
+    weak var cellDelegate: QuranPageCollectionCellDelegate!
+
     var page: QuranPage?
     var sizeConstraints: [NSLayoutConstraint] = []
 
     override func awakeFromNib() {
         super.awakeFromNib()
         scrollView.backgroundColor = UIColor.readingBackground()
-
+        self.highlightingView.delegate = self
         setupLongPressGestureRecognizer()
     }
 
@@ -106,6 +113,13 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
         if sender.state == .Began {
             let touchLocation = sender.locationInView(self.highlightingView)
             self.highlightingView.highlightVerseAtLocation(touchLocation)
+        }
+    }
+
+    // MARK: - HighlightingViewDelegate -
+    func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String) {
+        if let delegate = self.cellDelegate {
+            delegate.quranPageCollectionCell(self, didSelectAyahTextToShare: ayahText)
         }
     }
 }

@@ -11,7 +11,7 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
+class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPageCollectionCellDelegate {
 
     let persistence: SimplePersistence
     let dataRetriever: AnyDataRetriever<[QuranPage]>
@@ -38,6 +38,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
+        self.pageDataSource.pageCellDelegate = self
 
         automaticallyAdjustsScrollViewInsets = false
 
@@ -189,6 +190,13 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
     func stopBarHiddenTimer() {
         timer?.cancel()
         timer = nil
+    }
+
+    //MARK: - QuranPageCollectionCellDelegate -
+
+    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
+
+        ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
     }
 
 

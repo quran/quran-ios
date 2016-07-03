@@ -104,7 +104,12 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
     }
 
-    func shouldListenToTapGestureAtPage(page: Int) -> Bool {
+    /**
+        Deselect the current selected verse if we already have a currently selected one. 
+        - Parameter page: The Quran page which we check if it has a selected verse to deselect it. 
+        - Returns: *true* if a selected verse has been found and is already unselected. *false* otherwise.
+     */
+    func deselectSelectedVerseIfAny(page: Int) -> Bool {
         let index = NSIndexPath(forItem: page - 1, inSection: 0)
         // if the cell is there, highlight the ayah.
         if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {

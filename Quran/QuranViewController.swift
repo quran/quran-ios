@@ -199,7 +199,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
             return
         }
         if let currentPage = currentPage() {
-            if self.pageDataSource.shouldListenToTapGestureAtPage(currentPage.pageNumber) {
+            if self.pageDataSource.deselectSelectedVerseIfAny(currentPage.pageNumber) {
 
                 // No bars animation
 

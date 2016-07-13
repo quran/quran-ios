@@ -11,8 +11,7 @@ import AVFoundation
 
 private let imageHeightDiff: CGFloat = 34
 
-@objc protocol QuranPageCollectionCellDelegate {
-
+protocol QuranPageCollectionCellDelegate: class {
     func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
 }
 
@@ -26,7 +25,6 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
     @IBOutlet weak var mainImageView: UIImageView!
 
     @IBOutlet weak var scrollView: UIScrollView!
-
     weak var cellDelegate: QuranPageCollectionCellDelegate!
 
     var page: QuranPage?

@@ -8,8 +8,7 @@
 
 import UIKit
 
-@objc protocol HighlightingViewDelegate {
-
+protocol HighlightingViewDelegate: class {
     func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String)
 }
 
@@ -21,8 +20,7 @@ class HighlightingView: UIView {
 
     /// is true when user long pressed on verse to select and a menu controller is displayed.
     var isSelectingVerse = false
-
-    weak var delegate: HighlightingViewDelegate!
+    weak var delegate: HighlightingViewDelegate?
 
     var highlightedAyat: Set<AyahNumber> = Set<AyahNumber>() {
         didSet {
@@ -97,7 +95,8 @@ class HighlightingView: UIView {
     }
 
     /**
-     Highlight a verse that contains a given touch location. The verse will be highlighted and a menu controller will be displayed with options like Copy and Share the verse.
+     Highlight a verse that contains a given touch location.
+     The verse will be highlighted and a menu controller will be displayed with options like Copy and Share the verse.
      - Parameter location: The touch location where we check the verse that match the location to highlight
      - Returns: true if a verse is found and match the location, false otherwise.
      */
@@ -122,7 +121,7 @@ class HighlightingView: UIView {
     }
 
 
-    private func ayahNumberForTouchLocation(location: CGPoint) -> AyahNumber! {
+    private func ayahNumberForTouchLocation(location: CGPoint) -> AyahNumber? {
         if let ayahInfoData = self.ayahInfoData {
             for (ayahNumber, ayahInfo) in ayahInfoData {
                 for piece in ayahInfo {
@@ -156,14 +155,14 @@ class HighlightingView: UIView {
         }
         return false
     }
-    /// Did click on copy menu item
+    // Did click on copy menu item
     override func copy(sender: AnyObject?) {
         let pasteBoard = UIPasteboard.generalPasteboard()
         pasteBoard.string = currentHighlightedAyahText()
         self.deselectTheSelectedVerse()
     }
 
-    /// Did click on share menu item
+    // Did click on share menu item
     func _share(sender: AnyObject?) {
         let text = currentHighlightedAyahText()
         if text.characters.count != 0 {

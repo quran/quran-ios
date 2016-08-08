@@ -18,7 +18,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     var highlightedAyat: Set<AyahNumber> = Set()
 
-    weak var pageCellDelegate: QuranPageCollectionCellDelegate!
+    weak var pageCellDelegate: QuranPageCollectionCellDelegate?
 
     init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever) {
         self.imageService = imageService

@@ -25,7 +25,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
     @IBOutlet weak var mainImageView: UIImageView!
 
     @IBOutlet weak var scrollView: UIScrollView!
-    weak var cellDelegate: QuranPageCollectionCellDelegate!
+    weak var cellDelegate: QuranPageCollectionCellDelegate?
 
     var page: QuranPage?
     var sizeConstraints: [NSLayoutConstraint] = []

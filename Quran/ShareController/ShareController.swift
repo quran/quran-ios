@@ -13,7 +13,7 @@ class ShareController: NSObject {
 
     class func showShareActivityWithText(text: String, image: UIImage? = nil, url: NSURL? = nil,
                                          sourceViewController: UIViewController,
-                                         handler: UIActivityViewControllerCompletionWithItemsHandler!) {
+                                         handler: UIActivityViewControllerCompletionWithItemsHandler?) {
         var itemsToShare = [AnyObject]()
         itemsToShare.append(text)
         if let shareImage = image {

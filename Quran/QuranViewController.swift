@@ -11,7 +11,7 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
+class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPageCollectionCellDelegate {
 
     let persistence: SimplePersistence
     let dataRetriever: AnyDataRetriever<[QuranPage]>
@@ -38,6 +38,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
+        self.pageDataSource.pageCellDelegate = self
 
         automaticallyAdjustsScrollViewInsets = false
 
@@ -101,6 +102,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
 
         // hide bars on tap
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
+
     }
 
     private func createAudioBanner() {
@@ -190,10 +192,29 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate {
         timer = nil
     }
 
+    //MARK: - QuranPageCollectionCellDelegate -
+
+    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
+
+        ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
+    }
+
+
+    //MARK: - Gestures recognizers handlers -
+
     func onViewTapped(sender: UITapGestureRecognizer) {
         guard let audioView = audioView where !audioView.bounds.contains(sender.locationInView(audioView)) else {
             return
         }
+        if let currentPage = currentPage() {
+            if self.pageDataSource.deselectSelectedVerseIfAny(currentPage.pageNumber) {
+
+                // No bars animation
+
+                return
+            }
+        }
+
 
         setBarsHidden(navigationController?.navigationBarHidden == false)
     }

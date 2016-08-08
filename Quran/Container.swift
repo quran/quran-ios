@@ -90,6 +90,10 @@ class Container {
         return AyahInfoPersistenceStorage()
     }
 
+    func createAyahTextStorage() -> AyahTextStorageProtocol {
+        return AyahTextPersistenceStorage()
+    }
+
     func createAyahInfoRetriever() -> AyahInfoRetriever {
         return SQLiteAyahInfoRetriever(persistence: createAyahInfoStorage())
     }

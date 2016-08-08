@@ -11,7 +11,11 @@ import AVFoundation
 
 private let imageHeightDiff: CGFloat = 34
 
-class QuranPageCollectionViewCell: UICollectionViewCell {
+protocol QuranPageCollectionCellDelegate: class {
+    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
+}
+
+class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegate {
 
     @IBOutlet weak var juzLabel: UILabel!
     @IBOutlet weak var suraLabel: UILabel!
@@ -21,6 +25,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
 
     @IBOutlet weak var scrollView: UIScrollView!
+    weak var cellDelegate: QuranPageCollectionCellDelegate?
 
     var page: QuranPage?
     var sizeConstraints: [NSLayoutConstraint] = []
@@ -28,6 +33,8 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         scrollView.backgroundColor = UIColor.readingBackground()
+        self.highlightingView.delegate = self
+        setupLongPressGestureRecognizer()
     }
 
     override func prepareForReuse() {
@@ -90,5 +97,27 @@ class QuranPageCollectionViewCell: UICollectionViewCell {
 
         let contentOffset = max(0, min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height))
         scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
+    }
+
+    // MARK: - Gesture recognizer -
+    private func setupLongPressGestureRecognizer() {
+
+        // Long press gesture on verses to select
+        self.contentView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
+    }
+
+    func onLongPress(sender: UILongPressGestureRecognizer) {
+
+        if sender.state == .Began {
+            let touchLocation = sender.locationInView(self.highlightingView)
+            self.highlightingView.highlightVerseAtLocation(touchLocation)
+        }
+    }
+
+    // MARK: - HighlightingViewDelegate -
+    func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String) {
+        if let delegate = self.cellDelegate {
+            delegate.quranPageCollectionCell(self, didSelectAyahTextToShare: ayahText)
+        }
     }
 }

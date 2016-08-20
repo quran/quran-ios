@@ -120,7 +120,6 @@ class QueuePlayer: NSObject {
 
         rateObserver = observe(retainedObservable: player, keyPath: "rate", options: [.New]) { [weak self] (observable, change: ChangeData<Float>) in
             self?.updatePlayNowInfo()
-            self?.onPlaybackRateChanged?(playing: change.newValue != 0)
         }
 
         // enqueue new items

@@ -18,7 +18,7 @@ protocol GeneralCollectionViewMapping {
     var delegate: GeneralCollectionView? { get }
 }
 
-class DelegatedGeneralCollectionView: GeneralCollectionView {
+@objc class DelegatedGeneralCollectionView: NSObject, GeneralCollectionView {
     
     let mapping: GeneralCollectionViewMapping
     

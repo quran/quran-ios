@@ -11,7 +11,7 @@ import Foundation
 /**
  The DataSource protocol is a general data source and delegate protocol for both a UITableViewDataSource/UITableViewDelegate and UICollectionViewDataSource/UICollectionViewDelegate and adopted by an object that mediates the application’s data model for a view object (e.g. `UITableView` or `UICollectionView`.
  */
-public protocol DataSource : class {
+@objc public protocol DataSource : class {
 
     /**
      Whether the data source provides the item size/height delegate calls for `tableView:heightForRowAtIndexPath:`
@@ -63,7 +63,7 @@ public protocol DataSource : class {
      
      - returns: The size of the cell in a given location. For `UITableView`, the width is ignored.
      */
-    func ds_collectionView(collectionView: GeneralCollectionView, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+    optional func ds_collectionView(collectionView: GeneralCollectionView, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
 
     // MARK:- Selection
 

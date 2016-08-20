@@ -21,11 +21,13 @@ import UIKit
  */
 public class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSource {
 
+    private var itemSizeSet: Bool = false
+
     /// The size of the cell. Usually used with a `UICollectionView`.
     /// When setting a value to it. It will set `useDelegateForItemSize` to `true`.
     public var itemSize: CGSize = CGSize.zero {
         didSet {
-            useDelegateForItemSize = true
+            itemSizeSet = true
         }
     }
 
@@ -46,6 +48,7 @@ public class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSou
      `ds_collectionView(_:sizeForItemAtIndexPath:)`. If you will use `itemSize` or `itemHeight`,
      then those properties sets this property to `true`.
      */
+    @available(*, deprecated, message="Now, we can detect if you implemented sizeForItemAtIndexPath or not")
     public var useDelegateForItemSize: Bool = false
 
     /**
@@ -200,7 +203,11 @@ public class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSou
      or to the `UICollectionViewFlowLayout` using `itemSize` and/or `estimatedItemSize`.
      */
     public override func ds_shouldConsumeItemSizeDelegateCalls() -> Bool {
-        return useDelegateForItemSize
+        let selector = #selector(DataSource.ds_collectionView(_:sizeForItemAtIndexPath:))
+        let subclassImp = method_getImplementation(class_getInstanceMethod(self.dynamicType, selector))
+        let superImp = method_getImplementation(class_getInstanceMethod(BasicDataSource.self, selector))
+
+        return itemSizeSet || (subclassImp != superImp)
     }
 
     /**

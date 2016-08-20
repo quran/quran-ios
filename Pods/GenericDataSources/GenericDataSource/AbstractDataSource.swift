@@ -11,7 +11,8 @@ import UIKit
 /// Represents the selectors for querying a height/size of a cell.
 let sizeSelectors: [Selector] = [
     #selector(UITableViewDelegate.tableView(_:heightForRowAtIndexPath:)),
-    #selector(UICollectionViewDelegateFlowLayout.collectionView(_:layout:sizeForItemAtIndexPath:))
+    #selector(UICollectionViewDelegateFlowLayout.collectionView(_:layout:sizeForItemAtIndexPath:)),
+    #selector(DataSource.ds_collectionView(_:sizeForItemAtIndexPath:))
 ]
 
 /**

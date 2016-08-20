@@ -2,7 +2,7 @@ PODS:
   - Crashlytics (3.7.1):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.7)
-  - GenericDataSources (1.0.0)
+  - GenericDataSources (1.0.1)
   - KVOController-Swift (1.2.0)
   - RxCocoa (2.6.0):
     - RxSwift (~> 2.5)
@@ -23,7 +23,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
-  GenericDataSources: 80ac8e170a19f0290572b9a7be39b972f7d1c26f
+  GenericDataSources: 7da0f97c943ac21969bcdc3e7846474346b4f67f
   KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
   RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
   RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26

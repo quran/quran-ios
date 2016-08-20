@@ -26,7 +26,13 @@ public struct AnyDataSourceSelectionHandler<ItemType, CellType: ReusableCell> : 
     private let shouldDeselect: (BasicDataSource<ItemType, CellType>, GeneralCollectionView, NSIndexPath) -> Bool
     private let didDeselect: (BasicDataSource<ItemType, CellType>, GeneralCollectionView, NSIndexPath) -> Void
 
-    init<C: DataSourceSelectionHandler where C.ItemType == ItemType, C.CellType == CellType>(_ selectionHandler: C) {
+    /**
+     Create new type-erasure that wraps the passed handler.
+
+     - parameter selectionHandler: The handler to pass to the type erasure.
+
+     */
+    public init<C: DataSourceSelectionHandler where C.ItemType == ItemType, C.CellType == CellType>(_ selectionHandler: C) {
         
         itemsChanged = selectionHandler.dataSourceItemsModified
         configureCell = selectionHandler.dataSource(_:collectionView:configureCell:withItem:atIndexPath:)
@@ -41,11 +47,17 @@ public struct AnyDataSourceSelectionHandler<ItemType, CellType: ReusableCell> : 
         shouldDeselect = selectionHandler.dataSource(_:collectionView:shouldDeselectItemAtIndexPath:)
         didDeselect = selectionHandler.dataSource(_:collectionView:didDeselectItemAtIndexPath:)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSourceItemsModified(dataSource: BasicDataSource<ItemType, CellType>) {
         return itemsChanged(dataSource)
     }
 
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
@@ -54,21 +66,30 @@ public struct AnyDataSourceSelectionHandler<ItemType, CellType: ReusableCell> : 
         atIndexPath indexPath: NSIndexPath) {
             return configureCell(dataSource, collectionView, cell, item, indexPath)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
             return shouldHighlight(dataSource, collectionView, indexPath)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         didHighlightItemAtIndexPath indexPath: NSIndexPath) {
             return didHighlight(dataSource, collectionView, indexPath)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
@@ -77,13 +98,20 @@ public struct AnyDataSourceSelectionHandler<ItemType, CellType: ReusableCell> : 
     }
     
     // MARK:- Selecting
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
             return shouldSelect(dataSource, collectionView, indexPath)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
@@ -92,13 +120,20 @@ public struct AnyDataSourceSelectionHandler<ItemType, CellType: ReusableCell> : 
     }
     
     // MARK:- Deselecting
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         shouldDeselectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
             return shouldDeselect(dataSource, collectionView, indexPath)
     }
-    
+
+    /**
+     Delegating to the unerlying selection handler.
+     */
     public func dataSource(
         dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,

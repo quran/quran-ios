@@ -12,7 +12,7 @@ import Foundation
  Represents the reusable cell protocol for all resuable cells mainliy `UITableViewCell` and `UICollectionViewCell`.
  This protocol is used to limit the use of the `BasicDataSource` generic type `CellType` to only for `UITableViewCell` and `UICollectionViewCell`.
  */
-public protocol ReusableCell {
+@objc public protocol ReusableCell {
 }
 
 extension UITableViewCell : ReusableCell {

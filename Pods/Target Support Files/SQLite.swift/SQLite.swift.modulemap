@@ -3,4 +3,6 @@ framework module SQLite {
 
   export *
   module * { export * }
+
+  private header "fts3_tokenizer.h"
 }

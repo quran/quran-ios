@@ -9,4 +9,6 @@ target 'Quran' do
     pod 'Zip', '~> 0.4'
     pod 'Fabric'
     pod 'Crashlytics'
+    pod 'RxSwift'
+    pod 'RxCocoa'
 end

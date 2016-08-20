@@ -1,14 +1,14 @@
 PODS:
-  - Crashlytics (3.7.1):
+  - Crashlytics (3.7.3):
     - Fabric (~> 1.6.3)
-  - Fabric (1.6.7)
+  - Fabric (1.6.8)
   - GenericDataSources (1.0.1)
   - KVOController-Swift (1.2.0)
   - RxCocoa (2.6.0):
     - RxSwift (~> 2.5)
   - RxSwift (2.6.0)
   - SQLite.swift (0.10.1)
-  - Zip (0.4.1)
+  - Zip (0.4.3)
 
 DEPENDENCIES:
   - Crashlytics
@@ -21,13 +21,13 @@ DEPENDENCIES:
   - Zip (~> 0.4)
 
 SPEC CHECKSUMS:
-  Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
+  Crashlytics: 76f6beaff70acf226139582c09c78461597c2b98
+  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
   GenericDataSources: 7da0f97c943ac21969bcdc3e7846474346b4f67f
   KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
   RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
   RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26
   SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
-  Zip: 5bbe261a6c2c41b7b4e8e55c4a0a03be68ab4c4c
+  Zip: 670419a5ba9faaf5f24ed3650c4c38b4136e996b
 
 COCOAPODS: 0.39.0

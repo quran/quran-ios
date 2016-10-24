@@ -16,58 +16,52 @@ import UIKit
 
 extension UIScrollView {
     
-    /**
-    Factory method that enables subclasses to implement their own `rx_delegate`.
-    
-    - returns: Instance of delegate proxy that wraps `delegate`.
-    */
-    public func rx_createDelegateProxy() -> RxScrollViewDelegateProxy {
+    /// Factory method that enables subclasses to implement their own `delegate`.
+    ///
+    /// - returns: Instance of delegate proxy that wraps `delegate`.
+    public func createRxDelegateProxy() -> RxScrollViewDelegateProxy {
         return RxScrollViewDelegateProxy(parentObject: self)
     }
     
-    /**
-    Reactive wrapper for `delegate`.
-    
-    For more information take a look at `DelegateProxyType` protocol documentation.
-    */
-    public var rx_delegate: DelegateProxy {
-        return RxScrollViewDelegateProxy.proxyForObject(self)
+}
+
+extension Reactive where Base: UIScrollView {
+
+    /// Reactive wrapper for `delegate`.
+    ///
+    /// For more information take a look at `DelegateProxyType` protocol documentation.
+    public var delegate: DelegateProxy {
+        return RxScrollViewDelegateProxy.proxyForObject(base)
     }
     
-    /**
-    Reactive wrapper for `contentOffset`.
-    */
-    public var rx_contentOffset: ControlProperty<CGPoint> {
-        let proxy = RxScrollViewDelegateProxy.proxyForObject(self)
+    /// Reactive wrapper for `contentOffset`.
+    public var contentOffset: ControlProperty<CGPoint> {
+        let proxy = RxScrollViewDelegateProxy.proxyForObject(base)
 
-        let bindingObserver = UIBindingObserver(UIElement: self) { scrollView, contentOffset in
+        let bindingObserver = UIBindingObserver(UIElement: self.base) { scrollView, contentOffset in
             scrollView.contentOffset = contentOffset
         }
 
         return ControlProperty(values: proxy.contentOffsetSubject, valueSink: bindingObserver)
     }
 
-    /**
-    Bindable sink for `scrollEnabled` property.
-    */
-    public var rx_scrollEnabled: AnyObserver<Bool> {
-        return UIBindingObserver(UIElement: self) { scrollView, scrollEnabled in
-            scrollView.scrollEnabled = scrollEnabled
-        }.asObserver()
+    /// Bindable sink for `scrollEnabled` property.
+    public var isScrollEnabled: UIBindingObserver<Base, Bool> {
+        return UIBindingObserver(UIElement: self.base) { scrollView, scrollEnabled in
+            scrollView.isScrollEnabled = scrollEnabled
+        }
     }
 
-    /**
-    Installs delegate as forwarding delegate on `rx_delegate`.
-    Delegate won't be retained.
-    
-    It enables using normal delegate mechanism with reactive delegate mechanism.
-    
-    - parameter delegate: Delegate object.
-    - returns: Disposable object that can be used to unbind the delegate.
-    */
-    public func rx_setDelegate(delegate: UIScrollViewDelegate)
+    /// Installs delegate as forwarding delegate on `delegate`.
+    /// Delegate won't be retained.
+    ///
+    /// It enables using normal delegate mechanism with reactive delegate mechanism.
+    ///
+    /// - parameter delegate: Delegate object.
+    /// - returns: Disposable object that can be used to unbind the delegate.
+    public func setDelegate(_ delegate: UIScrollViewDelegate)
         -> Disposable {
-        return RxScrollViewDelegateProxy.installForwardDelegate(delegate, retainDelegate: false, onProxyForObject: self)
+        return RxScrollViewDelegateProxy.installForwardDelegate(delegate, retainDelegate: false, onProxyForObject: self.base)
     }
 }
 

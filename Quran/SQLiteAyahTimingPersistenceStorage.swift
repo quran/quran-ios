@@ -11,15 +11,15 @@ import SQLite
 
 struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
 
-    private struct Column {
+    fileprivate struct Column {
         static let sura = Expression<Int>("sura")
         static let ayah = Expression<Int>("ayah")
         static let time = Expression<Int>("time")
     }
 
-    private let timingsTable = Table("timings")
+    fileprivate let timingsTable = Table("timings")
 
-    func getTimingForSura(startAyah startAyah: AyahNumber, databaseFileURL: NSURL) -> [AyahNumber: AyahTiming] {
+    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) -> [AyahNumber: AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
         do {
@@ -37,7 +37,7 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
         }
     }
 
-    func getOrderedTimingForSura(startAyah startAyah: AyahNumber, databaseFileURL: NSURL) -> [AyahTiming] {
+    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) -> [AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
         do {

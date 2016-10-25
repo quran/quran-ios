@@ -8,55 +8,55 @@
 
 import Foundation
 
-public enum NetworkError: ErrorType, CustomStringConvertible {
+public enum NetworkError: Error, CustomStringConvertible {
     /// Unknown or not supported error.
-    case Unknown
+    case unknown
 
     /// Not connected to the internet.
-    case NotConnectedToInternet
+    case notConnectedToInternet
 
     /// International data roaming turned off.
-    case InternationalRoamingOff
+    case internationalRoamingOff
 
     /// Connection is lost.
-    case ConnectionLost
+    case connectionLost
 
     /// Cannot reach the server.
-    case ServerNotReachable
+    case serverNotReachable
 
-    internal init(error: ErrorType) {
-        if let error = error as? NSURLError {
-            switch error {
-            case .TimedOut, .CannotFindHost, .CannotConnectToHost:
-                self = .ServerNotReachable
-            case .NetworkConnectionLost:
-                self = .ConnectionLost
-            case .DNSLookupFailed:
-                self = .ServerNotReachable
-            case .NotConnectedToInternet:
-                self = .NotConnectedToInternet
-            case .InternationalRoamingOff:
-                self = .InternationalRoamingOff
+    internal init(error: Error) {
+        if let error = error as? URLError {
+            switch error.code {
+            case .timedOut, .cannotFindHost, .cannotConnectToHost:
+                self = .serverNotReachable
+            case .networkConnectionLost:
+                self = .connectionLost
+            case .dnsLookupFailed:
+                self = .serverNotReachable
+            case .notConnectedToInternet:
+                self = .notConnectedToInternet
+            case .internationalRoamingOff:
+                self = .internationalRoamingOff
             default:
-                self = .Unknown
+                self = .unknown
             }
         } else {
-            self = .Unknown
+            self = .unknown
         }
     }
 
     public var description: String {
         let text: String
         switch self {
-        case .Unknown:
+        case .unknown:
             text = NSLocalizedString("NetworkError_Unknown", comment: "Error description")
-        case .NotConnectedToInternet:
+        case .notConnectedToInternet:
             text = NSLocalizedString("NetworkError_NotConnectedToInternet", comment: "Error description")
-        case .InternationalRoamingOff:
+        case .internationalRoamingOff:
             text = NSLocalizedString("NetworkError_InternationalRoamingOff", comment: "Error description")
-        case .ServerNotReachable:
+        case .serverNotReachable:
             text = NSLocalizedString("NetworkError_ServerNotReachable", comment: "Error description")
-        case .ConnectionLost:
+        case .connectionLost:
             text = NSLocalizedString("NetworkError_ConnectionLost", comment: "Error description")
         }
         return text

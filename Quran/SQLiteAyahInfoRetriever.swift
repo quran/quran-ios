@@ -12,23 +12,23 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
 
     let persistence: AyahInfoStorage
 
-    func retrieveAyahsAtPage(page: Int, onCompletion: Result<[AyahNumber : [AyahInfo]]> -> Void) {
+    func retrieveAyahsAtPage(_ page: Int, onCompletion: @escaping (Result<[AyahNumber : [AyahInfo]]>) -> Void) {
         Queue.background.async {
             do {
                 let result = try self.persistence.getAyahInfoForPage(page)
                 Queue.main.async {
-                    onCompletion(Result.Success(self.processAyahInfo(result)))
+                    onCompletion(Result.success(self.processAyahInfo(result)))
                 }
             } catch {
                 Crash.recordError(error)
                 Queue.main.async({
-                    onCompletion(Result.Failure(error as? PersistenceError ?? PersistenceError.QueryError(error: error)))
+                    onCompletion(Result.failure(error as? PersistenceError ?? PersistenceError.queryError(error: error)))
                 })
             }
         }
     }
 
-    private func processAyahInfo(info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
+    fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
         var result = [AyahNumber: [AyahInfo]]()
         for (ayah, pieces) in info {
             guard pieces.count > 0 else { continue }

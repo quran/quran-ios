@@ -8,13 +8,13 @@
 
 import UIKit
 
-class ImagePreloadingOperation: NSOperation {
+class ImagePreloadingOperation: Operation {
 
     let page: Int
 
-    private var completionBlocks: [(Int, UIImage) -> Void] = []
+    fileprivate var completionBlocks: [(Int, UIImage) -> Void] = []
 
-    private (set) var image: UIImage?
+    fileprivate (set) var image: UIImage?
 
     init(page: Int) {
         self.page = page
@@ -38,17 +38,17 @@ class ImagePreloadingOperation: NSOperation {
         self.image = image.preloadedImage()
     }
 
-    func addCompletionBlock(block: (Int, UIImage) -> Void) {
+    func addCompletionBlock(_ block: @escaping (Int, UIImage) -> Void) {
         completionBlocks.append(block)
     }
 }
 
-private func fullPathForPage(page: Int) -> String? {
+private func fullPathForPage(_ page: Int) -> String? {
     let relativePath = fileNameForPage(page)
-    return NSBundle.mainBundle().pathForResource(relativePath, ofType: nil)
+    return Bundle.main.path(forResource: relativePath, ofType: nil)
 }
 
-private func fileNameForPage(page: Int) -> String {
+private func fileNameForPage(_ page: Int) -> String {
     let file = String(format: "images_\(quranImagesSize)/width_\(quranImagesSize)/page%03d.png", page)
     return file
 }

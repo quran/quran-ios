@@ -9,13 +9,13 @@
 import Foundation
 
 struct QuranPagesDataRetriever: DataRetriever {
-    func retrieve(onCompletion onCompletion: [QuranPage] -> Void) {
+    func retrieve(onCompletion: @escaping ([QuranPage]) -> Void) {
 
         Queue.background.async {
 
             var pages: [QuranPage] = []
 
-            let startIndex = Quran.QuranPagesRange.startIndex
+            let startIndex = Quran.QuranPagesRange.lowerBound
             for i in 0..<Quran.QuranPagesRange.count {
 
                 let pageNumber = i + startIndex

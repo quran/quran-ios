@@ -14,21 +14,21 @@ class BookmarksDataSource: CompositeDataSource {
     var headerTitles: [String] = []
     let headerReuseIdentifier: String
 
-    init(type: Type, headerReuseIdentifier: String) {
+    init(type: SectionType, headerReuseIdentifier: String) {
         self.headerReuseIdentifier = headerReuseIdentifier
-        super.init(type: type)
+        super.init(sectionType: type)
     }
 
-    func addDataSource(dataSource: DataSource, headerTitle: String) {
+    func addDataSource(_ dataSource: DataSource, headerTitle: String) {
         headerTitles.append(headerTitle)
         super.addDataSource(dataSource)
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerReuseIdentifier))
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let text = headerTitles[section]
         header.titleLabel.text =  text
-        header.subtitleLabel.hidden = true
+        header.subtitleLabel.isHidden = true
         return header
     }
 }

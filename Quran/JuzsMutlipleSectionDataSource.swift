@@ -12,21 +12,21 @@ import GenericDataSources
 
 class JuzsMutlipleSectionDataSource: CompositeDataSource {
 
-    let numberFormatter = NSNumberFormatter()
+    let numberFormatter = NumberFormatter()
 
     let headerReuseIdentifier: String
 
     var juzs: [Juz] = []
 
-    var onJuzHeaderSelected: (Juz -> Void)? = nil
+    var onJuzHeaderSelected: ((Juz) -> Void)? = nil
 
-    init(type: Type, headerReuseIdentifier: String) {
+    init(type: SectionType, headerReuseIdentifier: String) {
         self.headerReuseIdentifier = headerReuseIdentifier
-        super.init(type: type)
+        super.init(sectionType: type)
     }
 
-    func setSections<ItemType, CellType: ReusableCell>(sections: [(Juz, [ItemType])],
-                     @noescape dataSourceCreator: () -> BasicDataSource<ItemType, CellType>) {
+    func setSections<ItemType, CellType: ReusableCell>(_ sections: [(Juz, [ItemType])],
+                     dataSourceCreator: () -> BasicDataSource<ItemType, CellType>) {
 
         for dataSource in dataSources {
             removeDataSource(dataSource)
@@ -40,12 +40,12 @@ class JuzsMutlipleSectionDataSource: CompositeDataSource {
         juzs = sections.map { $0.0 }
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerReuseIdentifier))
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let juz = juzs[section]
 
         header.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), juz.order)
-        header.subtitleLabel.text = numberFormatter.format(juz.startPageNumber)
+        header.subtitleLabel.text = numberFormatter.string(from: NSNumber(value: juz.startPageNumber))
 
         header.object = juz
         header.onTapped = { [weak self] in

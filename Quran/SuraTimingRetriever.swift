@@ -9,5 +9,5 @@
 import Foundation
 
 protocol SuraTimingRetriever {
-    func retrieveSuraTiming(sura: Int, onCompletion: Result<[AyahTiming]> -> Void)
+    func retrieveSuraTiming(_ sura: Int, onCompletion: (Result<[AyahTiming]>) -> Void)
 }

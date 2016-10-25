@@ -21,13 +21,13 @@ class QariTableViewController: UITableViewController {
         }
     }
 
-    var onSelectedIndexChanged: (Int -> Void)?
+    var onSelectedIndexChanged: ((Int) -> Void)?
 
-    func setQaris(qaris: [Qari]) {
+    func setQaris(_ qaris: [Qari]) {
         dataSource.items = qaris
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -41,11 +41,11 @@ class QariTableViewController: UITableViewController {
         setUp()
     }
 
-    private func setUp() {
+    fileprivate func setUp() {
         let selectionHandler = BlockSelectionHandler<Qari, QariTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] _, _, indexPath in
             self?.selectedIndex = indexPath.item
-            self?.dismissViewControllerAnimated(true, completion: nil)
+            self?.dismiss(animated: true, completion: nil)
         }
         dataSource.setSelectionHandler(selectionHandler)
     }
@@ -55,23 +55,22 @@ class QariTableViewController: UITableViewController {
         tableView.backgroundView = nil
 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        tableView.registerNib(UINib(nibName: "QariTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseId)
+        tableView.register(UINib(nibName: "QariTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseId)
 
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
 
         tableView.ds_useDataSource(dataSource)
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(dismissViewController))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissViewController))
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        tableView.ds_selectItemAtIndexPath(NSIndexPath(forItem: selectedIndex, inSection: 0), animated: false, scrollPosition: .None)
+        tableView.ds_selectItem(at: IndexPath(item: selectedIndex, section: 0), animated: false, scrollPosition: [])
     }
 
     func dismissViewController() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }

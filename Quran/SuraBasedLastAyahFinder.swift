@@ -12,7 +12,7 @@ struct SuraBasedLastAyahFinder: LastAyahFinder {
 
     let pageFinder = PageBasedLastAyahFinder()
 
-    func findLastAyah(startAyah startAyah: AyahNumber, page: Int) -> AyahNumber {
+    func findLastAyah(startAyah: AyahNumber, page: Int) -> AyahNumber {
 
         let pageLastAyah = pageFinder.findLastAyah(startAyah: startAyah, page: page)
 

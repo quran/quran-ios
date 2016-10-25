@@ -19,14 +19,14 @@ class CrashlyticsKeyBase {
 final class CrashlyticsKey<Type>: CrashlyticsKeyBase {
     let key: String
 
-    private init(key: String) {
+    fileprivate init(key: String) {
         self.key = key
     }
 }
 
 struct Crash {
 
-    static func setValue<T>(value: T?, forKey key: CrashlyticsKey<T>) {
+    static func setValue<T>(_ value: T?, forKey key: CrashlyticsKey<T>) {
 
         let instance = Crashlytics.sharedInstance()
 
@@ -45,24 +45,22 @@ struct Crash {
             instance.setBoolValue(value, forKey: key.key)
         } else if let value = value as? CustomStringConvertible {
             instance.setObjectValue(value.description, forKey: key.key)
-        } else if let value = value as? AnyObject {
-            instance.setObjectValue(value.description, forKey: key.key)
         } else {
             fatalError("Unsupported value type: \(value)")
         }
     }
 
-    static func recordError(error: ErrorType) {
+    static func recordError(_ error: Error) {
         Crashlytics.sharedInstance().recordError(error as NSError)
     }
 }
 
 
-func CLog(string: String) {
+func CLog(_ string: String) {
     CLSLogv("%@", getVaList([string]))
 }
 
-@noreturn public func fatalError(@autoclosure message: () -> String = "", file: StaticString = #file, line: UInt = #line) {
+public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {
     CLog("message: \(message()), file:\(file.description), line:\(line)")
     Swift.fatalError(message, file: file, line: line)
 }

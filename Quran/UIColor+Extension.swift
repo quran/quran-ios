@@ -29,7 +29,7 @@ extension UIColor {
 
      - returns: The 1 pixel image of the color.
      */
-    func image() -> UIImage {
+    func image() -> UIImage? {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         setFill()

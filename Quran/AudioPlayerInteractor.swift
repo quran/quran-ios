@@ -10,7 +10,7 @@ import Foundation
 
 protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloading()
-    func didStartDownloadingAudioFiles(progress progress: NSProgress)
+    func didStartDownloadingAudioFiles(progress: Foundation.Progress)
 
     func onPlayingStarted()
 
@@ -18,9 +18,9 @@ protocol AudioPlayerInteractorDelegate: class {
 
     func onPlaybackResumed()
 
-    func highlight(ayah: AyahNumber)
+    func highlight(_ ayah: AyahNumber)
 
-    func onFailedDownloadingWithError(error: ErrorType)
+    func onFailedDownloadingWithError(_ error: Error)
 
     func onPlaybackOrDownloadingCompleted()
 }
@@ -30,9 +30,9 @@ protocol AudioPlayerInteractor: class {
     weak var delegate: AudioPlayerInteractorDelegate? { get set }
 
     // will call willStartDownloadingAudioFiles if there is downloads
-    func checkIfDownloading(completion: (downloading: Bool) -> Void)
+    func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void)
 
-    func playAudioForQari(qari: Qari, atPage page: QuranPage)
+    func playAudioForQari(_ qari: Qari, atPage page: QuranPage)
 
     func cancelDownload()
 

@@ -10,7 +10,7 @@ import CoreGraphics
 
 extension CGRect {
 
-    func applyScale(scale: CGFloat, xOffset: CGFloat, yOffset: CGFloat) -> CGRect {
+    func applyScale(_ scale: CGFloat, xOffset: CGFloat, yOffset: CGFloat) -> CGRect {
         return CGRect(x: minX * scale + xOffset,
                       y: minY * scale + yOffset,
                       width: width * scale,

@@ -11,11 +11,11 @@ import Foundation
 // class not struct to allow let declaration because once will be a mutating function.
 final class Once {
 
-    private (set) var executed = false
+    fileprivate (set) var executed = false
 
-    private let lock = NSLock()
+    fileprivate let lock = NSLock()
 
-    func once(@noescape block: () -> Void) {
+    func once(_ block: () -> Void) {
 
         // early check with no lock for performance optimization
         guard !executed else {

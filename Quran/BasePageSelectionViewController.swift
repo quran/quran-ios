@@ -14,7 +14,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController>
 
-    let dataSource = JuzsMutlipleSectionDataSource(type: .MultiSection, headerReuseIdentifier: "header")
+    let dataSource = JuzsMutlipleSectionDataSource(type: .multi, headerReuseIdentifier: "header")
 
     init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
         self.dataRetriever = dataRetriever
@@ -26,20 +26,20 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.imageWithRenderingMode(.AlwaysTemplate))
+        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
-        tableView.registerClass(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
 
         tableView.ds_useDataSource(dataSource)
 
@@ -58,20 +58,20 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.hidesBarsOnSwipe = true
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.hidesBarsOnSwipe = false
     }
 
-    private func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
+    fileprivate func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
         let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
-            let item = ds.itemAtIndexPath(index)
+            let item = ds.item(at: index)
             self?.navigateToPage(item.startPageNumber)
         }
 
@@ -84,7 +84,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         fatalError("Should be implemented by subclasses")
     }
 
-    private func navigateToPage(page: Int) {
+    fileprivate func navigateToPage(_ page: Int) {
         let controller = self.quranControllerCreator.create()
         controller.initialPage = page
         controller.hidesBottomBarWhenPushed = true

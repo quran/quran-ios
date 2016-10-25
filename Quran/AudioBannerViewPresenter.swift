@@ -9,8 +9,8 @@
 
 
 protocol AudioBannerViewPresenterDelegate: class {
-    func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int)
-    func highlightAyah(ayah: AyahNumber)
+    func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int)
+    func highlightAyah(_ ayah: AyahNumber)
     func removeHighlighting()
     func currentPage() -> QuranPage?
 }
@@ -21,5 +21,5 @@ protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
     weak var view: AudioBannerView? { get set }
 
     func onViewDidLoad()
-    func setQariIndex(index: Int)
+    func setQariIndex(_ index: Int)
 }

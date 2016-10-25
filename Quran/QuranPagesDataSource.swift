@@ -14,7 +14,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
     let imageService: QuranImageService
     let ayahInfoRetriever: AyahInfoRetriever
 
-    let numberFormatter = NSNumberFormatter()
+    let numberFormatter = NumberFormatter()
 
     var highlightedAyat: Set<AyahNumber> = Set()
 
@@ -25,25 +25,25 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         self.ayahInfoRetriever = ayahInfoRetriever
         super.init(reuseIdentifier: reuseIdentifier)
 
-        NSNotificationCenter.defaultCenter().addObserver(self,
+        NotificationCenter.default.addObserver(self,
                                                          selector: #selector(applicationBecomeActive),
-                                                         name: UIApplicationDidBecomeActiveNotification,
+                                                         name: NSNotification.Name.UIApplicationDidBecomeActive,
                                                          object: nil)
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    override func ds_collectionView(collectionView: GeneralCollectionView,
-                                    configureCell cell: QuranPageCollectionViewCell,
-                                    withItem item: QuranPage,
-                                    atIndexPath indexPath: NSIndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: QuranPageCollectionViewCell,
+                                    with item: QuranPage,
+                                    at indexPath: IndexPath) {
 
-        let size = ds_collectionView(collectionView, sizeForItemAtIndexPath: indexPath)
+        let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
 
         cell.page = item
-        cell.pageLabel.text = numberFormatter.format(item.pageNumber)
+        cell.pageLabel.text = numberFormatter.format(NSNumber(value: item.pageNumber))
         cell.suraLabel.text = Quran.nameForSura(item.startAyah.sura)
         cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), item.juzNumber)
 
@@ -67,13 +67,13 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
     }
 
     func removeHighlighting() {
-        highlightedAyat.removeAll(keepCapacity: true)
+        highlightedAyat.removeAll(keepingCapacity: true)
         for cell in ds_reusableViewDelegate?.ds_visibleCells() as? [QuranPageCollectionViewCell] ?? [] {
             cell.highlightAyat(highlightedAyat)
         }
     }
 
-    func highlightAyaht(ayat: Set<AyahNumber>) {
+    func highlightAyaht(_ ayat: Set<AyahNumber>) {
         highlightedAyat = ayat
 
         guard let ayah = ayat.first else {
@@ -90,18 +90,18 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
     }
 
-    private func scrollToHighlightedAya(ayah: AyahNumber, ayaht: Set<AyahNumber>) {
+    fileprivate func scrollToHighlightedAya(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
         Queue.background.async {
             let page = ayah.getStartPage()
 
             Queue.main.async {
-                let index = NSIndexPath(forItem: page - 1, inSection: 0)
+                let index = IndexPath(item: page - 1, section: 0)
                 // if the cell is there, highlight the ayah.
-                if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
+                if let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: index) as? QuranPageCollectionViewCell {
                     cell.highlightAyat(ayaht)
                 } else {
                     // scroll to the cell
-                    self.ds_reusableViewDelegate?.ds_scrollToItemAtIndexPath(index, atScrollPosition: .CenteredHorizontally, animated: true)
+                    self.ds_reusableViewDelegate?.ds_scrollToItem(at: index, at: .centeredHorizontally, animated: true)
                 }
             }
         }
@@ -112,10 +112,10 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         - Parameter page: The Quran page which we check if it has a selected verse to deselect it.
         - Returns: *true* if a selected verse has been found and is already unselected. *false* otherwise.
      */
-    func deselectSelectedVerseIfAny(page: Int) -> Bool {
-        let index = NSIndexPath(forItem: page - 1, inSection: 0)
+    func deselectSelectedVerseIfAny(_ page: Int) -> Bool {
+        let index = IndexPath(item: page - 1, section: 0)
         // if the cell is there, highlight the ayah.
-        if let cell = self.ds_reusableViewDelegate?.ds_cellForItemAtIndexPath(index) as? QuranPageCollectionViewCell {
+        if let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: index) as? QuranPageCollectionViewCell {
             if cell.highlightingView.isSelectingVerse {
                 cell.highlightingView.deselectTheSelectedVerse()
                 return true

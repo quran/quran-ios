@@ -10,14 +10,14 @@ import Foundation
 
 struct PageBasedLastAyahFinder: LastAyahFinder {
 
-    func findLastAyah(startAyah startAyah: AyahNumber, page: Int) -> AyahNumber {
+    func findLastAyah(startAyah: AyahNumber, page: Int) -> AyahNumber {
         guard Quran.QuranPagesRange.contains(page) else {
             fatalError("Page '\(page)' is not a valid quran page")
         }
-        let lastPage = Quran.QuranPagesRange.endIndex.predecessor()
+        let lastPage = (Quran.QuranPagesRange.upperBound - 1)
         guard page < lastPage else {
             // last page, then get last ayah
-            let lastSura = Quran.QuranSurasRange.endIndex.predecessor()
+            let lastSura = (Quran.QuranSurasRange.upperBound - 1)
             return AyahNumber(sura: lastSura, ayah: Quran.numberOfAyahsForSura(lastSura))
         }
 

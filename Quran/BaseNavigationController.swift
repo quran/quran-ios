@@ -12,6 +12,6 @@ class BaseNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationBar.barStyle = .Black
+        navigationBar.barStyle = .black
     }
 }

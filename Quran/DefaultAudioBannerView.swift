@@ -12,21 +12,21 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
 
     weak var delegate: AudioBannerViewDelegate?
 
-    let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
+    let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 
     let qariView = AudioQariBarView()
     let playView = AudioPlayBarView()
     let downloadView = AudioDownloadingBarView()
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         onTouchesBegan?()
     }
 
     var onTouchesBegan: (() -> Void)?
 
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesMoved(touches, withEvent: event)
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,23 +41,23 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
 
     func setUp() {
         backgroundColor = nil
-        addHeightConstraint(48)
+        _ = addHeightConstraint(48)
 
         addAutoLayoutSubview(visualEffect)
-        pinParentAllDirections(visualEffect)
+        _ = pinParentAllDirections(visualEffect)
 
-        let borderHeight: CGFloat = UIScreen.mainScreen().scale < 2 ? 1 : 0.5
+        let borderHeight: CGFloat = UIScreen.main.scale < 2 ? 1 : 0.5
 
         let topBorder = UIView()
-        topBorder.backgroundColor = UIColor.lightGrayColor()
-        topBorder.addHeightConstraint(borderHeight)
+        topBorder.backgroundColor = UIColor.lightGray
+        _ = topBorder.addHeightConstraint(borderHeight)
         addAutoLayoutSubview(topBorder)
-        pinParentHorizontal(topBorder)
-        addParentTopConstraint(topBorder, value: -borderHeight)
+        _ = pinParentHorizontal(topBorder)
+        _ = addParentTopConstraint(topBorder, value: -borderHeight)
 
         for view in [qariView, playView, downloadView] {
             visualEffect.contentView.addAutoLayoutSubview(view)
-            visualEffect.contentView.pinParentAllDirections(view)
+            _ = visualEffect.contentView.pinParentAllDirections(view)
             view.backgroundColor = nil
             view.alpha = 0
         }
@@ -67,39 +67,39 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         setUpDownloadView()
     }
 
-    private func setUpQariView() {
+    fileprivate func setUpQariView() {
         [qariView.playButton,
-            qariView.backgroundButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), forControlEvents: .TouchDown) }
+            qariView.backgroundButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
-        qariView.playButton.addTarget(self, action: #selector(qariPlayTapped), forControlEvents: .TouchUpInside)
-        qariView.backgroundButton.addTarget(self, action: #selector(qariTapped), forControlEvents: .TouchUpInside)
+        qariView.playButton.addTarget(self, action: #selector(qariPlayTapped), for: .touchUpInside)
+        qariView.backgroundButton.addTarget(self, action: #selector(qariTapped), for: .touchUpInside)
     }
 
-    private func setUpPlayView() {
+    fileprivate func setUpPlayView() {
         [playView.stopButton,
             playView.pauseResumeButton,
             playView.nextButton,
             playView.previousButton,
-            playView.repeatButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), forControlEvents: .TouchDown) }
+            playView.repeatButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
-        playView.stopButton.addTarget(self, action: #selector(stopPlayingTapped), forControlEvents: .TouchUpInside)
-        playView.pauseResumeButton.addTarget(self, action: #selector(onPauseResumeTapped), forControlEvents: .TouchUpInside)
-        playView.nextButton.addTarget(self, action: #selector(nextTapped), forControlEvents: .TouchUpInside)
-        playView.previousButton.addTarget(self, action: #selector(previousTapped), forControlEvents: .TouchUpInside)
-        playView.repeatButton?.addTarget(self, action: #selector(repeatTapped), forControlEvents: .TouchUpInside)
+        playView.stopButton.addTarget(self, action: #selector(stopPlayingTapped), for: .touchUpInside)
+        playView.pauseResumeButton.addTarget(self, action: #selector(onPauseResumeTapped), for: .touchUpInside)
+        playView.nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
+        playView.previousButton.addTarget(self, action: #selector(previousTapped), for: .touchUpInside)
+        playView.repeatButton?.addTarget(self, action: #selector(repeatTapped), for: .touchUpInside)
     }
 
-    private func setUpDownloadView() {
-        [downloadView.cancelButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), forControlEvents: .TouchDown) }
+    fileprivate func setUpDownloadView() {
+        [downloadView.cancelButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
-        downloadView.cancelButton.addTarget(self, action: #selector(cancelDownloadTapped), forControlEvents: .TouchUpInside)
+        downloadView.cancelButton.addTarget(self, action: #selector(cancelDownloadTapped), for: .touchUpInside)
     }
 
     func hideAllControls() {
         [qariView, playView, downloadView].forEach { $0.alpha = 0 }
     }
 
-    func setQari(name name: String, image: UIImage?) {
+    func setQari(name: String, image: UIImage?) {
 
         qariView.imageView.image = image
         qariView.titleLabel.text = name
@@ -107,7 +107,7 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         hideAllExcept(qariView)
     }
 
-    func setDownloading(progress: Float) {
+    func setDownloading(_ progress: Float) {
 
         downloadView.progressView.progress = progress
 
@@ -115,78 +115,78 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
     }
 
     func setPlaying() {
-        playView.pauseResumeButton.setImage(UIImage(named: "ic_pause"), forState: .Normal)
+        playView.pauseResumeButton.setImage(UIImage(named: "ic_pause"), for: UIControlState())
 
         hideAllExcept(playView)
     }
 
     func setPaused() {
 
-        playView.pauseResumeButton.setImage(UIImage(named: "ic_play"), forState: .Normal)
+        playView.pauseResumeButton.setImage(UIImage(named: "ic_play"), for: UIControlState())
 
         hideAllExcept(playView)
     }
 
-    func setRepeatCount(count: AudioRepeat) {
+    func setRepeatCount(_ count: AudioRepeat) {
 
-        let formatter = NSNumberFormatter()
+        let formatter = NumberFormatter()
         let text: String
         switch count {
-        case .None:
+        case .none:
             text = ""
-        case .Once:
+        case .once:
             text = formatter.format(1)
-        case .Twice:
+        case .twice:
             text = formatter.format(2)
-        case .ThreeTimes:
+        case .threeTimes:
             text = formatter.format(3)
-        case .Infinite:
+        case .infinite:
             text = "∞"
         }
         playView.repeatCountLabel?.text = text
     }
 
-    private func hideAllExcept(view: UIView) {
-        UIView.animateWithDuration(0.25) {
+    fileprivate func hideAllExcept(_ view: UIView) {
+        UIView.animate(withDuration: 0.25, animations: {
             for subview in [self.qariView, self.playView, self.downloadView] {
                 subview.alpha = subview == view ? 1 : 0
             }
-        }
+        })
     }
 
-    @objc private func buttonTouchesBegan() {
+    @objc fileprivate func buttonTouchesBegan() {
         onTouchesBegan?()
     }
 
-    @objc private func qariTapped() {
+    @objc fileprivate func qariTapped() {
         delegate?.onQariTapped()
     }
 
-    @objc private func qariPlayTapped() {
+    @objc fileprivate func qariPlayTapped() {
         delegate?.onPlayTapped()
     }
 
-    @objc private func stopPlayingTapped() {
+    @objc fileprivate func stopPlayingTapped() {
         delegate?.onStopTapped()
     }
 
-    @objc private func onPauseResumeTapped() {
+    @objc fileprivate func onPauseResumeTapped() {
         delegate?.onPauseResumeTapped()
     }
 
-    @objc private func previousTapped() {
+    @objc fileprivate func previousTapped() {
         delegate?.onBackwardTapped()
     }
 
-    @objc private func nextTapped() {
+    @objc fileprivate func nextTapped() {
         delegate?.onForwardTapped()
     }
 
-    @objc private func repeatTapped() {
+    @objc fileprivate func repeatTapped() {
         delegate?.onRepeatTapped()
     }
 
-    @objc private func cancelDownloadTapped() {
+    @objc fileprivate func cancelDownloadTapped() {
         delegate?.onCancelDownloadTapped()
     }
 }

@@ -15,10 +15,10 @@ class QarisDataSource: BasicDataSource<Qari, QariTableViewCell> {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override func ds_collectionView(collectionView: GeneralCollectionView,
-                                    configureCell cell: QariTableViewCell,
-                                    withItem item: Qari,
-                                    atIndexPath indexPath: NSIndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: QariTableViewCell,
+                                    with item: Qari,
+                                    at indexPath: IndexPath) {
         cell.titleLabel.text = item.name
         cell.photoImageView.image = item.imageName.flatMap { UIImage(named: $0) }
     }

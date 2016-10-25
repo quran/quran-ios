@@ -29,15 +29,15 @@ import Foundation
  - Failure: The operation encountered an error resulting in a failure.
  */
 public enum Result<Value> {
-    case Success(Value)
-    case Failure(ErrorType)
+    case success(Value)
+    case failure(Error)
 
     /// Returns `true` if the result is a success, `false` otherwise.
     public var isSuccess: Bool {
         switch self {
-        case .Success:
+        case .success:
             return true
-        case .Failure:
+        case .failure:
             return false
         }
     }
@@ -50,19 +50,19 @@ public enum Result<Value> {
     /// Returns the associated value if the result is a success, `nil` otherwise.
     public var value: Value? {
         switch self {
-        case .Success(let value):
+        case .success(let value):
             return value
-        case .Failure:
+        case .failure:
             return nil
         }
     }
 
     /// Returns the associated error value if the result is a failure, `nil` otherwise.
-    public var error: ErrorType? {
+    public var error: Error? {
         switch self {
-        case .Success:
+        case .success:
             return nil
-        case .Failure(let error):
+        case .failure(let error):
             return error
         }
     }
@@ -75,9 +75,9 @@ extension Result: CustomStringConvertible {
     /// success or failure.
     public var description: String {
         switch self {
-        case .Success:
+        case .success:
             return "SUCCESS"
-        case .Failure:
+        case .failure:
             return "FAILURE"
         }
     }
@@ -90,9 +90,9 @@ extension Result: CustomDebugStringConvertible {
     /// success or failure in addition to the value or error.
     public var debugDescription: String {
         switch self {
-        case .Success(let value):
+        case .success(let value):
             return "SUCCESS: \(value)"
-        case .Failure(let error):
+        case .failure(let error):
             return "FAILURE: \(error)"
         }
     }

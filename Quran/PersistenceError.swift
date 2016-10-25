@@ -8,8 +8,8 @@
 
 import Foundation
 
-enum PersistenceError: ErrorType {
-    case OpenDatabase(error: ErrorType)
-    case QueryError(error: ErrorType)
-    case Unknown
+enum PersistenceError: Error {
+    case openDatabase(error: Error)
+    case queryError(error: Error)
+    case unknown
 }

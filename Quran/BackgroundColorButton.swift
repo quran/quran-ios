@@ -24,56 +24,56 @@ class BackgroundColorButton: UIButton {
         updateBackgroundColor()
     }
 
-    @IBInspectable var normalBackground: UIColor = UIColor.lightGrayColor() {
+    @IBInspectable var normalBackground: UIColor = UIColor.lightGray {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable var selectedBackground: UIColor = UIColor.blueColor() {
+    @IBInspectable var selectedBackground: UIColor = UIColor.blue {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable var highlightedBackground: UIColor = UIColor.redColor() {
+    @IBInspectable var highlightedBackground: UIColor = UIColor.red {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable var disabledBackground: UIColor = UIColor.darkGrayColor() {
+    @IBInspectable var disabledBackground: UIColor = UIColor.darkGray {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    override var enabled: Bool {
+    override var isEnabled: Bool {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    private func updateBackgroundColor() {
+    fileprivate func updateBackgroundColor() {
 
         let background: UIColor
-        if !enabled {
+        if !isEnabled {
             background = disabledBackground
-        } else if highlighted {
+        } else if isHighlighted {
             background = highlightedBackground
-        } else if selected {
+        } else if isSelected {
             background = selectedBackground
         } else {
             background = normalBackground

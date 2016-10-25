@@ -18,28 +18,28 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
         self.downloader = downloader
     }
 
-    func filesForQari(qari: Qari,
+    func filesForQari(_ qari: Qari,
                               startAyah: AyahNumber,
-                              endAyah: AyahNumber) -> [(remoteURL: NSURL, destination: String, resumeURL: String)] {
+                              endAyah: AyahNumber) -> [(remoteURL: Foundation.URL, destination: String, resumeURL: String)] {
 
-        guard case AudioType.Gapless(let databaseFileName) = qari.audioType else {
+        guard case AudioType.gapless(let databaseFileName) = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")
         }
 
-        let databaseRemoteURL = URL.AudioDatabaseURL.URLByAppendingPathComponent(
-            databaseFileName).URLByAppendingPathExtension(Files.DatabaseRemoteFileExtension)
+        let databaseRemoteURL = QuranURLs.AudioDatabaseURL.appendingPathComponent(
+            databaseFileName).appendingPathExtension(Files.DatabaseRemoteFileExtension)
         let databaseLocalURL = qari.path.stringByAppendingPath(
             databaseFileName).stringByAppendingExtension(Files.DatabaseRemoteFileExtension)
         let databaseResumeURL = databaseLocalURL.stringByAppendingExtension(Files.DownloadResumeDataExtension)
 
         // loop over the files
-        var files = [(remoteURL: NSURL, destination: String, resumeURL: String)]()
+        var files:[(remoteURL: Foundation.URL, destination: String, resumeURL: String)] = []
         files.append(remoteURL: databaseRemoteURL, destination: databaseLocalURL, resumeURL: databaseResumeURL)
 
         for sura in startAyah.sura...endAyah.sura {
             let fileName = String(format: "%03d", sura)
 
-            let remoteURL = qari.audioURL.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(Files.AudioExtension)
+            let remoteURL = qari.audioURL.appendingPathComponent(fileName).appendingPathExtension(Files.AudioExtension)
             let localURL = qari.path.stringByAppendingPath(fileName).stringByAppendingExtension(Files.AudioExtension)
             let resumeURL = localURL.stringByAppendingExtension(Files.DownloadResumeDataExtension)
 

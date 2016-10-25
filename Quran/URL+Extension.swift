@@ -1,5 +1,5 @@
 //
-//  NSURL+Extension.swift
+//  URL+Extension.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/7/16.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension NSURL {
+extension URL {
 
-    convenience init(validURL: String) {
+    init(validURL: String) {
         self.init(string: validURL)! // swiftlint:disable:this force_unwrapping
     }
 }

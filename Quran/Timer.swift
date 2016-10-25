@@ -8,27 +8,27 @@
 
 import Foundation
 
-public class Timer {
+open class Timer {
 
-    public private(set) var isCancelled = false
+    open fileprivate(set) var isCancelled = false
 
-    private let repeated: Bool
+    fileprivate let repeated: Bool
 
-    private let timer: dispatch_source_t
+    fileprivate let timer: DispatchSourceTimer
 
-    init(interval: NSTimeInterval,
+    init(interval: TimeInterval,
          repeated: Bool = false,
          startNow: Bool = false,
-         queue: dispatch_queue_t = dispatch_get_main_queue(),
-         handler: dispatch_block_t) {
+         queue: DispatchQueue = DispatchQueue.main,
+         handler: @escaping ()->()) {
         self.repeated = repeated
 
-        timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+        timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: UInt(0)), queue: queue)
         let dispatchInterval = UInt64(interval * Double(NSEC_PER_SEC))
-        let startTime = dispatch_time(DISPATCH_TIME_NOW, startNow ? 0 : Int64(dispatchInterval))
-        dispatch_source_set_timer(timer, startTime, dispatchInterval, 0)
+        let startTime = DispatchTime.now() + Double(startNow ? 0 : Int64(dispatchInterval)) / Double(NSEC_PER_SEC)
+        timer.scheduleRepeating(deadline: startTime, interval: DispatchTimeInterval.seconds(Int(interval)))
 
-        dispatch_source_set_event_handler(timer) { [weak self] in
+        timer.setEventHandler { [weak self] in
             if self?.isCancelled == false {
                 handler()
             }
@@ -38,12 +38,12 @@ public class Timer {
                 self?.cancel()
             }
         }
-        dispatch_resume(timer)
+        timer.resume()
     }
 
     func cancel() {
         isCancelled = true
-        dispatch_source_cancel(timer)
+        timer.cancel()
     }
 
     deinit {

@@ -10,15 +10,15 @@ import Foundation
 
 class DownloadNetworkRequest: Request {
 
-    let task: NSURLSessionDownloadTask
+    let task: URLSessionDownloadTask
     let destination: String
     let resumeDestination: String
 
-    let progress: NSProgress
+    let progress: Foundation.Progress
 
-    var onCompletion: (Result<()> -> Void)? = nil
+    var onCompletion: ((Result<()>) -> Void)? = nil
 
-    init(task: NSURLSessionDownloadTask, destination: String, resumeDestination: String, progress: NSProgress) {
+    init(task: URLSessionDownloadTask, destination: String, resumeDestination: String, progress: Foundation.Progress) {
         self.task = task
         self.destination = destination
         self.resumeDestination = resumeDestination
@@ -34,6 +34,6 @@ class DownloadNetworkRequest: Request {
     }
 
     func cancel() {
-        task.cancelByProducingResumeData { _ in }
+        task.cancel { _ in }
     }
 }

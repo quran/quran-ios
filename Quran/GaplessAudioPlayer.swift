@@ -13,12 +13,12 @@ import MediaPlayer
 
 private class GaplessPlayerItem: AVPlayerItem {
     let sura: Int
-    init(URL: NSURL, sura: Int) {
+    init(URL: Foundation.URL, sura: Int) {
         self.sura = sura
-        super.init(asset: AVAsset(URL: URL), automaticallyLoadedAssetKeys: nil)
+        super.init(asset: AVAsset(url: URL), automaticallyLoadedAssetKeys: nil)
     }
 
-    private override var description: String {
+    fileprivate override var description: String {
         return super.description + " sura: \(sura)"
     }
 }
@@ -31,13 +31,13 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
 
     let timingRetriever: QariTimingRetriever
 
-    private var ayahsDictionary: [AVPlayerItem: [AyahNumber]] = [:]
+    fileprivate var ayahsDictionary: [AVPlayerItem: [AyahNumber]] = [:]
 
     init(timingRetriever: QariTimingRetriever) {
         self.timingRetriever = timingRetriever
     }
 
-    func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
+    func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
         timingRetriever.retrieveTimingForQari(qari, suras: items.map { $0.sura }) { [weak self] timings in
@@ -54,7 +54,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
                     array = Array(array.dropLast())
                 }
-                times[item] = array.enumerate().map { $0 == 0 && $1.ayah.ayah == 1 ? 0 : $1.seconds }
+                times[item] = array.enumerated().map { $0 == 0 && $1.ayah.ayah == 1 ? 0 : $1.seconds }
                 ayahs[item] = array.map { $0.ayah }
             }
             self?.ayahsDictionary = ayahs
@@ -76,7 +76,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
 
 extension GaplessAudioPlayer {
 
-    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GaplessPlayerItem], [PlayerItemInfo]) {
+    fileprivate func playerItemsForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GaplessPlayerItem], [PlayerItemInfo]) {
         let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
         let items = files.map { GaplessPlayerItem(URL: $0, sura: $1) }
         let info = files.map {
@@ -88,17 +88,17 @@ extension GaplessAudioPlayer {
         return (items, info)
     }
 
-    private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, Int)] {
+    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(Foundation.URL, Int)] {
 
-        guard case AudioType.Gapless = qari.audioType else {
+        guard case AudioType.gapless = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be played here.")
         }
 
         // loop over the files
-        var files = [(NSURL, Int)]()
+        var files: [(Foundation.URL, Int)] = []
         for sura in startAyah.sura...endAyah.sura {
             let fileName = String(format: "%03d", sura)
-            let localURL = qari.localFolder().URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(Files.AudioExtension)
+            let localURL = qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.AudioExtension)
             files.append(localURL, sura)
         }
         return files

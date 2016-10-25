@@ -15,12 +15,16 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
         return QuartersDataSource(reuseIdentifier: "cell")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerNib(UINib(nibName: "QuarterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.register(UINib(nibName: "QuarterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
 }

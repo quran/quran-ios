@@ -11,27 +11,27 @@ import GenericDataSources
 
 class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
 
-    let numberFormatter = NSNumberFormatter()
+    let numberFormatter = NumberFormatter()
 
     // this is needed as of swift 2.2 as class don't inherit constructors from generic based.
     override init(reuseIdentifier: String) {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override func ds_collectionView(collectionView: GeneralCollectionView,
-                                    configureCell cell: QuarterTableViewCell,
-                                    withItem item: Quarter,
-                                    atIndexPath indexPath: NSIndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: QuarterTableViewCell,
+                                    with item: Quarter,
+                                    at indexPath: IndexPath) {
 
         let progress = CGFloat(item.order % 4) / 4
         let circleProgress = progress == 0 ? 1 : progress
         let hizb = item.order / 4 + 1
 
-        cell.circleLabel.text = numberFormatter.format(hizb)
-        cell.circleLabel.hidden = circleProgress != 1
+        cell.circleLabel.text = numberFormatter.format(NSNumber(value: hizb))
+        cell.circleLabel.isHidden = circleProgress != 1
         cell.circleView.progress = circleProgress
         cell.name.text = item.ayahText
         cell.descriptionLabel.text = item.ayah.localizedName
-        cell.startPage.text = numberFormatter.format(item.startPageNumber)
+        cell.startPage.text = numberFormatter.format(NSNumber(value: item.startPageNumber))
     }
 }

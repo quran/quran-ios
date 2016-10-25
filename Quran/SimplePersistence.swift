@@ -11,7 +11,7 @@ import Foundation
 class PersistenceKeyBase {
     static let LastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
     static let LastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
-    static let DownloadRequests = PersistenceKey<NSData?>(key: "DownloadRequests", defaultValue: nil)
+    static let DownloadRequests = PersistenceKey<Data?>(key: "DownloadRequests", defaultValue: nil)
 }
 
 final class PersistenceKey<Type>: PersistenceKeyBase {
@@ -26,7 +26,7 @@ final class PersistenceKey<Type>: PersistenceKeyBase {
 
 protocol SimplePersistence {
 
-    func valueForKey<T>(key: PersistenceKey<T>) -> T
-    func setValue<T>(value: T?, forKey key: PersistenceKey<T>)
-    func removeValueForKey<T>(key: PersistenceKey<T?>)
+    func valueForKey<T>(_ key: PersistenceKey<T>) -> T
+    func setValue<T>(_ value: T?, forKey key: PersistenceKey<T>)
+    func removeValueForKey<T>(_ key: PersistenceKey<T?>)
 }

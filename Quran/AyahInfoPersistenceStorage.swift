@@ -11,7 +11,7 @@ import SQLite
 
 struct AyahInfoPersistenceStorage: AyahInfoStorage {
 
-    private struct Columns {
+    fileprivate struct Columns {
         let id = Expression<Int>("glyph_id")
         let page = Expression<Int>("page_number")
         let sura = Expression<Int>("sura_number")
@@ -24,19 +24,19 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
         let maxY = Expression<Int>("max_y")
     }
 
-    private let glyphsTable = Table("glyphs")
-    private let columns = Columns()
+    fileprivate let glyphsTable = Table("glyphs")
+    fileprivate let columns = Columns()
 
-    private var db: LazyConnectionWrapper = {
+    fileprivate var db: LazyConnectionWrapper = {
         let file = String(format: "images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)")
-        guard let path = NSBundle.mainBundle().pathForResource(file, ofType: "db") else {
+        guard let path = Bundle.main.path(forResource: file, ofType: "db") else {
             fatalError("Unable to find ayahinfo database in resources")
         }
 
         return LazyConnectionWrapper(sqliteFilePath: path, readonly: true)
     }()
 
-    func getAyahInfoForPage(page: Int) throws -> [AyahNumber : [AyahInfo]] {
+    func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]] {
         let query = glyphsTable.filter(columns.page == page)
 
         var result = [AyahNumber : [AyahInfo]]()
@@ -50,11 +50,11 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             return result
         } catch {
             Crash.recordError(error)
-            throw PersistenceError.QueryError(error: error)
+            throw PersistenceError.queryError(error: error)
         }
     }
 
-    func getAyahInfoForSuraAyah(sura: Int, ayah: Int) throws -> [AyahInfo] {
+    func getAyahInfoForSuraAyah(_ sura: Int, ayah: Int) throws -> [AyahInfo] {
         let query = glyphsTable.filter(columns.sura == sura && columns.ayah == ayah)
 
         var result: [AyahInfo] = []
@@ -66,11 +66,11 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             return result
         } catch {
             Crash.recordError(error)
-            throw PersistenceError.QueryError(error: error)
+            throw PersistenceError.queryError(error: error)
         }
     }
 
-    private func getAyahInfoFromRow(row: Row, ayah: AyahNumber) -> AyahInfo {
+    fileprivate func getAyahInfoFromRow(_ row: Row, ayah: AyahNumber) -> AyahInfo {
         return AyahInfo(page: row[columns.page],
                         line: row[columns.line],
                         ayah: ayah,

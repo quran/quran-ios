@@ -11,18 +11,18 @@ import Foundation
 extension Juz {
 
     static func getJuzs() -> [Juz] {
-        let juzs = Quran.JuzPageStart.enumerate().map { Juz(order: $0 + 1, startPageNumber: $1) }
+        let juzs = Quran.JuzPageStart.enumerated().map { Juz(order: $0 + 1, startPageNumber: $1) }
         return juzs
     }
 
-    static func juzFromPage(page: Int) -> Juz {
-        for (index, juzStartPage) in Quran.JuzPageStart.enumerate() {
+    static func juzFromPage(_ page: Int) -> Juz {
+        for (index, juzStartPage) in Quran.JuzPageStart.enumerated() {
             if page < juzStartPage {
-                let order = index - 1 + Quran.QuranJuzsRange.startIndex
+                let order = index - 1 + Quran.QuranJuzsRange.lowerBound
                 return Juz(order: order, startPageNumber: Quran.JuzPageStart[order - 1])
             }
         }
-        let order = Quran.QuranJuzsRange.endIndex.predecessor()
+        let order = (Quran.QuranJuzsRange.upperBound - 1)
         return Juz(order: order, startPageNumber: Quran.JuzPageStart[order - 1])
     }
 }

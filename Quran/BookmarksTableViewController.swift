@@ -11,7 +11,7 @@ import GenericDataSources
 
 class BookmarksTableViewController: BaseTableViewController {
 
-    let dataSource: BookmarksDataSource = BookmarksDataSource(type: .MultiSection, headerReuseIdentifier: "header")
+    let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi, headerReuseIdentifier: "header")
     let lastPageDS: LastPageBookmarkDataSource
     let quranControllerCreator: AnyCreator<QuranViewController>
 
@@ -24,7 +24,7 @@ class BookmarksTableViewController: BaseTableViewController {
 
         let selectionHandler = BlockSelectionHandler<Int, BookmarkTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
-            let item = ds.itemAtIndexPath(index)
+            let item = ds.item(at:index)
             self?.navigateToPage(item)
         }
         lastPageDS.setSelectionHandler(selectionHandler)
@@ -37,26 +37,26 @@ class BookmarksTableViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.imageWithRenderingMode(.AlwaysTemplate))
+        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
-        tableView.registerClass(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.registerNib(UINib(nibName: "BookmarkTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(UINib(nibName: "BookmarkTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.ds_useDataSource(dataSource)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         lastPageDS.reloadData()
         if let indexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRowAtIndexPath(indexPath, animated: animated)
+            tableView.deselectRow(at: indexPath, animated: animated)
         }
     }
 
-    private func navigateToPage(page: Int) {
+    fileprivate func navigateToPage(_ page: Int) {
         let controller = self.quranControllerCreator.create()
         controller.initialPage = page
         controller.hidesBottomBarWhenPushed = true

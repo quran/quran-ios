@@ -12,7 +12,7 @@ import GenericDataSources
 
 class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
 
-    let numberFormatter = NSNumberFormatter()
+    let numberFormatter = NumberFormatter()
 
     let persistence: SimplePersistence
 
@@ -21,10 +21,10 @@ class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override func ds_collectionView(collectionView: GeneralCollectionView,
-                                    configureCell cell: BookmarkTableViewCell,
-                                                  withItem item: Int,
-                                                           atIndexPath indexPath: NSIndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: BookmarkTableViewCell,
+                                    with item: Int,
+                                    at indexPath: IndexPath) {
         let ayah = Quran.startAyahForPage(item)
 
         let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
@@ -35,7 +35,7 @@ class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
 
         cell.name.text = String(format: suraFormat, suraName)
         cell.descriptionLabel.text = pageDescription
-        cell.startPage.text = numberFormatter.format(item)
+        cell.startPage.text = numberFormatter.format(NSNumber(value: item))
     }
 
     func reloadData() {
@@ -44,6 +44,6 @@ class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
         } else {
             items = []
         }
-        ds_reusableViewDelegate?.ds_reloadSections(NSIndexSet(index: 0), withRowAnimation: .Automatic)
+        ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
     }
 }

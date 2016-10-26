@@ -12,7 +12,6 @@ func unimplemented<T>() -> T {
     fatalError("Unimplemented")
 }
 
-
-@noreturn func unimplemented() {
+func unimplemented() -> Never {
     fatalError("Unimplemented")
 }

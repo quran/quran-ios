@@ -10,38 +10,38 @@ import Foundation
 
 struct UserDefaultsSimplePersistence: SimplePersistence {
 
-    let userDefaults: NSUserDefaults
+    let userDefaults: UserDefaults
 
-    func valueForKey<T>(key: PersistenceKey<T>) -> T {
-        let value = userDefaults.objectForKey(key.key)
+    func valueForKey<T>(_ key: PersistenceKey<T>) -> T {
+        let value = userDefaults.object(forKey: key.key)
         return (value as? T) ?? key.defaultValue
     }
 
-    func setValue<T>(value: T?, forKey key: PersistenceKey<T>) {
+    func setValue<T>(_ value: T?, forKey key: PersistenceKey<T>) {
 
         guard let value = value else {
-            userDefaults.removeObjectForKey(key.key)
+            userDefaults.removeObject(forKey: key.key)
             return
         }
 
         if let value = value as? Int {
-            userDefaults.setInteger(value, forKey: key.key)
+            userDefaults.set(value, forKey: key.key)
         } else if let value = value as? Float {
-            userDefaults.setFloat(value, forKey: key.key)
+            userDefaults.set(value, forKey: key.key)
         } else if let value = value as? Double {
-            userDefaults.setDouble(value, forKey: key.key)
+            userDefaults.set(value, forKey: key.key)
         } else if let value = value as? Bool {
-            userDefaults.setBool(value, forKey: key.key)
-        } else if let value = value as? NSURL {
-            userDefaults.setURL(value, forKey: key.key)
-        } else if let value = value as? AnyObject {
-            userDefaults.setObject(value, forKey: key.key)
+            userDefaults.set(value, forKey: key.key)
+        } else if let value = value as? Foundation.URL {
+            userDefaults.set(value, forKey: key.key)
+        } else if let value = value as? Data {
+            userDefaults.set(value, forKey: key.key)
         } else {
-            fatalError("Unsupported value type")
+            userDefaults.set(value, forKey: key.key)
         }
     }
 
-    func removeValueForKey<T>(key: PersistenceKey<T?>) {
-        userDefaults.removeObjectForKey(key.key)
+    func removeValueForKey<T>(_ key: PersistenceKey<T?>) {
+        userDefaults.removeObject(forKey: key.key)
     }
 }

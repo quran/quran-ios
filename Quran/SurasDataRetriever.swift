@@ -9,7 +9,7 @@
 import Foundation
 
 struct SurasDataRetriever: DataRetriever {
-    func retrieve(onCompletion onCompletion: [(Juz, [Sura])] -> Void) {
+    func retrieve(onCompletion: @escaping ([(Juz, [Sura])]) -> Void) {
 
         Queue.background.async {
             let juzs = Juz.getJuzs()
@@ -21,7 +21,7 @@ struct SurasDataRetriever: DataRetriever {
             for juzIndex in 0..<juzs.count {
 
                 let juz = juzs[juzIndex]
-                let nextJuzStartPage = juz == juzs.last ? Quran.QuranPagesRange.endIndex + 1 : juzs[juzIndex + 1].startPageNumber
+                let nextJuzStartPage = juz == juzs.last ? Quran.QuranPagesRange.upperBound + 1 : juzs[juzIndex + 1].startPageNumber
 
                 var currentSuras: [Sura] = []
                 while suraIndex < suras.count {

@@ -45,7 +45,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         pageDataSource.scrollViewDelegate = pageBehavior
-        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.New]) { [weak self] (observable, change: ChangeData<Int>) in
+        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (observable, change: ChangeData<Int>) in
             self?.onPageChanged()
         }
     }
@@ -82,16 +82,16 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
     }
 
-    override func prefersStatusBarHidden() -> Bool {
-        return statusBarHidden || traitCollection.containsTraitsInCollection(UITraitCollection(verticalSizeClass: .Compact))
+    override var prefersStatusBarHidden: Bool {
+        return statusBarHidden || traitCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
     }
 
-    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return .Slide
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .slide
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     override func loadView() {
@@ -105,32 +105,32 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     }
 
-    private func createAudioBanner() {
+    fileprivate func createAudioBanner() {
         let audioView = DefaultAudioBannerView()
         view.addAutoLayoutSubview(audioView)
-        view.pinParentHorizontal(audioView)
+        _ = view.pinParentHorizontal(audioView)
         bottomBarConstraint = view.addParentBottomConstraint(audioView)
 
         self.audioView = audioView
     }
 
-    private func createCollectionView() {
+    fileprivate func createCollectionView() {
         let layout = QuranPageFlowLayout()
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
 
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         if #available(iOS 9.0, *) {
-            collectionView.semanticContentAttribute = .ForceRightToLeft
+            collectionView.semanticContentAttribute = .forceRightToLeft
         }
         view.addAutoLayoutSubview(collectionView)
-        view.pinParentAllDirections(collectionView)
+        _ = view.pinParentAllDirections(collectionView)
 
         collectionView.backgroundColor = UIColor.readingBackground()
-        collectionView.pagingEnabled = true
+        collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.registerNib(UINib(nibName: "QuranPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseId)
+        collectionView.register(UINib(nibName: "QuranPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseId)
         collectionView.ds_useDataSource(pageDataSource)
 
         self.layout = layout
@@ -152,20 +152,20 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         startHiddenBarsTimer()
     }
 
-    private var interactivePopGestureOldEnabled: Bool?
+    fileprivate var interactivePopGestureOldEnabled: Bool?
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().idleTimerDisabled = true
+        UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.enabled
-        navigationController?.interactivePopGestureRecognizer?.enabled = false
+        interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
 
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UIApplication.sharedApplication().idleTimerDisabled = false
-        navigationController?.interactivePopGestureRecognizer?.enabled = interactivePopGestureOldEnabled ?? true
+        UIApplication.shared.isIdleTimerDisabled = false
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = interactivePopGestureOldEnabled ?? true
     }
 
     override func viewDidLayoutSubviews() {
@@ -174,16 +174,16 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         scrollToFirstPage()
     }
 
-    private func scrollToFirstPage() {
-        guard let index = pageDataSource.items.indexOf({ $0.pageNumber == initialPage }) where didLayoutSubviewToken.executed else {
+    fileprivate func scrollToFirstPage() {
+        guard let index = pageDataSource.items.index(where: { $0.pageNumber == initialPage }), didLayoutSubviewToken.executed else {
             return
         }
 
         scrollToPageToken.once {
-            let indexPath = NSIndexPath(forItem: index, inSection: 0)
+            let indexPath = IndexPath(item: index, section: 0)
             scrollToIndexPath(indexPath, animated: false)
 
-            onPageChangedToPage(pageDataSource.itemAtIndexPath(indexPath))
+            onPageChangedToPage(pageDataSource.item(at: indexPath))
         }
     }
 
@@ -194,7 +194,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     //MARK: - QuranPageCollectionCellDelegate -
 
-    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
+    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
 
         ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
     }
@@ -202,8 +202,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     //MARK: - Gestures recognizers handlers -
 
-    func onViewTapped(sender: UITapGestureRecognizer) {
-        guard let audioView = audioView where !audioView.bounds.contains(sender.locationInView(audioView)) else {
+    func onViewTapped(_ sender: UITapGestureRecognizer) {
+        guard let audioView = audioView, !audioView.bounds.contains(sender.location(in: audioView)) else {
             return
         }
         if let currentPage = currentPage() {
@@ -216,10 +216,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
 
 
-        setBarsHidden(navigationController?.navigationBarHidden == false)
+        setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
-    private func setBarsHidden(hidden: Bool) {
+    fileprivate func setBarsHidden(_ hidden: Bool) {
         navigationController?.setNavigationBarHidden(hidden, animated: true)
 
         if let bottomBarConstraint = bottomBarConstraint {
@@ -233,47 +233,47 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             }
         }
 
-        UIView.animateWithDuration(0.3) {
+        UIView.animate(withDuration: 0.3, animations: {
             self.statusBarHidden = hidden
             self.view.layoutIfNeeded()
-        }
+        })
 
         // remove the timer
         stopBarHiddenTimer()
     }
 
-    private func startHiddenBarsTimer() {
+    fileprivate func startHiddenBarsTimer() {
         timer = Timer(interval: 3) { [weak self] in
             self?.setBarsHidden(true)
         }
     }
 
-    private func scrollToIndexPath(indexPath: NSIndexPath, animated: Bool) {
-        collectionView?.scrollToItemAtIndexPath(indexPath,
-                                                atScrollPosition: .CenteredHorizontally,
+    fileprivate func scrollToIndexPath(_ indexPath: IndexPath, animated: Bool) {
+        collectionView?.scrollToItem(at: indexPath,
+                                                at: .centeredHorizontally,
                                                 animated: false)
     }
 
-    private func onPageChanged() {
+    fileprivate func onPageChanged() {
         guard let page = currentPage() else { return }
         onPageChangedToPage(page)
     }
 
-    private func onPageChangedToPage(page: QuranPage) {
+    fileprivate func onPageChangedToPage(_ page: QuranPage) {
         updateBarToPage(page)
     }
 
-    private func updateBarToPage(page: QuranPage) {
+    fileprivate func updateBarToPage(_ page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
 
         // only persist if active
-        if UIApplication.sharedApplication().applicationState == .Active {
+        if UIApplication.shared.applicationState == .active {
             persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
             Crash.setValue(page.pageNumber, forKey: .QuranPage)
         }
     }
 
-    func showQariListSelectionWithQari(qaris: [Qari], selectedIndex: Int) {
+    func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
         let controller = qarisControllerCreator.create()
         controller.setQaris(qaris)
         controller.selectedIndex = selectedIndex
@@ -282,21 +282,21 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
 
         controller.preferredContentSize = CGSize(width: 400, height: 500)
-        controller.modalPresentationStyle = .Popover
+        controller.modalPresentationStyle = .popover
         controller.popoverPresentationController?.delegate = self
         controller.popoverPresentationController?.sourceView = audioView
         controller.popoverPresentationController?.sourceRect = audioView?.bounds ?? CGRect.zero
-        controller.popoverPresentationController?.permittedArrowDirections = .Down
-        presentViewController(controller, animated: true, completion: nil)
+        controller.popoverPresentationController?.permittedArrowDirections = .down
+        present(controller, animated: true, completion: nil)
     }
 
-    func highlightAyah(ayah: AyahNumber) {
+    func highlightAyah(_ ayah: AyahNumber) {
         var set = Set<AyahNumber>()
         set.insert(ayah)
         pageDataSource.highlightAyaht(set)
 
         // persist if not active
-        guard UIApplication.sharedApplication().applicationState != .Active else { return }
+        guard UIApplication.shared.applicationState != .active else { return }
         Queue.background.async {
             let page = ayah.getStartPage()
             self.persistence.setValue(page, forKey: PersistenceKeyBase.LastViewedPage)
@@ -310,21 +310,21 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     func currentPage() -> QuranPage? {
         guard let offset = collectionView?.contentOffset,
-            let indexPath = collectionView?.indexPathForItemAtPoint(CGPoint(x: offset.x + view.bounds.width / 2, y: 0)) else {
+            let indexPath = collectionView?.indexPathForItem(at: CGPoint(x: offset.x + view.bounds.width / 2, y: 0)) else {
             return nil
         }
-        let page = pageDataSource.itemAtIndexPath(indexPath)
+        let page = pageDataSource.item(at: indexPath)
         return page
     }
 }
 
 extension QuranViewController: UIPopoverPresentationControllerDelegate {
 
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .FullScreen
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .fullScreen
     }
 
-    func presentationController(controller: UIPresentationController,
+    func presentationController(_ controller: UIPresentationController,
                                 viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
         return QariNavigationController(rootViewController: controller.presentedViewController)
     }

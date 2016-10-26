@@ -34,14 +34,14 @@ class AudioPlayBarView: UIView {
     func loadViewFromNib() {
         let nibName = "AudioPlayBarView"
         let nib = UINib(nibName: nibName, bundle: nil)
-        guard let contentView = nib.instantiateWithOwner(self, options: nil).first as? UIView else {
+        guard let contentView = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
             fatalError("Couldn't load '\(nibName).xib' as the first item should be a UIView subclass.")
         }
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|",
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
             options: [], metrics: nil, views: ["view" : contentView]))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|",
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
             options: [], metrics: nil, views: ["view" : contentView]))
     }
 

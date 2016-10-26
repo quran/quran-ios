@@ -9,10 +9,10 @@
 import Foundation
 
 struct QuartersDataRetriever: DataRetriever {
-    func retrieve(onCompletion onCompletion: [(Juz, [Quarter])] -> Void) {
+    func retrieve(onCompletion: @escaping ([(Juz, [Quarter])]) -> Void) {
 
         Queue.background.async {
-            guard let ayahsText = NSArray(contentsOfURL: Files.QuarterPrefixArray) as? [String] else {
+            guard let ayahsText = NSArray(contentsOf: Files.QuarterPrefixArray) as? [String] else {
                 fatalError("Couldn't load `\(Files.QuarterPrefixArray)` file")
             }
 
@@ -22,7 +22,7 @@ struct QuartersDataRetriever: DataRetriever {
 
             let numberOfQuarters = Quran.Quarters.count / juzs.count
 
-            for (juzIndex, juz) in juzs.enumerate() {
+            for (juzIndex, juz) in juzs.enumerated() {
 
                 var quarters: [Quarter] = []
                 for i in 0..<numberOfQuarters {

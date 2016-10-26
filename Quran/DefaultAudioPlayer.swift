@@ -23,7 +23,7 @@ extension DefaultAudioPlayer {
         }
     }
 
-    func onPlaybackRateChanged() -> Bool -> Void {
+    func onPlaybackRateChanged() -> (Bool) -> Void {
         return { [weak self] playing in
             if playing {
                 self?.delegate?.onPlaybackResumed()

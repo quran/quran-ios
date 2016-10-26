@@ -9,24 +9,24 @@
 import Foundation
 
 enum AudioRepeat {
-    case None
-    case Once
-    case Twice
-    case ThreeTimes
-    case Infinite
+    case none
+    case once
+    case twice
+    case threeTimes
+    case infinite
 
     func next() -> AudioRepeat {
         switch  self {
-        case .None:
-            return .Once
-        case .Once:
-            return .Twice
-        case .Twice:
-            return .ThreeTimes
-        case .ThreeTimes:
-            return .Infinite
-        case .Infinite:
-            return .None
+        case .none:
+            return .once
+        case .once:
+            return .twice
+        case .twice:
+            return .threeTimes
+        case .threeTimes:
+            return .infinite
+        case .infinite:
+            return .none
         }
     }
 }

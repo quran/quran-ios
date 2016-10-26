@@ -11,7 +11,7 @@ import UIKit
 
 extension CALayer {
 
-    class func withoutAnimation(@noescape block: () -> Void) {
+    class func withoutAnimation(_ block: () -> Void) {
         CATransaction.begin()
         CATransaction.setValue(true, forKey: kCATransactionDisableActions)
         block()

@@ -10,15 +10,14 @@ import Foundation
 
 extension NSLocking {
 
-    @warn_unused_result
-    func execute<T>(@noescape block: () -> T) -> T {
+    func execute<T>(_ block: () -> T) -> T {
         lock()
         let result = block()
         unlock()
         return result
     }
 
-    func execute(@noescape block: () -> Void) {
+    func execute(_ block: () -> Void) {
         lock()
         block()
         unlock()

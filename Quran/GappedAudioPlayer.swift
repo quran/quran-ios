@@ -13,25 +13,25 @@ import MediaPlayer
 
 private class GappedPlayerItem: AVPlayerItem {
     let ayah: AyahNumber
-    init(URL: NSURL, ayah: AyahNumber) {
+    init(URL: Foundation.URL, ayah: AyahNumber) {
         self.ayah = ayah
-        super.init(asset: AVAsset(URL: URL), automaticallyLoadedAssetKeys: nil)
+        super.init(asset: AVAsset(url: URL), automaticallyLoadedAssetKeys: nil)
     }
 
-    private override var description: String {
+    fileprivate override var description: String {
         return super.description + " ayah: \(ayah)"
     }
 }
 
 class GappedAudioPlayer: DefaultAudioPlayer {
 
-    let numberFormatter = NSNumberFormatter()
+    let numberFormatter = NumberFormatter()
 
     weak var delegate: AudioPlayerDelegate?
 
     let player = QueuePlayer()
 
-    func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
+    func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
         var times: [AVPlayerItem: [Double]] = [:]
@@ -53,7 +53,7 @@ class GappedAudioPlayer: DefaultAudioPlayer {
 
 extension GappedAudioPlayer {
 
-    private func playerItemsForQari(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GappedPlayerItem], [PlayerItemInfo]) {
+    fileprivate func playerItemsForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GappedPlayerItem], [PlayerItemInfo]) {
         let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
         let items = files.map { GappedPlayerItem(URL: $0, ayah: $1) }
         let info: [PlayerItemInfo] = files.map { (url, ayah) in
@@ -65,13 +65,13 @@ extension GappedAudioPlayer {
         return (items, info)
     }
 
-    private func filesToPlay(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(NSURL, AyahNumber)] {
+    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(Foundation.URL, AyahNumber)] {
 
-        guard case AudioType.Gapped = qari.audioType else {
+        guard case AudioType.gapped = qari.audioType else {
             fatalError("Unsupported qari type gapless. Only gapless qaris can be downloaded here.")
         }
 
-        var files = [(NSURL, AyahNumber)]()
+        var files: [(Foundation.URL, AyahNumber)] = []
 
         for sura in startAyah.sura...endAyah.sura {
 
@@ -90,9 +90,8 @@ extension GappedAudioPlayer {
         return files
     }
 
-    private func createRequestInfo(qari qari: Qari, sura: Int, ayah: Int) -> NSURL {
+    fileprivate func createRequestInfo(qari: Qari, sura: Int, ayah: Int) -> Foundation.URL {
         let fileName = String(format: "%03d%03d", sura, ayah)
-        let url = qari.localFolder().URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(Files.AudioExtension)
-        return url
+        return qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.AudioExtension)
     }
 }

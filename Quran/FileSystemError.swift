@@ -8,29 +8,29 @@
 
 import Foundation
 
-enum FileSystemError: ErrorType, CustomStringConvertible {
+enum FileSystemError: Error, CustomStringConvertible {
 
-    case NoDiskSpace
-    case Unknown
+    case noDiskSpace
+    case unknown
 
-    init(error: ErrorType) {
-        if let error = error as? NSCocoaError {
-            if error == .FileWriteOutOfSpaceError {
-                self = .NoDiskSpace
+    init(error: Error) {
+        if let error = error as? CocoaError {
+            if error.code == .fileWriteOutOfSpace {
+                self = .noDiskSpace
             } else {
-                self = .Unknown
+                self = .unknown
             }
         } else {
-            self = .Unknown
+            self = .unknown
         }
     }
 
     var description: String {
         let text: String
         switch self {
-        case .Unknown:
+        case .unknown:
             text = NSLocalizedString("FileSystemError_Unknown", comment: "")
-        case .NoDiskSpace:
+        case .noDiskSpace:
             text = NSLocalizedString("FileSystemError_NoDiskSpace", comment: "")
         }
         return text

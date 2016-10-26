@@ -14,38 +14,33 @@ import RxSwift
 #endif
 import UIKit
 
-extension UIImageView {
+extension Reactive where Base: UIImageView {
     
-    /**
-    Bindable sink for `image` property.
-    */
-    public var rx_image: AnyObserver<UIImage?> {
-        return self.rx_imageAnimated(nil)
+    /// Bindable sink for `image` property.
+    public var image: UIBindingObserver<Base, UIImage?> {
+        return image(transitionType: nil)
     }
     
-    /**
-    Bindable sink for `image` property.
-    
-    - parameter transitionType: Optional transition type while setting the image (kCATransitionFade, kCATransitionMoveIn, ...)
-    */
-    public func rx_imageAnimated(transitionType: String?) -> AnyObserver<UIImage?> {
-        return UIBindingObserver(UIElement: self) { imageView, image in
+    /// Bindable sink for `image` property.
+
+    /// - parameter transitionType: Optional transition type while setting the image (kCATransitionFade, kCATransitionMoveIn, ...)
+    public func image(transitionType: String? = nil) -> UIBindingObserver<Base, UIImage?> {
+        return UIBindingObserver(UIElement: base) { imageView, image in
             if let transitionType = transitionType {
                 if image != nil {
                     let transition = CATransition()
                     transition.duration = 0.25
                     transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                     transition.type = transitionType
-                    imageView.layer.addAnimation(transition, forKey: kCATransition)
+                    imageView.layer.add(transition, forKey: kCATransition)
                 }
             }
             else {
                 imageView.layer.removeAllAnimations()
             }
             imageView.image = image
-        }.asObserver()
+        }
     }
-    
 }
 
 #endif

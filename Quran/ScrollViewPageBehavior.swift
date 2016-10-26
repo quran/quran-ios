@@ -10,9 +10,9 @@ import UIKit
 
 class ScrollViewPageBehavior: NSObject, UIScrollViewDelegate {
 
-    private (set) dynamic var currentPage: Int = 0
+    fileprivate (set) dynamic var currentPage: Int = 0
 
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = scrollView.frame.size.width
         currentPage = Int(round((scrollView.contentOffset.x + (0.5 * width)) / width))
     }

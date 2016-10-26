@@ -18,7 +18,7 @@ struct AnyCreator<CreatedObject>: Creator {
 
     let createClosure: () -> CreatedObject
 
-    init<CreatorObject: Creator where CreatorObject.CreatedObject == CreatedObject>(creator: CreatorObject) {
+    init<CreatorObject: Creator>(creator: CreatorObject) where CreatorObject.CreatedObject == CreatedObject {
         createClosure = creator.create
     }
 

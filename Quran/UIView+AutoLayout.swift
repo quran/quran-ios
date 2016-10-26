@@ -10,130 +10,130 @@ import UIKit
 
 extension UIView {
 
-    func addAutoLayoutSubview(subview: UIView) {
+    func addAutoLayoutSubview(_ subview: UIView) {
         subview.translatesAutoresizingMaskIntoConstraints = false
         addSubview(subview)
     }
 
-    func addParentLeadingConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentLeadingConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: view,
-            attribute: NSLayoutAttribute.Leading,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.leading,
+            relatedBy: NSLayoutRelation.equal,
             toItem: self,
-            attribute: NSLayoutAttribute.Leading,
+            attribute: NSLayoutAttribute.leading,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addParentTrailingConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentTrailingConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self,
-            attribute: NSLayoutAttribute.Trailing,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.trailing,
+            relatedBy: NSLayoutRelation.equal,
             toItem: view,
-            attribute: NSLayoutAttribute.Trailing,
+            attribute: NSLayoutAttribute.trailing,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addParentTopConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentTopConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: view,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.top,
+            relatedBy: NSLayoutRelation.equal,
             toItem: self,
-            attribute: NSLayoutAttribute.Top,
+            attribute: NSLayoutAttribute.top,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addParentBottomConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentBottomConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self,
-            attribute: NSLayoutAttribute.Bottom,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.bottom,
+            relatedBy: NSLayoutRelation.equal,
             toItem: view,
-            attribute: NSLayoutAttribute.Bottom,
+            attribute: NSLayoutAttribute.bottom,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addParentCenterXConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentCenterXConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: view,
-            attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.centerX,
+            relatedBy: NSLayoutRelation.equal,
             toItem: self,
-            attribute: NSLayoutAttribute.CenterX,
+            attribute: NSLayoutAttribute.centerX,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addParentCenterYConstraint(view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addParentCenterYConstraint(_ view: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: view,
-            attribute: NSLayoutAttribute.CenterY,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.centerY,
+            relatedBy: NSLayoutRelation.equal,
             toItem: self,
-            attribute: NSLayoutAttribute.CenterY,
+            attribute: NSLayoutAttribute.centerY,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addHeightConstraint(value: CGFloat) -> NSLayoutConstraint {
+    func addHeightConstraint(_ value: CGFloat) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.height,
+            relatedBy: NSLayoutRelation.equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: NSLayoutAttribute.notAnAttribute,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addWidthConstraint(value: CGFloat) -> NSLayoutConstraint {
+    func addWidthConstraint(_ value: CGFloat) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self,
-            attribute: NSLayoutAttribute.Width,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.width,
+            relatedBy: NSLayoutRelation.equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: NSLayoutAttribute.notAnAttribute,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func pinParentHorizontal(view: UIView, leadingValue: CGFloat = 0, trailingValue: CGFloat = 0) -> [NSLayoutConstraint] {
+    func pinParentHorizontal(_ view: UIView, leadingValue: CGFloat = 0, trailingValue: CGFloat = 0) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array.append(addParentLeadingConstraint(view, value: leadingValue))
         array.append(addParentTrailingConstraint(view, value: trailingValue))
         return array
     }
 
-    func pinParentVertical(view: UIView, topValue: CGFloat = 0, bottomValue: CGFloat = 0) -> [NSLayoutConstraint] {
+    func pinParentVertical(_ view: UIView, topValue: CGFloat = 0, bottomValue: CGFloat = 0) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array.append(addParentTopConstraint(view, value: topValue))
         array.append(addParentBottomConstraint(view, value: bottomValue))
         return array
     }
 
-    func pinParentAllDirections(view: UIView, leadingValue: CGFloat = 0, trailingValue: CGFloat = 0,
+    func pinParentAllDirections(_ view: UIView, leadingValue: CGFloat = 0, trailingValue: CGFloat = 0,
                                 topValue: CGFloat = 0, bottomValue: CGFloat = 0) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array += pinParentHorizontal(view, leadingValue: leadingValue, trailingValue: trailingValue)
@@ -141,92 +141,92 @@ extension UIView {
         return array
     }
 
-    func addParentCenter(view: UIView, centerX: CGFloat = 0, centerY: CGFloat = 0) -> [NSLayoutConstraint] {
+    func addParentCenter(_ view: UIView, centerX: CGFloat = 0, centerY: CGFloat = 0) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array.append(addParentCenterXConstraint(view, value: centerX))
         array.append(addParentCenterYConstraint(view, value: centerY))
         return array
     }
 
-    func addSiblingHorizontalContiguous(left left: UIView, right: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addSiblingHorizontalContiguous(left: UIView, right: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: right,
-            attribute: NSLayoutAttribute.Leading,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.leading,
+            relatedBy: NSLayoutRelation.equal,
             toItem: left,
-            attribute: NSLayoutAttribute.Trailing,
+            attribute: NSLayoutAttribute.trailing,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addSiblingVerticalContiguous(top top: UIView, bottom: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func addSiblingVerticalContiguous(top: UIView, bottom: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: bottom,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.top,
+            relatedBy: NSLayoutRelation.equal,
             toItem: top,
-            attribute: NSLayoutAttribute.Bottom,
+            attribute: NSLayoutAttribute.bottom,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func alignSiblingTop(first first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func alignSiblingTop(first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: first,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.top,
+            relatedBy: NSLayoutRelation.equal,
             toItem: second,
-            attribute: NSLayoutAttribute.Top,
+            attribute: NSLayoutAttribute.top,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func alignSiblingBottom(first first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func alignSiblingBottom(first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: first,
-            attribute: NSLayoutAttribute.Bottom,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.bottom,
+            relatedBy: NSLayoutRelation.equal,
             toItem: second,
-            attribute: NSLayoutAttribute.Bottom,
+            attribute: NSLayoutAttribute.bottom,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func alignSiblingLeading(first first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func alignSiblingLeading(first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: first,
-            attribute: NSLayoutAttribute.Leading,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.leading,
+            relatedBy: NSLayoutRelation.equal,
             toItem: second,
-            attribute: NSLayoutAttribute.Leading,
+            attribute: NSLayoutAttribute.leading,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func alignSiblingTrailing(first first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
+    func alignSiblingTrailing(first: UIView, second: UIView, value: CGFloat = 0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: first,
-            attribute: NSLayoutAttribute.Trailing,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.trailing,
+            relatedBy: NSLayoutRelation.equal,
             toItem: second,
-            attribute: NSLayoutAttribute.Trailing,
+            attribute: NSLayoutAttribute.trailing,
             multiplier: 1,
             constant: value)
         addConstraint(constraint)
         return constraint
     }
 
-    func addEqualWidth(views views: [UIView], value: CGFloat = 0) -> [NSLayoutConstraint] {
+    func addEqualWidth(views: [UIView], value: CGFloat = 0) -> [NSLayoutConstraint] {
 
         assert(views.count > 1, "should have at least 2 views")
 
@@ -236,10 +236,10 @@ extension UIView {
             let view2 = views[i]
             let constraint = NSLayoutConstraint(
                 item: view1,
-                attribute: NSLayoutAttribute.Width,
-                relatedBy: NSLayoutRelation.Equal,
+                attribute: NSLayoutAttribute.width,
+                relatedBy: NSLayoutRelation.equal,
                 toItem: view2,
-                attribute: NSLayoutAttribute.Width,
+                attribute: NSLayoutAttribute.width,
                 multiplier: 1,
                 constant: value)
             constraints.append(constraint)
@@ -249,7 +249,7 @@ extension UIView {
         return constraints
     }
 
-    func addEqualHeight(views views: [UIView], value: CGFloat = 0) -> [NSLayoutConstraint] {
+    func addEqualHeight(views: [UIView], value: CGFloat = 0) -> [NSLayoutConstraint] {
 
         assert(views.count > 1, "should have at least 2 views")
 
@@ -259,10 +259,10 @@ extension UIView {
             let view2 = views[i]
             let constraint = NSLayoutConstraint(
                 item: view1,
-                attribute: NSLayoutAttribute.Height,
-                relatedBy: NSLayoutRelation.Equal,
+                attribute: NSLayoutAttribute.height,
+                relatedBy: NSLayoutRelation.equal,
                 toItem: view2,
-                attribute: NSLayoutAttribute.Height,
+                attribute: NSLayoutAttribute.height,
                 multiplier: 1,
                 constant: value)
             constraints.append(constraint)
@@ -272,14 +272,14 @@ extension UIView {
         return constraints
     }
 
-    func addEqualSize(views views: [UIView], width: CGFloat = 0, height: CGFloat = 0) -> [NSLayoutConstraint] {
+    func addEqualSize(views: [UIView], width: CGFloat = 0, height: CGFloat = 0) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
-        array.appendContentsOf(addEqualHeight(views: views, value: height))
-        array.appendContentsOf(addEqualWidth(views: views, value: width))
+        array.append(contentsOf: addEqualHeight(views: views, value: height))
+        array.append(contentsOf: addEqualWidth(views: views, value: width))
         return array
     }
 
-    func addSizeConstraints(width width: CGFloat, height: CGFloat) -> [NSLayoutConstraint] {
+    func addSizeConstraints(width: CGFloat, height: CGFloat) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array.append(addWidthConstraint(width))
         array.append(addHeightConstraint(height))

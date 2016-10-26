@@ -24,23 +24,23 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getCurrentTasks(completion: (downloads: [DownloadNetworkRequest]) -> Void)
+    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkRequest]) -> Void)
 
-    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest]
+    func download(_ requests: [(request: URLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest]
 }
 
 extension DownloadManager {
 
-    func download(requestDetails: [(
+    func download(_ requestDetails: [(
         method: HTTPMethod,
-        url: NSURL,
+        url: Foundation.URL,
         headers: [String: String]?,
         destination: String,
         resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
-        let requests: [(request: NSURLRequest, destination: String, resumeDestination: String)] = requestDetails.map { details in
-            let request = NSMutableURLRequest(URL: details.url)
-            request.HTTPMethod = details.method.rawValue
+        let requests: [(request: URLRequest, destination: String, resumeDestination: String)] = requestDetails.map { details in
+            var request = URLRequest(url: details.url)
+            request.httpMethod = details.method.rawValue
             return (request: request, destination: details.destination, resumeDestination: details.resumeDestination)
         }
         return download(requests)

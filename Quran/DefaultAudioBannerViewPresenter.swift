@@ -18,9 +18,9 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     var audioPlayer: AudioPlayerInteractor {
         switch selectedQari.audioType {
-        case .Gapless:
+        case .gapless:
             return gaplessAudioPlayer
-        case .Gapped:
+        case .gapped:
             return gappedAudioPlayer
         }
     }
@@ -40,13 +40,13 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         return qaris[selectedQariIndex]
     }
 
-    private var repeatCount: AudioRepeat = .None {
+    fileprivate var repeatCount: AudioRepeat = .none {
         didSet {
             view?.setRepeatCount(repeatCount)
         }
     }
 
-    private var playing: Bool = false {
+    fileprivate var playing: Bool = false {
         didSet {
             if playing {
                 view?.setPlaying()
@@ -81,7 +81,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
             // get last selected qari id
             let lastSelectedQariId = self.persistence.valueForKey(.LastSelectedQariId)
-            let index = qaris.indexOf { $0.id == lastSelectedQariId }
+            let index = qaris.index { $0.id == lastSelectedQariId }
             if let selectedIndex = index {
                 self.selectedQariIndex = selectedIndex
             }
@@ -94,12 +94,12 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         }
     }
 
-    private func showQariView() {
+    fileprivate func showQariView() {
         Crash.setValue(selectedQariIndex, forKey: .QariId)
         view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
     }
 
-    func setQariIndex(index: Int) {
+    func setQariIndex(_ index: Int) {
         selectedQariIndex = index
         showQariView()
     }
@@ -107,7 +107,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     // MARK:- AudioBannerViewDelegate
     func onPlayTapped() {
         guard let currentPage = delegate?.currentPage() else { return }
-        repeatCount = .None
+        repeatCount = .none
         // start downloading & playing
         audioPlayer.playAudioForQari(selectedQari, atPage: currentPage)
     }
@@ -147,7 +147,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     // MARK:- AudioPlayerInteractorDelegate
     let progressKeyPath = "fractionCompleted"
-    var progress: NSProgress? {
+    var progress: Foundation.Progress? {
         didSet {
             if let oldValue = oldValue {
                 unobserve(oldValue, keyPath: progressKeyPath)
@@ -155,7 +155,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
             if let newValue = progress {
                 observe(retainedObservable: newValue,
                         keyPath: progressKeyPath,
-                        options: [.Initial, .New]) { [weak self] (observable, change: ChangeData<Double>) in
+                        options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Double>) in
                             if let newValue = change.newValue {
                                 Queue.main.async { self?.view?.setDownloading(Float(newValue)) }
                             }
@@ -169,7 +169,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         Queue.main.async { self.view?.setDownloading(0)  }
     }
 
-    func didStartDownloadingAudioFiles(progress progress: NSProgress) {
+    func didStartDownloadingAudioFiles(progress: Foundation.Progress) {
         self.progress = progress
     }
 
@@ -187,12 +187,12 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         Queue.main.async { self.playing = false }
     }
 
-    func highlight(ayah: AyahNumber) {
+    func highlight(_ ayah: AyahNumber) {
         Crash.setValue(ayah, forKey: .PlayingAyah)
         Queue.main.async { self.delegate?.highlightAyah(ayah) }
     }
 
-    func onFailedDownloadingWithError(error: ErrorType) {
+    func onFailedDownloadingWithError(_ error: Error) {
         Queue.main.async {
             let message = (error as? CustomStringConvertible)?.description ?? "Error downloading files"
             UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()

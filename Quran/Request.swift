@@ -10,9 +10,9 @@ import Foundation
 
 protocol Request: class {
 
-    var progress: NSProgress { get }
+    var progress: Foundation.Progress { get }
 
-    var onCompletion: (Result<()> -> Void)? { get set }
+    var onCompletion: ((Result<()>) -> Void)? { get set }
 
     func resume()
     func suspend()

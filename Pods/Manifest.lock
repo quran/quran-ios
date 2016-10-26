@@ -1,14 +1,16 @@
 PODS:
-  - Crashlytics (3.7.3):
+  - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
-  - Fabric (1.6.8)
-  - GenericDataSources (1.0.1)
-  - KVOController-Swift (1.2.0)
-  - RxCocoa (2.6.0):
-    - RxSwift (~> 2.5)
-  - RxSwift (2.6.0)
-  - SQLite.swift (0.10.1)
-  - Zip (0.4.3)
+  - Fabric (1.6.10)
+  - GenericDataSources (2.1.0)
+  - KVOController-Swift (2.0.1)
+  - RxCocoa (3.0.0):
+    - RxSwift (~> 3.0)
+  - RxSwift (3.0.0)
+  - SQLite.swift (0.11.0):
+    - SQLite.swift/standard (= 0.11.0)
+  - SQLite.swift/standard (0.11.0)
+  - Zip (0.6.0)
 
 DEPENDENCIES:
   - Crashlytics
@@ -17,17 +19,19 @@ DEPENDENCIES:
   - KVOController-Swift
   - RxCocoa
   - RxSwift
-  - SQLite.swift (~> 0.10.1)
-  - Zip (~> 0.4)
+  - SQLite.swift (~> 0.11.0)
+  - Zip (~> 0.6)
 
 SPEC CHECKSUMS:
-  Crashlytics: 76f6beaff70acf226139582c09c78461597c2b98
-  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
-  GenericDataSources: 7da0f97c943ac21969bcdc3e7846474346b4f67f
-  KVOController-Swift: 369cc2f994e519c6d96b0d4ea6263c6b3e5f53a3
-  RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
-  RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26
-  SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
-  Zip: 670419a5ba9faaf5f24ed3650c4c38b4136e996b
+  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
+  Fabric: c73f371ee543e3f0b80608f2674750e4910d1669
+  GenericDataSources: d8c24a0b00fa0f293d34a6d5367765302da6cdaa
+  KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
+  RxCocoa: 0a2f3ae381cf16f4021a4cee7a4420f83058a965
+  RxSwift: a930cd662f5b4a7ca9dc3518585dba91dadf497c
+  SQLite.swift: 9a26273607d3077a2e5a8d33486e9989f8404c7d
+  Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 0f9999bf75ecf5642246583cb95c6b547203db79
+
+COCOAPODS: 1.1.1

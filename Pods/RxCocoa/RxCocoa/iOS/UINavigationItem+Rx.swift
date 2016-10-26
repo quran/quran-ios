@@ -1,6 +1,6 @@
 //
 //  UINavigationItem+Rx.swift
-//  Rx
+//  RxCocoa
 //
 //  Created by kumapo on 2016/05/09.
 //  Copyright © 2016 Krunoslav Zaher. All rights reserved.
@@ -14,14 +14,13 @@ import UIKit
 import RxSwift
 #endif
     
-extension UINavigationItem {
-    /**
-    Bindable sink for `title` property.
-    */
-    public var rx_title: AnyObserver<String?> {
-        return UIBindingObserver(UIElement: self) { navigationItem, text in
+extension Reactive where Base: UINavigationItem {
+    
+    /// Bindable sink for `title` property.
+    public var title: UIBindingObserver<Base, String?> {
+        return UIBindingObserver(UIElement: self.base) { navigationItem, text in
             navigationItem.title = text
-            }.asObserver()
+        }
     }
         
 }

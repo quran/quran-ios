@@ -16,20 +16,20 @@ class CircleView: UIView {
         }
     }
 
-    @IBInspectable var emptyColor: UIColor = UIColor.redColor() {
+    @IBInspectable var emptyColor: UIColor = UIColor.red {
         didSet {
             updateLayers()
         }
     }
 
-    @IBInspectable var fillColor: UIColor = UIColor.greenColor() {
+    @IBInspectable var fillColor: UIColor = UIColor.green {
         didSet {
             updateLayers()
         }
     }
 
-    private let emptyCircle = CAShapeLayer()
-    private let fillCircle = CAShapeLayer()
+    fileprivate let emptyCircle = CAShapeLayer()
+    fileprivate let fillCircle = CAShapeLayer()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -56,18 +56,18 @@ class CircleView: UIView {
         updateLayers()
     }
 
-    private func updateLayers() {
+    fileprivate func updateLayers() {
         emptyCircle.frame = bounds
         fillCircle.frame = bounds
 
         // emtpy circle
         //        var circleBounds = bounds
-        emptyCircle.path = UIBezierPath(ovalInRect: bounds).CGPath
-        emptyCircle.fillColor = emptyColor.CGColor
+        emptyCircle.path = UIBezierPath(ovalIn: bounds).cgPath
+        emptyCircle.fillColor = emptyColor.cgColor
 
         // fill circle
-        fillCircle.path = UIBezierPath(ovalInRect: bounds.insetBy(dx: bounds.width / 4, dy: bounds.height / 4)).CGPath
-        fillCircle.strokeColor = fillColor.CGColor
+        fillCircle.path = UIBezierPath(ovalIn: bounds.insetBy(dx: bounds.width / 4, dy: bounds.height / 4)).cgPath
+        fillCircle.strokeColor = fillColor.cgColor
         fillCircle.lineWidth = bounds.width / 2
 
         CALayer.withoutAnimation {

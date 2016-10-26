@@ -10,9 +10,9 @@ import Foundation
 
 struct QariDataRetriever: DataRetriever {
 
-    func retrieve(onCompletion onCompletion: [Qari] -> Void) {
+    func retrieve(onCompletion: @escaping ([Qari]) -> Void) {
         Queue.background.async {
-            guard let readersDictionary = NSDictionary(contentsOfURL: Files.Readers) else {
+            guard let readersDictionary = NSDictionary(contentsOf: Files.Readers) else {
                 fatalError("Couldn't load `\(Files.Readers)` file")
             }
 
@@ -75,9 +75,9 @@ struct QariDataRetriever: DataRetriever {
                 let type: AudioType
                 let databaseName = databaseNames[i]
                 if databaseName.isEmpty {
-                    type = .Gapped
+                    type = .gapped
                 } else {
-                    type = .Gapless(databaseName: databaseName)
+                    type = .gapless(databaseName: databaseName)
                 }
 
                 let image = images[i]
@@ -92,14 +92,14 @@ struct QariDataRetriever: DataRetriever {
                     id: i,
                     name: NSLocalizedString(names[i], tableName: "Readers", comment: ""),
                     path: localPaths[i],
-                    audioURL: NSURL(validURL: remoteURLs[i]),
+                    audioURL: Foundation.URL(validURL: remoteURLs[i]),
                     audioType: type,
                     imageName: imageName)
                 qaris.append(qari)
             }
 
-            qaris.sortInPlace {
-                $0.name.localizedCaseInsensitiveCompare($1.name) == .OrderedAscending
+            qaris.sort {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
 
 

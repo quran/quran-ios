@@ -1,9 +1,10 @@
 # KVOController-Swift
 
-[![CI Status](http://img.shields.io/travis/mohamede1945/KVOController-Swift.svg?style=flat)](https://travis-ci.org/mohamede1945/KVOController-Swift)
 [![Version](https://img.shields.io/cocoapods/v/KVOController-Swift.svg?style=flat)](http://cocoapods.org/pods/KVOController-Swift)
 [![License](https://img.shields.io/cocoapods/l/KVOController-Swift.svg?style=flat)](http://cocoapods.org/pods/KVOController-Swift)
 [![Platform](https://img.shields.io/cocoapods/p/KVOController-Swift.svg?style=flat)](http://cocoapods.org/pods/KVOController-Swift)
+
+**Supports Swift 3.0**
 
 Have you ever wondered if you can implement a generic key-value observing for Swift. It makes your life easy and saves you a lot of casting.
 This project is inspired by facebook/KVOController. So, it doesn't only provide a neat API for KVO', but also makes use of Swift generics feature.
@@ -11,7 +12,8 @@ This project is inspired by facebook/KVOController. So, it doesn't only provide 
 ## Requirements
 
 - iOS 7.0+ / Mac OS X 10.9+
-- Xcode 6.3
+- Xcode 8
+- Swift 3.0
 
 ## Usage
 
@@ -25,6 +27,9 @@ observe(retainedObservable: clock, keyPath: "date", options: .New | .Initial)
         }
 }
 ```
+**Note, you have to give the `change` a generic type of the property. In our case property is `NSDate`, so change is of type `ChangeData<NSDate>`**
+
+
 You can make use of automatic unobserving behavior or if you really want to unobserve, simply call
 ```Swift
   unobserve(clock, keyPath: "date")

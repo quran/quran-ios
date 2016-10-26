@@ -15,7 +15,7 @@ class QariTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        photoImageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        photoImageView.layer.borderColor = UIColor.lightGray.cgColor
         photoImageView.layer.borderWidth = 0.5
 
         let selectionBackground = UIView()
@@ -29,18 +29,18 @@ class QariTableViewCell: UITableViewCell {
         photoImageView.layer.masksToBounds = true
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        accessoryType = selected ? .Checkmark : .None
+        accessoryType = selected ? .checkmark : .none
         updateSelectedBackgroundView()
     }
 
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         updateSelectedBackgroundView()
     }
 
-    private func updateSelectedBackgroundView() {
+    fileprivate func updateSelectedBackgroundView() {
 //        selectedBackgroundView?.hidden = selected || !highlighted
     }
 }

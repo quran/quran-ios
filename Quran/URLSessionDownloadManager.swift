@@ -10,8 +10,8 @@ import Foundation
 
 class URLSessionDownloadManager: DownloadManager {
 
-    let session: NSURLSession
-    private let delegate: SessionDelegate
+    let session: URLSession
+    fileprivate let delegate: SessionDelegate
 
     var backgroundSessionCompletionHandler: (() -> Void)? {
         get {
@@ -22,15 +22,15 @@ class URLSessionDownloadManager: DownloadManager {
         }
     }
 
-    init(configuration: NSURLSessionConfiguration, persistence: SimplePersistence) {
+    init(configuration: URLSessionConfiguration, persistence: SimplePersistence) {
         delegate = SessionDelegate(persistence: persistence)
-        session = NSURLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+        session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
     }
 
-    func getCurrentTasks(completion: (downloads: [DownloadNetworkRequest]) -> Void) {
+    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkRequest]) -> Void) {
         // only query if there is download
         guard delegate.downloadRequests.isEmpty && delegate.isDownloading else {
-            completion(downloads: delegate.downloadRequests.map { $1 })
+            completion(delegate.downloadRequests.map { $1 })
             return
         }
 
@@ -39,11 +39,11 @@ class URLSessionDownloadManager: DownloadManager {
                 return
             }
             var downloads: [DownloadNetworkRequest] = []
-            var requests = [(NSURLRequest, DownloadNetworkRequest)]()
+            var requests = [(URLRequest, DownloadNetworkRequest)]()
             for task in downloadTakss {
                 if let request = task.originalRequest, let data = self.delegate.getRequestDataForRequest(request) {
 
-                    let progress = NSProgress(totalUnitCount: 1)
+                    let progress = Foundation.Progress(totalUnitCount: 1)
                     let downloadRequest = DownloadNetworkRequest(task: task,
                         destination: data.destination,
                         resumeDestination: data.resumeData,
@@ -53,23 +53,23 @@ class URLSessionDownloadManager: DownloadManager {
                 }
             }
             self.delegate.addRequestsData(requests)
-            completion(downloads: downloads)
+            completion(downloads)
         }
     }
 
-    func download(requests: [(request: NSURLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest] {
+    func download(_ requests: [(request: URLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
-        var downloadRequests = [(NSURLRequest, DownloadNetworkRequest)]()
-        var tasks: [NSURLSessionDownloadTask] = []
+        var downloadRequests = [(URLRequest, DownloadNetworkRequest)]()
+        var tasks: [URLSessionDownloadTask] = []
         for details in requests {
-            let task: NSURLSessionDownloadTask
-            let resumeURL = Files.DocumentsFolder.URLByAppendingPathComponent(details.resumeDestination)
-            if let data = NSData(contentsOfURL: resumeURL) {
-                task = session.downloadTaskWithResumeData(data)
+            let task: URLSessionDownloadTask
+            let resumeURL = Files.DocumentsFolder.appendingPathComponent(details.resumeDestination)
+            if let data = try? Data(contentsOf: resumeURL) {
+                task = session.downloadTask(withResumeData: data)
             } else {
-                task = session.downloadTaskWithRequest(details.request)
+                task = session.downloadTask(with: details.request)
             }
-            let progress = NSProgress(totalUnitCount: 1)
+            let progress = Foundation.Progress(totalUnitCount: 1)
             let downloadRequest = DownloadNetworkRequest(task: task,
                                                          destination: details.destination,
                                                          resumeDestination: details.resumeDestination,

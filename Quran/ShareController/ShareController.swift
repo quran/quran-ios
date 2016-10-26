@@ -11,20 +11,20 @@ import UIKit
 class ShareController: NSObject {
 
 
-    class func showShareActivityWithText(text: String, image: UIImage? = nil, url: NSURL? = nil,
+    class func showShareActivityWithText(_ text: String, image: UIImage? = nil, url: Foundation.URL? = nil,
                                          sourceViewController: UIViewController,
                                          handler: UIActivityViewControllerCompletionWithItemsHandler?) {
         var itemsToShare = [AnyObject]()
-        itemsToShare.append(text)
+        itemsToShare.append(text as AnyObject)
         if let shareImage = image {
             itemsToShare.append(shareImage)
         }
         if let shareURL = url {
-            itemsToShare.append(shareURL)
+            itemsToShare.append(shareURL as AnyObject)
         }
 
         let activityViewController = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
         activityViewController.completionWithItemsHandler = handler
-        sourceViewController.presentViewController(activityViewController, animated: true, completion: nil)
+        sourceViewController.present(activityViewController, animated: true, completion: nil)
     }
 }

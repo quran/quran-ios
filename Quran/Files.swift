@@ -15,39 +15,39 @@ struct Files {
     static let DatabaseRemoteFileExtension = "zip"
     static let DatabaseLocalFileExtension = "db"
 
-    static let QuarterPrefixArray: NSURL = fileURL("quarter_prefix_array", withExtension: "plist")
-    static let Readers: NSURL = fileURL("readers", withExtension: "plist")
+    static let QuarterPrefixArray: Foundation.URL = fileURL("quarter_prefix_array", withExtension: "plist")
+    static let Readers: Foundation.URL = fileURL("readers", withExtension: "plist")
 
-    static var DocumentsFolder: NSURL = {
-        return NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    static var DocumentsFolder: Foundation.URL = {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }()
 }
 
-private func fileURL(fileName: String, withExtension: String) -> NSURL {
-    guard let url = NSBundle.mainBundle().URLForResource(fileName, withExtension: withExtension) else {
+private func fileURL(_ fileName: String, withExtension: String) -> Foundation.URL {
+    guard let url = Bundle.main.url(forResource: fileName, withExtension: withExtension) else {
         fatalError("Couldn't find file `\(fileName).\(withExtension)` locally ")
     }
     return url
 }
 
 extension Qari {
-    func localFolder() -> NSURL {
-        return Files.DocumentsFolder.URLByAppendingPathComponent(path)
+    func localFolder() -> Foundation.URL {
+        return Files.DocumentsFolder.appendingPathComponent(path)
     }
 }
 
-extension NSURL {
-    func resumeURL() -> NSURL {
-        return URLByAppendingPathExtension(Files.DownloadResumeDataExtension)
+extension Foundation.URL {
+    func resumeURL() -> Foundation.URL {
+        return appendingPathExtension(Files.DownloadResumeDataExtension)
     }
 }
 
 extension String {
-    func stringByAppendingPath(path: String) -> String {
-        return (self as NSString).stringByAppendingPathComponent(path)
+    func stringByAppendingPath(_ path: String) -> String {
+        return (self as NSString).appendingPathComponent(path)
     }
 
-    func stringByAppendingExtension(pathExtension: String) -> String {
-        return (self as NSString).stringByAppendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
+    func stringByAppendingExtension(_ pathExtension: String) -> String {
+        return (self as NSString).appendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
     }
 }

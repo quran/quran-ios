@@ -10,20 +10,20 @@ import UIKit
 
 class DefaultQuranImageService: QuranImageService {
 
-    let imagesCache: Cache
+    let imagesCache: NSCache<NSNumber, UIImage>
 
-    private let preloadPreviousImagesCount = 1
-    private let preloadNextImagesCount = 2
+    fileprivate let preloadPreviousImagesCount = 1
+    fileprivate let preloadNextImagesCount = 2
 
-    private let queue = NSOperationQueue()
+    fileprivate let queue = OperationQueue()
 
-    init(imagesCache: Cache) {
+    init(imagesCache: NSCache<NSNumber, UIImage>) {
         self.imagesCache = imagesCache
 
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(DefaultQuranImageService.memoryWarning),
-            name: UIApplicationDidReceiveMemoryWarningNotification,
+            name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning,
             object: nil)
     }
 
@@ -32,17 +32,17 @@ class DefaultQuranImageService: QuranImageService {
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    private var inProgressOperations: [Int: ImagePreloadingOperation] = [:]
-    private let lock = NSLock()
+    fileprivate var inProgressOperations: [Int: ImagePreloadingOperation] = [:]
+    fileprivate let lock = NSLock()
 
-    func getImageOfPage(page: Int, forSize size: CGSize, onCompletion: UIImage -> Void) {
+    internal func getImageOfPage(_ page: Int, forSize size: CGSize, onCompletion: @escaping (UIImage) -> Void) {
 
-        let image = lock.execute { imagesCache.objectForKey(page) }
+        let image = lock.execute { imagesCache.object(forKey: NSNumber(value: page)) }
 
-        if let image = image as? UIImage {
+        if let image = image as UIImage! {
             onCompletion(image)
 
             // schedule for close images
@@ -51,7 +51,7 @@ class DefaultQuranImageService: QuranImageService {
         }
 
         // preload requested page with very high priority and QoS
-        preload(page, priority: .VeryHigh, qualityOfService: .UserInitiated) { (page, image) in
+        preload(page, priority: .veryHigh, qualityOfService: .userInitiated) { (page, image) in
             Queue.main.async {
                 onCompletion(image)
             }
@@ -61,11 +61,11 @@ class DefaultQuranImageService: QuranImageService {
         cachePagesCloserToPage(page)
     }
 
-    private func cachePagesCloserToPage(page: Int) {
+    fileprivate func cachePagesCloserToPage(_ page: Int) {
         // load next pages
         for index in 0..<preloadNextImagesCount {
             let targetPage = page + 1 + index
-            if !(imagesCache.objectForKey(targetPage) is UIImage) {
+            if !((imagesCache.object(forKey: NSNumber(value: targetPage)) != nil)) {
                 preload(targetPage, onCompletion: { _ in })
             }
         }
@@ -73,16 +73,16 @@ class DefaultQuranImageService: QuranImageService {
         // load previous pages
         for index in 0..<preloadPreviousImagesCount {
             let targetPage = page - 1 - index
-            if !(imagesCache.objectForKey(targetPage) is UIImage) {
+            if !((imagesCache.object(forKey: NSNumber(value: targetPage)) != nil)) {
                 preload(targetPage, onCompletion: { _ in })
             }
         }
     }
 
-    func preload(page: Int,
-                 priority: NSOperationQueuePriority = .Normal,
-                 qualityOfService: NSQualityOfService = .Background,
-                 onCompletion: (Int, UIImage) -> Void) {
+    func preload(_ page: Int,
+                 priority: Operation.QueuePriority = .normal,
+                 qualityOfService: QualityOfService = .background,
+                 onCompletion: @escaping (Int, UIImage) -> Void) {
         guard Quran.QuranPagesRange.contains(page) else {
             return // does nothing
         }
@@ -100,9 +100,9 @@ class DefaultQuranImageService: QuranImageService {
                     Queue.main.async {
                         self?.lock.execute {
                             // cache the image
-                            self?.imagesCache.setObject(image, forKey: page)
+                            self?.imagesCache.setObject(image, forKey: NSNumber(value: page))
                             // remove from in progress
-                            self?.inProgressOperations.removeValueForKey(page)
+                            _ = self?.inProgressOperations.removeValue(forKey: page)
                         }
                     }
                 }

@@ -12,14 +12,14 @@ struct JuzBasedLastAyahFinder: LastAyahFinder {
 
     let pageFinder = PageBasedLastAyahFinder()
 
-    func findLastAyah(startAyah startAyah: AyahNumber, page: Int) -> AyahNumber {
+    func findLastAyah(startAyah: AyahNumber, page: Int) -> AyahNumber {
 
         let pageLastAyah = pageFinder.findLastAyah(startAyah: startAyah, page: page)
         let juz = Juz.juzFromPage(page)
 
         // if last juz, get last ayah
-        guard juz.order != Quran.QuranJuzsRange.endIndex.predecessor() else {
-            let lastSura = Quran.QuranSurasRange.endIndex.predecessor()
+        guard juz.order != (Quran.QuranJuzsRange.upperBound - 1) else {
+            let lastSura = (Quran.QuranSurasRange.upperBound - 1)
             return AyahNumber(sura: lastSura, ayah: Quran.numberOfAyahsForSura(lastSura))
         }
 

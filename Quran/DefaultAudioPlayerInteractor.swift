@@ -18,29 +18,29 @@ protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegat
 
     var downloadCancelled: Bool { get set }
 
-    func prePlayOperation(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void)
+    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void)
 }
 
 extension DefaultAudioPlayerInteractor {
 
-    private typealias PlaybackInfo = (qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
+    fileprivate typealias PlaybackInfo = (qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
 
-    func prePlayOperation(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void) {
+    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void) {
         completion()
     }
 
-    func checkIfDownloading(completion: (downloading: Bool) -> Void) {
+    func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void) {
         downloader.getCurrentDownloadRequest { [weak self] (request) in
             guard let request = request else {
-                completion(downloading: false)
+                completion(false)
                 return
             }
             self?.gotDownloadRequest(request, playbackInfo: nil)
-            completion(downloading: true)
+            completion(true)
         }
     }
 
-    func playAudioForQari(qari: Qari, atPage page: QuranPage) {
+    func playAudioForQari(_ qari: Qari, atPage page: QuranPage) {
 
         let startAyah = Quran.startAyahForPage(page.pageNumber)
         let endAyah = lastAyahFinder.findLastAyah(startAyah: startAyah, page: page.pageNumber)
@@ -102,29 +102,29 @@ extension DefaultAudioPlayerInteractor {
         delegate?.onPlaybackOrDownloadingCompleted()
     }
 
-    func playingAyah(ayah: AyahNumber) {
+    func playingAyah(_ ayah: AyahNumber) {
         delegate?.highlight(ayah)
     }
 
-    private func gotDownloadRequest(request: Request, playbackInfo: PlaybackInfo?) {
+    fileprivate func gotDownloadRequest(_ request: Request, playbackInfo: PlaybackInfo?) {
 
         delegate?.didStartDownloadingAudioFiles(progress: request.progress)
         request.onCompletion = { [weak self] result in
             switch result {
-            case .Success:
+            case .success:
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {
                     self?.delegate?.onPlaybackOrDownloadingCompleted()
                 }
-            case .Failure(let error):
+            case .failure(let error):
                 self?.delegate?.onPlaybackOrDownloadingCompleted()
                 self?.delegate?.onFailedDownloadingWithError(error)
             }
         }
     }
 
-    private func startPlaying(playbackInfo: PlaybackInfo) {
+    fileprivate func startPlaying(_ playbackInfo: PlaybackInfo) {
         prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
             self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
             self?.delegate?.onPlayingStarted()

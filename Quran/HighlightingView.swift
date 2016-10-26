@@ -9,14 +9,14 @@
 import UIKit
 
 protocol HighlightingViewDelegate: class {
-    func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String)
+    func highlightingView(_ highlightingView: HighlightingView, didShareAyahText ayahText: String)
 }
 
 // This class is expected to be implemented using CoreAnimation with CAShapeLayers.
 // It's also expected to reuse layers instead of dropping & creating new ones.
 class HighlightingView: UIView {
 
-    @IBInspectable var highlightColor: UIColor = UIColor.appIdentity().colorWithAlphaComponent(0.25)
+    @IBInspectable var highlightColor: UIColor = UIColor.appIdentity().withAlphaComponent(0.25)
 
     /// is true when user long pressed on verse to select and a menu controller is displayed.
     var isSelectingVerse = false
@@ -34,24 +34,24 @@ class HighlightingView: UIView {
         }
     }
 
-    private var imageScale: CGFloat = 0.0
-    private var xOffset: CGFloat = 0.0
-    private var yOffset: CGFloat = 0.0
+    fileprivate var imageScale: CGFloat = 0.0
+    fileprivate var xOffset: CGFloat = 0.0
+    fileprivate var yOffset: CGFloat = 0.0
 
     var highlightingRectangles: [CGRect] = []
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         guard highlightedAyat.count > 0 else { return }
 
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, highlightColor.CGColor)
+        context?.setFillColor(highlightColor.cgColor)
         for rect in highlightingRectangles {
-            CGContextFillRect(context, rect)
+            context?.fill(rect)
         }
     }
 
-    func setScaleInfo(scale: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
+    func setScaleInfo(_ scale: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
         self.imageScale = scale
         self.xOffset = xOffset
         self.yOffset = yOffset
@@ -68,9 +68,9 @@ class HighlightingView: UIView {
         isSelectingVerse = false
     }
 
-    private func updateRectangleBounds() {
+    fileprivate func updateRectangleBounds() {
 
-        highlightingRectangles.removeAll(keepCapacity: true)
+        highlightingRectangles.removeAll(keepingCapacity: true)
         for ayah in highlightedAyat {
             guard let ayahInfo = ayahInfoData?[ayah] else { continue }
 
@@ -91,7 +91,7 @@ class HighlightingView: UIView {
         isSelectingVerse = false
 
         // hide the menu controller
-        UIMenuController.sharedMenuController().setMenuVisible(false, animated: true)
+        UIMenuController.shared.setMenuVisible(false, animated: true)
     }
 
     /**
@@ -100,7 +100,7 @@ class HighlightingView: UIView {
      - Parameter location: The touch location where we check the verse that match the location to highlight
      - Returns: true if a verse is found and match the location, false otherwise.
      */
-    func highlightVerseAtLocation(location: CGPoint) -> Bool {
+    func highlightVerseAtLocation(_ location: CGPoint) -> Bool {
 
         if let ayah = ayahNumberForTouchLocation(location) {
             var set = Set<AyahNumber>()
@@ -121,7 +121,7 @@ class HighlightingView: UIView {
     }
 
 
-    private func ayahNumberForTouchLocation(location: CGPoint) -> AyahNumber? {
+    fileprivate func ayahNumberForTouchLocation(_ location: CGPoint) -> AyahNumber? {
         if let ayahInfoData = self.ayahInfoData {
             for (ayahNumber, ayahInfo) in ayahInfoData {
                 for piece in ayahInfo {
@@ -138,32 +138,34 @@ class HighlightingView: UIView {
 
     //MARK: - Menu Controller (Clipboard) -
 
-    private func showMenuControllerAtRect(rect: CGRect) {
+    fileprivate func showMenuControllerAtRect(_ rect: CGRect) {
         self.becomeFirstResponder()
-        UIMenuController.sharedMenuController().setTargetRect(rect, inView: self)
-        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+        UIMenuController.shared.setTargetRect(rect, in: self)
+        UIMenuController.shared.menuItems = [UIMenuItem(title: "Copy", action: #selector(_copy(_:)))]
+        UIMenuController.shared.setMenuVisible(true, animated: true)
     }
 
-
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder: Bool {
         return true
     }
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
 
-        if action == #selector(NSObject.copy(_:)) || action == #selector(HighlightingView._share(_:)) {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+
+        if action == #selector(HighlightingView._copy(_:)) || action == #selector(HighlightingView._share(_:)) {
             return true
         }
         return false
     }
+
     // Did click on copy menu item
-    override func copy(sender: AnyObject?) {
-        let pasteBoard = UIPasteboard.generalPasteboard()
+    func _copy(_ sender: AnyObject?) {
+        let pasteBoard = UIPasteboard.general
         pasteBoard.string = currentHighlightedAyahText()
         self.deselectTheSelectedVerse()
     }
 
     // Did click on share menu item
-    func _share(sender: AnyObject?) {
+    func _share(_ sender: AnyObject?) {
         let text = currentHighlightedAyahText()
         if text.characters.count != 0 {
 
@@ -179,7 +181,7 @@ class HighlightingView: UIView {
      Get the current highlighted ayah text.
      - Returns: String value representing the ayah
      */
-    private func currentHighlightedAyahText() -> String {
+    fileprivate func currentHighlightedAyahText() -> String {
 
         if let number = self.highlightedAyat.first {
             return ayahTextFromNumber(number)
@@ -192,7 +194,7 @@ class HighlightingView: UIView {
      - Parameter number: AyahNumber object represting the ayah number that you need its text.
      - Returns: the arabic text of ayah.
      */
-    private func ayahTextFromNumber(number: AyahNumber) -> String {
+    fileprivate func ayahTextFromNumber(_ number: AyahNumber) -> String {
         let storage = AyahTextPersistenceStorage()
         do {
             let text = try storage.getAyahTextForNumber(number)

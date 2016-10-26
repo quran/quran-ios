@@ -10,12 +10,12 @@ import UIKit
 
 class QuranPageFlowLayout: UICollectionViewFlowLayout {
 
-    override func prepareLayout() {
+    override func prepare() {
         itemSize = collectionSize()
-        super.prepareLayout()
+        super.prepare()
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         if newBounds.size != collectionSize() {
             itemSize = newBounds.size
             return true
@@ -23,18 +23,18 @@ class QuranPageFlowLayout: UICollectionViewFlowLayout {
         return false
     }
 
-    override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint) -> CGPoint {
-        if let visibleItem = collectionView?.indexPathsForVisibleItems().first,
-            let attributes = layoutAttributesForItemAtIndexPath(visibleItem) {
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        if let visibleItem = collectionView?.indexPathsForVisibleItems.first,
+            let attributes = layoutAttributesForItem(at: visibleItem) {
 
             return CGPoint(x: attributes.frame.minX, y: 0)
         } else {
-            return super.targetContentOffsetForProposedContentOffset(proposedContentOffset)
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
         }
 
     }
 
-    private func collectionSize() -> CGSize {
+    fileprivate func collectionSize() -> CGSize {
         return collectionView?.bounds.size ?? CGSize.zero
     }
 }

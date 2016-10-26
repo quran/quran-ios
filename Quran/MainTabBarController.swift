@@ -12,6 +12,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.barStyle = .Default
+        tabBar.barStyle = .default
     }
 }

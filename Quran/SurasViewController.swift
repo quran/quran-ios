@@ -15,12 +15,16 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func createItemsDataSource() -> BasicDataSource<Sura, SuraTableViewCell> {
         return SurasDataSource(reuseIdentifier: "cell")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerNib(UINib(nibName: "SuraTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.register(UINib(nibName: "SuraTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
 }

@@ -11,18 +11,18 @@ import Foundation
 protocol DataRetriever {
     associatedtype Data
 
-    func retrieve(onCompletion onCompletion: Data -> Void)
+    func retrieve(onCompletion: @escaping (Data) -> Void)
 }
 
 struct AnyDataRetriever<Data> {
 
-    let retrieveClosure: (Data -> Void) -> Void
+    let retrieveClosure: (@escaping (Data) -> Void) -> Void
 
-    init<DataRetrieverType: DataRetriever where DataRetrieverType.Data == Data>(dataRetriever: DataRetrieverType) {
+    init<DataRetrieverType: DataRetriever>(dataRetriever: DataRetrieverType) where DataRetrieverType.Data == Data {
         retrieveClosure = dataRetriever.retrieve
     }
 
-    func retrieve(onCompletion onCompletion: Data -> Void) {
+    func retrieve(onCompletion: @escaping (Data) -> Void) {
         retrieveClosure(onCompletion)
     }
 }

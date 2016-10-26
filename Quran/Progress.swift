@@ -9,25 +9,25 @@
 import Foundation
 import KVOController_Swift
 
-class Progress: NSProgress {
+class Progress: Foundation.Progress {
 
-    let progress: NSProgress?
+    let progress: Foundation.Progress?
 
-    var children: [NSProgress] = []
+    var children: [Foundation.Progress] = []
 
-    init(observingProgress progress: NSProgress) {
+    init(observingProgress progress: Foundation.Progress) {
         self.progress = progress
-        super.init(parent: NSProgress.currentProgress(), userInfo: nil)
+        super.init(parent: Foundation.Progress.current(), userInfo: nil)
 
         observe(retainedObservable: progress,
                 keyPath: "totalUnitCount",
-                options: [.Initial, .New]) { [weak self] (observable, change: ChangeData<Int64>) in
+                options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Int64>) in
             self?.totalUnitCount = observable.totalUnitCount
         }
 
         observe(retainedObservable: progress,
                 keyPath: "completedUnitCount",
-                options: [.Initial, .New]) { [weak self] (observable, change: ChangeData<Int64>) in
+                options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Int64>) in
             self?.completedUnitCount = observable.completedUnitCount
         }
     }
@@ -39,8 +39,8 @@ class Progress: NSProgress {
         self.completedUnitCount = 0
     }
 
-    func addChildIOS8Compatible(progress: NSProgress, withPendingUnitCount pendingUnitCount: Int64) {
-        becomeCurrentWithPendingUnitCount(pendingUnitCount)
+    func addChildIOS8Compatible(_ progress: Foundation.Progress, withPendingUnitCount pendingUnitCount: Int64) {
+        becomeCurrent(withPendingUnitCount: pendingUnitCount)
         children.append(Progress(observingProgress: progress))
         resignCurrent()
     }

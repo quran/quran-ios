@@ -20,34 +20,34 @@ class BaseTableViewController: UIViewController {
 
         let tableView = UITableView()
         view.addAutoLayoutSubview(tableView)
-        view.pinParentAllDirections(tableView)
+        _ = view.pinParentAllDirections(tableView)
 
         let statusView = UIView()
         statusView.backgroundColor = UIColor.appIdentity()
         view.addAutoLayoutSubview(statusView)
-        view.pinParentHorizontal(statusView)
-        view.addParentTopConstraint(statusView)
-        statusView.addHeightConstraint(20)
+        _ = view.pinParentHorizontal(statusView)
+        _ = view.addParentTopConstraint(statusView)
+        _ = statusView.addHeightConstraint(20)
 
         self.tableView = tableView
         self.statusView = statusView
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if clearsSelectionOnViewWillAppear {
             if let indexPath = tableView.indexPathForSelectedRow {
-                tableView.deselectRowAtIndexPath(indexPath, animated: animated)
+                tableView.deselectRow(at: indexPath, animated: animated)
             }
         }
     }
 
-    override func willTransitionToTraitCollection(newCollection: UITraitCollection,
-                                                  withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        let isCompact = newCollection.containsTraitsInCollection(UITraitCollection(verticalSizeClass: .Compact))
-        coordinator.animateAlongsideTransition({ [weak self] _ in
+    override func willTransition(to newCollection: UITraitCollection,
+                                                  with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        let isCompact = newCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
+        coordinator.animate(alongsideTransition: { [weak self] _ in
             self?.statusView?.alpha = isCompact ? 0 : 1
             }, completion: nil)
     }

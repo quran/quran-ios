@@ -28,15 +28,15 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
         self.player.delegate = self
     }
 
-    func prePlayOperation(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void) {
-        guard case .Gapless(let databaseName) = qari.audioType else {
+    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void) {
+        guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Unsupported qari type gapped")
         }
-        let baseFileName = qari.localFolder().URLByAppendingPathComponent(databaseName)
-        let dbFile = baseFileName.URLByAppendingPathExtension(Files.DatabaseLocalFileExtension)
-        let zipFile = baseFileName.URLByAppendingPathExtension(Files.DatabaseRemoteFileExtension)
+        let baseFileName = qari.localFolder().appendingPathComponent(databaseName)
+        let dbFile = baseFileName.appendingPathExtension(Files.DatabaseLocalFileExtension)
+        let zipFile = baseFileName.appendingPathExtension(Files.DatabaseRemoteFileExtension)
 
-        guard !dbFile.checkResourceIsReachableAndReturnError(nil) else {
+        guard !((try? dbFile.checkResourceIsReachable()) ?? false) else {
             completion()
             return
         }
@@ -47,7 +47,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             } catch {
                 Crash.recordError(error)
                 // delete the zip and try to re-download it again, next time.
-                let _ = try? NSFileManager.defaultManager().removeItemAtURL(zipFile)
+                let _ = try? FileManager.default.removeItem(at: zipFile)
             }
 
             Queue.main.async {

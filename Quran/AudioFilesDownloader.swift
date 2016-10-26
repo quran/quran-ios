@@ -14,9 +14,9 @@ protocol AudioFilesDownloader: class {
     func resume()
     func suspend()
 
-    func needsToDownloadFiles(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
+    func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
 
-    func getCurrentDownloadRequest(completion: Request? -> Void)
+    func getCurrentDownloadRequest(_ completion: @escaping (Request?) -> Void)
 
-    func download(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request?
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request?
 }

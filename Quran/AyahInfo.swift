@@ -24,7 +24,7 @@ struct AyahInfo {
         }
     }
 
-    func engulf(other: AyahInfo) -> AyahInfo {
+    func engulf(_ other: AyahInfo) -> AyahInfo {
         return AyahInfo(page: page,
                         line: line,
                         ayah: ayah,

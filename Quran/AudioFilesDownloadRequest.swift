@@ -10,16 +10,16 @@ import Foundation
 
 class AudioFilesDownloadRequest: Request {
 
-    let progress: NSProgress
+    let progress: Foundation.Progress
 
     let requests: [DownloadNetworkRequest]
 
-    init(requests: [DownloadNetworkRequest], progress: NSProgress) {
+    init(requests: [DownloadNetworkRequest], progress: Foundation.Progress) {
         self.requests = requests
         self.progress = progress
     }
 
-    var onCompletion: (Result<()> -> Void)?
+    var onCompletion: ((Result<()>) -> Void)?
 
     func resume() {
         requests.forEach { $0.resume() }

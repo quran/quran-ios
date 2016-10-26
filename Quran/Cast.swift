@@ -8,9 +8,9 @@
 
 import Foundation
 
-func cast<T>(object: Any) -> T {
+func cast<T>(_ object: Any) -> T {
     guard let value = object as? T else {
-        fatalError("Couldn't cast object of type '\(object.dynamicType)' to '\(T.self)' where object value is '\(object)'")
+        fatalError("Couldn't cast object of type '\(type(of: (object) as AnyObject))' to '\(T.self)' where object value is '\(object)'")
     }
     return value
 }

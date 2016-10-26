@@ -9,15 +9,15 @@
 import Foundation
 
 enum AudioType {
-    case Gapless(databaseName: String)
-    case Gapped
+    case gapless(databaseName: String)
+    case gapped
 }
 
 struct Qari: Hashable {
     let id: Int
     let name: String
     let path: String
-    let audioURL: NSURL
+    let audioURL: Foundation.URL
     let audioType: AudioType
     let imageName: String?
 

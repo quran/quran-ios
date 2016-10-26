@@ -9,7 +9,7 @@
 import Foundation
 
 protocol QariTimingRetriever {
-    func retrieveTimingForQari(qari: Qari, startAyah: AyahNumber, onCompletion: [AyahNumber: AyahTiming] -> Void)
+    func retrieveTimingForQari(_ qari: Qari, startAyah: AyahNumber, onCompletion: @escaping ([AyahNumber: AyahTiming]) -> Void)
 
-    func retrieveTimingForQari(qari: Qari, suras: [Int], onCompletion: [Int: [AyahTiming]] -> Void)
+    func retrieveTimingForQari(_ qari: Qari, suras: [Int], onCompletion: @escaping ([Int: [AyahTiming]]) -> Void)
 }

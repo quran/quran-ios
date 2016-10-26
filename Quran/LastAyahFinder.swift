@@ -9,5 +9,5 @@
 import Foundation
 
 protocol LastAyahFinder {
-    func findLastAyah(startAyah startAyah: AyahNumber, page: Int) -> AyahNumber
+    func findLastAyah(startAyah: AyahNumber, page: Int) -> AyahNumber
 }

@@ -9,5 +9,5 @@
 import Foundation
 
 protocol AyahTextStorageProtocol {
-    func getAyahTextForNumber(number: AyahNumber) throws -> String
+    func getAyahTextForNumber(_ number: AyahNumber) throws -> String
 }

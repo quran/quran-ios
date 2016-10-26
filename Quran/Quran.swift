@@ -9,9 +9,9 @@ import Foundation
 
 struct Quran {
 
-    static let QuranPagesRange: Range<Int> = 1...PageSuraStart.count
-    static let QuranSurasRange: Range<Int> = 1...SuraPageStart.count
-    static let QuranJuzsRange: Range<Int>  = 1...JuzPageStart.count
+    static let QuranPagesRange: CountableRange<Int> = 1..<PageSuraStart.count
+    static let QuranSurasRange: CountableRange<Int> = 1..<SuraPageStart.count
+    static let QuranJuzsRange: CountableRange<Int>  = 1..<JuzPageStart.count
 
     static let NumberOfQuartersPerJuz = Quarters.count / JuzPageStart.count
 
@@ -367,11 +367,11 @@ struct Quran {
 }
 
 extension Quran {
-    static func startAyahForPage(page: Int) -> AyahNumber {
+    static func startAyahForPage(_ page: Int) -> AyahNumber {
         return AyahNumber(sura: PageSuraStart[page - 1], ayah: PageAyahStart[page - 1])
     }
 
-    static func numberOfAyahsForSura(sura: Int) -> Int {
+    static func numberOfAyahsForSura(_ sura: Int) -> Int {
         return SuraNumberOfAyahs[sura - 1]
     }
 
@@ -379,11 +379,11 @@ extension Quran {
         return quranPageForPageNumber(1)
     }
 
-    static func quranPageForPageNumber(page: Int) -> QuranPage {
+    static func quranPageForPageNumber(_ page: Int) -> QuranPage {
         return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).order)
     }
 
-    static func nameForSura(sura: Int) -> String {
+    static func nameForSura(_ sura: Int) -> String {
         return NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
     }
 }

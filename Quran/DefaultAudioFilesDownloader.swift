@@ -14,9 +14,9 @@ protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
     var request: Request? { set get }
 
-    func filesForQari(qari: Qari,
+    func filesForQari(_ qari: Qari,
                       startAyah: AyahNumber,
-                      endAyah: AyahNumber) -> [(remoteURL: NSURL, destination: String, resumeURL: String)]
+                      endAyah: AyahNumber) -> [(remoteURL: Foundation.URL, destination: String, resumeURL: String)]
 }
 
 extension DefaultAudioFilesDownloader {
@@ -34,13 +34,17 @@ extension DefaultAudioFilesDownloader {
         request?.suspend()
     }
 
-    func needsToDownloadFiles(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
+    func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
-        return !files.filter { !Files.DocumentsFolder.URLByAppendingPathComponent(
-            $0.destination).checkResourceIsReachableAndReturnError(nil) }.isEmpty
+        return !files.filter {
+            if let result = try? (Files.DocumentsFolder.appendingPathComponent($0.destination) as Foundation.URL).checkResourceIsReachable() {
+                return !result
+            }
+            return true
+        }.isEmpty
     }
 
-    func getCurrentDownloadRequest(completion: Request? -> Void) {
+    func getCurrentDownloadRequest(_ completion: @escaping (Request?) -> Void) {
         if let request = request {
             completion(request)
         } else {
@@ -51,15 +55,18 @@ extension DefaultAudioFilesDownloader {
         }
     }
 
-    func download(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request? {
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request? {
         // get all files
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
-        var uniqueFiles = Set<NSURL>()
+        var uniqueFiles = Set<Foundation.URL>()
         // filter out existing and duplicate files
         let filesToDownload = files.filter { (remoteURL, destination, _) in
             if !uniqueFiles.contains(remoteURL) {
                 uniqueFiles.insert(remoteURL)
-                return !Files.DocumentsFolder.URLByAppendingPathComponent(destination).checkResourceIsReachableAndReturnError(nil)
+                if let result = try? (Files.DocumentsFolder.appendingPathComponent(destination) as Foundation.URL).checkResourceIsReachable() {
+                    return !result
+                }
+                return true
             }
             return false
         }
@@ -76,7 +83,7 @@ extension DefaultAudioFilesDownloader {
         return self.request
     }
 
-    private func createRequestWithDownloads(downloads: [DownloadNetworkRequest]) {
+    fileprivate func createRequestWithDownloads(_ downloads: [DownloadNetworkRequest]) {
         guard !downloads.isEmpty else { return }
 
         let progress = Progress(totalUnitCount: Int64(downloads.count))
@@ -104,12 +111,12 @@ extension DefaultAudioFilesDownloader {
                     let request = self.request
                     self.request = nil
                     request?.cancel() // cancel other downloads
-                    request?.onCompletion?(.Failure(error))
+                    request?.onCompletion?(.failure(error))
                 } else {
                     if allCompleted {
                         let request = self.request
                         self.request = nil
-                        request?.onCompletion?(.Success())
+                        request?.onCompletion?(.success())
                     }
                 }
             }

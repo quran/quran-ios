@@ -10,18 +10,18 @@ import UIKit
 
 class Container {
 
-    private static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
+    fileprivate static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
 
-    private let imagesCache: Cache = {
-        let cache = NSCache()
+    fileprivate let imagesCache: NSCache<NSNumber, UIImage> = {
+        let cache = NSCache<NSNumber, UIImage>()
         cache.countLimit = 10
         return cache
     }()
 
-    private var downloadManager: DownloadManager! = nil
+    fileprivate var downloadManager: DownloadManager! = nil
 
     init() {
-        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("DownloadsBackgroundIdentifier")
+        let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
         downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createSimplePersistence())
     }
 
@@ -67,7 +67,7 @@ class Container {
     }
 
     func createQariTableViewController() -> QariTableViewController {
-        return QariTableViewController(style: .Plain)
+        return QariTableViewController(style: .plain)
     }
 
     func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
@@ -109,7 +109,7 @@ class Container {
         )
     }
 
-    func createBlockCreator<CreatedObject>(creationClosure: () -> CreatedObject) -> AnyCreator<CreatedObject> {
+    func createBlockCreator<CreatedObject>(_ creationClosure: @escaping () -> CreatedObject) -> AnyCreator<CreatedObject> {
         return BlockCreator(creationClosure: creationClosure).erasedType()
     }
 
@@ -117,7 +117,7 @@ class Container {
         return DefaultQuranImageService(imagesCache: createImagesCache())
     }
 
-    func createImagesCache() -> Cache {
+    func createImagesCache() -> NSCache<NSNumber, UIImage> {
         return imagesCache
     }
 
@@ -128,8 +128,8 @@ class Container {
                                                gappedAudioPlayer: createGappedAudioPlayerInteractor())
     }
 
-    func createUserDefaults() -> NSUserDefaults {
-        return NSUserDefaults.standardUserDefaults()
+    func createUserDefaults() -> UserDefaults {
+        return UserDefaults.standard
     }
 
     func createSimplePersistence() -> SimplePersistence {

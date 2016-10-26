@@ -11,25 +11,25 @@ import SQLite
 
 class AyahTextPersistenceStorage: AyahTextStorageProtocol {
 
-    private struct Columns {
+    fileprivate struct Columns {
         let sura = Expression<Int>("sura")
         let ayah = Expression<Int>("ayah")
         let text = Expression<String>("text")
     }
 
-    private let arabicTextTable = Table("arabic_text")
-    private let columns = Columns()
+    fileprivate let arabicTextTable = Table("arabic_text")
+    fileprivate let columns = Columns()
 
-    private var db: LazyConnectionWrapper = {
+    fileprivate var db: LazyConnectionWrapper = {
         let file = String(format: "images_\(quranImagesSize)/databases/quran.ar")
-        guard let path = NSBundle.mainBundle().pathForResource(file, ofType: "db") else {
+        guard let path = Bundle.main.path(forResource: file, ofType: "db") else {
             fatalError("Unable to find ayahinfo database in resources")
         }
 
         return LazyConnectionWrapper(sqliteFilePath: path, readonly: true)
     }()
 
-    func getAyahTextForNumber(number: AyahNumber) throws -> String {
+    func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
         let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
 
 
@@ -41,7 +41,7 @@ class AyahTextPersistenceStorage: AyahTextStorageProtocol {
             return ""
         } catch {
             Crash.recordError(error)
-            throw PersistenceError.QueryError(error: error)
+            throw PersistenceError.queryError(error: error)
         }
     }
 }

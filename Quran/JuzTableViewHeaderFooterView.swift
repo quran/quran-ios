@@ -29,24 +29,24 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         setUp()
     }
 
-    private func setUp() {
+    fileprivate func setUp() {
         addGestureRecognizer(tapGesture)
         tapGesture.addTarget(self, action: #selector(onViewTapped))
 
         contentView.backgroundColor = UIColor(rgb: 0xEEEEEE)
 
         titleLabel.textColor = UIColor(rgb: 0x323232)
-        titleLabel.font = UIFont.boldSystemFontOfSize(15)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         contentView.addAutoLayoutSubview(titleLabel)
-        contentView.pinParentVertical(titleLabel)
-        contentView.addParentLeadingConstraint(titleLabel, value: 20)
+        _ = contentView.pinParentVertical(titleLabel)
+        _ = contentView.addParentLeadingConstraint(titleLabel, value: 20)
 
         subtitleLabel.textColor = UIColor(rgb: 0x4B4B4B)
-        subtitleLabel.font = UIFont.systemFontOfSize(12)
-        subtitleLabel.textAlignment = .Right
+        subtitleLabel.font = UIFont.systemFont(ofSize: 12)
+        subtitleLabel.textAlignment = .right
         contentView.addAutoLayoutSubview(subtitleLabel)
-        contentView.pinParentVertical(subtitleLabel)
-        contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
+        _ = contentView.pinParentVertical(subtitleLabel)
+        _ = contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
     }
 
     func onViewTapped() {

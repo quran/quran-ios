@@ -9,6 +9,6 @@
 import Foundation
 
 enum Either<S, U> {
-    case First(S)
-    case Second(U)
+    case first(S)
+    case second(U)
 }

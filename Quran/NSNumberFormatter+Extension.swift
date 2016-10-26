@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension NSNumberFormatter {
+extension NumberFormatter {
 
-    func format(number: NSNumber) -> String {
-        return stringFromNumber(number) ?? number.description
+    func format(_ number: NSNumber) -> String {
+        return string(from: number) ?? number.description
     }
 }

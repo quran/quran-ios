@@ -12,7 +12,7 @@ import AVFoundation
 private let imageHeightDiff: CGFloat = 34
 
 protocol QuranPageCollectionCellDelegate: class {
-    func quranPageCollectionCell(collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
+    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
 }
 
 class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegate {
@@ -50,7 +50,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
         sizeConstraints.removeAll()
 
         let imageViewHeight: CGFloat
-        if let imageSize = mainImageView.image?.size where bounds.width > bounds.height {
+        if let imageSize = mainImageView.image?.size, bounds.width > bounds.height {
             // add fill height
             imageViewHeight = bounds.width * (imageSize.height / imageSize.width)
 
@@ -75,17 +75,17 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
         }
     }
 
-    func setAyahInfo(ayahInfoData: [AyahNumber: [AyahInfo]]?) {
+    func setAyahInfo(_ ayahInfoData: [AyahNumber: [AyahInfo]]?) {
         highlightingView.ayahInfoData = ayahInfoData
         scrollToHighlightedAyat()
     }
 
-    func highlightAyat(ayat: Set<AyahNumber>) {
+    func highlightAyat(_ ayat: Set<AyahNumber>) {
         highlightingView.highlightedAyat = ayat
         scrollToHighlightedAyat()
     }
 
-    private func scrollToHighlightedAyat() {
+    fileprivate func scrollToHighlightedAyat() {
         guard let first = highlightingView.highlightingRectangles.first else {
             return
         }
@@ -93,29 +93,29 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
         layoutIfNeeded()
 
         var union = first
-        highlightingView.highlightingRectangles.forEach { union.unionInPlace($0) }
+        highlightingView.highlightingRectangles.forEach { union = union.union($0) }
 
         let contentOffset = max(0, min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height))
         scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
     }
 
     // MARK: - Gesture recognizer -
-    private func setupLongPressGestureRecognizer() {
+    fileprivate func setupLongPressGestureRecognizer() {
 
         // Long press gesture on verses to select
         self.contentView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
     }
 
-    func onLongPress(sender: UILongPressGestureRecognizer) {
+    func onLongPress(_ sender: UILongPressGestureRecognizer) {
 
-        if sender.state == .Began {
-            let touchLocation = sender.locationInView(self.highlightingView)
-            self.highlightingView.highlightVerseAtLocation(touchLocation)
+        if sender.state == .began {
+            let touchLocation = sender.location(in: self.highlightingView)
+            _ = self.highlightingView.highlightVerseAtLocation(touchLocation)
         }
     }
 
     // MARK: - HighlightingViewDelegate -
-    func highlightingView(highlightingView: HighlightingView, didShareAyahText ayahText: String) {
+    func highlightingView(_ highlightingView: HighlightingView, didShareAyahText ayahText: String) {
         if let delegate = self.cellDelegate {
             delegate.quranPageCollectionCell(self, didSelectAyahTextToShare: ayahText)
         }

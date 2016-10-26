@@ -10,8 +10,8 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     override func viewDidLoad() {

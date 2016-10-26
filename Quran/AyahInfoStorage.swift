@@ -9,6 +9,6 @@
 import Foundation
 
 protocol AyahInfoStorage {
-    func getAyahInfoForPage(page: Int) throws -> [AyahNumber : [AyahInfo]]
-    func getAyahInfoForSuraAyah(sura: Int, ayah: Int) throws -> [AyahInfo]
+    func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]]
+    func getAyahInfoForSuraAyah(_ sura: Int, ayah: Int) throws -> [AyahInfo]
 }

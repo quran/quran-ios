@@ -28,9 +28,9 @@ protocol AudioBannerView: class {
     weak var delegate: AudioBannerViewDelegate? { get set }
 
     func hideAllControls()
-    func setQari(name name: String, image: UIImage?)
-    func setDownloading(progress: Float)
+    func setQari(name: String, image: UIImage?)
+    func setDownloading(_ progress: Float)
     func setPlaying()
     func setPaused()
-    func setRepeatCount(count: AudioRepeat)
+    func setRepeatCount(_ count: AudioRepeat)
 }

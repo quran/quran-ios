@@ -10,7 +10,7 @@ import Foundation
 
 protocol AudioPlayerDelegate: class {
 
-    func playingAyah(ayah: AyahNumber)
+    func playingAyah(_ ayah: AyahNumber)
 
     func onPlaybackEnded()
 
@@ -22,7 +22,7 @@ protocol AudioPlayer {
 
     weak var delegate: AudioPlayerDelegate? { get set }
 
-    func play(qari qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
+    func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
 
     func pause()
 

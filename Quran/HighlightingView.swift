@@ -141,6 +141,7 @@ class HighlightingView: UIView {
     fileprivate func showMenuControllerAtRect(_ rect: CGRect) {
         self.becomeFirstResponder()
         UIMenuController.shared.setTargetRect(rect, in: self)
+        UIMenuController.shared.menuItems = [UIMenuItem(title: "Copy", action: #selector(_copy(_:)))]
         UIMenuController.shared.setMenuVisible(true, animated: true)
     }
 
@@ -150,14 +151,14 @@ class HighlightingView: UIView {
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 
-        if action == #selector(HighlightingView.copy(_:)) || action == #selector(HighlightingView._share(_:)) {
+        if action == #selector(HighlightingView._copy(_:)) || action == #selector(HighlightingView._share(_:)) {
             return true
         }
         return false
     }
 
     // Did click on copy menu item
-    func copy(sender: AnyObject?) {
+    func _copy(_ sender: AnyObject?) {
         let pasteBoard = UIPasteboard.general
         pasteBoard.string = currentHighlightedAyahText()
         self.deselectTheSelectedVerse()

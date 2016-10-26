@@ -39,9 +39,9 @@ extension DownloadManager {
         resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
         let requests: [(request: URLRequest, destination: String, resumeDestination: String)] = requestDetails.map { details in
-            let request = NSMutableURLRequest(url: details.url)
+            var request = URLRequest(url: details.url)
             request.httpMethod = details.method.rawValue
-            return (request: request as URLRequest, destination: details.destination, resumeDestination: details.resumeDestination)
+            return (request: request, destination: details.destination, resumeDestination: details.resumeDestination)
         }
         return download(requests)
     }

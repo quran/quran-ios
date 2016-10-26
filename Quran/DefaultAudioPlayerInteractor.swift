@@ -18,14 +18,14 @@ protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegat
 
     var downloadCancelled: Bool { get set }
 
-    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void)
+    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void)
 }
 
 extension DefaultAudioPlayerInteractor {
 
     fileprivate typealias PlaybackInfo = (qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
 
-    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: () -> Void) {
+    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void) {
         completion()
     }
 

@@ -36,12 +36,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
         let dbFile = baseFileName.appendingPathExtension(Files.DatabaseLocalFileExtension)
         let zipFile = baseFileName.appendingPathExtension(Files.DatabaseRemoteFileExtension)
 
-        do {
-            guard try !(dbFile as Foundation.URL).checkResourceIsReachable() else {
-                completion()
-                return
-            }
-        } catch _ {
+        guard !((try? dbFile.checkResourceIsReachable()) ?? false) else {
             completion()
             return
         }

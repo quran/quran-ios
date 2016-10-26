@@ -41,9 +41,9 @@ private class RequestData: NSObject, NSSecureCoding {
 class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDownloadDelegate {
 
     let persistence: SimplePersistence
-    fileprivate var dataRequests: [URLRequest: RequestData]
+    fileprivate var dataRequests: [URL: RequestData]
 
-    var downloadRequests: [URLRequest: DownloadNetworkRequest] = [:]
+    var downloadRequests: [URL: DownloadNetworkRequest] = [:]
 
     var backgroundSessionCompletionHandler: (() -> Void)?
 
@@ -64,28 +64,38 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
 
     func addRequestsData(_ requests: [(URLRequest, DownloadNetworkRequest)]) {
         for (request, downloadRequest) in requests {
-            dataRequests[request] = RequestData(request: request,
+            if let url = request.url {
+                dataRequests[url] = RequestData(request: request,
                                                 destination: downloadRequest.destination,
                                                 resumeDataURL: downloadRequest.resumeDestination)
-            addRequest(request, downloadRequest: downloadRequest)
+                addRequest(request, downloadRequest: downloadRequest)
+            }
         }
         updatePersistence()
     }
 
     func addRequest(_ request: URLRequest, downloadRequest: DownloadNetworkRequest) {
-        downloadRequests[request] = downloadRequest
+        if let url = request.url {
+            downloadRequests[url] = downloadRequest
+        }
     }
 
     func getRequestDataForRequest(_ request: URLRequest) -> (destination: String, resumeData: String)? {
-        if let requestData = dataRequests[request] {
-            return (destination: requestData.destination, resumeData: requestData.resumeDataURL)
+        if let url = request.url {
+            if let requestData = dataRequests[url] {
+                return (destination: requestData.destination, resumeData: requestData.resumeDataURL)
+            }
         }
         return nil
     }
 
     fileprivate func removeRequest(_ request: URLRequest) -> (RequestData?, DownloadNetworkRequest?) {
-        let requestData = dataRequests.removeValue(forKey: request)
-        let downloadRequest = downloadRequests.removeValue(forKey: request)
+        guard let url = request.url else {
+            return (nil, nil)
+        }
+
+        let requestData = dataRequests.removeValue(forKey: url)
+        let downloadRequest = downloadRequests.removeValue(forKey: url)
 
         updatePersistence()
         return (requestData, downloadRequest)
@@ -106,7 +116,11 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
             return
         }
 
-        guard let downloadRequest = downloadRequests[request] else {
+        guard let url = request.url else {
+            return
+        }
+
+        guard let downloadRequest = downloadRequests[url] else {
             return
         }
         downloadRequest.progress.totalUnitCount = totalBytesExpectedToWrite
@@ -118,8 +132,13 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         guard let request = downloadTask.originalRequest else {
             return
         }
+
+        guard let url = request.url else {
+            return
+        }
+
         // move the file to the correct location
-        if let requestData = dataRequests[request] {
+        if let requestData = dataRequests[url] {
             let fileManager = FileManager.default
 
             let resumeURL = Files.DocumentsFolder.appendingPathComponent(requestData.resumeDataURL)

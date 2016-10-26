@@ -88,7 +88,7 @@ extension DefaultAudioPlayerInteractor {
         player.goBackward()
     }
 
-    // MARK:- AudioPlayerDelegate
+    // MARK: - AudioPlayerDelegate
 
     func onPlaybackPaused() {
         delegate?.onPlaybackPaused()

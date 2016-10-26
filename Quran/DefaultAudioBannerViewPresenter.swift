@@ -104,7 +104,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         showQariView()
     }
 
-    // MARK:- AudioBannerViewDelegate
+    // MARK: - AudioBannerViewDelegate
     func onPlayTapped() {
         guard let currentPage = delegate?.currentPage() else { return }
         repeatCount = .none
@@ -145,7 +145,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         audioPlayer.cancelDownload()
     }
 
-    // MARK:- AudioPlayerInteractorDelegate
+    // MARK: - AudioPlayerInteractorDelegate
     let progressKeyPath = "fractionCompleted"
     var progress: Foundation.Progress? {
         didSet {

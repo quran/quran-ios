@@ -266,11 +266,30 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     fileprivate func updateBarToPage(_ page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
 
+        showBookmarkIcon(selected: false)
+
         // only persist if active
         if UIApplication.shared.applicationState == .active {
             persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
             Crash.setValue(page.pageNumber, forKey: .QuranPage)
         }
+    }
+
+    private func showBookmarkIcon(selected: Bool) {
+        let item: UIBarButtonItem
+        if selected {
+            item = UIBarButtonItem(image: UIImage(named: "bookmark-filled"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
+            item.tintColor = UIColor(r: 255, g: 0, b: 0)
+        } else {
+            item = UIBarButtonItem(image: UIImage(named: "bookmark-empty"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
+        }
+        navigationItem.rightBarButtonItem = item
+    }
+
+    var bookmarked = false
+    @objc private func bookmarkButtonTapped() {
+        bookmarked = !bookmarked
+        showBookmarkIcon(selected: bookmarked)
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

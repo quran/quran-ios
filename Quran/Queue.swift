@@ -22,4 +22,17 @@ struct Queue {
     func after(_ timerInterval: TimeInterval, block: @escaping () -> Void) {
         queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(timerInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: block)
     }
+
+    func async<T>(_ background: @escaping @autoclosure () -> T, onMain: @escaping (T) -> Void) {
+        async {
+            let result = background()
+            Queue.main.async {
+                onMain(result)
+            }
+        }
+    }
+}
+
+extension Queue {
+    static let bookmarks = Queue(queue: DispatchQueue(label: "com.quran.bookmarks"))
 }

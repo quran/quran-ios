@@ -13,27 +13,33 @@ private let cellReuseId = "cell"
 
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPageCollectionCellDelegate {
 
-    let persistence: SimplePersistence
-    let dataRetriever: AnyDataRetriever<[QuranPage]>
+    private let persistence: SimplePersistence
+    private let dataRetriever: AnyDataRetriever<[QuranPage]>
+    private let bookmarksPersistence: BookmarksPersistence
 
-    let pageDataSource: QuranPagesDataSource
+    private let pageDataSource: QuranPagesDataSource
 
-    let audioViewPresenter: AudioBannerViewPresenter
-    let qarisControllerCreator: AnyCreator<QariTableViewController>
+    private let audioViewPresenter: AudioBannerViewPresenter
+    private let qarisControllerCreator: AnyCreator<QariTableViewController>
 
-    let scrollToPageToken = Once()
-    let didLayoutSubviewToken = Once()
+    private let scrollToPageToken = Once()
+    private let didLayoutSubviewToken = Once()
+
+    private var isBookmarked: Bool? = nil
 
     init(persistence: SimplePersistence,
          imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
-         qarisControllerCreator: AnyCreator<QariTableViewController>) {
+         qarisControllerCreator: AnyCreator<QariTableViewController>,
+         bookmarksPersistence: BookmarksPersistence) {
         self.persistence = persistence
         self.dataRetriever = dataRetriever
         self.audioViewPresenter = audioViewPresenter
         self.qarisControllerCreator = qarisControllerCreator
+        self.bookmarksPersistence = bookmarksPersistence
+
         self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService, ayahInfoRetriever: ayahInfoRetriever)
         super.init(nibName: nil, bundle: nil)
 
@@ -266,7 +272,12 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     fileprivate func updateBarToPage(_ page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
 
-        showBookmarkIcon(selected: false)
+        isBookmarked = nil
+        Queue.bookmarks.async((self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber)) { (bookmarked, page) in
+            guard page == self.currentPage()?.pageNumber else { return }
+            self.isBookmarked = bookmarked
+            self.showBookmarkIcon(selected: bookmarked)
+        }
 
         // only persist if active
         if UIApplication.shared.applicationState == .active {
@@ -279,17 +290,23 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         let item: UIBarButtonItem
         if selected {
             item = UIBarButtonItem(image: UIImage(named: "bookmark-filled"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
-            item.tintColor = UIColor(r: 255, g: 0, b: 0)
+            item.tintColor = UIColor(r: 255, g: 100, b: 100)
         } else {
             item = UIBarButtonItem(image: UIImage(named: "bookmark-empty"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
         }
         navigationItem.rightBarButtonItem = item
     }
 
-    var bookmarked = false
     @objc private func bookmarkButtonTapped() {
-        bookmarked = !bookmarked
-        showBookmarkIcon(selected: bookmarked)
+        guard let isBookmarked = isBookmarked, let page = currentPage() else { return }
+        self.isBookmarked = !isBookmarked
+        showBookmarkIcon(selected: !isBookmarked)
+
+        if isBookmarked {
+            Queue.background.async { self.bookmarksPersistence.removeBookmark(atPage: page.pageNumber) }
+        } else {
+            Queue.background.async { self.bookmarksPersistence.insertBookmark(forPage: page.pageNumber) }
+        }
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

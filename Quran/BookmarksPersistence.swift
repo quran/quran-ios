@@ -41,4 +41,12 @@ extension BookmarksPersistence {
         }
         return (pageBookmarks, ayahBookmarks)
     }
+
+    func removeBookmark(atPage page: Int) {
+        remove(PageBookmark(page: page, creationDate: Date(), tags: []))
+    }
+
+    func insertBookmark(forPage page: Int) {
+        insert(PageBookmark(page: page, creationDate: Date(), tags: []))
+    }
 }

@@ -57,6 +57,7 @@ struct Crash {
 
 
 func CLog(_ string: String) {
+    NSLog(string)
     CLSLogv("%@", getVaList([string]))
 }
 

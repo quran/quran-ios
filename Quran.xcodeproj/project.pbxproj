@@ -25,6 +25,8 @@
 		548724231DC4B42F00ADDE54 /* BookmarksPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724221DC4B42F00ADDE54 /* BookmarksPersistenceStorage.swift */; };
 		548724261DC4BF5500ADDE54 /* PageBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724251DC4BF5500ADDE54 /* PageBookmark.swift */; };
 		548724281DC4BF6000ADDE54 /* AyahBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724271DC4BF6000ADDE54 /* AyahBookmark.swift */; };
+		5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724291DC60DD100ADDE54 /* ConnectionsPool.swift */; };
+		548724301DC616D700ADDE54 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
 		548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */; };
 		5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461A1CE9F4E900EED886 /* AudioPlayer.swift */; };
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
@@ -241,6 +243,9 @@
 		548724221DC4B42F00ADDE54 /* BookmarksPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksPersistenceStorage.swift; sourceTree = "<group>"; };
 		548724251DC4BF5500ADDE54 /* PageBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmark.swift; sourceTree = "<group>"; };
 		548724271DC4BF6000ADDE54 /* AyahBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahBookmark.swift; sourceTree = "<group>"; };
+		548724291DC60DD100ADDE54 /* ConnectionsPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsPool.swift; sourceTree = "<group>"; };
+		5487242B1DC615CF00ADDE54 /* Quran-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quran-Bridging-Header.h"; sourceTree = "<group>"; };
+		5487242F1DC616D700ADDE54 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayerInteractor.swift; sourceTree = "<group>"; };
 		5487461A1CE9F4E900EED886 /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
@@ -421,6 +426,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				548724301DC616D700ADDE54 /* libsqlite3.tbd in Frameworks */,
 				37B1E4838697C2DC7FDAE39A /* Pods_Quran.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -474,6 +480,7 @@
 			children = (
 				548723F91DC4855E00ADDE54 /* SqlitePersistence.swift */,
 				5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */,
+				548724291DC60DD100ADDE54 /* ConnectionsPool.swift */,
 			);
 			name = sqlite;
 			sourceTree = "<group>";
@@ -575,6 +582,7 @@
 				54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */,
 				54C0DBC71CDE6484009AAD8D /* readers.plist */,
 				54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */,
+				5487242B1DC615CF00ADDE54 /* Quran-Bridging-Header.h */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1138,6 +1146,7 @@
 		96C71D1AA1D9AFFDF1764AD3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5487242F1DC616D700ADDE54 /* libsqlite3.tbd */,
 				06DB453FD466D51920429985 /* Pods_Quran.framework */,
 			);
 			name = Frameworks;
@@ -1384,6 +1393,7 @@
 				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
+				5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
@@ -1721,6 +1731,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1732,6 +1743,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1eeb2cc1-8ea8-4337-aee7-5fdc00f8b640";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development";
+				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -1742,6 +1755,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = MKP73M5X4A;
@@ -1752,6 +1766,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ab1cc3f1-3b39-4bfc-a995-6d549c1ad679";
 				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: com.quran.ios";
+				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

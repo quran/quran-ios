@@ -11,7 +11,7 @@ import SQLite
 
 struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
 
-    let version: UInt = 0
+    let version: UInt = 1
     var filePath: String {
         return FileManager.default.documentsPath + "/bookmarks.db"
     }
@@ -41,6 +41,7 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
     }
 
     func onCreate(connection: Connection) throws {
+        print("afifi", connection.description)
 
         // bookmark table
         try connection.run(Bookmarks.table.create { builder in
@@ -48,14 +49,14 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
             builder.column(Bookmarks.sura)
             builder.column(Bookmarks.ayah)
             builder.column(Bookmarks.page)
-            builder.column(Bookmarks.creationDate, defaultValue: Expression<Date>("CURRENT_TIMESTAMP"))
+            builder.column(Bookmarks.creationDate)
         })
 
         // tag table
         try connection.run(Tags.table.create { builder in
             builder.column(Tags.id, primaryKey: .autoincrement)
             builder.column(Tags.name)
-            builder.column(Tags.creationDate, defaultValue: Expression<Date>("CURRENT_TIMESTAMP"))
+            builder.column(Tags.creationDate)
         })
 
         // bookmark - tag
@@ -63,7 +64,7 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
             builder.column(BookmarkTags.id, primaryKey: .autoincrement)
             builder.column(BookmarkTags.bookmarkId)
             builder.column(BookmarkTags.tagId)
-            builder.column(BookmarkTags.creationDate, defaultValue: Expression<Date>("CURRENT_TIMESTAMP"))
+            builder.column(BookmarkTags.creationDate)
         })
 
         // page index
@@ -102,7 +103,8 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
             let insert = Bookmarks.table.insert(
                 Bookmarks.sura <- ayah?.sura,
                 Bookmarks.ayah <- ayah?.ayah,
-                Bookmarks.page <- bookmark.page)
+                Bookmarks.page <- bookmark.page,
+                Bookmarks.creationDate <- bookmark.creationDate)
             _ = try connection.run(insert)
         }
     }

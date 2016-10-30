@@ -100,12 +100,13 @@ class Container {
 
     func createQuranController() -> QuranViewController {
         return QuranViewController(
-            persistence: createSimplePersistence(),
-            imageService: createQuranImageService(),
-            dataRetriever: createQuranPagesRetriever(),
-            ayahInfoRetriever: createAyahInfoRetriever(),
-            audioViewPresenter: createAudioBannerViewPresenter(),
-            qarisControllerCreator: createBlockCreator(createQariTableViewController)
+            persistence             : createSimplePersistence(),
+            imageService            : createQuranImageService(),
+            dataRetriever           : createQuranPagesRetriever(),
+            ayahInfoRetriever       : createAyahInfoRetriever(),
+            audioViewPresenter      : createAudioBannerViewPresenter(),
+            qarisControllerCreator  : createBlockCreator(createQariTableViewController),
+            bookmarksPersistence    : createBookmarksPersistence()
         )
     }
 
@@ -186,5 +187,9 @@ class Container {
 
     func createQariAyahTimingPersistenceStorage() -> QariAyahTimingPersistenceStorage {
         return SQLiteAyahTimingPersistenceStorage()
+    }
+
+    func createBookmarksPersistence() -> BookmarksPersistence {
+        return BookmarksPersistenceStorage()
     }
 }

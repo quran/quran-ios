@@ -81,19 +81,19 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
     }
 
     func highlightAyat(_ ayat: Set<AyahNumber>) {
-        highlightingView.highlightedAyat = ayat
+        highlightingView.highlights[.reading] = ayat
         scrollToHighlightedAyat()
     }
 
     fileprivate func scrollToHighlightedAyat() {
-        guard let first = highlightingView.highlightingRectangles.first else {
+        guard let rectangles = highlightingView.highlightingRectangles[.reading], !rectangles.isEmpty else {
             return
         }
 
         layoutIfNeeded()
 
-        var union = first
-        highlightingView.highlightingRectangles.forEach { union = union.union($0) }
+        var union = rectangles[0]
+        rectangles.forEach { union = union.union($0) }
 
         let contentOffset = max(0, min(union.minY - 60, scrollView.contentSize.height - scrollView.bounds.height))
         scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)

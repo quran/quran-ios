@@ -27,6 +27,7 @@
 		548724281DC4BF6000ADDE54 /* AyahBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724271DC4BF6000ADDE54 /* AyahBookmark.swift */; };
 		5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724291DC60DD100ADDE54 /* ConnectionsPool.swift */; };
 		548724301DC616D700ADDE54 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
+		548724321DC633A000ADDE54 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548724311DC633A000ADDE54 /* UIView+Extension.swift */; };
 		548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */; };
 		5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461A1CE9F4E900EED886 /* AudioPlayer.swift */; };
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
@@ -246,6 +247,7 @@
 		548724291DC60DD100ADDE54 /* ConnectionsPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsPool.swift; sourceTree = "<group>"; };
 		5487242B1DC615CF00ADDE54 /* Quran-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quran-Bridging-Header.h"; sourceTree = "<group>"; };
 		5487242F1DC616D700ADDE54 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		548724311DC633A000ADDE54 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		548746171CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayerInteractor.swift; sourceTree = "<group>"; };
 		5487461A1CE9F4E900EED886 /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
@@ -724,6 +726,7 @@
 				C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */,
 				54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */,
 				5487241B1DC495DB00ADDE54 /* NSFileManager+Extension.swift */,
+				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1397,6 +1400,7 @@
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
+				548724321DC633A000ADDE54 /* UIView+Extension.swift in Sources */,
 				5487241F1DC4ABBD00ADDE54 /* Bookmark.swift in Sources */,
 				54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */,
 				54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */,

@@ -212,16 +212,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         guard let audioView = audioView, !audioView.bounds.contains(sender.location(in: audioView)) else {
             return
         }
-        if let currentPage = currentPage() {
-            if self.pageDataSource.deselectSelectedVerseIfAny(currentPage.pageNumber) {
-
-                // No bars animation
-
-                return
-            }
-        }
-
-
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
@@ -290,7 +280,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         let item: UIBarButtonItem
         if selected {
             item = UIBarButtonItem(image: UIImage(named: "bookmark-filled"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
-            item.tintColor = UIColor(r: 255, g: 100, b: 100)
+            item.tintColor = UIColor.bookmark()
         } else {
             item = UIBarButtonItem(image: UIImage(named: "bookmark-empty"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
         }

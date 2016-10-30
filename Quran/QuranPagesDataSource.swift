@@ -106,22 +106,4 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             }
         }
     }
-
-    /**
-        Deselect the current selected verse if we already have a currently selected one.
-        - Parameter page: The Quran page which we check if it has a selected verse to deselect it.
-        - Returns: *true* if a selected verse has been found and is already unselected. *false* otherwise.
-     */
-    func deselectSelectedVerseIfAny(_ page: Int) -> Bool {
-        let index = IndexPath(item: page - 1, section: 0)
-        // if the cell is there, highlight the ayah.
-        if let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: index) as? QuranPageCollectionViewCell {
-            if cell.highlightingView.isSelectingVerse {
-                cell.highlightingView.deselectTheSelectedVerse()
-                return true
-            }
-        }
-
-        return false
-    }
 }

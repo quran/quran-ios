@@ -10,9 +10,8 @@
 #endif
 #endif
 
-#import "SQLite-Bridging.h"
-#import "SQLite.h"
+#import "MenuItemKit.h"
 
-FOUNDATION_EXPORT double SQLiteVersionNumber;
-FOUNDATION_EXPORT const unsigned char SQLiteVersionString[];
+FOUNDATION_EXPORT double MenuItemKitVersionNumber;
+FOUNDATION_EXPORT const unsigned char MenuItemKitVersionString[];
 

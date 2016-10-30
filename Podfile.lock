@@ -4,6 +4,7 @@ PODS:
   - Fabric (1.6.10)
   - GenericDataSources (2.1.0)
   - KVOController-Swift (2.0.1)
+  - MenuItemKit (2.0)
   - RxCocoa (3.0.0):
     - RxSwift (~> 3.0)
   - RxSwift (3.0.0)
@@ -17,6 +18,7 @@ DEPENDENCIES:
   - Fabric
   - GenericDataSources
   - KVOController-Swift
+  - MenuItemKit
   - RxCocoa
   - RxSwift
   - SQLite.swift (~> 0.11.0)
@@ -27,11 +29,12 @@ SPEC CHECKSUMS:
   Fabric: c73f371ee543e3f0b80608f2674750e4910d1669
   GenericDataSources: d8c24a0b00fa0f293d34a6d5367765302da6cdaa
   KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
+  MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   RxCocoa: 0a2f3ae381cf16f4021a4cee7a4420f83058a965
   RxSwift: a930cd662f5b4a7ca9dc3518585dba91dadf497c
   SQLite.swift: 9a26273607d3077a2e5a8d33486e9989f8404c7d
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 0f9999bf75ecf5642246583cb95c6b547203db79
+PODFILE CHECKSUM: 681fc88d4f961989e2702ec2ac810075269a4dd2
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0.beta.1

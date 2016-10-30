@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MenuItemKit
 
 enum HighlightType: Int {
     case reading
@@ -36,18 +37,17 @@ class HighlightingView: UIView {
 
     private var resignGestures: [UIGestureRecognizer] = []
 
-    var highlights: [HighlightType: Set<AyahNumber>] = [:] {
-        didSet {
-            updateRectangleBounds()
-        }
-    }
+    var bookmarkPersistence: BookmarksPersistence!
 
+    var highlights: [HighlightType: Set<AyahNumber>] = [:] {
+        didSet { updateRectangleBounds() }
+    }
 
     var ayahInfoData: [AyahNumber: [AyahInfo]]? {
-        didSet {
-            updateRectangleBounds()
-        }
+        didSet { updateRectangleBounds() }
     }
+
+    var page: Int = 0
 
     private var imageScale: CGFloat = 0.0
     private var xOffset: CGFloat = 0.0
@@ -82,6 +82,7 @@ class HighlightingView: UIView {
         imageScale = 0.0
         xOffset = 0.0
         yOffset = 0.0
+        page = 0
     }
 
     private func updateRectangleBounds() {
@@ -165,6 +166,7 @@ class HighlightingView: UIView {
 
         // set up UIMenuController
         let rectangle = ayahInfo.rect.applyScale(imageScale, xOffset: xOffset, yOffset: yOffset)
+        UIMenuController.shared.menuItems = [configuredBookmarkMenuItem(ayah: selectedAyah)]
         UIMenuController.shared.setTargetRect(rectangle, in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
@@ -212,6 +214,31 @@ class HighlightingView: UIView {
         let text = currentSelectedAyahText()
         if text.characters.count != 0 {
             delegate?.highlightingView(self, didShareAyahText: text)
+        }
+    }
+
+    private func configuredBookmarkMenuItem(ayah: AyahNumber) -> UIMenuItem {
+        let bookmarked = highlights[.bookmark]?.contains(ayah) ?? false
+        if bookmarked {
+            let image = UIImage(named: "bookmark-filled")?.tintedImage(withColor: .bookmark())
+            return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
+                guard let `self` = self else { return }
+                Queue.bookmarks.async(self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah)) { _ in
+                    var bookmarks = self.highlights[.bookmark] ?? Set()
+                    bookmarks.remove(ayah)
+                    self.highlights[.bookmark] = bookmarks
+                }
+            }
+        } else {
+            let image = UIImage(named: "bookmark-empty")?.tintedImage(withColor: .white)
+            return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
+                guard let `self` = self else { return }
+                Queue.bookmarks.async(self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah)) { _ in
+                    var bookmarks = self.highlights[.bookmark] ?? Set()
+                    bookmarks.insert(ayah)
+                    self.highlights[.bookmark] = bookmarks
+                }
+            }
         }
     }
 

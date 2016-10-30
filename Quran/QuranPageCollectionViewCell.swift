@@ -27,7 +27,11 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
     @IBOutlet weak var scrollView: UIScrollView!
     weak var cellDelegate: QuranPageCollectionCellDelegate?
 
-    var page: QuranPage?
+    var page: QuranPage? {
+        didSet {
+            highlightingView.page = page?.pageNumber ?? 0
+        }
+    }
     var sizeConstraints: [NSLayoutConstraint] = []
 
     override func awakeFromNib() {

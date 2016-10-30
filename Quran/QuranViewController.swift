@@ -40,7 +40,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         self.qarisControllerCreator = qarisControllerCreator
         self.bookmarksPersistence = bookmarksPersistence
 
-        self.pageDataSource = QuranPagesDataSource(reuseIdentifier: cellReuseId, imageService: imageService, ayahInfoRetriever: ayahInfoRetriever)
+        self.pageDataSource = QuranPagesDataSource(
+            reuseIdentifier: cellReuseId,
+            imageService: imageService,
+            ayahInfoRetriever: ayahInfoRetriever,
+            bookmarkPersistence: bookmarksPersistence)
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self
@@ -293,9 +297,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         showBookmarkIcon(selected: !isBookmarked)
 
         if isBookmarked {
-            Queue.background.async { self.bookmarksPersistence.removeBookmark(atPage: page.pageNumber) }
+            Queue.background.async { self.bookmarksPersistence.removePageBookmark(atPage: page.pageNumber) }
         } else {
-            Queue.background.async { self.bookmarksPersistence.insertBookmark(forPage: page.pageNumber) }
+            Queue.background.async { self.bookmarksPersistence.insertPageBookmark(forPage: page.pageNumber) }
         }
     }
 

@@ -29,6 +29,22 @@ extension BookmarksPersistence {
         return !retrieve(inPage: page).0.isEmpty
     }
 
+    func removePageBookmark(atPage page: Int) {
+        remove(PageBookmark(page: page, creationDate: Date(), tags: []))
+    }
+
+    func insertPageBookmark(forPage page: Int) {
+        insert(PageBookmark(page: page, creationDate: Date(), tags: []))
+    }
+
+    func removeAyahBookmark(atPage page: Int, ayah: AyahNumber) {
+        remove(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
+    }
+
+    func insertAyahBookmark(forPage page: Int, ayah: AyahNumber) {
+        insert(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
+    }
+
     private func split(bookmarks: [Bookmark]) -> ([PageBookmark], [AyahBookmark]) {
         var pageBookmarks: [PageBookmark] = []
         var ayahBookmarks: [AyahBookmark] = []
@@ -40,13 +56,5 @@ extension BookmarksPersistence {
             }
         }
         return (pageBookmarks, ayahBookmarks)
-    }
-
-    func removeBookmark(atPage page: Int) {
-        remove(PageBookmark(page: page, creationDate: Date(), tags: []))
-    }
-
-    func insertBookmark(forPage page: Int) {
-        insert(PageBookmark(page: page, creationDate: Date(), tags: []))
     }
 }

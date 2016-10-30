@@ -13,6 +13,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     let imageService: QuranImageService
     let ayahInfoRetriever: AyahInfoRetriever
+    let bookmarkPersistence: BookmarksPersistence
 
     let numberFormatter = NumberFormatter()
 
@@ -20,9 +21,10 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     weak var pageCellDelegate: QuranPageCollectionCellDelegate?
 
-    init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever) {
+    init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever, bookmarkPersistence: BookmarksPersistence) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
+        self.bookmarkPersistence = bookmarkPersistence
         super.init(reuseIdentifier: reuseIdentifier)
 
         NotificationCenter.default.addObserver(self,
@@ -42,6 +44,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
         let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
 
+        cell.highlightingView.bookmarkPersistence = bookmarkPersistence
         cell.page = item
         cell.pageLabel.text = numberFormatter.format(NSNumber(value: item.pageNumber))
         cell.suraLabel.text = Quran.nameForSura(item.startAyah.sura)
@@ -52,17 +55,17 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         cell.cellDelegate = self.pageCellDelegate
 
         imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in
-            guard cell.page == item else {
-                return
-            }
+            guard cell.page == item else { return }
             cell.mainImageView.image = image
         }
 
         ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { (data) in
-            guard cell.page == item else {
-                return
-            }
+            guard cell.page == item else { return }
             cell.setAyahInfo(data.value)
+        }
+        Queue.bookmarks.async(self.bookmarkPersistence.retrieve(inPage: item.pageNumber)) { _, ayahBookmarks in
+            guard cell.page == item else { return }
+            cell.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
         }
     }
 
@@ -101,6 +104,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                     cell.highlightAyat(ayaht)
                 } else {
                     // scroll to the cell
+                    self.ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
                     self.ds_reusableViewDelegate?.ds_scrollToItem(at: index, at: .centeredHorizontally, animated: true)
                 }
             }

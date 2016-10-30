@@ -39,4 +39,21 @@ extension UIImage {
         }
         return self
     }
+
+    func tintedImage(withColor color: UIColor) -> UIImage? {
+        guard let cgImage = cgImage else { return nil }
+
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: 0, y: size.height)
+        context?.scaleBy(x: 1, y: -1)
+        context?.setBlendMode(.normal)
+        let rect = CGRect(origin: .zero, size: size)
+        context?.clip(to: rect, mask: cgImage)
+        color.setFill()
+        context?.fill(rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }

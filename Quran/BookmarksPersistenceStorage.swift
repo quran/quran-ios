@@ -66,8 +66,14 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
             builder.column(BookmarkTags.creationDate, defaultValue: Expression<Date>("CURRENT_TIMESTAMP"))
         })
 
+        // page index
+        try connection.run(Bookmarks.table.createIndex([Bookmarks.page], unique: false))
+
+        // (page - ayah - sura) index
+        try connection.run(Bookmarks.table.createIndex([Bookmarks.page, Bookmarks.sura, Bookmarks.ayah], unique: true))
+
         // (bookmark - tag) index
-        try connection.run(BookmarkTags.table.createIndex(BookmarkTags.bookmarkId, BookmarkTags.tagId))
+        try connection.run(BookmarkTags.table.createIndex([BookmarkTags.bookmarkId, BookmarkTags.tagId], unique: true))
     }
 
     func retrieveAll() -> [Bookmark] {

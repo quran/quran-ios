@@ -29,9 +29,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>One result for \&quot;%1$s\&quot;:</string>
+                <string>One result for \&quot;%1$@\&quot;:</string>
                 <key>other</key>
-                <string>%2$d results for \&quot;%1$s\&quot;:</string>
+                <string>%2$d results for \&quot;%1$@\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>

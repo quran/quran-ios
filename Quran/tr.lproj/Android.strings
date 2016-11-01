@@ -47,7 +47,7 @@ Menüden âyeti işaretleyebilir, paylaşabilir, meâlini okuyabilir veya âyeti
 "email_us" = "Sorunuz yukarıda yanıtlanmamış ise destek için quranandroid@gmail.com e-posta adresine mektup yollayabilirsiniz.\
 Lütfen unutmayın ki bize çok sayıda e-posta geliyor, bu yüzden aldığımız tüm e-postaları yanıtlamayabiliriz.";
 "found_in_sura" = "Sure de bulundu";
-"no_results" = "Bir sonuç bulunamadı \"%s\"";
+"no_results" = "Bir sonuç bulunamadı \"%@\"";
 "no_active_translation" = "Aktif bir meâl set edilmedi. Lütfen bir meâl aktif yapıp daha sonra arama yapın";
 "no_arabic_search_available" = "Arapça arama paketi indirilmedi. Lütfen indirip daha sonra tekrar deneyin";
 "get_arabic_search_db" = "Arapça arama veritabanını indirin";
@@ -91,14 +91,14 @@ Lütfen unutmayın ki bize çok sayıda e-posta geliyor, bu yüzden aldığımı
 "tag_bookmark" = "Sayfa işareti etiketi";
 "tag_ayah" = "Bu âyeti işaretle";
 "tag_dlg_title" = "Etiket";
-"sura_ayah_notification_str" = "Sure %1$s, âyet %2$d";
+"sura_ayah_notification_str" = "Sure %1$@, âyet %2$d";
 "tag_name" = "İsim";
 "share_ayah_text" = "Âyet meâlini paylaş";
 "share_ayah" = "Âyet kısayolu paylaş";
 "search_key" = "Kur\'anda arama yapmak için arama tuşuna bas";
 "search_data" = "Veri arama";
 "remove_dlg_title" = "Meâl kaldırılsın mı?";
-"remove_dlg_msg" = "\"%1$s\" meâlini kaldırmak istediğinize emin misiniz?";
+"remove_dlg_msg" = "\"%1$@\" meâlini kaldırmak istediğinize emin misiniz?";
 "quran_sura_title" = "%1$@ suresi";
 "prefs_volume_key_navigation_summary" = "Sayfalar arasında ses düğmelerini kullanarak dolaş";
 "prefs_volume_key_navigation_title" = "Ses düğmesi ile dolaşma";
@@ -131,7 +131,7 @@ Lütfen unutmayın ki bize çok sayıda e-posta geliyor, bu yüzden aldığımı
 "prefs_app_location_summary" = "Lütfen hangi SD karta kopyalanacağını seçin";
 "play_from_here" = "Buradan çalmaya başla";
 "page_description" = "sayfa  %1$d, cüz %2$d";
-"download_progress" = "%1$s / %2$s indirildi";
+"download_progress" = "%1$@ / %2$@ indirildi";
 "not_tagged" = "Etiketlenmedi";
 "new_tag" = "Yeni etiket";
 "need_translation" = "Hiçbir meâl indirilmedi";

@@ -31,7 +31,7 @@
 "search_hint" = "قۇرئاندىن ئىزدە";
 "quranSearchType" = "قۇرئان سۈرەلىرى";
 "found_in_sura" = "سۈرىدە بايقالدى";
-"no_results" = "\"%s\" نىڭ نەتىجىلىرى تېپىلمىدى";
+"no_results" = "\"%@\" نىڭ نەتىجىلىرى تېپىلمىدى";
 "no_active_translation" = "ھېچقانداق ئاكتىپ تەرجىمە تەڭشەلمىدىڭىز، ئالدى بىلەن بىر ئاكتىپ تەرجىمىنى تەڭشەڭ، ئاندىن قايتا ئىزدەڭ.";
 "translation_settings" = "تەرجىمە تەڭشەكلىرى";
 "no_arabic_search_available" = "سىز ئەرەبچە ئىزدەش بوغچىسىنى چۈشۈرمىگەن. ئۇنى چۈشۈرۈپ ئاندىن قايتا ئىزدەڭ.";
@@ -98,7 +98,7 @@
 "quran_sura" = "سۈرە";
 "quran_ayah" = "%1$d ئايەت";
 "quran_sura_title" = "%1$@ - سۈرە";
-"sura_ayah_notification_str" = "%1$s -سۈرە، %2$d - ئايەت";
+"sura_ayah_notification_str" = "%1$@ -سۈرە، %2$d - ئايەت";
 "bookmarks_current_page" = "نۆۋەتتىكى بەت";
 "index_loading" = "يۈكلەۋاتىدۇ…";
 "canceling" = "ۋاز كېچىۋاتىدۇ…";
@@ -117,13 +117,13 @@
 "download_error_network_retry" = "تور خاتالىقى، داۋاملاشتۇرۇشنى سىناۋاتىدۇ…";
 "notification_download_canceled" = "چۈشۈرۈشتىن ۋاز كەچتى";
 "download_non_wifi_prompt" = "سىز wifi تورىدا ئەمەس. سانلىق مەلۇماتنى چۈشۈرىۋېرەمسىز؟";
-"download_progress" = "%1$s / %2$s چۈشۈرۈلدى";
+"download_progress" = "%1$@ / %2$@ چۈشۈرۈلدى";
 "process_progress" = "بىر تەرەپ قىلىۋاتقىنى %1$d / %2$d";
 "download_retry" = "قايتا سىنا";
 "download_cancel" = "ۋاز كەچ";
 "download_extra_data" = "ھەمبەھىر ۋە تەرجىمە ئىقتىدارىنى قوللاش ئۈچۈن بىر ياكى ئىككى كىچىك ھۆججەت چۈشۈرۈشىمىز كېرەك. ھازىر چۈشۈرەمدۇ؟";
 "remove_dlg_title" = "تەرجىمىنى چىقىرىۋېتەمدۇ؟";
-"remove_dlg_msg" = "سىز %1$s نى راسلا چىقىرىۋېتەمسىز؟";
+"remove_dlg_msg" = "سىز %1$@ نى راسلا چىقىرىۋېتەمسىز؟";
 "error_getting_translation_list" = "تەرجىمە تىزىمىنى چۈشۈرەلمىدى. كېيىن قايتا سىناڭ.";
 "search_data" = "سانلىق مەلۇمات ئىزدە";
 "need_translation" = "سىز تېخى ھېچقانداق تەرجىمە/تەپسىر چۈشۈرمىگەن.";

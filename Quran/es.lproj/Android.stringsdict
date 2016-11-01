@@ -13,9 +13,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Un resultado para \&quot;%1$s\&quot;:</string>
+                <string>Un resultado para \&quot;%1$@\&quot;:</string>
                 <key>other</key>
-                <string>%2$d resultados para \&quot;%1$s\&quot;:</string>
+                <string>%2$d resultados para \&quot;%1$@\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>

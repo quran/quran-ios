@@ -73,7 +73,6 @@ open class Cache<KeyType: Hashable, ObjectType> {
         return cache.removeAllObjects()
     }
 
-
     open var totalCostLimit: Int {
         get { return cache.totalCostLimit }
         set { cache.totalCostLimit = totalCostLimit }

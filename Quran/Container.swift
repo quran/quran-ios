@@ -64,7 +64,8 @@ class Container {
     func createBookmarksViewController() -> UIViewController {
         return BookmarksTableViewController(persistence: createSimplePersistence(),
                                             quranControllerCreator: createBlockCreator(createQuranController),
-                                            bookmarksPersistence: createBookmarksPersistence())
+                                            bookmarksPersistence: createBookmarksPersistence(),
+                                            ayahPersistence: createAyahTextStorage())
     }
 
     func createQariTableViewController() -> QariTableViewController {

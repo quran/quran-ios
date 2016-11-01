@@ -13,9 +13,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>جستجو براي \&quot;%1$s\&quot;:</string>
+                <string>جستجو براي \&quot;%1$@\&quot;:</string>
                 <key>other</key>
-                <string>%2$d جستجو براي \&quot;%1$s\&quot;:</string>
+                <string>%2$d جستجو براي \&quot;%1$@\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>

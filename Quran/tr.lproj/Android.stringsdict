@@ -13,9 +13,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>\&quot;%1$s\&quot; için bir arama sonucu:</string>
+                <string>\&quot;%1$@\&quot; için bir arama sonucu:</string>
                 <key>other</key>
-                <string>\&quot;%1$s\&quot; için %2$d arama sonuçları:</string>
+                <string>\&quot;%1$@\&quot; için %2$d arama sonuçları:</string>
             </dict>
         </dict>
         <key>verses</key>

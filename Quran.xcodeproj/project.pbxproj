@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		37B1E4838697C2DC7FDAE39A /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB453FD466D51920429985 /* Pods_Quran.framework */; };
 		5415A94F1DC92A9C0089F9CB /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5415A94E1DC92A9C0089F9CB /* Cache.swift */; };
+		5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */; };
 		5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */; };
 		5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */; };
 		5419E4BB1CFA26B900071A6D /* Android.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E4BD1CFA26B900071A6D /* Android.strings */; };
@@ -178,6 +179,7 @@
 /* Begin PBXFileReference section */
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5415A94E1DC92A9C0089F9CB /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5416B4C01CEE7C820062FF54 /* QariAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
 		5416B4C21CEE7D440062FF54 /* SQLiteAyahTimingPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahTimingPersistenceStorage.swift; sourceTree = "<group>"; };
 		5419E4BC1CFA26B900071A6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Android.strings; sourceTree = "<group>"; };
@@ -818,6 +820,7 @@
 				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
 				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
 				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
+				5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -1384,6 +1387,7 @@
 				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */,
 				54C0DBC61CDE5C2A009AAD8D /* URL+Extension.swift in Sources */,
+				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* QuranURLs.swift in Sources */,

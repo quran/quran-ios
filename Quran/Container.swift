@@ -12,9 +12,9 @@ class Container {
 
     fileprivate static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
 
-    fileprivate let imagesCache: NSCache<NSNumber, UIImage> = {
-        let cache = NSCache<NSNumber, UIImage>()
-        cache.countLimit = 10
+    fileprivate let imagesCache: Cache<Int, UIImage> = {
+        let cache = Cache<Int, UIImage>()
+        cache.countLimit = 5
         return cache
     }()
 
@@ -119,7 +119,7 @@ class Container {
         return DefaultQuranImageService(imagesCache: createImagesCache())
     }
 
-    func createImagesCache() -> NSCache<NSNumber, UIImage> {
+    func createImagesCache() -> Cache<Int, UIImage> {
         return imagesCache
     }
 

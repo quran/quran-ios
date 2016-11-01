@@ -10,29 +10,15 @@ import UIKit
 
 class DefaultQuranImageService: QuranImageService {
 
-    let imagesCache: NSCache<NSNumber, UIImage>
+    let imagesCache: Cache<Int, UIImage>
 
     fileprivate let preloadPreviousImagesCount = 1
     fileprivate let preloadNextImagesCount = 2
 
     fileprivate let queue = OperationQueue()
 
-    init(imagesCache: NSCache<NSNumber, UIImage>) {
+    init(imagesCache: Cache<Int, UIImage>) {
         self.imagesCache = imagesCache
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(DefaultQuranImageService.memoryWarning),
-            name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning,
-            object: nil)
-    }
-
-    @objc func memoryWarning() {
-        imagesCache.removeAllObjects()
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     fileprivate var inProgressOperations: [Int: ImagePreloadingOperation] = [:]
@@ -40,7 +26,7 @@ class DefaultQuranImageService: QuranImageService {
 
     internal func getImageOfPage(_ page: Int, forSize size: CGSize, onCompletion: @escaping (UIImage) -> Void) {
 
-        let image = lock.execute { imagesCache.object(forKey: NSNumber(value: page)) }
+        let image = lock.execute { imagesCache.object(forKey: page) }
 
         if let image = image as UIImage! {
             onCompletion(image)
@@ -65,7 +51,7 @@ class DefaultQuranImageService: QuranImageService {
         // load next pages
         for index in 0..<preloadNextImagesCount {
             let targetPage = page + 1 + index
-            if !((imagesCache.object(forKey: NSNumber(value: targetPage)) != nil)) {
+            if !((imagesCache.object(forKey: targetPage) != nil)) {
                 preload(targetPage, onCompletion: { _ in })
             }
         }
@@ -73,7 +59,7 @@ class DefaultQuranImageService: QuranImageService {
         // load previous pages
         for index in 0..<preloadPreviousImagesCount {
             let targetPage = page - 1 - index
-            if !((imagesCache.object(forKey: NSNumber(value: targetPage)) != nil)) {
+            if !((imagesCache.object(forKey: targetPage) != nil)) {
                 preload(targetPage, onCompletion: { _ in })
             }
         }
@@ -100,7 +86,7 @@ class DefaultQuranImageService: QuranImageService {
                     Queue.main.async {
                         self?.lock.execute {
                             // cache the image
-                            self?.imagesCache.setObject(image, forKey: NSNumber(value: page))
+                            self?.imagesCache.setObject(image, forKey: page)
                             // remove from in progress
                             _ = self?.inProgressOperations.removeValue(forKey: page)
                         }

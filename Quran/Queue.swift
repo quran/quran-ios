@@ -23,7 +23,7 @@ struct Queue {
         queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(timerInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: block)
     }
 
-    func async<T>(_ background: @escaping @autoclosure () -> T, onMain: @escaping (T) -> Void) {
+    func async<T>(_ background: @escaping () -> T, onMain: @escaping (T) -> Void) {
         async {
             let result = background()
             Queue.main.async {

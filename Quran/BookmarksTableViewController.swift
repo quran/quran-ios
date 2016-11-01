@@ -13,21 +13,36 @@ class BookmarksTableViewController: BaseTableViewController {
 
     let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi, headerReuseIdentifier: "header")
     let lastPageDS: LastPageBookmarkDataSource
+    let pageDS: PageBookmarkDataSource
+
+
     let quranControllerCreator: AnyCreator<QuranViewController>
 
-    init(persistence: SimplePersistence, quranControllerCreator: AnyCreator<QuranViewController>) {
+    init(persistence: SimplePersistence, quranControllerCreator: AnyCreator<QuranViewController>, bookmarksPersistence: BookmarksPersistence) {
         self.quranControllerCreator = quranControllerCreator
+
+        // configure the data sources
         lastPageDS = LastPageBookmarkDataSource(reuseIdentifier: "cell", persistence: persistence)
+        pageDS = PageBookmarkDataSource(reuseIdentifier: "cell", persistence: bookmarksPersistence)
+
         dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: ""))
+        dataSource.addDataSource(pageDS, headerTitle: NSLocalizedString("menu_bookmarks_page", tableName: "Android", comment: ""))
 
         super.init(nibName: nil, bundle: nil)
 
-        let selectionHandler = BlockSelectionHandler<Int, BookmarkTableViewCell>()
-        selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
+        let lastPageSelection = BlockSelectionHandler<Int, BookmarkTableViewCell>()
+        lastPageSelection.didSelectBlock = { [weak self] (ds, _, index) in
             let item = ds.item(at:index)
             self?.navigateToPage(item)
         }
-        lastPageDS.setSelectionHandler(selectionHandler)
+        lastPageDS.setSelectionHandler(lastPageSelection)
+
+        let pageSelection = BlockSelectionHandler<PageBookmark, BookmarkTableViewCell>()
+        pageSelection.didSelectBlock = { [weak self] (ds, _, index) in
+            let item = ds.item(at:index)
+            self?.navigateToPage(item.page)
+        }
+        pageDS.setSelectionHandler(pageSelection)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -51,6 +66,7 @@ class BookmarksTableViewController: BaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         lastPageDS.reloadData()
+        pageDS.reloadData()
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: indexPath, animated: animated)
         }

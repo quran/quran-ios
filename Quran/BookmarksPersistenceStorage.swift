@@ -79,7 +79,7 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
 
     func retrieveAll() -> [Bookmark] {
         return run { connection in
-            let query = Bookmarks.table.order(Bookmarks.creationDate)
+            let query = Bookmarks.table.order(Bookmarks.creationDate.desc)
             let rows = try connection.prepare(query)
             let bookmarks = convert(rowsToBookmarks: rows)
             return bookmarks

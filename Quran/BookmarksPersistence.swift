@@ -21,6 +21,14 @@ extension BookmarksPersistence {
         return split(bookmarks: retrieveAll())
     }
 
+    func retrievePageBookmarks() -> [PageBookmark] {
+        return retrieveAll().0
+    }
+
+    func retrieveAyahBookmarks() -> [AyahBookmark] {
+        return retrieveAll().1
+    }
+
     func retrieve(inPage page: Int) -> ([PageBookmark], [AyahBookmark]) {
         return split(bookmarks: retrieve(inPage: page))
     }

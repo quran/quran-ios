@@ -63,7 +63,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             guard cell.page == item else { return }
             cell.setAyahInfo(data.value)
         }
-        Queue.bookmarks.async(self.bookmarkPersistence.retrieve(inPage: item.pageNumber)) { _, ayahBookmarks in
+        Queue.bookmarks.async({ self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { _, ayahBookmarks in
             guard cell.page == item else { return }
             cell.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
         }

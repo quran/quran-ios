@@ -267,7 +267,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         title = Quran.nameForSura(page.startAyah.sura)
 
         isBookmarked = nil
-        Queue.bookmarks.async((self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber)) { (bookmarked, page) in
+        Queue.bookmarks.async({ (self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber) }) { (bookmarked, page) in
             guard page == self.currentPage()?.pageNumber else { return }
             self.isBookmarked = bookmarked
             self.showBookmarkIcon(selected: bookmarked)

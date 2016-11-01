@@ -223,7 +223,7 @@ class HighlightingView: UIView {
             let image = UIImage(named: "bookmark-filled")?.tintedImage(withColor: .bookmark())
             return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.async(self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah)) { _ in
+                Queue.bookmarks.async({ self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah) }) { _ in
                     var bookmarks = self.highlights[.bookmark] ?? Set()
                     bookmarks.remove(ayah)
                     self.highlights[.bookmark] = bookmarks
@@ -233,7 +233,7 @@ class HighlightingView: UIView {
             let image = UIImage(named: "bookmark-empty")?.tintedImage(withColor: .white)
             return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.async(self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah)) { _ in
+                Queue.bookmarks.async({ self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah) }) { _ in
                     var bookmarks = self.highlights[.bookmark] ?? Set()
                     bookmarks.insert(ayah)
                     self.highlights[.bookmark] = bookmarks

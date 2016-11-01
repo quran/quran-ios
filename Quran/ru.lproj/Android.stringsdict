@@ -33,13 +33,13 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>%2$d результат для \&quot;%1$s\&quot;:</string>
+                <string>%2$d результат для \&quot;%1$@\&quot;:</string>
                 <key>few</key>
-                <string>%2$d результата для \&quot;%1$s\&quot;:</string>
+                <string>%2$d результата для \&quot;%1$@\&quot;:</string>
                 <key>many</key>
-                <string>%2$d результатов для \&quot;%1$s\&quot;:</string>
+                <string>%2$d результатов для \&quot;%1$@\&quot;:</string>
                 <key>other</key>
-                <string>%2$d результатов для \&quot;%1$s\&quot;:</string>
+                <string>%2$d результатов для \&quot;%1$@\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>

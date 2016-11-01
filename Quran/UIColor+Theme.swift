@@ -24,4 +24,12 @@ extension UIColor {
     class func readingBackground() -> UIColor {
         return UIColor(rgb: 0xF5F5F5)
     }
+
+    class func bookmark() -> UIColor {
+        return UIColor(r: 255, g: 100, b: 100)
+    }
+
+    class func selection() -> UIColor {
+        return UIColor(rgb: 0x156DDE)
+    }
 }

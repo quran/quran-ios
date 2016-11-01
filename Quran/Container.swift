@@ -12,9 +12,9 @@ class Container {
 
     fileprivate static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
 
-    fileprivate let imagesCache: NSCache<NSNumber, UIImage> = {
-        let cache = NSCache<NSNumber, UIImage>()
-        cache.countLimit = 10
+    fileprivate let imagesCache: Cache<Int, UIImage> = {
+        let cache = Cache<Int, UIImage>()
+        cache.countLimit = 5
         return cache
     }()
 
@@ -63,7 +63,9 @@ class Container {
 
     func createBookmarksViewController() -> UIViewController {
         return BookmarksTableViewController(persistence: createSimplePersistence(),
-                                            quranControllerCreator: createBlockCreator(createQuranController))
+                                            quranControllerCreator: createBlockCreator(createQuranController),
+                                            bookmarksPersistence: createBookmarksPersistence(),
+                                            ayahPersistence: createAyahTextStorage())
     }
 
     func createQariTableViewController() -> QariTableViewController {
@@ -100,12 +102,13 @@ class Container {
 
     func createQuranController() -> QuranViewController {
         return QuranViewController(
-            persistence: createSimplePersistence(),
-            imageService: createQuranImageService(),
-            dataRetriever: createQuranPagesRetriever(),
-            ayahInfoRetriever: createAyahInfoRetriever(),
-            audioViewPresenter: createAudioBannerViewPresenter(),
-            qarisControllerCreator: createBlockCreator(createQariTableViewController)
+            persistence             : createSimplePersistence(),
+            imageService            : createQuranImageService(),
+            dataRetriever           : createQuranPagesRetriever(),
+            ayahInfoRetriever       : createAyahInfoRetriever(),
+            audioViewPresenter      : createAudioBannerViewPresenter(),
+            qarisControllerCreator  : createBlockCreator(createQariTableViewController),
+            bookmarksPersistence    : createBookmarksPersistence()
         )
     }
 
@@ -117,7 +120,7 @@ class Container {
         return DefaultQuranImageService(imagesCache: createImagesCache())
     }
 
-    func createImagesCache() -> NSCache<NSNumber, UIImage> {
+    func createImagesCache() -> Cache<Int, UIImage> {
         return imagesCache
     }
 
@@ -186,5 +189,9 @@ class Container {
 
     func createQariAyahTimingPersistenceStorage() -> QariAyahTimingPersistenceStorage {
         return SQLiteAyahTimingPersistenceStorage()
+    }
+
+    func createBookmarksPersistence() -> BookmarksPersistence {
+        return BookmarksPersistenceStorage()
     }
 }

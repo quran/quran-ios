@@ -31,7 +31,7 @@
 "search_hint" = "Buscar en El Corán";
 "quranSearchType" = "Versículos del Corán";
 "found_in_sura" = "Capítulo encontrado";
-"no_results" = "No se encontró \"%s\"";
+"no_results" = "No se encontró \"%@\"";
 "no_active_translation" = "Usted no tiene grupo de traducción activa. Por favor, configure una traducción activa primero y luego volver a buscar.";
 "translation_settings" = "Ajustes de traducción";
 "no_arabic_search_available" = "Usted no ha descargado el paquete de búsqueda árabe. Por favor descargue y pruebe nuevamente su búsqueda.";
@@ -102,7 +102,7 @@
 "quran_sura" = "Capítulo";
 "quran_ayah" = "Versículo %1$d";
 "quran_sura_title" = "Capítulo %1$@";
-"sura_ayah_notification_str" = "Capítulo %1$s, Versículo %2$d";
+"sura_ayah_notification_str" = "Capítulo %1$@, Versículo %2$d";
 "bookmarks_current_page" = "Página corriente";
 "index_loading" = "Cargando…";
 "canceling" = "Cancelando…";
@@ -122,13 +122,13 @@
 "download_error_network_retry" = "Error de la red, intentando reanudar…";
 "notification_download_canceled" = "Descarga cancelada";
 "download_non_wifi_prompt" = "No estás conectado a una red WiFi. ¿Descargar los datos de todos modos?";
-"download_progress" = "Descargado %1$s / %2$s";
+"download_progress" = "Descargado %1$@ / %2$@";
 "process_progress" = "Procesando archivo %1$d / %2$d";
 "download_retry" = "Reintente";
 "download_cancel" = "Cancelar";
 "download_extra_data" = "Tenemos que descargar una o dos pequeñas actualizaciones para la función de compartir la traducción. ¿Descargar ahora?";
 "remove_dlg_title" = "¿Eliminar traducción?";
-"remove_dlg_msg" = "¿Está seguro que desea eliminar el %1$s?";
+"remove_dlg_msg" = "¿Está seguro que desea eliminar el %1$@?";
 "error_getting_translation_list" = "No se puede descargar la lista de traducciones. Por favor, inténtelo de nuevo más tarde.";
 "search_data" = "Buscar datos";
 "need_translation" = "Usted no tiene ninguna traducción / comentario todavía descargado.";

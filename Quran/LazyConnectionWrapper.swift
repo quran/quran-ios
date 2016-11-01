@@ -9,6 +9,28 @@
 import Foundation
 import SQLite
 
+extension Connection {
+    public var userVersion: Int {
+        get {
+            do {
+                let version: Int64 = try scalar("PRAGMA user_version") as! Int64
+                return Int(version)
+            } catch {
+                Crash.recordError(error)
+                fatalError("Cannot get user version from sqlite file. Error: '\(error)'")
+            }
+        }
+        set {
+            do {
+            try run("PRAGMA user_version = \(newValue)")
+            } catch {
+                Crash.recordError(error)
+                fatalError("Cannot set user version to sqlite file. Error: '\(error)'")
+            }
+        }
+    }
+}
+
 class LazyConnectionWrapper {
 
     let sqliteFilePath: String
@@ -31,7 +53,7 @@ class LazyConnectionWrapper {
             return connection
         } catch {
             Crash.recordError(error)
-            fatalError("Cannot open connection to sqlite file '\(sqliteFilePath)'. '\(error)'")
+            fatalError("Cannot open connection to sqlite file '\(sqliteFilePath)'. Error: '\(error)'")
         }
     }
 }

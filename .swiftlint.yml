@@ -3,6 +3,7 @@ included:
 
 disabled_rules:
   - cyclomatic_complexity
+  - force_cast
 
 opt_in_rules:
   - force_unwrapping

@@ -47,7 +47,7 @@
 "search_hint" = "جستجو در قرآن";
 "quranSearchType" = "آيات قرآن";
 "found_in_sura" = "در سوره";
-"no_results" = "هيچ نتيجه اي يافت نشد براي \"%s\"";
+"no_results" = "هيچ نتيجه اي يافت نشد براي \"%@\"";
 "no_active_translation" = "شما هيچ ترجمه را فعال نکرده ايد";
 "translation_settings" = "تنظيمات ترجمه";
 "no_arabic_search_available" = "شما متن عربي قرآن را براي جستجو بارگذاري نکرده ايد، لطفا آنرا ابتدا دريافت نماييد";
@@ -96,7 +96,7 @@
 "quran_sura" = "سوره";
 "quran_ayah" = "%1$d آية";
 "quran_sura_title" = "سوره %1$@";
-"sura_ayah_notification_str" = "سوره %1$s, آيه %2$d";
+"sura_ayah_notification_str" = "سوره %1$@, آيه %2$d";
 "bookmarks_current_page" = "صفحه کنوني";
 "index_loading" = "بارگذاري…";
 "canceling" = "در حال لغو";
@@ -114,12 +114,12 @@
 "download_error_network_retry" = "خطاي شبکه;";
 "notification_download_canceled" = "بارگذاري لغو شده ها";
 "download_non_wifi_prompt" = "شبکه بي سيم شما خاموش است، در هر صورت بارگذاري نمايد؟";
-"download_progress" = "بارگذاري %1$s / %2$s";
+"download_progress" = "بارگذاري %1$@ / %2$@";
 "process_progress" = "پردازش %1$d / %2$d";
 "download_retry" = "تلاش دوباره";
 "download_cancel" = "لغو";
 "remove_dlg_title" = "حذف ترجمه";
-"remove_dlg_msg" = "آيا مطمئن هستيد که مي خواهيد حذف کنيد %1$s?";
+"remove_dlg_msg" = "آيا مطمئن هستيد که مي خواهيد حذف کنيد %1$@?";
 "error_getting_translation_list" = "مشکلي وجود دارد، لطفا بعداً دوباره تلاش نماييد.";
 "search_data" = "جستجو";
 "email_us" = "اگر جواب سوال شما در بالا پیدا نشد، می‌توانید برای پشتیبانی با رایانامه quranandroid@gmail.com تماس حاصل نمایید. لطفا توجه داشته باشید که نامه های زیادی دریافت می‌شود، پاسخ به نامه شما ممکن است کمی طول بکشد.";

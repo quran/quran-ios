@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import GenericDataSources
 
 class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {

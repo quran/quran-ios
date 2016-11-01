@@ -87,7 +87,7 @@ berasizmi?";
 "storage_permission_please_restart" = "Iltimos, ushbu oʻzgarish amalga kirishi uchun\
 ilovani qayta ishga tushiring.";
 "found_in_sura" = "Surada topildi";
-"no_results" = "\"%s\" boʻyicha natija topilmadi";
+"no_results" = "\"%@\" boʻyicha natija topilmadi";
 "no_active_translation" = "Birorta ham tarjima faol foydalanishda emas.\
 Iltimos, avval biror tarjimani foydalanish uchun tanlang, soʻngra qayta izlab koʻring.";
 "translation_settings" = "Tarjima sozlamalari";
@@ -146,7 +146,7 @@ Iltimos, avval biror tarjimani foydalanish uchun tanlang, soʻngra qayta izlab k
 "prefs_err_moving_app_files" = "Fayllarni koʻchirib oʻtkazishda xatolik yuz berdi";
 "prefs_no_enough_space_to_move_files" = "Fayllarni koʻchirib oʻtkazish uchun yetarli joy mavjud emas";
 "prefs_megabytes_int" = "%1$d Mb";
-"prefs_megabytes_str" = "%s Mb";
+"prefs_megabytes_str" = "%@ Mb";
 "prefs_tablet_mode_title" = "Planshet rejimi";
 "prefs_tablet_mode_enabled" = "Yotiq holatda ikki bet yonma-yon koʻrinadi";
 "prefs_tablet_mode_disabled" = "Yotiq holatda ham faqat bitta bet koʻrinadi";
@@ -160,7 +160,7 @@ Iltimos, avval biror tarjimani foydalanish uchun tanlang, soʻngra qayta izlab k
 Import qilinsinmi?";
 "import_successful" = "Muvaffaqiyatli import qilindi";
 "export_data_error" = "Eksport qilishda xatolik yuz berdi";
-"exported_data" = "Maʼlumotlar \"%1$s\"ga eksport qilindi";
+"exported_data" = "Maʼlumotlar \"%1$@\"ga eksport qilindi";
 "warning" = "Ogohlantirish";
 "kitkat_external_message" = "Ilovani tashqi xotiraga (SD kartaga) koʻchirib oʻtkazgach, agar u oʻchirib tashlab-qayta oʻrnatilsa\
 yoki maʼlumotlari tozalansa barcha Qurʼon rasmlari va audio fayllar ham oʻchib ketadi va ushbu kerakli maʼlumotlarni yana qayta saqlab\
@@ -178,9 +178,9 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "quran_page" = "Sahifa";
 "quran_sura" = "Sura";
 "quran_ayah" = "%1$d-oyat";
-"quran_ayah_details" = "%1$s %2$s-oyat, %3$s-juz";
+"quran_ayah_details" = "%1$@ %2$@-oyat, %3$@-juz";
 "quran_sura_title" = "%1$@ surasi";
-"sura_ayah_notification_str" = "%1$s surasi %2$d-oyat";
+"sura_ayah_notification_str" = "%1$@ surasi %2$d-oyat";
 "bookmarks_current_page" = "Joriy sahifa";
 "index_loading" = "Yuklanmoqda…";
 "canceling" = "Bekor qilinmoqda…";
@@ -200,15 +200,15 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "download_error_network_retry" = "Tarqmoq xatoligi, qayta harakat qilinmoqda…";
 "notification_download_canceled" = "Saqlash bekor qilindi";
 "download_non_wifi_prompt" = "Wi-Fi tarmogʻiga ulanmagansiz, baribir fayllarni saqlab olmoqchimisiz?";
-"download_progress" = "%1$s/%2$s saqlandi";
-"download_sura_progress" = "%3$d-suraning %1$s (jami: %2$s) saqlanmoqda…";
+"download_progress" = "%1$@/%2$@ saqlandi";
+"download_sura_progress" = "%3$d-suraning %1$@ (jami: %2$@) saqlanmoqda…";
 "download_sura_ayah_progress" = "%1$d-sura %2$d-oyat saqlanmoqda…";
 "process_progress" = "%1$d/%2$d ishlandi";
 "download_retry" = "Qayta harakat qilish";
 "download_cancel" = "Bekor qilish";
 "download_extra_data" = "Boʻlishish va tarjimalardan foydalana olish uchun bir-ikkita kichik hajmdagi fayllar lozim. Hozir saqlab olasizmi?";
 "remove_dlg_title" = "Tarjima oʻchirilsinmi?";
-"remove_dlg_msg" = "Haqiqatda \"%1$s\" tarjimasini oʻchirmoqchimisiz??";
+"remove_dlg_msg" = "Haqiqatda \"%1$@\" tarjimasini oʻchirmoqchimisiz??";
 "error_getting_translation_list" = "Tarjimalar roʻyxatini olib boʻlmadi. Iltimos, birozdan keyin qayta harakat qilib koʻring.";
 "search_data" = "Maʼlumot izlash";
 "need_translation" = "Birorta ham tarjima saqlab olinmagan.";

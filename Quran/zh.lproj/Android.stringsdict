@@ -13,7 +13,7 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>other</key>
-                <string>%2$d 搜索\&quot;%1$s\&quot;的结果:</string>
+                <string>%2$d 搜索\&quot;%1$@\&quot;的结果:</string>
             </dict>
         </dict>
         <key>verses</key>

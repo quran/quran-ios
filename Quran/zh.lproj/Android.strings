@@ -50,7 +50,7 @@
 "search_hint" = "搜索古兰经";
 "quranSearchType" = "Verses of the Quran";
 "found_in_sura" = "对应章节";
-"no_results" = "未搜索到\"%s\"";
+"no_results" = "未搜索到\"%@\"";
 "no_active_translation" = "当前没有可用的译文，请设置译文语言后再次进行搜索.";
 "translation_settings" = "译文设置";
 "no_arabic_search_available" = "还没有下载搜索包，请下载后再次进行搜索.";
@@ -104,7 +104,7 @@
 "quran_page" = "页";
 "quran_sura" = "章";
 "quran_ayah" = "节 %1$d";
-"sura_ayah_notification_str" = "第%1$s章，第%2$d节";
+"sura_ayah_notification_str" = "第%1$@章，第%2$d节";
 "bookmarks_current_page" = "当前页";
 "index_loading" = "正在载入…";
 "canceling" = "正在取消…";
@@ -123,13 +123,13 @@
 "download_error_network_retry" = "网络错误，正在重新连接…";
 "notification_download_canceled" = "下载已取消";
 "download_non_wifi_prompt" = "没有连接到wifi. 要继续下载吗？";
-"download_progress" = "已下载 %1$s / %2$s";
+"download_progress" = "已下载 %1$@ / %2$@";
 "process_progress" = "正在处理文件 %1$d / %2$d";
 "download_retry" = "重试";
 "download_cancel" = "取消";
 "download_extra_data" = "共享功能和下载功能需要下载一两个小文件，现在下载吗？";
 "remove_dlg_title" = "移除译文吗？";
-"remove_dlg_msg" = "确定要移除译文%1$s吗？";
+"remove_dlg_msg" = "确定要移除译文%1$@吗？";
 "error_getting_translation_list" = "无法下载译文列表。请稍后重试.";
 "search_data" = "搜索数据";
 "need_translation" = "还没有下载任何译文。";

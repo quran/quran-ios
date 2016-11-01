@@ -48,7 +48,7 @@
 "search_hint" = "Cari dalam Quran";
 "quranSearchType" = "Ayat Quran";
 "found_in_sura" = "Dijumpai dalam Surah";
-"no_results" = "Tidak dijumpai \"%s\"";
+"no_results" = "Tidak dijumpai \"%@\"";
 "no_active_translation" = "Anda belum menetapkan terjemahan yang aktif. Ubah sesuai terjemahan pada menu tetapan, kemudian ulangi pencarian.";
 "translation_settings" = "Tetapan Terjemahan";
 "no_arabic_search_available" = "Anda belum memuat turun paket pencarian Arab. Sila muat turun dan ulangi pencarian";
@@ -115,7 +115,7 @@
 "quran_sura" = "Surah";
 "quran_ayah" = "Ayat %1$d";
 "quran_sura_title" = "Surah %1$@";
-"sura_ayah_notification_str" = "Surah %1$s, Ayat %2$d";
+"sura_ayah_notification_str" = "Surah %1$@, Ayat %2$d";
 "bookmarks_current_page" = "Halaman Ketika Ini";
 "index_loading" = "Memuat…";
 "canceling" = "Membatalkan…";
@@ -134,13 +134,13 @@
 "download_error_network_retry" = "Ralat jaringan, mencuba semula…";
 "notification_download_canceled" = "Muat turun dibatalkan";
 "download_non_wifi_prompt" = "Anda tidak berada pada jaringan wifi. Teruskan juga muat turun data?";
-"download_progress" = "Muat turun %1$s / %2$s";
+"download_progress" = "Muat turun %1$@ / %2$@";
 "process_progress" = "Memproses fail %1$d / %2$d";
 "download_retry" = "Cuba semula";
 "download_cancel" = "Batal";
 "download_extra_data" = "Perlu memuat turun beberapa fail kecil untuk menyokong kemampuan berkongsi dan terjemahan. Muat turun sekarang?";
 "remove_dlg_title" = "Hapus Terjemahan?";
-"remove_dlg_msg" = "Apakah anda yakin ingin menghapuskan %1$s?";
+"remove_dlg_msg" = "Apakah anda yakin ingin menghapuskan %1$@?";
 "error_getting_translation_list" = "Tidak dapat memuat turun daftar terjemahan. Sila cuba lagi nanti.";
 "search_data" = "Cari Data";
 "need_translation" = "Anda belum memuat turun fail terjemahan/tafsir.";

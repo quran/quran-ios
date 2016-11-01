@@ -47,7 +47,7 @@
 "quranSearchType" = "آيات القران";
 "found_in_sura" = "سورة";
 "translation_settings" = "إعدادات التفسير";
-"no_results" = "لا توجد نتائج ل \"%s\"";
+"no_results" = "لا توجد نتائج ل \"%@\"";
 "no_active_translation" = "يرجى الذهاب أولا إلى إعدادت التفاسير والتراجم..";
 "no_arabic_search_available" = "لتفعيل البحث بالعربية يجب تحميل قاعدة البيانات.. هل ترغب في ذلك ؟";
 "get_arabic_search_db" = "حمل قاعدة البيانات";
@@ -114,9 +114,9 @@
 "quran_page" = "الصفحة";
 "quran_sura" = "سورة";
 "quran_ayah" = "آية %1$d";
-"quran_ayah_details" = "%1$s - آية %2$s، جزء %3$s";
+"quran_ayah_details" = "%1$@ - آية %2$@، جزء %3$@";
 "quran_sura_title" = "سورة %1$@";
-"sura_ayah_notification_str" = "سورة %1$s, آية %2$d";
+"sura_ayah_notification_str" = "سورة %1$@, آية %2$d";
 "bookmarks_current_page" = "الصفحة الحالية";
 "index_loading" = "جاري التحميل…";
 "canceling" = "جاري إلغاء اﻷمر…";
@@ -135,8 +135,8 @@
 "download_error_network_retry" = "لا يمكن اﻻتصال بالانترنت، جاري إعادة المحاولة…";
 "notification_download_canceled" = "تم إلغاء التحميل";
 "sdcard_error" = "لم يتم العثور على بطاقه الذاكرة الرقمية. اعد وضعها و حاول مرة اخرى.";
-"download_progress" = "تم تحميل %1$s / %2$s";
-"download_sura_progress" = "جاري التحميل من سورة %3$d - %1$s / %2$s";
+"download_progress" = "تم تحميل %1$@ / %2$@";
+"download_sura_progress" = "جاري التحميل من سورة %3$d - %1$@ / %2$@";
 "download_sura_ayah_progress" = "جاري تحميل السورة %1$d الأية %2$d";
 "process_progress" = "جاري اﻹعداد %1$d / %2$d";
 "download_retry" = "اعد المحاولة";
@@ -145,7 +145,7 @@
 الملفات .. حمل الأن؟";
 "download_non_wifi_prompt" = "أنت لست على وأي فأي.  تحميل البيانات على أية حال؟";
 "remove_dlg_title" = "امسح التفسير/الترجمة؟";
-"remove_dlg_msg" = "هل ترغب في حذف التفسير/الترجمة %1$s؟";
+"remove_dlg_msg" = "هل ترغب في حذف التفسير/الترجمة %1$@؟";
 "error_getting_translation_list" = "لم يتم تحميل الملف المطلوب، من فضلك أعد المحاولة";
 "search_data" = "بيانات البحث";
 "need_translation" = "لم يتم تحميل أي تفسير أو ترجمة";

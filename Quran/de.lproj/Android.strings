@@ -79,7 +79,7 @@ wir Ihnen leider auch nicht weiterhelfen.";
 "search_hint" = "Durchsuche den Quran";
 "quranSearchType" = "Quranverse";
 "found_in_sura" = "Gefunden in Sure";
-"no_results" = "Es wurden keine Resultate für \"%s\" gefunden.";
+"no_results" = "Es wurden keine Resultate für \"%@\" gefunden.";
 "no_active_translation" = "Sie haben keine Übersetzung ausgewählt.  Bitte wählen Sie \
 zuerst eine Übersetzung aus und suchen Sie danach erneut.";
 "translation_settings" = "Übersetzungsoptionen";
@@ -153,7 +153,7 @@ heruntergeladen.  Bitte laden Sie dieses herunter und versuchen Sie es danach er
 "quran_sura" = "Sure";
 "quran_ayah" = "Vers %1$d";
 "quran_sura_title" = "Sure %1$@";
-"sura_ayah_notification_str" = "Sure %1$s, Vers %2$d";
+"sura_ayah_notification_str" = "Sure %1$@, Vers %2$d";
 "bookmarks_current_page" = "Aktuelle Seite";
 "index_loading" = "Lade…";
 "canceling" = "Abbrechen…";
@@ -173,8 +173,8 @@ heruntergeladen.  Bitte laden Sie dieses herunter und versuchen Sie es danach er
 "download_error_network_retry" = "Netzwerk-Fehler, es wird versucht eine Verbindung aufzubauen…";
 "notification_download_canceled" = "Download abgebrochen";
 "download_non_wifi_prompt" = "Sie sind nicht mit einem W-LAN verbunden.  Möchten Sie die Dateien trotzdem herunterladen?";
-"download_progress" = "Heruntergeladen %1$s / %2$s";
-"download_sura_progress" = "Heruntergeladen %1$s / %2$s von Sure %3$d";
+"download_progress" = "Heruntergeladen %1$@ / %2$@";
+"download_sura_progress" = "Heruntergeladen %1$@ / %2$@ von Sure %3$d";
 "download_sura_ayah_progress" = "Herunterladen von Sure %1$d Vers %2$d";
 "process_progress" = "Datei wird verarbeitet %1$d / %2$d";
 "download_retry" = "Nochmals versuchen";
@@ -182,7 +182,7 @@ heruntergeladen.  Bitte laden Sie dieses herunter und versuchen Sie es danach er
 "download_extra_data" = "Wir müssen einige kleine Dateien herunterladen, um von der \
 Teilen- und Übersetzungs-Funktion Gebrauch machen zu können.  Möchten Sie die Dateien jetzt herunterladen?";
 "remove_dlg_title" = "Übersetzung entfernen?";
-"remove_dlg_msg" = "Sind Sie sicher, dass Sie die %1$s entfernen wollen?";
+"remove_dlg_msg" = "Sind Sie sicher, dass Sie die %1$@ entfernen wollen?";
 "error_getting_translation_list" = "Es ist zurzeit nicht möglich die Liste \
 mit den Übersetzungen herunterzuladen.  Versuchen Sie es später erneut.";
 "search_data" = "Suche Dateien";

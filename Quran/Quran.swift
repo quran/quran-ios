@@ -9,9 +9,9 @@ import Foundation
 
 struct Quran {
 
-    static let QuranPagesRange: CountableRange<Int> = 1..<PageSuraStart.count
-    static let QuranSurasRange: CountableRange<Int> = 1..<SuraPageStart.count
-    static let QuranJuzsRange: CountableRange<Int>  = 1..<JuzPageStart.count
+    static let QuranPagesRange: ClosedRange<Int> = 1...PageSuraStart.count
+    static let QuranSurasRange: ClosedRange<Int> = 1...SuraPageStart.count
+    static let QuranJuzsRange: ClosedRange<Int>  = 1...JuzPageStart.count
 
     static let NumberOfQuartersPerJuz = Quarters.count / JuzPageStart.count
 

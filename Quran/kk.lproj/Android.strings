@@ -87,7 +87,7 @@
 "storage_permission_please_restart" = "Өзгерістер күшіне ену үшін\
 бағдарламаны қайта қосу керек.";
 "found_in_sura" = "Сүреде табылды";
-"no_results" = "\"%s\" бойынша нәтиже табылмады";
+"no_results" = "\"%@\" бойынша нәтиже табылмады";
 "no_active_translation" = "Белсенді аударма таңдалмаған.\
 Алдымен белсенді аударма таңдап, қайта іздеп көріңіз.";
 "translation_settings" = "Аударма баптаулары";
@@ -145,7 +145,7 @@
 "prefs_err_moving_app_files" = "Файлдарды көшіру барсындағы қателік";
 "prefs_no_enough_space_to_move_files" = "Файлдарды көшіруге бос орын жетпейді";
 "prefs_megabytes_int" = "%1$d Mб";
-"prefs_megabytes_str" = "%s Mб";
+"prefs_megabytes_str" = "%@ Mб";
 "prefs_tablet_mode_title" = "Планшет режимі";
 "prefs_tablet_mode_enabled" = "Көлденең режимде екі бет қатарынан көрсетіледі.";
 "prefs_tablet_mode_disabled" = "Көлденең режимде тек бір бет көрсетіледі.";
@@ -159,7 +159,7 @@
 Импорттау керек пе?";
 "import_successful" = "Деректер импортталды";
 "export_data_error" = "Экспорт қателігі";
-"exported_data" = "Деректер %1$s жеріне экспортталды";
+"exported_data" = "Деректер %1$@ жеріне экспортталды";
 "warning" = "Назар аударыңыз";
 "kitkat_external_message" = "Бағдарлама сыртқы жадқа (SD карта) көшірілген соң жойылып қайта орнатылса\
 немесе деректер тазаланса барлық Құран суреттері мен аудиолары жойылады және ол деректерді қайта жүктеу керек болады.\
@@ -177,9 +177,9 @@
 "quran_page" = "Бет";
 "quran_sura" = "Сүре";
 "quran_ayah" = "%1$d-аят";
-"quran_ayah_details" = "%1$s %2$s-аят, %3$s-пара";
+"quran_ayah_details" = "%1$@ %2$@-аят, %3$@-пара";
 "quran_sura_title" = "%1$@ сүресі";
-"sura_ayah_notification_str" = "%1$s сүресі, %2$d-аят";
+"sura_ayah_notification_str" = "%1$@ сүресі, %2$d-аят";
 "bookmarks_current_page" = "Ашылған бет";
 "index_loading" = "Жүктеу…";
 "canceling" = "Болдырмау…";
@@ -199,15 +199,15 @@
 "download_error_network_retry" = "Байланыс қателігі; қайта қосылуда…";
 "notification_download_canceled" = "Жүктелу тоқтатылды";
 "download_non_wifi_prompt" = "Wi-Fi қосылмаған. Бәрібір жүктелсін бе?";
-"download_progress" = "%1$s/%2$s жүктелді";
-"download_sura_progress" = "%3$d-сүренің %1$s жүктелді (барлығы: %2$s)…";
+"download_progress" = "%1$@/%2$@ жүктелді";
+"download_sura_progress" = "%3$d-сүренің %1$@ жүктелді (барлығы: %2$@)…";
 "download_sura_ayah_progress" = "%1$d-сүре %2$d-аят жүктелуде…";
 "process_progress" = "%1$d/%2$d жүктелді";
 "download_retry" = "Қайталау";
 "download_cancel" = "Болдырмау";
 "download_extra_data" = "Бөлісу және аудармаларды пайдалану үшін бір-екі файл жүктеу керек. Қазір жүктелсін бе?";
 "remove_dlg_title" = "Аударма жойылсын ба?";
-"remove_dlg_msg" = "%1$s аудармасын жоюға сенімдімісіз?";
+"remove_dlg_msg" = "%1$@ аудармасын жоюға сенімдімісіз?";
 "error_getting_translation_list" = "Аударма тізімі жүктелмеді. Кейінірек байқап көріңіз.";
 "search_data" = "Деректерді іздеу";
 "need_translation" = "Аударма/тәпсір жүктелмеген.";

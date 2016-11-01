@@ -1,0 +1,6 @@
+framework module MenuItemKit {
+  umbrella header "MenuItemKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

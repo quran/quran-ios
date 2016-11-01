@@ -57,10 +57,18 @@ struct Crash {
 
 
 func CLog(_ string: String) {
+    NSLog(string)
     CLSLogv("%@", getVaList([string]))
 }
 
 public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {
     CLog("message: \(message()), file:\(file.description), line:\(line)")
     Swift.fatalError(message, file: file, line: line)
+}
+
+
+public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error, file: StaticString = #file, line: UInt = #line) -> Never {
+    let fullMessage = "\(message()), error: \(error)"
+    CLog("message: \(fullMessage), file:\(file.description), line:\(line)")
+    Swift.fatalError(fullMessage, file: file, line: line)
 }

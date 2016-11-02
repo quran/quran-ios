@@ -42,70 +42,75 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                                     with item: QuranPage,
                                     at indexPath: IndexPath) {
 
-        let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
-
+        cell.cellDelegate = self.pageCellDelegate
         cell.highlightingView.bookmarkPersistence = bookmarkPersistence
+
         cell.page = item
         cell.pageLabel.text = numberFormatter.format(NSNumber(value: item.pageNumber))
         cell.suraLabel.text = Quran.nameForSura(item.startAyah.sura)
         cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), item.juzNumber)
-
-        cell.mainImageView.image = nil
         cell.highlightAyat(highlightedAyat)
-        cell.cellDelegate = self.pageCellDelegate
 
-        imageService.getImageOfPage(item.pageNumber, forSize: size) { (image) in
-            guard cell.page == item else { return }
-            cell.mainImageView.image = image
+        // set the page image
+        cell.mainImageView.image = nil
+        let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
+        imageService.getImageOfPage(item.pageNumber, forSize: size) { [weak cell] (image) in
+            guard cell?.page == item else { return }
+            cell?.mainImageView.image = image
         }
 
-        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { (data) in
-            guard cell.page == item else { return }
-            cell.setAyahInfo(data.value)
+        // set the ayah dimensions
+        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { [weak cell] (data) in
+            guard cell?.page == item else { return }
+            cell?.setAyahInfo(data.value)
         }
-        Queue.bookmarks.async({ self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { _, ayahBookmarks in
-            guard cell.page == item else { return }
-            cell.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
+
+        // set bookmarked ayat
+        Queue.bookmarks.async({ self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { [weak cell] _, ayahBookmarks in
+            guard cell?.page == item else { return }
+            cell?.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
         }
     }
 
-    func removeHighlighting() {
-        highlightedAyat.removeAll(keepingCapacity: true)
-        for cell in ds_reusableViewDelegate?.ds_visibleCells() as? [QuranPageCollectionViewCell] ?? [] {
-            cell.highlightAyat(highlightedAyat)
-        }
+    @objc (collectionView:willDisplayCell:forItemAtIndexPath:)
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // Update the highlighting since it's something that could change
+        // between the cell is configured and the cell is visible.
+        (cell as? QuranPageCollectionViewCell)?.highlightAyat(highlightedAyat)
     }
 
     func highlightAyaht(_ ayat: Set<AyahNumber>) {
         highlightedAyat = ayat
 
-        guard let ayah = ayat.first else {
-            removeHighlighting()
-            return
+        // update highlighting for all cells
+        if let visibleCells = self.ds_reusableViewDelegate?.ds_visibleCells() as? [QuranPageCollectionViewCell] {
+            visibleCells.forEach { $0.highlightAyat(highlightedAyat) }
         }
 
-        scrollToHighlightedAya(ayah, ayaht: ayat)
+
+        if let ayah = ayat.first {
+            scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
+        }
     }
 
     func applicationBecomeActive() {
         if let ayah = highlightedAyat.first {
-            scrollToHighlightedAya(ayah, ayaht: highlightedAyat)
+            scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
         }
     }
 
-    fileprivate func scrollToHighlightedAya(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
+    private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
         Queue.background.async {
             let page = ayah.getStartPage()
 
             Queue.main.async {
-                let index = IndexPath(item: page - 1, section: 0)
+                let indexPath = IndexPath(item: page - 1, section: 0)
+
                 // if the cell is there, highlight the ayah.
-                if let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: index) as? QuranPageCollectionViewCell {
-                    cell.highlightAyat(ayaht)
-                } else {
+                if !(self.ds_reusableViewDelegate?.ds_indexPathsForVisibleItems().contains(indexPath) ?? false) {
                     // scroll to the cell
                     self.ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
-                    self.ds_reusableViewDelegate?.ds_scrollToItem(at: index, at: .centeredHorizontally, animated: true)
+                    self.ds_reusableViewDelegate?.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
                 }
             }
         }

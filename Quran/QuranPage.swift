@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct QuranPage: Hashable {
+struct QuranPage: Hashable, CustomStringConvertible {
 
     let pageNumber: Int
 
@@ -18,6 +18,10 @@ struct QuranPage: Hashable {
 
     var hashValue: Int {
         return pageNumber.hashValue
+    }
+
+    var description: String {
+        return "<QuranPage page=\(pageNumber) juz=\(juzNumber) startAyah=\(startAyah)>"
     }
 }
 

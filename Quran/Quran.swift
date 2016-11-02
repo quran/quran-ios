@@ -9,9 +9,9 @@ import Foundation
 
 struct Quran {
 
-    static let QuranPagesRange: ClosedRange<Int> = 1...PageSuraStart.count
-    static let QuranSurasRange: ClosedRange<Int> = 1...SuraPageStart.count
-    static let QuranJuzsRange: ClosedRange<Int>  = 1...JuzPageStart.count
+    static let QuranPagesRange: CountableClosedRange<Int> = 1...PageSuraStart.count
+    static let QuranSurasRange: CountableClosedRange<Int> = 1...SuraPageStart.count
+    static let QuranJuzsRange: CountableClosedRange<Int>  = 1...JuzPageStart.count
 
     static let NumberOfQuartersPerJuz = Quarters.count / JuzPageStart.count
 
@@ -380,7 +380,7 @@ extension Quran {
     }
 
     static func quranPageForPageNumber(_ page: Int) -> QuranPage {
-        return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).order)
+        return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).juzNumber)
     }
 
     static func nameForSura(_ sura: Int) -> String {

@@ -28,8 +28,8 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
         let madani = NSLocalizedString("madani", tableName: "Android", comment: "")
         let suraType = item.isMAkki ? makki : madani
 
-        cell.order.text = numberFormatter.format(NSNumber(value: item.order))
-        cell.name.text = Quran.nameForSura(item.order)
+        cell.order.text = numberFormatter.format(NSNumber(value: item.suraNumber))
+        cell.name.text = Quran.nameForSura(item.suraNumber)
         cell.descriptionLabel.text = "\(suraType) - \(ayahsString)"
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.startPageNumber))
     }

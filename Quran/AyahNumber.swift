@@ -39,10 +39,10 @@ struct AyahNumber: Hashable, CustomStringConvertible {
 
     func nextAyah() -> AyahNumber? {
         if ayah < Quran.numberOfAyahsForSura(sura) {
-            // next ayah
+            // same sura
             return AyahNumber(sura: sura, ayah: ayah + 1)
         } else {
-            if sura < Quran.SuraIsMakki.count {
+            if sura < Quran.SuraPageStart.count {
                 // next sura
                 return AyahNumber(sura: sura + 1, ayah: 1)
             } else {
@@ -53,8 +53,10 @@ struct AyahNumber: Hashable, CustomStringConvertible {
 
     func previousAyah() -> AyahNumber? {
         if ayah > 1 {
+            // same sura
             return AyahNumber(sura: sura, ayah: ayah - 1)
         } else if sura > 1 {
+            // previous sura
             let newSura = sura - 1
             return AyahNumber(sura: newSura, ayah: Quran.numberOfAyahsForSura(newSura))
         } else {

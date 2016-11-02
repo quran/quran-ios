@@ -35,7 +35,7 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
 
         let suraName = Quran.nameForSura(item.ayah.sura)
         let ayahText = numberFormatter.string(from: NSNumber(value: item.ayah.ayah)) ?? ""
-        let juzText = numberFormatter.string(from: NSNumber(value: Juz.juzFromPage(item.page).order)) ?? ""
+        let juzText = numberFormatter.string(from: NSNumber(value: Juz.juzFromPage(item.page).juzNumber)) ?? ""
 
         let ayahFormat = NSLocalizedString("quran_ayah_details", tableName: "Android", comment: "")
         let ayahDescription = String.localizedStringWithFormat(ayahFormat, suraName, ayahText, juzText)

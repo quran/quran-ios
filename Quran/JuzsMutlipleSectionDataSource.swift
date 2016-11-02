@@ -44,7 +44,7 @@ class JuzsMutlipleSectionDataSource: CompositeDataSource {
         let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let juz = juzs[section]
 
-        header.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), juz.order)
+        header.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), juz.juzNumber)
         header.subtitleLabel.text = numberFormatter.string(from: NSNumber(value: juz.startPageNumber))
 
         header.object = juz

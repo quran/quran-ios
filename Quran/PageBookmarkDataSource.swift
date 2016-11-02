@@ -30,7 +30,7 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
         let suraName = Quran.nameForSura(ayah.sura)
 
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
-        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).order)
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
 
         cell.name.text = String(format: suraFormat, suraName)
         cell.descriptionLabel.text = pageDescription

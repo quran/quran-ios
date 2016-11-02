@@ -8,15 +8,19 @@
 
 import Foundation
 
-struct Juz: QuranPageReference, Hashable {
-    let order: Int
-    let startPageNumber: Int
+struct Juz: QuranPageReference, Hashable, CustomStringConvertible {
+    let juzNumber: Int
+    var startPageNumber: Int { return Quran.JuzPageStart[juzNumber - 1] }
 
     var hashValue: Int {
-        return order.hashValue
+        return juzNumber.hashValue
+    }
+
+    var description: String {
+        return "<Juz juz=\(juzNumber) startPage=\(startPageNumber)>"
     }
 }
 
 func == (lhs: Juz, rhs: Juz) -> Bool {
-    return lhs.order == rhs.order
+    return lhs.juzNumber == rhs.juzNumber
 }

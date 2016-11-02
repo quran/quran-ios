@@ -10,7 +10,7 @@ import Foundation
 
 
 struct Sura: QuranPageReference {
-    let order: Int
+    let suraNumber: Int
     let isMAkki: Bool
     let numberOfAyahs: Int
     let startPageNumber: Int

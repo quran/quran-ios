@@ -10,25 +10,19 @@ import Foundation
 
 struct JuzBasedLastAyahFinder: LastAyahFinder {
 
-    let pageFinder = PageBasedLastAyahFinder()
-
     func findLastAyah(startAyah: AyahNumber, page: Int) -> AyahNumber {
 
-        let pageLastAyah = pageFinder.findLastAyah(startAyah: startAyah, page: page)
+        precondition(Quran.QuranPagesRange.contains(page), "Page '\(page)' is not a valid quran page")
+
         let juz = Juz.juzFromPage(page)
 
-        // if last juz, get last ayah
-        guard juz.order != (Quran.QuranJuzsRange.upperBound - 1) else {
-            let lastSura = (Quran.QuranSurasRange.upperBound - 1)
+        guard juz.juzNumber < Quran.QuranJuzsRange.upperBound else {
+            // last juz, get last ayah
+            let lastSura = Quran.QuranSurasRange.upperBound
             return AyahNumber(sura: lastSura, ayah: Quran.numberOfAyahsForSura(lastSura))
         }
 
-        let endJuz = Quran.Quarters[juz.order * Quran.NumberOfQuartersPerJuz]
-        if pageLastAyah.sura > endJuz.sura ||
-            (pageLastAyah.sura == endJuz.sura && pageLastAyah.ayah > endJuz.ayah) {
-            return Quran.Quarters[(juz.order + 1) * Quran.NumberOfQuartersPerJuz]
-        } else {
-            return endJuz
-        }
+        let juzLastAyah = Quran.Quarters[juz.juzNumber * Quran.NumberOfQuartersPerJuz].previousAyah()
+        return juzLastAyah! // swiftlint:disable:this force_unwrapping
     }
 }

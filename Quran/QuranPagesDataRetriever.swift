@@ -15,12 +15,10 @@ struct QuranPagesDataRetriever: DataRetriever {
 
             var pages: [QuranPage] = []
 
-            let startIndex = Quran.QuranPagesRange.lowerBound
-            for i in 0..<Quran.QuranPagesRange.count {
+            for pageNumber in Quran.QuranPagesRange {
 
-                let pageNumber = i + startIndex
                 let ayah = Quran.startAyahForPage(pageNumber)
-                let juzNumber = Juz.juzFromPage(pageNumber).order
+                let juzNumber = Juz.juzFromPage(pageNumber).juzNumber
 
                 let page = QuranPage(pageNumber: pageNumber, startAyah: ayah, juzNumber: juzNumber)
                 pages.append(page)

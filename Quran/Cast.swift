@@ -8,7 +8,7 @@
 
 import Foundation
 
-func cast<T>(_ object: Any) -> T {
+func cast<S, T>(_ object: S) -> T {
     guard let value = object as? T else {
         fatalError("Couldn't cast object of type '\(type(of: (object) as AnyObject))' to '\(T.self)' where object value is '\(object)'")
     }

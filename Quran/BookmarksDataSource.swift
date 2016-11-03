@@ -25,7 +25,7 @@ class BookmarksDataSource: CompositeDataSource {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier) as Any)
+        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let text = headerTitles[section]
         header.titleLabel.text =  text
         header.subtitleLabel.isHidden = true

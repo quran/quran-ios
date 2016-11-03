@@ -299,15 +299,15 @@ class QueuePlayer: NSObject {
         let itemInfo = playingItemsInfo[index]
 
         var info: [String: AnyObject] = [:]
-        info[MPNowPlayingInfoPropertyPlaybackQueueCount] = playingItems.count as AnyObject?
+        info[MPNowPlayingInfoPropertyPlaybackQueueCount] = playingItems.count as AnyObject
         if let index = playingItems.index(of: currentItem) {
-            info[MPNowPlayingInfoPropertyPlaybackQueueIndex] = index as AnyObject?
+            info[MPNowPlayingInfoPropertyPlaybackQueueIndex] = index as AnyObject
         }
-        info[MPNowPlayingInfoPropertyPlaybackRate] = player.rate as AnyObject?
-        info[MPMediaItemPropertyPlaybackDuration] = currentItem.duration.seconds as AnyObject?
-        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentItem.currentTime().seconds as AnyObject?
-        info[MPMediaItemPropertyTitle] = itemInfo.title as AnyObject?
-        info[MPMediaItemPropertyArtist] = itemInfo.artist as AnyObject?
+        info[MPNowPlayingInfoPropertyPlaybackRate] = player.rate as AnyObject
+        info[MPMediaItemPropertyPlaybackDuration] = currentItem.duration.seconds as AnyObject
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentItem.currentTime().seconds as AnyObject
+        info[MPMediaItemPropertyTitle] = itemInfo.title as AnyObject
+        info[MPMediaItemPropertyArtist] = itemInfo.artist as AnyObject
         info[MPMediaItemPropertyArtwork] = itemInfo.artwork
         center.nowPlayingInfo = info
     }
@@ -318,7 +318,7 @@ class QueuePlayer: NSObject {
         let timeValues = times.map { NSValue(time: CMTime(seconds: $0, preferredTimescale: 1000)) }
         timeObserver = player.addBoundaryTimeObserver(forTimes: timeValues, queue: nil) { [weak self] in
             self?.onTimeBoundaryReached()
-        } as AnyObject?
+        } as AnyObject
     }
 
     fileprivate func onTimeBoundaryReached() {

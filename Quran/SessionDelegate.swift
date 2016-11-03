@@ -25,9 +25,9 @@ private class RequestData: NSObject, NSSecureCoding {
     }
 
     @objc required convenience init(coder aDecoder: NSCoder) {
-        let request: URLRequest = cast(aDecoder.decodeObject(forKey: "request"))
-        let destination: String = cast(aDecoder.decodeObject(forKey: "destination"))
-        let resumeDataURL: String = cast(aDecoder.decodeObject(forKey: "resumeDataURL"))
+        let request: URLRequest = cast(aDecoder.decodeObject(forKey: "request") as Any)
+        let destination: String = cast(aDecoder.decodeObject(forKey: "destination") as Any)
+        let resumeDataURL: String = cast(aDecoder.decodeObject(forKey: "resumeDataURL") as Any)
         self.init(request: request, destination: destination, resumeDataURL: resumeDataURL)
     }
 
@@ -52,7 +52,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
 
         // initialize requests
         if let data = persistence.valueForKey(.DownloadRequests) {
-            dataRequests = cast(NSKeyedUnarchiver.unarchiveObject(with: data))
+            dataRequests = cast(NSKeyedUnarchiver.unarchiveObject(with: data) as Any)
         } else {
             dataRequests = [:]
         }
@@ -163,7 +163,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
                 downloadRequest?.onCompletion?(.failure(FileSystemError(error: error)))
             }
         } else {
-            print("Missed saving task", downloadTask.currentRequest?.url)
+            print("Missed saving task", downloadTask.currentRequest?.url as Any)
         }
     }
 

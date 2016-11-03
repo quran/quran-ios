@@ -101,7 +101,6 @@
 		54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */; };
 		54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */; };
 		54B266C91CD2CD2500D3AEF8 /* QuranUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */; };
-		54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */; };
 		54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266CE1CD31CA600D3AEF8 /* Cast.swift */; };
 		54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */; };
 		54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D51CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift */; };
@@ -168,6 +167,7 @@
 		54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EB823E1D0A35EA00CBA802 /* Crash.swift */; };
 		54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */; };
 		54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */ = {isa = PBXBuildFile; fileRef = 54F5B4371CFAF96B0002A3B8 /* images_1280 */; };
+		C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */; };
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */; };
 		C1F63E251CE58B460026E263 /* AyahInfoPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */; };
@@ -326,7 +326,6 @@
 		54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotImplemented.swift; sourceTree = "<group>"; };
 		54B266C71CD2B76C00D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranUtilities.swift; sourceTree = "<group>"; };
-		54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzsMutlipleSectionDataSource.swift; sourceTree = "<group>"; };
 		54B266CE1CD31CA600D3AEF8 /* Cast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cast.swift; sourceTree = "<group>"; };
 		54B266D01CD3E2B700D3AEF8 /* UIView+AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AutoLayout.swift"; sourceTree = "<group>"; };
 		54B266D21CD3F15200D3AEF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -421,6 +420,7 @@
 		54F5B4371CFAF96B0002A3B8 /* images_1280 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1280; sourceTree = "<group>"; };
 		979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 		A1C4D17DF9C049CBECBB13FE /* Pods-Quran.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.debug.xcconfig"; sourceTree = "<group>"; };
+		C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzsMultipleSectionDataSource.swift; sourceTree = "<group>"; };
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoStorage.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* AyahInfoPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistenceStorage.swift; sourceTree = "<group>"; };
@@ -814,10 +814,10 @@
 			children = (
 				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
-				54B266CC1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift */,
 				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
 				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
+				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
 				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
 				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 				5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */,
@@ -1384,7 +1384,6 @@
 				54C0DC261CE78337009AAD8D /* FileSystemError.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
-				54B266CD1CD315E100D3AEF8 /* JuzsMutlipleSectionDataSource.swift in Sources */,
 				5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */,
 				54C0DBC61CDE5C2A009AAD8D /* URL+Extension.swift in Sources */,
 				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
@@ -1468,6 +1467,7 @@
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
+				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
 				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,

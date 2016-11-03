@@ -1,5 +1,5 @@
 //
-//  JuzsMutlipleSectionDataSource.swift
+//  JuzsMultipleSectionDataSource.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/29/16.
@@ -10,7 +10,7 @@ import Foundation
 import GenericDataSources
 
 
-class JuzsMutlipleSectionDataSource: CompositeDataSource {
+class JuzsMultipleSectionDataSource: CompositeDataSource {
 
     let numberFormatter = NumberFormatter()
 
@@ -41,7 +41,7 @@ class JuzsMutlipleSectionDataSource: CompositeDataSource {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
+        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier) as Any)
         let juz = juzs[section]
 
         header.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), juz.juzNumber)

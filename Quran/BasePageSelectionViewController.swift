@@ -14,7 +14,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController>
 
-    let dataSource = JuzsMutlipleSectionDataSource(type: .multi, headerReuseIdentifier: "header")
+    let dataSource = JuzsMultipleSectionDataSource(type: .multi, headerReuseIdentifier: "header")
 
     init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
         self.dataRetriever = dataRetriever

@@ -242,6 +242,12 @@
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
+		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
+		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
+		545EE5111DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Readers.strings; sourceTree = "<group>"; };
+		545EE5121DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Android.stringsdict; sourceTree = "<group>"; };
+		545EE5131DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		548723F91DC4855E00ADDE54 /* SqlitePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlitePersistence.swift; sourceTree = "<group>"; };
 		548724191DC4957700ADDE54 /* BookmarksPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksPersistence.swift; sourceTree = "<group>"; };
 		5487241B1DC495DB00ADDE54 /* NSFileManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFileManager+Extension.swift"; sourceTree = "<group>"; };
@@ -1249,6 +1255,7 @@
 				ru,
 				tr,
 				zh,
+				nl,
 			);
 			mainGroup = 54B265DA1CC57D8E00D3AEF8;
 			productRefGroup = 54B265E41CC57D8F00D3AEF8 /* Products */;
@@ -1537,6 +1544,7 @@
 				5419E4C91CFA26E200071A6D /* ru */,
 				5419E4CA1CFA26E200071A6D /* tr */,
 				5419E4CB1CFA26E300071A6D /* zh */,
+				545EE50F1DCBC4DE0085D31F /* nl */,
 			);
 			name = Android.strings;
 			sourceTree = "<group>";
@@ -1558,6 +1566,7 @@
 				5419E5191CFA2BB000071A6D /* ru */,
 				5419E51A1CFA2BB100071A6D /* tr */,
 				5419E51B1CFA2BB200071A6D /* zh */,
+				545EE5101DCBC4DE0085D31F /* nl */,
 			);
 			name = Suras.strings;
 			sourceTree = "<group>";
@@ -1579,6 +1588,7 @@
 				5419E52B1CFA2BCA00071A6D /* ru */,
 				5419E52C1CFA2BCA00071A6D /* tr */,
 				5419E52D1CFA2BCB00071A6D /* zh */,
+				545EE5111DCBC4DE0085D31F /* nl */,
 			);
 			name = Readers.strings;
 			sourceTree = "<group>";
@@ -1600,6 +1610,7 @@
 				5419E5401CFA46A200071A6D /* ru */,
 				5419E5411CFA46A300071A6D /* zh */,
 				5419E5421CFA46A500071A6D /* tr */,
+				545EE5121DCBC4DE0085D31F /* nl */,
 			);
 			name = Android.stringsdict;
 			sourceTree = "<group>";
@@ -1621,6 +1632,7 @@
 				54B266FA1CD656CC00D3AEF8 /* ru */,
 				54B266FC1CD657DE00D3AEF8 /* tr */,
 				54B266FE1CD69DE000D3AEF8 /* zh */,
+				545EE50E1DCBC4DE0085D31F /* nl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1642,6 +1654,7 @@
 				54B266F91CD656CC00D3AEF8 /* ru */,
 				54B266FB1CD657DE00D3AEF8 /* tr */,
 				54B266FD1CD69DE000D3AEF8 /* zh */,
+				545EE5131DCBC4DE0085D31F /* nl */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

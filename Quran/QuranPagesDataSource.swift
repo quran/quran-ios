@@ -28,9 +28,9 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         super.init(reuseIdentifier: reuseIdentifier)
 
         NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(applicationBecomeActive),
-                                                         name: NSNotification.Name.UIApplicationDidBecomeActive,
-                                                         object: nil)
+                                               selector: #selector(applicationBecomeActive),
+                                               name: .UIApplicationDidBecomeActive,
+                                               object: nil)
     }
 
     deinit {

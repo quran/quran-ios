@@ -1,0 +1,13 @@
+
+"NetworkError_ConnectionLost" = "Internet verbinding is verbroken. Ga naar een locatie waar meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug stabiel te zijn.";
+"NetworkError_InternationalRoamingOff" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
+"NetworkError_NotConnectedToInternet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
+"NetworkError_ServerNotReachable" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"NetworkError_Unknown" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+
+
+"FileSystemError_Unknown" = "Onbekende fout bij het toetreden van de hardeschijf van het toestel.";
+"FileSystemError_NoDiskSpace" = "Geen opslagruimte beschikbaar om te downloaden.";
+
+
+

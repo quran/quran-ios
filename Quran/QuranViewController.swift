@@ -44,7 +44,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             reuseIdentifier: cellReuseId,
             imageService: imageService,
             ayahInfoRetriever: ayahInfoRetriever,
-            bookmarkPersistence: bookmarksPersistence)
+            bookmarkPersistence: bookmarksPersistence,
+            persistence: persistence)
         super.init(nibName: nil, bundle: nil)
 
         audioViewPresenter.delegate = self

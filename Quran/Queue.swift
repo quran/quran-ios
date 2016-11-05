@@ -32,7 +32,3 @@ struct Queue {
         }
     }
 }
-
-extension Queue {
-    static let bookmarks = Queue(queue: DispatchQueue(label: "com.quran.bookmarks"))
-}

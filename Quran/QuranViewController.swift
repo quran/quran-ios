@@ -11,45 +11,67 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPageCollectionCellDelegate {
+class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPagesDataSourceDelegate {
 
-    private let persistence: SimplePersistence
-    private let dataRetriever: AnyDataRetriever<[QuranPage]>
     private let bookmarksPersistence: BookmarksPersistence
+    private let lastPagesPersistence: LastPagesPersistence
+
+    private let dataRetriever: AnyDataRetriever<[QuranPage]>
 
     private let pageDataSource: QuranPagesDataSource
 
     private let audioViewPresenter: AudioBannerViewPresenter
-    private let qarisControllerCreator: AnyCreator<QariTableViewController>
+    private let qarisControllerCreator: AnyCreator<QariTableViewController, Void>
 
     private let scrollToPageToken = Once()
     private let didLayoutSubviewToken = Once()
 
     private var isBookmarked: Bool? = nil
 
-    init(persistence: SimplePersistence,
-         imageService: QuranImageService,
+    private var lastPage: LastPage!
+
+    private func saveCurrentPage(_ page: Int) {
+        Queue.lastPages.async({
+            if let lastPage = self.lastPage {
+                return self.lastPagesPersistence.update(page: lastPage, toPage: page)
+            } else {
+                return self.lastPagesPersistence.add(page: page)
+            }
+        }) { self.lastPage = $0 }
+    }
+
+    init(imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
-         qarisControllerCreator: AnyCreator<QariTableViewController>,
-         bookmarksPersistence: BookmarksPersistence) {
-        self.persistence = persistence
-        self.dataRetriever = dataRetriever
-        self.audioViewPresenter = audioViewPresenter
+         qarisControllerCreator: AnyCreator<QariTableViewController, Void>,
+         bookmarksPersistence: BookmarksPersistence,
+         lastPagesPersistence: LastPagesPersistence,
+         page: Int,
+         lastPage: LastPage?) {
+        self.dataRetriever          = dataRetriever
+        self.audioViewPresenter     = audioViewPresenter
         self.qarisControllerCreator = qarisControllerCreator
-        self.bookmarksPersistence = bookmarksPersistence
+        self.bookmarksPersistence   = bookmarksPersistence
+        self.lastPagesPersistence   = lastPagesPersistence
+        self.initialPage            = page
 
         self.pageDataSource = QuranPagesDataSource(
             reuseIdentifier: cellReuseId,
             imageService: imageService,
             ayahInfoRetriever: ayahInfoRetriever,
-            bookmarkPersistence: bookmarksPersistence,
-            persistence: persistence)
+            bookmarkPersistence: bookmarksPersistence)
+
         super.init(nibName: nil, bundle: nil)
 
+        if lastPage == nil {
+            saveCurrentPage(page)
+        } else {
+            self.lastPage = lastPage
+        }
+
         audioViewPresenter.delegate = self
-        self.pageDataSource.pageCellDelegate = self
+        self.pageDataSource.delegate = self
 
         automaticallyAdjustsScrollViewInsets = false
 
@@ -65,7 +87,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         fatalError("init(coder:) has not been implemented")
     }
 
-    var initialPage: Int = 0 {
+    private var initialPage: Int = 0 {
         didSet {
             title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
         }
@@ -203,15 +225,18 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         timer = nil
     }
 
-    //MARK: - QuranPageCollectionCellDelegate -
+    //MARK: - QuranPagesDataSourceDelegate
 
-    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
-
+    func share(ayahText: String, from cell: QuranPageCollectionViewCell) {
         ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
     }
 
+    func lastViewedPage() -> Int {
+        return lastPage.page
+    }
 
-    //MARK: - Gestures recognizers handlers -
+
+    //MARK: - Gestures recognizers handlers
 
     func onViewTapped(_ sender: UITapGestureRecognizer) {
         guard let audioView = audioView, !audioView.bounds.contains(sender.location(in: audioView)) else {
@@ -276,8 +301,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
         // only persist if active
         if UIApplication.shared.applicationState == .active {
-            persistence.setValue(page.pageNumber, forKey: PersistenceKeyBase.LastViewedPage)
             Crash.setValue(page.pageNumber, forKey: .QuranPage)
+            saveCurrentPage(page.pageNumber)
         }
     }
 
@@ -305,7 +330,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
-        let controller = qarisControllerCreator.create()
+        let controller = qarisControllerCreator.create(parameters: Void())
         controller.setQaris(qaris)
         controller.selectedIndex = selectedIndex
         controller.onSelectedIndexChanged = { [weak self] index in
@@ -330,7 +355,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         guard UIApplication.shared.applicationState != .active else { return }
         Queue.background.async {
             let page = ayah.getStartPage()
-            self.persistence.setValue(page, forKey: PersistenceKeyBase.LastViewedPage)
+            self.saveCurrentPage(page)
             Crash.setValue(page, forKey: .QuranPage)
         }
     }

@@ -11,7 +11,7 @@ import GenericDataSources
 
 class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell> {
 
-    override init(dataRetriever: AnyDataRetriever<[(Juz, [Sura])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
+    override init(dataRetriever: AnyDataRetriever<[(Juz, [Sura])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 

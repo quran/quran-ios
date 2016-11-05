@@ -12,11 +12,11 @@ import GenericDataSources
 class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableViewController {
 
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
-    let quranControllerCreator: AnyCreator<QuranViewController>
+    let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>
 
     let dataSource = JuzsMultipleSectionDataSource(type: .multi, headerReuseIdentifier: "header")
 
-    init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
+    init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         self.dataRetriever = dataRetriever
         self.quranControllerCreator = quranControllerCreator
         super.init(nibName: nil, bundle: nil)
@@ -85,8 +85,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     }
 
     fileprivate func navigateToPage(_ page: Int) {
-        let controller = self.quranControllerCreator.create()
-        controller.initialPage = page
+        let controller = self.quranControllerCreator.create(parameters: (page, nil))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

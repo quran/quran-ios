@@ -262,7 +262,7 @@ class QueuePlayer: NSObject {
 
         NotificationCenter.default.addObserver(self,
                                                          selector: #selector(onCurrentItemReachedEnd),
-                                                         name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                         name: .AVPlayerItemDidPlayToEndTime,
                                                          object: newValue)
 
         durationObserver = observe(retainedObservable: newValue,
@@ -334,12 +334,12 @@ class QueuePlayer: NSObject {
     }
 
     fileprivate func removeCurrentItemObserver() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
         unobserve(self.player, keyPath: "currentItem")
     }
 
     fileprivate func removeInterruptionNotification() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVAudioSessionInterruption, object: nil)
     }
 
     fileprivate func stopPlayback() {
@@ -357,7 +357,7 @@ class QueuePlayer: NSObject {
     }
 
     func onAudioInterruptionStateChanged(_ notification: Notification) {
-        guard let info = (notification as NSNotification).userInfo, notification.name == NSNotification.Name.AVAudioSessionInterruption else {
+        guard let info = (notification as NSNotification).userInfo, notification.name == .AVAudioSessionInterruption else {
             return
         }
 

@@ -11,26 +11,29 @@ import GenericDataSources
 
 class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell> {
 
-    let imageService: QuranImageService
-    let ayahInfoRetriever: AyahInfoRetriever
-    let bookmarkPersistence: BookmarksPersistence
+    private let persistence: SimplePersistence
+    private let imageService: QuranImageService
+    private let ayahInfoRetriever: AyahInfoRetriever
+    private let bookmarkPersistence: BookmarksPersistence
 
-    let numberFormatter = NumberFormatter()
+    private let numberFormatter = NumberFormatter()
 
-    var highlightedAyat: Set<AyahNumber> = Set()
+    private var highlightedAyat: Set<AyahNumber> = Set()
 
     weak var pageCellDelegate: QuranPageCollectionCellDelegate?
 
-    init(reuseIdentifier: String, imageService: QuranImageService, ayahInfoRetriever: AyahInfoRetriever, bookmarkPersistence: BookmarksPersistence) {
+    init(reuseIdentifier: String,
+         imageService: QuranImageService,
+         ayahInfoRetriever: AyahInfoRetriever,
+         bookmarkPersistence: BookmarksPersistence,
+         persistence: SimplePersistence) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
         self.bookmarkPersistence = bookmarkPersistence
+        self.persistence = persistence
         super.init(reuseIdentifier: reuseIdentifier)
 
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(applicationBecomeActive),
-                                                         name: NSNotification.Name.UIApplicationDidBecomeActive,
-                                                         object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
     }
 
     deinit {
@@ -93,26 +96,30 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
     }
 
-    func applicationBecomeActive() {
+    @objc private func applicationBecomeActive() {
         if let ayah = highlightedAyat.first {
             scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
+        } else {
+            if let lastPageViewed = persistence.valueForKey(PersistenceKeyBase.LastViewedPage) {
+                scrollTo(page: lastPageViewed)
+            }
+        }
+    }
+
+    private func scrollTo(page: Int) {
+        let indexPath = IndexPath(item: page - 1, section: 0)
+
+        // if the cell is there, highlight the ayah.
+        if !(ds_reusableViewDelegate?.ds_indexPathsForVisibleItems().contains(indexPath) ?? false) {
+            // scroll to the cell
+            ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
+            ds_reusableViewDelegate?.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
     }
 
     private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
-        Queue.background.async {
-            let page = ayah.getStartPage()
-
-            Queue.main.async {
-                let indexPath = IndexPath(item: page - 1, section: 0)
-
-                // if the cell is there, highlight the ayah.
-                if !(self.ds_reusableViewDelegate?.ds_indexPathsForVisibleItems().contains(indexPath) ?? false) {
-                    // scroll to the cell
-                    self.ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
-                    self.ds_reusableViewDelegate?.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                }
-            }
+        Queue.background.async({ ayah.getStartPage() }) {
+            self.scrollTo(page: $0)
         }
     }
 }

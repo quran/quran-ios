@@ -40,7 +40,7 @@ struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
         // Last Pages table
         try connection.run(LastPages.table.create { builder in
             builder.column(LastPages.id, primaryKey: .autoincrement)
-            builder.column(LastPages.page)
+            builder.column(LastPages.page, unique: true)
             builder.column(LastPages.createdOn)
             builder.column(LastPages.modifiedOn)
         })
@@ -68,6 +68,7 @@ struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
     func add(page: Int) -> LastPage {
         return run { connection in
             let insert = LastPages.table.insert(
+                or: .replace,
                 LastPages.page <- page,
                 LastPages.createdOn <- Date(),
                 LastPages.modifiedOn <- Date())

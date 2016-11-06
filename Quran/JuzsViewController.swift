@@ -11,7 +11,7 @@ import GenericDataSources
 
 class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell> {
 
-    override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<QuranViewController>) {
+    override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 

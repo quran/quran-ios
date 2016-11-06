@@ -9,6 +9,10 @@
 import Foundation
 import SQLite
 
+extension Queue {
+    static let bookmarks = Queue(queue: DispatchQueue(label: "com.quran.bookmarks"))
+}
+
 struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
 
     let version: UInt = 1
@@ -41,8 +45,6 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
     }
 
     func onCreate(connection: Connection) throws {
-        print("afifi", connection.description)
-
         // bookmark table
         try connection.run(Bookmarks.table.create { builder in
             builder.column(Bookmarks.id, primaryKey: .autoincrement)

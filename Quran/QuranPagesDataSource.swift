@@ -9,9 +9,13 @@
 import Foundation
 import GenericDataSources
 
-class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell> {
+protocol QuranPagesDataSourceDelegate: class {
+    func share(ayahText: String, from cell: QuranPageCollectionViewCell)
+    func lastViewedPage() -> Int
+}
 
-    private let persistence: SimplePersistence
+class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell>, QuranPageCollectionCellDelegate {
+
     private let imageService: QuranImageService
     private let ayahInfoRetriever: AyahInfoRetriever
     private let bookmarkPersistence: BookmarksPersistence
@@ -20,17 +24,15 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     private var highlightedAyat: Set<AyahNumber> = Set()
 
-    weak var pageCellDelegate: QuranPageCollectionCellDelegate?
+    weak var delegate: QuranPagesDataSourceDelegate?
 
     init(reuseIdentifier: String,
          imageService: QuranImageService,
          ayahInfoRetriever: AyahInfoRetriever,
-         bookmarkPersistence: BookmarksPersistence,
-         persistence: SimplePersistence) {
+         bookmarkPersistence: BookmarksPersistence) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
         self.bookmarkPersistence = bookmarkPersistence
-        self.persistence = persistence
         super.init(reuseIdentifier: reuseIdentifier)
 
         NotificationCenter.default.addObserver(self, selector: #selector(applicationBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
@@ -45,7 +47,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
                                     with item: QuranPage,
                                     at indexPath: IndexPath) {
 
-        cell.cellDelegate = self.pageCellDelegate
+        cell.cellDelegate = self
         cell.highlightingView.bookmarkPersistence = bookmarkPersistence
 
         cell.page = item
@@ -100,7 +102,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         if let ayah = highlightedAyat.first {
             scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
         } else {
-            if let lastPageViewed = persistence.valueForKey(PersistenceKeyBase.LastViewedPage) {
+            if let lastPageViewed = delegate?.lastViewedPage() {
                 scrollTo(page: lastPageViewed)
             }
         }
@@ -121,5 +123,9 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         Queue.background.async({ ayah.getStartPage() }) {
             self.scrollTo(page: $0)
         }
+    }
+
+    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
+        delegate?.share(ayahText: ayahText, from: collectionCell)
     }
 }

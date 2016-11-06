@@ -42,11 +42,11 @@ class Container {
     }
 
     func createSurasViewController() -> UIViewController {
-        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createBlockCreator(createQuranController))
+        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createCreator(createQuranController))
     }
 
     func createJuzsViewController() -> UIViewController {
-        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createBlockCreator(createQuranController))
+        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createCreator(createQuranController))
     }
 
     func createSearchController() -> UIViewController {
@@ -62,8 +62,10 @@ class Container {
     }
 
     func createBookmarksViewController() -> UIViewController {
-        return BookmarksTableViewController(persistence: createSimplePersistence(),
-                                            quranControllerCreator: createBlockCreator(createQuranController),
+        return BookmarksTableViewController(
+                                            quranControllerCreator: createCreator(createQuranController),
+                                            simplePersistence: createSimplePersistence(),
+                                            lastPagesPersistence: createLastPagesPersistence(),
                                             bookmarksPersistence: createBookmarksPersistence(),
                                             ayahPersistence: createAyahTextStorage())
     }
@@ -100,20 +102,23 @@ class Container {
         return SQLiteAyahInfoRetriever(persistence: createAyahInfoStorage())
     }
 
-    func createQuranController() -> QuranViewController {
+    func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
         return QuranViewController(
-            persistence             : createSimplePersistence(),
             imageService            : createQuranImageService(),
             dataRetriever           : createQuranPagesRetriever(),
             ayahInfoRetriever       : createAyahInfoRetriever(),
             audioViewPresenter      : createAudioBannerViewPresenter(),
-            qarisControllerCreator  : createBlockCreator(createQariTableViewController),
-            bookmarksPersistence    : createBookmarksPersistence()
+            qarisControllerCreator  : createCreator(createQariTableViewController),
+            bookmarksPersistence    : createBookmarksPersistence(),
+            lastPagesPersistence    : createLastPagesPersistence(),
+            page                    : page,
+            lastPage                : lastPage
         )
     }
 
-    func createBlockCreator<CreatedObject>(_ creationClosure: @escaping () -> CreatedObject) -> AnyCreator<CreatedObject> {
-        return BlockCreator(creationClosure: creationClosure).erasedType()
+    func createCreator<CreatedObject, Parameters>(
+        _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<CreatedObject, Parameters> {
+        return AnyCreator(createClosure: creationClosure).erasedType()
     }
 
     func createQuranImageService() -> QuranImageService {
@@ -193,5 +198,9 @@ class Container {
 
     func createBookmarksPersistence() -> BookmarksPersistence {
         return BookmarksPersistenceStorage()
+    }
+
+    func createLastPagesPersistence() -> LastPagesPersistence {
+        return SqliteLastPagesPersistence(simplePersistence: createSimplePersistence())
     }
 }

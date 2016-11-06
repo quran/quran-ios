@@ -9,7 +9,6 @@
 import Foundation
 
 class PersistenceKeyBase {
-    static let LastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
     static let LastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
     static let DownloadRequests = PersistenceKey<Data?>(key: "DownloadRequests", defaultValue: nil)
 }

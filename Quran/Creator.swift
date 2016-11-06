@@ -10,26 +10,31 @@ import Foundation
 
 protocol Creator {
     associatedtype CreatedObject
+    associatedtype Parameters
 
-    func create() -> CreatedObject
+    func create(parameters: Parameters) -> CreatedObject
 }
 
-struct AnyCreator<CreatedObject>: Creator {
+struct AnyCreator<CreatedObject, Parameters>: Creator {
 
-    let createClosure: () -> CreatedObject
+    let createClosure: (Parameters) -> CreatedObject
 
-    init<CreatorObject: Creator>(creator: CreatorObject) where CreatorObject.CreatedObject == CreatedObject {
+    init(createClosure: @escaping (Parameters) -> CreatedObject) {
+        self.createClosure = createClosure
+    }
+
+    init<CreatorObject: Creator>(creator: CreatorObject) where CreatorObject.CreatedObject == CreatedObject, CreatorObject.Parameters == Parameters {
         createClosure = creator.create
     }
 
-    func create() -> CreatedObject {
-        return createClosure()
+    func create(parameters: Parameters) -> CreatedObject {
+        return createClosure(parameters)
     }
 }
 
 extension Creator {
 
-    func erasedType() -> AnyCreator<CreatedObject> {
+    func erasedType() -> AnyCreator<CreatedObject, Parameters> {
         return AnyCreator(creator: self)
     }
 }

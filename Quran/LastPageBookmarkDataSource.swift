@@ -9,40 +9,38 @@
 import Foundation
 import GenericDataSources
 
-class LastPageBookmarkDataSource: BasicDataSource<Int, BookmarkTableViewCell> {
+class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCell> {
 
     let numberFormatter = NumberFormatter()
 
-    let persistence: SimplePersistence
+    let persistence: LastPagesPersistence
 
-    init(reuseIdentifier: String, persistence: SimplePersistence) {
+    init(reuseIdentifier: String, persistence: LastPagesPersistence) {
         self.persistence = persistence
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: BookmarkTableViewCell,
-                                    with item: Int,
+                                    with item: LastPage,
                                     at indexPath: IndexPath) {
-        let ayah = Quran.startAyahForPage(item)
+        let ayah = Quran.startAyahForPage(item.page)
 
         let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
         let suraName = Quran.nameForSura(ayah.sura)
 
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
-        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item, Juz.juzFromPage(item).juzNumber)
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
 
         cell.name.text = String(format: suraFormat, suraName)
         cell.descriptionLabel.text = pageDescription
-        cell.startPage.text = numberFormatter.format(NSNumber(value: item))
+        cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))
     }
 
     func reloadData() {
-        if let item = persistence.valueForKey(.LastViewedPage) {
-            items = [item]
-        } else {
-            items = []
+        Queue.bookmarks.async({ self.persistence.retrieveAll() }) { [weak self] items in
+            self?.items = items
+            self?.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
         }
-        ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
     }
 }

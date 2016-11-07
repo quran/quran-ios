@@ -10,35 +10,41 @@ import Foundation
 
 struct Files {
 
-    static let AudioExtension = "mp3"
-    static let DownloadResumeDataExtension = "resume"
-    static let DatabaseRemoteFileExtension = "zip"
-    static let DatabaseLocalFileExtension = "db"
+    static let audioExtension = "mp3"
+    static let downloadResumeDataExtension = "resume"
+    static let databaseRemoteFileExtension = "zip"
+    static let databaseLocalFileExtension = "db"
 
-    static let QuarterPrefixArray: Foundation.URL = fileURL("quarter_prefix_array", withExtension: "plist")
-    static let Readers: Foundation.URL = fileURL("readers", withExtension: "plist")
+    static let quarterPrefixArray = fileURL("quarter_prefix_array", withExtension: "plist")
+    static let readers = fileURL("readers", withExtension: "plist")
 
-    static var DocumentsFolder: Foundation.URL = {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }()
+    static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
+    static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
 }
 
-private func fileURL(_ fileName: String, withExtension: String) -> Foundation.URL {
-    guard let url = Bundle.main.url(forResource: fileName, withExtension: withExtension) else {
-        fatalError("Couldn't find file `\(fileName).\(withExtension)` locally ")
+private func fileURL(_ fileName: String, withExtension `extension`: String) -> URL {
+    guard let url = Bundle.main.url(forResource: fileName, withExtension: `extension`) else {
+        fatalError("Couldn't find file `\(fileName).\(`extension`)` locally ")
     }
     return url
 }
 
+private func filePath(_ fileName: String, ofType type: String) -> String {
+    guard let path = Bundle.main.path(forResource: fileName, ofType: type) else {
+        fatalError("Couldn't find file `\(fileName).\(type)` locally ")
+    }
+    return path
+}
+
 extension Qari {
-    func localFolder() -> Foundation.URL {
-        return Files.DocumentsFolder.appendingPathComponent(path)
+    func localFolder() -> URL {
+        return FileManager.default.documentsURL.appendingPathComponent(path)
     }
 }
 
-extension Foundation.URL {
-    func resumeURL() -> Foundation.URL {
-        return appendingPathExtension(Files.DownloadResumeDataExtension)
+extension URL {
+    func resumeURL() -> URL {
+        return appendingPathExtension(Files.downloadResumeDataExtension)
     }
 }
 

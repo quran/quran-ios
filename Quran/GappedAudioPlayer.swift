@@ -13,7 +13,7 @@ import MediaPlayer
 
 private class GappedPlayerItem: AVPlayerItem {
     let ayah: AyahNumber
-    init(URL: Foundation.URL, ayah: AyahNumber) {
+    init(URL: URL, ayah: AyahNumber) {
         self.ayah = ayah
         super.init(asset: AVAsset(url: URL), automaticallyLoadedAssetKeys: nil)
     }
@@ -65,13 +65,13 @@ extension GappedAudioPlayer {
         return (items, info)
     }
 
-    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(Foundation.URL, AyahNumber)] {
+    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(URL, AyahNumber)] {
 
         guard case AudioType.gapped = qari.audioType else {
             fatalError("Unsupported qari type gapless. Only gapless qaris can be downloaded here.")
         }
 
-        var files: [(Foundation.URL, AyahNumber)] = []
+        var files: [(URL, AyahNumber)] = []
 
         for sura in startAyah.sura...endAyah.sura {
 
@@ -90,8 +90,8 @@ extension GappedAudioPlayer {
         return files
     }
 
-    fileprivate func createRequestInfo(qari: Qari, sura: Int, ayah: Int) -> Foundation.URL {
+    fileprivate func createRequestInfo(qari: Qari, sura: Int, ayah: Int) -> URL {
         let fileName = String(format: "%03d%03d", sura, ayah)
-        return qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.AudioExtension)
+        return qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
     }
 }

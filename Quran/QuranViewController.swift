@@ -84,7 +84,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        unimplemented()
     }
 
     private var initialPage: Int = 0 {

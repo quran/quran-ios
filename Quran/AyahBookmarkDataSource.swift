@@ -20,9 +20,9 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
     let numberFormatter = NumberFormatter()
 
     let persistence: BookmarksPersistence
-    let ayahPersistence: AyahTextStorageProtocol
+    let ayahPersistence: AyahTextPersistence
 
-    init(reuseIdentifier: String, persistence: BookmarksPersistence, ayahPersistence: AyahTextStorageProtocol) {
+    init(reuseIdentifier: String, persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
         self.persistence = persistence
         self.ayahPersistence = ayahPersistence
         super.init(reuseIdentifier: reuseIdentifier)

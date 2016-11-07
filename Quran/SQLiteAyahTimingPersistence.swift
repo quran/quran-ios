@@ -1,5 +1,5 @@
 //
-//  SQLiteAyahTimingPersistenceStorage.swift
+//  SQLiteAyahTimingPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/20/16.
@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
+struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
 
     fileprivate struct Column {
         static let sura = Expression<Int>("sura")
@@ -19,7 +19,7 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
 
     fileprivate let timingsTable = Table("timings")
 
-    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) throws -> [AyahNumber: AyahTiming] {
+    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahNumber: AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
         do {
@@ -37,7 +37,7 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
         }
     }
 
-    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) throws -> [AyahTiming] {
+    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
         do {

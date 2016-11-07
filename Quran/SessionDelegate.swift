@@ -141,8 +141,8 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         if let requestData = dataRequests[url] {
             let fileManager = FileManager.default
 
-            let resumeURL = Files.DocumentsFolder.appendingPathComponent(requestData.resumeDataURL)
-            let destinationURL = Files.DocumentsFolder.appendingPathComponent(requestData.destination)
+            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(requestData.resumeDataURL)
+            let destinationURL = FileManager.default.documentsURL.appendingPathComponent(requestData.destination)
 
             // remove the resume data
             let _ = try? fileManager.removeItem(at: resumeURL)
@@ -182,7 +182,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
             // save resume data, if found
             if let resumePath = requestData?.resumeDataURL, let resumeData =
                 (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
-                let resumeURL = Files.DocumentsFolder.appendingPathComponent(resumePath)
+                let resumeURL = FileManager.default.documentsURL.appendingPathComponent(resumePath)
                 try? resumeData.write(to: resumeURL, options: [.atomic])
             }
 
@@ -207,7 +207,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         handler?()
     }
 
-    fileprivate func createDirectoryForPath(_ path: Foundation.URL) {
+    fileprivate func createDirectoryForPath(_ path: URL) {
         let directory = path.deletingLastPathComponent()
         // ignore errors
         let _ = try? FileManager.default.createDirectory(at: directory,

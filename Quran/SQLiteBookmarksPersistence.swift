@@ -1,5 +1,5 @@
 //
-//  BookmarksPersistenceStorage.swift
+//  SQLiteBookmarksPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/29/16.
@@ -13,7 +13,7 @@ extension Queue {
     static let bookmarks = Queue(queue: DispatchQueue(label: "com.quran.bookmarks"))
 }
 
-struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
+struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {

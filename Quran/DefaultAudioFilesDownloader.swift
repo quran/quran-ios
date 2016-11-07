@@ -16,7 +16,7 @@ protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
     func filesForQari(_ qari: Qari,
                       startAyah: AyahNumber,
-                      endAyah: AyahNumber) -> [(remoteURL: Foundation.URL, destination: String, resumeURL: String)]
+                      endAyah: AyahNumber) -> [(remoteURL: URL, destination: String, resumeURL: String)]
 }
 
 extension DefaultAudioFilesDownloader {
@@ -37,7 +37,7 @@ extension DefaultAudioFilesDownloader {
     func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
         return !files.filter {
-            if let result = try? (Files.DocumentsFolder.appendingPathComponent($0.destination) as Foundation.URL).checkResourceIsReachable() {
+            if let result = try? FileManager.default.documentsURL.appendingPathComponent($0.destination).checkResourceIsReachable() {
                 return !result
             }
             return true
@@ -58,12 +58,12 @@ extension DefaultAudioFilesDownloader {
     func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request? {
         // get all files
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
-        var uniqueFiles = Set<Foundation.URL>()
+        var uniqueFiles = Set<URL>()
         // filter out existing and duplicate files
         let filesToDownload = files.filter { (remoteURL, destination, _) in
             if !uniqueFiles.contains(remoteURL) {
                 uniqueFiles.insert(remoteURL)
-                if let result = try? (Files.DocumentsFolder.appendingPathComponent(destination) as Foundation.URL).checkResourceIsReachable() {
+                if let result = try? FileManager.default.documentsURL.appendingPathComponent(destination).checkResourceIsReachable() {
                     return !result
                 }
                 return true

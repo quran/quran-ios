@@ -1,5 +1,5 @@
 //
-//  SqlitePersistence.swift
+//  SQLitePersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/29/16.
@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-protocol SqlitePersistence {
+protocol SQLitePersistence {
     var filePath: String { get }
     var version: UInt { get }
 
@@ -17,7 +17,7 @@ protocol SqlitePersistence {
     func onUpgrade(connection: Connection, oldVersion: UInt, newVersion: UInt) throws
 }
 
-extension SqlitePersistence {
+extension SQLitePersistence {
 
     func onUpgrade(connection: Connection, oldVersion: UInt, newVersion: UInt) throws {
         // default implementation

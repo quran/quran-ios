@@ -33,8 +33,8 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             fatalError("Unsupported qari type gapped")
         }
         let baseFileName = qari.localFolder().appendingPathComponent(databaseName)
-        let dbFile = baseFileName.appendingPathExtension(Files.DatabaseLocalFileExtension)
-        let zipFile = baseFileName.appendingPathExtension(Files.DatabaseRemoteFileExtension)
+        let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
+        let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
         guard !((try? dbFile.checkResourceIsReachable()) ?? false) else {
             completion()

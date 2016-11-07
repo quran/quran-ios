@@ -1,5 +1,5 @@
 //
-//  SqliteLastPagesPersistence.swift
+//  SQLiteLastPagesPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 11/5/16.
@@ -19,7 +19,7 @@ extension Queue {
     static let lastPages = Queue(queue: DispatchQueue(label: "com.quran.last_pages"))
 }
 
-struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
+struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {

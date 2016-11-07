@@ -33,7 +33,7 @@ extension DownloadManager {
 
     func download(_ requestDetails: [(
         method: HTTPMethod,
-        url: Foundation.URL,
+        url: URL,
         headers: [String: String]?,
         destination: String,
         resumeDestination: String)]) -> [DownloadNetworkRequest] {

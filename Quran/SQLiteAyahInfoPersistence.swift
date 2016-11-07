@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct AyahInfoPersistenceStorage: AyahInfoStorage {
+struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
 
     fileprivate struct Columns {
         let id = Expression<Int>("glyph_id")
@@ -27,14 +27,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
     fileprivate let glyphsTable = Table("glyphs")
     fileprivate let columns = Columns()
 
-    fileprivate var db: LazyConnectionWrapper = {
-        let file = String(format: "images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)")
-        guard let path = Bundle.main.path(forResource: file, ofType: "db") else {
-            fatalError("Unable to find ayahinfo database in resources")
-        }
-
-        return LazyConnectionWrapper(sqliteFilePath: path, readonly: true)
-    }()
+    fileprivate var db: LazyConnectionWrapper = { LazyConnectionWrapper(sqliteFilePath: Files.ayahInfoPath, readonly: true) }()
 
     func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]] {
         let query = glyphsTable.filter(columns.page == page)

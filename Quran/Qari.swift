@@ -17,7 +17,7 @@ struct Qari: Hashable {
     let id: Int
     let name: String
     let path: String
-    let audioURL: Foundation.URL
+    let audioURL: URL
     let audioType: AudioType
     let imageName: String?
 

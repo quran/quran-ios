@@ -23,7 +23,7 @@ class BookmarksTableViewController: BaseTableViewController {
          simplePersistence: SimplePersistence,
          lastPagesPersistence: LastPagesPersistence,
          bookmarksPersistence: BookmarksPersistence,
-         ayahPersistence: AyahTextStorageProtocol) {
+         ayahPersistence: AyahTextPersistence) {
         self.quranControllerCreator = quranControllerCreator
 
         // configure the data sources
@@ -60,7 +60,7 @@ class BookmarksTableViewController: BaseTableViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        unimplemented()
     }
 
     override func viewDidLoad() {

@@ -1,5 +1,5 @@
 //
-//  SQLiteAyahInfoPersistence.swift
+//  DefaultAyahInfoPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/22/16.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
+struct DefaultAyahInfoRetriever: AyahInfoRetriever {
 
-    let persistence: AyahInfoStorage
+    let persistence: AyahInfoPersistence
 
     func retrieveAyahsAtPage(_ page: Int, onCompletion: @escaping (Result<[AyahNumber : [AyahInfo]]>) -> Void) {
         Queue.background.async {

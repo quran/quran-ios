@@ -29,9 +29,8 @@ class ImagePreloadingOperation: Operation {
     }
 
     override func main() {
-        guard let filePath = fullPathForPage(page),
-            let image = UIImage(contentsOfFile: filePath) else {
-                fatalError("No image found for page '\(page)'")
+        guard let filePath = fullPathForPage(page), let image = UIImage(contentsOfFile: filePath) else {
+            fatalError("No image found for page '\(page)'")
         }
 
         // preload the image

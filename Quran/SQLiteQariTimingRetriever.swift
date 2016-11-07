@@ -10,14 +10,14 @@ import Foundation
 
 struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
-    let persistence: QariAyahTimingPersistenceStorage
+    let persistence: QariAyahTimingPersistence
 
     func retrieveTimingForQari(_ qari: Qari, startAyah: AyahNumber, onCompletion: @escaping (Result<[AyahNumber: AyahTiming]>) -> Void) {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
         Queue.background.tryAsync({
-            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.DatabaseLocalFileExtension)
+            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
             let timings = try self.persistence.getTimingForSura(startAyah: startAyah, databaseFileURL: fileURL)
             return timings
         }, onMain: onCompletion)
@@ -28,7 +28,7 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
             fatalError("Gapped qaris are not supported.")
         }
         Queue.background.tryAsync({
-            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.DatabaseLocalFileExtension)
+            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
 
             var result: [Int: [AyahTiming]] = [:]
             for sura in suras {

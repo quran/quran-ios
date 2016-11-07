@@ -1,5 +1,5 @@
 //
-//  NSFileManager+Extension.swift
+//  FileManager+Extension.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/29/16.
@@ -12,5 +12,9 @@ extension FileManager {
 
     var documentsPath: String {
         return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    }
+
+    var documentsURL: URL {
+        return urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }

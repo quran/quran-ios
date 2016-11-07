@@ -40,7 +40,8 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
     func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
-        timingRetriever.retrieveTimingForQari(qari, suras: items.map { $0.sura }) { [weak self] timings in
+        timingRetriever.retrieveTimingForQari(qari, suras: items.map { $0.sura }) { [weak self] timingsResult in
+            guard let timings = timingsResult.value else { return }
 
             var mutableTimings = timings
             if let timeArray = mutableTimings[startAyah.sura] {

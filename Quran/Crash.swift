@@ -50,8 +50,8 @@ struct Crash {
         }
     }
 
-    static func recordError(_ error: Error) {
-        Crashlytics.sharedInstance().recordError(error as NSError)
+    static func recordError(_ error: Error, reason: String) {
+        Crashlytics.sharedInstance().recordError(error as NSError, withAdditionalUserInfo: ["quran.reason": reason])
     }
 }
 

@@ -32,15 +32,15 @@ class AyahTextPersistenceStorage: AyahTextStorageProtocol {
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
         let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
 
-
         do {
-            for row in try db.connection.prepare(query) {
-                let text = row[columns.text]
-                return text
+            let rows = try db.getOpenConnection().prepare(query)
+
+            guard let first = rows.first(where: { _ in true}) else {
+                throw PersistenceError.general(description: "Cannot find any records for ayah '\(number)'")
             }
-            return ""
+            return first[columns.text]
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "Cannot get ayah text for \(number)")
             throw PersistenceError.queryError(error: error)
         }
     }

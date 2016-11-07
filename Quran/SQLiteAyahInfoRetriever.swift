@@ -17,12 +17,11 @@ struct SQLiteAyahInfoRetriever: AyahInfoRetriever {
             do {
                 let result = try self.persistence.getAyahInfoForPage(page)
                 Queue.main.async {
-                    onCompletion(Result.success(self.processAyahInfo(result)))
+                    onCompletion(.success(self.processAyahInfo(result)))
                 }
             } catch {
-                Crash.recordError(error)
                 Queue.main.async({
-                    onCompletion(Result.failure(error as? PersistenceError ?? PersistenceError.queryError(error: error)))
+                    onCompletion(.failure(error as? PersistenceError ?? PersistenceError.queryError(error: error)))
                 })
             }
         }

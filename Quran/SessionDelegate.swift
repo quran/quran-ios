@@ -157,7 +157,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
                                                  attributes: nil)
                 try fileManager.copyItem(at: location, to: destinationURL)
             } catch let error {
-                Crash.recordError(error)
+                Crash.recordError(error, reason: "Problem with create directory or copying item to the new location '\(destinationURL)'")
                 // early exist with error
                 let (_, downloadRequest) = removeRequest(request)
                 downloadRequest?.onCompletion?(.failure(FileSystemError(error: error)))

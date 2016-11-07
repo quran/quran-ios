@@ -23,9 +23,9 @@ extension SqlitePersistence {
         // default implementation
     }
 
-    func openConnection() -> Connection {
+    func openConnection() throws -> Connection {
         // create the connection
-        let connection = ConnectionsPool.default.getConnection(filePath: filePath)
+        let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
         let oldVersion = connection.userVersion
         let newVersion = version
         precondition(newVersion != 0, "version should be greater than 0.")
@@ -36,8 +36,8 @@ extension SqlitePersistence {
                 try onCreate(connection: connection)
                 connection.userVersion = Int(newVersion)
             } catch {
-                Crash.recordError(error)
-                fatalError("Cannot create database for file '\(filePath)'", error)
+                Crash.recordError(error, reason: "Cannot create database for file '\(filePath)'")
+                throw PersistenceError.queryError(error: error)
             }
         } else {
             let unsignedOldVersion = UInt(oldVersion)
@@ -46,24 +46,26 @@ extension SqlitePersistence {
                     try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
                     connection.userVersion = Int(newVersion)
                 } catch {
-                    Crash.recordError(error)
-                    fatalError("Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)", error)
+                    Crash.recordError(error, reason: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
+                    throw PersistenceError.queryError(error: error)
                 }
             }
         }
         return connection
     }
 
-    func run<T>(_ block: (Connection) throws -> T) -> T {
-        let connection = openConnection()
-        defer {
-            ConnectionsPool.default.close(connection: connection)
-        }
+    func run<T>(_ block: (Connection) throws -> T) throws -> T {
         do {
+            let connection = try openConnection()
+            defer {
+                ConnectionsPool.default.close(connection: connection)
+            }
             return try block(connection)
+        } catch let error as PersistenceError {
+            throw error
         } catch {
-            Crash.recordError(error)
-            fatalError("Error while executing sqlite statement", error)
+            Crash.recordError(error, reason: "Error while executing sqlite statement")
+            throw PersistenceError.queryError(error: error)
         }
     }
 }

@@ -41,7 +41,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
 
         var result = [AyahNumber : [AyahInfo]]()
         do {
-            for row in try db.connection.prepare(query) {
+            for row in try db.getOpenConnection().prepare(query) {
                 let ayah = AyahNumber(sura: row[columns.sura], ayah: row[columns.ayah])
                 var ayahInfoList = result[ayah] ?? []
                 ayahInfoList += [ getAyahInfoFromRow(row, ayah: ayah) ]
@@ -49,7 +49,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             }
             return result
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "Error getting ayah info for page '\(page)'")
             throw PersistenceError.queryError(error: error)
         }
     }
@@ -60,12 +60,12 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
         var result: [AyahInfo] = []
         let ayah = AyahNumber(sura: sura, ayah: ayah)
         do {
-            for row in try db.connection.prepare(query) {
+            for row in try db.getOpenConnection().prepare(query) {
                 result += [ getAyahInfoFromRow(row, ayah: ayah) ]
             }
             return result
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "Error getting ayah info for (sura: \(sura), ayah: \(ayah))")
             throw PersistenceError.queryError(error: error)
         }
     }

@@ -31,4 +31,29 @@ struct Queue {
             }
         }
     }
+
+    func tryAsync<T>(_ background: @escaping () throws -> T, onMain: @escaping (Result<T>) -> Void) {
+        async {
+            do {
+                let result = try background()
+                Queue.main.async {
+                    onMain(.success(result))
+                }
+            } catch {
+                Queue.main.async {
+                    onMain(.failure(error))
+                }
+            }
+
+        }
+    }
+
+    func asyncSuccess<T>(_ background: @escaping () throws -> T, onMain: @escaping (T) -> Void) {
+        tryAsync(background) { result in
+            switch result {
+            case .success(let value): onMain(value)
+            case .failure: break
+            }
+        }
+    }
 }

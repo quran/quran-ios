@@ -56,8 +56,8 @@ struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
         }
     }
 
-    func retrieveAll() -> [LastPage] {
-        return run { connection in
+    func retrieveAll() throws -> [LastPage] {
+        return try run { connection in
             let query = LastPages.table.order(LastPages.modifiedOn.desc)
             let rows = try connection.prepare(query)
             let pages = convert(rowsToLastPages: rows)
@@ -65,8 +65,8 @@ struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
         }
     }
 
-    func add(page: Int) -> LastPage {
-        return run { connection in
+    func add(page: Int) throws -> LastPage {
+        return try run { connection in
             let insert = LastPages.table.insert(
                 or: .replace,
                 LastPages.page <- page,
@@ -83,8 +83,8 @@ struct SqliteLastPagesPersistence: LastPagesPersistence, SqlitePersistence {
         }
     }
 
-    func update(page: LastPage, toPage newPage: Int) -> LastPage {
-        return run { connection in
+    func update(page: LastPage, toPage newPage: Int) throws -> LastPage {
+        return try run { connection in
             let requestedPage = LastPages.table.filter(LastPages.id == page.id)
 
             var updatedPage = page

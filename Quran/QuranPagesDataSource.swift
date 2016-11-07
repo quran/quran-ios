@@ -71,7 +71,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
 
         // set bookmarked ayat
-        Queue.bookmarks.async({ self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { [weak cell] _, ayahBookmarks in
+        Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { [weak cell] _, ayahBookmarks in
             guard cell?.page == item else { return }
             cell?.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
         }

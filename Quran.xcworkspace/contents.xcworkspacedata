@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:fastlane"
+      name = "fastlane">
+      <FileRef
+         location = "group:Fastfile"
+         assignedFileDataType = "public.ruby-script">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Quran.xcodeproj">
    </FileRef>

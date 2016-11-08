@@ -27,7 +27,7 @@ final class ConnectionsPool {
                 return connection
             } catch {
                 Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(filePath)'.")
-                throw PersistenceError.openDatabase(error: error)
+                throw PersistenceError.openDatabase(error)
             }
         }
     }

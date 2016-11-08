@@ -21,7 +21,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
                 }
             } catch {
                 Queue.main.async({
-                    onCompletion(.failure(error as? PersistenceError ?? PersistenceError.queryError(error: error)))
+                    onCompletion(.failure(error as? PersistenceError ?? PersistenceError.query(error)))
                 })
             }
         }

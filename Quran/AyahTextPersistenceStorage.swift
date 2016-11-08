@@ -29,12 +29,12 @@ class SQLiteAyahTextPersistence: AyahTextPersistence {
             let rows = try db.getOpenConnection().prepare(query)
 
             guard let first = rows.first(where: { _ in true}) else {
-                throw PersistenceError.general(description: "Cannot find any records for ayah '\(number)'")
+                throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
             }
             return first[columns.text]
         } catch {
             Crash.recordError(error, reason: "Cannot get ayah text for \(number)")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 }

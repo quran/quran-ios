@@ -33,7 +33,7 @@ struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
             return timings
         } catch {
             Crash.recordError(error, reason: "Couldn't get timing for sura starting from '\(startAyah)")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 
@@ -51,7 +51,7 @@ struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
             return timings
         } catch {
             Crash.recordError(error, reason: "Couldn't get ordered timing for sura starting from '\(startAyah)")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 }

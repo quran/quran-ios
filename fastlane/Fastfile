@@ -75,8 +75,8 @@ platform :ios do
         say successMessage
     end
 
-    error do |_lane, _exception|
-        say 'Error while trying to execute fastlane command. Error!'
+    error do |lane, exception|
+        say "Error while trying to execute fastlane command. #{exception.message}"
     end
 end
 

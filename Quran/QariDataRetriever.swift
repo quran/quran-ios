@@ -12,8 +12,8 @@ struct QariDataRetriever: DataRetriever {
 
     func retrieve(onCompletion: @escaping ([Qari]) -> Void) {
         Queue.background.async {
-            guard let readersDictionary = NSDictionary(contentsOf: Files.Readers) else {
-                fatalError("Couldn't load `\(Files.Readers)` file")
+            guard let readersDictionary = NSDictionary(contentsOf: Files.readers) else {
+                fatalError("Couldn't load `\(Files.readers)` file")
             }
 
             guard let names = readersDictionary["quran_readers_name"] as? [String] else {
@@ -92,7 +92,7 @@ struct QariDataRetriever: DataRetriever {
                     id: i,
                     name: NSLocalizedString(names[i], tableName: "Readers", comment: ""),
                     path: localPaths[i],
-                    audioURL: Foundation.URL(validURL: remoteURLs[i]),
+                    audioURL: URL(validURL: remoteURLs[i]),
                     audioType: type,
                     imageName: imageName)
                 qaris.append(qari)

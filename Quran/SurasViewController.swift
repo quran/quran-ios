@@ -16,7 +16,7 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        unimplemented()
     }
 
     override func createItemsDataSource() -> BasicDataSource<Sura, SuraTableViewCell> {

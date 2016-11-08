@@ -16,7 +16,7 @@ extension Connection {
                 let version: Int64 = try scalar("PRAGMA user_version") as! Int64
                 return Int(version)
             } catch {
-                Crash.recordError(error)
+                Crash.recordError(error, reason: "Cannot get value for user_version")
                 fatalError("Cannot get user version from sqlite file. Error: '\(error)'")
             }
         }
@@ -24,7 +24,7 @@ extension Connection {
             do {
             try run("PRAGMA user_version = \(newValue)")
             } catch {
-                Crash.recordError(error)
+                Crash.recordError(error, reason: "Cannot set value for user_version")
                 fatalError("Cannot set user version to sqlite file. Error: '\(error)'")
             }
         }
@@ -43,7 +43,7 @@ class LazyConnectionWrapper {
 
     var instance: Connection?
 
-    var connection: Connection {
+    func getOpenConnection() throws -> Connection {
         if let connection = instance {
             return connection
         }
@@ -52,8 +52,8 @@ class LazyConnectionWrapper {
             instance = connection
             return connection
         } catch {
-            Crash.recordError(error)
-            fatalError("Cannot open connection to sqlite file '\(sqliteFilePath)'. Error: '\(error)'")
+            Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(sqliteFilePath)'")
+            throw PersistenceError.openDatabase(error: error)
         }
     }
 }

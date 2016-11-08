@@ -1,5 +1,5 @@
 //
-//  AyahTextStorageProtocol.swift
+//  AyahTextPersistence.swift
 //  Quran
 //
 //  Created by Hossam Ghareeb on 6/20/16.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol AyahTextStorageProtocol {
+protocol AyahTextPersistence {
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String
 }

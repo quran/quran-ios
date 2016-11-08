@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct AyahInfoPersistenceStorage: AyahInfoStorage {
+struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
 
     fileprivate struct Columns {
         let id = Expression<Int>("glyph_id")
@@ -27,21 +27,14 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
     fileprivate let glyphsTable = Table("glyphs")
     fileprivate let columns = Columns()
 
-    fileprivate var db: LazyConnectionWrapper = {
-        let file = String(format: "images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)")
-        guard let path = Bundle.main.path(forResource: file, ofType: "db") else {
-            fatalError("Unable to find ayahinfo database in resources")
-        }
-
-        return LazyConnectionWrapper(sqliteFilePath: path, readonly: true)
-    }()
+    fileprivate var db: LazyConnectionWrapper = { LazyConnectionWrapper(sqliteFilePath: Files.ayahInfoPath, readonly: true) }()
 
     func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]] {
         let query = glyphsTable.filter(columns.page == page)
 
         var result = [AyahNumber : [AyahInfo]]()
         do {
-            for row in try db.connection.prepare(query) {
+            for row in try db.getOpenConnection().prepare(query) {
                 let ayah = AyahNumber(sura: row[columns.sura], ayah: row[columns.ayah])
                 var ayahInfoList = result[ayah] ?? []
                 ayahInfoList += [ getAyahInfoFromRow(row, ayah: ayah) ]
@@ -49,7 +42,7 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
             }
             return result
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "Error getting ayah info for page '\(page)'")
             throw PersistenceError.queryError(error: error)
         }
     }
@@ -60,12 +53,12 @@ struct AyahInfoPersistenceStorage: AyahInfoStorage {
         var result: [AyahInfo] = []
         let ayah = AyahNumber(sura: sura, ayah: ayah)
         do {
-            for row in try db.connection.prepare(query) {
+            for row in try db.getOpenConnection().prepare(query) {
                 result += [ getAyahInfoFromRow(row, ayah: ayah) ]
             }
             return result
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "Error getting ayah info for (sura: \(sura), ayah: \(ayah))")
             throw PersistenceError.queryError(error: error)
         }
     }

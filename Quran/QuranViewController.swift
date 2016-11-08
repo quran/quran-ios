@@ -31,11 +31,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private var lastPage: LastPage!
 
     private func saveCurrentPage(_ page: Int) {
-        Queue.lastPages.async({
+        Queue.lastPages.asyncSuccess({
             if let lastPage = self.lastPage {
-                return self.lastPagesPersistence.update(page: lastPage, toPage: page)
+                return try self.lastPagesPersistence.update(page: lastPage, toPage: page)
             } else {
-                return self.lastPagesPersistence.add(page: page)
+                return try self.lastPagesPersistence.add(page: page)
             }
         }) { self.lastPage = $0 }
     }
@@ -84,7 +84,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        unimplemented()
     }
 
     private var initialPage: Int = 0 {
@@ -323,9 +323,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         showBookmarkIcon(selected: !isBookmarked)
 
         if isBookmarked {
-            Queue.background.async { self.bookmarksPersistence.removePageBookmark(atPage: page.pageNumber) }
+            Queue.background.async { try? self.bookmarksPersistence.removePageBookmark(atPage: page.pageNumber) }
         } else {
-            Queue.background.async { self.bookmarksPersistence.insertPageBookmark(forPage: page.pageNumber) }
+            Queue.background.async { try? self.bookmarksPersistence.insertPageBookmark(forPage: page.pageNumber) }
         }
     }
 

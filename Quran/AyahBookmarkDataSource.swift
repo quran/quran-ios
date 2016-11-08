@@ -20,9 +20,9 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
     let numberFormatter = NumberFormatter()
 
     let persistence: BookmarksPersistence
-    let ayahPersistence: AyahTextStorageProtocol
+    let ayahPersistence: AyahTextPersistence
 
-    init(reuseIdentifier: String, persistence: BookmarksPersistence, ayahPersistence: AyahTextStorageProtocol) {
+    init(reuseIdentifier: String, persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
         self.persistence = persistence
         self.ayahPersistence = ayahPersistence
         super.init(reuseIdentifier: reuseIdentifier)
@@ -64,7 +64,7 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
     }
 
     func reloadData() {
-        Queue.bookmarks.async({ self.persistence.retrieveAyahBookmarks() }) { [weak self] items in
+        Queue.bookmarks.asyncSuccess({ try self.persistence.retrieveAyahBookmarks() }) { [weak self] items in
             self?.items = items
             self?.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
         }

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol LastPagesPersistence {
-    func retrieveAll() -> [LastPage]
-    func add(page: Int) -> LastPage
-    func update(page: LastPage, toPage: Int) -> LastPage
+    func retrieveAll() throws -> [LastPage]
+    func add(page: Int) throws -> LastPage
+    func update(page: LastPage, toPage: Int) throws -> LastPage
 }

@@ -1,5 +1,5 @@
 //
-//  BookmarksPersistenceStorage.swift
+//  SQLiteBookmarksPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/29/16.
@@ -13,7 +13,7 @@ extension Queue {
     static let bookmarks = Queue(queue: DispatchQueue(label: "com.quran.bookmarks"))
 }
 
-struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
+struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
@@ -79,8 +79,8 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
         try connection.run(BookmarkTags.table.createIndex([BookmarkTags.bookmarkId, BookmarkTags.tagId], unique: true))
     }
 
-    func retrieveAll() -> [Bookmark] {
-        return run { connection in
+    func retrieveAll() throws -> [Bookmark] {
+        return try run { connection in
             let query = Bookmarks.table.order(Bookmarks.creationDate.desc)
             let rows = try connection.prepare(query)
             let bookmarks = convert(rowsToBookmarks: rows)
@@ -88,8 +88,8 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
         }
     }
 
-    func retrieve(inPage page: Int) -> [Bookmark] {
-        return run { connection in
+    func retrieve(inPage page: Int) throws -> [Bookmark] {
+        return try run { connection in
             let query = Bookmarks.table.filter(Bookmarks.page == page)
             let rows = try connection.prepare(query)
             let bookmarks = convert(rowsToBookmarks: rows)
@@ -97,8 +97,8 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
         }
     }
 
-    func insert(_ bookmark: Bookmark) {
-        return run { connection in
+    func insert(_ bookmark: Bookmark) throws {
+        return try run { connection in
 
             let ayah = (bookmark as? AyahBookmark)?.ayah
 
@@ -111,9 +111,8 @@ struct BookmarksPersistenceStorage: BookmarksPersistence, SqlitePersistence {
         }
     }
 
-    func remove(_ bookmark: Bookmark) {
-
-        return run { connection in
+    func remove(_ bookmark: Bookmark) throws {
+        return try run { connection in
 
             let ayah = (bookmark as? AyahBookmark)?.ayah
 

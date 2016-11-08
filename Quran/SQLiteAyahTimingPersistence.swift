@@ -1,5 +1,5 @@
 //
-//  SQLiteAyahTimingPersistenceStorage.swift
+//  SQLiteAyahTimingPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/20/16.
@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
+struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
 
     fileprivate struct Column {
         static let sura = Expression<Int>("sura")
@@ -19,12 +19,12 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
 
     fileprivate let timingsTable = Table("timings")
 
-    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) -> [AyahNumber: AyahTiming] {
+    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahNumber: AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
         do {
             var timings: [AyahNumber: AyahTiming] = [:]
-            let rows = try db.connection.prepare(query)
+            let rows = try db.getOpenConnection().prepare(query)
             for row in rows {
                 let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
                 let timing = AyahTiming(ayah: ayah, time: row[Column.time])
@@ -32,17 +32,17 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
             }
             return timings
         } catch {
-            Crash.recordError(error)
-            fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
+            Crash.recordError(error, reason: "Couldn't get timing for sura starting from '\(startAyah)")
+            throw PersistenceError.queryError(error: error)
         }
     }
 
-    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: Foundation.URL) -> [AyahTiming] {
+    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahTiming] {
         let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
         let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
         do {
             var timings: [AyahTiming] = []
-            let rows = try db.connection.prepare(query)
+            let rows = try db.getOpenConnection().prepare(query)
             for row in rows {
                 let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
                 let timing = AyahTiming(ayah: ayah, time: row[Column.time])
@@ -50,8 +50,8 @@ struct SQLiteAyahTimingPersistenceStorage: QariAyahTimingPersistenceStorage {
             }
             return timings
         } catch {
-            Crash.recordError(error)
-            fatalError("Couldn't execute quary for sqlite database with error, '\(error)'")
+            Crash.recordError(error, reason: "Couldn't get ordered timing for sura starting from '\(startAyah)")
+            throw PersistenceError.queryError(error: error)
         }
     }
 }

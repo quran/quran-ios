@@ -11,7 +11,7 @@ import UIKit
 class ShareController: NSObject {
 
 
-    class func showShareActivityWithText(_ text: String, image: UIImage? = nil, url: Foundation.URL? = nil,
+    class func showShareActivityWithText(_ text: String, image: UIImage? = nil, url: URL? = nil,
                                          sourceViewController: UIViewController,
                                          handler: UIActivityViewControllerCompletionWithItemsHandler?) {
         var itemsToShare = [AnyObject]()

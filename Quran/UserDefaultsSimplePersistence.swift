@@ -32,7 +32,7 @@ struct UserDefaultsSimplePersistence: SimplePersistence {
             userDefaults.set(value, forKey: key.key)
         } else if let value = value as? Bool {
             userDefaults.set(value, forKey: key.key)
-        } else if let value = value as? Foundation.URL {
+        } else if let value = value as? URL {
             userDefaults.set(value, forKey: key.key)
         } else if let value = value as? Data {
             userDefaults.set(value, forKey: key.key)

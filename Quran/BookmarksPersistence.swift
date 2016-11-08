@@ -9,48 +9,48 @@
 import Foundation
 
 protocol BookmarksPersistence {
-    func retrieveAll() -> [Bookmark]
-    func retrieve(inPage page: Int) -> [Bookmark]
-    func insert(_ bookmark: Bookmark)
-    func remove(_ bookmark: Bookmark)
+    func retrieveAll() throws -> [Bookmark]
+    func retrieve(inPage page: Int) throws -> [Bookmark]
+    func insert(_ bookmark: Bookmark) throws
+    func remove(_ bookmark: Bookmark) throws
 }
 
 extension BookmarksPersistence {
 
-    func retrieveAll() -> ([PageBookmark], [AyahBookmark]) {
-        return split(bookmarks: retrieveAll())
+    func retrieveAll() throws -> ([PageBookmark], [AyahBookmark]) {
+        return split(bookmarks: try retrieveAll())
     }
 
-    func retrievePageBookmarks() -> [PageBookmark] {
-        return retrieveAll().0
+    func retrievePageBookmarks() throws -> [PageBookmark] {
+        return try retrieveAll().0
     }
 
-    func retrieveAyahBookmarks() -> [AyahBookmark] {
-        return retrieveAll().1
+    func retrieveAyahBookmarks() throws -> [AyahBookmark] {
+        return try retrieveAll().1
     }
 
-    func retrieve(inPage page: Int) -> ([PageBookmark], [AyahBookmark]) {
-        return split(bookmarks: retrieve(inPage: page))
+    func retrieve(inPage page: Int) throws -> ([PageBookmark], [AyahBookmark]) {
+        return split(bookmarks: try retrieve(inPage: page))
     }
 
     func isPageBookmarked(_ page: Int) -> Bool {
-        return !retrieve(inPage: page).0.isEmpty
+        return !((try? retrieve(inPage: page))?.0.isEmpty ?? true)
     }
 
-    func removePageBookmark(atPage page: Int) {
-        remove(PageBookmark(page: page, creationDate: Date(), tags: []))
+    func removePageBookmark(atPage page: Int) throws {
+        try remove(PageBookmark(page: page, creationDate: Date(), tags: []))
     }
 
-    func insertPageBookmark(forPage page: Int) {
-        insert(PageBookmark(page: page, creationDate: Date(), tags: []))
+    func insertPageBookmark(forPage page: Int) throws {
+        try insert(PageBookmark(page: page, creationDate: Date(), tags: []))
     }
 
-    func removeAyahBookmark(atPage page: Int, ayah: AyahNumber) {
-        remove(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
+    func removeAyahBookmark(atPage page: Int, ayah: AyahNumber) throws {
+        try remove(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
     }
 
-    func insertAyahBookmark(forPage page: Int, ayah: AyahNumber) {
-        insert(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
+    func insertAyahBookmark(forPage page: Int, ayah: AyahNumber) throws {
+        try insert(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
     }
 
     private func split(bookmarks: [Bookmark]) -> ([PageBookmark], [AyahBookmark]) {

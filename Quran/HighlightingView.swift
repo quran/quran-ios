@@ -205,16 +205,15 @@ class HighlightingView: UIView {
 
     /// Did click on copy menu item
     override func copy(_ sender: Any?) {
+        guard let text = currentSelectedAyahText() else { return }
         let pasteBoard = UIPasteboard.general
-        pasteBoard.string = currentSelectedAyahText()
+        pasteBoard.string = text
     }
 
     /// Did click on share menu item
     func _share(_ sender: Any?) {
-        let text = currentSelectedAyahText()
-        if text.characters.count != 0 {
-            delegate?.highlightingView(self, didShareAyahText: text)
-        }
+        guard let text = currentSelectedAyahText() else { return }
+        delegate?.highlightingView(self, didShareAyahText: text)
     }
 
     private func configuredBookmarkMenuItem(ayah: AyahNumber) -> UIMenuItem {
@@ -223,7 +222,7 @@ class HighlightingView: UIView {
             let image = UIImage(named: "bookmark-filled")?.tintedImage(withColor: .bookmark())
             return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.async({ self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah) }) { _ in
+                Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah) }) { _ in
                     var bookmarks = self.highlights[.bookmark] ?? Set()
                     bookmarks.remove(ayah)
                     self.highlights[.bookmark] = bookmarks
@@ -233,7 +232,7 @@ class HighlightingView: UIView {
             let image = UIImage(named: "bookmark-empty")?.tintedImage(withColor: .white)
             return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.async({ self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah) }) { _ in
+                Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah) }) { _ in
                     var bookmarks = self.highlights[.bookmark] ?? Set()
                     bookmarks.insert(ayah)
                     self.highlights[.bookmark] = bookmarks
@@ -246,8 +245,8 @@ class HighlightingView: UIView {
      Get the current highlighted ayah text.
      - Returns: String value representing the ayah
      */
-    private func currentSelectedAyahText() -> String {
-        return highlights[.share]?.first.map { ayahTextFromNumber($0) } ?? ""
+    private func currentSelectedAyahText() -> String? {
+        return highlights[.share]?.first.flatMap { ayahTextFromNumber($0) }
     }
 
     /**
@@ -255,14 +254,14 @@ class HighlightingView: UIView {
      - Parameter number: AyahNumber object represting the ayah number that you need its text.
      - Returns: the arabic text of ayah.
      */
-    private func ayahTextFromNumber(_ number: AyahNumber) -> String {
-        let storage = AyahTextPersistenceStorage()
+    private func ayahTextFromNumber(_ number: AyahNumber) -> String? {
+        let storage: AyahTextPersistence = SQLiteAyahTextPersistence()
         do {
             let text = try storage.getAyahTextForNumber(number)
             return text
         } catch {
-            Crash.recordError(error)
+            Crash.recordError(error, reason: "While getting ayah text for ayah '\(number)'")
+            return nil
         }
-        return ""
     }
 }

@@ -90,16 +90,16 @@ class Container {
         return QariDataRetriever().erasedType()
     }
 
-    func createAyahInfoStorage() -> AyahInfoStorage {
-        return AyahInfoPersistenceStorage()
+    func createAyahInfoPersistence() -> AyahInfoPersistence {
+        return SQLiteAyahInfoPersistence()
     }
 
-    func createAyahTextStorage() -> AyahTextStorageProtocol {
-        return AyahTextPersistenceStorage()
+    func createAyahTextStorage() -> AyahTextPersistence {
+        return SQLiteAyahTextPersistence()
     }
 
     func createAyahInfoRetriever() -> AyahInfoRetriever {
-        return SQLiteAyahInfoRetriever(persistence: createAyahInfoStorage())
+        return DefaultAyahInfoRetriever(persistence: createAyahInfoPersistence())
     }
 
     func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
@@ -189,18 +189,18 @@ class Container {
     }
 
     func createQariTimingRetriever() -> QariTimingRetriever {
-        return SQLiteQariTimingRetriever(persistence: createQariAyahTimingPersistenceStorage())
+        return SQLiteQariTimingRetriever(persistence: createQariAyahTimingPersistence())
     }
 
-    func createQariAyahTimingPersistenceStorage() -> QariAyahTimingPersistenceStorage {
-        return SQLiteAyahTimingPersistenceStorage()
+    func createQariAyahTimingPersistence() -> QariAyahTimingPersistence {
+        return SQLiteAyahTimingPersistence()
     }
 
     func createBookmarksPersistence() -> BookmarksPersistence {
-        return BookmarksPersistenceStorage()
+        return SQLiteBookmarksPersistence()
     }
 
     func createLastPagesPersistence() -> LastPagesPersistence {
-        return SqliteLastPagesPersistence(simplePersistence: createSimplePersistence())
+        return SQLiteLastPagesPersistence(simplePersistence: createSimplePersistence())
     }
 }

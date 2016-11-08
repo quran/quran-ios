@@ -63,7 +63,7 @@ class URLSessionDownloadManager: DownloadManager {
         var tasks: [URLSessionDownloadTask] = []
         for details in requests {
             let task: URLSessionDownloadTask
-            let resumeURL = Files.DocumentsFolder.appendingPathComponent(details.resumeDestination)
+            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(details.resumeDestination)
             if let data = try? Data(contentsOf: resumeURL) {
                 task = session.downloadTask(withResumeData: data)
             } else {

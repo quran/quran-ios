@@ -16,7 +16,7 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        unimplemented()
     }
 
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {

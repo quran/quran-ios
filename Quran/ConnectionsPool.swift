@@ -16,7 +16,7 @@ final class ConnectionsPool {
 
     var pool: [String: (uses: Int, connection: Connection)] = [:]
 
-    func getConnection(filePath: String) -> Connection {
+    func getConnection(filePath: String) throws -> Connection {
         if let (uses, connection) = pool[filePath] {
             pool[filePath] = (uses + 1, connection)
             return connection
@@ -26,8 +26,8 @@ final class ConnectionsPool {
                 pool[filePath] = (1, connection)
                 return connection
             } catch {
-                Crash.recordError(error)
-                fatalError("Cannot open connection to sqlite file '\(filePath)'. Error: '\(error)'")
+                Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(filePath)'.")
+                throw PersistenceError.openDatabase(error: error)
             }
         }
     }

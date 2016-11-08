@@ -25,24 +25,10 @@ class AudioQariBarView: UIView {
         setUp()
     }
 
-    func setUp() {
-        loadViewFromNib()
+    private func setUp() {
+        loadViewFrom(nibName: "AudioQariBarView")
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         imageView.layer.borderWidth = 0.5
-    }
-
-    func loadViewFromNib() {
-        let nibName = "AudioQariBarView"
-        let nib = UINib(nibName: nibName, bundle: nil)
-        guard let contentView = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
-            fatalError("Couldn't load '\(nibName).xib' as the first item should be a UIView subclass.")
-        }
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(contentView)
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
-            options: [], metrics: nil, views: ["view" : contentView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
-            options: [], metrics: nil, views: ["view" : contentView]))
     }
 
     override func layoutSubviews() {

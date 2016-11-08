@@ -12,8 +12,8 @@ struct QuartersDataRetriever: DataRetriever {
     func retrieve(onCompletion: @escaping ([(Juz, [Quarter])]) -> Void) {
 
         Queue.background.async {
-            guard let ayahsText = NSArray(contentsOf: Files.QuarterPrefixArray) as? [String] else {
-                fatalError("Couldn't load `\(Files.QuarterPrefixArray)` file")
+            guard let ayahsText = NSArray(contentsOf: Files.quarterPrefixArray) as? [String] else {
+                fatalError("Couldn't load `\(Files.quarterPrefixArray)` file")
             }
 
             let juzs = Juz.getJuzs()

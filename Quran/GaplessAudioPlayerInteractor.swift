@@ -33,8 +33,8 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             fatalError("Unsupported qari type gapped")
         }
         let baseFileName = qari.localFolder().appendingPathComponent(databaseName)
-        let dbFile = baseFileName.appendingPathExtension(Files.DatabaseLocalFileExtension)
-        let zipFile = baseFileName.appendingPathExtension(Files.DatabaseRemoteFileExtension)
+        let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
+        let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
         guard !((try? dbFile.checkResourceIsReachable()) ?? false) else {
             completion()
@@ -45,7 +45,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             do {
                 try Zip.unzipFile(zipFile, destination: qari.localFolder(), overwrite: true, password: nil, progress: nil)
             } catch {
-                Crash.recordError(error)
+                Crash.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(qari.localFolder())'")
                 // delete the zip and try to re-download it again, next time.
                 let _ = try? FileManager.default.removeItem(at: zipFile)
             }

@@ -68,7 +68,9 @@ platform :ios do
         pilot(ipa: './build/Quran.ipa', skip_waiting_for_build_processing: true)
 
         # Reset fabric keys changes
-        reset_git_repo(force: true)
+        # reset_git_repo(force: true)
+        sh "git reset --hard HEAD"
+        sh "git clean -fd"
 
         # Say it succeeded
         successMessage = 'New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!'

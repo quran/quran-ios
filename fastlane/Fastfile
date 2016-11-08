@@ -35,28 +35,48 @@ platform :ios do
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
     lane :beta do
-      # Increase build number & commit it
-      increment_build_number
-      #commit_version_bump
-      #push_to_git_remote
+        # Increase build number & commit it
+        increment_build_number
+        commit_version_bump
+        push_to_git_remote
 
-      # Build the app
-      gym(
-        scheme: "Quran",
-        clean: true,
-        output_directory: "./build/",
-      )
+        # Update fabric keys
+        fabric_keys = ENV['fabric_keys'].split(',')
+        puts 'before'.color(:yellow)
+        file_names = ['../Quran.xcodeproj/project.pbxproj', '../Quran/Info.plist']
+        file_names.each do |file_name|
+            text = File.read(file_name)
 
-      # Upload to test flight
-      pilot(ipa: "./build/Quran.ipa", skip_waiting_for_build_processing: true)
+            fabric_keys.each do |key|
+                values = key.split('|')
+                puts " Replacing #{values[0]} => #{values[1]} in #{file_name}"
+                text = text.gsub(values[0], values[1])
+            end
 
-      successMessage = "New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!"
-      say successMessage
+            # To write changes to the file, use:
+            File.open(file_name, 'w') { |file| file.puts text }
+        end
 
+        # Build the app
+        gym(
+            scheme: 'Quran',
+            clean: true,
+            output_directory: './build/'
+        )
+
+        # Upload to test flight
+        pilot(ipa: './build/Quran.ipa', skip_waiting_for_build_processing: true)
+
+        # Reset fabric keys changes
+        reset_git_repo(force: true)
+
+        # Say it succeeded
+        successMessage = 'New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!'
+        say successMessage
     end
 
-    error do |lane, exception|
-      say "Error while trying to execute fastlane command. Error!"
+    error do |_lane, _exception|
+        say 'Error while trying to execute fastlane command. Error!'
     end
 end
 

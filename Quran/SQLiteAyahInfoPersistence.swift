@@ -43,7 +43,7 @@ struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
             return result
         } catch {
             Crash.recordError(error, reason: "Error getting ayah info for page '\(page)'")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 
@@ -59,7 +59,7 @@ struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
             return result
         } catch {
             Crash.recordError(error, reason: "Error getting ayah info for (sura: \(sura), ayah: \(ayah))")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 

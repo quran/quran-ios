@@ -53,7 +53,7 @@ class LazyConnectionWrapper {
             return connection
         } catch {
             Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(sqliteFilePath)'")
-            throw PersistenceError.openDatabase(error: error)
+            throw PersistenceError.openDatabase(error)
         }
     }
 }

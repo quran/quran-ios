@@ -12,7 +12,7 @@ import SQLite
 private let maxNumberOfLastPages = 3
 
 extension PersistenceKeyBase {
-    fileprivate static let LastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
+    fileprivate static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
 }
 
 extension Queue {
@@ -46,13 +46,13 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
         })
 
         // migrate from old persistence.
-        if let lastPage = simplePersistence.valueForKey(.LastViewedPage) {
+        if let lastPage = simplePersistence.valueForKey(.lastViewedPage) {
             let insert = LastPages.table.insert(
                 LastPages.page <- lastPage,
                 LastPages.createdOn <- Date(),
                 LastPages.modifiedOn <- Date())
             _ = try connection.run(insert)
-            simplePersistence.removeValueForKey(.LastViewedPage)
+            simplePersistence.removeValueForKey(.lastViewedPage)
         }
     }
 
@@ -84,7 +84,16 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
     }
 
     func update(page: LastPage, toPage newPage: Int) throws -> LastPage {
+        // if the same page
+        guard page.page != newPage else { return page }
+
         return try run { connection in
+
+            // delete conflict record for the new page
+            let conflict = LastPages.table.filter(LastPages.page == newPage)
+            _ = try connection.run(conflict.delete())
+
+            // update the record
             let requestedPage = LastPages.table.filter(LastPages.id == page.id)
 
             var updatedPage = page

@@ -37,7 +37,7 @@ extension SQLitePersistence {
                 connection.userVersion = Int(newVersion)
             } catch {
                 Crash.recordError(error, reason: "Cannot create database for file '\(filePath)'")
-                throw PersistenceError.queryError(error: error)
+                throw PersistenceError.query(error)
             }
         } else {
             let unsignedOldVersion = UInt(oldVersion)
@@ -47,7 +47,7 @@ extension SQLitePersistence {
                     connection.userVersion = Int(newVersion)
                 } catch {
                     Crash.recordError(error, reason: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
-                    throw PersistenceError.queryError(error: error)
+                    throw PersistenceError.query(error)
                 }
             }
         }
@@ -65,7 +65,7 @@ extension SQLitePersistence {
             throw error
         } catch {
             Crash.recordError(error, reason: "Error while executing sqlite statement")
-            throw PersistenceError.queryError(error: error)
+            throw PersistenceError.query(error)
         }
     }
 }

@@ -9,8 +9,8 @@
 import Foundation
 
 enum PersistenceError: Error {
-    case general(description: String)
-    case openDatabase(error: Error)
-    case queryError(error: Error)
+    case general(String)
+    case openDatabase(Error)
+    case query(Error)
     case unknown
 }

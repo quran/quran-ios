@@ -29,49 +29,34 @@ platform :ios do
         increment_build_number(build_number: 0)
 
         # Commit the change
-        # commit_version_bump
-    end
-
-    desc 'Runs all the tests'
-    lane :test do
-        scan
+        commit_version_bump
     end
 
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
     lane :beta do
-        # match(type: "appstore") # more information: https://codesigning.guide
-        gym(scheme: 'Quran') # Build your app - more options available
-        pilot
+      # Increase build number & commit it
+      increment_build_number
+      #commit_version_bump
+      #push_to_git_remote
 
-        # sh "your_script.sh"
-        # You can also use other beta testing services here (run `fastlane actions`)
-    end
+      # Build the app
+      gym(
+        scheme: "Quran",
+        clean: true,
+        output_directory: "./build/",
+      )
 
-    desc 'Deploy a new version to the App Store'
-    lane :release do
-        # match(type: "appstore")
-        # snapshot
-        gym(scheme: 'Quran') # Build your app - more options available
-        deliver(force: true)
-        # frameit
-    end
+      # Upload to test flight
+      pilot(ipa: "./build/Quran.ipa", skip_waiting_for_build_processing: true)
 
-    # You can define as many lanes as you want
+      successMessage = "New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!"
+      say successMessage
 
-    after_all do |lane|
-        # This block is called, only if the executed lane was successful
-
-        # slack(
-        #   message: "Successfully deployed new App Update."
-        # )
     end
 
     error do |lane, exception|
-        # slack(
-        #   message: exception.message,
-        #   success: false
-        # )
+      say "Error while trying to execute fastlane command. Error!"
     end
 end
 

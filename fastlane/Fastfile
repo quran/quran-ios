@@ -1,0 +1,89 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version '1.107.0'
+
+default_platform :ios
+
+platform :ios do
+    before_all do
+        # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+    end
+
+    desc 'Resets the build to 0 and version to passed version value and push it to the origin.'
+    lane :version_reset do |options|
+        # Set a specific version number
+        increment_version_number(version_number: options[:version])
+
+        # Set build number to 0
+        increment_build_number(build_number: 0)
+
+        # Commit the change
+        commit_version_bump
+    end
+
+    desc 'Submit a new Beta Build to Apple TestFlight'
+    desc 'This will also make sure the profile is up to date'
+    lane :beta do
+        # Increase build number & commit it
+        increment_build_number
+        commit_version_bump
+        push_to_git_remote
+
+        # Update fabric keys
+        fabric_keys = ENV['fabric_keys'].split(',')
+        puts 'before'.color(:yellow)
+        file_names = ['../Quran.xcodeproj/project.pbxproj', '../Quran/Info.plist']
+        file_names.each do |file_name|
+            text = File.read(file_name)
+
+            fabric_keys.each do |key|
+                values = key.split('|')
+                puts " Replacing #{values[0]} => #{values[1]} in #{file_name}"
+                text = text.gsub(values[0], values[1])
+            end
+
+            # To write changes to the file, use:
+            File.open(file_name, 'w') { |file| file.puts text }
+        end
+
+        # Build the app
+        gym(
+            scheme: 'Quran',
+            clean: true,
+            output_directory: './build/'
+        )
+
+        # Upload to test flight
+        pilot(ipa: './build/Quran.ipa', skip_waiting_for_build_processing: true)
+
+        # Reset fabric keys changes
+        # reset_git_repo(force: true)
+        sh "git reset --hard HEAD"
+        sh "git clean -fd"
+
+        # Say it succeeded
+        successMessage = 'New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!'
+        say successMessage
+    end
+
+    error do |lane, exception|
+        say "Error while trying to execute fastlane command. #{exception.message}"
+    end
+end
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer

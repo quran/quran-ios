@@ -17,4 +17,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-
+fastlane/Appfile
+fastlane/report.xml
+fastlane/README.md

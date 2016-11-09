@@ -1220,8 +1220,8 @@
 				54B265DF1CC57D8E00D3AEF8 /* Sources */,
 				54B265E01CC57D8E00D3AEF8 /* Frameworks */,
 				54B265E11CC57D8E00D3AEF8 /* Resources */,
-				54B266481CC81D6500D3AEF8 /* ShellScript */,
-				54A99CB41CF7BDF2003995AE /* ShellScript */,
+				54B266481CC81D6500D3AEF8 /* Swiftlint Run Script */,
+				54A99CB41CF7BDF2003995AE /* Fabric Run Script */,
 				A7C0CB29E29693C884F7AE27 /* [CP] Embed Pods Frameworks */,
 				B40DC3187BCD4205782A7E54 /* [CP] Copy Pods Resources */,
 			);
@@ -1320,26 +1320,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		54A99CB41CF7BDF2003995AE /* ShellScript */ = {
+		54A99CB41CF7BDF2003995AE /* Fabric Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Fabric Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 9d14e32641d4697dc9516655505b19a7b3d91747 2c77b30cb2574beb030dae483b3b4effcff2475154a8d503c86728fa9ab13393";
 		};
-		54B266481CC81D6500D3AEF8 /* ShellScript */ = {
+		54B266481CC81D6500D3AEF8 /* Swiftlint Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Swiftlint Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1787,6 +1789,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = MKP73M5X4A;
 				INFOPLIST_FILE = Quran/Info.plist;
@@ -1811,6 +1814,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
 				INFOPLIST_FILE = Quran/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;

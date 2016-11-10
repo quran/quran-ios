@@ -11,6 +11,8 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
+
+
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPagesDataSourceDelegate {
 
     private let bookmarksPersistence: BookmarksPersistence
@@ -28,17 +30,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     private var isBookmarked: Bool? = nil
 
-    private var lastPage: LastPage!
-
-    private func saveCurrentPage(_ page: Int) {
-        Queue.lastPages.asyncSuccess({
-            if let lastPage = self.lastPage {
-                return try self.lastPagesPersistence.update(page: lastPage, toPage: page)
-            } else {
-                return try self.lastPagesPersistence.add(page: page)
-            }
-        }) { self.lastPage = $0 }
-    }
+    private var lastPageUpdater: LastPageUpdater!
 
     init(imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
@@ -55,6 +47,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         self.bookmarksPersistence   = bookmarksPersistence
         self.lastPagesPersistence   = lastPagesPersistence
         self.initialPage            = page
+        self.lastPageUpdater        = LastPageUpdater(persistence: lastPagesPersistence)
 
         self.pageDataSource = QuranPagesDataSource(
             reuseIdentifier: cellReuseId,
@@ -64,11 +57,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
         super.init(nibName: nil, bundle: nil)
 
-        if lastPage == nil {
-            saveCurrentPage(page)
-        } else {
-            self.lastPage = lastPage
-        }
+        self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
         audioViewPresenter.delegate = self
         self.pageDataSource.delegate = self
@@ -232,9 +221,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     func lastViewedPage() -> Int {
-        return lastPage.page
+        return lastPageUpdater.lastPage?.page ?? initialPage
     }
-
 
     //MARK: - Gestures recognizers handlers
 
@@ -302,7 +290,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         // only persist if active
         if UIApplication.shared.applicationState == .active {
             Crash.setValue(page.pageNumber, forKey: .QuranPage)
-            saveCurrentPage(page.pageNumber)
+            lastPageUpdater.updateTo(page: page.pageNumber)
         }
     }
 
@@ -355,7 +343,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         guard UIApplication.shared.applicationState != .active else { return }
         Queue.background.async {
             let page = ayah.getStartPage()
-            self.saveCurrentPage(page)
+            self.lastPageUpdater.updateTo(page: page)
             Crash.setValue(page, forKey: .QuranPage)
         }
     }

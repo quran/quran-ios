@@ -9,7 +9,6 @@
 import Foundation
 
 struct LastPage {
-    var id: Int64
     var page: Int
     var createdOn: Date
     var modifiedOn: Date

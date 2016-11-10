@@ -84,38 +84,35 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
     }
 
     func update(page: LastPage, toPage newPage: Int) throws -> LastPage {
-        // if the same page
-        guard page.page != newPage else { return page }
+        // update it if the same page, since it should upate the dates.
 
         return try run { connection in
 
-            // delete conflict record for the new page
-            let conflict = LastPages.table.filter(LastPages.page == newPage)
+            // delete conflict record for the new & old pages.
+            let conflict = LastPages.table.filter([page.page, newPage].contains(LastPages.page))
             _ = try connection.run(conflict.delete())
-
-            // update the record
-            let requestedPage = LastPages.table.filter(LastPages.id == page.id)
 
             var updatedPage = page
             updatedPage.page = newPage
             updatedPage.modifiedOn = Date()
+            updatedPage.createdOn = Date()
 
-            let update = requestedPage.update(
+            // Insert or update the record
+            let insert = LastPages.table.insert(
                 LastPages.page <- updatedPage.page,
-                LastPages.modifiedOn <- updatedPage.modifiedOn
-            )
-            _ = try connection.run(update)
+                LastPages.createdOn <- updatedPage.createdOn,
+                LastPages.modifiedOn <- updatedPage.modifiedOn)
+            _ = try connection.run(insert)
             return updatedPage
         }
     }
 
     private func convert(rowsToLastPages rows: AnySequence<Row>) -> [LastPage] {
         return rows.map { row in
-            let id = row[LastPages.id]
             let page = row[LastPages.page]
             let createdOn = row[LastPages.createdOn]
             let modifiedOn = row[LastPages.modifiedOn]
-            return LastPage(id: id, page: page, createdOn: createdOn, modifiedOn: modifiedOn)
+            return LastPage(page: page, createdOn: createdOn, modifiedOn: modifiedOn)
         }
     }
 }

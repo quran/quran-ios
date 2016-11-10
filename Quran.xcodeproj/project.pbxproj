@@ -19,6 +19,7 @@
 		5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */; };
 		5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
+		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
@@ -243,6 +244,7 @@
 		5421D8CA1CDA986D00E6B019 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
+		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
@@ -482,6 +484,14 @@
 				5419E5321CFA3F0300071A6D /* Android.stringsdict */,
 			);
 			name = Strings;
+			sourceTree = "<group>";
+		};
+		54236C471DD4F791002E6FD3 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
+			);
+			name = utils;
 			sourceTree = "<group>";
 		};
 		545EE5151DCE082C0085D31F /* Last Pages */ = {
@@ -997,6 +1007,7 @@
 		54B266BB1CD16E9800D3AEF8 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
+				54236C471DD4F791002E6FD3 /* utils */,
 				54C0DBE61CE48DED009AAD8D /* Views */,
 				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
 			);
@@ -1506,6 +1517,7 @@
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
 				5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */,
+				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
 				54C0DC1D1CE69BF6009AAD8D /* GaplessAudioFilesDownloader.swift in Sources */,
 				54C0DC121CE692FC009AAD8D /* DownloadNetworkRequest.swift in Sources */,
 				5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistence.swift in Sources */,

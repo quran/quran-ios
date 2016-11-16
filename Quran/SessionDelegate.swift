@@ -52,7 +52,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
 
         // initialize requests
         if let data = persistence.valueForKey(.DownloadRequests) {
-            dataRequests = cast(NSKeyedUnarchiver.unarchiveObject(with: data))
+            dataRequests = (NSKeyedUnarchiver.unarchiveObject(with: data) as? [URL: RequestData]) ?? [:]
         } else {
             dataRequests = [:]
         }

@@ -15,7 +15,6 @@ struct Quran {
 
     static let NumberOfQuartersPerJuz = Quarters.count / JuzPageStart.count
 
-
     static let SuraPageStart: [Int] = [
         1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262,
         267, 282, 293, 305, 312, 322, 332, 342, 350, 359, 367, 377, 385, 396,
@@ -387,7 +386,6 @@ extension Quran {
         return NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
     }
 }
-
 
 extension AyahNumber {
 

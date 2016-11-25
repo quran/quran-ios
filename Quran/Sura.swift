@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct Sura: QuranPageReference {
     let suraNumber: Int
     let isMAkki: Bool

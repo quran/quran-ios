@@ -92,7 +92,6 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
             visibleCells.forEach { $0.highlightAyat(highlightedAyat) }
         }
 
-
         if let ayah = ayat.first {
             scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
         }

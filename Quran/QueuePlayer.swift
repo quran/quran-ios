@@ -17,7 +17,6 @@ struct PlayerItemInfo {
     let artwork: MPMediaItemArtwork?
 }
 
-
 class QueuePlayer: NSObject {
 
     let player: AVQueuePlayer = AVQueuePlayer()

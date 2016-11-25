@@ -6,8 +6,6 @@
 //  Copyright © 2016 Quran.com. All rights reserved.
 //
 
-
-
 protocol AudioBannerViewPresenterDelegate: class {
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int)
     func highlightAyah(_ ayah: AyahNumber)

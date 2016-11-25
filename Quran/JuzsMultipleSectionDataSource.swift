@@ -9,7 +9,6 @@
 import Foundation
 import GenericDataSources
 
-
 class JuzsMultipleSectionDataSource: CompositeDataSource {
 
     let numberFormatter = NumberFormatter()

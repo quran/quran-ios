@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class QariNavigationController: BaseNavigationController {
 
 }

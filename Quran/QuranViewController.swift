@@ -11,8 +11,6 @@ import KVOController_Swift
 
 private let cellReuseId = "cell"
 
-
-
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPagesDataSourceDelegate {
 
     private let bookmarksPersistence: BookmarksPersistence

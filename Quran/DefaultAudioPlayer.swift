@@ -13,7 +13,6 @@ protocol DefaultAudioPlayer: class, AudioPlayer {
     var player: QueuePlayer { get }
 }
 
-
 extension DefaultAudioPlayer {
 
     func onPlaybackEnded() -> () -> Void {

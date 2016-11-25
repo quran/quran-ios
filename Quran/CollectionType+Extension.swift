@@ -24,7 +24,6 @@ extension Collection where Index: Strideable {
     }
 }
 
-
 extension Collection where Index: Strideable, Iterator.Element: Comparable {
     func binarySearch(_ value: Iterator.Element) -> Index {
         return binarySearch { $0 < value }

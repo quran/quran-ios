@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 extension CALayer {
 
     class func withoutAnimation(_ block: () -> Void) {

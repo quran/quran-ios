@@ -16,7 +16,6 @@ class QuarterTableViewCell: UITableViewCell {
     @IBOutlet weak var startPage: UILabel!
     @IBOutlet weak var circleLabel: UILabel!
 
-
     override func awakeFromNib() {
         super.awakeFromNib()
         circleView.fillColor = UIColor.appIdentity()

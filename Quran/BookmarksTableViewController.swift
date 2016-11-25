@@ -84,7 +84,6 @@ class BookmarksTableViewController: BaseTableViewController {
         pageDS.reloadData()
         ayahDS.reloadData()
 
-
         // deselect selected row
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: indexPath, animated: animated)

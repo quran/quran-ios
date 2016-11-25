@@ -102,7 +102,6 @@ struct QariDataRetriever: DataRetriever {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
 
-
             Queue.main.async {
                 onCompletion(qaris)
             }

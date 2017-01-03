@@ -65,7 +65,11 @@ class URLSessionDownloadManager: DownloadManager {
             let task: URLSessionDownloadTask
             let resumeURL = FileManager.default.documentsURL.appendingPathComponent(details.resumeDestination)
             if let data = try? Data(contentsOf: resumeURL) {
-                task = session.downloadTask(withResumeData: data)
+                if #available(iOS 10, *) {
+                    task = session.correctedDownloadTask(withResumeData: data)
+                } else {
+                    task = session.downloadTask(withResumeData: data)
+                }
             } else {
                 task = session.downloadTask(with: details.request)
             }

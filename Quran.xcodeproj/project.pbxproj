@@ -177,6 +177,7 @@
 		DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */; };
 		DA0B7E191D1753C900F92AA3 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
+		EB7CDEB81E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -439,6 +440,7 @@
 		DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistenceStorage.swift; sourceTree = "<group>"; };
 		DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
+		EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+CorrectedResumeData.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -770,6 +772,7 @@
 				54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */,
 				5487241B1DC495DB00ADDE54 /* FileManager+Extension.swift */,
 				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
+				EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1464,6 +1467,7 @@
 				DA0B7E191D1753C900F92AA3 /* AyahTextPersistence.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
+				EB7CDEB81E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,

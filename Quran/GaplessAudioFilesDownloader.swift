@@ -20,7 +20,7 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
 
     func filesForQari(_ qari: Qari,
                       startAyah: AyahNumber,
-                      endAyah: AyahNumber) -> [(remoteURL: URL, destination: String, resumeURL: String)] {
+                      endAyah: AyahNumber) -> [DownloadInformation] {
 
         guard case AudioType.gapless(let databaseFileName) = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")
@@ -33,8 +33,8 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
         let databaseResumeURL = databaseLocalURL.stringByAppendingExtension(Files.downloadResumeDataExtension)
 
         // loop over the files
-        var files:[(remoteURL: URL, destination: String, resumeURL: String)] = []
-        files.append(remoteURL: databaseRemoteURL, destination: databaseLocalURL, resumeURL: databaseResumeURL)
+        var files: [DownloadInformation] = []
+        files.append(DownloadInformation(remoteURL: databaseRemoteURL, destination: databaseLocalURL, resumeURL: databaseResumeURL))
 
         for sura in startAyah.sura...endAyah.sura {
             let fileName = String(format: "%03d", sura)
@@ -43,7 +43,7 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
             let localURL = qari.path.stringByAppendingPath(fileName).stringByAppendingExtension(Files.audioExtension)
             let resumeURL = localURL.stringByAppendingExtension(Files.downloadResumeDataExtension)
 
-            files.append(remoteURL: remoteURL, destination: localURL, resumeURL: resumeURL)
+            files.append(DownloadInformation(remoteURL: remoteURL, destination: localURL, resumeURL: resumeURL))
         }
         return files
     }

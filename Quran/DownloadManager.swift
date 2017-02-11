@@ -26,7 +26,7 @@ protocol DownloadManager: class {
 
     func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkRequest]) -> Void)
 
-    func download(_ requests: [(request: URLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest]
+    func download(_ requests: [DownloadInformation]) -> [DownloadNetworkRequest]
 }
 
 extension DownloadManager {
@@ -39,10 +39,10 @@ extension DownloadManager {
                   destination: String,
                   resumeDestination: String)]) -> [DownloadNetworkRequest] {
 
-        let requests: [(request: URLRequest, destination: String, resumeDestination: String)] = requestDetails.map { details in
+        let requests: [DownloadInformation] = requestDetails.map { details in
             var request = URLRequest(url: details.url)
             request.httpMethod = details.method.rawValue
-            return (request: request, destination: details.destination, resumeDestination: details.resumeDestination)
+            return DownloadInformation(remoteURL: details.url, destination: details.destination, resumeURL: details.resumeDestination)
         }
         return download(requests)
     }

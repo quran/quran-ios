@@ -57,25 +57,26 @@ class URLSessionDownloadManager: DownloadManager {
         }
     }
 
-    func download(_ requests: [(request: URLRequest, destination: String, resumeDestination: String)]) -> [DownloadNetworkRequest] {
+    func download(_ requests: [DownloadInformation]) -> [DownloadNetworkRequest] {
 
         var downloadRequests = [(URLRequest, DownloadNetworkRequest)]()
         var tasks: [URLSessionDownloadTask] = []
         for details in requests {
+            let request = URLRequest(url: details.remoteURL)
             let task: URLSessionDownloadTask
-            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(details.resumeDestination)
+            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(details.resumeURL)
             if let data = try? Data(contentsOf: resumeURL) {
                 task = session.downloadTask(withResumeData: data)
             } else {
-                task = session.downloadTask(with: details.request)
+                task = session.downloadTask(with: request)
             }
             let progress = Foundation.Progress(totalUnitCount: 1)
             let downloadRequest = DownloadNetworkRequest(task: task,
                                                          destination: details.destination,
-                                                         resumeDestination: details.resumeDestination,
+                                                         resumeDestination: details.resumeURL,
                                                          progress: progress)
             tasks.append(task)
-            downloadRequests.append((details.request, downloadRequest))
+            downloadRequests.append((request, downloadRequest))
         }
 
         delegate.addRequestsData(downloadRequests)

@@ -56,7 +56,7 @@ extension GappedAudioPlayer {
     fileprivate func playerItemsForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GappedPlayerItem], [PlayerItemInfo]) {
         let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
         let items = files.map { GappedPlayerItem(URL: $0, ayah: $1) }
-        let info: [PlayerItemInfo] = files.map { (url, ayah) in
+        let info: [PlayerItemInfo] = files.map { (_, ayah) in
             return PlayerItemInfo(
                 title: ayah.localizedName,
                 artist: qari.name,

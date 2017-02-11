@@ -11,7 +11,7 @@ import Zip
 
 class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
 
-    weak var delegate: AudioPlayerInteractorDelegate? = nil
+    weak var delegate: AudioPlayerInteractorDelegate?
 
     let downloader: AudioFilesDownloader
 

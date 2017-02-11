@@ -26,7 +26,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private let scrollToPageToken = Once()
     private let didLayoutSubviewToken = Once()
 
-    private var isBookmarked: Bool? = nil
+    private var isBookmarked: Bool?
 
     private var lastPageUpdater: LastPageUpdater!
 
@@ -65,7 +65,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         pageDataSource.scrollViewDelegate = pageBehavior
-        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (observable, change: ChangeData<Int>) in
+        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (_, _: ChangeData<Int>) in
             self?.onPageChanged()
         }
     }
@@ -212,7 +212,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         timer = nil
     }
 
-    //MARK: - QuranPagesDataSourceDelegate
+    // MARK: - QuranPagesDataSourceDelegate
 
     func share(ayahText: String, from cell: QuranPageCollectionViewCell) {
         ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
@@ -222,7 +222,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         return lastPageUpdater.lastPage?.page ?? initialPage
     }
 
-    //MARK: - Gestures recognizers handlers
+    // MARK: - Gestures recognizers handlers
 
     func onViewTapped(_ sender: UITapGestureRecognizer) {
         guard let audioView = audioView, !audioView.bounds.contains(sender.location(in: audioView)) else {

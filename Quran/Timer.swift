@@ -20,7 +20,7 @@ open class Timer {
          repeated: Bool = false,
          startNow: Bool = false,
          queue: DispatchQueue = DispatchQueue.main,
-         handler: @escaping ()->()) {
+         handler: @escaping () -> Void) {
         self.repeated = repeated
 
         timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: UInt(0)), queue: queue)

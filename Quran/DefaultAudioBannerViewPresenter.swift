@@ -155,7 +155,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
             if let newValue = progress {
                 observe(retainedObservable: newValue,
                         keyPath: progressKeyPath,
-                        options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Double>) in
+                        options: [.initial, .new]) { [weak self] (_, change: ChangeData<Double>) in
                             if let newValue = change.newValue {
                                 Queue.main.async { self?.view?.setDownloading(Float(newValue)) }
                             }

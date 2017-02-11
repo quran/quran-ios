@@ -32,7 +32,7 @@ struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
     func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]] {
         let query = glyphsTable.filter(columns.page == page)
 
-        var result = [AyahNumber : [AyahInfo]]()
+        var result = [AyahNumber: [AyahInfo]]()
         do {
             for row in try db.getOpenConnection().prepare(query) {
                 let ayah = AyahNumber(sura: row[columns.sura], ayah: row[columns.ayah])

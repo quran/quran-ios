@@ -16,7 +16,7 @@ protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
     func filesForQari(_ qari: Qari,
                       startAyah: AyahNumber,
-                      endAyah: AyahNumber) -> [(remoteURL: URL, destination: String, resumeURL: String)]
+                      endAyah: AyahNumber) -> [ DownloadInformation ]
 }
 
 extension DefaultAudioFilesDownloader {
@@ -60,10 +60,10 @@ extension DefaultAudioFilesDownloader {
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
         var uniqueFiles = Set<URL>()
         // filter out existing and duplicate files
-        let filesToDownload = files.filter { (remoteURL, destination, _) in
-            if !uniqueFiles.contains(remoteURL) {
-                uniqueFiles.insert(remoteURL)
-                if let result = try? FileManager.default.documentsURL.appendingPathComponent(destination).checkResourceIsReachable() {
+        let filesToDownload = files.filter { downloadInfo in
+            if !uniqueFiles.contains(downloadInfo.remoteURL) {
+                uniqueFiles.insert(downloadInfo.remoteURL)
+                if let result = try? FileManager.default.documentsURL.appendingPathComponent(downloadInfo.destination).checkResourceIsReachable() {
                     return !result
                 }
                 return true
@@ -72,7 +72,7 @@ extension DefaultAudioFilesDownloader {
         }
 
         // create downloads
-        let requests = downloader.download(filesToDownload.map { (
+        let requests = downloader.download(filesToDownload.map { DownloadRequest(
             method: .GET,
             url: $0.remoteURL,
             headers: nil,

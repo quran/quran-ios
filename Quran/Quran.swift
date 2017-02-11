@@ -361,7 +361,7 @@ struct Quran {
         AyahNumber(sura:78, ayah:1), AyahNumber(sura:80, ayah:1), AyahNumber(sura:82, ayah:1), AyahNumber(sura:84, ayah:1),
 
         // hizb 60
-        AyahNumber(sura:87, ayah:1), AyahNumber(sura:90, ayah:1), AyahNumber(sura:94, ayah:1), AyahNumber(sura:100, ayah:9),
+        AyahNumber(sura:87, ayah:1), AyahNumber(sura:90, ayah:1), AyahNumber(sura:94, ayah:1), AyahNumber(sura:100, ayah:9)
         ]
 }
 

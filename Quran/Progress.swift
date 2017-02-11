@@ -21,13 +21,13 @@ class Progress: Foundation.Progress {
 
         observe(retainedObservable: progress,
                 keyPath: "totalUnitCount",
-                options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Int64>) in
+                options: [.initial, .new]) { [weak self] (observable, _: ChangeData<Int64>) in
             self?.totalUnitCount = observable.totalUnitCount
         }
 
         observe(retainedObservable: progress,
                 keyPath: "completedUnitCount",
-                options: [.initial, .new]) { [weak self] (observable, change: ChangeData<Int64>) in
+                options: [.initial, .new]) { [weak self] (observable, _: ChangeData<Int64>) in
             self?.completedUnitCount = observable.completedUnitCount
         }
     }

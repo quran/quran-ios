@@ -11,6 +11,8 @@ import Foundation
 class URLSessionDownloadManager: DownloadManager {
 
     let session: URLSession
+
+    // swiftlint:disable weak_delegate
     fileprivate let delegate: SessionDelegate
 
     var backgroundSessionCompletionHandler: (() -> Void)? {

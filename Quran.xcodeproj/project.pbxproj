@@ -174,6 +174,7 @@
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */; };
 		C13E39421E4EF5B500079128 /* DownloadInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39411E4EF5B500079128 /* DownloadInformation.swift */; };
+		C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39431E4F02FF00079128 /* DownloadRequest.swift */; };
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
 		DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */; };
 		DA0B7E191D1753C900F92AA3 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */; };
@@ -437,6 +438,7 @@
 		C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistence.swift; sourceTree = "<group>"; };
 		C13E39411E4EF5B500079128 /* DownloadInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadInformation.swift; sourceTree = "<group>"; };
+		C13E39431E4F02FF00079128 /* DownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadRequest.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahInfoPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistenceStorage.swift; sourceTree = "<group>"; };
 		DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
@@ -1155,6 +1157,7 @@
 				54B266861CCACA2F00D3AEF8 /* DownloadManager.swift */,
 				54C0DC211CE7695E009AAD8D /* URLSessionDownloadManager.swift */,
 				C13E39411E4EF5B500079128 /* DownloadInformation.swift */,
+				C13E39431E4F02FF00079128 /* DownloadRequest.swift */,
 			);
 			name = NetworkManager;
 			sourceTree = "<group>";
@@ -1487,6 +1490,7 @@
 				54B2660D1CC6D38600D3AEF8 /* SettingsNavigationController.swift in Sources */,
 				54C0DBE81CE48DF8009AAD8D /* QuranView.swift in Sources */,
 				54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */,
+				C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
 				54C0DBE51CE479D7009AAD8D /* DefaultAudioBannerView.swift in Sources */,
 				54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */,

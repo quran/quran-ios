@@ -72,7 +72,7 @@ extension DefaultAudioFilesDownloader {
         }
 
         // create downloads
-        let requests = downloader.download(filesToDownload.map { (
+        let requests = downloader.download(filesToDownload.map { DownloadRequest(
             method: .GET,
             url: $0.remoteURL,
             headers: nil,

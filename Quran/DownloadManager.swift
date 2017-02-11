@@ -31,13 +31,7 @@ protocol DownloadManager: class {
 
 extension DownloadManager {
 
-    // swiftlint:disable large_tuple
-    func download(_ requestDetails: [(
-                  method: HTTPMethod,
-                  url: URL,
-                  headers: [String: String]?,
-                  destination: String,
-                  resumeDestination: String)]) -> [DownloadNetworkRequest] {
+    func download(_ requestDetails: [DownloadRequest]) -> [DownloadNetworkRequest] {
 
         let requests: [DownloadInformation] = requestDetails.map { details in
             var request = URLRequest(url: details.url)

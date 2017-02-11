@@ -44,7 +44,7 @@ class BaseTableViewController: UIViewController {
     }
 
     override func willTransition(to newCollection: UITraitCollection,
-                                                  with coordinator: UIViewControllerTransitionCoordinator) {
+                                 with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         let isCompact = newCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
         coordinator.animate(alongsideTransition: { [weak self] _ in

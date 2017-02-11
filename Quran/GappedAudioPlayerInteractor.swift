@@ -10,7 +10,7 @@ import Foundation
 
 class GappedAudioPlayerInteractor: DefaultAudioPlayerInteractor {
 
-    weak var delegate: AudioPlayerInteractorDelegate? = nil
+    weak var delegate: AudioPlayerInteractorDelegate?
 
     let downloader: AudioFilesDownloader
 

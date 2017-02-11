@@ -12,7 +12,7 @@ class GappedAudioFilesDownloader: DefaultAudioFilesDownloader {
 
     let downloader: DownloadManager
 
-    var request: Request? = nil
+    var request: Request?
 
     init(downloader: DownloadManager) {
         self.downloader = downloader

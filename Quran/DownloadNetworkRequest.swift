@@ -16,7 +16,7 @@ class DownloadNetworkRequest: Request {
 
     let progress: Foundation.Progress
 
-    var onCompletion: ((Result<()>) -> Void)? = nil
+    var onCompletion: ((Result<()>) -> Void)?
 
     init(task: URLSessionDownloadTask, destination: String, resumeDestination: String, progress: Foundation.Progress) {
         self.task = task

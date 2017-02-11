@@ -17,7 +17,7 @@ class JuzsMultipleSectionDataSource: CompositeDataSource {
 
     var juzs: [Juz] = []
 
-    var onJuzHeaderSelected: ((Juz) -> Void)? = nil
+    var onJuzHeaderSelected: ((Juz) -> Void)?
 
     init(type: SectionType, headerReuseIdentifier: String) {
         self.headerReuseIdentifier = headerReuseIdentifier
@@ -25,7 +25,7 @@ class JuzsMultipleSectionDataSource: CompositeDataSource {
     }
 
     func setSections<ItemType, CellType: ReusableCell>(_ sections: [(Juz, [ItemType])],
-                     dataSourceCreator: () -> BasicDataSource<ItemType, CellType>) {
+                                                       dataSourceCreator: () -> BasicDataSource<ItemType, CellType>) {
 
         for dataSource in dataSources {
             removeDataSource(dataSource)

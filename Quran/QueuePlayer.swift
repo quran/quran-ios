@@ -109,9 +109,9 @@ class QueuePlayer: NSObject {
     }
 
     func play(startTimeInSeconds: Double = 0,
-                                 items: [AVPlayerItem],
-                                 info: [PlayerItemInfo],
-                                 boundaries: [AVPlayerItem: [Double]]) {
+              items: [AVPlayerItem],
+              info: [PlayerItemInfo],
+              boundaries: [AVPlayerItem: [Double]]) {
 
         guard items.count == info.count && items.count == boundaries.count else {
             fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
@@ -121,7 +121,7 @@ class QueuePlayer: NSObject {
         playingItemsInfo = info
         self.playingItemBoundaries = boundaries
 
-        rateObserver = observe(retainedObservable: player, keyPath: "rate", options: [.new]) { [weak self] (observable, change: ChangeData<Float>) in
+        rateObserver = observe(retainedObservable: player, keyPath: "rate", options: [.new]) { [weak self] (_, change: ChangeData<Float>) in
             self?.updatePlayNowInfo()
             self?.onPlaybackRateChanged?(change.newValue != 0)
         }
@@ -251,7 +251,7 @@ class QueuePlayer: NSObject {
     }
 
     fileprivate func addCurrentItemObserver() {
-        observe(retainedObservable: player, keyPath: "currentItem", options: [.new]) { [weak self] (observable, change) in
+        observe(retainedObservable: player, keyPath: "currentItem", options: [.new]) { [weak self] (_, change) in
             self?._currentItemChanged(change.newValue)
         }
     }
@@ -266,7 +266,7 @@ class QueuePlayer: NSObject {
 
         durationObserver = observe(retainedObservable: newValue,
                                    keyPath: "duration",
-                                   options: [.initial, .new]) { [weak self] (observable, change: ChangeData<CMTime>) in
+                                   options: [.initial, .new]) { [weak self] (_, _) in
                                     self?.updatePlayNowInfo()
         }
 

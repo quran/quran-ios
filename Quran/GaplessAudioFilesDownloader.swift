@@ -12,15 +12,15 @@ class GaplessAudioFilesDownloader: DefaultAudioFilesDownloader {
 
     let downloader: DownloadManager
 
-    var request: Request? = nil
+    var request: Request?
 
     init(downloader: DownloadManager) {
         self.downloader = downloader
     }
 
     func filesForQari(_ qari: Qari,
-                              startAyah: AyahNumber,
-                              endAyah: AyahNumber) -> [(remoteURL: URL, destination: String, resumeURL: String)] {
+                      startAyah: AyahNumber,
+                      endAyah: AyahNumber) -> [(remoteURL: URL, destination: String, resumeURL: String)] {
 
         guard case AudioType.gapless(let databaseFileName) = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")

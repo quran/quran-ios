@@ -19,9 +19,7 @@ struct AyahInfo {
     let maxY: Int
 
     var rect: Rect {
-        get {
-            return Rect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
-        }
+        return Rect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 
     func engulf(_ other: AyahInfo) -> AyahInfo {

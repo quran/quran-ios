@@ -183,6 +183,7 @@
 		C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */; };
 		C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
+		EB7CDEB81E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -451,6 +452,7 @@
 		C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
+		EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+CorrectedResumeData.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -781,6 +783,7 @@
 				54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */,
 				5487241B1DC495DB00ADDE54 /* FileManager+Extension.swift */,
 				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
+				EB7CDEB71E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1498,6 +1501,7 @@
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
+				EB7CDEB81E1BFA210050ADF6 /* URLSession+CorrectedResumeData.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,

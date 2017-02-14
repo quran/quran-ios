@@ -27,6 +27,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private let didLayoutSubviewToken = Once()
 
     private var isBookmarked: Bool?
+    private var backButtonItem: UIBarButtonItem? = nil
 
     private var lastPageUpdater: LastPageUpdater!
 
@@ -68,6 +69,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (_, _: ChangeData<Int>) in
             self?.onPageChanged()
         }
+        backButtonItem = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,6 +79,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private var initialPage: Int = 0 {
         didSet {
             title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
+            backButtonItem?.title = title
         }
     }
 
@@ -168,7 +171,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
         audioViewPresenter.onViewDidLoad()
 
-        // start hidding bars timer
+        // hide the title, because we'll set it on the left side
+        navigationItem.titleView = UILabel()
+        navigationController?.navigationBar.topItem?.backBarButtonItem = backButtonItem
+
+        // start hiding bars timer
         startHiddenBarsTimer()
     }
 
@@ -277,6 +284,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     fileprivate func updateBarToPage(_ page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
+        backButtonItem?.title = title
 
         isBookmarked = nil
         Queue.bookmarks.async({ (self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber) }) { (bookmarked, page) in

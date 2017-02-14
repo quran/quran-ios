@@ -95,7 +95,7 @@ class Container {
     }
 
     func createAyahTextStorage() -> AyahTextPersistence {
-        return SQLiteAyahTextPersistence()
+        return SQLiteArabicTextPersistence()
     }
 
     func createAyahInfoRetriever() -> AyahInfoRetriever {

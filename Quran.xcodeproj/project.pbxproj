@@ -176,8 +176,9 @@
 		C13E39421E4EF5B500079128 /* DownloadInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39411E4EF5B500079128 /* DownloadInformation.swift */; };
 		C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39431E4F02FF00079128 /* DownloadRequest.swift */; };
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
-		DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */; };
-		DA0B7E191D1753C900F92AA3 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */; };
+		C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */; };
+		C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */; };
+		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
 /* End PBXBuildFile section */
 
@@ -440,8 +441,9 @@
 		C13E39411E4EF5B500079128 /* DownloadInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadInformation.swift; sourceTree = "<group>"; };
 		C13E39431E4F02FF00079128 /* DownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadRequest.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahInfoPersistence.swift; sourceTree = "<group>"; };
-		DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistenceStorage.swift; sourceTree = "<group>"; };
-		DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteTranslationTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteArabicTextPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -463,8 +465,6 @@
 			children = (
 				C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */,
 				C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */,
-				DA0B7E181D1753C900F92AA3 /* AyahTextPersistence.swift */,
-				DA0B7E161D17519D00F92AA3 /* AyahTextPersistenceStorage.swift */,
 			);
 			name = AyahInfo;
 			sourceTree = "<group>";
@@ -873,6 +873,7 @@
 				548723F81DC4847800ADDE54 /* Bookmarks */,
 				5416B4BF1CEE7C4B0062FF54 /* QariAyahTiming */,
 				5416B4BE1CEE7C3F0062FF54 /* AyahInfo */,
+				C2E3E1B8B556C26AC3EC142C /* Ayah Text */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1218,6 +1219,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		C2E3E1B8B556C26AC3EC142C /* Ayah Text */ = {
+			isa = PBXGroup;
+			children = (
+				C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */,
+				C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */,
+				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
+			);
+			name = "Ayah Text";
+			sourceTree = "<group>";
+		};
 		DA0B7E1A1D175D9300F92AA3 /* ShareController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1468,7 +1479,6 @@
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
-				DA0B7E191D1753C900F92AA3 /* AyahTextPersistence.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
@@ -1545,7 +1555,6 @@
 				548724261DC4BF5500ADDE54 /* PageBookmark.swift in Sources */,
 				5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
-				DA0B7E171D17519D00F92AA3 /* AyahTextPersistenceStorage.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
 				54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */,
@@ -1567,6 +1576,9 @@
 				54C0DBC11CDBC764009AAD8D /* ScrollViewPageBehavior.swift in Sources */,
 				54C0DC081CE633C6009AAD8D /* JuzBasedLastAyahFinder.swift in Sources */,
 				54B266151CC6D5A900D3AEF8 /* JuzsViewController.swift in Sources */,
+				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */,
+				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
+				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

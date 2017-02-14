@@ -255,7 +255,7 @@ class HighlightingView: UIView {
      - Returns: the arabic text of ayah.
      */
     private func ayahTextFromNumber(_ number: AyahNumber) -> String? {
-        let storage: AyahTextPersistence = SQLiteAyahTextPersistence()
+        let storage: AyahTextPersistence = SQLiteArabicTextPersistence()
         do {
             let text = try storage.getAyahTextForNumber(number)
             return text

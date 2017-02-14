@@ -50,6 +50,9 @@
 		54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */; };
 		54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */; };
 		54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */; };
+		54B135681E53A9FA0087D0F8 /* DownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */; };
+		54B1356A1E53AA780087D0F8 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135691E53AA780087D0F8 /* Download.swift */; };
+		54B1356C1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
@@ -288,6 +291,9 @@
 		54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookmarkTableViewCell.xib; sourceTree = "<group>"; };
+		54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsPersistence.swift; sourceTree = "<group>"; };
+		54B135691E53AA780087D0F8 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqliteDownloadsPersistence.swift; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -603,6 +609,16 @@
 			name = Bookmark;
 			sourceTree = "<group>";
 		};
+		54B135661E53A9DD0087D0F8 /* Dowloads */ = {
+			isa = PBXGroup;
+			children = (
+				54B135691E53AA780087D0F8 /* Download.swift */,
+				54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */,
+				54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */,
+			);
+			name = Dowloads;
+			sourceTree = "<group>";
+		};
 		54B265DA1CC57D8E00D3AEF8 = {
 			isa = PBXGroup;
 			children = (
@@ -875,6 +891,7 @@
 			isa = PBXGroup;
 			children = (
 				54C0DBFB1CE52368009AAD8D /* Defaults */,
+				54B135661E53A9DD0087D0F8 /* Dowloads */,
 				545EE5151DCE082C0085D31F /* Last Pages */,
 				5487241D1DC4967800ADDE54 /* sqlite */,
 				548723F81DC4847800ADDE54 /* Bookmarks */,
@@ -1498,6 +1515,7 @@
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
+				54B135681E53A9FA0087D0F8 /* DownloadsPersistence.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,
@@ -1573,6 +1591,7 @@
 				5421D8CB1CDA986D00E6B019 /* UIImage+Extension.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
+				54B1356A1E53AA780087D0F8 /* Download.swift in Sources */,
 				54B266D11CD3E2B700D3AEF8 /* UIView+AutoLayout.swift in Sources */,
 				54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
@@ -1587,6 +1606,7 @@
 				54C0DC1F1CE69C0A009AAD8D /* GappedAudioFilesDownloader.swift in Sources */,
 				54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,
+				54B1356C1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift in Sources */,
 				54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */,
 				54B266A61CCD944600D3AEF8 /* QuartersDataRetriever.swift in Sources */,
 				54C0DBF51CE4B162009AAD8D /* QariTableViewCell.swift in Sources */,

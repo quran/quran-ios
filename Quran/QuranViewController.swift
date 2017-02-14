@@ -27,7 +27,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private let didLayoutSubviewToken = Once()
 
     private var isBookmarked: Bool?
-    private var backButtonItem: UIBarButtonItem? = nil
+    private var backButtonItem: UIBarButtonItem
+    private var translationButton: UIBarButtonItem
 
     private var lastPageUpdater: LastPageUpdater!
 
@@ -54,6 +55,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
+        backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        translationButton = UIBarButtonItem(image: UIImage(named: "translation"), style: .plain, target: nil, action: nil)
+
         super.init(nibName: nil, bundle: nil)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
@@ -69,7 +73,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (_, _: ChangeData<Int>) in
             self?.onPageChanged()
         }
-        backButtonItem = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+
+        translationButton.target = self
+        translationButton.action = #selector(translationButtonTapped)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -79,7 +85,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private var initialPage: Int = 0 {
         didSet {
             title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
-            backButtonItem?.title = title
+            backButtonItem.title = title
         }
     }
 
@@ -284,7 +290,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     fileprivate func updateBarToPage(_ page: QuranPage) {
         title = Quran.nameForSura(page.startAyah.sura)
-        backButtonItem?.title = title
+        backButtonItem.title = title
 
         isBookmarked = nil
         Queue.bookmarks.async({ (self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber) }) { (bookmarked, page) in
@@ -308,7 +314,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         } else {
             item = UIBarButtonItem(image: UIImage(named: "bookmark-empty"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
         }
-        navigationItem.rightBarButtonItem = item
+        navigationItem.rightBarButtonItems = [ translationButton, item ]
     }
 
     @objc private func bookmarkButtonTapped() {
@@ -321,6 +327,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         } else {
             Queue.background.async { try? self.bookmarksPersistence.insertPageBookmark(forPage: page.pageNumber) }
         }
+    }
+
+    @objc private func translationButtonTapped() {
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

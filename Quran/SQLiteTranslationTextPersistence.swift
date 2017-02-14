@@ -1,15 +1,14 @@
 //
-//  SQLiteAyahTextPersistence.swift
+//  SQLiteTranslationTextPersistence.swift
 //  Quran
 //
-//  Created by Hossam Ghareeb on 6/20/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//  Created by Ahmed El-Helw on 2/13/17.
+//  Copyright © 2017 Quran.com. All rights reserved.
 //
 
-import UIKit
 import SQLite
 
-class SQLiteAyahTextPersistence: AyahTextPersistence {
+class SQLiteTranslationTextPersistence: AyahTextPersistence {
 
     fileprivate struct Columns {
         let sura = Expression<Int>("sura")
@@ -17,13 +16,17 @@ class SQLiteAyahTextPersistence: AyahTextPersistence {
         let text = Expression<String>("text")
     }
 
-    fileprivate let arabicTextTable = Table("arabic_text")
+    fileprivate let translationTextTable = Table("verses")
     fileprivate let columns = Columns()
 
-    fileprivate var db: LazyConnectionWrapper = { LazyConnectionWrapper(sqliteFilePath: Files.quranTextPath, readonly: true) }()
+    fileprivate var db: LazyConnectionWrapper
+
+    init(databaseFileURL: URL) {
+        db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
+    }
 
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
-        let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
+        let query = translationTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
 
         do {
             let rows = try db.getOpenConnection().prepare(query)

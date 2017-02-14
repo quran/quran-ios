@@ -23,6 +23,9 @@ final class ConnectionsPool {
         } else {
             do {
                 let connection = try Connection(filePath, readonly: false)
+                connection.busyTimeout = 2
+
+                connection.busyHandler { tries in tries < 3 }
                 pool[filePath] = (1, connection)
                 return connection
             } catch {

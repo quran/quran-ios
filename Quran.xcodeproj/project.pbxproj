@@ -176,9 +176,12 @@
 		C13E39421E4EF5B500079128 /* DownloadInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39411E4EF5B500079128 /* DownloadInformation.swift */; };
 		C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39431E4F02FF00079128 /* DownloadRequest.swift */; };
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
+		C2E3E08007B4A9B67363F256 /* TranslationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */; };
 		C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */; };
 		C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */; };
 		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */; };
+		C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */; };
+		C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
 /* End PBXBuildFile section */
 
@@ -444,6 +447,9 @@
 		C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteTranslationTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteArabicTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationInfo.swift; sourceTree = "<group>"; };
+		C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
+		C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -721,6 +727,7 @@
 				54B266AF1CD166B200D3AEF8 /* AyahTiming.swift */,
 				54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */,
 				54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */,
+				C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -874,6 +881,7 @@
 				5416B4BF1CEE7C4B0062FF54 /* QariAyahTiming */,
 				5416B4BE1CEE7C3F0062FF54 /* AyahInfo */,
 				C2E3E1B8B556C26AC3EC142C /* Ayah Text */,
+				C2E3EDAD1B85C45E1A173674 /* Translation Manager */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1229,6 +1237,15 @@
 			name = "Ayah Text";
 			sourceTree = "<group>";
 		};
+		C2E3EDAD1B85C45E1A173674 /* Translation Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */,
+				C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */,
+			);
+			name = "Translation Manager";
+			sourceTree = "<group>";
+		};
 		DA0B7E1A1D175D9300F92AA3 /* ShareController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1579,6 +1596,9 @@
 				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */,
 				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
+				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,
+				C2E3E08007B4A9B67363F256 /* TranslationInfo.swift in Sources */,
+				C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

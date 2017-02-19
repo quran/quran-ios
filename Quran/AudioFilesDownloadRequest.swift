@@ -8,28 +8,28 @@
 
 import Foundation
 
-class AudioFilesDownloadRequest: Request {
+class AudioFilesDownloadResponse: Response {
 
     let progress: Foundation.Progress
 
-    let requests: [DownloadNetworkRequest]
+    let responses: [DownloadNetworkResponse]
 
-    init(requests: [DownloadNetworkRequest], progress: Foundation.Progress) {
-        self.requests = requests
+    init(responses: [DownloadNetworkResponse], progress: Foundation.Progress) {
+        self.responses = responses
         self.progress = progress
     }
 
     var onCompletion: ((Result<()>) -> Void)?
 
     func resume() {
-        requests.forEach { $0.resume() }
+        responses.forEach { $0.resume() }
     }
 
     func suspend() {
-        requests.forEach { $0.suspend() }
+        responses.forEach { $0.suspend() }
     }
 
     func cancel() {
-        requests.forEach { $0.cancel() }
+        responses.forEach { $0.cancel() }
     }
 }

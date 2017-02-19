@@ -24,19 +24,19 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkRequest]) -> Void)
+    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkResponse]) -> Void)
 
-    func download(_ requests: [DownloadInformation]) -> [DownloadNetworkRequest]
+    func download(_ requests: [Download]) -> [DownloadNetworkResponse]
 }
 
 extension DownloadManager {
 
-    func download(_ requestDetails: [DownloadRequest]) -> [DownloadNetworkRequest] {
+    func download(_ requestDetails: [DownloadRequest]) -> [DownloadNetworkResponse] {
 
-        let requests: [DownloadInformation] = requestDetails.map { details in
+        let requests: [Download] = requestDetails.map { details in
             var request = URLRequest(url: details.url)
             request.httpMethod = details.method.rawValue
-            return DownloadInformation(remoteURL: details.url, destination: details.destination, resumeURL: details.resumeDestination)
+            return Download(url: details.url, resumePath: details.resumePath, destinationPath: details.destinationPath)
         }
         return download(requests)
     }

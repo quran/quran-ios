@@ -21,7 +21,7 @@ struct Download {
     let destinationPath: String
     var status: Status
 
-    public init(url: URL, resumePath: String, destinationPath: String, status: Status/* = false*/) {
+    public init(url: URL, resumePath: String, destinationPath: String, status: Status = .downloading) {
         self.url = url
         self.resumePath = resumePath
         self.destinationPath = destinationPath

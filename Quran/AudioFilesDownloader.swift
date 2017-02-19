@@ -16,7 +16,7 @@ protocol AudioFilesDownloader: class {
 
     func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
 
-    func getCurrentDownloadRequest(_ completion: @escaping (Request?) -> Void)
+    func getCurrentDownloadRequest(_ completion: @escaping (Response?) -> Void)
 
-    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request?
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Response?
 }

@@ -106,10 +106,10 @@ extension DefaultAudioPlayerInteractor {
         delegate?.highlight(ayah)
     }
 
-    fileprivate func gotDownloadRequest(_ request: Request, playbackInfo: PlaybackInfo?) {
+    fileprivate func gotDownloadRequest(_ response: Response, playbackInfo: PlaybackInfo?) {
 
-        delegate?.didStartDownloadingAudioFiles(progress: request.progress)
-        request.onCompletion = { [weak self] result in
+        delegate?.didStartDownloadingAudioFiles(progress: response.progress)
+        response.onCompletion = { [weak self] result in
             switch result {
             case .success:
                 if let playbackInfo = playbackInfo {

@@ -1,5 +1,5 @@
 //
-//  DownloadNetworkRequest.swift
+//  DownloadNetworkResponse.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/14/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DownloadNetworkRequest: Request {
+class DownloadNetworkResponse: Response {
 
     let task: URLSessionDownloadTask
     let destination: String

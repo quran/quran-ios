@@ -1,5 +1,5 @@
 //
-//  SessionDelegate.swift
+//  DownloadSessionDelegate.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/14/16.
@@ -38,12 +38,12 @@ private class RequestData: NSObject, NSSecureCoding {
     }
 }
 
-class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDownloadDelegate {
+class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDownloadDelegate {
 
     let persistence: SimplePersistence
     fileprivate var dataRequests: [URL: RequestData]
 
-    var downloadRequests: [URL: DownloadNetworkRequest] = [:]
+    var downloadRequests: [URL: DownloadNetworkResponse] = [:]
 
     var backgroundSessionCompletionHandler: (() -> Void)?
 
@@ -62,7 +62,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         return !dataRequests.isEmpty
     }
 
-    func addRequestsData(_ requests: [(URLRequest, DownloadNetworkRequest)]) {
+    func addRequestsData(_ requests: [(URLRequest, DownloadNetworkResponse)]) {
         for (request, downloadRequest) in requests {
             if let url = request.url {
                 dataRequests[url] = RequestData(request: request,
@@ -74,7 +74,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         updatePersistence()
     }
 
-    func addRequest(_ request: URLRequest, downloadRequest: DownloadNetworkRequest) {
+    func addRequest(_ request: URLRequest, downloadRequest: DownloadNetworkResponse) {
         if let url = request.url {
             downloadRequests[url] = downloadRequest
         }
@@ -89,7 +89,7 @@ class SessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URL
         return nil
     }
 
-    fileprivate func removeRequest(_ request: URLRequest) -> (RequestData?, DownloadNetworkRequest?) {
+    fileprivate func removeRequest(_ request: URLRequest) -> (RequestData?, DownloadNetworkResponse?) {
         guard let url = request.url else {
             return (nil, nil)
         }

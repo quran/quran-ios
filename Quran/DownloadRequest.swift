@@ -10,8 +10,18 @@ import Foundation
 
 struct DownloadRequest {
     let method: HTTPMethod
-    let url: URL
     let headers: [String: String]?
-    let destination: String
-    let resumeDestination: String
+
+    let url: URL
+    let resumePath: String
+    let destinationPath: String
+
+    init(method: HTTPMethod, headers: [String: String]? = nil, download: Download) {
+        self.method = method
+        self.headers = headers
+        url = download.url
+        resumePath = download.resumePath
+        destinationPath = download.destinationPath
+
+    }
 }

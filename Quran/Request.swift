@@ -1,5 +1,5 @@
 //
-//  DownloadRequest.swift
+//  Response.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/14/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Request: class {
+protocol Response: class {
 
     var progress: Foundation.Progress { get }
 

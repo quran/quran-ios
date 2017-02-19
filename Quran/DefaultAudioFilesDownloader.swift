@@ -12,58 +12,57 @@ protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
     var downloader: DownloadManager { get }
 
-    var request: Request? { set get }
+    var response: Response? { set get }
 
-    func filesForQari(_ qari: Qari,
-                      startAyah: AyahNumber,
-                      endAyah: AyahNumber) -> [ DownloadInformation ]
+    func filesForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [Download]
 }
 
 extension DefaultAudioFilesDownloader {
 
     func cancel() {
-        request?.cancel()
-        request = nil
+        response?.cancel()
+        response = nil
     }
 
     func resume() {
-        request?.resume()
+        response?.resume()
     }
 
     func suspend() {
-        request?.suspend()
+        response?.suspend()
     }
 
     func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
         return !files.filter {
-            if let result = try? FileManager.default.documentsURL.appendingPathComponent($0.destination).checkResourceIsReachable() {
+            if let result = try? FileManager.default.documentsURL.appendingPathComponent($0.destinationPath).checkResourceIsReachable() {
                 return !result
             }
             return true
         }.isEmpty
     }
 
-    func getCurrentDownloadRequest(_ completion: @escaping (Request?) -> Void) {
-        if let request = request {
-            completion(request)
+    func getCurrentDownloadResponse() -> Response? {
+        if let response = response {
+            return response
         } else {
-            downloader.getCurrentTasks { [weak self] (downloads) in
-                self?.createRequestWithDownloads(downloads)
-                completion(self?.request)
-            }
+            let batches = downloader.getOnGoingDownloads()
+            let downloads = batches.flatMap { $0 }
+            createRequestWithDownloads(downloads)
+            return response
         }
     }
 
-    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Request? {
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Response? {
         // get all files
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
         var uniqueFiles = Set<URL>()
         // filter out existing and duplicate files
         let filesToDownload = files.filter { downloadInfo in
-            if !uniqueFiles.contains(downloadInfo.remoteURL) {
-                uniqueFiles.insert(downloadInfo.remoteURL)
-                if let result = try? FileManager.default.documentsURL.appendingPathComponent(downloadInfo.destination).checkResourceIsReachable() {
+            if !uniqueFiles.contains(downloadInfo.url) {
+                uniqueFiles.insert(downloadInfo.url)
+                let destinationPath = FileManager.default.documentsURL.appendingPathComponent(downloadInfo.destinationPath)
+                if let result = try? destinationPath.checkResourceIsReachable() {
                     return !result
                 }
                 return true
@@ -72,24 +71,19 @@ extension DefaultAudioFilesDownloader {
         }
 
         // create downloads
-        let requests = downloader.download(filesToDownload.map { DownloadRequest(
-            method: .GET,
-            url: $0.remoteURL,
-            headers: nil,
-            destination: $0.destination,
-            resumeDestination: $0.resumeURL) })
+        let requests = downloader.download(filesToDownload.map { DownloadRequest( method: .GET, download: $0) })
         // wrap the requests
         self.createRequestWithDownloads(requests)
-        return self.request
+        return self.response
     }
 
-    fileprivate func createRequestWithDownloads(_ downloads: [DownloadNetworkRequest]) {
+    fileprivate func createRequestWithDownloads(_ downloads: [DownloadNetworkResponse]) {
         guard !downloads.isEmpty else { return }
 
         let progress = Progress(totalUnitCount: Int64(downloads.count))
         downloads.forEach { progress.addChildIOS8Compatible($0.progress, withPendingUnitCount: 1) }
-        let request = AudioFilesDownloadRequest(requests: downloads, progress: progress)
-        self.request = request
+        let response = AudioFilesDownloadResponse(responses: downloads, progress: progress)
+        self.response = response
 
         let completionLock = NSLock()
 
@@ -108,15 +102,15 @@ extension DefaultAudioFilesDownloader {
 
                 // if error occurred, stop downloads
                 if let error = result.error {
-                    let request = self.request
-                    self.request = nil
-                    request?.cancel() // cancel other downloads
-                    request?.onCompletion?(.failure(error))
+                    let response = self.response
+                    self.response = nil
+                    response?.cancel() // cancel other downloads
+                    response?.onCompletion?(.failure(error))
                 } else {
                     if allCompleted {
-                        let request = self.request
-                        self.request = nil
-                        request?.onCompletion?(.success())
+                        let response = self.response
+                        self.response = nil
+                        response?.onCompletion?(.success())
                     }
                 }
             }

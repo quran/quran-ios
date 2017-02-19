@@ -13,7 +13,7 @@ class URLSessionDownloadManager: DownloadManager {
     let session: URLSession
 
     // swiftlint:disable weak_delegate
-    fileprivate let delegate: SessionDelegate
+    fileprivate let delegate: DownloadSessionDelegate
 
     var backgroundSessionCompletionHandler: (() -> Void)? {
         get {
@@ -24,67 +24,45 @@ class URLSessionDownloadManager: DownloadManager {
         }
     }
 
-    init(configuration: URLSessionConfiguration, persistence: SimplePersistence) {
-        delegate = SessionDelegate(persistence: persistence)
+    init(configuration: URLSessionConfiguration, persistence: DownloadsPersistence) {
+        delegate = DownloadSessionDelegate(persistence: persistence)
         session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
     }
 
-    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkRequest]) -> Void) {
-        // only query if there is download
-        guard delegate.downloadRequests.isEmpty && delegate.isDownloading else {
-            completion(delegate.downloadRequests.map { $1 })
-            return
-        }
-
-        session.getTasksWithCompletionHandler { [weak self] (_, _, downloadTakss) in
-            guard let `self` = self else {
-                return
-            }
-            var downloads: [DownloadNetworkRequest] = []
-            var requests = [(URLRequest, DownloadNetworkRequest)]()
-            for task in downloadTakss {
-                if let request = task.originalRequest, let data = self.delegate.getRequestDataForRequest(request) {
-
-                    let progress = Foundation.Progress(totalUnitCount: 1)
-                    let downloadRequest = DownloadNetworkRequest(task: task,
-                        destination: data.destination,
-                        resumeDestination: data.resumeData,
-                        progress: progress)
-                    requests.append((request, downloadRequest: downloadRequest))
-                    downloads.append(downloadRequest)
-                }
-            }
-            self.delegate.addRequestsData(requests)
-            completion(downloads)
+    func populateOnGoingDownloads() {
+        session.getTasksWithCompletionHandler { [weak self] (_, _, downloadTaks) in
+            self?.delegate.populateOnGoingDownloads(onGoingDownloadTasks: downloadTaks)
         }
     }
 
-    func download(_ requests: [DownloadInformation]) -> [DownloadNetworkRequest] {
+    func getOnGoingDownloads() -> [[DownloadNetworkResponse]] {
+        return delegate.getOnGoingDownloads()
+    }
 
-        var downloadRequests = [(URLRequest, DownloadNetworkRequest)]()
+    func download(_ requests: [Download]) -> [DownloadNetworkResponse] {
+
+        var responses = [DownloadNetworkResponse]()
         var tasks: [URLSessionDownloadTask] = []
-        for details in requests {
-            let request = URLRequest(url: details.remoteURL)
+        for download in requests {
+            let request = URLRequest(url: download.url)
             let task: URLSessionDownloadTask
-            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(details.resumeURL)
+            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(download.resumePath)
             if let data = try? Data(contentsOf: resumeURL) {
                 task = session.downloadTask(withResumeData: data)
             } else {
                 task = session.downloadTask(with: request)
             }
-            let progress = Foundation.Progress(totalUnitCount: 1)
-            let downloadRequest = DownloadNetworkRequest(task: task,
-                                                         destination: details.destination,
-                                                         resumeDestination: details.resumeURL,
-                                                         progress: progress)
             tasks.append(task)
-            downloadRequests.append((request, downloadRequest))
+
+            let progress = Foundation.Progress(totalUnitCount: 1)
+            let response = DownloadNetworkResponse(task: task, download: download, progress: progress)
+            responses.append(response)
         }
 
-        delegate.addRequestsData(downloadRequests)
+        delegate.addOnGoingDownloads(responses)
         // start the tasks after the requests info are saved
         tasks.forEach { $0.resume() }
 
-        return downloadRequests.map { $1 }
+        return responses
     }
 }

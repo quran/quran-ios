@@ -22,7 +22,7 @@ class Container {
 
     init() {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
-        downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createSimplePersistence())
+        downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createDownloadsPersistence())
     }
 
     func createRootViewController() -> UIViewController {
@@ -62,8 +62,7 @@ class Container {
     }
 
     func createBookmarksViewController() -> UIViewController {
-        return BookmarksTableViewController(
-                                            quranControllerCreator: createCreator(createQuranController),
+        return BookmarksTableViewController(quranControllerCreator: createCreator(createQuranController),
                                             simplePersistence: createSimplePersistence(),
                                             lastPagesPersistence: createLastPagesPersistence(),
                                             bookmarksPersistence: createBookmarksPersistence(),
@@ -202,5 +201,9 @@ class Container {
 
     func createLastPagesPersistence() -> LastPagesPersistence {
         return SQLiteLastPagesPersistence(simplePersistence: createSimplePersistence())
+    }
+
+    func createDownloadsPersistence() -> DownloadsPersistence {
+        return SqliteDownloadsPersistence()
     }
 }

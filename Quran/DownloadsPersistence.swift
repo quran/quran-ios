@@ -12,7 +12,7 @@ protocol DownloadsPersistence {
     func retrieveAll() throws -> [DownloadBatch]
     func retrieve(status: Download.Status) throws -> [DownloadBatch]
 
-    func insert(batch: [Download]) throws
+    func insert(batch: [Download]) throws -> [Download]
 
     func update(url: URL, newStatus status: Download.Status) throws
     func update(batches: [DownloadBatch], newStatus status: Download.Status) throws

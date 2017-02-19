@@ -17,11 +17,12 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
-        return FileManager.default.documentsPath + "/bookmarks.db"
+        return FileManager.default.documentsPath + "/downloads.db"
     }
 
     private struct Downloads {
         static let table = Table("download")
+        static let id = Expression<Int64>("id")
         static let url = Expression<String>("url")
         static let resumePath = Expression<String>("resumePath")
         static let destinationPath = Expression<String>("destinationPath")
@@ -43,7 +44,8 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
         // downloads table
         try connection.run(Downloads.table.create { builder in
-            builder.column(Downloads.url, primaryKey: true)
+            builder.column(Downloads.id, primaryKey: .autoincrement)
+            builder.column(Downloads.url)
             builder.column(Downloads.resumePath)
             builder.column(Downloads.destinationPath)
             builder.column(Downloads.status)
@@ -67,18 +69,18 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
                 query = query.filter(Downloads.status == status.rawValue)
             }
             let rows = try connection.prepare(query)
-            let bookmarks = convert(rowsToDownloads: rows)
-            return bookmarks
+            let downloads = convert(rowsToDownloads: rows)
+            return downloads
         }
     }
 
-    func insert(batch: [Download]) throws {
+    func insert(batch: [Download]) throws -> [Download] {
         return try run { connection in
             // insert batch
             let batchInsert = Batches.table.insert()
             _ = try connection.run(batchInsert)
             guard let batchId = connection.lastInsertRowid else {
-                return
+                return batch
             }
 
             // insert downloads
@@ -92,6 +94,13 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
                 _ = try connection.run(insert)
             }
+
+            var downloads: [Download] = []
+            for var download in batch {
+                download.batchId = batchId
+                downloads.append(download)
+            }
+            return downloads
         }
     }
 
@@ -138,7 +147,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
             let destinationPath = row[Downloads.destinationPath]
             let status = Download.Status(rawValue: row[Downloads.status]) ?? .downloading
             let batchId = row[Downloads.batchId]
-            let download = Download(url: url, resumePath: resumePath, destinationPath: destinationPath, status: status)
+            let download = Download(url: url, resumePath: resumePath, destinationPath: destinationPath, status: status, batchId: batchId)
             return (download, batchId)
         }
         return nil

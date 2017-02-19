@@ -10,30 +10,28 @@ import Foundation
 
 class DownloadNetworkResponse: Response {
 
-    let task: URLSessionDownloadTask
-    let destination: String
-    let resumeDestination: String
+    let task: URLSessionDownloadTask?
+    var download: Download
 
     let progress: Foundation.Progress
 
     var onCompletion: ((Result<()>) -> Void)?
 
-    init(task: URLSessionDownloadTask, destination: String, resumeDestination: String, progress: Foundation.Progress) {
+    init(task: URLSessionDownloadTask?, download: Download, progress: Foundation.Progress) {
         self.task = task
-        self.destination = destination
-        self.resumeDestination = resumeDestination
+        self.download = download
         self.progress = progress
     }
 
     func resume() {
-        task.resume()
+        task?.resume()
     }
 
     func suspend() {
-        task.suspend()
+        task?.suspend()
     }
 
     func cancel() {
-        task.cancel { _ in }
+        task?.cancel { _ in }
     }
 }

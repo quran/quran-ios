@@ -53,6 +53,7 @@
 		54B135681E53A9FA0087D0F8 /* DownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */; };
 		54B1356A1E53AA780087D0F8 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135691E53AA780087D0F8 /* Download.swift */; };
 		54B1356C1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */; };
+		54B1356F1E59FEA10087D0F8 /* Sequence+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
 		54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */; };
@@ -293,6 +294,7 @@
 		54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsPersistence.swift; sourceTree = "<group>"; };
 		54B135691E53AA780087D0F8 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqliteDownloadsPersistence.swift; sourceTree = "<group>"; };
+		54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sequence+Extension.swift"; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -804,6 +806,7 @@
 				54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */,
 				5487241B1DC495DB00ADDE54 /* FileManager+Extension.swift */,
 				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
+				54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1187,8 +1190,8 @@
 			children = (
 				54B1356D1E59BD020087D0F8 /* impl */,
 				54C0DC111CE692FC009AAD8D /* DownloadNetworkResponse.swift */,
-				54B266861CCACA2F00D3AEF8 /* DownloadManager.swift */,
 				C13E39431E4F02FF00079128 /* DownloadRequest.swift */,
+				54B266861CCACA2F00D3AEF8 /* DownloadManager.swift */,
 			);
 			name = NetworkManager;
 			sourceTree = "<group>";
@@ -1524,6 +1527,7 @@
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
+				54B1356F1E59FEA10087D0F8 /* Sequence+Extension.swift in Sources */,
 				54C0DC2A1CE7A318009AAD8D /* Request.swift in Sources */,
 				548724281DC4BF6000ADDE54 /* AyahBookmark.swift in Sources */,
 				54C0DBD51CDF7250009AAD8D /* AudioBannerViewPresenter.swift in Sources */,

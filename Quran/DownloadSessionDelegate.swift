@@ -8,102 +8,138 @@
 
 import Foundation
 
-private class RequestData: NSObject, NSSecureCoding {
-
-    @objc fileprivate static var supportsSecureCoding: Bool {
-        return true
+private struct URL: Hashable {
+    let string: String
+    init(_ url: Foundation.URL) {
+        string = (url.host ?? "") + url.path
     }
 
-    let request: URLRequest
-    let destination: String
-    let resumeDataURL: String
+    var hashValue: Int { return string.hashValue }
 
-    init(request: URLRequest, destination: String, resumeDataURL: String) {
-        self.request = request
-        self.destination = destination
-        self.resumeDataURL = resumeDataURL
+    static func == (lhs: URL, rhs: URL) -> Bool {
+        return lhs.string == rhs.string
     }
+}
 
-    @objc required convenience init(coder aDecoder: NSCoder) {
-        let request: URLRequest = cast(aDecoder.decodeObject(forKey: "request"))
-        let destination: String = cast(aDecoder.decodeObject(forKey: "destination"))
-        let resumeDataURL: String = cast(aDecoder.decodeObject(forKey: "resumeDataURL"))
-        self.init(request: request, destination: destination, resumeDataURL: resumeDataURL)
-    }
+extension URLSessionTask {
 
-    @objc func encode(with aCoder: NSCoder) {
-        aCoder.encode(request, forKey: "request")
-        aCoder.encode(destination, forKey: "destination")
-        aCoder.encode(resumeDataURL, forKey: "resumeDataURL")
+    fileprivate var url: URL? {
+        if let request = originalRequest ?? currentRequest {
+            return request.url.map { URL($0) }
+        }
+        return nil
     }
 }
 
 class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDownloadDelegate {
 
-    let persistence: SimplePersistence
-    fileprivate var dataRequests: [URL: RequestData]
+    private let persistence: DownloadsPersistence
 
-    var downloadRequests: [URL: DownloadNetworkResponse] = [:]
+    private var onGoingDownloads: [URL: DownloadNetworkResponse] = [:]
 
     var backgroundSessionCompletionHandler: (() -> Void)?
 
-    init(persistence: SimplePersistence) {
+    init(persistence: DownloadsPersistence) {
         self.persistence = persistence
-
-        // initialize requests
-        if let data = persistence.valueForKey(.DownloadRequests) {
-            dataRequests = (NSKeyedUnarchiver.unarchiveObject(with: data) as? [URL: RequestData]) ?? [:]
-        } else {
-            dataRequests = [:]
-        }
     }
 
-    var isDownloading: Bool {
-        return !dataRequests.isEmpty
-    }
+    func populateOnGoingDownloads(onGoingDownloadTasks tasks: [URLSessionDownloadTask]) {
 
-    func addRequestsData(_ requests: [(URLRequest, DownloadNetworkResponse)]) {
-        for (request, downloadRequest) in requests {
-            if let url = request.url {
-                dataRequests[url] = RequestData(request: request,
-                                                destination: downloadRequest.destination,
-                                                resumeDataURL: downloadRequest.resumeDestination)
-                addRequest(request, downloadRequest: downloadRequest)
+        Queue.downloads.async { [weak self] in
+            guard let batches = (try? self?.persistence.retrieve(status: .downloading)).flatMap({ $0 }) else {
+                return
+            }
+
+            // group tasks by url
+            var tasksByURL: [URL: URLSessionDownloadTask] = [:]
+            for task in tasks {
+                if let url = task.url {
+                    tasksByURL[url] = task
+                }
+            }
+
+            // loop over the batches
+            for batch in batches {
+                for download in batch.downloads {
+                    if let task = tasksByURL[URL(download.url)] {
+                        let progress = Foundation.Progress(totalUnitCount: 1)
+                        let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress)
+                        self?.onGoingDownloads[URL(download.url)] = downloadRequest
+                    } else {
+                        if download.status == .completed {
+                            let progress = Foundation.Progress(totalUnitCount: 1)
+                            progress.completedUnitCount = 1
+                            let downloadRequest = DownloadNetworkResponse(task: nil, download: download, progress: progress)
+                            self?.onGoingDownloads[URL(download.url)] = downloadRequest
+                        }
+                        if download.status == .downloading {
+                            try? self?.persistence.update(url: download.url, newStatus: .failed)
+                        }
+                    }
+                }
             }
         }
-        updatePersistence()
     }
 
-    func addRequest(_ request: URLRequest, downloadRequest: DownloadNetworkResponse) {
-        if let url = request.url {
-            downloadRequests[url] = downloadRequest
-        }
-    }
+    func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
+        Queue.downloads.async { [weak self] in
+            let batch = ((try? self?.persistence.insert(batch: downloads.map { $0.download })) ?? []) ?? []
 
-    func getRequestDataForRequest(_ request: URLRequest) -> (destination: String, resumeData: String)? {
-        if let url = request.url {
-            if let requestData = dataRequests[url] {
-                return (destination: requestData.destination, resumeData: requestData.resumeDataURL)
+            downloads.enumerated().forEach { (index, response) in
+                response.download = batch[index]
+            }
+
+            for download in downloads {
+                self?.onGoingDownloads[URL(download.download.url)] = download
             }
         }
-        return nil
     }
 
-    fileprivate func removeRequest(_ request: URLRequest) -> (RequestData?, DownloadNetworkResponse?) {
-        guard let url = request.url else {
-            return (nil, nil)
+    func getOnGoingDownloads() -> [[DownloadNetworkResponse]] {
+        let groups = onGoingDownloads.values.group { $0.download.batchId ?? 0 }
+        return groups.map { $1 }
+    }
+
+    private func responsesForBatch(_ batchId: Int64?) -> [DownloadNetworkResponse] {
+        guard let batchId = batchId else { return [] }
+        return onGoingDownloads.filter { $1.download.batchId == batchId }.map { $1 }
+    }
+
+    private func taskFailed(_ task: URLSessionTask) -> DownloadNetworkResponse? {
+        guard let url = task.url else {
+            return nil
+        }
+        return update(url: url, status: .failed)
+    }
+
+    private func taskCompleted(_ task: URLSessionTask) -> DownloadNetworkResponse? {
+        guard let url = task.url else {
+            return nil
+        }
+        return update(url: url, status: .completed)
+    }
+
+    private func update(url: URL, status: Download.Status) -> DownloadNetworkResponse? {
+        guard let downloadRequest = onGoingDownloads[url] else {
+            return nil
+        }
+        var download = downloadRequest.download
+        download.status = status
+        downloadRequest.download = download
+        onGoingDownloads[url] = downloadRequest
+
+        // delete the batch if all completed/failed
+        let responses = responsesForBatch(download.batchId)
+        if !responses.contains { $0.download.status == .downloading } {
+            for response in responses {
+                onGoingDownloads[URL(response.download.url)] = nil
+            }
         }
 
-        let requestData = dataRequests.removeValue(forKey: url)
-        let downloadRequest = downloadRequests.removeValue(forKey: url)
-
-        updatePersistence()
-        return (requestData, downloadRequest)
-    }
-
-    fileprivate func updatePersistence() {
-        let encodedData: Data? = NSKeyedArchiver.archivedData(withRootObject: dataRequests)
-        persistence.setValue(encodedData, forKey: .DownloadRequests)
+        Queue.downloads.async {
+            try? self.persistence.update(url: download.url, newStatus: status)
+        }
+        return downloadRequest
     }
 
     func urlSession(_ session: URLSession,
@@ -120,29 +156,25 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
             return
         }
 
-        guard let downloadRequest = downloadRequests[url] else {
+        guard let response = onGoingDownloads[URL(url)] else {
             return
         }
-        downloadRequest.progress.totalUnitCount = totalBytesExpectedToWrite
-        downloadRequest.progress.completedUnitCount = totalBytesWritten
+        response.progress.totalUnitCount = totalBytesExpectedToWrite
+        response.progress.completedUnitCount = totalBytesWritten
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: Foundation.URL) {
 
-        guard let request = downloadTask.originalRequest else {
-            return
-        }
-
-        guard let url = request.url else {
+        guard let url = downloadTask.url else {
             return
         }
 
         // move the file to the correct location
-        if let requestData = dataRequests[url] {
+        if let download = onGoingDownloads[url]?.download {
             let fileManager = FileManager.default
 
-            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(requestData.resumeDataURL)
-            let destinationURL = FileManager.default.documentsURL.appendingPathComponent(requestData.destination)
+            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(download.resumePath)
+            let destinationURL = FileManager.default.documentsURL.appendingPathComponent(download.destinationPath)
 
             // remove the resume data
             let _ = try? fileManager.removeItem(at: resumeURL)
@@ -156,11 +188,13 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                                 withIntermediateDirectories: true,
                                                  attributes: nil)
                 try fileManager.copyItem(at: location, to: destinationURL)
+
+
             } catch let error {
                 Crash.recordError(error, reason: "Problem with create directory or copying item to the new location '\(destinationURL)'",
                     fatalErrorOnDebug: false)
                 // early exist with error
-                let (_, downloadRequest) = removeRequest(request)
+                let downloadRequest = taskFailed(downloadTask)
                 downloadRequest?.onCompletion?(.failure(FileSystemError(error: error)))
             }
         } else {
@@ -169,20 +203,20 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-
-        guard let request = task.originalRequest else {
-            return
-        }
-
         // remove the request
-        let (requestData, downloadRequest) = removeRequest(request)
+        let response: DownloadNetworkResponse?
+        if error != nil {
+            response = taskFailed(task)
+        } else {
+            response = taskCompleted(task)
+        }
 
         if let error = error {
             print("Network error occurred: \(error)")
 
             // save resume data, if found
-            if let resumePath = requestData?.resumeDataURL, let resumeData =
-                (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
+            if let resumePath = response?.download.resumePath,
+                let resumeData = (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
                 let resumeURL = FileManager.default.documentsURL.appendingPathComponent(resumePath)
                 try? resumeData.write(to: resumeURL, options: [.atomic])
             }
@@ -194,11 +228,11 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                 } else {
                     finalError = NetworkError(error: error)
                 }
-                downloadRequest?.onCompletion?(.failure(finalError))
+                response?.onCompletion?(.failure(finalError))
             }
         } else {
             // success
-            downloadRequest?.onCompletion?(.success())
+            response?.onCompletion?(.success())
         }
     }
 
@@ -208,7 +242,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
         handler?()
     }
 
-    fileprivate func createDirectoryForPath(_ path: URL) {
+    fileprivate func createDirectoryForPath(_ path: Foundation.URL) {
         let directory = path.deletingLastPathComponent()
         // ignore errors
         let _ = try? FileManager.default.createDirectory(at: directory,

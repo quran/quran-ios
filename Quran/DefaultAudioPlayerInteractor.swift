@@ -30,14 +30,12 @@ extension DefaultAudioPlayerInteractor {
     }
 
     func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void) {
-        downloader.getCurrentDownloadRequest { [weak self] (request) in
-            guard let request = request else {
-                completion(false)
-                return
-            }
-            self?.gotDownloadRequest(request, playbackInfo: nil)
-            completion(true)
+        guard let response = downloader.getCurrentDownloadResponse() else {
+            completion(false)
+            return
         }
+        gotDownloadResponse(response, playbackInfo: nil)
+        completion(true)
     }
 
     func playAudioForQari(_ qari: Qari, atPage page: QuranPage) {
@@ -49,11 +47,11 @@ extension DefaultAudioPlayerInteractor {
             downloadCancelled = false
             Queue.background.async {
                 self.delegate?.willStartDownloading()
-                if let request = self.downloader.download(qari: qari, startAyah: startAyah, endAyah: endAyah) {
+                if let response = self.downloader.download(qari: qari, startAyah: startAyah, endAyah: endAyah) {
                     if self.downloadCancelled {
-                        request.cancel()
+                        response.cancel()
                     } else {
-                        self.gotDownloadRequest(request, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
+                        self.gotDownloadResponse(response, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
                     }
                 }
             }
@@ -106,7 +104,7 @@ extension DefaultAudioPlayerInteractor {
         delegate?.highlight(ayah)
     }
 
-    fileprivate func gotDownloadRequest(_ response: Response, playbackInfo: PlaybackInfo?) {
+    fileprivate func gotDownloadResponse(_ response: Response, playbackInfo: PlaybackInfo?) {
 
         delegate?.didStartDownloadingAudioFiles(progress: response.progress)
         response.onCompletion = { [weak self] result in

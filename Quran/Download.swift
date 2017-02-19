@@ -20,12 +20,14 @@ struct Download {
     let resumePath: String
     let destinationPath: String
     var status: Status
+    var batchId: Int64?
 
-    public init(url: URL, resumePath: String, destinationPath: String, status: Status = .downloading) {
+    public init(url: URL, resumePath: String, destinationPath: String, status: Status = .downloading, batchId: Int64? = nil) {
         self.url = url
         self.resumePath = resumePath
         self.destinationPath = destinationPath
         self.status = status
+        self.batchId = batchId
     }
 }
 

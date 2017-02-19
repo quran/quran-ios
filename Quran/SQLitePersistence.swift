@@ -62,6 +62,7 @@ extension SQLitePersistence {
             }
             return try block(connection)
         } catch let error as PersistenceError {
+            Crash.recordError(error, reason: "Error while executing sqlite statement")
             throw error
         } catch {
             Crash.recordError(error, reason: "Error while executing sqlite statement")

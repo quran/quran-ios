@@ -24,7 +24,7 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getCurrentTasks(_ completion: @escaping (_ downloads: [DownloadNetworkResponse]) -> Void)
+    func getOnGoingDownloads() -> [[DownloadNetworkResponse]]
 
     func download(_ requests: [Download]) -> [DownloadNetworkResponse]
 }

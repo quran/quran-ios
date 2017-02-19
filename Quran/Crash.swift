@@ -51,6 +51,7 @@ struct Crash {
     }
 
     static func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool = true) {
+        print("Error Occurred, reason: \(reason), error: \(error)")
         Crashlytics.sharedInstance().recordError(error as NSError, withAdditionalUserInfo: ["quran.reason": reason])
         #if DEBUG
             if fatalErrorOnDebug {

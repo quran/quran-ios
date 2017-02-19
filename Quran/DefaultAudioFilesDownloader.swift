@@ -42,14 +42,14 @@ extension DefaultAudioFilesDownloader {
         }.isEmpty
     }
 
-    func getCurrentDownloadRequest(_ completion: @escaping (Response?) -> Void) {
+    func getCurrentDownloadResponse() -> Response? {
         if let response = response {
-            completion(response)
+            return response
         } else {
-            downloader.getCurrentTasks { [weak self] (downloads) in
-                self?.createRequestWithDownloads(downloads)
-                completion(self?.response)
-            }
+            let batches = downloader.getOnGoingDownloads()
+            let downloads = batches.flatMap { $0 }
+            createRequestWithDownloads(downloads)
+            return response
         }
     }
 

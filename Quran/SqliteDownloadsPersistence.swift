@@ -17,7 +17,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
-        return FileManager.default.documentsPath + "/downloads.db"
+        return Files.databasesPath + "/downloads.db"
     }
 
     private struct Downloads {

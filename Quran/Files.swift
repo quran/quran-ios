@@ -20,6 +20,8 @@ struct Files {
 
     static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
     static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
+
+    static let databasesPath: String = FileManager.default.documentsPath + "databases"
 }
 
 private func fileURL(_ fileName: String, withExtension `extension`: String) -> URL {

@@ -56,7 +56,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             bookmarkPersistence: bookmarksPersistence)
 
         backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        translationButton = UIBarButtonItem(image: UIImage(named: "translation"), style: .plain, target: nil, action: nil)
+        translationButton = UIBarButtonItem(image: UIImage(named: "globe-25"), style: .plain, target: nil, action: nil)
 
         super.init(nibName: nil, bundle: nil)
 

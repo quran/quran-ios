@@ -29,8 +29,13 @@ class Container {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
+                                      createTranslationsNavigationController(),
                                       createBookmarksController()]
         return controller
+    }
+
+    func createTranslationsNavigationController() -> UIViewController {
+        return TranslationsNavigationController(rootViewController: createTranslationsViewController())
     }
 
     func createSurasNavigationController() -> UIViewController {
@@ -39,6 +44,10 @@ class Container {
 
     func createJuzsNavigationController() -> UIViewController {
         return JuzsNavigationController(rootViewController: createJuzsViewController())
+    }
+
+    func createTranslationsViewController() -> UIViewController {
+        return TranslationsViewController()
     }
 
     func createSurasViewController() -> UIViewController {

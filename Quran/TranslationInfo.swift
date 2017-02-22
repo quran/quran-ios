@@ -15,4 +15,5 @@ struct TranslationInfo {
     let translatorForeign: String?
     let fileName: String
     let version: Int
+    let needsUpgrade: Bool
 }

@@ -24,6 +24,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         static let translatorForeign = Expression<String?>("translator_foreign")
         static let fileName = Expression<String>("filename")
         static let version = Expression<Int>("version")
+        static let needsUpgrade = Expression<Bool>("needsUpgrade")
     }
 
     func onCreate(connection: Connection) throws {
@@ -35,6 +36,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             builder.column(Translations.translatorForeign)
             builder.column(Translations.fileName)
             builder.column(Translations.version)
+            builder.column(Translations.needsUpgrade)
         })
     }
 
@@ -55,7 +57,8 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.translator <- translation.translator,
                 Translations.translatorForeign <- translation.translatorForeign,
                 Translations.fileName <- translation.fileName,
-                Translations.version <- translation.version)
+                Translations.version <- translation.version,
+                Translations.needsUpgrade <- translation.needsUpgrade)
             _ = try connection.run(insert)
         }
     }
@@ -76,8 +79,10 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             let translatorForeign = row[Translations.translatorForeign]
             let fileName = row[Translations.fileName]
             let version = row[Translations.version]
+            let needsUpgrade = row[Translations.needsUpgrade]
             let translation = TranslationInfo(id: id, displayName: name, translator: translator,
-                    translatorForeign: translatorForeign, fileName: fileName, version: version)
+                                              translatorForeign: translatorForeign, fileName: fileName,
+                                              version: version, needsUpgrade: needsUpgrade)
             translations.append(translation)
         }
         return translations

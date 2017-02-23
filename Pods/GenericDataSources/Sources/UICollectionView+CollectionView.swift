@@ -9,109 +9,109 @@
 import Foundation
 
 extension UICollectionView: GeneralCollectionView {
-    
+
     /**
      Represents the underlying scroll view. Use this method if you want to get the
      `UICollectionView`/`UITableView` itself not a wrapper.
      So, if you have for example an instance like the following
      ```
      let generalCollectionView: GeneralCollectionView = <...>
-     
+
      // Not Recommented, can result crashes if there is a CompositeDataSource.
      let underlyingTableView = generalCollectionView as! UITableView
-     
+
      // Recommended, safer
      let underlyingTableView = generalCollectionView.ds_scrollView as! UITableView
      ```
      The later can result a crash if the scroll view is a UICollectionView not a UITableView.
-     
+
      */
     open var ds_scrollView: UIScrollView { return self }
-    
+
     /**
      Just calls the corresponding method `registerNib(nib, forCellWithReuseIdentifier: identifier)`.
      */
     open func ds_register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
         register(nib, forCellWithReuseIdentifier: identifier)
     }
-    
+
     /**
      Just calls the corresponding method `registerClass(cellClass, forCellWithReuseIdentifier: identifier)`.
      */
     open func ds_register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
         register(cellClass, forCellWithReuseIdentifier: identifier)
     }
-    
+
     /**
      Just calls the corresponding method `reloadData()`.
      */
     open func ds_reloadData() {
         reloadData()
     }
-    
+
     /**
      Just calls the corresponding method `performBatchUpdates(updates, completion: completion)`.
      */
     open func ds_performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         internal_performBatchUpdates(updates, completion: completion)
     }
-    
+
     /**
      Just calls the corresponding method `insertSections(sections)`.
      */
     open func ds_insertSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
         insertSections(sections)
     }
-    
+
     /**
      Just calls the corresponding method `deleteSections(sections)`.
      */
     open func ds_deleteSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
         deleteSections(sections)
     }
-    
+
     /**
      Just calls the corresponding method `reloadSections(sections)`.
      */
     open func ds_reloadSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
         reloadSections(sections)
     }
-    
+
     /**
      Just calls the corresponding method `moveSection(section, toSection: newSection)`.
      */
     open func ds_moveSection(_ section: Int, toSection newSection: Int) {
         moveSection(section, toSection: newSection)
     }
-    
+
     /**
      Just calls the corresponding method `insertItemsAtIndexPaths(indexPaths)`.
      */
     open func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
         insertItems(at: indexPaths)
     }
-    
+
     /**
      Just calls the corresponding method `deleteItemsAtIndexPaths(indexPaths)`.
      */
     open func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
         deleteItems(at: indexPaths)
     }
-    
+
     /**
      Just calls the corresponding method `reloadItemsAtIndexPaths(indexPaths)`.
      */
     open func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
         reloadItems(at: indexPaths)
     }
-    
+
     /**
      Just calls the corresponding method `moveItemAt(indexPath, toIndexPath: newIndexPath)`.
      */
     open func ds_moveItem(at indexPath: IndexPath, to newIndexPath: IndexPath) {
         moveItem(at: indexPath, to: newIndexPath)
     }
-    
+
     /**
      Just calls the corresponding method `scrollToItemAt(indexPath, atScrollPosition: scrollPosition, animated: animated)`.
      */
@@ -125,7 +125,7 @@ extension UICollectionView: GeneralCollectionView {
     open func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionViewScrollPosition) {
         selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
     }
-    
+
     /**
      Just calls the corresponding method `deselectItemAt(indexPath, animated: animated)`.
      */
@@ -139,38 +139,43 @@ extension UICollectionView: GeneralCollectionView {
     open func ds_dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> ReusableCell {
         return dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
     }
-    
+
+    /**
+     Just calls the corresponding method `dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath)`.
+     */
+    open func ds_dequeueReusableSupplementaryView(ofKind kind: String, withIdentifier identifier: String, for indexPath: IndexPath) -> ReusableSupplementaryView {
+        return dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath)
+    }
+
     /**
      Just calls the corresponding method `return indexPathForCell(cell)`.
      */
     open func ds_indexPath(for reusableCell: ReusableCell) -> IndexPath? {
-        guard let cell = reusableCell as? UICollectionViewCell else {
-            fatalError("Cell '\(reusableCell)' should be of type UICollectionViewCell.")
-        }
+        let cell: UICollectionViewCell = cast(reusableCell, message: "Cell '\(reusableCell)' should be of type UICollectionViewCell.")
         return indexPath(for: cell)
     }
-    
+
     /**
      Just calls the corresponding method `return indexPathForItemAtPoint(point)`.
      */
     open func ds_indexPathForItem(at point: CGPoint) -> IndexPath? {
         return indexPathForItem(at: point)
     }
-    
+
     /**
      Just calls the corresponding method `return numberOfSections()`.
      */
     open func ds_numberOfSections() -> Int {
         return numberOfSections
     }
-    
+
     /**
      Just calls the corresponding method `return numberOfItemsInSection(section)`.
      */
     open func ds_numberOfItems(inSection section: Int) -> Int {
         return numberOfItems(inSection: section)
     }
-    
+
     /**
      Just calls the corresponding method `return cellForItemAt(indexPath)`.
      */
@@ -189,28 +194,28 @@ extension UICollectionView: GeneralCollectionView {
         }
         return reusableCells
     }
-    
+
     /**
      Just calls the corresponding method `return indexPathsForVisibleItems()`.
      */
     open func ds_indexPathsForVisibleItems() -> [IndexPath] {
         return indexPathsForVisibleItems
     }
-    
+
     /**
      Just calls the corresponding method `return indexPathsForSelectedItems() ?? []`.
      */
     open func ds_indexPathsForSelectedItems() -> [IndexPath] {
         return indexPathsForSelectedItems ?? []
     }
-    
+
     /**
      Always returns the same value passed.
      */
     open func ds_localIndexPathForGlobalIndexPath(_ globalIndex: IndexPath) -> IndexPath {
         return globalIndex
     }
-    
+
     /**
      Always returns the same value passed.
      */

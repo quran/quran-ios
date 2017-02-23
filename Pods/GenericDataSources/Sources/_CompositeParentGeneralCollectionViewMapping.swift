@@ -1,5 +1,5 @@
 //
-//  CompositeParentGeneralCollectionViewMapping.swift
+//  _CompositeParentGeneralCollectionViewMapping.swift
 //  GenericDataSource
 //
 //  Created by Mohamed Afifi on 2/21/16.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-class CompositeParentGeneralCollectionViewMapping: GeneralCollectionViewMapping {
+class _CompositeParentGeneralCollectionViewMapping: _GeneralCollectionViewMapping {
 
     unowned var parentDataSource: CompositeDataSource
-    
+
     unowned var dataSource: DataSource
-    
+
     var delegate: GeneralCollectionView? {
         return parentDataSource.ds_reusableViewDelegate
     }
@@ -26,7 +26,7 @@ class CompositeParentGeneralCollectionViewMapping: GeneralCollectionViewMapping 
     func globalSectionForLocalSection(_ localSection: Int) -> Int {
         return parentDataSource.globalSectionForLocalSection(localSection, dataSource: dataSource)
     }
-    
+
     func localIndexPathForGlobalIndexPath(_ globalIndexPath: IndexPath) -> IndexPath {
         return parentDataSource.localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: dataSource)
     }

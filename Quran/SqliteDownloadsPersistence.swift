@@ -79,9 +79,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
             // insert batch
             let batchInsert = Batches.table.insert()
             _ = try connection.run(batchInsert)
-            guard let batchId = connection.lastInsertRowid else {
-                return batch
-            }
+            let batchId = connection.lastInsertRowid
 
             // insert downloads
             for download in batch {

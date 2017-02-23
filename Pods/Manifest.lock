@@ -1,16 +1,16 @@
 PODS:
-  - Crashlytics (3.8.3):
+  - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
-  - Fabric (1.6.10)
-  - GenericDataSources (2.1.0)
+  - Fabric (1.6.11)
+  - GenericDataSources (2.2.0)
   - KVOController-Swift (2.0.1)
   - MenuItemKit (2.0)
-  - RxCocoa (3.0.0):
-    - RxSwift (~> 3.0)
-  - RxSwift (3.0.0)
-  - SQLite.swift (0.11.0):
-    - SQLite.swift/standard (= 0.11.0)
-  - SQLite.swift/standard (0.11.0)
+  - RxCocoa (3.2.0):
+    - RxSwift (~> 3.1)
+  - RxSwift (3.2.0)
+  - SQLite.swift (0.11.2):
+    - SQLite.swift/standard (= 0.11.2)
+  - SQLite.swift/standard (0.11.2)
   - Zip (0.6.0)
 
 DEPENDENCIES:
@@ -25,16 +25,16 @@ DEPENDENCIES:
   - Zip (~> 0.6)
 
 SPEC CHECKSUMS:
-  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
-  Fabric: c73f371ee543e3f0b80608f2674750e4910d1669
-  GenericDataSources: d8c24a0b00fa0f293d34a6d5367765302da6cdaa
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
   KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
-  RxCocoa: 0a2f3ae381cf16f4021a4cee7a4420f83058a965
-  RxSwift: a930cd662f5b4a7ca9dc3518585dba91dadf497c
-  SQLite.swift: 9a26273607d3077a2e5a8d33486e9989f8404c7d
+  RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
+  RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
+  SQLite.swift: 670c3e9e0a806bbfd56a3de5d530768dc0e6fe7c
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
 PODFILE CHECKSUM: 681fc88d4f961989e2702ec2ac810075269a4dd2
 
-COCOAPODS: 1.2.0.beta.3
+COCOAPODS: 1.2.0

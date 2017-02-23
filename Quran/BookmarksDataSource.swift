@@ -21,10 +21,10 @@ class BookmarksDataSource: CompositeDataSource {
 
     func addDataSource(_ dataSource: DataSource, headerTitle: String) {
         headerTitles.append(headerTitle)
-        super.addDataSource(dataSource)
+        super.add(dataSource)
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let text = headerTitles[section]
         header.titleLabel.text =  text

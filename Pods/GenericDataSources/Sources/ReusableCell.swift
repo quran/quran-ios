@@ -15,8 +15,10 @@ import Foundation
 @objc public protocol ReusableCell {
 }
 
+/// Make `UITableViewCell` reusable cell.
 extension UITableViewCell : ReusableCell {
 }
 
+/// Make `UICollectionViewCell` reusable cell.
 extension UICollectionViewCell : ReusableCell {
 }

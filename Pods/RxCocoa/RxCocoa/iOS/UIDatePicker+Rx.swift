@@ -8,16 +8,19 @@
 
 #if os(iOS)
 
-import Foundation
 #if !RX_NO_MODULE
 import RxSwift
 #endif
 import UIKit
 
 extension Reactive where Base: UIDatePicker {
-    
     /// Reactive wrapper for `date` property.
     public var date: ControlProperty<Date> {
+        return value
+    }
+    
+    /// Reactive wrapper for `date` property.
+    public var value: ControlProperty<Date> {
         return UIControl.rx.value(
             self.base,
             getter: { datePicker in

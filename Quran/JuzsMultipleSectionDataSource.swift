@@ -28,18 +28,18 @@ class JuzsMultipleSectionDataSource: CompositeDataSource {
                                                        dataSourceCreator: () -> BasicDataSource<ItemType, CellType>) {
 
         for dataSource in dataSources {
-            removeDataSource(dataSource)
+            remove(dataSource)
         }
 
         for section in sections {
             let ds = dataSourceCreator()
             ds.items = section.1
-            addDataSource(ds)
+            add(ds)
         }
         juzs = sections.map { $0.0 }
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
         let juz = juzs[section]
 

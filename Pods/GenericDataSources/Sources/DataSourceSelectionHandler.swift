@@ -10,7 +10,7 @@ import Foundation
 
 /**
  Represents the selection handler when a selection changes it handle it.
- 
+
  It's mainly used with `BasicDataSource`. It also can work with `BasicDataSource` nested inside multiple `CompositeDataSource`. You can have one handler for each data source.
  */
 public protocol DataSourceSelectionHandler {
@@ -45,7 +45,7 @@ public protocol DataSourceSelectionHandler {
         with item: ItemType,
         at indexPath: IndexPath)
 
-    // MARK:- Highlighting
+    // MARK: - Highlighting
 
     /**
      Called to see if the cell can be highlighted.
@@ -84,8 +84,8 @@ public protocol DataSourceSelectionHandler {
         _ dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         didUnhighlightItemAt indexPath: IndexPath)
-    
-    // MARK:- Selecting
+
+    // MARK: - Selecting
 
     /**
      Whether or not to select a cell.
@@ -112,8 +112,8 @@ public protocol DataSourceSelectionHandler {
         _ dataSource: BasicDataSource<ItemType, CellType>,
         collectionView: GeneralCollectionView,
         didSelectItemAt indexPath: IndexPath)
-    
-    // MARK:- Deselecting
+
+    // MARK: - Deselecting
 
     /**
      Should the cell be delselected or not.
@@ -142,7 +142,7 @@ public protocol DataSourceSelectionHandler {
         didDeselectItemAt indexPath: IndexPath)
 }
 
-// MARK:- Default implementation
+// MARK: - Default implementation
 extension DataSourceSelectionHandler {
 
     /**
@@ -161,8 +161,8 @@ extension DataSourceSelectionHandler {
         with item: ItemType,
         at indexPath: IndexPath) {
     }
-    
-    // MARK:- Highlighting
+
+    // MARK: - Highlighting
 
     /**
      Default implementation. Returns `true`.
@@ -193,8 +193,8 @@ extension DataSourceSelectionHandler {
         didUnhighlightItemAt indexPath: IndexPath) {
             // does nothing
     }
-    
-    // MARK:- Selecting
+
+    // MARK: - Selecting
 
     /**
      Default implementation. Returns `true`.
@@ -216,7 +216,7 @@ extension DataSourceSelectionHandler {
             // does nothing
     }
 
-    // MARK:- Deselecting
+    // MARK: - Deselecting
 
     /**
      Default implementation. Returns `true`.

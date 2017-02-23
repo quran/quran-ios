@@ -12,6 +12,7 @@ target 'Quran' do
     pod 'RxSwift'
     pod 'RxCocoa'
     pod 'MenuItemKit'
+    pod 'Alamofire'
 
     post_install do |installer|
       installer.pods_project.targets.each do |target|

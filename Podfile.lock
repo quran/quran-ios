@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.3.0)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.11)
@@ -14,6 +15,7 @@ PODS:
   - Zip (0.6.0)
 
 DEPENDENCIES:
+  - Alamofire
   - Crashlytics
   - Fabric
   - GenericDataSources
@@ -25,6 +27,7 @@ DEPENDENCIES:
   - Zip (~> 0.6)
 
 SPEC CHECKSUMS:
+  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
@@ -35,6 +38,6 @@ SPEC CHECKSUMS:
   SQLite.swift: 670c3e9e0a806bbfd56a3de5d530768dc0e6fe7c
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 681fc88d4f961989e2702ec2ac810075269a4dd2
+PODFILE CHECKSUM: 3d811fa6af2f0ccebe40581f570902a26498d963
 
 COCOAPODS: 1.2.0

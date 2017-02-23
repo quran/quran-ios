@@ -13,6 +13,7 @@ target 'Quran' do
     pod 'RxCocoa'
     pod 'MenuItemKit'
     pod 'Alamofire'
+    pod 'Moya'
     pod 'SwiftyJSON'
 
     post_install do |installer|

@@ -6,6 +6,12 @@ PODS:
   - GenericDataSources (2.2.0)
   - KVOController-Swift (2.0.1)
   - MenuItemKit (2.0)
+  - Moya (8.0.2):
+    - Moya/Core (= 8.0.2)
+  - Moya/Core (8.0.2):
+    - Alamofire (~> 4.1)
+    - Result (~> 3.0)
+  - Result (3.1.0)
   - RxCocoa (3.2.0):
     - RxSwift (~> 3.1)
   - RxSwift (3.2.0)
@@ -22,6 +28,7 @@ DEPENDENCIES:
   - GenericDataSources
   - KVOController-Swift
   - MenuItemKit
+  - Moya
   - RxCocoa
   - RxSwift
   - SQLite.swift (~> 0.11.0)
@@ -35,12 +42,14 @@ SPEC CHECKSUMS:
   GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
   KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
+  Moya: 47f61da5b634aa71f676431b64ee0f81e976296d
+  Result: 4e3ed5995ed94d0cd6a09be9a431fce3f3624bbf
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
   SQLite.swift: 670c3e9e0a806bbfd56a3de5d530768dc0e6fe7c
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: f818beed5438553fce24c7d4b857b516df32542a
+PODFILE CHECKSUM: b37c789756124b6360c46037b8fbde75224d6bab
 
 COCOAPODS: 1.2.0

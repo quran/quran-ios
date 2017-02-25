@@ -13,6 +13,7 @@ protocol Response: class {
     var progress: Foundation.Progress { get }
 
     var onCompletion: ((Result<()>) -> Void)? { get set }
+    var result: Result<()>? { get set }
 
     func resume()
     func suspend()

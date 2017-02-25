@@ -48,6 +48,9 @@ class LazyConnectionWrapper {
             return connection
         }
         do {
+            try FileManager.default.createDirectory(atPath: sqliteFilePath.stringByDeletingLastPathComponent,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: nil)
             let connection = try Connection(sqliteFilePath, readonly: readonly)
             instance = connection
             return connection

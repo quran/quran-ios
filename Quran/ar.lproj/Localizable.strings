@@ -8,7 +8,7 @@
 "NetworkError_NotConnectedToInternet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";
 "NetworkError_ServerNotReachable" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "NetworkError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-
+"NetworkError_Parsing" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 
 "FileSystemError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "FileSystemError_NoDiskSpace" = "لا توجد مساحة كافيه في ذاكرة الهاتف لحفظ التنزيلات.";

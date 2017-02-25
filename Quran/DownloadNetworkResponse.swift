@@ -15,7 +15,21 @@ class DownloadNetworkResponse: Response {
 
     let progress: Foundation.Progress
 
-    var onCompletion: ((Result<()>) -> Void)?
+    var result: Result<()>? {
+        didSet {
+            if let result = result {
+                onCompletion?(result)
+            }
+        }
+    }
+
+    var onCompletion: ((Result<()>) -> Void)? {
+        didSet {
+            if let result = result {
+                onCompletion?(result)
+            }
+        }
+    }
 
     init(task: URLSessionDownloadTask?, download: Download, progress: Foundation.Progress) {
         self.task = task

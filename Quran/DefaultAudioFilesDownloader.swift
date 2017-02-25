@@ -103,14 +103,16 @@ extension DefaultAudioFilesDownloader {
                 // if error occurred, stop downloads
                 if let error = result.error {
                     let response = self.response
-                    self.response = nil
+                    Queue.main.after(0.2) {
+                        self.response = nil
+                    }
                     response?.cancel() // cancel other downloads
-                    response?.onCompletion?(.failure(error))
+                    response?.result = .failure(error)
                 } else {
                     if allCompleted {
                         let response = self.response
                         self.response = nil
-                        response?.onCompletion?(.success())
+                        response?.result = .success()
                     }
                 }
             }

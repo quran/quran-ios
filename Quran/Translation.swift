@@ -1,5 +1,5 @@
 //
-//  TranslationInfo.swift
+//  Translation.swift
 //  Quran
 //
 //  Created by Ahmed El-Helw on 2/13/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TranslationInfo {
+struct Translation {
     let id: Int
     let displayName: String
     let translator: String?

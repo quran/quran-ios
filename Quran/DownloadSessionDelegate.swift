@@ -83,14 +83,19 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
 
     func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
         Queue.downloads.async { [weak self] in
-            let batch = ((try? self?.persistence.insert(batch: downloads.map { $0.download })) ?? []) ?? []
+            do {
+                guard let `self` = self else { return }
+                let batch = try self.persistence.insert(batch: downloads.map { $0.download })
 
-            downloads.enumerated().forEach { (index, response) in
-                response.download = batch[index]
-            }
+                downloads.enumerated().forEach { (index, response) in
+                    response.download = batch[index]
+                }
 
-            for download in downloads {
-                self?.onGoingDownloads[URL(download.download.url)] = download
+                for download in downloads {
+                    self.onGoingDownloads[URL(download.download.url)] = download
+                }
+            } catch {
+                downloads.first?.result = .failure(error)
             }
         }
     }
@@ -195,7 +200,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                     fatalErrorOnDebug: false)
                 // early exist with error
                 let downloadRequest = taskFailed(downloadTask)
-                downloadRequest?.onCompletion?(.failure(FileSystemError(error: error)))
+                downloadRequest?.result = .failure(FileSystemError(error: error))
             }
         } else {
             print("Missed saving task", downloadTask.currentRequest?.url as Any)
@@ -228,11 +233,11 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                 } else {
                     finalError = NetworkError(error: error)
                 }
-                response?.onCompletion?(.failure(finalError))
+                response?.result = .failure(finalError)
             }
         } else {
             // success
-            response?.onCompletion?(.success())
+            response?.result = .success()
         }
     }
 

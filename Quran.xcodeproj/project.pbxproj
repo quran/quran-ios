@@ -39,6 +39,14 @@
 		5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461A1CE9F4E900EED886 /* AudioPlayer.swift */; };
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
 		5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */; };
+		549040A01E5F945900D54625 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5490409F1E5F945900D54625 /* NetworkManager.swift */; };
+		549040A21E5F949D00D54625 /* MoyaNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */; };
+		549040A41E5F94BE00D54625 /* NetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A31E5F94BE00D54625 /* NetworkResponse.swift */; };
+		549040A71E5F99BE00D54625 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A61E5F99BE00D54625 /* Parser.swift */; };
+		549040A91E5F9A9C00D54625 /* TranslationsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A81E5F9A9C00D54625 /* TranslationsParser.swift */; };
+		549040AB1E61813B00D54625 /* Parsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AA1E61813B00D54625 /* Parsable.swift */; };
+		549040AD1E619A3300D54625 /* BackendServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AC1E619A3300D54625 /* BackendServices.swift */; };
+		549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AE1E61B32E00D54625 /* String+Extension.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -161,7 +169,7 @@
 		54C0DC221CE7695E009AAD8D /* URLSessionDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC211CE7695E009AAD8D /* URLSessionDownloadManager.swift */; };
 		54C0DC241CE76EF4009AAD8D /* DownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC231CE76EF4009AAD8D /* DownloadSessionDelegate.swift */; };
 		54C0DC261CE78337009AAD8D /* FileSystemError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC251CE78337009AAD8D /* FileSystemError.swift */; };
-		54C0DC2A1CE7A318009AAD8D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC291CE7A318009AAD8D /* Request.swift */; };
+		54C0DC2A1CE7A318009AAD8D /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC291CE7A318009AAD8D /* Response.swift */; };
 		54C0DC2C1CE7D53A009AAD8D /* AudioFilesDownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2B1CE7D53A009AAD8D /* AudioFilesDownloadRequest.swift */; };
 		54C0DC2E1CE87E60009AAD8D /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2D1CE87E60009AAD8D /* Progress.swift */; };
 		54C0DC301CE889CA009AAD8D /* DefaultAudioFilesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2F1CE889CA009AAD8D /* DefaultAudioFilesDownloader.swift */; };
@@ -181,7 +189,7 @@
 		C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */; };
 		C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E39431E4F02FF00079128 /* DownloadRequest.swift */; };
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
-		C2E3E08007B4A9B67363F256 /* TranslationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */; };
+		C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */; };
 		C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */; };
 		C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */; };
 		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */; };
@@ -282,6 +290,14 @@
 		5487461A1CE9F4E900EED886 /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
 		5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaplessAudioPlayer.swift; sourceTree = "<group>"; };
+		5490409F1E5F945900D54625 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoyaNetworkManager.swift; sourceTree = "<group>"; };
+		549040A31E5F94BE00D54625 /* NetworkResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkResponse.swift; sourceTree = "<group>"; };
+		549040A61E5F99BE00D54625 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		549040A81E5F9A9C00D54625 /* TranslationsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsParser.swift; sourceTree = "<group>"; };
+		549040AA1E61813B00D54625 /* Parsable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parsable.swift; sourceTree = "<group>"; };
+		549040AC1E619A3300D54625 /* BackendServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackendServices.swift; sourceTree = "<group>"; };
+		549040AE1E61B32E00D54625 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -432,7 +448,7 @@
 		54C0DC211CE7695E009AAD8D /* URLSessionDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDownloadManager.swift; sourceTree = "<group>"; };
 		54C0DC231CE76EF4009AAD8D /* DownloadSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadSessionDelegate.swift; sourceTree = "<group>"; };
 		54C0DC251CE78337009AAD8D /* FileSystemError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemError.swift; sourceTree = "<group>"; };
-		54C0DC291CE7A318009AAD8D /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		54C0DC291CE7A318009AAD8D /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		54C0DC2B1CE7D53A009AAD8D /* AudioFilesDownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFilesDownloadRequest.swift; sourceTree = "<group>"; };
 		54C0DC2D1CE87E60009AAD8D /* Progress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Progress.swift; sourceTree = "<group>"; };
 		54C0DC2F1CE889CA009AAD8D /* DefaultAudioFilesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioFilesDownloader.swift; sourceTree = "<group>"; };
@@ -457,7 +473,7 @@
 		C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteTranslationTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteArabicTextPersistence.swift; sourceTree = "<group>"; };
-		C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationInfo.swift; sourceTree = "<group>"; };
+		C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
@@ -585,6 +601,26 @@
 				54B266231CC80AE800D3AEF8 /* Interactors */,
 			);
 			name = "Download & Audio";
+			sourceTree = "<group>";
+		};
+		5490409E1E5F944600D54625 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				5490409F1E5F945900D54625 /* NetworkManager.swift */,
+				549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */,
+				549040A31E5F94BE00D54625 /* NetworkResponse.swift */,
+				549040AC1E619A3300D54625 /* BackendServices.swift */,
+			);
+			name = NetworkManager;
+			sourceTree = "<group>";
+		};
+		549040A51E5F99AD00D54625 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				549040A61E5F99BE00D54625 /* Parser.swift */,
+				549040A81E5F9A9C00D54625 /* TranslationsParser.swift */,
+			);
+			name = Parsers;
 			sourceTree = "<group>";
 		};
 		5494CCB31CEFAB4200031686 /* Timing */ = {
@@ -738,6 +774,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				549040A51E5F99AD00D54625 /* Parsers */,
 				54E714A31DD118A700FB3BCB /* Quran */,
 				54B2669F1CCD8D1100D3AEF8 /* Data */,
 				54B266241CC80AEC00D3AEF8 /* Dependency Injection Container */,
@@ -745,7 +782,7 @@
 				54B266601CCA907A00D3AEF8 /* Errors */,
 				54B266471CC81AC600D3AEF8 /* Network */,
 				54B2664E1CCA873B00D3AEF8 /* Persistence */,
-				54C0DC291CE7A318009AAD8D /* Request.swift */,
+				54C0DC291CE7A318009AAD8D /* Response.swift */,
 				54B266A71CD1628500D3AEF8 /* Timing */,
 			);
 			name = Services;
@@ -765,7 +802,7 @@
 				54B266AF1CD166B200D3AEF8 /* AyahTiming.swift */,
 				54B266B91CD16DD400D3AEF8 /* AudioRepeat.swift */,
 				54B267061CD6B17F00D3AEF8 /* QuranPageReference.swift */,
-				C2E3E6D9D1E850CA2BC3AF03 /* TranslationInfo.swift */,
+				C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -820,6 +857,7 @@
 				5487241B1DC495DB00ADDE54 /* FileManager+Extension.swift */,
 				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
 				54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */,
+				549040AE1E61B32E00D54625 /* String+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -840,6 +878,7 @@
 				54C0DC0F1CE69272009AAD8D /* Either.swift */,
 				54EB823E1D0A35EA00CBA802 /* Crash.swift */,
 				5415A94E1DC92A9C0089F9CB /* Cache.swift */,
+				549040AA1E61813B00D54625 /* Parsable.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -883,7 +922,8 @@
 		54B266471CC81AC600D3AEF8 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DC201CE7649C009AAD8D /* NetworkManager */,
+				5490409E1E5F944600D54625 /* NetworkManager */,
+				54C0DC201CE7649C009AAD8D /* DownloadManager */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -1199,7 +1239,7 @@
 			name = AudioFilesDownloader;
 			sourceTree = "<group>";
 		};
-		54C0DC201CE7649C009AAD8D /* NetworkManager */ = {
+		54C0DC201CE7649C009AAD8D /* DownloadManager */ = {
 			isa = PBXGroup;
 			children = (
 				54B1356D1E59BD020087D0F8 /* impl */,
@@ -1207,7 +1247,7 @@
 				C13E39431E4F02FF00079128 /* DownloadRequest.swift */,
 				54B266861CCACA2F00D3AEF8 /* DownloadManager.swift */,
 			);
-			name = NetworkManager;
+			name = DownloadManager;
 			sourceTree = "<group>";
 		};
 		54C3C88E1CD7D5C50045F18F /* Constants */ = {
@@ -1491,12 +1531,14 @@
 				54C0DC0E1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift in Sources */,
 				54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */,
 				54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */,
+				549040A21E5F949D00D54625 /* MoyaNetworkManager.swift in Sources */,
 				54C3C89C1CD7E42B0045F18F /* DefaultQuranImageService.swift in Sources */,
 				54C0DC241CE76EF4009AAD8D /* DownloadSessionDelegate.swift in Sources */,
 				54C0DBFF1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift in Sources */,
 				54C0DC2C1CE7D53A009AAD8D /* AudioFilesDownloadRequest.swift in Sources */,
 				54C0DC101CE69272009AAD8D /* Either.swift in Sources */,
 				54C0DC261CE78337009AAD8D /* FileSystemError.swift in Sources */,
+				549040A91E5F9A9C00D54625 /* TranslationsParser.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */,
@@ -1506,6 +1548,7 @@
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* QuranURLs.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
+				549040AB1E61813B00D54625 /* Parsable.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
 				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
 				5487241C1DC495DB00ADDE54 /* FileManager+Extension.swift in Sources */,
@@ -1532,23 +1575,26 @@
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
+				549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
+				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,
 				54B135681E53A9FA0087D0F8 /* DownloadsPersistence.swift in Sources */,
 				54B2661F1CC7F2DA00D3AEF8 /* UIColor+Extension.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266CF1CD31CA600D3AEF8 /* Cast.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
 				54B1356F1E59FEA10087D0F8 /* Sequence+Extension.swift in Sources */,
-				54C0DC2A1CE7A318009AAD8D /* Request.swift in Sources */,
+				54C0DC2A1CE7A318009AAD8D /* Response.swift in Sources */,
 				548724281DC4BF6000ADDE54 /* AyahBookmark.swift in Sources */,
 				54C0DBD51CDF7250009AAD8D /* AudioBannerViewPresenter.swift in Sources */,
 				54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
 				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
 				54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */,
+				549040A71E5F99BE00D54625 /* Parser.swift in Sources */,
 				54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */,
 				54B266891CCACB8F00D3AEF8 /* DefaultAyahInfoRetriever.swift in Sources */,
 				C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */,
@@ -1559,6 +1605,7 @@
 				54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */,
 				C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
+				549040A41E5F94BE00D54625 /* NetworkResponse.swift in Sources */,
 				54C0DBE51CE479D7009AAD8D /* DefaultAudioBannerView.swift in Sources */,
 				54B266BD1CD16EA200D3AEF8 /* QuranViewController.swift in Sources */,
 				54B2669E1CCD21F800D3AEF8 /* AyahNumber.swift in Sources */,
@@ -1620,6 +1667,7 @@
 				54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
+				549040AD1E619A3300D54625 /* BackendServices.swift in Sources */,
 				54B266801CCAAE4900D3AEF8 /* Quran.swift in Sources */,
 				54C0DC1B1CE69BE7009AAD8D /* AudioFilesDownloader.swift in Sources */,
 				54B2669C1CCD208800D3AEF8 /* HighlightingView.swift in Sources */,
@@ -1641,7 +1689,7 @@
 				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,
-				C2E3E08007B4A9B67363F256 /* TranslationInfo.swift in Sources */,
+				C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */,
 				C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

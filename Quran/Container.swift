@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Moya
+import SwiftyJSON
 
 class Container {
 
@@ -214,5 +216,17 @@ class Container {
 
     func createDownloadsPersistence() -> DownloadsPersistence {
         return SqliteDownloadsPersistence()
+    }
+
+    func createMoyaProvider() -> MoyaProvider<BackendServices> {
+        return MoyaProvider()
+    }
+
+    func createNetworkManager<To>(parser: AnyParser<JSON, To>) -> AnyNetworkManager<To> {
+        return AnyNetworkManager(MoyaNetworkManager(provider: createMoyaProvider(), parser: parser))
+    }
+
+    func createTranslationsParser() -> AnyParser<JSON, [Translation]> {
+        return AnyParser(TranslationsParser())
     }
 }

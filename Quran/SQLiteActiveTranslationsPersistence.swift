@@ -40,7 +40,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         })
     }
 
-    func retrieveAll() throws -> [TranslationInfo] {
+    func retrieveAll() throws -> [Translation] {
         return try run { connection in
             let query = Translations.table.order(Translations.name.asc)
             let rows = try connection.prepare(query)
@@ -49,7 +49,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func insert(_ translation: TranslationInfo) throws {
+    func insert(_ translation: Translation) throws {
         return try run { connection in
             let insert = Translations.table.insert(
                 Translations.id <- translation.id,
@@ -63,15 +63,15 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func remove(_ translation: TranslationInfo) throws {
+    func remove(_ translation: Translation) throws {
         return try run { connection in
             let filter = Translations.table.filter(Translations.id == translation.id)
             _ = try connection.run(filter.delete())
         }
     }
 
-    private func convert(rowsToTranslations rows: AnySequence<Row>) -> [TranslationInfo] {
-        var translations: [TranslationInfo] = []
+    private func convert(rowsToTranslations rows: AnySequence<Row>) -> [Translation] {
+        var translations: [Translation] = []
         for row in rows {
             let id = row[Translations.id]
             let name = row[Translations.name]
@@ -80,9 +80,9 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             let fileName = row[Translations.fileName]
             let version = row[Translations.version]
             let needsUpgrade = row[Translations.needsUpgrade]
-            let translation = TranslationInfo(id: id, displayName: name, translator: translator,
-                                              translatorForeign: translatorForeign, fileName: fileName,
-                                              version: version, needsUpgrade: needsUpgrade)
+            let translation = Translation(id: id, displayName: name, translator: translator,
+                                          translatorForeign: translatorForeign, fileName: fileName,
+                                          version: version, needsUpgrade: needsUpgrade)
             translations.append(translation)
         }
         return translations

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ActiveTranslationsPersistence {
-    func retrieveAll() throws -> [TranslationInfo]
-    func insert(_ translation: TranslationInfo) throws
-    func remove(_ translation: TranslationInfo) throws
+    func retrieveAll() throws -> [Translation]
+    func insert(_ translation: Translation) throws
+    func remove(_ translation: Translation) throws
 }

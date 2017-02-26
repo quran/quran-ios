@@ -49,7 +49,7 @@ class Container {
     }
 
     func createTranslationsViewController() -> UIViewController {
-        return TranslationsViewController()
+        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -228,5 +228,14 @@ class Container {
 
     func createTranslationsParser() -> AnyParser<JSON, [Translation]> {
         return AnyParser(TranslationsParser())
+    }
+
+    func createActiveTranslationsPersistence() -> ActiveTranslationsPersistence {
+        return SQLiteActiveTranslationsPersistence()
+    }
+
+    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [Translation]> {
+        return TranslationsRetrievalInteractor(networkManager: createNetworkManager(parser: createTranslationsParser()),
+                                               persistence: createActiveTranslationsPersistence()).erasedType()
     }
 }

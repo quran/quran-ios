@@ -49,6 +49,11 @@
 		549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AE1E61B32E00D54625 /* String+Extension.swift */; };
 		549040B51E6334AC00D54625 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B41E6334AC00D54625 /* Interactor.swift */; };
 		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
+		549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BA1E63566D00D54625 /* TranslationsDataSource.swift */; };
+		549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */; };
+		549040C01E63578D00D54625 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */; };
+		549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */; };
+		549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C31E635A7300D54625 /* PromiseKit+Extension.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -302,6 +307,11 @@
 		549040AE1E61B32E00D54625 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		549040B41E6334AC00D54625 /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
 		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
+		549040BA1E63566D00D54625 /* TranslationsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsDataSource.swift; sourceTree = "<group>"; };
+		549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTableViewCell.swift; sourceTree = "<group>"; };
+		549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
+		549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell-UITableViewCell+Reuse.swift"; sourceTree = "<group>"; };
+		549040C31E635A7300D54625 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -636,6 +646,15 @@
 			name = Interactors;
 			sourceTree = "<group>";
 		};
+		549040BC1E63577900D54625 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
+				549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		5494CCB31CEFAB4200031686 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -684,6 +703,7 @@
 		54B135721E5E456A0087D0F8 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				549040BC1E63577900D54625 /* Views */,
 				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
 			);
 			name = Translations;
@@ -872,6 +892,7 @@
 				548724311DC633A000ADDE54 /* UIView+Extension.swift */,
 				54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */,
 				549040AE1E61B32E00D54625 /* String+Extension.swift */,
+				549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -893,6 +914,7 @@
 				54EB823E1D0A35EA00CBA802 /* Crash.swift */,
 				5415A94E1DC92A9C0089F9CB /* Cache.swift */,
 				549040AA1E61813B00D54625 /* Parsable.swift */,
+				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -960,6 +982,7 @@
 				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
 				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
+				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -1449,6 +1472,7 @@
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,
+				549040C01E63578D00D54625 /* TranslationTableViewCell.xib in Resources */,
 				5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
 				54C0DBC81CDE6484009AAD8D /* readers.plist in Resources */,
@@ -1551,6 +1575,7 @@
 				54C0DBFF1CE524C4009AAD8D /* UserDefaultsSimplePersistence.swift in Sources */,
 				54C0DC2C1CE7D53A009AAD8D /* AudioFilesDownloadRequest.swift in Sources */,
 				54C0DC101CE69272009AAD8D /* Either.swift in Sources */,
+				549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */,
 				54C0DC261CE78337009AAD8D /* FileSystemError.swift in Sources */,
 				549040A91E5F9A9C00D54625 /* TranslationsParser.swift in Sources */,
 				54B266B21CD1687100D3AEF8 /* DataRetriever.swift in Sources */,
@@ -1594,6 +1619,7 @@
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				549040B51E6334AC00D54625 /* Interactor.swift in Sources */,
+				549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,
@@ -1611,6 +1637,7 @@
 				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
 				54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */,
 				549040A71E5F99BE00D54625 /* Parser.swift in Sources */,
+				549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */,
 				54B2665B1CCA8CE900D3AEF8 /* AyahInfo.swift in Sources */,
 				54B266891CCACB8F00D3AEF8 /* DefaultAyahInfoRetriever.swift in Sources */,
 				C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */,
@@ -1684,6 +1711,7 @@
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
 				549040AD1E619A3300D54625 /* BackendServices.swift in Sources */,
+				549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */,
 				54B266801CCAAE4900D3AEF8 /* Quran.swift in Sources */,
 				54C0DC1B1CE69BE7009AAD8D /* AudioFilesDownloader.swift in Sources */,
 				54B2669C1CCD208800D3AEF8 /* HighlightingView.swift in Sources */,

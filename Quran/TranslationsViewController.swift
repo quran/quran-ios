@@ -8,11 +8,52 @@
 
 import UIKit
 
-class TranslationsViewController: UIViewController {
+class TranslationsViewController: BaseTableViewController {
+
+    private let dataSource = TranslationsDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+
+    private let interactor: AnyInteractor<Void, [Translation]>
+
+    init(interactor: AnyInteractor<Void, [Translation]>) {
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        unimplemented()
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = ""
+        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
 
-        // Do any additional setup after loading the view.
+        tableView.register(cell: TranslationTableViewCell.self)
+        tableView.ds_useDataSource(dataSource)
+        tableView.allowsSelection = false
+
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.addSubview(refreshControl)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        refreshData()
+    }
+
+    func refreshData() {
+        refreshControl.beginRefreshing()
+        _ = interactor.execute()
+            .then(on: .main) { [weak self] translations -> Void in
+                self?.dataSource.items = translations
+                self?.tableView.reloadData()
+            }.catchToAlertView().always { [weak self] in
+                self?.refreshControl.endRefreshing()
+        }
     }
 }

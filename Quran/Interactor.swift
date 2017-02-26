@@ -28,3 +28,9 @@ struct AnyInteractor<Input, Output>: Interactor {
         return executeClosure(input)
     }
 }
+
+extension Interactor {
+    func erasedType() -> AnyInteractor<Input, Output> {
+        return AnyInteractor(self)
+    }
+}

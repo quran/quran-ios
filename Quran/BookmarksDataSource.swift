@@ -11,24 +11,20 @@ import GenericDataSources
 
 class BookmarksDataSource: CompositeDataSource {
 
-    var headerTitles: [String] = []
-    let headerReuseIdentifier: String
+    private let headerCreator: BasicBlockSupplementaryViewCreator<String, JuzTableViewHeaderFooterView>
 
     init(type: SectionType, headerReuseIdentifier: String) {
-        self.headerReuseIdentifier = headerReuseIdentifier
+        headerCreator = BasicBlockSupplementaryViewCreator(identifier: headerReuseIdentifier, size: CGSize(width: 0, height: 44)) {
+            (item, view, _) in
+            view.titleLabel.text =  item
+            view.subtitleLabel.isHidden = true
+        }
         super.init(sectionType: type)
+        set(headerCreator: headerCreator)
     }
 
     func addDataSource(_ dataSource: DataSource, headerTitle: String) {
-        headerTitles.append(headerTitle)
+        headerCreator.items.append([headerTitle])
         super.add(dataSource)
-    }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header: JuzTableViewHeaderFooterView = cast(tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseIdentifier))
-        let text = headerTitles[section]
-        header.titleLabel.text =  text
-        header.subtitleLabel.isHidden = true
-        return header
     }
 }

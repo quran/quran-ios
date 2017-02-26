@@ -54,6 +54,7 @@
 		549040C01E63578D00D54625 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */; };
 		549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */; };
 		549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C31E635A7300D54625 /* PromiseKit+Extension.swift */; };
+		549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -312,6 +313,7 @@
 		549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
 		549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell-UITableViewCell+Reuse.swift"; sourceTree = "<group>"; };
 		549040C31E635A7300D54625 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
+		549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -982,6 +984,7 @@
 				54B266811CCAC82600D3AEF8 /* QuranPagesDataSource.swift */,
 				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
 				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
+				549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */,
 				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
 			);
 			name = DataSources;
@@ -1662,6 +1665,7 @@
 				54B266871CCACA2F00D3AEF8 /* DownloadManager.swift in Sources */,
 				54C0DBED1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift in Sources */,
 				54B266541CCA87FC00D3AEF8 /* Result.swift in Sources */,
+				549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */,
 				54C0DC061CE633AC009AAD8D /* PageBasedLastAyahFinder.swift in Sources */,
 				5415A94F1DC92A9C0089F9CB /* Cache.swift in Sources */,
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,

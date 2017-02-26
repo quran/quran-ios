@@ -130,8 +130,8 @@ open class CompositeSupplementaryViewCreator: NSObject, SupplementaryViewCreator
     ///
     /// - returns: The size of the supplementary view.
     open func collectionView(_ collectionView: GeneralCollectionView, sizeForViewOfKind kind: String, at indexPath: IndexPath) -> CGSize {
-        let viewCreator = creator(ofKind: kind)
-        return viewCreator.collectionView(collectionView, sizeForViewOfKind: kind, at: indexPath)
+        let viewCreator = creators[kind]
+        return viewCreator?.collectionView(collectionView, sizeForViewOfKind: kind, at: indexPath) ?? .zero
     }
 
     /// Supplementary view is about to be displayed. Called exactly before the supplementary view is displayed.

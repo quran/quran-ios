@@ -24,7 +24,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         static let translatorForeign = Expression<String?>("translator_foreign")
         static let fileName = Expression<String>("filename")
         static let version = Expression<Int>("version")
-        static let needsUpgrade = Expression<Bool>("needsUpgrade")
+        static let installedVersion = Expression<Int?>("installedVersion")
     }
 
     func onCreate(connection: Connection) throws {
@@ -36,7 +36,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             builder.column(Translations.translatorForeign)
             builder.column(Translations.fileName)
             builder.column(Translations.version)
-            builder.column(Translations.needsUpgrade)
+            builder.column(Translations.installedVersion)
         })
     }
 
@@ -58,7 +58,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.translatorForeign <- translation.translatorForeign,
                 Translations.fileName <- translation.fileName,
                 Translations.version <- translation.version,
-                Translations.needsUpgrade <- translation.needsUpgrade)
+                Translations.installedVersion <- translation.installedVersion)
             _ = try connection.run(insert)
         }
     }
@@ -79,10 +79,10 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             let translatorForeign = row[Translations.translatorForeign]
             let fileName = row[Translations.fileName]
             let version = row[Translations.version]
-            let needsUpgrade = row[Translations.needsUpgrade]
+            let installedVersion = row[Translations.installedVersion]
             let translation = Translation(id: id, displayName: name, translator: translator,
                                           translatorForeign: translatorForeign, fileName: fileName,
-                                          version: version, needsUpgrade: needsUpgrade)
+                                          version: version, installedVersion: installedVersion)
             translations.append(translation)
         }
         return translations

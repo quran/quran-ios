@@ -24,6 +24,6 @@ extension Translation: Parsable {
         translatorForeign = json["translator_foreign"].string
         fileName = try json["fileName"].parsed()
         version = try json["current_version"].parsed()
-        needsUpgrade = false
+        installedVersion = nil
     }
 }

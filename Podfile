@@ -1,5 +1,6 @@
 platform :ios, '8.1'
 use_frameworks!
+swift_version = "3.0"
 
 target 'Quran' do
 
@@ -12,15 +13,7 @@ target 'Quran' do
     pod 'RxSwift'
     pod 'RxCocoa'
     pod 'MenuItemKit'
-    pod 'Alamofire'
     pod 'Moya'
     pod 'SwiftyJSON'
-
-    post_install do |installer|
-      installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings['SWIFT_VERSION'] = '3.0'
-        end
-      end
-    end
+    pod 'PromiseKit'
 end

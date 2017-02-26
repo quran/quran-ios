@@ -7,20 +7,21 @@
 //
 
 import Foundation
+import PromiseKit
 
 protocol NetworkManager {
     associatedtype Target
 
-    func execute(_ service: BackendServices) -> NetworkResponse<Target>
+    func execute(_ service: BackendServices) -> Promise<Target>
 }
 
 struct AnyNetworkManager<Target>: NetworkManager {
-    let executeClosure: (BackendServices) -> NetworkResponse<Target>
+    let executeClosure: (BackendServices) -> Promise<Target>
     init<NetworkManagerType: NetworkManager>(_ networkManager: NetworkManagerType) where NetworkManagerType.Target == Target {
         executeClosure = networkManager.execute
     }
 
-    func execute(_ service: BackendServices) -> NetworkResponse<Target> {
+    func execute(_ service: BackendServices) -> Promise<Target> {
         return executeClosure(service)
     }
 }

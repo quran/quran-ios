@@ -47,6 +47,7 @@
 		549040AB1E61813B00D54625 /* Parsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AA1E61813B00D54625 /* Parsable.swift */; };
 		549040AD1E619A3300D54625 /* BackendServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AC1E619A3300D54625 /* BackendServices.swift */; };
 		549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AE1E61B32E00D54625 /* String+Extension.swift */; };
+		549040B51E6334AC00D54625 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B41E6334AC00D54625 /* Interactor.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -298,6 +299,7 @@
 		549040AA1E61813B00D54625 /* Parsable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parsable.swift; sourceTree = "<group>"; };
 		549040AC1E619A3300D54625 /* BackendServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackendServices.swift; sourceTree = "<group>"; };
 		549040AE1E61B32E00D54625 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		549040B41E6334AC00D54625 /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -623,6 +625,14 @@
 			name = Parsers;
 			sourceTree = "<group>";
 		};
+		549040B31E6334A200D54625 /* Interactors */ = {
+			isa = PBXGroup;
+			children = (
+				549040B41E6334AC00D54625 /* Interactor.swift */,
+			);
+			name = Interactors;
+			sourceTree = "<group>";
+		};
 		5494CCB31CEFAB4200031686 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,6 +784,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				549040B31E6334A200D54625 /* Interactors */,
 				549040A51E5F99AD00D54625 /* Parsers */,
 				54E714A31DD118A700FB3BCB /* Quran */,
 				54B2669F1CCD8D1100D3AEF8 /* Data */,
@@ -1578,6 +1589,7 @@
 				549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				549040B51E6334AC00D54625 /* Interactor.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,

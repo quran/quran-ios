@@ -22,7 +22,7 @@ final class ConnectionsPool {
             return connection
         } else {
             do {
-                try FileManager.default.createDirectory(atPath: filePath.stringByDeletingLastPathComponent,
+                try? FileManager.default.createDirectory(atPath: filePath.stringByDeletingLastPathComponent,
                                                         withIntermediateDirectories: true,
                                                         attributes: nil)
                 let connection = try Connection(filePath, readonly: false)

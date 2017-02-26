@@ -16,6 +16,6 @@ class TranslationsDataSource: BasicDataSource<Translation, TranslationTableViewC
                                     with item: Translation,
                                     at indexPath: IndexPath) {
         cell.textLabel?.text = item.displayName
-        cell.detailTextLabel?.text = item.translatorForeign
+        cell.detailTextLabel?.text = item.translatorForeign ?? item.translator
     }
 }

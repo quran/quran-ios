@@ -48,6 +48,7 @@
 		549040AD1E619A3300D54625 /* BackendServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AC1E619A3300D54625 /* BackendServices.swift */; };
 		549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040AE1E61B32E00D54625 /* String+Extension.swift */; };
 		549040B51E6334AC00D54625 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B41E6334AC00D54625 /* Interactor.swift */; };
+		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
 		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
@@ -300,6 +301,7 @@
 		549040AC1E619A3300D54625 /* BackendServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackendServices.swift; sourceTree = "<group>"; };
 		549040AE1E61B32E00D54625 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		549040B41E6334AC00D54625 /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
+		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
 		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 			isa = PBXGroup;
 			children = (
 				549040B41E6334AC00D54625 /* Interactor.swift */,
+				549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */,
 			);
 			name = Interactors;
 			sourceTree = "<group>";
@@ -1555,6 +1558,7 @@
 				5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */,
 				54C0DBC61CDE5C2A009AAD8D /* URL+Extension.swift in Sources */,
 				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
+				549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* QuranURLs.swift in Sources */,

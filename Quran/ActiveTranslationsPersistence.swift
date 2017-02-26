@@ -12,4 +12,5 @@ protocol ActiveTranslationsPersistence {
     func retrieveAll() throws -> [Translation]
     func insert(_ translation: Translation) throws
     func remove(_ translation: Translation) throws
+    func update(_ translation: Translation) throws
 }

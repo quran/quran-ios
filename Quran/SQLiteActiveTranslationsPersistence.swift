@@ -9,6 +9,10 @@
 import Foundation
 import SQLite
 
+extension Queue {
+    static let translations = Queue(queue: DispatchQueue(label: "com.quran.translations"))
+}
+
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
 
     let version: UInt = 1
@@ -60,6 +64,21 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.version <- translation.version,
                 Translations.installedVersion <- translation.installedVersion)
             _ = try connection.run(insert)
+        }
+    }
+
+    func update(_ translation: Translation) throws {
+        return try run { connection in
+            let update = Translations.table
+                .where(Translations.id == translation.id)
+                .update(
+                    Translations.name <- translation.displayName,
+                    Translations.translator <- translation.translator,
+                    Translations.translatorForeign <- translation.translatorForeign,
+                    Translations.fileName <- translation.fileName,
+                    Translations.version <- translation.version,
+                    Translations.installedVersion <- translation.installedVersion)
+            _ = try connection.run(update)
         }
     }
 

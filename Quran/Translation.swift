@@ -15,5 +15,5 @@ struct Translation {
     let translatorForeign: String?
     let fileName: String
     let version: Int
-    let installedVersion: Int?
+    var installedVersion: Int?
 }

@@ -1,4 +1,4 @@
-platform :ios, '8.1'
+platform :ios, '9.0'
 use_frameworks!
 swift_version = "3.0"
 

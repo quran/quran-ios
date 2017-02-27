@@ -7,12 +7,12 @@
 //
 
 import PromiseKit
+import UIKit
 
 extension Promise {
-    func catchToAlertView() -> Promise {
-        return self.`catch`(on: .main) { error in
-            let message = (error as? CustomStringConvertible)?.description ?? NSLocalizedString("NetworkError_Unknown", comment: "")
-            UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
+    func catchToAlertView(viewController: UIViewController?) -> Promise {
+        return self.`catch`(on: .main) { [weak viewController] error in
+            viewController?.showErrorAlert(error: error)
         }
     }
 }

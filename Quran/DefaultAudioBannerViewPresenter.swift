@@ -194,8 +194,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func onFailedDownloadingWithError(_ error: Error) {
         Queue.main.async {
-            let message = (error as? CustomStringConvertible)?.description ?? NSLocalizedString("NetworkError_Unknown", comment: "")
-            UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
+            self.delegate?.onErrorOccurred(error: error)
         }
     }
 

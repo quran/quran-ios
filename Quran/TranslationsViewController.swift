@@ -52,7 +52,7 @@ class TranslationsViewController: BaseTableViewController {
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.items = translations
                 self?.tableView.reloadData()
-            }.catchToAlertView().always { [weak self] in
+            }.catchToAlertView(viewController: self).always { [weak self] in
                 self?.refreshControl.endRefreshing()
         }
     }

@@ -375,6 +375,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         let page = pageDataSource.item(at: indexPath)
         return page
     }
+
+    func onErrorOccurred(error: Error) {
+        showErrorAlert(error: error)
+    }
 }
 
 extension QuranViewController: UIPopoverPresentationControllerDelegate {

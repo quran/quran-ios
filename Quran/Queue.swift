@@ -57,3 +57,7 @@ struct Queue {
         }
     }
 }
+
+extension DispatchQueue {
+    static let background = Queue.background.queue
+}

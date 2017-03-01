@@ -26,6 +26,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         static let name = Expression<String>("name")
         static let translator = Expression<String?>("translator")
         static let translatorForeign = Expression<String?>("translator_foreign")
+        static let fileURL = Expression<String>("fileURL")
         static let fileName = Expression<String>("filename")
         static let version = Expression<Int>("version")
         static let installedVersion = Expression<Int?>("installedVersion")
@@ -38,6 +39,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             builder.column(Translations.name)
             builder.column(Translations.translator)
             builder.column(Translations.translatorForeign)
+            builder.column(Translations.fileURL)
             builder.column(Translations.fileName)
             builder.column(Translations.version)
             builder.column(Translations.installedVersion)
@@ -60,6 +62,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.name <- translation.displayName,
                 Translations.translator <- translation.translator,
                 Translations.translatorForeign <- translation.translatorForeign,
+                Translations.fileURL <- translation.fileURL.absoluteString,
                 Translations.fileName <- translation.fileName,
                 Translations.version <- translation.version,
                 Translations.installedVersion <- translation.installedVersion)
@@ -75,6 +78,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                     Translations.name <- translation.displayName,
                     Translations.translator <- translation.translator,
                     Translations.translatorForeign <- translation.translatorForeign,
+                    Translations.fileURL <- translation.fileURL.absoluteString,
                     Translations.fileName <- translation.fileName,
                     Translations.version <- translation.version,
                     Translations.installedVersion <- translation.installedVersion)
@@ -96,11 +100,13 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             let name = row[Translations.name]
             let translator = row[Translations.translator]
             let translatorForeign = row[Translations.translatorForeign]
+            let fileURL = row[Translations.fileURL]
             let fileName = row[Translations.fileName]
             let version = row[Translations.version]
             let installedVersion = row[Translations.installedVersion]
             let translation = Translation(id: id, displayName: name, translator: translator,
-                                          translatorForeign: translatorForeign, fileName: fileName,
+                                          translatorForeign: translatorForeign,
+                                          fileURL: cast(URL(string: fileURL)), fileName: fileName,
                                           version: version, installedVersion: installedVersion)
             translations.append(translation)
         }

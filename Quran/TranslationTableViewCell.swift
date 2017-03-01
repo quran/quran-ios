@@ -9,13 +9,6 @@
 import UIKit
 import DownloadButton
 
-enum DownloadState {
-    case startDownload
-    case pending
-    case downloading(progress: CGFloat)
-    case downloaded
-}
-
 class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
     @IBOutlet weak var downloadButton: PKDownloadButton!
@@ -24,6 +17,14 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
     var onShouldCancelDownload: (() -> Void)?
     var onShouldStartDownload: (() -> Void)?
+
+    var response: DownloadNetworkResponse? {
+        didSet {
+            guard let response = response else {
+                return
+            }
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -86,7 +87,7 @@ extension PKDownloadButton {
     func setDownloadState(_ state: DownloadState) {
         isHidden = false
         switch state {
-        case .startDownload:
+        case .notDownloaded:
             self.state = .startDownload
         case .pending:
             self.state = .pending
@@ -94,7 +95,7 @@ extension PKDownloadButton {
             pendingView.startSpin()
         case .downloading(let progress):
             self.state = .downloading
-            self.stopDownloadButton.progress = progress
+            self.stopDownloadButton.progress = CGFloat(progress)
         case .downloaded:
             self.state = .startDownload
             isHidden = true

@@ -7,3 +7,15 @@
 //
 
 import Foundation
+
+extension Download {
+    var isTranslation: Bool {
+        return destinationPath.hasPrefix(Files.translationsPathComponent)
+    }
+}
+
+extension Download {
+    var isAudio: Bool {
+        return !isTranslation
+    }
+}

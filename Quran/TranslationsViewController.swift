@@ -10,12 +10,13 @@ import UIKit
 
 class TranslationsViewController: BaseTableViewController {
 
-    private let dataSource = TranslationsDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+    private let dataSource: TranslationsDataSource
 
-    private let interactor: AnyInteractor<Void, [Translation]>
+    private let interactor: AnyInteractor<Void, [TranslationFull]>
 
-    init(interactor: AnyInteractor<Void, [Translation]>) {
+    init(interactor: AnyInteractor<Void, [TranslationFull]>, downloader: DownloadManager) {
         self.interactor = interactor
+        dataSource = TranslationsDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
         super.init(nibName: nil, bundle: nil)
     }
 

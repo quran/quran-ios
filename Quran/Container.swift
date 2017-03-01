@@ -49,7 +49,7 @@ class Container {
     }
 
     func createTranslationsViewController() -> UIViewController {
-        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor())
+        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor(), downloader: createDownloadManager())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -234,8 +234,9 @@ class Container {
         return SQLiteActiveTranslationsPersistence()
     }
 
-    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [Translation]> {
+    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
         return TranslationsRetrievalInteractor(networkManager: createNetworkManager(parser: createTranslationsParser()),
-                                               persistence: createActiveTranslationsPersistence()).erasedType()
+                                               persistence: createActiveTranslationsPersistence(),
+                                               downloader: createDownloadManager()).erasedType()
     }
 }

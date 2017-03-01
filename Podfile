@@ -5,7 +5,6 @@ swift_version = "3.0"
 target 'Quran' do
 
     pod 'GenericDataSources'
-    pod 'KVOController-Swift'
     pod 'SQLite.swift', '~> 0.11.0'
     pod 'Zip', '~> 0.6'
     pod 'Fabric'
@@ -17,4 +16,5 @@ target 'Quran' do
     pod 'SwiftyJSON'
     pod 'PromiseKit'
     pod 'DownloadButton'
+    pod 'KVOController'
 end

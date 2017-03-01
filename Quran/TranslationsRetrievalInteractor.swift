@@ -11,14 +11,16 @@ import PromiseKit
 
 class TranslationsRetrievalInteractor: Interactor {
 
-    let networkManager: AnyNetworkManager<[Translation]>
-    let persistence: ActiveTranslationsPersistence
-    public init(networkManager: AnyNetworkManager<[Translation]>, persistence: ActiveTranslationsPersistence) {
+    private let networkManager: AnyNetworkManager<[Translation]>
+    private let persistence: ActiveTranslationsPersistence
+    private let downloader: DownloadManager
+    init(networkManager: AnyNetworkManager<[Translation]>, persistence: ActiveTranslationsPersistence, downloader: DownloadManager) {
         self.networkManager = networkManager
         self.persistence = persistence
+        self.downloader = downloader
     }
 
-    func execute(_ input: Void) -> Promise<[Translation]> {
+    func execute(_ input: Void) -> Promise<[TranslationFull]> {
 
         let local = Queue.translations.queue.promise { [weak self] (Void) -> [Translation] in
             guard let `self` = self else { return [] }
@@ -27,7 +29,7 @@ class TranslationsRetrievalInteractor: Interactor {
         let remote = networkManager.execute(.translations)
 
         return when(fulfilled: local, remote)
-            .then(on: Queue.background.queue) { local, remote -> ([Translation], [Int: Translation]) in
+            .then(on: .background) { local, remote -> ([Translation], [Int: Translation]) in
                 let combined = combine(local: local, remote: remote)
                 let localMap = local.flatGroup { $0.id }
                 return (combined, localMap)
@@ -42,8 +44,30 @@ class TranslationsRetrievalInteractor: Interactor {
                     }
                 }
                 return translations
+            }.then { [weak self] translations -> ([Translation], [DownloadNetworkResponse]) in
+                let batches = self?.downloader.getOnGoingDownloads()
+                let downloads = batches?.flatMap { $0.filter { $0.download.isTranslation } }
+                return (translations, downloads ?? [])
+            }.then(on: .background) { (translations, downloads) -> [TranslationFull] in
+                return createTransltionsFull(translations, downloads: downloads)
         }
     }
+}
+
+private func createTransltionsFull(_ translations: [Translation], downloads: [DownloadNetworkResponse]) -> [TranslationFull] {
+    let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
+
+    let translationsFull = translations.map { translation -> TranslationFull in
+        if translation.possibleFileNames.contains(where: {
+            (try? Files.translationsURL.appendingPathComponent($0).checkResourceIsReachable()) ?? false }) {
+            return TranslationFull(translation: translation, downloaded: true, downloadResponse: nil)
+        } else if let response = downloadsByFile[translation.fileName.stringByDeletingPathExtension] {
+            return TranslationFull(translation: translation, downloaded: false, downloadResponse: response)
+        } else {
+            return TranslationFull(translation: translation, downloaded: false, downloadResponse: nil)
+        }
+    }
+    return translationsFull
 }
 
 private func combine(local: [Translation], remote: [Translation]) -> [Translation] {

@@ -47,7 +47,7 @@ extension DefaultAudioFilesDownloader {
             return response
         } else {
             let batches = downloader.getOnGoingDownloads()
-            let downloads = batches.flatMap { $0 }
+            let downloads = batches.flatMap { $0.filter { $0.download.isAudio } }
             createRequestWithDownloads(downloads)
             return response
         }
@@ -81,7 +81,8 @@ extension DefaultAudioFilesDownloader {
         guard !downloads.isEmpty else { return }
 
         let progress = Progress(totalUnitCount: Int64(downloads.count))
-        downloads.forEach { progress.addChildIOS8Compatible($0.progress, withPendingUnitCount: 1) }
+
+        downloads.forEach { progress.addChild($0.progress, withPendingUnitCount: 1) }
         let response = AudioFilesDownloadResponse(responses: downloads, progress: progress)
         self.response = response
 

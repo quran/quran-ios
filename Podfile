@@ -16,4 +16,5 @@ target 'Quran' do
     pod 'Moya'
     pod 'SwiftyJSON'
     pod 'PromiseKit'
+    pod 'DownloadButton'
 end

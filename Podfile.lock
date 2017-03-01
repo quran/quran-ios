@@ -2,6 +2,7 @@ PODS:
   - Alamofire (4.3.0)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
+  - DownloadButton (0.1.0)
   - Fabric (1.6.11)
   - GenericDataSources (2.2.0)
   - KVOController-Swift (2.0.1)
@@ -34,6 +35,7 @@ PODS:
 
 DEPENDENCIES:
   - Crashlytics
+  - DownloadButton
   - Fabric
   - GenericDataSources
   - KVOController-Swift
@@ -49,6 +51,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
   KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
@@ -62,6 +65,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 8be0836a29dfaac9a3301d16deff3618987b074b
+PODFILE CHECKSUM: 1aec3ecb466cf18356a490d33786b777682b2fa6
 
 COCOAPODS: 1.2.0

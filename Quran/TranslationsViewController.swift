@@ -32,9 +32,13 @@ class TranslationsViewController: BaseTableViewController {
         navigationItem.title = ""
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
 
+        tableView.sectionHeaderHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 70
+
+        tableView.allowsSelection = false
         tableView.register(cell: TranslationTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
-        tableView.allowsSelection = false
 
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)

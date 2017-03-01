@@ -15,7 +15,7 @@ class TranslationsDataSource: BasicDataSource<Translation, TranslationTableViewC
                                     configure cell: TranslationTableViewCell,
                                     with item: Translation,
                                     at indexPath: IndexPath) {
-        cell.textLabel?.text = item.displayName
-        cell.detailTextLabel?.text = item.translatorForeign ?? item.translator
+        cell.set(title: item.displayName, subtitle: (item.translatorForeign ?? item.translator) ?? "")
+        cell.downloadButton.setDownloadState(indexPath.item % 2 == 0 ? .startDownload : .pending)
     }
 }

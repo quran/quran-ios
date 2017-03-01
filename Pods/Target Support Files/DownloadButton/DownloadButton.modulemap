@@ -1,0 +1,6 @@
+framework module DownloadButton {
+  umbrella header "DownloadButton-umbrella.h"
+
+  export *
+  module * { export * }
+}

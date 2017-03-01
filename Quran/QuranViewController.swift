@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import KVOController_Swift
+import KVOController
 
 private let cellReuseId = "cell"
 
@@ -70,7 +70,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         pageDataSource.scrollViewDelegate = pageBehavior
-        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (_, _: ChangeData<Int>) in
+        kvoController.observe(pageBehavior, keyPath: "currentPage", options: .new) { [weak self] (_, _, _) in
             self?.onPageChanged()
         }
 

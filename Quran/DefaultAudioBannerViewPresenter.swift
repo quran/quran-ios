@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import KVOController_Swift
+import KVOController
 
 class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate {
 
@@ -150,16 +150,16 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     var progress: Foundation.Progress? {
         didSet {
             if let oldValue = oldValue {
-                unobserve(oldValue, keyPath: progressKeyPath)
+                kvoController.unobserve(oldValue)
             }
             if let newValue = progress {
-                observe(retainedObservable: newValue,
-                        keyPath: progressKeyPath,
-                        options: [.initial, .new]) { [weak self] (_, change: ChangeData<Double>) in
-                            if let newValue = change.newValue {
-                                Queue.main.async { self?.view?.setDownloading(Float(newValue)) }
-                            }
-                }
+                kvoController.observe(newValue, keyPath: progressKeyPath, options: [.initial, .new], block: { [weak self] (_, _, change) in
+                    if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
+                        Queue.main.async {
+                            self?.view?.setDownloading(Float(newValue))
+                        }
+                    }
+                })
             }
         }
     }

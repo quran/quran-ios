@@ -23,7 +23,9 @@ class TranslationsDataSource: BasicDataSource<TranslationFull, TranslationTableV
                                     at indexPath: IndexPath) {
         cell.set(title: item.translation.displayName, subtitle: (item.translation.translatorForeign ?? item.translation.translator) ?? "")
         cell.downloadButton.setDownloadState(item.downloadState)
-        cell.onShouldStartDownload = { [weak self] in
+        cell.response = item.downloadResponse
+
+        cell.onShouldStartDownload = { [weak self, weak cell] in
             guard let `self` = self else { return }
 
             // download the translation
@@ -35,14 +37,16 @@ class TranslationsDataSource: BasicDataSource<TranslationFull, TranslationTableV
                 return
             }
 
+            cell?.response = response
+
             let newItem = TranslationFull(translation: item.translation, downloaded: false, downloadResponse: response)
             var newItems = self.items
             newItems[indexPath.item] = newItem
             self.items = newItems
         }
 
-        cell.onShouldCancelDownload = {
-
+        cell.onShouldCancelDownload = { [weak cell] in
+            cell?.response?.cancel()
         }
     }
 }

@@ -29,10 +29,18 @@ extension TranslationFull {
         guard let response = downloadResponse else {
             return .notDownloaded
         }
-        if abs(response.progress.fractionCompleted - 0.001) < 0 {
+        return response.progress.downloadState
+    }
+}
+
+extension Progress {
+
+    var downloadState: DownloadState {
+        print(fractionCompleted)
+        if abs(fractionCompleted) < 0.001 {
             return .pending
         } else {
-            return .downloading(progress: Float(response.progress.fractionCompleted))
+            return .downloading(progress: Float(fractionCompleted))
         }
     }
 }

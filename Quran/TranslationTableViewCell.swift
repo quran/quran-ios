@@ -11,6 +11,11 @@ import DownloadButton
 
 class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        response = nil
+    }
+
     @IBOutlet weak var downloadButton: PKDownloadButton!
     @IBOutlet weak var firstLabel: UILabel!
     @IBOutlet weak var secondLabel: UILabel!
@@ -22,6 +27,18 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
         didSet {
             guard let response = response else {
                 return
+            }
+            kvoController.observe(response.progress, keyPath: "fractionCompleted",
+                                  options: [.initial, .new],
+                                  block: { [weak self] (_, progress, change) in
+                if let progress = progress as? Progress {
+                    Queue.main.async {
+                        self?.downloadButton.setDownloadState(progress.downloadState)
+                    }
+                }
+            })
+            response.onCompletion = { [weak self] _ in
+                self?.downloadButton.setDownloadState(.downloaded)
             }
         }
     }

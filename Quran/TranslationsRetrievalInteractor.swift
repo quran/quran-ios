@@ -58,14 +58,23 @@ private func createTransltionsFull(_ translations: [Translation], downloads: [Do
     let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
 
     let translationsFull = translations.map { translation -> TranslationFull in
-        if translation.possibleFileNames.contains(where: {
-            (try? Files.translationsURL.appendingPathComponent($0).checkResourceIsReachable()) ?? false }) {
+        // check if file downloaded already
+        let possibleFiles = translation.possibleFileNames
+        if possibleFiles.contains(where: { fileName in
+            (try? Files.translationsURL.appendingPathComponent(fileName).checkResourceIsReachable()) ?? false }) {
             return TranslationFull(translation: translation, downloaded: true, downloadResponse: nil)
-        } else if let response = downloadsByFile[translation.fileName.stringByDeletingPathExtension] {
-            return TranslationFull(translation: translation, downloaded: false, downloadResponse: response)
-        } else {
-            return TranslationFull(translation: translation, downloaded: false, downloadResponse: nil)
         }
+
+        // downloading...?
+        let responses = possibleFiles.flatMap {
+            downloadsByFile[Files.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
+        }
+        if let response = responses.first {
+            return TranslationFull(translation: translation, downloaded: false, downloadResponse: response)
+        }
+
+        // not downloaded
+        return TranslationFull(translation: translation, downloaded: false, downloadResponse: nil)
     }
     return translationsFull
 }

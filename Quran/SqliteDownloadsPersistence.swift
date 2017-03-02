@@ -23,6 +23,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     private struct Downloads {
         static let table = Table("download")
         static let id = Expression<Int64>("id")
+        static let taskId = Expression<Int>("taskId")
         static let url = Expression<String>("url")
         static let resumePath = Expression<String>("resumePath")
         static let destinationPath = Expression<String>("destinationPath")
@@ -45,6 +46,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         // downloads table
         try connection.run(Downloads.table.create { builder in
             builder.column(Downloads.id, primaryKey: .autoincrement)
+            builder.column(Downloads.taskId)
             builder.column(Downloads.url)
             builder.column(Downloads.resumePath)
             builder.column(Downloads.destinationPath)
@@ -83,7 +85,9 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
             // insert downloads
             for download in batch {
+                let taskId: Int = cast(download.taskId)
                 let insert = Downloads.table.insert(
+                    Downloads.taskId <- taskId,
                     Downloads.url <- download.url.absoluteString,
                     Downloads.resumePath <- download.resumePath,
                     Downloads.destinationPath <- download.destinationPath,
@@ -120,32 +124,30 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     }
 
     private func convert(rowsToDownloads rows: AnySequence<Row>) -> [DownloadBatch] {
-        var downloads: [Download] = []
-        var batches: [DownloadBatch] = []
-        var lastBatchId: Int64?
-        for row in rows {
-            if let download = convert(rowToDownload: row) {
-                if download.batchId == lastBatchId {
-                    downloads.append(download.download)
-                } else {
-                    if !downloads.isEmpty {
-                        batches.append(DownloadBatch(downloads: downloads))
-                        downloads.removeAll()
-                    }
-                }
-                lastBatchId = download.batchId
-            }
+        let downloads = rows.flatMap { row in
+            convert(rowToDownload: row)
         }
+
+        let batches = downloads
+            .group { $0.batchId }
+            .map { DownloadBatch(downloads: $1.map { $0.download }) }
+
         return batches
     }
 
     private func convert(rowToDownload row: Row) -> (download: Download, batchId: Int64)? {
         if let url = URL(string: row[Downloads.url]) {
+            let taskId = row[Downloads.taskId]
             let resumePath = row[Downloads.resumePath]
             let destinationPath = row[Downloads.destinationPath]
             let status = Download.Status(rawValue: row[Downloads.status]) ?? .downloading
             let batchId = row[Downloads.batchId]
-            let download = Download(url: url, resumePath: resumePath, destinationPath: destinationPath, status: status, batchId: batchId)
+            let download = Download(taskId: taskId,
+                                    url: url,
+                                    resumePath: resumePath,
+                                    destinationPath: destinationPath,
+                                    status: status,
+                                    batchId: batchId)
             return (download, batchId)
         }
         return nil

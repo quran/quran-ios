@@ -16,13 +16,15 @@ struct Download {
         case failed
     }
 
+    var taskId: Int?
     let url: URL
     let resumePath: String
     let destinationPath: String
     var status: Status
     var batchId: Int64?
 
-    public init(url: URL, resumePath: String, destinationPath: String, status: Status = .downloading, batchId: Int64? = nil) {
+    public init(taskId: Int? = nil, url: URL, resumePath: String, destinationPath: String, status: Status = .downloading, batchId: Int64? = nil) {
+        self.taskId = taskId
         self.url = url
         self.resumePath = resumePath
         self.destinationPath = destinationPath

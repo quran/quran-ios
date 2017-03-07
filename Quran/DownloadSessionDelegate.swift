@@ -148,7 +148,6 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-
        urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location, firstTime: true)
     }
 
@@ -174,7 +173,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                 try fileManager.copyItem(at: location, to: destinationURL)
 
 
-            } catch let error {
+            } catch {
                 Crash.recordError(error, reason: "Problem with create directory or copying item to the new location '\(destinationURL)'",
                     fatalErrorOnDebug: false)
                 // early exist with error
@@ -183,8 +182,16 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
             }
         } else {
             if firstTime {
+                // move the file to a temprarily location
+                let tempFileURL = FileManager.default.tempFileURL
+                do {
+                    try FileManager.default.copyItem(at: location, to: tempFileURL)
+                } catch {
+                    Crash.recordError(error, reason: "Error copying the file to a temp file location")
+                }
                 populateOnGoingDownloads(from: session, completion: { [weak self] in
-                    self?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location, firstTime: false)
+                    self?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: tempFileURL, firstTime: false)
+                    try? FileManager.default.removeItem(at: tempFileURL)
                 })
             } else {
                 print("Missed saving task", downloadTask.currentRequest?.url as Any)

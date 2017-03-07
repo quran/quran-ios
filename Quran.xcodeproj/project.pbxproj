@@ -23,6 +23,8 @@
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		544629DC1E67636F005B1107 /* TranslationFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DB1E67636F005B1107 /* TranslationFull.swift */; };
 		544629DE1E676703005B1107 /* Download+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DD1E676703005B1107 /* Download+Types.swift */; };
+		544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */; };
+		544629E61E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
 		545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE51A1DCE0D450085D31F /* LastPage.swift */; };
@@ -277,6 +279,8 @@
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		544629DB1E67636F005B1107 /* TranslationFull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationFull.swift; sourceTree = "<group>"; };
 		544629DD1E676703005B1107 /* Download+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Download+Types.swift"; sourceTree = "<group>"; };
+		544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsBasicDataSource.swift; sourceTree = "<group>"; };
+		544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
@@ -555,6 +559,16 @@
 			children = (
 				549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */,
 				544629DB1E67636F005B1107 /* TranslationFull.swift */,
+			);
+			name = Translations;
+			sourceTree = "<group>";
+		};
+		544629E01E6ADFE0005B1107 /* Translations */ = {
+			isa = PBXGroup;
+			children = (
+				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
+				544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */,
+				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
 			);
 			name = Translations;
 			sourceTree = "<group>";
@@ -992,6 +1006,7 @@
 		54B2664D1CCA871E00D3AEF8 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				544629E01E6ADFE0005B1107 /* Translations */,
 				545EE51C1DCE0F830085D31F /* Bookmarks */,
 				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
@@ -999,7 +1014,6 @@
 				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
 				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
 				549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */,
-				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -1634,6 +1648,7 @@
 				549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				549040B51E6334AC00D54625 /* Interactor.swift in Sources */,
 				549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
@@ -1732,6 +1747,7 @@
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
 				549040AD1E619A3300D54625 /* BackendServices.swift in Sources */,
 				549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */,
+				544629E61E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift in Sources */,
 				54B266801CCAAE4900D3AEF8 /* Quran.swift in Sources */,
 				54C0DC1B1CE69BE7009AAD8D /* AudioFilesDownloader.swift in Sources */,
 				54B2669C1CCD208800D3AEF8 /* HighlightingView.swift in Sources */,

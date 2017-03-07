@@ -13,3 +13,6 @@
 
 "FileSystemError_Unknown" = "Oops! Something went wrong. Please try again.";
 "FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+
+
+"translatorLabel: " = "Translator: ";

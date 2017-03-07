@@ -13,7 +13,8 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        response = nil
+        onShouldStartDownload = nil
+        onShouldCancelDownload = nil
     }
 
     @IBOutlet weak var downloadButton: PKDownloadButton!
@@ -22,26 +23,6 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
     var onShouldCancelDownload: (() -> Void)?
     var onShouldStartDownload: (() -> Void)?
-
-    var response: DownloadNetworkResponse? {
-        didSet {
-            guard let response = response else {
-                return
-            }
-            kvoController.observe(response.progress, keyPath: "fractionCompleted",
-                                  options: [.initial, .new],
-                                  block: { [weak self] (_, progress, change) in
-                if let progress = progress as? Progress {
-                    Queue.main.async {
-                        self?.downloadButton.setDownloadState(progress.downloadState)
-                    }
-                }
-            })
-            response.onCompletion = { [weak self] _ in
-                self?.downloadButton.setDownloadState(.downloaded)
-            }
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -82,7 +63,7 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
             return
         }
 
-        let translator = "Translator: "
+        let translator = NSLocalizedString("translatorLabel: ", comment: "")
 
         let lightFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
         let regularFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)

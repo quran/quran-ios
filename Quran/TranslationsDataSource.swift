@@ -9,44 +9,169 @@
 import Foundation
 import GenericDataSources
 
-class TranslationsDataSource: BasicDataSource<TranslationFull, TranslationTableViewCell> {
+class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDelegate {
 
     private let downloader: DownloadManager
-    public init(downloader: DownloadManager, reuseIdentifier: String) {
+
+    private let downloadedDS: TranslationsBasicDataSource
+    private let pendingDS: TranslationsBasicDataSource
+
+    private var downloadingObservers: [Int: DownloadingObserver] = [:]
+
+    public init(downloader: DownloadManager, headerReuseId: String) {
         self.downloader = downloader
-        super.init(reuseIdentifier: reuseIdentifier)
+        downloadedDS = TranslationsBasicDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
+        pendingDS = TranslationsBasicDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
+        super.init(sectionType: .multi)
+
+        let headers = TranslationsHeaderSupplementaryViewCreator(identifier: headerReuseId)
+        headers.setSectionedItems([
+            NSLocalizedString("downloaded_translations", tableName: "Android", comment: ""),
+            NSLocalizedString("available_translations", tableName: "Android", comment: "")
+            ])
+
+        set(headerCreator: headers)
+        add(downloadedDS)
+        add(pendingDS)
+
+        downloadedDS.delegate = self
+        pendingDS.delegate = self
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: TranslationTableViewCell,
-                                    with item: TranslationFull,
-                                    at indexPath: IndexPath) {
-        cell.set(title: item.translation.displayName, subtitle: (item.translation.translatorForeign ?? item.translation.translator) ?? "")
-        cell.downloadButton.setDownloadState(item.downloadState)
-        cell.response = item.downloadResponse
+                                    sizeForSupplementaryViewOfKind kind: String,
+                                    at indexPath: IndexPath) -> CGSize {
+        if dataSource(at: indexPath.section).ds_numberOfItems(inSection: 0) == 0 {
+            return .zero
+        } else {
+            return super.ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: kind, at: indexPath)
+        }
+    }
 
-        cell.onShouldStartDownload = { [weak self, weak cell] in
-            guard let `self` = self else { return }
+    func setItems(items: [TranslationFull]) {
+        downloadingObservers.forEach { $1.stop() }
+        downloadingObservers.removeAll()
 
-            // download the translation
-            let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
-            let download = Download(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
-            let responses = self.downloader.download([download])
+        downloadedDS.items = items.filter { $0.downloaded }.sorted { $0.translation.displayName < $1.translation.displayName }
+        pendingDS.items = items.filter { !$0.downloaded }.sorted { $0.translation.displayName < $1.translation.displayName }
 
-            guard let response = responses.first, self.items.count > indexPath.item else {
-                return
+        for item in pendingDS.items {
+            if item.downloadResponse != nil {
+                downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
             }
+        }
+    }
 
-            cell?.response = response
+    fileprivate func onDownloadProgressUpdated(progress: Float, for translation: TranslationFull) {
+        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+            CLog("Cannot updated progress for translation \(translation.translation.displayName)")
+            return
+        }
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
+        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
+        cell?.downloadButton.setDownloadState(progress.downloadState)
+    }
 
-            let newItem = TranslationFull(translation: item.translation, downloaded: false, downloadResponse: response)
-            var newItems = self.items
-            newItems[indexPath.item] = newItem
-            self.items = newItems
+    fileprivate func onDownloadCompleted(for translation: TranslationFull) {
+        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+            CLog("Cannot complete download for translation \(translation.translation.displayName)")
+            return
+        }
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
+
+        // remove old observer
+        let observer = downloadingObservers.removeValue(forKey: translation.translation.id)
+        observer?.stop()
+
+        // update the cell
+        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
+        cell?.downloadButton.setDownloadState(.downloaded)
+
+        // remove from old location
+        pendingDS.items.remove(at: localIndexPath.item)
+        let newItem = TranslationFull(translation: translation.translation, downloaded: true, downloadResponse: nil)
+
+        // add in new location
+        var downloadedItems = downloadedDS.items
+        downloadedItems.append(newItem)
+        downloadedItems.sort { $0.translation.displayName < $1.translation.displayName }
+        downloadedDS.items = downloadedItems
+
+        // move the cell
+        let newLocalIndexPath: IndexPath = cast(downloadedDS.indexPath(for: newItem))
+        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: downloadedDS)
+        ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
+    }
+
+    func translationsBasicDataSource(_ dataSource: TranslationsBasicDataSource, onShouldStartDownload item: TranslationFull) {
+        // download the translation
+        let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
+        let download = Download(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
+        let responses = self.downloader.download([download])
+
+        guard let response = responses.first else {
+            return
         }
 
-        cell.onShouldCancelDownload = { [weak cell] in
-            cell?.response?.cancel()
+        // update the item to be downloading
+        let newItem = TranslationFull(translation: item.translation, downloaded: false, downloadResponse: response)
+        var newItems = dataSource.items
+        newItems[cast(newItems.index(of: item))] = newItem
+        dataSource.items = newItems
+
+        // observe download progress
+        downloadingObservers[newItem.translation.id] = DownloadingObserver(translation: newItem, dataSource: self)
+    }
+
+    func translationsBasicDataSource(_ dataSource: TranslationsBasicDataSource, onShouldCancelDownload item: TranslationFull) {
+        let observer = downloadingObservers[item.translation.id]
+        observer?.cancel()
+    }
+}
+
+private class DownloadingObserver: NSObject {
+    private weak var dataSource: TranslationsDataSource?
+
+    let translation: TranslationFull
+
+    init(translation: TranslationFull, dataSource: TranslationsDataSource) {
+        self.translation = translation
+        self.dataSource = dataSource
+        super.init()
+        start()
+    }
+
+    deinit {
+        stop()
+    }
+
+    func cancel() {
+        stop()
+        translation.downloadResponse?.cancel()
+    }
+
+    func stop() {
+        translation.downloadResponse?.onCompletion = nil
+        kvoController.unobserveAll()
+    }
+
+    func start() {
+        let response: DownloadNetworkResponse = cast(translation.downloadResponse)
+        kvoController.observe(response.progress, keyPath: "fractionCompleted",
+                              options: [.initial, .new],
+                              block: { [weak self] (_, progress, change) in
+                                if let progress = progress as? Progress, let translation = self?.translation {
+                                    Queue.main.async {
+                                        self?.dataSource?.onDownloadProgressUpdated(progress: Float(progress.fractionCompleted), for: translation)
+                                    }
+                                }
+        })
+        response.onCompletion = { [weak self] _ in
+            if let translation = self?.translation {
+                Queue.main.async {
+                    self?.dataSource?.onDownloadCompleted(for: translation)
+                }
+            }
         }
     }
 }

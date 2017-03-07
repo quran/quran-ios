@@ -13,10 +13,13 @@ class TranslationsViewController: BaseTableViewController {
     private let dataSource: TranslationsDataSource
 
     private let interactor: AnyInteractor<Void, [TranslationFull]>
+    private var activityIndicator: UIActivityIndicatorView? {
+        return navigationItem.rightBarButtonItem?.customView as? UIActivityIndicatorView
+    }
 
     init(interactor: AnyInteractor<Void, [TranslationFull]>, downloader: DownloadManager) {
         self.interactor = interactor
-        dataSource = TranslationsDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
+        dataSource = TranslationsDataSource(downloader: downloader, headerReuseId: "header")
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -33,12 +36,18 @@ class TranslationsViewController: BaseTableViewController {
         navigationItem.title = ""
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
 
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.stopAnimating()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
         tableView.allowsSelection = false
         tableView.register(cell: TranslationTableViewCell.self)
+        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.ds_useDataSource(dataSource)
 
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -48,17 +57,19 @@ class TranslationsViewController: BaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        activityIndicator?.startAnimating()
         refreshData()
     }
 
     func refreshData() {
-        refreshControl.beginRefreshing()
         _ = interactor.execute()
             .then(on: .main) { [weak self] translations -> Void in
-                self?.dataSource.items = translations
+                self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
-            }.catchToAlertView(viewController: self).always { [weak self] in
+            }.catchToAlertView(viewController: self)
+            .always { [weak self] in
                 self?.refreshControl.endRefreshing()
+                self?.activityIndicator?.stopAnimating()
         }
     }
 }

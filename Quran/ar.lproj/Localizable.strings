@@ -12,3 +12,6 @@
 
 "FileSystemError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "FileSystemError_NoDiskSpace" = "لا توجد مساحة كافيه في ذاكرة الهاتف لحفظ التنزيلات.";
+
+
+"translatorLabel: " = "المفسر: ";

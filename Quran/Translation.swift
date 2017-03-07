@@ -10,7 +10,7 @@ import Foundation
 
 private let `extension` = "zip"
 
-struct Translation {
+struct Translation: Equatable {
     let id: Int
     let displayName: String
     let translator: String?
@@ -19,6 +19,10 @@ struct Translation {
     let fileName: String
     let version: Int
     var installedVersion: Int?
+
+    static func==(lhs: Translation, rhs: Translation) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 extension Translation {

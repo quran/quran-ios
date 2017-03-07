@@ -15,10 +15,14 @@ enum DownloadState {
     case downloaded
 }
 
-struct TranslationFull {
+struct TranslationFull: Equatable {
     let translation: Translation
     var downloaded: Bool
     var downloadResponse: DownloadNetworkResponse?
+
+    static func==(lhs: TranslationFull, rhs: TranslationFull) -> Bool {
+        return lhs.translation == rhs.translation
+    }
 }
 
 extension TranslationFull {
@@ -29,18 +33,17 @@ extension TranslationFull {
         guard let response = downloadResponse else {
             return .notDownloaded
         }
-        return response.progress.downloadState
+        return Float(response.progress.fractionCompleted).downloadState
     }
 }
 
-extension Progress {
+extension Float {
 
     var downloadState: DownloadState {
-        print(fractionCompleted)
-        if abs(fractionCompleted) < 0.001 {
+        if abs(self) < 0.001 {
             return .pending
         } else {
-            return .downloading(progress: Float(fractionCompleted))
+            return .downloading(progress: self)
         }
     }
 }

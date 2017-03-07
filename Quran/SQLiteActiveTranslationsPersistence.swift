@@ -17,7 +17,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
 
     let version: UInt = 1
     var filePath: String {
-        return Files.databasesPath + "/translations.db"
+        return Files.databasesPath.stringByAppendingPath("translations.db")
     }
 
     private struct Translations {

@@ -54,6 +54,56 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         }
     }
 
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let ds = dataSource(at: indexPath.section)
+        return ds === downloadedDS
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt globalIndexPath: IndexPath) {
+        guard editingStyle == .delete else {
+            return
+        }
+        let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS)
+        let item = downloadedDS.item(at: localIndexPath)
+
+        // delete from disk
+        item.translation.possibleFileNames.forEach { fileName in
+            let url = Files.translationsURL.appendingPathComponent(fileName)
+            try? FileManager.default.removeItem(at: url)
+        }
+
+        let newGlobalIndexPath = move(item: item,
+                                      atLocalPath: localIndexPath,
+                                      newItem: TranslationFull(translation: item.translation, downloaded: false, downloadResponse: nil),
+                                      from: downloadedDS,
+                                      to: pendingDS)
+        ds_reusableViewDelegate?.ds_performBatchUpdates({
+            self.ds_reusableViewDelegate?.ds_deleteItems(at: [globalIndexPath], with: .left)
+            self.ds_reusableViewDelegate?.ds_insertItems(at: [newGlobalIndexPath], with: .right)
+        }, completion: nil)
+    }
+
+    private func move(item: TranslationFull,
+                      atLocalPath localIndexPath: IndexPath,
+                      newItem: TranslationFull,
+                      from: TranslationsBasicDataSource,
+                      to: TranslationsBasicDataSource) -> IndexPath {
+
+        // remove from old location
+        from.items.remove(at: localIndexPath.item)
+
+        // add in new location
+        var list = to.items
+        list.append(newItem)
+        list.sort { $0.translation.displayName < $1.translation.displayName }
+        to.items = list
+
+        // move the cell
+        let newLocalIndexPath: IndexPath = cast(to.indexPath(for: newItem))
+        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to)
+        return newGlobalIndexPath
+    }
+
     func setItems(items: [TranslationFull]) {
         downloadingObservers.forEach { $1.stop() }
         downloadingObservers.removeAll()
@@ -111,19 +161,11 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.setDownloadState(.downloaded)
 
-        // remove from old location
-        pendingDS.items.remove(at: localIndexPath.item)
-        let newItem = TranslationFull(translation: translation.translation, downloaded: true, downloadResponse: nil)
-
-        // add in new location
-        var downloadedItems = downloadedDS.items
-        downloadedItems.append(newItem)
-        downloadedItems.sort { $0.translation.displayName < $1.translation.displayName }
-        downloadedDS.items = downloadedItems
-
-        // move the cell
-        let newLocalIndexPath: IndexPath = cast(downloadedDS.indexPath(for: newItem))
-        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: downloadedDS)
+        let newGlobalIndexPath = move(item: translation,
+                                      atLocalPath: localIndexPath,
+                                      newItem: TranslationFull(translation: translation.translation, downloaded: true, downloadResponse: nil),
+                                      from: pendingDS,
+                                      to: downloadedDS)
         ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
     }
 

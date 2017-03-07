@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TranslationsViewController: BaseTableViewController {
+class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
 
     private let dataSource: TranslationsDataSource
 
@@ -21,6 +21,7 @@ class TranslationsViewController: BaseTableViewController {
         self.interactor = interactor
         dataSource = TranslationsDataSource(downloader: downloader, headerReuseId: "header")
         super.init(nibName: nil, bundle: nil)
+        dataSource.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -71,5 +72,9 @@ class TranslationsViewController: BaseTableViewController {
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator?.stopAnimating()
         }
+    }
+
+    func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error) {
+        showErrorAlert(error: error)
     }
 }

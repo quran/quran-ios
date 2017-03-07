@@ -9,7 +9,13 @@
 import Foundation
 import GenericDataSources
 
+protocol TranslationsDataSourceDelegate: class {
+    func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error)
+}
+
 class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDelegate {
+
+    weak var delegate: TranslationsDataSourceDelegate?
 
     private let downloader: DownloadManager
 
@@ -70,6 +76,24 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.setDownloadState(progress.downloadState)
+    }
+
+    fileprivate func onDownloadCompleted(withError error: Error, for translation: TranslationFull) {
+        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+            CLog("Cannot updated progress for translation \(translation.translation.displayName)")
+            return
+        }
+
+        delegate?.translationsDataSource(self, errorOccurred: error)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
+        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
+        cell?.downloadButton.setDownloadState(.notDownloaded)
+
+        // update the item to be not downloading
+        let newItem = TranslationFull(translation: translation.translation, downloaded: false, downloadResponse: nil)
+        var newItems = pendingDS.items
+        newItems[localIndexPath.item] = newItem
+        pendingDS.items = newItems
     }
 
     fileprivate func onDownloadCompleted(for translation: TranslationFull) {
@@ -166,10 +190,16 @@ private class DownloadingObserver: NSObject {
                                     }
                                 }
         })
-        response.onCompletion = { [weak self] _ in
+        response.onCompletion = { [weak self] result in
             if let translation = self?.translation {
                 Queue.main.async {
-                    self?.dataSource?.onDownloadCompleted(for: translation)
+                    switch result {
+                    case .success:
+                        self?.dataSource?.onDownloadCompleted(for: translation)
+                    case .failure(let error):
+                        self?.dataSource?.onDownloadCompleted(withError: error, for: translation)
+                    }
+
                 }
             }
         }

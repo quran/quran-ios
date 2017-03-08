@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Moya
+import SwiftyJSON
 
 class Container {
 
@@ -29,8 +31,13 @@ class Container {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
+                                      createTranslationsNavigationController(),
                                       createBookmarksController()]
         return controller
+    }
+
+    func createTranslationsNavigationController() -> UIViewController {
+        return TranslationsNavigationController(rootViewController: createTranslationsViewController())
     }
 
     func createSurasNavigationController() -> UIViewController {
@@ -39,6 +46,10 @@ class Container {
 
     func createJuzsNavigationController() -> UIViewController {
         return JuzsNavigationController(rootViewController: createJuzsViewController())
+    }
+
+    func createTranslationsViewController() -> UIViewController {
+        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor(), downloader: createDownloadManager())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -205,5 +216,27 @@ class Container {
 
     func createDownloadsPersistence() -> DownloadsPersistence {
         return SqliteDownloadsPersistence()
+    }
+
+    func createMoyaProvider() -> MoyaProvider<BackendServices> {
+        return MoyaProvider()
+    }
+
+    func createNetworkManager<To>(parser: AnyParser<JSON, To>) -> AnyNetworkManager<To> {
+        return AnyNetworkManager(MoyaNetworkManager(provider: createMoyaProvider(), parser: parser))
+    }
+
+    func createTranslationsParser() -> AnyParser<JSON, [Translation]> {
+        return AnyParser(TranslationsParser())
+    }
+
+    func createActiveTranslationsPersistence() -> ActiveTranslationsPersistence {
+        return SQLiteActiveTranslationsPersistence()
+    }
+
+    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+        return TranslationsRetrievalInteractor(networkManager: createNetworkManager(parser: createTranslationsParser()),
+                                               persistence: createActiveTranslationsPersistence(),
+                                               downloader: createDownloadManager()).erasedType()
     }
 }

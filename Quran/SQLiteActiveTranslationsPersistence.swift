@@ -9,11 +9,15 @@
 import Foundation
 import SQLite
 
+extension Queue {
+    static let translations = Queue(queue: DispatchQueue(label: "com.quran.translations"))
+}
+
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
-        return FileManager.default.documentsPath + "/translations.db"
+        return Files.databasesPath.stringByAppendingPath("translations.db")
     }
 
     private struct Translations {
@@ -22,9 +26,10 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         static let name = Expression<String>("name")
         static let translator = Expression<String?>("translator")
         static let translatorForeign = Expression<String?>("translator_foreign")
+        static let fileURL = Expression<String>("fileURL")
         static let fileName = Expression<String>("filename")
         static let version = Expression<Int>("version")
-        static let needsUpgrade = Expression<Bool>("needsUpgrade")
+        static let installedVersion = Expression<Int?>("installedVersion")
     }
 
     func onCreate(connection: Connection) throws {
@@ -34,13 +39,14 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             builder.column(Translations.name)
             builder.column(Translations.translator)
             builder.column(Translations.translatorForeign)
+            builder.column(Translations.fileURL)
             builder.column(Translations.fileName)
             builder.column(Translations.version)
-            builder.column(Translations.needsUpgrade)
+            builder.column(Translations.installedVersion)
         })
     }
 
-    func retrieveAll() throws -> [TranslationInfo] {
+    func retrieveAll() throws -> [Translation] {
         return try run { connection in
             let query = Translations.table.order(Translations.name.asc)
             let rows = try connection.prepare(query)
@@ -49,40 +55,59 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func insert(_ translation: TranslationInfo) throws {
+    func insert(_ translation: Translation) throws {
         return try run { connection in
             let insert = Translations.table.insert(
                 Translations.id <- translation.id,
                 Translations.name <- translation.displayName,
                 Translations.translator <- translation.translator,
                 Translations.translatorForeign <- translation.translatorForeign,
+                Translations.fileURL <- translation.fileURL.absoluteString,
                 Translations.fileName <- translation.fileName,
                 Translations.version <- translation.version,
-                Translations.needsUpgrade <- translation.needsUpgrade)
+                Translations.installedVersion <- translation.installedVersion)
             _ = try connection.run(insert)
         }
     }
 
-    func remove(_ translation: TranslationInfo) throws {
+    func update(_ translation: Translation) throws {
+        return try run { connection in
+            let update = Translations.table
+                .where(Translations.id == translation.id)
+                .update(
+                    Translations.name <- translation.displayName,
+                    Translations.translator <- translation.translator,
+                    Translations.translatorForeign <- translation.translatorForeign,
+                    Translations.fileURL <- translation.fileURL.absoluteString,
+                    Translations.fileName <- translation.fileName,
+                    Translations.version <- translation.version,
+                    Translations.installedVersion <- translation.installedVersion)
+            _ = try connection.run(update)
+        }
+    }
+
+    func remove(_ translation: Translation) throws {
         return try run { connection in
             let filter = Translations.table.filter(Translations.id == translation.id)
             _ = try connection.run(filter.delete())
         }
     }
 
-    private func convert(rowsToTranslations rows: AnySequence<Row>) -> [TranslationInfo] {
-        var translations: [TranslationInfo] = []
+    private func convert(rowsToTranslations rows: AnySequence<Row>) -> [Translation] {
+        var translations: [Translation] = []
         for row in rows {
             let id = row[Translations.id]
             let name = row[Translations.name]
             let translator = row[Translations.translator]
             let translatorForeign = row[Translations.translatorForeign]
+            let fileURL = row[Translations.fileURL]
             let fileName = row[Translations.fileName]
             let version = row[Translations.version]
-            let needsUpgrade = row[Translations.needsUpgrade]
-            let translation = TranslationInfo(id: id, displayName: name, translator: translator,
-                                              translatorForeign: translatorForeign, fileName: fileName,
-                                              version: version, needsUpgrade: needsUpgrade)
+            let installedVersion = row[Translations.installedVersion]
+            let translation = Translation(id: id, displayName: name, translator: translator,
+                                          translatorForeign: translatorForeign,
+                                          fileURL: cast(URL(string: fileURL)), fileName: fileName,
+                                          version: version, installedVersion: installedVersion)
             translations.append(translation)
         }
         return translations

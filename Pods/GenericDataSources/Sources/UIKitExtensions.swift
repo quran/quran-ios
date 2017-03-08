@@ -23,10 +23,10 @@ extension UITableViewScrollPosition {
 }
 
 extension UITableView {
-    
+
     /**
      Use this method to set up a table view with a data source.
-     
+
      - parameter dataSource: The data source to set for the table view.
      */
     open func ds_useDataSource(_ dataSource: AbstractDataSource) {
@@ -37,10 +37,10 @@ extension UITableView {
 }
 
 extension UICollectionView {
-    
+
     /**
      Use this method to set up a collection view with a data source.
-     
+
      - parameter dataSource: The data source to set for the table view.
      */
     open func ds_useDataSource(_ dataSource: AbstractDataSource) {

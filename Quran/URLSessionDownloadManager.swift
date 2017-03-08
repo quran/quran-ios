@@ -27,12 +27,11 @@ class URLSessionDownloadManager: DownloadManager {
     init(configuration: URLSessionConfiguration, persistence: DownloadsPersistence) {
         delegate = DownloadSessionDelegate(persistence: persistence)
         session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+        populateOnGoingDownloads()
     }
 
     func populateOnGoingDownloads() {
-        session.getTasksWithCompletionHandler { [weak self] (_, _, downloadTaks) in
-            self?.delegate.populateOnGoingDownloads(onGoingDownloadTasks: downloadTaks)
-        }
+        delegate.populateOnGoingDownloads(from: session)
     }
 
     func getOnGoingDownloads() -> [[DownloadNetworkResponse]] {
@@ -43,7 +42,7 @@ class URLSessionDownloadManager: DownloadManager {
 
         var responses = [DownloadNetworkResponse]()
         var tasks: [URLSessionDownloadTask] = []
-        for download in requests {
+        for var download in requests {
             let request = URLRequest(url: download.url)
             let task: URLSessionDownloadTask
             let resumeURL = FileManager.default.documentsURL.appendingPathComponent(download.resumePath)
@@ -53,6 +52,7 @@ class URLSessionDownloadManager: DownloadManager {
                 task = session.downloadTask(with: request)
             }
             tasks.append(task)
+            download.taskId = task.taskIdentifier
 
             let progress = Foundation.Progress(totalUnitCount: 1)
             let response = DownloadNetworkResponse(task: task, download: download, progress: progress)

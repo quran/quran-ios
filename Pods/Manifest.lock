@@ -1,40 +1,70 @@
 PODS:
-  - Crashlytics (3.8.3):
+  - Alamofire (4.3.0)
+  - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
-  - Fabric (1.6.10)
-  - GenericDataSources (2.1.0)
-  - KVOController-Swift (2.0.1)
+  - DownloadButton (0.1.0)
+  - Fabric (1.6.11)
+  - GenericDataSources (2.2.0)
+  - KVOController (1.2.0)
   - MenuItemKit (2.0)
-  - RxCocoa (3.0.0):
-    - RxSwift (~> 3.0)
-  - RxSwift (3.0.0)
-  - SQLite.swift (0.11.0):
-    - SQLite.swift/standard (= 0.11.0)
-  - SQLite.swift/standard (0.11.0)
+  - Moya (8.0.2):
+    - Moya/Core (= 8.0.2)
+  - Moya/Core (8.0.2):
+    - Alamofire (~> 4.1)
+    - Result (~> 3.0)
+  - PromiseKit (4.1.7):
+    - PromiseKit/Foundation (= 4.1.7)
+    - PromiseKit/QuartzCore (= 4.1.7)
+    - PromiseKit/UIKit (= 4.1.7)
+  - PromiseKit/CorePromise (4.1.7)
+  - PromiseKit/Foundation (4.1.7):
+    - PromiseKit/CorePromise
+  - PromiseKit/QuartzCore (4.1.7):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (4.1.7):
+    - PromiseKit/CorePromise
+  - Result (3.1.0)
+  - RxCocoa (3.2.0):
+    - RxSwift (~> 3.1)
+  - RxSwift (3.2.0)
+  - SQLite.swift (0.11.2):
+    - SQLite.swift/standard (= 0.11.2)
+  - SQLite.swift/standard (0.11.2)
+  - SwiftyJSON (3.1.4)
   - Zip (0.6.0)
 
 DEPENDENCIES:
   - Crashlytics
+  - DownloadButton
   - Fabric
   - GenericDataSources
-  - KVOController-Swift
+  - KVOController
   - MenuItemKit
+  - Moya
+  - PromiseKit
   - RxCocoa
   - RxSwift
   - SQLite.swift (~> 0.11.0)
+  - SwiftyJSON
   - Zip (~> 0.6)
 
 SPEC CHECKSUMS:
-  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
-  Fabric: c73f371ee543e3f0b80608f2674750e4910d1669
-  GenericDataSources: d8c24a0b00fa0f293d34a6d5367765302da6cdaa
-  KVOController-Swift: a99526bae597d459c5e4eb211552b41dc4aa5eee
+  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
+  KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
-  RxCocoa: 0a2f3ae381cf16f4021a4cee7a4420f83058a965
-  RxSwift: a930cd662f5b4a7ca9dc3518585dba91dadf497c
-  SQLite.swift: 9a26273607d3077a2e5a8d33486e9989f8404c7d
+  Moya: 47f61da5b634aa71f676431b64ee0f81e976296d
+  PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
+  Result: 4e3ed5995ed94d0cd6a09be9a431fce3f3624bbf
+  RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
+  RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
+  SQLite.swift: 670c3e9e0a806bbfd56a3de5d530768dc0e6fe7c
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 681fc88d4f961989e2702ec2ac810075269a4dd2
+PODFILE CHECKSUM: 693d9737b7cabdc1cde8be93560f1573937916b1
 
-COCOAPODS: 1.2.0.beta.3
+COCOAPODS: 1.2.0

@@ -23,6 +23,13 @@ extension Reactive where Base: UIBarButtonItem {
             UIElement.isEnabled = value
         }
     }
+    
+    /// Bindable sink for `title` property.
+    public var title: UIBindingObserver<Base, String> {
+        return UIBindingObserver(UIElement: self.base) { UIElement, value in
+            UIElement.title = value
+        }
+    }
 
     /// Reactive wrapper for target action pattern on `self`.
     public var tap: ControlEvent<Void> {
@@ -47,7 +54,7 @@ extension Reactive where Base: UIBarButtonItem {
 
 
 @objc
-class BarButtonItemTarget: RxTarget {
+final class BarButtonItemTarget: RxTarget {
     typealias Callback = () -> Void
     
     weak var barButtonItem: UIBarButtonItem?

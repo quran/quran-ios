@@ -12,16 +12,16 @@ import Foundation
  A basic data source class that configures the cells with a closure.
  */
 open class BasicBlockDataSource<ItemType, CellType: ReusableCell> : BasicDataSource <ItemType, CellType> {
-    
+
     /// The configure closure type.
     public typealias ConfigureBlock = (ItemType, CellType, IndexPath) -> Void
 
     /// The configure block instance.
-    fileprivate let configureBlock: ConfigureBlock
-    
+    private let configureBlock: ConfigureBlock
+
     /**
      Creates new instance of the basic block data source.
-     
+
      - parameter reuseIdentifier: The reuse identifier for dequeuing the cells.
      - parameter configureBlock:  The configuration block for the cell.
      */
@@ -32,7 +32,7 @@ open class BasicBlockDataSource<ItemType, CellType: ReusableCell> : BasicDataSou
 
     /**
      Configure the cell. It calls the configure block to configure the cell.
-     
+
      - parameter collectionView: The collection view that will show the cell.
      - parameter cell:           A general collection view object.
      - parameter item:           The item that is used in the configure operation.

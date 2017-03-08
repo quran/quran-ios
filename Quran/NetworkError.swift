@@ -24,6 +24,8 @@ public enum NetworkError: Error, CustomStringConvertible {
     /// Cannot reach the server.
     case serverNotReachable
 
+    case parsing(String)
+
     internal init(error: Error) {
         if let error = error as? URLError {
             switch error.code {
@@ -58,6 +60,8 @@ public enum NetworkError: Error, CustomStringConvertible {
             text = NSLocalizedString("NetworkError_ServerNotReachable", comment: "Error description")
         case .connectionLost:
             text = NSLocalizedString("NetworkError_ConnectionLost", comment: "Error description")
+        case .parsing:
+            text = NSLocalizedString("NetworkError_Parsing", comment: "When a parsing error occurs")
         }
         return text
     }

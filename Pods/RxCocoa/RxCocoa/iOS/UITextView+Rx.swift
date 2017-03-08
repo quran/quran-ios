@@ -8,7 +8,6 @@
 
 #if os(iOS) || os(tvOS)
 
-import Foundation
 import UIKit
 #if !RX_NO_MODULE
 import RxSwift
@@ -27,8 +26,13 @@ extension UITextView {
 }
 
 extension Reactive where Base: UITextView {
-    /// Reactive wrapper for `text` property.
+    /// Reactive wrapper for `text` property
     public var text: ControlProperty<String?> {
+        return value
+    }
+    
+    /// Reactive wrapper for `text` property.
+    public var value: ControlProperty<String?> {
         let source: Observable<String?> = Observable.deferred { [weak textView = self.base] in
             let text = textView?.text
             

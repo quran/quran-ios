@@ -14,12 +14,17 @@ struct Files {
     static let downloadResumeDataExtension = "resume"
     static let databaseRemoteFileExtension = "zip"
     static let databaseLocalFileExtension = "db"
+    static let databasesPathComponent = "databases"
+    static let translationsPathComponent = "translations"
 
     static let quarterPrefixArray = fileURL("quarter_prefix_array", withExtension: "plist")
     static let readers = fileURL("readers", withExtension: "plist")
 
     static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
     static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
+
+    static let databasesPath: String = FileManager.default.documentsPath.stringByAppendingPath(databasesPathComponent)
+    static let translationsURL = FileManager.default.documentsURL.appendingPathComponent(translationsPathComponent)
 }
 
 private func fileURL(_ fileName: String, withExtension `extension`: String) -> URL {
@@ -45,6 +50,12 @@ extension Qari {
 extension URL {
     func resumeURL() -> URL {
         return appendingPathExtension(Files.downloadResumeDataExtension)
+    }
+}
+
+extension String {
+    var resumePath: String {
+        return stringByAppendingExtension(Files.downloadResumeDataExtension)
     }
 }
 

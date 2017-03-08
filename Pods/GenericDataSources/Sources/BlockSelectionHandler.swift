@@ -71,8 +71,8 @@ open class BlockSelectionHandler<ItemType, CellType: ReusableCell> : DataSourceS
         at indexPath: IndexPath) {
         configureBlock?(dataSource, collectionView, cell, item, indexPath)
     }
-    
-    // MARK:- Highlighting
+
+    // MARK: - Highlighting
 
     /**
      Called to see if the cell can be highlighted.
@@ -117,8 +117,8 @@ open class BlockSelectionHandler<ItemType, CellType: ReusableCell> : DataSourceS
         didUnhighlightItemAt indexPath: IndexPath) {
         didUnhighlightBlock?(dataSource, collectionView, indexPath)
     }
-    
-    // MARK:- Selecting
+
+    // MARK: - Selecting
 
     /**
      Whether or not to select a cell.
@@ -149,8 +149,8 @@ open class BlockSelectionHandler<ItemType, CellType: ReusableCell> : DataSourceS
         didSelectItemAt indexPath: IndexPath) {
         didSelectBlock?(dataSource, collectionView, indexPath)
     }
-    
-    // MARK:- Deselecting
+
+    // MARK: - Deselecting
 
     /**
      Should the cell be delselected or not.

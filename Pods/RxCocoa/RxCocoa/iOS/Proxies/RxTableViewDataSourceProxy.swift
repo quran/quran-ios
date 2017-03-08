@@ -8,7 +8,6 @@
 
 #if os(iOS) || os(tvOS)
 
-import Foundation
 import UIKit
 #if !RX_NO_MODULE
 import RxSwift
@@ -16,7 +15,7 @@ import RxSwift
 
 let tableViewDataSourceNotSet = TableViewDataSourceNotSet()
 
-class TableViewDataSourceNotSet
+final class TableViewDataSourceNotSet
     : NSObject
     , UITableViewDataSource {
 
@@ -43,11 +42,11 @@ public class RxTableViewDataSourceProxy
     private var _commitForRowAtSequenceSentMessage: CachedCommitForRowAt? = nil
     private var _commitForRowAtSequenceMethodInvoked: CachedCommitForRowAt? = nil
 
-    fileprivate class Counter {
+    fileprivate final class Counter {
         var hasObservers: Bool = false
     }
     
-    fileprivate class CachedCommitForRowAt {
+    fileprivate final class CachedCommitForRowAt {
         let sequence: Observable<[Any]>
         let counter: Counter
 
@@ -83,7 +82,7 @@ public class RxTableViewDataSourceProxy
     ///
     /// - parameter parentObject: Parent object for delegate proxy.
     public required init(parentObject: AnyObject) {
-        self.tableView = (parentObject as! UITableView)
+        self.tableView = castOrFatalError(parentObject)
         super.init(parentObject: parentObject)
     }
 
@@ -103,9 +102,8 @@ public class RxTableViewDataSourceProxy
 
     /// For more information take a look at `DelegateProxyType`.
     public override class func createProxyForObject(_ object: AnyObject) -> AnyObject {
-        let tableView = (object as! UITableView)
-
-        return castOrFatalError(tableView.createRxDataSourceProxy())
+        let tableView: UITableView = castOrFatalError(object)
+        return tableView.createRxDataSourceProxy()
     }
 
     /// For more information take a look at `DelegateProxyType`.
@@ -130,6 +128,7 @@ public class RxTableViewDataSourceProxy
         let requiredMethodsDataSource: UITableViewDataSource? = castOptionalOrFatalError(forwardToDelegate)
         _requiredMethodsDataSource = requiredMethodsDataSource ?? tableViewDataSourceNotSet
         super.setForwardToDelegate(forwardToDelegate, retainDelegate: retainDelegate)
+        refreshTableViewDataSource()
     }
 
     override open func methodInvoked(_ selector: Selector) -> Observable<[Any]> {
@@ -176,7 +175,9 @@ public class RxTableViewDataSourceProxy
     private func refreshTableViewDataSource() {
         if self.tableView?.dataSource === self {
             self.tableView?.dataSource = nil
-            self.tableView?.dataSource = self
+            if _requiredMethodsDataSource != nil && _requiredMethodsDataSource !== tableViewDataSourceNotSet {
+                self.tableView?.dataSource = self
+            }
         }
     }
 

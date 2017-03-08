@@ -1,6 +1,0 @@
-framework module KVOController_Swift {
-  umbrella header "KVOController-Swift-umbrella.h"
-
-  export *
-  module * { export * }
-}

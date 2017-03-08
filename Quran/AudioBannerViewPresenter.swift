@@ -11,6 +11,7 @@ protocol AudioBannerViewPresenterDelegate: class {
     func highlightAyah(_ ayah: AyahNumber)
     func removeHighlighting()
     func currentPage() -> QuranPage?
+    func onErrorOccurred(error: Error)
 }
 
 protocol AudioBannerViewPresenter: AudioBannerViewDelegate {

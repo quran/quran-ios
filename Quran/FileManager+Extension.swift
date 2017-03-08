@@ -17,4 +17,10 @@ extension FileManager {
     var documentsURL: URL {
         return urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
+
+    var tempFileURL: URL {
+        let fileName = NSUUID().uuidString
+        let temp = URL.init(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+        return temp
+    }
 }

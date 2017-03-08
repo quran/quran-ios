@@ -77,8 +77,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
     }
 
-    @objc (collectionView:willDisplayCell:forItemAtIndexPath:)
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
         // Update the highlighting since it's something that could change
         // between the cell is configured and the cell is visible.
         (cell as? QuranPageCollectionViewCell)?.highlightAyat(highlightedAyat)

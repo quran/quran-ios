@@ -8,13 +8,17 @@
 
 import Foundation
 import AVFoundation
-import KVOController_Swift
+import KVOController
 import MediaPlayer
 
 struct PlayerItemInfo {
     let title: String
     let artist: String
     let artwork: MPMediaItemArtwork?
+}
+
+private class _Observer: NSObject {
+
 }
 
 class QueuePlayer: NSObject {
@@ -38,15 +42,15 @@ class QueuePlayer: NSObject {
         }
     }
 
-    fileprivate var durationObserver: Controller<ClosureObserverWay<AVPlayerItem, CMTime>>? {
+    fileprivate var durationObserver: _Observer? {
         didSet {
-            oldValue?.unobserve()
+            oldValue?.kvoController.unobserveAll()
         }
     }
 
-    fileprivate var rateObserver: Controller<ClosureObserverWay<AVQueuePlayer, Float>>? {
+    fileprivate var rateObserver: _Observer? {
         didSet {
-            oldValue?.unobserve()
+            oldValue?.kvoController.unobserveAll()
         }
     }
 
@@ -121,10 +125,14 @@ class QueuePlayer: NSObject {
         playingItemsInfo = info
         self.playingItemBoundaries = boundaries
 
-        rateObserver = observe(retainedObservable: player, keyPath: "rate", options: [.new]) { [weak self] (_, change: ChangeData<Float>) in
+
+        rateObserver = _Observer()
+        rateObserver?.kvoController.observe(player, keyPath: "rate", options: [.initial, .new], block: { [weak self] (_, _, change) in
             self?.updatePlayNowInfo()
-            self?.onPlaybackRateChanged?(change.newValue != 0)
-        }
+            if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Int {
+                self?.onPlaybackRateChanged?(newValue != 0)
+            }
+        })
 
         // enqueue new items
         player.removeAllItems()
@@ -251,24 +259,23 @@ class QueuePlayer: NSObject {
     }
 
     fileprivate func addCurrentItemObserver() {
-        observe(retainedObservable: player, keyPath: "currentItem", options: [.new]) { [weak self] (_, change) in
-            self?._currentItemChanged(change.newValue)
-        }
+        kvoController.observe(player, keyPath: "currentItem", options: .new, block: { [weak self] (_: Any, _: Any, change: [String: Any]) in
+            self?._currentItemChanged(change[NSKeyValueChangeKey.newKey.rawValue] as? AVPlayerItem)
+        })
     }
 
     fileprivate func _currentItemChanged(_ newValue: AVPlayerItem?) {
         guard let newValue = newValue else { return }
 
         NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(onCurrentItemReachedEnd),
-                                                         name: .AVPlayerItemDidPlayToEndTime,
-                                                         object: newValue)
+                                               selector: #selector(onCurrentItemReachedEnd),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: newValue)
 
-        durationObserver = observe(retainedObservable: newValue,
-                                   keyPath: "duration",
-                                   options: [.initial, .new]) { [weak self] (_, _) in
-                                    self?.updatePlayNowInfo()
-        }
+        durationObserver = _Observer()
+        durationObserver?.kvoController.observe(newValue, keyPath: "duration", options: [.initial, .new], block: { [weak self] (_, _, _) in
+            self?.updatePlayNowInfo()
+        })
 
         startBoundaryObserver(newValue)
         notifyPlayerItemChangedTo(newValue)
@@ -334,7 +341,7 @@ class QueuePlayer: NSObject {
 
     fileprivate func removeCurrentItemObserver() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        unobserve(self.player, keyPath: "currentItem")
+        kvoController.unobserve(self.player, keyPath: "currentItem")
     }
 
     fileprivate func removeInterruptionNotification() {

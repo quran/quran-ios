@@ -15,6 +15,10 @@ class BaseTableViewController: UIViewController {
 
     var clearsSelectionOnViewWillAppear: Bool = true
 
+    lazy var refreshControl: UIRefreshControl = {
+        return UIRefreshControl()
+    }()
+
     override func loadView() {
         super.loadView()
 

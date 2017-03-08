@@ -19,7 +19,21 @@ class AudioFilesDownloadResponse: Response {
         self.progress = progress
     }
 
-    var onCompletion: ((Result<()>) -> Void)?
+    var result: Result<()>? {
+        didSet {
+            if let result = result {
+                onCompletion?(result)
+            }
+        }
+    }
+
+    var onCompletion: ((Result<()>) -> Void)? {
+        didSet {
+            if let result = result {
+                onCompletion?(result)
+            }
+        }
+    }
 
     func resume() {
         responses.forEach { $0.resume() }

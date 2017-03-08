@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import KVOController_Swift
+import KVOController
 
 private let cellReuseId = "cell"
 
@@ -56,7 +56,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             bookmarkPersistence: bookmarksPersistence)
 
         backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        translationButton = UIBarButtonItem(image: UIImage(named: "translation"), style: .plain, target: nil, action: nil)
+        translationButton = UIBarButtonItem(image: UIImage(named: "globe-25"), style: .plain, target: nil, action: nil)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -70,7 +70,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         pageDataSource.scrollViewDelegate = pageBehavior
-        observe(retainedObservable: pageBehavior, keyPath: "currentPage", options: [.new]) { [weak self] (_, _: ChangeData<Int>) in
+        kvoController.observe(pageBehavior, keyPath: "currentPage", options: .new) { [weak self] (_, _, _) in
             self?.onPageChanged()
         }
 
@@ -374,6 +374,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
         let page = pageDataSource.item(at: indexPath)
         return page
+    }
+
+    func onErrorOccurred(error: Error) {
+        showErrorAlert(error: error)
     }
 }
 

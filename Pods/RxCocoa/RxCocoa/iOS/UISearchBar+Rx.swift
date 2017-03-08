@@ -8,7 +8,6 @@
 
 #if os(iOS) || os(tvOS)
 
-import Foundation
 #if !RX_NO_MODULE
 import RxSwift
 #endif
@@ -35,9 +34,14 @@ extension Reactive where Base: UISearchBar {
     public var delegate: DelegateProxy {
         return RxSearchBarDelegateProxy.proxyForObject(base)
     }
-    
+
     /// Reactive wrapper for `text` property.
     public var text: ControlProperty<String?> {
+        return value
+    }
+    
+    /// Reactive wrapper for `text` property.
+    public var value: ControlProperty<String?> {
         let source: Observable<String?> = Observable.deferred { [weak searchBar = self.base as UISearchBar] () -> Observable<String?> in
             let text = searchBar?.text
             

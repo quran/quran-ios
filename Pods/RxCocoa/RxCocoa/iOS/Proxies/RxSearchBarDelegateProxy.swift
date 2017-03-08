@@ -8,7 +8,6 @@
 
 #if os(iOS) || os(tvOS)
 
-import Foundation
 import UIKit
 #if !RX_NO_MODULE
 import RxSwift
@@ -37,9 +36,8 @@ public class RxSearchBarDelegateProxy
 #if os(iOS)
     /// For more information take a look at `DelegateProxyType`.
     public override class func createProxyForObject(_ object: AnyObject) -> AnyObject {
-        let searchBar = (object as! UISearchBar)
-        
-        return castOrFatalError(searchBar.createRxDelegateProxy())
+        let searchBar: UISearchBar = castOrFatalError(object)
+        return searchBar.createRxDelegateProxy()
     }
 #endif
     

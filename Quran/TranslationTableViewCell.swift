@@ -55,7 +55,7 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
         }
     }
 
-    func set(title: String, subtitle: String) {
+    func set(title: String, subtitle: String, needsAmharicFont: Bool) {
         firstLabel.text = title
 
         guard !subtitle.isEmpty else {
@@ -67,15 +67,17 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
         let lightFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
         let regularFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+        let amharicFont: UIFont = cast(UIFont(name: "AbyssinicaSIL", size: 17))
 
         let lightColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
         let regularColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
 
         let lightAttributes: [String: Any] = [NSFontAttributeName: lightFont, NSForegroundColorAttributeName: lightColor]
         let regularAttributes: [String: Any] = [NSFontAttributeName: regularFont, NSForegroundColorAttributeName: regularColor]
+        let amharicAttributes: [String: Any] = [NSFontAttributeName: amharicFont, NSForegroundColorAttributeName: regularColor]
 
         let translatorAttributes = NSMutableAttributedString(string: translator, attributes: lightAttributes)
-        let attributes = NSMutableAttributedString(string: subtitle, attributes: regularAttributes)
+        let attributes = NSMutableAttributedString(string: subtitle, attributes: needsAmharicFont ? amharicAttributes : regularAttributes)
         translatorAttributes.append(attributes)
         secondLabel.attributedText = translatorAttributes
     }

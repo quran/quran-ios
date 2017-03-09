@@ -29,7 +29,10 @@ class TranslationsBasicDataSource: BasicDataSource<TranslationFull, TranslationT
                                     configure cell: TranslationTableViewCell,
                                     with item: TranslationFull,
                                     at indexPath: IndexPath) {
-        cell.set(title: item.translation.displayName, subtitle: (item.translation.translatorForeign ?? item.translation.translator) ?? "")
+        let subtitle = (item.translation.translatorForeign ?? item.translation.translator) ?? ""
+        cell.set(title: item.translation.displayName,
+                 subtitle: subtitle,
+                 needsAmharicFont: item.translation.displayName.lowercased().contains("amharic"))
         cell.downloadButton.setDownloadState(item.downloadState)
         cell.onShouldStartDownload = { [weak self] in
             if let ds = self {

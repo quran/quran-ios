@@ -49,34 +49,9 @@ class TranslationsRetrievalInteractor: Interactor {
                 let downloads = batches?.flatMap { $0.filter { $0.download.isTranslation } }
                 return (translations, downloads ?? [])
             }.then(on: .background) { (translations, downloads) -> [TranslationFull] in
-                return createTransltionsFull(translations, downloads: downloads)
+                return TranslationFull.createTransltionsFull(translations, downloads: downloads)
         }
     }
-}
-
-private func createTransltionsFull(_ translations: [Translation], downloads: [DownloadNetworkResponse]) -> [TranslationFull] {
-    let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
-
-    let translationsFull = translations.map { translation -> TranslationFull in
-        // check if file downloaded already
-        let possibleFiles = translation.possibleFileNames
-        if possibleFiles.contains(where: { fileName in
-            (try? Files.translationsURL.appendingPathComponent(fileName).checkResourceIsReachable()) ?? false }) {
-            return TranslationFull(translation: translation, downloaded: true, downloadResponse: nil)
-        }
-
-        // downloading...?
-        let responses = possibleFiles.flatMap {
-            downloadsByFile[Files.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
-        }
-        if let response = responses.first {
-            return TranslationFull(translation: translation, downloaded: false, downloadResponse: response)
-        }
-
-        // not downloaded
-        return TranslationFull(translation: translation, downloaded: false, downloadResponse: nil)
-    }
-    return translationsFull
 }
 
 private func combine(local: [Translation], remote: [Translation]) -> [Translation] {

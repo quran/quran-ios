@@ -49,7 +49,10 @@ class Container {
     }
 
     func createTranslationsViewController() -> UIViewController {
-        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor(), downloader: createDownloadManager())
+        return TranslationsViewController(
+            interactor: createTranslationsRetrievalInteractor(),
+            localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
+            downloader: createDownloadManager())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -235,8 +238,15 @@ class Container {
     }
 
     func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
-        return TranslationsRetrievalInteractor(networkManager: createNetworkManager(parser: createTranslationsParser()),
-                                               persistence: createActiveTranslationsPersistence(),
-                                               downloader: createDownloadManager()).erasedType()
+        return TranslationsRetrievalInteractor(
+            networkManager: createNetworkManager(parser: createTranslationsParser()),
+            persistence: createActiveTranslationsPersistence(),
+            downloader: createDownloadManager()).erasedType()
+    }
+
+    func createLocalTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+        return LocalTranslationsRetrievalInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            downloader: createDownloadManager()).erasedType()
     }
 }

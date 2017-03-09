@@ -13,12 +13,17 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     private let dataSource: TranslationsDataSource
 
     private let interactor: AnyInteractor<Void, [TranslationFull]>
+    private let localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>
+
     private var activityIndicator: UIActivityIndicatorView? {
         return navigationItem.rightBarButtonItem?.customView as? UIActivityIndicatorView
     }
 
-    init(interactor: AnyInteractor<Void, [TranslationFull]>, downloader: DownloadManager) {
+    init(interactor: AnyInteractor<Void, [TranslationFull]>,
+         localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>,
+         downloader: DownloadManager) {
         self.interactor = interactor
+        self.localTranslationsInteractor = localTranslationsInteractor
         dataSource = TranslationsDataSource(downloader: downloader, headerReuseId: "header")
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
@@ -53,6 +58,8 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
+
+        loadLocalData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +78,14 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
             .always { [weak self] in
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator?.stopAnimating()
+        }
+    }
+
+    private func loadLocalData() {
+        _ = localTranslationsInteractor.execute()
+            .then(on: .main) { [weak self] translations -> Void in
+                self?.dataSource.setItems(items: translations)
+                self?.tableView.reloadData()
         }
     }
 

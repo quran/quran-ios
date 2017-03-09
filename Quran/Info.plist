@@ -98,5 +98,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AbyssinicaSIL-R.ttf</string>
+	</array>
 </dict>
 </plist>

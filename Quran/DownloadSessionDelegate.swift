@@ -68,6 +68,12 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     }
 
     func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
+        // create the onGoingDownloads once so we can use it before the persistence value is written.
+        for download in downloads {
+            let taskId: Int = cast(download.download.taskId)
+            onGoingDownloads[taskId] = download
+        }
+
         Queue.downloads.async { [weak self] in
             do {
                 guard let `self` = self else { return }
@@ -139,8 +145,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                     didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
-
         guard let response = onGoingDownloads[downloadTask.taskIdentifier] else {
+            CLog("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - \(downloadTask.currentRequest?.url)")
             return
         }
         response.progress.totalUnitCount = totalBytesExpectedToWrite
@@ -200,36 +206,38 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        // remove the request
-        let response: DownloadNetworkResponse?
-        if error != nil {
-            response = taskFailed(task)
-        } else {
-            response = taskCompleted(task)
-        }
-
-        if let error = error {
-            print("Network error occurred: \(error)")
-
-            // save resume data, if found
-            if let resumePath = response?.download.resumePath,
-                let resumeData = (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
-                let resumeURL = FileManager.default.documentsURL.appendingPathComponent(resumePath)
-                try? resumeData.write(to: resumeURL, options: [.atomic])
+        Queue.downloads.async { [weak self] in
+            // remove the request
+            let response: DownloadNetworkResponse?
+            if error != nil {
+                response = self?.taskFailed(task)
+            } else {
+                response = self?.taskCompleted(task)
             }
 
-            if ((error as? URLError)?.code) != URLError.cancelled { // not cancelled by user
-                let finalError: Error
-                if error is POSIXErrorCode && Int32((error as NSError).code) == ENOENT {
-                    finalError = FileSystemError.noDiskSpace
-                } else {
-                    finalError = NetworkError(error: error)
+            if let error = error {
+                print("Network error occurred: \(error)")
+
+                // save resume data, if found
+                if let resumePath = response?.download.resumePath,
+                    let resumeData = (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
+                    let resumeURL = FileManager.default.documentsURL.appendingPathComponent(resumePath)
+                    try? resumeData.write(to: resumeURL, options: [.atomic])
                 }
-                response?.result = .failure(finalError)
+
+                if ((error as? URLError)?.code) != URLError.cancelled { // not cancelled by user
+                    let finalError: Error
+                    if error is POSIXErrorCode && Int32((error as NSError).code) == ENOENT {
+                        finalError = FileSystemError.noDiskSpace
+                    } else {
+                        finalError = NetworkError(error: error)
+                    }
+                    response?.result = .failure(finalError)
+                }
+            } else {
+                // success
+                response?.result = .success()
             }
-        } else {
-            // success
-            response?.result = .success()
         }
     }
 

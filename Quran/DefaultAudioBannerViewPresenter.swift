@@ -156,6 +156,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
                 kvoController.observe(newValue, keyPath: progressKeyPath, options: [.initial, .new], block: { [weak self] (_, _, change) in
                     if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
                         Queue.main.async {
+                            print("progress", newValue)
                             self?.view?.setDownloading(Float(newValue))
                         }
                     }
@@ -174,16 +175,18 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onPlayingStarted() {
-        Crash.setValue(false, forKey: .DownloadingQuran)
         self.progress = nil
+        Crash.setValue(false, forKey: .DownloadingQuran)
         Queue.main.async { self.playing = true }
     }
 
     func onPlaybackResumed() {
+        self.progress = nil
         Queue.main.async { self.playing = true }
     }
 
     func onPlaybackPaused() {
+        self.progress = nil
         Queue.main.async { self.playing = false }
     }
 
@@ -193,12 +196,15 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onFailedDownloadingWithError(_ error: Error) {
+        self.progress = nil
         Queue.main.async {
             self.delegate?.onErrorOccurred(error: error)
         }
     }
 
     func onPlaybackOrDownloadingCompleted() {
+        self.progress = nil
+
         Crash.setValue(nil, forKey: .PlayingAyah)
         Crash.setValue(false, forKey: .DownloadingQuran)
         Queue.main.async {

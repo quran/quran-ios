@@ -20,6 +20,7 @@
 		5421D8CD1CDA9C5100E6B019 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
+		5424773D1E7856040051C196 /* TranslationDownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* TranslationDownloadButton.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		544629DC1E67636F005B1107 /* TranslationFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DB1E67636F005B1107 /* TranslationFull.swift */; };
 		544629DE1E676703005B1107 /* Download+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DD1E676703005B1107 /* Download+Types.swift */; };
@@ -27,6 +28,11 @@
 		544629E61E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */; };
 		544629E81E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */; };
 		544629EA1E71F984005B1107 /* AbyssinicaSIL-R.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */; };
+		544629EC1E754DDA005B1107 /* Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EB1E754DDA005B1107 /* Retry.swift */; };
+		544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */; };
+		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
+		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
+		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
 		545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE51A1DCE0D450085D31F /* LastPage.swift */; };
@@ -278,6 +284,7 @@
 		5421D8CC1CDA9C5100E6B019 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
+		5424773C1E7856040051C196 /* TranslationDownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDownloadButton.swift; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		544629DB1E67636F005B1107 /* TranslationFull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationFull.swift; sourceTree = "<group>"; };
 		544629DD1E676703005B1107 /* Download+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Download+Types.swift"; sourceTree = "<group>"; };
@@ -285,6 +292,11 @@
 		544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
 		544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalTranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
 		544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AbyssinicaSIL-R.ttf"; sourceTree = "<group>"; };
+		544629EB1E754DDA005B1107 /* Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Retry.swift; sourceTree = "<group>"; };
+		544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseVersionPersistence.swift; sourceTree = "<group>"; };
+		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
+		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
+		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
@@ -563,6 +575,8 @@
 			children = (
 				549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */,
 				544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */,
+				544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */,
+				544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */,
 				544629DB1E67636F005B1107 /* TranslationFull.swift */,
 			);
 			name = Translations;
@@ -685,6 +699,7 @@
 			children = (
 				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
 				549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */,
+				5424773C1E7856040051C196 /* TranslationDownloadButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -929,6 +944,8 @@
 				54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */,
 				549040AE1E61B32E00D54625 /* String+Extension.swift */,
 				549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */,
+				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
+				549040C71E641F4C00D54625 /* UIViewController+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -950,8 +967,7 @@
 				54EB823E1D0A35EA00CBA802 /* Crash.swift */,
 				5415A94E1DC92A9C0089F9CB /* Cache.swift */,
 				549040AA1E61813B00D54625 /* Parsable.swift */,
-				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
-				549040C71E641F4C00D54625 /* UIViewController+Extension.swift */,
+				544629EB1E754DDA005B1107 /* Retry.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1035,7 +1051,7 @@
 				5416B4BF1CEE7C4B0062FF54 /* QariAyahTiming */,
 				5416B4BE1CEE7C3F0062FF54 /* AyahInfo */,
 				C2E3E1B8B556C26AC3EC142C /* Ayah Text */,
-				C2E3EDAD1B85C45E1A173674 /* Translation Manager */,
+				C2E3EDAD1B85C45E1A173674 /* Translations */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1383,20 +1399,22 @@
 		C2E3E1B8B556C26AC3EC142C /* Ayah Text */ = {
 			isa = PBXGroup;
 			children = (
+				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
 				C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */,
 				C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */,
-				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
 			);
 			name = "Ayah Text";
 			sourceTree = "<group>";
 		};
-		C2E3EDAD1B85C45E1A173674 /* Translation Manager */ = {
+		C2E3EDAD1B85C45E1A173674 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
 				C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */,
 				C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */,
+				544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */,
+				544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */,
 			);
-			name = "Translation Manager";
+			name = Translations;
 			sourceTree = "<group>";
 		};
 		DA0B7E1A1D175D9300F92AA3 /* ShareController */ = {
@@ -1622,6 +1640,7 @@
 				54C0DBC61CDE5C2A009AAD8D /* URL+Extension.swift in Sources */,
 				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
 				549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */,
+				5424773D1E7856040051C196 /* TranslationDownloadButton.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* QuranURLs.swift in Sources */,
@@ -1644,6 +1663,7 @@
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
+				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
 				548724321DC633A000ADDE54 /* UIView+Extension.swift in Sources */,
@@ -1651,8 +1671,10 @@
 				54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */,
 				54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
+				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
+				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
 				549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
@@ -1674,6 +1696,7 @@
 				54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */,
 				54B266A91CD1632F00D3AEF8 /* Qari.swift in Sources */,
 				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
+				544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */,
 				54B266E21CD5FFEA00D3AEF8 /* CALayer+Extension.swift in Sources */,
 				549040A71E5F99BE00D54625 /* Parser.swift in Sources */,
 				549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */,
@@ -1700,6 +1723,7 @@
 				54B266821CCAC82600D3AEF8 /* QuranPagesDataSource.swift in Sources */,
 				54C0DC301CE889CA009AAD8D /* DefaultAudioFilesDownloader.swift in Sources */,
 				54B266871CCACA2F00D3AEF8 /* DownloadManager.swift in Sources */,
+				544629EC1E754DDA005B1107 /* Retry.swift in Sources */,
 				54C0DBED1CE48EA4009AAD8D /* SimultenousGestureDelegate.swift in Sources */,
 				54B266541CCA87FC00D3AEF8 /* Result.swift in Sources */,
 				549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */,

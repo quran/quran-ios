@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import DownloadButton
 
-class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
+class TranslationTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -17,7 +16,7 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
         onShouldCancelDownload = nil
     }
 
-    @IBOutlet weak var downloadButton: PKDownloadButton!
+    @IBOutlet weak var downloadButton: TranslationDownloadButton!
     @IBOutlet weak var firstLabel: UILabel!
     @IBOutlet weak var secondLabel: UILabel!
 
@@ -26,32 +25,32 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        downloadButton.delegate = self
-
-        downloadButton.stopDownloadButton.tintColor = .appIdentity()
-        downloadButton.stopDownloadButton.filledLineStyleOuter = true
-        downloadButton.pendingView.tintColor = .appIdentity()
-        downloadButton.startDownloadButton.cleanDefaultAppearance()
-        downloadButton.startDownloadButton.setTitle(nil, for: .normal)
-        downloadButton.startDownloadButton.setImage(#imageLiteral(resourceName: "download-30").tintedImage(withColor: .appIdentity()), for: .normal)
+        downloadButton.backgroundColor = .clear
+        downloadButton.onButtonTapped = { [weak self] _ in
+            self?.downloadButtonTapped()
+        }
     }
 
-    func downloadButtonTapped(_ downloadButton: PKDownloadButton!, currentState state: PKDownloadButtonState) {
-        switch state {
-        case .startDownload:
-            downloadButton.state = .pending
-            downloadButton.pendingView.stopSpin()
-            downloadButton.pendingView.startSpin()
+    func downloadButtonTapped() {
+        switch downloadButton.state {
+        case .notDownloaded:
+            downloadButton.state = .pendingDownloading
             onShouldStartDownload?()
-        case .pending:
-            downloadButton.state = .startDownload
+
+        case .needsUpgrade:
+            downloadButton.state = .pendingUpgrading
+            onShouldStartDownload?()
+
+        case .pendingDownloading, .downloading:
+            downloadButton.state = .notDownloaded
             onShouldCancelDownload?()
-        case .downloading:
-            downloadButton.state = .startDownload
+
+        case .pendingUpgrading, .downloadingUpgrade:
+            downloadButton.state = .needsUpgrade
             onShouldCancelDownload?()
+
         case .downloaded:
-            onShouldCancelDownload?()
-            downloadButton.state = .startDownload
+            break
         }
     }
 
@@ -80,25 +79,5 @@ class TranslationTableViewCell: UITableViewCell, PKDownloadButtonDelegate {
         let attributes = NSMutableAttributedString(string: subtitle, attributes: needsAmharicFont ? amharicAttributes : regularAttributes)
         translatorAttributes.append(attributes)
         secondLabel.attributedText = translatorAttributes
-    }
-}
-
-extension PKDownloadButton {
-    func setDownloadState(_ state: DownloadState) {
-        isHidden = false
-        switch state {
-        case .notDownloaded:
-            self.state = .startDownload
-        case .pending:
-            self.state = .pending
-            pendingView.stopSpin()
-            pendingView.startSpin()
-        case .downloading(let progress):
-            self.state = .downloading
-            self.stopDownloadButton.progress = CGFloat(progress)
-        case .downloaded:
-            self.state = .startDownload
-            isHidden = true
-        }
     }
 }

@@ -18,14 +18,21 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     weak var delegate: TranslationsDataSourceDelegate?
 
     private let downloader: DownloadManager
+    private let deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>
+    private let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
 
     private let downloadedDS: TranslationsBasicDataSource
     private let pendingDS: TranslationsBasicDataSource
 
     private var downloadingObservers: [Int: DownloadingObserver] = [:]
 
-    public init(downloader: DownloadManager, headerReuseId: String) {
+    public init(downloader: DownloadManager,
+                deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
+                versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
+                headerReuseId: String) {
         self.downloader = downloader
+        self.deletionInteractor = deletionInteractor
+        self.versionUpdater = versionUpdater
         downloadedDS = TranslationsBasicDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
         pendingDS = TranslationsBasicDataSource(downloader: downloader, reuseIdentifier: TranslationTableViewCell.reuseId)
         super.init(sectionType: .multi)
@@ -66,21 +73,20 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS)
         let item = downloadedDS.item(at: localIndexPath)
 
-        // delete from disk
-        item.translation.possibleFileNames.forEach { fileName in
-            let url = Files.translationsURL.appendingPathComponent(fileName)
-            try? FileManager.default.removeItem(at: url)
-        }
+        _ = deletionInteractor
+            .execute(item)
+            .then(on: .main) { newItem -> Void in
 
-        let newGlobalIndexPath = move(item: item,
-                                      atLocalPath: localIndexPath,
-                                      newItem: TranslationFull(translation: item.translation, downloaded: false, downloadResponse: nil),
-                                      from: downloadedDS,
-                                      to: pendingDS)
-        ds_reusableViewDelegate?.ds_performBatchUpdates({
-            self.ds_reusableViewDelegate?.ds_deleteItems(at: [globalIndexPath], with: .left)
-            self.ds_reusableViewDelegate?.ds_insertItems(at: [newGlobalIndexPath], with: .right)
-        }, completion: nil)
+                let newGlobalIndexPath = self.move(item: item,
+                                                   atLocalPath: localIndexPath,
+                                                   newItem: newItem,
+                                                   from: self.downloadedDS,
+                                                   to: self.pendingDS)
+                self.ds_reusableViewDelegate?.ds_performBatchUpdates({
+                    self.ds_reusableViewDelegate?.ds_deleteItems(at: [globalIndexPath], with: .left)
+                    self.ds_reusableViewDelegate?.ds_insertItems(at: [newGlobalIndexPath], with: .right)
+                }, completion: nil)
+        }
     }
 
     private func move(item: TranslationFull,
@@ -95,7 +101,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         // add in new location
         var list = to.items
         list.append(newItem)
-        list.sort { $0.translation.displayName < $1.translation.displayName }
+        list.sort()
         to.items = list
 
         // move the cell
@@ -108,8 +114,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         downloadingObservers.forEach { $1.stop() }
         downloadingObservers.removeAll()
 
-        downloadedDS.items = items.filter { $0.downloaded }.sorted { $0.translation.displayName < $1.translation.displayName }
-        pendingDS.items = items.filter { !$0.downloaded }.sorted { $0.translation.displayName < $1.translation.displayName }
+        pendingDS.items    = items.filter { !$0.downloaded }.sorted()
+        downloadedDS.items = items.filter {  $0.downloaded }.sorted()
 
         for item in pendingDS.items {
             if item.downloadResponse != nil {
@@ -118,40 +124,51 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         }
     }
 
+    private func indexPathFor(translation: TranslationFull) -> (TranslationsBasicDataSource, IndexPath)? {
+        let dataSources = [downloadedDS, pendingDS]
+        for ds in dataSources {
+            if let indexPath = ds.indexPath(for: translation) {
+                return (ds, indexPath)
+            }
+        }
+        return nil
+    }
+
     fileprivate func onDownloadProgressUpdated(progress: Float, for translation: TranslationFull) {
-        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+        guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
             CLog("Cannot updated progress for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
-        cell?.downloadButton.setDownloadState(progress.downloadState)
+        cell?.downloadButton.state = translation.state
     }
 
     fileprivate func onDownloadCompleted(withError error: Error, for translation: TranslationFull) {
-        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+        guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
             CLog("Cannot updated progress for translation \(translation.translation.displayName)")
             return
         }
 
-        delegate?.translationsDataSource(self, errorOccurred: error)
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
-        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
-        cell?.downloadButton.setDownloadState(.notDownloaded)
-
         // update the item to be not downloading
-        let newItem = TranslationFull(translation: translation.translation, downloaded: false, downloadResponse: nil)
-        var newItems = pendingDS.items
+        let newItem = TranslationFull(translation: translation.translation, downloadResponse: nil)
+        var newItems = ds.items
         newItems[localIndexPath.item] = newItem
-        pendingDS.items = newItems
+        ds.items = newItems
+
+        // update the UI
+        delegate?.translationsDataSource(self, errorOccurred: error)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
+        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
+        cell?.downloadButton.state = newItem.state
     }
 
     fileprivate func onDownloadCompleted(for translation: TranslationFull) {
-        guard let localIndexPath = pendingDS.indexPath(for: translation) else {
+        guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
             CLog("Cannot complete download for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: pendingDS)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
 
         // remove old observer
         let observer = downloadingObservers.removeValue(forKey: translation.translation.id)
@@ -159,14 +176,18 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // update the cell
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
-        cell?.downloadButton.setDownloadState(.downloaded)
+        cell?.downloadButton.state = .downloaded
 
-        let newGlobalIndexPath = move(item: translation,
-                                      atLocalPath: localIndexPath,
-                                      newItem: TranslationFull(translation: translation.translation, downloaded: true, downloadResponse: nil),
-                                      from: pendingDS,
-                                      to: downloadedDS)
-        ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
+        _ = versionUpdater
+            .execute([translation.translation])
+            .then(on: .main) { newItem  -> Void in
+                let newGlobalIndexPath = self.move(item: translation,
+                                                   atLocalPath: localIndexPath,
+                                                   newItem: newItem[0],
+                                                   from: ds,
+                                                   to: self.downloadedDS)
+                self.ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
+        }
     }
 
     func translationsBasicDataSource(_ dataSource: TranslationsBasicDataSource, onShouldStartDownload item: TranslationFull) {
@@ -180,7 +201,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         }
 
         // update the item to be downloading
-        let newItem = TranslationFull(translation: item.translation, downloaded: false, downloadResponse: response)
+        let newItem = TranslationFull(translation: item.translation, downloadResponse: response)
         var newItems = dataSource.items
         newItems[cast(newItems.index(of: item))] = newItem
         dataSource.items = newItems

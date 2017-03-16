@@ -52,6 +52,8 @@ class Container {
         return TranslationsViewController(
             interactor: createTranslationsRetrievalInteractor(),
             localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
+            deletionInteractor: createTranslationDeletionInteractor(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor(),
             downloader: createDownloadManager())
     }
 
@@ -241,12 +243,27 @@ class Container {
         return TranslationsRetrievalInteractor(
             networkManager: createNetworkManager(parser: createTranslationsParser()),
             persistence: createActiveTranslationsPersistence(),
-            downloader: createDownloadManager()).erasedType()
+            localInteractor: createLocalTranslationsRetrievalInteractor()).erasedType()
     }
 
     func createLocalTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
         return LocalTranslationsRetrievalInteractor(
             persistence: createActiveTranslationsPersistence(),
-            downloader: createDownloadManager()).erasedType()
+            versionUpdater: createTranslationsVersionUpdaterInteractor()).erasedType()
+    }
+
+    func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
+        return TranslationsVersionUpdaterInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            downloader: createDownloadManager(),
+            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).erasedType()
+    }
+
+    func createSQLiteDatabaseVersionPersistence(filePath: String) -> DatabaseVersionPersistence {
+        return SQLiteDatabaseVersionPersistence(filePath: filePath)
+    }
+
+    func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
+        return TranslationDeletionInteractor(persistence: createActiveTranslationsPersistence()).erasedType()
     }
 }

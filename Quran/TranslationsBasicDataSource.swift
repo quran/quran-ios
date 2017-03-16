@@ -33,7 +33,7 @@ class TranslationsBasicDataSource: BasicDataSource<TranslationFull, TranslationT
         cell.set(title: item.translation.displayName,
                  subtitle: subtitle,
                  needsAmharicFont: item.translation.displayName.lowercased().contains("amharic"))
-        cell.downloadButton.setDownloadState(item.downloadState)
+        cell.downloadButton.state = item.state
         cell.onShouldStartDownload = { [weak self] in
             if let ds = self {
                 ds.delegate?.translationsBasicDataSource(ds, onShouldStartDownload: item)

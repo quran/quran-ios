@@ -8,36 +8,30 @@
 
 import SQLite
 
-class SQLiteTranslationTextPersistence: AyahTextPersistence {
+class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
 
-    fileprivate struct Columns {
-        let sura = Expression<Int>("sura")
-        let ayah = Expression<Int>("ayah")
-        let text = Expression<String>("text")
+    private struct Verses {
+        static let table = Table("verses")
+        static let sura = Expression<Int>("sura")
+        static let ayah = Expression<Int>("ayah")
+        static let text = Expression<String>("text")
     }
 
-    fileprivate let translationTextTable = Table("verses")
-    fileprivate let columns = Columns()
+    let filePath: String
 
-    fileprivate var db: LazyConnectionWrapper
-
-    init(databaseFileURL: URL) {
-        db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
+    init(filePath: String) {
+        self.filePath = filePath
     }
 
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
-        let query = translationTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
+        return try run { connection in
 
-        do {
-            let rows = try db.getOpenConnection().prepare(query)
-
+            let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)
+            let rows = try connection.prepare(query)
             guard let first = rows.first(where: { _ in true}) else {
                 throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
             }
-            return first[columns.text]
-        } catch {
-            Crash.recordError(error, reason: "Cannot get ayah text for \(number)")
-            throw PersistenceError.query(error)
+            return first[Verses.text]
         }
     }
 }

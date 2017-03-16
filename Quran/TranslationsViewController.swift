@@ -21,10 +21,16 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     init(interactor: AnyInteractor<Void, [TranslationFull]>,
          localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>,
+         deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
+         versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
          downloader: DownloadManager) {
         self.interactor = interactor
         self.localTranslationsInteractor = localTranslationsInteractor
-        dataSource = TranslationsDataSource(downloader: downloader, headerReuseId: "header")
+        dataSource = TranslationsDataSource(
+            downloader: downloader,
+            deletionInteractor: deletionInteractor,
+            versionUpdater: versionUpdater,
+            headerReuseId: "header")
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
     }
@@ -70,7 +76,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     }
 
     func refreshData() {
-        _ = interactor.execute()
+        interactor.execute()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
@@ -82,11 +88,12 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     }
 
     private func loadLocalData() {
-        _ = localTranslationsInteractor.execute()
+        localTranslationsInteractor.execute()
             .then(on: .main) { [weak self] translations -> Void in
+                translations.forEach { print($0.state) }
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
-        }
+            }.catch(execute: showErrorAlert)
     }
 
     func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error) {

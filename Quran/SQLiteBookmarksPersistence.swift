@@ -107,7 +107,7 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
                 Bookmarks.ayah <- ayah?.ayah,
                 Bookmarks.page <- bookmark.page,
                 Bookmarks.creationDate <- bookmark.creationDate)
-            _ = try connection.run(insert)
+            try connection.run(insert)
         }
     }
 
@@ -120,7 +120,7 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
                 Bookmarks.sura == ayah?.sura &&
                 Bookmarks.ayah == ayah?.ayah &&
                 Bookmarks.page == bookmark.page)
-            _ = try connection.run(filter.delete())
+            try connection.run(filter.delete())
         }
     }
 

@@ -103,7 +103,7 @@ class TranslationsVersionUpdaterInteractor: Interactor {
                     // success: to save space
                     // failure: to redownload it again
                     defer {
-                        let _ = try? FileManager.default.removeItem(at: zipFile)
+                        try? FileManager.default.removeItem(at: zipFile)
                     }
                     try attempt(times: 3) {
                         try Zip.unzipFile(zipFile, destination: Files.translationsURL, overwrite: true, password: nil, progress: nil)

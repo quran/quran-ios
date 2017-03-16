@@ -27,9 +27,9 @@ class MoyaNetworkManager<Target>: NetworkManager {
                 guard let `self` = self else { return }
                 do {
                     switch result {
-                    case let .success(moyaResponse):
+                    case var .success(moyaResponse):
                         // only accept 2xx statuses
-                        _ = try moyaResponse.filterSuccessfulStatusCodes()
+                        moyaResponse = try moyaResponse.filterSuccessfulStatusCodes()
 
                         // convert response to the object
                         let data = moyaResponse.data

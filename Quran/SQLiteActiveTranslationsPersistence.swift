@@ -69,7 +69,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.fileName <- translation.fileName,
                 Translations.version <- translation.version,
                 Translations.installedVersion <- translation.installedVersion)
-            _ = try connection.run(insert)
+            try connection.run(insert)
         }
     }
 
@@ -85,14 +85,14 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                     Translations.fileName <- translation.fileName,
                     Translations.version <- translation.version,
                     Translations.installedVersion <- translation.installedVersion)
-            _ = try connection.run(update)
+            try connection.run(update)
         }
     }
 
     func remove(_ translation: Translation) throws {
         return try run { connection in
             let filter = Translations.table.filter(Translations.id == translation.id)
-            _ = try connection.run(filter.delete())
+            try connection.run(filter.delete())
         }
     }
 

@@ -137,7 +137,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     fileprivate func createAudioBanner() {
         let audioView = DefaultAudioBannerView()
         view.addAutoLayoutSubview(audioView)
-        _ = view.pinParentHorizontal(audioView)
+        view.pinParentHorizontal(audioView)
         bottomBarConstraint = view.addParentBottomConstraint(audioView)
 
         self.audioView = audioView
@@ -154,7 +154,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             collectionView.semanticContentAttribute = .forceRightToLeft
         }
         view.addAutoLayoutSubview(collectionView)
-        _ = view.pinParentAllDirections(collectionView)
+        view.pinParentAllDirections(collectionView)
 
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true

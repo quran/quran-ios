@@ -51,7 +51,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
                 LastPages.page <- lastPage,
                 LastPages.createdOn <- Date(),
                 LastPages.modifiedOn <- Date())
-            _ = try connection.run(insert)
+            try connection.run(insert)
             simplePersistence.removeValueForKey(.lastViewedPage)
         }
     }
@@ -90,7 +90,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
 
             // delete conflict record for the new & old pages.
             let conflict = LastPages.table.filter([page.page, newPage].contains(LastPages.page))
-            _ = try connection.run(conflict.delete())
+            try connection.run(conflict.delete())
 
             var updatedPage = page
             updatedPage.page = newPage
@@ -102,7 +102,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
                 LastPages.page <- updatedPage.page,
                 LastPages.createdOn <- updatedPage.createdOn,
                 LastPages.modifiedOn <- updatedPage.modifiedOn)
-            _ = try connection.run(insert)
+            try connection.run(insert)
             return updatedPage
         }
     }

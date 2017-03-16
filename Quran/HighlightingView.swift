@@ -120,6 +120,7 @@ class HighlightingView: UIView {
      - Parameter location: The touch location where we check the verse that match the location to highlight
      - Returns: true if a verse is found and match the location, false otherwise.
      */
+    @discardableResult
     func highlightVerseAtLocation(_ location: CGPoint) -> Bool {
 
         guard let ayah = ayahNumber(at: location) else { return false }

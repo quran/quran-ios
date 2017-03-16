@@ -93,7 +93,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
                 translations.forEach { print($0.state) }
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
-            }.catch(execute: showErrorAlert)
+            }.catchToAlertView(viewController: self)
     }
 
     func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error) {

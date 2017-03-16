@@ -99,6 +99,7 @@ extension UIView {
         return constraint
     }
 
+    @discardableResult
     func addHeightConstraint(_ value: CGFloat) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self,

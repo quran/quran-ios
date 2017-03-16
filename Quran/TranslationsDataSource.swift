@@ -73,7 +73,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS)
         let item = downloadedDS.item(at: localIndexPath)
 
-        _ = deletionInteractor
+        deletionInteractor
             .execute(item)
             .then(on: .main) { newItem -> Void in
 
@@ -86,6 +86,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
                     self.ds_reusableViewDelegate?.ds_deleteItems(at: [globalIndexPath], with: .left)
                     self.ds_reusableViewDelegate?.ds_insertItems(at: [newGlobalIndexPath], with: .right)
                 }, completion: nil)
+            }.catch(on: .main) { error in
+                self.delegate?.translationsDataSource(self, errorOccurred: error)
         }
     }
 
@@ -178,7 +180,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = .downloaded
 
-        _ = versionUpdater
+        versionUpdater
             .execute([translation.translation])
             .then(on: .main) { newItem  -> Void in
                 let newGlobalIndexPath = self.move(item: translation,
@@ -187,6 +189,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
                                                    from: ds,
                                                    to: self.downloadedDS)
                 self.ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
+            }.catch(on: .main) { error in
+                self.delegate?.translationsDataSource(self, errorOccurred: error)
         }
     }
 

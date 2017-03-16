@@ -166,16 +166,16 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
             let destinationURL = FileManager.default.documentsURL.appendingPathComponent(download.destinationPath)
 
             // remove the resume data
-            let _ = try? fileManager.removeItem(at: resumeURL)
+            try? fileManager.removeItem(at: resumeURL)
             // remove the existing file if exist.
-            let _ = try? fileManager.removeItem(at: destinationURL)
+            try? fileManager.removeItem(at: destinationURL)
 
             // move the file to destination
             do {
                 let directory = destinationURL.deletingLastPathComponent()
-                let _ = try? fileManager.createDirectory(at: directory,
-                                                         withIntermediateDirectories: true,
-                                                         attributes: nil)
+                try? fileManager.createDirectory(at: directory,
+                                                 withIntermediateDirectories: true,
+                                                 attributes: nil)
                 try fileManager.copyItem(at: location, to: destinationURL)
 
 
@@ -250,8 +250,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     fileprivate func createDirectoryForPath(_ path: URL) {
         let directory = path.deletingLastPathComponent()
         // ignore errors
-        let _ = try? FileManager.default.createDirectory(at: directory,
-                                withIntermediateDirectories: true,
+        try? FileManager.default.createDirectory(at: directory,
+                                                 withIntermediateDirectories: true,
                                                  attributes: nil)
     }
 }

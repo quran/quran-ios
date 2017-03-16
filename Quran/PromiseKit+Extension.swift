@@ -10,9 +10,24 @@ import PromiseKit
 import UIKit
 
 extension Promise {
+
+    @discardableResult
     func catchToAlertView(viewController: UIViewController?) -> Promise {
         return self.`catch`(on: .main) { [weak viewController] error in
             viewController?.showErrorAlert(error: error)
+        }
+    }
+}
+
+extension Promise {
+
+    public func cauterize(tag: String? = nil) {
+        `catch` { error in
+            if let tag = tag {
+                print("PromiseKit: [\(tag)] unhandled error:", error)
+            } else {
+                print("PromiseKit: unhandled error:", error)
+            }
         }
     }
 }

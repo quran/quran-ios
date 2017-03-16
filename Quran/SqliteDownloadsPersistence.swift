@@ -80,7 +80,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         return try run { connection in
             // insert batch
             let batchInsert = Batches.table.insert()
-            _ = try connection.run(batchInsert)
+            try connection.run(batchInsert)
             let batchId = connection.lastInsertRowid
 
             // insert downloads
@@ -94,7 +94,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
                     Downloads.status <- Download.Status.downloading.rawValue,
                     Downloads.batchId <- batchId)
 
-                _ = try connection.run(insert)
+                try connection.run(insert)
             }
 
             var downloads: [Download] = []
@@ -119,7 +119,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         return try run { connection in
             let rows = Downloads.table.filter(filter)
             let update = rows.update(Downloads.status <- status.rawValue)
-            _ = try connection.run(update)
+            try connection.run(update)
         }
     }
 

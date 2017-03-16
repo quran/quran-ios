@@ -114,7 +114,7 @@ class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegat
 
         if sender.state == .began {
             let touchLocation = sender.location(in: self.highlightingView)
-            _ = self.highlightingView.highlightVerseAtLocation(touchLocation)
+            self.highlightingView.highlightVerseAtLocation(touchLocation)
         }
     }
 

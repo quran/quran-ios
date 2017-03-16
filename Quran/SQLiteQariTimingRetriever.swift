@@ -10,7 +10,7 @@ import Foundation
 
 struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
-    let persistence: QariAyahTimingPersistence
+    let persistenceCreator: AnyCreator<QariAyahTimingPersistence, URL>
 
     func retrieveTimingForQari(_ qari: Qari, startAyah: AyahNumber, onCompletion: @escaping (Result<[AyahNumber: AyahTiming]>) -> Void) {
         guard case .gapless(let databaseName) = qari.audioType else {
@@ -18,7 +18,8 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
         }
         Queue.background.tryAsync({
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-            let timings = try self.persistence.getTimingForSura(startAyah: startAyah, databaseFileURL: fileURL)
+            let persistence = self.persistenceCreator.create(parameters: fileURL)
+            let timings = try persistence.getTimingForSura(startAyah: startAyah)
             return timings
         }, onMain: onCompletion)
     }
@@ -29,10 +30,11 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
         }
         Queue.background.tryAsync({
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
+            let persistence = self.persistenceCreator.create(parameters: fileURL)
 
             var result: [Int: [AyahTiming]] = [:]
             for sura in suras {
-                let timings = try self.persistence.getOrderedTimingForSura(startAyah: AyahNumber(sura: sura, ayah: 1), databaseFileURL: fileURL)
+                let timings = try persistence.getOrderedTimingForSura(startAyah: AyahNumber(sura: sura, ayah: 1))
                 result[sura] = timings
             }
             return result

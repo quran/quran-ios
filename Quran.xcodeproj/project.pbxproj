@@ -21,6 +21,7 @@
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5424773D1E7856040051C196 /* TranslationDownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* TranslationDownloadButton.swift */; };
+		5424773F1E7B1C060051C196 /* SQLite+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773E1E7B1C060051C196 /* SQLite+Extension.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		544629DC1E67636F005B1107 /* TranslationFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DB1E67636F005B1107 /* TranslationFull.swift */; };
 		544629DE1E676703005B1107 /* Download+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DD1E676703005B1107 /* Download+Types.swift */; };
@@ -68,7 +69,6 @@
 		549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C31E635A7300D54625 /* PromiseKit+Extension.swift */; };
 		549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */; };
 		549040C81E641F4C00D54625 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C71E641F4C00D54625 /* UIViewController+Extension.swift */; };
-		5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */; };
 		5494CCB21CEFA5F700031686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB11CEFA5F700031686 /* Constants.swift */; };
 		5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */; };
 		5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */; };
@@ -285,6 +285,7 @@
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* TranslationDownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDownloadButton.swift; sourceTree = "<group>"; };
+		5424773E1E7B1C060051C196 /* SQLite+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SQLite+Extension.swift"; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		544629DB1E67636F005B1107 /* TranslationFull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationFull.swift; sourceTree = "<group>"; };
 		544629DD1E676703005B1107 /* Download+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Download+Types.swift"; sourceTree = "<group>"; };
@@ -339,7 +340,6 @@
 		549040C31E635A7300D54625 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
 		549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
 		549040C71E641F4C00D54625 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyConnectionWrapper.swift; sourceTree = "<group>"; };
 		5494CCB11CEFA5F700031686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5494CCB41CEFAB8400031686 /* QariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTimingRetriever.swift; sourceTree = "<group>"; };
 		5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQariTimingRetriever.swift; sourceTree = "<group>"; };
@@ -625,7 +625,6 @@
 			isa = PBXGroup;
 			children = (
 				548723F91DC4855E00ADDE54 /* SQLitePersistence.swift */,
-				5494CCAF1CEFA3B200031686 /* LazyConnectionWrapper.swift */,
 				548724291DC60DD100ADDE54 /* ConnectionsPool.swift */,
 			);
 			name = sqlite;
@@ -946,6 +945,7 @@
 				549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */,
 				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
 				549040C71E641F4C00D54625 /* UIViewController+Extension.swift */,
+				5424773E1E7B1C060051C196 /* SQLite+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1749,7 +1749,6 @@
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
-				5494CCB01CEFA3B200031686 /* LazyConnectionWrapper.swift in Sources */,
 				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
 				54C0DC1D1CE69BF6009AAD8D /* GaplessAudioFilesDownloader.swift in Sources */,
 				54C0DC121CE692FC009AAD8D /* DownloadNetworkResponse.swift in Sources */,
@@ -1785,6 +1784,7 @@
 				54B2669C1CCD208800D3AEF8 /* HighlightingView.swift in Sources */,
 				54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
+				5424773F1E7B1C060051C196 /* SQLite+Extension.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54C0DBFD1CE5237E009AAD8D /* SimplePersistence.swift in Sources */,
 				54C0DC1F1CE69C0A009AAD8D /* GappedAudioFilesDownloader.swift in Sources */,

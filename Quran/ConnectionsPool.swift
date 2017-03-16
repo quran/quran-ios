@@ -17,19 +17,19 @@ final class ConnectionsPool {
     var pool: [String: (uses: Int, connection: Connection)] = [:]
 
     func getConnection(filePath: String) throws -> Connection {
-            do {
-                try? FileManager.default.createDirectory(atPath: filePath.stringByDeletingLastPathComponent,
-                                                        withIntermediateDirectories: true,
-                                                        attributes: nil)
-                let connection = try Connection(filePath, readonly: false)
-                connection.busyTimeout = 2
+        do {
+            try? FileManager.default.createDirectory(atPath: filePath.stringByDeletingLastPathComponent,
+                                                     withIntermediateDirectories: true,
+                                                     attributes: nil)
+            let connection = try Connection(filePath, readonly: false)
+            connection.busyTimeout = 2
 
-                connection.busyHandler { tries in tries < 3 }
-                return connection
-            } catch {
-                Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(filePath)'.")
-                throw PersistenceError.openDatabase(error)
-            }
+            connection.busyHandler { tries in tries < 3 }
+            return connection
+        } catch {
+            Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(filePath)'.")
+            throw PersistenceError.openDatabase(error)
+        }
     }
 
     func close(connection: Connection) {

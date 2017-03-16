@@ -204,11 +204,11 @@ class Container {
     }
 
     func createQariTimingRetriever() -> QariTimingRetriever {
-        return SQLiteQariTimingRetriever(persistence: createQariAyahTimingPersistence())
+        return SQLiteQariTimingRetriever(persistenceCreator: createCreator(createQariAyahTimingPersistence))
     }
 
-    func createQariAyahTimingPersistence() -> QariAyahTimingPersistence {
-        return SQLiteAyahTimingPersistence()
+    func createQariAyahTimingPersistence(filePath: URL) -> QariAyahTimingPersistence {
+        return SQLiteAyahTimingPersistence(filePath: filePath)
     }
 
     func createBookmarksPersistence() -> BookmarksPersistence {

@@ -10,6 +10,6 @@ import Foundation
 
 protocol QariAyahTimingPersistence {
 
-    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahNumber: AyahTiming]
-    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahTiming]
+    func getTimingForSura(startAyah: AyahNumber) throws -> [AyahNumber: AyahTiming]
+    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> [AyahTiming]
 }

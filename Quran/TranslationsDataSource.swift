@@ -182,10 +182,10 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         versionUpdater
             .execute([translation.translation])
-            .then(on: .main) { newItem  -> Void in
+            .then(on: .main) { newItems  -> Void in
                 let newGlobalIndexPath = self.move(item: translation,
                                                    atLocalPath: localIndexPath,
-                                                   newItem: newItem[0],
+                                                   newItem: newItems[0],
                                                    from: ds,
                                                    to: self.downloadedDS)
                 self.ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)

@@ -90,7 +90,6 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     private func loadLocalData() {
         localTranslationsInteractor.execute()
             .then(on: .main) { [weak self] translations -> Void in
-                translations.forEach { print($0.state) }
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)

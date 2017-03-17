@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 protocol AudioFilesDownloader: class {
 
@@ -16,7 +17,7 @@ protocol AudioFilesDownloader: class {
 
     func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
 
-    func getCurrentDownloadResponse() -> Response?
+    func getCurrentDownloadResponse() -> Promise<Response?>
 
     func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Response?
 }

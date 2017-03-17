@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 enum HTTPMethod: String {
     case OPTIONS
@@ -24,7 +25,7 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getOnGoingDownloads() -> [[DownloadNetworkResponse]]
+    func getOnGoingDownloads() -> Promise<[[DownloadNetworkResponse]]>
 
     func download(_ requests: [Download]) -> [DownloadNetworkResponse]
 }

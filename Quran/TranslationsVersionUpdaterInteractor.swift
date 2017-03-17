@@ -24,14 +24,16 @@ class TranslationsVersionUpdaterInteractor: Interactor {
     }
 
     func execute(_ translations: [Translation]) -> Promise<[TranslationFull]> {
-        return Promise(value: translations)
+        let update = Promise(value: translations)
             .then(on: .global(), execute: unzipIfNeeded)    // unzip if needed
             .then(on: .translations, execute: updateInstalledVersions) // update versions
+        let downloads = downloader.getOnGoingDownloads()
+        return when(fulfilled: update, downloads)
             .then(on: .global(), execute: createTranslations)
     }
 
-    private func createTranslations(translations: [Translation]) -> [TranslationFull] {
-        let downloads = downloader.getOnGoingDownloads()
+    private func createTranslations(translations: [Translation], downloadsBatches: [[DownloadNetworkResponse]]) -> [TranslationFull] {
+        let downloads = downloadsBatches
             .flatMap { $0 }
             .filter { $0.download.isTranslation }
 
@@ -49,12 +51,6 @@ class TranslationsVersionUpdaterInteractor: Interactor {
             // not downloaded
             return TranslationFull(translation: translation, downloadResponse: nil)
         }
-    }
-
-    private func onGoingDownloads() -> Promise<[DownloadNetworkResponse]> {
-        return Promise(value: downloader.getOnGoingDownloads()
-            .flatMap { $0 }
-            .filter { $0.download.isTranslation })
     }
 
     private func updateInstalledVersions(translations: [Translation]) throws -> [Translation] {

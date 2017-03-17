@@ -7,13 +7,22 @@
 //
 
 import Foundation
+import PromiseKit
 
 class URLSessionDownloadManager: DownloadManager {
 
     let session: URLSession
 
+    // Intentially retained
     // swiftlint:disable weak_delegate
-    fileprivate let delegate: DownloadSessionDelegate
+    private let delegate: ThreadSafeDownloadSessionDelegate
+
+    private let delegateQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.quran.downloads"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
 
     var backgroundSessionCompletionHandler: (() -> Void)? {
         get {
@@ -25,16 +34,17 @@ class URLSessionDownloadManager: DownloadManager {
     }
 
     init(configuration: URLSessionConfiguration, persistence: DownloadsPersistence) {
-        delegate = DownloadSessionDelegate(persistence: persistence)
-        session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+        let handler = DownloadSessionDelegate(persistence: persistence, queue: delegateQueue)
+        self.delegate = ThreadSafeDownloadSessionDelegate(handler: handler, queue: delegateQueue)
+        session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: delegateQueue)
         populateOnGoingDownloads()
     }
 
-    func populateOnGoingDownloads() {
+    private func populateOnGoingDownloads() {
         delegate.populateOnGoingDownloads(from: session)
     }
 
-    func getOnGoingDownloads() -> [[DownloadNetworkResponse]] {
+    func getOnGoingDownloads() -> Promise<[[DownloadNetworkResponse]]> {
         return delegate.getOnGoingDownloads()
     }
 

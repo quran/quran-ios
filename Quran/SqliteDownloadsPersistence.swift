@@ -66,7 +66,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     private func retrieve(_ status: Download.Status?) throws -> [DownloadBatch] {
         return try run { connection in
-            var query = Downloads.table.group(Downloads.batchId)
+            var query = Downloads.table
             if let status = status {
                 query = query.filter(Downloads.status == status.rawValue)
             }
@@ -113,6 +113,14 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     func update(batches: [DownloadBatch], newStatus status: Download.Status) throws {
         let urls = batches.flatMap { $0.downloads.map { $0.url.absoluteString } }
         return try update(filter: urls.contains(Downloads.url), newStatus: status)
+    }
+
+    func delete(batchId: Int64) throws {
+        return try run { connection in
+            let query = Downloads.table.filter(Downloads.batchId == batchId)
+            let delete = query.delete()
+            try connection.run(delete)
+        }
     }
 
     private func update(filter: Expression<Bool>, newStatus status: Download.Status) throws {

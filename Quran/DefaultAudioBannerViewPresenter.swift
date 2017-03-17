@@ -156,7 +156,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
                 kvoController.observe(newValue, keyPath: progressKeyPath, options: [.initial, .new], block: { [weak self] (_, _, change) in
                     if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
                         Queue.main.async {
-                            print("progress", newValue)
+                            // CLog("progress:", newValue)
                             self?.view?.setDownloading(Float(newValue))
                         }
                     }

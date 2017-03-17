@@ -21,13 +21,36 @@ extension Promise {
 
 extension Promise {
 
-    public func cauterize(tag: String? = nil) {
+    public func cauterize(tag: String?) {
         `catch` { error in
+            let message: String
             if let tag = tag {
-                print("PromiseKit: [\(tag)] unhandled error:", error)
+                message = "PromiseKit: [\(tag)] unhandled error: \(error)"
             } else {
-                print("PromiseKit: unhandled error:", error)
+                message = "PromiseKit: unhandled error: \(error)"
             }
+            CLog(message)
         }
+    }
+}
+
+extension URLSession {
+    public func getTasks() -> Promise<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
+        return wrap(getTasksWithCompletionHandler)
+    }
+}
+
+extension OperationQueue {
+
+    func promise<T>(execute body: @escaping () throws -> T) -> Promise<T> {
+        return Promise(resolvers: { (fulfill, reject) in
+            addOperation {
+                do {
+                    fulfill(try body())
+                } catch {
+                    reject(error)
+                }
+            }
+        })
     }
 }

@@ -22,6 +22,8 @@
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5424773D1E7856040051C196 /* TranslationDownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* TranslationDownloadButton.swift */; };
 		5424773F1E7B1C060051C196 /* SQLite+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773E1E7B1C060051C196 /* SQLite+Extension.swift */; };
+		542477411E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542477401E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift */; };
+		542477431E7B2CBE0051C196 /* Protected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542477421E7B2CBE0051C196 /* Protected.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		544629DC1E67636F005B1107 /* TranslationFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DB1E67636F005B1107 /* TranslationFull.swift */; };
 		544629DE1E676703005B1107 /* Download+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DD1E676703005B1107 /* Download+Types.swift */; };
@@ -286,6 +288,8 @@
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* TranslationDownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDownloadButton.swift; sourceTree = "<group>"; };
 		5424773E1E7B1C060051C196 /* SQLite+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SQLite+Extension.swift"; sourceTree = "<group>"; };
+		542477401E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeDownloadSessionDelegate.swift; sourceTree = "<group>"; };
+		542477421E7B2CBE0051C196 /* Protected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protected.swift; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		544629DB1E67636F005B1107 /* TranslationFull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationFull.swift; sourceTree = "<group>"; };
 		544629DD1E676703005B1107 /* Download+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Download+Types.swift"; sourceTree = "<group>"; };
@@ -744,6 +748,7 @@
 			isa = PBXGroup;
 			children = (
 				54C0DC211CE7695E009AAD8D /* URLSessionDownloadManager.swift */,
+				542477401E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift */,
 				54C0DC231CE76EF4009AAD8D /* DownloadSessionDelegate.swift */,
 			);
 			name = impl;
@@ -968,6 +973,7 @@
 				5415A94E1DC92A9C0089F9CB /* Cache.swift */,
 				549040AA1E61813B00D54625 /* Parsable.swift */,
 				544629EB1E754DDA005B1107 /* Retry.swift */,
+				542477421E7B2CBE0051C196 /* Protected.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1744,6 +1750,7 @@
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
 				54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */,
+				542477411E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift in Sources */,
 				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				544629DE1E676703005B1107 /* Download+Types.swift in Sources */,
 				C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */,
@@ -1763,6 +1770,7 @@
 				54B266931CCACCBF00D3AEF8 /* CircleView.swift in Sources */,
 				5494CCB21CEFA5F700031686 /* Constants.swift in Sources */,
 				54B2667A1CCAAB6600D3AEF8 /* Juz.swift in Sources */,
+				542477431E7B2CBE0051C196 /* Protected.swift in Sources */,
 				54B266971CCACEB400D3AEF8 /* QuranImageService.swift in Sources */,
 				548724231DC4B42F00ADDE54 /* SQLiteBookmarksPersistence.swift in Sources */,
 				548724211DC4B3C300ADDE54 /* Tag.swift in Sources */,

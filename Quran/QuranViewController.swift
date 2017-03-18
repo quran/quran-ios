@@ -18,6 +18,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private let dataRetriever: AnyDataRetriever<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<QariTableViewController, Void>
+    private let translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>
     private let simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater!
 
@@ -62,24 +63,26 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         get { return simplePersistence.valueForKey(.showQuranTranslationView) }
     }
 
-    init(imageService: QuranImageService,
+    init(imageService: QuranImageService, // swiftlint:disable:this function_parameter_count
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
          qarisControllerCreator: AnyCreator<QariTableViewController, Void>,
+         translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>,
          bookmarksPersistence: BookmarksPersistence,
          lastPagesPersistence: LastPagesPersistence,
         simplePersistence: SimplePersistence,
          page: Int,
          lastPage: LastPage?) {
-        self.dataRetriever          = dataRetriever
-        self.audioViewPresenter     = audioViewPresenter
-        self.qarisControllerCreator = qarisControllerCreator
-        self.bookmarksPersistence   = bookmarksPersistence
-        self.lastPagesPersistence   = lastPagesPersistence
-        self.initialPage            = page
-        self.lastPageUpdater        = LastPageUpdater(persistence: lastPagesPersistence)
-        self.simplePersistence      = simplePersistence
+        self.initialPage                            = page
+        self.dataRetriever                          = dataRetriever
+        self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
+        self.simplePersistence                      = simplePersistence
+        self.audioViewPresenter                     = audioViewPresenter
+        self.bookmarksPersistence                   = bookmarksPersistence
+        self.lastPagesPersistence                   = lastPagesPersistence
+        self.qarisControllerCreator                 = qarisControllerCreator
+        self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
 
         self.pageDataSource = QuranPagesDataSource(
             reuseIdentifier: cellReuseId,
@@ -352,7 +355,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     @objc private func selectTranslationsButtonTapped() {
-
+        let controller = translationsSelectionControllerCreator.create(parameters: ())
+        present(controller, animated: true, completion: nil)
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

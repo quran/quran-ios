@@ -48,6 +48,16 @@ class Container {
         return JuzsNavigationController(rootViewController: createJuzsViewController())
     }
 
+    func createTranslationsSelectionViewController() -> UIViewController {
+        return TranslationsSelectionNavigationController(
+            rootViewController: TranslationsSelectionViewController(
+                interactor: createTranslationsRetrievalInteractor(),
+                localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
+                deletionInteractor: createTranslationDeletionInteractor(),
+                versionUpdater: createTranslationsVersionUpdaterInteractor(),
+                downloader: createDownloadManager()))
+    }
+
     func createTranslationsViewController() -> UIViewController {
         return TranslationsViewController(
             interactor: createTranslationsRetrievalInteractor(),
@@ -124,6 +134,7 @@ class Container {
             ayahInfoRetriever       : createAyahInfoRetriever(),
             audioViewPresenter      : createAudioBannerViewPresenter(),
             qarisControllerCreator  : createCreator(createQariTableViewController),
+            translationsSelectionControllerCreator: createCreator(createTranslationsSelectionViewController),
             bookmarksPersistence    : createBookmarksPersistence(),
             lastPagesPersistence    : createLastPagesPersistence(),
             simplePersistence       : createSimplePersistence(),

@@ -16,7 +16,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     private let localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>
 
     private var activityIndicator: UIActivityIndicatorView? {
-        return navigationItem.rightBarButtonItem?.customView as? UIActivityIndicatorView
+        return navigationItem.leftBarButtonItem?.customView as? UIActivityIndicatorView
     }
 
     init(interactor: AnyInteractor<Void, [TranslationFull]>,
@@ -51,7 +51,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.stopAnimating()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: activityIndicator)
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

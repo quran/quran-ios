@@ -27,10 +27,13 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private let didLayoutSubviewToken = Once()
 
     private var isBookmarked: Bool?
-    private var backButtonItem: UIBarButtonItem
     private var translationButton: UIBarButtonItem
 
     private var lastPageUpdater: LastPageUpdater!
+
+    private var titleView: QuranPageTitleView? {
+        return navigationItem.titleView as? QuranPageTitleView
+    }
 
     init(imageService: QuranImageService,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
@@ -55,7 +58,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
-        backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         translationButton = UIBarButtonItem(image: UIImage(named: "globe-25"), style: .plain, target: nil, action: nil)
 
         super.init(nibName: nil, bundle: nil)
@@ -85,7 +87,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private var initialPage: Int = 0 {
         didSet {
             title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
-            backButtonItem.title = title
+            updateTitle(sura: Quran.nameForSura(Quran.PageSuraStart[initialPage - 1]), pageNumber: initialPage)
         }
     }
 
@@ -169,6 +171,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // set the custom title view
+        navigationItem.titleView = QuranPageTitleView()
+
         dataRetriever.retrieve { [weak self] (data: [QuranPage]) in
             self?.pageDataSource.items = data
             self?.collectionView?.reloadData()
@@ -176,10 +181,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
 
         audioViewPresenter.onViewDidLoad()
-
-        // hide the title, because we'll set it on the left side
-        navigationItem.titleView = UILabel()
-        navigationController?.navigationBar.topItem?.backBarButtonItem = backButtonItem
 
         // start hiding bars timer
         startHiddenBarsTimer()
@@ -205,6 +206,15 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         super.viewDidLayoutSubviews()
         didLayoutSubviewToken.once {}
         scrollToFirstPage()
+    }
+
+    private func updateTitle(sura: String, pageNumber: Int) {
+        let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, pageNumber, Juz.juzFromPage(pageNumber).juzNumber)
+        titleView?.titleLabel.text = sura
+        titleView?.detailsLabel.text = pageDescription
+        titleView?.sizeToFit()
+        navigationController?.navigationBar.setNeedsLayout()
     }
 
     fileprivate func scrollToFirstPage() {
@@ -289,8 +299,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     fileprivate func updateBarToPage(_ page: QuranPage) {
-        title = Quran.nameForSura(page.startAyah.sura)
-        backButtonItem.title = title
+        updateTitle(sura: Quran.nameForSura(page.startAyah.sura), pageNumber: page.pageNumber)
 
         isBookmarked = nil
         DispatchQueue.bookmarks

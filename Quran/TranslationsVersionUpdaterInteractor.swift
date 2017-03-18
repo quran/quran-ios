@@ -58,12 +58,19 @@ class TranslationsVersionUpdaterInteractor: Interactor {
         for var translation in translations {
 
             let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
-            // installed on the latest version & the db file exists
-            if translation.version != translation.installedVersion && fileURL.isReachable {
+            let isReachable = fileURL.isReachable
+            let previousInstalledVersion = translation.installedVersion
 
+            // installed on the latest version & the db file exists
+            if translation.version != translation.installedVersion && isReachable {
                 let versionPersistence = versionPersistenceCreator.create(parameters: fileURL.absoluteString)
                 let version = try versionPersistence.getTextVersion()
                 translation.installedVersion = version
+            } else if translation.installedVersion != nil && !isReachable {
+                translation.installedVersion = nil
+            }
+
+            if previousInstalledVersion != translation.installedVersion {
                 try persistence.update(translation)
             }
             updatedTranslations.append(translation)

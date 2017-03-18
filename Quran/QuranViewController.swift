@@ -273,7 +273,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     fileprivate func startHiddenBarsTimer() {
-        // increate the timer duration to give existing users the time to rel
+        // increate the timer duration to give existing users the time to see the new buttons
         barsTimer = Timer(interval: 5) { [weak self] in
             self?.setBarsHidden(true)
         }

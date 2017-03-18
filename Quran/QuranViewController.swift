@@ -44,6 +44,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
     }
 
+    private var interactivePopGestureOldEnabled: Bool?
     private var barsHiddenTimerExecuted = false
 
     private var statusBarHidden = false {
@@ -63,6 +64,18 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     private var isTranslationView: Bool {
         set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
         get { return simplePersistence.valueForKey(.showQuranTranslationView) }
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return statusBarHidden || traitCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
+    }
+
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .slide
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     init(imageService: QuranImageService, // swiftlint:disable:this function_parameter_count
@@ -111,18 +124,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
     required init?(coder aDecoder: NSCoder) {
         unimplemented()
-    }
-
-    override var prefersStatusBarHidden: Bool {
-        return statusBarHidden || traitCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
-    }
-
-    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .slide
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
     }
 
     override func loadView() {
@@ -182,8 +183,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
 
         audioViewPresenter.onViewDidLoad()
     }
-
-    fileprivate var interactivePopGestureOldEnabled: Bool?
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

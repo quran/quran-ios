@@ -8,12 +8,17 @@
 
 import UIKit
 
-class TranslationsSelectionViewController: TranslationsViewController {
+class TranslationsSelectionViewController: TranslationsViewController<TranslationSelectionTableViewCell> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = NSLocalizedString("translationsSelectionTitle", comment: "")
+        navigationItem.titleView = nil
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
+
+        tableView.allowsSelection = true
+        tableView.register(cell: TranslationSelectionTableViewCell.self)
     }
 
     func dismissViewController() {

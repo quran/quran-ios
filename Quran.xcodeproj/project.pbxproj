@@ -41,6 +41,9 @@
 		545499B11E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 545499AF1E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib */; };
 		545499B31E7DB9C800F4F927 /* TranslationsSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */; };
 		545499B51E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */; };
+		545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */; };
+		545499B91E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */; };
+		545499BB1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
 		545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE51A1DCE0D450085D31F /* LastPage.swift */; };
@@ -314,6 +317,9 @@
 		545499AF1E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationSelectionTableViewCell.xib; sourceTree = "<group>"; };
 		545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionViewController.swift; sourceTree = "<group>"; };
 		545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionNavigationController.swift; sourceTree = "<group>"; };
+		545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionDataSource.swift; sourceTree = "<group>"; };
+		545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionBasicDataSource.swift; sourceTree = "<group>"; };
+		545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GenericDataSources+Extension.swift"; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
@@ -603,9 +609,11 @@
 		544629E01E6ADFE0005B1107 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
-				544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */,
 				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
+				544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */,
+				545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */,
+				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
+				545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */,
 			);
 			name = Translations;
 			sourceTree = "<group>";
@@ -978,6 +986,7 @@
 				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
 				549040C71E641F4C00D54625 /* UIViewController+Extension.swift */,
 				5424773E1E7B1C060051C196 /* SQLite+Extension.swift */,
+				545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1694,6 +1703,7 @@
 				54C0DC221CE7695E009AAD8D /* URLSessionDownloadManager.swift in Sources */,
 				54C3C8961CD7DAA60045F18F /* Timer.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */,
+				545499B91E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift in Sources */,
 				548723FA1DC4855E00ADDE54 /* SQLitePersistence.swift in Sources */,
 				545499B51E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift in Sources */,
 				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,
@@ -1701,6 +1711,7 @@
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */,
+				545499BB1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
@@ -1835,6 +1846,7 @@
 				54B266BF1CD16F1E00D3AEF8 /* NotImplemented.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,
 				54B1356C1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift in Sources */,
+				545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */,
 				54B2668B1CCACC4A00D3AEF8 /* QuranPage.swift in Sources */,
 				54B266A61CCD944600D3AEF8 /* QuartersDataRetriever.swift in Sources */,
 				54C0DBF51CE4B162009AAD8D /* QariTableViewCell.swift in Sources */,

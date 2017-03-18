@@ -53,18 +53,14 @@ class Container {
             rootViewController: TranslationsSelectionViewController(
                 interactor: createTranslationsRetrievalInteractor(),
                 localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
-                deletionInteractor: createTranslationDeletionInteractor(),
-                versionUpdater: createTranslationsVersionUpdaterInteractor(),
-                downloader: createDownloadManager()))
+                dataSource: createTranslationsSelectionDataSource()))
     }
 
     func createTranslationsViewController() -> UIViewController {
         return TranslationsViewController(
             interactor: createTranslationsRetrievalInteractor(),
             localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
-            deletionInteractor: createTranslationDeletionInteractor(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor(),
-            downloader: createDownloadManager())
+            dataSource: createTranslationsDataSource())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -97,6 +93,38 @@ class Container {
 
     func createQariTableViewController() -> QariTableViewController {
         return QariTableViewController(style: .plain)
+    }
+
+    func createTranslationsDataSource() -> TranslationsDataSource {
+        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let downloadedDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let dataSource = TranslationsDataSource(
+            downloader: createDownloadManager(),
+            deletionInteractor: createTranslationDeletionInteractor(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor(),
+            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
+            headerReuseId: "header")
+        pendingDS.delegate = dataSource
+        downloadedDS.delegate = dataSource
+        return dataSource
+    }
+
+    func createTranslationsSelectionDataSource() -> TranslationsDataSource {
+        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let downloadedDS = TranslationsSelectionBasicDataSource(
+            reuseIdentifier: TranslationSelectionTableViewCell.reuseId,
+            simplePersistence: createSimplePersistence())
+        let dataSource = TranslationsSelectionDataSource(
+            downloader: createDownloadManager(),
+            deletionInteractor: createTranslationDeletionInteractor(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor(),
+            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
+            headerReuseId: "header")
+        pendingDS.delegate = dataSource
+        downloadedDS.delegate = dataSource
+        return dataSource
     }
 
     func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {

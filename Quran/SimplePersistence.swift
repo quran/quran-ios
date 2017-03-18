@@ -11,6 +11,7 @@ import Foundation
 class PersistenceKeyBase {
     static let LastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
     static let showQuranTranslationView = PersistenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
+    static let selectedTranslations = PersistenceKey<[Int]>(key: "showQuranTranslationView", defaultValue: [])
 }
 
 final class PersistenceKey<Type>: PersistenceKeyBase {

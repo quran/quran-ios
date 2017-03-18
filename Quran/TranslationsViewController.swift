@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import GenericDataSources
 
-class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
+class TranslationsViewController<CellType: TranslationTableViewCell>: BaseTableViewController, TranslationsDataSourceDelegate {
 
     private let dataSource: TranslationsDataSource
 
@@ -21,16 +22,10 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     init(interactor: AnyInteractor<Void, [TranslationFull]>,
          localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>,
-         deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
-         versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
-         downloader: DownloadManager) {
+         dataSource: TranslationsDataSource) {
         self.interactor = interactor
         self.localTranslationsInteractor = localTranslationsInteractor
-        dataSource = TranslationsDataSource(
-            downloader: downloader,
-            deletionInteractor: deletionInteractor,
-            versionUpdater: versionUpdater,
-            headerReuseId: "header")
+        self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
     }
@@ -95,7 +90,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
             }.catchToAlertView(viewController: self)
     }
 
-    func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error) {
+    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
         showErrorAlert(error: error)
     }
 }

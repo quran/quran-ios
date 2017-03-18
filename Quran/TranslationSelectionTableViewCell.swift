@@ -10,4 +10,14 @@ import UIKit
 
 class TranslationSelectionTableViewCell: TranslationTableViewCell {
     @IBOutlet weak var checkbox: UIImageView!
+
+    func setSelection(_ selected: Bool) {
+        let image: UIImage
+        if selected {
+            image = #imageLiteral(resourceName: "checkbox-selected").withRenderingMode(.alwaysTemplate)
+        } else {
+            image = #imageLiteral(resourceName: "checkbox-unselected").withRenderingMode(.alwaysOriginal)
+        }
+        checkbox.image = image
+    }
 }

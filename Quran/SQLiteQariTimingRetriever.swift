@@ -7,28 +7,30 @@
 //
 
 import Foundation
+import PromiseKit
 
 struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
     let persistenceCreator: AnyCreator<QariAyahTimingPersistence, URL>
 
-    func retrieveTimingForQari(_ qari: Qari, startAyah: AyahNumber, onCompletion: @escaping (Result<[AyahNumber: AyahTiming]>) -> Void) {
+    func retrieveTiming(for qari: Qari, startAyah: AyahNumber) -> Promise<[AyahNumber: AyahTiming]> {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
-        Queue.background.tryAsync({
-            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-            let persistence = self.persistenceCreator.create(parameters: fileURL)
-            let timings = try persistence.getTimingForSura(startAyah: startAyah)
-            return timings
-        }, onMain: onCompletion)
+
+        return DispatchQueue.global() .promise {
+                let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
+                let persistence = self.persistenceCreator.create(parameters: fileURL)
+                let timings = try persistence.getTimingForSura(startAyah: startAyah)
+                return timings
+        }
     }
 
-    func retrieveTimingForQari(_ qari: Qari, suras: [Int], onCompletion: @escaping (Result<[Int : [AyahTiming]]>) -> Void) {
+    func retrieveTiming(for qari: Qari, suras: [Int]) -> Promise<[Int: [AyahTiming]]> {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
-        Queue.background.tryAsync({
+        return DispatchQueue.global() .promise {
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
             let persistence = self.persistenceCreator.create(parameters: fileURL)
 
@@ -38,6 +40,6 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
                 result[sura] = timings
             }
             return result
-        }, onMain: onCompletion)
+        }
     }
 }

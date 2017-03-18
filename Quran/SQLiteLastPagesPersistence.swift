@@ -15,8 +15,8 @@ extension PersistenceKeyBase {
     fileprivate static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
 }
 
-extension Queue {
-    static let lastPages = Queue(queue: DispatchQueue(label: "com.quran.last_pages"))
+extension DispatchQueue {
+    static let lastPages = DispatchQueue(label: "com.quran.last_pages")
 }
 
 struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {

@@ -223,21 +223,27 @@ class HighlightingView: UIView {
             let image = UIImage(named: "bookmark-filled")?.tintedImage(withColor: .bookmark())
             return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah) }) { _ in
-                    var bookmarks = self.highlights[.bookmark] ?? Set()
-                    bookmarks.remove(ayah)
-                    self.highlights[.bookmark] = bookmarks
-                }
+
+                DispatchQueue.bookmarks
+                    .promise { try self.bookmarkPersistence.removeAyahBookmark(atPage: self.page, ayah: ayah) }
+                    .then(on: .main) { _ -> Void in
+                        var bookmarks = self.highlights[.bookmark] ?? Set()
+                        bookmarks.remove(ayah)
+                        self.highlights[.bookmark] = bookmarks
+                }.cauterize(tag: "BookmarksPersistence.removeAyahBookmark")
             }
         } else {
             let image = UIImage(named: "bookmark-empty")?.tintedImage(withColor: .white)
             return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
                 guard let `self` = self else { return }
-                Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah) }) { _ in
-                    var bookmarks = self.highlights[.bookmark] ?? Set()
-                    bookmarks.insert(ayah)
-                    self.highlights[.bookmark] = bookmarks
-                }
+
+                DispatchQueue.bookmarks
+                    .promise { try self.bookmarkPersistence.insertAyahBookmark(forPage: self.page, ayah: ayah) }
+                    .then(on: .main) { _ -> Void in
+                        var bookmarks = self.highlights[.bookmark] ?? Set()
+                        bookmarks.insert(ayah)
+                        self.highlights[.bookmark] = bookmarks
+                }.cauterize(tag: "BookmarksPersistence.insertAyahBookmark")
             }
         }
     }

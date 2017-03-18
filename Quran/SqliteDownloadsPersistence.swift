@@ -9,10 +9,6 @@
 import Foundation
 import SQLite
 
-extension Queue {
-    static let downloads = Queue(queue: DispatchQueue(label: "com.quran.downloads"))
-}
-
 struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     let version: UInt = 1

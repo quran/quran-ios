@@ -49,24 +49,26 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
 
         } else {
             cell.name.text = item.ayah.localizedName
-            Queue.bookmarks.async({ try? self.ayahPersistence.getAyahTextForNumber(item.ayah) }) { [weak self, weak cell] text in
-                guard let text = text else { return }
-                guard let cell = cell else { return }
-                guard self?.ds_reusableViewDelegate?.ds_indexPath(for: cell) == indexPath else { return }
+            DispatchQueue.bookmarks
+                .promise { try self.ayahPersistence.getAyahTextForNumber(item.ayah) }
+                .then(on: .main) { text -> Void in
+                    guard self.ds_reusableViewDelegate?.ds_indexPath(for: cell) == indexPath else { return }
 
-                // save to cache
-                self?.ayahCache.setObject(text, forKey: item.ayah)
+                    // save to cache
+                    self.ayahCache.setObject(text, forKey: item.ayah)
 
-                // update the UI
-                cell.name.text = text
-            }
+                    // update the UI
+                    cell.name.text = text
+            }.cauterize(tag: "AyahTextPersistence.getAyahTextForNumber")
         }
     }
 
     func reloadData() {
-        Queue.bookmarks.asyncSuccess({ try self.persistence.retrieveAyahBookmarks() }) { [weak self] items in
-            self?.items = items
-            self?.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
-        }
+        DispatchQueue.bookmarks
+        .promise(execute: self.persistence.retrieveAyahBookmarks)
+            .then(on: .main) { items -> Void in
+                self.items = items
+                self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
+        }.cauterize(tag: "BookmarksPersistence.retrieveAyahBookmarks")
     }
 }

@@ -71,10 +71,11 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
 
         // set bookmarked ayat
-        Queue.bookmarks.asyncSuccess({ try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }) { [weak cell] _, ayahBookmarks in
-            guard cell?.page == item else { return }
-            cell?.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
-        }
+        DispatchQueue.bookmarks
+            .promise { try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }
+            .then(on: .main) { (_, ayahBookmarks) -> Void in
+                cell.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
+        }.cauterize(tag: "bookmarkPersistence.retrieve(inPage:)")
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
@@ -118,9 +119,10 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
     }
 
     private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
-        Queue.background.async({ ayah.getStartPage() }) {
-            self.scrollTo(page: $0)
-        }
+        DispatchQueue.global()
+        .promise(execute: ayah.getStartPage)
+            .then(on: .main) { self.scrollTo(page: $0) }
+        .cauterize(tag: "Never.getStartPage")
     }
 
     func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {

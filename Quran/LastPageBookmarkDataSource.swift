@@ -38,9 +38,11 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
     }
 
     func reloadData() {
-        Queue.bookmarks.asyncSuccess({ try self.persistence.retrieveAll() }) { [weak self] items in
-            self?.items = items
-            self?.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
-        }
+        DispatchQueue.bookmarks
+            .promise(execute: self.persistence.retrieveAll)
+            .then(on: .main) { items -> Void in
+                self.items = items
+                self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
+            }.cauterize(tag: "LastPagesPersistence.retrieveAll")
     }
 }

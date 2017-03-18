@@ -126,6 +126,7 @@ class Container {
             qarisControllerCreator  : createCreator(createQariTableViewController),
             bookmarksPersistence    : createBookmarksPersistence(),
             lastPagesPersistence    : createLastPagesPersistence(),
+            simplePersistence       : createSimplePersistence(),
             page                    : page,
             lastPage                : lastPage
         )

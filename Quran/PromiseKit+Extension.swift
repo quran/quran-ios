@@ -35,7 +35,7 @@ extension Promise {
 }
 
 extension URLSession {
-    public func getTasks() -> Promise<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
+    public func getTasks() -> Promise<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {// swiftlint:disable:this large_tuple
         return wrap(getTasksWithCompletionHandler)
     }
 }

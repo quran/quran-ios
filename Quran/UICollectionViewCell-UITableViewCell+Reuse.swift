@@ -20,14 +20,12 @@ extension UITableViewCell {
     }
 }
 
-
 extension UICollectionView {
 
     func register(cell: UICollectionViewCell.Type) {
         register(UINib(nibName: String(describing: cell), bundle: nil), forCellWithReuseIdentifier: cell.reuseId)
     }
 }
-
 
 extension UITableView {
 

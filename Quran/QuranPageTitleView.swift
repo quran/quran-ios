@@ -38,9 +38,9 @@ class QuranPageTitleView: UIView {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
-                                                      options: [], metrics: nil, views: ["view" : contentView]))
+                                                      options: [], metrics: nil, views: ["view": contentView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
-                                                      options: [], metrics: nil, views: ["view" : contentView]))
+                                                      options: [], metrics: nil, views: ["view": contentView]))
         contentView.backgroundColor = .clear
     }
 

@@ -33,7 +33,7 @@ extension BackendServices: TargetType {
 
     var parameters: [String : Any]? {
         switch self {
-        case .translations: return ["v" : "3"]
+        case .translations: return ["v": "3"]
         }
     }
 

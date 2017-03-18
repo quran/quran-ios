@@ -250,7 +250,7 @@ private class DownloadingObserver: NSObject {
         let response: DownloadNetworkResponse = cast(translation.downloadResponse)
         kvoController.observe(response.progress, keyPath: "fractionCompleted",
                               options: [.initial, .new],
-                              block: { [weak self] (_, progress, change) in
+                              block: { [weak self] (_, progress, _) in
                                 if let progress = progress as? Progress, let translation = self?.translation {
                                     Queue.main.async {
                                         self?.dataSource?.onDownloadProgressUpdated(progress: Float(progress.fractionCompleted), for: translation)

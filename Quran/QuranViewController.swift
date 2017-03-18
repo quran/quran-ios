@@ -73,7 +73,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
          translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>,
          bookmarksPersistence: BookmarksPersistence,
          lastPagesPersistence: LastPagesPersistence,
-        simplePersistence: SimplePersistence,
+         simplePersistence: SimplePersistence,
          page: Int,
          lastPage: LastPage?) {
         self.initialPage                            = page

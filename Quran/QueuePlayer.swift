@@ -125,7 +125,6 @@ class QueuePlayer: NSObject {
         playingItemsInfo = info
         self.playingItemBoundaries = boundaries
 
-
         rateObserver = _Observer()
         rateObserver?.kvoController.observe(player, keyPath: "rate", options: [.initial, .new], block: { [weak self] (_, _, change) in
             self?.updatePlayNowInfo()

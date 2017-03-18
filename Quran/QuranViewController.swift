@@ -44,6 +44,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
     }
 
+    private var barsHiddenTimerExecuted = false
+
     private var statusBarHidden = false {
         didSet {
             setNeedsStatusBarAppearanceUpdate()
@@ -179,9 +181,6 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
 
         audioViewPresenter.onViewDidLoad()
-
-        // start hiding bars timer
-        startHiddenBarsTimer()
     }
 
     fileprivate var interactivePopGestureOldEnabled: Bool?
@@ -192,6 +191,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         navigationController?.setNavigationBarHidden(false, animated: animated)
         interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+
+        // start hiding bars timer
+        if !barsHiddenTimerExecuted {
+            startHiddenBarsTimer()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -253,6 +257,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     fileprivate func setBarsHidden(_ hidden: Bool) {
+        barsHiddenTimerExecuted = true
         navigationController?.setNavigationBarHidden(hidden, animated: true)
 
         if let bottomBarConstraint = bottomBarConstraint {
@@ -278,7 +283,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     fileprivate func startHiddenBarsTimer() {
         // increate the timer duration to give existing users the time to see the new buttons
         barsTimer = Timer(interval: 5) { [weak self] in
-            self?.setBarsHidden(true)
+            if self?.presentedViewController == nil {
+                self?.setBarsHidden(true)
+            }
         }
     }
 

@@ -119,7 +119,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         pendingDS.items    = items.filter { !$0.downloaded }.sorted()
         downloadedDS.items = items.filter {  $0.downloaded }.sorted()
 
-        for item in pendingDS.items {
+        for item in items {
             if item.downloadResponse != nil {
                 downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
             }

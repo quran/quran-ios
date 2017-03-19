@@ -59,6 +59,7 @@ class QuranView: UIView {
 
     private func setUp() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
+        sendSubview(toBack: collectionView)
         bringSubview(toFront: audioView)
     }
 

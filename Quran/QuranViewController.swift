@@ -10,7 +10,7 @@ import UIKit
 import KVOController
 
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
-                        QuranPagesDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
+                        QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
@@ -22,7 +22,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     private let simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater!
 
-    private let pageDataSource: QuranPagesDataSource
+    private let dataSource: QuranDataSource
 
     private let scrollToPageToken = Once()
     private let didLayoutSubviewToken = Once()
@@ -94,24 +94,27 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
 
-        self.pageDataSource = QuranPagesDataSource(
+        let imagesDataSource = QuranImagesDataSource(
             reuseIdentifier: QuranPageCollectionViewCell.reuseId,
             imageService: imageService,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
+
+        dataSource = QuranDataSource(dataSourceRepresentables: [imagesDataSource.asQuranBasicDataSourceRepresentable()])
+        dataSource.selectedDataSourceIndex = 0
 
         super.init(nibName: nil, bundle: nil)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
         audioViewPresenter.delegate = self
-        self.pageDataSource.delegate = self
+        imagesDataSource.delegate = self
 
         automaticallyAdjustsScrollViewInsets = false
 
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
-        pageDataSource.scrollViewDelegate = pageBehavior
+        dataSource.scrollViewDelegate = pageBehavior
         kvoController.observe(pageBehavior, keyPath: "currentPage", options: .new) { [weak self] (_, _, _) in
             self?.onPageChanged()
         }
@@ -131,14 +134,13 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         quranNavigationBar.delegate = self
 
         configureAudioView()
-        quranView.collectionView.ds_useDataSource(pageDataSource)
+        quranView.collectionView.ds_useDataSource(dataSource)
 
         // set the custom title view
         navigationItem.titleView = QuranPageTitleView()
 
-        dataRetriever.retrieve { [weak self] (data: [QuranPage]) in
-            self?.pageDataSource.items = data
-            self?.quranView.collectionView.reloadData()
+        dataRetriever.retrieve { [weak self] items in
+            self?.dataSource.setItems(items)
             self?.scrollToFirstPage()
         }
 
@@ -181,15 +183,15 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     fileprivate func scrollToFirstPage() {
-        guard let index = pageDataSource.items.index(where: { $0.pageNumber == initialPage }), didLayoutSubviewToken.executed else {
+        let currentIndex = dataSource.selectedDataSourceRepresentable.items.index(where: { $0.pageNumber == initialPage })
+        guard let index = currentIndex, didLayoutSubviewToken.executed else {
             return
         }
 
         scrollToPageToken.once {
             let indexPath = IndexPath(item: index, section: 0)
             scrollToIndexPath(indexPath, animated: false)
-
-            onPageChangedToPage(pageDataSource.item(at: indexPath))
+            onPageChangedToPage(dataSource.selectedDataSourceRepresentable.item(at: indexPath))
         }
     }
 
@@ -198,9 +200,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         barsTimer = nil
     }
 
-    // MARK: - QuranPagesDataSourceDelegate
+    // MARK: - QuranImagesDataSourceDelegate
 
-    func share(ayahText: String, from cell: QuranPageCollectionViewCell) {
+    func share(ayahText: String) {
         ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
     }
 
@@ -296,7 +298,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     func highlightAyah(_ ayah: AyahNumber) {
         var set = Set<AyahNumber>()
         set.insert(ayah)
-        pageDataSource.highlightAyaht(set)
+        dataSource.highlightAyaht(set)
 
         // persist if not active
         guard UIApplication.shared.applicationState != .active else { return }
@@ -308,11 +310,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     func removeHighlighting() {
-        pageDataSource.highlightAyaht(Set())
+        dataSource.highlightAyaht(Set())
     }
 
     func currentPage() -> QuranPage? {
-        return quranView.visibleIndexPath().map { pageDataSource.item(at: $0) }
+        return quranView.visibleIndexPath().map { dataSource.selectedDataSourceRepresentable.item(at: $0) }
     }
 
     func onErrorOccurred(error: Error) {

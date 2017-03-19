@@ -1,5 +1,5 @@
 //
-//  QuranPagesDataSource.swift
+//  QuranImagesDataSource.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/22/16.
@@ -9,12 +9,8 @@
 import Foundation
 import GenericDataSources
 
-protocol QuranPagesDataSourceDelegate: class {
-    func share(ayahText: String, from cell: QuranPageCollectionViewCell)
-    func lastViewedPage() -> Int
-}
-
-class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell>, QuranPageCollectionCellDelegate {
+class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell>,
+                    QuranBasicDataSourceRepresentable, QuranPageCollectionCellDelegate {
 
     private let imageService: QuranImageService
     private let ayahInfoRetriever: AyahInfoRetriever
@@ -24,7 +20,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
 
     private var highlightedAyat: Set<AyahNumber> = Set()
 
-    weak var delegate: QuranPagesDataSourceDelegate?
+    weak var delegate: QuranDataSourceDelegate?
 
     init(reuseIdentifier: String,
          imageService: QuranImageService,
@@ -34,12 +30,6 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         self.ayahInfoRetriever = ayahInfoRetriever
         self.bookmarkPersistence = bookmarkPersistence
         super.init(reuseIdentifier: reuseIdentifier)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -97,7 +87,7 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
         }
     }
 
-    @objc private func applicationBecomeActive() {
+    func applicationDidBecomeActive() {
         if let ayah = highlightedAyat.first {
             scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
         } else {
@@ -126,6 +116,6 @@ class QuranPagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCe
     }
 
     func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
-        delegate?.share(ayahText: ayahText, from: collectionCell)
+        delegate?.share(ayahText: ayahText)
     }
 }

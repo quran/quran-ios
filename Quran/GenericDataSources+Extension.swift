@@ -12,7 +12,7 @@ import GenericDataSources
 protocol BasicDataSourceRepresentable: class {
     associatedtype Item
     var items: [Item] { get set }
-    var datasource: AbstractDataSource { get }
+    var dataSource: AbstractDataSource { get }
 }
 
 private class _AnyBasicDataSourceRepresentableBoxBase<Item>: BasicDataSourceRepresentable {
@@ -22,7 +22,7 @@ private class _AnyBasicDataSourceRepresentableBoxBase<Item>: BasicDataSourceRepr
         set { fatalError() }
     }
 
-    var datasource: AbstractDataSource { fatalError() }
+    var dataSource: AbstractDataSource { fatalError() }
 }
 
 private class _AnyBasicDataSourceRepresentableBox<DS: BasicDataSourceRepresentable>: _AnyBasicDataSourceRepresentableBoxBase<DS.Item> {
@@ -37,7 +37,7 @@ private class _AnyBasicDataSourceRepresentableBox<DS: BasicDataSourceRepresentab
         set { ds.items = newValue }
     }
 
-    override var datasource: AbstractDataSource { return ds.datasource }
+    override var dataSource: AbstractDataSource { return ds.dataSource }
 }
 
 class AnyBasicDataSourceRepresentable<Item>: BasicDataSourceRepresentable {
@@ -52,7 +52,7 @@ class AnyBasicDataSourceRepresentable<Item>: BasicDataSourceRepresentable {
         set { box.items = newValue }
     }
 
-    var datasource: AbstractDataSource { return box.datasource }
+    var dataSource: AbstractDataSource { return box.dataSource }
 }
 
 extension BasicDataSourceRepresentable {
@@ -82,5 +82,5 @@ extension BasicDataSourceRepresentable {
 }
 
 extension BasicDataSource: BasicDataSourceRepresentable {
-    var datasource: AbstractDataSource { return self }
+    var dataSource: AbstractDataSource { return self }
 }

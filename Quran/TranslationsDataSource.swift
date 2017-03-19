@@ -47,8 +47,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
             ])
 
         set(headerCreator: headers)
-        add(downloadedDS.datasource)
-        add(pendingDS.datasource)
+        add(downloadedDS.dataSource)
+        add(pendingDS.dataSource)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -63,14 +63,14 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let ds = dataSource(at: indexPath.section)
-        return ds === downloadedDS.datasource
+        return ds === downloadedDS.dataSource
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt globalIndexPath: IndexPath) {
         guard editingStyle == .delete else {
             return
         }
-        let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS.datasource)
+        let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS.dataSource)
         let item = downloadedDS.item(at: localIndexPath)
 
         deletionInteractor
@@ -108,7 +108,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // move the cell
         let newLocalIndexPath: IndexPath = cast(to.indexPath(for: newItem))
-        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to.datasource)
+        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to.dataSource)
         return newGlobalIndexPath
     }
 
@@ -141,7 +141,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
             CLog("Cannot updated progress for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.datasource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = translation.state
     }
@@ -160,7 +160,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // update the UI
         delegate?.translationsDataSource(self, errorOccurred: error)
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.datasource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = newItem.state
     }
@@ -170,7 +170,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
             CLog("Cannot complete download for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.datasource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
 
         // remove old observer
         let observer = downloadingObservers.removeValue(forKey: translation.translation.id)

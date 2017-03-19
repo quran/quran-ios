@@ -62,3 +62,14 @@ class QuranPageTitleView: UIView {
         return result
     }
 }
+
+extension QuranPageTitleView {
+    func setPageNumber(_ pageNumber: Int, navigationBar: UINavigationBar?) {
+        let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, pageNumber, Juz.juzFromPage(pageNumber).juzNumber)
+        titleLabel.text = Quran.nameForSura(Quran.PageSuraStart[pageNumber - 1])
+        detailsLabel.text = pageDescription
+        sizeToFit()
+        navigationBar?.setNeedsLayout()
+    }
+}

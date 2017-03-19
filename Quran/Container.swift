@@ -91,8 +91,12 @@ class Container {
                                             ayahPersistence: createAyahTextStorage())
     }
 
-    func createQariTableViewController() -> QariTableViewController {
-        return QariTableViewController(style: .plain)
+    func createQariTableViewController(qaris: [Qari], selectedQariIndex: Int) -> QariTableViewController {
+        return QariTableViewController(style: .plain, qaris: qaris, selectedQariIndex: selectedQariIndex)
+    }
+
+    func createQariTableViewControllerCreator() -> AnyCreator<QariTableViewController, ([Qari], Int, UIView?)> {
+        return QariTableViewControllerCreator(qarisControllerCreator: createCreator(createQariTableViewController)).asAnyCreator()
     }
 
     func createTranslationsDataSource() -> TranslationsDataSource {
@@ -161,7 +165,7 @@ class Container {
             dataRetriever           : createQuranPagesRetriever(),
             ayahInfoRetriever       : createAyahInfoRetriever(),
             audioViewPresenter      : createAudioBannerViewPresenter(),
-            qarisControllerCreator  : createCreator(createQariTableViewController),
+            qarisControllerCreator  : createQariTableViewControllerCreator(),
             translationsSelectionControllerCreator: createCreator(createTranslationsSelectionViewController),
             bookmarksPersistence    : createBookmarksPersistence(),
             lastPagesPersistence    : createLastPagesPersistence(),
@@ -173,7 +177,7 @@ class Container {
 
     func createCreator<CreatedObject, Parameters>(
         _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<CreatedObject, Parameters> {
-        return AnyCreator(createClosure: creationClosure).erasedType()
+        return AnyCreator(createClosure: creationClosure)
     }
 
     func createQuranImageService() -> QuranImageService {

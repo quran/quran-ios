@@ -20,7 +20,7 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
         return DispatchQueue.global() .promise {
                 let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-                let persistence = self.persistenceCreator.create(parameters: fileURL)
+                let persistence = self.persistenceCreator.create(fileURL)
                 let timings = try persistence.getTimingForSura(startAyah: startAyah)
                 return timings
         }
@@ -32,7 +32,7 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
         }
         return DispatchQueue.global() .promise {
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-            let persistence = self.persistenceCreator.create(parameters: fileURL)
+            let persistence = self.persistenceCreator.create(fileURL)
 
             var result: [Int: [AyahTiming]] = [:]
             for sura in suras {

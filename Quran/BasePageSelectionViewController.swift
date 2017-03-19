@@ -85,7 +85,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     }
 
     fileprivate func navigateToPage(_ page: Int) {
-        let controller = self.quranControllerCreator.create(parameters: (page, nil))
+        let controller = self.quranControllerCreator.create((page, nil))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

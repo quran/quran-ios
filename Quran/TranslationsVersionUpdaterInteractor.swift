@@ -63,7 +63,7 @@ class TranslationsVersionUpdaterInteractor: Interactor {
 
             // installed on the latest version & the db file exists
             if translation.version != translation.installedVersion && isReachable {
-                let versionPersistence = versionPersistenceCreator.create(parameters: fileURL.absoluteString)
+                let versionPersistence = versionPersistenceCreator.create(fileURL.absoluteString)
                 let version = try versionPersistence.getTextVersion()
                 translation.installedVersion = version
             } else if translation.installedVersion != nil && !isReachable {

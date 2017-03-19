@@ -24,3 +24,5 @@ type_body_length: 300
 function_parameter_count: 10
 
 function_body_length: 80
+
+large_tuple: 4

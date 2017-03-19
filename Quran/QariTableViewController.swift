@@ -13,9 +13,9 @@ private let cellReuseId = "cell"
 
 class QariTableViewController: UITableViewController {
 
-    let dataSource = QarisDataSource(reuseIdentifier: cellReuseId)
+    private let dataSource = QarisDataSource(reuseIdentifier: cellReuseId)
 
-    var selectedIndex: Int = 0 {
+    var selectedIndex: Int {
         didSet {
             onSelectedIndexChanged?(selectedIndex)
         }
@@ -23,22 +23,16 @@ class QariTableViewController: UITableViewController {
 
     var onSelectedIndexChanged: ((Int) -> Void)?
 
-    func setQaris(_ qaris: [Qari]) {
-        dataSource.items = qaris
-    }
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(style: UITableViewStyle) {
+    init(style: UITableViewStyle, qaris: [Qari], selectedQariIndex: Int) {
+        selectedIndex = selectedQariIndex
         super.init(style: style)
         setUp()
+        dataSource.items = qaris
+
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setUp()
+        unimplemented()
     }
 
     fileprivate func setUp() {

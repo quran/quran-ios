@@ -214,6 +214,9 @@
 		54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63031CF216C4003D1ABA /* QueuePlayer.swift */; };
 		54EA63061CF38E08003D1ABA /* CollectionType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */; };
 		54EB823F1D0A35EA00CBA802 /* Crash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EB823E1D0A35EA00CBA802 /* Crash.swift */; };
+		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
+		54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */; };
+		54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */; };
 		54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */; };
 		54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */ = {isa = PBXBuildFile; fileRef = 54F5B4371CFAF96B0002A3B8 /* images_1280 */; };
 		C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */; };
@@ -525,6 +528,9 @@
 		54EA63031CF216C4003D1ABA /* QueuePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuePlayer.swift; sourceTree = "<group>"; };
 		54EA63051CF38E08003D1ABA /* CollectionType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionType+Extension.swift"; sourceTree = "<group>"; };
 		54EB823E1D0A35EA00CBA802 /* Crash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crash.swift; sourceTree = "<group>"; };
+		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
+		54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksManager.swift; sourceTree = "<group>"; };
+		54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranNavigationBar.swift; sourceTree = "<group>"; };
 		54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		54F5B4371CFAF96B0002A3B8 /* images_1280 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1280; sourceTree = "<group>"; };
 		979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
@@ -584,14 +590,6 @@
 				5419E5321CFA3F0300071A6D /* Android.stringsdict */,
 			);
 			name = Strings;
-			sourceTree = "<group>";
-		};
-		54236C471DD4F791002E6FD3 /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
-			);
-			name = utils;
 			sourceTree = "<group>";
 		};
 		544629DA1E676357005B1107 /* Translations */ = {
@@ -1232,7 +1230,7 @@
 		54B266BB1CD16E9800D3AEF8 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
-				54236C471DD4F791002E6FD3 /* utils */,
+				54F56C481E7EB93600D7AF57 /* Managers */,
 				54C0DBE61CE48DED009AAD8D /* Views */,
 				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
 			);
@@ -1328,6 +1326,7 @@
 			children = (
 				54C0DBF21CE4B155009AAD8D /* cell */,
 				54C0DBEF1CE4B0C2009AAD8D /* QariTableViewController.swift */,
+				54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */,
 			);
 			name = QariList;
 			sourceTree = "<group>";
@@ -1412,6 +1411,16 @@
 				54EA63031CF216C4003D1ABA /* QueuePlayer.swift */,
 			);
 			name = QueuePlayer;
+			sourceTree = "<group>";
+		};
+		54F56C481E7EB93600D7AF57 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
+				54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */,
+				54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */,
+			);
+			name = Managers;
 			sourceTree = "<group>";
 		};
 		54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */ = {
@@ -1690,6 +1699,7 @@
 				5424773D1E7856040051C196 /* TranslationDownloadButton.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
+				54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */,
 				54C3C8901CD7D5DF0045F18F /* QuranURLs.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
 				549040AB1E61813B00D54625 /* Parsable.swift in Sources */,
@@ -1724,6 +1734,7 @@
 				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
+				54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */,
 				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
 				549040AF1E61B32E00D54625 /* String+Extension.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
@@ -1767,6 +1778,7 @@
 				54B2669E1CCD21F800D3AEF8 /* AyahNumber.swift in Sources */,
 				545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */,
 				54C0DC0A1CE66B20009AAD8D /* AudioPlayerInteractor.swift in Sources */,
+				54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */,
 				545499B01E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift in Sources */,
 				5487241A1DC4957700ADDE54 /* BookmarksPersistence.swift in Sources */,
 				54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */,

@@ -44,6 +44,11 @@ class QuranPageTitleView: UIView {
         contentView.backgroundColor = .clear
     }
 
+    override func layoutSubviews() {
+        sizeToFit()
+        super.layoutSubviews()
+    }
+
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         let containerHeight = superview?.bounds.height ?? size.height
         let isCompressed = containerHeight < 34

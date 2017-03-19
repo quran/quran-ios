@@ -9,7 +9,8 @@
 import Foundation
 
 class PersistenceKeyBase {
-    static let LastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
+    static let lastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
+    static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
     static let showQuranTranslationView = PersistenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
     static let selectedTranslations = PersistenceKey<[Int]>(key: "showQuranTranslationView", defaultValue: [])
 }
@@ -18,7 +19,7 @@ final class PersistenceKey<Type>: PersistenceKeyBase {
     let key: String
     let defaultValue: Type
 
-    init(key: String, defaultValue: Type) {
+    fileprivate init(key: String, defaultValue: Type) {
         self.key = key
         self.defaultValue = defaultValue
     }

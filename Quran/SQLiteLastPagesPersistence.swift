@@ -11,10 +11,6 @@ import SQLite
 
 private let maxNumberOfLastPages = 3
 
-extension PersistenceKeyBase {
-    fileprivate static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
-}
-
 extension DispatchQueue {
     static let lastPages = DispatchQueue(label: "com.quran.last_pages")
 }

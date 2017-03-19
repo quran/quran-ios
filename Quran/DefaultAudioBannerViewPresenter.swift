@@ -31,7 +31,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     var selectedQariIndex: Int = 0 {
         didSet {
-            persistence.setValue(selectedQari.id, forKey: .LastSelectedQariId)
+            persistence.setValue(selectedQari.id, forKey: .lastSelectedQariId)
         }
     }
     var qaris: [Qari] = []
@@ -80,7 +80,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
             self.qaris = qaris
 
             // get last selected qari id
-            let lastSelectedQariId = self.persistence.valueForKey(.LastSelectedQariId)
+            let lastSelectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
             let index = qaris.index { $0.id == lastSelectedQariId }
             if let selectedIndex = index {
                 self.selectedQariIndex = selectedIndex

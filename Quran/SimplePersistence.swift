@@ -12,8 +12,14 @@ class PersistenceKeyBase {
     static let lastSelectedQariId = PersistenceKey<Int>(key: "LastSelectedQariId", defaultValue: -1)
     static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
     static let showQuranTranslationView = PersistenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
-    static let selectedTranslations = PersistenceKey<[Int]>(key: "showQuranTranslationView", defaultValue: [])
+    static let selectedTranslations = PersistenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
 }
+
+#if DEBUG
+private struct Statics {
+    static var registeredKeys = Set<String>()
+}
+#endif
 
 final class PersistenceKey<Type>: PersistenceKeyBase {
     let key: String
@@ -22,6 +28,13 @@ final class PersistenceKey<Type>: PersistenceKeyBase {
     fileprivate init(key: String, defaultValue: Type) {
         self.key = key
         self.defaultValue = defaultValue
+
+        #if DEBUG
+            if Statics.registeredKeys.contains(key) {
+                fatalError("PersistenceKey '\(key)' is registered multiple times")
+            }
+            Statics.registeredKeys.insert(key)
+        #endif
     }
 }
 

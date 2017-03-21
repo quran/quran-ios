@@ -43,6 +43,7 @@ class QuranView: UIView {
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(cell: QuranPageCollectionViewCell.self)
+        collectionView.register(cell: QuranTranslationPageCollectionViewCell.self)
 
         return collectionView
     }()

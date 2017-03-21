@@ -17,6 +17,14 @@ class QuranDataSource: SegmentedDataSource {
         return selectedDataSourceIndex.map { return dataSourceRepresentables[$0] }
     }
 
+    override var selectedDataSource: DataSource? {
+        didSet {
+            if oldValue !== selectedDataSource {
+                ds_reusableViewDelegate?.ds_reloadData()
+            }
+        }
+    }
+
     init(dataSourceRepresentables: [AnyQuranBasicDataSourceRepresentable<QuranPage>]) {
         self.dataSourceRepresentables = dataSourceRepresentables
         super.init()

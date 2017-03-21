@@ -12,7 +12,7 @@ import GenericDataSources
 class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewCell>,
                     QuranBasicDataSourceRepresentable, QuranPageCollectionCellDelegate {
 
-    private let imageService: QuranImageService
+    private let imageService: AnyCacheableService<Int, UIImage>
     private let ayahInfoRetriever: AyahInfoRetriever
     private let bookmarkPersistence: BookmarksPersistence
 
@@ -23,7 +23,7 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
     weak var delegate: QuranDataSourceDelegate?
 
     init(reuseIdentifier: String,
-         imageService: QuranImageService,
+         imageService: AnyCacheableService<Int, UIImage>,
          ayahInfoRetriever: AyahInfoRetriever,
          bookmarkPersistence: BookmarksPersistence) {
         self.imageService = imageService
@@ -48,17 +48,18 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
 
         // set the page image
         cell.mainImageView.image = nil
-        let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
-        imageService.getImageOfPage(item.pageNumber, forSize: size) { [weak cell] (image) in
+        imageService.get(item.pageNumber).then(on: .main) { [weak cell] (image) -> Void in
             guard cell?.page == item else { return }
             cell?.mainImageView.image = image
-        }
+        }.suppress()
 
         // set the ayah dimensions
-        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { [weak cell] (data) in
-            guard cell?.page == item else { return }
-            cell?.setAyahInfo(data.value)
-        }
+        ayahInfoRetriever
+            .retrieveAyahs(in: item.pageNumber)
+            .then(on: .main) { [weak cell] data -> Void in
+                guard cell?.page == item else { return }
+                cell?.setAyahInfo(data)
+        }.cauterize(tag: "retrieveAyahs(in:)")
 
         // set bookmarked ayat
         DispatchQueue.bookmarks
@@ -115,7 +116,7 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
         .cauterize(tag: "Never.getStartPage")
     }
 
-    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String) {
+    func quranPageCollectionCell(_ collectionCell: UICollectionViewCell, didSelectAyahTextToShare ayahText: String) {
         delegate?.share(ayahText: ayahText)
     }
 }

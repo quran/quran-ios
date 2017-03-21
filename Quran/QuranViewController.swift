@@ -73,7 +73,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         return .lightContent
     }
 
-    init(imageService: QuranImageService, // swiftlint:disable:this function_parameter_count
+    init(imageService: AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
@@ -100,10 +100,18 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
-        dataSource = QuranDataSource(dataSourceRepresentables: [imagesDataSource.asQuranBasicDataSourceRepresentable()])
-        dataSource.selectedDataSourceIndex = 0
+        let translationsDataSource = QuranTranslationsDataSource(
+            reuseIdentifier: QuranTranslationPageCollectionViewCell.reuseId,
+            imageService: imageService,
+            ayahInfoRetriever: ayahInfoRetriever,
+            bookmarkPersistence: bookmarksPersistence)
+
+        dataSource = QuranDataSource( dataSourceRepresentables: [imagesDataSource.asQuranBasicDataSourceRepresentable(),
+                                                                 translationsDataSource.asQuranBasicDataSourceRepresentable()])
 
         super.init(nibName: nil, bundle: nil)
+
+        updateTranslationView()
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
@@ -280,6 +288,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onTranslationButtonTapped() {
+        updateTranslationView()
     }
 
     func onSelectTranslationsButtonTapped() {
@@ -319,5 +328,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
     func onErrorOccurred(error: Error) {
         showErrorAlert(error: error)
+    }
+
+    private func updateTranslationView() {
+        dataSource.selectedDataSourceIndex = quranNavigationBar.isTranslationView ? 1 : 0
     }
 }

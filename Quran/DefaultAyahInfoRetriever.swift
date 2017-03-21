@@ -6,25 +6,17 @@
 //  Copyright © 2016 Quran.com. All rights reserved.
 //
 
-import Foundation
+import PromiseKit
 
 struct DefaultAyahInfoRetriever: AyahInfoRetriever {
 
     let persistence: AyahInfoPersistence
 
-    func retrieveAyahsAtPage(_ page: Int, onCompletion: @escaping (Result<[AyahNumber : [AyahInfo]]>) -> Void) {
-        Queue.background.async {
-            do {
-                let result = try self.persistence.getAyahInfoForPage(page)
-                Queue.main.async {
-                    onCompletion(.success(self.processAyahInfo(result)))
-                }
-            } catch {
-                Queue.main.async({
-                    onCompletion(.failure(error as? PersistenceError ?? PersistenceError.query(error)))
-                })
-            }
-        }
+    func retrieveAyahs(in page: Int) -> Promise<[AyahNumber: [AyahInfo]]> {
+
+        return DispatchQueue.global()
+            .promise { try self.persistence.getAyahInfoForPage(page) }
+            .then(on: .global()) { self.processAyahInfo($0) }
     }
 
     fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {

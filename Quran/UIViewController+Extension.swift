@@ -10,7 +10,7 @@ import UIKit
 
 extension UIViewController {
     func showErrorAlert(error: Error) {
-        Crash.recordError(error, reason: "showErrorAlert")
+        Crash.recordError(error, reason: "showErrorAlert", fatalErrorOnDebug: false)
         let message = error.getLocalizedDescription()
         let controller = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))

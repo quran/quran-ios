@@ -7,25 +7,23 @@
 //
 
 import UIKit
+import PromiseKit
 
-class ImagePreloadingOperation: Operation {
+class ImagePreloadingOperation: Operation, PreloadingOperationRepresentable {
 
     let page: Int
 
-    fileprivate var completionBlocks: [(Int, UIImage) -> Void] = []
+    var operation: Operation {
+        return self
+    }
 
-    fileprivate (set) var image: UIImage?
+    private let pending = Promise<UIImage>.pending()
+    var promise: Promise<UIImage> {
+        return pending.promise
+    }
 
-    init(page: Int) {
+    required init(_ page: Int) {
         self.page = page
-        super.init()
-
-        completionBlock = { [weak self] in
-            guard let image = self?.image else {
-                return
-            }
-            self?.completionBlocks.forEach { $0(page, image) }
-        }
     }
 
     override func main() {
@@ -34,11 +32,8 @@ class ImagePreloadingOperation: Operation {
         }
 
         // preload the image
-        self.image = image.preloadedImage()
-    }
-
-    func addCompletionBlock(_ block: @escaping (Int, UIImage) -> Void) {
-        completionBlocks.append(block)
+        let preloadedImage = image.preloadedImage()
+        pending.fulfill(preloadedImage)
     }
 }
 

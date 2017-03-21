@@ -21,7 +21,7 @@ class QuranNavigationBar {
 
     weak var delegate: QuranNavigationBarDelegate?
 
-    private var isTranslationView: Bool {
+    var isTranslationView: Bool {
         set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
         get { return simplePersistence.valueForKey(.showQuranTranslationView) }
     }

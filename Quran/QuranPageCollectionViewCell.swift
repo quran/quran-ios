@@ -12,7 +12,7 @@ import AVFoundation
 private let imageHeightDiff: CGFloat = 34
 
 protocol QuranPageCollectionCellDelegate: class {
-    func quranPageCollectionCell(_ collectionCell: QuranPageCollectionViewCell, didSelectAyahTextToShare ayahText: String)
+    func quranPageCollectionCell(_ collectionCell: UICollectionViewCell, didSelectAyahTextToShare ayahText: String)
 }
 
 class QuranPageCollectionViewCell: UICollectionViewCell, HighlightingViewDelegate {

@@ -180,8 +180,12 @@ class Container {
         return AnyCreator(createClosure: creationClosure)
     }
 
-    func createQuranImageService() -> QuranImageService {
-        return DefaultQuranImageService(imagesCache: createImagesCache())
+    func createQuranImageService() -> AnyCacheableService<Int, UIImage> {
+        return PagesCacheableService<UIImage, ImagePreloadingOperation>(
+            cache: createImagesCache(),
+            previousPagesCount: 1,
+            nextPagesCount: 2,
+            pageRange: Quran.QuranPagesRange).asCacheableService()
     }
 
     func createImagesCache() -> Cache<Int, UIImage> {

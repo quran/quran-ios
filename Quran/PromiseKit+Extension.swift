@@ -21,7 +21,7 @@ extension Promise {
 
 extension Promise {
 
-    public func cauterize(tag: String?) {
+    public func cauterize(tag: StaticString?) {
         `catch` { error in
             let message: String
             if let tag = tag {
@@ -31,6 +31,14 @@ extension Promise {
             }
             Crash.recordError(error, reason: message)
         }
+    }
+
+    public func cauterize(function: StaticString = #function) {
+        return cauterize(tag: function)
+    }
+
+    public func suppress() {
+        return cauterize(tag: "Suppress")
     }
 }
 

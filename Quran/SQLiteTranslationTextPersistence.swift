@@ -34,4 +34,16 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
             return first[Verses.text]
         }
     }
+
+    func getOptionalAyahText(forNumber number: AyahNumber) throws -> String? {
+        return try run { connection in
+
+            let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)
+            let rows = try connection.prepare(query)
+            guard let first = rows.first(where: { _ in true}) else {
+                return nil
+            }
+            return first[Verses.text]
+        }
+    }
 }

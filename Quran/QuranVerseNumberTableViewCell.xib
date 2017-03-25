@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="102" id="KGk-i7-Jjw" customClass="QuranVerseNumberTableViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="101.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sYp-6c-za7">
+                        <rect key="frame" x="12" y="10" width="81.5" height="81.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10:99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tLJ-Pj-oNx">
+                                <rect key="frame" x="10" y="10" width="61.5" height="61.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.48621892929077148" green="0.48630648851394653" blue="0.48621344566345215" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.86048719618055558" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="tLJ-Pj-oNx" secondAttribute="bottom" constant="10" id="6RM-zq-Qxl"/>
+                            <constraint firstItem="tLJ-Pj-oNx" firstAttribute="top" secondItem="sYp-6c-za7" secondAttribute="top" constant="10" id="7gt-nf-WE8"/>
+                            <constraint firstItem="tLJ-Pj-oNx" firstAttribute="leading" secondItem="sYp-6c-za7" secondAttribute="leading" constant="10" id="BYq-kw-Zgh"/>
+                            <constraint firstAttribute="trailing" secondItem="tLJ-Pj-oNx" secondAttribute="trailing" constant="10" id="DJl-iI-fhB"/>
+                            <constraint firstAttribute="width" secondItem="sYp-6c-za7" secondAttribute="height" multiplier="1:1" id="tNU-KT-f3d"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="sYp-6c-za7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="U9Y-Wd-EIM"/>
+                    <constraint firstAttribute="bottom" secondItem="sYp-6c-za7" secondAttribute="bottom" constant="10" id="lgc-kR-H47"/>
+                    <constraint firstItem="sYp-6c-za7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="tBO-To-ZYZ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="label" destination="tLJ-Pj-oNx" id="D9T-nf-rBf"/>
+                <outlet property="roundedView" destination="sYp-6c-za7" id="53U-7I-wq8"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="32"/>
+        </tableViewCell>
+    </objects>
+</document>

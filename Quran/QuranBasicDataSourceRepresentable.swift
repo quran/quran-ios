@@ -19,16 +19,19 @@ protocol QuranBasicDataSourceRepresentable: BasicDataSourceRepresentable {
 
     func highlightAyaht(_ ayat: Set<AyahNumber>)
     func applicationDidBecomeActive()
+    func invalidate()
 }
 
 class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentable<Item>, QuranBasicDataSourceRepresentable {
 
     private let highlightAyatBlock: (Set<AyahNumber>) -> Void
     private let becomeActiveBlock: () -> Void
+    private let invalidateBlock: () -> Void
 
     override init<DS: QuranBasicDataSourceRepresentable>(_ ds: DS) where DS.Item == Item {
         highlightAyatBlock = ds.highlightAyaht
         becomeActiveBlock = ds.applicationDidBecomeActive
+        invalidateBlock = ds.invalidate
         super.init(ds)
     }
 
@@ -38,6 +41,10 @@ class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentabl
 
     func applicationDidBecomeActive() {
         return becomeActiveBlock()
+    }
+
+    func invalidate() {
+        return invalidateBlock()
     }
 }
 

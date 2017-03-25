@@ -19,3 +19,7 @@
 "upgradeTranslationButtonTitle" = "UPDATE";
 
 "translationsSelectionTitle" = "Select Translations/Tafseer";
+"translationsSelectionPrompt" = "Select in order";
+
+"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
+"noAvailableTranslationText" = "No translation available for this Ayah.";

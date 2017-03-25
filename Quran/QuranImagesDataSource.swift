@@ -51,7 +51,7 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
         imageService.get(item.pageNumber).then(on: .main) { [weak cell] (image) -> Void in
             guard cell?.page == item else { return }
             cell?.mainImageView.image = image
-        }.suppress()
+        }.cauterize()
 
         // set the ayah dimensions
         ayahInfoRetriever
@@ -96,6 +96,10 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
                 scrollTo(page: lastPageViewed)
             }
         }
+    }
+
+    func invalidate() {
+        // does nothing
     }
 
     private func scrollTo(page: Int) {

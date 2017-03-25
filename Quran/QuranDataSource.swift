@@ -55,4 +55,9 @@ class QuranDataSource: SegmentedDataSource {
         }
         ds_reusableViewDelegate?.ds_reloadData()
     }
+
+    func invalidate() {
+        dataSourceRepresentables.forEach { $0.invalidate() }
+        ds_reusableViewDelegate?.ds_reloadData()
+    }
 }

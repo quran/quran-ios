@@ -47,7 +47,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
     private var initialPage: Int = 0 {
         didSet {
-            title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
+            title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1], withPrefix: true)
             titleView?.setPageNumber(initialPage, navigationBar: navigationController?.navigationBar)
         }
     }
@@ -74,6 +74,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     init(imageService: AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
+         pageService: AnyCacheableService<Int, TranslationPage>,
          dataRetriever: AnyDataRetriever<[QuranPage]>,
          ayahInfoRetriever: AyahInfoRetriever,
          audioViewPresenter: AudioBannerViewPresenter,
@@ -102,7 +103,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
         let translationsDataSource = QuranTranslationsDataSource(
             reuseIdentifier: QuranTranslationPageCollectionViewCell.reuseId,
-            imageService: imageService,
+            pageService: pageService,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
@@ -175,6 +176,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         // start hiding bars timer
         if !barsHiddenTimerExecuted {
             startHiddenBarsTimer()
+        }
+
+        // reload when coming from translation
+        if presentedViewController is TranslationsSelectionNavigationController {
+            dataSource.invalidate()
         }
     }
 

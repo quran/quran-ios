@@ -37,7 +37,7 @@ class QuranView: UIView {
             collectionView.semanticContentAttribute = .forceRightToLeft
         }
         self.addAutoLayoutSubview(collectionView)
-        self.pinParentAllDirections(collectionView)
+        self.pinParentAllDirections(collectionView, leadingValue: -5, trailingValue: -5)
 
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true

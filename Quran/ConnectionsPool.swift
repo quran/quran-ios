@@ -14,8 +14,6 @@ final class ConnectionsPool {
 
     static var `default`: ConnectionsPool = ConnectionsPool()
 
-    var pool: [String: (uses: Int, connection: Connection)] = [:]
-
     func getConnection(filePath: String) throws -> Connection {
         do {
             try? FileManager.default.createDirectory(atPath: filePath.stringByDeletingLastPathComponent,

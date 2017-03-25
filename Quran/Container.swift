@@ -88,7 +88,7 @@ class Container {
                                             simplePersistence: createSimplePersistence(),
                                             lastPagesPersistence: createLastPagesPersistence(),
                                             bookmarksPersistence: createBookmarksPersistence(),
-                                            ayahPersistence: createAyahTextStorage())
+                                            ayahPersistence: createArabicTextPersistence())
     }
 
     func createQariTableViewController(qaris: [Qari], selectedQariIndex: Int) -> QariTableViewController {
@@ -151,8 +151,12 @@ class Container {
         return SQLiteAyahInfoPersistence()
     }
 
-    func createAyahTextStorage() -> AyahTextPersistence {
+    func createArabicTextPersistence() -> AyahTextPersistence {
         return SQLiteArabicTextPersistence()
+    }
+
+    func createTranslationTextPersistence(filePath: String) -> SQLiteTranslationTextPersistence {
+        return SQLiteTranslationTextPersistence(filePath: filePath)
     }
 
     func createAyahInfoRetriever() -> AyahInfoRetriever {
@@ -161,17 +165,18 @@ class Container {
 
     func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
         return QuranViewController(
-            imageService            : createQuranImageService(),
-            dataRetriever           : createQuranPagesRetriever(),
-            ayahInfoRetriever       : createAyahInfoRetriever(),
-            audioViewPresenter      : createAudioBannerViewPresenter(),
-            qarisControllerCreator  : createQariTableViewControllerCreator(),
-            translationsSelectionControllerCreator: createCreator(createTranslationsSelectionViewController),
-            bookmarksPersistence    : createBookmarksPersistence(),
-            lastPagesPersistence    : createLastPagesPersistence(),
-            simplePersistence       : createSimplePersistence(),
-            page                    : page,
-            lastPage                : lastPage
+            imageService                           : createQuranImageService(),
+            pageService                            : createQuranTranslationService(),
+            dataRetriever                          : createQuranPagesRetriever(),
+            ayahInfoRetriever                      : createAyahInfoRetriever(),
+            audioViewPresenter                     : createAudioBannerViewPresenter(),
+            qarisControllerCreator                 : createQariTableViewControllerCreator(),
+            translationsSelectionControllerCreator : createCreator(createTranslationsSelectionViewController),
+            bookmarksPersistence                   : createBookmarksPersistence(),
+            lastPagesPersistence                   : createLastPagesPersistence(),
+            simplePersistence                      : createSimplePersistence(),
+            page                                   : page,
+            lastPage                               : lastPage
         )
     }
 
@@ -181,11 +186,28 @@ class Container {
     }
 
     func createQuranImageService() -> AnyCacheableService<Int, UIImage> {
-        return PagesCacheableService<UIImage, ImagePreloadingOperation>(
-            cache: createImagesCache(),
-            previousPagesCount: 1,
-            nextPagesCount: 2,
-            pageRange: Quran.QuranPagesRange).asCacheableService()
+        return PagesCacheableService(
+            cache              : createImagesCache(),
+            previousPagesCount : 1,
+            nextPagesCount     : 2,
+            pageRange          : Quran.QuranPagesRange,
+            operationCreator   : createCreator(createImagePreloadingOperation)).asCacheableService()
+    }
+
+    func createQuranTranslationService() -> AnyCacheableService<Int, TranslationPage> {
+        let d = PagesCacheableService(
+            cache              : createTranslationPageCache(),
+            previousPagesCount : 1,
+            nextPagesCount     : 2,
+            pageRange          : Quran.QuranPagesRange,
+            operationCreator   : createCreator(createTranslationPreloadingOperation))
+        return d.asCacheableService()
+    }
+
+    func createTranslationPageCache() -> Cache<Int, TranslationPage> {
+        let cache = Cache<Int, TranslationPage>()
+        cache.countLimit = 5
+        return cache
     }
 
     func createImagesCache() -> Cache<Int, UIImage> {
@@ -313,5 +335,17 @@ class Container {
 
     func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
         return TranslationDeletionInteractor(persistence: createActiveTranslationsPersistence()).erasedType()
+    }
+
+    func createImagePreloadingOperation(page: Int) -> ImagePreloadingOperation {
+        return ImagePreloadingOperation(page: page)
+    }
+
+    func createTranslationPreloadingOperation(page: Int) -> TranslationPreloadingOperation {
+        return TranslationPreloadingOperation(page: page,
+                                              localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+                                              arabicPersistence: createArabicTextPersistence(),
+                                              translationPersistenceCreator: createCreator(createTranslationTextPersistence),
+                                              simplePersistence: createSimplePersistence())
     }
 }

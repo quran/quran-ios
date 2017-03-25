@@ -39,4 +39,8 @@ extension Translation {
         }
         return fileName
     }
+
+    var translationName: String {
+        return translatorForeign ?? translator ?? displayName
+    }
 }

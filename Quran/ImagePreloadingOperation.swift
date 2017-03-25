@@ -9,20 +9,11 @@
 import UIKit
 import PromiseKit
 
-class ImagePreloadingOperation: Operation, PreloadingOperationRepresentable {
+class ImagePreloadingOperation: AbstractPreloadingOperation<UIImage> {
 
     let page: Int
 
-    var operation: Operation {
-        return self
-    }
-
-    private let pending = Promise<UIImage>.pending()
-    var promise: Promise<UIImage> {
-        return pending.promise
-    }
-
-    required init(_ page: Int) {
+    init(page: Int) {
         self.page = page
     }
 
@@ -33,7 +24,7 @@ class ImagePreloadingOperation: Operation, PreloadingOperationRepresentable {
 
         // preload the image
         let preloadedImage = image.preloadedImage()
-        pending.fulfill(preloadedImage)
+        fulfill(preloadedImage)
     }
 }
 

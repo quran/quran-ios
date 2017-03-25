@@ -32,3 +32,9 @@ extension UIView {
                                                       options: [], metrics: nil, views: ["view": contentView]))
     }
 }
+
+extension UIView {
+    var circularRadius: CGFloat {
+        return min(bounds.width, bounds.height) / 2
+    }
+}

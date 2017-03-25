@@ -10,7 +10,7 @@ import UIKit
 import PromiseKit
 
 class PagesCacheableService<Output, OperationType: PreloadingOperationRepresentable>: CacheableService
-    where OperationType.Input == Int, OperationType.Output == Output {
+    where OperationType.Output == Output {
 
     private let previousPagesCount: Int
     private let nextPagesCount: Int
@@ -22,11 +22,24 @@ class PagesCacheableService<Output, OperationType: PreloadingOperationRepresenta
     private var inProgressOperations: [Int: OperationType] = [:]
     private let lock = NSLock()
 
-    init(cache: Cache<Int, Output>, previousPagesCount: Int, nextPagesCount: Int, pageRange: CountableClosedRange<Int>) {
-        self.range = pageRange
-        self.cache = cache
-        self.nextPagesCount = nextPagesCount
+    private let operationCreator: AnyCreator<OperationType, Int>
+
+    init(cache              : Cache<Int, Output>,
+         previousPagesCount : Int,
+         nextPagesCount     : Int,
+         pageRange          : CountableClosedRange<Int>,
+         operationCreator   : AnyCreator<OperationType, Int>) {
+        self.range              = pageRange
+        self.cache              = cache
+        self.nextPagesCount     = nextPagesCount
+        self.operationCreator   = operationCreator
         self.previousPagesCount = previousPagesCount
+    }
+
+    func invalidate() {
+        queue.cancelAllOperations()
+        inProgressOperations.removeAll()
+        cache.removeAllObjects()
     }
 
     func get(_ page: Int) -> Promise<Output> {
@@ -73,7 +86,7 @@ class PagesCacheableService<Output, OperationType: PreloadingOperationRepresenta
             } else {
 
                 // create the operation
-                let operation = OperationType(page)
+                let operation = operationCreator.create(page)
                 // add it to the in progress
                 inProgressOperations[page] = operation
 

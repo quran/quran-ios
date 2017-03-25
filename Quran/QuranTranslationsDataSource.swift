@@ -12,7 +12,7 @@ import GenericDataSources
 class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPageCollectionViewCell>,
         QuranBasicDataSourceRepresentable, QuranPageCollectionCellDelegate {
 
-    private let imageService: AnyCacheableService<Int, UIImage>
+    private let pageService: AnyCacheableService<Int, TranslationPage>
     private let ayahInfoRetriever: AyahInfoRetriever
     private let bookmarkPersistence: BookmarksPersistence
 
@@ -22,37 +22,36 @@ class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPa
 
     weak var delegate: QuranDataSourceDelegate?
 
-    init(reuseIdentifier: String,
-         imageService: AnyCacheableService<Int, UIImage>,
-         ayahInfoRetriever: AyahInfoRetriever,
-         bookmarkPersistence: BookmarksPersistence) {
+    init(reuseIdentifier     : String,
+         pageService         : AnyCacheableService<Int, TranslationPage>,
+         ayahInfoRetriever   : AyahInfoRetriever,
+         bookmarkPersistence : BookmarksPersistence) {
         self.bookmarkPersistence = bookmarkPersistence
-        self.imageService        = imageService
+        self.pageService         = pageService
         self.ayahInfoRetriever   = ayahInfoRetriever
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-//    override func ds_collectionView(_ collectionView: GeneralCollectionView,
-//                                    configure cell: QuranTranslationPageCollectionViewCell,
-//                                    with item: QuranPage,
-//                                    at indexPath: IndexPath) {
-//
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: QuranTranslationPageCollectionViewCell,
+                                    with item: QuranPage,
+                                    at indexPath: IndexPath) {
+
 //        cell.cellDelegate = self
 //        cell.highlightingView.bookmarkPersistence = bookmarkPersistence
-//
-//        cell.page = item
+
+        cell.page = item
 //        cell.pageLabel.text = numberFormatter.format(NSNumber(value: item.pageNumber))
 //        cell.suraLabel.text = Quran.nameForSura(item.startAyah.sura)
 //        cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), item.juzNumber)
 //        cell.highlightAyat(highlightedAyat)
-//
-//        // set the page image
-//        cell.mainImageView.image = nil
-//        let size = ds_collectionView(collectionView, sizeForItemAt: indexPath)
-//        imageService.getImageOfPage(item.pageNumber, forSize: size) { [weak cell] (image) in
-//            guard cell?.page == item else { return }
-//            cell?.mainImageView.image = image
-//        }
+
+        // set the translation page
+        cell.dataSource.page = nil
+        pageService.get(item.pageNumber).then(on: .main) { [weak cell] (page) -> Void in
+            guard cell?.page == item else { return }
+            cell?.dataSource.page = page
+            }.cauterize()
 //
 //        // set the ayah dimensions
 //        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { [weak cell] (data) in
@@ -66,8 +65,8 @@ class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPa
 //            .then(on: .main) { (_, ayahBookmarks) -> Void in
 //                cell.highlightingView.highlights[.bookmark] = Set(ayahBookmarks.map { $0.ayah })
 //            }.cauterize(tag: "bookmarkPersistence.retrieve(inPage:)")
-//    }
-//
+    }
+
 //    override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
 //        // Update the highlighting since it's something that could change
 //        // between the cell is configured and the cell is visible.
@@ -95,6 +94,10 @@ class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPa
 //                scrollTo(page: lastPageViewed)
 //            }
 //        }
+    }
+
+    func invalidate() {
+        pageService.invalidate()
     }
 
 //    private func scrollTo(page: Int) {

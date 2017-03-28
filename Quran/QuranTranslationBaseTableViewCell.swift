@@ -12,7 +12,7 @@ class QuranTranslationBaseTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
+        backgroundColor = .readingBackground()
+        contentView.backgroundColor = .readingBackground()
     }
 }

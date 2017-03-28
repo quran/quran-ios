@@ -102,6 +102,7 @@
 		54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */; };
 		54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */; };
 		54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */; };
+		54AC671F1E8B06CD00FBE96E /* OperationCacheableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AC671E1E8B06CD00FBE96E /* OperationCacheableService.swift */; };
 		54B135681E53A9FA0087D0F8 /* DownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */; };
 		54B1356A1E53AA780087D0F8 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135691E53AA780087D0F8 /* Download.swift */; };
 		54B1356C1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */; };
@@ -420,6 +421,7 @@
 		54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookmarkTableViewCell.xib; sourceTree = "<group>"; };
+		54AC671E1E8B06CD00FBE96E /* OperationCacheableService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationCacheableService.swift; sourceTree = "<group>"; };
 		54B135671E53A9FA0087D0F8 /* DownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsPersistence.swift; sourceTree = "<group>"; };
 		54B135691E53AA780087D0F8 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		54B1356B1E53ACE00087D0F8 /* SqliteDownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqliteDownloadsPersistence.swift; sourceTree = "<group>"; };
@@ -1247,6 +1249,7 @@
 				54D2C22F1E86A61800128282 /* AnyCacheableService.swift */,
 				54B266961CCACEB400D3AEF8 /* CacheableService.swift */,
 				546E1E951E81A8AA00B9B9D6 /* PagesCacheableService.swift */,
+				54AC671E1E8B06CD00FBE96E /* OperationCacheableService.swift */,
 			);
 			name = QuranImage;
 			sourceTree = "<group>";
@@ -1937,6 +1940,7 @@
 				54C0DBE81CE48DF8009AAD8D /* QuranView.swift in Sources */,
 				54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */,
 				C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */,
+				54AC671F1E8B06CD00FBE96E /* OperationCacheableService.swift in Sources */,
 				54B266621CCA908900D3AEF8 /* NetworkError.swift in Sources */,
 				549040A41E5F94BE00D54625 /* NetworkResponse.swift in Sources */,
 				54C0DBE51CE479D7009AAD8D /* DefaultAudioBannerView.swift in Sources */,

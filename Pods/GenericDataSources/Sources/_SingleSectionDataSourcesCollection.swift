@@ -30,7 +30,7 @@ class _SingleSectionDataSourcesCollection: NSObject, _DataSourcesCollection {
 
         // reset
         var count = 0
-        globalItemToMappings.removeAll()
+        globalItemToMappings.removeAll(keepingCapacity: true)
 
         for mapping in mappings.array {
             let mapping: _SingleSectionMapping = cast(mapping, message: "Mappings for \(type(of: self)) should be of type \(_SingleSectionMapping.self)")

@@ -27,15 +27,3 @@ extension String {
         return (self as NSString).pathComponents
     }
 }
-
-extension String {
-
-    func size(withFont font: UIFont, constrainedToWidth width: CGFloat = .greatestFiniteMagnitude) -> CGSize {
-        let size = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let box = self.boundingRect(with: size,
-                                      options: .usesLineFragmentOrigin,
-                                      attributes: [NSFontAttributeName: font],
-                                      context: nil)
-        return box.size
-    }
-}

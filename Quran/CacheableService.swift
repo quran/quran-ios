@@ -16,4 +16,5 @@ protocol CacheableService {
 
     func invalidate()
     func get(_ input: Input) -> Promise<Output>
+    func getCached(_ input: Input) -> Output?
 }

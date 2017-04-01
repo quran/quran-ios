@@ -31,4 +31,8 @@ extension UIColor {
     class func selection() -> UIColor {
         return UIColor(rgb: 0x156DDE)
     }
+
+    static var translationText: UIColor {
+        return #colorLiteral(red: 0.1294117647, green: 0.1294117647, blue: 0.1294117647, alpha: 1)
+    }
 }

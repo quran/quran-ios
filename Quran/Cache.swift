@@ -9,7 +9,7 @@
 import Foundation
 
 extension Hashable {
-    var hashNumber: NSNumber {
+    fileprivate var hashNumber: NSNumber {
         return NSNumber(value: hashValue)
     }
 }

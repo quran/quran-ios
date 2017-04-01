@@ -12,6 +12,7 @@ private class _AnyCacheableServiceBoxBase<Input: Hashable, Output>: CacheableSer
 
     func invalidate() { fatalError() }
     func get(_ input: Input) -> Promise<Output> { fatalError() }
+    func getCached(_ input: Input) -> Output? { fatalError() }
 }
 
 private class _AnyCacheableServiceBox<O: CacheableService>: _AnyCacheableServiceBoxBase<O.Input, O.Output> {
@@ -27,6 +28,10 @@ private class _AnyCacheableServiceBox<O: CacheableService>: _AnyCacheableService
 
     override func get(_ input: O.Input) -> Promise<O.Output> {
         return ds.get(input)
+    }
+
+    override func getCached(_ input: O.Input) -> O.Output? {
+        return ds.getCached(input)
     }
 }
 
@@ -44,6 +49,10 @@ class AnyCacheableService<Input: Hashable, Output>: CacheableService {
 
     func get(_ input: Input) -> Promise<Output> {
         return box.get(input)
+    }
+
+    func getCached(_ input: Input) -> Output? {
+        return box.getCached(input)
     }
 }
 

@@ -13,6 +13,8 @@ class QuranPageTitleView: UIView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailsLabel: UILabel!
 
+    var pageNumber: Int?
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setUp()
@@ -70,6 +72,7 @@ class QuranPageTitleView: UIView {
 
 extension QuranPageTitleView {
     func setPageNumber(_ pageNumber: Int, navigationBar: UINavigationBar?) {
+        self.pageNumber = pageNumber
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
         let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, pageNumber, Juz.juzFromPage(pageNumber).juzNumber)
         titleLabel.text = Quran.nameForSura(Quran.PageSuraStart[pageNumber - 1], withPrefix: true)

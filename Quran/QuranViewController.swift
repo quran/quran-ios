@@ -96,13 +96,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
 
         let imagesDataSource = QuranImagesDataSource(
-            reuseIdentifier: QuranPageCollectionViewCell.reuseId,
             imageService: imageService,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
         let translationsDataSource = QuranTranslationsDataSource(
-            reuseIdentifier: QuranTranslationPageCollectionViewCell.reuseId,
             pageService: pageService,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
@@ -270,6 +268,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     fileprivate func updateBarToPage(_ page: QuranPage) {
+        // only apply if there is a change
+        guard page.pageNumber != titleView?.pageNumber else {
+            return
+        }
         titleView?.setPageNumber(page.pageNumber, navigationBar: navigationController?.navigationBar)
 
         bookmarksManager.calculateIsBookmarked(pageNumber: page.pageNumber)

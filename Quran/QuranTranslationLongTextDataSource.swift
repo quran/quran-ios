@@ -1,5 +1,5 @@
 //
-//  QuranTranslationTextDataSource.swift
+//  QuranTranslationLongTextDataSource.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/2/17.
@@ -8,14 +8,13 @@
 
 import GenericDataSources
 
-class QuranTranslationTextDataSource: BaseBasicDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
+class QuranTranslationLongTextDataSource: BaseBasicDataSource<TranslationTextLayout, QuranTranslationLongTextCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: QuranTranslationTextCollectionViewCell,
+                                    configure cell: QuranTranslationLongTextCollectionViewCell,
                                     with item: TranslationTextLayout,
                                     at indexPath: IndexPath) {
-        cell.label.font = item.text.translation.preferredTextFont
-        cell.label.text = item.text.text
+        cell.label.textLayout = item
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {

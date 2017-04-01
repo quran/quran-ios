@@ -56,7 +56,11 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
         for i in 0..<ayahs.count {
             let ayah = ayahs[i]
             let arabicText = arabic[i].text
-            let ayahTranslations = translations.map { TranslationText(translation: $0, text: $1[i].text) }
+            let ayahTranslations = translations.map { (translation, ayahs) -> TranslationText in
+                let text = ayahs[i].text
+                let isLongText = text.characters.count >= 300
+                return TranslationText(translation: translation, text: text, isLongText: isLongText)
+            }
             let verse = TranslationVerse(ayah: ayah, arabicText: arabicText, translations: ayahTranslations)
             verses.append(verse)
         }
@@ -67,7 +71,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
                 prefixes.append(Quran.arabicBasmAllah)
             }
         }
-        return TranslationPage(arabicPrefix: prefixes, verses: verses, arabicSuffix: [])
+        return TranslationPage(pageNumber: page, arabicPrefix: prefixes, verses: verses, arabicSuffix: [])
     }
 
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {

@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 
-class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPageCollectionViewCell>,
+class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationCollectionPageCollectionViewCell>,
         QuranBasicDataSourceRepresentable, QuranPageCollectionCellDelegate {
 
     private let pageService: AnyCacheableService<Int, TranslationPage>
@@ -22,18 +22,18 @@ class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPa
 
     weak var delegate: QuranDataSourceDelegate?
 
-    init(reuseIdentifier     : String,
+    init(
          pageService         : AnyCacheableService<Int, TranslationPage>,
          ayahInfoRetriever   : AyahInfoRetriever,
          bookmarkPersistence : BookmarksPersistence) {
         self.bookmarkPersistence = bookmarkPersistence
         self.pageService         = pageService
         self.ayahInfoRetriever   = ayahInfoRetriever
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init(reuseIdentifier: QuranTranslationCollectionPageCollectionViewCell.reuseId)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: QuranTranslationPageCollectionViewCell,
+                                    configure cell: QuranTranslationCollectionPageCollectionViewCell,
                                     with item: QuranPage,
                                     at indexPath: IndexPath) {
 
@@ -47,12 +47,12 @@ class QuranTranslationsDataSource: BasicDataSource<QuranPage, QuranTranslationPa
 //        cell.highlightAyat(highlightedAyat)
 
         // set the translation page
-        cell.dataSource.page = nil
-        pageService.get(item.pageNumber).then(on: .main) { [weak cell] (page) -> Void in
+
+        pageService.getOnMainThread(item.pageNumber) { [weak cell] page in
             guard cell?.page == item else { return }
-            cell?.dataSource.page = page
-            }.cauterize()
-//
+            cell?.translationPage = page
+        }
+
 //        // set the ayah dimensions
 //        ayahInfoRetriever.retrieveAyahsAtPage(item.pageNumber) { [weak cell] (data) in
 //            guard cell?.page == item else { return }

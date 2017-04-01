@@ -20,4 +20,8 @@ extension GeneralCollectionView {
     func register(cell: ReusableCell.Type) {
         ds_register(UINib(nibName: String(describing: cell), bundle: nil), forCellWithReuseIdentifier: cell.reuseId)
     }
+
+    func register(cellClass: ReusableCell.Type) {
+        ds_register(cellClass, forCellWithReuseIdentifier: cellClass.reuseId)
+    }
 }

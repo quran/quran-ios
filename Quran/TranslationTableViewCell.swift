@@ -66,7 +66,7 @@ class TranslationTableViewCell: UITableViewCell {
 
         let lightFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
         let regularFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
-        let amharicFont: UIFont = cast(UIFont(name: "AbyssinicaSIL", size: 17))
+        let amharicFont: UIFont = .translationTranslatorNameAmharic
 
         let lightColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
         let regularColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)

@@ -14,20 +14,18 @@ private func operationQueue() -> OperationQueue {
     return queue
 }
 
-class OperationCacheableService<Input: Hashable, Output, OperationType: PreloadingOperationRepresentable>: CacheableService
-    where OperationType.Output == Output {
+class OperationCacheableService<Input: Hashable, Output>: CacheableService {
 
     private let cache: Cache<Input, Output>
-
     private let queue: OperationQueue
-    private var inProgressOperations: [Input: OperationType] = [:]
-    private let lock = NSLock()
 
-    private let operationCreator: AnyCreator<OperationType, Input>
+    private var inProgressOperations: [Input: AnyPreloadingOperationRepresentable<Output>] = [:]
+    private let lock = NSLock()
+    private let operationCreator: AnyCreator<AnyPreloadingOperationRepresentable<Output>, Input>
 
     init(queue              : OperationQueue = operationQueue(),
          cache              : Cache<Input, Output>,
-         operationCreator   : AnyCreator<OperationType, Input>) {
+         operationCreator   : AnyCreator<AnyPreloadingOperationRepresentable<Output>, Input>) {
         self.queue              = queue
         self.cache              = cache
         self.operationCreator   = operationCreator
@@ -45,13 +43,13 @@ class OperationCacheableService<Input: Hashable, Output, OperationType: Preloadi
         return lock.execute { () -> Promise<Output> in
 
             if let result = cache.object(forKey: input) {
-                print("already cached: \(input)")
+//                print("already cached: \(input)")
                 return Promise(value: result)
             } else  if let operation = inProgressOperations[input] {
-                print("queuing: \(input)")
+//                print("queuing: \(input)")
                 return operation.promise
             } else {
-                print("requesting: \(input)")
+//                print("requesting: \(input)")
 
                 // create the operation
                 let operation = operationCreator.create(input)
@@ -66,12 +64,18 @@ class OperationCacheableService<Input: Hashable, Output, OperationType: Preloadi
                             // remove from in progress
                             self.inProgressOperations.removeValue(forKey: input)
                         }
-                        print("retrieved: \(input)")
+//                        print("retrieved: \(input)")
                         return result
                 }
                 queue.addOperation(operation.operation)
                 return promise
             }
+        }
+    }
+
+    func getCached(_ input: Input) -> Output? {
+        return lock.execute {
+            return cache.object(forKey: input)
         }
     }
 }

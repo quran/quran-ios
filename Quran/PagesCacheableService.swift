@@ -14,21 +14,20 @@ private func operationQueue() -> OperationQueue {
     return queue
 }
 
-class PagesCacheableService<Output, OperationType: PreloadingOperationRepresentable>: CacheableService
-    where OperationType.Output == Output {
+class PagesCacheableService<Output>: CacheableService {
 
     private let previousPagesCount: Int
     private let nextPagesCount: Int
     private let range: CountableClosedRange<Int>
 
-    private let service: OperationCacheableService<Int, Output, OperationType>
+    private let service: OperationCacheableService<Int, Output>
 
     init(queue              : OperationQueue = operationQueue(),
          cache              : Cache<Int, Output>,
          previousPagesCount : Int,
          nextPagesCount     : Int,
          pageRange          : CountableClosedRange<Int>,
-         operationCreator   : AnyCreator<OperationType, Int>) {
+         operationCreator   : AnyCreator<AnyPreloadingOperationRepresentable<Output>, Int>) {
         service = OperationCacheableService(queue: queue, cache: cache, operationCreator: operationCreator)
         self.range              = pageRange
         self.nextPagesCount     = nextPagesCount
@@ -47,6 +46,10 @@ class PagesCacheableService<Output, OperationType: PreloadingOperationRepresenta
 
         // preload requested page with very high priority and QoS
         return preload(page)
+    }
+
+    func getCached(_ input: Int) -> Output? {
+        return service.getCached(input)
     }
 
     private func cachePagesCloserToPage(_ page: Int) {

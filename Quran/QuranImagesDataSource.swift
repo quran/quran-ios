@@ -22,14 +22,14 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
 
     weak var delegate: QuranDataSourceDelegate?
 
-    init(reuseIdentifier: String,
+    init(
          imageService: AnyCacheableService<Int, UIImage>,
          ayahInfoRetriever: AyahInfoRetriever,
          bookmarkPersistence: BookmarksPersistence) {
         self.imageService = imageService
         self.ayahInfoRetriever = ayahInfoRetriever
         self.bookmarkPersistence = bookmarkPersistence
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init(reuseIdentifier: QuranPageCollectionViewCell.reuseId)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -47,11 +47,10 @@ class QuranImagesDataSource: BasicDataSource<QuranPage, QuranPageCollectionViewC
         cell.highlightAyat(highlightedAyat)
 
         // set the page image
-        cell.mainImageView.image = nil
-        imageService.get(item.pageNumber).then(on: .main) { [weak cell] (image) -> Void in
+        imageService.getOnMainThread(item.pageNumber) { [weak cell] image in
             guard cell?.page == item else { return }
             cell?.mainImageView.image = image
-        }.cauterize()
+        }
 
         // set the ayah dimensions
         ayahInfoRetriever

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="QuranTranslationCollectionPageCollectionViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="275" height="200"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="275" height="200"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sbt-mL-qt8">
+                        <rect key="frame" x="5" y="0.0" width="265" height="200"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RTB-TE-Fp2">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                    </collectionView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uSa-Ot-uKD" userLabel="Line">
+                        <rect key="frame" x="0.0" y="0.0" width="1" height="200"/>
+                        <color key="backgroundColor" red="0.4039215686" green="0.4039215686" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="TAF-df-CVC"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="uSa-Ot-uKD" secondAttribute="bottom" id="14h-sX-C6b"/>
+                <constraint firstItem="Sbt-mL-qt8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="1cH-Pn-4b8"/>
+                <constraint firstItem="uSa-Ot-uKD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="5Ll-mR-2Yz"/>
+                <constraint firstItem="uSa-Ot-uKD" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="GfP-3N-Rwp"/>
+                <constraint firstItem="Sbt-mL-qt8" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aPp-mD-N3J"/>
+                <constraint firstAttribute="trailing" secondItem="Sbt-mL-qt8" secondAttribute="trailing" constant="5" id="e7R-PZ-Yvh"/>
+                <constraint firstAttribute="bottom" secondItem="Sbt-mL-qt8" secondAttribute="bottom" id="szu-Od-mdd"/>
+            </constraints>
+            <size key="customSize" width="275" height="200"/>
+            <connections>
+                <outlet property="collectionView" destination="Sbt-mL-qt8" id="s43-cW-Uni"/>
+            </connections>
+            <point key="canvasLocation" x="-51" y="-111"/>
+        </collectionViewCell>
+    </objects>
+</document>

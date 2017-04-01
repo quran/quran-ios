@@ -337,15 +337,15 @@ class Container {
         return TranslationDeletionInteractor(persistence: createActiveTranslationsPersistence()).erasedType()
     }
 
-    func createImagePreloadingOperation(page: Int) -> ImagePreloadingOperation {
-        return ImagePreloadingOperation(page: page)
+    func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {
+        return ImagePreloadingOperation(page: page).asPreloadingOperationRepresentable()
     }
 
-    func createTranslationPreloadingOperation(page: Int) -> TranslationPreloadingOperation {
+    func createTranslationPreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<TranslationPage> {
         return TranslationPreloadingOperation(page: page,
                                               localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
                                               arabicPersistence: createArabicTextPersistence(),
                                               translationPersistenceCreator: createCreator(createTranslationTextPersistence),
-                                              simplePersistence: createSimplePersistence())
+                                              simplePersistence: createSimplePersistence()).asPreloadingOperationRepresentable()
     }
 }

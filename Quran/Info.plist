@@ -66,6 +66,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>AbyssinicaSIL-R.ttf</string>
+		<string>UthmanTN1 Ver10.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

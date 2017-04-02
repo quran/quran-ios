@@ -22,4 +22,4 @@ Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contrib
 
 ## License
 
-Quran - by Quran.com - قرآن is available under the MIT license. See the LICENSE file for more info.
+Quran - by Quran.com - قرآن is available under the GPLv3 license. See the LICENSE file for more info.

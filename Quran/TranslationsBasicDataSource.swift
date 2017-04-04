@@ -14,18 +14,16 @@ protocol TranslationsBasicDataSourceDelegate: class {
     func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldCancelDownload translation: TranslationFull)
 }
 
-class TranslationsBasicDataSource<CellType: TranslationTableViewCell>: BasicDataSource<TranslationFull, CellType> {
+class TranslationsBasicDataSource: BasicDataSource<TranslationFull, TranslationTableViewCell> {
 
     weak var delegate: TranslationsBasicDataSourceDelegate?
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: CellType,
+                                    configure cell: TranslationTableViewCell,
                                     with item: TranslationFull,
                                     at indexPath: IndexPath) {
-        let subtitle = (item.translation.translatorForeign ?? item.translation.translator) ?? ""
-        cell.set(title: item.translation.displayName,
-                 subtitle: subtitle,
-                 needsAmharicFont: item.translation.displayName.lowercased().contains("amharic"))
+        cell.checkbox.isHidden = true
+        cell.configure(with: item.translation)
         cell.downloadButton.state = item.state
         cell.onShouldStartDownload = { [weak self] in
             if let ds = self {

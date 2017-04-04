@@ -117,7 +117,7 @@ class Container {
     func createTranslationsSelectionDataSource() -> TranslationsDataSource {
         let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
         let downloadedDS = TranslationsSelectionBasicDataSource(
-            reuseIdentifier: TranslationSelectionTableViewCell.reuseId,
+            reuseIdentifier: TranslationTableViewCell.reuseId,
             simplePersistence: createSimplePersistence())
         let dataSource = TranslationsSelectionDataSource(
             downloader: createDownloadManager(),

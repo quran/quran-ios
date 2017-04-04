@@ -9,7 +9,7 @@
 import UIKit
 import GenericDataSources
 
-class TranslationsViewController<CellType: TranslationTableViewCell>: BaseTableViewController, TranslationsDataSourceDelegate {
+class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
 
     private let dataSource: TranslationsDataSource
 

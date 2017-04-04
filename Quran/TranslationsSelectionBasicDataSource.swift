@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 
-class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource<TranslationSelectionTableViewCell> {
+class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource {
 
     private let simplePersistence: SimplePersistence
 
@@ -19,10 +19,11 @@ class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource<Translat
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: TranslationSelectionTableViewCell,
+                                    configure cell: TranslationTableViewCell,
                                     with item: TranslationFull,
                                     at indexPath: IndexPath) {
         super.ds_collectionView(collectionView, configure: cell, with: item, at: indexPath)
+        cell.checkbox.isHidden = false
         cell.setSelection(simplePersistence.valueForKey(.selectedTranslations).contains(item.translation.id))
     }
 
@@ -40,7 +41,7 @@ class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource<Translat
             selectedTranslations.append(item.translation.id)
         }
         simplePersistence.setValue(selectedTranslations, forKey: .selectedTranslations)
-        let cell = collectionView.ds_cellForItem(at: indexPath) as? TranslationSelectionTableViewCell
+        let cell = collectionView.ds_cellForItem(at: indexPath) as? TranslationTableViewCell
         cell?.setSelection(existingIndex == nil)
         collectionView.ds_deselectItem(at: indexPath, animated: true)
     }

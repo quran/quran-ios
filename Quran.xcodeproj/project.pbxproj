@@ -61,8 +61,7 @@
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
 		5454998F1E7DB27B00F4F927 /* copyrights in Resources */ = {isa = PBXBuildFile; fileRef = 5454998E1E7DB27B00F4F927 /* copyrights */; };
-		545499B01E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499AE1E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift */; };
-		545499B11E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 545499AF1E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib */; };
+		545499B11E7DB88900F4F927 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */; };
 		545499B31E7DB9C800F4F927 /* TranslationsSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */; };
 		545499B51E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */; };
 		545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */; };
@@ -112,7 +111,6 @@
 		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
 		549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BA1E63566D00D54625 /* TranslationsDataSource.swift */; };
 		549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */; };
-		549040C01E63578D00D54625 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */; };
 		549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */; };
 		549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C31E635A7300D54625 /* PromiseKit+Extension.swift */; };
 		549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */; };
@@ -389,8 +387,7 @@
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
 		5454998E1E7DB27B00F4F927 /* copyrights */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyrights; sourceTree = "<group>"; };
-		545499AE1E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationSelectionTableViewCell.swift; sourceTree = "<group>"; };
-		545499AF1E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationSelectionTableViewCell.xib; sourceTree = "<group>"; };
+		545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
 		545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionViewController.swift; sourceTree = "<group>"; };
 		545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionNavigationController.swift; sourceTree = "<group>"; };
 		545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionDataSource.swift; sourceTree = "<group>"; };
@@ -447,7 +444,6 @@
 		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
 		549040BA1E63566D00D54625 /* TranslationsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsDataSource.swift; sourceTree = "<group>"; };
 		549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTableViewCell.swift; sourceTree = "<group>"; };
-		549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
 		549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell-UITableViewCell+Reuse.swift"; sourceTree = "<group>"; };
 		549040C31E635A7300D54625 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
 		549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
@@ -903,10 +899,8 @@
 			isa = PBXGroup;
 			children = (
 				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
-				549040BE1E63578D00D54625 /* TranslationTableViewCell.xib */,
+				545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */,
 				5424773C1E7856040051C196 /* TranslationDownloadButton.swift */,
-				545499AE1E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift */,
-				545499AF1E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1814,7 +1808,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				545499B11E7DB88900F4F927 /* TranslationSelectionTableViewCell.xib in Resources */,
+				545499B11E7DB88900F4F927 /* TranslationTableViewCell.xib in Resources */,
 				5409227A1E8F03C800C7537A /* UthmanTN1 Ver10.otf in Resources */,
 				54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */,
 				5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */,
@@ -1836,7 +1830,6 @@
 				5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */,
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,
-				549040C01E63578D00D54625 /* TranslationTableViewCell.xib in Resources */,
 				54699B8F1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib in Resources */,
 				5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
@@ -2060,7 +2053,6 @@
 				540922B01E91818300C7537A /* VerseHighlightType.swift in Sources */,
 				54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */,
 				54699BAB1E8DC25100211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift in Sources */,
-				545499B01E7DB88900F4F927 /* TranslationSelectionTableViewCell.swift in Sources */,
 				540922821E90142900C7537A /* TranslationPageLayoutOperation.swift in Sources */,
 				5487241A1DC4957700ADDE54 /* BookmarksPersistence.swift in Sources */,
 				541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */,

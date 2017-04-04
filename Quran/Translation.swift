@@ -15,6 +15,7 @@ struct Translation: Equatable {
     let translatorForeign: String?
     let fileURL: URL
     let fileName: String
+    let languageCode: String
     let version: Int
     var installedVersion: Int?
 

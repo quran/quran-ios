@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TranslationsSelectionViewController: TranslationsViewController<TranslationSelectionTableViewCell> {
+class TranslationsSelectionViewController: TranslationsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +19,6 @@ class TranslationsSelectionViewController: TranslationsViewController<Translatio
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
 
         tableView.allowsSelection = true
-        tableView.register(cell: TranslationSelectionTableViewCell.self)
     }
 
     func dismissViewController() {

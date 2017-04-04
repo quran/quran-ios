@@ -179,6 +179,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         // update the cell
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = .downloaded
+        cell?.checkbox.isHidden = false
+        cell?.setSelection(false)
 
         versionUpdater
             .execute([translation.translation])

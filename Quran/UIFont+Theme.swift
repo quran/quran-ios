@@ -29,10 +29,9 @@ extension UIFont {
 extension Translation {
 
     var preferredTextFont: UIFont {
-        let displayName = self.displayName.lowercased()
-        if displayName.contains("amharic") {
+        if languageCode == "am" {
             return .translationAmharicTranslation
-        } else if displayName.contains("arabic") {
+        } else if languageCode == "ar" {
             return .translationArabicTranslation
         } else {
             return .translationEnglishTranslation
@@ -40,10 +39,9 @@ extension Translation {
     }
 
     var preferredTranslatorNameFont: UIFont {
-        let displayName = self.displayName.lowercased()
-        if displayName.contains("amharic") {
+        if languageCode == "am" {
             return .translationTranslatorNameAmharic
-        } else if displayName.contains("arabic") {
+        } else if languageCode == "ar" {
             return .translationTranslatorNameArabic
         } else {
             return .translationTranslatorNameEnglish

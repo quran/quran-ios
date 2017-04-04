@@ -335,7 +335,9 @@ class Container {
     }
 
     func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
-        return TranslationDeletionInteractor(persistence: createActiveTranslationsPersistence()).erasedType()
+        return TranslationDeletionInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            simplePersistence: createSimplePersistence()).erasedType()
     }
 
     func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {

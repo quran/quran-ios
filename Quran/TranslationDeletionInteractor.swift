@@ -11,12 +11,26 @@ import PromiseKit
 class TranslationDeletionInteractor: Interactor {
 
     private let persistence: ActiveTranslationsPersistence
+    private let simplePersistence: SimplePersistence
 
-    init(persistence: ActiveTranslationsPersistence) {
+    init(persistence: ActiveTranslationsPersistence, simplePersistence: SimplePersistence) {
         self.persistence = persistence
+        self.simplePersistence = simplePersistence
     }
 
     func execute(_ item: TranslationFull) -> Promise<TranslationFull> {
+
+        // update the selected translations
+        let translations = simplePersistence.valueForKey(.selectedTranslations)
+        var updatedTranslations: [Int] = []
+        for id in translations {
+            if item.translation.id != id {
+                updatedTranslations.append(id)
+            }
+        }
+        if translations != updatedTranslations {
+            simplePersistence.setValue(updatedTranslations, forKey: .selectedTranslations)
+        }
 
         return DispatchQueue.global()
             .promise {

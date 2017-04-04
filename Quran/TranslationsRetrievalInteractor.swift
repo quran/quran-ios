@@ -25,12 +25,12 @@ class TranslationsRetrievalInteractor: Interactor {
 
     func execute(_ input: Void) -> Promise<[TranslationFull]> {
 
-        let local = DispatchQueue.translations.promise(execute: persistence.retrieveAll)
+        let local = DispatchQueue.global().promise(execute: persistence.retrieveAll)
         let remote = networkManager.execute(.translations)
 
         return when(fulfilled: local, remote)                       // get local and remote
             .then(on: .global(), execute: combine)                  // combine local and remote
-            .then(on: .translations, execute: saveCombined)         // save combined list
+            .then(on: .global(), execute: saveCombined)         // save combined list
             .then(on: .global(), execute: localInteractor.execute)  // get local data
     }
 

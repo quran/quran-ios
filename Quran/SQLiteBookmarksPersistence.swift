@@ -9,10 +9,6 @@
 import Foundation
 import SQLite
 
-extension DispatchQueue {
-    static let bookmarks = DispatchQueue(label: "com.quran.bookmarks")
-}
-
 struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     let version: UInt = 1

@@ -229,7 +229,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func removeAyahFromBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        DispatchQueue.bookmarks
+        DispatchQueue.global()
             .promise { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in
                 // remove bookmark from model
@@ -240,7 +240,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func addAyahToBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        DispatchQueue.bookmarks
+        DispatchQueue.global()
             .promise { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in
                 // add a bookmark to the model

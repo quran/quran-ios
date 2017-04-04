@@ -9,13 +9,6 @@
 import Foundation
 import SQLite
 
-extension Queue {
-    static let translations = Queue(queue: DispatchQueue(label: "com.quran.translations"))
-}
-extension DispatchQueue {
-    static let translations = Queue.translations.queue
-}
-
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
 
     let version: UInt = 1

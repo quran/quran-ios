@@ -35,7 +35,7 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
     }
 
     func reloadData() {
-        DispatchQueue.bookmarks
+        DispatchQueue.global()
             .promise(execute: self.persistence.retrieveAll)
             .then(on: .main) { items -> Void in
                 self.items = items

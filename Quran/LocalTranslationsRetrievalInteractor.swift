@@ -21,7 +21,7 @@ class LocalTranslationsRetrievalInteractor: Interactor {
     }
 
     func execute(_ input: Void) -> Promise<[TranslationFull]> {
-        return DispatchQueue.translations
+        return DispatchQueue.global()
             .promise(execute: persistence.retrieveAll)
             .then(on: .global(), execute: versionUpdater.execute)
     }

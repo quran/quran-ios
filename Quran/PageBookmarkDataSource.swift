@@ -38,7 +38,7 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
     }
 
     func reloadData() {
-        DispatchQueue.bookmarks
+        DispatchQueue.global()
             .promise(execute: self.persistence.retrievePageBookmarks)
             .then(on: .main) { items -> Void in
                 self.items = items

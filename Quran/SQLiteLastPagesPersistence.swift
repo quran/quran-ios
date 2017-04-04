@@ -11,10 +11,6 @@ import SQLite
 
 private let maxNumberOfLastPages = 3
 
-extension DispatchQueue {
-    static let lastPages = DispatchQueue(label: "com.quran.last_pages")
-}
-
 struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
 
     let version: UInt = 1

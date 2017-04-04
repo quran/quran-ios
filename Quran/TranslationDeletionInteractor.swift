@@ -40,7 +40,7 @@ class TranslationDeletionInteractor: Interactor {
                     try? FileManager.default.removeItem(at: url)
                 }
             }
-            .then(on: .translations) { () -> TranslationFull in
+            .then(on: .global()) { () -> TranslationFull in
                 var translation = item.translation
                 translation.installedVersion = nil
                 try self.persistence.update(translation)

@@ -18,7 +18,7 @@ class BookmarksManager {
     private(set) var isBookmarked: Bool = false
 
     func calculateIsBookmarked(pageNumber: Int) -> Promise<Bool> {
-        return DispatchQueue.bookmarks
+        return DispatchQueue.global()
             .promise { self.bookmarksPersistence.isPageBookmarked(pageNumber) }
             .then(on: .main) { bookmarked -> Bool in
                 self.isBookmarked = bookmarked
@@ -30,11 +30,11 @@ class BookmarksManager {
         isBookmarked = !isBookmarked
 
         if isBookmarked {
-            return DispatchQueue.bookmarks .promise {
+            return DispatchQueue.global() .promise {
                 try self.bookmarksPersistence.insertPageBookmark(forPage: pageNumber)
             }
         } else {
-            return DispatchQueue.bookmarks .promise {
+            return DispatchQueue.global() .promise {
                 try self.bookmarksPersistence.removePageBookmark(atPage: pageNumber)
             }
         }

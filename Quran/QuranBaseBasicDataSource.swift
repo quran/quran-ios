@@ -34,7 +34,7 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: BaseB
         cell.setHighlightedVerses(highlightedAyat, forType: .reading)
 
         // set bookmarked ayat
-        DispatchQueue.bookmarks
+        DispatchQueue.global()
             .promise { try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }
             .then(on: .main) { (_, ayahBookmarks) -> Void in
                 cell.setHighlightedVerses(Set(ayahBookmarks.map { $0.ayah }), forType: .bookmark)

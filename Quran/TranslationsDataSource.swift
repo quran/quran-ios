@@ -264,7 +264,7 @@ private class DownloadingObserver: NSObject {
 
     func start() {
         let response: DownloadNetworkResponse = cast(translation.downloadResponse)
-        kvoController.observe(response.progress, keyPath: "fractionCompleted",
+        kvoController.observe(response.progress, keyPath: #keyPath(Progress.fractionCompleted),
                               options: [.initial, .new],
                               block: { [weak self] (_, progress, _) in
                                 if let progress = progress as? Progress, let translation = self?.translation {

@@ -146,14 +146,14 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     // MARK: - AudioPlayerInteractorDelegate
-    let progressKeyPath = "fractionCompleted"
     var progress: Foundation.Progress? {
         didSet {
             if let oldValue = oldValue {
                 kvoController.unobserve(oldValue)
             }
             if let newValue = progress {
-                kvoController.observe(newValue, keyPath: progressKeyPath, options: [.initial, .new], block: { [weak self] (_, _, change) in
+                kvoController.observe(newValue, keyPath: #keyPath(Progress.fractionCompleted),
+                                      options: [.initial, .new], block: { [weak self] (_, _, change) in
                     if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
                         Queue.main.async {
                             // CLog("progress:", newValue)

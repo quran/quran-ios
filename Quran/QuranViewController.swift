@@ -131,7 +131,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         dataSource.scrollViewDelegate = pageBehavior
-        kvoController.observe(pageBehavior, keyPath: "currentPage", options: .new) { [weak self] (_, _, _) in
+        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) { [weak self] (_, _, _) in
             self?.onPageChanged()
         }
     }

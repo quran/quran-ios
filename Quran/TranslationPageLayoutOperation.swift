@@ -22,17 +22,16 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
     override func main() {
 
         autoreleasepool {
-            let arabicPrefixLayouts = page.arabicPrefix.map { arabicLayoutFrom($0) }
-            let arabicSuffixLayouts = page.arabicSuffix.map { arabicLayoutFrom($0) }
-            let verseLayouts = page.verses.map {
-                TranslationVerseLayout(ayah: $0.ayah,
-                                       arabicTextLayout: arabicLayoutFrom($0.arabicText),
-                                       translationLayouts: $0.translations.map { translationTextLayoutFrom($0) })
+            let verseLayouts = page.verses.map { verse -> TranslationVerseLayout in
+                let arabicPrefixLayouts = verse.arabicPrefix.map { arabicLayoutFrom($0) }
+                let arabicSuffixLayouts = verse.arabicSuffix.map { arabicLayoutFrom($0) }
+                return TranslationVerseLayout(ayah: verse.ayah,
+                                       arabicTextLayout: arabicLayoutFrom(verse.arabicText),
+                                       translationLayouts: verse.translations.map { translationTextLayoutFrom($0) },
+                                       arabicPrefixLayouts: arabicPrefixLayouts,
+                                       arabicSuffixLayouts: arabicSuffixLayouts)
             }
-            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber,
-                                                   arabicPrefixLayouts: arabicPrefixLayouts,
-                                                   verseLayouts: verseLayouts,
-                                                   arabicSuffixLayouts: arabicSuffixLayouts)
+            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber, verseLayouts: verseLayouts)
             fulfill(pageLayout)
         }
     }

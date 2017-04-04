@@ -21,11 +21,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         super.init(sectionType: .single)
     }
 
-    func add(verse: TranslationVerseLayout,
-             index: Int,
-             arabicPrefix: [TranslationArabicTextLayout],
-             arabicSuffix: [TranslationArabicTextLayout],
-             hasSeparator: Bool) {
+    func add(verse: TranslationVerseLayout, index: Int, hasSeparator: Bool) {
 
         // if start of page or a new sura
         if index == 0 || verse.ayah.ayah == 1 {
@@ -35,9 +31,9 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         }
 
         // add prefixes
-        if !arabicPrefix.isEmpty {
+        if !verse.arabicPrefixLayouts.isEmpty {
             let prefix = QuranTranslationArabicTextDataSource()
-            prefix.items = arabicPrefix
+            prefix.items = verse.arabicPrefixLayouts
             add(prefix)
         }
 
@@ -70,9 +66,9 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         }
 
         // add prefixes suffixes
-        if !arabicSuffix.isEmpty {
+        if !verse.arabicSuffixLayouts.isEmpty {
             let suffix = QuranTranslationArabicTextDataSource()
-            suffix.items = arabicSuffix
+            suffix.items = verse.arabicSuffixLayouts
             add(suffix)
         }
 

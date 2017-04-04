@@ -18,13 +18,13 @@ struct TranslationVerse {
     let ayah: AyahNumber
     let arabicText: String
     let translations: [TranslationText]
+    let arabicPrefix: [String]
+    let arabicSuffix: [String]
 }
 
 struct TranslationPage: Hashable {
     let pageNumber: Int
-    let arabicPrefix: [String]
     let verses: [TranslationVerse]
-    let arabicSuffix: [String]
 
     private var translationIds: [Int] {
         return verses.first?.translations.map { $0.translation.id } ?? []

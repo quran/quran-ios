@@ -40,11 +40,12 @@ struct TranslationVerseLayout {
     let ayah: AyahNumber
     let arabicTextLayout: TranslationArabicTextLayout
     let translationLayouts: [TranslationTextLayout]
+
+    let arabicPrefixLayouts: [TranslationArabicTextLayout]
+    let arabicSuffixLayouts: [TranslationArabicTextLayout]
 }
 
 struct TranslationPageLayout {
     let pageNumber: Int
-    let arabicPrefixLayouts: [TranslationArabicTextLayout]
     let verseLayouts: [TranslationVerseLayout]
-    let arabicSuffixLayouts: [TranslationArabicTextLayout]
 }

@@ -61,17 +61,11 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
                 let isLongText = text.characters.count >= 300
                 return TranslationText(translation: translation, text: text, isLongText: isLongText)
             }
-            let verse = TranslationVerse(ayah: ayah, arabicText: arabicText, translations: ayahTranslations)
+            let prefix = ayah.startsWithBesmallah ? [Quran.arabicBasmAllah] : []
+            let verse = TranslationVerse(ayah: ayah, arabicText: arabicText, translations: ayahTranslations, arabicPrefix: prefix, arabicSuffix: [])
             verses.append(verse)
         }
-
-        var prefixes: [String] = []
-        if let firstAyah = ayahs.first {
-            if firstAyah.startsWithBesmallah {
-                prefixes.append(Quran.arabicBasmAllah)
-            }
-        }
-        return TranslationPage(pageNumber: page, arabicPrefix: prefixes, verses: verses, arabicSuffix: [])
+        return TranslationPage(pageNumber: page, verses: verses)
     }
 
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {

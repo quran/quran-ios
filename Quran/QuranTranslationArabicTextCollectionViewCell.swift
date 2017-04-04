@@ -26,7 +26,7 @@ class QuranTranslationArabicTextCollectionViewCell: QuranTranslationBaseCollecti
         label.numberOfLines = 0
         label.textAlignment = .right
         label.font = .translationArabicQuranText
-        label.textColor = #colorLiteral(red: 0.1294117647, green: 0.1294117647, blue: 0.1294117647, alpha: 1)
+        label.textColor = .translationText
         label.backgroundColor = .readingBackground()
 
         contentView.addAutoLayoutSubview(label)
@@ -35,5 +35,15 @@ class QuranTranslationArabicTextCollectionViewCell: QuranTranslationBaseCollecti
                                            trailingValue: Layout.Translation.horizontalInset,
                                            topValue: 15,
                                            bottomValue: 15)
+    }
+
+    override var backgroundColor: UIColor? {
+        didSet {
+            if backgroundColor == .readingBackground() {
+                label.backgroundColor = backgroundColor
+            } else {
+                label.backgroundColor = .clear
+            }
+        }
     }
 }

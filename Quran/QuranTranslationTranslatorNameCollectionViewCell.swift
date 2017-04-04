@@ -24,7 +24,7 @@ class QuranTranslationTranslatorNameCollectionViewCell: QuranTranslationBaseColl
 
     private func setUp() {
         label.numberOfLines = 0
-        label.textColor = #colorLiteral(red: 0.5490196078, green: 0.662745098, blue: 0.662745098, alpha: 1)
+        label.textColor = .translatorName
         label.backgroundColor = .readingBackground()
 
         contentView.addAutoLayoutSubview(label)
@@ -33,5 +33,15 @@ class QuranTranslationTranslatorNameCollectionViewCell: QuranTranslationBaseColl
                                            trailingValue: Layout.Translation.horizontalInset,
                                            topValue: 15,
                                            bottomValue: 5)
+    }
+
+    override var backgroundColor: UIColor? {
+        didSet {
+            if backgroundColor == .readingBackground() {
+                label.backgroundColor = backgroundColor
+            } else {
+                label.backgroundColor = .clear
+            }
+        }
     }
 }

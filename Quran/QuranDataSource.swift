@@ -46,7 +46,9 @@ class QuranDataSource: SegmentedDataSource {
     }
 
     func highlightAyaht(_ ayat: Set<AyahNumber>) {
-        selectedDataSourceRepresentable?.highlightAyaht(ayat)
+        for (offset, ds) in dataSourceRepresentables.enumerated() {
+            ds.highlightAyaht(ayat, isActive: offset == selectedDataSourceIndex)
+        }
     }
 
     func setItems(_ items: [QuranPage]) {

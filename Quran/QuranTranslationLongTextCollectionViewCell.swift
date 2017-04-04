@@ -32,4 +32,14 @@ class QuranTranslationLongTextCollectionViewCell: QuranTranslationBaseCollection
                                            topValue: 5,
                                            bottomValue: 15)
     }
+
+    override var backgroundColor: UIColor? {
+        didSet {
+            if backgroundColor == .readingBackground() {
+                label.backgroundColor = backgroundColor
+            } else {
+                label.backgroundColor = .clear
+            }
+        }
+    }
 }

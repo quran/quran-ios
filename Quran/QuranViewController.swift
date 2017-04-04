@@ -12,9 +12,11 @@ import KVOController
 class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
+    private let bookmarksPersistence: BookmarksPersistence
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
 
+    private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
     private let dataRetriever: AnyDataRetriever<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>
@@ -61,6 +63,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         return bookmarksManager.isBookmarked
     }
 
+    var lastViewedPage: Int {
+        return lastPageUpdater.lastPage?.page ?? initialPage
+    }
+
     override var prefersStatusBarHidden: Bool {
         return statusBarHidden || traitCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
     }
@@ -73,18 +79,19 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         return .lightContent
     }
 
-    init(imageService: AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
-         pageService: AnyCacheableService<Int, TranslationPage>,
-         dataRetriever: AnyDataRetriever<[QuranPage]>,
-         ayahInfoRetriever: AyahInfoRetriever,
-         audioViewPresenter: AudioBannerViewPresenter,
-         qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>,
-         translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>,
-         bookmarksPersistence: BookmarksPersistence,
-         lastPagesPersistence: LastPagesPersistence,
-         simplePersistence: SimplePersistence,
-         page: Int,
-         lastPage: LastPage?) {
+    init(imageService                           : AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
+         pageService                            : AnyCacheableService<Int, TranslationPage>,
+         dataRetriever                          : AnyDataRetriever<[QuranPage]>,
+         ayahInfoRetriever                      : AyahInfoRetriever,
+         audioViewPresenter                     : AudioBannerViewPresenter,
+         qarisControllerCreator                 : AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>,
+         translationsSelectionControllerCreator : AnyCreator<UIViewController, Void>,
+         bookmarksPersistence                   : BookmarksPersistence,
+         lastPagesPersistence                   : LastPagesPersistence,
+         simplePersistence                      : SimplePersistence,
+         verseTextRetrieval                     : AnyInteractor<QuranShareData, String>,
+         page                                   : Int,
+         lastPage                               : LastPage?) {
         self.initialPage                            = page
         self.dataRetriever                          = dataRetriever
         self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
@@ -94,6 +101,8 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         self.qarisControllerCreator                 = qarisControllerCreator
         self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
+        self.bookmarksPersistence                   = bookmarksPersistence
+        self.verseTextRetrieval                     = verseTextRetrieval
 
         let imagesDataSource = QuranImagesDataSource(
             imageService: imageService,
@@ -132,7 +141,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     override func loadView() {
-        view = QuranView()
+        view = QuranView(bookmarksPersistence: bookmarksPersistence, verseTextRetrieval: verseTextRetrieval)
     }
 
     override func viewDidLoad() {
@@ -212,20 +221,14 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         barsTimer = nil
     }
 
-    // MARK: - QuranImagesDataSourceDelegate
-
-    func share(ayahText: String) {
-        ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
-    }
-
-    func lastViewedPage() -> Int {
-        return lastPageUpdater.lastPage?.page ?? initialPage
-    }
-
     // MARK: - Quran View Delegate
 
     func onQuranViewTapped(_ quranView: QuranView) {
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
+    }
+
+    func quranView(_ quranView: QuranView, didSelectTextToShare text: String) {
+        ShareController.showShareActivityWithText(text, sourceViewController: self, handler: nil)
     }
 
     private func setBarsHidden(_ hidden: Bool) {

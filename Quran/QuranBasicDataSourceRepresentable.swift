@@ -9,22 +9,17 @@
 import Foundation
 import GenericDataSources
 
-protocol QuranDataSourceDelegate: class {
-    func share(ayahText: String)
-    func lastViewedPage() -> Int
-}
-
 protocol QuranBasicDataSourceRepresentable: BasicDataSourceRepresentable {
     associatedtype Item = QuranPage
 
-    func highlightAyaht(_ ayat: Set<AyahNumber>)
+    func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool)
     func applicationDidBecomeActive()
     func invalidate()
 }
 
 class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentable<Item>, QuranBasicDataSourceRepresentable {
 
-    private let highlightAyatBlock: (Set<AyahNumber>) -> Void
+    private let highlightAyatBlock: (Set<AyahNumber>, Bool) -> Void
     private let becomeActiveBlock: () -> Void
     private let invalidateBlock: () -> Void
 
@@ -35,8 +30,8 @@ class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentabl
         super.init(ds)
     }
 
-    func highlightAyaht(_ ayat: Set<AyahNumber>) {
-        return highlightAyatBlock(ayat)
+    func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool) {
+        return highlightAyatBlock(ayat, isActive)
     }
 
     func applicationDidBecomeActive() {

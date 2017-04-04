@@ -18,11 +18,11 @@ extension UIFont {
     static let translationTranslatorNameEnglish: UIFont = .systemFont(ofSize: 17)
     static let translationTranslatorNameAmharic: UIFont = UIFont(name: amharic, size: 17)!
 
-    static let translationArabicQuranText: UIFont = UIFont(name: arabic, size: 20)!
+    static let translationArabicQuranText: UIFont = UIFont(name: arabic, size: 24)!
 
-    static let translationArabicTranslation: UIFont = UIFont(name: arabic, size: 17)!
-    static let translationEnglishTranslation: UIFont = .systemFont(ofSize: 17)
-    static let translationAmharicTranslation: UIFont = UIFont(name: amharic, size: 17)!
+    static let translationArabicTranslation: UIFont = UIFont(name: arabic, size: 20)!
+    static let translationEnglishTranslation: UIFont = .systemFont(ofSize: 20)
+    static let translationAmharicTranslation: UIFont = UIFont(name: amharic, size: 22)!
     // swiftlint:enable force_unwrapping
 }
 

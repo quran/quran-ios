@@ -175,6 +175,7 @@ class Container {
             bookmarksPersistence                   : createBookmarksPersistence(),
             lastPagesPersistence                   : createLastPagesPersistence(),
             simplePersistence                      : createSimplePersistence(),
+            verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
             page                                   : page,
             lastPage                               : lastPage
         )
@@ -347,5 +348,19 @@ class Container {
                                               arabicPersistence: createArabicTextPersistence(),
                                               translationPersistenceCreator: createCreator(createTranslationTextPersistence),
                                               simplePersistence: createSimplePersistence()).asPreloadingOperationRepresentable()
+    }
+
+    func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).erasedType()
+    }
+
+    func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return TranslationVerseTextRetrieval().erasedType()
+    }
+
+    func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return CompositeVerseTextRetrieval(
+            image: createImageVerseTextRetrieval(),
+            translation: createTranslationVerseTextRetrieval()).erasedType()
     }
 }

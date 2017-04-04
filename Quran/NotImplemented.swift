@@ -17,5 +17,5 @@ func unimplemented(function: StaticString = #function, file: StaticString = #fil
 }
 
 func expectedToBeSubclassed(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> Never {
-    fatalError("Function '\(function)' is unimplemented at: \(file) - \(line)")
+    fatalError("\(#function) Should be implemented by subclasses")
 }

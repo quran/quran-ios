@@ -9,6 +9,9 @@
 import UIKit
 
 class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
+
+    var ayah: AyahNumber?
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setUp()
@@ -22,5 +25,15 @@ class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
     private func setUp() {
         backgroundColor = .readingBackground()
         contentView.backgroundColor = .readingBackground()
+    }
+
+    override var backgroundColor: UIColor? {
+        set {
+            super.backgroundColor = newValue ?? .readingBackground()
+            contentView.backgroundColor = super.backgroundColor
+        }
+        get {
+            return super.backgroundColor
+        }
     }
 }

@@ -1,4 +1,3 @@
-
 /*
  New Localizations in Quran for iOS. TODO: need to be reviewed by a native speaker.
  Translated by Ismail Uslu
@@ -10,9 +9,17 @@
 "NetworkError_NotConnectedToInternet" = "internete bağlı değil. Wi-Fi açiniz veya hücresel veri bağlantısı’ni aktif ediniz.";
 "NetworkError_ServerNotReachable" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
 "NetworkError_Unknown" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
-
-
-
+"NetworkError_Parsing" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
 
 "FileSystemError_Unknown" = "Cihazi disk’e erişirken bilinmeyen bir hata oluştu";
 "FileSystemError_NoDiskSpace" = "Indirmenizi kaydetmek için hiçbir kullanılabilir disk alani bulunmamaktadir ";
+
+
+"translatorLabel: " = "Translator: ";
+"upgradeTranslationButtonTitle" = "UPDATE";
+
+"translationsSelectionTitle" = "Select Translations/Tafseer";
+"translationsSelectionPrompt" = "Select in order";
+
+"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
+"noAvailableTranslationText" = "No translation available for this Ayah.";

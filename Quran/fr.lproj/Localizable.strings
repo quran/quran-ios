@@ -1,4 +1,3 @@
-
 /*
  New Localizations in Quran for iOS. TODO: need to be reviewed by a native speaker.
  */
@@ -8,8 +7,17 @@
 "NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
 "NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
 "NetworkError_Unknown" = "Oops! Something went wrong. Please try again.";
-
-
+"NetworkError_Parsing" = "Oops! Something went wrong. Please try again.";
 
 "FileSystemError_Unknown" = "Unkown error occurred while accessing device hard disk";
 "FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+
+
+"translatorLabel: " = "Translator: ";
+"upgradeTranslationButtonTitle" = "UPDATE";
+
+"translationsSelectionTitle" = "Select Translations/Tafseer";
+"translationsSelectionPrompt" = "Select in order";
+
+"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
+"noAvailableTranslationText" = "No translation available for this Ayah.";

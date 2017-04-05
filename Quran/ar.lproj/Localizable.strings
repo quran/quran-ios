@@ -1,4 +1,3 @@
-
 /*
  New Localizations in Quran for iOS.
  */
@@ -18,3 +17,7 @@
 "upgradeTranslationButtonTitle" = "تحديث";
 
 "translationsSelectionTitle" = "إختر التفاسير والترجمات";
+"translationsSelectionPrompt" = "إختار بالترتيب المرغوب فيه";
+
+"errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";

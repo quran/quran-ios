@@ -12,7 +12,7 @@ protocol Creator {
     associatedtype CreatedObject
     associatedtype Parameters
 
-    func create(parameters: Parameters) -> CreatedObject
+    func create(_ parameters: Parameters) -> CreatedObject
 }
 
 struct AnyCreator<CreatedObject, Parameters>: Creator {
@@ -27,14 +27,14 @@ struct AnyCreator<CreatedObject, Parameters>: Creator {
         createClosure = creator.create
     }
 
-    func create(parameters: Parameters) -> CreatedObject {
+    func create(_ parameters: Parameters) -> CreatedObject {
         return createClosure(parameters)
     }
 }
 
 extension Creator {
 
-    func erasedType() -> AnyCreator<CreatedObject, Parameters> {
+    func asAnyCreator() -> AnyCreator<CreatedObject, Parameters> {
         return AnyCreator(creator: self)
     }
 }

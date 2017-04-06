@@ -21,10 +21,11 @@ extension Translation: Parsable {
         id = try json["id"].parsed()
         displayName = try json["displayName"].parsed()
         translator = json["translator"].string
-        translatorForeign = json["translator_foreign"].string
+        translatorForeign = json["translatorForeign"].string
         fileURL = try json["fileUrl"].parsed()
         fileName = try json["fileName"].parsed()
-        version = try json["current_version"].parsed()
+        languageCode = try json["languageCode"].parsed()
+        version = try json["currentVersion"].parsed()
         installedVersion = nil
     }
 }

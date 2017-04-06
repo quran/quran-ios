@@ -10,72 +10,84 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="99" id="KGk-i7-Jjw" customClass="TranslationTableViewCell" customModule="Quran" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="99" id="Y1f-pj-HbF" customClass="TranslationTableViewCell" customModule="Quran" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="98.5"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y1f-pj-HbF" id="4HX-6q-TtD">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="98"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4js-8U-T2b">
-                        <rect key="frame" x="15" y="10" width="245" height="79"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Arabic Translation" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNb-vy-AQn">
-                                <rect key="frame" x="0.0" y="0.0" width="245" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFL-YT-GvE">
-                                <rect key="frame" x="0.0" y="58" width="245" height="21"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Translator:">
-                                        <attributes>
-                                            <color key="NSColor" white="0.56761895285712349" alpha="1" colorSpace="calibratedWhite"/>
-                                            <font key="NSFont" size="17" name=".SFNSText"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" ">
-                                        <attributes>
-                                            <color key="NSColor" red="0.10523054748773575" green="0.41989994049072266" blue="0.44597047567367554" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="17" name=".SFNSText"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Ibn Kather">
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                    </stackView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Wd-SD-I4r" customClass="PKDownloadButton">
-                        <rect key="frame" x="260" y="25" width="50" height="50"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <view contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="c6P-2R-1yp" customClass="TranslationDownloadButton" customModule="Quran" customModuleProvider="target">
+                        <rect key="frame" x="255" y="24" width="50" height="50"/>
+                        <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="e7e-ZI-ObT"/>
-                            <constraint firstAttribute="height" constant="50" id="fLB-vO-qjb"/>
+                            <constraint firstAttribute="height" constant="50" id="1O9-xG-tjv"/>
                         </constraints>
                     </view>
+                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="bx8-tS-JKx">
+                        <rect key="frame" x="12" y="10" width="233" height="79"/>
+                        <subviews>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-selected" translatesAutoresizingMaskIntoConstraints="NO" id="LZn-ci-uco">
+                                <rect key="frame" x="0.0" y="28.5" width="22" height="22"/>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aBd-0m-pyV">
+                                <rect key="frame" x="42" y="14" width="191" height="51"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Arabic Translation" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d1y-dc-yca">
+                                        <rect key="frame" x="0.0" y="0.0" width="138" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uoe-XG-72q">
+                                        <rect key="frame" x="0.0" y="30.5" width="163" height="20.5"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Translator:">
+                                                <attributes>
+                                                    <color key="NSColor" white="0.56761895289999997" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <font key="NSFont" size="17" name=".SFNSText"/>
+                                                </attributes>
+                                            </fragment>
+                                            <fragment content=" ">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.10523054749999999" green="0.41989994050000001" blue="0.44597047569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" size="17" name=".SFNSText"/>
+                                                </attributes>
+                                            </fragment>
+                                            <fragment content="Ibn Kather">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <font key="NSFont" metaFont="system" size="17"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.23137255009999999" green="0.45490196350000001" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                            </stackView>
+                        </subviews>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="1Wd-SD-I4r" secondAttribute="trailing" constant="10" id="Cfj-bY-UbE"/>
-                    <constraint firstAttribute="bottom" secondItem="4js-8U-T2b" secondAttribute="bottom" constant="10" id="PnT-CU-Y4k"/>
-                    <constraint firstItem="1Wd-SD-I4r" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="YrA-5j-SBB"/>
-                    <constraint firstAttribute="trailing" secondItem="4js-8U-T2b" secondAttribute="trailing" constant="60" id="ceD-vZ-wbF"/>
-                    <constraint firstItem="4js-8U-T2b" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="mBh-Dk-KBq"/>
-                    <constraint firstItem="4js-8U-T2b" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="ryS-QK-PCc"/>
+                    <constraint firstItem="bx8-tS-JKx" firstAttribute="top" secondItem="4HX-6q-TtD" secondAttribute="top" constant="10" id="DjJ-KB-7LX"/>
+                    <constraint firstItem="c6P-2R-1yp" firstAttribute="centerY" secondItem="4HX-6q-TtD" secondAttribute="centerY" id="VfD-37-vN5"/>
+                    <constraint firstItem="bx8-tS-JKx" firstAttribute="leading" secondItem="4HX-6q-TtD" secondAttribute="leading" constant="12" id="a4b-i3-JON"/>
+                    <constraint firstAttribute="trailing" secondItem="c6P-2R-1yp" secondAttribute="trailing" constant="15" id="hpG-G9-FZI"/>
+                    <constraint firstAttribute="bottom" secondItem="bx8-tS-JKx" secondAttribute="bottom" constant="10" id="kUg-h9-bcM"/>
+                    <constraint firstItem="c6P-2R-1yp" firstAttribute="leading" secondItem="bx8-tS-JKx" secondAttribute="trailing" constant="10" id="wzN-p9-BcZ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="downloadButton" destination="1Wd-SD-I4r" id="llC-I6-ud8"/>
-                <outlet property="firstLabel" destination="VNb-vy-AQn" id="uoQ-8D-RUu"/>
-                <outlet property="secondLabel" destination="SFL-YT-GvE" id="mUX-mc-4ny"/>
+                <outlet property="checkbox" destination="LZn-ci-uco" id="FoQ-Yc-N3V"/>
+                <outlet property="downloadButton" destination="c6P-2R-1yp" id="M3X-89-fuJ"/>
+                <outlet property="firstLabel" destination="d1y-dc-yca" id="sxp-4r-zXw"/>
+                <outlet property="secondLabel" destination="uoe-XG-72q" id="r4s-dR-Ogu"/>
             </connections>
-            <point key="canvasLocation" x="-248" y="99.5"/>
+            <point key="canvasLocation" x="-276" y="50"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="checkbox-selected" width="22" height="22"/>
+    </resources>
 </document>

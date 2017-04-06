@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
+struct SQLiteAyahInfoPersistence: AyahInfoPersistence, ReadonlySQLitePersistence {
 
     fileprivate struct Columns {
         let id = Expression<Int>("glyph_id")
@@ -27,39 +27,33 @@ struct SQLiteAyahInfoPersistence: AyahInfoPersistence {
     fileprivate let glyphsTable = Table("glyphs")
     fileprivate let columns = Columns()
 
-    fileprivate var db: LazyConnectionWrapper = { LazyConnectionWrapper(sqliteFilePath: Files.ayahInfoPath, readonly: true) }()
+    var filePath: String { return Files.ayahInfoPath }
 
     func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]] {
-        let query = glyphsTable.filter(columns.page == page)
+        return try run { connection in
+            let query = glyphsTable.filter(columns.page == page)
 
-        var result = [AyahNumber: [AyahInfo]]()
-        do {
-            for row in try db.getOpenConnection().prepare(query) {
+            var result = [AyahNumber: [AyahInfo]]()
+            for row in try connection.prepare(query) {
                 let ayah = AyahNumber(sura: row[columns.sura], ayah: row[columns.ayah])
                 var ayahInfoList = result[ayah] ?? []
                 ayahInfoList += [ getAyahInfoFromRow(row, ayah: ayah) ]
                 result[ayah] = ayahInfoList
             }
             return result
-        } catch {
-            Crash.recordError(error, reason: "Error getting ayah info for page '\(page)'")
-            throw PersistenceError.query(error)
         }
     }
 
     func getAyahInfoForSuraAyah(_ sura: Int, ayah: Int) throws -> [AyahInfo] {
-        let query = glyphsTable.filter(columns.sura == sura && columns.ayah == ayah)
+        return try run { connection in
+            let query = glyphsTable.filter(columns.sura == sura && columns.ayah == ayah)
 
-        var result: [AyahInfo] = []
-        let ayah = AyahNumber(sura: sura, ayah: ayah)
-        do {
-            for row in try db.getOpenConnection().prepare(query) {
+            var result: [AyahInfo] = []
+            let ayah = AyahNumber(sura: sura, ayah: ayah)
+            for row in try connection.prepare(query) {
                 result += [ getAyahInfoFromRow(row, ayah: ayah) ]
             }
             return result
-        } catch {
-            Crash.recordError(error, reason: "Error getting ayah info for (sura: \(sura), ayah: \(ayah))")
-            throw PersistenceError.query(error)
         }
     }
 

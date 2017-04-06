@@ -9,13 +9,13 @@
 import Foundation
 
 extension NSObjectProtocol {
-    func cast<T, U>(_ value: T) -> U {
-        return cast(value, message: "Couldn't cast object '\(value)' to '\(U.self)'")
+    func cast<T, U>(_ value: T, file: StaticString = #file, line: UInt = #line) -> U {
+        return cast(value, message: "Couldn't cast object '\(value)' to '\(U.self)'", file: file, line: line)
     }
 
-    func cast<T, U>(_ value: T, message: String) -> U {
+    func cast<T, U>(_ value: T, message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) -> U {
         guard let castedValue = value as? U else {
-            fatalError("[\(type(of: self))]: \(message)")
+            fatalError("[\(type(of: self))]: \(message()); file\(file), line:\(line)")
         }
         return castedValue
     }

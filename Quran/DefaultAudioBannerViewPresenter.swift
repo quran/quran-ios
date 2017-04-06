@@ -31,7 +31,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     var selectedQariIndex: Int = 0 {
         didSet {
-            persistence.setValue(selectedQari.id, forKey: .LastSelectedQariId)
+            persistence.setValue(selectedQari.id, forKey: .lastSelectedQariId)
         }
     }
     var qaris: [Qari] = []
@@ -80,7 +80,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
             self.qaris = qaris
 
             // get last selected qari id
-            let lastSelectedQariId = self.persistence.valueForKey(.LastSelectedQariId)
+            let lastSelectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
             let index = qaris.index { $0.id == lastSelectedQariId }
             if let selectedIndex = index {
                 self.selectedQariIndex = selectedIndex
@@ -146,16 +146,17 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     // MARK: - AudioPlayerInteractorDelegate
-    let progressKeyPath = "fractionCompleted"
     var progress: Foundation.Progress? {
         didSet {
             if let oldValue = oldValue {
                 kvoController.unobserve(oldValue)
             }
             if let newValue = progress {
-                kvoController.observe(newValue, keyPath: progressKeyPath, options: [.initial, .new], block: { [weak self] (_, _, change) in
+                kvoController.observe(newValue, keyPath: #keyPath(Progress.fractionCompleted),
+                                      options: [.initial, .new], block: { [weak self] (_, _, change) in
                     if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
                         Queue.main.async {
+                            // CLog("progress:", newValue)
                             self?.view?.setDownloading(Float(newValue))
                         }
                     }
@@ -174,16 +175,18 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onPlayingStarted() {
-        Crash.setValue(false, forKey: .DownloadingQuran)
         self.progress = nil
+        Crash.setValue(false, forKey: .DownloadingQuran)
         Queue.main.async { self.playing = true }
     }
 
     func onPlaybackResumed() {
+        self.progress = nil
         Queue.main.async { self.playing = true }
     }
 
     func onPlaybackPaused() {
+        self.progress = nil
         Queue.main.async { self.playing = false }
     }
 
@@ -193,12 +196,15 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onFailedDownloadingWithError(_ error: Error) {
+        self.progress = nil
         Queue.main.async {
             self.delegate?.onErrorOccurred(error: error)
         }
     }
 
     func onPlaybackOrDownloadingCompleted() {
+        self.progress = nil
+
         Crash.setValue(nil, forKey: .PlayingAyah)
         Crash.setValue(false, forKey: .DownloadingQuran)
         Queue.main.async {

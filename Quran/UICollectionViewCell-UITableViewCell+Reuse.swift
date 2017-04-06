@@ -7,31 +7,21 @@
 //
 
 import UIKit
+import GenericDataSources
 
-extension UICollectionViewCell {
+extension ReusableCell {
     static var reuseId: String {
         return String(describing: self)
     }
 }
 
-extension UITableViewCell {
-    static var reuseId: String {
-        return String(describing: self)
+extension GeneralCollectionView {
+
+    func register(cell: ReusableCell.Type) {
+        ds_register(UINib(nibName: String(describing: cell), bundle: nil), forCellWithReuseIdentifier: cell.reuseId)
     }
-}
 
-
-extension UICollectionView {
-
-    func register(cell: UICollectionViewCell.Type) {
-        register(UINib(nibName: String(describing: cell), bundle: nil), forCellWithReuseIdentifier: cell.reuseId)
-    }
-}
-
-
-extension UITableView {
-
-    func register(cell: UITableViewCell.Type) {
-        register(UINib(nibName: String(describing: cell), bundle: nil), forCellReuseIdentifier: cell.reuseId)
+    func register(cellClass: ReusableCell.Type) {
+        ds_register(cellClass, forCellWithReuseIdentifier: cellClass.reuseId)
     }
 }

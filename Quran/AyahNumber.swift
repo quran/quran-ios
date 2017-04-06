@@ -72,3 +72,9 @@ struct AyahNumber: Hashable, CustomStringConvertible {
 func == (lhs: AyahNumber, rhs: AyahNumber) -> Bool {
     return lhs.sura == rhs.sura && lhs.ayah == rhs.ayah
 }
+
+extension AyahNumber {
+    var startsWithBesmallah: Bool {
+        return ayah == 1 && sura != 1 && sura != 9
+    }
+}

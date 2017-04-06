@@ -115,8 +115,10 @@ static PKPendingView *CommonInit(PKPendingView *self) {
 
 - (NSArray *)createConstraints {
     NSMutableArray *constraints = [NSMutableArray array];
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsForCenterView:self.circleView
-                                                                         withView:self]];
+//    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsForCenterView:self.circleView
+//                                                                         withView:self]];
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsForWrappedSubview:self.circleView
+                                                                           withInsets:UIEdgeInsetsZero]];
     return constraints;
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
+struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence, ReadonlySQLitePersistence {
 
     fileprivate struct Column {
         static let sura = Expression<Int>("sura")
@@ -19,39 +19,47 @@ struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence {
 
     fileprivate let timingsTable = Table("timings")
 
-    func getTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahNumber: AyahTiming] {
-        let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
-        let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
-        do {
-            var timings: [AyahNumber: AyahTiming] = [:]
-            let rows = try db.getOpenConnection().prepare(query)
-            for row in rows {
-                let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
-                let timing = AyahTiming(ayah: ayah, time: row[Column.time])
-                timings[ayah] = timing
+    let filePath: String
+
+    init(filePath: URL) {
+        self.filePath = filePath.absoluteString
+    }
+
+    func getTimingForSura(startAyah: AyahNumber) throws -> [AyahNumber: AyahTiming] {
+        return try run { connection in
+            let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
+            do {
+                var timings: [AyahNumber: AyahTiming] = [:]
+                let rows = try connection.prepare(query)
+                for row in rows {
+                    let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
+                    let timing = AyahTiming(ayah: ayah, time: row[Column.time])
+                    timings[ayah] = timing
+                }
+                return timings
+            } catch {
+                Crash.recordError(error, reason: "Couldn't get timing for sura starting from '\(startAyah)")
+                throw PersistenceError.query(error)
             }
-            return timings
-        } catch {
-            Crash.recordError(error, reason: "Couldn't get timing for sura starting from '\(startAyah)")
-            throw PersistenceError.query(error)
         }
     }
 
-    func getOrderedTimingForSura(startAyah: AyahNumber, databaseFileURL: URL) throws -> [AyahTiming] {
-        let db = LazyConnectionWrapper(sqliteFilePath: databaseFileURL.absoluteString, readonly: true)
-        let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
-        do {
-            var timings: [AyahTiming] = []
-            let rows = try db.getOpenConnection().prepare(query)
-            for row in rows {
-                let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
-                let timing = AyahTiming(ayah: ayah, time: row[Column.time])
-                timings.append(timing)
+    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> [AyahTiming] {
+        return try run { connection in
+            let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
+            do {
+                var timings: [AyahTiming] = []
+                let rows = try connection.prepare(query)
+                for row in rows {
+                    let ayah = AyahNumber(sura: row[Column.sura], ayah: row[Column.ayah])
+                    let timing = AyahTiming(ayah: ayah, time: row[Column.time])
+                    timings.append(timing)
+                }
+                return timings
+            } catch {
+                Crash.recordError(error, reason: "Couldn't get ordered timing for sura starting from '\(startAyah)")
+                throw PersistenceError.query(error)
             }
-            return timings
-        } catch {
-            Crash.recordError(error, reason: "Couldn't get ordered timing for sura starting from '\(startAyah)")
-            throw PersistenceError.query(error)
         }
     }
 }

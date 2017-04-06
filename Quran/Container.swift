@@ -48,8 +48,19 @@ class Container {
         return JuzsNavigationController(rootViewController: createJuzsViewController())
     }
 
+    func createTranslationsSelectionViewController() -> UIViewController {
+        return TranslationsSelectionNavigationController(
+            rootViewController: TranslationsSelectionViewController(
+                interactor: createTranslationsRetrievalInteractor(),
+                localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
+                dataSource: createTranslationsSelectionDataSource()))
+    }
+
     func createTranslationsViewController() -> UIViewController {
-        return TranslationsViewController(interactor: createTranslationsRetrievalInteractor(), downloader: createDownloadManager())
+        return TranslationsViewController(
+            interactor: createTranslationsRetrievalInteractor(),
+            localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
+            dataSource: createTranslationsDataSource())
     }
 
     func createSurasViewController() -> UIViewController {
@@ -77,11 +88,47 @@ class Container {
                                             simplePersistence: createSimplePersistence(),
                                             lastPagesPersistence: createLastPagesPersistence(),
                                             bookmarksPersistence: createBookmarksPersistence(),
-                                            ayahPersistence: createAyahTextStorage())
+                                            ayahPersistence: createArabicTextPersistence())
     }
 
-    func createQariTableViewController() -> QariTableViewController {
-        return QariTableViewController(style: .plain)
+    func createQariTableViewController(qaris: [Qari], selectedQariIndex: Int) -> QariTableViewController {
+        return QariTableViewController(style: .plain, qaris: qaris, selectedQariIndex: selectedQariIndex)
+    }
+
+    func createQariTableViewControllerCreator() -> AnyCreator<QariTableViewController, ([Qari], Int, UIView?)> {
+        return QariTableViewControllerCreator(qarisControllerCreator: createCreator(createQariTableViewController)).asAnyCreator()
+    }
+
+    func createTranslationsDataSource() -> TranslationsDataSource {
+        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let downloadedDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let dataSource = TranslationsDataSource(
+            downloader: createDownloadManager(),
+            deletionInteractor: createTranslationDeletionInteractor(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor(),
+            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
+            headerReuseId: "header")
+        pendingDS.delegate = dataSource
+        downloadedDS.delegate = dataSource
+        return dataSource
+    }
+
+    func createTranslationsSelectionDataSource() -> TranslationsDataSource {
+        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let downloadedDS = TranslationsSelectionBasicDataSource(
+            reuseIdentifier: TranslationTableViewCell.reuseId,
+            simplePersistence: createSimplePersistence())
+        let dataSource = TranslationsSelectionDataSource(
+            downloader: createDownloadManager(),
+            deletionInteractor: createTranslationDeletionInteractor(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor(),
+            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
+            headerReuseId: "header")
+        pendingDS.delegate = dataSource
+        downloadedDS.delegate = dataSource
+        return dataSource
     }
 
     func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
@@ -104,8 +151,12 @@ class Container {
         return SQLiteAyahInfoPersistence()
     }
 
-    func createAyahTextStorage() -> AyahTextPersistence {
+    func createArabicTextPersistence() -> AyahTextPersistence {
         return SQLiteArabicTextPersistence()
+    }
+
+    func createTranslationTextPersistence(filePath: String) -> SQLiteTranslationTextPersistence {
+        return SQLiteTranslationTextPersistence(filePath: filePath)
     }
 
     func createAyahInfoRetriever() -> AyahInfoRetriever {
@@ -114,25 +165,50 @@ class Container {
 
     func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
         return QuranViewController(
-            imageService            : createQuranImageService(),
-            dataRetriever           : createQuranPagesRetriever(),
-            ayahInfoRetriever       : createAyahInfoRetriever(),
-            audioViewPresenter      : createAudioBannerViewPresenter(),
-            qarisControllerCreator  : createCreator(createQariTableViewController),
-            bookmarksPersistence    : createBookmarksPersistence(),
-            lastPagesPersistence    : createLastPagesPersistence(),
-            page                    : page,
-            lastPage                : lastPage
+            imageService                           : createQuranImageService(),
+            pageService                            : createQuranTranslationService(),
+            dataRetriever                          : createQuranPagesRetriever(),
+            ayahInfoRetriever                      : createAyahInfoRetriever(),
+            audioViewPresenter                     : createAudioBannerViewPresenter(),
+            qarisControllerCreator                 : createQariTableViewControllerCreator(),
+            translationsSelectionControllerCreator : createCreator(createTranslationsSelectionViewController),
+            bookmarksPersistence                   : createBookmarksPersistence(),
+            lastPagesPersistence                   : createLastPagesPersistence(),
+            simplePersistence                      : createSimplePersistence(),
+            verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
+            page                                   : page,
+            lastPage                               : lastPage
         )
     }
 
     func createCreator<CreatedObject, Parameters>(
         _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<CreatedObject, Parameters> {
-        return AnyCreator(createClosure: creationClosure).erasedType()
+        return AnyCreator(createClosure: creationClosure)
     }
 
-    func createQuranImageService() -> QuranImageService {
-        return DefaultQuranImageService(imagesCache: createImagesCache())
+    func createQuranImageService() -> AnyCacheableService<Int, UIImage> {
+        return PagesCacheableService(
+            cache              : createImagesCache(),
+            previousPagesCount : 1,
+            nextPagesCount     : 2,
+            pageRange          : Quran.QuranPagesRange,
+            operationCreator   : createCreator(createImagePreloadingOperation)).asCacheableService()
+    }
+
+    func createQuranTranslationService() -> AnyCacheableService<Int, TranslationPage> {
+        let d = PagesCacheableService(
+            cache              : createTranslationPageCache(),
+            previousPagesCount : 1,
+            nextPagesCount     : 2,
+            pageRange          : Quran.QuranPagesRange,
+            operationCreator   : createCreator(createTranslationPreloadingOperation))
+        return d.asCacheableService()
+    }
+
+    func createTranslationPageCache() -> Cache<Int, TranslationPage> {
+        let cache = Cache<Int, TranslationPage>()
+        cache.countLimit = 5
+        return cache
     }
 
     func createImagesCache() -> Cache<Int, UIImage> {
@@ -199,11 +275,11 @@ class Container {
     }
 
     func createQariTimingRetriever() -> QariTimingRetriever {
-        return SQLiteQariTimingRetriever(persistence: createQariAyahTimingPersistence())
+        return SQLiteQariTimingRetriever(persistenceCreator: createCreator(createQariAyahTimingPersistence))
     }
 
-    func createQariAyahTimingPersistence() -> QariAyahTimingPersistence {
-        return SQLiteAyahTimingPersistence()
+    func createQariAyahTimingPersistence(filePath: URL) -> QariAyahTimingPersistence {
+        return SQLiteAyahTimingPersistence(filePath: filePath)
     }
 
     func createBookmarksPersistence() -> BookmarksPersistence {
@@ -235,8 +311,58 @@ class Container {
     }
 
     func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
-        return TranslationsRetrievalInteractor(networkManager: createNetworkManager(parser: createTranslationsParser()),
-                                               persistence: createActiveTranslationsPersistence(),
-                                               downloader: createDownloadManager()).erasedType()
+        return TranslationsRetrievalInteractor(
+            networkManager: createNetworkManager(parser: createTranslationsParser()),
+            persistence: createActiveTranslationsPersistence(),
+            localInteractor: createLocalTranslationsRetrievalInteractor()).erasedType()
+    }
+
+    func createLocalTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+        return LocalTranslationsRetrievalInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            versionUpdater: createTranslationsVersionUpdaterInteractor()).erasedType()
+    }
+
+    func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
+        return TranslationsVersionUpdaterInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            downloader: createDownloadManager(),
+            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).erasedType()
+    }
+
+    func createSQLiteDatabaseVersionPersistence(filePath: String) -> DatabaseVersionPersistence {
+        return SQLiteDatabaseVersionPersistence(filePath: filePath)
+    }
+
+    func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
+        return TranslationDeletionInteractor(
+            persistence: createActiveTranslationsPersistence(),
+            simplePersistence: createSimplePersistence()).erasedType()
+    }
+
+    func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {
+        return ImagePreloadingOperation(page: page).asPreloadingOperationRepresentable()
+    }
+
+    func createTranslationPreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<TranslationPage> {
+        return TranslationPreloadingOperation(page: page,
+                                              localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+                                              arabicPersistence: createArabicTextPersistence(),
+                                              translationPersistenceCreator: createCreator(createTranslationTextPersistence),
+                                              simplePersistence: createSimplePersistence()).asPreloadingOperationRepresentable()
+    }
+
+    func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).erasedType()
+    }
+
+    func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return TranslationVerseTextRetrieval().erasedType()
+    }
+
+    func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+        return CompositeVerseTextRetrieval(
+            image: createImageVerseTextRetrieval(),
+            translation: createTranslationVerseTextRetrieval()).erasedType()
     }
 }

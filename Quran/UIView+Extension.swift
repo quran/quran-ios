@@ -19,7 +19,13 @@ extension UIView {
         return nil
     }
 
-    func loadViewFrom(nibName: String) {
+    @discardableResult
+    func loadViewFrom(nibClass: UIView.Type) -> UIView {
+        return loadViewFrom(nibName: String(describing: nibClass))
+    }
+
+    @discardableResult
+    func loadViewFrom(nibName: String) -> UIView {
         let nib = UINib(nibName: nibName, bundle: nil)
         guard let contentView = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
             fatalError("Couldn't load '\(nibName).xib' as the first item should be a UIView subclass.")
@@ -30,5 +36,12 @@ extension UIView {
                                                       options: [], metrics: nil, views: ["view": contentView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
                                                       options: [], metrics: nil, views: ["view": contentView]))
+        return contentView
+    }
+}
+
+extension UIView {
+    var circularRadius: CGFloat {
+        return min(bounds.width, bounds.height) / 2
     }
 }

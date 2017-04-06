@@ -10,11 +10,10 @@ import Foundation
 
 protocol Parser {
     associatedtype From
-    associatedtype To
+    associatedtype To //swiftlint:disable:this type_name
 
     func parse(_ from: From) throws -> To
 }
-
 
 struct AnyParser<From, To>: Parser {
     let parseClosure: (From) throws -> To

@@ -51,7 +51,7 @@ struct Crash {
     }
 
     static func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool = true) {
-        print("Error Occurred, reason: \(reason), error: \(error)")
+        CLog("Error Occurred, reason: \(reason), error: \(type(of: error)): \(error)")
         Crashlytics.sharedInstance().recordError(error as NSError, withAdditionalUserInfo: ["quran.reason": reason])
         #if DEBUG
             if fatalErrorOnDebug {
@@ -61,9 +61,10 @@ struct Crash {
     }
 }
 
-func CLog(_ string: String) {
-    NSLog(string)
-    CLSLogv("%@", getVaList([string]))
+public func CLog(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    let message = "[Quran]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+    NSLog(message)
+    CLSLogv("%@", getVaList([message]))
 }
 
 public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {
@@ -75,4 +76,12 @@ public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error
     let fullMessage = "\(message()), error: \(error)"
     CLog("message: \(fullMessage), file:\(file.description), line:\(line)")
     Swift.fatalError(fullMessage, file: file, line: line)
+}
+
+public func safely(_ from: String, _ body: () throws -> Void) {
+    do {
+        try body()
+    } catch {
+        Crash.recordError(error, reason: from)
+    }
 }

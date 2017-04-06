@@ -24,14 +24,14 @@ class BaseTableViewController: UIViewController {
 
         let tableView = UITableView()
         view.addAutoLayoutSubview(tableView)
-        _ = view.pinParentAllDirections(tableView)
+        view.pinParentAllDirections(tableView)
 
         let statusView = UIView()
         statusView.backgroundColor = UIColor.appIdentity()
         view.addAutoLayoutSubview(statusView)
-        _ = view.pinParentHorizontal(statusView)
-        _ = view.addParentTopConstraint(statusView)
-        _ = statusView.addHeightConstraint(20)
+        view.pinParentHorizontal(statusView)
+        view.addParentTopConstraint(statusView)
+        statusView.addHeightConstraint(20)
 
         self.tableView = tableView
         self.statusView = statusView

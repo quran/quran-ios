@@ -518,8 +518,10 @@ open class CompositeDataSource: AbstractDataSource {
     }
 
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndDisplaying cell: ReusableCell, forItemAt indexPath: IndexPath) {
-        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
-        return transformed.dataSource.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: transformed.indexPath)
+        guard let transformed = transform(globalIndexPath: indexPath, globalCollectionView: collectionView) else {
+            return
+        }
+        transformed.dataSource.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: transformed.indexPath)
     }
 
     // MARK: - Copy/Paste

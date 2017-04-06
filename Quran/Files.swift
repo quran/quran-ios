@@ -16,6 +16,7 @@ struct Files {
     static let databaseLocalFileExtension = "db"
     static let databasesPathComponent = "databases"
     static let translationsPathComponent = "translations"
+    static let translationCompressedFileExtension = "zip"
 
     static let quarterPrefixArray = fileURL("quarter_prefix_array", withExtension: "plist")
     static let readers = fileURL("readers", withExtension: "plist")

@@ -42,8 +42,8 @@ open class SegmentedDataSource: AbstractDataSource {
 
     open var selectedDataSourceIndex: Int? {
         set {
-            if let selectedDataSourceIndex = selectedDataSourceIndex {
-                selectedDataSource = dataSources[selectedDataSourceIndex]
+            if let newValue = newValue {
+                selectedDataSource = dataSources[newValue]
             } else {
                 selectedDataSource = nil
             }

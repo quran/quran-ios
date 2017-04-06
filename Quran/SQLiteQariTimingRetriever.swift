@@ -7,35 +7,39 @@
 //
 
 import Foundation
+import PromiseKit
 
 struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
-    let persistence: QariAyahTimingPersistence
+    let persistenceCreator: AnyCreator<QariAyahTimingPersistence, URL>
 
-    func retrieveTimingForQari(_ qari: Qari, startAyah: AyahNumber, onCompletion: @escaping (Result<[AyahNumber: AyahTiming]>) -> Void) {
+    func retrieveTiming(for qari: Qari, startAyah: AyahNumber) -> Promise<[AyahNumber: AyahTiming]> {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
-        Queue.background.tryAsync({
-            let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-            let timings = try self.persistence.getTimingForSura(startAyah: startAyah, databaseFileURL: fileURL)
-            return timings
-        }, onMain: onCompletion)
+
+        return DispatchQueue.global() .promise {
+                let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
+                let persistence = self.persistenceCreator.create(fileURL)
+                let timings = try persistence.getTimingForSura(startAyah: startAyah)
+                return timings
+        }
     }
 
-    func retrieveTimingForQari(_ qari: Qari, suras: [Int], onCompletion: @escaping (Result<[Int : [AyahTiming]]>) -> Void) {
+    func retrieveTiming(for qari: Qari, suras: [Int]) -> Promise<[Int: [AyahTiming]]> {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
-        Queue.background.tryAsync({
+        return DispatchQueue.global() .promise {
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
+            let persistence = self.persistenceCreator.create(fileURL)
 
             var result: [Int: [AyahTiming]] = [:]
             for sura in suras {
-                let timings = try self.persistence.getOrderedTimingForSura(startAyah: AyahNumber(sura: sura, ayah: 1), databaseFileURL: fileURL)
+                let timings = try persistence.getOrderedTimingForSura(startAyah: AyahNumber(sura: sura, ayah: 1))
                 result[sura] = timings
             }
             return result
-        }, onMain: onCompletion)
+        }
     }
 }

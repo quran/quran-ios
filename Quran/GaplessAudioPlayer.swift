@@ -40,38 +40,37 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
     func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
         let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
 
-        timingRetriever.retrieveTimingForQari(qari, suras: items.map { $0.sura }) { [weak self] timingsResult in
-            guard let timings = timingsResult.value else { return }
-
-            var mutableTimings = timings
-            if let timeArray = mutableTimings[startAyah.sura] {
-                mutableTimings[startAyah.sura] = Array(timeArray.dropFirst(startAyah.ayah - 1))
-            }
-
-            var times: [AVPlayerItem: [Double]] = [:]
-            var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
-            for item in items {
-                var array: [AyahTiming] = cast(mutableTimings[item.sura])
-                if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
-                    array = Array(array.dropLast())
+        timingRetriever.retrieveTiming(for: qari, suras: items.map { $0.sura })
+            .then(on: .main) { timings -> Void in
+                var mutableTimings = timings
+                if let timeArray = mutableTimings[startAyah.sura] {
+                    mutableTimings[startAyah.sura] = Array(timeArray.dropFirst(startAyah.ayah - 1))
                 }
-                times[item] = array.enumerated().map { $0 == 0 && $1.ayah.ayah == 1 ? 0 : $1.seconds }
-                ayahs[item] = array.map { $0.ayah }
-            }
-            self?.ayahsDictionary = ayahs
 
-            let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
-            let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
+                var times: [AVPlayerItem: [Double]] = [:]
+                var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
+                for item in items {
+                    var array: [AyahTiming] = cast(mutableTimings[item.sura])
+                    if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
+                        array = Array(array.dropLast())
+                    }
+                    times[item] = array.enumerated().map { $0 == 0 && $1.ayah.ayah == 1 ? 0 : $1.seconds }
+                    ayahs[item] = array.map { $0.ayah }
+                }
+                self.ayahsDictionary = ayahs
 
-            self?.player.onPlaybackEnded = self?.onPlaybackEnded()
-            self?.player.onPlaybackRateChanged = self?.onPlaybackRateChanged()
+                let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
+                let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
 
-            self?.player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, timeIndex: Int) in
-                guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
-                self?.delegate?.playingAyah(ayahs[timeIndex])
-            }
-            self?.player.play(startTimeInSeconds: startTime, items: items, info: info, boundaries: times)
-        }
+                self.player.onPlaybackEnded = self.onPlaybackEnded()
+                self.player.onPlaybackRateChanged = self.onPlaybackRateChanged()
+
+                self.player.onPlaybackStartingTimeFrame = { [weak self] (item: AVPlayerItem, timeIndex: Int) in
+                    guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
+                    self?.delegate?.playingAyah(ayahs[timeIndex])
+                }
+                self.player.play(startTimeInSeconds: startTime, items: items, info: info, boundaries: times)
+            }.cauterize(tag: "QariTimingRetriever.retrieveTiming(for:suras:)")
     }
 }
 

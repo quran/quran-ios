@@ -10,7 +10,7 @@ import Foundation
 
 class DownloadNetworkResponse: Response {
 
-    let task: URLSessionDownloadTask?
+    let task: URLSessionTask?
     var download: Download
 
     let progress: Foundation.Progress
@@ -31,7 +31,7 @@ class DownloadNetworkResponse: Response {
         }
     }
 
-    init(task: URLSessionDownloadTask?, download: Download, progress: Foundation.Progress) {
+    init(task: URLSessionTask?, download: Download, progress: Foundation.Progress) {
         self.task = task
         self.download = download
         self.progress = progress
@@ -46,6 +46,6 @@ class DownloadNetworkResponse: Response {
     }
 
     func cancel() {
-        task?.cancel { _ in }
+        task?.cancel()
     }
 }

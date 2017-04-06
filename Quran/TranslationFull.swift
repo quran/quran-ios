@@ -8,42 +8,79 @@
 
 import Foundation
 
-enum DownloadState {
-    case notDownloaded
-    case pending
-    case downloading(progress: Float)
-    case downloaded
+extension Translation {
+    enum State {
+        case notDownloaded
+        case downloaded
+        case needsUpgrade
+
+        case pendingDownloading
+        case downloading(progress: Float)
+
+        case pendingUpgrading
+        case downloadingUpgrade(progress: Float)
+
+        fileprivate func isUpgrade() -> Bool {
+            switch self {
+            case .needsUpgrade, .pendingUpgrading, .downloadingUpgrade:
+                return true
+            case .notDownloaded, .downloaded, .pendingDownloading, .downloading:
+                return false
+            }
+        }
+    }
 }
 
-struct TranslationFull: Equatable {
+struct TranslationFull: Equatable, Comparable {
     let translation: Translation
-    var downloaded: Bool
     var downloadResponse: DownloadNetworkResponse?
 
-    static func==(lhs: TranslationFull, rhs: TranslationFull) -> Bool {
+    static func == (lhs: TranslationFull, rhs: TranslationFull) -> Bool {
         return lhs.translation == rhs.translation
+    }
+
+    static func < (lhs: TranslationFull, rhs: TranslationFull) -> Bool {
+        let lUpgrading = lhs.state.isUpgrade()
+        let rUpgrading = rhs.state.isUpgrade()
+        if lUpgrading != rUpgrading {
+            return lUpgrading
+        }
+
+        return lhs.translation.displayName < rhs.translation.displayName
     }
 }
 
 extension TranslationFull {
-    var downloadState: DownloadState {
-        if downloaded {
-            return .downloaded
+
+    var state: Translation.State {
+        if let response = downloadResponse {
+            let progress = Float(response.progress.fractionCompleted).normalized
+            if translation.installedVersion != nil {
+                return progress == 0 ? .pendingUpgrading : .downloadingUpgrade(progress: progress)
+            } else {
+                return progress == 0 ? .pendingDownloading : .downloading(progress: progress)
+            }
         }
-        guard let response = downloadResponse else {
+
+        if let installedVersion = translation.installedVersion {
+            return installedVersion == translation.version ? .downloaded : .needsUpgrade
+        } else {
             return .notDownloaded
         }
-        return Float(response.progress.fractionCompleted).downloadState
+    }
+
+    var downloaded: Bool {
+        return translation.installedVersion != nil
     }
 }
 
 extension Float {
 
-    var downloadState: DownloadState {
+    var normalized: Float {
         if abs(self) < 0.001 {
-            return .pending
+            return 0
         } else {
-            return .downloading(progress: self)
+            return self
         }
     }
 }

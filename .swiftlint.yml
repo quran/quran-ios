@@ -4,6 +4,7 @@ included:
 disabled_rules:
   - cyclomatic_complexity
   - force_cast
+  - colon
 
 opt_in_rules:
   - force_unwrapping
@@ -24,3 +25,5 @@ type_body_length: 300
 function_parameter_count: 10
 
 function_body_length: 80
+
+large_tuple: 4

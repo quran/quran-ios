@@ -36,7 +36,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
         let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
         let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
-        guard !((try? dbFile.checkResourceIsReachable()) ?? false) else {
+        guard !dbFile.isReachable else {
             completion()
             return
         }
@@ -47,7 +47,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             } catch {
                 Crash.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(qari.localFolder())'")
                 // delete the zip and try to re-download it again, next time.
-                let _ = try? FileManager.default.removeItem(at: zipFile)
+                try? FileManager.default.removeItem(at: zipFile)
             }
 
             Queue.main.async {

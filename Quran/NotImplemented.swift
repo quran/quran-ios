@@ -8,10 +8,14 @@
 
 import Foundation
 
-func unimplemented<T>() -> T {
-    fatalError("Unimplemented")
+func unimplemented<T>(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> T {
+    fatalError("Function '\(function)' is unimplemented at: \(file) - \(line)")
 }
 
-func unimplemented() -> Never {
-    fatalError("Unimplemented")
+func unimplemented(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> Never {
+    fatalError("Function '\(function)' is unimplemented at: \(file) - \(line)")
+}
+
+func expectedToBeSubclassed(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> Never {
+    fatalError("\(#function) Should be implemented by subclasses")
 }

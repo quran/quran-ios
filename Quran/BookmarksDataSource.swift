@@ -14,8 +14,8 @@ class BookmarksDataSource: CompositeDataSource {
     private let headerCreator: BasicBlockSupplementaryViewCreator<String, JuzTableViewHeaderFooterView>
 
     init(type: SectionType, headerReuseIdentifier: String) {
-        headerCreator = BasicBlockSupplementaryViewCreator(identifier: headerReuseIdentifier, size: CGSize(width: 0, height: 44)) {
-            (item, view, _) in
+        headerCreator = BasicBlockSupplementaryViewCreator(
+        identifier: headerReuseIdentifier, size: CGSize(width: 0, height: 44)) { (item, view, _) in
             view.titleLabel.text =  item
             view.subtitleLabel.isHidden = true
         }

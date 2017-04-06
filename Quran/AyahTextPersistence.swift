@@ -10,4 +10,5 @@ import Foundation
 
 protocol AyahTextPersistence {
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String
+    func getOptionalAyahText(forNumber: AyahNumber) throws -> String?
 }

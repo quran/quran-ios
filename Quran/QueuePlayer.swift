@@ -125,9 +125,9 @@ class QueuePlayer: NSObject {
         playingItemsInfo = info
         self.playingItemBoundaries = boundaries
 
-
         rateObserver = _Observer()
-        rateObserver?.kvoController.observe(player, keyPath: "rate", options: [.initial, .new], block: { [weak self] (_, _, change) in
+        rateObserver?.kvoController.observe(player, keyPath: #keyPath(AVQueuePlayer.rate),
+                                            options: [.initial, .new], block: { [weak self] (_, _, change) in
             self?.updatePlayNowInfo()
             if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Int {
                 self?.onPlaybackRateChanged?(newValue != 0)
@@ -259,7 +259,8 @@ class QueuePlayer: NSObject {
     }
 
     fileprivate func addCurrentItemObserver() {
-        kvoController.observe(player, keyPath: "currentItem", options: .new, block: { [weak self] (_: Any, _: Any, change: [String: Any]) in
+        kvoController.observe(player, keyPath: #keyPath(AVQueuePlayer.currentItem), options: .new,
+                              block: { [weak self] (_: Any, _: Any, change: [String: Any]) in
             self?._currentItemChanged(change[NSKeyValueChangeKey.newKey.rawValue] as? AVPlayerItem)
         })
     }
@@ -273,7 +274,8 @@ class QueuePlayer: NSObject {
                                                object: newValue)
 
         durationObserver = _Observer()
-        durationObserver?.kvoController.observe(newValue, keyPath: "duration", options: [.initial, .new], block: { [weak self] (_, _, _) in
+        durationObserver?.kvoController.observe(newValue, keyPath: #keyPath(AVPlayerItem.duration),
+                                                options: [.initial, .new], block: { [weak self] (_, _, _) in
             self?.updatePlayNowInfo()
         })
 
@@ -341,7 +343,7 @@ class QueuePlayer: NSObject {
 
     fileprivate func removeCurrentItemObserver() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        kvoController.unobserve(self.player, keyPath: "currentItem")
+        kvoController.unobserve(self.player, keyPath: #keyPath(AVQueuePlayer.currentItem))
     }
 
     fileprivate func removeInterruptionNotification() {

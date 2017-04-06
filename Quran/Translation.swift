@@ -8,8 +8,6 @@
 
 import Foundation
 
-private let `extension` = "zip"
-
 struct Translation: Equatable {
     let id: Int
     let displayName: String
@@ -17,10 +15,11 @@ struct Translation: Equatable {
     let translatorForeign: String?
     let fileURL: URL
     let fileName: String
+    let languageCode: String
     let version: Int
     var installedVersion: Int?
 
-    static func==(lhs: Translation, rhs: Translation) -> Bool {
+    static func == (lhs: Translation, rhs: Translation) -> Bool {
         return lhs.id == rhs.id
     }
 }
@@ -28,16 +27,21 @@ struct Translation: Equatable {
 extension Translation {
 
     var possibleFileNames: [String] {
-        if rawFileName != fileName {
-            return [fileName, fileName.stringByDeletingPathExtension.stringByAppendingExtension(`extension`)]
+        let raw = rawFileName
+        if raw != fileName {
+            return [fileName, raw]
         }
         return [fileName]
     }
 
     var rawFileName: String {
-        if fileURL.absoluteString.hasSuffix(`extension`) {
-            return fileName.stringByDeletingPathExtension.stringByAppendingExtension(`extension`)
+        if fileURL.absoluteString.hasSuffix(Files.translationCompressedFileExtension) {
+            return fileName.stringByDeletingPathExtension.stringByAppendingExtension(Files.translationCompressedFileExtension)
         }
         return fileName
+    }
+
+    var translationName: String {
+        return translatorForeign ?? translator ?? displayName
     }
 }

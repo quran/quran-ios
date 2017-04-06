@@ -9,106 +9,62 @@
 import UIKit
 import KVOController
 
-private let cellReuseId = "cell"
-
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, QuranPagesDataSourceDelegate {
+class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
+                        QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
     private let bookmarksPersistence: BookmarksPersistence
-    private let lastPagesPersistence: LastPagesPersistence
+    private let bookmarksManager: BookmarksManager
+    private let quranNavigationBar: QuranNavigationBar
 
+    private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
     private let dataRetriever: AnyDataRetriever<[QuranPage]>
-
-    private let pageDataSource: QuranPagesDataSource
-
     private let audioViewPresenter: AudioBannerViewPresenter
-    private let qarisControllerCreator: AnyCreator<QariTableViewController, Void>
+    private let qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>
+    private let translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>
+    private let simplePersistence: SimplePersistence
+    private var lastPageUpdater: LastPageUpdater!
+
+    private let dataSource: QuranDataSource
 
     private let scrollToPageToken = Once()
     private let didLayoutSubviewToken = Once()
+    private let interactiveGestureToken = Once()
 
-    private var isBookmarked: Bool?
-    private var backButtonItem: UIBarButtonItem
-    private var translationButton: UIBarButtonItem
+    private var titleView: QuranPageTitleView? { return navigationItem.titleView as? QuranPageTitleView }
 
-    private var lastPageUpdater: LastPageUpdater!
-
-    init(imageService: QuranImageService,
-         dataRetriever: AnyDataRetriever<[QuranPage]>,
-         ayahInfoRetriever: AyahInfoRetriever,
-         audioViewPresenter: AudioBannerViewPresenter,
-         qarisControllerCreator: AnyCreator<QariTableViewController, Void>,
-         bookmarksPersistence: BookmarksPersistence,
-         lastPagesPersistence: LastPagesPersistence,
-         page: Int,
-         lastPage: LastPage?) {
-        self.dataRetriever          = dataRetriever
-        self.audioViewPresenter     = audioViewPresenter
-        self.qarisControllerCreator = qarisControllerCreator
-        self.bookmarksPersistence   = bookmarksPersistence
-        self.lastPagesPersistence   = lastPagesPersistence
-        self.initialPage            = page
-        self.lastPageUpdater        = LastPageUpdater(persistence: lastPagesPersistence)
-
-        self.pageDataSource = QuranPagesDataSource(
-            reuseIdentifier: cellReuseId,
-            imageService: imageService,
-            ayahInfoRetriever: ayahInfoRetriever,
-            bookmarkPersistence: bookmarksPersistence)
-
-        backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        translationButton = UIBarButtonItem(image: UIImage(named: "globe-25"), style: .plain, target: nil, action: nil)
-
-        super.init(nibName: nil, bundle: nil)
-
-        self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
-
-        audioViewPresenter.delegate = self
-        self.pageDataSource.delegate = self
-
-        automaticallyAdjustsScrollViewInsets = false
-
-        // page behavior
-        let pageBehavior = ScrollViewPageBehavior()
-        pageDataSource.scrollViewDelegate = pageBehavior
-        kvoController.observe(pageBehavior, keyPath: "currentPage", options: .new) { [weak self] (_, _, _) in
-            self?.onPageChanged()
-        }
-
-        translationButton.target = self
-        translationButton.action = #selector(translationButtonTapped)
+    private var quranView: QuranView! {
+        return view as? QuranView
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+    private var barsTimer: Timer?
+
+    private var interactivePopGestureOldEnabled: Bool?
+    private var barsHiddenTimerExecuted = false
+
+    private var statusBarHidden = false {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
     }
 
     private var initialPage: Int = 0 {
         didSet {
-            title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1])
-            backButtonItem.title = title
+            title = Quran.nameForSura(Quran.PageSuraStart[initialPage - 1], withPrefix: true)
+            titleView?.setPageNumber(initialPage, navigationBar: navigationController?.navigationBar)
         }
     }
 
-    weak var audioView: DefaultAudioBannerView? {
-        didSet {
-            audioView?.onTouchesBegan = { [weak self] in
-                self?.stopBarHiddenTimer()
-            }
-            audioViewPresenter.view = audioView
-            audioView?.delegate = audioViewPresenter
-        }
+    private var isTranslationView: Bool {
+        set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
+        get { return simplePersistence.valueForKey(.showQuranTranslationView) }
     }
 
-    weak var collectionView: UICollectionView?
-    weak var layout: UICollectionViewFlowLayout?
-    weak var bottomBarConstraint: NSLayoutConstraint?
+    var isBookmarked: Bool {
+        return bookmarksManager.isBookmarked
+    }
 
-    var timer: Timer?
-
-    var statusBarHidden = false {
-        didSet {
-            setNeedsStatusBarAppearanceUpdate()
-        }
+    var lastViewedPage: Int {
+        return lastPageUpdater.lastPage?.page ?? initialPage
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -123,76 +79,116 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         return .lightContent
     }
 
-    override func loadView() {
-        view = QuranView()
+    init(imageService                           : AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
+         pageService                            : AnyCacheableService<Int, TranslationPage>,
+         dataRetriever                          : AnyDataRetriever<[QuranPage]>,
+         ayahInfoRetriever                      : AyahInfoRetriever,
+         audioViewPresenter                     : AudioBannerViewPresenter,
+         qarisControllerCreator                 : AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>,
+         translationsSelectionControllerCreator : AnyCreator<UIViewController, Void>,
+         bookmarksPersistence                   : BookmarksPersistence,
+         lastPagesPersistence                   : LastPagesPersistence,
+         simplePersistence                      : SimplePersistence,
+         verseTextRetrieval                     : AnyInteractor<QuranShareData, String>,
+         page                                   : Int,
+         lastPage                               : LastPage?) {
+        self.initialPage                            = page
+        self.dataRetriever                          = dataRetriever
+        self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
+        self.bookmarksManager                       = BookmarksManager(bookmarksPersistence: bookmarksPersistence)
+        self.simplePersistence                      = simplePersistence
+        self.audioViewPresenter                     = audioViewPresenter
+        self.qarisControllerCreator                 = qarisControllerCreator
+        self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
+        self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
+        self.bookmarksPersistence                   = bookmarksPersistence
+        self.verseTextRetrieval                     = verseTextRetrieval
 
-        createCollectionView()
-        createAudioBanner()
+        let imagesDataSource = QuranImagesDataSource(
+            imageService: imageService,
+            ayahInfoRetriever: ayahInfoRetriever,
+            bookmarkPersistence: bookmarksPersistence)
 
-        // hide bars on tap
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:))))
+        let translationsDataSource = QuranTranslationsDataSource(
+            pageService: pageService,
+            ayahInfoRetriever: ayahInfoRetriever,
+            bookmarkPersistence: bookmarksPersistence)
 
-    }
+        dataSource = QuranDataSource( dataSourceRepresentables: [imagesDataSource.asQuranBasicDataSourceRepresentable(),
+                                                                 translationsDataSource.asQuranBasicDataSourceRepresentable()])
 
-    fileprivate func createAudioBanner() {
-        let audioView = DefaultAudioBannerView()
-        view.addAutoLayoutSubview(audioView)
-        _ = view.pinParentHorizontal(audioView)
-        bottomBarConstraint = view.addParentBottomConstraint(audioView)
+        super.init(nibName: nil, bundle: nil)
 
-        self.audioView = audioView
-    }
+        updateTranslationView()
 
-    fileprivate func createCollectionView() {
-        let layout = QuranPageFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        if #available(iOS 9.0, *) {
-            collectionView.semanticContentAttribute = .forceRightToLeft
+        audioViewPresenter.delegate = self
+        imagesDataSource.delegate = self
+
+        automaticallyAdjustsScrollViewInsets = false
+
+        // page behavior
+        let pageBehavior = ScrollViewPageBehavior()
+        dataSource.scrollViewDelegate = pageBehavior
+        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) { [weak self] (_, _, _) in
+            self?.onPageChanged()
         }
-        view.addAutoLayoutSubview(collectionView)
-        _ = view.pinParentAllDirections(collectionView)
+    }
 
-        collectionView.backgroundColor = UIColor.readingBackground()
-        collectionView.isPagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(UINib(nibName: "QuranPageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseId)
-        collectionView.ds_useDataSource(pageDataSource)
+    required init?(coder aDecoder: NSCoder) {
+        unimplemented()
+    }
 
-        self.layout = layout
-        self.collectionView = collectionView
+    override func loadView() {
+        view = QuranView(bookmarksPersistence: bookmarksPersistence, verseTextRetrieval: verseTextRetrieval)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        quranView.delegate = self
+        quranNavigationBar.delegate = self
 
-        dataRetriever.retrieve { [weak self] (data: [QuranPage]) in
-            self?.pageDataSource.items = data
-            self?.collectionView?.reloadData()
+        configureAudioView()
+        quranView.collectionView.ds_useDataSource(dataSource)
+
+        // set the custom title view
+        navigationItem.titleView = QuranPageTitleView()
+
+        dataRetriever.retrieve { [weak self] items in
+            self?.dataSource.setItems(items)
             self?.scrollToFirstPage()
         }
 
         audioViewPresenter.onViewDidLoad()
-
-        // hide the title, because we'll set it on the left side
-        navigationItem.titleView = UILabel()
-        navigationController?.navigationBar.topItem?.backBarButtonItem = backButtonItem
-
-        // start hiding bars timer
-        startHiddenBarsTimer()
     }
 
-    fileprivate var interactivePopGestureOldEnabled: Bool?
+    private func configureAudioView() {
+        quranView.audioView.onTouchesBegan = { [weak self] in
+            self?.stopBarHiddenTimer()
+        }
+        audioViewPresenter.view = quranView.audioView
+        quranView.audioView.delegate = audioViewPresenter
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled
+        interactiveGestureToken.once {
+            interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled
+        }
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+
+        // start hiding bars timer
+        if !barsHiddenTimerExecuted {
+            startHiddenBarsTimer()
+        }
+
+        // reload when coming from translation
+        if presentedViewController is TranslationsSelectionNavigationController {
+            dataSource.invalidate()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -208,75 +204,61 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     fileprivate func scrollToFirstPage() {
-        guard let index = pageDataSource.items.index(where: { $0.pageNumber == initialPage }), didLayoutSubviewToken.executed else {
+        let currentIndex = dataSource.selectedDataSourceRepresentable.items.index(where: { $0.pageNumber == initialPage })
+        guard let index = currentIndex, didLayoutSubviewToken.executed else {
             return
         }
 
         scrollToPageToken.once {
             let indexPath = IndexPath(item: index, section: 0)
             scrollToIndexPath(indexPath, animated: false)
-
-            onPageChangedToPage(pageDataSource.item(at: indexPath))
+            onPageChangedToPage(dataSource.selectedDataSourceRepresentable.item(at: indexPath))
         }
     }
 
     func stopBarHiddenTimer() {
-        timer?.cancel()
-        timer = nil
+        barsTimer?.cancel()
+        barsTimer = nil
     }
 
-    // MARK: - QuranPagesDataSourceDelegate
+    // MARK: - Quran View Delegate
 
-    func share(ayahText: String, from cell: QuranPageCollectionViewCell) {
-        ShareController.showShareActivityWithText(ayahText, sourceViewController: self, handler: nil)
-    }
-
-    func lastViewedPage() -> Int {
-        return lastPageUpdater.lastPage?.page ?? initialPage
-    }
-
-    // MARK: - Gestures recognizers handlers
-
-    func onViewTapped(_ sender: UITapGestureRecognizer) {
-        guard let audioView = audioView, !audioView.bounds.contains(sender.location(in: audioView)) else {
-            return
-        }
+    func onQuranViewTapped(_ quranView: QuranView) {
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
-    fileprivate func setBarsHidden(_ hidden: Bool) {
+    func quranView(_ quranView: QuranView, didSelectTextToShare text: String) {
+        ShareController.showShareActivityWithText(text, sourceViewController: self, handler: nil)
+    }
+
+    private func setBarsHidden(_ hidden: Bool) {
+        // remove the timer
+        barsHiddenTimerExecuted = true
+        stopBarHiddenTimer()
+
         navigationController?.setNavigationBarHidden(hidden, animated: true)
+        quranView.setBarsHidden(hidden)
 
-        if let bottomBarConstraint = bottomBarConstraint {
-            view.removeConstraint(bottomBarConstraint)
-        }
-        if let audioView = audioView {
-            if hidden {
-                bottomBarConstraint = view.addSiblingVerticalContiguous(top: view, bottom: audioView)
-            } else {
-                bottomBarConstraint = view.addParentBottomConstraint(audioView)
-            }
-        }
-
+        // animate the change
         UIView.animate(withDuration: 0.3, animations: {
             self.statusBarHidden = hidden
             self.view.layoutIfNeeded()
         })
-
-        // remove the timer
-        stopBarHiddenTimer()
     }
 
     fileprivate func startHiddenBarsTimer() {
-        timer = Timer(interval: 3) { [weak self] in
-            self?.setBarsHidden(true)
+        // increate the timer duration to give existing users the time to see the new buttons
+        barsTimer = Timer(interval: 5) { [weak self] in
+            if self?.presentedViewController == nil {
+                self?.setBarsHidden(true)
+            }
         }
     }
 
     fileprivate func scrollToIndexPath(_ indexPath: IndexPath, animated: Bool) {
-        collectionView?.scrollToItem(at: indexPath,
-                                                at: .centeredHorizontally,
-                                                animated: false)
+        quranView.collectionView.scrollToItem(at: indexPath,
+                                              at: .centeredHorizontally,
+                                              animated: false)
     }
 
     fileprivate func onPageChanged() {
@@ -289,15 +271,17 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     fileprivate func updateBarToPage(_ page: QuranPage) {
-        title = Quran.nameForSura(page.startAyah.sura)
-        backButtonItem.title = title
-
-        isBookmarked = nil
-        Queue.bookmarks.async({ (self.bookmarksPersistence.isPageBookmarked(page.pageNumber), page.pageNumber) }) { (bookmarked, page) in
-            guard page == self.currentPage()?.pageNumber else { return }
-            self.isBookmarked = bookmarked
-            self.showBookmarkIcon(selected: bookmarked)
+        // only apply if there is a change
+        guard page.pageNumber != titleView?.pageNumber else {
+            return
         }
+        titleView?.setPageNumber(page.pageNumber, navigationBar: navigationController?.navigationBar)
+
+        bookmarksManager.calculateIsBookmarked(pageNumber: page.pageNumber)
+            .then(on: .main) { _ -> Void in
+                guard page.pageNumber == self.currentPage()?.pageNumber else { return }
+                self.quranNavigationBar.updateRightBarItems(animated: false)
+            }.cauterize(tag: "bookmarksPersistence.isPageBookmarked")
 
         // only persist if active
         if UIApplication.shared.applicationState == .active {
@@ -306,53 +290,35 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
         }
     }
 
-    private func showBookmarkIcon(selected: Bool) {
-        let item: UIBarButtonItem
-        if selected {
-            item = UIBarButtonItem(image: UIImage(named: "bookmark-filled"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
-            item.tintColor = UIColor.bookmark()
-        } else {
-            item = UIBarButtonItem(image: UIImage(named: "bookmark-empty"), style: .plain, target: self, action: #selector(bookmarkButtonTapped))
-        }
-        navigationItem.rightBarButtonItems = [ translationButton, item ]
+    func onBookmarkButtonTapped() {
+        guard let page = currentPage() else { return }
+
+        bookmarksManager
+            .toggleBookmarking(pageNumber: page.pageNumber)
+            .cauterize(tag: "bookmarksPersistence.toggleBookmarking")
     }
 
-    @objc private func bookmarkButtonTapped() {
-        guard let isBookmarked = isBookmarked, let page = currentPage() else { return }
-        self.isBookmarked = !isBookmarked
-        showBookmarkIcon(selected: !isBookmarked)
-
-        if isBookmarked {
-            Queue.background.async { try? self.bookmarksPersistence.removePageBookmark(atPage: page.pageNumber) }
-        } else {
-            Queue.background.async { try? self.bookmarksPersistence.insertPageBookmark(forPage: page.pageNumber) }
-        }
+    func onTranslationButtonTapped() {
+        updateTranslationView()
     }
 
-    @objc private func translationButtonTapped() {
+    func onSelectTranslationsButtonTapped() {
+        let controller = translationsSelectionControllerCreator.create()
+        present(controller, animated: true, completion: nil)
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
-        let controller = qarisControllerCreator.create(parameters: Void())
-        controller.setQaris(qaris)
-        controller.selectedIndex = selectedIndex
+        let controller = qarisControllerCreator.create((qaris, selectedIndex, quranView.audioView))
         controller.onSelectedIndexChanged = { [weak self] index in
             self?.audioViewPresenter.setQariIndex(index)
         }
-
-        controller.preferredContentSize = CGSize(width: 400, height: 500)
-        controller.modalPresentationStyle = .popover
-        controller.popoverPresentationController?.delegate = self
-        controller.popoverPresentationController?.sourceView = audioView
-        controller.popoverPresentationController?.sourceRect = audioView?.bounds ?? CGRect.zero
-        controller.popoverPresentationController?.permittedArrowDirections = .down
         present(controller, animated: true, completion: nil)
     }
 
     func highlightAyah(_ ayah: AyahNumber) {
         var set = Set<AyahNumber>()
         set.insert(ayah)
-        pageDataSource.highlightAyaht(set)
+        dataSource.highlightAyaht(set)
 
         // persist if not active
         guard UIApplication.shared.applicationState != .active else { return }
@@ -364,31 +330,18 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate, Q
     }
 
     func removeHighlighting() {
-        pageDataSource.highlightAyaht(Set())
+        dataSource.highlightAyaht(Set())
     }
 
     func currentPage() -> QuranPage? {
-        guard let offset = collectionView?.contentOffset,
-            let indexPath = collectionView?.indexPathForItem(at: CGPoint(x: offset.x + view.bounds.width / 2, y: 0)) else {
-            return nil
-        }
-        let page = pageDataSource.item(at: indexPath)
-        return page
+        return quranView.visibleIndexPath().map { dataSource.selectedDataSourceRepresentable.item(at: $0) }
     }
 
     func onErrorOccurred(error: Error) {
         showErrorAlert(error: error)
     }
-}
 
-extension QuranViewController: UIPopoverPresentationControllerDelegate {
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .fullScreen
-    }
-
-    func presentationController(_ controller: UIPresentationController,
-                                viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
-        return QariNavigationController(rootViewController: controller.presentedViewController)
+    private func updateTranslationView() {
+        dataSource.selectedDataSourceIndex = quranNavigationBar.isTranslationView ? 1 : 0
     }
 }

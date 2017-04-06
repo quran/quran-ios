@@ -9,10 +9,6 @@
 import Foundation
 import SQLite
 
-extension Queue {
-    static let downloads = Queue(queue: DispatchQueue(label: "com.quran.downloads"))
-}
-
 struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     let version: UInt = 1
@@ -66,7 +62,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
 
     private func retrieve(_ status: Download.Status?) throws -> [DownloadBatch] {
         return try run { connection in
-            var query = Downloads.table.group(Downloads.batchId)
+            var query = Downloads.table
             if let status = status {
                 query = query.filter(Downloads.status == status.rawValue)
             }
@@ -80,7 +76,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         return try run { connection in
             // insert batch
             let batchInsert = Batches.table.insert()
-            _ = try connection.run(batchInsert)
+            try connection.run(batchInsert)
             let batchId = connection.lastInsertRowid
 
             // insert downloads
@@ -94,7 +90,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
                     Downloads.status <- Download.Status.downloading.rawValue,
                     Downloads.batchId <- batchId)
 
-                _ = try connection.run(insert)
+                try connection.run(insert)
             }
 
             var downloads: [Download] = []
@@ -115,11 +111,19 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         return try update(filter: urls.contains(Downloads.url), newStatus: status)
     }
 
+    func delete(batchId: Int64) throws {
+        return try run { connection in
+            let query = Downloads.table.filter(Downloads.batchId == batchId)
+            let delete = query.delete()
+            try connection.run(delete)
+        }
+    }
+
     private func update(filter: Expression<Bool>, newStatus status: Download.Status) throws {
         return try run { connection in
             let rows = Downloads.table.filter(filter)
             let update = rows.update(Downloads.status <- status.rawValue)
-            _ = try connection.run(update)
+            try connection.run(update)
         }
     }
 

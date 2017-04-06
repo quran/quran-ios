@@ -34,10 +34,16 @@ class LastPageUpdater {
 
     private func forceUpdateTo(page: Int) {
         guard let lastPage = lastPage else { return }
-        Queue.lastPages.asyncSuccess({ try self.persistence.update(page: lastPage, toPage: page) }) { self.lastPage = $0 }
+        DispatchQueue.global()
+            .promise { try self.persistence.update(page: lastPage, toPage: page) }
+            .then (on: .main) { self.lastPage = $0 }
+            .cauterize(tag: "LastPagesPersistence.update(page:toPage:)")
     }
 
     private func create(page: Int) {
-        Queue.lastPages.asyncSuccess({ try self.persistence.add(page: page)}) { self.lastPage = $0 }
+        DispatchQueue.global()
+            .promise { try self.persistence.add(page: page) }
+            .then (on: .main) { self.lastPage = $0 }
+            .cauterize(tag: "LastPagesPersistence.update(page:toPage:)")
     }
 }

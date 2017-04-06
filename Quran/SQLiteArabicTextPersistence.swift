@@ -9,7 +9,7 @@
 import UIKit
 import SQLite
 
-class SQLiteArabicTextPersistence: AyahTextPersistence {
+class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
 
     fileprivate struct Columns {
         let sura = Expression<Int>("sura")
@@ -20,21 +20,29 @@ class SQLiteArabicTextPersistence: AyahTextPersistence {
     fileprivate let arabicTextTable = Table("arabic_text")
     fileprivate let columns = Columns()
 
-    fileprivate var db: LazyConnectionWrapper = { LazyConnectionWrapper(sqliteFilePath: Files.quranTextPath, readonly: true) }()
+    var filePath: String { return Files.quranTextPath }
 
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
-        let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
-
-        do {
-            let rows = try db.getOpenConnection().prepare(query)
+        return try run { connection in
+            let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
+            let rows = try connection.prepare(query)
 
             guard let first = rows.first(where: { _ in true}) else {
                 throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
             }
             return first[columns.text]
-        } catch {
-            Crash.recordError(error, reason: "Cannot get ayah text for \(number)")
-            throw PersistenceError.query(error)
+        }
+    }
+
+    func getOptionalAyahText(forNumber number: AyahNumber) throws -> String? {
+        return try run { connection in
+            let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
+            let rows = try connection.prepare(query)
+
+            guard let first = rows.first(where: { _ in true}) else {
+                return nil
+            }
+            return first[columns.text]
         }
     }
 }

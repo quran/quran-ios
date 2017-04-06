@@ -91,7 +91,7 @@ class BookmarksTableViewController: BaseTableViewController {
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {
-        let controller = self.quranControllerCreator.create(parameters: (page, lastPage))
+        let controller = self.quranControllerCreator.create(page, lastPage)
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

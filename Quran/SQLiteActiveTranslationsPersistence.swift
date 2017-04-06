@@ -9,10 +9,6 @@
 import Foundation
 import SQLite
 
-extension Queue {
-    static let translations = Queue(queue: DispatchQueue(label: "com.quran.translations"))
-}
-
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
 
     let version: UInt = 1
@@ -28,6 +24,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         static let translatorForeign = Expression<String?>("translator_foreign")
         static let fileURL = Expression<String>("fileURL")
         static let fileName = Expression<String>("filename")
+        static let languageCode = Expression<String>("languageCode")
         static let version = Expression<Int>("version")
         static let installedVersion = Expression<Int?>("installedVersion")
     }
@@ -41,6 +38,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             builder.column(Translations.translatorForeign)
             builder.column(Translations.fileURL)
             builder.column(Translations.fileName)
+            builder.column(Translations.languageCode)
             builder.column(Translations.version)
             builder.column(Translations.installedVersion)
         })
@@ -64,9 +62,10 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                 Translations.translatorForeign <- translation.translatorForeign,
                 Translations.fileURL <- translation.fileURL.absoluteString,
                 Translations.fileName <- translation.fileName,
+                Translations.languageCode <- translation.languageCode,
                 Translations.version <- translation.version,
                 Translations.installedVersion <- translation.installedVersion)
-            _ = try connection.run(insert)
+            try connection.run(insert)
         }
     }
 
@@ -80,16 +79,17 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
                     Translations.translatorForeign <- translation.translatorForeign,
                     Translations.fileURL <- translation.fileURL.absoluteString,
                     Translations.fileName <- translation.fileName,
+                    Translations.languageCode <- translation.languageCode,
                     Translations.version <- translation.version,
                     Translations.installedVersion <- translation.installedVersion)
-            _ = try connection.run(update)
+            try connection.run(update)
         }
     }
 
     func remove(_ translation: Translation) throws {
         return try run { connection in
             let filter = Translations.table.filter(Translations.id == translation.id)
-            _ = try connection.run(filter.delete())
+            try connection.run(filter.delete())
         }
     }
 
@@ -102,11 +102,13 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
             let translatorForeign = row[Translations.translatorForeign]
             let fileURL = row[Translations.fileURL]
             let fileName = row[Translations.fileName]
+            let languageCode = row[Translations.languageCode]
             let version = row[Translations.version]
             let installedVersion = row[Translations.installedVersion]
             let translation = Translation(id: id, displayName: name, translator: translator,
                                           translatorForeign: translatorForeign,
                                           fileURL: cast(URL(string: fileURL)), fileName: fileName,
+                                          languageCode: languageCode,
                                           version: version, installedVersion: installedVersion)
             translations.append(translation)
         }

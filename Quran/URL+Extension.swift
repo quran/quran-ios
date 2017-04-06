@@ -13,4 +13,8 @@ extension URL {
     init(validURL: String) {
         self.init(string: validURL)! // swiftlint:disable:this force_unwrapping
     }
+
+    var isReachable: Bool {
+        return (try? checkResourceIsReachable()) ?? false
+    }
 }

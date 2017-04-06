@@ -19,7 +19,7 @@ open class Timer {
     init(interval: TimeInterval,
          repeated: Bool = false,
          startNow: Bool = false,
-         queue: DispatchQueue = DispatchQueue.main,
+         queue: DispatchQueue = .main,
          handler: @escaping () -> Void) {
         self.repeated = repeated
 

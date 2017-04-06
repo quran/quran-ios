@@ -7,19 +7,25 @@
 //
 
 import UIKit
+import GenericDataSources
 
 class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
 
     private let dataSource: TranslationsDataSource
 
     private let interactor: AnyInteractor<Void, [TranslationFull]>
+    private let localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>
+
     private var activityIndicator: UIActivityIndicatorView? {
-        return navigationItem.rightBarButtonItem?.customView as? UIActivityIndicatorView
+        return navigationItem.leftBarButtonItem?.customView as? UIActivityIndicatorView
     }
 
-    init(interactor: AnyInteractor<Void, [TranslationFull]>, downloader: DownloadManager) {
+    init(interactor: AnyInteractor<Void, [TranslationFull]>,
+         localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>,
+         dataSource: TranslationsDataSource) {
         self.interactor = interactor
-        dataSource = TranslationsDataSource(downloader: downloader, headerReuseId: "header")
+        self.localTranslationsInteractor = localTranslationsInteractor
+        self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
     }
@@ -40,7 +46,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.stopAnimating()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: activityIndicator)
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -53,6 +59,8 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
+
+        loadLocalData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,7 +71,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     }
 
     func refreshData() {
-        _ = interactor.execute()
+        interactor.execute()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
@@ -74,7 +82,15 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         }
     }
 
-    func translationsDataSource(_ dataSource: TranslationsDataSource, errorOccurred error: Error) {
+    private func loadLocalData() {
+        localTranslationsInteractor.execute()
+            .then(on: .main) { [weak self] translations -> Void in
+                self?.dataSource.setItems(items: translations)
+                self?.tableView.reloadData()
+            }.catchToAlertView(viewController: self)
+    }
+
+    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
         showErrorAlert(error: error)
     }
 }

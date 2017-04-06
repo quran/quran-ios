@@ -38,15 +38,15 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         titleLabel.textColor = UIColor(rgb: 0x323232)
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         contentView.addAutoLayoutSubview(titleLabel)
-        _ = contentView.pinParentVertical(titleLabel)
-        _ = contentView.addParentLeadingConstraint(titleLabel, value: 20)
+        contentView.pinParentVertical(titleLabel)
+        contentView.addParentLeadingConstraint(titleLabel, value: 20)
 
         subtitleLabel.textColor = UIColor(rgb: 0x4B4B4B)
         subtitleLabel.font = UIFont.systemFont(ofSize: 12)
         subtitleLabel.textAlignment = .right
         contentView.addAutoLayoutSubview(subtitleLabel)
-        _ = contentView.pinParentVertical(subtitleLabel)
-        _ = contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
+        contentView.pinParentVertical(subtitleLabel)
+        contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
     }
 
     func onViewTapped() {

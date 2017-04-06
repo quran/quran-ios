@@ -26,21 +26,20 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
                                     at indexPath: IndexPath) {
         let ayah = Quran.startAyahForPage(item.page)
 
-        let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
-        let suraName = Quran.nameForSura(ayah.sura)
-
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
         let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
 
-        cell.name.text = String(format: suraFormat, suraName)
+        cell.name.text = Quran.nameForSura(ayah.sura, withPrefix: true)
         cell.descriptionLabel.text = pageDescription
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))
     }
 
     func reloadData() {
-        Queue.bookmarks.asyncSuccess({ try self.persistence.retrieveAll() }) { [weak self] items in
-            self?.items = items
-            self?.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
-        }
+        DispatchQueue.global()
+            .promise(execute: self.persistence.retrieveAll)
+            .then(on: .main) { items -> Void in
+                self.items = items
+                self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
+            }.cauterize(tag: "LastPagesPersistence.retrieveAll")
     }
 }

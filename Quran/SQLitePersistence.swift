@@ -9,7 +9,37 @@
 import Foundation
 import SQLite
 
-protocol SQLitePersistence {
+protocol ReadonlySQLitePersistence {
+    var filePath: String { get }
+    func openConnection() throws -> Connection
+}
+
+extension ReadonlySQLitePersistence {
+
+    func openConnection() throws -> Connection {
+        // create the connection
+        let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
+        return connection
+    }
+
+    func run<T>(_ block: (Connection) throws -> T) throws -> T {
+        do {
+            let connection = try openConnection()
+            defer {
+                ConnectionsPool.default.close(connection: connection)
+            }
+            return try block(connection)
+        } catch let error as PersistenceError {
+            Crash.recordError(error, reason: "Error while executing sqlite statement")
+            throw error
+        } catch {
+            Crash.recordError(error, reason: "Error while executing sqlite statement")
+            throw PersistenceError.query(error)
+        }
+    }
+}
+
+protocol SQLitePersistence: ReadonlySQLitePersistence {
     var filePath: String { get }
     var version: UInt { get }
 
@@ -52,21 +82,5 @@ extension SQLitePersistence {
             }
         }
         return connection
-    }
-
-    func run<T>(_ block: (Connection) throws -> T) throws -> T {
-        do {
-            let connection = try openConnection()
-            defer {
-                ConnectionsPool.default.close(connection: connection)
-            }
-            return try block(connection)
-        } catch let error as PersistenceError {
-            Crash.recordError(error, reason: "Error while executing sqlite statement")
-            throw error
-        } catch {
-            Crash.recordError(error, reason: "Error while executing sqlite statement")
-            throw PersistenceError.query(error)
-        }
     }
 }

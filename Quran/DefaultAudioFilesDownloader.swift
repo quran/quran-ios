@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 protocol DefaultAudioFilesDownloader: AudioFilesDownloader {
 
@@ -34,22 +35,18 @@ extension DefaultAudioFilesDownloader {
 
     func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
         let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
-        return !files.filter {
-            if let result = try? FileManager.default.documentsURL.appendingPathComponent($0.destinationPath).checkResourceIsReachable() {
-                return !result
-            }
-            return true
-        }.isEmpty
+        return !files.filter { !FileManager.default.documentsURL.appendingPathComponent($0.destinationPath).isReachable }.isEmpty
     }
 
-    func getCurrentDownloadResponse() -> Response? {
+    func getCurrentDownloadResponse() -> Promise<Response?> {
         if let response = response {
-            return response
+            return Promise(value: response)
         } else {
-            let batches = downloader.getOnGoingDownloads()
-            let downloads = batches.flatMap { $0.filter { $0.download.isAudio } }
-            createRequestWithDownloads(downloads)
-            return response
+            return downloader.getOnGoingDownloads().then { batches -> Response? in
+                let downloads = batches.flatMap { $0.filter { $0.download.isAudio } }
+                self.createRequestWithDownloads(downloads)
+                return self.response
+            }
         }
     }
 
@@ -61,11 +58,8 @@ extension DefaultAudioFilesDownloader {
         let filesToDownload = files.filter { downloadInfo in
             if !uniqueFiles.contains(downloadInfo.url) {
                 uniqueFiles.insert(downloadInfo.url)
-                let destinationPath = FileManager.default.documentsURL.appendingPathComponent(downloadInfo.destinationPath)
-                if let result = try? destinationPath.checkResourceIsReachable() {
-                    return !result
-                }
-                return true
+                let destinationURL = FileManager.default.documentsURL.appendingPathComponent(downloadInfo.destinationPath)
+                return !destinationURL.isReachable
             }
             return false
         }

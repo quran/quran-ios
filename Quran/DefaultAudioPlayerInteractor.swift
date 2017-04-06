@@ -30,12 +30,14 @@ extension DefaultAudioPlayerInteractor {
     }
 
     func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void) {
-        guard let response = downloader.getCurrentDownloadResponse() else {
-            completion(false)
-            return
-        }
-        gotDownloadResponse(response, playbackInfo: nil)
-        completion(true)
+        downloader.getCurrentDownloadResponse().then { response -> Void in
+            guard let response = response else {
+                completion(false)
+                return
+            }
+            self.gotDownloadResponse(response, playbackInfo: nil)
+            completion(true)
+            }.cauterize(tag: "checkIfDownloading")
     }
 
     func playAudioForQari(_ qari: Qari, atPage page: QuranPage) {

@@ -9,6 +9,8 @@ import Foundation
 
 struct Quran {
 
+    static let arabicBasmAllah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
+
     static let QuranPagesRange: CountableClosedRange<Int> = 1...PageSuraStart.count
     static let QuranSurasRange: CountableClosedRange<Int> = 1...SuraPageStart.count
     static let QuranJuzsRange: CountableClosedRange<Int>  = 1...JuzPageStart.count
@@ -381,9 +383,16 @@ extension Quran {
     static func quranPageForPageNumber(_ page: Int) -> QuranPage {
         return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).juzNumber)
     }
+}
 
-    static func nameForSura(_ sura: Int) -> String {
-        return NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
+extension Quran {
+    static func nameForSura(_ sura: Int, withPrefix: Bool = false) -> String {
+        let suraName = NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
+        if !withPrefix {
+            return suraName
+        }
+        let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
+        return String(format: suraFormat, suraName)
     }
 }
 
@@ -393,5 +402,15 @@ extension AyahNumber {
         let ayahNumberString = String.localizedStringWithFormat(NSLocalizedString("quran_ayah", tableName: "Android", comment: ""), ayah)
         let suraName = Quran.nameForSura(sura)
         return "\(suraName), \(ayahNumberString)"
+    }
+}
+
+extension Quran {
+
+    static func range(forPage page: Int) -> VerseRange {
+        let lowerBound = startAyahForPage(page)
+        let finder = PageBasedLastAyahFinder()
+        let upperBound = finder.findLastAyah(startAyah: lowerBound, page: page)
+        return VerseRange(lowerBound: lowerBound, upperBound: upperBound)
     }
 }

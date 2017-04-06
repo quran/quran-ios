@@ -10,9 +10,19 @@ import UIKit
 
 extension UIViewController {
     func showErrorAlert(error: Error) {
-        let message = (error as? CustomStringConvertible)?.description ?? NSLocalizedString("NetworkError_Unknown", comment: "")
+        Crash.recordError(error, reason: "showErrorAlert", fatalErrorOnDebug: false)
+        let message = error.getLocalizedDescription()
         let controller = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         present(controller, animated: true)
+    }
+}
+
+extension Error {
+    fileprivate func getLocalizedDescription() -> String {
+        if let error = self as? CustomStringConvertible {
+            return error.description
+        }
+        return NSLocalizedString("NetworkError_Unknown", comment: "")
     }
 }

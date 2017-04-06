@@ -343,6 +343,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     private func updateTranslationView() {
-        dataSource.selectedDataSourceIndex = quranNavigationBar.isTranslationView ? 1 : 0
+        let isTranslationView = quranNavigationBar.isTranslationView
+        dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
+        let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
+        if isTranslationView && noTranslationsSelected {
+            onSelectTranslationsButtonTapped()
+        }
     }
 }

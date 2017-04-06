@@ -47,13 +47,25 @@ extension Translation {
             return .translationTranslatorNameEnglish
         }
     }
+
+    var characterDirection: Locale.LanguageDirection {
+        return Locale.characterDirection(forLanguage: languageCode)
+    }
 }
 
 extension TranslationText {
     var attributedText: NSAttributedString {
+        let style = NSMutableParagraphStyle()
+        if translation.characterDirection == .rightToLeft {
+            style.alignment = .right
+        } else {
+            style.alignment = .left
+        }
+
         let attributes = [
             NSFontAttributeName            : translation.preferredTextFont,
-            NSForegroundColorAttributeName : UIColor.translationText]
+            NSForegroundColorAttributeName : UIColor.translationText,
+            NSParagraphStyleAttributeName  : style]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         return attributedString
     }

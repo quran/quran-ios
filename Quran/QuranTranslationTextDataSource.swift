@@ -14,8 +14,7 @@ class QuranTranslationTextDataSource: BasicDataSource<TranslationTextLayout, Qur
                                     configure cell: QuranTranslationTextCollectionViewCell,
                                     with item: TranslationTextLayout,
                                     at indexPath: IndexPath) {
-        cell.label.font = item.text.translation.preferredTextFont
-        cell.label.text = item.text.text
+        cell.label.attributedText = item.text.attributedText
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {

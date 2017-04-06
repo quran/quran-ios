@@ -29,7 +29,7 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
         label.textColor = .white
 
         contentView.addAutoLayoutSubview(colorView)
-        contentView.pinParentAllDirections(colorView, leadingValue: -5, trailingValue: -5)
+        contentView.pinParentAllDirections(colorView)
 
         colorView.addAutoLayoutSubview(label)
         colorView.pinParentAllDirections(label,

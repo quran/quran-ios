@@ -20,11 +20,11 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
     }
 
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
-        return QuartersDataSource(reuseIdentifier: "cell")
+        return QuartersDataSource()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "QuarterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.ds_register(cellNib: QuarterTableViewCell.self)
     }
 }

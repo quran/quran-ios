@@ -18,19 +18,17 @@ import Foundation
 
     /**
      Represents the underlying scroll view. Use this method if you want to get the
-     `UICollectionView`/`UITableView` itself not a wrapper.
+     `UICollectionView`/`UITableView` itself. `GeneralCollectionView` is not guarnteed to be `UICollectionView` or
+     a `UITableView`, use this property to access the underlying `UICollectionView` or `UITableView`.
      So, if you have for example an instance like the following
      ```
      let generalCollectionView: GeneralCollectionView = <...>
 
      // Not Recommented, can result crashes if there is a CompositeDataSource.
      let underlyingTableView = generalCollectionView as! UITableView
-
-     // Recommended, safer
-     let underlyingTableView = generalCollectionView.ds_scrollView as! UITableView
      ```
-     The later can result a crash if the scroll view is a UICollectionView not a UITableView.
 
+     **See also** : `asCollectionView()` and `asTableView()`
      */
     var ds_scrollView: UIScrollView { get }
 
@@ -220,5 +218,50 @@ extension GeneralCollectionView {
             globalSections.add(globalSection)
         }
         return globalSections as IndexSet
+    }
+}
+
+extension GeneralCollectionView {
+
+    /// Gets the size of the underlying `UITableView` or the `UICollectionView`.
+    public var size: CGSize {
+        return ds_scrollView.frame.size
+    }
+}
+
+extension GeneralCollectionView {
+
+    /**
+     Represents the underlying `UICollectionView` itself. `GeneralCollectionView` is not guarnteed to be `UICollectionView` or
+     a `UITableView`, use this property to access the underlying `UICollectionView` or nil if it is `UITableView`.
+     So, if you have for example an instance like the following
+     ```
+     let generalCollectionView: GeneralCollectionView = <...>
+
+     // Not Recommented, can result crashes if there is a CompositeDataSource.
+     let underlyingTableView = generalCollectionView as! UITableView
+     ```
+
+     **See also** : `ds_scrollView` and `asTableView()`
+     */
+    public func asCollectionView() -> UICollectionView? {
+        return ds_scrollView as? UICollectionView
+    }
+
+    /**
+     Represents the underlying `UITableView` itself. `GeneralCollectionView` is not guarnteed to be `UITableView` or
+     a `UICollectionView`, use this property to access the underlying `UITableView` or nil if it is `UICollectionView`.
+     So, if you have for example an instance like the following
+     ```
+     let generalCollectionView: GeneralCollectionView = <...>
+
+     // Not Recommented, can result crashes if there is a CompositeDataSource.
+     let underlyingTableView = generalCollectionView as! UITableView
+     ```
+
+     **See also** : `ds_scrollView` and `asCollectionView()`
+     */
+    public func asTableView() -> UITableView? {
+        return ds_scrollView as? UITableView
     }
 }

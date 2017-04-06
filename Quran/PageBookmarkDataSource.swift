@@ -15,9 +15,9 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
 
     let persistence: BookmarksPersistence
 
-    init(reuseIdentifier: String, persistence: BookmarksPersistence) {
+    init(persistence: BookmarksPersistence) {
         self.persistence = persistence
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

@@ -8,7 +8,7 @@
 
 import GenericDataSources
 
-class QuranTranslationTextDataSource: BaseBasicDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
+class QuranTranslationTextDataSource: BasicDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuranTranslationTextCollectionViewCell,

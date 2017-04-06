@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 
-class QuranTranslationsDataSource: QuranBaseBasicDataSource<QuranTranslationCollectionPageCollectionViewCell>, QuranBasicDataSourceRepresentable {
+class QuranTranslationsDataSource: QuranBaseBasicDataSource<QuranTranslationCollectionPageCollectionViewCell>, QuranDataSourceHandler {
 
     private let pageService: AnyCacheableService<Int, TranslationPage>
     private let ayahInfoRetriever: AyahInfoRetriever

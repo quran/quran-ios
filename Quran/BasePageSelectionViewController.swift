@@ -14,7 +14,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>
 
-    let dataSource = JuzsMultipleSectionDataSource(type: .multi, headerReuseIdentifier: "header")
+    let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
 
     init(dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         self.dataRetriever = dataRetriever
@@ -39,8 +39,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
-        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
-
+        tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
 
         dataRetriever.retrieve { [weak self] (data: [(Juz, [ItemType])]) in

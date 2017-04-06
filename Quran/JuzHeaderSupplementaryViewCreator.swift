@@ -15,8 +15,8 @@ class JuzHeaderSupplementaryViewCreator: BasicSupplementaryViewCreator<Juz, JuzT
 
     var onJuzHeaderSelected: ((Juz) -> Void)?
 
-    override init(identifier: String) {
-        super.init(identifier: identifier, size: CGSize(width: 0, height: 44))
+    override init() {
+        super.init(size: CGSize(width: 0, height: 44))
     }
 
     override func collectionView(_ collectionView: GeneralCollectionView,

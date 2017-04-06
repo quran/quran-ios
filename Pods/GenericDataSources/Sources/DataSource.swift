@@ -8,10 +8,14 @@
 
 import Foundation
 
-/**
- The DataSource protocol is a general data source and delegate protocol for both a UITableViewDataSource/UITableViewDelegate and UICollectionViewDataSource/UICollectionViewDelegate and adopted by an object that mediates the application’s data model for a view object (e.g. `UITableView` or `UICollectionView`.
- */
+/// The DataSource protocol is a general data source and delegate protocol for both a UITableViewDataSource/UITableViewDelegate and UICollectionViewDataSource/UICollectionViewDelegate and adopted by an object that mediates the application’s data model for a view object (e.g. `UITableView` or `UICollectionView`.
 @objc public protocol DataSource : class {
+
+    /// Asks the data source if it responds to a given selector.
+    ///
+    /// - Parameter selector: The selector to check if the instance repsonds to.
+    /// - Returns: `true` if the instance responds to the passed selector, otherwise `false`.
+    func ds_responds(to selector: DataSourceSelector) -> Bool
 
     /**
      Whether the data source provides the item size/height delegate calls for `tableView:heightForRowAtIndexPath:`
@@ -21,6 +25,7 @@ import Foundation
         `false` if the size/height information is provided to the `UITableView` using `rowHeight` and/or `estimatedRowHeight`
         or to the `UICollectionViewFlowLayout` using `itemSize` and/or `estimatedItemSize`.
      */
+    @available(*, unavailable, renamed: "ds_responds(to:)", message: "with DataSourceSelector.size as parameter")
     func ds_shouldConsumeItemSizeDelegateCalls() -> Bool
 
     /**
@@ -141,7 +146,7 @@ import Foundation
     ///   - kind: The kind of the supplementary view.
     ///   - indexPath: The indexPath at which the supplementary view is requested.
     /// - Returns: The supplementary view for the passed index path.
-    func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView
+    func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView?
 
     /// Gets the size of supplementary view for the passed kind at the passed index path.
     ///
@@ -179,28 +184,164 @@ import Foundation
 
     // MARK: - Reordering
 
+    /// Asks the delegate if the item can be moved for a reoder operation.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
     func ds_collectionView(_ collectionView: GeneralCollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
+
+    /// Performs the move operation of an item from `sourceIndexPath` to `destinationIndexPath`.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - sourceIndexPath: An index path locating the start position of the item in the view.
+    ///   - destinationIndexPath: An index path locating the end position of the item in the view.
     func ds_collectionView(_ collectionView: GeneralCollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
 
     // MARK: - Cell displaying
 
+    /// The cell will is about to be displayed or moving into the visible area of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath)
+
+    /// The cell will is already displayed and will be moving out of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     func ds_collectionView(_ collectionView: GeneralCollectionView, didEndDisplaying cell: ReusableCell, forItemAt indexPath: IndexPath)
 
     // MARK: - Copy/Paste
 
+    /// Whether the copy/paste/etc. menu should be shown for the item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item should show the copy/paste/etc. menu, otherwise `false`.
     func ds_collectionView(_ collectionView: GeneralCollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool
+
+    /// Check whether an action/selector can be performed for a specific item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to check if it can be performed or not.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     func ds_collectionView(_ collectionView: GeneralCollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool
+
+    /// Executes an action for a specific item with the passed sender.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to be executed.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     func ds_collectionView(_ collectionView: GeneralCollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?)
 
     // MARK: - Focus
 
+    /// Whether or not the item can have focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can have focus, otherwise `false`.
     @available(iOS 9.0, *)
     func ds_collectionView(_ collectionView: GeneralCollectionView, canFocusItemAt indexPath: IndexPath) -> Bool
+
+    /// Whether or not should we update the focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
     @available(iOS 9.0, *)
     func ds_collectionView(_ collectionView: GeneralCollectionView, shouldUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext) -> Bool
+
+    /// The focus is has been updated.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    ///   - coordinator: The focus animation coordinator.
     @available(iOS 9.0, *)
     func ds_collectionView(_ collectionView: GeneralCollectionView, didUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator)
+
+    /// Gets the index path of the preferred focused view.
+    ///
+    /// - Parameter collectionView: A general collection view object initiating the operation.
     @available(iOS 9.0, *)
     func ds_indexPathForPreferredFocusedView(in collectionView: GeneralCollectionView) -> IndexPath?
+
+    // MARK: - Editing
+
+    /// Check whether the item can be edited or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool
+
+    /// Executes the editing operation for the item at the specified index pass.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - editingStyle: The
+    ///   - indexPath: An index path locating an item in the view.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath)
+
+    /// Gets the editing style for an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The editing style.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle
+
+    /// Gets the localized title for the delete button to show for editing an item (e.g. swipe to delete).
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The localized title string.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, titleForDeleteConfirmationButtonForItemAt indexPath: IndexPath) -> String?
+
+    /// Gets the list of editing actions to use for editing an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The list of editing actions.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, editActionsForItemAt indexPath: IndexPath) -> [UITableViewRowAction]?
+
+    /// Check whether to indent the item while editing or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be indented while editing, otherwise `false`.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, shouldIndentWhileEditingItemAt indexPath: IndexPath) -> Bool
+
+    /// The item is about to enter into the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, willBeginEditingItemAt indexPath: IndexPath)
+
+    /// The item did leave the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    func ds_collectionView(_ collectionView: GeneralCollectionView, didEndEditingItemAt indexPath: IndexPath)
 }

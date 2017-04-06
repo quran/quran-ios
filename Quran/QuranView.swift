@@ -60,8 +60,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(cell: QuranImagePageCollectionViewCell.self)
-        collectionView.register(cell: QuranTranslationCollectionPageCollectionViewCell.self)
+        collectionView.ds_register(cellNib: QuranImagePageCollectionViewCell.self)
+        collectionView.ds_register(cellNib: QuranTranslationCollectionPageCollectionViewCell.self)
 
         return collectionView
     }()

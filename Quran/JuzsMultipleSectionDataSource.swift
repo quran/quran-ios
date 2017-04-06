@@ -18,9 +18,9 @@ class JuzsMultipleSectionDataSource: CompositeDataSource {
 
     private let headerCreator: JuzHeaderSupplementaryViewCreator
 
-    init(type: SectionType, headerReuseIdentifier: String) {
-        headerCreator = JuzHeaderSupplementaryViewCreator(identifier: headerReuseIdentifier)
-        super.init(sectionType: type)
+    override init(sectionType: SectionType) {
+        headerCreator = JuzHeaderSupplementaryViewCreator()
+        super.init(sectionType: sectionType)
         set(headerCreator: headerCreator)
     }
 

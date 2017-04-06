@@ -190,7 +190,7 @@ extension _DataSourcesCollection {
 
     func unsafeTransform(globalIndexPath: IndexPath, globalCollectionView: GeneralCollectionView) -> LocalDataSourceCollectionView {
         let mapping: LocalDataSourceCollectionView = cast(transform(globalIndexPath: globalIndexPath, globalCollectionView: globalCollectionView),
-                                                          message: "unsafeTransform called but there is no mapping possible for the passed index path.")
+                                                          message: "unsafeTransform called but there is no mapping possible for the passed index path '\(globalIndexPath)'.")
         return mapping
     }
 

@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Represents a focus update context protocol to be something general for `UIFocusUpdateContext`.
 @available(iOS 9.0, *)
 @objc public protocol FocusUpdateContext: NSObjectProtocol {
 
@@ -34,11 +35,14 @@ import Foundation
 @available(iOS 9.0, *)
 extension UIFocusUpdateContext: FocusUpdateContext { }
 
+/// Represents a general collection view focus update context.
 @available(iOS 9.0, *)
 @objc public protocol GeneralCollectionViewFocusUpdateContext: FocusUpdateContext {
 
+    /// Represents the previously focused index path.
     var previouslyFocusedIndexPath: IndexPath? { get }
 
+    /// Represents the next focused index path.
     var nextFocusedIndexPath: IndexPath? { get }
 }
 

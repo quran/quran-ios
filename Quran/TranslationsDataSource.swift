@@ -30,8 +30,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
                 deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
                 versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
                 pendingDataSource: AnyBasicDataSourceRepresentable<TranslationFull>,
-                downloadedDataSource: AnyBasicDataSourceRepresentable<TranslationFull>,
-                headerReuseId: String) {
+                downloadedDataSource: AnyBasicDataSourceRepresentable<TranslationFull>) {
         self.downloader = downloader
         self.deletionInteractor = deletionInteractor
         self.versionUpdater = versionUpdater
@@ -40,7 +39,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         super.init(sectionType: .multi)
 
-        let headers = TranslationsHeaderSupplementaryViewCreator(identifier: headerReuseId)
+        let headers = TranslationsHeaderSupplementaryViewCreator()
         headers.setSectionedItems([
             NSLocalizedString("downloaded_translations", tableName: "Android", comment: ""),
             NSLocalizedString("available_translations", tableName: "Android", comment: "")
@@ -61,12 +60,14 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         }
     }
 
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
         let ds = dataSource(at: indexPath.section)
         return ds === downloadedDS.dataSource
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt globalIndexPath: IndexPath) {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    commit editingStyle: UITableViewCellEditingStyle,
+                                    forItemAt globalIndexPath: IndexPath) {
         guard editingStyle == .delete else {
             return
         }

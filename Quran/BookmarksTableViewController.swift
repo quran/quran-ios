@@ -11,7 +11,7 @@ import GenericDataSources
 
 class BookmarksTableViewController: BaseTableViewController {
 
-    let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi, headerReuseIdentifier: "header")
+    let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi)
     let lastPageDS: LastPageBookmarkDataSource
     let pageDS: PageBookmarkDataSource
     let ayahDS: AyahBookmarkDataSource
@@ -27,9 +27,9 @@ class BookmarksTableViewController: BaseTableViewController {
         self.quranControllerCreator = quranControllerCreator
 
         // configure the data sources
-        lastPageDS = LastPageBookmarkDataSource(reuseIdentifier: "cell", persistence: lastPagesPersistence)
-        pageDS = PageBookmarkDataSource(reuseIdentifier: "cell", persistence: bookmarksPersistence)
-        ayahDS = AyahBookmarkDataSource(reuseIdentifier: "cell", persistence: bookmarksPersistence, ayahPersistence: ayahPersistence)
+        lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
+        pageDS = PageBookmarkDataSource(persistence: bookmarksPersistence)
+        ayahDS = AyahBookmarkDataSource(persistence: bookmarksPersistence, ayahPersistence: ayahPersistence)
 
         dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: ""))
         dataSource.addDataSource(pageDS, headerTitle: NSLocalizedString("menu_bookmarks_page", tableName: "Android", comment: ""))
@@ -72,8 +72,8 @@ class BookmarksTableViewController: BaseTableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
-        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.register(UINib(nibName: "BookmarkTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
+        tableView.ds_register(cellNib: BookmarkTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
     }
 

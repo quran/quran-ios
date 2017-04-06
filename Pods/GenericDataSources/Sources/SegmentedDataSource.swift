@@ -8,56 +8,49 @@
 
 import Foundation
 
-open class SegmentedDataSource: AbstractDataSource {
+/// The composite data source class that is responsible for managing a set of children data sources.
+/// Delegating requests to the selected child data source to respond.
+/// If the `selectedDataSource` is nil, calls to `DataSource` methods will crash.
+open class SegmentedDataSource: AbstractDataSource, CollectionDataSource {
+
+    /// Returns a string that describes the contents of the receiver.
+    open override var description: String {
+        let properties: [(String, Any?)] = [
+            ("selectedDataSource", selectedDataSource),
+            ("scrollViewDelegate", scrollViewDelegate),
+            ("supplementaryViewCreator", supplementaryViewCreator)]
+        return describe(self, properties: properties)
+    }
 
     private var childrenReusableDelegate: _DelegatedGeneralCollectionView!
 
-    /**
-     Creates new instance.
-     */
+    /// Creates new instance.
     public override init() {
         super.init()
         let mapping = _SegmentedGeneralCollectionViewMapping(parentDataSource: self)
         childrenReusableDelegate = _DelegatedGeneralCollectionView(mapping: mapping)
     }
 
-    /**
-     Returns a Boolean value that indicates whether the receiver implements or inherits a method that can respond to a specified message.
-     true if the receiver implements or inherits a method that can respond to aSelector, otherwise false.
-
-     - parameter selector: A selector that identifies a message.
-
-     - returns: `true` if the receiver implements or inherits a method that can respond to aSelector, otherwise `false`.
-     */
-    open override func responds(to selector: Selector) -> Bool {
-
-        if sizeSelectors.contains(selector) {
-            return ds_shouldConsumeItemSizeDelegateCalls()
-        }
-
-        return super.responds(to: selector)
-    }
-
     // MARK: - Children DataSources
 
-    open var selectedDataSourceIndex: Int? {
+    /// Represents the selected data source index or `NSNotFound` if no data source selected.
+    open var selectedDataSourceIndex: Int {
         set {
-            if let newValue = newValue {
-                selectedDataSource = dataSources[newValue]
-            } else {
-                selectedDataSource = nil
-            }
+            precondition(newValue < dataSources.count, "[GenericDataSource] invalid selectedDataSourceIndex, should be less than \(dataSources.count)")
+            precondition(newValue >= 0, "[GenericDataSource] invalid selectedDataSourceIndex, should be greater than or equal to 0.")
+            selectedDataSource = dataSources[newValue]
         }
         get {
-            return dataSources.index { $0 === selectedDataSource } ?? -1
+            return dataSources.index { $0 === selectedDataSource } ?? NSNotFound
         }
     }
 
+    /// Represents the selected data source or nil if not selected.
     open var selectedDataSource: DataSource?
 
     private var unsafeSelectedDataSource: DataSource {
         guard let selectedDataSource = selectedDataSource else {
-            fatalError("[\(type(of: self))]: Calling DataSource methods with nil selectedDataSource")
+            fatalError("[\(type(of: self))]: Calling SegmentedDataSource methods with nil selectedDataSource")
         }
         return selectedDataSource
     }
@@ -73,6 +66,9 @@ open class SegmentedDataSource: AbstractDataSource {
     open func add(_ dataSource: DataSource) {
         dataSource.ds_reusableViewDelegate = childrenReusableDelegate
         dataSources.append(dataSource)
+        if selectedDataSource == nil {
+            selectedDataSource = dataSource
+        }
     }
 
     /**
@@ -84,6 +80,9 @@ open class SegmentedDataSource: AbstractDataSource {
     open func insert(_ dataSource: DataSource, at index: Int) {
         dataSource.ds_reusableViewDelegate = childrenReusableDelegate
         dataSources.insert(dataSource, at: index)
+        if selectedDataSource == nil {
+            selectedDataSource = dataSource
+        }
     }
 
     /**
@@ -144,6 +143,74 @@ open class SegmentedDataSource: AbstractDataSource {
         return dataSources.index { $0 === dataSource }
     }
 
+    // MARK: - Responds
+
+    /// Asks the data source if it responds to a given selector.
+    ///
+    /// This method returns `true` if the selected data source can respond to the selector.
+    ///
+    /// - Parameter selector: The selector to check if the instance repsonds to.
+    /// - Returns: `true` if the instance responds to the passed selector, otherwise `false`.
+    open override func ds_responds(to selector: DataSourceSelector) -> Bool {
+        // we always define last one as DataSource selector.
+        let theSelector = dataSourceSelectorToSelectorMapping[selector]!.last!
+        // check if the subclass implemented the selector, always return true
+        if subclassHasDifferentImplmentation(type: SegmentedDataSource.self, selector: theSelector) {
+            return true
+        }
+        return selectedDataSource?.ds_responds(to: selector) ?? false
+    }
+
+    // MARK: - IndexPath and Section translations
+
+    /**
+     Converts a section value relative to a specific data source to a section value relative to the composite data source.
+
+     - parameter section:       The local section relative to the passed data source.
+     - parameter dataSource:    The data source that is the local section is relative to it. Should be a child data source.
+
+     - returns: The global section relative to the composite data source.
+     */
+    open func globalSectionForLocalSection(_ section: Int, dataSource: DataSource) -> Int {
+        return section
+    }
+
+    /**
+     Converts a section value relative to the composite data source to a section value relative to a specific data source.
+
+     - parameter section:    The section relative to the compsite data source.
+     - parameter dataSource: The data source that is the returned local section is relative to it. Should be a child data source.
+
+     - returns: The global section relative to the composite data source.
+     */
+    open func localSectionForGlobalSection(_ section: Int, dataSource: DataSource) -> Int {
+        return section
+    }
+
+    /**
+     Converts an index path value relative to a specific data source to an index path value relative to the composite data source.
+
+     - parameter indexPath:     The local index path relative to the passed data source.
+     - parameter dataSource:    The data source that is the local index path is relative to it. Should be a child data source.
+
+     - returns: The global index path relative to the composite data source.
+     */
+    open func globalIndexPathForLocalIndexPath(_ indexPath: IndexPath, dataSource: DataSource) -> IndexPath {
+        return indexPath
+    }
+
+    /**
+     Converts an index path value relative to the composite data source to an index path value relative to a specific data source.
+
+     - parameter indexPath:    The index path relative to the compsite data source.
+     - parameter dataSource: The data source that is the returned local index path is relative to it. Should be a child data source.
+
+     - returns: The global index path relative to the composite data source.
+     */
+    open func localIndexPathForGlobalIndexPath(_ indexPath: IndexPath, dataSource: DataSource) -> IndexPath {
+        return indexPath
+    }
+
     // MARK: - Cell
 
     /**
@@ -182,16 +249,6 @@ open class SegmentedDataSource: AbstractDataSource {
     }
 
     // MARK: - Size
-
-    /**
-     Gets whether the data source will handle size delegate calls.
-     It only handle delegate calls if the selected data source can.
-
-     - returns: `false` if there is no data sources or any of the data sources cannot handle size delegate calls.
-     */
-    open override func ds_shouldConsumeItemSizeDelegateCalls() -> Bool {
-        return selectedDataSource?.ds_shouldConsumeItemSizeDelegateCalls() ?? false
-    }
 
     /**
      Asks the data source for the size of a cell in a particular location of the general collection view.
@@ -289,7 +346,14 @@ open class SegmentedDataSource: AbstractDataSource {
 
     // MARK: - Header/Footer
 
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView {
+    /// Retrieves the supplementary view for the passed kind at the passed index path.
+    ///
+    /// - Parameters:
+    ///   - collectionView: The collectionView requesting the supplementary view.
+    ///   - kind: The kind of the supplementary view.
+    ///   - indexPath: The indexPath at which the supplementary view is requested.
+    /// - Returns: The supplementary view for the passed index path.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView? {
         // if, supplementaryViewCreator is not configured use it, otherwise delegate to one of the child data sources
         if supplementaryViewCreator != nil {
             return super.ds_collectionView(collectionView, supplementaryViewOfKind: kind, at: indexPath)
@@ -297,6 +361,17 @@ open class SegmentedDataSource: AbstractDataSource {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, supplementaryViewOfKind: kind, at: indexPath)
     }
 
+    /// Gets the size of supplementary view for the passed kind at the passed index path.
+    ///
+    /// * For `UITableView` just supply the height width is don't care.
+    /// * For `UICollectionViewFlowLayout` supply the height if it's vertical scrolling, or width if it's horizontal scrolling.
+    /// * Specifying `CGSize.zero`, means don't display a supplementary view and `viewOfKind` will not be called.
+    ///
+    /// - Parameters:
+    ///   - collectionView: The collectionView requesting the supplementary view.
+    ///   - kind: The kind of the supplementary view.
+    ///   - indexPath: The indexPath at which the supplementary view is requested.
+    /// - Returns: The size of the supplementary view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForSupplementaryViewOfKind kind: String, at indexPath: IndexPath) -> CGSize {
         // if, it's configured use it, otherwise delegate to one of the child data sources
         if supplementaryViewCreator != nil {
@@ -305,6 +380,14 @@ open class SegmentedDataSource: AbstractDataSource {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: kind, at: indexPath)
     }
 
+    /// Supplementary view is about to be displayed. Called exactly before the supplementary view is displayed.
+    ///
+    /// - parameter collectionView: The general collection view requesting the index path.
+    /// - parameter view:           The supplementary view that will  be displayed.
+    /// - parameter kind:           The kind of the supplementary view. For `UITableView`, it can be either
+    ///                             `UICollectionElementKindSectionHeader` or `UICollectionElementKindSectionFooter` for
+    ///                             header and footer views respectively.
+    /// - parameter indexPath:      The index path at which the supplementary view is.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplaySupplementaryView view: ReusableSupplementaryView, ofKind kind: String, at indexPath: IndexPath) {
         // if, it's configured use it, otherwise delegate to one of the child data sources
         if supplementaryViewCreator != nil {
@@ -313,6 +396,15 @@ open class SegmentedDataSource: AbstractDataSource {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, willDisplaySupplementaryView: view, ofKind: kind, at: indexPath)
     }
 
+    /// Supplementary view has been displayed and user scrolled it out of the screen.
+    /// Called exactly after the supplementary view is scrolled out of the screen.
+    ///
+    /// - parameter collectionView: The general collection view requesting the index path.
+    /// - parameter view:           The supplementary view that will  be displayed.
+    /// - parameter kind:           The kind of the supplementary view. For `UITableView`, it can be either
+    ///                             `UICollectionElementKindSectionHeader` or `UICollectionElementKindSectionFooter` for
+    ///                             header and footer views respectively.
+    /// - parameter indexPath:      The index path at which the supplementary view is.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndDisplayingSupplementaryView view: ReusableSupplementaryView, ofKind kind: String, at indexPath: IndexPath) {
         // if, it's configured use it, otherwise delegate to one of the child data sources
         if supplementaryViewCreator != nil {
@@ -323,57 +415,202 @@ open class SegmentedDataSource: AbstractDataSource {
 
     // MARK: - Reordering
 
+    /// Asks the delegate if the item can be moved for a reoder operation.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, canMoveItemAt: indexPath)
     }
 
+    /// Performs the move operation of an item from `sourceIndexPath` to `destinationIndexPath`.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - sourceIndexPath: An index path locating the start position of the item in the view.
+    ///   - destinationIndexPath: An index path locating the end position of the item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
     }
 
     // MARK: - Cell displaying
 
+    /// The cell will is about to be displayed or moving into the visible area of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, willDisplay: cell, forItemAt: indexPath)
     }
 
+    /// The cell will is already displayed and will be moving out of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndDisplaying cell: ReusableCell, forItemAt indexPath: IndexPath) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
     }
 
     // MARK: - Copy/Paste
 
+    /// Whether the copy/paste/etc. menu should be shown for the item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item should show the copy/paste/etc. menu, otherwise `false`.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, shouldShowMenuForItemAt: indexPath)
     }
 
+    /// Check whether an action/selector can be performed for a specific item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to check if it can be performed or not.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
     }
 
+    /// Executes an action for a specific item with the passed sender.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to be executed.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
     }
 
     // MARK: - Focus
 
+    /// Whether or not the item can have focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can have focus, otherwise `false`.
     @available(iOS 9.0, *)
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, canFocusItemAt: indexPath)
     }
 
+    /// Whether or not should we update the focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
     @available(iOS 9.0, *)
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext) -> Bool {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, shouldUpdateFocusIn: context)
     }
 
+    /// The focus is has been updated.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    ///   - coordinator: The focus animation coordinator.
     @available(iOS 9.0, *)
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, didUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, didUpdateFocusIn: context, with: coordinator)
     }
 
+    /// Gets the index path of the preferred focused view.
+    ///
+    /// - Parameter collectionView: A general collection view object initiating the operation.
     @available(iOS 9.0, *)
     open override func ds_indexPathForPreferredFocusedView(in collectionView: GeneralCollectionView) -> IndexPath? {
         return unsafeSelectedDataSource.ds_indexPathForPreferredFocusedView(in: collectionView)
+    }
+
+    // MARK: - Editing
+
+    /// Check whether the item can be edited or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, canEditItemAt: indexPath)
+    }
+
+    /// Executes the editing operation for the item at the specified index pass.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - editingStyle: The
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath) {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, commit: editingStyle, forItemAt: indexPath)
+    }
+
+    /// Gets the editing style for an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The editing style.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, editingStyleForItemAt: indexPath)
+    }
+
+    /// Gets the localized title for the delete button to show for editing an item (e.g. swipe to delete).
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The localized title string.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, titleForDeleteConfirmationButtonForItemAt indexPath: IndexPath) -> String? {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, titleForDeleteConfirmationButtonForItemAt: indexPath)
+    }
+
+    /// Gets the list of editing actions to use for editing an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The list of editing actions.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editActionsForItemAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, editActionsForItemAt: indexPath)
+    }
+
+    /// Check whether to indent the item while editing or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be indented while editing, otherwise `false`.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldIndentWhileEditingItemAt indexPath: IndexPath) -> Bool {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, shouldIndentWhileEditingItemAt: indexPath)
+    }
+
+    /// The item is about to enter into the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, willBeginEditingItemAt indexPath: IndexPath) {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, willBeginEditingItemAt: indexPath)
+    }
+
+    /// The item did leave the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndEditingItemAt indexPath: IndexPath) {
+        return unsafeSelectedDataSource.ds_collectionView(collectionView, didEndEditingItemAt: indexPath)
     }
 }

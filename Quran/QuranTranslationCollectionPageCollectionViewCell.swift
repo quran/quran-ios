@@ -50,13 +50,13 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         contentView.backgroundColor = .readingBackground()
         collectionView.backgroundColor = .readingBackground()
 
-        collectionView.register(cellClass: QuranTranslationSuraNameCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationVerseNumberCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationVerseSeparatorCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationArabicTextCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationTranslatorNameCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationTextCollectionViewCell.self)
-        collectionView.register(cellClass: QuranTranslationLongTextCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationSuraNameCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationVerseNumberCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationVerseSeparatorCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationArabicTextCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationTranslatorNameCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationTextCollectionViewCell.self)
+        collectionView.ds_register(cellClass: QuranTranslationLongTextCollectionViewCell.self)
 
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.minimumInteritemSpacing = 0

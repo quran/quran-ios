@@ -11,7 +11,7 @@ import GenericDataSources
 
 class TranslationsSelectionDataSource: TranslationsDataSource {
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
         return false
     }
 }

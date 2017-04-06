@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 
-class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionViewCell>, QuranBasicDataSourceRepresentable {
+class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionViewCell>, QuranDataSourceHandler {
 
     private let imageService: AnyCacheableService<Int, UIImage>
     private let ayahInfoRetriever: AyahInfoRetriever

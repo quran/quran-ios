@@ -100,32 +100,29 @@ class Container {
     }
 
     func createTranslationsDataSource() -> TranslationsDataSource {
-        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
-        let downloadedDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let pendingDS = TranslationsBasicDataSource()
+        let downloadedDS = TranslationsBasicDataSource()
         let dataSource = TranslationsDataSource(
             downloader: createDownloadManager(),
             deletionInteractor: createTranslationDeletionInteractor(),
             versionUpdater: createTranslationsVersionUpdaterInteractor(),
             pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
-            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
-            headerReuseId: "header")
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable())
         pendingDS.delegate = dataSource
         downloadedDS.delegate = dataSource
         return dataSource
     }
 
     func createTranslationsSelectionDataSource() -> TranslationsDataSource {
-        let pendingDS = TranslationsBasicDataSource(reuseIdentifier: TranslationTableViewCell.reuseId)
+        let pendingDS = TranslationsBasicDataSource()
         let downloadedDS = TranslationsSelectionBasicDataSource(
-            reuseIdentifier: TranslationTableViewCell.reuseId,
             simplePersistence: createSimplePersistence())
         let dataSource = TranslationsSelectionDataSource(
             downloader: createDownloadManager(),
             deletionInteractor: createTranslationDeletionInteractor(),
             versionUpdater: createTranslationsVersionUpdaterInteractor(),
             pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
-            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable(),
-            headerReuseId: "header")
+            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable())
         pendingDS.delegate = dataSource
         downloadedDS.delegate = dataSource
         return dataSource

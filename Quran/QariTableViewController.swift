@@ -9,11 +9,9 @@
 import UIKit
 import GenericDataSources
 
-private let cellReuseId = "cell"
-
 class QariTableViewController: UITableViewController {
 
-    private let dataSource = QarisDataSource(reuseIdentifier: cellReuseId)
+    private let dataSource = QarisDataSource()
 
     var selectedIndex: Int {
         didSet {
@@ -49,7 +47,7 @@ class QariTableViewController: UITableViewController {
         tableView.backgroundView = nil
 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        tableView.register(UINib(nibName: "QariTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseId)
+        tableView.ds_register(cellNib: QariTableViewCell.self)
 
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44

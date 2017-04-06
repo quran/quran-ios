@@ -20,7 +20,7 @@ open class BasicBlockDataSource<ItemType, CellType: ReusableCell> : BasicDataSou
     private let configureBlock: ConfigureBlock
 
     /**
-     Creates new instance of the basic block data source.
+     Creates new instance of the basic block data source with configure block and reuse id.
 
      - parameter reuseIdentifier: The reuse identifier for dequeuing the cells.
      - parameter configureBlock:  The configuration block for the cell.
@@ -28,6 +28,21 @@ open class BasicBlockDataSource<ItemType, CellType: ReusableCell> : BasicDataSou
     public init(reuseIdentifier: String, configureBlock: @escaping ConfigureBlock) {
         self.configureBlock = configureBlock
         super.init(reuseIdentifier: reuseIdentifier)
+    }
+
+    /// Creates new instance of the basic block data source with just the configure block.
+    /// Providing a way to use the default reuse Id (`Cell.ds_reuseId`) which represents the class name.
+    /// Usually (**99.99% of the times**) we register the cell once. So a unique name would be the `Cell.ds_reuseId`.
+    ///
+    /// You can use one of the following recommended methods to register cells:
+    ///
+    ///     extension GeneralCollectionView {
+    ///         func ds_register(cellNib cell: ReusableCell.Type, in bundle: Bundle? = nil)
+    ///         func ds_register(cellClass cell: ReusableCell.Type)
+    ///     }
+    public init(configureBlock: @escaping ConfigureBlock) {
+        self.configureBlock = configureBlock
+        super.init()
     }
 
     /**

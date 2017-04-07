@@ -41,13 +41,13 @@ class QuranNavigationBar {
         let translationImage = isTranslationView ? #imageLiteral(resourceName: "globe_filled-25") : #imageLiteral(resourceName: "globe-25")
         let translation = UIBarButtonItem(image: translationImage, style: .plain, target: self, action: #selector(onTranslationButtonTapped))
 
-        var barItems = [translation, bookmark]
+        var barItems = [bookmark, translation]
         if isTranslationView {
             let translationsSelection = UIBarButtonItem(image: #imageLiteral(resourceName: "Checklist_25"),
                                                         style: .plain,
                                                         target: self,
                                                         action: #selector(onSelectTranslationsTapped))
-            barItems.insert(translationsSelection, at: 0)
+            barItems.append(translationsSelection)
         }
 
         delegate?.navigationItem.setRightBarButtonItems(barItems, animated: animated)
@@ -55,7 +55,7 @@ class QuranNavigationBar {
 
     @objc private func onTranslationButtonTapped() {
         isTranslationView = !isTranslationView
-        updateRightBarItems(animated: true)
+        updateRightBarItems(animated: false)
         delegate?.onTranslationButtonTapped()
     }
 

@@ -4,7 +4,7 @@ PODS:
     - Fabric (~> 1.6.3)
   - DownloadButton (0.1.0)
   - Fabric (1.6.11)
-  - GenericDataSources (2.2.0)
+  - GenericDataSources (2.4.4)
   - KVOController (1.2.0)
   - MenuItemKit (2.0)
   - Moya (8.0.2):
@@ -53,7 +53,7 @@ SPEC CHECKSUMS:
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  GenericDataSources: 2abf31809c7b7e600c6cdcdc61eca2c7b88301a7
+  GenericDataSources: 70b1ce367744c595444a7da9a43784536de9173f
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   Moya: 47f61da5b634aa71f676431b64ee0f81e976296d

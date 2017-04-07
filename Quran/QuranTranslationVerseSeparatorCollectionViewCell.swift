@@ -25,7 +25,7 @@ class QuranTranslationVerseSeparatorCollectionViewCell: QuranTranslationBaseColl
         lineView.backgroundColor = #colorLiteral(red: 0.4862745098, green: 0.4862745098, blue: 0.4862745098, alpha: 1)
 
         contentView.addAutoLayoutSubview(lineView)
-        contentView.pinParentHorizontal(lineView, leadingValue: -5, trailingValue: -5)
+        contentView.pinParentHorizontal(lineView)
         contentView.addParentBottomConstraint(lineView)
         lineView.addHeightConstraint(1)
     }

@@ -17,7 +17,7 @@ extension Layout {
 }
 
 extension Layout.Translation {
-    static let horizontalInset: CGFloat = 10
+    static let horizontalInset: CGFloat = 15
 }
 
 extension Layout.QuranCell {

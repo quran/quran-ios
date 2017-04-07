@@ -15,9 +15,9 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
 
     let persistence: LastPagesPersistence
 
-    init(reuseIdentifier: String, persistence: LastPagesPersistence) {
+    init(persistence: LastPagesPersistence) {
         self.persistence = persistence
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

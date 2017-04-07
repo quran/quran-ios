@@ -68,8 +68,11 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
         }
     }
 
-    override func ds_shouldConsumeItemSizeDelegateCalls() -> Bool {
-        return true
+    override func ds_responds(to selector: DataSourceSelector) -> Bool {
+        if selector == .size {
+            return true
+        }
+        return super.ds_responds(to: selector)
     }
 
     private func updateHighlights() {

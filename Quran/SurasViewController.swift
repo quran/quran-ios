@@ -20,11 +20,11 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
     }
 
     override func createItemsDataSource() -> BasicDataSource<Sura, SuraTableViewCell> {
-        return SurasDataSource(reuseIdentifier: "cell")
+        return SurasDataSource()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "SuraTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.ds_register(cellNib: SuraTableViewCell.self)
     }
 }

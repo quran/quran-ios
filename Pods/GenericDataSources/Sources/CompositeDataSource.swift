@@ -22,20 +22,17 @@ import UIKit
  basic data source followed by 4 cells dequeued and configured by the second data source.)
 
  It's recommended to subclass it if you want to have a common behavior.
- (e.g. If all the cells will have a common cell size. Then, implement `ds_shouldConsumeItemSizeDelegateCalls` and return `true`, then implement
+ (e.g. If all the cells will have a common cell size. Then, implement `ds_responds(to:.size)` and return `true`, then implement
  `ds_collectionView(_:sizeForItemAt:)` and return the desired size for all
  the cells regardless of the children data sources.)
  */
-open class CompositeDataSource: AbstractDataSource {
+open class CompositeDataSource: AbstractDataSource, CollectionDataSource {
 
-    /**
-     The type of the composite data source.
-
-     - SingleSection: Single section data source represents one section, children data sources are all on the same section.
-     - MultiSection:  Mutli section data source represents multiple sections, each child data source represents a section.
-     */
+    /// The type of the composite data source.
     public enum SectionType {
+        /// Single section data source represents one section, children data sources are all on the same section.
         case single
+        /// Mutli section data source represents multiple sections, each child data source represents a section.
         case multi
     }
 
@@ -44,6 +41,15 @@ open class CompositeDataSource: AbstractDataSource {
 
     ///  Represents the section type of the composite data source.
     open let sectionType: SectionType
+
+    /// Returns a string that describes the contents of the receiver.
+    open override var description: String {
+        let properties: [(String, Any?)] = [
+            ("sectionType", sectionType),
+            ("scrollViewDelegate", scrollViewDelegate),
+            ("supplementaryViewCreator", supplementaryViewCreator)]
+        return describe(self, properties: properties)
+    }
 
     /**
      Creates new instance with the desired type.
@@ -60,23 +66,6 @@ open class CompositeDataSource: AbstractDataSource {
         case .multi:
             collection = _MultiSectionDataSourcesCollection(parentDataSource: self)
         }
-    }
-
-    /**
-     Returns a Boolean value that indicates whether the receiver implements or inherits a method that can respond to a specified message.
-     true if the receiver implements or inherits a method that can respond to aSelector, otherwise false.
-
-     - parameter selector: A selector that identifies a message.
-
-     - returns: `true` if the receiver implements or inherits a method that can respond to aSelector, otherwise `false`.
-     */
-    open override func responds(to selector: Selector) -> Bool {
-
-        if sizeSelectors.contains(selector) {
-            return ds_shouldConsumeItemSizeDelegateCalls()
-        }
-
-        return super.responds(to: selector)
     }
 
     // MARK: - Children DataSources
@@ -159,6 +148,33 @@ open class CompositeDataSource: AbstractDataSource {
      */
     open func index(of dataSource: DataSource) -> Int? {
         return collection.index(of: dataSource)
+    }
+
+    // MARK: - Responds
+
+    /// Asks the data source if it responds to a given selector.
+    ///
+    /// This method returns `true` if the children data sources can respond to the selector.
+    ///
+    /// - Parameter selector: The selector to check if the instance repsonds to.
+    /// - Returns: `true` if the instance responds to the passed selector, otherwise `false`.
+    open override func ds_responds(to selector: DataSourceSelector) -> Bool {
+
+        // we always define last one as DataSource selector.
+        let theSelector = dataSourceSelectorToSelectorMapping[selector]!.last!
+        // check if the subclass implemented the selector, always return true
+        if subclassHasDifferentImplmentation(type: CompositeDataSource.self, selector: theSelector) {
+            return true
+        }
+
+        if dataSources.isEmpty {
+            return false
+        }
+        if selector.mustAllRespondsToIt {
+            return dataSources.filter { $0.ds_responds(to: selector) }.count == dataSources.count
+        } else {
+            return dataSources.contains { $0.ds_responds(to: selector) }
+        }
     }
 
     // MARK: - IndexPath and Section translations
@@ -293,20 +309,6 @@ open class CompositeDataSource: AbstractDataSource {
     // MARK: - Size
 
     /**
-     Gets whether the data source will handle size delegate calls.
-     It only handle delegate calls if there is at least 1 data source and all the data sources can handle the size delegate calls.
-
-     - returns: `false` if there is no data sources or any of the data sources cannot handle size delegate calls.
-     */
-    open override func ds_shouldConsumeItemSizeDelegateCalls() -> Bool {
-        if dataSources.isEmpty {
-            return false
-        }
-        // if all data sources should consume item size delegates
-        return dataSources.filter { $0.ds_shouldConsumeItemSizeDelegateCalls() }.count == dataSources.count
-    }
-
-    /**
      Asks the data source for the size of a cell in a particular location of the general collection view.
 
      - parameter collectionView: A general collection view object initiating the operation.
@@ -427,7 +429,7 @@ open class CompositeDataSource: AbstractDataSource {
     ///   - kind: The kind of the supplementary view.
     ///   - indexPath: The indexPath at which the supplementary view is requested.
     /// - Returns: The supplementary view for the passed index path.
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView {
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, supplementaryViewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView? {
         // if, supplementaryViewCreator is not configured use it, otherwise delegate to one of the child data sources
         guard let transformed = delegateSupplementaryViewCalls(collectionView: collectionView, indexPath: indexPath) else {
             return super.ds_collectionView(collectionView, supplementaryViewOfKind: kind, at: indexPath)
@@ -498,11 +500,23 @@ open class CompositeDataSource: AbstractDataSource {
 
     // MARK: - Reordering
 
+    /// Asks the delegate if the item can be moved for a reoder operation.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, canMoveItemAt: transformed.indexPath)
     }
 
+    /// Performs the move operation of an item from `sourceIndexPath` to `destinationIndexPath`.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - sourceIndexPath: An index path locating the start position of the item in the view.
+    ///   - destinationIndexPath: An index path locating the end position of the item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let transformedSource = unsafeTransform(globalIndexPath: sourceIndexPath, globalCollectionView: collectionView)
         let transformedDestination = unsafeTransform(globalIndexPath: destinationIndexPath, globalCollectionView: collectionView)
@@ -512,32 +526,202 @@ open class CompositeDataSource: AbstractDataSource {
 
     // MARK: - Cell displaying
 
+    /// The cell will is about to be displayed or moving into the visible area of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, willDisplay: cell, forItemAt: transformed.indexPath)
     }
 
+    /// The cell will is already displayed and will be moving out of the screen.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - cell: The cell that will be displayed
+    ///   - indexPath: An index path locating an item in the view.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndDisplaying cell: ReusableCell, forItemAt indexPath: IndexPath) {
         guard let transformed = transform(globalIndexPath: indexPath, globalCollectionView: collectionView) else {
-            return
+            return super.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
         }
-        transformed.dataSource.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: transformed.indexPath)
+        return transformed.dataSource.ds_collectionView(collectionView, didEndDisplaying: cell, forItemAt: transformed.indexPath)
     }
 
     // MARK: - Copy/Paste
 
+    /// Whether the copy/paste/etc. menu should be shown for the item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item should show the copy/paste/etc. menu, otherwise `false`.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, shouldShowMenuForItemAt: transformed.indexPath)
     }
 
+    /// Check whether an action/selector can be performed for a specific item or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to check if it can be performed or not.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, canPerformAction: action, forItemAt: transformed.indexPath, withSender: sender)
     }
 
+    /// Executes an action for a specific item with the passed sender.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - action: The action that is requested to be executed.
+    ///   - indexPath: An index path locating an item in the view.
+    ///   - sender: The sender of the action.
     open override func ds_collectionView(_ collectionView: GeneralCollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, performAction: action, forItemAt: transformed.indexPath, withSender: sender)
+    }
+
+    // MARK: - Focus
+
+    /// Whether or not the item can have focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can have focus, otherwise `false`.
+    @available(iOS 9.0, *)
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, canFocusItemAt: transformed.indexPath)
+    }
+
+    /// Whether or not should we update the focus.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
+    @available(iOS 9.0, *)
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext) -> Bool {
+        // simply call the super, since we cannot transform this as it dosen't ask for a specific class.
+        // usually the outermost datasource is the one responsible for handling this call.
+        return super.ds_collectionView(collectionView, shouldUpdateFocusIn: context)
+    }
+
+    /// The focus is has been updated.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - context: The focus context.
+    ///   - coordinator: The focus animation coordinator.
+    @available(iOS 9.0, *)
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, didUpdateFocusIn context: GeneralCollectionViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        // simply call the super, since we cannot transform this as it dosen't ask for a specific class.
+        // usually the outermost datasource is the one responsible for handling this call.
+        return super.ds_collectionView(collectionView, didUpdateFocusIn: context, with: coordinator)
+    }
+
+    /// Gets the index path of the preferred focused view.
+    ///
+    /// - Parameter collectionView: A general collection view object initiating the operation.
+    @available(iOS 9.0, *)
+    open override func ds_indexPathForPreferredFocusedView(in collectionView: GeneralCollectionView) -> IndexPath? {
+        // simply call the super, since we cannot transform this as it dosen't ask for a specific class.
+        // usually the outermost datasource is the one responsible for handling this call.
+        return super.ds_indexPathForPreferredFocusedView(in: collectionView)
+    }
+
+    // MARK: - Editing
+
+    /// Check whether the item can be edited or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be moved, otherwise `false`.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, canEditItemAt: transformed.indexPath)
+    }
+
+    /// Executes the editing operation for the item at the specified index pass.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - editingStyle: The
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath) {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, commit: editingStyle, forItemAt: transformed.indexPath)
+    }
+
+    /// Gets the editing style for an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The editing style.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, editingStyleForItemAt: transformed.indexPath)
+    }
+
+    /// Gets the localized title for the delete button to show for editing an item (e.g. swipe to delete).
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The localized title string.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, titleForDeleteConfirmationButtonForItemAt indexPath: IndexPath) -> String? {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, titleForDeleteConfirmationButtonForItemAt: transformed.indexPath)
+    }
+
+    /// Gets the list of editing actions to use for editing an item.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: The list of editing actions.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editActionsForItemAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, editActionsForItemAt: transformed.indexPath)
+    }
+
+    /// Check whether to indent the item while editing or not.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    /// - Returns: `true` if the item can be indented while editing, otherwise `false`.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldIndentWhileEditingItemAt indexPath: IndexPath) -> Bool {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, shouldIndentWhileEditingItemAt: transformed.indexPath)
+    }
+
+    /// The item is about to enter into the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, willBeginEditingItemAt indexPath: IndexPath) {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, willBeginEditingItemAt: transformed.indexPath)
+    }
+
+    /// The item did leave the editing mode.
+    ///
+    /// - Parameters:
+    ///   - collectionView: A general collection view object initiating the operation.
+    ///   - indexPath: An index path locating an item in the view.
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndEditingItemAt indexPath: IndexPath) {
+        let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
+        return transformed.dataSource.ds_collectionView(collectionView, didEndEditingItemAt: transformed.indexPath)
     }
 }

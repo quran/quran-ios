@@ -34,7 +34,7 @@ class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollect
 
         contentView.addAutoLayoutSubview(roundedView)
         contentView.pinParentVertical(roundedView, topValue: 10, bottomValue: 10)
-        contentView.addParentLeadingConstraint(roundedView, value: 12)
+        contentView.addParentLeadingConstraint(roundedView, value: Layout.Translation.horizontalInset)
         roundedView.heightAnchor.constraint(equalTo: roundedView.widthAnchor).isActive = true
 
         roundedView.addAutoLayoutSubview(label)

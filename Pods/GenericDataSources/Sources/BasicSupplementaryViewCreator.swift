@@ -49,7 +49,6 @@ open class BasicSupplementaryViewCreator<ItemType, SupplementaryView: ReusableSu
     open var items: [[ItemType]] = []
 
     /// Creates new instance with the passed reuse identifier and specific size for all views.
-    ///
     /// - parameter identifier: The reuse identfier used to dequeue to the supplementary view.
     /// - parameter size:       Represents the size of the supplementary views.
     public init(identifier: String, size: CGSize) {
@@ -57,16 +56,52 @@ open class BasicSupplementaryViewCreator<ItemType, SupplementaryView: ReusableSu
         self.size = size
     }
 
-    /// Creates new instance with the passed reuse identifier.
+    /// Creates new instance with the passed size and the `identifier will be `SupplementaryView.ds_reuseId` which is usually recommended.
     ///
+    /// You can use one of the following recommended methods to register views:
+    ///
+    ///     extension UICollectionView {
+    ///         func ds_register(supplementaryViewNib view: UICollectionReusableView.Type, in bundle: Bundle? = nil, forKind kind: String)
+    ///         func ds_register(supplementaryViewClass view: UICollectionReusableView.Type, forKind kind: String)
+    ///     }
+    ///
+    ///     extension UITableView {
+    ///         func ds_register(headerFooterNib view: UITableViewHeaderFooterView.Type, in bundle: Bundle? = nil)
+    ///         func ds_register(headerFooterNib view: UITableViewHeaderFooterView.Type)
+    ///     }
+    ///
+    /// - parameter size:       Represents the size of the supplementary views.
+    public init(size: CGSize) {
+        self.identifier = SupplementaryView.ds_reuseId
+        self.size = size
+    }
+
+    /// Creates new instance with the passed reuse identifier.
     /// - parameter identifier: The reuse identfier used to dequeue to the supplementary view.
-    public init(identifier: String) {
+    public init(identifier: String = SupplementaryView.ds_reuseId) {
         self.identifier = identifier
         self.size = nil
     }
 
-    /// Sets the specified items array as sectioned items (i.e. mapping each item into an array with one element).
+    /// Creates new instance, the `identifier will be `SupplementaryView.ds_reuseId` which is usually recommended.
     ///
+    /// You can use one of the following recommended methods to register views:
+    ///
+    ///     extension UICollectionView {
+    ///         func ds_register(supplementaryViewNib view: UICollectionReusableView.Type, in bundle: Bundle? = nil, forKind kind: String)
+    ///         func ds_register(supplementaryViewClass view: UICollectionReusableView.Type, forKind kind: String)
+    ///     }
+    ///
+    ///     extension UITableView {
+    ///         func ds_register(headerFooterNib view: UITableViewHeaderFooterView.Type, in bundle: Bundle? = nil)
+    ///         func ds_register(headerFooterNib view: UITableViewHeaderFooterView.Type)
+    ///     }
+    public override init() {
+        self.identifier = SupplementaryView.ds_reuseId
+        self.size = nil
+    }
+
+    /// Sets the specified items array as sectioned items (i.e. mapping each item into an array with one element).
     /// - parameter sectionedItems: The array of items each item represents the item associated with a section.
     open func setSectionedItems(_ sectionedItems: [ItemType]) {
         items = sectionedItems.map { [$0] }
@@ -98,7 +133,7 @@ open class BasicSupplementaryViewCreator<ItemType, SupplementaryView: ReusableSu
     /// - parameter indexPath:      The index path at which the supplementary view is requested.
     ///
     /// - returns: The supplementary view dequeued and configured appropriately.
-    open func collectionView(_ collectionView: GeneralCollectionView, viewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView {
+    open func collectionView(_ collectionView: GeneralCollectionView, viewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView? {
         let view = collectionView.ds_dequeueReusableSupplementaryView(ofKind: kind, withIdentifier: identifier, for: indexPath)
 
         let supplementaryView: SupplementaryView = cast(view, message: "Cannot cast view '\(view)' to type '\(SupplementaryView.self)'")

@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sbt-mL-qt8">
-                        <rect key="frame" x="5" y="0.0" width="265" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="275" height="200"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RTB-TE-Fp2">
                             <size key="itemSize" width="50" height="50"/>
@@ -38,11 +38,11 @@
             </view>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="uSa-Ot-uKD" secondAttribute="bottom" id="14h-sX-C6b"/>
-                <constraint firstItem="Sbt-mL-qt8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="1cH-Pn-4b8"/>
+                <constraint firstItem="Sbt-mL-qt8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1cH-Pn-4b8"/>
                 <constraint firstItem="uSa-Ot-uKD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="5Ll-mR-2Yz"/>
                 <constraint firstItem="uSa-Ot-uKD" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="GfP-3N-Rwp"/>
                 <constraint firstItem="Sbt-mL-qt8" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aPp-mD-N3J"/>
-                <constraint firstAttribute="trailing" secondItem="Sbt-mL-qt8" secondAttribute="trailing" constant="5" id="e7R-PZ-Yvh"/>
+                <constraint firstAttribute="trailing" secondItem="Sbt-mL-qt8" secondAttribute="trailing" id="e7R-PZ-Yvh"/>
                 <constraint firstAttribute="bottom" secondItem="Sbt-mL-qt8" secondAttribute="bottom" id="szu-Od-mdd"/>
             </constraints>
             <size key="customSize" width="275" height="200"/>

@@ -114,8 +114,9 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
             ayahInfoRetriever: ayahInfoRetriever,
             bookmarkPersistence: bookmarksPersistence)
 
-        dataSource = QuranDataSource( dataSourceRepresentables: [imagesDataSource.asQuranBasicDataSourceRepresentable(),
-                                                                 translationsDataSource.asQuranBasicDataSourceRepresentable()])
+        let dataSources = [imagesDataSource.asBasicDataSourceRepresentable(), translationsDataSource.asBasicDataSourceRepresentable()]
+        let handlers = [imagesDataSource.asAnyQuranDataSourceHandler(), translationsDataSource.asAnyQuranDataSourceHandler()]
+        dataSource = QuranDataSource(dataSources: dataSources, handlers: handlers)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -204,7 +205,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     fileprivate func scrollToFirstPage() {
-        let currentIndex = dataSource.selectedDataSourceRepresentable.items.index(where: { $0.pageNumber == initialPage })
+        let currentIndex = dataSource.selectedBasicDataSource.items.index(where: { $0.pageNumber == initialPage })
         guard let index = currentIndex, didLayoutSubviewToken.executed else {
             return
         }
@@ -212,7 +213,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         scrollToPageToken.once {
             let indexPath = IndexPath(item: index, section: 0)
             scrollToIndexPath(indexPath, animated: false)
-            onPageChangedToPage(dataSource.selectedDataSourceRepresentable.item(at: indexPath))
+            onPageChangedToPage(dataSource.selectedBasicDataSource.item(at: indexPath))
         }
     }
 
@@ -334,7 +335,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     func currentPage() -> QuranPage? {
-        return quranView.visibleIndexPath().map { dataSource.selectedDataSourceRepresentable.item(at: $0) }
+        return quranView.visibleIndexPath().map { dataSource.selectedBasicDataSource.item(at: $0) }
     }
 
     func onErrorOccurred(error: Error) {
@@ -342,6 +343,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     private func updateTranslationView() {
-        dataSource.selectedDataSourceIndex = quranNavigationBar.isTranslationView ? 1 : 0
+        let isTranslationView = quranNavigationBar.isTranslationView
+        dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
+        let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
+        if isTranslationView && noTranslationsSelected {
+            onSelectTranslationsButtonTapped()
+        }
     }
 }

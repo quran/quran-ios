@@ -29,7 +29,7 @@ public protocol SupplementaryViewCreator {
     /// - parameter indexPath:      The index path at which the supplementary view is requested.
     ///
     /// - returns: The supplementary view dequeued and configured appropriately.
-    func collectionView(_ collectionView: GeneralCollectionView, viewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView
+    func collectionView(_ collectionView: GeneralCollectionView, viewOfKind kind: String, at indexPath: IndexPath) -> ReusableSupplementaryView?
 
     /// Gets the size of the supplementary view for the passed kind at the specified index path.
     ///

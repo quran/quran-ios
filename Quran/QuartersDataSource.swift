@@ -13,11 +13,6 @@ class QuartersDataSource: BasicDataSource<Quarter, QuarterTableViewCell> {
 
     let numberFormatter = NumberFormatter()
 
-    // this is needed as of swift 2.2 as class don't inherit constructors from generic based.
-    override init(reuseIdentifier: String) {
-        super.init(reuseIdentifier: reuseIdentifier)
-    }
-
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuarterTableViewCell,
                                     with item: Quarter,

@@ -53,8 +53,8 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         tableView.estimatedRowHeight = 70
 
         tableView.allowsSelection = false
-        tableView.register(cell: TranslationTableViewCell.self)
-        tableView.register(JuzTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
+        tableView.ds_register(cellNib: TranslationTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)

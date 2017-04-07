@@ -66,7 +66,6 @@
 		545499B51E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */; };
 		545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */; };
 		545499B91E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */; };
-		545499BB1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
 		545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE51A1DCE0D450085D31F /* LastPage.swift */; };
@@ -111,7 +110,6 @@
 		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
 		549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BA1E63566D00D54625 /* TranslationsDataSource.swift */; };
 		549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */; };
-		549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */; };
 		549040C41E635A7300D54625 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C31E635A7300D54625 /* PromiseKit+Extension.swift */; };
 		549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */; };
 		549040C81E641F4C00D54625 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C71E641F4C00D54625 /* UIViewController+Extension.swift */; };
@@ -249,7 +247,6 @@
 		54C3C89E1CD7EF5D0045F18F /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89D1CD7EF5D0045F18F /* Once.swift */; };
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 		54D2C2131E85D79100128282 /* AbstractPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D2C2121E85D79100128282 /* AbstractPreloadingOperation.swift */; };
-		54D2C21A1E85DC7800128282 /* BaseBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D2C2191E85DC7800128282 /* BaseBasicDataSource.swift */; };
 		54D2C2301E86A61800128282 /* AnyCacheableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D2C22F1E86A61800128282 /* AnyCacheableService.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
 		54DC4AE41E8472EE00F4CBD6 /* TranslationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE31E8472EE00F4CBD6 /* TranslationPage.swift */; };
@@ -392,7 +389,6 @@
 		545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionNavigationController.swift; sourceTree = "<group>"; };
 		545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionDataSource.swift; sourceTree = "<group>"; };
 		545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionBasicDataSource.swift; sourceTree = "<group>"; };
-		545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GenericDataSources+Extension.swift"; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
@@ -444,7 +440,6 @@
 		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
 		549040BA1E63566D00D54625 /* TranslationsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsDataSource.swift; sourceTree = "<group>"; };
 		549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTableViewCell.swift; sourceTree = "<group>"; };
-		549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell-UITableViewCell+Reuse.swift"; sourceTree = "<group>"; };
 		549040C31E635A7300D54625 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
 		549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
 		549040C71E641F4C00D54625 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -610,7 +605,6 @@
 		54C3C89D1CD7EF5D0045F18F /* Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Once.swift; sourceTree = "<group>"; };
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		54D2C2121E85D79100128282 /* AbstractPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractPreloadingOperation.swift; sourceTree = "<group>"; };
-		54D2C2191E85DC7800128282 /* BaseBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBasicDataSource.swift; sourceTree = "<group>"; };
 		54D2C22F1E86A61800128282 /* AnyCacheableService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCacheableService.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
 		54DC4AE31E8472EE00F4CBD6 /* TranslationPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPage.swift; sourceTree = "<group>"; };
@@ -1158,11 +1152,9 @@
 				54B1356E1E59FEA10087D0F8 /* Sequence+Extension.swift */,
 				549040AE1E61B32E00D54625 /* String+Extension.swift */,
 				540922831E90169300C7537A /* String+Size.swift */,
-				549040C11E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift */,
 				549040C31E635A7300D54625 /* PromiseKit+Extension.swift */,
 				549040C71E641F4C00D54625 /* UIViewController+Extension.swift */,
 				5424773E1E7B1C060051C196 /* SQLite+Extension.swift */,
-				545499BA1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift */,
 				540922B61E91AC1100C7537A /* Set+Extension.swift */,
 			);
 			name = Extensions;
@@ -1250,7 +1242,6 @@
 		54B2664D1CCA871E00D3AEF8 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				54D2C2191E85DC7800128282 /* BaseBasicDataSource.swift */,
 				545EE51C1DCE0F830085D31F /* Bookmarks */,
 				54F56C4D1E7ED96600D7AF57 /* Quran */,
 				54D2C2251E86817400128282 /* Sura/Juz */,
@@ -1980,7 +1971,6 @@
 				54699BA31E8DC17B00211A60 /* QuranTranslationTextCollectionViewCell.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				5487242A1DC60DD100ADDE54 /* ConnectionsPool.swift in Sources */,
-				545499BB1E7DEEEB00F4F927 /* GenericDataSources+Extension.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
 				54B266561CCA887200D3AEF8 /* PersistenceError.swift in Sources */,
@@ -2003,7 +1993,6 @@
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				549040B51E6334AC00D54625 /* Interactor.swift in Sources */,
-				549040C21E63583500D54625 /* UICollectionViewCell-UITableViewCell+Reuse.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				540922881E9041D500C7537A /* TranslationPageLayoutRequest.swift in Sources */,
@@ -2035,7 +2024,6 @@
 				54B2668F1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.swift in Sources */,
 				54C0DBD81CDF7447009AAD8D /* BackgroundColorButton.swift in Sources */,
 				54B2660D1CC6D38600D3AEF8 /* SettingsNavigationController.swift in Sources */,
-				54D2C21A1E85DC7800128282 /* BaseBasicDataSource.swift in Sources */,
 				54C0DBE81CE48DF8009AAD8D /* QuranView.swift in Sources */,
 				54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */,
 				C13E39441E4F02FF00079128 /* DownloadRequest.swift in Sources */,

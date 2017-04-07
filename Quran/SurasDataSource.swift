@@ -13,11 +13,6 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
 
     let numberFormatter = NumberFormatter()
 
-    // this is needed as of swift 2.2 as class don't inherit constructors from generic based.
-    override init(reuseIdentifier: String) {
-        super.init(reuseIdentifier: reuseIdentifier)
-    }
-
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: SuraTableViewCell,
                                     with item: Sura,

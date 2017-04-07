@@ -13,9 +13,9 @@ class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource {
 
     private let simplePersistence: SimplePersistence
 
-    init(reuseIdentifier: String, simplePersistence: SimplePersistence) {
+    init(simplePersistence: SimplePersistence) {
         self.simplePersistence = simplePersistence
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

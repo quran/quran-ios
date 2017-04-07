@@ -11,10 +11,6 @@ import GenericDataSources
 
 class QarisDataSource: BasicDataSource<Qari, QariTableViewCell> {
 
-    override init(reuseIdentifier: String) {
-        super.init(reuseIdentifier: reuseIdentifier)
-    }
-
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QariTableViewCell,
                                     with item: Qari,

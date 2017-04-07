@@ -12,7 +12,7 @@ protocol QuranDataSourceDelegate: class {
     var lastViewedPage: Int { get }
 }
 
-class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: BaseBasicDataSource<QuranPage, CellType> {
+class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: BasicDataSource<QuranPage, CellType> {
 
     private let bookmarkPersistence: BookmarksPersistence
 
@@ -22,6 +22,7 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: BaseB
 
     public init(bookmarkPersistence: BookmarksPersistence) {
         self.bookmarkPersistence = bookmarkPersistence
+        super.init()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

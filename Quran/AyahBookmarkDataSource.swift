@@ -22,10 +22,10 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
     let persistence: BookmarksPersistence
     let ayahPersistence: AyahTextPersistence
 
-    init(reuseIdentifier: String, persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
+    init(persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
         self.persistence = persistence
         self.ayahPersistence = ayahPersistence
-        super.init(reuseIdentifier: reuseIdentifier)
+        super.init()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

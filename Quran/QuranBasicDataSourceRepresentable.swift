@@ -1,5 +1,5 @@
 //
-//  QuranBasicDataSourceRepresentable.swift
+//  QuranDataSourceHandler.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/19/17.
@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 
-protocol QuranBasicDataSourceRepresentable: BasicDataSourceRepresentable {
+protocol QuranDataSourceHandler {
     associatedtype Item = QuranPage
 
     func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool)
@@ -17,17 +17,16 @@ protocol QuranBasicDataSourceRepresentable: BasicDataSourceRepresentable {
     func invalidate()
 }
 
-class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentable<Item>, QuranBasicDataSourceRepresentable {
+class AnyQuranDataSourceHandler<Item>: QuranDataSourceHandler {
 
     private let highlightAyatBlock: (Set<AyahNumber>, Bool) -> Void
     private let becomeActiveBlock: () -> Void
     private let invalidateBlock: () -> Void
 
-    override init<DS: QuranBasicDataSourceRepresentable>(_ ds: DS) where DS.Item == Item {
+    init<DS: QuranDataSourceHandler>(_ ds: DS) where DS.Item == Item {
         highlightAyatBlock = ds.highlightAyaht
         becomeActiveBlock = ds.applicationDidBecomeActive
         invalidateBlock = ds.invalidate
-        super.init(ds)
     }
 
     func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool) {
@@ -43,8 +42,8 @@ class AnyQuranBasicDataSourceRepresentable<Item>: AnyBasicDataSourceRepresentabl
     }
 }
 
-extension QuranBasicDataSourceRepresentable {
-    func asQuranBasicDataSourceRepresentable() -> AnyQuranBasicDataSourceRepresentable<Item> {
-        return AnyQuranBasicDataSourceRepresentable(self)
+extension QuranDataSourceHandler {
+    func asAnyQuranDataSourceHandler() -> AnyQuranDataSourceHandler<Item> {
+        return AnyQuranDataSourceHandler(self)
     }
 }

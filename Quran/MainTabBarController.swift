@@ -25,5 +25,35 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.barStyle = .default
+        delegate = self
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if tabBarController.selectedViewController == viewController && viewController.isViewLoaded {
+            if let navigationController = viewController as? UINavigationController {
+                scrollToTop(navigationController.topViewController?.view)
+            } else {
+                scrollToTop(viewController.view)
+            }
+        }
+        return true
+    }
+
+    private func scrollToTop(_ view: UIView?) {
+        func _scrollToTop(_ view: UIView?) -> Bool {
+            if let scrollView = view as? UIScrollView {
+                scrollView.setContentOffset(.zero, animated: true)
+                return true
+            }
+            return false
+        }
+
+        if !_scrollToTop(view) {
+            for subview in view?.subviews ?? [] {
+                if _scrollToTop(subview) {
+                    break
+                }
+            }
+        }
     }
 }

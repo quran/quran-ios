@@ -27,7 +27,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
             let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
             let rows = try connection.prepare(query)
 
-            guard let first = rows.first(where: { _ in true}) else {
+            guard let first = rows.first(where: { _ in true }) else {
                 throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
             }
             return first[columns.text]
@@ -39,7 +39,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
             let query = arabicTextTable.filter(columns.sura == number.sura && columns.ayah == number.ayah)
             let rows = try connection.prepare(query)
 
-            guard let first = rows.first(where: { _ in true}) else {
+            guard let first = rows.first(where: { _ in true }) else {
                 return nil
             }
             return first[columns.text]

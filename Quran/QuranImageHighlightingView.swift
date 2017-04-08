@@ -33,7 +33,7 @@ class QuranImageHighlightingView: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard highlights.count > 0 else { return }
+        guard !highlights.isEmpty else { return }
 
         let context = UIGraphicsGetCurrentContext()
         for (highlightType, rectangles) in highlightingRectangles {

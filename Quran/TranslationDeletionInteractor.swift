@@ -23,10 +23,8 @@ class TranslationDeletionInteractor: Interactor {
         // update the selected translations
         let translations = simplePersistence.valueForKey(.selectedTranslations)
         var updatedTranslations: [Int] = []
-        for id in translations {
-            if item.translation.id != id {
-                updatedTranslations.append(id)
-            }
+        for id in translations where item.translation.id != id {
+            updatedTranslations.append(id)
         }
         if translations != updatedTranslations {
             simplePersistence.setValue(updatedTranslations, forKey: .selectedTranslations)

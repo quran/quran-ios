@@ -20,7 +20,7 @@ extension FileManager {
 
     var tempFileURL: URL {
         let fileName = NSUUID().uuidString
-        let temp = URL.init(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+        let temp = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
         return temp
     }
 }

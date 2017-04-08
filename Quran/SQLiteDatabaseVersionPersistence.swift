@@ -27,7 +27,7 @@ struct SQLiteDatabaseVersionPersistence: DatabaseVersionPersistence, ReadonlySQL
 
             let query = Properties.table.filter(Properties.property == "text_version")
             let rows = try connection.prepare(query)
-            guard let first = rows.first(where: { _ in true}) else {
+            guard let first = rows.first(where: { _ in true }) else {
                 throw PersistenceError.general("Cannot find any records for text_version")
             }
             return cast(Int(first[Properties.value]))

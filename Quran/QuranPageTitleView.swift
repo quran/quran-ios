@@ -54,7 +54,7 @@ class QuranPageTitleView: UIView {
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         let containerHeight = superview?.bounds.height ?? size.height
         let isCompressed = containerHeight < 34
-        let spacing: CGFloat =  isCompressed ? 0 : 3
+        let spacing: CGFloat = isCompressed ? 0 : 3
 
         titleLabel.font = UIFont.boldSystemFont(ofSize: isCompressed ? 13 : 15)
         detailsLabel.font = UIFont.systemFont(ofSize: isCompressed ? 11 : 13, weight: UIFontWeightLight)

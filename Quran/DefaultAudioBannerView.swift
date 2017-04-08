@@ -115,14 +115,13 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
     }
 
     func setPlaying() {
-        playView.pauseResumeButton.setImage(UIImage(named: "ic_pause"), for: UIControlState())
+        playView.pauseResumeButton.setImage(#imageLiteral(resourceName: "ic_pause"), for: UIControlState())
 
         hideAllExcept(playView)
     }
 
     func setPaused() {
-
-        playView.pauseResumeButton.setImage(UIImage(named: "ic_play"), for: UIControlState())
+        playView.pauseResumeButton.setImage(#imageLiteral(resourceName: "ic_play"), for: UIControlState())
 
         hideAllExcept(playView)
     }

@@ -28,7 +28,7 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
 
             let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)
             let rows = try connection.prepare(query)
-            guard let first = rows.first(where: { _ in true}) else {
+            guard let first = rows.first(where: { _ in true }) else {
                 throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
             }
             return first[Verses.text]
@@ -40,7 +40,7 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
 
             let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)
             let rows = try connection.prepare(query)
-            guard let first = rows.first(where: { _ in true}) else {
+            guard let first = rows.first(where: { _ in true }) else {
                 return nil
             }
             return first[Verses.text]

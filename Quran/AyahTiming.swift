@@ -13,6 +13,6 @@ struct AyahTiming {
     let time: Int
 
     var seconds: Double {
-        return Double(time) / 1000
+        return Double(time) / 1_000
     }
 }

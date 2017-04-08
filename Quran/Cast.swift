@@ -8,9 +8,9 @@
 
 import Foundation
 
-func cast<S, T>(_ object: S) -> T {
+func cast<S, T>(_ object: S, function: StaticString = #function) -> T {
     guard let value = object as? T else {
-        fatalError("Couldn't cast object of type '\(type(of: (object) as AnyObject))' to '\(T.self)' where object value is '\(object)'")
+        fatalError("\(function): Couldn't cast object of type '\(type(of: (object)))' to '\(T.self)' where object value is '\(object)'")
     }
     return value
 }

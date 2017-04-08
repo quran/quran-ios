@@ -21,8 +21,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
 
     fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
         var result = [AyahNumber: [AyahInfo]]()
-        for (ayah, pieces) in info {
-            guard pieces.count > 0 else { continue }
+        for (ayah, pieces) in info where !pieces.isEmpty {
             var ayahResult: [AyahInfo] = []
             ayahResult += [pieces[0]]
             var lastAyah = ayahResult[0]

@@ -17,8 +17,8 @@ class TranslationsNavigationController: BaseNavigationController {
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
         tabBarItem = UITabBarItem(title: NSLocalizedString("prefs_translations", tableName: "Android", comment: ""),
-                                  image: UIImage(named: "globe-25"),
-                                  selectedImage: UIImage(named: "globe_filled-25"))
+                                  image: #imageLiteral(resourceName: "globe-25"),
+                                  selectedImage: #imageLiteral(resourceName: "globe_filled-25"))
 
     }
 

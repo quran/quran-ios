@@ -18,8 +18,8 @@ protocol PreloadingOperationRepresentable {
 
 private class _AnyPreloadingOperationRepresentableBoxBase<Output>: PreloadingOperationRepresentable {
 
-    var operation: Operation { fatalError() }
-    var promise: Promise<Output> { fatalError() }
+    var operation: Operation { expectedToBeSubclassed() }
+    var promise: Promise<Output> { expectedToBeSubclassed() }
 }
 
 private class _AnyPreloadingOperationRepresentableBox<O: PreloadingOperationRepresentable>:

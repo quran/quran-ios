@@ -167,7 +167,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     func willStartDownloading() {
         Crash.setValue(true, forKey: .DownloadingQuran)
-        Queue.main.async { self.view?.setDownloading(0)  }
+        Queue.main.async { self.view?.setDownloading(0) }
     }
 
     func didStartDownloadingAudioFiles(progress: Foundation.Progress) {

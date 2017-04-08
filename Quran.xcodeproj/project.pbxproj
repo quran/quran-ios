@@ -480,11 +480,11 @@
 		54B2661E1CC7F2DA00D3AEF8 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		54B266251CC80AFD00D3AEF8 /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
-		54B266531CCA87FC00D3AEF8 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		54B266531CCA87FC00D3AEF8 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Quran/Result.swift; sourceTree = "<group>"; };
 		54B266551CCA887200D3AEF8 /* PersistenceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceError.swift; sourceTree = "<group>"; };
 		54B2665A1CCA8CE900D3AEF8 /* AyahInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfo.swift; sourceTree = "<group>"; };
 		54B2665C1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoRetriever.swift; sourceTree = "<group>"; };
-		54B266611CCA908900D3AEF8 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		54B266611CCA908900D3AEF8 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkError.swift; path = Quran/NetworkError.swift; sourceTree = "<group>"; };
 		54B266661CCA917700D3AEF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B266691CCA93C500D3AEF8 /* SuraTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuraTableViewCell.swift; sourceTree = "<group>"; };
 		54B2666A1CCA93C500D3AEF8 /* SuraTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuraTableViewCell.xib; sourceTree = "<group>"; };
@@ -765,6 +765,15 @@
 			name = Translations;
 			sourceTree = "<group>";
 		};
+		545C0D821E985E79006278B9 /* 3rd-party */ = {
+			isa = PBXGroup;
+			children = (
+				54B266611CCA908900D3AEF8 /* NetworkError.swift */,
+				54B266531CCA87FC00D3AEF8 /* Result.swift */,
+			);
+			name = "3rd-party";
+			sourceTree = "<group>";
+		};
 		545EE5151DCE082C0085D31F /* Last Pages */ = {
 			isa = PBXGroup;
 			children = (
@@ -968,6 +977,7 @@
 		54B265DA1CC57D8E00D3AEF8 = {
 			isa = PBXGroup;
 			children = (
+				545C0D821E985E79006278B9 /* 3rd-party */,
 				54B265E51CC57D8F00D3AEF8 /* Quran */,
 				54B265E41CC57D8F00D3AEF8 /* Products */,
 				A91BC603C3D1C41446CF2E46 /* Pods */,
@@ -1166,7 +1176,6 @@
 				54C3C88E1CD7D5C50045F18F /* Constants */,
 				54B266C81CD2CD2500D3AEF8 /* QuranUtilities.swift */,
 				54B267001CD6ADE000D3AEF8 /* Creator.swift */,
-				54B266531CCA87FC00D3AEF8 /* Result.swift */,
 				54B266BE1CD16F1E00D3AEF8 /* NotImplemented.swift */,
 				54B266DB1CD4F48900D3AEF8 /* Queue.swift */,
 				54C3C8951CD7DAA60045F18F /* Timer.swift */,
@@ -1279,7 +1288,6 @@
 			isa = PBXGroup;
 			children = (
 				54B266551CCA887200D3AEF8 /* PersistenceError.swift */,
-				54B266611CCA908900D3AEF8 /* NetworkError.swift */,
 				54C0DC251CE78337009AAD8D /* FileSystemError.swift */,
 			);
 			name = Errors;

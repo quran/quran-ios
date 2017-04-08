@@ -49,7 +49,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
 
         for translationText in verse.translationLayouts {
             if verse.translationLayouts.count > 1 {
-                let name  = QuranTranslationTranslatorNameTextDataSource()
+                let name = QuranTranslationTranslatorNameTextDataSource()
                 name.items = [translationText]
                 add(name)
             }

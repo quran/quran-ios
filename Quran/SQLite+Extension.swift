@@ -12,7 +12,7 @@ extension Connection {
     public var userVersion: Int {
         get {
             do {
-                let version: Int64 = try scalar("PRAGMA user_version") as! Int64
+                let version: Int64 = cast(try scalar("PRAGMA user_version"))
                 return Int(version)
             } catch {
                 Crash.recordError(error, reason: "Cannot get value for user_version")

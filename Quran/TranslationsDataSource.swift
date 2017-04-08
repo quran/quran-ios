@@ -118,12 +118,10 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         downloadingObservers.removeAll()
 
         pendingDS.items    = items.filter { !$0.downloaded }.sorted()
-        downloadedDS.items = items.filter {  $0.downloaded }.sorted()
+        downloadedDS.items = items.filter { $0.downloaded }.sorted()
 
-        for item in items {
-            if item.downloadResponse != nil {
-                downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
-            }
+        for item in items where item.downloadResponse != nil {
+            downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
         }
     }
 
@@ -185,7 +183,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         versionUpdater
             .execute([translation.translation])
-            .then(on: .main) { newItems  -> Void in
+            .then(on: .main) { newItems -> Void in
                 let newGlobalIndexPath = self.move(item: translation,
                                                    atLocalPath: localIndexPath,
                                                    newItem: newItems[0],

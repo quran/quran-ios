@@ -83,7 +83,9 @@ extension GaplessAudioPlayer {
             PlayerItemInfo(
                 title: Quran.nameForSura($1),
                 artist: qari.name,
-                artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
+                artwork: qari.imageName
+                    .flatMap { UIImage(named: $0) }
+                    .flatMap { MPMediaItemArtwork(image: $0) })
         }
         return (items, info)
     }

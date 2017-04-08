@@ -16,12 +16,10 @@ extension Juz {
     }
 
     static func juzFromPage(_ page: Int) -> Juz {
-        for (index, juzStartPage) in Quran.JuzPageStart.enumerated() {
-            if page < juzStartPage {
-                let previousIndex = index - 1
-                let juzNumber = previousIndex + Quran.QuranJuzsRange.lowerBound
-                return Juz(juzNumber: juzNumber)
-            }
+        for (index, juzStartPage) in Quran.JuzPageStart.enumerated() where page < juzStartPage {
+            let previousIndex = index - 1
+            let juzNumber = previousIndex + Quran.QuranJuzsRange.lowerBound
+            return Juz(juzNumber: juzNumber)
         }
         let juzNumber = Quran.QuranJuzsRange.upperBound
         return Juz(juzNumber: juzNumber)

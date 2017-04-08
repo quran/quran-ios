@@ -47,7 +47,7 @@ class TranslationsRetrievalInteractor: Interactor {
             }
             combinedList.append(combined)
         }
-        combinedList.append(contentsOf: localMap.map { $1})
+        combinedList.append(contentsOf: localMap.map { $1 })
         return (combinedList, localMapConstant)
     }
 

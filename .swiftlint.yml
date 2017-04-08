@@ -3,11 +3,20 @@ included:
 
 disabled_rules:
   - cyclomatic_complexity
-  - force_cast
   - colon
 
 opt_in_rules:
+  - closure_spacing
+  - empty_count
+  - explicit_init
+  - fatal_error_message
+  - first_where
   - force_unwrapping
+  - number_separator
+  - object_literal
+  - overridden_super_call
+  - prohibited_super_call
+  - redundant_nil_coalescing
 
 type_name:
   max_length: 60

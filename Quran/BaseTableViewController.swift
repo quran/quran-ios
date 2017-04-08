@@ -20,7 +20,7 @@ class BaseTableViewController: UIViewController {
     }()
 
     override func loadView() {
-        super.loadView()
+        view = UIView()
 
         let tableView = UITableView()
         view.addAutoLayoutSubview(tableView)

@@ -57,8 +57,8 @@ class QueuePlayer: NSObject {
     override init() {
         super.init()
 
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
-                                                                 with: [.defaultToSpeaker, .allowBluetooth])
+        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord,
+                                                             with: [.defaultToSpeaker, .allowBluetooth])
         player.actionAtItemEnd = .advance
 
         setUpRemoteControlEvents()
@@ -254,7 +254,7 @@ class QueuePlayer: NSObject {
     }
 
     fileprivate func seekTo(_ timeInSeconds: Double) {
-        let time = CMTime(seconds: timeInSeconds, preferredTimescale: 1000)
+        let time = CMTime(seconds: timeInSeconds, preferredTimescale: 1_000)
         player.seek(to: time)
     }
 
@@ -323,7 +323,7 @@ class QueuePlayer: NSObject {
     fileprivate func startBoundaryObserver(_ newItem: AVPlayerItem) {
         guard let times = playingItemBoundaries[newItem] else { return }
 
-        let timeValues = times.map { NSValue(time: CMTime(seconds: $0, preferredTimescale: 1000)) }
+        let timeValues = times.map { NSValue(time: CMTime(seconds: $0, preferredTimescale: 1_000)) }
         timeObserver = player.addBoundaryTimeObserver(forTimes: timeValues, queue: nil) { [weak self] in
             self?.onTimeBoundaryReached()
         } as AnyObject

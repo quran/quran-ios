@@ -58,7 +58,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         collectionView.ds_register(cellClass: QuranTranslationTextCollectionViewCell.self)
         collectionView.ds_register(cellClass: QuranTranslationLongTextCollectionViewCell.self)
 
-        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let flowLayout: UICollectionViewFlowLayout = cast(collectionView.collectionViewLayout)
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
 

@@ -73,7 +73,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     init(bookmarksPersistence: BookmarksPersistence,
          verseTextRetrieval: AnyInteractor<QuranShareData, String>) {
         self.bookmarksPersistence = bookmarksPersistence
-        self.verseTextRetrieval   = verseTextRetrieval
+        self.verseTextRetrieval = verseTextRetrieval
         super.init(frame: .zero)
         setUp()
     }
@@ -207,7 +207,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     /// Did click on share menu item
-    func _share(_ sender: Any?) {
+    func _share(_ sender: Any?) { //swiftlint:disable:this identifier_name
         retrieveSelectedAyahText { text in
             self.delegate?.quranView(self, didSelectTextToShare: text)
         }

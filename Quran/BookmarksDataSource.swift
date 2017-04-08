@@ -15,7 +15,7 @@ class BookmarksDataSource: CompositeDataSource {
 
     init(type: SectionType) {
         headerCreator = BasicBlockSupplementaryViewCreator(size: CGSize(width: 0, height: 44)) { (item, view, _) in
-            view.titleLabel.text =  item
+            view.titleLabel.text = item
             view.subtitleLabel.isHidden = true
         }
         super.init(sectionType: type)

@@ -10,9 +10,9 @@ import PromiseKit
 
 private class _AnyCacheableServiceBoxBase<Input: Hashable, Output>: CacheableService {
 
-    func invalidate() { fatalError() }
-    func get(_ input: Input) -> Promise<Output> { fatalError() }
-    func getCached(_ input: Input) -> Output? { fatalError() }
+    func invalidate() { expectedToBeSubclassed() }
+    func get(_ input: Input) -> Promise<Output> { expectedToBeSubclassed() }
+    func getCached(_ input: Input) -> Output? { expectedToBeSubclassed() }
 }
 
 private class _AnyCacheableServiceBox<O: CacheableService>: _AnyCacheableServiceBoxBase<O.Input, O.Output> {

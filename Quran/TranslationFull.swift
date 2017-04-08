@@ -52,10 +52,18 @@ struct TranslationFull: Equatable, Comparable {
     }
 
     static func < (lhs: TranslationFull, rhs: TranslationFull) -> Bool {
+        // items that should be upgraded should be at the top
         let lUpgrading = lhs.state.isUpgrade()
         let rUpgrading = rhs.state.isUpgrade()
         if lUpgrading != rUpgrading {
             return lUpgrading
+        }
+
+        // items with device language should be at the top
+        let lIsDeviceLanguage = Locale.current.languageCode == lhs.translation.languageCode
+        let rIsDeviceLanguage = Locale.current.languageCode == rhs.translation.languageCode
+        if lIsDeviceLanguage != rIsDeviceLanguage {
+            return lIsDeviceLanguage
         }
 
         return lhs.translation.displayName < rhs.translation.displayName

@@ -21,7 +21,7 @@
 import UIKit
 import KVOController
 
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
+class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
     private let bookmarksPersistence: BookmarksPersistence
@@ -52,6 +52,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
     private var interactivePopGestureOldEnabled: Bool?
     private var barsHiddenTimerExecuted = false
+
+    override var screen: Analytics.Screen {
+        return isTranslationView ? .quranArabic : .quranTranslation
+    }
 
     private var statusBarHidden = false {
         didSet {
@@ -132,7 +136,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
         super.init(nibName: nil, bundle: nil)
 
-        updateTranslationView()
+        updateTranslationView(initialization: true)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
@@ -312,7 +316,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onTranslationButtonTapped() {
-        updateTranslationView()
+        updateTranslationView(initialization: false)
     }
 
     func onSelectTranslationsButtonTapped() {
@@ -354,11 +358,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         showErrorAlert(error: error)
     }
 
-    private func updateTranslationView() {
+    private func updateTranslationView(initialization: Bool) {
         let isTranslationView = quranNavigationBar.isTranslationView
         dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
         let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
-        if isTranslationView && noTranslationsSelected {
+        if !initialization && isTranslationView && noTranslationsSelected {
             onSelectTranslationsButtonTapped()
         }
     }

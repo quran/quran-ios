@@ -1,5 +1,5 @@
 //
-//  BaseTableViewController.swift
+//  BaseTableBasedViewController.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/29/16.
@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BaseTableViewController: UIViewController {
+class BaseTableBasedViewController: BaseViewController {
 
     weak var tableView: UITableView!
     weak var statusView: UIView?

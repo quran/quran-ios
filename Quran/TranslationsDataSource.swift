@@ -86,6 +86,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS.dataSource)
         let item = downloadedDS.item(at: localIndexPath)
 
+        Analytics.shared.deleting(translation: item.translation)
+
         deletionInteractor
             .execute(item)
             .then(on: .main) { newItem -> Void in
@@ -212,6 +214,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         guard let (ds, _) = indexPathFor(translation: item) else {
             return
         }
+
+        Analytics.shared.downloading(translation: item.translation)
 
         // download the translation
         let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)

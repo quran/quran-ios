@@ -21,7 +21,7 @@
 import UIKit
 import GenericDataSources
 
-class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableViewController {
+class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
 
     let dataRetriever: AnyDataRetriever<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>

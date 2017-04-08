@@ -21,7 +21,9 @@
 import UIKit
 import GenericDataSources
 
-class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
+class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate {
+
+    override var screen: Analytics.Screen { return .translations }
 
     private let dataSource: TranslationsDataSource
 

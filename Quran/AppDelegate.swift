@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self, Answers.self])
 
+        Analytics.shared.logSystemLanguage()
+
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
         configureAppAppearance()

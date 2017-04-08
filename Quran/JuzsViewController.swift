@@ -23,6 +23,8 @@ import GenericDataSources
 
 class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell> {
 
+    override var screen: Analytics.Screen { return .juzs }
+
     override init(dataRetriever: AnyDataRetriever<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }

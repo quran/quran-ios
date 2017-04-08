@@ -21,7 +21,9 @@
 import UIKit
 import GenericDataSources
 
-class QariTableViewController: UITableViewController {
+class QariTableViewController: BaseTableViewController {
+
+    override var screen: Analytics.Screen { return .reciterSelection }
 
     private let dataSource = QarisDataSource()
 

@@ -58,6 +58,7 @@ extension DefaultAudioPlayerInteractor {
         let endAyah = lastAyahFinder.findLastAyah(startAyah: startAyah, page: page.pageNumber)
 
         if downloader.needsToDownloadFiles(qari: qari, startAyah: startAyah, endAyah: endAyah) {
+            Analytics.shared.downloading(startAyah: startAyah, qari: qari)
             downloadCancelled = false
             Queue.background.async {
                 self.delegate?.willStartDownloading()
@@ -137,6 +138,7 @@ extension DefaultAudioPlayerInteractor {
     }
 
     fileprivate func startPlaying(_ playbackInfo: PlaybackInfo) {
+        Analytics.shared.playing(startAyah: playbackInfo.startAyah, qari: playbackInfo.qari)
         prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
             self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
             self?.delegate?.onPlayingStarted()

@@ -23,6 +23,8 @@ import GenericDataSources
 
 class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell> {
 
+    override var screen: Analytics.Screen { return .suras }
+
     override init(dataRetriever: AnyDataRetriever<[(Juz, [Sura])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }

@@ -1,8 +1,8 @@
 //
-//  SettingsViewController.swift
+//  BaseViewController.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
+//  Created by Mohamed Afifi on 4/8/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -20,11 +20,22 @@
 
 import UIKit
 
-class SettingsViewController: BaseTableBasedViewController {
+class BaseViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.secondaryColor()
-        title = navigationController?.tabBarItem.title
+    var screen: Analytics.Screen { expectedToBeSubclassed() }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Analytics.shared.showing(screen: screen)
+    }
+}
+
+class BaseTableViewController: UITableViewController {
+
+    var screen: Analytics.Screen { expectedToBeSubclassed() }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Analytics.shared.showing(screen: screen)
     }
 }

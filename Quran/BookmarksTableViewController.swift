@@ -21,7 +21,9 @@
 import UIKit
 import GenericDataSources
 
-class BookmarksTableViewController: BaseTableViewController {
+class BookmarksTableViewController: BaseTableBasedViewController {
+
+    override var screen: Analytics.Screen { return .bookmarks }
 
     let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi)
     let lastPageDS: LastPageBookmarkDataSource

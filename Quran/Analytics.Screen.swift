@@ -1,8 +1,8 @@
 //
-//  SettingsViewController.swift
+//  Analytics.Screen.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
+//  Created by Mohamed Afifi on 4/8/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,13 +18,18 @@
 //  GNU General Public License for more details.
 //
 
-import UIKit
+extension Analytics {
+    enum Screen: String {
 
-class SettingsViewController: BaseTableBasedViewController {
+        case suras
+        case juzs
+        case translations
+        case bookmarks
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.secondaryColor()
-        title = navigationController?.tabBarItem.title
+        case quranArabic
+        case quranTranslation
+
+        case translationsSelection
+        case reciterSelection
     }
 }

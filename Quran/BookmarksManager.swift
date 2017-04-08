@@ -42,10 +42,12 @@ class BookmarksManager {
         isBookmarked = !isBookmarked
 
         if isBookmarked {
+            Analytics.shared.bookmark(quranPage: pageNumber)
             return DispatchQueue.global() .promise {
                 try self.bookmarksPersistence.insertPageBookmark(forPage: pageNumber)
             }
         } else {
+            Analytics.shared.unbookmark(quranPage: pageNumber)
             return DispatchQueue.global() .promise {
                 try self.bookmarksPersistence.removePageBookmark(atPage: pageNumber)
             }

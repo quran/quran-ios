@@ -228,11 +228,13 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private func configuredBookmarkMenuItem(shareData: QuranShareData) -> UIMenuItem {
         let isBookmarked = shareData.cell.highlightedVerse(forType: .bookmark)?.contains(shareData.ayah) ?? false
         if isBookmarked {
+            Analytics.shared.unbookmark(ayah: shareData.ayah)
             let image = #imageLiteral(resourceName: "bookmark-filled").tintedImage(withColor: .bookmark())
             return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
                 self?.removeAyahFromBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)
             }
         } else {
+            Analytics.shared.bookmark(ayah: shareData.ayah)
             let image = #imageLiteral(resourceName: "bookmark-empty").tintedImage(withColor: .white)
             return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
                 self?.addAyahToBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)

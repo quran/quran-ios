@@ -22,6 +22,8 @@ import UIKit
 
 class TranslationsSelectionViewController: TranslationsViewController {
 
+    override var screen: Analytics.Screen { return .translationsSelection }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

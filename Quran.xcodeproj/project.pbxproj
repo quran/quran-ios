@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		37B1E4838697C2DC7FDAE39A /* Pods_Quran.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06DB453FD466D51920429985 /* Pods_Quran.framework */; };
+		540031E71E998AFD00BB4B7B /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031E61E998AFD00BB4B7B /* Analytics.swift */; };
+		540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031E81E99924000BB4B7B /* Analytics.Screen.swift */; };
+		540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031EA1E99925500BB4B7B /* BaseViewController.swift */; };
 		5409227A1E8F03C800C7537A /* UthmanTN1 Ver10.otf in Resources */ = {isa = PBXBuildFile; fileRef = 540922791E8F03C200C7537A /* UthmanTN1 Ver10.otf */; };
 		5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */; };
 		5409227E1E8FE7FD00C7537A /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5409227D1E8FE7FD00C7537A /* Measure.swift */; };
@@ -261,7 +264,7 @@
 		54F56C511E7EDA5C00D7AF57 /* QuranDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C501E7EDA5C00D7AF57 /* QuranDataSource.swift */; };
 		54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C521E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift */; };
 		54F56C551E7F06B000D7AF57 /* PreloadingOperationRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C541E7F06B000D7AF57 /* PreloadingOperationRepresentable.swift */; };
-		54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */; };
+		54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */; };
 		54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */ = {isa = PBXBuildFile; fileRef = 54F5B4371CFAF96B0002A3B8 /* images_1280 */; };
 		C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */; };
 		C10770321CED9B3A0089F9C7 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10770311CED9B3A0089F9C7 /* CGRect+Extension.swift */; };
@@ -279,6 +282,9 @@
 
 /* Begin PBXFileReference section */
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		540031E61E998AFD00BB4B7B /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		540031E81E99924000BB4B7B /* Analytics.Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.Screen.swift; sourceTree = "<group>"; };
+		540031EA1E99925500BB4B7B /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		540922791E8F03C200C7537A /* UthmanTN1 Ver10.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UthmanTN1 Ver10.otf"; sourceTree = "<group>"; };
 		5409227D1E8FE7FD00C7537A /* Measure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
 		5409227F1E9011DE00C7537A /* TranslationPageLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPageLayout.swift; sourceTree = "<group>"; };
@@ -619,7 +625,7 @@
 		54F56C501E7EDA5C00D7AF57 /* QuranDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranDataSource.swift; sourceTree = "<group>"; };
 		54F56C521E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranBasicDataSourceRepresentable.swift; sourceTree = "<group>"; };
 		54F56C541E7F06B000D7AF57 /* PreloadingOperationRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreloadingOperationRepresentable.swift; sourceTree = "<group>"; };
-		54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableBasedViewController.swift; sourceTree = "<group>"; };
 		54F5B4371CFAF96B0002A3B8 /* images_1280 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images_1280; sourceTree = "<group>"; };
 		979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.release.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.release.xcconfig"; sourceTree = "<group>"; };
 		A1C4D17DF9C049CBECBB13FE /* Pods-Quran.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Quran.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Quran/Pods-Quran.debug.xcconfig"; sourceTree = "<group>"; };
@@ -650,6 +656,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		540031E51E99705400BB4B7B /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				540031E61E998AFD00BB4B7B /* Analytics.swift */,
+				540031E81E99924000BB4B7B /* Analytics.Screen.swift */,
+				540031EA1E99925500BB4B7B /* BaseViewController.swift */,
+			);
+			name = Analytics;
+			sourceTree = "<group>";
+		};
 		540922751E8F005100C7537A /* fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1070,6 +1086,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				540031E51E99705400BB4B7B /* Analytics */,
 				549040B31E6334A200D54625 /* Interactors */,
 				549040A51E5F99AD00D54625 /* Parsers */,
 				54E714A31DD118A700FB3BCB /* Quran */,
@@ -1670,7 +1687,7 @@
 		54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */ = {
 			isa = PBXGroup;
 			children = (
-				54F5B4351CFAE5C80002A3B8 /* BaseTableViewController.swift */,
+				54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */,
 			);
 			name = BaseTableViewController;
 			sourceTree = "<group>";
@@ -1925,6 +1942,7 @@
 				54C0DC0E1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift in Sources */,
 				54699B8E1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift in Sources */,
 				54D2C2301E86A61800128282 /* AnyCacheableService.swift in Sources */,
+				540031E71E998AFD00BB4B7B /* Analytics.swift in Sources */,
 				54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */,
 				54C3C89A1CD7E3980045F18F /* Aliases.swift in Sources */,
 				549040A21E5F949D00D54625 /* MoyaNetworkManager.swift in Sources */,
@@ -1999,6 +2017,7 @@
 				540922B51E919C5500C7537A /* QuranBasePageCollectionViewCell.swift in Sources */,
 				54EA63041CF216C4003D1ABA /* QueuePlayer.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				549040B51E6334AC00D54625 /* Interactor.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
@@ -2079,11 +2098,12 @@
 				54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */,
 				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
-				54F5B4361CFAE5C80002A3B8 /* BaseTableViewController.swift in Sources */,
+				54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
 				54699B931E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift in Sources */,
 				540922A91E91318300C7537A /* QuranTranslationTextDataSource.swift in Sources */,
+				540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */,
 				54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */,
 				542477411E7B26C90051C196 /* ThreadSafeDownloadSessionDelegate.swift in Sources */,
 				5409227E1E8FE7FD00C7537A /* Measure.swift in Sources */,

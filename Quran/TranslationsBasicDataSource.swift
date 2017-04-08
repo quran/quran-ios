@@ -28,6 +28,10 @@ protocol TranslationsBasicDataSourceDelegate: class {
 
 class TranslationsBasicDataSource: BasicDataSource<TranslationFull, TranslationTableViewCell> {
 
+    var isSelectable: Bool {
+        return false
+    }
+
     weak var delegate: TranslationsBasicDataSourceDelegate?
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -51,6 +55,6 @@ class TranslationsBasicDataSource: BasicDataSource<TranslationFull, TranslationT
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return false
+        return isSelectable
     }
 }

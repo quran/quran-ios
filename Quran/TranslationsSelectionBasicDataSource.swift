@@ -30,6 +30,10 @@ class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource {
         super.init()
     }
 
+    override var isSelectable: Bool {
+        return true
+    }
+
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: TranslationTableViewCell,
                                     with item: TranslationFull,
@@ -37,10 +41,6 @@ class TranslationsSelectionBasicDataSource: TranslationsBasicDataSource {
         super.ds_collectionView(collectionView, configure: cell, with: item, at: indexPath)
         cell.checkbox.isHidden = false
         cell.setSelection(simplePersistence.valueForKey(.selectedTranslations).contains(item.translation.id))
-    }
-
-    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, didSelectItemAt indexPath: IndexPath) {

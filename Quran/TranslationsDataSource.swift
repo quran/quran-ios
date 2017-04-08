@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 2/26/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import Foundation
@@ -118,12 +130,10 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         downloadingObservers.removeAll()
 
         pendingDS.items    = items.filter { !$0.downloaded }.sorted()
-        downloadedDS.items = items.filter {  $0.downloaded }.sorted()
+        downloadedDS.items = items.filter { $0.downloaded }.sorted()
 
-        for item in items {
-            if item.downloadResponse != nil {
-                downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
-            }
+        for item in items where item.downloadResponse != nil {
+            downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
         }
     }
 
@@ -185,7 +195,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         versionUpdater
             .execute([translation.translation])
-            .then(on: .main) { newItems  -> Void in
+            .then(on: .main) { newItems -> Void in
                 let newGlobalIndexPath = self.move(item: translation,
                                                    atLocalPath: localIndexPath,
                                                    newItem: newItems[0],

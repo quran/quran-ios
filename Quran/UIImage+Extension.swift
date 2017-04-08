@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/4/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
@@ -21,13 +33,13 @@ extension UIImage {
         let height = cgimg.height
 
         let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let imageContext =  CGContext(data: nil,
-                                                  width: width,
-                                                  height: height,
-                                                  bitsPerComponent: 8,
-                                                  bytesPerRow: width * 4,
-                                                  space: colourSpace,
-                                                  bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        let imageContext = CGContext(data: nil,
+                                     width: width,
+                                     height: height,
+                                     bitsPerComponent: 8,
+                                     bytesPerRow: width * 4,
+                                     space: colourSpace,
+                                     bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
 
         // draw the image to the context, release it
         imageContext?.draw(cgimg, in: CGRect(x: 0, y: 0, width: width, height: height))

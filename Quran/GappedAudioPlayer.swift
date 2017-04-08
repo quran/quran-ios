@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/16/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import Foundation
@@ -60,7 +72,9 @@ extension GappedAudioPlayer {
             return PlayerItemInfo(
                 title: ayah.localizedName,
                 artist: qari.name,
-                artwork: qari.imageName.flatMap({UIImage(named: $0)}).flatMap { MPMediaItemArtwork(image: $0) })
+                artwork: qari.imageName
+                    .flatMap { UIImage(named: $0) }
+                    .flatMap { MPMediaItemArtwork(image: $0) })
         }
         return (items, info)
     }

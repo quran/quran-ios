@@ -43,7 +43,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
 
     func onCreate(connection: Connection) throws {
         // translations table
-        try connection.run(Translations.table.create { builder in
+        try connection.run(Translations.table.create(ifNotExists: true) { builder in
             builder.column(Translations.id, primaryKey: true)
             builder.column(Translations.name)
             builder.column(Translations.translator)

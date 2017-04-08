@@ -42,7 +42,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
 
     func onCreate(connection: Connection) throws {
         // Last Pages table
-        try connection.run(LastPages.table.create { builder in
+        try connection.run(LastPages.table.create(ifNotExists: true) { builder in
             builder.column(LastPages.id, primaryKey: .autoincrement)
             builder.column(LastPages.page, unique: true)
             builder.column(LastPages.createdOn)

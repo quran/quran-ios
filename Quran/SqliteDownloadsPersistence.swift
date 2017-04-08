@@ -47,12 +47,12 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     func onCreate(connection: Connection) throws {
 
         // batches table
-        try connection.run(Batches.table.create { builder in
+        try connection.run(Batches.table.create(ifNotExists: true) { builder in
             builder.column(Batches.id, primaryKey: .autoincrement)
         })
 
         // downloads table
-        try connection.run(Downloads.table.create { builder in
+        try connection.run(Downloads.table.create(ifNotExists: true) { builder in
             builder.column(Downloads.id, primaryKey: .autoincrement)
             builder.column(Downloads.taskId)
             builder.column(Downloads.url)

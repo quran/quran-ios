@@ -24,9 +24,6 @@ PODS:
   - PromiseKit/UIKit (4.1.7):
     - PromiseKit/CorePromise
   - Result (3.2.1)
-  - RxCocoa (3.2.0):
-    - RxSwift (~> 3.1)
-  - RxSwift (3.2.0)
   - SQLite.swift (0.11.3):
     - SQLite.swift/standard (= 0.11.3)
   - SQLite.swift/standard (0.11.3)
@@ -42,8 +39,6 @@ DEPENDENCIES:
   - MenuItemKit
   - Moya
   - PromiseKit
-  - RxCocoa
-  - RxSwift
   - SQLite.swift (~> 0.11.0)
   - SwiftyJSON
   - Zip (~> 0.6)
@@ -59,12 +54,10 @@ SPEC CHECKSUMS:
   Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
-  RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
-  RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: ece5120214c484d41e1f44edabdf42568f0d88ab
+PODFILE CHECKSUM: 99e4a8f7198b42159e9c4987a419a5bbee3977ab
 
 COCOAPODS: 1.2.0

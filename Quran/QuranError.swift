@@ -19,6 +19,7 @@
 //
 
 protocol QuranError: Error {
-    // This is a workaround to `localizedDescription` as it was not calling our implementation and instead uses system default implementation of `localizedDescription`.
+    // This is a workaround to `localizedDescription` as it was not calling our implementation
+    // and instead uses system default implementation of `localizedDescription`.
     var localizedDescriptionv2: String { get }
 }

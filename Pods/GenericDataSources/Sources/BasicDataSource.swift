@@ -62,12 +62,16 @@ open class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSourc
     /// Represents the underlying data source which is `self`.
     open var dataSource: AbstractDataSource { return self }
 
+    /// A closure to be called when the items array has been updated.
+    open var onItemsUpdated: (([ItemType]) -> Void)?
+
     /**
      Represents the list of items managed by this basic data source.
      */
     open var items: [ItemType] = [] {
         didSet {
             selectionHandler?.dataSourceItemsModified(self)
+            onItemsUpdated?(items)
         }
     }
 

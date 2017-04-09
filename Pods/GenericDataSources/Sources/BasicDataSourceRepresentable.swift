@@ -26,6 +26,9 @@ public protocol BasicDataSourceRepresentable: class {
 
     /// Represents the list of items that is managed by this data source.
     var items: [Item] { get set }
+
+    /// A closure to be called when the items array has been updated.
+    var onItemsUpdated: (([Item]) -> Void)? { get set }
 }
 
 extension BasicDataSourceRepresentable {

@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/22/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import PromiseKit
@@ -21,8 +33,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
 
     fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
         var result = [AyahNumber: [AyahInfo]]()
-        for (ayah, pieces) in info {
-            guard pieces.count > 0 else { continue }
+        for (ayah, pieces) in info where !pieces.isEmpty {
             var ayahResult: [AyahInfo] = []
             ayahResult += [pieces[0]]
             var lastAyah = ayahResult[0]

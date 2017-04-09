@@ -1,4 +1,4 @@
-//
+// //swiftlint:disable:this file_header
 //  NetworkError.swift
 //  SwinjectMVVMExample
 //
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum NetworkError: Error, CustomStringConvertible {
+public enum NetworkError: QuranError {
     /// Unknown or not supported error.
     case unknown
 
@@ -47,7 +47,7 @@ public enum NetworkError: Error, CustomStringConvertible {
         }
     }
 
-    public var description: String {
+    public var localizedDescriptionv2: String {
         let text: String
         switch self {
         case .unknown:

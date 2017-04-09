@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 2/26/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import Foundation
@@ -21,16 +33,16 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     private let deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>
     private let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
 
-    private let downloadedDS: AnyBasicDataSourceRepresentable<TranslationFull>
-    private let pendingDS: AnyBasicDataSourceRepresentable<TranslationFull>
+    let downloadedDS: TranslationsBasicDataSource
+    let pendingDS: TranslationsBasicDataSource
 
     private var downloadingObservers: [Int: DownloadingObserver] = [:]
 
     public init(downloader: DownloadManager,
                 deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
                 versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
-                pendingDataSource: AnyBasicDataSourceRepresentable<TranslationFull>,
-                downloadedDataSource: AnyBasicDataSourceRepresentable<TranslationFull>) {
+                pendingDataSource: TranslationsBasicDataSource,
+                downloadedDataSource: TranslationsBasicDataSource) {
         self.downloader = downloader
         self.deletionInteractor = deletionInteractor
         self.versionUpdater = versionUpdater
@@ -42,12 +54,11 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         let headers = TranslationsHeaderSupplementaryViewCreator()
         headers.setSectionedItems([
             NSLocalizedString("downloaded_translations", tableName: "Android", comment: ""),
-            NSLocalizedString("available_translations", tableName: "Android", comment: "")
-            ])
+            NSLocalizedString("available_translations", tableName: "Android", comment: "")])
 
         set(headerCreator: headers)
-        add(downloadedDS.dataSource)
-        add(pendingDS.dataSource)
+        add(downloadedDS)
+        add(pendingDS)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -62,7 +73,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
         let ds = dataSource(at: indexPath.section)
-        return ds === downloadedDS.dataSource
+        return ds === downloadedDS
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -71,8 +82,10 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         guard editingStyle == .delete else {
             return
         }
-        let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS.dataSource)
+        let localIndexPath = localIndexPathForGlobalIndexPath(globalIndexPath, dataSource: downloadedDS)
         let item = downloadedDS.item(at: localIndexPath)
+
+        Analytics.shared.deleting(translation: item.translation)
 
         deletionInteractor
             .execute(item)
@@ -95,8 +108,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     private func move(item: TranslationFull,
                       atLocalPath localIndexPath: IndexPath,
                       newItem: TranslationFull,
-                      from: AnyBasicDataSourceRepresentable<TranslationFull>,
-                      to: AnyBasicDataSourceRepresentable<TranslationFull>) -> IndexPath {
+                      from: TranslationsBasicDataSource,
+                      to: TranslationsBasicDataSource) -> IndexPath {
 
         // remove from old location
         from.items.remove(at: localIndexPath.item)
@@ -109,7 +122,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // move the cell
         let newLocalIndexPath: IndexPath = cast(to.indexPath(for: newItem))
-        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to.dataSource)
+        let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to)
         return newGlobalIndexPath
     }
 
@@ -118,16 +131,14 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         downloadingObservers.removeAll()
 
         pendingDS.items    = items.filter { !$0.downloaded }.sorted()
-        downloadedDS.items = items.filter {  $0.downloaded }.sorted()
+        downloadedDS.items = items.filter { $0.downloaded }.sorted()
 
-        for item in items {
-            if item.downloadResponse != nil {
-                downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
-            }
+        for item in items where item.downloadResponse != nil {
+            downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
         }
     }
 
-    private func indexPathFor(translation: TranslationFull) -> (AnyBasicDataSourceRepresentable<TranslationFull>, IndexPath)? {
+    private func indexPathFor(translation: TranslationFull) -> (TranslationsBasicDataSource, IndexPath)? {
         let dataSources = [downloadedDS, pendingDS]
         for ds in dataSources {
             if let indexPath = ds.indexPath(for: translation) {
@@ -142,7 +153,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
             CLog("Cannot updated progress for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = translation.state
     }
@@ -161,7 +172,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // update the UI
         delegate?.translationsDataSource(self, errorOccurred: error)
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = newItem.state
     }
@@ -171,7 +182,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
             CLog("Cannot complete download for translation \(translation.translation.displayName)")
             return
         }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds.dataSource)
+        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
 
         // remove old observer
         let observer = downloadingObservers.removeValue(forKey: translation.translation.id)
@@ -180,12 +191,12 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         // update the cell
         let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
         cell?.downloadButton.state = .downloaded
-        cell?.checkbox.isHidden = false
+        cell?.checkbox.isHidden = !downloadedDS.isSelectable
         cell?.setSelection(false)
 
         versionUpdater
             .execute([translation.translation])
-            .then(on: .main) { newItems  -> Void in
+            .then(on: .main) { newItems -> Void in
                 let newGlobalIndexPath = self.move(item: translation,
                                                    atLocalPath: localIndexPath,
                                                    newItem: newItems[0],
@@ -202,6 +213,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         guard let (ds, _) = indexPathFor(translation: item) else {
             return
         }
+
+        Analytics.shared.downloading(translation: item.translation)
 
         // download the translation
         let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)

@@ -3,13 +3,27 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 2/22/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
 import GenericDataSources
 
-class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate {
+class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate {
+
+    override var screen: Analytics.Screen { return .translations }
 
     private let dataSource: TranslationsDataSource
 
@@ -41,7 +55,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: UIImage(named: "logo-22")?.withRenderingMode(.alwaysTemplate))
+        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
 
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true
@@ -60,6 +74,10 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
+        dataSource.downloadedDS.onItemsUpdated = { [weak self] _ in
+            self?.onDownloadedItemsUpdated()
+        }
+
         loadLocalData()
     }
 
@@ -70,7 +88,17 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         refreshData()
     }
 
-    func refreshData() {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tableView.setEditing(false, animated: animated)
+        updateRightBarItem(animated: animated)
+    }
+
+    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
+        showErrorAlert(error: error)
+    }
+
+    @objc private func refreshData() {
         interactor.execute()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
@@ -90,7 +118,38 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
             }.catchToAlertView(viewController: self)
     }
 
-    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
-        showErrorAlert(error: error)
+    private func onDownloadedItemsUpdated() {
+        guard !dataSource.downloadedDS.isSelectable else {
+            return
+        }
+        guard !dataSource.downloadedDS.items.isEmpty else {
+            tableView.setEditing(false, animated: true)
+            navigationItem.setRightBarButton(nil, animated: true)
+            return
+        }
+
+        if navigationItem.rightBarButtonItem == nil {
+            updateRightBarItem(animated: true)
+        }
+    }
+
+    private func updateRightBarItem(animated: Bool) {
+        let button: UIBarButtonItem
+        if tableView.isEditing {
+            button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDoneTapped))
+        } else {
+            button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditTapped))
+        }
+        navigationItem.setRightBarButton(button, animated: animated)
+    }
+
+    @objc private func onEditTapped() {
+        tableView.setEditing(true, animated: true)
+        updateRightBarItem(animated: true)
+    }
+
+    @objc private func onDoneTapped() {
+        tableView.setEditing(false, animated: true)
+        updateRightBarItem(animated: true)
     }
 }

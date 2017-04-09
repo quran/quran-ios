@@ -3,13 +3,25 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/28/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
 import KVOController
 
-class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
+class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
     private let bookmarksPersistence: BookmarksPersistence
@@ -40,6 +52,10 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
     private var interactivePopGestureOldEnabled: Bool?
     private var barsHiddenTimerExecuted = false
+
+    override var screen: Analytics.Screen {
+        return isTranslationView ? .quranArabic : .quranTranslation
+    }
 
     private var statusBarHidden = false {
         didSet {
@@ -120,7 +136,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
 
         super.init(nibName: nil, bundle: nil)
 
-        updateTranslationView()
+        updateTranslationView(initialization: true)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
@@ -300,7 +316,7 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onTranslationButtonTapped() {
-        updateTranslationView()
+        updateTranslationView(initialization: false)
     }
 
     func onSelectTranslationsButtonTapped() {
@@ -342,11 +358,11 @@ class QuranViewController: UIViewController, AudioBannerViewPresenterDelegate,
         showErrorAlert(error: error)
     }
 
-    private func updateTranslationView() {
+    private func updateTranslationView(initialization: Bool) {
         let isTranslationView = quranNavigationBar.isTranslationView
         dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
         let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
-        if isTranslationView && noTranslationsSelected {
+        if !initialization && isTranslationView && noTranslationsSelected {
             onSelectTranslationsButtonTapped()
         }
     }

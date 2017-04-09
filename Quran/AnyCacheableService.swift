@@ -3,16 +3,28 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/25/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import PromiseKit
 
 private class _AnyCacheableServiceBoxBase<Input: Hashable, Output>: CacheableService {
 
-    func invalidate() { fatalError() }
-    func get(_ input: Input) -> Promise<Output> { fatalError() }
-    func getCached(_ input: Input) -> Output? { fatalError() }
+    func invalidate() { expectedToBeSubclassed() }
+    func get(_ input: Input) -> Promise<Output> { expectedToBeSubclassed() }
+    func getCached(_ input: Input) -> Output? { expectedToBeSubclassed() }
 }
 
 private class _AnyCacheableServiceBox<O: CacheableService>: _AnyCacheableServiceBoxBase<O.Input, O.Output> {

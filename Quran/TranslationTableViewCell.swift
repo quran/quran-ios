@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 2/26/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
@@ -12,14 +24,17 @@ class TranslationTableViewCell: UITableViewCell {
 
     @IBOutlet weak var checkbox: UIImageView!
     @IBOutlet weak var downloadButton: TranslationDownloadButton!
-    @IBOutlet weak var firstLabel: UILabel!
-    @IBOutlet weak var secondLabel: UILabel!
+    @IBOutlet fileprivate weak var firstLabel: UILabel!
+    @IBOutlet fileprivate weak var secondLabel: UILabel!
+    @IBOutlet fileprivate weak var languageLabel: UILabel!
+    @IBOutlet weak var iPhoneIcon: UIImageView!
 
     var onShouldCancelDownload: (() -> Void)?
     var onShouldStartDownload: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        languageLabel.textColor = .appIdentity()
         downloadButton.backgroundColor = .clear
         downloadButton.onButtonTapped = { [weak self] _ in
             self?.downloadButtonTapped()
@@ -69,7 +84,11 @@ class TranslationTableViewCell: UITableViewCell {
 extension TranslationTableViewCell {
 
     func configure(with translation: Translation) {
+        // show iPhone icon if the translation language is the same as device language
+        iPhoneIcon.isHidden = Locale.current.languageCode != translation.languageCode
         firstLabel.text = translation.displayName
+        languageLabel.text = Locale(identifier: translation.languageCode).localizedString(forLanguageCode: translation.languageCode)
+
         let translatorNameOptional = translation.translatorForeign ?? translation.translator
 
         guard let translatorName = translatorNameOptional, !translatorName.isEmpty else {

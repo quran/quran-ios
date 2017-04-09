@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/18/17.
-//  Copyright © 2017 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
@@ -54,7 +66,7 @@ class QuranPageTitleView: UIView {
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         let containerHeight = superview?.bounds.height ?? size.height
         let isCompressed = containerHeight < 34
-        let spacing: CGFloat =  isCompressed ? 0 : 3
+        let spacing: CGFloat = isCompressed ? 0 : 3
 
         titleLabel.font = UIFont.boldSystemFont(ofSize: isCompressed ? 13 : 15)
         detailsLabel.font = UIFont.systemFont(ofSize: isCompressed ? 11 : 13, weight: UIFontWeightLight)

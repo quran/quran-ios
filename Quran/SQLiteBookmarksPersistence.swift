@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/29/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import Foundation
@@ -42,7 +54,7 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     func onCreate(connection: Connection) throws {
         // bookmark table
-        try connection.run(Bookmarks.table.create { builder in
+        try connection.run(Bookmarks.table.create(ifNotExists: true) { builder in
             builder.column(Bookmarks.id, primaryKey: .autoincrement)
             builder.column(Bookmarks.sura)
             builder.column(Bookmarks.ayah)
@@ -51,14 +63,14 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
         })
 
         // tag table
-        try connection.run(Tags.table.create { builder in
+        try connection.run(Tags.table.create(ifNotExists: true) { builder in
             builder.column(Tags.id, primaryKey: .autoincrement)
             builder.column(Tags.name)
             builder.column(Tags.creationDate)
         })
 
         // bookmark - tag
-        try connection.run(BookmarkTags.table.create { builder in
+        try connection.run(BookmarkTags.table.create(ifNotExists: true) { builder in
             builder.column(BookmarkTags.id, primaryKey: .autoincrement)
             builder.column(BookmarkTags.bookmarkId)
             builder.column(BookmarkTags.tagId)
@@ -66,13 +78,13 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
         })
 
         // page index
-        try connection.run(Bookmarks.table.createIndex([Bookmarks.page], unique: false))
+        try connection.run(Bookmarks.table.createIndex([Bookmarks.page], unique: false, ifNotExists: true))
 
         // (page - ayah - sura) index
-        try connection.run(Bookmarks.table.createIndex([Bookmarks.page, Bookmarks.sura, Bookmarks.ayah], unique: true))
+        try connection.run(Bookmarks.table.createIndex([Bookmarks.page, Bookmarks.sura, Bookmarks.ayah], unique: true, ifNotExists: true))
 
         // (bookmark - tag) index
-        try connection.run(BookmarkTags.table.createIndex([BookmarkTags.bookmarkId, BookmarkTags.tagId], unique: true))
+        try connection.run(BookmarkTags.table.createIndex([BookmarkTags.bookmarkId, BookmarkTags.tagId], unique: true, ifNotExists: true))
     }
 
     func retrieveAll() throws -> [Bookmark] {

@@ -3,7 +3,19 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/22/16.
-//  Copyright © 2016 Quran.com. All rights reserved.
+//
+//  Quran for iOS is a Quran reading application for iOS.
+//  Copyright (C) 2017  Quran.com
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
 //
 
 import UIKit
@@ -48,7 +60,7 @@ class CircleView: UIView {
         layer.addSublayer(emptyCircle)
         layer.addSublayer(fillCircle)
         fillCircle.fillColor = nil
-        fillCircle.transform = CATransform3DMakeRotation(CGFloat(-M_PI_2), 0, 0, 1)
+        fillCircle.transform = CATransform3DMakeRotation(-.pi / 2, 0, 0, 1)
     }
 
     override func layoutSubviews() {

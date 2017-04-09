@@ -23,6 +23,28 @@ import PromiseKit
 class TranslationVerseTextRetrieval: Interactor {
 
     func execute(_ input: QuranShareData) -> Promise<String> {
-        unimplemented()
+        guard let cell = input.cell as? QuranTranslationCollectionPageCollectionViewCell else {
+            fatalError("TranslationVerseTextRetrieval works with QuranTranslationCollectionPageCollectionViewCell")
+        }
+
+        guard let page = cell.translationPage else {
+            return Promise(value: "")
+        }
+
+        guard let verse = page.verses.first(where: { $0.ayah == input.ayah }) else {
+            return Promise(value: "")
+        }
+
+        var components: [String] = []
+
+        // add arabic text
+        components.append(verse.arabicText)
+
+        for translationText in verse.translations {
+            components.append("\(translationText.translation.translationName):\n\(translationText.text)")
+        }
+
+        let text = components.joined(separator: "\n\n")
+        return Promise(value: text)
     }
 }

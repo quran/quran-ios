@@ -30,7 +30,7 @@ protocol AudioPlayerDelegate: class {
     func onPlaybackResumed()
 }
 
-protocol AudioPlayer {
+protocol AudioPlayer: class {
 
     weak var delegate: AudioPlayerDelegate? { get set }
 

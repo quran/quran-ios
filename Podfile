@@ -5,7 +5,7 @@ swift_version = "3.0"
 target 'Quran' do
 
     pod 'GenericDataSources'
-    pod 'SQLite.swift', '~> 0.11.0'
+    pod 'SQLite.swift', '~> 0.11.0', :inhibit_warnings => true
     pod 'Zip', '~> 0.6'
     pod 'Fabric'
     pod 'Crashlytics'

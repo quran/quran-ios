@@ -121,6 +121,7 @@
 		5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */; };
 		54965FB81E7D4A3700A212E2 /* QuranPageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54965FB71E7D4A3700A212E2 /* QuranPageTitleView.swift */; };
 		54965FBA1E7D4A3F00A212E2 /* QuranPageTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54965FB91E7D4A3F00A212E2 /* QuranPageTitleView.xib */; };
+		5496748B1E9A2CDC00FE0B51 /* QuranError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496748A1E9A2CDC00FE0B51 /* QuranError.swift */; };
 		54A99CA31CF64671003995AE /* DefaultAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA21CF64671003995AE /* DefaultAudioPlayer.swift */; };
 		54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */; };
 		54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */; };
@@ -454,6 +455,7 @@
 		5494CCB61CEFAB9500031686 /* SQLiteQariTimingRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQariTimingRetriever.swift; sourceTree = "<group>"; };
 		54965FB71E7D4A3700A212E2 /* QuranPageTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageTitleView.swift; sourceTree = "<group>"; };
 		54965FB91E7D4A3F00A212E2 /* QuranPageTitleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuranPageTitleView.xib; sourceTree = "<group>"; };
+		5496748A1E9A2CDC00FE0B51 /* QuranError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranError.swift; sourceTree = "<group>"; };
 		54A99CA21CF64671003995AE /* DefaultAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAudioPlayer.swift; sourceTree = "<group>"; };
 		54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksNavigationController.swift; sourceTree = "<group>"; };
 		54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTableViewController.swift; sourceTree = "<group>"; };
@@ -1306,6 +1308,7 @@
 			children = (
 				54B266551CCA887200D3AEF8 /* PersistenceError.swift */,
 				54C0DC251CE78337009AAD8D /* FileSystemError.swift */,
+				5496748A1E9A2CDC00FE0B51 /* QuranError.swift */,
 			);
 			name = Errors;
 			sourceTree = "<group>";
@@ -2176,6 +2179,7 @@
 				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */,
 				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
+				5496748B1E9A2CDC00FE0B51 /* QuranError.swift in Sources */,
 				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,
 				C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */,
 				C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */,

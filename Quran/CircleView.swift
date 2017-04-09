@@ -60,7 +60,7 @@ class CircleView: UIView {
         layer.addSublayer(emptyCircle)
         layer.addSublayer(fillCircle)
         fillCircle.fillColor = nil
-        fillCircle.transform = CATransform3DMakeRotation(CGFloat(-M_PI_2), 0, 0, 1)
+        fillCircle.transform = CATransform3DMakeRotation(-.pi / 2, 0, 0, 1)
     }
 
     override func layoutSubviews() {

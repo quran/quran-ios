@@ -1,8 +1,8 @@
 //
-//  PersistenceError.swift
+//  QuranError.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/22/16.
+//  Created by Mohamed Afifi on 4/9/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,15 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
-enum PersistenceError: QuranError {
-    case general(String)
-    case openDatabase(Error)
-    case query(Error)
-    case unknown
-
-    var localizedDescriptionv2: String {
-        return NSLocalizedString("NetworkError_Unknown", comment: "")
-    }
+protocol QuranError: Error {
+    // This is a workaround to `localizedDescription` as it was not calling our implementation and instead uses system default implementation of `localizedDescription`.
+    var localizedDescriptionv2: String { get }
 }

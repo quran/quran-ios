@@ -184,7 +184,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         guard let response = response(for: downloadTask) else {
-            CLog("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - \(downloadTask.currentRequest?.url)")
+            CLog("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - " +
+                "URL(\(downloadTask.currentRequest?.url?.absoluteString ?? ""))")
             return
         }
         response.progress.totalUnitCount = totalBytesExpectedToWrite

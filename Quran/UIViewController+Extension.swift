@@ -32,8 +32,8 @@ extension UIViewController {
 
 extension Error {
     fileprivate func getLocalizedDescription() -> String {
-        if let error = self as? CustomStringConvertible {
-            return error.description
+        if let error = self as? QuranError {
+            return error.localizedDescriptionv2
         }
         return NSLocalizedString("NetworkError_Unknown", comment: "")
     }

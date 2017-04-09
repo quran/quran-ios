@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.3.0)
+  - Alamofire (4.4.0)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - DownloadButton (0.1.0)
@@ -7,9 +7,9 @@ PODS:
   - GenericDataSources (2.4.4)
   - KVOController (1.2.0)
   - MenuItemKit (2.0)
-  - Moya (8.0.2):
-    - Moya/Core (= 8.0.2)
-  - Moya/Core (8.0.2):
+  - Moya (8.0.3):
+    - Moya/Core (= 8.0.3)
+  - Moya/Core (8.0.3):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - PromiseKit (4.1.7):
@@ -23,13 +23,13 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (4.1.7):
     - PromiseKit/CorePromise
-  - Result (3.1.0)
+  - Result (3.2.1)
   - RxCocoa (3.2.0):
     - RxSwift (~> 3.1)
   - RxSwift (3.2.0)
-  - SQLite.swift (0.11.2):
-    - SQLite.swift/standard (= 0.11.2)
-  - SQLite.swift/standard (0.11.2)
+  - SQLite.swift (0.11.3):
+    - SQLite.swift/standard (= 0.11.3)
+  - SQLite.swift/standard (0.11.3)
   - SwiftyJSON (3.1.4)
   - Zip (0.6.0)
 
@@ -49,22 +49,22 @@ DEPENDENCIES:
   - Zip (~> 0.6)
 
 SPEC CHECKSUMS:
-  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   GenericDataSources: 70b1ce367744c595444a7da9a43784536de9173f
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
-  Moya: 47f61da5b634aa71f676431b64ee0f81e976296d
+  Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
-  Result: 4e3ed5995ed94d0cd6a09be9a431fce3f3624bbf
+  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   RxCocoa: ccdf43101a70407097a29082f648ba1676075b30
   RxSwift: 46574f70d416b7923c237195939cc488a7fbf3a0
-  SQLite.swift: 670c3e9e0a806bbfd56a3de5d530768dc0e6fe7c
+  SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 693d9737b7cabdc1cde8be93560f1573937916b1
+PODFILE CHECKSUM: ece5120214c484d41e1f44edabdf42568f0d88ab
 
 COCOAPODS: 1.2.0

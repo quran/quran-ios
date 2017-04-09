@@ -20,7 +20,7 @@
 
 import Foundation
 
-enum FileSystemError: Error, CustomStringConvertible {
+enum FileSystemError: QuranError {
 
     case noDiskSpace
     case unknown
@@ -37,7 +37,7 @@ enum FileSystemError: Error, CustomStringConvertible {
         }
     }
 
-    var description: String {
+    var localizedDescriptionv2: String {
         let text: String
         switch self {
         case .unknown:

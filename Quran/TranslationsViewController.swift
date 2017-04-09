@@ -74,6 +74,10 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
+        dataSource.downloadedDS.onItemsUpdated = { [weak self] _ in
+            self?.onDownloadedItemsUpdated()
+        }
+
         loadLocalData()
     }
 
@@ -84,7 +88,17 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         refreshData()
     }
 
-    func refreshData() {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tableView.setEditing(false, animated: animated)
+        updateRightBarItem(animated: animated)
+    }
+
+    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
+        showErrorAlert(error: error)
+    }
+
+    @objc private func refreshData() {
         interactor.execute()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
@@ -104,7 +118,38 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
             }.catchToAlertView(viewController: self)
     }
 
-    func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
-        showErrorAlert(error: error)
+    private func onDownloadedItemsUpdated() {
+        guard !dataSource.downloadedDS.isSelectable else {
+            return
+        }
+        guard !dataSource.downloadedDS.items.isEmpty else {
+            tableView.setEditing(false, animated: true)
+            navigationItem.setRightBarButton(nil, animated: true)
+            return
+        }
+
+        if navigationItem.rightBarButtonItem == nil {
+            updateRightBarItem(animated: true)
+        }
+    }
+
+    private func updateRightBarItem(animated: Bool) {
+        let button: UIBarButtonItem
+        if tableView.isEditing {
+            button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDoneTapped))
+        } else {
+            button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditTapped))
+        }
+        navigationItem.setRightBarButton(button, animated: animated)
+    }
+
+    @objc private func onEditTapped() {
+        tableView.setEditing(true, animated: true)
+        updateRightBarItem(animated: true)
+    }
+
+    @objc private func onDoneTapped() {
+        tableView.setEditing(false, animated: true)
+        updateRightBarItem(animated: true)
     }
 }

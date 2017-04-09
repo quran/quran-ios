@@ -16,6 +16,10 @@ private class _AnyBasicDataSourceRepresentableBoxBase<Item>: BasicDataSourceRepr
     }
 
     var dataSource: AbstractDataSource { fatalError() }
+    var onItemsUpdated: (([Item]) -> Void)? {
+        get { fatalError() }
+        set { fatalError() }
+    }
 }
 
 private class _AnyBasicDataSourceRepresentableBox<DS: BasicDataSourceRepresentable>: _AnyBasicDataSourceRepresentableBoxBase<DS.Item> {
@@ -31,6 +35,11 @@ private class _AnyBasicDataSourceRepresentableBox<DS: BasicDataSourceRepresentab
     }
 
     override var dataSource: AbstractDataSource { return ds.dataSource }
+
+    override var onItemsUpdated: (([DS.Item]) -> Void)? {
+        get { return ds.onItemsUpdated }
+        set { ds.onItemsUpdated = newValue }
+    }
 }
 
 /// Represents a type-erased `BasicDataSourceRepresentable` type.
@@ -52,6 +61,11 @@ public final class AnyBasicDataSourceRepresentable<Item>: BasicDataSourceReprese
     open var items: [Item] {
         get { return box.items }
         set { box.items = newValue }
+    }
+
+    open var onItemsUpdated: (([Item]) -> Void)? {
+        get { return box.onItemsUpdated }
+        set { box.onItemsUpdated = newValue }
     }
 }
 

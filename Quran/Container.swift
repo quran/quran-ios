@@ -118,8 +118,8 @@ class Container {
             downloader: createDownloadManager(),
             deletionInteractor: createTranslationDeletionInteractor(),
             versionUpdater: createTranslationsVersionUpdaterInteractor(),
-            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
-            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable())
+            pendingDataSource: pendingDS,
+            downloadedDataSource: downloadedDS)
         pendingDS.delegate = dataSource
         downloadedDS.delegate = dataSource
         return dataSource
@@ -133,8 +133,8 @@ class Container {
             downloader: createDownloadManager(),
             deletionInteractor: createTranslationDeletionInteractor(),
             versionUpdater: createTranslationsVersionUpdaterInteractor(),
-            pendingDataSource: pendingDS.asBasicDataSourceRepresentable(),
-            downloadedDataSource: downloadedDS.asBasicDataSourceRepresentable())
+            pendingDataSource: pendingDS,
+            downloadedDataSource: downloadedDS)
         pendingDS.delegate = dataSource
         downloadedDS.delegate = dataSource
         return dataSource

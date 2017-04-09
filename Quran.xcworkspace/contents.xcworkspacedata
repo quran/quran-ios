@@ -8,16 +8,17 @@
          location = "group:LICENSE">
       </FileRef>
       <FileRef
-         location = "group:fastlane/Fastfile">
+         location = "group:fastlane/Fastfile"
+         assignedFileDataType = "public.ruby-script">
       </FileRef>
       <FileRef
          location = "group:README.md">
       </FileRef>
       <FileRef
-          location = "group:.gitignore">
+         location = "group:.gitignore">
       </FileRef>
       <FileRef
-          location = "group:.swiftlint.yml">
+         location = "group:.swiftlint.yml">
       </FileRef>
    </Group>
    <FileRef

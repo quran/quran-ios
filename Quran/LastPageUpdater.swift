@@ -42,7 +42,6 @@ class LastPageUpdater {
         // don't update if it's the same page
         guard let lastPage = lastPage, page != lastPage.page else { return }
 
-        Analytics.shared.showing(quranPage: page)
         forceUpdateTo(page: page)
     }
 

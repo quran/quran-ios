@@ -303,8 +303,15 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // only persist if active
         if UIApplication.shared.applicationState == .active {
             Crash.setValue(page.pageNumber, forKey: .QuranPage)
-            lastPageUpdater.updateTo(page: page.pageNumber)
+            updateLatestPageTo(page: page.pageNumber)
         }
+    }
+
+    private func updateLatestPageTo(page: Int) {
+        Analytics.shared.showing(quranPage: page,
+                                 isTranslation: isTranslationView,
+                                 numberOfSelectedTranslations: simplePersistence.valueForKey(.selectedTranslations).count)
+        lastPageUpdater.updateTo(page: page)
     }
 
     func onBookmarkButtonTapped() {
@@ -341,7 +348,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         guard UIApplication.shared.applicationState != .active else { return }
         Queue.background.async {
             let page = ayah.getStartPage()
-            self.lastPageUpdater.updateTo(page: page)
+            self.updateLatestPageTo(page: page)
             Crash.setValue(page, forKey: .QuranPage)
         }
     }

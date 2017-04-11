@@ -39,11 +39,14 @@ struct Analytics {
                                customAttributes: nil)
     }
 
-    func showing(quranPage page: Int) {
-        Answers.logContentView(withName: "QuranPage: \(page)",
-                               contentType: "QuranPage",
-                               contentId: nil,
-                               customAttributes: nil)
+    func showing(quranPage page: Int, isTranslation: Bool, numberOfSelectedTranslations: Int) {
+        var attributes: [String: Any] = [
+            "page": "\(page)",
+            "Viewing Mode": isTranslation ? "Translation" : "Arabic"]
+        if isTranslation {
+            attributes["Selected Translations"] = numberOfSelectedTranslations
+        }
+        Answers.logCustomEvent(withName: "ShowingQuranPage", customAttributes: attributes)
     }
 
     func downloading(translation: Translation) {

@@ -45,7 +45,7 @@ extension UIColor {
     }
 
     static var translationText: UIColor {
-        return #colorLiteral(red: 0.03921568627, green: 0.03921568627, blue: 0.03921568627, alpha: 1)
+        return #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
     }
 
     static var translatorName: UIColor {

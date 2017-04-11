@@ -1,3 +1,5 @@
+require "pstore"
+
 # Customise this file, documentation can be found here:
 # https://github.com/fastlane/fastlane/tree/master/fastlane/docs
 # All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
@@ -25,20 +27,32 @@ platform :ios do
         # Set a specific version number
         increment_version_number(version_number: options[:version])
 
-        # Set build number to 0
-        increment_build_number(build_number: 0)
+        # Set build number to 1.
+        increment_build_number(build_number: 1)
 
-        # Commit the change
-        commit_version_bump
+        message = "You need to commit and push changes to the remote repo yourself."
+        puts message
+        say message
     end
 
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
     lane :beta do
-        # Increase build number & commit it
-        increment_build_number
-        commit_version_bump
-        push_to_git_remote
+
+        store = PStore.new("#{Dir.home}/com.quran.ios.pstore")
+
+        oldVersion = store.transaction { store[:versionKey] }
+        oldBuild = store.transaction { store[:buildKey] }
+
+        # Increase build number if the same version
+        currentVersion = get_version_number
+        currentBuild = "1"
+        if oldVersion == currentVersion
+            currentBuild = (oldBuild.to_i + 1).to_s
+        end
+
+        # Set the build number
+        increment_build_number(build_number: currentBuild)
 
         # Update fabric keys
         fabric_keys = ENV['fabric_keys'].split(',')
@@ -67,7 +81,13 @@ platform :ios do
         # Upload to test flight
         pilot(ipa: './build/Quran.ipa', skip_waiting_for_build_processing: true)
 
-        # Reset fabric keys changes
+        # Save the latest version and build number after uploaded succeed
+        store.transaction do
+            store[:versionKey] = currentVersion
+            store[:buildKey] = currentBuild
+        end
+
+        # Reset fabric keys changes & build number
         # reset_git_repo(force: true)
         sh "git reset --hard HEAD"
         sh "git clean -fd"

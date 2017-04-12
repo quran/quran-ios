@@ -85,7 +85,8 @@ extension TranslationTableViewCell {
 
     func configure(with translation: Translation) {
         // show iPhone icon if the translation language is the same as device language
-        iPhoneIcon.isHidden = Locale.current.languageCode != translation.languageCode
+        // Always hide the icon
+        iPhoneIcon.isHidden = true // Locale.current.languageCode != translation.languageCode
         firstLabel.text = translation.displayName
         languageLabel.text = Locale(identifier: translation.languageCode).localizedString(forLanguageCode: translation.languageCode)
 

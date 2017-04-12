@@ -74,8 +74,12 @@ platform :ios do
         # Build the app
         gym(
             scheme: 'Quran',
+            configuration: "Release",
             clean: true,
-            output_directory: './build/'
+            output_directory: './build/',
+            include_symbols: true,
+            include_bitcode: true
+            
         )
 
         # Upload to test flight

@@ -3,7 +3,7 @@
 [<img src="https://cloud.githubusercontent.com/assets/5665498/24449585/04481cfe-1478-11e7-9079-35c9532fc661.png" />](https://itunes.apple.com/app/id1118663303)
 
 
-[<img align="right" src="https://raw.githubusercontent.com/quran/quran-ios/master/Quran/Assets.xcassets/AppIcon.appiconset/Icon-83.5%402x.png" />](https://itunes.apple.com/app/id1118663303)
+[<img align="right" src="https://cloud.githubusercontent.com/assets/5665498/25025425/85720cc8-20a2-11e7-9860-c1e37353b049.png" />](https://itunes.apple.com/app/id1118663303)
 
 This is a simple (madani based) quran app for iOS (iPhone/iPad).
 

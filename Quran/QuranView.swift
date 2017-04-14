@@ -23,7 +23,7 @@ import MenuItemKit
 
 protocol QuranViewDelegate: class {
     func onQuranViewTapped(_ quranView: QuranView)
-    func quranView(_ quranView: QuranView, didSelectTextToShare text: String)
+    func quranView(_ quranView: QuranView, didSelectTextToShare text: String, sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
 }
 
@@ -158,9 +158,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // set up dismiss gestures
         subviews.forEach { $0.isUserInteractionEnabled = false }
 
+        let localPoint = sender.location(in: self)
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
         let pan = UIPanGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
-        let shareData = QuranShareData(gestures: [tap, pan], cell: cell, page: page, ayah: ayah)
+        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: cell, page: page, ayah: ayah)
         self.shareData = shareData
 
         // highlight the ayah UI
@@ -169,11 +171,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
 
-        let localPoint = sender.location(in: self)
-        let size = CGSize(width: 20, height: 20)
-        let targetRect = CGRect(origin: CGPoint(x: localPoint.x - size.width / 2, y: localPoint.y - size.height / 2), size: size)
         UIMenuController.shared.menuItems = [configuredBookmarkMenuItem(shareData: shareData)]
-        UIMenuController.shared.setTargetRect(targetRect, in: self)
+        UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
     }
@@ -220,8 +219,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     /// Did click on share menu item
     func _share(_ sender: Any?) { //swiftlint:disable:this identifier_name
+        guard let shareData = shareData else {
+            return
+        }
+
         retrieveSelectedAyahText { text in
-            self.delegate?.quranView(self, didSelectTextToShare: text)
+            self.delegate?.quranView(self, didSelectTextToShare: text, sourceView: self, sourceRect: self.targetRect(for: shareData.location))
         }
     }
 
@@ -278,5 +281,10 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             .catch { (error) in
                 self.delegate?.onErrorOccurred(error: error)
         }
+    }
+
+    private func targetRect(for point: CGPoint) -> CGRect {
+        let size = CGSize(width: 20, height: 20)
+        return CGRect(origin: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2), size: size)
     }
 }

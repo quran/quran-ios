@@ -23,6 +23,8 @@ import UIKit
 
 class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
+    private let acceptableStatusCodes = 200..<300
+
     private let persistence: DownloadsPersistence
 
     private var downloadingResponses: [Int: DownloadNetworkResponse] = [:]
@@ -193,6 +195,11 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        // validate task response
+        guard validate(task: downloadTask) == nil else {
+            return
+        }
+
         guard let download = response(for: downloadTask)?.download else {
             CLog("Missed saving task", downloadTask.currentRequest?.url as Any)
             return
@@ -224,10 +231,14 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
+
+        let validationError = validate(task: task)
+        let theError = sessionError ?? validationError
+
         // remove the request
         let networkResponse: DownloadNetworkResponse?
-        if let error = error {
+        if let error = theError {
             CLog("Download network error occurred:", error)
             networkResponse = taskFailed(task)
         } else {
@@ -238,7 +249,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
 
         // if success, early return
-        guard let error = error else {
+        guard let error = theError else {
             response.result = .success()
             return
         }
@@ -269,6 +280,16 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         let handler = backgroundSessionCompletionHandler
         backgroundSessionCompletionHandler = nil
         handler?()
+    }
+
+    private func validate(task: URLSessionTask) -> Error? {
+        let httpResponse = task.response as? HTTPURLResponse
+        let statusCode = httpResponse?.statusCode ?? 0
+        if !acceptableStatusCodes.contains(statusCode) {
+            return NetworkError.serverError("Unacceptable status code: \(statusCode)")
+        } else {
+            return nil
+        }
     }
 }
 

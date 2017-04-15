@@ -29,7 +29,9 @@ public enum NetworkError: QuranError {
     case parsing(String)
 
     internal init(error: Error) {
-        if let error = error as? URLError {
+        if let error = error as? NetworkError {
+            self = error
+        } else if let error = error as? URLError {
             switch error.code {
             case .timedOut, .cannotFindHost, .cannotConnectToHost:
                 self = .serverNotReachable

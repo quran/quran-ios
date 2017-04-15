@@ -10,7 +10,7 @@ import Foundation
 
 public enum NetworkError: QuranError {
     /// Unknown or not supported error.
-    case unknown
+    case unknown(Error)
 
     /// Not connected to the internet.
     case notConnectedToInternet
@@ -23,6 +23,8 @@ public enum NetworkError: QuranError {
 
     /// Cannot reach the server.
     case serverNotReachable
+
+    case serverError(String)
 
     case parsing(String)
 
@@ -40,10 +42,10 @@ public enum NetworkError: QuranError {
             case .internationalRoamingOff:
                 self = .internationalRoamingOff
             default:
-                self = .unknown
+                self = .unknown(error)
             }
         } else {
-            self = .unknown
+            self = .unknown(error)
         }
     }
 
@@ -51,6 +53,8 @@ public enum NetworkError: QuranError {
         let text: String
         switch self {
         case .unknown:
+            text = NSLocalizedString("NetworkError_Unknown", comment: "Error description")
+        case .serverError:
             text = NSLocalizedString("NetworkError_Unknown", comment: "Error description")
         case .notConnectedToInternet:
             text = NSLocalizedString("NetworkError_NotConnectedToInternet", comment: "Error description")

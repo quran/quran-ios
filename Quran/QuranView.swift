@@ -246,8 +246,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func removeAyahFromBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        DispatchQueue.global()
-            .promise { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
+        DispatchQueue.default
+            .promise2 { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in
                 // remove bookmark from model
                 var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
@@ -257,8 +257,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func addAyahToBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        DispatchQueue.global()
-            .promise { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
+        DispatchQueue.default
+            .promise2 { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in
                 // add a bookmark to the model
                 var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
@@ -278,7 +278,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         verseTextRetrieval
             .execute(shareData)
             .then(on: .main, execute: completion)
-            .catch { (error) in
+            .catch(on: .main) { (error) in
                 self.delegate?.onErrorOccurred(error: error)
         }
     }

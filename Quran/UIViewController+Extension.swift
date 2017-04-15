@@ -22,6 +22,16 @@ import UIKit
 
 extension UIViewController {
     func showErrorAlert(error: Error) {
+        if Thread.current.isMainThread {
+            _showErrorAlert(error: error)
+        } else {
+            DispatchQueue.main.async {
+                self._showErrorAlert(error: error)
+            }
+        }
+    }
+
+    private func _showErrorAlert(error: Error) {
         Crash.recordError(error, reason: "showErrorAlert", fatalErrorOnDebug: false)
         let message = error.getLocalizedDescription()
         let controller = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

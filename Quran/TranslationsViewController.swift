@@ -104,7 +104,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
-            .always { [weak self] in
+            .always(on: .main) { [weak self] in
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator?.stopAnimating()
         }

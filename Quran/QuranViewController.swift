@@ -244,8 +244,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
-    func quranView(_ quranView: QuranView, didSelectTextToShare text: String) {
-        ShareController.showShareActivityWithText(text, sourceViewController: self, handler: nil)
+    func quranView(_ quranView: QuranView, didSelectTextToShare text: String, sourceView: UIView, sourceRect: CGRect) {
+        ShareController.share(text: text, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
     }
 
     private func setBarsHidden(_ hidden: Bool) {

@@ -22,9 +22,13 @@ import UIKit
 
 class ShareController: NSObject {
 
-    class func showShareActivityWithText(_ text: String, image: UIImage? = nil, url: URL? = nil,
-                                         sourceViewController: UIViewController,
-                                         handler: UIActivityViewControllerCompletionWithItemsHandler?) {
+    class func share(text: String,
+                     image: UIImage? = nil,
+                     url: URL? = nil,
+                     sourceView: UIView,
+                     sourceRect: CGRect,
+                     sourceViewController: UIViewController,
+                     handler: UIActivityViewControllerCompletionWithItemsHandler?) {
         var itemsToShare = [AnyObject]()
         itemsToShare.append(text as AnyObject)
         if let shareImage = image {
@@ -36,6 +40,8 @@ class ShareController: NSObject {
 
         let activityViewController = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
         activityViewController.completionWithItemsHandler = handler
+        activityViewController.popoverPresentationController?.sourceView = sourceView
+        activityViewController.popoverPresentationController?.sourceRect = sourceRect
         sourceViewController.present(activityViewController, animated: true, completion: nil)
     }
 }

@@ -21,6 +21,7 @@
 import UIKit
 
 struct QuranShareData {
+    let location: CGPoint
     let gestures: [UIGestureRecognizer]
     let cell: QuranBasePageCollectionViewCell
     let page: QuranPage

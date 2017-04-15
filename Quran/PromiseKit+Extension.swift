@@ -74,3 +74,21 @@ extension OperationQueue {
         })
     }
 }
+
+extension DispatchQueue {
+    public final func promise2<T>(execute body: @escaping () throws -> T) -> Promise<T> {
+        return Promise(resolvers: { (fulfill, reject) in
+            if self === zalgo || self === waldo && !Thread.isMainThread {
+                fulfill(try body())
+            } else {
+                async {
+                    do {
+                        fulfill(try body())
+                    } catch {
+                        reject(error)
+                    }
+                }
+            }
+        })
+    }
+}

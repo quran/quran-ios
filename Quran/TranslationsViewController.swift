@@ -85,7 +85,9 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         super.viewWillAppear(animated)
 
         activityIndicator?.startAnimating()
-        refreshData()
+        loadLocalData {
+            self.refreshData()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -104,17 +106,19 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
-            .always { [weak self] in
+            .always(on: .main) { [weak self] in
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator?.stopAnimating()
         }
     }
 
-    private func loadLocalData() {
+    private func loadLocalData(completion: @escaping () -> Void = { }) {
         localTranslationsInteractor.execute()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
+            } .always {
+                completion()
             }.catchToAlertView(viewController: self)
     }
 

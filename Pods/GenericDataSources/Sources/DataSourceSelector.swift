@@ -29,12 +29,14 @@ import Foundation
     case move
     case willDisplayCell
     case didEndDisplayingCell
-    case shouldShowMenuForItemAt
     case canPerformAction
     case performAction
     case canFocusItemAt
     case shouldUpdateFocusIn
     case didUpdateFocusIn*/
+
+    /// Represents the should show menu for item selector.
+    case shouldShowMenuForItemAt
 
     /// Represents the can edit selector.
     case canEdit
@@ -78,6 +80,7 @@ extension DataSourceSelector {
         case .shouldIndentWhileEditing: return false
         case .willBeginEditing: return false
         case .didEndEditing: return false
+        case .shouldShowMenuForItemAt: return false
         }
     }
 }
@@ -121,6 +124,11 @@ let dataSourceSelectorToSelectorMapping: [DataSourceSelector: [Selector]] = {
          .didEndEditing: [
             #selector(UITableViewDelegate.tableView(_:didEndEditingRowAt:)),
             #selector(DataSource.ds_collectionView(_:didEndEditingItemAt:))
+            ],
+         .shouldShowMenuForItemAt: [
+            #selector(UITableViewDelegate.tableView(_:shouldShowMenuForRowAt:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:shouldShowMenuForItemAt:)),
+            #selector(DataSource.ds_collectionView(_:shouldShowMenuForItemAt:))
             ]
     ]
     return mapping

@@ -70,7 +70,7 @@ class OperationCacheableService<Input: Hashable, Output>: CacheableService {
 
                 // cache the result
                 let promise = operation.promise
-                    .then(on: .global()) { result -> Output in
+                    .then { result -> Output in
                         self.lock.execute {
                             self.cache.setObject(result, forKey: input)
                             // remove from in progress

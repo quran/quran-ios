@@ -26,6 +26,10 @@ protocol ReadonlySQLitePersistence {
     func openConnection() throws -> Connection
 }
 
+private var dbFileIssueCodes: Set<Int32> = {
+    return Set([SQLITE_PERM, SQLITE_NOTADB, SQLITE_CORRUPT, SQLITE_CANTOPEN])
+}()
+
 extension ReadonlySQLitePersistence {
 
     func openConnection() throws -> Connection {
@@ -36,17 +40,47 @@ extension ReadonlySQLitePersistence {
 
     func run<T>(_ block: (Connection) throws -> T) throws -> T {
         do {
+            // open the connection
             let connection = try openConnection()
+
+            // close the connection
             defer {
                 ConnectionsPool.default.close(connection: connection)
             }
+
+            // execute the query
             return try block(connection)
+
         } catch let error as PersistenceError {
             Crash.recordError(error, reason: "Error while executing sqlite statement")
             throw error
+
+        } catch let error as SQLite.Result {
+            switch error {
+            case .error(message: _, code: let code, statement: _):
+                if dbFileIssueCodes.contains(code) {
+                    // remove the db file as sometimes, the download is completed with error.
+                    if let url = URL(string: filePath) {
+                        try? FileManager.default.removeItem(at: url)
+                    }
+                    throw PersistenceError.badFile(error)
+                }
+            }
+            Crash.recordError(error, reason: "Error while executing sqlite statement")
+            throw PersistenceError.query(error)
         } catch {
             Crash.recordError(error, reason: "Error while executing sqlite statement")
             throw PersistenceError.query(error)
+        }
+    }
+}
+
+extension ReadonlySQLitePersistence {
+    func validateFileExists() throws {
+        if let url = URL(string: filePath) {
+            if !url.isReachable {
+                throw PersistenceError.badFile(nil)
+            }
         }
     }
 }
@@ -68,7 +102,7 @@ extension SQLitePersistence {
     func openConnection() throws -> Connection {
         // create the connection
         let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
-        let oldVersion = connection.userVersion
+        let oldVersion = try connection.getUserVersion()
         let newVersion = version
         precondition(newVersion != 0, "version should be greater than 0.")
 
@@ -76,21 +110,20 @@ extension SQLitePersistence {
         if oldVersion <= 0 {
             do {
                 try onCreate(connection: connection)
-                connection.userVersion = Int(newVersion)
             } catch {
-                Crash.recordError(error, reason: "Cannot create database for file '\(filePath)'")
-                throw PersistenceError.query(error)
+                throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
             }
+            try connection.setUserVersion(Int(newVersion))
         } else {
             let unsignedOldVersion = UInt(oldVersion)
             if newVersion != unsignedOldVersion {
                 do {
                     try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
-                    connection.userVersion = Int(newVersion)
                 } catch {
-                    Crash.recordError(error, reason: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
-                    throw PersistenceError.query(error)
+                    throw PersistenceError.generalError(
+                        error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
                 }
+                try connection.setUserVersion(Int(newVersion))
             }
         }
         return connection

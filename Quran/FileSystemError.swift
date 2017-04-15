@@ -23,17 +23,17 @@ import Foundation
 enum FileSystemError: QuranError {
 
     case noDiskSpace
-    case unknown
+    case unknown(Error)
 
     init(error: Error) {
         if let error = error as? CocoaError {
             if error.code == .fileWriteOutOfSpace {
                 self = .noDiskSpace
             } else {
-                self = .unknown
+                self = .unknown(error)
             }
         } else {
-            self = .unknown
+            self = .unknown(error)
         }
     }
 

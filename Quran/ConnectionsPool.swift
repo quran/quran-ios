@@ -34,7 +34,7 @@ final class ConnectionsPool {
             let connection = try Connection(filePath, readonly: false)
             // wait for max of 3 seconds if the db is locked.
             // should be enough for most of the cases.
-            connection.busyTimeout = 3
+            connection.busyTimeout = 5
             return connection
         } catch {
             Crash.recordError(error, reason: "Cannot open connection to sqlite file '\(filePath)'.")

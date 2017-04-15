@@ -23,6 +23,8 @@ import UIKit
 
 class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
+    private let acceptableStatusCodes = 200..<300
+
     private let persistence: DownloadsPersistence
 
     private var downloadingResponses: [Int: DownloadNetworkResponse] = [:]
@@ -193,6 +195,11 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        // validate task response
+        guard validate(task: downloadTask) == nil else {
+            return
+        }
+
         guard let download = response(for: downloadTask)?.download else {
             CLog("Missed saving task", downloadTask.currentRequest?.url as Any)
             return
@@ -224,11 +231,14 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
+
+        let validationError = validate(task: task)
+        let theError = sessionError ?? validationError
+
         // remove the request
         let networkResponse: DownloadNetworkResponse?
-        if let error = error {
-            CLog("Download network error occurred:", error)
+        if theError != nil {
             networkResponse = taskFailed(task)
         } else {
             networkResponse = taskCompleted(task)
@@ -238,7 +248,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
 
         // if success, early return
-        guard let error = error else {
+        guard var error = theError else {
             response.result = .success()
             return
         }
@@ -249,12 +259,15 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
             safely("save.resume.data") {
                 try resumeData.write(to: resumeURL, options: [.atomic])
             }
+            error = error.removeResumeData()
         }
 
         // not cancelled by user
         guard !error.isCancelled else {
             return
         }
+
+        Crash.recordError(error, reason: "Download network error occurred")
 
         let finalError: Error
         if error is POSIXErrorCode && Int32((error as NSError).code) == ENOENT {
@@ -270,6 +283,16 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         backgroundSessionCompletionHandler = nil
         handler?()
     }
+
+    private func validate(task: URLSessionTask) -> Error? {
+        let httpResponse = task.response as? HTTPURLResponse
+        let statusCode = httpResponse?.statusCode ?? 0
+        if !acceptableStatusCodes.contains(statusCode) {
+            return NetworkError.serverError("Unacceptable status code: \(statusCode)")
+        } else {
+            return nil
+        }
+    }
 }
 
 extension Error {
@@ -279,5 +302,15 @@ extension Error {
 
     fileprivate var isCancelled: Bool {
         return (self as? URLError)?.code == URLError.cancelled
+    }
+
+    fileprivate func removeResumeData() -> Error {
+        let error = self as NSError
+        guard error.userInfo[NSURLSessionDownloadTaskResumeData] != nil else {
+            return self
+        }
+        var userInfo = error.userInfo
+        userInfo[NSURLSessionDownloadTaskResumeData] = nil
+        return NSError(domain: error.domain, code: error.code, userInfo: userInfo)
     }
 }

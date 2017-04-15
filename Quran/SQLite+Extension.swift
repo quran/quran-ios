@@ -21,23 +21,22 @@
 import SQLite
 
 extension Connection {
-    public var userVersion: Int {
-        get {
-            do {
-                let version: Int64 = cast(try scalar("PRAGMA user_version"))
-                return Int(version)
-            } catch {
-                Crash.recordError(error, reason: "Cannot get value for user_version")
-                fatalError("Cannot get user version from sqlite file. Error: '\(error)'")
-            }
+
+    func setUserVersion(_ newValue: Int) throws {
+        do {
+            let newValue: Int = cast(newValue)
+            try run("PRAGMA user_version = \(newValue)")
+        } catch {
+            throw PersistenceError.generalError(error, info: "Cannot set value for user_version to \(newValue)")
         }
-        set {
-            do {
-                try run("PRAGMA user_version = \(newValue)")
-            } catch {
-                Crash.recordError(error, reason: "Cannot set value for user_version")
-                fatalError("Cannot set user version to sqlite file. Error: '\(error)'")
-            }
+    }
+
+    func getUserVersion() throws -> Int {
+        do {
+            let version: Int64 = cast(try scalar("PRAGMA user_version"))
+            return Int(version)
+        } catch {
+            throw PersistenceError.generalError(error, info: "Cannot get value for user_version")
         }
     }
 }

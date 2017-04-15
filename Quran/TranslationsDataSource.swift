@@ -178,25 +178,27 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     }
 
     func onDownloadCompleted(for translation: TranslationFull) {
-        guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
-            CLog("Cannot complete download for translation \(translation.translation.displayName)")
-            return
-        }
-        let globalIndexPath = globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
-
-        // remove old observer
-        let observer = downloadingObservers.removeValue(forKey: translation.translation.id)
-        observer?.stop()
-
-        // update the cell
-        let cell = ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
-        cell?.downloadButton.state = .downloaded
-        cell?.checkbox.isHidden = !downloadedDS.isSelectable
-        cell?.setSelection(false)
 
         versionUpdater
             .execute([translation.translation])
             .then(on: .main) { newItems -> Void in
+
+                guard let (ds, localIndexPath) = self.indexPathFor(translation: translation) else {
+                    CLog("Cannot complete download for translation \(translation.translation.displayName)")
+                    return
+                }
+                let globalIndexPath = self.globalIndexPathForLocalIndexPath(localIndexPath, dataSource: ds)
+
+                // remove old observer
+                let observer = self.downloadingObservers.removeValue(forKey: translation.translation.id)
+                observer?.stop()
+
+                // update the cell
+                let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: globalIndexPath) as? TranslationTableViewCell
+                cell?.downloadButton.state = .downloaded
+                cell?.checkbox.isHidden = !self.downloadedDS.isSelectable
+                cell?.setSelection(false)
+
                 let newGlobalIndexPath = self.move(item: translation,
                                                    atLocalPath: localIndexPath,
                                                    newItem: newItems[0],

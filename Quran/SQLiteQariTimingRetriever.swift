@@ -30,7 +30,7 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
             fatalError("Gapped qaris are not supported.")
         }
 
-        return DispatchQueue.global() .promise {
+        return DispatchQueue.default.promise2 {
                 let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
                 let persistence = self.persistenceCreator.create(fileURL)
                 let timings = try persistence.getTimingForSura(startAyah: startAyah)
@@ -42,7 +42,7 @@ struct SQLiteQariTimingRetriever: QariTimingRetriever {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Gapped qaris are not supported.")
         }
-        return DispatchQueue.global() .promise {
+        return DispatchQueue.default.promise2 {
             let fileURL = qari.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
             let persistence = self.persistenceCreator.create(fileURL)
 

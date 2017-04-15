@@ -26,9 +26,9 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
 
     func retrieveAyahs(in page: Int) -> Promise<[AyahNumber: [AyahInfo]]> {
 
-        return DispatchQueue.global()
-            .promise { try self.persistence.getAyahInfoForPage(page) }
-            .then(on: .global()) { self.processAyahInfo($0) }
+        return DispatchQueue.default
+            .promise2 { try self.persistence.getAyahInfoForPage(page) }
+            .then { self.processAyahInfo($0) }
     }
 
     fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {

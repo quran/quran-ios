@@ -61,7 +61,7 @@ class MoyaNetworkManager<Target>: NetworkManager {
                         case .underlying(let underlyingError):
                             finalError = NetworkError(error: underlyingError)
                         default:
-                            finalError = NetworkError.unknown
+                            finalError = NetworkError.unknown(error)
                         }
                     } else {
                         finalError = error

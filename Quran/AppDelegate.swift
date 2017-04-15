@@ -21,13 +21,20 @@
 import UIKit
 import Fabric
 import Crashlytics
+import PromiseKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    let container = Container()
+    let container: Container
+
+    override init() {
+        DispatchQueue.default = .global()
+        container = Container()
+        super.init()
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self, Answers.self])

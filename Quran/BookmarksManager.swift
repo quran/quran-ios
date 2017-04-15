@@ -30,8 +30,8 @@ class BookmarksManager {
     private(set) var isBookmarked: Bool = false
 
     func calculateIsBookmarked(pageNumber: Int) -> Promise<Bool> {
-        return DispatchQueue.global()
-            .promise { self.bookmarksPersistence.isPageBookmarked(pageNumber) }
+        return DispatchQueue.default
+            .promise2 { self.bookmarksPersistence.isPageBookmarked(pageNumber) }
             .then(on: .main) { bookmarked -> Bool in
                 self.isBookmarked = bookmarked
                 return bookmarked
@@ -43,12 +43,12 @@ class BookmarksManager {
 
         if isBookmarked {
             Analytics.shared.bookmark(quranPage: pageNumber)
-            return DispatchQueue.global() .promise {
+            return DispatchQueue.default.promise2 {
                 try self.bookmarksPersistence.insertPageBookmark(forPage: pageNumber)
             }
         } else {
             Analytics.shared.unbookmark(quranPage: pageNumber)
-            return DispatchQueue.global() .promise {
+            return DispatchQueue.default.promise2 {
                 try self.bookmarksPersistence.removePageBookmark(atPage: pageNumber)
             }
         }

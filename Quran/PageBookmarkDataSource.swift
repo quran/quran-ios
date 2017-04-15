@@ -50,8 +50,8 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
     }
 
     func reloadData() {
-        DispatchQueue.global()
-            .promise(execute: self.persistence.retrievePageBookmarks)
+        DispatchQueue.default
+            .promise2(execute: self.persistence.retrievePageBookmarks)
             .then(on: .main) { items -> Void in
                 self.items = items
                 self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)

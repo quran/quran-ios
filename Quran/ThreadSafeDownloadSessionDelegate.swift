@@ -50,9 +50,7 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
                 self.queue.promise {
                     self.handler.populateOnGoingDownloads(from: downloadTasks)
                 }
-            }.catch { error in
-                Crash.recordError(error, reason: "While populateOnGoingDownloads")
-        }
+            }.cauterize()
     }
 
     func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {

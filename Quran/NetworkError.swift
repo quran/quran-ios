@@ -24,9 +24,9 @@ public enum NetworkError: QuranError {
     /// Cannot reach the server.
     case serverNotReachable
 
-    case serverError(String)
-
     case parsing(String)
+
+    case serverError(String)
 
     internal init(error: Error) {
         if let error = error as? NetworkError {

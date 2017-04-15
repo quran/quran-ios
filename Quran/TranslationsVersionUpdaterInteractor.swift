@@ -23,13 +23,16 @@ import Zip
 
 class TranslationsVersionUpdaterInteractor: Interactor {
 
+    private let simplePersistence: SimplePersistence
     private let persistence: ActiveTranslationsPersistence
     private let downloader: DownloadManager
     private let versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>
 
-    init(persistence: ActiveTranslationsPersistence,
+    init(simplePersistence: SimplePersistence,
+         persistence: ActiveTranslationsPersistence,
          downloader: DownloadManager,
          versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>) {
+        self.simplePersistence = simplePersistence
         self.persistence = persistence
         self.downloader = downloader
         self.versionPersistenceCreator = versionPersistenceCreator
@@ -76,14 +79,29 @@ class TranslationsVersionUpdaterInteractor: Interactor {
             // installed on the latest version & the db file exists
             if translation.version != translation.installedVersion && isReachable {
                 let versionPersistence = versionPersistenceCreator.create(fileURL.absoluteString)
-                let version = try versionPersistence.getTextVersion()
-                translation.installedVersion = version
+                do {
+                    let version = try versionPersistence.getTextVersion()
+                    translation.installedVersion = version
+                } catch {
+                    // if an error occurred while getting the version
+                    // that means the db file is corrupted.
+                    translation.installedVersion = nil
+                }
             } else if translation.installedVersion != nil && !isReachable {
                 translation.installedVersion = nil
             }
 
             if previousInstalledVersion != translation.installedVersion {
                 try persistence.update(translation)
+
+                // remove the translation from selected translations
+                if translation.installedVersion == nil {
+                    var selectedTranslations = simplePersistence.valueForKey(.selectedTranslations)
+                    if let index = selectedTranslations.index(of: translation.id) {
+                        selectedTranslations.remove(at: index)
+                        simplePersistence.setValue(selectedTranslations, forKey: .selectedTranslations)
+                    }
+                }
             }
             updatedTranslations.append(translation)
         }

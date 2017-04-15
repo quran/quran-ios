@@ -38,6 +38,8 @@ struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence, ReadonlySQLitePer
     }
 
     func getTimingForSura(startAyah: AyahNumber) throws -> [AyahNumber: AyahTiming] {
+        try validateFileExists()
+
         return try run { connection in
             let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah)
             do {
@@ -57,6 +59,8 @@ struct SQLiteAyahTimingPersistence: QariAyahTimingPersistence, ReadonlySQLitePer
     }
 
     func getOrderedTimingForSura(startAyah: AyahNumber) throws -> [AyahTiming] {
+        try validateFileExists()
+
         return try run { connection in
             let query = timingsTable.filter(Column.sura == startAyah.sura && Column.ayah >= startAyah.ayah).order(Column.ayah)
             do {

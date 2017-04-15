@@ -36,6 +36,8 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
     }
 
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
+        try validateFileExists()
+
         return try run { connection in
 
             let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)
@@ -48,6 +50,8 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
     }
 
     func getOptionalAyahText(forNumber number: AyahNumber) throws -> String? {
+        try validateFileExists()
+
         return try run { connection in
 
             let query = Verses.table.filter(Verses.sura == number.sura && Verses.ayah == number.ayah)

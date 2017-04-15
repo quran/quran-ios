@@ -24,7 +24,8 @@ enum PersistenceError: QuranError {
     case general(String)
     case openDatabase(Error)
     case query(Error)
-    case unknown
+    case badFile(Error?)
+    case unknown(Error)
 
     var localizedDescriptionv2: String {
         return NSLocalizedString("NetworkError_Unknown", comment: "")

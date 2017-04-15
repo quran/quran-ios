@@ -334,6 +334,7 @@ class Container {
 
     func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
         return TranslationsVersionUpdaterInteractor(
+            simplePersistence: createSimplePersistence(),
             persistence: createActiveTranslationsPersistence(),
             downloader: createDownloadManager(),
             versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).erasedType()

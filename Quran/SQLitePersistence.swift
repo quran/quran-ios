@@ -40,11 +40,17 @@ extension ReadonlySQLitePersistence {
 
     func run<T>(_ block: (Connection) throws -> T) throws -> T {
         do {
+            // open the connection
             let connection = try openConnection()
+
+            // close the connection
             defer {
                 ConnectionsPool.default.close(connection: connection)
             }
+
+            // execute the query
             return try block(connection)
+
         } catch let error as PersistenceError {
             Crash.recordError(error, reason: "Error while executing sqlite statement")
             throw error
@@ -96,7 +102,7 @@ extension SQLitePersistence {
     func openConnection() throws -> Connection {
         // create the connection
         let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
-        let oldVersion = connection.userVersion
+        let oldVersion = try connection.getUserVersion()
         let newVersion = version
         precondition(newVersion != 0, "version should be greater than 0.")
 
@@ -104,21 +110,20 @@ extension SQLitePersistence {
         if oldVersion <= 0 {
             do {
                 try onCreate(connection: connection)
-                connection.userVersion = Int(newVersion)
             } catch {
-                Crash.recordError(error, reason: "Cannot create database for file '\(filePath)'")
-                throw PersistenceError.query(error)
+                throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
             }
+            try connection.setUserVersion(Int(newVersion))
         } else {
             let unsignedOldVersion = UInt(oldVersion)
             if newVersion != unsignedOldVersion {
                 do {
                     try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
-                    connection.userVersion = Int(newVersion)
                 } catch {
-                    Crash.recordError(error, reason: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
-                    throw PersistenceError.query(error)
+                    throw PersistenceError.generalError(
+                        error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
                 }
+                try connection.setUserVersion(Int(newVersion))
             }
         }
         return connection

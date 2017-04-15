@@ -30,4 +30,8 @@ enum PersistenceError: QuranError {
     var localizedDescriptionv2: String {
         return NSLocalizedString("NetworkError_Unknown", comment: "")
     }
+
+    static func generalError(_ error: Error, info: String) -> PersistenceError {
+        return .general("error: \(error), info: \(info)")
+    }
 }

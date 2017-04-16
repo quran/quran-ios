@@ -20,7 +20,16 @@
 
 import UIKit
 
-class ScrollViewPageBehavior: NSObject, UIScrollViewDelegate {
+class ScrollViewDelegateNotifier: NSObject, UIScrollViewDelegate {
+
+    var onScrollViewWillBeginDragging: (() -> Void)?
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        onScrollViewWillBeginDragging?()
+    }
+}
+
+class ScrollViewPageBehavior: ScrollViewDelegateNotifier {
 
     fileprivate (set) dynamic var currentPage: Int = 0
 

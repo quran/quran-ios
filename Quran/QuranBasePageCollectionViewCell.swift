@@ -23,6 +23,13 @@ import PromiseKit
 
 class QuranBasePageCollectionViewCell: UICollectionViewCell {
 
+    var onScrollViewWillBeginDragging: (() -> Void)? {
+        get { return scrollNotifier.onScrollViewWillBeginDragging }
+        set { return scrollNotifier.onScrollViewWillBeginDragging = newValue }
+    }
+
+    let scrollNotifier = ScrollViewDelegateNotifier()
+
     var page: QuranPage?
 
     // MARK: - share specifics

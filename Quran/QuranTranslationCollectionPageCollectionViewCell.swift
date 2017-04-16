@@ -75,6 +75,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         flowLayout.minimumLineSpacing = 0
 
         collectionView.ds_useDataSource(dataSource)
+        dataSource.scrollViewDelegate = scrollNotifier
     }
 
     override func layoutSubviews() {

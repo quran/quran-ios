@@ -131,7 +131,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
             bookmarkPersistence: bookmarksPersistence)
 
         let dataSources = [imagesDataSource.asBasicDataSourceRepresentable(), translationsDataSource.asBasicDataSourceRepresentable()]
-        let handlers = [imagesDataSource.asAnyQuranDataSourceHandler(), translationsDataSource.asAnyQuranDataSourceHandler()]
+        let handlers: [QuranDataSourceHandler] = [imagesDataSource, translationsDataSource]
         dataSource = QuranDataSource(dataSources: dataSources, handlers: handlers)
 
         super.init(nibName: nil, bundle: nil)
@@ -148,8 +148,15 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         dataSource.scrollViewDelegate = pageBehavior
-        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) { [weak self] (_, _, _) in
+        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) { [weak self] _ in
             self?.onPageChanged()
+        }
+        pageBehavior.onScrollViewWillBeginDragging = { [weak self] in
+            self?.setBarsHidden(true)
+        }
+
+        dataSource.onScrollViewWillBeginDragging = { [weak self] in
+            self?.setBarsHidden(true)
         }
     }
 

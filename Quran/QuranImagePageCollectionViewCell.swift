@@ -40,6 +40,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         scrollView.backgroundColor = UIColor.readingBackground()
+        scrollView.delegate = scrollNotifier
     }
 
     override func prepareForReuse() {

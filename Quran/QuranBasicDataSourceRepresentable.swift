@@ -21,41 +21,10 @@
 import Foundation
 import GenericDataSources
 
-protocol QuranDataSourceHandler {
-    associatedtype Item = QuranPage
-
+protocol QuranDataSourceHandler: class {
     func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool)
     func applicationDidBecomeActive()
     func invalidate()
-}
 
-class AnyQuranDataSourceHandler<Item>: QuranDataSourceHandler {
-
-    private let highlightAyatBlock: (Set<AyahNumber>, Bool) -> Void
-    private let becomeActiveBlock: () -> Void
-    private let invalidateBlock: () -> Void
-
-    init<DS: QuranDataSourceHandler>(_ ds: DS) where DS.Item == Item {
-        highlightAyatBlock = ds.highlightAyaht
-        becomeActiveBlock = ds.applicationDidBecomeActive
-        invalidateBlock = ds.invalidate
-    }
-
-    func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool) {
-        return highlightAyatBlock(ayat, isActive)
-    }
-
-    func applicationDidBecomeActive() {
-        return becomeActiveBlock()
-    }
-
-    func invalidate() {
-        return invalidateBlock()
-    }
-}
-
-extension QuranDataSourceHandler {
-    func asAnyQuranDataSourceHandler() -> AnyQuranDataSourceHandler<Item> {
-        return AnyQuranDataSourceHandler(self)
-    }
+    var onScrollViewWillBeginDragging: (() -> Void)? { get set }
 }

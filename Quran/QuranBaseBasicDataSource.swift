@@ -26,6 +26,8 @@ protocol QuranDataSourceDelegate: class {
 
 class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: BasicDataSource<QuranPage, CellType> {
 
+    var onScrollViewWillBeginDragging: (() -> Void)?
+
     private let bookmarkPersistence: BookmarksPersistence
 
     private var highlightedAyat: Set<AyahNumber> = Set()
@@ -41,6 +43,9 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
                                     configure cell: CellType,
                                     with item: QuranPage,
                                     at indexPath: IndexPath) {
+        cell.onScrollViewWillBeginDragging = { [weak self] in
+            self?.onScrollViewWillBeginDragging?()
+        }
         // configure common properties
         cell.setNeedsLayout()
         cell.page = item

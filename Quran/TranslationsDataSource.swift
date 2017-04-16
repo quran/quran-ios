@@ -27,6 +27,8 @@ protocol TranslationsDataSourceDelegate: class {
 
 class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDelegate {
 
+    var onEditingChanged: (() -> Void)?
+
     weak var delegate: TranslationsDataSourceDelegate?
 
     private let downloader: DownloadManager
@@ -69,6 +71,17 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         } else {
             return super.ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: kind, at: indexPath)
         }
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, willBeginEditingItemAt indexPath: IndexPath) {
+        // call it in the next cycle to give isEditing a chance to change
+        DispatchQueue.main.async {
+            self.onEditingChanged?()
+        }
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, didEndEditingItemAt indexPath: IndexPath) {
+        onEditingChanged?()
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {

@@ -79,6 +79,10 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         }
 
         loadLocalData()
+
+        dataSource.onEditingChanged = { [weak self] in
+            self?.updateRightBarItem(animated: true)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,25 +130,26 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         guard !dataSource.downloadedDS.isSelectable else {
             return
         }
-        guard !dataSource.downloadedDS.items.isEmpty else {
+
+        if dataSource.downloadedDS.items.isEmpty {
             tableView.setEditing(false, animated: true)
-            navigationItem.setRightBarButton(nil, animated: true)
-            return
         }
 
-        if navigationItem.rightBarButtonItem == nil {
-            updateRightBarItem(animated: true)
-        }
+        updateRightBarItem(animated: true)
     }
 
     private func updateRightBarItem(animated: Bool) {
-        let button: UIBarButtonItem
-        if tableView.isEditing {
+        let button: UIBarButtonItem?
+        if dataSource.downloadedDS.items.isEmpty {
+            button = nil
+        } else if tableView.isEditing {
             button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDoneTapped))
         } else {
             button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditTapped))
         }
-        navigationItem.setRightBarButton(button, animated: animated)
+        if navigationItem.rightBarButtonItem?.action != button?.action {
+            navigationItem.setRightBarButton(button, animated: animated)
+        }
     }
 
     @objc private func onEditTapped() {

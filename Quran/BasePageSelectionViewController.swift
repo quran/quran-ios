@@ -69,16 +69,6 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.hidesBarsOnSwipe = true
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.hidesBarsOnSwipe = false
-    }
-
     fileprivate func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
         let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in

@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BaseTableBasedViewController: BaseViewController {
+class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
 
     weak var tableView: UITableView!
     weak var statusView: UIView?
@@ -66,5 +66,9 @@ class BaseTableBasedViewController: BaseViewController {
         coordinator.animate(alongsideTransition: { [weak self] _ in
             self?.statusView?.alpha = isCompact ? 0 : 1
             }, completion: nil)
+    }
+
+    func scrollToTop() {
+        tableView.setContentOffset(CGPoint(x: 0, y: -tableView.contentInset.top), animated: true)
     }
 }

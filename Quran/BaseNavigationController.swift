@@ -20,10 +20,14 @@
 
 import UIKit
 
-class BaseNavigationController: UINavigationController {
+class BaseNavigationController: UINavigationController, ScrollableToTop {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.barStyle = .black
+    }
+
+    func scrollToTop() {
+        (topViewController as? ScrollableToTop)?.scrollToTop()
     }
 }

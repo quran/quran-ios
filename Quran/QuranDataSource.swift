@@ -23,10 +23,12 @@ import GenericDataSources
 
 class QuranDataSource: SegmentedDataSource {
 
-    private let dataSourceHandlers: [AnyQuranDataSourceHandler<QuranPage>]
+    private let dataSourceHandlers: [QuranDataSourceHandler]
     private let dataSourceRepresentables: [AnyBasicDataSourceRepresentable<QuranPage>]
 
-    private var selectedDataSourceHandler: AnyQuranDataSourceHandler<QuranPage> {
+    var onScrollViewWillBeginDragging: (() -> Void)?
+
+    private var selectedDataSourceHandler: QuranDataSourceHandler {
         return dataSourceHandlers[selectedDataSourceIndex]
     }
 
@@ -42,7 +44,7 @@ class QuranDataSource: SegmentedDataSource {
         }
     }
 
-    init(dataSources: [AnyBasicDataSourceRepresentable<QuranPage>], handlers: [AnyQuranDataSourceHandler<QuranPage>]) {
+    init(dataSources: [AnyBasicDataSourceRepresentable<QuranPage>], handlers: [QuranDataSourceHandler]) {
         assert(dataSources.count == handlers.count)
         self.dataSourceHandlers = handlers
         self.dataSourceRepresentables = dataSources
@@ -54,6 +56,11 @@ class QuranDataSource: SegmentedDataSource {
                                                selector: #selector(applicationDidBecomeActive),
                                                name: .UIApplicationDidBecomeActive,
                                                object: nil)
+        handlers.forEach {
+            $0.onScrollViewWillBeginDragging = { [weak self] in
+                self?.onScrollViewWillBeginDragging?()
+            }
+        }
     }
 
     deinit {

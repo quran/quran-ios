@@ -28,57 +28,29 @@ struct QariDataRetriever: DataRetriever {
                 fatalError("Couldn't load `\(Files.readers)` file")
             }
 
-            guard let names = readersDictionary["quran_readers_name"] as? [String] else {
-                fatalError("Couldn't read quran_readers_name.")
-            }
+            // get the values
+            let ids: [Int] = get(from: readersDictionary, key: "quran_readers_id")
+            let names: [String] = get(from: readersDictionary, key: "quran_readers_name")
+            let haveGaplessEquivalents: [Bool] = get(from: readersDictionary, key: "quran_readers_have_gapless_equivalents")
+            let localPaths: [String] = get(from: readersDictionary, key: "quran_readers_path")
+            let databaseNames: [String] = get(from: readersDictionary, key: "quran_readers_db_name")
+            let remoteURLs: [String] = get(from: readersDictionary, key: "quran_readers_urls")
+            let images: [String] = get(from: readersDictionary, key: "quran_readers_image")
 
-            guard let haveGaplessEquivalents = readersDictionary["quran_readers_have_gapless_equivalents"] as? [Bool] else {
-                fatalError("Couldn't read quran_readers_have_gapless_equivalents.")
-            }
+            // validate the array sizes
+            validateSize(ids, names)
+            validateSize(ids, haveGaplessEquivalents)
+            validateSize(ids, localPaths)
+            validateSize(ids, databaseNames)
+            validateSize(ids, remoteURLs)
+            validateSize(ids, images)
 
-            guard let localPaths = readersDictionary["quran_readers_path"] as? [String] else {
-                fatalError("Couldn't read quran_readers_path.")
-            }
-
-            guard let databaseNames = readersDictionary["quran_readers_db_name"] as? [String] else {
-                fatalError("Couldn't read quran_readers_db_name.")
-            }
-
-            guard let remoteURLs = readersDictionary["quran_readers_urls"] as? [String] else {
-                fatalError("Couldn't read quran_readers_urls.")
-            }
-
-            guard let images = readersDictionary["quran_readers_image"] as? [String] else {
-                fatalError("Couldn't read quran_readers_image.")
-            }
-
-            guard names.count == haveGaplessEquivalents.count else {
-                fatalError("Incorrect readers array count")
-            }
-
-            guard names.count == localPaths.count else {
-                fatalError("Incorrect readers array count")
-            }
-
-            guard names.count == databaseNames.count else {
-                fatalError("Incorrect readers array count")
-            }
-
-            guard names.count == remoteURLs.count else {
-                fatalError("Incorrect readers array count")
-            }
-
-            guard names.count == images.count else {
-                fatalError("Incorrect readers array count")
-            }
-
-            guard Set(localPaths).count == localPaths.count else {
-                fatalError("quran_readers_path should have unique values")
-            }
+            precondition(Set(localPaths).count == localPaths.count, "quran_readers_path should have unique values")
 
             var qaris: [Qari] = []
-
             for i in 0..<names.count {
+
+                precondition(i == ids[i], "Incorrect id")
 
                 guard !haveGaplessEquivalents[i] else {
                     continue
@@ -119,4 +91,15 @@ struct QariDataRetriever: DataRetriever {
             }
         }
     }
+}
+
+private func get<T>(from: NSDictionary, key: String) -> T {
+    guard let value = from[key] as? T else {
+        fatalError("Couldn't read \(key) from \(Files.readers)")
+    }
+    return value
+}
+
+private func validateSize<T, U>(_ first: [T], _ second: [U]) {
+    precondition(first.count == second.count, "Incorrect readers array count")
 }

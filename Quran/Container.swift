@@ -140,19 +140,19 @@ class Container {
         return dataSource
     }
 
-    func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
+    func createSurasRetriever() -> AnyInteractor<Void, [(Juz, [Sura])]> {
         return SurasDataRetriever().erasedType()
     }
 
-    func createQuartersRetriever() -> AnyDataRetriever<[(Juz, [Quarter])]> {
+    func createQuartersRetriever() -> AnyInteractor<Void, [(Juz, [Quarter])]> {
         return QuartersDataRetriever().erasedType()
     }
 
-    func createQuranPagesRetriever() -> AnyDataRetriever<[QuranPage]> {
+    func createQuranPagesRetriever() -> AnyInteractor<Void, [QuranPage]> {
         return QuranPagesDataRetriever().erasedType()
     }
 
-    func createQarisDataRetriever() -> AnyDataRetriever<[Qari]> {
+    func createQarisDataRetriever() -> AnyInteractor<Void, [Qari]> {
         return QariDataRetriever().erasedType()
     }
 

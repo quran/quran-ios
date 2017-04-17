@@ -18,12 +18,12 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
 
-struct QuranPagesDataRetriever: DataRetriever {
-    func retrieve(onCompletion: @escaping ([QuranPage]) -> Void) {
+struct QuranPagesDataRetriever: Interactor {
 
-        Queue.background.async {
+    func execute(_ input: Void) -> Promise<[QuranPage]> {
+        return DispatchQueue.default.promise2 {
 
             var pages: [QuranPage] = []
 
@@ -35,10 +35,7 @@ struct QuranPagesDataRetriever: DataRetriever {
                 let page = QuranPage(pageNumber: pageNumber, startAyah: ayah, juzNumber: juzNumber)
                 pages.append(page)
             }
-
-            Queue.main.async {
-                onCompletion(pages)
-            }
+            return pages
         }
     }
 }

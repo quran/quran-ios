@@ -18,12 +18,12 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
 
-struct QariDataRetriever: DataRetriever {
+struct QariDataRetriever: Interactor {
 
-    func retrieve(onCompletion: @escaping ([Qari]) -> Void) {
-        Queue.background.async {
+    func execute(_ input: Void) -> Promise<[Qari]> {
+        return DispatchQueue.default.promise2 {
             guard let readersDictionary = NSDictionary(contentsOf: Files.readers) else {
                 fatalError("Couldn't load `\(Files.readers)` file")
             }
@@ -86,9 +86,7 @@ struct QariDataRetriever: DataRetriever {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
 
-            Queue.main.async {
-                onCompletion(qaris)
-            }
+            return qaris
         }
     }
 }

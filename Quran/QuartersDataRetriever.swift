@@ -18,12 +18,12 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
 
-struct QuartersDataRetriever: DataRetriever {
-    func retrieve(onCompletion: @escaping ([(Juz, [Quarter])]) -> Void) {
+struct QuartersDataRetriever: Interactor {
 
-        Queue.background.async {
+    func execute(_ input: Void) -> Promise<[(Juz, [Quarter])]> {
+        return DispatchQueue.default.promise2 {
             guard let ayahsText = NSArray(contentsOf: Files.quarterPrefixArray) as? [String] else {
                 fatalError("Couldn't load `\(Files.quarterPrefixArray)` file")
             }
@@ -51,10 +51,7 @@ struct QuartersDataRetriever: DataRetriever {
                 }
                 juzsGroup.append((juz, quarters))
             }
-
-            Queue.main.async {
-                onCompletion(juzsGroup)
-            }
+            return juzsGroup
         }
     }
 }

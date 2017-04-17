@@ -25,7 +25,7 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
 
     override var screen: Analytics.Screen { return .suras }
 
-    override init(dataRetriever: AnyDataRetriever<[(Juz, [Sura])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
+    override init(dataRetriever: AnyInteractor<Void, [(Juz, [Sura])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 

@@ -29,7 +29,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let quranNavigationBar: QuranNavigationBar
 
     private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
-    private let dataRetriever: AnyDataRetriever<[QuranPage]>
+    private let dataRetriever: AnyInteractor<Void, [QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>
     private let translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>
@@ -97,7 +97,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     init(imageService                           : AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
          pageService                            : AnyCacheableService<Int, TranslationPage>,
-         dataRetriever                          : AnyDataRetriever<[QuranPage]>,
+         dataRetriever                          : AnyInteractor<Void, [QuranPage]>,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
          qarisControllerCreator                 : AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>,
@@ -179,10 +179,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // set the custom title view
         navigationItem.titleView = QuranPageTitleView()
 
-        dataRetriever.retrieve { [weak self] items in
+        dataRetriever.execute().then(on: .main) { [weak self] items -> Void in
             self?.dataSource.setItems(items)
             self?.scrollToFirstPage()
-        }
+        }.suppress()
 
         audioViewPresenter.onViewDidLoad()
     }

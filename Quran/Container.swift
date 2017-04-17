@@ -140,20 +140,20 @@ class Container {
         return dataSource
     }
 
-    func createSurasRetriever() -> AnyInteractor<Void, [(Juz, [Sura])]> {
-        return SurasDataRetriever().erasedType()
+    func createSurasRetriever() -> AnyGetInteractor<[(Juz, [Sura])]> {
+        return SurasDataRetriever().asAnyGetInteractor()
     }
 
-    func createQuartersRetriever() -> AnyInteractor<Void, [(Juz, [Quarter])]> {
-        return QuartersDataRetriever().erasedType()
+    func createQuartersRetriever() -> AnyGetInteractor<[(Juz, [Quarter])]> {
+        return QuartersDataRetriever().asAnyGetInteractor()
     }
 
-    func createQuranPagesRetriever() -> AnyInteractor<Void, [QuranPage]> {
-        return QuranPagesDataRetriever().erasedType()
+    func createQuranPagesRetriever() -> AnyGetInteractor<[QuranPage]> {
+        return QuranPagesDataRetriever().asAnyGetInteractor()
     }
 
-    func createQarisDataRetriever() -> AnyInteractor<Void, [Qari]> {
-        return QariDataRetriever().erasedType()
+    func createQarisDataRetriever() -> AnyGetInteractor<[Qari]> {
+        return QariDataRetriever().asAnyGetInteractor()
     }
 
     func createAyahInfoPersistence() -> AyahInfoPersistence {
@@ -319,17 +319,17 @@ class Container {
         return SQLiteActiveTranslationsPersistence()
     }
 
-    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+    func createTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
         return TranslationsRetrievalInteractor(
             networkManager: createNetworkManager(parser: createTranslationsParser()),
             persistence: createActiveTranslationsPersistence(),
-            localInteractor: createLocalTranslationsRetrievalInteractor()).erasedType()
+            localInteractor: createLocalTranslationsRetrievalInteractor()).asAnyGetInteractor()
     }
 
-    func createLocalTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+    func createLocalTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
         return LocalTranslationsRetrievalInteractor(
             persistence: createActiveTranslationsPersistence(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor()).erasedType()
+            versionUpdater: createTranslationsVersionUpdaterInteractor()).asAnyGetInteractor()
     }
 
     func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
@@ -337,7 +337,7 @@ class Container {
             simplePersistence: createSimplePersistence(),
             persistence: createActiveTranslationsPersistence(),
             downloader: createDownloadManager(),
-            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).erasedType()
+            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).asAnyInteractor()
     }
 
     func createSQLiteDatabaseVersionPersistence(filePath: String) -> DatabaseVersionPersistence {
@@ -347,7 +347,7 @@ class Container {
     func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
         return TranslationDeletionInteractor(
             persistence: createActiveTranslationsPersistence(),
-            simplePersistence: createSimplePersistence()).erasedType()
+            simplePersistence: createSimplePersistence()).asAnyInteractor()
     }
 
     func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {
@@ -363,16 +363,16 @@ class Container {
     }
 
     func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
-        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).erasedType()
+        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).asAnyInteractor()
     }
 
     func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
-        return TranslationVerseTextRetrieval().erasedType()
+        return TranslationVerseTextRetrieval().asAnyInteractor()
     }
 
     func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
         return CompositeVerseTextRetrieval(
             image: createImageVerseTextRetrieval(),
-            translation: createTranslationVerseTextRetrieval()).erasedType()
+            translation: createTranslationVerseTextRetrieval()).asAnyInteractor()
     }
 }

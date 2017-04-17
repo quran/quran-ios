@@ -27,15 +27,15 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
 
     private let dataSource: TranslationsDataSource
 
-    private let interactor: AnyInteractor<Void, [TranslationFull]>
-    private let localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>
+    private let interactor: AnyGetInteractor<[TranslationFull]>
+    private let localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>
 
     private var activityIndicator: UIActivityIndicatorView? {
         return navigationItem.leftBarButtonItem?.customView as? UIActivityIndicatorView
     }
 
-    init(interactor: AnyInteractor<Void, [TranslationFull]>,
-         localTranslationsInteractor: AnyInteractor<Void, [TranslationFull]>,
+    init(interactor: AnyGetInteractor<[TranslationFull]>,
+         localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>,
          dataSource: TranslationsDataSource) {
         self.interactor = interactor
         self.localTranslationsInteractor = localTranslationsInteractor
@@ -105,7 +105,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
     }
 
     @objc private func refreshData() {
-        interactor.execute()
+        interactor.get()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
@@ -117,7 +117,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
     }
 
     private func loadLocalData(completion: @escaping () -> Void = { }) {
-        localTranslationsInteractor.execute()
+        localTranslationsInteractor.get()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()

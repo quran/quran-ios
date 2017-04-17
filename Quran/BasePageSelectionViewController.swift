@@ -23,12 +23,12 @@ import GenericDataSources
 
 class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
 
-    let dataRetriever: AnyInteractor<Void, [(Juz, [ItemType])]>
+    let dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>
     let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
 
-    init(dataRetriever: AnyInteractor<Void, [(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
+    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
         self.dataRetriever = dataRetriever
         self.quranControllerCreator = quranControllerCreator
         super.init(nibName: nil, bundle: nil)
@@ -54,7 +54,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
 
-        dataRetriever.execute().then(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
+        dataRetriever.get().then(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
 
             guard let `self` = self else {
                 return

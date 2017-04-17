@@ -23,7 +23,7 @@ import KVOController
 
 class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate {
 
-    let qariRetreiver: AnyInteractor<Void, [Qari]>
+    let qariRetreiver: AnyGetInteractor<[Qari]>
     let persistence: SimplePersistence
     let gaplessAudioPlayer: AudioPlayerInteractor
     let gappedAudioPlayer: AudioPlayerInteractor
@@ -69,7 +69,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     init(persistence: SimplePersistence,
-         qariRetreiver: AnyInteractor<Void, [Qari]>,
+         qariRetreiver: AnyGetInteractor<[Qari]>,
          gaplessAudioPlayer: AudioPlayerInteractor,
          gappedAudioPlayer: AudioPlayerInteractor) {
         self.persistence = persistence
@@ -85,7 +85,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     func onViewDidLoad() {
         view?.hideAllControls()
 
-        qariRetreiver.execute().then(on: .main) { [weak self] (qaris) -> Void in
+        qariRetreiver.get().then(on: .main) { [weak self] (qaris) -> Void in
             guard let `self` = self else {
                 return
             }

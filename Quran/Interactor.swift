@@ -42,7 +42,30 @@ struct AnyInteractor<Input, Output>: Interactor {
 }
 
 extension Interactor {
-    func erasedType() -> AnyInteractor<Input, Output> {
+    func asAnyInteractor() -> AnyInteractor<Input, Output> {
         return AnyInteractor(self)
+    }
+}
+
+struct AnyGetInteractor<Output>: Interactor {
+    let executeClosure: (Void) -> Promise<Output>
+
+    init<InteractorType: Interactor>(_ interactor: InteractorType)
+        where InteractorType.Input == Void, InteractorType.Output == Output {
+            executeClosure = interactor.execute
+    }
+
+    func execute(_ input: Void) -> Promise<Output> {
+        return executeClosure(input)
+    }
+
+    func get() -> Promise<Output> {
+        return executeClosure(Void())
+    }
+}
+
+extension Interactor where Input == Void {
+    func asAnyGetInteractor() -> AnyGetInteractor<Output> {
+        return AnyGetInteractor(self)
     }
 }

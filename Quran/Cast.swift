@@ -26,3 +26,10 @@ func cast<S, T>(_ object: S, function: StaticString = #function) -> T {
     }
     return value
 }
+
+func unwrap<T>(_ object: T?, function: StaticString = #function) -> T {
+    guard let value = object else {
+        fatalError("\(function): Couldn't unwrap object of type '\(type(of: (object)))', found nil.")
+    }
+    return value
+}

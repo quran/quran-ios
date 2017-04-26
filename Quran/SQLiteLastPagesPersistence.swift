@@ -27,7 +27,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
-        return FileManager.default.documentsPath.stringByAppendingPath("last_pages.db")
+        return FileManager.documentsPath.stringByAppendingPath("last_pages.db")
     }
 
     let simplePersistence: SimplePersistence

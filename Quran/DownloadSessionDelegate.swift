@@ -25,18 +25,20 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
     private let acceptableStatusCodes = 200..<300
 
+    private let queue: OperationQueue
     private let persistence: DownloadsPersistence
 
     private var downloadingResponses: [Int: DownloadNetworkResponse] = [:]
+    private var downloadBatches: [DownloadBatch] = []
+    private var populated = false
+
+    weak var cancellable: NetworkResponseCancellable?
 
     var backgroundSessionCompletionHandler: (() -> Void)?
 
-    private var downloadBatches: [DownloadBatch] = []
-
-    private var populated = false
-
     init(persistence: DownloadsPersistence, queue: OperationQueue) {
         self.persistence = persistence
+        self.queue = queue
         super.init()
         queue.promise {
             self.downloadBatches = try persistence.retrieve(status: .downloading)
@@ -55,7 +57,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
             return nil
         }
         let progress = Progress(totalUnitCount: 1)
-        let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress)
+        let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress, cancellable: cancellable)
         downloadingResponses[task.taskIdentifier] = downloadRequest
         return downloadRequest
     }
@@ -70,7 +72,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
                     let taskId: Int = cast(item.download.taskId)
                     downloadingResponses[taskId] = nil
                 }
-                safely("cleanUpDownloads") {
+                suppress {
                     try persistence.delete(batchId: batchId)
                 }
             }
@@ -92,17 +94,17 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
             }
             if let task = tasksByIds[taskId] {
                 let progress = Progress(totalUnitCount: 1)
-                let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress)
+                let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress, cancellable: cancellable)
                 downloadingResponses[taskId] = downloadRequest
             } else {
                 if download.status == .completed {
                     let progress = Progress(totalUnitCount: 1)
                     progress.completedUnitCount = 1
-                    let downloadRequest = DownloadNetworkResponse(task: nil, download: download, progress: progress)
+                    let downloadRequest = DownloadNetworkResponse(task: nil, download: download, progress: progress, cancellable: cancellable)
                     downloadingResponses[taskId] = downloadRequest
                 } else if download.status == .downloading {
                     // set it as failed
-                    safely("populateOnGoingDownloads") {
+                    suppress {
                         try persistence.update(url: download.url, newStatus: .failed)
                     }
                 }
@@ -143,9 +145,9 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
     }
 
-    func getOnGoingDownloads() -> [[DownloadNetworkResponse]] {
+    func getOnGoingDownloads() -> [DownloadNetworkBatchResponse] {
         let groups = downloadingResponses.values.group { $0.download.batchId ?? 0 }
-        return groups.map { $1 }
+        return groups.map { DownloadNetworkBatchResponse(responses: $1) }
     }
 
     private func taskFailed(_ task: URLSessionTask) -> DownloadNetworkResponse? {
@@ -169,7 +171,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         downloadRequest.download = download
         downloadingResponses[task.taskIdentifier] = downloadRequest
 
-        safely("update(task:status:)") {
+        suppress {
             try persistence.update(url: download.url, newStatus: status)
         }
 
@@ -190,8 +192,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
                 "URL(\(downloadTask.currentRequest?.url?.absoluteString ?? ""))")
             return
         }
-        response.progress.totalUnitCount = totalBytesExpectedToWrite
-        response.progress.completedUnitCount = totalBytesWritten
+        response.progress.totalUnitCount = Double(totalBytesExpectedToWrite)
+        response.progress.completedUnitCount = Double(totalBytesWritten)
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
@@ -206,8 +208,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         }
         let fileManager = FileManager.default
 
-        let resumeURL = fileManager.documentsURL.appendingPathComponent(download.resumePath)
-        let destinationURL = fileManager.documentsURL.appendingPathComponent(download.destinationPath)
+        let resumeURL = FileManager.documentsURL.appendingPathComponent(download.resumePath)
+        let destinationURL = FileManager.documentsURL.appendingPathComponent(download.destinationPath)
 
         // remove the resume data
         try? fileManager.removeItem(at: resumeURL)
@@ -255,8 +257,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
         // save resume data, if found
         if let resumeData = error.resumeData {
-            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(response.download.resumePath)
-            safely("save.resume.data") {
+            let resumeURL = FileManager.documentsURL.appendingPathComponent(response.download.resumePath)
+            suppress {
                 try resumeData.write(to: resumeURL, options: [.atomic])
             }
             error = error.removeResumeData()
@@ -282,6 +284,38 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         let handler = backgroundSessionCompletionHandler
         backgroundSessionCompletionHandler = nil
         handler?()
+    }
+
+    func cancel(_ response: DownloadNetworkResponse) {
+        queue.promise { [weak self] in
+            guard let `self` = self else { return }
+
+            let batchId = unwrap(response.download.batchId)
+            let batch: [DownloadNetworkResponse] = self.downloadingResponses
+                .map { $1 }
+                .filter { $0.download.batchId == batchId }
+
+            // remove from memory
+            for item in batch {
+                let taskId: Int = cast(item.download.taskId)
+                self.downloadingResponses[taskId] = nil
+            }
+
+            guard !batch.isEmpty else {
+                // we already cancelled it before
+                return
+            }
+
+            // cancel all tasks
+            for response in batch {
+                response.task?.cancel()
+            }
+
+            // remove from persistence
+            suppress {
+                try self.persistence.delete(batchId: batchId)
+            }
+        }.cauterize()
     }
 
     private func validate(task: URLSessionTask) -> Error? {

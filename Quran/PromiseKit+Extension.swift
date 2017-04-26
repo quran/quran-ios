@@ -92,3 +92,50 @@ extension DispatchQueue {
         })
     }
 }
+
+extension Promise where T: Sequence {
+    public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
+        return then(on: q) { sequence -> [U] in
+            var array: [U] = []
+            for item in sequence {
+                array.append(try body(item))
+            }
+            return array
+        }
+    }
+
+    public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
+        return then(on: q) { sequence -> Promise<[U]> in
+            var array: [Promise<U>] = []
+            for item in sequence {
+                array.append(try body(item))
+            }
+            return when(fulfilled: array)
+
+        }
+    }
+}
+
+public protocol OptionalConvertible {
+    associatedtype Wrapped
+    func asOptional() -> Wrapped?
+}
+
+extension Optional: OptionalConvertible {
+    public func asOptional() -> Wrapped? { return self }
+}
+
+extension ImplicitlyUnwrappedOptional: OptionalConvertible {
+    public func asOptional() -> Wrapped? { return self }
+}
+
+extension Promise where T: OptionalConvertible {
+    public func `do`(on q: DispatchQueue = .default, execute body: @escaping (T.Wrapped) throws -> Void) -> Promise<T> {
+        return then(on: q) { value -> T in
+            if let wrapped = value.asOptional() {
+                try body(wrapped)
+            }
+            return value
+        }
+    }
+}

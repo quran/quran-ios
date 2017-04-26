@@ -37,7 +37,7 @@ protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getOnGoingDownloads() -> Promise<[[DownloadNetworkResponse]]>
+    func getOnGoingDownloads() -> Promise<[DownloadNetworkBatchResponse]>
 
     func download(_ requests: [Download]) -> [DownloadNetworkResponse]
 }

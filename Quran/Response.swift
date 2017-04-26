@@ -22,12 +22,11 @@ import Foundation
 
 protocol Response: class {
 
-    var progress: Foundation.Progress { get }
+    var progress: Progress { get }
 
-    var onCompletion: ((Result<()>) -> Void)? { get set }
     var result: Result<()>? { get set }
 
-    func resume()
-    func suspend()
+    func addCompletion(_ completion: @escaping (Result<()>) -> Void)
+
     func cancel()
 }

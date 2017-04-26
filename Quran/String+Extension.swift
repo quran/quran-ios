@@ -38,4 +38,13 @@ extension String {
     var pathComponents: [String] {
         return (self as NSString).pathComponents
     }
+
+    func stringByAppendingPath(_ path: String) -> String {
+        return (self as NSString).appendingPathComponent(path)
+    }
+
+    func stringByAppendingExtension(_ pathExtension: String) -> String {
+        return (self as NSString).appendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
+    }
+
 }

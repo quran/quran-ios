@@ -22,15 +22,11 @@ import Foundation
 
 extension FileManager {
 
-    var documentsPath: String {
-        return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    }
+    static let documentsPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 
-    var documentsURL: URL {
-        return urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
+    static let documentsURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 
-    var tempFileURL: URL {
+    static var tempFileURL: URL {
         let fileName = NSUUID().uuidString
         let temp = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
         return temp

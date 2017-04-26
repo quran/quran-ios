@@ -20,44 +20,53 @@
 
 import Foundation
 
+struct DownloadNetworkBatchResponse {
+    let responses: [DownloadNetworkResponse]
+    subscript(_ index: Int) -> DownloadNetworkResponse {
+        get { return responses[index] }
+    }
+
+    var isAudio: Bool {
+        return responses.first(where: { !$0.download.isAudio }) == nil
+    }
+}
+
 class DownloadNetworkResponse: Response {
+
+    private weak var cancellable: NetworkResponseCancellable?
 
     let task: URLSessionTask?
     var download: Download
 
-    let progress: Foundation.Progress
+    let progress: Progress
+
+    private var completions: [(Result<()>) -> Void] = []
 
     var result: Result<()>? {
         didSet {
             if let result = result {
-                onCompletion?(result)
+                for completion in completions {
+                    completion(result)
+                }
             }
         }
     }
 
-    var onCompletion: ((Result<()>) -> Void)? {
-        didSet {
-            if let result = result {
-                onCompletion?(result)
-            }
+    func addCompletion(_ completion: @escaping (Result<()>) -> Void) {
+        completions.append(completion)
+        if let result = result {
+            completion(result)
         }
     }
 
-    init(task: URLSessionTask?, download: Download, progress: Foundation.Progress) {
+    init(task: URLSessionTask?, download: Download, progress: Progress, cancellable: NetworkResponseCancellable?) {
         self.task = task
         self.download = download
         self.progress = progress
-    }
-
-    func resume() {
-        task?.resume()
-    }
-
-    func suspend() {
-        task?.suspend()
+        self.cancellable = cancellable
     }
 
     func cancel() {
-        task?.cancel()
+        cancellable?.cancel(self)
     }
 }

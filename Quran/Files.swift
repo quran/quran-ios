@@ -36,8 +36,8 @@ struct Files {
     static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
     static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
 
-    static let databasesPath: String = FileManager.default.documentsPath.stringByAppendingPath(databasesPathComponent)
-    static let translationsURL = FileManager.default.documentsURL.appendingPathComponent(translationsPathComponent)
+    static let databasesPath: String = FileManager.documentsPath.stringByAppendingPath(databasesPathComponent)
+    static let translationsURL = FileManager.documentsURL.appendingPathComponent(translationsPathComponent)
 }
 
 private func fileURL(_ fileName: String, withExtension `extension`: String) -> URL {
@@ -56,7 +56,7 @@ private func filePath(_ fileName: String, ofType type: String) -> String {
 
 extension Qari {
     func localFolder() -> URL {
-        return FileManager.default.documentsURL.appendingPathComponent(path)
+        return FileManager.documentsURL.appendingPathComponent(path)
     }
 }
 
@@ -69,15 +69,5 @@ extension URL {
 extension String {
     var resumePath: String {
         return stringByAppendingExtension(Files.downloadResumeDataExtension)
-    }
-}
-
-extension String {
-    func stringByAppendingPath(_ path: String) -> String {
-        return (self as NSString).appendingPathComponent(path)
-    }
-
-    func stringByAppendingExtension(_ pathExtension: String) -> String {
-        return (self as NSString).appendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
     }
 }

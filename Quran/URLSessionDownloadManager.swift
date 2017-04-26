@@ -48,6 +48,7 @@ class URLSessionDownloadManager: DownloadManager {
     init(configuration: URLSessionConfiguration, persistence: DownloadsPersistence) {
         let handler = DownloadSessionDelegate(persistence: persistence, queue: delegateQueue)
         self.delegate = ThreadSafeDownloadSessionDelegate(handler: handler, queue: delegateQueue)
+        handler.cancellable = self.delegate
         session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: delegateQueue)
         populateOnGoingDownloads()
     }
@@ -56,7 +57,7 @@ class URLSessionDownloadManager: DownloadManager {
         delegate.populateOnGoingDownloads(from: session)
     }
 
-    func getOnGoingDownloads() -> Promise<[[DownloadNetworkResponse]]> {
+    func getOnGoingDownloads() -> Promise<[DownloadNetworkBatchResponse]> {
         return delegate.getOnGoingDownloads()
     }
 
@@ -67,7 +68,7 @@ class URLSessionDownloadManager: DownloadManager {
         for var download in requests {
             let request = URLRequest(url: download.url)
             let task: URLSessionDownloadTask
-            let resumeURL = FileManager.default.documentsURL.appendingPathComponent(download.resumePath)
+            let resumeURL = FileManager.documentsURL.appendingPathComponent(download.resumePath)
             if let data = try? Data(contentsOf: resumeURL) {
                 task = session.downloadTask(withResumeData: data)
             } else {
@@ -76,8 +77,8 @@ class URLSessionDownloadManager: DownloadManager {
             tasks.append(task)
             download.taskId = task.taskIdentifier
 
-            let progress = Foundation.Progress(totalUnitCount: 1)
-            let response = DownloadNetworkResponse(task: task, download: download, progress: progress)
+            let progress = Progress(totalUnitCount: 1)
+            let response = DownloadNetworkResponse(task: task, download: download, progress: progress, cancellable: delegate)
             responses.append(response)
         }
 

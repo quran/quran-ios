@@ -90,7 +90,7 @@ public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error
     Swift.fatalError(fullMessage, file: file, line: line)
 }
 
-public func safely(_ from: String, _ body: () throws -> Void) {
+public func suppress(_ from: String = #function, _ body: () throws -> Void) {
     do {
         try body()
     } catch {

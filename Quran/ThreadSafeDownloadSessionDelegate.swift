@@ -21,15 +21,19 @@
 import Foundation
 import PromiseKit
 
-protocol URLSessionDownloadHandler: URLSessionDownloadDelegate {
+protocol NetworkResponseCancellable: class {
+    func cancel(_ response: DownloadNetworkResponse)
+}
+
+protocol URLSessionDownloadHandler: URLSessionDownloadDelegate, NetworkResponseCancellable {
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
     func populateOnGoingDownloads(from downloadTasks: [URLSessionTask])
     func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse])
-    func getOnGoingDownloads() -> [[DownloadNetworkResponse]]
+    func getOnGoingDownloads() -> [DownloadNetworkBatchResponse]
 }
 
-class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
+class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, NetworkResponseCancellable {
 
     private let handler: URLSessionDownloadHandler
     private let queue: OperationQueue
@@ -59,7 +63,7 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         }
     }
 
-    func getOnGoingDownloads() -> Promise<[[DownloadNetworkResponse]]> {
+    func getOnGoingDownloads() -> Promise<[DownloadNetworkBatchResponse]> {
         return queue.promise {
             self.handler.getOnGoingDownloads()
         }
@@ -87,5 +91,9 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         handler.urlSessionDidFinishEvents?(forBackgroundURLSession: session)
+    }
+
+    func cancel(_ response: DownloadNetworkResponse) {
+        handler.cancel(response)
     }
 }

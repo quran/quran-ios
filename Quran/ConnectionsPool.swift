@@ -32,7 +32,7 @@ final class ConnectionsPool {
                                                      withIntermediateDirectories: true,
                                                      attributes: nil)
             let connection = try Connection(filePath, readonly: false)
-            // wait for max of 3 seconds if the db is locked.
+            // wait for max of 5 seconds if the db is locked.
             // should be enough for most of the cases.
             connection.busyTimeout = 5
             return connection

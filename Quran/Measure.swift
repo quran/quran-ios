@@ -20,10 +20,10 @@
 
 import Foundation
 
-func measure(_ tag: String = #function, limit: TimeInterval = 0, _ body: () -> Void) {
+func measure<T>(_ tag: String = #function, limit: TimeInterval = 0, _ body: () throws -> T) rethrows -> T {
 
     let start = DispatchTime.now() // <<<<<<<<<< Start time
-    body()
+    let result = try body()
     let end = DispatchTime.now()   // <<<<<<<<<<   end time
     let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
     let timeInterval = Double(nanoTime) / 1_000_000_000 // Technically could overflow for long running tests
@@ -31,4 +31,6 @@ func measure(_ tag: String = #function, limit: TimeInterval = 0, _ body: () -> V
     if timeInterval >= limit {
         print("[\(tag)]: Time Elabsed \(timeInterval) seconds")
     }
+
+    return result
 }

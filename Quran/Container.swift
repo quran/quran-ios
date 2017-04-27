@@ -43,9 +43,14 @@ class Container {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
+                                      createBookmarksController(),
                                       createTranslationsNavigationController(),
-                                      createBookmarksController()]
+                                      createAudioDownloadsNavigationController()]
         return controller
+    }
+
+    func createAudioDownloadsNavigationController() -> UIViewController {
+        return AudioDownloadsNavigationController(rootViewController: createAudioDownloadsViewController())
     }
 
     func createTranslationsNavigationController() -> UIViewController {
@@ -54,6 +59,15 @@ class Container {
 
     func createSurasNavigationController() -> UIViewController {
         return SurasNavigationController(rootViewController: createSurasViewController())
+    }
+
+    func createAudioDownloadsViewController() -> UIViewController {
+        return AudioDownloadsViewController(
+            retriever: createDownloadableQariAudioRetriever(),
+            downloader: createDownloadManager(),
+            ayahsDownloader: createAyahsAudioDownloader(),
+            qariAudioDownloadRetriever: createQariListToQariAudioDownloadRetriever(),
+            deletionInteractor: createQariAudioDeleteInteractor())
     }
 
     func createJuzsNavigationController() -> UIViewController {

@@ -28,6 +28,8 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
         return Files.databasesPath.stringByAppendingPath("downloads.db")
     }
 
+    private var connection: Connection!
+
     private struct Downloads {
         static let table = Table("download")
         static let id = Expression<Int64>("id")
@@ -42,6 +44,10 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     private struct Batches {
         static let table = Table("batch")
         static let id = Expression<Int64>("id")
+    }
+
+    init() {
+        connection = try? attempt(times: 3) { try openConnection() }
     }
 
     func onCreate(connection: Connection) throws {
@@ -73,7 +79,7 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     }
 
     private func retrieve(_ status: Download.Status?) throws -> [DownloadBatch] {
-        return try run { connection in
+        return try run(using: connection) { connection in
             var query = Downloads.table
             if let status = status {
                 query = query.filter(Downloads.status == status.rawValue)
@@ -85,26 +91,29 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     }
 
     func insert(batch: [Download]) throws -> [Download] {
-        return try run { connection in
+        return try run(using: connection) { connection in
             // insert batch
             let batchInsert = Batches.table.insert()
             try connection.run(batchInsert)
             let batchId = connection.lastInsertRowid
 
-            // insert downloads
-            for download in batch {
-                let taskId: Int = cast(download.taskId)
-                let insert = Downloads.table.insert(
-                    Downloads.taskId <- taskId,
-                    Downloads.url <- download.url.absoluteString,
-                    Downloads.resumePath <- download.resumePath,
-                    Downloads.destinationPath <- download.destinationPath,
-                    Downloads.status <- Download.Status.downloading.rawValue,
-                    Downloads.batchId <- batchId)
-
-                try connection.run(insert)
+            // insert downloads multiple values at once
+            let prefix = "INSERT INTO \"download\" (\"taskId\", \"url\", \"resumePath\", \"destinationPath\", \"status\", \"batchId\") VALUES "
+            let values: [String] = batch.map { download -> String in
+                let value = "(" +
+                    "\(unwrap(download.taskId))," +
+                    "'" + download.url.absoluteString + "'," +
+                    "'" + download.resumePath + "'," +
+                    "'" + download.destinationPath + "'," +
+                    "\(Download.Status.downloading.rawValue)," +
+                    "\(batchId)" +
+                ")"
+                return value
             }
+            let statement = prefix + values.joined(separator: ",\n")
+            try connection.run(statement)
 
+            // prepare the result
             var downloads: [Download] = []
             for var download in batch {
                 download.batchId = batchId
@@ -124,15 +133,19 @@ struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     }
 
     func delete(batchId: Int64) throws {
-        return try run { connection in
-            let query = Downloads.table.filter(Downloads.batchId == batchId)
-            let delete = query.delete()
-            try connection.run(delete)
+        return try run(using: connection) { connection in
+            let query1 = Downloads.table.filter(Downloads.batchId == batchId)
+            let delete1 = query1.delete()
+            try connection.run(delete1)
+
+            let query2 = Downloads.table.filter(Batches.id == batchId)
+            let delete2 = query2.delete()
+            try connection.run(delete2)
         }
     }
 
     private func update(filter: Expression<Bool>, newStatus status: Download.Status) throws {
-        return try run { connection in
+        return try run(using: connection) { connection in
             let rows = Downloads.table.filter(filter)
             let update = rows.update(Downloads.status <- status.rawValue)
             try connection.run(update)

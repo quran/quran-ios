@@ -38,14 +38,19 @@ extension ReadonlySQLitePersistence {
         return connection
     }
 
-    func run<T>(_ block: (Connection) throws -> T) throws -> T {
+    func run<T>(using external: Connection? = nil, _ block: (Connection) throws -> T) throws -> T {
         do {
             // open the connection
-            let connection = try openConnection()
+            let connection: Connection
+            if let external = external {
+                connection = external
+            } else {
+                connection = try openConnection()
 
-            // close the connection
-            defer {
-                ConnectionsPool.default.close(connection: connection)
+                // close the connection
+                defer {
+                    ConnectionsPool.default.close(connection: connection)
+                }
             }
 
             // execute the query

@@ -22,10 +22,11 @@ import Foundation
 
 public struct Protected<T> {
     private var _data: T
-    private let lock = NSLock()
+    private let lock: NSLocking
 
-    init(_ data: T) {
+    init(_ data: T, using lock: NSLocking = NSLock()) {
         _data = data
+        self.lock = lock
     }
 
     public var value: T {
@@ -39,5 +40,20 @@ public struct Protected<T> {
             defer { lock.unlock() }
             _data = newValue
         }
+    }
+
+    public mutating func sync<U>(_ body: (inout T) -> U) -> U {
+        lock.lock()
+        defer { lock.unlock() }
+
+        var d = _data
+        let result = body(&d)
+        _data = d
+        return result
+    }
+
+    public var unsafeAccess: T {
+        get { return _data }
+        set { _data = newValue }
     }
 }

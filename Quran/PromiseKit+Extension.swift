@@ -73,6 +73,28 @@ extension OperationQueue {
             }
         })
     }
+
+    func promise2<T>(execute body: @escaping () throws -> T) -> Promise<T> {
+
+        // if the same operation queue, then execute it immediately
+        if self == OperationQueue.current {
+            do {
+                return Promise(value: try body())
+            } catch {
+                return Promise(error: error)
+            }
+        }
+
+        return Promise(resolvers: { (fulfill, reject) in
+            addOperation {
+                do {
+                    fulfill(try body())
+                } catch {
+                    reject(error)
+                }
+            }
+        })
+    }
 }
 
 extension DispatchQueue {

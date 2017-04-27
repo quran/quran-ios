@@ -380,6 +380,15 @@ struct Quran {
 }
 
 extension Quran {
+    static let startAyah = AyahNumber(sura: 1, ayah: 1)
+    static let lastAyah: AyahNumber = {
+        let lastSura = SuraPageStart.count
+        let lastAyah = SuraNumberOfAyahs[lastSura - 1]
+        return AyahNumber(sura: lastSura, ayah: lastAyah)
+    }()
+}
+
+extension Quran {
     static func startAyahForPage(_ page: Int) -> AyahNumber {
         return AyahNumber(sura: PageSuraStart[page - 1], ayah: PageAyahStart[page - 1])
     }

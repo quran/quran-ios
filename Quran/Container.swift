@@ -256,11 +256,15 @@ class Container {
     }
 
     func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return GappedAudioFilesDownloader(downloader: createDownloadManager())
+        return AudioFilesDownloader(audioFileList: GappedQariAudioFileListRetrieval(),
+                                    downloader: createDownloadManager(),
+                                    ayahDownloader: createAyahsAudioDownloader())
     }
 
     func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return GaplessAudioFilesDownloader(downloader: createDownloadManager())
+        return AudioFilesDownloader(audioFileList: GaplessQariAudioFileListRetrieval(),
+                                    downloader: createDownloadManager(),
+                                    ayahDownloader: createAyahsAudioDownloader())
     }
 
     func createGappedAudioPlayer() -> AudioPlayer {
@@ -374,5 +378,28 @@ class Container {
         return CompositeVerseTextRetrieval(
             image: createImageVerseTextRetrieval(),
             translation: createTranslationVerseTextRetrieval()).asAnyInteractor()
+    }
+
+    func createDownloadableQariAudioRetriever() -> AnyGetInteractor<[DownloadableQariAudio]> {
+        return DownloadableQariAudioRetriever(
+            downloader: createDownloadManager(),
+            qarisRetriever: createQarisDataRetriever(),
+            downloadsInfoRetriever: createQariListToQariAudioDownloadRetriever()).asAnyGetInteractor()
+    }
+
+    func createQariListToQariAudioDownloadRetriever() -> AnyInteractor<[Qari], [QariAudioDownload]> {
+        return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    }
+
+    func createQariAudioFileListRetrievalCreator() -> AnyCreator<QariAudioFileListRetrieval, Qari> {
+        return QariAudioFileListRetrievalCreator().asAnyCreator()
+    }
+
+    func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]> {
+        return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    }
+
+    func createQariAudioDeleteInteractor() -> AnyInteractor<Qari, Void> {
+        return QariAudioDeleteInteractor().asAnyInteractor()
     }
 }

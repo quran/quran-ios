@@ -54,7 +54,7 @@ class TranslationDeletionInteractor: Interactor {
                 var translation = item.translation
                 translation.installedVersion = nil
                 try self.persistence.update(translation)
-                return TranslationFull(translation: translation, downloadResponse: item.downloadResponse)
+                return TranslationFull(translation: translation, response: item.response)
         }
     }
 }

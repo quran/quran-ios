@@ -47,9 +47,9 @@ class TranslationsVersionUpdaterInteractor: Interactor {
             .then(execute: createTranslations)
     }
 
-    private func createTranslations(translations: [Translation], downloadsBatches: [[DownloadNetworkResponse]]) -> [TranslationFull] {
+    private func createTranslations(translations: [Translation], downloadsBatches: [DownloadNetworkBatchResponse]) -> [TranslationFull] {
         let downloads = downloadsBatches
-            .flatMap { $0 }
+            .flatMap { $0.responses }
             .filter { $0.download.isTranslation }
 
         let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
@@ -60,11 +60,11 @@ class TranslationsVersionUpdaterInteractor: Interactor {
                 downloadsByFile[Files.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
             }
             if let response = responses.first {
-                return TranslationFull(translation: translation, downloadResponse: response)
+                return TranslationFull(translation: translation, response: response)
             }
 
             // not downloaded
-            return TranslationFull(translation: translation, downloadResponse: nil)
+            return TranslationFull(translation: translation, response: nil)
         }
     }
 

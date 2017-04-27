@@ -1,5 +1,5 @@
 //
-//  TranslationDownloadButton.swift
+//  DownloadButton.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/14/17.
@@ -21,9 +21,9 @@
 import UIKit
 import DownloadButton
 
-class TranslationDownloadButton: UIView {
+class DownloadButton: UIView {
 
-    var state: Translation.State = .notDownloaded {
+    var state: DownloadState = .notDownloaded {
         didSet {
             stateViews.forEach { $0.isHidden = true }
             stateConstraints.forEach { $0.isActive = false }
@@ -50,7 +50,7 @@ class TranslationDownloadButton: UIView {
         }
     }
 
-    var onButtonTapped: ((TranslationDownloadButton) -> Void)?
+    var onButtonTapped: ((DownloadButton) -> Void)?
 
     var downloadConstraints: [NSLayoutConstraint] = []
     var pendingConstraints: [NSLayoutConstraint] = []

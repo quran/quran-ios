@@ -23,7 +23,7 @@ import UIKit
 class TranslationTableViewCell: UITableViewCell {
 
     @IBOutlet weak var checkbox: UIImageView!
-    @IBOutlet weak var downloadButton: TranslationDownloadButton!
+    @IBOutlet weak var downloadButton: DownloadButton!
     @IBOutlet fileprivate weak var firstLabel: UILabel!
     @IBOutlet fileprivate weak var secondLabel: UILabel!
     @IBOutlet fileprivate weak var languageLabel: UILabel!

@@ -22,11 +22,10 @@ import Foundation
 
 func measure<T>(_ tag: String = #function, limit: TimeInterval = 0, _ body: () throws -> T) rethrows -> T {
 
-    let start = DispatchTime.now() // <<<<<<<<<< Start time
+    let start = CFAbsoluteTimeGetCurrent() // <<<<<<<<<< Start time
     let result = try body()
-    let end = DispatchTime.now()   // <<<<<<<<<<   end time
-    let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
-    let timeInterval = Double(nanoTime) / 1_000_000_000 // Technically could overflow for long running tests
+    let end = CFAbsoluteTimeGetCurrent()   // <<<<<<<<<<   end time
+    let timeInterval = end - start
 
     if timeInterval >= limit {
         print("[\(tag)]: Time Elabsed \(timeInterval) seconds")

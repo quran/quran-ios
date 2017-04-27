@@ -64,14 +64,7 @@ struct QariDataRetriever: Interactor {
                     type = .gapless(databaseName: databaseName)
                 }
 
-                let image = images[i]
-                let imageName: String?
-                if image.isEmpty {
-                    imageName = nil
-                } else {
-                    imageName = image
-                }
-
+                let imageName = images[i]
                 let qari = Qari(
                     id: i,
                     name: NSLocalizedString(names[i], tableName: "Readers", comment: ""),

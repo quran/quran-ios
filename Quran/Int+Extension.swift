@@ -1,8 +1,8 @@
 //
-//  QarisDataSource.swift
+//  Int+Extension.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 5/12/16.
+//  Created by Mohamed Afifi on 4/23/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,16 +18,16 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-import GenericDataSources
+extension Int {
 
-class QarisDataSource: BasicDataSource<Qari, QariTableViewCell> {
+    // Better in performance more than 50% faster than String(format: "%03d", sura)
+    func as3DigitString() -> String {
+        let v3 = self / 100
+        let m2 = self - v3 * 100
 
-    override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: QariTableViewCell,
-                                    with item: Qari,
-                                    at indexPath: IndexPath) {
-        cell.titleLabel.text = item.name
-        cell.photoImageView.image = UIImage(named: item.imageName)
+        let v2 = m2 / 10
+        let m1 = m2 - v2 * 10
+
+        return v3.description + v2.description + m1.description
     }
 }

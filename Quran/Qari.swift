@@ -31,7 +31,7 @@ struct Qari: Hashable {
     let path: String
     let audioURL: URL
     let audioType: AudioType
-    let imageName: String?
+    let imageName: String
 
     var hashValue: Int {
         return id.hashValue

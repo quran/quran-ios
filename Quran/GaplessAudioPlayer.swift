@@ -95,8 +95,7 @@ extension GaplessAudioPlayer {
             PlayerItemInfo(
                 title: Quran.nameForSura($1),
                 artist: qari.name,
-                artwork: qari.imageName
-                    .flatMap { UIImage(named: $0) }
+                artwork: UIImage(named: qari.imageName)
                     .flatMap { MPMediaItemArtwork(image: $0) })
         }
         return (items, info)
@@ -111,7 +110,7 @@ extension GaplessAudioPlayer {
         // loop over the files
         var files: [(URL, Int)] = []
         for sura in startAyah.sura...endAyah.sura {
-            let fileName = String(format: "%03d", sura)
+            let fileName = sura.as3DigitString()
             let localURL = qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
             files.append(localURL, sura)
         }

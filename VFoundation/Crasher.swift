@@ -33,6 +33,8 @@ public protocol Crasher {
     func setValue<T>(_ value: T?, forKey key: CrasherKey<T>)
     func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool, file: StaticString, line: UInt)
     func log(_ message: String)
+
+    var localizedUnkownError: String { get }
 }
 
 public struct Crash {

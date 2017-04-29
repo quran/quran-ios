@@ -43,6 +43,6 @@ extension UIViewController {
 extension Error {
     fileprivate func getErrorDescription() -> String {
         let description = (self as? LocalizedError)?.errorDescription
-        return description ?? NSLocalizedString("NetworkError_Unknown", comment: "")
+        return description ?? Crash.crasher?.localizedUnkownError ?? "Something went wrong!"
     }
 }

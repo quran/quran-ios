@@ -31,7 +31,8 @@ extension CrasherKeyBase {
 
 struct CrashlyticsCrasher: Crasher {
 
-    var tag: StaticString { return "Quran" }
+    let tag: StaticString = "Quran"
+    let localizedUnkownError: String = NSLocalizedString("NetworkError_Unknown", comment: "")
 
     func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
 

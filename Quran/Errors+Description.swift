@@ -41,9 +41,9 @@ extension NetworkError: LocalizedError {
         let text: String
         switch self {
         case .unknown:
-            text = NSLocalizedString("NetworkError_Unknown", comment: "Error description")
+            text = NSLocalizedString("unknown_error_message", comment: "Error description")
         case .serverError:
-            text = NSLocalizedString("NetworkError_Unknown", comment: "Error description")
+            text = NSLocalizedString("unknown_error_message", comment: "Error description")
         case .notConnectedToInternet:
             text = NSLocalizedString("NetworkError_NotConnectedToInternet", comment: "Error description")
         case .internationalRoamingOff:
@@ -65,6 +65,6 @@ extension ParsingError: LocalizedError {
 
 extension PersistenceError: LocalizedError {
     public var errorDescription: String {
-        return NSLocalizedString("NetworkError_Unknown", comment: "")
+        return NSLocalizedString("unknown_error_message", comment: "")
     }
 }

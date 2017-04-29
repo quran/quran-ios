@@ -6,7 +6,7 @@
 "NetworkError_InternationalRoamingOff" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
 "NetworkError_NotConnectedToInternet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
 "NetworkError_ServerNotReachable" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-"NetworkError_Unknown" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"unknown_error_message" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
 "NetworkError_Parsing" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
 
 "FileSystemError_Unknown" = "Onbekende fout bij het toetreden van de hardeschijf van het toestel.";

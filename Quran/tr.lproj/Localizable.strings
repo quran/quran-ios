@@ -8,7 +8,7 @@
 "NetworkError_InternationalRoamingOff" = "Uluslararası dolaşım için izin verilmiyor. Dolasim ayarini degistirin ya da Wi-Fi baglantisini açiniz.";
 "NetworkError_NotConnectedToInternet" = "internete bağlı değil. Wi-Fi açiniz veya hücresel veri bağlantısı’ni aktif ediniz.";
 "NetworkError_ServerNotReachable" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
-"NetworkError_Unknown" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
+"unknown_error_message" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
 "NetworkError_Parsing" = "Bir hata olustu. Lütfen tekrar deneyiniz.";
 
 "FileSystemError_Unknown" = "Cihazi disk’e erişirken bilinmeyen bir hata oluştu";

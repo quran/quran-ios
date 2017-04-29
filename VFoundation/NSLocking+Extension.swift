@@ -22,16 +22,19 @@ import Foundation
 
 extension NSLocking {
 
-    public func execute<T>(_ block: () -> T) -> T {
+    public func synchronized<T>(_ block: () -> T) -> T {
         lock()
-        let result = block()
-        unlock()
-        return result
+        defer {
+            unlock()
+        }
+        return block()
     }
 
-    public func execute(_ block: () -> Void) {
+    public func synchronized(_ block: () -> Void) {
         lock()
+        defer {
+            unlock()
+        }
         block()
-        unlock()
     }
 }

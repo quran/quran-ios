@@ -36,7 +36,7 @@ public final class Once {
             return
         }
 
-        let shouldExecute: Bool = lock.execute {
+        let shouldExecute: Bool = lock.synchronized {
             // check again inside a lock to prevent 2 threads entering at the same time
             guard !executed else {
                 return false

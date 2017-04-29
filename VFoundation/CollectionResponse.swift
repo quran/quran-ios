@@ -64,7 +64,7 @@ open class CollectionResponse: Response {
                     return
                 }
 
-                let allCompleted: Bool = self.completionLock.execute {
+                let allCompleted: Bool = self.completionLock.synchronized {
                     completed += 1
                     return completed == total
                 }

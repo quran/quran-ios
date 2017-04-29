@@ -44,7 +44,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
     }
 
     open func invalidate() {
-        lock.execute {
+        lock.synchronized {
             queue.cancelAllOperations()
             inProgressOperations.removeAll()
             cache.removeAllObjects()
@@ -52,7 +52,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
     }
 
     open func get(_ input: Input) -> Promise<Output> {
-        return lock.execute { () -> Promise<Output> in
+        return lock.synchronized { () -> Promise<Output> in
 
             if let result = cache.object(forKey: input) {
 //                print("already cached: \(input)")
@@ -71,7 +71,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
                 // cache the result
                 let promise = operation.promise
                     .then { result -> Output in
-                        self.lock.execute {
+                        self.lock.synchronized {
                             self.cache.setObject(result, forKey: input)
                             // remove from in progress
                             self.inProgressOperations.removeValue(forKey: input)
@@ -86,7 +86,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
     }
 
     open func getCached(_ input: Input) -> Output? {
-        return lock.execute {
+        return lock.synchronized {
             return cache.object(forKey: input)
         }
     }

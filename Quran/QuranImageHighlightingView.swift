@@ -73,7 +73,7 @@ class QuranImageHighlightingView: UIView {
             for ayah in ayat {
                 guard let ayahInfo = ayahInfoData?[ayah] else { continue }
                 for piece in ayahInfo {
-                    let rectangle = piece.rect.applyScale(imageScale)
+                    let rectangle = piece.rect.scaled(by: imageScale)
                     rectangles.append(rectangle)
                 }
             }
@@ -89,7 +89,7 @@ class QuranImageHighlightingView: UIView {
         guard let ayahInfoData = ayahInfoData else { return nil }
         for (ayahNumber, ayahInfos) in ayahInfoData {
             for piece in ayahInfos {
-                let rectangle = piece.rect.applyScale(imageScale)
+                let rectangle = piece.rect.scaled(by: imageScale)
                 if rectangle.contains(location) {
                     return ayahNumber
                 }

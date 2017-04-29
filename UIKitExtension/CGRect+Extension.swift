@@ -35,7 +35,7 @@ extension CGRect {
         public static let zero = Scale(scale: 0, xOffset: 0, yOffset: 0)
     }
 
-    public func applyScale(_ scale: Scale) -> CGRect {
+    public func scaled(by scale: Scale) -> CGRect {
         return CGRect(x: minX * scale.scale + scale.xOffset,
                       y: minY * scale.scale + scale.yOffset,
                       width: width * scale.scale,

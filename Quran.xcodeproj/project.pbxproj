@@ -81,7 +81,6 @@
 		5437D3B61EB392C300795FA9 /* NSLocking+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3B51EB392C300795FA9 /* NSLocking+Extension.swift */; };
 		543FDFE11EB394D300687DF8 /* CollectionType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFD71EB394D300687DF8 /* CollectionType+Extension.swift */; };
 		543FDFE21EB394D300687DF8 /* NumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFD81EB394D300687DF8 /* NumberFormatter+Extension.swift */; };
-		543FDFE31EB394D300687DF8 /* Set+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFD91EB394D300687DF8 /* Set+Extension.swift */; };
 		543FDFEB1EB3B51300687DF8 /* CollectionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFEA1EB3B51300687DF8 /* CollectionResponse.swift */; };
 		543FDFF41EB3B60400687DF8 /* AbstractPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFED1EB3B60400687DF8 /* AbstractPreloadingOperation.swift */; };
 		543FDFF51EB3B60400687DF8 /* AnyCacheableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543FDFEE1EB3B60400687DF8 /* AnyCacheableService.swift */; };
@@ -540,7 +539,6 @@
 		5437D3B51EB392C300795FA9 /* NSLocking+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLocking+Extension.swift"; sourceTree = "<group>"; };
 		543FDFD71EB394D300687DF8 /* CollectionType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionType+Extension.swift"; sourceTree = "<group>"; };
 		543FDFD81EB394D300687DF8 /* NumberFormatter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extension.swift"; sourceTree = "<group>"; };
-		543FDFD91EB394D300687DF8 /* Set+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Set+Extension.swift"; sourceTree = "<group>"; };
 		543FDFEA1EB3B51300687DF8 /* CollectionResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionResponse.swift; sourceTree = "<group>"; };
 		543FDFED1EB3B60400687DF8 /* AbstractPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractPreloadingOperation.swift; sourceTree = "<group>"; };
 		543FDFEE1EB3B60400687DF8 /* AnyCacheableService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCacheableService.swift; sourceTree = "<group>"; };
@@ -1124,7 +1122,6 @@
 				543FDFD81EB394D300687DF8 /* NumberFormatter+Extension.swift */,
 				5437D3791EB3886500795FA9 /* PromiseKit+Extension.swift */,
 				5437D37F1EB3886500795FA9 /* Sequence+Extension.swift */,
-				543FDFD91EB394D300687DF8 /* Set+Extension.swift */,
 				5437D3801EB3886500795FA9 /* String+Extension.swift */,
 				5437D3821EB3886500795FA9 /* URL+Extension.swift */,
 			);
@@ -2709,7 +2706,6 @@
 				5437D3A31EB3912000795FA9 /* Creator.swift in Sources */,
 				5437D3901EB3886500795FA9 /* Sequence+Extension.swift in Sources */,
 				543FDFE21EB394D300687DF8 /* NumberFormatter+Extension.swift in Sources */,
-				543FDFE31EB394D300687DF8 /* Set+Extension.swift in Sources */,
 				543FDFF71EB3B60400687DF8 /* CacheableService+main.swift in Sources */,
 				543FDFF41EB3B60400687DF8 /* AbstractPreloadingOperation.swift in Sources */,
 				5437D3841EB3886500795FA9 /* Cast.swift in Sources */,

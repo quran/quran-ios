@@ -166,7 +166,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         self.shareData = shareData
 
         // highlight the ayah UI
-        cell.setHighlightedVerses(Set<AyahNumber>(ayah), forType: .share)
+        cell.setHighlightedVerses([ayah], forType: .share)
 
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")

@@ -19,6 +19,7 @@
 //
 
 import PromiseKit
+import BatchDownloader
 
 struct AyahsAudioDownloadRequest {
     let start: AyahNumber

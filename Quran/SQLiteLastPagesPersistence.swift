@@ -20,6 +20,7 @@
 
 import Foundation
 import SQLite
+import SQLitePersistence
 
 private let maxNumberOfLastPages = 3
 

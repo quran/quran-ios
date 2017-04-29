@@ -19,6 +19,7 @@
 //
 
 import GenericDataSources
+import BatchDownloader
 
 protocol AudioDownloadsDataSourceDelegate: class {
     func audioDownloadsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error)

@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import CoreGraphics
 
 struct AyahInfo {
     let page: Int
@@ -30,8 +30,8 @@ struct AyahInfo {
     let minY: Int
     let maxY: Int
 
-    var rect: Rect {
-        return Rect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    var rect: CGRect {
+        return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 
     func engulf(_ other: AyahInfo) -> AyahInfo {

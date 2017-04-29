@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import QueuePlayer
 
 protocol DefaultAudioPlayer: class, AudioPlayer {
 

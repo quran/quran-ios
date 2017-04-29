@@ -22,7 +22,7 @@ import PromiseKit
 
 protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloading()
-    func didStartDownloadingAudioFiles(progress: Progress)
+    func didStartDownloadingAudioFiles(progress: QProgress)
 
     func onPlayingStarted()
 

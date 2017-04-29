@@ -20,6 +20,7 @@
 
 import UIKit
 import SQLite
+import SQLitePersistence
 
 class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
 

@@ -20,6 +20,7 @@
 
 import PromiseKit
 import Zip
+import BatchDownloader
 
 class TranslationsVersionUpdaterInteractor: Interactor {
 

@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let container: Container
 
     override init() {
+        Crash.crasher = CrashlyticsCrasher()
         DispatchQueue.default = .global()
         container = Container()
         super.init()

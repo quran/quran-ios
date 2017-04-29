@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import BatchDownloader
 
 extension Download {
     var isTranslation: Bool {
@@ -29,5 +29,11 @@ extension Download {
 extension Download {
     var isAudio: Bool {
         return !isTranslation
+    }
+}
+
+extension DownloadNetworkBatchResponse {
+    var isAudio: Bool {
+        return responses.first(where: { !$0.download.isAudio }) == nil
     }
 }

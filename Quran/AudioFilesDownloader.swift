@@ -18,8 +18,8 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
 import PromiseKit
+import BatchDownloader
 
 class AudioFilesDownloader {
 

@@ -20,6 +20,7 @@
 
 import Foundation
 import SQLite
+import SQLitePersistence
 
 struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 

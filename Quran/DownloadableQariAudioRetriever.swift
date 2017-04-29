@@ -19,6 +19,7 @@
 //
 
 import PromiseKit
+import BatchDownloader
 
 class DownloadableQariAudioRetriever: Interactor {
 

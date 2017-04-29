@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 struct TranslationFull: Downloadable {
     let translation: Translation
     var response: Response?

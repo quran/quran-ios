@@ -22,6 +22,7 @@ import Foundation
 import AVFoundation
 import UIKit
 import MediaPlayer
+import QueuePlayer
 
 private class GaplessPlayerItem: AVPlayerItem {
     let sura: Int

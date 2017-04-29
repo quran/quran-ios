@@ -22,6 +22,7 @@ import Foundation
 import Moya
 import SwiftyJSON
 import PromiseKit
+import BatchDownloader
 
 class MoyaNetworkManager<Target>: NetworkManager {
     private let provider: MoyaProvider<BackendServices>

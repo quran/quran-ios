@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import BatchDownloader
 import GenericDataSources
 
 protocol TranslationsDataSourceDelegate: class {

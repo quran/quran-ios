@@ -19,7 +19,6 @@
 //
 
 import UIKit
-import KVOController
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
@@ -48,7 +47,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         return view as? QuranView
     }
 
-    private var barsTimer: Timer?
+    private var barsTimer: VFoundation.Timer?
 
     private var interactivePopGestureOldEnabled: Bool?
     private var barsHiddenTimerExecuted = false

@@ -41,3 +41,9 @@ struct Qari: Hashable {
 func == (lhs: Qari, rhs: Qari) -> Bool {
     return lhs.id == rhs.id
 }
+
+extension Qari {
+    func localFolder() -> URL {
+        return FileManager.documentsURL.appendingPathComponent(path)
+    }
+}

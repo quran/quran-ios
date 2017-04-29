@@ -21,6 +21,7 @@
 import UIKit
 import Moya
 import SwiftyJSON
+import BatchDownloader
 
 class Container {
 
@@ -318,7 +319,7 @@ class Container {
     }
 
     func createDownloadsPersistence() -> DownloadsPersistence {
-        return SqliteDownloadsPersistence()
+        return SqliteDownloadsPersistence(filePath: Files.databasesPath.stringByAppendingPath("downloads.db"))
     }
 
     func createMoyaProvider() -> MoyaProvider<BackendServices> {

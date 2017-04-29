@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 enum DownloadState {
     case notDownloaded
     case downloaded

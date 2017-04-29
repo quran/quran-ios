@@ -1,5 +1,10 @@
 included:
+  - BatchDownloader
+  - QueuePlayer
   - Quran
+  - SQLitePersistence
+  - UIKitExtension
+  - VFoundation
 
 disabled_rules:
   - cyclomatic_complexity

@@ -19,9 +19,8 @@
 //
 
 import UIKit
-import KVOController
 
-class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate, ProgressListener {
+class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate, QProgressListener {
 
     let qariRetreiver: AnyGetInteractor<[Qari]>
     let persistence: SimplePersistence
@@ -165,7 +164,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     // MARK: - AudioPlayerInteractorDelegate
 
-    var progress: Progress? {
+    var progress: QProgress? {
         didSet {
             oldValue?.progressListeners.remove(self)
             progress?.progressListeners.insert(self)
@@ -177,7 +176,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         DispatchQueue.main.async { self.view?.setDownloading(0) }
     }
 
-    func didStartDownloadingAudioFiles(progress: Progress) {
+    func didStartDownloadingAudioFiles(progress: QProgress) {
         self.progress = progress
         onProgressUpdated(to: progress.progress)
     }

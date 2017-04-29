@@ -1,0 +1,6 @@
+framework module Pods_SQLitePersistence {
+  umbrella header "Pods-SQLitePersistence-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -20,6 +20,7 @@
 
 import Foundation
 import SQLite
+import SQLitePersistence
 
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
 

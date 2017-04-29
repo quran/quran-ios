@@ -18,27 +18,22 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
 import Crashlytics
 
-class CrashlyticsKeyBase {
-    static let QariId = CrashlyticsKey<Int>(key: "QariId")
-    static let QuranPage = CrashlyticsKey<Int>(key: "QuranPage")
-    static let PlayingAyah = CrashlyticsKey<AyahNumber>(key: "PlayingAyah")
-    static let DownloadingQuran = CrashlyticsKey<Bool>(key: "DownloadingQuran")
+public class CrashlyticsKeyBase {}
+
+extension CrasherKeyBase {
+    static let QariId = CrasherKey<Int>(key: "QariId")
+    static let QuranPage = CrasherKey<Int>(key: "QuranPage")
+    static let PlayingAyah = CrasherKey<AyahNumber>(key: "PlayingAyah")
+    static let DownloadingQuran = CrasherKey<Bool>(key: "DownloadingQuran")
 }
 
-final class CrashlyticsKey<Type>: CrashlyticsKeyBase {
-    let key: String
+struct CrashlyticsCrasher: Crasher {
 
-    fileprivate init(key: String) {
-        self.key = key
-    }
-}
+    var tag: StaticString { return "Quran" }
 
-struct Crash {
-
-    static func setValue<T>(_ value: T?, forKey key: CrashlyticsKey<T>) {
+    func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
 
         let instance = Crashlytics.sharedInstance()
 
@@ -62,38 +57,25 @@ struct Crash {
         }
     }
 
-    static func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool = true) {
+    func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool = true, file: StaticString = #file, line: UInt = #line) {
         CLog("Error Occurred, reason: \(reason), error: \(type(of: error)): \(error)")
         Crashlytics.sharedInstance().recordError(error as NSError, withAdditionalUserInfo: ["quran.reason": reason])
         #if DEBUG
             if fatalErrorOnDebug {
-                fatalError("\(reason). Error: \(error)")
+                fatalError(reason, error, file: file, line: line)
             }
         #endif
     }
-}
 
-public func CLog(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    let message = "[Quran]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
-    NSLog(message)
-    CLSLogv("%@", getVaList([message]))
+    func log(_ message: String) {
+        CLSLogv("%@", getVaList([message]))
+    }
 }
 
 public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {
-    CLog("message: \(message()), file:\(file.description), line:\(line)")
-    Swift.fatalError(message, file: file, line: line)
+    VFoundation.fatalError(message, file: file, line: line)
 }
 
 public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error, file: StaticString = #file, line: UInt = #line) -> Never {
-    let fullMessage = "\(message()), error: \(error)"
-    CLog("message: \(fullMessage), file:\(file.description), line:\(line)")
-    Swift.fatalError(fullMessage, file: file, line: line)
-}
-
-public func suppress(_ from: String = #function, _ body: () throws -> Void) {
-    do {
-        try body()
-    } catch {
-        Crash.recordError(error, reason: from)
-    }
+    VFoundation.fatalError(message, error, file: file, line: line)
 }

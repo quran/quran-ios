@@ -20,6 +20,7 @@
 
 import UIKit
 import GenericDataSources
+import BatchDownloader
 
 class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate {
 

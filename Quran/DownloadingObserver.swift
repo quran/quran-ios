@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 protocol DownloadingObserverDelegate: class {
     associatedtype Item: Downloadable
 
@@ -59,7 +57,7 @@ final class AnyDownloadingObserverDelegate<Item: Downloadable>: DownloadingObser
     func onDownloadCompleted(for item: Item) { box.onDownloadCompleted(for: item) }
 }
 
-class DownloadingObserver<Item: Downloadable>: NSObject, ProgressListener {
+class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
     private var observer: AnyDownloadingObserverDelegate<Item>?
 
     let item: Item

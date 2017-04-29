@@ -19,6 +19,7 @@
 //
 
 import SQLite
+import SQLitePersistence
 
 struct SQLiteDatabaseVersionPersistence: DatabaseVersionPersistence, ReadonlySQLitePersistence {
 

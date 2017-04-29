@@ -56,7 +56,6 @@
 		5437D3881EB3886500795FA9 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3771EB3886500795FA9 /* Measure.swift */; };
 		5437D38A1EB3886500795FA9 /* PromiseKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3791EB3886500795FA9 /* PromiseKit+Extension.swift */; };
 		5437D38B1EB3886500795FA9 /* QProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D37A1EB3886500795FA9 /* QProgress.swift */; };
-		5437D38C1EB3886500795FA9 /* QuranError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D37B1EB3886500795FA9 /* QuranError.swift */; };
 		5437D38D1EB3886500795FA9 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D37C1EB3886500795FA9 /* Response.swift */; };
 		5437D38E1EB3886500795FA9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D37D1EB3886500795FA9 /* Result.swift */; };
 		5437D38F1EB3886500795FA9 /* Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D37E1EB3886500795FA9 /* Retry.swift */; };
@@ -516,7 +515,6 @@
 		5437D3771EB3886500795FA9 /* Measure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
 		5437D3791EB3886500795FA9 /* PromiseKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PromiseKit+Extension.swift"; sourceTree = "<group>"; };
 		5437D37A1EB3886500795FA9 /* QProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QProgress.swift; sourceTree = "<group>"; };
-		5437D37B1EB3886500795FA9 /* QuranError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranError.swift; sourceTree = "<group>"; };
 		5437D37C1EB3886500795FA9 /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		5437D37D1EB3886500795FA9 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		5437D37E1EB3886500795FA9 /* Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Retry.swift; sourceTree = "<group>"; };
@@ -1108,7 +1106,6 @@
 			isa = PBXGroup;
 			children = (
 				543FE04C1EB3DA4800687DF8 /* ParsingError.swift */,
-				5437D37B1EB3886500795FA9 /* QuranError.swift */,
 			);
 			name = Errors;
 			sourceTree = "<group>";
@@ -2729,7 +2726,6 @@
 				5437D3B21EB3921F00795FA9 /* Parser.swift in Sources */,
 				5437D3861EB3886500795FA9 /* FileManager+Extension.swift in Sources */,
 				5437D3A41EB3912000795FA9 /* Interactor.swift in Sources */,
-				5437D38C1EB3886500795FA9 /* QuranError.swift in Sources */,
 				543FE04D1EB3DA4800687DF8 /* ParsingError.swift in Sources */,
 				5437D3AF1EB3921F00795FA9 /* NotImplemented.swift in Sources */,
 				5437D38E1EB3886500795FA9 /* Result.swift in Sources */,

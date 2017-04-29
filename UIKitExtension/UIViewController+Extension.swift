@@ -33,7 +33,7 @@ extension UIViewController {
 
     private func _showErrorAlert(error: Error) {
         Crash.recordError(error, reason: "showErrorAlert", fatalErrorOnDebug: false)
-        let message = error.getLocalizedDescription()
+        let message = error.getErrorDescription()
         let controller = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         present(controller, animated: true)
@@ -41,10 +41,8 @@ extension UIViewController {
 }
 
 extension Error {
-    fileprivate func getLocalizedDescription() -> String {
-        if let error = self as? QuranError {
-            return error.localizedDescriptionv2
-        }
-        return NSLocalizedString("NetworkError_Unknown", comment: "")
+    fileprivate func getErrorDescription() -> String {
+        let description = (self as? LocalizedError)?.errorDescription
+        return description ?? NSLocalizedString("NetworkError_Unknown", comment: "")
     }
 }

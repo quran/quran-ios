@@ -21,9 +21,9 @@
 import SQLitePersistence
 import BatchDownloader
 
-extension FileSystemError: QuranError {
+extension FileSystemError: LocalizedError {
 
-    public var localizedDescriptionv2: String {
+    public var errorDescription: String {
         let text: String
         switch self {
         case .unknown:
@@ -35,9 +35,9 @@ extension FileSystemError: QuranError {
     }
 }
 
-extension NetworkError: QuranError {
+extension NetworkError: LocalizedError {
 
-    public var localizedDescriptionv2: String {
+    public var errorDescription: String {
         let text: String
         switch self {
         case .unknown:
@@ -57,14 +57,14 @@ extension NetworkError: QuranError {
     }
 }
 
-extension ParsingError: QuranError {
-    public var localizedDescriptionv2: String {
+extension ParsingError: LocalizedError {
+    public var errorDescription: String {
         return NSLocalizedString("NetworkError_Parsing", comment: "When a parsing error occurs")
     }
 }
 
-extension PersistenceError: QuranError {
-    public var localizedDescriptionv2: String {
+extension PersistenceError: LocalizedError {
+    public var errorDescription: String {
         return NSLocalizedString("NetworkError_Unknown", comment: "")
     }
 }

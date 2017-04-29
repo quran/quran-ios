@@ -51,3 +51,5 @@ extension Creator {
         return AnyCreator(creator: self)
     }
 }
+
+public typealias AnyGetCreator<CreatedObject> = AnyCreator<Void, CreatedObject>

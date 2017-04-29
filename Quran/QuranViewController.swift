@@ -31,7 +31,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let dataRetriever: AnyGetInteractor<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
-    private let translationsSelectionControllerCreator: AnyCreator<Void, UIViewController>
+    private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
     private let simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater!
 
@@ -100,7 +100,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
          qarisControllerCreator                 : AnyCreator<([Qari], Int, UIView?), QariTableViewController>,
-         translationsSelectionControllerCreator : AnyCreator<Void, UIViewController>,
+         translationsSelectionControllerCreator : AnyGetCreator<UIViewController>,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,

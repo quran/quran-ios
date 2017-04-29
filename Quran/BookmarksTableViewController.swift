@@ -30,10 +30,10 @@ class BookmarksTableViewController: BaseTableBasedViewController {
     let pageDS: PageBookmarkDataSource
     let ayahDS: AyahBookmarkDataSource
 
-    let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>
+    let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
 
     init(
-         quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>,
+         quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>,
          simplePersistence: SimplePersistence,
          lastPagesPersistence: LastPagesPersistence,
          bookmarksPersistence: BookmarksPersistence,

@@ -30,8 +30,8 @@ struct AyahsAudioDownloadRequest {
 struct AyahsAudioDownloader: Interactor {
 
     let downloader: DownloadManager
-    let creator: AnyCreator<QariAudioFileListRetrieval, Qari>
-    init(downloader: DownloadManager, creator: AnyCreator<QariAudioFileListRetrieval, Qari>) {
+    let creator: AnyCreator<Qari, QariAudioFileListRetrieval>
+    init(downloader: DownloadManager, creator: AnyCreator<Qari, QariAudioFileListRetrieval>) {
         self.downloader = downloader
         self.creator = creator
     }

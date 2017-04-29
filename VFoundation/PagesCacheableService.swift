@@ -39,7 +39,7 @@ open class PagesCacheableService<Output>: CacheableService {
                 previousPagesCount : Int,
                 nextPagesCount     : Int,
                 pageRange          : CountableClosedRange<Int>,
-                operationCreator   : AnyCreator<AnyPreloadingOperationRepresentable<Output>, Int>) {
+                operationCreator   : AnyCreator<Int, AnyPreloadingOperationRepresentable<Output>>) {
         service = OperationCacheableService(queue: queue, cache: cache, operationCreator: operationCreator)
         self.range              = pageRange
         self.nextPagesCount     = nextPagesCount

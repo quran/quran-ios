@@ -24,11 +24,11 @@ import GenericDataSources
 class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
 
     let dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>
-    let quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>
+    let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
 
-    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
+    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
         self.dataRetriever = dataRetriever
         self.quranControllerCreator = quranControllerCreator
         super.init(nibName: nil, bundle: nil)

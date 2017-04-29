@@ -25,7 +25,7 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
 
     override var screen: Analytics.Screen { return .juzs }
 
-    override init(dataRetriever: AnyGetInteractor<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<QuranViewController, (Int, LastPage?)>) {
+    override init(dataRetriever: AnyGetInteractor<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
         super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
     }
 

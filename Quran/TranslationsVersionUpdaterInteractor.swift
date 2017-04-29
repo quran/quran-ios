@@ -27,12 +27,12 @@ class TranslationsVersionUpdaterInteractor: Interactor {
     private let simplePersistence: SimplePersistence
     private let persistence: ActiveTranslationsPersistence
     private let downloader: DownloadManager
-    private let versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>
+    private let versionPersistenceCreator: AnyCreator<String, DatabaseVersionPersistence>
 
     init(simplePersistence: SimplePersistence,
          persistence: ActiveTranslationsPersistence,
          downloader: DownloadManager,
-         versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>) {
+         versionPersistenceCreator: AnyCreator<String, DatabaseVersionPersistence>) {
         self.simplePersistence = simplePersistence
         self.persistence = persistence
         self.downloader = downloader

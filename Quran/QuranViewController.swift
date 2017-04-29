@@ -30,8 +30,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
     private let dataRetriever: AnyGetInteractor<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
-    private let qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>
-    private let translationsSelectionControllerCreator: AnyCreator<UIViewController, Void>
+    private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
+    private let translationsSelectionControllerCreator: AnyCreator<Void, UIViewController>
     private let simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater!
 
@@ -99,8 +99,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          dataRetriever                          : AnyGetInteractor<[QuranPage]>,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
-         qarisControllerCreator                 : AnyCreator<QariTableViewController, ([Qari], Int, UIView?)>,
-         translationsSelectionControllerCreator : AnyCreator<UIViewController, Void>,
+         qarisControllerCreator                 : AnyCreator<([Qari], Int, UIView?), QariTableViewController>,
+         translationsSelectionControllerCreator : AnyCreator<Void, UIViewController>,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,

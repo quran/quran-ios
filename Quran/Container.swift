@@ -122,7 +122,7 @@ class Container {
         return QariTableViewController(style: .plain, qaris: qaris, selectedQariIndex: selectedQariIndex)
     }
 
-    func createQariTableViewControllerCreator() -> AnyCreator<QariTableViewController, ([Qari], Int, UIView?)> {
+    func createQariTableViewControllerCreator() -> AnyCreator<([Qari], Int, UIView?), QariTableViewController> {
         return QariTableViewControllerCreator(qarisControllerCreator: createCreator(createQariTableViewController)).asAnyCreator()
     }
 
@@ -206,7 +206,7 @@ class Container {
     }
 
     func createCreator<CreatedObject, Parameters>(
-        _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<CreatedObject, Parameters> {
+        _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<Parameters, CreatedObject> {
         return AnyCreator(createClosure: creationClosure)
     }
 
@@ -406,7 +406,7 @@ class Container {
         return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
     }
 
-    func createQariAudioFileListRetrievalCreator() -> AnyCreator<QariAudioFileListRetrieval, Qari> {
+    func createQariAudioFileListRetrievalCreator() -> AnyCreator<Qari, QariAudioFileListRetrieval> {
         return QariAudioFileListRetrievalCreator().asAnyCreator()
     }
 

@@ -33,11 +33,11 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
 
     private var inProgressOperations: [Input: AnyPreloadingOperationRepresentable<Output>] = [:]
     private let lock = NSLock()
-    private let operationCreator: AnyCreator<AnyPreloadingOperationRepresentable<Output>, Input>
+    private let operationCreator: AnyCreator<Input, AnyPreloadingOperationRepresentable<Output>>
 
     public init(queue              : OperationQueue = operationQueue(),
                 cache              : Cache<Input, Output>,
-                operationCreator   : AnyCreator<AnyPreloadingOperationRepresentable<Output>, Input>) {
+                operationCreator   : AnyCreator<Input, AnyPreloadingOperationRepresentable<Output>>) {
         self.queue              = queue
         self.cache              = cache
         self.operationCreator   = operationCreator

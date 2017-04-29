@@ -22,8 +22,8 @@ import PromiseKit
 
 class QariListToQariAudioDownloadRetriever: Interactor {
 
-    let fileListCreator: AnyCreator<QariAudioFileListRetrieval, Qari>
-    init(fileListCreator: AnyCreator<QariAudioFileListRetrieval, Qari>) {
+    let fileListCreator: AnyCreator<Qari, QariAudioFileListRetrieval>
+    init(fileListCreator: AnyCreator<Qari, QariAudioFileListRetrieval>) {
         self.fileListCreator = fileListCreator
     }
 

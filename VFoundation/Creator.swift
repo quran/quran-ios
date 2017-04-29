@@ -21,13 +21,13 @@
 import Foundation
 
 public protocol Creator {
-    associatedtype CreatedObject
     associatedtype Parameters
+    associatedtype CreatedObject
 
     func create(_ parameters: Parameters) -> CreatedObject
 }
 
-public struct AnyCreator<CreatedObject, Parameters>: Creator {
+public struct AnyCreator<Parameters, CreatedObject>: Creator {
 
     private let createClosure: (Parameters) -> CreatedObject
 
@@ -47,7 +47,7 @@ public struct AnyCreator<CreatedObject, Parameters>: Creator {
 
 extension Creator {
 
-    public func asAnyCreator() -> AnyCreator<CreatedObject, Parameters> {
+    public func asAnyCreator() -> AnyCreator<Parameters, CreatedObject> {
         return AnyCreator(creator: self)
     }
 }

@@ -22,8 +22,8 @@ import UIKit
 
 class QariTableViewControllerCreator: NSObject, Creator, UIPopoverPresentationControllerDelegate {
 
-    private let qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int)>
-    init(qarisControllerCreator: AnyCreator<QariTableViewController, ([Qari], Int)>) {
+    private let qarisControllerCreator: AnyCreator<([Qari], Int), QariTableViewController>
+    init(qarisControllerCreator: AnyCreator<([Qari], Int), QariTableViewController>) {
         self.qarisControllerCreator = qarisControllerCreator
     }
 

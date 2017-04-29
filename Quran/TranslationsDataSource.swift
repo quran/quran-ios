@@ -134,7 +134,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         to.items = list
 
         // move the cell
-        let newLocalIndexPath: IndexPath = cast(to.indexPath(for: newItem))
+        let newLocalIndexPath = unwrap(to.indexPath(for: newItem))
         let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to)
         return newGlobalIndexPath
     }

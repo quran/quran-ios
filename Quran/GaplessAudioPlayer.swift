@@ -63,7 +63,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 var times: [AVPlayerItem: [Double]] = [:]
                 var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
                 for item in items {
-                    var array: [AyahTiming] = cast(mutableTimings[item.sura])
+                    var array = unwrap(mutableTimings[item.sura])
                     if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
                         array = Array(array.dropLast())
                     }
@@ -72,7 +72,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 }
                 self.ayahsDictionary = ayahs
 
-                let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
+                let startSuraTimes = unwrap(mutableTimings[startAyah.sura])
                 let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
 
                 self.player.onPlaybackEnded = self.onPlaybackEnded()

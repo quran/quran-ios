@@ -68,7 +68,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
             // if all completed or failed or mix between both, remove the batch
             if !isDownloading {
                 for item in batch {
-                    let taskId: Int = cast(item.download.taskId)
+                    let taskId = unwrap(item.download.taskId)
                     downloadingResponses[taskId] = nil
                 }
                 suppress {
@@ -87,7 +87,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         // loop over the downloads
         let downloads = downloadBatches.flatMap { $0.downloads }
         for download in downloads {
-            let taskId: Int = cast(download.taskId)
+            let taskId = unwrap(download.taskId)
             guard downloadingResponses[taskId] == nil else {
                 continue
             }
@@ -117,7 +117,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
     func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
         // create the onGoingDownloads once so we can use it before the persistence value is written.
         for download in downloads {
-            let taskId: Int = cast(download.download.taskId)
+            let taskId = unwrap(download.download.taskId)
             downloadingResponses[taskId] = download
         }
         do {
@@ -135,7 +135,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
                 // update the download
                 response.download = batch[index]
                 // add it to downloading
-                let taskId: Int = cast(response.download.taskId)
+                let taskId = unwrap(response.download.taskId)
                 downloadingResponses[taskId] = response
             }
         } catch {
@@ -296,7 +296,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
             // remove from memory
             for item in batch {
-                let taskId: Int = cast(item.download.taskId)
+                let taskId = unwrap(item.download.taskId)
                 self.downloadingResponses[taskId] = nil
             }
 

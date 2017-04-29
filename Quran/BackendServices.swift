@@ -28,7 +28,7 @@ enum BackendServices {
 extension BackendServices: TargetType {
 
     var baseURL: URL {
-        return QuranURLs.Host
+        return QuranURLs.host
     }
 
     var path: String {

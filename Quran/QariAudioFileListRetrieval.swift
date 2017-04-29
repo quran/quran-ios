@@ -56,7 +56,7 @@ struct GaplessQariAudioFileListRetrieval: QariAudioFileListRetrieval {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")
         }
 
-        let databaseRemoteURL = QuranURLs.AudioDatabaseURL.appendingPathComponent(
+        let databaseRemoteURL = QuranURLs.audioDatabaseURL.appendingPathComponent(
             databaseFileName).appendingPathExtension(Files.databaseRemoteFileExtension)
         let databaseLocalURL = qari.path.stringByAppendingPath(databaseFileName).stringByAppendingExtension(Files.databaseRemoteFileExtension)
         let dbFile = QariDatabaseAudioFile(remote: databaseRemoteURL, local: databaseLocalURL)

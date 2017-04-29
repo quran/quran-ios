@@ -21,8 +21,8 @@
 import Foundation
 
 struct QuranURLs {
-    static var Host: URL = URL(validURL: "http://android.quran.com/")
-    static var AudioDatabaseURL: URL = Host.appendingPathComponent("data/databases/audio/")
+    static var host: URL = URL(validURL: "http://android.quran.com/")
+    static var audioDatabaseURL: URL = host.appendingPathComponent("data/databases/audio/")
 }
 
 public struct Files {

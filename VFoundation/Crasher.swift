@@ -33,6 +33,7 @@ public protocol Crasher {
     func setValue<T>(_ value: T?, forKey key: CrasherKey<T>)
     func recordError(_ error: Error, reason: String, fatalErrorOnDebug: Bool, file: StaticString, line: UInt)
     func log(_ message: String)
+    func logCriticalIssue(_ message: String)
 
     var localizedUnkownError: String { get }
 }
@@ -55,6 +56,11 @@ public func CLog(_ items: Any..., separator: String = " ", terminator: String = 
     Crash.crasher?.log(message)
 }
 
+public func logCriticalIssue(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+    Crash.crasher?.logCriticalIssue(message)
+}
+
 public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {
     CLog("message: \(message()), file:\(file.description), line:\(line)")
     Swift.fatalError(message, file: file, line: line)
@@ -65,3 +71,4 @@ public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error
     CLog("message: \(fullMessage), file:\(file.description), line:\(line)")
     Swift.fatalError(fullMessage, file: file, line: line)
 }
+

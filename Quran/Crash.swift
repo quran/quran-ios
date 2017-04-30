@@ -71,6 +71,13 @@ struct CrashlyticsCrasher: Crasher {
     func log(_ message: String) {
         CLSLogv("%@", getVaList([message]))
     }
+
+    func logCriticalIssue(_ message: String) {
+        CLSLogv("%@", getVaList([message]))
+        #if DEBUG
+            fatalError(reason, error, file: file, line: line)
+        #endif
+    }
 }
 
 public func fatalError(_ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line) -> Never {

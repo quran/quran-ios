@@ -28,6 +28,14 @@ public func unimplemented(function: StaticString = #function, file: StaticString
     fatalError("Function '\(function)' is unimplemented at: \(file) - \(line)")
 }
 
+public func shouldBeImplemented<T>(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> T {
+    fatalError("Function '\(function)' is should be implemented at: \(file) - \(line)")
+}
+
+public func shouldBeImplemented(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> Never {
+    fatalError("Function '\(function)' is should be implemented at: \(file) - \(line)")
+}
+
 public func expectedToBeSubclassed(function: StaticString = #function, file: StaticString = #file, line: Int = #line) -> Never {
     fatalError("\(function) Should be implemented by subclasses")
 }

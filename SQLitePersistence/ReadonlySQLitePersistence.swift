@@ -20,6 +20,7 @@
 
 import SQLite
 import VFoundation
+import sqlite3
 
 public protocol ReadonlySQLitePersistence {
     var filePath: String { get }
@@ -38,7 +39,7 @@ extension ReadonlySQLitePersistence {
         return connection
     }
 
-    public func run<T>(using external: Connection? = nil, _ block: (Connection) throws -> T) throws -> T {
+    public func run<T>(using external: Connection? = nil, inTransaction: Bool = false, _ block: (Connection) throws -> T) throws -> T {
         do {
             // open the connection
             let connection: Connection
@@ -53,12 +54,21 @@ extension ReadonlySQLitePersistence {
                 }
             }
 
-            // execute the query
-            return try block(connection)
+            if inTransaction {
+                var result: T!
+                try connection.transaction {
+                    result = try block(connection)
+                }
+
+                return result
+            } else {
+                // execute the query
+                return try block(connection)
+            }
 
         } catch let error as PersistenceError {
             Crash.recordError(error, reason: "Error while executing sqlite statement")
-            throw error
+            throw error // rethrow
 
         } catch let error as SQLite.Result {
             switch error {

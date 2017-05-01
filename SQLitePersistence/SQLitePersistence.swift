@@ -44,22 +44,26 @@ extension SQLitePersistence {
 
         // if first time
         if oldVersion <= 0 {
-            do {
-                try onCreate(connection: connection)
-            } catch {
-                throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
+            try connection.transaction {
+                do {
+                    try onCreate(connection: connection)
+                } catch {
+                    throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
+                }
+                try connection.setUserVersion(Int(newVersion))
             }
-            try connection.setUserVersion(Int(newVersion))
         } else {
             let unsignedOldVersion = UInt(oldVersion)
             if newVersion != unsignedOldVersion {
-                do {
-                    try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
-                } catch {
-                    throw PersistenceError.generalError(
-                        error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
+                try connection.transaction {
+                    do {
+                        try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
+                    } catch {
+                        throw PersistenceError.generalError(
+                            error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
+                    }
+                    try connection.setUserVersion(Int(newVersion))
                 }
-                try connection.setUserVersion(Int(newVersion))
             }
         }
         return connection

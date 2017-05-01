@@ -20,6 +20,8 @@
 
 import Foundation
 
+/// Thread safe set holding weak references to its elements.
+///
 /// While the `Element` can be any type including structs, enums. It only works with classes
 /// This is because if we constrained `Element` to be `AnyObject`, we have to include a type-erasure for every protocol.
 /// For example:
@@ -38,32 +40,43 @@ open class WeakSet<Element>: Sequence {
 
     public typealias Iterator = AnyIterator<Element>
 
-    open var count: Int { return storage.count }
+    open var count: Int { return storage.value.count }
 
-    private let storage = NSHashTable<AnyObject>.weakObjects()
+    private var storage = Protected<NSHashTable<AnyObject>>(.weakObjects())
 
     public init() { }
 
     open func insert(_ object: Element) {
-        storage.add(object as AnyObject)
+        storage.sync { (s: inout NSHashTable<AnyObject>) in
+            s.add(object as AnyObject)
+        }
     }
 
     open func remove(_ object: Element) {
-        storage.remove(object as AnyObject)
+        storage.sync { (s: inout NSHashTable<AnyObject>) in
+            s.remove(object as AnyObject)
+        }
     }
 
     open func removeAllObjects() {
-        storage.removeAllObjects()
+        storage.sync { (s: inout NSHashTable<AnyObject>) in
+            s.removeAllObjects()
+        }
     }
 
     open func contains(_ object: Element) -> Bool {
-        return storage.contains(object as AnyObject)
+        return storage.sync { (s: inout NSHashTable<AnyObject>) in
+            s.contains(object as AnyObject)
+        }
     }
 
     open func makeIterator() -> Iterator {
-        var arrayIterator = storage.allObjects.makeIterator()
-        return AnyIterator {
-            return arrayIterator.next() as? Element
+        return storage.sync { (s: inout NSHashTable<AnyObject>) in
+            var arrayIterator = s.allObjects.makeIterator()
+            return AnyIterator {
+                return arrayIterator.next() as? Element
+            }
         }
+
     }
 }

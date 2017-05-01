@@ -52,6 +52,15 @@ public struct Protected<T> {
         return result
     }
 
+    public mutating func sync(_ body: (inout T) -> Void) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        var d = _data
+        body(&d)
+        _data = d
+    }
+
     public var unsafeAccess: T {
         get { return _data }
         set { _data = newValue }

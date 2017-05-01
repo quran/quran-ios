@@ -89,21 +89,16 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
         stopped = false
 
         response.progress.progressListeners.insert(self)
-        response.addCompletion { [weak self] result in
-            if let item = self?.item {
-                DispatchQueue.main.async {
-                    guard self?.stopped == false else {
-                        return
-                    }
-
-                    switch result {
-                    case .success:
-                        self?.observer?.onDownloadCompleted(for: item)
-                    case .failure(let error):
-                        self?.observer?.onDownloadCompleted(withError: error, for: item)
-                    }
+        response.promise.then(on: .main) { [weak self] _ -> Void in
+                guard let `self` = self, !self.stopped else {
+                    return
                 }
-            }
+                self.observer?.onDownloadCompleted(for: self.item)
+            }.catch(on: .main) { [weak self] error in
+                guard let `self` = self, !self.stopped else {
+                    return
+                }
+                self.observer?.onDownloadCompleted(withError: error, for: self.item)
         }
         onProgressUpdated(to: response.progress.progress)
     }

@@ -46,6 +46,8 @@
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5424773D1E7856040051C196 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* DownloadButton.swift */; };
+		542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */; };
+		542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		5437D3641EB385DB00795FA9 /* VFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5437D3621EB385DB00795FA9 /* VFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
@@ -65,7 +67,7 @@
 		5437D3941EB3886500795FA9 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3831EB3886500795FA9 /* WeakSet.swift */; };
 		5437D3961EB38A3900795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
 		5437D3991EB38A7D00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
-		5437D39E1EB38B2A00795FA9 /* Crash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D39C1EB38B2A00795FA9 /* Crash.swift */; };
+		5437D39E1EB38B2A00795FA9 /* CrashlyticsCrasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D39C1EB38B2A00795FA9 /* CrashlyticsCrasher.swift */; };
 		5437D39F1EB38B2A00795FA9 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D39D1EB38B2A00795FA9 /* Files.swift */; };
 		5437D3A31EB3912000795FA9 /* Creator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A11EB3912000795FA9 /* Creator.swift */; };
 		5437D3A41EB3912000795FA9 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A21EB3912000795FA9 /* Interactor.swift */; };
@@ -150,7 +152,7 @@
 		546784191EB29DDD0012FA2C /* BatchDownloader.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 546784111EB29DDD0012FA2C /* BatchDownloader.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		546784201EB29E710012FA2C /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5467841F1EB29E710012FA2C /* Download.swift */; };
 		546784281EB29F230012FA2C /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784221EB29F230012FA2C /* DownloadManager.swift */; };
-		546784291EB29F230012FA2C /* DownloadNetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784231EB29F230012FA2C /* DownloadNetworkResponse.swift */; };
+		546784291EB29F230012FA2C /* DownloadBatchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784231EB29F230012FA2C /* DownloadBatchResponse.swift */; };
 		5467842A1EB29F230012FA2C /* DownloadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784241EB29F230012FA2C /* DownloadRequest.swift */; };
 		5467842B1EB29F230012FA2C /* DownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784251EB29F230012FA2C /* DownloadSessionDelegate.swift */; };
 		5467842C1EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784261EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift */; };
@@ -163,10 +165,8 @@
 		546784471EB2A07E0012FA2C /* DownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784451EB2A07E0012FA2C /* DownloadsPersistence.swift */; };
 		546784481EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784461EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift */; };
 		546784491EB2A0C00012FA2C /* SQLitePersistence.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 546784341EB29FD20012FA2C /* SQLitePersistence.framework */; };
-		546784511EB2A26B0012FA2C /* SQLitePersistence-Briding-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 546784501EB2A26B0012FA2C /* SQLitePersistence-Briding-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		546784521EB2A32A0012FA2C /* Quran-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 5487242B1DC615CF00ADDE54 /* Quran-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		546784541EB2A3790012FA2C /* PersistenceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784531EB2A3790012FA2C /* PersistenceError.swift */; };
-		546784751EB2AADD0012FA2C /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 546784741EB2AADD0012FA2C /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699B861E8DADFD00211A60 /* UIFont+Theme.swift */; };
 		54699B8E1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */; };
 		54699B8F1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */; };
@@ -415,7 +415,6 @@
 /* Begin PBXFileReference section */
 		00A59CDA1DDFC044C1625C25 /* Pods-UIKitExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIKitExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-UIKitExtension/Pods-UIKitExtension.release.xcconfig"; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		08F35B9838DF424BAE43084E /* Pods-QuranFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranFoundation.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuranFoundation/Pods-QuranFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		1B08B5935F8D252F7CCFA3A6 /* Pods-QueuePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QueuePlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-QueuePlayer/Pods-QueuePlayer.release.xcconfig"; sourceTree = "<group>"; };
 		1C51FED6418A042F5FC53D9F /* Pods-BatchDownloader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BatchDownloader.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BatchDownloader/Pods-BatchDownloader.debug.xcconfig"; sourceTree = "<group>"; };
 		3A6B58A8DD2394BC5ECDD486 /* Pods-BatchDownloader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BatchDownloader.release.xcconfig"; path = "Pods/Target Support Files/Pods-BatchDownloader/Pods-BatchDownloader.release.xcconfig"; sourceTree = "<group>"; };
@@ -505,6 +504,9 @@
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
+		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
+		542732FB1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		542732FD1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5437D3601EB385DB00795FA9 /* VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5437D3621EB385DB00795FA9 /* VFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VFoundation.h; sourceTree = "<group>"; };
@@ -522,7 +524,7 @@
 		5437D3801EB3886500795FA9 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		5437D3821EB3886500795FA9 /* URL+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Extension.swift"; sourceTree = "<group>"; };
 		5437D3831EB3886500795FA9 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
-		5437D39C1EB38B2A00795FA9 /* Crash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crash.swift; sourceTree = "<group>"; };
+		5437D39C1EB38B2A00795FA9 /* CrashlyticsCrasher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrashlyticsCrasher.swift; sourceTree = "<group>"; };
 		5437D39D1EB38B2A00795FA9 /* Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
 		5437D3A11EB3912000795FA9 /* Creator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creator.swift; sourceTree = "<group>"; };
 		5437D3A21EB3912000795FA9 /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
@@ -612,7 +614,7 @@
 		546784141EB29DDD0012FA2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5467841F1EB29E710012FA2C /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		546784221EB29F230012FA2C /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		546784231EB29F230012FA2C /* DownloadNetworkResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadNetworkResponse.swift; sourceTree = "<group>"; };
+		546784231EB29F230012FA2C /* DownloadBatchResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchResponse.swift; sourceTree = "<group>"; };
 		546784241EB29F230012FA2C /* DownloadRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadRequest.swift; sourceTree = "<group>"; };
 		546784251EB29F230012FA2C /* DownloadSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadSessionDelegate.swift; sourceTree = "<group>"; };
 		546784261EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeDownloadSessionDelegate.swift; sourceTree = "<group>"; };
@@ -624,9 +626,7 @@
 		546784411EB2A0420012FA2C /* SQLitePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLitePersistence.swift; sourceTree = "<group>"; };
 		546784451EB2A07E0012FA2C /* DownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsPersistence.swift; sourceTree = "<group>"; };
 		546784461EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqliteDownloadsPersistence.swift; sourceTree = "<group>"; };
-		546784501EB2A26B0012FA2C /* SQLitePersistence-Briding-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLitePersistence-Briding-Header.h"; sourceTree = "<group>"; };
 		546784531EB2A3790012FA2C /* PersistenceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceError.swift; sourceTree = "<group>"; };
-		546784741EB2AADD0012FA2C /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../iPhoneOS.sdk/usr/include/sqlite3.h; sourceTree = SDKROOT; };
 		54699B861E8DADFD00211A60 /* UIFont+Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Theme.swift"; sourceTree = "<group>"; };
 		54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationCollectionPageCollectionViewCell.swift; sourceTree = "<group>"; };
 		54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuranTranslationCollectionPageCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -796,7 +796,6 @@
 		54F8C4191EA7EFB200C853C6 /* Downloadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloadable.swift; sourceTree = "<group>"; };
 		54F8C41B1EA7F29A00C853C6 /* DownloadableQariAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadableQariAudio.swift; sourceTree = "<group>"; };
 		54F8C4231EA8104F00C853C6 /* DownloadingObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadingObserver.swift; sourceTree = "<group>"; };
-		625C02B93A47BBFF16D5ED09 /* Pods-QuranFoundation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranFoundation.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranFoundation/Pods-QuranFoundation.debug.xcconfig"; sourceTree = "<group>"; };
 		63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		677E77F7272383AD7D4EE74D /* Pods-VFoundation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VFoundation.release.xcconfig"; path = "Pods/Target Support Files/Pods-VFoundation/Pods-VFoundation.release.xcconfig"; sourceTree = "<group>"; };
 		68E316D282FF8EFEB064A26B /* Pods_UIKitExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIKitExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -863,6 +862,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */,
 				5437D3961EB38A3900795FA9 /* VFoundation.framework in Frameworks */,
 				5D0FC79199F8BE4D09D1164C /* Pods_SQLitePersistence.framework in Frameworks */,
 			);
@@ -994,6 +994,41 @@
 			name = "verse-text";
 			sourceTree = "<group>";
 		};
+		542732F31EB697A000DC5C0F /* support */ = {
+			isa = PBXGroup;
+			children = (
+				542732F91EB697CD00DC5C0F /* modules */,
+				546784361EB29FD20012FA2C /* SQLitePersistence.h */,
+				546784371EB29FD20012FA2C /* Info.plist */,
+			);
+			name = support;
+			sourceTree = "<group>";
+		};
+		542732F91EB697CD00DC5C0F /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				542732FA1EB697CD00DC5C0F /* iphoneos */,
+				542732FC1EB697CD00DC5C0F /* iphonesimulator */,
+			);
+			path = modules;
+			sourceTree = "<group>";
+		};
+		542732FA1EB697CD00DC5C0F /* iphoneos */ = {
+			isa = PBXGroup;
+			children = (
+				542732FB1EB697CD00DC5C0F /* module.modulemap */,
+			);
+			path = iphoneos;
+			sourceTree = "<group>";
+		};
+		542732FC1EB697CD00DC5C0F /* iphonesimulator */ = {
+			isa = PBXGroup;
+			children = (
+				542732FD1EB697CD00DC5C0F /* module.modulemap */,
+			);
+			path = iphonesimulator;
+			sourceTree = "<group>";
+		};
 		5437D3611EB385DB00795FA9 /* VFoundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1022,7 +1057,7 @@
 				543FDFD41EB394AE00687DF8 /* Theme */,
 				540BCA4B1EACC4C700D28797 /* Int+Extension.swift */,
 				54B2667F1CCAAE4900D3AEF8 /* Quran.swift */,
-				5437D39C1EB38B2A00795FA9 /* Crash.swift */,
+				5437D39C1EB38B2A00795FA9 /* CrashlyticsCrasher.swift */,
 				5437D39D1EB38B2A00795FA9 /* Files.swift */,
 				5494CCB11CEFA5F700031686 /* Constants.swift */,
 			);
@@ -1305,13 +1340,14 @@
 			children = (
 				543FE0501EB3DAE900687DF8 /* Errors */,
 				5467842E1EB29F750012FA2C /* Persistence */,
-				546784221EB29F230012FA2C /* DownloadManager.swift */,
-				546784231EB29F230012FA2C /* DownloadNetworkResponse.swift */,
 				546784241EB29F230012FA2C /* DownloadRequest.swift */,
-				546784251EB29F230012FA2C /* DownloadSessionDelegate.swift */,
-				546784261EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift */,
-				546784271EB29F230012FA2C /* URLSessionDownloadManager.swift */,
 				5467841F1EB29E710012FA2C /* Download.swift */,
+				546784231EB29F230012FA2C /* DownloadBatchResponse.swift */,
+				546784221EB29F230012FA2C /* DownloadManager.swift */,
+				546784271EB29F230012FA2C /* URLSessionDownloadManager.swift */,
+				546784261EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift */,
+				546784251EB29F230012FA2C /* DownloadSessionDelegate.swift */,
+				542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -1329,10 +1365,7 @@
 			isa = PBXGroup;
 			children = (
 				546784441EB2A0470012FA2C /* Sources */,
-				546784361EB29FD20012FA2C /* SQLitePersistence.h */,
-				546784741EB2AADD0012FA2C /* sqlite3.h */,
-				546784501EB2A26B0012FA2C /* SQLitePersistence-Briding-Header.h */,
-				546784371EB29FD20012FA2C /* Info.plist */,
+				542732F31EB697A000DC5C0F /* support */,
 			);
 			path = SQLitePersistence;
 			sourceTree = "<group>";
@@ -1341,9 +1374,9 @@
 			isa = PBXGroup;
 			children = (
 				546784531EB2A3790012FA2C /* PersistenceError.swift */,
+				543FE0511EB48CF800687DF8 /* ReadonlySQLitePersistence.swift */,
 				546784411EB2A0420012FA2C /* SQLitePersistence.swift */,
 				546784401EB2A0420012FA2C /* ConnectionsPool.swift */,
-				543FE0511EB48CF800687DF8 /* ReadonlySQLitePersistence.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -2086,8 +2119,6 @@
 				3A6B58A8DD2394BC5ECDD486 /* Pods-BatchDownloader.release.xcconfig */,
 				F63053760FF0083E316842E3 /* Pods-SQLitePersistence.debug.xcconfig */,
 				A4C4845C7D3953895D14D1E5 /* Pods-SQLitePersistence.release.xcconfig */,
-				625C02B93A47BBFF16D5ED09 /* Pods-QuranFoundation.debug.xcconfig */,
-				08F35B9838DF424BAE43084E /* Pods-QuranFoundation.release.xcconfig */,
 				E18B51ECB2D8C742A5092BB5 /* Pods-VFoundation.debug.xcconfig */,
 				677E77F7272383AD7D4EE74D /* Pods-VFoundation.release.xcconfig */,
 				D4E967A879B0B7890F3E1B97 /* Pods-UIKitExtension.debug.xcconfig */,
@@ -2158,10 +2189,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				546784751EB2AADD0012FA2C /* sqlite3.h in Headers */,
 				546784521EB2A32A0012FA2C /* Quran-Bridging-Header.h in Headers */,
 				546784381EB29FD20012FA2C /* SQLitePersistence.h in Headers */,
-				546784511EB2A26B0012FA2C /* SQLitePersistence-Briding-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2765,6 +2794,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */,
 				5467842C1EB29F230012FA2C /* ThreadSafeDownloadSessionDelegate.swift in Sources */,
 				543FE04B1EB3DA2A00687DF8 /* FileSystemError.swift in Sources */,
 				546784481EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift in Sources */,
@@ -2773,7 +2803,7 @@
 				546784201EB29E710012FA2C /* Download.swift in Sources */,
 				5467842A1EB29F230012FA2C /* DownloadRequest.swift in Sources */,
 				546784471EB2A07E0012FA2C /* DownloadsPersistence.swift in Sources */,
-				546784291EB29F230012FA2C /* DownloadNetworkResponse.swift in Sources */,
+				546784291EB29F230012FA2C /* DownloadBatchResponse.swift in Sources */,
 				543FE04F1EB3DAE500687DF8 /* NetworkError.swift in Sources */,
 				546784281EB29F230012FA2C /* DownloadManager.swift in Sources */,
 			);
@@ -2941,7 +2971,7 @@
 				541BA5E11E93AE6500245A42 /* QuranShareData.swift in Sources */,
 				54C0DC041CE63387009AAD8D /* SuraBasedLastAyahFinder.swift in Sources */,
 				548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */,
-				5437D39E1EB38B2A00795FA9 /* Crash.swift in Sources */,
+				5437D39E1EB38B2A00795FA9 /* CrashlyticsCrasher.swift in Sources */,
 				5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */,
 				54C0DC0C1CE68F46009AAD8D /* GaplessAudioPlayerInteractor.swift in Sources */,
 				5494CCB21CEFA5F700031686 /* Constants.swift in Sources */,
@@ -3185,7 +3215,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3197,6 +3227,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.VFoundation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3215,7 +3246,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3227,6 +3258,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.VFoundation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3243,7 +3275,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3273,7 +3305,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3301,7 +3333,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3331,7 +3363,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3359,7 +3391,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3389,7 +3421,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3417,7 +3449,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3429,10 +3461,13 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.SQLitePersistence;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				"SWIFT_INCLUDE_PATHS[sdk=iphoneos*]" = "$(TARGET_NAME)/modules/iphoneos";
+				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(TARGET_NAME)/modules/iphonesimulator";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -3448,7 +3483,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3460,9 +3495,12 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.SQLitePersistence;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				"SWIFT_INCLUDE_PATHS[sdk=iphoneos*]" = "$(TARGET_NAME)/modules/iphoneos";
+				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(TARGET_NAME)/modules/iphonesimulator";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -3510,7 +3548,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -3553,7 +3591,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

@@ -25,13 +25,13 @@ class AudioFilesDownloader {
 
     let audioFileList: QariAudioFileListRetrieval
     let downloader: DownloadManager
-    let ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]>
+    let ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
 
-    private var response: Response?
+    private var response: DownloadBatchResponse?
 
     init(audioFileList: QariAudioFileListRetrieval,
          downloader: DownloadManager,
-         ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]>) {
+         ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>) {
         self.audioFileList  = audioFileList
         self.downloader     = downloader
         self.ayahDownloader = ayahDownloader
@@ -47,43 +47,40 @@ class AudioFilesDownloader {
         return !files.filter { !FileManager.documentsURL.appendingPathComponent($0.destinationPath).isReachable }.isEmpty
     }
 
-    func getCurrentDownloadResponse() -> Promise<Response?> {
+    func getCurrentDownloadResponse() -> Promise<DownloadBatchResponse?> {
         if let response = response {
             return Promise(value: response)
         } else {
-            return downloader.getOnGoingDownloads().then { batches -> Response? in
-                let downloads = batches.flatMap { $0.responses.filter { $0.download.isAudio } }
-                self.createRequestWithDownloads(downloads)
+            return downloader.getOnGoingDownloads().then { batches -> DownloadBatchResponse? in
+                let downloading = batches.first { $0.isAudio }
+                self.createRequestWithDownloads(downloading)
                 return self.response
             }
         }
     }
 
-    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Promise<Response?> {
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Promise<DownloadBatchResponse?> {
         return ayahDownloader
             .execute(AyahsAudioDownloadRequest(start: startAyah, end: endAyah, qari: qari))
-            .then(on: .main) { responses -> Response? in
+            .then(on: .main) { responses -> DownloadBatchResponse? in
                 // wrap the requests
                 self.createRequestWithDownloads(responses)
                 return self.response
         }
     }
 
-    private func createRequestWithDownloads(_ downloads: [DownloadNetworkResponse]) {
-        guard !downloads.isEmpty else { return }
+    private func createRequestWithDownloads(_ batch: DownloadBatchResponse?) {
+        guard let batch = batch else { return }
 
-        self.response = CollectionResponse(responses: downloads)
-        self.response?.addCompletion { [weak self] _ in
-            guard let `self` = self else {
-                return
-            }
-            self.response = nil
+        response = batch
+        response?.promise.always { [weak self] in
+            self?.response = nil
         }
     }
 
-    func filesForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [Download] {
+    func filesForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [DownloadRequest] {
         return audioFileList.get(for: qari, startAyah: startAyah, endAyah: endAyah).map {
-            Download(url: $0.remote, resumePath: $0.local.stringByAppendingPath(Files.downloadResumeDataExtension), destinationPath: $0.local)
+            DownloadRequest(url: $0.remote, resumePath: $0.local.stringByAppendingPath(Files.downloadResumeDataExtension), destinationPath: $0.local)
         }
     }
 }

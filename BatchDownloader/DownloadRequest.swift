@@ -18,22 +18,39 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import VFoundation
 
 public struct DownloadRequest {
-    public let method: HTTPMethod
-    public let headers: [String: String]?
-
     public let url: URL
     public let resumePath: String
     public let destinationPath: String
 
-    public init(method: HTTPMethod, headers: [String: String]? = nil, download: Download) {
-        self.method = method
-        self.headers = headers
-        url = download.url
-        resumePath = download.resumePath
-        destinationPath = download.destinationPath
+    public init(url: URL, resumePath: String, destinationPath: String) {
+        self.url = url
+        self.resumePath = resumePath
+        self.destinationPath = destinationPath
+    }
 
+    public var request: URLRequest {
+        return URLRequest(url: url)
+    }
+}
+
+public struct DownloadBatchRequest {
+    public let requests: [DownloadRequest]
+    public init(requests: [DownloadRequest]) {
+        self.requests = requests
+    }
+}
+
+extension URLSession {
+
+    public func downloadTask(with request: DownloadRequest) -> URLSessionDownloadTask {
+        let resumeURL = FileManager.documentsURL.appendingPathComponent(request.resumePath)
+        if let data = try? Data(contentsOf: resumeURL) {
+            return downloadTask(withResumeData: data)
+        } else {
+            return downloadTask(with: URLRequest(url: request.url))
+        }
     }
 }

@@ -171,21 +171,17 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         // download the translation
         let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
-        let download = Download(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
-        let responses = self.downloader.download([download])
+        let download = DownloadRequest(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
+        self.downloader.download(DownloadBatchRequest(requests: [download])).then(on: .main) { response -> Void in
+            // update the item to be downloading
+            let newItem = TranslationFull(translation: item.translation, response: response)
+            var newItems = ds.items
+            newItems[cast(newItems.index(of: item))] = newItem
+            ds.items = newItems
 
-        guard let response = responses.first else {
-            return
-        }
-
-        // update the item to be downloading
-        let newItem = TranslationFull(translation: item.translation, response: response)
-        var newItems = ds.items
-        newItems[cast(newItems.index(of: item))] = newItem
-        ds.items = newItems
-
-        // observe download progress
-        downloadingObservers[newItem.translation.id] = DownloadingObserver(item: newItem, delegate: self)
+            // observe download progress
+            self.downloadingObservers[newItem.translation.id] = DownloadingObserver(item: newItem, delegate: self)
+        }.cauterize()
     }
 
     func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldCancelDownload item: TranslationFull) {

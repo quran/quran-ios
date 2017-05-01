@@ -1,5 +1,5 @@
 //
-//  Crash.swift
+//  CrashlyticsCrasher.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 6/10/16.
@@ -75,7 +75,7 @@ struct CrashlyticsCrasher: Crasher {
     func logCriticalIssue(_ message: String) {
         CLSLogv("%@", getVaList([message]))
         #if DEBUG
-            fatalError(reason, error, file: file, line: line)
+            fatalError(message)
         #endif
     }
 }

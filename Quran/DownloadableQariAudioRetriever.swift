@@ -42,25 +42,19 @@ class DownloadableQariAudioRetriever: Interactor {
         return when(fulfilled: downloads, retriever).then(execute: createDownloadableQariAudio(downloads:qaris:))
     }
 
-    private func createDownloadableQariAudio(downloads: [DownloadNetworkBatchResponse], qaris: [QariAudioDownload]) -> [DownloadableQariAudio] {
+    private func createDownloadableQariAudio(downloads: [DownloadBatchResponse], qaris: [QariAudioDownload]) -> [DownloadableQariAudio] {
 
-        var paths: [String: DownloadNetworkBatchResponse] = [:]
+        var paths: [String: DownloadBatchResponse] = [:]
         for batch in downloads {
-            if let download = batch.responses.first, batch.isAudio {
-                if let path = download.download.destinationPath.pathComponents.first(where: { "/" != $0 }) {
+            if let download = batch.requests.first, batch.isAudio {
+                if let path = download.destinationPath.pathComponents.first(where: { "/" != $0 }) {
                     paths[path] = batch
                 }
             }
         }
 
         return qaris.map { audio in
-            let response: Response?
-            if let batch =  paths[audio.qari.path] {
-                response = CollectionResponse(responses: batch.responses)
-            } else {
-                response = nil
-            }
-            return DownloadableQariAudio(audio: audio, response: response)
+            return DownloadableQariAudio(audio: audio, response: paths[audio.qari.path])
         }
     }
 }

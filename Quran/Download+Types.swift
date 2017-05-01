@@ -20,20 +20,24 @@
 
 import BatchDownloader
 
-extension Download {
+extension DownloadRequest {
     var isTranslation: Bool {
         return destinationPath.hasPrefix(Files.translationsPathComponent)
     }
 }
 
-extension Download {
+extension DownloadRequest {
     var isAudio: Bool {
         return !isTranslation
     }
 }
 
-extension DownloadNetworkBatchResponse {
+extension DownloadBatchResponse {
     var isAudio: Bool {
-        return responses.first(where: { !$0.download.isAudio }) == nil
+        return requests.first(where: { $0.isAudio }) != nil
+    }
+
+    var isTranslation: Bool {
+        return requests.count == 1 && requests.first(where: { $0.isTranslation }) != nil
     }
 }

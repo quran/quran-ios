@@ -50,6 +50,11 @@ public struct Crash {
     }
 }
 
+public func log(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+    NSLog(message)
+}
+
 public func CLog(_ items: Any..., separator: String = " ", terminator: String = "\n") {
     let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
     NSLog(message)
@@ -58,6 +63,7 @@ public func CLog(_ items: Any..., separator: String = " ", terminator: String = 
 
 public func logCriticalIssue(_ items: Any..., separator: String = " ", terminator: String = "\n") {
     let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+    NSLog(message)
     Crash.crasher?.logCriticalIssue(message)
 }
 

@@ -40,7 +40,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     init(retriever: AnyGetInteractor<[DownloadableQariAudio]>,
          downloader: DownloadManager,
-         ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]>,
+         ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
          qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>,
          deletionInteractor: AnyInteractor<Qari, Void>) {
         self.retriever = retriever

@@ -48,12 +48,10 @@ class TranslationsVersionUpdaterInteractor: Interactor {
             .then(execute: createTranslations)
     }
 
-    private func createTranslations(translations: [Translation], downloadsBatches: [DownloadNetworkBatchResponse]) -> [TranslationFull] {
-        let downloads = downloadsBatches
-            .flatMap { $0.responses }
-            .filter { $0.download.isTranslation }
+    private func createTranslations(translations: [Translation], downloadsBatches: [DownloadBatchResponse]) -> [TranslationFull] {
+        let downloads = downloadsBatches.filter { $0.isTranslation }
 
-        let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
+        let downloadsByFile = downloads.flatGroup { $0.requests.first?.destinationPath.stringByDeletingPathExtension ?? "_" }
 
         return translations.map { translation -> TranslationFull in
             // downloading...

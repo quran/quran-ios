@@ -17,6 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import BatchDownloader
 
 enum DownloadState {
     case notDownloaded
@@ -49,7 +50,7 @@ enum DownloadState {
 
 protocol Downloadable {
 
-    var response: Response? { get set }
+    var response: DownloadBatchResponse? { get set }
     var isDownloaded: Bool { get }
     var needsUpgrade: Bool { get }
 }

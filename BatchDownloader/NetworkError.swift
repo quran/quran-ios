@@ -10,7 +10,7 @@ import Foundation
 
 public enum NetworkError: Error {
     /// Unknown or not supported error.
-    case unknown(Error)
+    case unknown(Error?)
 
     /// Not connected to the internet.
     case notConnectedToInternet

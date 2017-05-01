@@ -22,12 +22,8 @@ import Foundation
 
 public protocol DownloadsPersistence {
     func retrieveAll() throws -> [DownloadBatch]
-    func retrieve(status: Download.Status) throws -> [DownloadBatch]
-
-    func insert(batch: [Download]) throws -> [Download]
-
+    func insert(batch: DownloadBatchRequest) throws -> DownloadBatch
     func update(url: URL, newStatus status: Download.Status) throws
-    func update(batches: [DownloadBatch], newStatus status: Download.Status) throws
-
-    func delete(batchId: Int64) throws
+    func update(downloads: [Download]) throws
+    func delete(batchIds: [Int64]) throws
 }

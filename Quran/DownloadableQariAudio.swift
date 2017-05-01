@@ -18,9 +18,11 @@
 //  GNU General Public License for more details.
 //
 
+import BatchDownloader
+
 struct DownloadableQariAudio: Downloadable {
     let audio: QariAudioDownload
-    var response: Response?
+    var response: DownloadBatchResponse?
 
     var isDownloaded: Bool { return audio.isDownloaded }
     var needsUpgrade: Bool { return false }

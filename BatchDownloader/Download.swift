@@ -23,40 +23,31 @@ import Foundation
 public struct Download {
 
     public enum Status: Int {
-        case downloading
-        case completed
-        case failed
+        case downloading = 0
+        case completed   = 1
+        // case failed      = 2 // we shouldn't keep a failed download
+        case pending     = 3
     }
 
-    var taskId: Int?
-    public let url: URL
-    public let resumePath: String
-    public let destinationPath: String
-    public var status: Status
-    var batchId: Int64?
+    public let batchId: Int64
+    public let request: DownloadRequest
 
-    public init(taskId: Int? = nil, url: URL, resumePath: String, destinationPath: String, status: Status = .downloading, batchId: Int64? = nil) {
-        self.taskId = taskId
-        self.url = url
-        self.resumePath = resumePath
-        self.destinationPath = destinationPath
-        self.status = status
+    public var status: Status
+    public var taskId: Int?
+
+    public init(taskId: Int? = nil, request: DownloadRequest, status: Status = .downloading, batchId: Int64) {
+        self.taskId  = taskId
+        self.request = request
+        self.status  = status
         self.batchId = batchId
     }
 }
 
 public struct DownloadBatch {
+    public let id: Int64
     public let downloads: [Download]
-
-    public var status: Download.Status {
-        var failed = false
-        for download in downloads {
-            if download.status == .failed {
-                failed = true
-            } else if download.status == .downloading {
-                return .downloading
-            }
-        }
-        return failed ? .failed : .completed
+    public init(id: Int64, downloads: [Download]) {
+        self.id = id
+        self.downloads = downloads
     }
 }

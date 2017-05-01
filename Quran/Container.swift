@@ -37,7 +37,10 @@ class Container {
 
     init() {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
-        downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createDownloadsPersistence())
+        configuration.timeoutIntervalForRequest = 60 * 5 // 5 minutes
+        downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 200,
+                                                    configuration: configuration,
+                                                    persistence: createDownloadsPersistence())
     }
 
     func createRootViewController() -> UIViewController {
@@ -410,7 +413,7 @@ class Container {
         return QariAudioFileListRetrievalCreator().asAnyCreator()
     }
 
-    func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]> {
+    func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse> {
         return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
     }
 

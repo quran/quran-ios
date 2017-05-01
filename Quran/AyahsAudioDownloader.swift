@@ -36,20 +36,19 @@ struct AyahsAudioDownloader: Interactor {
         self.creator = creator
     }
 
-    func execute(_ request: AyahsAudioDownloadRequest) -> Promise<[DownloadNetworkResponse]> {
-        return DispatchQueue.default.promise2 { () -> [DownloadNetworkResponse] in
-            let retriever = self.creator.create(request.qari)
+    func execute(_ request: AyahsAudioDownloadRequest) -> Promise<DownloadBatchResponse> {
+        return DispatchQueue.default.promise2 { () -> DownloadBatchRequest in
+                let retriever = self.creator.create(request.qari)
 
-            // get downloads
-            let files = retriever
-                .get(for: request.qari, startAyah: request.start, endAyah: request.end)
-                .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
-                .map { Download(url: $0.remote, resumePath: $0.local.resumePath, destinationPath: $0.local) }
-                .map { DownloadRequest( method: .GET, download: $0) }
-
-            // create downloads
-            let responses = self.downloader.download(files)
-            return responses
+                // get downloads
+                let files = retriever
+                    .get(for: request.qari, startAyah: request.start, endAyah: request.end)
+                    .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
+                    .map { DownloadRequest(url: $0.remote, resumePath: $0.local.resumePath, destinationPath: $0.local) }
+                return DownloadBatchRequest(requests: files)
+            }.then {
+                // create downloads
+                return self.downloader.download($0)
         }
     }
 }

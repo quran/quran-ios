@@ -19,6 +19,7 @@
 //
 
 import PromiseKit
+import BatchDownloader
 
 protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegate {
 
@@ -118,21 +119,19 @@ extension DefaultAudioPlayerInteractor {
         delegate?.highlight(ayah)
     }
 
-    fileprivate func gotDownloadResponse(_ response: Response, playbackInfo: PlaybackInfo?) {
+    fileprivate func gotDownloadResponse(_ response: DownloadBatchResponse, playbackInfo: PlaybackInfo?) {
 
         delegate?.didStartDownloadingAudioFiles(progress: response.progress)
-        response.addCompletion { [weak self] result in
-            switch result {
-            case .success:
+        response.promise
+            .then { [weak self] () -> Void in
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {
                     self?.delegate?.onPlaybackOrDownloadingCompleted()
                 }
-            case .failure(let error):
-                self?.delegate?.onPlaybackOrDownloadingCompleted()
-                self?.delegate?.onFailedDownloadingWithError(error)
-            }
+        }.catch { [weak self] error in
+            self?.delegate?.onPlaybackOrDownloadingCompleted()
+            self?.delegate?.onFailedDownloadingWithError(error)
         }
     }
 

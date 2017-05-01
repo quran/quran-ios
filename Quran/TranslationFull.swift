@@ -17,10 +17,11 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import BatchDownloader
 
 struct TranslationFull: Downloadable {
     let translation: Translation
-    var response: Response?
+    var response: DownloadBatchResponse?
 
     var isDownloaded: Bool { return translation.installedVersion != nil }
     var needsUpgrade: Bool { return translation.installedVersion != translation.version }

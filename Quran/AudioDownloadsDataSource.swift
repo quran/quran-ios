@@ -29,7 +29,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
 
     private let deletionInteractor: AnyInteractor<Qari, Void>
     private let downloader: DownloadManager
-    private let ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]>
+    private let ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
     fileprivate let qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>
     fileprivate var downloadingObservers: [Qari: DownloadingObserver<DownloadableQariAudio>] = [:]
 
@@ -38,7 +38,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     var onEditingChanged: (() -> Void)?
 
     init(downloader: DownloadManager,
-         ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, [DownloadNetworkResponse]>,
+         ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
          qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>,
          deletionInteractor: AnyInteractor<Qari, Void>) {
         self.downloader = downloader
@@ -125,12 +125,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         // download the audio
         ayahsDownloader
             .execute(AyahsAudioDownloadRequest(start: Quran.startAyah, end: Quran.lastAyah, qari: item.audio.qari))
-            .then { responses -> Void in
-
-                guard !responses.isEmpty else {
-                    return
-                }
-                let response = CollectionResponse(responses: responses)
+            .then { response -> Void in
 
                 guard !self.cancelled.value else {
                     response.cancel()
@@ -218,7 +213,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         reload(item: item, cell: cell, response: nil)
     }
 
-    private func reload(item: DownloadableQariAudio, cell: AudioDownloadTableViewCell?, response: Response?) {
+    private func reload(item: DownloadableQariAudio, cell: AudioDownloadTableViewCell?, response: DownloadBatchResponse?) {
         qariAudioDownloadRetriever.execute([item.audio.qari])
             .then(on: .main) { audios -> Void in
                 guard let audio = audios.first else {

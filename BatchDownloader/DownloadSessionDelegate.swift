@@ -20,165 +20,29 @@
 
 import VFoundation
 
-class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
+class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
 
     private let acceptableStatusCodes = 200..<300
 
-    private let queue: OperationQueue
-    private let persistence: DownloadsPersistence
-
-    private var downloadingResponses: [Int: DownloadNetworkResponse] = [:]
-    private var downloadBatches: [DownloadBatch] = []
-    private var populated = false
+    private let dataController: DownloadBatchDataController
 
     weak var cancellable: NetworkResponseCancellable?
-
     var backgroundSessionCompletionHandler: (() -> Void)?
 
-    init(persistence: DownloadsPersistence, queue: OperationQueue) {
-        self.persistence = persistence
-        self.queue = queue
-        super.init()
-        queue.promise {
-            self.downloadBatches = try persistence.retrieve(status: .downloading)
-            }.cauterize(tag: "downloadSessionDelegate.retreiving.downloads")
+    init(dataController: DownloadBatchDataController) {
+        self.dataController = dataController
     }
 
-    private func response(for task: URLSessionTask) -> DownloadNetworkResponse? {
-        if let response = downloadingResponses[task.taskIdentifier] {
-            return response
-        }
-
-        let target = downloadBatches
-            .flatMap { $0.downloads }
-            .first { $0.taskId == task.taskIdentifier }
-        guard let download = target else {
-            return nil
-        }
-        let progress = QProgress(totalUnitCount: 1)
-        let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress, cancellable: cancellable)
-        downloadingResponses[task.taskIdentifier] = downloadRequest
-        return downloadRequest
+    func setRunningTasks(_ tasks: [URLSessionTask]) throws {
+        try dataController.setRunningTasks(tasks)
     }
 
-    private func cleanUpDownloads() {
-        let batches = downloadingResponses.map { $1 }.group { $0.download.batchId ?? 0 }
-        for (batchId, batch) in batches {
-            let isDownloading = batch.contains { $0.download.status == .downloading }
-            // if all completed or failed or mix between both, remove the batch
-            if !isDownloading {
-                for item in batch {
-                    let taskId = unwrap(item.download.taskId)
-                    downloadingResponses[taskId] = nil
-                }
-                suppress {
-                    try persistence.delete(batchId: batchId)
-                }
-            }
-        }
+    func download(_ batch: DownloadBatchRequest) throws -> DownloadBatchResponse {
+        return try dataController.download(batch)
     }
 
-    func populateOnGoingDownloads(from downloadTasks: [URLSessionTask]) {
-        populated = false
-
-        // group tasks by id
-        let tasksByIds: [Int: URLSessionTask] = downloadTasks.flatGroup { $0.taskIdentifier }
-
-        // loop over the downloads
-        let downloads = downloadBatches.flatMap { $0.downloads }
-        for download in downloads {
-            let taskId = unwrap(download.taskId)
-            guard downloadingResponses[taskId] == nil else {
-                continue
-            }
-            if let task = tasksByIds[taskId] {
-                let progress = QProgress(totalUnitCount: 1)
-                let downloadRequest = DownloadNetworkResponse(task: task, download: download, progress: progress, cancellable: cancellable)
-                downloadingResponses[taskId] = downloadRequest
-            } else {
-                if download.status == .completed {
-                    let progress = QProgress(totalUnitCount: 1)
-                    progress.completedUnitCount = 1
-                    let downloadRequest = DownloadNetworkResponse(task: nil, download: download, progress: progress, cancellable: cancellable)
-                    downloadingResponses[taskId] = downloadRequest
-                } else if download.status == .downloading {
-                    // set it as failed
-                    suppress {
-                        try persistence.update(url: download.url, newStatus: .failed)
-                    }
-                }
-            }
-        }
-        downloadBatches.removeAll()
-        cleanUpDownloads()
-        populated = true
-    }
-
-    func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
-        // create the onGoingDownloads once so we can use it before the persistence value is written.
-        for download in downloads {
-            let taskId = unwrap(download.download.taskId)
-            downloadingResponses[taskId] = download
-        }
-        do {
-            // update the status
-            let downloadsToInsert = downloads.map { response -> Download in
-                var d = response.download
-                d.status = .downloading
-                return d
-            }
-            // insert the batch
-            let batch = try persistence.insert(batch: downloadsToInsert)
-
-            // update the responses and the downloading
-            for (index, response) in downloads.enumerated() {
-                // update the download
-                response.download = batch[index]
-                // add it to downloading
-                let taskId = unwrap(response.download.taskId)
-                downloadingResponses[taskId] = response
-            }
-        } catch {
-            Crash.recordError(error, reason: "addOnGoingDownloads")
-            downloads.first?.result = .failure(error)
-        }
-    }
-
-    func getOnGoingDownloads() -> [DownloadNetworkBatchResponse] {
-        let groups = downloadingResponses.values.group { $0.download.batchId ?? 0 }
-        return groups.map { DownloadNetworkBatchResponse(responses: $1) }
-    }
-
-    private func taskFailed(_ task: URLSessionTask) -> DownloadNetworkResponse? {
-        return update(task: task, status: .failed)
-    }
-
-    private func taskCompleted(_ task: URLSessionTask) -> DownloadNetworkResponse? {
-        return update(task: task, status: .completed)
-    }
-
-    private func update(task: URLSessionTask, status: Download.Status) -> DownloadNetworkResponse? {
-        guard let downloadRequest = response(for: task) else {
-            return nil
-        }
-        // we get only update the downloading
-        guard downloadRequest.download.status == .downloading else {
-            return downloadRequest
-        }
-        var download = downloadRequest.download
-        download.status = status
-        downloadRequest.download = download
-        downloadingResponses[task.taskIdentifier] = downloadRequest
-
-        suppress {
-            try persistence.update(url: download.url, newStatus: status)
-        }
-
-        // delete the batch if all completed/failed
-        if populated {
-            cleanUpDownloads()
-        }
-        return downloadRequest
+    func getOnGoingDownloads() -> [DownloadBatchResponse] {
+        return dataController.getOnGoingDownloads().map { $1 }
     }
 
     func urlSession(_ session: URLSession,
@@ -186,8 +50,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
                     didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
-        guard let response = response(for: downloadTask) else {
-            CLog("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - " +
+        guard let response = dataController.downloadResponse(for: downloadTask) else {
+            log("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - " +
                 "URL(\(downloadTask.currentRequest?.url?.absoluteString ?? ""))")
             return
         }
@@ -201,62 +65,76 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
             return
         }
 
-        guard let download = response(for: downloadTask)?.download else {
-            CLog("Missed saving task", downloadTask.currentRequest?.url as Any)
+        guard let response = dataController.downloadResponse(for: downloadTask) else {
+            log("Missed saving task", downloadTask.currentRequest?.url as Any)
             return
         }
         let fileManager = FileManager.default
 
-        let resumeURL = FileManager.documentsURL.appendingPathComponent(download.resumePath)
-        let destinationURL = FileManager.documentsURL.appendingPathComponent(download.destinationPath)
+        let resumeURL = FileManager.documentsURL.appendingPathComponent(response.download.request.resumePath)
+        let destinationURL = FileManager.documentsURL.appendingPathComponent(response.download.request.destinationPath)
 
         // remove the resume data
         try? fileManager.removeItem(at: resumeURL)
         // remove the existing file if exist.
         try? fileManager.removeItem(at: destinationURL)
 
+        // create directory if needed
+        let directory = destinationURL.deletingLastPathComponent()
+        try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+
         // move the file to destination
         do {
-            let directory = destinationURL.deletingLastPathComponent()
-            try? fileManager.createDirectory(at: directory,
-                                             withIntermediateDirectories: true,
-                                             attributes: nil)
             try fileManager.moveItem(at: location, to: destinationURL)
 
         } catch {
             Crash.recordError(error, reason: "Problem with create directory or copying item to the new location '\(destinationURL)'",
                 fatalErrorOnDebug: false)
-            // early exist with error
-            let downloadRequest = taskFailed(downloadTask)
-            downloadRequest?.result = .failure(FileSystemError(error: error))
+            // fail the batch since we save the file
+            do {
+                try dataController.downloadFailed(response, with: FileSystemError(error: error))
+            } catch {
+                Crash.recordError(error, reason: "downloadFailed", fatalErrorOnDebug: false)
+            }
         }
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
 
+        guard let response = dataController.downloadResponse(for: task) else {
+            log("Cannot find onGoingDownloads for task with id \(task.taskIdentifier) - " +
+                "URL(\(task.currentRequest?.url?.absoluteString ?? ""))")
+            return
+        }
+
         let validationError = validate(task: task)
         let theError = sessionError ?? validationError
 
-        // remove the request
-        let networkResponse: DownloadNetworkResponse?
-        if theError != nil {
-            networkResponse = taskFailed(task)
-        } else {
-            networkResponse = taskCompleted(task)
-        }
-        guard let response = networkResponse else {
+        // if success, early return
+        guard let error = theError else {
+            do {
+                try dataController.downloadCompleted(response)
+            } catch {
+                Crash.recordError(error, reason: "downloadCompleted", fatalErrorOnDebug: false)
+            }
             return
         }
 
-        // if success, early return
-        guard var error = theError else {
-            response.result = .success()
-            return
+        let finalError = wrap(error: error, resumePath: response.download.request.resumePath)
+
+        do {
+            try dataController.downloadFailed(response, with: finalError)
+        } catch {
+            Crash.recordError(error, reason: "downloadFailed", fatalErrorOnDebug: false)
         }
+    }
+
+    private func wrap(error theError: Error, resumePath: String) -> Error {
+        var error = theError
 
         // save resume data, if found
         if let resumeData = error.resumeData {
-            let resumeURL = FileManager.documentsURL.appendingPathComponent(response.download.resumePath)
+            let resumeURL = FileManager.documentsURL.appendingPathComponent(resumePath)
             suppress {
                 try resumeData.write(to: resumeURL, options: [.atomic])
             }
@@ -265,18 +143,19 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
 
         // not cancelled by user
         guard !error.isCancelled else {
-            return
+            return error
         }
 
-        Crash.recordError(error, reason: "Download network error occurred")
+        Crash.recordError(error, reason: "Download network error occurred", fatalErrorOnDebug: false)
 
+        // check if no disk space
         let finalError: Error
         if error is POSIXErrorCode && Int32((error as NSError).code) == ENOENT {
             finalError = FileSystemError.noDiskSpace
         } else {
             finalError = NetworkError(error: error)
         }
-        response.result = .failure(finalError)
+        return finalError
     }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
@@ -285,36 +164,8 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadHandler {
         handler?()
     }
 
-    func cancel(_ response: DownloadNetworkResponse) {
-        queue.promise { [weak self] in
-            guard let `self` = self else { return }
-
-            let batchId = unwrap(response.download.batchId)
-            let batch: [DownloadNetworkResponse] = self.downloadingResponses
-                .map { $1 }
-                .filter { $0.download.batchId == batchId }
-
-            // remove from memory
-            for item in batch {
-                let taskId = unwrap(item.download.taskId)
-                self.downloadingResponses[taskId] = nil
-            }
-
-            guard !batch.isEmpty else {
-                // we already cancelled it before
-                return
-            }
-
-            // cancel all tasks
-            for response in batch {
-                response.task?.cancel()
-            }
-
-            // remove from persistence
-            suppress {
-                try self.persistence.delete(batchId: batchId)
-            }
-            }.cauterize()
+    func cancel(batch: DownloadBatchResponse) throws {
+        try dataController.cancel(batch: batch)
     }
 
     private func validate(task: URLSessionTask) -> Error? {

@@ -104,6 +104,14 @@ extension DispatchQueue {
     }
 }
 
+extension DispatchGroup {
+    public final func notify(on q: DispatchQueue = .default) -> Promise<Void> {
+        return Promise(resolvers: { (fulfill, _) in
+            self.notify(queue: q, execute: fulfill)
+        })
+    }
+}
+
 extension Promise where T: Sequence {
     public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
         return then(on: q) { sequence -> [U] in

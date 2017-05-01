@@ -21,51 +21,43 @@
 import VFoundation
 import PromiseKit
 
-public protocol NetworkResponseCancellable: class {
-    func cancel(_ response: DownloadNetworkResponse)
-}
-
-protocol URLSessionDownloadHandler: URLSessionDownloadDelegate, NetworkResponseCancellable {
-    var backgroundSessionCompletionHandler: (() -> Void)? { get set }
-
-    func populateOnGoingDownloads(from downloadTasks: [URLSessionTask])
-    func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse])
-    func getOnGoingDownloads() -> [DownloadNetworkBatchResponse]
+protocol NetworkResponseCancellable: class {
+    func cancel(batch: DownloadBatchResponse)
 }
 
 class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, NetworkResponseCancellable {
 
-    private let handler: URLSessionDownloadHandler
+    private let unsafeHandler: DownloadSessionDelegate
     private let queue: OperationQueue
 
     var backgroundSessionCompletionHandler: (() -> Void)? {
-        get { return handler.backgroundSessionCompletionHandler }
-        set { handler.backgroundSessionCompletionHandler = newValue }
+        get { return unsafeHandler.backgroundSessionCompletionHandler }
+        set { unsafeHandler.backgroundSessionCompletionHandler = newValue }
     }
 
-    init(handler: URLSessionDownloadHandler, queue: OperationQueue) {
-        self.handler = handler
+    init(unsafeHandler: DownloadSessionDelegate, queue: OperationQueue) {
+        self.unsafeHandler = unsafeHandler
         self.queue = queue
     }
 
-    func populateOnGoingDownloads(from session: URLSession) {
+    func populateRunningTasks(from session: URLSession) {
         session.getTasks()
             .then { (_, _, downloadTasks) in
                 self.queue.promise {
-                    self.handler.populateOnGoingDownloads(from: downloadTasks)
+                    try self.unsafeHandler.setRunningTasks(downloadTasks)
                 }
             }.cauterize()
     }
 
-    func addOnGoingDownloads(_ downloads: [DownloadNetworkResponse]) {
-        queue.addOperation {
-            self.handler.addOnGoingDownloads(downloads)
+    func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
+        return queue.promise {
+            try self.unsafeHandler.download(batch)
         }
     }
 
-    func getOnGoingDownloads() -> Promise<[DownloadNetworkBatchResponse]> {
+    func getOnGoingDownloads() -> Promise<[DownloadBatchResponse]> {
         return queue.promise {
-            self.handler.getOnGoingDownloads()
+            self.unsafeHandler.getOnGoingDownloads()
         }
     }
 
@@ -74,26 +66,28 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
                     didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
-        handler.urlSession?(session,
-                            downloadTask: downloadTask,
-                            didWriteData: bytesWritten,
-                            totalBytesWritten: totalBytesWritten,
-                            totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+        unsafeHandler.urlSession(session,
+                           downloadTask: downloadTask,
+                           didWriteData: bytesWritten,
+                           totalBytesWritten: totalBytesWritten,
+                           totalBytesExpectedToWrite: totalBytesExpectedToWrite)
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        handler.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
+        unsafeHandler.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        handler.urlSession?(session, task: task, didCompleteWithError: error)
+        unsafeHandler.urlSession(session, task: task, didCompleteWithError: error)
     }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        handler.urlSessionDidFinishEvents?(forBackgroundURLSession: session)
+        unsafeHandler.urlSessionDidFinishEvents(forBackgroundURLSession: session)
     }
 
-    func cancel(_ response: DownloadNetworkResponse) {
-        handler.cancel(response)
+    func cancel(batch: DownloadBatchResponse) {
+        queue.promise {
+            try self.unsafeHandler.cancel(batch: batch)
+        }.cauterize()
     }
 }

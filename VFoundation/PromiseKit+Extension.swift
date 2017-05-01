@@ -30,7 +30,7 @@ extension Promise {
             } else {
                 message = "PromiseKit: unhandled error: \(error)"
             }
-            Crash.recordError(error, reason: message)
+            Crash.recordError(error, reason: message, fatalErrorOnDebug: false)
         }
     }
 

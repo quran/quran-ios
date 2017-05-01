@@ -71,4 +71,3 @@ public func fatalError(_ message: @autoclosure () -> String = "", _ error: Error
     CLog("message: \(fullMessage), file:\(file.description), line:\(line)")
     Swift.fatalError(fullMessage, file: file, line: line)
 }
-

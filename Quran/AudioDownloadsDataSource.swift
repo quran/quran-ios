@@ -170,8 +170,9 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         }
         let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
 
-        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * 100)
-        let newValue = floor(item.state.progress * 100)
+        let scale: Float = 2_000
+        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * scale)
+        let newValue = floor(item.state.progress * scale)
 
         cell?.downloadButton.state = item.state
 

@@ -22,6 +22,7 @@ import Foundation
 import AVFoundation
 import UIKit
 import MediaPlayer
+import QueuePlayer
 
 private class GappedPlayerItem: AVPlayerItem {
     let ayah: AyahNumber
@@ -72,8 +73,7 @@ extension GappedAudioPlayer {
             return PlayerItemInfo(
                 title: ayah.localizedName,
                 artist: qari.name,
-                artwork: qari.imageName
-                    .flatMap { UIImage(named: $0) }
+                artwork: UIImage(named: qari.imageName)
                     .flatMap { MPMediaItemArtwork(image: $0) })
         }
         return (items, info)
@@ -105,7 +105,7 @@ extension GappedAudioPlayer {
     }
 
     fileprivate func createRequestInfo(qari: Qari, sura: Int, ayah: Int) -> URL {
-        let fileName = String(format: "%03d%03d", sura, ayah)
+        let fileName = sura.as3DigitString() + ayah.as3DigitString()
         return qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
     }
 }

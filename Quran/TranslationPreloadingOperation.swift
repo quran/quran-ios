@@ -30,15 +30,15 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
 
     let page: Int
 
-    private let localTranslationInteractor: AnyInteractor<Void, [TranslationFull]>
+    private let localTranslationInteractor: AnyGetInteractor<[TranslationFull]>
     private let arabicPersistence: AyahTextPersistence
-    private let translationPersistenceCreator: AnyCreator<AyahTextPersistence, String>
+    private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
     private let simplePersistence: SimplePersistence
 
     init(page                          : Int,
-         localTranslationInteractor    : AnyInteractor<Void, [TranslationFull]>,
+         localTranslationInteractor    : AnyGetInteractor<[TranslationFull]>,
          arabicPersistence             : AyahTextPersistence,
-         translationPersistenceCreator : AnyCreator<AyahTextPersistence, String>,
+         translationPersistenceCreator : AnyCreator<String, AyahTextPersistence>,
          simplePersistence             : SimplePersistence) {
         self.page                          = page
         self.simplePersistence             = simplePersistence
@@ -82,7 +82,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
 
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {
         return localTranslationInteractor
-            .execute()
+            .get()
             .then(execute: selectedTranslations(allTranslations:))
             .then { self.retrieveAllTranslations(ayahs: ayahs, translations: $0) }
     }

@@ -18,11 +18,11 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
 
 protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloading()
-    func didStartDownloadingAudioFiles(progress: Foundation.Progress)
+    func didStartDownloadingAudioFiles(progress: QProgress)
 
     func onPlayingStarted()
 
@@ -42,7 +42,7 @@ protocol AudioPlayerInteractor: class {
     weak var delegate: AudioPlayerInteractorDelegate? { get set }
 
     // will call willStartDownloadingAudioFiles if there is downloads
-    func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void)
+    func isAudioDownloading() -> Promise<Bool>
 
     func playAudioForQari(_ qari: Qari, atPage page: QuranPage)
 

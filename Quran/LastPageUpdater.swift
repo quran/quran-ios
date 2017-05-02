@@ -22,7 +22,7 @@ import Foundation
 
 class LastPageUpdater {
     private let persistence: LastPagesPersistence
-    private (set) var lastPage: LastPage?
+    private(set) var lastPage: LastPage?
 
     init(persistence: LastPagesPersistence) {
         self.persistence = persistence

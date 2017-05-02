@@ -18,16 +18,26 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import BatchDownloader
 
-extension Download {
+extension DownloadRequest {
     var isTranslation: Bool {
         return destinationPath.hasPrefix(Files.translationsPathComponent)
     }
 }
 
-extension Download {
+extension DownloadRequest {
     var isAudio: Bool {
         return !isTranslation
+    }
+}
+
+extension DownloadBatchResponse {
+    var isAudio: Bool {
+        return requests.first(where: { $0.isAudio }) != nil
+    }
+
+    var isTranslation: Bool {
+        return requests.count == 1 && requests.first(where: { $0.isTranslation }) != nil
     }
 }

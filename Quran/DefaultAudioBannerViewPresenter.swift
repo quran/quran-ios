@@ -19,11 +19,10 @@
 //
 
 import UIKit
-import KVOController
 
-class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate {
+class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate, QProgressListener {
 
-    let qariRetreiver: AnyDataRetriever<[Qari]>
+    let qariRetreiver: AnyGetInteractor<[Qari]>
     let persistence: SimplePersistence
     let gaplessAudioPlayer: AudioPlayerInteractor
     let gappedAudioPlayer: AudioPlayerInteractor
@@ -69,7 +68,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     init(persistence: SimplePersistence,
-         qariRetreiver: AnyDataRetriever<[Qari]>,
+         qariRetreiver: AnyGetInteractor<[Qari]>,
          gaplessAudioPlayer: AudioPlayerInteractor,
          gappedAudioPlayer: AudioPlayerInteractor) {
         self.persistence = persistence
@@ -85,30 +84,28 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     func onViewDidLoad() {
         view?.hideAllControls()
 
-        qariRetreiver.retrieve { [weak self] (qaris) in
-            guard let `self` = self else {
-                return
-            }
-            self.qaris = qaris
+        qariRetreiver.get()
+            .then(on: .main) { (qaris) -> Void in
+                self.qaris = qaris
 
-            // get last selected qari id
-            let lastSelectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
-            let index = qaris.index { $0.id == lastSelectedQariId }
-            if let selectedIndex = index {
-                self.selectedQariIndex = selectedIndex
-            }
-
-            self.audioPlayer.checkIfDownloading { [weak self] (downloading) in
-                if !downloading {
-                    Queue.main.async { self?.showQariView() }
+                // get last selected qari id
+                let lastSelectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
+                let index = qaris.index { $0.id == lastSelectedQariId }
+                if let selectedIndex = index {
+                    self.selectedQariIndex = selectedIndex
                 }
             }
-        }
+            .then { self.audioPlayer.isAudioDownloading() }
+            .then(on: .main) { downloading -> Void in
+                if !downloading {
+                    self.showQariView()
+                }
+        }.suppress()
     }
 
     fileprivate func showQariView() {
         Crash.setValue(selectedQariIndex, forKey: .QariId)
-        view?.setQari(name: selectedQari.name, image: selectedQari.imageName.flatMap { UIImage(named: $0) })
+        view?.setQari(name: selectedQari.name, image: UIImage(named: selectedQari.imageName))
     }
 
     func setQariIndex(_ index: Int) {
@@ -157,33 +154,31 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         audioPlayer.cancelDownload()
     }
 
+    // MARK: - ProgressListener
+
+    func onProgressUpdated(to progress: Double) {
+        DispatchQueue.main.async {
+            self.view?.setDownloading(Float(progress))
+        }
+    }
+
     // MARK: - AudioPlayerInteractorDelegate
-    var progress: Foundation.Progress? {
+
+    var progress: QProgress? {
         didSet {
-            if let oldValue = oldValue {
-                kvoController.unobserve(oldValue)
-            }
-            if let newValue = progress {
-                kvoController.observe(newValue, keyPath: #keyPath(Progress.fractionCompleted),
-                                      options: [.initial, .new], block: { [weak self] (_, _, change) in
-                    if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Double {
-                        Queue.main.async {
-                            // CLog("progress:", newValue)
-                            self?.view?.setDownloading(Float(newValue))
-                        }
-                    }
-                })
-            }
+            oldValue?.progressListeners.remove(self)
+            progress?.progressListeners.insert(self)
         }
     }
 
     func willStartDownloading() {
         Crash.setValue(true, forKey: .DownloadingQuran)
-        Queue.main.async { self.view?.setDownloading(0) }
+        DispatchQueue.main.async { self.view?.setDownloading(0) }
     }
 
-    func didStartDownloadingAudioFiles(progress: Foundation.Progress) {
+    func didStartDownloadingAudioFiles(progress: QProgress) {
         self.progress = progress
+        onProgressUpdated(to: progress.progress)
     }
 
     func onPlayingStarted() {

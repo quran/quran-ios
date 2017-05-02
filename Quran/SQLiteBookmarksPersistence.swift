@@ -20,12 +20,13 @@
 
 import Foundation
 import SQLite
+import SQLitePersistence
 
 struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     let version: UInt = 1
     var filePath: String {
-        return FileManager.default.documentsPath.stringByAppendingPath("bookmarks.db")
+        return FileManager.documentsPath.stringByAppendingPath("bookmarks.db")
     }
 
     private struct Bookmarks {

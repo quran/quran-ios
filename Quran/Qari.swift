@@ -31,7 +31,7 @@ struct Qari: Hashable {
     let path: String
     let audioURL: URL
     let audioType: AudioType
-    let imageName: String?
+    let imageName: String
 
     var hashValue: Int {
         return id.hashValue
@@ -40,4 +40,10 @@ struct Qari: Hashable {
 
 func == (lhs: Qari, rhs: Qari) -> Bool {
     return lhs.id == rhs.id
+}
+
+extension Qari {
+    func localFolder() -> URL {
+        return FileManager.documentsURL.appendingPathComponent(path)
+    }
 }

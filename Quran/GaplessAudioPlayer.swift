@@ -22,6 +22,7 @@ import Foundation
 import AVFoundation
 import UIKit
 import MediaPlayer
+import QueuePlayer
 
 private class GaplessPlayerItem: AVPlayerItem {
     let sura: Int
@@ -62,7 +63,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 var times: [AVPlayerItem: [Double]] = [:]
                 var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
                 for item in items {
-                    var array: [AyahTiming] = cast(mutableTimings[item.sura])
+                    var array = unwrap(mutableTimings[item.sura])
                     if array.last?.ayah == AyahNumber(sura: item.sura, ayah: 999) {
                         array = Array(array.dropLast())
                     }
@@ -71,7 +72,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 }
                 self.ayahsDictionary = ayahs
 
-                let startSuraTimes: [AyahTiming] = cast(mutableTimings[startAyah.sura])
+                let startSuraTimes = unwrap(mutableTimings[startAyah.sura])
                 let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
 
                 self.player.onPlaybackEnded = self.onPlaybackEnded()
@@ -95,8 +96,7 @@ extension GaplessAudioPlayer {
             PlayerItemInfo(
                 title: Quran.nameForSura($1),
                 artist: qari.name,
-                artwork: qari.imageName
-                    .flatMap { UIImage(named: $0) }
+                artwork: UIImage(named: qari.imageName)
                     .flatMap { MPMediaItemArtwork(image: $0) })
         }
         return (items, info)
@@ -111,7 +111,7 @@ extension GaplessAudioPlayer {
         // loop over the files
         var files: [(URL, Int)] = []
         for sura in startAyah.sura...endAyah.sura {
-            let fileName = String(format: "%03d", sura)
+            let fileName = sura.as3DigitString()
             let localURL = qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
             files.append(localURL, sura)
         }

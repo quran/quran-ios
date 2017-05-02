@@ -25,6 +25,7 @@ extension Analytics {
         case juzs
         case translations
         case bookmarks
+        case audioDownloads
 
         case quranArabic
         case quranTranslation

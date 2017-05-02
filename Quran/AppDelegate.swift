@@ -31,13 +31,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let container: Container
 
     override init() {
+        // initialize craslytics
+        Fabric.with([Crashlytics.self, Answers.self])
+
+        // mandatory to be at the top
+        Crash.crasher = CrashlyticsCrasher()
         DispatchQueue.default = .global()
+
+        // create the dependency injection container
         container = Container()
         super.init()
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        Fabric.with([Crashlytics.self, Answers.self])
+        #if DEBUG
+            print("Document path:", FileManager.documentsPath)
+        #endif
 
         Analytics.shared.logSystemLanguage()
 

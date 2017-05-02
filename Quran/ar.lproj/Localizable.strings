@@ -6,7 +6,7 @@
 "NetworkError_InternationalRoamingOff" = "لا يسمح باستخدام التجوال الدولي. من فضلك قم بتغيير إعدادات خدمة التجوال الدولي، أو إتصل بالإنترنت عن طريق Wi-Fi.";
 "NetworkError_NotConnectedToInternet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";
 "NetworkError_ServerNotReachable" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-"NetworkError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"unknown_error_message" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "NetworkError_Parsing" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 
 "FileSystemError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";

@@ -6,7 +6,7 @@
 "NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
 "NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
 "NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
-"NetworkError_Unknown" = "Oops! Something went wrong. Please try again.";
+"unknown_error_message" = "Oops! Something went wrong. Please try again.";
 "NetworkError_Parsing" = "Oops! Something went wrong. Please try again.";
 
 "FileSystemError_Unknown" = "Oops! Something went wrong. Please try again.";

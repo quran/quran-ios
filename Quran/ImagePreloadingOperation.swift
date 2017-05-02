@@ -46,6 +46,6 @@ private func fullPathForPage(_ page: Int) -> String? {
 }
 
 private func fileNameForPage(_ page: Int) -> String {
-    let file = String(format: "images_\(quranImagesSize)/width_\(quranImagesSize)/page%03d.png", page)
+    let file = "images_\(quranImagesSize)/width_\(quranImagesSize)/page" + page.as3DigitString() + ".png"
     return file
 }

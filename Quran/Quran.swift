@@ -380,6 +380,15 @@ struct Quran {
 }
 
 extension Quran {
+    static let startAyah = AyahNumber(sura: 1, ayah: 1)
+    static let lastAyah: AyahNumber = {
+        let lastSura = SuraPageStart.count
+        let lastAyah = SuraNumberOfAyahs[lastSura - 1]
+        return AyahNumber(sura: lastSura, ayah: lastAyah)
+    }()
+}
+
+extension Quran {
     static func startAyahForPage(_ page: Int) -> AyahNumber {
         return AyahNumber(sura: PageSuraStart[page - 1], ayah: PageAyahStart[page - 1])
     }
@@ -408,6 +417,16 @@ extension Quran {
     }
 }
 
+extension Quran {
+
+    static func range(forPage page: Int) -> VerseRange {
+        let lowerBound = startAyahForPage(page)
+        let finder = PageBasedLastAyahFinder()
+        let upperBound = finder.findLastAyah(startAyah: lowerBound, page: page)
+        return VerseRange(lowerBound: lowerBound, upperBound: upperBound)
+    }
+}
+
 extension AyahNumber {
 
     var localizedName: String {
@@ -417,12 +436,37 @@ extension AyahNumber {
     }
 }
 
-extension Quran {
+extension Juz {
 
-    static func range(forPage page: Int) -> VerseRange {
-        let lowerBound = startAyahForPage(page)
-        let finder = PageBasedLastAyahFinder()
-        let upperBound = finder.findLastAyah(startAyah: lowerBound, page: page)
-        return VerseRange(lowerBound: lowerBound, upperBound: upperBound)
+    static func getJuzs() -> [Juz] {
+        let juzs = Quran.QuranJuzsRange.map { Juz(juzNumber: $0) }
+        return juzs
+    }
+
+    static func juzFromPage(_ page: Int) -> Juz {
+        for (index, juzStartPage) in Quran.JuzPageStart.enumerated() where page < juzStartPage {
+            let previousIndex = index - 1
+            let juzNumber = previousIndex + Quran.QuranJuzsRange.lowerBound
+            return Juz(juzNumber: juzNumber)
+        }
+        let juzNumber = Quran.QuranJuzsRange.upperBound
+        return Juz(juzNumber: juzNumber)
+    }
+}
+
+extension Sura {
+
+    static func getSuras() -> [Sura] {
+
+        var suras: [Sura] = []
+
+        for i in 0..<Quran.SuraPageStart.count {
+            suras.append(Sura(
+                suraNumber: i + 1,
+                isMAkki: Quran.SuraIsMakki[i],
+                numberOfAyahs: Quran.SuraNumberOfAyahs[i],
+                startPageNumber: Quran.SuraPageStart[i]))
+        }
+        return suras
     }
 }

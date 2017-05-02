@@ -21,6 +21,7 @@
 import UIKit
 import Moya
 import SwiftyJSON
+import BatchDownloader
 
 class Container {
 
@@ -36,16 +37,24 @@ class Container {
 
     init() {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
-        downloadManager = URLSessionDownloadManager(configuration: configuration, persistence: createDownloadsPersistence())
+        configuration.timeoutIntervalForRequest = 60 * 5 // 5 minutes
+        downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 200,
+                                                    configuration: configuration,
+                                                    persistence: createDownloadsPersistence())
     }
 
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
+                                      createBookmarksController(),
                                       createTranslationsNavigationController(),
-                                      createBookmarksController()]
+                                      createAudioDownloadsNavigationController()]
         return controller
+    }
+
+    func createAudioDownloadsNavigationController() -> UIViewController {
+        return AudioDownloadsNavigationController(rootViewController: createAudioDownloadsViewController())
     }
 
     func createTranslationsNavigationController() -> UIViewController {
@@ -54,6 +63,15 @@ class Container {
 
     func createSurasNavigationController() -> UIViewController {
         return SurasNavigationController(rootViewController: createSurasViewController())
+    }
+
+    func createAudioDownloadsViewController() -> UIViewController {
+        return AudioDownloadsViewController(
+            retriever: createDownloadableQariAudioRetriever(),
+            downloader: createDownloadManager(),
+            ayahsDownloader: createAyahsAudioDownloader(),
+            qariAudioDownloadRetriever: createQariListToQariAudioDownloadRetriever(),
+            deletionInteractor: createQariAudioDeleteInteractor())
     }
 
     func createJuzsNavigationController() -> UIViewController {
@@ -107,7 +125,7 @@ class Container {
         return QariTableViewController(style: .plain, qaris: qaris, selectedQariIndex: selectedQariIndex)
     }
 
-    func createQariTableViewControllerCreator() -> AnyCreator<QariTableViewController, ([Qari], Int, UIView?)> {
+    func createQariTableViewControllerCreator() -> AnyCreator<([Qari], Int, UIView?), QariTableViewController> {
         return QariTableViewControllerCreator(qarisControllerCreator: createCreator(createQariTableViewController)).asAnyCreator()
     }
 
@@ -140,20 +158,20 @@ class Container {
         return dataSource
     }
 
-    func createSurasRetriever() -> AnyDataRetriever<[(Juz, [Sura])]> {
-        return SurasDataRetriever().erasedType()
+    func createSurasRetriever() -> AnyGetInteractor<[(Juz, [Sura])]> {
+        return SurasDataRetriever().asAnyGetInteractor()
     }
 
-    func createQuartersRetriever() -> AnyDataRetriever<[(Juz, [Quarter])]> {
-        return QuartersDataRetriever().erasedType()
+    func createQuartersRetriever() -> AnyGetInteractor<[(Juz, [Quarter])]> {
+        return QuartersDataRetriever().asAnyGetInteractor()
     }
 
-    func createQuranPagesRetriever() -> AnyDataRetriever<[QuranPage]> {
-        return QuranPagesDataRetriever().erasedType()
+    func createQuranPagesRetriever() -> AnyGetInteractor<[QuranPage]> {
+        return QuranPagesDataRetriever().asAnyGetInteractor()
     }
 
-    func createQarisDataRetriever() -> AnyDataRetriever<[Qari]> {
-        return QariDataRetriever().erasedType()
+    func createQarisDataRetriever() -> AnyGetInteractor<[Qari]> {
+        return QariDataRetriever().asAnyGetInteractor()
     }
 
     func createAyahInfoPersistence() -> AyahInfoPersistence {
@@ -191,7 +209,7 @@ class Container {
     }
 
     func createCreator<CreatedObject, Parameters>(
-        _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<CreatedObject, Parameters> {
+        _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<Parameters, CreatedObject> {
         return AnyCreator(createClosure: creationClosure)
     }
 
@@ -256,11 +274,15 @@ class Container {
     }
 
     func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return GappedAudioFilesDownloader(downloader: createDownloadManager())
+        return AudioFilesDownloader(audioFileList: GappedQariAudioFileListRetrieval(),
+                                    downloader: createDownloadManager(),
+                                    ayahDownloader: createAyahsAudioDownloader())
     }
 
     func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return GaplessAudioFilesDownloader(downloader: createDownloadManager())
+        return AudioFilesDownloader(audioFileList: GaplessQariAudioFileListRetrieval(),
+                                    downloader: createDownloadManager(),
+                                    ayahDownloader: createAyahsAudioDownloader())
     }
 
     func createGappedAudioPlayer() -> AudioPlayer {
@@ -300,7 +322,7 @@ class Container {
     }
 
     func createDownloadsPersistence() -> DownloadsPersistence {
-        return SqliteDownloadsPersistence()
+        return SqliteDownloadsPersistence(filePath: Files.databasesPath.stringByAppendingPath("downloads.db"))
     }
 
     func createMoyaProvider() -> MoyaProvider<BackendServices> {
@@ -319,17 +341,17 @@ class Container {
         return SQLiteActiveTranslationsPersistence()
     }
 
-    func createTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+    func createTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
         return TranslationsRetrievalInteractor(
             networkManager: createNetworkManager(parser: createTranslationsParser()),
             persistence: createActiveTranslationsPersistence(),
-            localInteractor: createLocalTranslationsRetrievalInteractor()).erasedType()
+            localInteractor: createLocalTranslationsRetrievalInteractor()).asAnyGetInteractor()
     }
 
-    func createLocalTranslationsRetrievalInteractor() -> AnyInteractor<Void, [TranslationFull]> {
+    func createLocalTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
         return LocalTranslationsRetrievalInteractor(
             persistence: createActiveTranslationsPersistence(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor()).erasedType()
+            versionUpdater: createTranslationsVersionUpdaterInteractor()).asAnyGetInteractor()
     }
 
     func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
@@ -337,7 +359,7 @@ class Container {
             simplePersistence: createSimplePersistence(),
             persistence: createActiveTranslationsPersistence(),
             downloader: createDownloadManager(),
-            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).erasedType()
+            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).asAnyInteractor()
     }
 
     func createSQLiteDatabaseVersionPersistence(filePath: String) -> DatabaseVersionPersistence {
@@ -347,7 +369,7 @@ class Container {
     func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
         return TranslationDeletionInteractor(
             persistence: createActiveTranslationsPersistence(),
-            simplePersistence: createSimplePersistence()).erasedType()
+            simplePersistence: createSimplePersistence()).asAnyInteractor()
     }
 
     func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {
@@ -363,16 +385,39 @@ class Container {
     }
 
     func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
-        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).erasedType()
+        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).asAnyInteractor()
     }
 
     func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
-        return TranslationVerseTextRetrieval().erasedType()
+        return TranslationVerseTextRetrieval().asAnyInteractor()
     }
 
     func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
         return CompositeVerseTextRetrieval(
             image: createImageVerseTextRetrieval(),
-            translation: createTranslationVerseTextRetrieval()).erasedType()
+            translation: createTranslationVerseTextRetrieval()).asAnyInteractor()
+    }
+
+    func createDownloadableQariAudioRetriever() -> AnyGetInteractor<[DownloadableQariAudio]> {
+        return DownloadableQariAudioRetriever(
+            downloader: createDownloadManager(),
+            qarisRetriever: createQarisDataRetriever(),
+            downloadsInfoRetriever: createQariListToQariAudioDownloadRetriever()).asAnyGetInteractor()
+    }
+
+    func createQariListToQariAudioDownloadRetriever() -> AnyInteractor<[Qari], [QariAudioDownload]> {
+        return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    }
+
+    func createQariAudioFileListRetrievalCreator() -> AnyCreator<Qari, QariAudioFileListRetrieval> {
+        return QariAudioFileListRetrievalCreator().asAnyCreator()
+    }
+
+    func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse> {
+        return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    }
+
+    func createQariAudioDeleteInteractor() -> AnyInteractor<Qari, Void> {
+        return QariAudioDeleteInteractor().asAnyInteractor()
     }
 }

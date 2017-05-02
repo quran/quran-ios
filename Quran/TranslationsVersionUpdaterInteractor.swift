@@ -20,18 +20,19 @@
 
 import PromiseKit
 import Zip
+import BatchDownloader
 
 class TranslationsVersionUpdaterInteractor: Interactor {
 
     private let simplePersistence: SimplePersistence
     private let persistence: ActiveTranslationsPersistence
     private let downloader: DownloadManager
-    private let versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>
+    private let versionPersistenceCreator: AnyCreator<String, DatabaseVersionPersistence>
 
     init(simplePersistence: SimplePersistence,
          persistence: ActiveTranslationsPersistence,
          downloader: DownloadManager,
-         versionPersistenceCreator: AnyCreator<DatabaseVersionPersistence, String>) {
+         versionPersistenceCreator: AnyCreator<String, DatabaseVersionPersistence>) {
         self.simplePersistence = simplePersistence
         self.persistence = persistence
         self.downloader = downloader
@@ -47,12 +48,10 @@ class TranslationsVersionUpdaterInteractor: Interactor {
             .then(execute: createTranslations)
     }
 
-    private func createTranslations(translations: [Translation], downloadsBatches: [[DownloadNetworkResponse]]) -> [TranslationFull] {
-        let downloads = downloadsBatches
-            .flatMap { $0 }
-            .filter { $0.download.isTranslation }
+    private func createTranslations(translations: [Translation], downloadsBatches: [DownloadBatchResponse]) -> [TranslationFull] {
+        let downloads = downloadsBatches.filter { $0.isTranslation }
 
-        let downloadsByFile = downloads.flatGroup { $0.download.destinationPath.stringByDeletingPathExtension }
+        let downloadsByFile = downloads.flatGroup { $0.requests.first?.destinationPath.stringByDeletingPathExtension ?? "_" }
 
         return translations.map { translation -> TranslationFull in
             // downloading...
@@ -60,11 +59,11 @@ class TranslationsVersionUpdaterInteractor: Interactor {
                 downloadsByFile[Files.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
             }
             if let response = responses.first {
-                return TranslationFull(translation: translation, downloadResponse: response)
+                return TranslationFull(translation: translation, response: response)
             }
 
             // not downloaded
-            return TranslationFull(translation: translation, downloadResponse: nil)
+            return TranslationFull(translation: translation, response: nil)
         }
     }
 

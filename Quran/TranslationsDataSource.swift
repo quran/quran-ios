@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import BatchDownloader
 import GenericDataSources
 
 protocol TranslationsDataSourceDelegate: class {
@@ -33,12 +33,12 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     private let downloader: DownloadManager
     private let deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>
-    private let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
+    fileprivate let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
 
     let downloadedDS: TranslationsBasicDataSource
     let pendingDS: TranslationsBasicDataSource
 
-    private var downloadingObservers: [Int: DownloadingObserver] = [:]
+    fileprivate var downloadingObservers: [Int: DownloadingObserver<TranslationFull>] = [:]
 
     public init(downloader: DownloadManager,
                 deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
@@ -118,11 +118,11 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         }
     }
 
-    private func move(item: TranslationFull,
-                      atLocalPath localIndexPath: IndexPath,
-                      newItem: TranslationFull,
-                      from: TranslationsBasicDataSource,
-                      to: TranslationsBasicDataSource) -> IndexPath {
+    fileprivate func move(item: TranslationFull,
+                          atLocalPath localIndexPath: IndexPath,
+                          newItem: TranslationFull,
+                          from: TranslationsBasicDataSource,
+                          to: TranslationsBasicDataSource) -> IndexPath {
 
         // remove from old location
         from.items.remove(at: localIndexPath.item)
@@ -134,7 +134,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         to.items = list
 
         // move the cell
-        let newLocalIndexPath: IndexPath = cast(to.indexPath(for: newItem))
+        let newLocalIndexPath = unwrap(to.indexPath(for: newItem))
         let newGlobalIndexPath = globalIndexPathForLocalIndexPath(newLocalIndexPath, dataSource: to)
         return newGlobalIndexPath
     }
@@ -143,15 +143,15 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         downloadingObservers.forEach { $1.stop() }
         downloadingObservers.removeAll()
 
-        pendingDS.items    = items.filter { !$0.downloaded }.sorted()
-        downloadedDS.items = items.filter { $0.downloaded }.sorted()
+        pendingDS.items    = items.filter { !$0.isDownloaded }.sorted()
+        downloadedDS.items = items.filter { $0.isDownloaded }.sorted()
 
-        for item in items where item.downloadResponse != nil {
-            downloadingObservers[item.translation.id] = DownloadingObserver(translation: item, dataSource: self)
+        for item in items where item.response != nil {
+            downloadingObservers[item.translation.id] = DownloadingObserver(item: item, delegate: self)
         }
     }
 
-    private func indexPathFor(translation: TranslationFull) -> (TranslationsBasicDataSource, IndexPath)? {
+    fileprivate func indexPathFor(translation: TranslationFull) -> (TranslationsBasicDataSource, IndexPath)? {
         let dataSources = [downloadedDS, pendingDS]
         for ds in dataSources {
             if let indexPath = ds.indexPath(for: translation) {
@@ -161,6 +161,36 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         return nil
     }
 
+    func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldStartDownload item: TranslationFull) {
+
+        guard let (ds, _) = indexPathFor(translation: item) else {
+            return
+        }
+
+        Analytics.shared.downloading(translation: item.translation)
+
+        // download the translation
+        let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
+        let download = DownloadRequest(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
+        self.downloader.download(DownloadBatchRequest(requests: [download])).then(on: .main) { response -> Void in
+            // update the item to be downloading
+            let newItem = TranslationFull(translation: item.translation, response: response)
+            var newItems = ds.items
+            newItems[cast(newItems.index(of: item))] = newItem
+            ds.items = newItems
+
+            // observe download progress
+            self.downloadingObservers[newItem.translation.id] = DownloadingObserver(item: newItem, delegate: self)
+        }.cauterize()
+    }
+
+    func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldCancelDownload item: TranslationFull) {
+        let observer = downloadingObservers[item.translation.id]
+        observer?.cancel()
+    }
+}
+
+extension TranslationsDataSource: DownloadingObserverDelegate {
     func onDownloadProgressUpdated(progress: Float, for translation: TranslationFull) {
         guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
             CLog("Cannot updated progress for translation \(translation.translation.displayName)")
@@ -173,12 +203,12 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     func onDownloadCompleted(withError error: Error, for translation: TranslationFull) {
         guard let (ds, localIndexPath) = indexPathFor(translation: translation) else {
-            CLog("Cannot updated progress for translation \(translation.translation.displayName)")
+            CLog("Cannot error download for translation \(translation.translation.displayName)")
             return
         }
 
         // update the item to be not downloading
-        let newItem = TranslationFull(translation: translation.translation, downloadResponse: nil)
+        let newItem = TranslationFull(translation: translation.translation, response: nil)
         var newItems = ds.items
         newItems[localIndexPath.item] = newItem
         ds.items = newItems
@@ -220,100 +250,6 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
                 self.ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
             }.catch(on: .main) { error in
                 self.delegate?.translationsDataSource(self, errorOccurred: error)
-        }
-    }
-
-    func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldStartDownload item: TranslationFull) {
-
-        guard let (ds, _) = indexPathFor(translation: item) else {
-            return
-        }
-
-        Analytics.shared.downloading(translation: item.translation)
-
-        // download the translation
-        let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
-        let download = Download(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
-        let responses = self.downloader.download([download])
-
-        guard let response = responses.first else {
-            return
-        }
-
-        // update the item to be downloading
-        let newItem = TranslationFull(translation: item.translation, downloadResponse: response)
-        var newItems = ds.items
-        newItems[cast(newItems.index(of: item))] = newItem
-        ds.items = newItems
-
-        // observe download progress
-        downloadingObservers[newItem.translation.id] = DownloadingObserver(translation: newItem, dataSource: self)
-    }
-
-    func translationsBasicDataSource(_ dataSource: AbstractDataSource, onShouldCancelDownload item: TranslationFull) {
-        let observer = downloadingObservers[item.translation.id]
-        observer?.cancel()
-    }
-}
-
-extension TranslationsDataSource: DownloadingObserverDelegate {
-}
-
-protocol DownloadingObserverDelegate: class {
-    func onDownloadProgressUpdated(progress: Float, for translation: TranslationFull)
-    func onDownloadCompleted(withError error: Error, for translation: TranslationFull)
-    func onDownloadCompleted(for translation: TranslationFull)
-}
-
-private class DownloadingObserver: NSObject {
-    private weak var dataSource: DownloadingObserverDelegate?
-
-    let translation: TranslationFull
-
-    init(translation: TranslationFull, dataSource: DownloadingObserverDelegate) {
-        self.translation = translation
-        self.dataSource = dataSource
-        super.init()
-        start()
-    }
-
-    deinit {
-        stop()
-    }
-
-    func cancel() {
-        stop()
-        translation.downloadResponse?.cancel()
-    }
-
-    func stop() {
-        translation.downloadResponse?.onCompletion = nil
-        kvoController.unobserveAll()
-    }
-
-    func start() {
-        let response: DownloadNetworkResponse = cast(translation.downloadResponse)
-        kvoController.observe(response.progress, keyPath: #keyPath(Progress.fractionCompleted),
-                              options: [.initial, .new],
-                              block: { [weak self] (_, progress, _) in
-                                if let progress = progress as? Progress, let translation = self?.translation {
-                                    Queue.main.async {
-                                        self?.dataSource?.onDownloadProgressUpdated(progress: Float(progress.fractionCompleted), for: translation)
-                                    }
-                                }
-        })
-        response.onCompletion = { [weak self] result in
-            if let translation = self?.translation {
-                Queue.main.async {
-                    switch result {
-                    case .success:
-                        self?.dataSource?.onDownloadCompleted(for: translation)
-                    case .failure(let error):
-                        self?.dataSource?.onDownloadCompleted(withError: error, for: translation)
-                    }
-
-                }
-            }
         }
     }
 }

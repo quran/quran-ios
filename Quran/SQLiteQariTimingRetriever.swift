@@ -23,7 +23,7 @@ import PromiseKit
 
 struct SQLiteQariTimingRetriever: QariTimingRetriever {
 
-    let persistenceCreator: AnyCreator<QariAyahTimingPersistence, URL>
+    let persistenceCreator: AnyCreator<URL, QariAyahTimingPersistence>
 
     func retrieveTiming(for qari: Qari, startAyah: AyahNumber) -> Promise<[AyahNumber: AyahTiming]> {
         guard case .gapless(let databaseName) = qari.audioType else {

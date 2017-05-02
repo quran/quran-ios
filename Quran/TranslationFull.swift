@@ -17,40 +17,25 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import BatchDownloader
 
-import Foundation
+struct TranslationFull: Downloadable {
+    let translation: Translation
+    var response: DownloadBatchResponse?
 
-extension Translation {
-    enum State {
-        case notDownloaded
-        case downloaded
-        case needsUpgrade
+    var isDownloaded: Bool { return translation.installedVersion != nil }
+    var needsUpgrade: Bool { return translation.installedVersion != translation.version }
 
-        case pendingDownloading
-        case downloading(progress: Float)
-
-        case pendingUpgrading
-        case downloadingUpgrade(progress: Float)
-
-        fileprivate func isUpgrade() -> Bool {
-            switch self {
-            case .needsUpgrade, .pendingUpgrading, .downloadingUpgrade:
-                return true
-            case .notDownloaded, .downloaded, .pendingDownloading, .downloading:
-                return false
-            }
-        }
-    }
 }
 
-struct TranslationFull: Equatable, Comparable {
-    let translation: Translation
-    var downloadResponse: DownloadNetworkResponse?
+extension TranslationFull: Equatable {
 
     static func == (lhs: TranslationFull, rhs: TranslationFull) -> Bool {
         return lhs.translation == rhs.translation
     }
+}
 
+extension TranslationFull: Comparable {
     static func < (lhs: TranslationFull, rhs: TranslationFull) -> Bool {
         // items that should be upgraded should be at the top
         let lUpgrading = lhs.state.isUpgrade()
@@ -67,40 +52,5 @@ struct TranslationFull: Equatable, Comparable {
         }
 
         return lhs.translation.displayName < rhs.translation.displayName
-    }
-}
-
-extension TranslationFull {
-
-    var state: Translation.State {
-        if let response = downloadResponse {
-            let progress = Float(response.progress.fractionCompleted).normalized
-            if translation.installedVersion != nil {
-                return progress == 0 ? .pendingUpgrading : .downloadingUpgrade(progress: progress)
-            } else {
-                return progress == 0 ? .pendingDownloading : .downloading(progress: progress)
-            }
-        }
-
-        if let installedVersion = translation.installedVersion {
-            return installedVersion == translation.version ? .downloaded : .needsUpgrade
-        } else {
-            return .notDownloaded
-        }
-    }
-
-    var downloaded: Bool {
-        return translation.installedVersion != nil
-    }
-}
-
-extension Float {
-
-    var normalized: Float {
-        if abs(self) < 0.001 {
-            return 0
-        } else {
-            return self
-        }
     }
 }

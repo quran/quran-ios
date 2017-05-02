@@ -18,7 +18,8 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
+import BatchDownloader
 
 protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegate {
 
@@ -41,15 +42,10 @@ extension DefaultAudioPlayerInteractor {
         completion()
     }
 
-    func checkIfDownloading(_ completion: @escaping (_ downloading: Bool) -> Void) {
-        downloader.getCurrentDownloadResponse().then { response -> Void in
-            guard let response = response else {
-                completion(false)
-                return
-            }
-            self.gotDownloadResponse(response, playbackInfo: nil)
-            completion(true)
-            }.cauterize(tag: "checkIfDownloading")
+    func isAudioDownloading() -> Promise<Bool> {
+        return downloader.getCurrentDownloadResponse()
+            .do { self.gotDownloadResponse($0, playbackInfo: nil) }
+            .then { $0 != nil }
     }
 
     func playAudioForQari(_ qari: Qari, atPage page: QuranPage) {
@@ -60,16 +56,20 @@ extension DefaultAudioPlayerInteractor {
         if downloader.needsToDownloadFiles(qari: qari, startAyah: startAyah, endAyah: endAyah) {
             Analytics.shared.downloading(startAyah: startAyah, qari: qari)
             downloadCancelled = false
-            Queue.background.async {
-                self.delegate?.willStartDownloading()
-                if let response = self.downloader.download(qari: qari, startAyah: startAyah, endAyah: endAyah) {
+            delegate?.willStartDownloading()
+            downloader
+                .download(qari: qari, startAyah: startAyah, endAyah: endAyah)
+                .then(on: .main) { response -> Void in
+                    guard let response = response else {
+                        return
+                    }
+
                     if self.downloadCancelled {
                         response.cancel()
                     } else {
                         self.gotDownloadResponse(response, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
                     }
-                }
-            }
+            }.suppress()
         } else {
             startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
         }
@@ -119,21 +119,19 @@ extension DefaultAudioPlayerInteractor {
         delegate?.highlight(ayah)
     }
 
-    fileprivate func gotDownloadResponse(_ response: Response, playbackInfo: PlaybackInfo?) {
+    fileprivate func gotDownloadResponse(_ response: DownloadBatchResponse, playbackInfo: PlaybackInfo?) {
 
         delegate?.didStartDownloadingAudioFiles(progress: response.progress)
-        response.onCompletion = { [weak self] result in
-            switch result {
-            case .success:
+        response.promise
+            .then { [weak self] () -> Void in
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {
                     self?.delegate?.onPlaybackOrDownloadingCompleted()
                 }
-            case .failure(let error):
-                self?.delegate?.onPlaybackOrDownloadingCompleted()
-                self?.delegate?.onFailedDownloadingWithError(error)
-            }
+        }.catch { [weak self] error in
+            self?.delegate?.onPlaybackOrDownloadingCompleted()
+            self?.delegate?.onFailedDownloadingWithError(error)
         }
     }
 

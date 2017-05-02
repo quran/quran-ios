@@ -20,7 +20,7 @@
 
 import UIKit
 
-let quranImagesSize = "1280"
+public let quranImagesSize = "1280"
 
 enum Layout { }
 extension Layout {

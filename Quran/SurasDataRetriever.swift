@@ -18,12 +18,12 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import PromiseKit
 
-struct SurasDataRetriever: DataRetriever {
-    func retrieve(onCompletion: @escaping ([(Juz, [Sura])]) -> Void) {
+struct SurasDataRetriever: Interactor {
 
-        Queue.background.async {
+    func execute(_ input: Void) -> Promise<[(Juz, [Sura])]> {
+        return DispatchQueue.default.promise2 {
             let juzs = Juz.getJuzs()
             let suras = Sura.getSuras()
 
@@ -46,9 +46,7 @@ struct SurasDataRetriever: DataRetriever {
                 }
                 juzsGroup.append((juz, currentSuras))
             }
-            Queue.main.async {
-                onCompletion(juzsGroup)
-            }
+            return juzsGroup
         }
     }
 }

@@ -28,6 +28,6 @@ class QarisDataSource: BasicDataSource<Qari, QariTableViewCell> {
                                     with item: Qari,
                                     at indexPath: IndexPath) {
         cell.titleLabel.text = item.name
-        cell.photoImageView.image = item.imageName.flatMap { UIImage(named: $0) }
+        cell.photoImageView.image = UIImage(named: item.imageName)
     }
 }

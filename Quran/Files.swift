@@ -20,24 +20,29 @@
 
 import Foundation
 
-struct Files {
+struct QuranURLs {
+    static var host: URL = URL(validURL: "http://android.quran.com/")
+    static var audioDatabaseURL: URL = host.appendingPathComponent("data/databases/audio/")
+}
 
-    static let audioExtension = "mp3"
-    static let downloadResumeDataExtension = "resume"
-    static let databaseRemoteFileExtension = "zip"
-    static let databaseLocalFileExtension = "db"
-    static let databasesPathComponent = "databases"
-    static let translationsPathComponent = "translations"
-    static let translationCompressedFileExtension = "zip"
+public struct Files {
 
-    static let quarterPrefixArray = fileURL("quarter_prefix_array", withExtension: "plist")
-    static let readers = fileURL("readers", withExtension: "plist")
+    public static let audioExtension = "mp3"
+    public static let downloadResumeDataExtension = "resume"
+    public static let databaseRemoteFileExtension = "zip"
+    public static let databaseLocalFileExtension = "db"
+    public static let databasesPathComponent = "databases"
+    public static let translationsPathComponent = "translations"
+    public static let translationCompressedFileExtension = "zip"
 
-    static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
-    static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
+    public static let quarterPrefixArray = fileURL("quarter_prefix_array", withExtension: "plist")
+    public static let readers = fileURL("readers", withExtension: "plist")
 
-    static let databasesPath: String = FileManager.default.documentsPath.stringByAppendingPath(databasesPathComponent)
-    static let translationsURL = FileManager.default.documentsURL.appendingPathComponent(translationsPathComponent)
+    public static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
+    public static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
+
+    public static let databasesPath: String = FileManager.documentsPath.stringByAppendingPath(databasesPathComponent)
+    public static let translationsURL = FileManager.documentsURL.appendingPathComponent(translationsPathComponent)
 }
 
 private func fileURL(_ fileName: String, withExtension `extension`: String) -> URL {
@@ -54,30 +59,14 @@ private func filePath(_ fileName: String, ofType type: String) -> String {
     return path
 }
 
-extension Qari {
-    func localFolder() -> URL {
-        return FileManager.default.documentsURL.appendingPathComponent(path)
-    }
-}
-
 extension URL {
-    func resumeURL() -> URL {
+    public func resumeURL() -> URL {
         return appendingPathExtension(Files.downloadResumeDataExtension)
     }
 }
 
 extension String {
-    var resumePath: String {
+    public var resumePath: String {
         return stringByAppendingExtension(Files.downloadResumeDataExtension)
-    }
-}
-
-extension String {
-    func stringByAppendingPath(_ path: String) -> String {
-        return (self as NSString).appendingPathComponent(path)
-    }
-
-    func stringByAppendingExtension(_ pathExtension: String) -> String {
-        return (self as NSString).appendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
     }
 }

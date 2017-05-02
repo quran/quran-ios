@@ -19,6 +19,7 @@
 //
 
 import SQLite
+import SQLitePersistence
 
 class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
 

@@ -2,7 +2,7 @@
 //  AudioFilesDownloader.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 5/14/16.
+//  Created by Mohamed Afifi on 5/15/16.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,18 +18,69 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
 import PromiseKit
+import BatchDownloader
 
-protocol AudioFilesDownloader: class {
+class AudioFilesDownloader {
 
-    func cancel()
-    func resume()
-    func suspend()
+    let audioFileList: QariAudioFileListRetrieval
+    let downloader: DownloadManager
+    let ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
 
-    func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool
+    private var response: DownloadBatchResponse?
 
-    func getCurrentDownloadResponse() -> Promise<Response?>
+    init(audioFileList: QariAudioFileListRetrieval,
+         downloader: DownloadManager,
+         ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>) {
+        self.audioFileList  = audioFileList
+        self.downloader     = downloader
+        self.ayahDownloader = ayahDownloader
+    }
 
-    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Response?
+    func cancel() {
+        response?.cancel()
+        response = nil
+    }
+
+    func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
+        let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
+        return !files.filter { !FileManager.documentsURL.appendingPathComponent($0.destinationPath).isReachable }.isEmpty
+    }
+
+    func getCurrentDownloadResponse() -> Promise<DownloadBatchResponse?> {
+        if let response = response {
+            return Promise(value: response)
+        } else {
+            return downloader.getOnGoingDownloads().then { batches -> DownloadBatchResponse? in
+                let downloading = batches.first { $0.isAudio }
+                self.createRequestWithDownloads(downloading)
+                return self.response
+            }
+        }
+    }
+
+    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Promise<DownloadBatchResponse?> {
+        return ayahDownloader
+            .execute(AyahsAudioDownloadRequest(start: startAyah, end: endAyah, qari: qari))
+            .then(on: .main) { responses -> DownloadBatchResponse? in
+                // wrap the requests
+                self.createRequestWithDownloads(responses)
+                return self.response
+        }
+    }
+
+    private func createRequestWithDownloads(_ batch: DownloadBatchResponse?) {
+        guard let batch = batch else { return }
+
+        response = batch
+        response?.promise.always { [weak self] in
+            self?.response = nil
+        }
+    }
+
+    func filesForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [DownloadRequest] {
+        return audioFileList.get(for: qari, startAyah: startAyah, endAyah: endAyah).map {
+            DownloadRequest(url: $0.remote, resumePath: $0.local.stringByAppendingPath(Files.downloadResumeDataExtension), destinationPath: $0.local)
+        }
+    }
 }

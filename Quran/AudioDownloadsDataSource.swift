@@ -170,13 +170,15 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         }
         let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
 
-        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * 100)
-        let newValue = floor(item.state.progress * 100)
+        let scale: Float = 2_000
+        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * scale)
+        let newValue = floor(item.state.progress * scale)
 
         cell?.downloadButton.state = item.state
 
         if newValue - oldValue > 0.9 {
             reload(item: item, cell: cell, response: item.response)
+            NSLog("Reloading \(newValue), \(oldValue)")
         }
     }
 
@@ -224,8 +226,16 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
                     return
                 }
 
+                let oldItem = self.items[localIndexPath.item]
+                let finalResponse: DownloadBatchResponse?
+                if response == nil || oldItem.response == nil {
+                    finalResponse = nil
+                } else {
+                    finalResponse = response
+                }
+
                 // update the item to be not downloading
-                let newItem = DownloadableQariAudio(audio: audio, response: response)
+                let newItem = DownloadableQariAudio(audio: audio, response: finalResponse)
                 self.items[localIndexPath.item] = newItem
 
                 cell?.configure(with: audio)

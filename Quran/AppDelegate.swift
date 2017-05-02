@@ -50,6 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Analytics.shared.logSystemLanguage()
 
+        let updater = AppUpdater()
+        let versionUpdate = updater.updated()
+        CLog("Version Update:", versionUpdate)
+
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
         configureAppAppearance()

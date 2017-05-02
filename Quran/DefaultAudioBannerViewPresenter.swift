@@ -104,7 +104,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     fileprivate func showQariView() {
-        Crash.setValue(selectedQariIndex, forKey: .QariId)
+        Crash.setValue(selectedQari.id, forKey: .QariId)
         view?.setQari(name: selectedQari.name, image: UIImage(named: selectedQari.imageName))
     }
 

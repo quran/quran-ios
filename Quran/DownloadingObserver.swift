@@ -62,7 +62,11 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
 
     let item: Item
 
-    private var stopped: Bool = false
+    private var stopped = Protected<Bool>(false)
+
+    var isStopped: Bool {
+        return stopped.value
+    }
 
     init<D: DownloadingObserverDelegate>(item: Item, delegate: D) where D.Item == Item {
         self.item = item
@@ -77,35 +81,35 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
     }
 
     func stop() {
-        DispatchQueue.main.async {
-            self.stopped = true
-        }
+        stopped.value = true
     }
 
     func start() {
         guard let response = item.response else {
             return
         }
-        stopped = false
+        stopped.value = false
 
         response.progress.progressListeners.insert(self)
         response.promise.then(on: .main) { [weak self] _ -> Void in
-                guard let `self` = self, !self.stopped else {
+                guard let `self` = self, !self.stopped.value else {
                     return
                 }
                 self.observer?.onDownloadCompleted(for: self.item)
             }.catch(on: .main) { [weak self] error in
-                guard let `self` = self, !self.stopped else {
+                guard let `self` = self, !self.stopped.value else {
                     return
                 }
                 self.observer?.onDownloadCompleted(withError: error, for: self.item)
+            }.always { [weak self] in
+                self?.stopped.value = true
         }
         onProgressUpdated(to: response.progress.progress)
     }
 
     func onProgressUpdated(to progress: Double) {
         DispatchQueue.main.async {
-            guard !self.stopped else {
+            guard !self.stopped.value else {
                 return
             }
             self.observer?.onDownloadProgressUpdated(progress: Float(progress), for: self.item)

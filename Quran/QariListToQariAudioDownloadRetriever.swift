@@ -29,7 +29,7 @@ class QariListToQariAudioDownloadRetriever: Interactor {
 
     func execute(_ qaris: [Qari]) -> Promise<[QariAudioDownload]> {
         return Promise(value: qaris)
-                .map(execute: self.createAudioDownload(for:))
+                .parallelMap(execute: self.createAudioDownload(for:))
     }
 
     private func createAudioDownload(for qari: Qari) -> QariAudioDownload {
@@ -38,6 +38,10 @@ class QariListToQariAudioDownloadRetriever: Interactor {
         let fileList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
 
         let manager = FileManager.default
+
+        guard qari.localFolder().isReachable else {
+            return QariAudioDownload(qari: qari, downloadedSizeInBytes: 0, downloadedSuraCount: 0)
+        }
 
         var suras = Set(Sura.getSuras().map { $0.suraNumber })
 

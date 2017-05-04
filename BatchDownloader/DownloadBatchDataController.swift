@@ -19,8 +19,8 @@
 //
 import VFoundation
 
-private func describe(_ task: URLSessionTask) -> Any {
-    return (task.originalRequest?.url ?? task.currentRequest?.url) as Any
+func describe(_ task: URLSessionTask) -> String {
+    return "\(task.taskIdentifier) " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "")
 }
 
 class DownloadBatchDataController {
@@ -137,7 +137,7 @@ class DownloadBatchDataController {
                 runningDownloads[task.taskIdentifier] = response
                 response.task = task
 
-                CLog("Associating download with a DownloadTask:", response.download.request.url)
+                CLog("Associating download with a DownloadTask:", describe(task))
             } else {
                 CLog("Cancelling DownloadTask: ", describe(task))
 
@@ -151,7 +151,7 @@ class DownloadBatchDataController {
             response.download.taskId = nil // don't save it as it doesn't matter
             response.download.status = .pending
 
-            CLog("")
+            CLog("From downloading to pending", response.download.request.url)
         }
 
         // start pending tasks if needed

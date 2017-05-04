@@ -51,8 +51,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         guard let response = dataController.downloadResponse(for: downloadTask) else {
-            log("Cannot find onGoingDownloads for task with id \(downloadTask.taskIdentifier) - " +
-                "URL(\(downloadTask.currentRequest?.url?.absoluteString ?? ""))")
+            log("Cannot find onGoingDownloads for task", describe(downloadTask))
             return
         }
         response.progress.totalUnitCount = Double(totalBytesExpectedToWrite)
@@ -66,7 +65,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         }
 
         guard let response = dataController.downloadResponse(for: downloadTask) else {
-            log("Missed saving task", downloadTask.currentRequest?.url as Any)
+            log("Missed saving task", describe(downloadTask))
             return
         }
         let fileManager = FileManager.default
@@ -102,8 +101,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
 
         guard let response = dataController.downloadResponse(for: task) else {
-            log("Cannot find onGoingDownloads for task with id \(task.taskIdentifier) - " +
-                "URL(\(task.currentRequest?.url?.absoluteString ?? ""))")
+            log("Cannot find onGoingDownloads for task", describe(task))
             return
         }
 

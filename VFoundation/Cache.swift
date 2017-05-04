@@ -20,12 +20,6 @@
 
 import Foundation
 
-extension Hashable {
-    fileprivate var hashNumber: NSNumber {
-        return NSNumber(value: hashValue)
-    }
-}
-
 private class ObjectWrapper {
     let value: Any
 
@@ -34,9 +28,27 @@ private class ObjectWrapper {
     }
 }
 
+private class KeyWrapper<KeyType: Hashable>: NSObject {
+    let key: KeyType
+    init(_ key: KeyType) {
+        self.key = key
+    }
+
+    override var hash: Int {
+        return key.hashValue
+    }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? KeyWrapper<KeyType> else {
+            return false
+        }
+        return key == other.key
+    }
+}
+
 open class Cache<KeyType: Hashable, ObjectType> {
 
-    private let cache: NSCache<NSNumber, ObjectWrapper> = NSCache()
+    private let cache: NSCache<KeyWrapper<KeyType>, ObjectWrapper> = NSCache()
 
     public init(lowMemoryAware: Bool = true) {
         guard lowMemoryAware else { return }
@@ -66,19 +78,19 @@ open class Cache<KeyType: Hashable, ObjectType> {
     }
 
     open func object(forKey key: KeyType) -> ObjectType? {
-        return cache.object(forKey: key.hashNumber)?.value as? ObjectType
+        return cache.object(forKey: KeyWrapper(key))?.value as? ObjectType
     }
 
     open func setObject(_ obj: ObjectType, forKey key: KeyType) { // 0 cost
-        return cache.setObject(ObjectWrapper(obj), forKey: key.hashNumber)
+        return cache.setObject(ObjectWrapper(obj), forKey: KeyWrapper(key))
     }
 
     open func setObject(_ obj: ObjectType, forKey key: KeyType, cost: Int) {
-        return cache.setObject(ObjectWrapper(obj), forKey: key.hashNumber, cost: cost)
+        return cache.setObject(ObjectWrapper(obj), forKey: KeyWrapper(key), cost: cost)
     }
 
     open func removeObject(forKey key: KeyType) {
-        return cache.removeObject(forKey: key.hashNumber)
+        return cache.removeObject(forKey: KeyWrapper(key))
     }
 
     open func removeAllObjects() {

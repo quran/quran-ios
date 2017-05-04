@@ -38,7 +38,7 @@ class Container {
     init() {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
         configuration.timeoutIntervalForRequest = 60 * 5 // 5 minutes
-        downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 200,
+        downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 600,
                                                     configuration: configuration,
                                                     persistence: createDownloadsPersistence())
     }

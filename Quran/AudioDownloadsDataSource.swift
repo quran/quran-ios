@@ -178,7 +178,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
 
         if newValue - oldValue > 0.9 {
             reload(item: item, cell: cell, response: item.response)
-            NSLog("Reloading \(newValue), \(oldValue)")
+            CLog("Reloading \(newValue), \(oldValue)")
         }
     }
 

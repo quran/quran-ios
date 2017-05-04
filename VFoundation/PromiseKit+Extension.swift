@@ -113,6 +113,19 @@ extension DispatchGroup {
 }
 
 extension Promise where T: Sequence {
+    public func parallelMap<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
+        return then(on: zalgo) { sequence -> Promise<[U]> in
+
+            var promises: [Promise<U>] = []
+            for item in sequence {
+                promises.append(q.promise2 {
+                    try body(item)
+                })
+            }
+            return when(fulfilled: promises)
+        }
+    }
+
     public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
         return then(on: q) { sequence -> [U] in
             var array: [U] = []

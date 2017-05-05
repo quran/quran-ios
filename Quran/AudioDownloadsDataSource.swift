@@ -177,7 +177,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         cell?.downloadButton.state = item.state
 
         if newValue - oldValue > 0.9 {
-            reload(item: item, cell: cell, response: item.response)
+            reload(item: item, response: item.response)
             CLog("Reloading \(newValue), \(oldValue)")
         }
     }
@@ -212,10 +212,10 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
         cell?.downloadButton.state = .downloaded
 
-        reload(item: item, cell: cell, response: nil)
+        reload(item: item, response: nil)
     }
 
-    private func reload(item: DownloadableQariAudio, cell: AudioDownloadTableViewCell?, response: DownloadBatchResponse?) {
+    private func reload(item: DownloadableQariAudio, response: DownloadBatchResponse?) {
         qariAudioDownloadRetriever.execute([item.audio.qari])
             .then(on: .main) { audios -> Void in
                 guard let audio = audios.first else {
@@ -234,10 +234,11 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
                     finalResponse = response
                 }
 
-                // update the item to be not downloading
+                // update the item response
                 let newItem = DownloadableQariAudio(audio: audio, response: finalResponse)
                 self.items[localIndexPath.item] = newItem
 
+                let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
                 cell?.configure(with: audio)
 
             }.suppress()

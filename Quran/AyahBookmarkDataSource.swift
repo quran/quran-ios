@@ -52,27 +52,30 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
         let ayahFormat = NSLocalizedString("quran_ayah_details", tableName: "Android", comment: "")
         let ayahDescription = String.localizedStringWithFormat(ayahFormat, suraName, ayahText, juzText)
 
+        cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)
+        cell.iconImage.tintColor = .bookmark()
         cell.descriptionLabel.text = ayahDescription
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))
 
+        let name: String
         // get from cache
         if let text = ayahCache.object(forKey: item.ayah) {
-            cell.name.text = text
-
+            name = text
         } else {
-            cell.name.text = item.ayah.localizedName
-            DispatchQueue.default
-                .promise2 { try self.ayahPersistence.getAyahTextForNumber(item.ayah) }
-                .then(on: .main) { text -> Void in
-                    guard self.ds_reusableViewDelegate?.ds_indexPath(for: cell) == indexPath else { return }
+            do {
+                // get from persistence
+                let text = try self.ayahPersistence.getAyahTextForNumber(item.ayah)
+                // save to cache
+                self.ayahCache.setObject(text, forKey: item.ayah)
 
-                    // save to cache
-                    self.ayahCache.setObject(text, forKey: item.ayah)
-
-                    // update the UI
-                    cell.name.text = text
-                }.cauterize(tag: "AyahTextPersistence.getAyahTextForNumber")
+                // update the UI
+                name = text
+            } catch {
+                name = item.ayah.localizedName
+                Crash.recordError(error, reason: "AyahTextPersistence.getAyahTextForNumber", fatalErrorOnDebug: false)
+            }
         }
+        cell.name.text = name
     }
 
     func reloadData() {

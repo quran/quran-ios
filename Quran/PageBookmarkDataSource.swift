@@ -44,6 +44,8 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
         let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
 
+        cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)
+        cell.iconImage.tintColor = .bookmark()
         cell.name.text = String(format: suraFormat, suraName)
         cell.descriptionLabel.text = pageDescription
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))

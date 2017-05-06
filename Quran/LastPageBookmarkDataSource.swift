@@ -41,6 +41,7 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
         let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
 
+        cell.iconImage.image = #imageLiteral(resourceName: "recent")
         cell.name.text = Quran.nameForSura(ayah.sura, withPrefix: true)
         cell.descriptionLabel.text = pageDescription
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))

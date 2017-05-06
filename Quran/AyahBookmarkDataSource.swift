@@ -44,17 +44,9 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
                                     configure cell: BookmarkTableViewCell,
                                     with item: AyahBookmark,
                                     at indexPath: IndexPath) {
-
-        let suraName = Quran.nameForSura(item.ayah.sura)
-        let ayahText = numberFormatter.string(from: NSNumber(value: item.ayah.ayah)) ?? ""
-        let juzText = numberFormatter.string(from: NSNumber(value: Juz.juzFromPage(item.page).juzNumber)) ?? ""
-
-        let ayahFormat = NSLocalizedString("quran_ayah_details", tableName: "Android", comment: "")
-        let ayahDescription = String.localizedStringWithFormat(ayahFormat, suraName, ayahText, juzText)
-
         cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)
         cell.iconImage.tintColor = .bookmark()
-        cell.descriptionLabel.text = ayahDescription
+        cell.descriptionLabel.text = item.creationDate.bookmarkTimeAgo()
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))
 
         let name: String

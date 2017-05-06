@@ -41,13 +41,10 @@ class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCel
         let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
         let suraName = Quran.nameForSura(ayah.sura)
 
-        let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
-        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, item.page, Juz.juzFromPage(item.page).juzNumber)
-
         cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)
         cell.iconImage.tintColor = .bookmark()
         cell.name.text = String(format: suraFormat, suraName)
-        cell.descriptionLabel.text = pageDescription
+        cell.descriptionLabel.text = item.creationDate.bookmarkTimeAgo()
         cell.startPage.text = numberFormatter.format(NSNumber(value: item.page))
     }
 

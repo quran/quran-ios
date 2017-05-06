@@ -20,6 +20,11 @@
 
 import PromiseKit
 
+private struct AudioFileLists {
+    let gapped: [QariAudioFile]
+    let gapless: [QariAudioFile]
+}
+
 class QariListToQariAudioDownloadRetriever: Interactor {
 
     let fileListCreator: AnyCreator<Qari, QariAudioFileListRetrieval>
@@ -28,42 +33,91 @@ class QariListToQariAudioDownloadRetriever: Interactor {
     }
 
     func execute(_ qaris: [Qari]) -> Promise<[QariAudioDownload]> {
-        return Promise(value: qaris)
-                .parallelMap(execute: self.createAudioDownload(for:))
+        let suras = DispatchQueue.default.promise2 {
+            Set(Sura.getSuras().map { $0.suraNumber })
+        }
+        let fileLists = DispatchQueue.default.promise2 {
+            self.createFileLists(for: qaris)
+        }
+        let qarisAndSuras = when(fulfilled: Promise(value: qaris), suras, fileLists)
+            .then { qaris, suras, fileLists in
+                qaris.map { ($0, suras, fileLists) }
+        }
+        return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:))
     }
 
-    private func createAudioDownload(for qari: Qari) -> QariAudioDownload {
+    private func createFileLists(for qaris: [Qari]) -> AudioFileLists {
+        let gapped = qaris.first(where: {
+            if case .gapped = $0.audioType {
+                return true
+            }
+            return false
+        })
 
+        let gapless = qaris.first(where: {
+            if case .gapless = $0.audioType {
+                return true
+            }
+            return false
+        })
+
+        let gappedList: [QariAudioFile]
+        if let qari = gapped {
+            gappedList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
+        } else {
+            gappedList = []
+        }
+
+        let gaplessList: [QariAudioFile]
+        if let qari = gapless {
+            gaplessList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
+        } else {
+            gaplessList = []
+        }
+        return AudioFileLists(gapped: gappedList, gapless: gaplessList)
+    }
+
+    private func createAudioDownload(for qari: Qari, suras: Set<Int>, fileLists: AudioFileLists) -> QariAudioDownload {
         // get the list of files for the entire Quran.
-        let fileList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
+        let fileList: [QariAudioFile]
+        switch qari.audioType {
+        case .gapped: fileList = fileLists.gapped
+        case .gapless: fileList = fileLists.gapless
+        }
 
         let manager = FileManager.default
+        var filesDictionary = fileList.flatGroup { $0.local.lastPathComponent }
 
-        guard qari.localFolder().isReachable else {
+        let properties: [URLResourceKey] = [.fileSizeKey]
+
+        guard let enumerator = manager.enumerator(at: qari.localFolder(), includingPropertiesForKeys: properties, options: []) else {
             return QariAudioDownload(qari: qari, downloadedSizeInBytes: 0, downloadedSuraCount: 0)
         }
 
-        var suras = Set(Sura.getSuras().map { $0.suraNumber })
-
         // sum the sizes of downloaded files
         var sizeInBytes: UInt64 = 0
-        for file in fileList {
-            let localPath = FileManager.documentsPath.stringByAppendingPath(file.local)
-            if manager.fileExists(atPath: localPath) {
-                // calculate the size
-
-                let attributes = (try? manager.attributesOfItem(atPath: localPath)) ?? [:]
-                let size = attributes[.size] as? UInt64
-                sizeInBytes += size ?? 0
-            } else {
-                // remove the sura from being downloaded.
-                // For gapless, that's enough.
-                // for gapped, we consider if one ayah is not downloaded that the entire sura is not downloaded.
-                if let file = file as? QariSuraAudioFile {
-                    suras.remove(file.sura)
-                }
+        for case let fileURL as URL in enumerator {
+            do {
+                let resourceValues = try fileURL.resourceValues(forKeys: Set([.fileSizeKey]))
+                sizeInBytes += UInt64(resourceValues.fileSize ?? 0)
+                let path = fileURL.lastPathComponent
+                filesDictionary[path] = nil
+            } catch {
+                CLog("Unexpected error while getting resourceValues", error)
             }
         }
+
+        // remove suras that we didn't find dowonloaded files for
+        var suras = suras
+        for (_, file) in filesDictionary {
+            // remove the suras from being downloaded.
+            // For gapless, that's enough.
+            // for gapped, we consider if one ayah is not downloaded that the entire sura is not downloaded.
+            if let file = file as? QariSuraAudioFile {
+                suras.remove(file.sura)
+            }
+        }
+
         return QariAudioDownload(qari: qari, downloadedSizeInBytes: sizeInBytes, downloadedSuraCount: suras.count)
     }
 }

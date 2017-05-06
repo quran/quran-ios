@@ -222,7 +222,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
                     return
                 }
                 guard let localIndexPath = self.indexPath(for: item) else {
-                    CLog("Cannot get audio for \(item.audio.qari.name)")
+                    CLog("Cannot get audio indexPath for \(item.audio.qari.name)")
                     return
                 }
 

@@ -17,10 +17,9 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import SQLite
-import VFoundation
 import sqlite3
+import VFoundation
 
 public protocol ReadonlySQLitePersistence {
     var filePath: String { get }

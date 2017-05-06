@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import DownloadButton
+import UIKit
 
 class DownloadButton: UIView {
 
@@ -144,7 +143,8 @@ class DownloadButton: UIView {
         state = .needsUpgrade
     }
 
-    @objc private func onAnyButtonTapped() {
+    @objc
+    private func onAnyButtonTapped() {
         onButtonTapped?(self)
     }
 

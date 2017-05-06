@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import PromiseKit
 import BatchDownloader
+import PromiseKit
 
 class AudioFilesDownloader {
 
@@ -66,7 +65,7 @@ class AudioFilesDownloader {
                 // wrap the requests
                 self.createRequestWithDownloads(responses)
                 return self.response
-        }
+            }
     }
 
     private func createRequestWithDownloads(_ batch: DownloadBatchResponse?) {

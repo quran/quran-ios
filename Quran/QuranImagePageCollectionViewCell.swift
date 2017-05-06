@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import PromiseKit
+import UIKit
 
 private let imageHeightDiff: CGFloat = 34
 private let imageWidthDiff : CGFloat = 10

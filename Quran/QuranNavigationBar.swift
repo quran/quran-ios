@@ -65,18 +65,21 @@ class QuranNavigationBar {
         delegate?.navigationItem.setRightBarButtonItems(barItems, animated: animated)
     }
 
-    @objc private func onTranslationButtonTapped() {
+    @objc
+    private func onTranslationButtonTapped() {
         isTranslationView = !isTranslationView
         updateRightBarItems(animated: false)
         delegate?.onTranslationButtonTapped()
     }
 
-    @objc private func onBookmarkTapped() {
+    @objc
+    private func onBookmarkTapped() {
         delegate?.onBookmarkButtonTapped()
         updateRightBarItems(animated: false)
     }
 
-    @objc private func onSelectTranslationsTapped() {
+    @objc
+    private func onSelectTranslationsTapped() {
         delegate?.onSelectTranslationsButtonTapped()
     }
 

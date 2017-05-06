@@ -63,7 +63,8 @@ open class Cache<KeyType: Hashable, ObjectType> {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc private func onLowMemory() {
+    @objc
+    private func onLowMemory() {
         removeAllObjects()
     }
 

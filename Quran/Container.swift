@@ -17,11 +17,10 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
+import BatchDownloader
 import Moya
 import SwiftyJSON
-import BatchDownloader
+import UIKit
 
 class Container {
 
@@ -33,7 +32,7 @@ class Container {
         return cache
     }()
 
-    fileprivate var downloadManager: DownloadManager! = nil
+    fileprivate var downloadManager: DownloadManager! = nil // swiftlint:disable:this implicitly_unwrapped_optional
 
     init() {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")

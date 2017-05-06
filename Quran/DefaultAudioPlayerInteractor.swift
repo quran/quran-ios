@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import PromiseKit
 import BatchDownloader
+import PromiseKit
 
 protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegate {
 
@@ -69,7 +68,7 @@ extension DefaultAudioPlayerInteractor {
                     } else {
                         self.gotDownloadResponse(response, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
                     }
-            }.suppress()
+                }.suppress()
         } else {
             startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
         }
@@ -129,10 +128,10 @@ extension DefaultAudioPlayerInteractor {
                 } else {
                     self?.delegate?.onPlaybackOrDownloadingCompleted()
                 }
-        }.catch { [weak self] error in
-            self?.delegate?.onPlaybackOrDownloadingCompleted()
-            self?.delegate?.onFailedDownloadingWithError(error)
-        }
+            }.catch { [weak self] error in
+                self?.delegate?.onPlaybackOrDownloadingCompleted()
+                self?.delegate?.onFailedDownloadingWithError(error)
+            }
     }
 
     fileprivate func startPlaying(_ playbackInfo: PlaybackInfo) {

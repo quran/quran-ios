@@ -165,39 +165,48 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         })
     }
 
-    @objc fileprivate func buttonTouchesBegan() {
+    @objc
+    fileprivate func buttonTouchesBegan() {
         onTouchesBegan?()
     }
 
-    @objc fileprivate func qariTapped() {
+    @objc
+    fileprivate func qariTapped() {
         delegate?.onQariTapped()
     }
 
-    @objc fileprivate func qariPlayTapped() {
+    @objc
+    fileprivate func qariPlayTapped() {
         delegate?.onPlayTapped()
     }
 
-    @objc fileprivate func stopPlayingTapped() {
+    @objc
+    fileprivate func stopPlayingTapped() {
         delegate?.onStopTapped()
     }
 
-    @objc fileprivate func onPauseResumeTapped() {
+    @objc
+    fileprivate func onPauseResumeTapped() {
         delegate?.onPauseResumeTapped()
     }
 
-    @objc fileprivate func previousTapped() {
+    @objc
+    fileprivate func previousTapped() {
         delegate?.onBackwardTapped()
     }
 
-    @objc fileprivate func nextTapped() {
+    @objc
+    fileprivate func nextTapped() {
         delegate?.onForwardTapped()
     }
 
-    @objc fileprivate func repeatTapped() {
+    @objc
+    fileprivate func repeatTapped() {
         delegate?.onRepeatTapped()
     }
 
-    @objc fileprivate func cancelDownloadTapped() {
+    @objc
+    fileprivate func cancelDownloadTapped() {
         delegate?.onCancelDownloadTapped()
     }
 }

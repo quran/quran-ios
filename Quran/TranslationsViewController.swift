@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import GenericDataSources
+import UIKit
 
 class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate {
 
@@ -104,7 +103,8 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         showErrorAlert(error: error)
     }
 
-    @objc private func refreshData() {
+    @objc
+    private func refreshData() {
         interactor.get()
             .then(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
@@ -113,7 +113,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
             .always(on: .main) { [weak self] in
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator?.stopAnimating()
-        }
+            }
     }
 
     private func loadLocalData(completion: @escaping () -> Void = { }) {
@@ -152,12 +152,14 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         }
     }
 
-    @objc private func onEditTapped() {
+    @objc
+    private func onEditTapped() {
         tableView.setEditing(true, animated: true)
         updateRightBarItem(animated: true)
     }
 
-    @objc private func onDoneTapped() {
+    @objc
+    private func onDoneTapped() {
         tableView.setEditing(false, animated: true)
         updateRightBarItem(animated: true)
     }

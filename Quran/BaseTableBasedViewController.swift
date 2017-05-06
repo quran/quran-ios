@@ -22,7 +22,7 @@ import UIKit
 
 class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
 
-    weak var tableView: UITableView!
+    weak var tableView: UITableView! // swiftlint:disable:this implicitly_unwrapped_optional
     weak var statusView: UIView?
 
     var clearsSelectionOnViewWillAppear: Bool = true

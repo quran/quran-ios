@@ -42,7 +42,7 @@ class QariListToQariAudioDownloadRetriever: Interactor {
         let qarisAndSuras = when(fulfilled: Promise(value: qaris), suras, fileLists)
             .then { qaris, suras, fileLists in
                 qaris.map { ($0, suras, fileLists) }
-        }
+            }
         return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:))
     }
 

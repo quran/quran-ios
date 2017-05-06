@@ -17,10 +17,9 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
-import GenericDataSources
 import BatchDownloader
+import GenericDataSources
+import UIKit
 
 class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate {
 
@@ -113,7 +112,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
             }.catchToAlertView(viewController: self)
             .always(on: .main) {
                 self.activityIndicator?.stopAnimating()
-        }
+            }
     }
 
     private func hasMoreItemsToEdit() -> Bool {
@@ -149,12 +148,14 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         }
     }
 
-    @objc private func onEditTapped() {
+    @objc
+    private func onEditTapped() {
         tableView.setEditing(true, animated: true)
         updateRightBarItem(animated: true)
     }
 
-    @objc private func onDoneTapped() {
+    @objc
+    private func onDoneTapped() {
         tableView.setEditing(false, animated: true)
         updateRightBarItem(animated: true)
     }

@@ -36,29 +36,25 @@ open class BackgroundColorButton: UIButton {
         updateBackgroundColor()
     }
 
-    @IBInspectable
-    open var normalBackground: UIColor = UIColor.lightGray {
+    @IBInspectable open var normalBackground: UIColor = UIColor.lightGray {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable
-    open var selectedBackground: UIColor = UIColor.blue {
+    @IBInspectable open var selectedBackground: UIColor = UIColor.blue {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable
-    open var highlightedBackground: UIColor = UIColor.red {
+    @IBInspectable open var highlightedBackground: UIColor = UIColor.red {
         didSet {
             updateBackgroundColor()
         }
     }
 
-    @IBInspectable
-    open var disabledBackground: UIColor = UIColor.darkGray {
+    @IBInspectable open var disabledBackground: UIColor = UIColor.darkGray {
         didSet {
             updateBackgroundColor()
         }

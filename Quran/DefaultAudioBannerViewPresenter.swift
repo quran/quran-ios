@@ -100,7 +100,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
                 if !downloading {
                     self.showQariView()
                 }
-        }.suppress()
+            }.suppress()
     }
 
     fileprivate func showQariView() {

@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import MenuItemKit
+import UIKit
 
 protocol QuranViewDelegate: class {
     func onQuranViewTapped(_ quranView: QuranView)
@@ -136,7 +135,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc private func onLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc
+    private func onLongPress(_ sender: UILongPressGestureRecognizer) {
         guard sender.state == .began else {
             return
         }
@@ -204,7 +204,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         return false
     }
 
-    @objc private func viewPannedOrTapped() {
+    @objc
+    private func viewPannedOrTapped() {
         // resign first responder
         _ = resignFirstResponder()
     }
@@ -280,7 +281,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             .then(on: .main, execute: completion)
             .catch(on: .main) { (error) in
                 self.delegate?.onErrorOccurred(error: error)
-        }
+            }
     }
 
     private func targetRect(for point: CGPoint) -> CGRect {

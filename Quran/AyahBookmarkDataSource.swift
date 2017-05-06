@@ -71,7 +71,7 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
 
                     // update the UI
                     cell.name.text = text
-            }.cauterize(tag: "AyahTextPersistence.getAyahTextForNumber")
+                }.cauterize(tag: "AyahTextPersistence.getAyahTextForNumber")
         }
     }
 
@@ -81,6 +81,6 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
             .then(on: .main) { items -> Void in
                 self.items = items
                 self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
-        }.cauterize(tag: "BookmarksPersistence.retrieveAyahBookmarks")
+            }.cauterize(tag: "BookmarksPersistence.retrieveAyahBookmarks")
     }
 }

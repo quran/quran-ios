@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import GenericDataSources
 import BatchDownloader
+import GenericDataSources
 
 protocol AudioDownloadsDataSourceDelegate: class {
     func audioDownloadsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error)
@@ -84,7 +83,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
                 self.ds_reusableViewDelegate?.ds_reloadItems(at: [indexPath], with: .automatic)
             }.catch(on: .main) { error in
                 self.delegate?.audioDownloadsDataSource(self, errorOccurred: error)
-        }
+            }
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
@@ -143,7 +142,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
                 // observe download progress
                 self.downloadingObservers[newItem.audio.qari] = DownloadingObserver(item: newItem, delegate: self)
 
-        }.suppress()
+            }.suppress()
     }
 
     func onShouldCancelDownload(item: DownloadableQariAudio) {

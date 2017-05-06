@@ -22,14 +22,30 @@ import Foundation
 
 public func measure<T>(_ tag: String = #function, limit: TimeInterval = 0, _ body: () throws -> T) rethrows -> T {
 
-    let start = CFAbsoluteTimeGetCurrent() // <<<<<<<<<< Start time
+    let measurer = Measurer(tag: tag, limit: limit)
     let result = try body()
-    let end = CFAbsoluteTimeGetCurrent()   // <<<<<<<<<<   end time
-    let timeInterval = end - start
-
-    if timeInterval >= limit {
-        print("[\(tag)]: Time Elabsed \(timeInterval) seconds")
-    }
+    measurer.end()
 
     return result
+}
+
+public struct Measurer {
+    public let start = CFAbsoluteTimeGetCurrent()
+    public let tag: String
+    public let limit: TimeInterval
+    public init(tag: String = #function, limit: TimeInterval = 0) {
+        self.tag = tag
+        self.limit = limit
+    }
+
+    @discardableResult
+    public func end() -> TimeInterval {
+        let end = CFAbsoluteTimeGetCurrent()   // <<<<<<<<<<   end time
+        let timeInterval = end - start
+
+        if timeInterval >= limit {
+            print("[\(tag)]: Time Elabsed \(timeInterval) seconds")
+        }
+        return timeInterval
+    }
 }

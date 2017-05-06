@@ -170,13 +170,15 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         }
         let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
 
-        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * 100)
-        let newValue = floor(item.state.progress * 100)
+        let scale: Float = 2_000
+        let oldValue = floor((cell?.downloadButton.state.progress ?? 0) * scale)
+        let newValue = floor(item.state.progress * scale)
 
         cell?.downloadButton.state = item.state
 
         if newValue - oldValue > 0.9 {
-            reload(item: item, cell: cell, response: item.response)
+            reload(item: item, response: item.response)
+            CLog("Reloading \(newValue), \(oldValue)")
         }
     }
 
@@ -210,24 +212,33 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
         let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
         cell?.downloadButton.state = .downloaded
 
-        reload(item: item, cell: cell, response: nil)
+        reload(item: item, response: nil)
     }
 
-    private func reload(item: DownloadableQariAudio, cell: AudioDownloadTableViewCell?, response: DownloadBatchResponse?) {
+    private func reload(item: DownloadableQariAudio, response: DownloadBatchResponse?) {
         qariAudioDownloadRetriever.execute([item.audio.qari])
             .then(on: .main) { audios -> Void in
                 guard let audio = audios.first else {
                     return
                 }
                 guard let localIndexPath = self.indexPath(for: item) else {
-                    CLog("Cannot get audio for \(item.audio.qari.name)")
+                    CLog("Cannot get audio indexPath for \(item.audio.qari.name)")
                     return
                 }
 
-                // update the item to be not downloading
-                let newItem = DownloadableQariAudio(audio: audio, response: response)
+                let oldItem = self.items[localIndexPath.item]
+                let finalResponse: DownloadBatchResponse?
+                if response == nil || oldItem.response == nil {
+                    finalResponse = nil
+                } else {
+                    finalResponse = response
+                }
+
+                // update the item response
+                let newItem = DownloadableQariAudio(audio: audio, response: finalResponse)
                 self.items[localIndexPath.item] = newItem
 
+                let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
                 cell?.configure(with: audio)
 
             }.suppress()

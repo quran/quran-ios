@@ -19,6 +19,10 @@
 //
 import VFoundation
 
+func describe(_ task: URLSessionTask) -> String {
+    return "\(task.taskIdentifier) " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "")
+}
+
 class DownloadBatchDataController {
     private let maxSimultaneousDownloads: Int
     private let persistence: DownloadsPersistence
@@ -44,7 +48,23 @@ class DownloadBatchDataController {
     }
 
     func downloadResponse(for task: URLSessionTask) -> DownloadResponse? {
-        return runningDownloads[task.taskIdentifier]
+        // get from running
+        if let response = runningDownloads[task.taskIdentifier] {
+            return response
+        }
+
+        // get from pending
+        CLog("Didn't find a running task", describe(task), "will search in pending tasks")
+        for (_, batch) in batchesByIds {
+            for response in batch.responses where response.download.taskId == task.taskIdentifier {
+                CLog("Found task in pending tasks")
+                runningDownloads[task.taskIdentifier] = response
+                response.task = task
+                return response
+            }
+        }
+        CLog("Didn't find the task in pending tasks")
+        return nil
     }
 
     func download(_ batchRequest: DownloadBatchRequest) throws -> DownloadBatchResponse {
@@ -106,23 +126,32 @@ class DownloadBatchDataController {
             try loadBatchesFromPersistence()
         }
 
+        let previouslyDownloading = batchesByIds
+            .flatMap { $1.responses }
+            .filter { $0.download.taskId != nil }
+            .flatGroup { $0.download.taskId ?? 0 }
+
         // associate tasks with downloads
         for task in tasks {
-            if let response = runningDownloads[task.taskIdentifier] {
+            if let response = previouslyDownloading[task.taskIdentifier] {
+                runningDownloads[task.taskIdentifier] = response
                 response.task = task
+
+                CLog("Associating download with a DownloadTask:", describe(task))
             } else {
+                CLog("Cancelling DownloadTask: ", describe(task))
+
                 // cancel the task
                 task.cancel()
             }
         }
 
         // remove downloads that doesn't have tasks from being running
-        let totalRunningDownloads = runningDownloads
-        for (taskId, response) in totalRunningDownloads where response.task == nil {
-            runningDownloads[taskId] = nil
-            response.task = nil
+        for (_, response) in previouslyDownloading where response.task == nil {
             response.download.taskId = nil // don't save it as it doesn't matter
             response.download.status = .pending
+
+            CLog("From downloading to pending", response.download.request.url)
         }
 
         // start pending tasks if needed

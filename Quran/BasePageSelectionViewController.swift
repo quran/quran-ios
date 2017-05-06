@@ -26,10 +26,14 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
+    let lastPageDS: LastPageBookmarkDataSource
 
-    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
+    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>,
+         quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>,
+         lastPagesPersistence: LastPagesPersistence) {
         self.dataRetriever = dataRetriever
         self.quranControllerCreator = quranControllerCreator
+        self.lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -47,29 +51,58 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
+        tableView.ds_register(cellNib: BookmarkTableViewCell.self)
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
 
         dataRetriever.get().then(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
-
-            guard let `self` = self else {
-                return
-            }
-
-            self.dataSource.setSections(data) { self.wrappedCreateItemsDataSource() }
-            self.tableView.reloadData()
+            self?.setSections(data)
+            self?.tableView.reloadData()
         }.suppress()
 
         dataSource.onJuzHeaderSelected = { [weak self] juz in
-            self?.navigateToPage(juz.startPageNumber)
+            self?.navigateToPage(juz.startPageNumber, lastPage: nil)
         }
     }
 
-    fileprivate func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        lastPageDS.reloadData()
+    }
+
+    private func setSections(_ sections: [(Juz, [ItemType])]) {
+        for ds in dataSource.dataSources {
+            self.dataSource.remove(ds)
+        }
+
+        addLastPageDataSource()
+
+        for section in sections {
+            let ds = wrappedCreateItemsDataSource()
+            ds.items = section.1
+            dataSource.add(ds)
+        }
+
+        let lastPageHeader = NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: "")
+        let juzs = sections.map { String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), $0.0.juzNumber) }
+        self.dataSource.headerCreator.setSectionedItems([lastPageHeader] + juzs)
+    }
+
+    private func addLastPageDataSource() {
+        self.dataSource.add(self.lastPageDS)
+        let lastPageSelection = BlockSelectionHandler<LastPage, BookmarkTableViewCell>()
+        lastPageSelection.didSelectBlock = { [weak self] (ds, _, index) in
+            let item = ds.item(at:index)
+            self?.navigateToPage(item.page, lastPage: item)
+        }
+        lastPageDS.setSelectionHandler(lastPageSelection)
+    }
+
+    private func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
         let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
             let item = ds.item(at: index)
-            self?.navigateToPage(item.startPageNumber)
+            self?.navigateToPage(item.startPageNumber, lastPage: nil)
         }
 
         let dataSource = createItemsDataSource()
@@ -81,8 +114,8 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         fatalError("Should be implemented by subclasses")
     }
 
-    fileprivate func navigateToPage(_ page: Int) {
-        let controller = self.quranControllerCreator.create((page, nil))
+    private func navigateToPage(_ page: Int, lastPage: LastPage?) {
+        let controller = self.quranControllerCreator.create(page, lastPage)
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

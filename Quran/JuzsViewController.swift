@@ -24,14 +24,6 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
 
     override var screen: Analytics.Screen { return .juzs }
 
-    override init(dataRetriever: AnyGetInteractor<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
-        super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
-    }
-
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
         return QuartersDataSource()
     }

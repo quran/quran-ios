@@ -93,11 +93,17 @@ class Container {
     }
 
     func createSurasViewController() -> UIViewController {
-        return SurasViewController(dataRetriever: createSurasRetriever(), quranControllerCreator: createCreator(createQuranController))
+        return SurasViewController(
+            dataRetriever: createSurasRetriever(),
+            quranControllerCreator: createCreator(createQuranController),
+            lastPagesPersistence: createLastPagesPersistence())
     }
 
     func createJuzsViewController() -> UIViewController {
-        return JuzsViewController(dataRetriever: createQuartersRetriever(), quranControllerCreator: createCreator(createQuranController))
+        return JuzsViewController(
+            dataRetriever: createQuartersRetriever(),
+            quranControllerCreator: createCreator(createQuranController),
+            lastPagesPersistence: createLastPagesPersistence())
     }
 
     func createSearchController() -> UIViewController {

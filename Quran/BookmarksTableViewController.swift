@@ -95,11 +95,6 @@ class BookmarksTableViewController: BaseTableBasedViewController {
         lastPageDS.reloadData()
         pageDS.reloadData()
         ayahDS.reloadData()
-
-        // deselect selected row
-        if let indexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: indexPath, animated: animated)
-        }
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {

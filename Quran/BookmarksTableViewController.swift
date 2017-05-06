@@ -78,8 +78,7 @@ class BookmarksTableViewController: BaseTableBasedViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
+        title = NSLocalizedString("menu_bookmarks", tableName: "Android", comment: "")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

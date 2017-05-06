@@ -57,8 +57,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
+        title = NSLocalizedString("audio_manager", tableName: "Android", comment: "")
 
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true

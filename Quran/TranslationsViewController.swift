@@ -53,8 +53,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
+        title = NSLocalizedString("prefs_translations", tableName: "Android", comment: "")
 
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true

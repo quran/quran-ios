@@ -52,4 +52,8 @@ class LastPageBookmarkDataSource: BasicDataSource<LastPage, BookmarkTableViewCel
                 self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
             }.cauterize(tag: "LastPagesPersistence.retrieveAll")
     }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
 }

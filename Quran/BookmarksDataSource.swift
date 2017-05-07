@@ -38,4 +38,11 @@ class BookmarksDataSource: CompositeDataSource {
         headerCreator.items.append([headerTitle])
         super.add(dataSource)
     }
+
+    override func ds_responds(to selector: DataSourceSelector) -> Bool {
+        if selector == .commitEditingStyle {
+            return true
+        }
+        return super.ds_responds(to: selector)
+    }
 }

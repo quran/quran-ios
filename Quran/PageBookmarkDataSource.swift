@@ -21,16 +21,9 @@
 import Foundation
 import GenericDataSources
 
-class PageBookmarkDataSource: BasicDataSource<PageBookmark, BookmarkTableViewCell> {
+class PageBookmarkDataSource: BaseBookmarkDataSource<PageBookmark, BookmarkTableViewCell> {
 
     let numberFormatter = NumberFormatter()
-
-    let persistence: BookmarksPersistence
-
-    init(persistence: BookmarksPersistence) {
-        self.persistence = persistence
-        super.init()
-    }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: BookmarkTableViewCell,

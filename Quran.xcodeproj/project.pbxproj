@@ -145,6 +145,8 @@
 		5459FF7F1EA549C400FBF6C5 /* AudioDownloadsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF7E1EA549C400FBF6C5 /* AudioDownloadsDataSource.swift */; };
 		545D96491EBE7997006D758A /* TimeAgo+Quran.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545D96481EBE7997006D758A /* TimeAgo+Quran.swift */; };
 		545D964B1EBE83B4006D758A /* EditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545D964A1EBE83B4006D758A /* EditController.swift */; };
+		545D964D1EBF3990006D758A /* EditableBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */; };
+		545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */; };
 		545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5161DCE08530085D31F /* LastPagesPersistence.swift */; };
 		545EE5191DCE09980085D31F /* SQLiteLastPagesPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE5181DCE09980085D31F /* SQLiteLastPagesPersistence.swift */; };
 		545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545EE51A1DCE0D450085D31F /* LastPage.swift */; };
@@ -605,6 +607,8 @@
 		5459FF7E1EA549C400FBF6C5 /* AudioDownloadsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadsDataSource.swift; sourceTree = "<group>"; };
 		545D96481EBE7997006D758A /* TimeAgo+Quran.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeAgo+Quran.swift"; sourceTree = "<group>"; };
 		545D964A1EBE83B4006D758A /* EditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditController.swift; sourceTree = "<group>"; };
+		545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableBasicDataSource.swift; sourceTree = "<group>"; };
+		545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBookmarkDataSource.swift; sourceTree = "<group>"; };
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
@@ -1330,9 +1334,10 @@
 			isa = PBXGroup;
 			children = (
 				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
-				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
+				545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */,
 				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 				5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */,
+				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -1696,6 +1701,7 @@
 			children = (
 				545D964A1EBE83B4006D758A /* EditController.swift */,
 				5437D3A01EB38DE600795FA9 /* Deprecated */,
+				545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -2942,6 +2948,7 @@
 				54C0DC0A1CE66B20009AAD8D /* AudioPlayerInteractor.swift in Sources */,
 				540922B01E91818300C7537A /* VerseHighlightType.swift in Sources */,
 				54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */,
+				545D964D1EBF3990006D758A /* EditableBasicDataSource.swift in Sources */,
 				54699BAB1E8DC25100211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift in Sources */,
 				540922821E90142900C7537A /* TranslationPageLayoutOperation.swift in Sources */,
 				5487241A1DC4957700ADDE54 /* BookmarksPersistence.swift in Sources */,
@@ -3019,6 +3026,7 @@
 				54B2669C1CCD208800D3AEF8 /* QuranImageHighlightingView.swift in Sources */,
 				54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
+				545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */,
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */,

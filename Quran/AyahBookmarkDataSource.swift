@@ -21,7 +21,7 @@
 import Foundation
 import GenericDataSources
 
-class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCell> {
+class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, BookmarkTableViewCell> {
 
     let ayahCache: Cache<AyahNumber, String> = {
         let cache = Cache<AyahNumber, String>()
@@ -30,14 +30,11 @@ class AyahBookmarkDataSource: BasicDataSource<AyahBookmark, BookmarkTableViewCel
     }()
 
     let numberFormatter = NumberFormatter()
-
-    let persistence: BookmarksPersistence
     let ayahPersistence: AyahTextPersistence
 
     init(persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
-        self.persistence = persistence
         self.ayahPersistence = ayahPersistence
-        super.init()
+        super.init(persistence: persistence)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,

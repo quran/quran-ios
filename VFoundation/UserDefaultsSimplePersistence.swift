@@ -20,16 +20,19 @@
 
 import Foundation
 
-struct UserDefaultsSimplePersistence: SimplePersistence {
+public struct UserDefaultsSimplePersistence: SimplePersistence {
 
-    let userDefaults: UserDefaults
+    public let userDefaults: UserDefaults
+    public init(userDefaults: UserDefaults) {
+        self.userDefaults = userDefaults
+    }
 
-    func valueForKey<T>(_ key: PersistenceKey<T>) -> T {
+    public func valueForKey<T>(_ key: PersistenceKey<T>) -> T {
         let value = userDefaults.object(forKey: key.key)
         return (value as? T) ?? key.defaultValue
     }
 
-    func setValue<T>(_ value: T?, forKey key: PersistenceKey<T>) {
+    public func setValue<T>(_ value: T?, forKey key: PersistenceKey<T>) {
 
         guard let value = value else {
             userDefaults.removeObject(forKey: key.key)
@@ -53,7 +56,7 @@ struct UserDefaultsSimplePersistence: SimplePersistence {
         }
     }
 
-    func removeValueForKey<T>(_ key: PersistenceKey<T?>) {
+    public func removeValueForKey<T>(_ key: PersistenceKey<T?>) {
         userDefaults.removeObject(forKey: key.key)
     }
 }

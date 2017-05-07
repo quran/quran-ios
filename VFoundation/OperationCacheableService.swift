@@ -78,7 +78,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
                         }
 //                        print("retrieved: \(input)")
                         return result
-                }
+                    }
                 queue.addOperation(operation.operation)
                 return promise
             }

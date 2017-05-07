@@ -22,22 +22,19 @@ import UIKit
 
 open class CircleView: UIView {
 
-    @IBInspectable
-    open var progress: CGFloat = 0.8 {
+    @IBInspectable open var progress: CGFloat = 0.8 {
         didSet {
             updateLayers()
         }
     }
 
-    @IBInspectable
-    open var emptyColor: UIColor = UIColor.red {
+    @IBInspectable open var emptyColor: UIColor = UIColor.red {
         didSet {
             updateLayers()
         }
     }
 
-    @IBInspectable
-    open var fillColor: UIColor = UIColor.green {
+    @IBInspectable open var fillColor: UIColor = UIColor.green {
         didSet {
             updateLayers()
         }

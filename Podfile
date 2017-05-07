@@ -37,4 +37,5 @@ target 'Quran' do
     pod 'PromiseKit'
     pod 'DownloadButton'
     pod 'KVOController'
+    pod 'NSDate+TimeAgo'
 end

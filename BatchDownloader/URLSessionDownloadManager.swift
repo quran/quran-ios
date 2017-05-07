@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import VFoundation
 import PromiseKit
+import VFoundation
 
 private let queue: OperationQueue = {
     let queue = OperationQueue()
@@ -30,7 +29,7 @@ private let queue: OperationQueue = {
 
 open class URLSessionDownloadManager: DownloadManager {
 
-    open private(set) var session: URLSession!
+    open private(set) var session: URLSession! // swiftlint:disable:this implicitly_unwrapped_optional
     private var handler: ThreadSafeDownloadSessionDelegate?
 
     open var backgroundSessionCompletionHandler: (() -> Void)? {
@@ -49,7 +48,7 @@ open class URLSessionDownloadManager: DownloadManager {
                 try attempt(times: 3) {
                     try dataController.loadBatchesFromPersistence()
                 }
-            }.always {
+        }.always {
 
                 // create handler classes
                 let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
@@ -69,7 +68,7 @@ open class URLSessionDownloadManager: DownloadManager {
                 handler.populateRunningTasks(from: session)
 
                 self.initializationGroup.leave()
-            }.cauterize()
+        }.cauterize()
     }
 
     open func getOnGoingDownloads() -> Promise<[DownloadBatchResponse]> {
@@ -77,7 +76,7 @@ open class URLSessionDownloadManager: DownloadManager {
             .notify()
             .then {
                 self.handler?.getOnGoingDownloads() ?? Promise(value: [])
-        }
+            }
     }
 
     open func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
@@ -85,7 +84,7 @@ open class URLSessionDownloadManager: DownloadManager {
             .notify()
             .then {
                 self.handler?.download(batch) ?? Promise(value: self.createFailureResponse())
-        }
+            }
     }
 
     private func createFailureResponse() -> DownloadBatchResponse {

@@ -27,7 +27,7 @@ public struct SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistenc
     public let version: UInt = 2
     public let filePath: String
 
-    private var connection: Connection!
+    private var connection: Connection?
 
     private struct Downloads {
         static let table = Table("download")

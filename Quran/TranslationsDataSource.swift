@@ -115,7 +115,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
                 }, completion: nil)
             }.catch(on: .main) { error in
                 self.delegate?.translationsDataSource(self, errorOccurred: error)
-        }
+            }
     }
 
     fileprivate func move(item: TranslationFull,
@@ -250,6 +250,6 @@ extension TranslationsDataSource: DownloadingObserverDelegate {
                 self.ds_reusableViewDelegate?.ds_moveItem(at: globalIndexPath, to: newGlobalIndexPath)
             }.catch(on: .main) { error in
                 self.delegate?.translationsDataSource(self, errorOccurred: error)
-        }
+            }
     }
 }

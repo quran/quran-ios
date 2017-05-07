@@ -62,7 +62,7 @@ class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionVi
             .then(on: .main) { [weak cell] data -> Void in
                 guard cell?.page == item else { return }
                 cell?.setAyahInfo(data)
-        }.cauterize(tag: "retrieveAyahs(in:)")
+            }.cauterize(tag: "retrieveAyahs(in:)")
     }
 
     func invalidate() {

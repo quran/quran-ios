@@ -17,14 +17,14 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import GenericDataSources
+import UIKit
 
-class BookmarksTableViewController: BaseTableBasedViewController {
+class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate, BookmarkDataSourceDelegate {
 
     override var screen: Analytics.Screen { return .bookmarks }
 
+    let editController = EditController(usesRightBarButton: true)
     let dataSource: BookmarksDataSource = BookmarksDataSource(type: .multi)
     let lastPageDS: LastPageBookmarkDataSource
     let pageDS: PageBookmarkDataSource
@@ -79,8 +79,7 @@ class BookmarksTableViewController: BaseTableBasedViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
+        title = NSLocalizedString("menu_bookmarks", tableName: "Android", comment: "")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -89,6 +88,25 @@ class BookmarksTableViewController: BaseTableBasedViewController {
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_register(cellNib: BookmarkTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
+
+        editController.configure(tableView: tableView, delegate: self, navigationItem: navigationItem)
+
+        pageDS.delegate = self
+        ayahDS.delegate = self
+
+        pageDS.onItemsUpdated = { [weak self] _ in
+            self?.editController.onEditableItemsUpdated()
+        }
+        ayahDS.onItemsUpdated = { [weak self] _ in
+            self?.editController.onEditableItemsUpdated()
+        }
+
+        pageDS.onEditingChanged = { [weak self] in
+            self?.editController.onStartSwipingToEdit()
+        }
+        ayahDS.onEditingChanged = { [weak self] in
+            self?.editController.onStartSwipingToEdit()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -97,16 +115,24 @@ class BookmarksTableViewController: BaseTableBasedViewController {
         lastPageDS.reloadData()
         pageDS.reloadData()
         ayahDS.reloadData()
+    }
 
-        // deselect selected row
-        if let indexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: indexPath, animated: animated)
-        }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        editController.endEditing(animated)
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {
         let controller = self.quranControllerCreator.create(page, lastPage)
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
+    }
+
+    func hasItemsToEdit() -> Bool {
+        return !pageDS.items.isEmpty || !ayahDS.items.isEmpty
+    }
+
+    func bookmarkDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
+        showErrorAlert(error: error)
     }
 }

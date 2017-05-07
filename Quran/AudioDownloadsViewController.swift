@@ -17,15 +17,14 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
-import GenericDataSources
 import BatchDownloader
+import GenericDataSources
+import UIKit
 
-class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate {
+class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate, EditControllerDelegate {
 
+    private let editController = EditController(usesRightBarButton: true)
     private let dataSource: AudioDownloadsDataSource
-
     private let retriever: AnyGetInteractor<[DownloadableQariAudio]>
 
     override var screen: Analytics.Screen { return .audioDownloads }
@@ -58,8 +57,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = ""
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo22").withRenderingMode(.alwaysTemplate))
+        title = NSLocalizedString("audio_manager", tableName: "Android", comment: "")
 
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.hidesWhenStopped = true
@@ -74,12 +72,12 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         tableView.ds_register(cellNib: AudioDownloadTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
+        editController.configure(tableView: tableView, delegate: self, navigationItem: navigationItem)
         dataSource.onItemsUpdated = { [weak self] _ in
-            self?.onDownloadedItemsUpdated()
+            self?.editController.onEditableItemsUpdated()
         }
-
         dataSource.onEditingChanged = { [weak self] in
-            self?.updateRightBarItem(animated: true)
+            self?.editController.onStartSwipingToEdit()
         }
     }
 
@@ -92,8 +90,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        tableView.setEditing(false, animated: animated)
-        updateRightBarItem(animated: animated)
+        editController.endEditing(animated)
     }
 
     func audioDownloadsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
@@ -113,10 +110,10 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
             }.catchToAlertView(viewController: self)
             .always(on: .main) {
                 self.activityIndicator?.stopAnimating()
-        }
+            }
     }
 
-    private func hasMoreItemsToEdit() -> Bool {
+    func hasItemsToEdit() -> Bool {
         var canEdit = false
         for item in dataSource.items {
             if item.audio.downloadedSizeInBytes != 0 && item.response == nil {
@@ -125,37 +122,5 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
             }
         }
         return canEdit
-    }
-
-    private func onDownloadedItemsUpdated() {
-        if !hasMoreItemsToEdit() {
-            tableView.setEditing(false, animated: true)
-        }
-
-        updateRightBarItem(animated: true)
-    }
-
-    private func updateRightBarItem(animated: Bool) {
-        let button: UIBarButtonItem?
-        if !hasMoreItemsToEdit() {
-            button = nil
-        } else if tableView.isEditing {
-            button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDoneTapped))
-        } else {
-            button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditTapped))
-        }
-        if navigationItem.rightBarButtonItem?.action != button?.action {
-            navigationItem.setRightBarButton(button, animated: animated)
-        }
-    }
-
-    @objc private func onEditTapped() {
-        tableView.setEditing(true, animated: true)
-        updateRightBarItem(animated: true)
-    }
-
-    @objc private func onDoneTapped() {
-        tableView.setEditing(false, animated: true)
-        updateRightBarItem(animated: true)
     }
 }

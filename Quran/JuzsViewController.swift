@@ -17,21 +17,12 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import GenericDataSources
+import UIKit
 
 class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell> {
 
     override var screen: Analytics.Screen { return .juzs }
-
-    override init(dataRetriever: AnyGetInteractor<[(Juz, [Quarter])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
-        super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
-    }
 
     override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
         return QuartersDataSource()
@@ -39,6 +30,7 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = NSLocalizedString("quran_juz2", tableName: "Android", comment: "")
         tableView.ds_register(cellNib: QuarterTableViewCell.self)
     }
 }

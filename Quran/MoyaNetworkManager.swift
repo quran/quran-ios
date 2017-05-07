@@ -17,12 +17,11 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
+import BatchDownloader
 import Foundation
 import Moya
-import SwiftyJSON
 import PromiseKit
-import BatchDownloader
+import SwiftyJSON
 
 class MoyaNetworkManager<Target>: NetworkManager {
     private let provider: MoyaProvider<BackendServices>

@@ -17,11 +17,10 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
-import Fabric
 import Crashlytics
+import Fabric
 import PromiseKit
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -49,6 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         Analytics.shared.logSystemLanguage()
+
+        let updater = AppUpdater()
+        let versionUpdate = updater.updated()
+        CLog("Version Update:", versionUpdate)
 
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window

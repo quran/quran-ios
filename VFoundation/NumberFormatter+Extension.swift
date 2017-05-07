@@ -22,19 +22,23 @@ import Foundation
 
 extension NumberFormatter {
 
-    @nonobjc public func format(_ number: NSNumber) -> String {
+    @nonobjc
+    public func format(_ number: NSNumber) -> String {
         return string(from: number) ?? number.description
     }
 
-    @nonobjc public func format(_ number: Int) -> String {
+    @nonobjc
+    public func format(_ number: Int) -> String {
         return format(NSNumber(value: number))
     }
 
-    @nonobjc public func format(_ number: Double) -> String {
+    @nonobjc
+    public func format(_ number: Double) -> String {
         return format(NSNumber(value: number))
     }
 
-    @nonobjc public func format(_ number: Float) -> String {
+    @nonobjc
+    public func format(_ number: Float) -> String {
         return format(NSNumber(value: number))
     }
 }

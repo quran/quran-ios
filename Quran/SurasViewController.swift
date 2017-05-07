@@ -17,21 +17,12 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
 import GenericDataSources
+import UIKit
 
 class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell> {
 
     override var screen: Analytics.Screen { return .suras }
-
-    override init(dataRetriever: AnyGetInteractor<[(Juz, [Sura])]>, quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
-        super.init(dataRetriever: dataRetriever, quranControllerCreator: quranControllerCreator)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
-    }
 
     override func createItemsDataSource() -> BasicDataSource<Sura, SuraTableViewCell> {
         return SurasDataSource()
@@ -39,6 +30,7 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = NSLocalizedString("quran_sura", tableName: "Android", comment: "")
         tableView.ds_register(cellNib: SuraTableViewCell.self)
     }
 }

@@ -35,7 +35,7 @@ class BookmarksManager {
             .then(on: .main) { bookmarked -> Bool in
                 self.isBookmarked = bookmarked
                 return bookmarked
-        }
+            }
     }
 
     func toggleBookmarking(pageNumber: Int) -> Promise<Void> {

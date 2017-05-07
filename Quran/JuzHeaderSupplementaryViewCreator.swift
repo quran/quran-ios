@@ -21,7 +21,7 @@
 import Foundation
 import GenericDataSources
 
-class JuzHeaderSupplementaryViewCreator: BasicSupplementaryViewCreator<Juz, JuzTableViewHeaderFooterView> {
+class JuzHeaderSupplementaryViewCreator: BasicSupplementaryViewCreator<String, JuzTableViewHeaderFooterView> {
 
     private let numberFormatter = NumberFormatter()
 
@@ -33,17 +33,8 @@ class JuzHeaderSupplementaryViewCreator: BasicSupplementaryViewCreator<Juz, JuzT
 
     override func collectionView(_ collectionView: GeneralCollectionView,
                                  configure view: JuzTableViewHeaderFooterView,
-                                 with item: Juz,
+                                 with item: String,
                                  at indexPath: IndexPath) {
-
-        view.titleLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), item.juzNumber)
-        view.subtitleLabel.text = numberFormatter.string(from: NSNumber(value: item.startPageNumber))
-
-        view.object = item
-        view.onTapped = { [weak self, weak view] in
-            guard let object = view?.object as? Juz else { return }
-
-            self?.onJuzHeaderSelected?(object)
-        }
+        view.titleLabel.text = item
     }
 }

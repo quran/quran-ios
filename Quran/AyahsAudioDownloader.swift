@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import PromiseKit
 import BatchDownloader
+import PromiseKit
 
 struct AyahsAudioDownloadRequest {
     let start: AyahNumber
@@ -46,7 +45,7 @@ struct AyahsAudioDownloader: Interactor {
                     .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
                     .map { DownloadRequest(url: $0.remote, resumePath: $0.local.resumePath, destinationPath: $0.local) }
                 return DownloadBatchRequest(requests: files)
-            }.then {
+        }.then {
                 // create downloads
                 return self.downloader.download($0)
         }

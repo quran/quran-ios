@@ -92,17 +92,17 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
 
         response.progress.progressListeners.insert(self)
         response.promise.then(on: .main) { [weak self] _ -> Void in
-                guard let `self` = self, !self.stopped.value else {
-                    return
-                }
-                self.observer?.onDownloadCompleted(for: self.item)
-            }.catch(on: .main) { [weak self] error in
-                guard let `self` = self, !self.stopped.value else {
-                    return
-                }
-                self.observer?.onDownloadCompleted(withError: error, for: self.item)
-            }.always { [weak self] in
-                self?.stopped.value = true
+            guard let `self` = self, !self.stopped.value else {
+                return
+            }
+            self.observer?.onDownloadCompleted(for: self.item)
+        }.catch(on: .main) { [weak self] error in
+            guard let `self` = self, !self.stopped.value else {
+                return
+            }
+            self.observer?.onDownloadCompleted(withError: error, for: self.item)
+        }.always { [weak self] in
+            self?.stopped.value = true
         }
         onProgressUpdated(to: response.progress.progress)
     }

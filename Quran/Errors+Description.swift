@@ -17,9 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import SQLitePersistence
 import BatchDownloader
+import SQLitePersistence
 
 extension FileSystemError: LocalizedError {
 

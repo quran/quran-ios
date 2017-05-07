@@ -33,6 +33,7 @@ class TranslationsSelectionViewController: TranslationsViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
 
         tableView.allowsSelection = true
+        editController.isEnabled = false
     }
 
     func dismissViewController() {

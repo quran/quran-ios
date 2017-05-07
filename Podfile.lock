@@ -12,6 +12,7 @@ PODS:
   - Moya/Core (8.0.3):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
+  - NSDate+TimeAgo (1.0.6)
   - PromiseKit (4.1.7):
     - PromiseKit/Foundation (= 4.1.7)
     - PromiseKit/QuartzCore (= 4.1.7)
@@ -38,6 +39,7 @@ DEPENDENCIES:
   - KVOController
   - MenuItemKit
   - Moya
+  - NSDate+TimeAgo
   - PromiseKit
   - SQLite.swift (~> 0.11.0)
   - SwiftyJSON
@@ -52,12 +54,13 @@ SPEC CHECKSUMS:
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
+  NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: a87dbc81caf39cf0d835707d3daff7257d1463e9
+PODFILE CHECKSUM: 748f438c6fd30bf1c08c204a5a35f5e2f3e85449
 
 COCOAPODS: 1.2.0

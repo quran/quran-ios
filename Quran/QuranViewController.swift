@@ -33,7 +33,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
     private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
     private let simplePersistence: SimplePersistence
-    private var lastPageUpdater: LastPageUpdater!
+    private var lastPageUpdater: LastPageUpdater
 
     private let dataSource: QuranDataSource
 
@@ -43,7 +43,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     private var titleView: QuranPageTitleView? { return navigationItem.titleView as? QuranPageTitleView }
 
-    private var quranView: QuranView! {
+    private var quranView: QuranView? {
         return view as? QuranView
     }
 
@@ -169,11 +169,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        quranView.delegate = self
+        quranView?.delegate = self
         quranNavigationBar.delegate = self
 
         configureAudioView()
-        quranView.collectionView.ds_useDataSource(dataSource)
+        quranView?.collectionView.ds_useDataSource(dataSource)
 
         // set the custom title view
         navigationItem.titleView = QuranPageTitleView()
@@ -187,11 +187,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     private func configureAudioView() {
-        quranView.audioView.onTouchesBegan = { [weak self] in
+        quranView?.audioView.onTouchesBegan = { [weak self] in
             self?.stopBarHiddenTimer()
         }
-        audioViewPresenter.view = quranView.audioView
-        quranView.audioView.delegate = audioViewPresenter
+        audioViewPresenter.view = quranView?.audioView
+        quranView?.audioView.delegate = audioViewPresenter
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -260,7 +260,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         stopBarHiddenTimer()
 
         navigationController?.setNavigationBarHidden(hidden, animated: true)
-        quranView.setBarsHidden(hidden)
+        quranView?.setBarsHidden(hidden)
 
         // animate the change
         UIView.animate(withDuration: 0.3, animations: {
@@ -279,9 +279,9 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     fileprivate func scrollToIndexPath(_ indexPath: IndexPath, animated: Bool) {
-        quranView.collectionView.scrollToItem(at: indexPath,
-                                              at: .centeredHorizontally,
-                                              animated: false)
+        quranView?.collectionView.scrollToItem(at: indexPath,
+                                               at: .centeredHorizontally,
+                                               animated: false)
     }
 
     fileprivate func onPageChanged() {
@@ -338,7 +338,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
-        let controller = qarisControllerCreator.create((qaris, selectedIndex, quranView.audioView))
+        let controller = qarisControllerCreator.create((qaris, selectedIndex, quranView?.audioView))
         controller.onSelectedIndexChanged = { [weak self] index in
             self?.audioViewPresenter.setQariIndex(index)
         }
@@ -364,7 +364,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func currentPage() -> QuranPage? {
-        return quranView.visibleIndexPath().map { dataSource.selectedBasicDataSource.item(at: $0) }
+        return quranView?.visibleIndexPath().map { dataSource.selectedBasicDataSource.item(at: $0) }
     }
 
     func onErrorOccurred(error: Error) {

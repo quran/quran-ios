@@ -25,7 +25,7 @@ import UIKit
 extension UIColor {
 
     class func appIdentity() -> UIColor {
-        return UIColor(rgb: 0x1B6B71)
+        return #colorLiteral(red: 0.1058823529, green: 0.4196078431, blue: 0.4431372549, alpha: 1)
     }
 
     class func secondaryColor() -> UIColor {
@@ -33,15 +33,15 @@ extension UIColor {
     }
 
     class func readingBackground() -> UIColor {
-        return UIColor(rgb: 0xF5F5F5)
+        return #colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1)
     }
 
     class func bookmark() -> UIColor {
-        return UIColor(r: 255, g: 100, b: 100)
+        return #colorLiteral(red: 1, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
     }
 
     class func selection() -> UIColor {
-        return UIColor(rgb: 0x156DDE)
+        return #colorLiteral(red: 0.08235294118, green: 0.4274509804, blue: 0.8705882353, alpha: 1)
     }
 
     static var translationText: UIColor {

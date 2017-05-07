@@ -31,7 +31,6 @@ class QuarterTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         circleView.fillColor = UIColor.appIdentity()
-        circleView.emptyColor = UIColor(rgb: 0x8AB09D)
+        circleView.emptyColor = #colorLiteral(red: 0.5411764706, green: 0.6901960784, blue: 0.6156862745, alpha: 1)
     }
-
 }

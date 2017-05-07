@@ -28,6 +28,7 @@ PODS:
   - SQLite.swift (0.11.3):
     - SQLite.swift/standard (= 0.11.3)
   - SQLite.swift/standard (0.11.3)
+  - SwiftMonkey (1.0.0)
   - SwiftyJSON (3.1.4)
   - Zip (0.6.0)
 
@@ -42,6 +43,7 @@ DEPENDENCIES:
   - NSDate+TimeAgo
   - PromiseKit
   - SQLite.swift (~> 0.11.0)
+  - SwiftMonkey
   - SwiftyJSON
   - Zip (~> 0.6)
 
@@ -58,9 +60,10 @@ SPEC CHECKSUMS:
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
+  SwiftMonkey: dc5681bf881dd84efcc7ff684a31582d5ac67232
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 748f438c6fd30bf1c08c204a5a35f5e2f3e85449
+PODFILE CHECKSUM: be742c8e8248772997c4841fe5ae81128299c374
 
 COCOAPODS: 1.2.0

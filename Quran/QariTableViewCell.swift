@@ -31,7 +31,7 @@ class QariTableViewCell: UITableViewCell {
         photoImageView.layer.borderWidth = 0.5
 
         let selectionBackground = UIView()
-        selectionBackground.backgroundColor = UIColor(rgb: 0xE9E9E9)
+        selectionBackground.backgroundColor = #colorLiteral(red: 0.9137254902, green: 0.9137254902, blue: 0.9137254902, alpha: 1)
         selectedBackgroundView = selectionBackground
     }
 

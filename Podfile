@@ -39,3 +39,7 @@ target 'Quran' do
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
 end
+
+target 'QuranUITests' do
+    pod "SwiftMonkey", :inhibit_warnings => true
+end

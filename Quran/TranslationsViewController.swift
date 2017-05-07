@@ -20,12 +20,12 @@
 import GenericDataSources
 import UIKit
 
-class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate {
+class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate, EditControllerDelegate {
 
     override var screen: Analytics.Screen { return .translations }
 
+    let editController = EditController(usesRightBarButton: true)
     private let dataSource: TranslationsDataSource
-
     private let interactor: AnyGetInteractor<[TranslationFull]>
     private let localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>
 
@@ -72,15 +72,15 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
+        editController.configure(tableView: tableView, delegate: self, navigationItem: navigationItem)
         dataSource.downloadedDS.onItemsUpdated = { [weak self] _ in
-            self?.onDownloadedItemsUpdated()
+            self?.editController.onEditableItemsUpdated()
+        }
+        dataSource.onEditingChanged = { [weak self] in
+            self?.editController.onStartSwipingToEdit()
         }
 
         loadLocalData()
-
-        dataSource.onEditingChanged = { [weak self] in
-            self?.updateRightBarItem(animated: true)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -94,8 +94,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        tableView.setEditing(false, animated: animated)
-        updateRightBarItem(animated: animated)
+        editController.endEditing(animated)
     }
 
     func translationsDataSource(_ dataSource: AbstractDataSource, errorOccurred error: Error) {
@@ -125,41 +124,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
             }.catchToAlertView(viewController: self)
     }
 
-    private func onDownloadedItemsUpdated() {
-        guard !dataSource.downloadedDS.isSelectable else {
-            return
-        }
-
-        if dataSource.downloadedDS.items.isEmpty {
-            tableView.setEditing(false, animated: true)
-        }
-
-        updateRightBarItem(animated: true)
-    }
-
-    private func updateRightBarItem(animated: Bool) {
-        let button: UIBarButtonItem?
-        if dataSource.downloadedDS.items.isEmpty {
-            button = nil
-        } else if tableView.isEditing {
-            button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDoneTapped))
-        } else {
-            button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditTapped))
-        }
-        if navigationItem.rightBarButtonItem?.action != button?.action {
-            navigationItem.setRightBarButton(button, animated: animated)
-        }
-    }
-
-    @objc
-    private func onEditTapped() {
-        tableView.setEditing(true, animated: true)
-        updateRightBarItem(animated: true)
-    }
-
-    @objc
-    private func onDoneTapped() {
-        tableView.setEditing(false, animated: true)
-        updateRightBarItem(animated: true)
+    func hasItemsToEdit() -> Bool {
+        return !dataSource.downloadedDS.items.isEmpty
     }
 }

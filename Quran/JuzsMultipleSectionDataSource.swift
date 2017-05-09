@@ -35,4 +35,14 @@ class JuzsMultipleSectionDataSource: CompositeDataSource {
         super.init(sectionType: sectionType)
         set(headerCreator: headerCreator)
     }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    sizeForSupplementaryViewOfKind kind: String,
+                                    at indexPath: IndexPath) -> CGSize {
+        if dataSource(at: indexPath.section).ds_numberOfItems(inSection: 0) == 0 {
+            return .zero
+        } else {
+            return super.ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: kind, at: indexPath)
+        }
+    }
 }

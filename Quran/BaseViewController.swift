@@ -27,6 +27,7 @@ class BaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Analytics.shared.showing(screen: screen)
+        CLog("Showing", screen.rawValue)
     }
 }
 

@@ -127,6 +127,8 @@
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
+		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
+		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
 		5454998F1E7DB27B00F4F927 /* copyrights in Resources */ = {isa = PBXBuildFile; fileRef = 5454998E1E7DB27B00F4F927 /* copyrights */; };
 		545499B11E7DB88900F4F927 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */; };
 		545499B31E7DB9C800F4F927 /* TranslationsSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */; };
@@ -137,7 +139,6 @@
 		5459FF6A1EA4E7F900FBF6C5 /* QariAudioDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF691EA4E7F900FBF6C5 /* QariAudioDownload.swift */; };
 		5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF6C1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift */; };
 		5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF6E1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift */; };
-		5459FF711EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */; };
 		5459FF741EA526C700FBF6C5 /* AudioDownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */; };
 		5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */; };
 		5459FF791EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */; };
@@ -216,7 +217,6 @@
 		54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */; };
 		54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */; };
 		54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AC67201E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift */; };
-		54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */; };
 		54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
@@ -600,6 +600,8 @@
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
+		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
+		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
 		5454998E1E7DB27B00F4F927 /* copyrights */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyrights; sourceTree = "<group>"; };
 		545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
 		545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionViewController.swift; sourceTree = "<group>"; };
@@ -610,7 +612,6 @@
 		5459FF691EA4E7F900FBF6C5 /* QariAudioDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDownload.swift; sourceTree = "<group>"; };
 		5459FF6C1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioFileListRetrieval.swift; sourceTree = "<group>"; };
 		5459FF6E1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioFileListRetrievalCreator.swift; sourceTree = "<group>"; };
-		5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadsNavigationController.swift; sourceTree = "<group>"; };
 		5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadsViewController.swift; sourceTree = "<group>"; };
 		5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadTableViewCell.swift; sourceTree = "<group>"; };
 		5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioDownloadTableViewCell.xib; sourceTree = "<group>"; };
@@ -696,7 +697,6 @@
 		54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookmarkTableViewCell.xib; sourceTree = "<group>"; };
 		54AC67201E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRenderPreloadingOperation.swift; sourceTree = "<group>"; };
-		54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsNavigationController.swift; sourceTree = "<group>"; };
 		54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsViewController.swift; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1302,6 +1302,7 @@
 			children = (
 				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
 				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
+				54547E8A1EC75384008AFED3 /* SettingsCreators.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1337,6 +1338,14 @@
 			name = Juz;
 			sourceTree = "<group>";
 		};
+		54547E871EC75061008AFED3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				54547E881EC75071008AFED3 /* SettingsDataSource.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		5459FF661EA4E77700FBF6C5 /* AudioDownloads */ = {
 			isa = PBXGroup;
 			children = (
@@ -1361,7 +1370,6 @@
 		5459FF721EA526B400FBF6C5 /* AudioDownloads */ = {
 			isa = PBXGroup;
 			children = (
-				5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */,
 				5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */,
 				5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */,
 				5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */,
@@ -1579,7 +1587,6 @@
 		54B135721E5E456A0087D0F8 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */,
 				545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */,
 				545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */,
 				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
@@ -1789,6 +1796,7 @@
 		54B2664D1CCA871E00D3AEF8 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				54547E871EC75061008AFED3 /* Settings */,
 				5459FF7D1EA549B700FBF6C5 /* AudioDownloads */,
 				545EE51C1DCE0F830085D31F /* Bookmarks */,
 				54F56C4D1E7ED96600D7AF57 /* Quran */,
@@ -2890,7 +2898,6 @@
 				54F8C41A1EA7EFB200C853C6 /* Downloadable.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */,
-				5459FF711EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
 				5409229F1E91312200C7537A /* QuranTranslationSuraDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
@@ -2915,6 +2922,7 @@
 				54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				545D96491EBE7997006D758A /* TimeAgo+Quran.swift in Sources */,
+				54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */,
 				540922A31E91315800C7537A /* QuranTranslationVerseSeparatorDataSource.swift in Sources */,
 				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */,
@@ -2923,6 +2931,7 @@
 				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
 				540922B51E919C5500C7537A /* QuranBasePageCollectionViewCell.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */,
 				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
@@ -2996,7 +3005,6 @@
 				540922A91E91318300C7537A /* QuranTranslationTextDataSource.swift in Sources */,
 				5459FF7C1EA545CA00FBF6C5 /* QariListToQariAudioDownloadRetriever.swift in Sources */,
 				540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */,
-				54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */,
 				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				544629DE1E676703005B1107 /* Download+Types.swift in Sources */,
 				5437D39F1EB38B2A00795FA9 /* Files.swift in Sources */,

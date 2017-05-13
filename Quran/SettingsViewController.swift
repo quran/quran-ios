@@ -17,14 +17,50 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
+import GenericDataSources
 import UIKit
 
 class SettingsViewController: BaseTableBasedViewController {
 
+    private let dataSource = SettingsDataSource()
+    private let creators: SettingsCreators
+
+    override var screen: Analytics.Screen { return .settings }
+
+    init(creators: SettingsCreators) {
+        self.creators = creators
+        super.init(nibName: nil, bundle: nil)
+
+        let selection = BlockSelectionHandler<Setting, UITableViewCell>()
+        selection.didSelectBlock = { [weak self] ds, _, indexPath in
+            guard let `self` = self else { return }
+            let item = ds.item(at: indexPath)
+            item.onSelection(self)
+        }
+        dataSource.setSelectionHandler(selection)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        unimplemented()
+    }
+
+    override func loadView() {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        view = tableView
+        self.tableView = tableView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.secondaryColor()
-        title = navigationController?.tabBarItem.title
+        title = NSLocalizedString("menu_settings", tableName: "Android", comment: "")
+
+        tableView.sectionHeaderHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 70
+
+        tableView.ds_register(cellClass: UITableViewCell.self)
+        tableView.ds_useDataSource(dataSource)
+
+        dataSource.items = creators.createSettingsItems()
     }
 }

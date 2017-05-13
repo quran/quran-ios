@@ -47,17 +47,8 @@ class Container {
         controller.viewControllers = [createSurasNavigationController(),
                                       createJuzsNavigationController(),
                                       createBookmarksController(),
-                                      createTranslationsNavigationController(),
-                                      createAudioDownloadsNavigationController()]
+                                      createSettingsController()]
         return controller
-    }
-
-    func createAudioDownloadsNavigationController() -> UIViewController {
-        return AudioDownloadsNavigationController(rootViewController: createAudioDownloadsViewController())
-    }
-
-    func createTranslationsNavigationController() -> UIViewController {
-        return TranslationsNavigationController(rootViewController: createTranslationsViewController())
     }
 
     func createSurasNavigationController() -> UIViewController {
@@ -111,7 +102,7 @@ class Container {
     }
 
     func createSettingsController() -> UIViewController {
-        return SettingsNavigationController(rootViewController: SettingsViewController())
+        return SettingsNavigationController(rootViewController: SettingsViewController(creators: createSettingsCreators()))
     }
 
     func createBookmarksController() -> UIViewController {
@@ -424,5 +415,11 @@ class Container {
 
     func createQariAudioDeleteInteractor() -> AnyInteractor<Qari, Void> {
         return QariAudioDeleteInteractor().asAnyInteractor()
+    }
+
+    func createSettingsCreators() -> SettingsCreators {
+        return NavigationSettingsCreators(
+            translationsCreator: createCreator(createTranslationsViewController),
+            audioDownloadsCreator: createCreator(createAudioDownloadsViewController))
     }
 }

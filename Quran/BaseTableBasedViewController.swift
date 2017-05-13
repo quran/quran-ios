@@ -23,7 +23,6 @@ import UIKit
 class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
 
     weak var tableView: UITableView! // swiftlint:disable:this implicitly_unwrapped_optional
-    weak var statusView: UIView?
 
     var clearsSelectionOnViewWillAppear: Bool = true
 
@@ -38,15 +37,7 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
         view.addAutoLayoutSubview(tableView)
         view.pinParentAllDirections(tableView)
 
-        let statusView = UIView()
-        statusView.backgroundColor = UIColor.appIdentity()
-        view.addAutoLayoutSubview(statusView)
-        view.pinParentHorizontal(statusView)
-        view.addParentTopConstraint(statusView)
-        statusView.addHeightConstraint(20)
-
         self.tableView = tableView
-        self.statusView = statusView
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,15 +48,6 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
                 tableView.deselectRow(at: indexPath, animated: animated)
             }
         }
-    }
-
-    override func willTransition(to newCollection: UITraitCollection,
-                                 with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-        let isCompact = newCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
-        coordinator.animate(alongsideTransition: { [weak self] _ in
-            self?.statusView?.alpha = isCompact ? 0 : 1
-            }, completion: nil)
     }
 
     func scrollToTop() {

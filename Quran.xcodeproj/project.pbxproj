@@ -961,13 +961,13 @@
 		540922AC1E91321A00C7537A /* basic */ = {
 			isa = PBXGroup;
 			children = (
+				540922A41E91316100C7537A /* QuranTranslationArabicTextDataSource.swift */,
+				540922AA1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift */,
 				5409229E1E91312200C7537A /* QuranTranslationSuraDataSource.swift */,
+				540922A81E91318300C7537A /* QuranTranslationTextDataSource.swift */,
+				540922A61E91316D00C7537A /* QuranTranslationTranslatorNameTextDataSource.swift */,
 				540922A01E91314D00C7537A /* QuranTranslationVerseNumberDataSource.swift */,
 				540922A21E91315800C7537A /* QuranTranslationVerseSeparatorDataSource.swift */,
-				540922A41E91316100C7537A /* QuranTranslationArabicTextDataSource.swift */,
-				540922A61E91316D00C7537A /* QuranTranslationTranslatorNameTextDataSource.swift */,
-				540922A81E91318300C7537A /* QuranTranslationTextDataSource.swift */,
-				540922AA1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift */,
 			);
 			name = basic;
 			sourceTree = "<group>";
@@ -1006,7 +1006,7 @@
 			name = QariAyahTiming;
 			sourceTree = "<group>";
 		};
-		5419E4B81CFA268500071A6D /* Strings */ = {
+		5419E4B81CFA268500071A6D /* strings */ = {
 			isa = PBXGroup;
 			children = (
 				54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */,
@@ -1016,15 +1016,15 @@
 				5419E5201CFA2BC100071A6D /* Readers.strings */,
 				5419E5321CFA3F0300071A6D /* Android.stringsdict */,
 			);
-			name = Strings;
+			name = strings;
 			sourceTree = "<group>";
 		};
 		541BA5DF1E93ADD000245A42 /* verse-text */ = {
 			isa = PBXGroup;
 			children = (
+				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */,
 				541BA5D91E938F6800245A42 /* ImageVerseTextRetrieval.swift */,
 				541BA5DB1E93929C00245A42 /* TranslationVerseTextRetrieval.swift */,
-				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */,
 			);
 			name = "verse-text";
 			sourceTree = "<group>";
@@ -1288,13 +1288,53 @@
 		544629E01E6ADFE0005B1107 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
 				544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */,
-				545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */,
 				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
+				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
+				545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */,
 				545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */,
 			);
 			name = Translations;
+			sourceTree = "<group>";
+		};
+		54547E811EC74CE4008AFED3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
+				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		54547E821EC74CFA008AFED3 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
+				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		54547E851EC74D6B008AFED3 /* Sura */ = {
+			isa = PBXGroup;
+			children = (
+				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
+				54B266161CC6D5BF00D3AEF8 /* SurasViewController.swift */,
+				54B266691CCA93C500D3AEF8 /* SuraTableViewCell.swift */,
+				54B2666A1CCA93C500D3AEF8 /* SuraTableViewCell.xib */,
+			);
+			name = Sura;
+			sourceTree = "<group>";
+		};
+		54547E861EC74D86008AFED3 /* Juz */ = {
+			isa = PBXGroup;
+			children = (
+				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
+				54B266141CC6D5A900D3AEF8 /* JuzsViewController.swift */,
+				54B2666F1CCA93E000D3AEF8 /* QuarterTableViewCell.swift */,
+				54B266701CCA93E000D3AEF8 /* QuarterTableViewCell.xib */,
+			);
+			name = Juz;
 			sourceTree = "<group>";
 		};
 		5459FF661EA4E77700FBF6C5 /* AudioDownloads */ = {
@@ -1321,19 +1361,12 @@
 		5459FF721EA526B400FBF6C5 /* AudioDownloads */ = {
 			isa = PBXGroup;
 			children = (
-				5459FF751EA5286D00FBF6C5 /* cell */,
+				5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */,
 				5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */,
-			);
-			name = AudioDownloads;
-			sourceTree = "<group>";
-		};
-		5459FF751EA5286D00FBF6C5 /* cell */ = {
-			isa = PBXGroup;
-			children = (
 				5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */,
 				5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */,
 			);
-			name = cell;
+			name = AudioDownloads;
 			sourceTree = "<group>";
 		};
 		5459FF7D1EA549B700FBF6C5 /* AudioDownloads */ = {
@@ -1373,11 +1406,11 @@
 		545EE51C1DCE0F830085D31F /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
-				545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */,
-				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 				5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */,
+				545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */,
+				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
 				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
+				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -1441,13 +1474,13 @@
 		54699B901E8DC11B00211A60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */,
-				54699B911E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift */,
-				54699B951E8DC14C00211A60 /* QuranTranslationVerseNumberCollectionViewCell.swift */,
 				54699B991E8DC15D00211A60 /* QuranTranslationArabicTextCollectionViewCell.swift */,
-				54699B9D1E8DC16C00211A60 /* QuranTranslationTranslatorNameCollectionViewCell.swift */,
-				54699BA11E8DC17A00211A60 /* QuranTranslationTextCollectionViewCell.swift */,
+				54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */,
 				54699BA51E8DC18600211A60 /* QuranTranslationLongTextCollectionViewCell.swift */,
+				54699B911E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift */,
+				54699BA11E8DC17A00211A60 /* QuranTranslationTextCollectionViewCell.swift */,
+				54699B9D1E8DC16C00211A60 /* QuranTranslationTranslatorNameCollectionViewCell.swift */,
+				54699B951E8DC14C00211A60 /* QuranTranslationVerseNumberCollectionViewCell.swift */,
 				54699BA91E8DC25000211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift */,
 			);
 			name = Translations;
@@ -1514,15 +1547,6 @@
 			name = Interactors;
 			sourceTree = "<group>";
 		};
-		549040BC1E63577900D54625 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
-				545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
 		5494CCB31CEFAB4200031686 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -1544,26 +1568,23 @@
 		54A99CA81CF7959A003995AE /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */,
 				54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */,
-			);
-			name = Bookmarks;
-			sourceTree = "<group>";
-		};
-		54A99CAF1CF7A632003995AE /* Bookmark */ = {
-			isa = PBXGroup;
-			children = (
 				54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */,
 				54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */,
 			);
-			name = Bookmark;
+			name = Bookmarks;
 			sourceTree = "<group>";
 		};
 		54B135721E5E456A0087D0F8 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				549040BC1E63577900D54625 /* Views */,
-				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
+				54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */,
+				545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */,
 				545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */,
+				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
+				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
+				545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */,
 			);
 			name = Translations;
 			sourceTree = "<group>";
@@ -1610,11 +1631,11 @@
 		54B265FA1CC57E2000D3AEF8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				54B2664A1CC95DAC00D3AEF8 /* images */,
-				5419E4B81CFA268500071A6D /* Strings */,
-				540922761E8F006000C7537A /* plists */,
 				540922751E8F005100C7537A /* fonts */,
+				54B2664A1CC95DAC00D3AEF8 /* images */,
 				540922771E8F007B00C7537A /* others */,
+				540922761E8F006000C7537A /* plists */,
+				5419E4B81CFA268500071A6D /* strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1631,32 +1652,33 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
-		54B265FC1CC57E2D00D3AEF8 /* Shared Views */ = {
+		54B265FC1CC57E2D00D3AEF8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				5424773C1E7856040051C196 /* DownloadButton.swift */,
+				54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */,
 				5463C1881E8B1427009EE603 /* AsyncLabel.swift */,
+				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
+				54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */,
+				5424773C1E7856040051C196 /* DownloadButton.swift */,
+				54B266731CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift */,
+				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
+				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
 				DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */,
-				54B2666D1CCA93C800D3AEF8 /* Launch */,
 			);
-			name = "Shared Views";
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */,
+				54547E821EC74CFA008AFED3 /* Search */,
+				54547E811EC74CE4008AFED3 /* Settings */,
 				5459FF721EA526B400FBF6C5 /* AudioDownloads */,
 				54B135721E5E456A0087D0F8 /* Translations */,
 				54A99CA81CF7959A003995AE /* Bookmarks */,
 				54C0DBEE1CE4B0A9009AAD8D /* QariList */,
 				54B266D41CD4E6C400D3AEF8 /* PageSelection */,
 				54B266BB1CD16E9800D3AEF8 /* Quran */,
-				54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */,
-				54B266201CC8010A00D3AEF8 /* BaseControllers */,
-				54B2660A1CC6D35C00D3AEF8 /* Settings */,
-				54B2660B1CC6D37800D3AEF8 /* Search */,
-				54B266011CC6CF1400D3AEF8 /* TabController */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1664,10 +1686,10 @@
 		54B265FE1CC57E4000D3AEF8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBD31CDF723D009AAD8D /* Presenter */,
-				54B2664D1CCA871E00D3AEF8 /* DataSources */,
 				54B265FD1CC57E3200D3AEF8 /* Controllers */,
-				54B265FC1CC57E2D00D3AEF8 /* Shared Views */,
+				54B2664D1CCA871E00D3AEF8 /* DataSources */,
+				54C0DBD31CDF723D009AAD8D /* Presenter */,
+				54B265FC1CC57E2D00D3AEF8 /* Shared */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1714,30 +1736,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		54B266011CC6CF1400D3AEF8 /* TabController */ = {
-			isa = PBXGroup;
-			children = (
-				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
-			);
-			name = TabController;
-			sourceTree = "<group>";
-		};
-		54B2660A1CC6D35C00D3AEF8 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
-		54B2660B1CC6D37800D3AEF8 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
-			);
-			name = Search;
-			sourceTree = "<group>";
-		};
 		54B266181CC6D72800D3AEF8 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -1746,14 +1744,6 @@
 				545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */,
 			);
 			name = Helper;
-			sourceTree = "<group>";
-		};
-		54B266201CC8010A00D3AEF8 /* BaseControllers */ = {
-			isa = PBXGroup;
-			children = (
-				54B266CA1CD3157400D3AEF8 /* Navigations */,
-			);
-			name = BaseControllers;
 			sourceTree = "<group>";
 		};
 		54B266231CC80AE800D3AEF8 /* Interactors */ = {
@@ -1830,59 +1820,18 @@
 			name = AyahInfo;
 			sourceTree = "<group>";
 		};
-		54B266681CCA936400D3AEF8 /* Suras */ = {
-			isa = PBXGroup;
-			children = (
-				54B266691CCA93C500D3AEF8 /* SuraTableViewCell.swift */,
-				54B2666A1CCA93C500D3AEF8 /* SuraTableViewCell.xib */,
-			);
-			name = Suras;
-			sourceTree = "<group>";
-		};
-		54B2666D1CCA93C800D3AEF8 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
-			);
-			name = Launch;
-			sourceTree = "<group>";
-		};
-		54B2666E1CCA93CF00D3AEF8 /* Quarter */ = {
-			isa = PBXGroup;
-			children = (
-				54B2666F1CCA93E000D3AEF8 /* QuarterTableViewCell.swift */,
-				54B266701CCA93E000D3AEF8 /* QuarterTableViewCell.xib */,
-			);
-			name = Quarter;
-			sourceTree = "<group>";
-		};
-		54B266831CCAC8F800D3AEF8 /* Size Layout */ = {
-			isa = PBXGroup;
-			children = (
-				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
-			);
-			name = "Size Layout";
-			sourceTree = "<group>";
-		};
 		54B266991CCD206A00D3AEF8 /* cell */ = {
 			isa = PBXGroup;
 			children = (
 				540922B11E91964300C7537A /* Image */,
-				54699B901E8DC11B00211A60 /* Translations */,
 				540922B41E919C5500C7537A /* QuranBasePageCollectionViewCell.swift */,
 				54B2668D1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.swift */,
 				54B2668E1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib */,
 				54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */,
 				54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */,
+				54699B901E8DC11B00211A60 /* Translations */,
 			);
 			name = cell;
-			sourceTree = "<group>";
-		};
-		54B2669A1CCD207400D3AEF8 /* Highlighting */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Highlighting;
 			sourceTree = "<group>";
 		};
 		54B2669F1CCD8D1100D3AEF8 /* Data */ = {
@@ -1896,17 +1845,6 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
-		54B266A41CCD936A00D3AEF8 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				54A99CAF1CF7A632003995AE /* Bookmark */,
-				54B266731CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift */,
-				54B266681CCA936400D3AEF8 /* Suras */,
-				54B2666E1CCA93CF00D3AEF8 /* Quarter */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
 		54B266A71CD1628500D3AEF8 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -1918,10 +1856,13 @@
 		54B266B61CD16CD500D3AEF8 /* AudioBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBDD1CDF7E95009AAD8D /* Downloading */,
-				54C0DBD61CDF7415009AAD8D /* Play */,
-				54C0DBCD1CDF6342009AAD8D /* QariBarView */,
 				54B266B71CD16CED00D3AEF8 /* AudioBannerView.swift */,
+				54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */,
+				54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */,
+				54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */,
+				54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */,
+				54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */,
+				54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */,
 				54C0DBE41CE479D7009AAD8D /* DefaultAudioBannerView.swift */,
 			);
 			name = AudioBannerView;
@@ -1931,48 +1872,21 @@
 			isa = PBXGroup;
 			children = (
 				54F56C481E7EB93600D7AF57 /* Managers */,
-				54C0DBE61CE48DED009AAD8D /* Views */,
+				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
 				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
+				54C0DBE61CE48DED009AAD8D /* Views */,
 			);
 			name = Quran;
-			sourceTree = "<group>";
-		};
-		54B266CA1CD3157400D3AEF8 /* Navigations */ = {
-			isa = PBXGroup;
-			children = (
-				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
-				54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */,
-				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
-				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
-				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
-				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
-				54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */,
-				54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */,
-				545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */,
-				5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */,
-			);
-			name = Navigations;
 			sourceTree = "<group>";
 		};
 		54B266D41CD4E6C400D3AEF8 /* PageSelection */ = {
 			isa = PBXGroup;
 			children = (
-				54B266831CCAC8F800D3AEF8 /* Size Layout */,
-				54B266A41CCD936A00D3AEF8 /* Views */,
 				54B266D51CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift */,
-				54B266161CC6D5BF00D3AEF8 /* SurasViewController.swift */,
-				54B266141CC6D5A900D3AEF8 /* JuzsViewController.swift */,
+				54547E861EC74D86008AFED3 /* Juz */,
+				54547E851EC74D6B008AFED3 /* Sura */,
 			);
 			name = PageSelection;
-			sourceTree = "<group>";
-		};
-		54C0DBCD1CDF6342009AAD8D /* QariBarView */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */,
-				54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */,
-			);
-			name = QariBarView;
 			sourceTree = "<group>";
 		};
 		54C0DBD31CDF723D009AAD8D /* Presenter */ = {
@@ -1984,32 +1898,13 @@
 			name = Presenter;
 			sourceTree = "<group>";
 		};
-		54C0DBD61CDF7415009AAD8D /* Play */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */,
-				54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */,
-			);
-			name = Play;
-			sourceTree = "<group>";
-		};
-		54C0DBDD1CDF7E95009AAD8D /* Downloading */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */,
-				54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */,
-			);
-			name = Downloading;
-			sourceTree = "<group>";
-		};
 		54C0DBE61CE48DED009AAD8D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5E01E93AE6500245A42 /* QuranShareData.swift */,
-				54965FB61E7D4A1700A212E2 /* QuranPageTitle */,
-				54B266991CCD206A00D3AEF8 /* cell */,
-				54B2669A1CCD207400D3AEF8 /* Highlighting */,
 				54B266B61CD16CD500D3AEF8 /* AudioBannerView */,
+				54B266991CCD206A00D3AEF8 /* cell */,
+				54965FB61E7D4A1700A212E2 /* QuranPageTitle */,
+				541BA5E01E93AE6500245A42 /* QuranShareData.swift */,
 				54C0DBE71CE48DF8009AAD8D /* QuranView.swift */,
 			);
 			name = Views;
@@ -2018,20 +1913,13 @@
 		54C0DBEE1CE4B0A9009AAD8D /* QariList */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBF21CE4B155009AAD8D /* cell */,
+				54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */,
+				54C0DBF31CE4B162009AAD8D /* QariTableViewCell.swift */,
+				54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */,
 				54C0DBEF1CE4B0C2009AAD8D /* QariTableViewController.swift */,
 				54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */,
 			);
 			name = QariList;
-			sourceTree = "<group>";
-		};
-		54C0DBF21CE4B155009AAD8D /* cell */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBF31CE4B162009AAD8D /* QariTableViewCell.swift */,
-				54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */,
-			);
-			name = cell;
 			sourceTree = "<group>";
 		};
 		54C0DC001CE62D2B009AAD8D /* LastAyahFinder */ = {
@@ -2057,9 +1945,9 @@
 			isa = PBXGroup;
 			children = (
 				540922AC1E91321A00C7537A /* basic */,
-				54F56C4E1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift */,
-				54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */,
 				541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */,
+				54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */,
+				54F56C4E1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift */,
 			);
 			name = translations;
 			sourceTree = "<group>";
@@ -2067,11 +1955,11 @@
 		54D2C2251E86817400128282 /* Sura/Juz */ = {
 			isa = PBXGroup;
 			children = (
-				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
-				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
-				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
-				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
 				549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */,
+				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
+				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
+				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
+				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 			);
 			name = Sura/Juz;
 			sourceTree = "<group>";
@@ -2109,10 +1997,10 @@
 		54F56C481E7EB93600D7AF57 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5DF1E93ADD000245A42 /* verse-text */,
-				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
 				54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */,
+				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
 				54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */,
+				541BA5DF1E93ADD000245A42 /* verse-text */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -2120,21 +2008,13 @@
 		54F56C4D1E7ED96600D7AF57 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */,
 				54D2C2261E86828000128282 /* image */,
-				54D2C2161E85DB8200128282 /* translations */,
+				541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */,
 				54F56C521E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift */,
 				54F56C501E7EDA5C00D7AF57 /* QuranDataSource.swift */,
+				54D2C2161E85DB8200128282 /* translations */,
 			);
 			name = Quran;
-			sourceTree = "<group>";
-		};
-		54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */ = {
-			isa = PBXGroup;
-			children = (
-				54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */,
-			);
-			name = BaseTableViewController;
 			sourceTree = "<group>";
 		};
 		54F8C4221EA8104100C853C6 /* Downloadable */ = {

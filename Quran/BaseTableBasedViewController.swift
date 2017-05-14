@@ -17,7 +17,6 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import UIKit
 
 class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
@@ -44,13 +43,16 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
         super.viewWillAppear(animated)
 
         if clearsSelectionOnViewWillAppear {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                tableView.deselectRow(at: indexPath, animated: animated)
+            if let indexPath = tableView?.indexPathForSelectedRow {
+                tableView?.deselectRow(at: indexPath, animated: animated)
             }
         }
     }
 
     func scrollToTop() {
+        guard let tableView = tableView else {
+            return
+        }
         for section in 0..<tableView.numberOfSections {
             if tableView.numberOfRows(inSection: section) > 0 {
                 tableView.scrollToRow(at: IndexPath(item: 0, section: section), at: .top, animated: true)

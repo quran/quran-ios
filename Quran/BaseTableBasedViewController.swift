@@ -51,6 +51,11 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
     }
 
     func scrollToTop() {
-        tableView.setContentOffset(CGPoint(x: 0, y: -tableView.contentInset.top), animated: true)
+        for section in 0..<tableView.numberOfSections {
+            if tableView.numberOfRows(inSection: section) > 0 {
+                tableView.scrollToRow(at: IndexPath(item: 0, section: section), at: .top, animated: true)
+                break
+            }
+        }
     }
 }

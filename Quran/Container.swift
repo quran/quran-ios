@@ -44,10 +44,13 @@ class Container {
 
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
-        controller.viewControllers = [createSurasNavigationController(),
-                                      createJuzsNavigationController(),
-                                      createBookmarksController(),
-                                      createSettingsController()]
+        controller.viewControllers = [
+            createSurasNavigationController(),
+            createJuzsNavigationController(),
+            createBookmarksController(),
+            createSearchNavigationController(),
+            createSettingsController()
+        ]
         return controller
     }
 
@@ -74,6 +77,14 @@ class Container {
                 interactor: createTranslationsRetrievalInteractor(),
                 localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
                 dataSource: createTranslationsSelectionDataSource()))
+    }
+
+    func createSearchViewController() -> UIViewController {
+        return SearchViewController()
+    }
+
+    func createSearchNavigationController() -> UIViewController {
+        return SearchNavigationController(rootViewController: createSearchViewController())
     }
 
     func createTranslationsViewController() -> UIViewController {

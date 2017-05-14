@@ -28,7 +28,7 @@ class SearchNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: "Search", image: nil, selectedImage: nil)
+        tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {

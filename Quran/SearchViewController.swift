@@ -20,7 +20,11 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseTableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+
+    let searchController = UISearchController(searchResultsController: nil)
+
+    override var screen: Analytics.Screen { return .search }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -29,6 +33,24 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.secondaryColor()
-        title = navigationController?.tabBarItem.title
+
+        let searchBackgroundImage = #colorLiteral(red: 0.0716814159, green: 0.2847787611, blue: 0.3, alpha: 1).image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
+        searchController.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
+        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
+
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+
+        navigationItem.titleView = searchController.searchBar
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

@@ -53,7 +53,7 @@ extension DefaultAudioPlayerInteractor {
         let endAyah = lastAyahFinder.findLastAyah(startAyah: startAyah, page: page.pageNumber)
 
         if downloader.needsToDownloadFiles(qari: qari, startAyah: startAyah, endAyah: endAyah) {
-            Analytics.shared.downloading(startAyah: startAyah, qari: qari)
+            Analytics.shared.downloadingJuz(startAyah: startAyah, qari: qari)
             downloadCancelled = false
             delegate?.willStartDownloading()
             downloader

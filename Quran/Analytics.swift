@@ -29,13 +29,13 @@ struct Analytics {
         let current = Locale.current
         let english = Locale(identifier: "en")
         let systemLanguage = current.languageCode.flatMap { english.localizedString(forLanguageCode: $0) } ?? "[\(current.identifier)]"
-        CLog("System Language =", systemLanguage)
+        CLog("System Language:", systemLanguage)
         Answers.logCustomEvent(withName: "System Language", customAttributes: ["language" : systemLanguage])
 
     }
 
     func showing(screen: Screen) {
-        CLog("Showing Page", screen.rawValue)
+        CLog("Showing Page:", screen.rawValue)
         Answers.logContentView(withName: screen.rawValue,
                                contentType: "Scrren Type",
                                contentId: nil,
@@ -95,10 +95,19 @@ struct Analytics {
             "ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
     }
 
-    func downloading(startAyah ayah: AyahNumber, qari: Qari) {
+    func downloadingJuz(startAyah ayah: AyahNumber, qari: Qari) {
         let ayahText = "\(ayah.sura):\(ayah.ayah)"
-        CLog("Downloading audio from:", ayahText, "qri:", qari.id)
-        Answers.logCustomEvent(withName: "Audio Downloading", customAttributes: [
-            "ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
+        CLog("Downloading juz' from:", ayahText, "qri:", qari.id)
+        Answers.logCustomEvent(withName: "Juz Downloading", customAttributes: ["ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
+    }
+
+    func downloadingQuran(qari: Qari) {
+        CLog("Downloading entire quran qari:", qari.id)
+        Answers.logCustomEvent(withName: "Quran Downloading", customAttributes: ["qari.id": qari.id, "qari.name": qari.name])
+    }
+
+    func deletingQuran(qari: Qari) {
+        CLog("Deleting audio for qari:", qari.id)
+        Answers.logCustomEvent(withName: "Audio Deletion", customAttributes: ["qari.id": qari.id, "qari.name": qari.name])
     }
 }

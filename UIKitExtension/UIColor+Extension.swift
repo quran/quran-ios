@@ -36,13 +36,8 @@ extension UIColor {
                   b: CGFloat((rgb >> 00) & 0xff))
     }
 
-    /**
-     Creates a 1 pixel image from the color.
-
-     - returns: The 1 pixel image of the color.
-     */
-    public func image() -> UIImage? {
-        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+    public func image(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage? {
+        let rect = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContext(rect.size)
         setFill()
         UIRectFill(rect)

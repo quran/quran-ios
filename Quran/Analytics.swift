@@ -29,10 +29,13 @@ struct Analytics {
         let current = Locale.current
         let english = Locale(identifier: "en")
         let systemLanguage = current.languageCode.flatMap { english.localizedString(forLanguageCode: $0) } ?? "[\(current.identifier)]"
+        CLog("System Language =", systemLanguage)
         Answers.logCustomEvent(withName: "System Language", customAttributes: ["language" : systemLanguage])
+
     }
 
     func showing(screen: Screen) {
+        CLog("Showing Page", screen.rawValue)
         Answers.logContentView(withName: screen.rawValue,
                                contentType: "Scrren Type",
                                contentId: nil,
@@ -40,6 +43,8 @@ struct Analytics {
     }
 
     func showing(quranPage page: Int, isTranslation: Bool, numberOfSelectedTranslations: Int) {
+        CLog("Showing Quran Page:", page, "isTranslation:", isTranslation, "numberOfSelectedTranslations:", numberOfSelectedTranslations)
+
         var attributes: [String: Any] = [
             "page": "\(page)",
             "Viewing Mode": isTranslation ? "Translation" : "Arabic"]
@@ -50,38 +55,50 @@ struct Analytics {
     }
 
     func downloading(translation: Translation) {
+        CLog("Downloading translation:", translation.id)
         Answers.logCustomEvent(withName: "Translations Downloading", customAttributes: [
             "id" : "\(translation.id)", "displayName": translation.displayName, "language": translation.languageCode])
     }
 
     func deleting(translation: Translation) {
+        CLog("Deleting translation:", translation.id)
         Answers.logCustomEvent(withName: "Translations Deletion", customAttributes: [
             "id" : "\(translation.id)", "displayName": translation.displayName, "language": translation.languageCode])
     }
 
     func bookmark(ayah: AyahNumber) {
-        Answers.logCustomEvent(withName: "Bookmark Ayah", customAttributes: ["ayah": "\(ayah.sura):\(ayah.ayah)"])
+        let ayahText = "\(ayah.sura):\(ayah.ayah)"
+        CLog("Bookmarking Ayah:", ayahText)
+        Answers.logCustomEvent(withName: "Bookmark Ayah", customAttributes: ["ayah": ayahText])
     }
 
     func bookmark(quranPage page: Int) {
+        CLog("Bookmarking Page:", page)
         Answers.logCustomEvent(withName: "Bookmark Page", customAttributes: ["page": "\(page)"])
     }
 
     func unbookmark(ayah: AyahNumber) {
-        Answers.logCustomEvent(withName: "Unbookmark Ayah", customAttributes: ["ayah": "\(ayah.sura):\(ayah.ayah)"])
+        let ayahText = "\(ayah.sura):\(ayah.ayah)"
+        CLog("Unbookmarking Ayah:", ayahText)
+        Answers.logCustomEvent(withName: "Unbookmark Ayah", customAttributes: ["ayah": ayahText])
     }
 
     func unbookmark(quranPage page: Int) {
+        CLog("Unbookmarking Page:", page)
         Answers.logCustomEvent(withName: "Unbookmark Page", customAttributes: ["page": "\(page)"])
     }
 
     func playing(startAyah ayah: AyahNumber, qari: Qari) {
+        let ayahText = "\(ayah.sura):\(ayah.ayah)"
+        CLog("Playing Audio from:", ayahText, "qri:", qari.id)
         Answers.logCustomEvent(withName: "Audio Playing", customAttributes: [
-            "ayah": "\(ayah.sura):\(ayah.ayah)", "qari.id": qari.id, "qari.name": qari.name])
+            "ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
     }
 
     func downloading(startAyah ayah: AyahNumber, qari: Qari) {
+        let ayahText = "\(ayah.sura):\(ayah.ayah)"
+        CLog("Downloading audio from:", ayahText, "qri:", qari.id)
         Answers.logCustomEvent(withName: "Audio Downloading", customAttributes: [
-            "ayah": "\(ayah.sura):\(ayah.ayah)", "qari.id": qari.id, "qari.name": qari.name])
+            "ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
     }
 }

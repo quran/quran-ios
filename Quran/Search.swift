@@ -1,8 +1,8 @@
 //
-//  SearchNavigationController.swift
+//  Search.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
+//  Created by Mohamed Afifi on 5/15/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,16 +18,15 @@
 //  GNU General Public License for more details.
 //
 
-import UIKit
+struct SearchAutocompletion {
+    let text: String
+    let highlightedRange: Range<String.Index>
+}
 
-class SearchNavigationController: BaseNavigationController {
+struct SearchResult {
+    let text: String
+    let ayah: AyahNumber
+    let page: Int
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
-    }
+    let highlightedRanges: [Range<String.Index>]
 }

@@ -24,8 +24,10 @@ extension Analytics {
         case suras
         case juzs
         case bookmarks
-        case search
         case settings
+
+        case search
+        case searchResults
 
         case translations
         case audioDownloads

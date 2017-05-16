@@ -20,9 +20,24 @@
 
 import UIKit
 
-class SearchViewController: BaseTableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchBarDelegate, SearchView {
 
-    let searchController = UISearchController(searchResultsController: nil)
+    var router: SearchRouter? // DESIGN: Shouldn't be saved here
+    weak var delegate: SearchViewDelegate?
+
+    var searchController: UISearchController?
+    lazy var searchResults: SearchResultsViewController = {
+        let controller = SearchResultsViewController()
+        controller.dataSource.onAutocompletionSelected = { [weak self] index in
+            self?.searchController?.searchBar.resignFirstResponder()
+            self?.delegate?.onSelected(autocompletionAt: index)
+        }
+        controller.dataSource.onResultSelected = { [weak self] index in
+            self?.searchController?.searchBar.resignFirstResponder() // defensive
+            self?.delegate?.onSelected(searchResultAt: index)
+        }
+        return controller
+    }()
 
     override var screen: Analytics.Screen { return .search }
 
@@ -30,27 +45,104 @@ class SearchViewController: BaseTableViewController, UISearchResultsUpdating, UI
         return .lightContent
     }
 
+    @IBOutlet weak var recents: UIStackView!
+    @IBOutlet weak var recentsTitle: UILabel!
+    @IBOutlet weak var popular: UIStackView!
+    @IBOutlet weak var popularTitle: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.secondaryColor()
 
-        let searchBackgroundImage = #colorLiteral(red: 0.0716814159, green: 0.2847787611, blue: 0.3, alpha: 1).image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
-        searchController.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
-        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
+        recentsTitle.text = NSLocalizedString("searchRecentsTitle", comment: "")
+        popularTitle.text = NSLocalizedString("searchPopularTitle", comment: "")
 
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.dimsBackgroundDuringPresentation = true
-        searchController.hidesNavigationBarDuringPresentation = false
+        searchController = SearchControllerWithNoCancelButton(searchResultsController: searchResults)
+
+        searchController?.searchResultsUpdater = self
+        searchController?.searchBar.delegate = self
+
+        let searchBackgroundImage = #colorLiteral(red: 0.0716814159, green: 0.2847787611, blue: 0.3, alpha: 1).image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
+        searchController?.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
+        searchController?.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
+
+        searchController?.searchBar.showsCancelButton = false
+        searchController?.dimsBackgroundDuringPresentation = true
+        searchController?.hidesNavigationBarDuringPresentation = false
         definesPresentationContext = true
 
-        navigationItem.titleView = searchController.searchBar
+        navigationItem.titleView = searchController?.searchBar
+
+        delegate?.onViewLoaded()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if let indexPath = searchResults.tableView?.indexPathForSelectedRow {
+            searchResults.tableView?.deselectRow(at: indexPath, animated: animated)
+        }
     }
 
     func updateSearchResults(for searchController: UISearchController) {
+        delegate?.onSearchTextUpdated(to: searchController.searchBar.text ?? "", isActive: searchController.isActive)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        delegate?.onSearchButtonTapped()
+    }
+
+    // MARK: - SearchView
+
+    func show(autocompletions: [NSAttributedString]) {
+        searchResults.show(autocompletions: autocompletions)
+    }
+
+    func show(results: [SearchResultUI]) {
+        searchResults.show(results: results)
+    }
+
+    func show(recents: [String], popular: [String]) {
+        updateList(stack: self.recents, title: recentsTitle, values: recents, tapSelector: #selector(onRecentOrPopularTapped(button:)))
+        updateList(stack: self.popular, title: popularTitle, values: popular, tapSelector: #selector(onRecentOrPopularTapped(button:)))
+    }
+
+    func showLoading() {
+        searchResults.showLoading()
+    }
+
+    func showError(_ error: Error) {
+        showErrorAlert(error: error)
+    }
+
+    func updateSearchBarText(to text: String) {
+        searchController?.searchBar.text = text
+    }
+
+    func setSearchBarActive(_ isActive: Bool) {
+        searchController?.isActive = isActive
+    }
+
+    func onRecentOrPopularTapped(button: UIButton) {
+        delegate?.onSearchTermSelected(button.title(for: .normal) ?? "")
+    }
+
+    private func updateList(stack: UIStackView, title: UIView, values: [String], tapSelector: Selector) {
+        title.isHidden = values.isEmpty
+
+        for view in stack.arrangedSubviews {
+            stack.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+
+        stack.addArrangedSubview(title)
+        for value in values {
+            let button = UIButton(type: .system)
+            button.addHeightConstraint(44)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            button.setTitle(value, for: .normal)
+            button.addTarget(self, action: tapSelector, for: .touchUpInside)
+            stack.addArrangedSubview(button)
+        }
     }
 }

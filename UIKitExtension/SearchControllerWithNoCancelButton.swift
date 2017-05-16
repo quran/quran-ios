@@ -1,8 +1,8 @@
 //
-//  SearchNavigationController.swift
+//  SearchControllerWithNoCancelButton.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
+//  Created by Mohamed Afifi on 5/14/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -18,16 +18,16 @@
 //  GNU General Public License for more details.
 //
 
-import UIKit
-
-class SearchNavigationController: BaseNavigationController {
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
+open class SearchBarWithNoCancelButton: UISearchBar {
+    open override func setShowsCancelButton(_ showsCancelButton: Bool, animated: Bool) {
+        // does nothing
     }
+}
 
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+open class SearchControllerWithNoCancelButton: UISearchController {
+    private lazy var _searchBar: SearchBarWithNoCancelButton = SearchBarWithNoCancelButton()
+
+    open override var searchBar: UISearchBar {
+        return _searchBar
     }
 }

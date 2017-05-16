@@ -45,10 +45,10 @@ class Container {
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
         controller.viewControllers = [
-            createSurasNavigationController(),
+            createSearchNavigationController(), createSurasNavigationController(),
             createJuzsNavigationController(),
             createBookmarksController(),
-            createSearchNavigationController(),
+
             createSettingsController()
         ]
         return controller
@@ -79,12 +79,10 @@ class Container {
                 dataSource: createTranslationsSelectionDataSource()))
     }
 
-    func createSearchViewController() -> UIViewController {
-        return SearchViewController()
-    }
-
     func createSearchNavigationController() -> UIViewController {
-        return SearchNavigationController(rootViewController: createSearchViewController())
+        let builder = DefaultSearchBuilder(container: self) // DESIGN: should be done in tab bar router
+        let (_, controller) = builder.build()
+        return controller
     }
 
     func createTranslationsViewController() -> UIViewController {
@@ -106,10 +104,6 @@ class Container {
             dataRetriever: createQuartersRetriever(),
             quranControllerCreator: createCreator(createQuranController),
             lastPagesPersistence: createLastPagesPersistence())
-    }
-
-    func createSearchController() -> UIViewController {
-        return SearchNavigationController(rootViewController: SearchViewController())
     }
 
     func createSettingsController() -> UIViewController {

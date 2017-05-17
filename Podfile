@@ -38,6 +38,8 @@ target 'Quran' do
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
+    pod 'RxSwift'
+    pod 'RxCocoa'
 end
 
 target 'QuranUITests' do

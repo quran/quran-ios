@@ -92,10 +92,17 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         delegate?.onSearchButtonTapped()
     }
 
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchResults.switchToAutocompletes()
+    }
+
     // MARK: - SearchView
 
     func show(autocompletions: [NSAttributedString]) {
-        searchResults.show(autocompletions: autocompletions)
+        searchResults.setAutocompletes(autocompletions)
+        if searchController?.searchBar.isFirstResponder ?? false {
+            searchResults.switchToAutocompletes()
+        }
     }
 
     func show(results: [SearchResultUI]) {

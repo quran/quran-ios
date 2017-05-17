@@ -427,4 +427,16 @@ class Container {
             translationsCreator: createCreator(createTranslationsViewController),
             audioDownloadsCreator: createCreator(createAudioDownloadsViewController))
     }
+
+    func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
+        return SQLiteSearchAutocompletionService()
+    }
+
+    func createSQLiteSearchService() -> SearchService {
+        return SQLiteSearchService()
+    }
+
+    func createDefaultSearchRecentsService() -> SearchRecentsService {
+        return DefaultSearchRecentsService()
+    }
 }

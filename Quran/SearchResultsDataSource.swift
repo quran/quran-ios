@@ -63,8 +63,11 @@ class SearchResultsDataSource: SegmentedDataSource {
         selectedDataSource = loading
     }
 
-    func switchToAutocomplete(with items: [NSAttributedString]) {
+    func setAutocompletes(_ items: [NSAttributedString]) {
         autocomplete.items = items
+    }
+
+    func switchToAutocompletes() {
         selectedDataSource = autocomplete
     }
 

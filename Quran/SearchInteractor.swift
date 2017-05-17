@@ -17,6 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import RxCocoa
+import RxSwift
 
 protocol SearchInteractor: class {
     weak var router: SearchRouter? { get set }
@@ -36,59 +38,93 @@ class DefaultSearchInteractor: SearchInteractor {
     weak var router: SearchRouter?
     weak var presenter: SearchPresenter?
 
-    func onViewLoaded() {
-        presenter?.show(recents: ["Recent 1", "Recent 2", "very old recent"], popular: ["Popular 1", "Popular 2", "Way popular", "Way popular 2"])
+    private let disposeBag = DisposeBag()
+    private let searchTerm = Variable("")
+    private let startSearching = EventStream<Void>()
+
+    private let recentsService: SearchRecentsService
+
+    init(autocompleteService: SearchAutocompletionService, searchService: SearchService, recentsService: SearchRecentsService) {
+        self.recentsService = recentsService
+
+        // loading search
+        let loading = ActivityIndicator()
+        loading
+            .filter { $0 }
+            .drive(onNext: { [weak self] _ in
+                self?.presenter?.showLoading()
+            }).addDisposableTo(disposeBag)
+
+        // auto completion
+        searchTerm
+            .asDriver()
+            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+            .throttle(0.3)
+            .distinctUntilChanged()
+            .flatMapLatest { query in
+                autocompleteService
+                    .autocompletes(for: query)
+                    .asDriver(onErrorJustReturn: [])
+            }.drive(onNext: { [weak self] (completions) in
+                self?.presenter?.show(autocompletions: completions)
+            }).addDisposableTo(disposeBag)
+
+        // search
+        startSearching
+            .asDriver()
+            .withLatestFrom(searchTerm.asDriver())
+            .flatMapLatest { query in
+                searchService
+                    .search(for: query)
+                    .trackActivity(loading)
+                    .map { (Result.success($0), query) }
+                    .asDriver(onErrorTransform: { (Result.failure($0), query) })
+            }.drive(onNext: { [weak self] (result, query) in
+                switch result {
+                case .success(let results): self?.presenter?.show(results: results)
+                case .failure(let error)  : self?.presenter?.showError(error)
+                }
+                self?.recentsService.addToRecents(query)
+                self?.recentsUpdated()
+            }).addDisposableTo(disposeBag)
     }
 
-    func onSearchTermSelected(_ searchTerm: String) {
-        // TODO: update the search term model
+    private func recentsUpdated() {
+        presenter?.show(recents: recentsService.getRecents(), popular: recentsService.getPopularTerms())
+    }
+
+    func onViewLoaded() {
+        recentsUpdated()
+    }
+
+    func onSearchTermSelected(_ term: String) {
+        // update the model
+        searchTerm.value = term
 
         // start searching
-        search()
+        startSearching.trigger()
     }
 
     func onSelected(searchResult: SearchResult) {
-        // TODO: update the recents
-
         // navigate to the selected page
         router?.navigateTo(quranPage: searchResult.page, highlightingAyah: searchResult.ayah)
     }
 
     func onSelected(autocompletion: SearchAutocompletion) {
-        // TODO: update the search term model
+        // update the model
+        searchTerm.value = autocompletion.text
 
         // start searching
-        search()
+        startSearching.trigger()
     }
 
     func onSearchButtonTapped() {
         // start searching
-        search()
+        startSearching.trigger()
     }
 
     func onSearchTextUpdated(to term: String, isActive: Bool) {
-        // TODO: update the model
-
-        // get some auto complete results
-        DispatchQueue.main.async {
-            self.presenter?.show(autocompletions: [
-                SearchAutocompletion(text: term + "test", highlightedRange: (term.startIndex..<term.endIndex)),
-                SearchAutocompletion(text: term + "popular", highlightedRange: (term.startIndex..<term.endIndex)),
-                SearchAutocompletion(text: term + "something to the other", highlightedRange: (term.startIndex..<term.endIndex))])
-        }
-    }
-
-    private func search() {
-        presenter?.showLoading()
-
-        // get some auto complete results
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            let long = "some search 1, to the end of it, but very long and that is long enough. I don't know let's check it. But we are not sure, let's use 3rd line"
-            self.presenter?.show(results: [
-                SearchResult(text: long, ayah: AyahNumber(sura: 2, ayah: 78), page: 12, highlightedRanges: [long.range(of: "search 1")!, long.range(of: "is long enough")!]),
-                SearchResult(text: "some search 2", ayah: AyahNumber(sura: 1, ayah: 1), page: 1, highlightedRanges: []),
-                SearchResult(text: "some search 3", ayah: AyahNumber(sura: 2, ayah: 6), page: 3, highlightedRanges: [])
-                ])
-        }
+        // update the model
+        searchTerm.value = term
     }
 }

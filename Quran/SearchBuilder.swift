@@ -17,7 +17,6 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 protocol SearchBuilder: class {
     func build() -> (SearchRouter, UIViewController) // DESIGN: should remove UIViewController
 }
@@ -34,7 +33,10 @@ class DefaultSearchBuilder: SearchBuilder {
         let navigation = SearchNavigationController() // DESIGN: shouldn't be created here
         navigation.viewControllers = [view]
 
-        let interactor = DefaultSearchInteractor()
+        let interactor = DefaultSearchInteractor(
+            autocompleteService: container.createSQLiteSearchAutocompletionService(),
+            searchService: container.createSQLiteSearchService(),
+            recentsService: container.createDefaultSearchRecentsService())
         let presenter = DefaultSearchPresenter()
 
         let router: SearchRouter = NavigationSearchRouter(

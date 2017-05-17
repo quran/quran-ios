@@ -48,6 +48,12 @@
 		5424773D1E7856040051C196 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* DownloadButton.swift */; };
 		542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */; };
 		542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
+		542DCBC51ECC33460023D6FD /* SearchAutocompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */; };
+		542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC61ECC4BDC0023D6FD /* SearchService.swift */; };
+		542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */; };
+		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
+		542DCBD71ECC60A20023D6FD /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD61ECC60A20023D6FD /* EventStream.swift */; };
+		542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		5437D3641EB385DB00795FA9 /* VFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5437D3621EB385DB00795FA9 /* VFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
@@ -537,6 +543,12 @@
 		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
 		542732FB1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		542732FD1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAutocompletionService.swift; sourceTree = "<group>"; };
+		542DCBC61ECC4BDC0023D6FD /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
+		542DCBD61ECC60A20023D6FD /* EventStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
+		542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecentsService.swift; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5437D3601EB385DB00795FA9 /* VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5437D3621EB385DB00795FA9 /* VFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VFoundation.h; sourceTree = "<group>"; };
@@ -1090,6 +1102,33 @@
 			path = iphonesimulator;
 			sourceTree = "<group>";
 		};
+		542DCBC31ECC332E0023D6FD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */,
+				542DCBC61ECC4BDC0023D6FD /* SearchService.swift */,
+				542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		542DCBCB1ECC53BB0023D6FD /* RxExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */,
+				542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */,
+			);
+			name = RxExtensions;
+			sourceTree = "<group>";
+		};
+		542DCBD31ECC5D2E0023D6FD /* RxExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBD61ECC60A20023D6FD /* EventStream.swift */,
+			);
+			name = RxExtensions;
+			sourceTree = "<group>";
+		};
 		5437D3611EB385DB00795FA9 /* VFoundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1131,7 +1170,6 @@
 			isa = PBXGroup;
 			children = (
 				543FDFE91EB3B4FE00687DF8 /* Response */,
-				5437D37D1EB3886500795FA9 /* Result.swift */,
 			);
 			name = Deprecated;
 			sourceTree = "<group>";
@@ -1179,9 +1217,10 @@
 		543FDFFB1EB3B75500687DF8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				54FD7BA41EB9342200FA485F /* UserDefaults */,
-				543FDFEC1EB3B57D00687DF8 /* CacheableService */,
+				542DCBD31ECC5D2E0023D6FD /* RxExtensions */,
+				54FD7BA91EB9377300FA485F /* AppUpdater.swift */,
 				5437D3A51EB3921F00795FA9 /* Cache.swift */,
+				543FDFEC1EB3B57D00687DF8 /* CacheableService */,
 				5437D3731EB3886500795FA9 /* Cast.swift */,
 				5437D3741EB3886500795FA9 /* Crasher.swift */,
 				5437D3A11EB3912000795FA9 /* Creator.swift */,
@@ -1194,10 +1233,11 @@
 				5437D3AA1EB3921F00795FA9 /* Parser.swift */,
 				5437D3AB1EB3921F00795FA9 /* Protected.swift */,
 				5437D37A1EB3886500795FA9 /* QProgress.swift */,
+				5437D37D1EB3886500795FA9 /* Result.swift */,
 				5437D37E1EB3886500795FA9 /* Retry.swift */,
 				5437D3AC1EB3921F00795FA9 /* Timer.swift */,
+				54FD7BA41EB9342200FA485F /* UserDefaults */,
 				5437D3831EB3886500795FA9 /* WeakSet.swift */,
-				54FD7BA91EB9377300FA485F /* AppUpdater.swift */,
 			);
 			name = Features;
 			sourceTree = "<group>";
@@ -1238,6 +1278,7 @@
 		543FE00F1EB3B84C00687DF8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				542DCBCB1ECC53BB0023D6FD /* RxExtensions */,
 				543FE0401EB3C47800687DF8 /* CustomViews */,
 				543FE03E1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift */,
 				543FE0251EB3C0C000687DF8 /* SimultenousGestureDelegate.swift */,
@@ -1375,6 +1416,7 @@
 		54547E941EC9D181008AFED3 /* VIPER */ = {
 			isa = PBXGroup;
 			children = (
+				542DCBC31ECC332E0023D6FD /* Services */,
 				54547EAF1ECA84C0008AFED3 /* UIKit */,
 				54547E9D1EC9D39F008AFED3 /* Search.swift */,
 				54547E991EC9D34A008AFED3 /* SearchBuilder.swift */,
@@ -2847,6 +2889,7 @@
 				543FDFF71EB3B60400687DF8 /* CacheableService+main.swift in Sources */,
 				543FDFF41EB3B60400687DF8 /* AbstractPreloadingOperation.swift in Sources */,
 				5437D3841EB3886500795FA9 /* Cast.swift in Sources */,
+				542DCBD71ECC60A20023D6FD /* EventStream.swift in Sources */,
 				5437D3AD1EB3921F00795FA9 /* Cache.swift in Sources */,
 				5437D3AE1EB3921F00795FA9 /* Either.swift in Sources */,
 				543FDFF91EB3B60400687DF8 /* PagesCacheableService.swift in Sources */,
@@ -2883,6 +2926,7 @@
 				543FE01C1EB3B94100687DF8 /* UIView+Extension.swift in Sources */,
 				54547E911EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift in Sources */,
 				543FE0461EB3C4A500687DF8 /* CircularView.swift in Sources */,
+				542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */,
 				543FE0441EB3C4A500687DF8 /* BackgroundColorButton.swift in Sources */,
 				543FE0221EB3BB4D00687DF8 /* String+Size.swift in Sources */,
 				543FE01B1EB3B94100687DF8 /* UIView+AutoLayout.swift in Sources */,
@@ -2892,6 +2936,7 @@
 				543FE0261EB3C0C000687DF8 /* SimultenousGestureDelegate.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,
 				543FE0181EB3B94100687DF8 /* CGRect+Extension.swift in Sources */,
+				542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */,
 				543FE03F1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift in Sources */,
 				543FE0241EB3BBE800687DF8 /* PromiseKit+UIExtension.swift in Sources */,
 				543FE01A1EB3B94100687DF8 /* UIImage+Extension.swift in Sources */,
@@ -3015,6 +3060,7 @@
 				540922881E9041D500C7537A /* TranslationPageLayoutRequest.swift in Sources */,
 				54F56C511E7EDA5C00D7AF57 /* QuranDataSource.swift in Sources */,
 				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,
+				542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */,
 				540922AB1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
@@ -3083,6 +3129,7 @@
 				54699B931E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift in Sources */,
 				540922A91E91318300C7537A /* QuranTranslationTextDataSource.swift in Sources */,
 				5459FF7C1EA545CA00FBF6C5 /* QariListToQariAudioDownloadRetriever.swift in Sources */,
+				542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */,
 				540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */,
 				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				544629DE1E676703005B1107 /* Download+Types.swift in Sources */,
@@ -3134,6 +3181,7 @@
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */,
+				542DCBC51ECC33460023D6FD /* SearchAutocompletionService.swift in Sources */,
 				54DC4AE61E84751800F4CBD6 /* VerseRange.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,
 				545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */,

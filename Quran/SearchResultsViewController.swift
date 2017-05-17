@@ -45,8 +45,12 @@ class SearchResultsViewController: BaseTableViewController {
         dataSource.switchToLoading()
     }
 
-    func show(autocompletions: [NSAttributedString]) {
-        dataSource.switchToAutocomplete(with: autocompletions)
+    func setAutocompletes(_ autocompletes: [NSAttributedString]) {
+        dataSource.setAutocompletes(autocompletes)
+    }
+
+    func switchToAutocompletes() {
+        dataSource.switchToAutocompletes()
     }
 
     func show(results: [SearchResultUI]) {

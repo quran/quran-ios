@@ -25,6 +25,15 @@ protocol ScrollableToTop {
 }
 
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+    override open var shouldAutorotate: Bool {
+        return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
+    }
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return selectedViewController?.preferredInterfaceOrientationForPresentation ?? super.preferredInterfaceOrientationForPresentation
+    }
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +43,47 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if tabBarController.selectedViewController == viewController && viewController.isViewLoaded {
-
             (viewController as? ScrollableToTop)?.scrollToTop()
         }
         return true
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let targetMask = tabBarController.supportedInterfaceOrientations
+        if let currentMask = UIApplication.shared.statusBarOrientation.asMask {
+            if !targetMask.contains(currentMask) {
+                if let interface = targetMask.asOrientation {
+                    UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
+                }
+            }
+        }
+    }
+}
+
+extension UIInterfaceOrientation {
+    fileprivate var asMask: UIInterfaceOrientationMask? {
+        switch self {
+        case .portrait: return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft: return .landscapeLeft
+        case .landscapeRight: return .landscapeRight
+        default: return nil
+        }
+    }
+}
+
+extension UIInterfaceOrientationMask {
+    fileprivate var asOrientation: UIInterfaceOrientation? {
+        if self.contains(.portrait) {
+            return .portrait
+        } else if self.contains(.landscapeLeft) {
+            return .landscapeLeft
+        } else if self.contains(.landscapeRight) {
+            return .landscapeRight
+        } else if self.contains(.portraitUpsideDown) {
+            return .portraitUpsideDown
+        } else {
+            return nil
+        }
     }
 }

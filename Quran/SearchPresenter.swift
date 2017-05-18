@@ -28,6 +28,7 @@ protocol SearchPresenter: class {
 
     func showLoading()
     func showError(_ error: Error)
+    func showNoResults(for term: String)
 }
 
 class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
@@ -68,6 +69,11 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
 
     func showError(_ error: Error) {
         view?.showError(error)
+    }
+
+    func showNoResults(for term: String) {
+        let message = String(format: NSLocalizedString("no_results", tableName: "Android", comment: ""), term)
+        view?.showNoResult(message)
     }
 
     // MARK: - SearchViewDelegate

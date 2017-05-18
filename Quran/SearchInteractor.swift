@@ -81,8 +81,15 @@ class DefaultSearchInteractor: SearchInteractor {
                     .asDriver(onErrorTransform: { (Result.failure($0), query) })
             }.drive(onNext: { [weak self] (result, query) in
                 switch result {
-                case .success(let results): self?.presenter?.show(results: results)
-                case .failure(let error)  : self?.presenter?.showError(error)
+                case .success(let results):
+                    if results.isEmpty {
+                        self?.presenter?.showNoResults(for: query)
+                    } else {
+                        self?.presenter?.show(results: results)
+                    }
+                case .failure(let error):
+                    self?.presenter?.show(results: [])
+                    self?.presenter?.showError(error)
                 }
                 self?.recentsService.addToRecents(query)
                 self?.recentsUpdated()

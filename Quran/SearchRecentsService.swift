@@ -28,8 +28,8 @@ class DefaultSearchRecentsService: SearchRecentsService {
     private let maxCount: Int = 5
     private let removePopularWhenRecentsCount = 3
 
-    private let popularTerms = ["Popular 1", "Popular 2", "Way popular", "Way popular 2"]
-    private var recents: NSMutableOrderedSet = []
+    private let popularTerms: [String] = ["Popular 1", "Popular 2", "Way popular", "Way popular 2"]
+    private var recents: NSMutableOrderedSet = [] // ["A", "b", "d"]
 
     func getPopularTerms() -> [String] {
         guard recents.count < removePopularWhenRecentsCount else {

@@ -54,6 +54,8 @@
 		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
 		542DCBD71ECC60A20023D6FD /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD61ECC60A20023D6FD /* EventStream.swift */; };
 		542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */; };
+		542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */; };
+		542DCBDD1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		5437D3641EB385DB00795FA9 /* VFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5437D3621EB385DB00795FA9 /* VFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
@@ -549,6 +551,8 @@
 		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
 		542DCBD61ECC60A20023D6FD /* EventStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
 		542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecentsService.swift; sourceTree = "<group>"; };
+		542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchNoResultTableViewCell.swift; sourceTree = "<group>"; };
+		542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchNoResultTableViewCell.xib; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5437D3601EB385DB00795FA9 /* VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5437D3621EB385DB00795FA9 /* VFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VFoundation.h; sourceTree = "<group>"; };
@@ -1449,9 +1453,11 @@
 				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
 				54547E9F1EC9ED05008AFED3 /* SearchViewController.xib */,
 				54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */,
+				54547EA61ECA7CE2008AFED3 /* SearchResultsDataSource.swift */,
 				54547EAB1ECA82BE008AFED3 /* SearchResultTableViewCell.swift */,
 				54547EAC1ECA82BE008AFED3 /* SearchResultTableViewCell.xib */,
-				54547EA61ECA7CE2008AFED3 /* SearchResultsDataSource.swift */,
+				542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */,
+				542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2582,6 +2588,7 @@
 				54965FBA1E7D4A3F00A212E2 /* QuranPageTitleView.xib in Resources */,
 				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
 				5419E5301CFA3F0300071A6D /* Android.stringsdict in Resources */,
+				542DCBDD1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib in Resources */,
 				54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */,
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,
 				54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */,
@@ -3025,6 +3032,7 @@
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,
 				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
+				542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */,
 				54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */,
 				54699BA71E8DC18600211A60 /* QuranTranslationLongTextCollectionViewCell.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */,

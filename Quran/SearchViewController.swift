@@ -22,6 +22,14 @@ import UIKit
 
 class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchBarDelegate, SearchView {
 
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .portrait
+        } else {
+            return super.supportedInterfaceOrientations
+        }
+    }
+
     var router: SearchRouter? // DESIGN: Shouldn't be saved here
     weak var delegate: SearchViewDelegate?
 
@@ -120,6 +128,10 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
 
     func showError(_ error: Error) {
         showErrorAlert(error: error)
+    }
+
+    func showNoResult(_ message: String) {
+        searchResults.showNoResult(message)
     }
 
     func updateSearchBarText(to text: String) {

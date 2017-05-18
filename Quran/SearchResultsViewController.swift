@@ -37,6 +37,7 @@ class SearchResultsViewController: BaseTableViewController {
         tableView.ds_register(cellClass: UITableViewCell.self)
         tableView.ds_register(cellClass: FullScreenLoadingTableViewCell.self)
         tableView.ds_register(cellNib: SearchResultTableViewCell.self)
+        tableView.ds_register(cellNib: SearchNoResultTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
         clearsSelectionOnViewWillAppear = true
     }
@@ -54,8 +55,10 @@ class SearchResultsViewController: BaseTableViewController {
     }
 
     func show(results: [SearchResultUI]) {
-        // TODO: should handle empty state
-
         dataSource.switchToResults(with: results)
+    }
+
+    func showNoResult(_ message: String) {
+        dataSource.switchToNoResults(message)
     }
 }

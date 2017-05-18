@@ -30,6 +30,7 @@ class SearchResultsDataSource: SegmentedDataSource {
     private let loading = FullScreenLoadingDataSource()
     private let autocomplete = SearchAutocompletionDataSource()
     private let results = SearchResultDataSource()
+    private let noResults = NoSearchResultDataSource()
 
     var onResultSelected: ((Int) -> Void)?
     var onAutocompletionSelected: ((Int) -> Void)?
@@ -45,6 +46,7 @@ class SearchResultsDataSource: SegmentedDataSource {
         super.init()
         add(loading)
         add(autocomplete)
+        add(noResults)
 
         let autocompleteSelection = BlockSelectionHandler<NSAttributedString, UITableViewCell>()
         autocompleteSelection.didSelectBlock = { [weak self] (_, _, indexPath) in
@@ -74,6 +76,11 @@ class SearchResultsDataSource: SegmentedDataSource {
     func switchToResults(with items: [SearchResultUI]) {
         results.items = items
         selectedDataSource = results
+    }
+
+    func switchToNoResults(_ message: String) {
+        noResults.items = [message]
+        selectedDataSource = noResults
     }
 }
 
@@ -106,5 +113,25 @@ private class SearchResultDataSource: BasicDataSource<SearchResultUI, SearchResu
         let item = self.item(at: indexPath)
         let size = item.attributedString.stringSize(constrainedToWidth: collectionView.ds_scrollView.bounds.width - 25)
         return CGSize(width: 0, height: size.height + 46)
+    }
+}
+
+private class NoSearchResultDataSource: BasicDataSource<String, SearchNoResultTableViewCell> {
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: SearchNoResultTableViewCell,
+                                    with item: String, at indexPath: IndexPath) {
+        cell.descriptionLabel.text = item
+        cell.separatorInset = UIEdgeInsets(top: 0, left: collectionView.ds_scrollView.bounds.width, bottom: 0, right: 0)
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let scrollView = collectionView.ds_scrollView
+        return CGSize(width: scrollView.bounds.width - (scrollView.contentInset.left + scrollView.contentInset.right),
+                      height: scrollView.bounds.height - (scrollView.contentInset.top + scrollView.contentInset.bottom))
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
     }
 }

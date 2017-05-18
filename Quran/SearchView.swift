@@ -39,6 +39,7 @@ protocol SearchView: class {
 
     func showLoading()
     func showError(_ error: Error)
+    func showNoResult(_ message: String)
 
     func updateSearchBarText(to text: String)
     func setSearchBarActive(_ isActive: Bool)

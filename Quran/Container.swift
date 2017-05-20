@@ -429,7 +429,11 @@ class Container {
     }
 
     func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
-        return SQLiteSearchAutocompletionService()
+        return SQLiteSearchAutocompletionService(
+            localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+            simplePersistence: createSimplePersistence(),
+            arabicPersistence: createArabicTextPersistence(),
+            translationPersistenceCreator: createCreator(createTranslationTextPersistence))
     }
 
     func createSQLiteSearchService() -> SearchService {

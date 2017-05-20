@@ -25,17 +25,51 @@ protocol SearchAutocompletionService {
 
 class SQLiteSearchAutocompletionService: SearchAutocompletionService {
 
+    private let localTranslationInteractor: AnyGetInteractor<[TranslationFull]>
+    private let simplePersistence: SimplePersistence
+    private let arabicPersistence: AyahTextPersistence
+    private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
+    init(
+        localTranslationInteractor: AnyGetInteractor<[TranslationFull]>,
+        simplePersistence: SimplePersistence,
+        arabicPersistence: AyahTextPersistence,
+        translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>) {
+        self.localTranslationInteractor = localTranslationInteractor
+        self.simplePersistence = simplePersistence
+        self.arabicPersistence = arabicPersistence
+        self.translationPersistenceCreator = translationPersistenceCreator
+    }
+
     func autocompletes(for term: String) -> Observable<[SearchAutocompletion]> {
-        return Observable.create { observer in
-            DispatchQueue.default.asyncAfter(deadline: .now() + 0.3) {
-                observer.on(.next(
-                    [SearchAutocompletion(text: term + "test", highlightedRange: (term.startIndex..<term.endIndex)),
-                     SearchAutocompletion(text: term + "popular", highlightedRange: (term.startIndex..<term.endIndex)),
-                     SearchAutocompletion(text: term + "something to the other", highlightedRange: (term.startIndex..<term.endIndex))]
-                    ))
-                observer.on(.completed)
+
+        let translationCreator = self.translationPersistenceCreator
+        let persistence = self.simplePersistence
+        let arabicPersistence = self.arabicPersistence
+
+        return localTranslationInteractor
+            .get()
+            .asObservable()
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
+            .map { allTranslations -> [Translation] in
+                let selectedTranslationsIds = Set(persistence.valueForKey(.selectedTranslations))
+                return allTranslations
+                    .map { $0.translation }
+                    .filter { selectedTranslationsIds.contains($0.id) }
             }
-            return Disposables.create()
-        }
+            .map { translations -> [SearchAutocompletion] in
+                let arabicResults = try arabicPersistence.searchForAutcompleting(term: term)
+                guard arabicResults.isEmpty else {
+                    return arabicResults
+                }
+                for translation in translations {
+                    let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
+                    let persistence = translationCreator.create(fileURL.absoluteString)
+                    let results = try persistence.searchForAutcompleting(term: term)
+                    if !results.isEmpty {
+                        return results
+                    }
+                }
+                return []
+            }
     }
 }

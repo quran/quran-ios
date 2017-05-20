@@ -56,6 +56,8 @@
 		542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */; };
 		542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */; };
 		542DCBDD1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */; };
+		542DCBE21ECE424C0023D6FD /* DispatchQueue+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */; };
+		542DCBE61ED04B150023D6FD /* Promise+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBE51ED04B150023D6FD /* Promise+Rx.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		5437D3641EB385DB00795FA9 /* VFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5437D3621EB385DB00795FA9 /* VFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
@@ -553,6 +555,8 @@
 		542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecentsService.swift; sourceTree = "<group>"; };
 		542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchNoResultTableViewCell.swift; sourceTree = "<group>"; };
 		542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchNoResultTableViewCell.xib; sourceTree = "<group>"; };
+		542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Rx.swift"; sourceTree = "<group>"; };
+		542DCBE51ED04B150023D6FD /* Promise+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Rx.swift"; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5437D3601EB385DB00795FA9 /* VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5437D3621EB385DB00795FA9 /* VFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VFoundation.h; sourceTree = "<group>"; };
@@ -1129,6 +1133,8 @@
 			isa = PBXGroup;
 			children = (
 				542DCBD61ECC60A20023D6FD /* EventStream.swift */,
+				542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */,
+				542DCBE51ED04B150023D6FD /* Promise+Rx.swift */,
 			);
 			name = RxExtensions;
 			sourceTree = "<group>";
@@ -2900,6 +2906,7 @@
 				5437D3AD1EB3921F00795FA9 /* Cache.swift in Sources */,
 				5437D3AE1EB3921F00795FA9 /* Either.swift in Sources */,
 				543FDFF91EB3B60400687DF8 /* PagesCacheableService.swift in Sources */,
+				542DCBE61ED04B150023D6FD /* Promise+Rx.swift in Sources */,
 				54FD7BAA1EB9377300FA485F /* AppUpdater.swift in Sources */,
 				5437D3881EB3886500795FA9 /* Measure.swift in Sources */,
 				5437D3B01EB3921F00795FA9 /* Once.swift in Sources */,
@@ -2911,6 +2918,7 @@
 				5437D3B41EB3921F00795FA9 /* Timer.swift in Sources */,
 				5437D3B61EB392C300795FA9 /* NSLocking+Extension.swift in Sources */,
 				5437D3931EB3886500795FA9 /* URL+Extension.swift in Sources */,
+				542DCBE21ECE424C0023D6FD /* DispatchQueue+Rx.swift in Sources */,
 				5437D3941EB3886500795FA9 /* WeakSet.swift in Sources */,
 				543FDFEB1EB3B51300687DF8 /* CollectionResponse.swift in Sources */,
 				543FDFF61EB3B60400687DF8 /* CacheableService.swift in Sources */,

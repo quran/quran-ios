@@ -58,13 +58,16 @@ class DefaultSearchInteractor: SearchInteractor {
         // auto completion
         searchTerm
             .asDriver()
-            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
             .throttle(0.3)
             .distinctUntilChanged()
-            .flatMapLatest { query in
-                autocompleteService
-                    .autocompletes(for: query)
-                    .asDriver(onErrorJustReturn: [])
+            .flatMapLatest { query -> Driver<[SearchAutocompletion]> in
+                if query.trimmingCharacters(in: .whitespaces).isEmpty {
+                    return .just([])
+                } else {
+                    return autocompleteService
+                        .autocompletes(for: query)
+                        .asDriver(onErrorJustReturn: [])
+                }
             }.drive(onNext: { [weak self] (completions) in
                 self?.presenter?.show(autocompletions: completions)
             }).addDisposableTo(disposeBag)

@@ -404,6 +404,24 @@ extension Quran {
     static func quranPageForPageNumber(_ page: Int) -> QuranPage {
         return QuranPage(pageNumber: page, startAyah: startAyahForPage(page), juzNumber: Juz.juzFromPage(page).juzNumber)
     }
+
+    static func pageForAyah(_ ayah: AyahNumber) -> Int {
+        // what page does the sura start on?
+        var index = SuraPageStart[ayah.sura - 1] - 1
+        while index < QuranPagesRange.upperBound {
+            // what's the first sura in that page?
+            let ss = PageSuraStart[index]
+
+            // if we've passed the sura, return the previous page
+            // or, if we're at the same sura and passed the ayah
+            if ss > ayah.sura || (ss == ayah.sura && PageAyahStart[index] > ayah.ayah) {
+                break
+            }
+            // otherwise, look at the next page
+            index += 1
+        }
+        return index
+    }
 }
 
 extension Quran {

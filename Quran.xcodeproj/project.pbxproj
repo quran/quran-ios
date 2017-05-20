@@ -344,8 +344,7 @@
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
 		C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */; };
 		C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */; };
-		C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */; };
-		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */; };
+		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteAyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */; };
 		C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */; };
 		C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
@@ -882,8 +881,7 @@
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistence.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahInfoPersistence.swift; sourceTree = "<group>"; };
 		C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
-		C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteTranslationTextPersistence.swift; sourceTree = "<group>"; };
-		C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteArabicTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
@@ -2217,8 +2215,7 @@
 			isa = PBXGroup;
 			children = (
 				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
-				C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */,
-				C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */,
+				C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */,
 			);
 			name = "Ayah Text";
 			sourceTree = "<group>";
@@ -3207,8 +3204,7 @@
 				54C0DC081CE633C6009AAD8D /* JuzBasedLastAyahFinder.swift in Sources */,
 				54B266151CC6D5A900D3AEF8 /* JuzsViewController.swift in Sources */,
 				54FD7BA31EB933A500FA485F /* UserDefaults+Keys.swift in Sources */,
-				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */,
-				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
+				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteAyahTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 				5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */,
 				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,

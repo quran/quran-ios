@@ -17,8 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import RxSwift
 import RxCocoa
+import RxSwift
 import VFoundation
 
 extension ObservableConvertibleType {
@@ -36,7 +36,7 @@ extension EventStream {
     /// - returns: Driving observable sequence.
     public func asDriver() -> Driver<Event> {
         return asObservable()
-            .asDriver(onErrorRecover: { (error) -> Driver<Event> in
+            .asDriver(onErrorRecover: { _ -> Driver<Event> in
                 Swift.fatalError("EventStream shouldn't error!")
         })
     }
@@ -46,8 +46,9 @@ extension EventStream {
     /// Converts `EventStream` to `SharedSequence` unit.
     ///
     /// - returns: Observable sequence.
-    public func asSharedSequence<SharingStrategy: SharingStrategyProtocol>(strategy: SharingStrategy.Type = SharingStrategy.self) -> SharedSequence<SharingStrategy, Event> {
-        return asObservable().asSharedSequence(onErrorRecover: { (error) -> SharedSequence<SharingStrategy, Event> in
+    public func asSharedSequence<SharingStrategy: SharingStrategyProtocol>(
+        strategy: SharingStrategy.Type = SharingStrategy.self) -> SharedSequence<SharingStrategy, Event> {
+        return asObservable().asSharedSequence(onErrorRecover: { _ -> SharedSequence<SharingStrategy, Event> in
             Swift.fatalError("EventStream shouldn't error!")
         })
     }

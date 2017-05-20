@@ -149,15 +149,3 @@ extension SearchResult {
         return attributedString
     }
 }
-
-extension String {
-    func rangeAsNSRange(_ range: Range<String.Index>) -> NSRange {
-        let rangeStartIndex = range.lowerBound
-        let rangeEndIndex = range.upperBound
-
-        let start = distance(from: startIndex, to: rangeStartIndex)
-        let length = distance(from: rangeStartIndex, to: rangeEndIndex)
-
-        return NSRange(location: start, length: length)
-    }
-}

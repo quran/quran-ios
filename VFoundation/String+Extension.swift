@@ -46,4 +46,19 @@ extension String {
         return (self as NSString).appendingPathExtension(pathExtension) ?? (self + "." + pathExtension)
     }
 
+    public func byteOffsetToStringIndex(_ byteOffset: Int) -> String.Index? {
+        let index = utf8.index(utf8.startIndex, offsetBy: byteOffset)
+        return index.samePosition(in: self)
+    }
+
+    public func rangeAsNSRange(_ range: Range<String.Index>) -> NSRange {
+        let rangeStartIndex = range.lowerBound
+        let rangeEndIndex = range.upperBound
+
+        let start = distance(from: startIndex, to: rangeStartIndex)
+        let length = distance(from: rangeStartIndex, to: rangeEndIndex)
+
+        return NSRange(location: start, length: length)
+    }
+
 }

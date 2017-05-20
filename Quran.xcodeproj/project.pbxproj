@@ -48,7 +48,6 @@
 		5424773D1E7856040051C196 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* DownloadButton.swift */; };
 		542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */; };
 		542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
-		542DCBC51ECC33460023D6FD /* SearchAutocompletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */; };
 		542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC61ECC4BDC0023D6FD /* SearchService.swift */; };
 		542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */; };
 		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
@@ -546,7 +545,6 @@
 		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
 		542732FB1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		542732FD1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAutocompletionService.swift; sourceTree = "<group>"; };
 		542DCBC61ECC4BDC0023D6FD /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
@@ -1111,7 +1109,6 @@
 		542DCBC31ECC332E0023D6FD /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				542DCBC41ECC33460023D6FD /* SearchAutocompletionService.swift */,
 				542DCBC61ECC4BDC0023D6FD /* SearchService.swift */,
 				542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */,
 			);
@@ -3194,7 +3191,6 @@
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */,
-				542DCBC51ECC33460023D6FD /* SearchAutocompletionService.swift in Sources */,
 				54DC4AE61E84751800F4CBD6 /* VerseRange.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,
 				545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */,

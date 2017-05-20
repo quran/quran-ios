@@ -25,4 +25,5 @@ protocol AyahTextPersistence {
     func getOptionalAyahText(forNumber: AyahNumber) throws -> String?
 
     func searchForAutcompleting(term: String) throws -> [SearchAutocompletion]
+    func search(for term: String) throws -> [SearchResult]
 }

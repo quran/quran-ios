@@ -24,6 +24,7 @@ private struct Columns {
     static let sura = Expression<Int>("sura")
     static let ayah = Expression<Int>("ayah")
     static let text = Expression<String>("text")
+    static let offsets = Expression<String>(literal: "offsets(verses)")
 }
 
 class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
@@ -60,6 +61,12 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
     func searchForAutcompleting(term: String) throws -> [SearchAutocompletion] {
         return try run { connection in
             return try autocomplete(term: term, connection: connection, table: versesTable)
+        }
+    }
+
+    func search(for term: String) throws -> [SearchResult] {
+        return try run { connection in
+            return try searching(for: term, connection: connection, table: versesTable)
         }
     }
 }
@@ -107,6 +114,66 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
             return try autocomplete(term: term, connection: connection, table: table)
         }
     }
+
+    func search(for term: String) throws -> [SearchResult] {
+        try validateFileExists()
+        return try run { connection in
+            return try searching(for: term, connection: connection, table: table)
+        }
+    }
+}
+
+private func searching(for term: String, connection: Connection, table: Table) throws -> [SearchResult] {
+    let searchTerm: String
+    let components = term.components(separatedBy: "\"")
+    if components.count % 2 == 0 {
+        searchTerm = term.lowercased()
+    } else {
+        searchTerm = components.joined(separator: "").lowercased()
+    }
+    let query = table
+        .select(Columns.text, Columns.sura, Columns.ayah, Columns.offsets)
+        .filter(Columns.text.match("\(searchTerm)"))
+    let rows = try connection.prepare(query)
+    return try rowsToResults(rows, term: searchTerm.lowercased())
+}
+
+private func rowsToResults(_ rows: AnySequence<Row>, term: String) throws -> [SearchResult] {
+    var results: [SearchResult] = []
+    for row in rows {
+        let text = row[Columns.text]
+        let sura = row[Columns.sura]
+        let ayah = row[Columns.ayah]
+        let offsets = row[Columns.offsets]
+
+        let offsetsInt = offsets
+            .components(separatedBy: " ")
+            .flatMap { Int($0) }
+        guard offsetsInt.count % 4 == 0 else {
+            continue
+        }
+
+        var ranges: [Range<String.Index>] = []
+        for index in stride(from: 0, to: offsetsInt.count, by: 4) {
+            let byteOffset = offsetsInt[index + 2]
+            let byteSize = offsetsInt[index + 3]
+
+            guard let startIndex = text.byteOffsetToStringIndex(byteOffset) else {
+                throw PersistenceError.general("Searching, bad start index returned")
+            }
+
+            guard let endIndex = text.byteOffsetToStringIndex(byteOffset + byteSize) else {
+                throw PersistenceError.general("Searching, bad end index returned")
+            }
+
+            ranges.append(startIndex..<endIndex)
+        }
+
+        let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
+        let result = SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber), highlightedRanges: ranges)
+        results.append(result)
+    }
+    return results
 }
 
 private func autocomplete(term: String, connection: Connection, table: Table) throws -> [SearchAutocompletion] {
@@ -144,6 +211,6 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
         let autocompletion = SearchAutocompletion(text: substring, highlightedRange: term.startIndex..<term.endIndex)
         result.append(autocompletion)
     }
-    print("autocomplete count", result.count)
+
     return result
 }

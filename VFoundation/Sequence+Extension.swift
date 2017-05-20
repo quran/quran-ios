@@ -41,3 +41,17 @@ public extension Sequence {
         return categories
     }
 }
+
+extension Sequence where Iterator.Element: Hashable {
+    public func orderedUnique() -> [Iterator.Element] {
+        var buffer: [Iterator.Element] = []
+        var added: Set<Iterator.Element> = []
+        for elem in self {
+            if !added.contains(elem) {
+                buffer.append(elem)
+                added.insert(elem)
+            }
+        }
+        return buffer
+    }
+}

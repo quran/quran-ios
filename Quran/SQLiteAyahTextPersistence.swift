@@ -58,15 +58,15 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
         }
     }
 
-    func searchForAutcompleting(term: String) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String) throws -> [SearchAutocompletion] {
         return try run { connection in
-            return try autocomplete(term: term, connection: connection, table: versesTable)
+            return try _autocomplete(term: term, connection: connection, table: versesTable)
         }
     }
 
     func search(for term: String) throws -> [SearchResult] {
         return try run { connection in
-            return try searching(for: term, connection: connection, table: versesTable)
+            return try _search(for: term, connection: connection, table: versesTable)
         }
     }
 }
@@ -108,22 +108,22 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
         }
     }
 
-    func searchForAutcompleting(term: String) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String) throws -> [SearchAutocompletion] {
         try validateFileExists()
         return try run { connection in
-            return try autocomplete(term: term, connection: connection, table: table)
+            return try _autocomplete(term: term, connection: connection, table: table)
         }
     }
 
     func search(for term: String) throws -> [SearchResult] {
         try validateFileExists()
         return try run { connection in
-            return try searching(for: term, connection: connection, table: table)
+            return try _search(for: term, connection: connection, table: table)
         }
     }
 }
 
-private func searching(for term: String, connection: Connection, table: Table) throws -> [SearchResult] {
+private func _search(for term: String, connection: Connection, table: Table) throws -> [SearchResult] {
     let searchTerm = cleanup(term: term)
     let query = table
         .select(Columns.snippet, Columns.sura, Columns.ayah)
@@ -146,7 +146,7 @@ private func rowsToResults(_ rows: AnySequence<Row>, term: String) throws -> [Se
     return results
 }
 
-private func autocomplete(term: String, connection: Connection, table: Table) throws -> [SearchAutocompletion] {
+private func _autocomplete(term: String, connection: Connection, table: Table) throws -> [SearchAutocompletion] {
     let searchTerm = cleanup(term: term)
     let query = table
         .select(Columns.text)

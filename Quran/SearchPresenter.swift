@@ -101,11 +101,11 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     }
 
     func onSelected(autocompletionAt index: Int) {
-        let autcompletion = self.autocompletions[index]
+        let autocompletion = self.autocompletions[index]
         withoutDelegate {
-            view?.updateSearchBarText(to: autcompletion.text)
+            view?.updateSearchBarText(to: autocompletion.text)
         }
-        interactor?.onSelected(autocompletion: autcompletion)
+        interactor?.onSelected(autocompletion: autocompletion)
     }
 
     func onSearchButtonTapped() {

@@ -65,7 +65,7 @@ class DefaultSearchInteractor: SearchInteractor {
                     return .just([])
                 } else {
                     return autocompleteService
-                        .autocompletes(for: query)
+                        .autocomplete(term: query)
                         .asDriver(onErrorJustReturn: [])
                 }
             }.drive(onNext: { [weak self] (completions) in

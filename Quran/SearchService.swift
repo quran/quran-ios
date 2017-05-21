@@ -23,7 +23,7 @@ protocol SearchService {
     func search(for term: String) -> Observable<[SearchResult]>
 }
 protocol SearchAutocompletionService {
-    func autocompletes(for term: String) -> Observable<[SearchAutocompletion]>
+    func autocomplete(term: String) -> Observable<[SearchAutocompletion]>
 }
 
 class SQLiteSearchService: SearchAutocompletionService, SearchService {
@@ -43,21 +43,21 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
         self.translationPersistenceCreator = translationPersistenceCreator
     }
 
-    func autocompletes(for term: String) -> Observable<[SearchAutocompletion]> {
+    func autocomplete(term: String) -> Observable<[SearchAutocompletion]> {
 
         let translationCreator = self.translationPersistenceCreator
         let arabicPersistence = self.arabicPersistence
 
         return prepare()
             .map { translations -> [SearchAutocompletion] in
-                let arabicResults = try arabicPersistence.searchForAutcompleting(term: term)
+                let arabicResults = try arabicPersistence.autocomplete(term: term)
                 guard arabicResults.isEmpty else {
                     return arabicResults
                 }
                 for translation in translations {
                     let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
                     let persistence = translationCreator.create(fileURL.absoluteString)
-                    let results = try persistence.searchForAutcompleting(term: term)
+                    let results = try persistence.autocomplete(term: term)
                     if !results.isEmpty {
                         return results
                     }

@@ -27,6 +27,4 @@ struct SearchResult {
     let text: String
     let ayah: AyahNumber
     let page: Int
-
-    let highlightedRanges: [Range<String.Index>]
 }

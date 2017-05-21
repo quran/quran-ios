@@ -50,13 +50,19 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     }
 
     func show(results: [SearchResult]) {
+        print("Number of results", results.count)
         self.results = results
-        let seachResultsUI = results.map {
-            SearchResultUI(attributedString: $0.asAttributedString(),
-                           pageNumber: numberFormatter.format($0.page),
-                           ayahDescription: $0.ayah.localizedName)
+
+        DispatchQueue.default.async {
+            let seachResultsUI = results.map {
+                SearchResultUI(attributedString: $0.asAttributedString(),
+                               pageNumber: self.numberFormatter.format($0.page),
+                               ayahDescription: $0.ayah.localizedName)
+            }
+            DispatchQueue.main.async {
+                self.view?.show(results: seachResultsUI)
+            }
         }
-        view?.show(results: seachResultsUI)
     }
 
     func show(recents: [String], popular: [String]) {
@@ -122,7 +128,7 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
 extension NSAttributedString {
     fileprivate static let normalAttributes: [String: Any] = [
         NSFontAttributeName: UIFont.systemFont(ofSize: 14),
-        NSForegroundColorAttributeName: #colorLiteral(red: 0.1333333333, green: 0.1326085031, blue: 0.1326085031, alpha: 1)
+        NSForegroundColorAttributeName: #colorLiteral(red: 0.1333333333, green: 0.1333333333, blue: 0.1333333333, alpha: 1)
     ]
     fileprivate static let highlightedAttributes: [String: Any] = [
         NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
@@ -140,12 +146,20 @@ extension SearchAutocompletion {
 }
 
 extension SearchResult {
+    private static let style = "<style>*{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size: 14.0;color: #444444;}b{color: #222222;}</style>" // swiftlint:disable:this line_length
     fileprivate func asAttributedString() -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: text, attributes: NSAttributedString.normalAttributes)
-        for range in highlightedRanges {
-            let highlightedNSRange = text.rangeAsNSRange(range)
-            attributedString.setAttributes(NSAttributedString.highlightedAttributes, range: highlightedNSRange)
+        let fullText = SearchResult.style + text
+        do {
+            guard let data = fullText.data(using: .utf8) else {
+                return NSAttributedString(string: text)
+            }
+            let options: [String: Any] = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                          NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue]
+            let string = try NSAttributedString(data: data, options: options, documentAttributes: nil)
+            return string
+        } catch {
+            Crash.recordError(error, reason: "While converting result to NSAttributedString")
+            return NSAttributedString(string: text)
         }
-        return attributedString
     }
 }

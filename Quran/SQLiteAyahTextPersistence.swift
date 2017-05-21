@@ -24,7 +24,7 @@ private struct Columns {
     static let sura = Expression<Int>("sura")
     static let ayah = Expression<Int>("ayah")
     static let text = Expression<String>("text")
-    static let offsets = Expression<String>(literal: "offsets(verses)")
+    static let snippet = Expression<String>(literal: "snippet(verses, '<b>', '</b>', '...', -1, 64)")
 }
 
 class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
@@ -124,72 +124,36 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
 }
 
 private func searching(for term: String, connection: Connection, table: Table) throws -> [SearchResult] {
-    let searchTerm: String
-    let components = term.components(separatedBy: "\"")
-    if components.count % 2 == 0 {
-        searchTerm = term.lowercased()
-    } else {
-        searchTerm = components.joined(separator: "").lowercased()
-    }
+    let searchTerm = cleanup(term: term)
     let query = table
-        .select(Columns.text, Columns.sura, Columns.ayah, Columns.offsets)
+        .select(Columns.snippet, Columns.sura, Columns.ayah)
         .filter(Columns.text.match("\(searchTerm)"))
+        .limit(300)
     let rows = try connection.prepare(query)
-    return try rowsToResults(rows, term: searchTerm.lowercased())
+    return try rowsToResults(rows, term: searchTerm)
 }
 
 private func rowsToResults(_ rows: AnySequence<Row>, term: String) throws -> [SearchResult] {
     var results: [SearchResult] = []
     for row in rows {
-        let text = row[Columns.text]
+        let text = row[Columns.snippet]
         let sura = row[Columns.sura]
         let ayah = row[Columns.ayah]
-        let offsets = row[Columns.offsets]
-
-        let offsetsInt = offsets
-            .components(separatedBy: " ")
-            .flatMap { Int($0) }
-        guard offsetsInt.count % 4 == 0 else {
-            continue
-        }
-
-        var ranges: [Range<String.Index>] = []
-        for index in stride(from: 0, to: offsetsInt.count, by: 4) {
-            let byteOffset = offsetsInt[index + 2]
-            let byteSize = offsetsInt[index + 3]
-
-            guard let startIndex = text.byteOffsetToStringIndex(byteOffset) else {
-                throw PersistenceError.general("Searching, bad start index returned")
-            }
-
-            guard let endIndex = text.byteOffsetToStringIndex(byteOffset + byteSize) else {
-                throw PersistenceError.general("Searching, bad end index returned")
-            }
-
-            ranges.append(startIndex..<endIndex)
-        }
-
         let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
-        let result = SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber), highlightedRanges: ranges)
+        let result = SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
         results.append(result)
     }
     return results
 }
 
 private func autocomplete(term: String, connection: Connection, table: Table) throws -> [SearchAutocompletion] {
-    let searchTerm: String
-    let components = term.components(separatedBy: "\"")
-    if components.count % 2 == 0 {
-        searchTerm = term.lowercased()
-    } else {
-        searchTerm = components.joined(separator: "").lowercased()
-    }
+    let searchTerm = cleanup(term: term)
     let query = table
         .select(Columns.text)
         .filter(Columns.text.match("\(searchTerm)*"))
         .limit(100)
     let rows = try connection.prepare(query)
-    return try rowsToAutocompletions(rows, term: searchTerm.lowercased())
+    return try rowsToAutocompletions(rows, term: searchTerm)
 }
 
 private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throws -> [SearchAutocompletion] {
@@ -202,7 +166,12 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
             continue
         }
 
-        let substring = text.substring(from: range.lowerBound)
+        var substring = text.substring(from: range.lowerBound)
+        if substring.characters.count > 100 {
+            if let endIndex = substring.index(substring.startIndex, offsetBy: 100, limitedBy: substring.endIndex) {
+                substring = substring.substring(to: endIndex)
+            }
+        }
         guard !added.contains(substring) else {
             continue
         }
@@ -213,4 +182,13 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
     }
 
     return result
+}
+
+private func cleanup(term: String) -> String {
+    let components = term.components(separatedBy: "\"")
+    if components.count % 2 == 1 {
+        return term.lowercased()
+    } else {
+        return components.joined(separator: "").lowercased()
+    }
 }

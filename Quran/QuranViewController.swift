@@ -41,6 +41,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let didLayoutSubviewToken = Once()
     private let interactiveGestureToken = Once()
 
+    private let highlightedSearchAyah: AyahNumber?
+
     private var titleView: QuranPageTitleView? { return navigationItem.titleView as? QuranPageTitleView }
 
     private var quranView: QuranView? {
@@ -106,7 +108,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          simplePersistence                      : SimplePersistence,
          verseTextRetrieval                     : AnyInteractor<QuranShareData, String>,
          page                                   : Int,
-         lastPage                               : LastPage?) {
+         lastPage                               : LastPage?,
+         highlightedSearchAyah                  : AyahNumber?) {
         self.initialPage                            = page
         self.dataRetriever                          = dataRetriever
         self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
@@ -118,6 +121,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
         self.verseTextRetrieval                     = verseTextRetrieval
+        self.highlightedSearchAyah                  = highlightedSearchAyah
 
         let imagesDataSource = QuranImagesDataSource(
             imageService: imageService,
@@ -236,6 +240,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
             let indexPath = IndexPath(item: index, section: 0)
             scrollToIndexPath(indexPath, animated: false)
             onPageChangedToPage(dataSource.selectedBasicDataSource.item(at: indexPath))
+
+            if let highlightedSearchAyah = highlightedSearchAyah {
+                dataSource.highlightSearchAyaht([highlightedSearchAyah])
+            }
         }
     }
 
@@ -285,6 +293,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     fileprivate func onPageChanged() {
+        dataSource.highlightSearchAyaht([])
         guard let page = currentPage() else { return }
         onPageChangedToPage(page)
     }

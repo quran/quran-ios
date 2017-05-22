@@ -30,7 +30,11 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
 
     private let bookmarkPersistence: BookmarksPersistence
 
-    private var highlightedAyat: Set<AyahNumber> = Set()
+    private var highlights: [VerseHighlightType: Set<AyahNumber>] = [:] {
+        didSet {
+            updateHighlightsForVisibleCells()
+        }
+    }
 
     weak var delegate: QuranDataSourceDelegate?
 
@@ -49,7 +53,9 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
         // configure common properties
         cell.setNeedsLayout()
         cell.page = item
-        cell.setHighlightedVerses(highlightedAyat, forType: .reading)
+        for (type, ayat) in highlights {
+            cell.setHighlightedVerses(ayat, forType: type)
+        }
 
         // set bookmarked ayat
         DispatchQueue.default
@@ -62,25 +68,32 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
     override func ds_collectionView(_ collectionView: GeneralCollectionView, willDisplay cell: ReusableCell, forItemAt indexPath: IndexPath) {
         // Update the highlighting since it's something that could change
         // between the cell is configured and the cell is visible.
-        (cell as? QuranBasePageCollectionViewCell)?.setHighlightedVerses(highlightedAyat, forType: .reading)
+        if let cell = cell as? QuranBasePageCollectionViewCell {
+            for (type, ayat) in highlights {
+                cell.setHighlightedVerses(ayat, forType: type)
+            }
+        }
     }
 
     func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool) {
-        highlightedAyat = ayat
-
-        // update highlighting for all cells
-        for cell in ds_reusableViewDelegate?.ds_visibleCells() ?? [] {
-            (cell as? QuranBasePageCollectionViewCell)?.setHighlightedVerses(highlightedAyat, forType: .reading)
-        }
+        highlights[.reading] = ayat
 
         if let ayah = ayat.first, isActive {
-            scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
+            scrollToHighlightedAyaIfNeeded(ayah)
+        }
+    }
+
+    func highlightSearchAyaht(_ ayat: Set<AyahNumber>, isActive: Bool) {
+        highlights[.search] = ayat
+
+        if let ayah = ayat.first, isActive {
+            scrollToHighlightedAyaIfNeeded(ayah)
         }
     }
 
     func applicationDidBecomeActive() {
-        if let ayah = highlightedAyat.first {
-            scrollToHighlightedAyaIfNeeded(ayah, ayaht: highlightedAyat)
+        if let ayah = highlights[.reading]?.first {
+            scrollToHighlightedAyaIfNeeded(ayah)
         } else {
             if let lastPageViewed = delegate?.lastViewedPage {
                 scrollTo(page: lastPageViewed)
@@ -88,7 +101,7 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
         }
     }
 
-    private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber, ayaht: Set<AyahNumber>) {
+    private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber) {
         DispatchQueue.default
             .promise2(execute: ayah.getStartPage)
             .then(on: .main) { self.scrollTo(page: $0) }
@@ -103,6 +116,16 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
             // scroll to the cell
             ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
             ds_reusableViewDelegate?.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+
+    private func updateHighlightsForVisibleCells() {
+        for cell in ds_reusableViewDelegate?.ds_visibleCells() ?? [] {
+            if let cell = cell as? QuranBasePageCollectionViewCell {
+                for (type, ayat) in highlights {
+                    cell.setHighlightedVerses(ayat, forType: type)
+                }
+            }
         }
     }
 }

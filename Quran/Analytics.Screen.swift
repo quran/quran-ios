@@ -23,8 +23,13 @@ extension Analytics {
 
         case suras
         case juzs
-        case translations
         case bookmarks
+        case settings
+
+        case search
+        case searchResults
+
+        case translations
         case audioDownloads
 
         case quranArabic

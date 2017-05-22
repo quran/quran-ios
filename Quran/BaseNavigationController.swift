@@ -22,6 +22,16 @@ import UIKit
 
 class BaseNavigationController: UINavigationController, ScrollableToTop {
 
+    override open var shouldAutorotate: Bool {
+        return topViewController?.shouldAutorotate ?? super.shouldAutorotate
+    }
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return topViewController?.preferredInterfaceOrientationForPresentation ?? super.preferredInterfaceOrientationForPresentation
+    }
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return topViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.barStyle = .black

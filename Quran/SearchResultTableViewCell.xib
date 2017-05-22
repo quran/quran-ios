@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="109" id="KGk-i7-Jjw" customClass="SearchResultTableViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="109"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="108.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" text="215" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ecr-bJ-sZo">
+                        <rect key="frame" x="445" y="10" width="25" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.29411764705882354" green="0.29411764705882354" blue="0.29411764705882354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" text="Surat Muhammad, Ayah 19" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bt6-5a-Ad4">
+                        <rect key="frame" x="15" y="10" width="183" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.29411764705882354" green="0.29411764705882354" blue="0.29411764705882354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehN-zt-qIr">
+                        <rect key="frame" x="15" y="33" width="455" height="65.5"/>
+                        <string key="text">Very long text. Very long text. Very long text. Very long text. Very long text. Very long text. Very long text. Very long text. Very long text. Very long text.</string>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ehN-zt-qIr" firstAttribute="trailing" secondItem="Ecr-bJ-sZo" secondAttribute="trailing" id="1eL-I4-rPY"/>
+                    <constraint firstItem="ehN-zt-qIr" firstAttribute="top" secondItem="Bt6-5a-Ad4" secondAttribute="bottom" constant="5" id="5VG-GI-6Vp"/>
+                    <constraint firstAttribute="bottom" secondItem="ehN-zt-qIr" secondAttribute="bottom" constant="10" id="Maa-UP-bJA"/>
+                    <constraint firstItem="Ecr-bJ-sZo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="N6M-oH-nI7"/>
+                    <constraint firstItem="Bt6-5a-Ad4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="NjK-MO-MlC"/>
+                    <constraint firstItem="ehN-zt-qIr" firstAttribute="leading" secondItem="Bt6-5a-Ad4" secondAttribute="leading" id="dRB-4m-aPk"/>
+                    <constraint firstAttribute="trailing" secondItem="Ecr-bJ-sZo" secondAttribute="trailing" constant="10" id="hkb-wY-2LE"/>
+                    <constraint firstItem="Bt6-5a-Ad4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="sC4-im-bOK"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="ayahDescription" destination="Bt6-5a-Ad4" id="NzK-zr-nQ3"/>
+                <outlet property="pageNumber" destination="Ecr-bJ-sZo" id="V37-7e-sWG"/>
+                <outlet property="resultLabel" destination="ehN-zt-qIr" id="Q1t-86-Fe0"/>
+            </connections>
+            <point key="canvasLocation" x="-71" y="-86.5"/>
+        </tableViewCell>
+    </objects>
+</document>

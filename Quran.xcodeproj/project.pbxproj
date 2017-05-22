@@ -43,11 +43,21 @@
 		541BA5E11E93AE6500245A42 /* QuranShareData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E01E93AE6500245A42 /* QuranShareData.swift */; };
 		541BA5E31E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */; };
 		541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */; };
+		5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5420D2C71ED3733500D36821 /* UITableView+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5424773D1E7856040051C196 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* DownloadButton.swift */; };
 		542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */; };
 		542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
+		542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC61ECC4BDC0023D6FD /* SearchService.swift */; };
+		542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */; };
+		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
+		542DCBD71ECC60A20023D6FD /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD61ECC60A20023D6FD /* EventStream.swift */; };
+		542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */; };
+		542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */; };
+		542DCBDD1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */; };
+		542DCBE21ECE424C0023D6FD /* DispatchQueue+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */; };
+		542DCBE61ED04B150023D6FD /* Promise+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBE51ED04B150023D6FD /* Promise+Rx.swift */; };
 		5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */; };
 		5437D3641EB385DB00795FA9 /* VFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5437D3621EB385DB00795FA9 /* VFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
@@ -127,6 +137,21 @@
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
+		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
+		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
+		54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */; };
+		54547E911EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */; };
+		54547E931EC9D0A9008AFED3 /* SearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E921EC9D0A9008AFED3 /* SearchInteractor.swift */; };
+		54547E961EC9D1B1008AFED3 /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E951EC9D1B1008AFED3 /* SearchRouter.swift */; };
+		54547E981EC9D1F1008AFED3 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E971EC9D1F1008AFED3 /* SearchPresenter.swift */; };
+		54547E9A1EC9D34A008AFED3 /* SearchBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E991EC9D34A008AFED3 /* SearchBuilder.swift */; };
+		54547E9C1EC9D383008AFED3 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E9B1EC9D383008AFED3 /* SearchView.swift */; };
+		54547E9E1EC9D39F008AFED3 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E9D1EC9D39F008AFED3 /* Search.swift */; };
+		54547EA01EC9ED05008AFED3 /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54547E9F1EC9ED05008AFED3 /* SearchViewController.xib */; };
+		54547EA71ECA7CE2008AFED3 /* SearchResultsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547EA61ECA7CE2008AFED3 /* SearchResultsDataSource.swift */; };
+		54547EAA1ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */; };
+		54547EAD1ECA82BE008AFED3 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547EAB1ECA82BE008AFED3 /* SearchResultTableViewCell.swift */; };
+		54547EAE1ECA82BE008AFED3 /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54547EAC1ECA82BE008AFED3 /* SearchResultTableViewCell.xib */; };
 		5454998F1E7DB27B00F4F927 /* copyrights in Resources */ = {isa = PBXBuildFile; fileRef = 5454998E1E7DB27B00F4F927 /* copyrights */; };
 		545499B11E7DB88900F4F927 /* TranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */; };
 		545499B31E7DB9C800F4F927 /* TranslationsSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */; };
@@ -137,7 +162,6 @@
 		5459FF6A1EA4E7F900FBF6C5 /* QariAudioDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF691EA4E7F900FBF6C5 /* QariAudioDownload.swift */; };
 		5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF6C1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift */; };
 		5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF6E1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift */; };
-		5459FF711EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */; };
 		5459FF741EA526C700FBF6C5 /* AudioDownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */; };
 		5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */; };
 		5459FF791EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */; };
@@ -216,7 +240,6 @@
 		54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */; };
 		54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */; };
 		54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AC67201E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift */; };
-		54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */; };
 		54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */; };
 		54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */; };
 		54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B265EF1CC57D8F00D3AEF8 /* Assets.xcassets */; };
@@ -321,8 +344,7 @@
 		C1F63E251CE58B460026E263 /* SQLiteAyahInfoPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */; };
 		C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */; };
 		C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */; };
-		C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */; };
-		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */; };
+		C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteAyahTextPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */; };
 		C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */; };
 		C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */; };
 		DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */; };
@@ -518,12 +540,22 @@
 		541BA5E01E93AE6500245A42 /* QuranShareData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranShareData.swift; sourceTree = "<group>"; };
 		541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationAyahSectionDataSource.swift; sourceTree = "<group>"; };
 		541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranBaseBasicDataSource.swift; sourceTree = "<group>"; };
+		5420D2C71ED3733500D36821 /* UITableView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
 		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
 		542732FB1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		542732FD1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		542DCBC61ECC4BDC0023D6FD /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
+		542DCBD61ECC60A20023D6FD /* EventStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
+		542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecentsService.swift; sourceTree = "<group>"; };
+		542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchNoResultTableViewCell.swift; sourceTree = "<group>"; };
+		542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchNoResultTableViewCell.xib; sourceTree = "<group>"; };
+		542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Rx.swift"; sourceTree = "<group>"; };
+		542DCBE51ED04B150023D6FD /* Promise+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Rx.swift"; sourceTree = "<group>"; };
 		5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageBookmarkDataSource.swift; sourceTree = "<group>"; };
 		5437D3601EB385DB00795FA9 /* VFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5437D3621EB385DB00795FA9 /* VFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VFoundation.h; sourceTree = "<group>"; };
@@ -600,6 +632,21 @@
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
+		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
+		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
+		54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
+		54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchControllerWithNoCancelButton.swift; sourceTree = "<group>"; };
+		54547E921EC9D0A9008AFED3 /* SearchInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; };
+		54547E951EC9D1B1008AFED3 /* SearchRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; };
+		54547E971EC9D1F1008AFED3 /* SearchPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
+		54547E991EC9D34A008AFED3 /* SearchBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBuilder.swift; sourceTree = "<group>"; };
+		54547E9B1EC9D383008AFED3 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		54547E9D1EC9D39F008AFED3 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		54547E9F1EC9ED05008AFED3 /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
+		54547EA61ECA7CE2008AFED3 /* SearchResultsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsDataSource.swift; sourceTree = "<group>"; };
+		54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenLoadingDataSource.swift; sourceTree = "<group>"; };
+		54547EAB1ECA82BE008AFED3 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		54547EAC1ECA82BE008AFED3 /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		5454998E1E7DB27B00F4F927 /* copyrights */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyrights; sourceTree = "<group>"; };
 		545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationTableViewCell.xib; sourceTree = "<group>"; };
 		545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionViewController.swift; sourceTree = "<group>"; };
@@ -610,7 +657,6 @@
 		5459FF691EA4E7F900FBF6C5 /* QariAudioDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDownload.swift; sourceTree = "<group>"; };
 		5459FF6C1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioFileListRetrieval.swift; sourceTree = "<group>"; };
 		5459FF6E1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioFileListRetrievalCreator.swift; sourceTree = "<group>"; };
-		5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadsNavigationController.swift; sourceTree = "<group>"; };
 		5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadsViewController.swift; sourceTree = "<group>"; };
 		5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDownloadTableViewCell.swift; sourceTree = "<group>"; };
 		5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioDownloadTableViewCell.xib; sourceTree = "<group>"; };
@@ -696,7 +742,6 @@
 		54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookmarkTableViewCell.xib; sourceTree = "<group>"; };
 		54AC67201E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRenderPreloadingOperation.swift; sourceTree = "<group>"; };
-		54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsNavigationController.swift; sourceTree = "<group>"; };
 		54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsViewController.swift; sourceTree = "<group>"; };
 		54B265E31CC57D8F00D3AEF8 /* Quran.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quran.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -836,8 +881,7 @@
 		C120E69B1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahInfoPersistence.swift; sourceTree = "<group>"; };
 		C1F63E241CE58B460026E263 /* SQLiteAyahInfoPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahInfoPersistence.swift; sourceTree = "<group>"; };
 		C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahTextPersistence.swift; sourceTree = "<group>"; };
-		C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteTranslationTextPersistence.swift; sourceTree = "<group>"; };
-		C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteArabicTextPersistence.swift; sourceTree = "<group>"; };
+		C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteAyahTextPersistence.swift; sourceTree = "<group>"; };
 		C2E3E6D9D1E850CA2BC3AF03 /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		C2E3EF4A8298079CC297E679 /* SQLiteActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
 		C2E3EFBA57CE1F4DB5D44F70 /* ActiveTranslationsPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTranslationsPersistence.swift; sourceTree = "<group>"; };
@@ -961,13 +1005,13 @@
 		540922AC1E91321A00C7537A /* basic */ = {
 			isa = PBXGroup;
 			children = (
+				540922A41E91316100C7537A /* QuranTranslationArabicTextDataSource.swift */,
+				540922AA1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift */,
 				5409229E1E91312200C7537A /* QuranTranslationSuraDataSource.swift */,
+				540922A81E91318300C7537A /* QuranTranslationTextDataSource.swift */,
+				540922A61E91316D00C7537A /* QuranTranslationTranslatorNameTextDataSource.swift */,
 				540922A01E91314D00C7537A /* QuranTranslationVerseNumberDataSource.swift */,
 				540922A21E91315800C7537A /* QuranTranslationVerseSeparatorDataSource.swift */,
-				540922A41E91316100C7537A /* QuranTranslationArabicTextDataSource.swift */,
-				540922A61E91316D00C7537A /* QuranTranslationTranslatorNameTextDataSource.swift */,
-				540922A81E91318300C7537A /* QuranTranslationTextDataSource.swift */,
-				540922AA1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift */,
 			);
 			name = basic;
 			sourceTree = "<group>";
@@ -1006,7 +1050,7 @@
 			name = QariAyahTiming;
 			sourceTree = "<group>";
 		};
-		5419E4B81CFA268500071A6D /* Strings */ = {
+		5419E4B81CFA268500071A6D /* strings */ = {
 			isa = PBXGroup;
 			children = (
 				54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */,
@@ -1016,15 +1060,15 @@
 				5419E5201CFA2BC100071A6D /* Readers.strings */,
 				5419E5321CFA3F0300071A6D /* Android.stringsdict */,
 			);
-			name = Strings;
+			name = strings;
 			sourceTree = "<group>";
 		};
 		541BA5DF1E93ADD000245A42 /* verse-text */ = {
 			isa = PBXGroup;
 			children = (
+				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */,
 				541BA5D91E938F6800245A42 /* ImageVerseTextRetrieval.swift */,
 				541BA5DB1E93929C00245A42 /* TranslationVerseTextRetrieval.swift */,
-				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */,
 			);
 			name = "verse-text";
 			sourceTree = "<group>";
@@ -1062,6 +1106,34 @@
 				542732FD1EB697CD00DC5C0F /* module.modulemap */,
 			);
 			path = iphonesimulator;
+			sourceTree = "<group>";
+		};
+		542DCBC31ECC332E0023D6FD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBC61ECC4BDC0023D6FD /* SearchService.swift */,
+				542DCBD81ECC79410023D6FD /* SearchRecentsService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		542DCBCB1ECC53BB0023D6FD /* RxExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */,
+				542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */,
+			);
+			name = RxExtensions;
+			sourceTree = "<group>";
+		};
+		542DCBD31ECC5D2E0023D6FD /* RxExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBD61ECC60A20023D6FD /* EventStream.swift */,
+				542DCBE11ECE424C0023D6FD /* DispatchQueue+Rx.swift */,
+				542DCBE51ED04B150023D6FD /* Promise+Rx.swift */,
+			);
+			name = RxExtensions;
 			sourceTree = "<group>";
 		};
 		5437D3611EB385DB00795FA9 /* VFoundation */ = {
@@ -1105,7 +1177,6 @@
 			isa = PBXGroup;
 			children = (
 				543FDFE91EB3B4FE00687DF8 /* Response */,
-				5437D37D1EB3886500795FA9 /* Result.swift */,
 			);
 			name = Deprecated;
 			sourceTree = "<group>";
@@ -1153,9 +1224,10 @@
 		543FDFFB1EB3B75500687DF8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				54FD7BA41EB9342200FA485F /* UserDefaults */,
-				543FDFEC1EB3B57D00687DF8 /* CacheableService */,
+				542DCBD31ECC5D2E0023D6FD /* RxExtensions */,
+				54FD7BA91EB9377300FA485F /* AppUpdater.swift */,
 				5437D3A51EB3921F00795FA9 /* Cache.swift */,
+				543FDFEC1EB3B57D00687DF8 /* CacheableService */,
 				5437D3731EB3886500795FA9 /* Cast.swift */,
 				5437D3741EB3886500795FA9 /* Crasher.swift */,
 				5437D3A11EB3912000795FA9 /* Creator.swift */,
@@ -1168,10 +1240,11 @@
 				5437D3AA1EB3921F00795FA9 /* Parser.swift */,
 				5437D3AB1EB3921F00795FA9 /* Protected.swift */,
 				5437D37A1EB3886500795FA9 /* QProgress.swift */,
+				5437D37D1EB3886500795FA9 /* Result.swift */,
 				5437D37E1EB3886500795FA9 /* Retry.swift */,
 				5437D3AC1EB3921F00795FA9 /* Timer.swift */,
+				54FD7BA41EB9342200FA485F /* UserDefaults */,
 				5437D3831EB3886500795FA9 /* WeakSet.swift */,
-				54FD7BA91EB9377300FA485F /* AppUpdater.swift */,
 			);
 			name = Features;
 			sourceTree = "<group>";
@@ -1212,6 +1285,7 @@
 		543FE00F1EB3B84C00687DF8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				542DCBCB1ECC53BB0023D6FD /* RxExtensions */,
 				543FE0401EB3C47800687DF8 /* CustomViews */,
 				543FE03E1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift */,
 				543FE0251EB3C0C000687DF8 /* SimultenousGestureDelegate.swift */,
@@ -1224,6 +1298,8 @@
 				543FE0151EB3B94100687DF8 /* UIView+Extension.swift */,
 				543FE0161EB3B94100687DF8 /* UIViewController+Extension.swift */,
 				543FE0231EB3BBE800687DF8 /* PromiseKit+UIExtension.swift */,
+				54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */,
+				5420D2C71ED3733500D36821 /* UITableView+Extension.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -1288,13 +1364,106 @@
 		544629E01E6ADFE0005B1107 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
 				544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */,
-				545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */,
 				549040BA1E63566D00D54625 /* TranslationsDataSource.swift */,
+				544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */,
+				545499B81E7DDE1500F4F927 /* TranslationsSelectionBasicDataSource.swift */,
 				545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */,
 			);
 			name = Translations;
+			sourceTree = "<group>";
+		};
+		54547E811EC74CE4008AFED3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
+				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
+				54547E8A1EC75384008AFED3 /* SettingsCreators.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		54547E821EC74CFA008AFED3 /* Search Module (VIPER) */ = {
+			isa = PBXGroup;
+			children = (
+				54547E941EC9D181008AFED3 /* VIPER */,
+			);
+			name = "Search Module (VIPER)";
+			sourceTree = "<group>";
+		};
+		54547E851EC74D6B008AFED3 /* Sura */ = {
+			isa = PBXGroup;
+			children = (
+				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
+				54B266161CC6D5BF00D3AEF8 /* SurasViewController.swift */,
+				54B266691CCA93C500D3AEF8 /* SuraTableViewCell.swift */,
+				54B2666A1CCA93C500D3AEF8 /* SuraTableViewCell.xib */,
+			);
+			name = Sura;
+			sourceTree = "<group>";
+		};
+		54547E861EC74D86008AFED3 /* Juz */ = {
+			isa = PBXGroup;
+			children = (
+				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
+				54B266141CC6D5A900D3AEF8 /* JuzsViewController.swift */,
+				54B2666F1CCA93E000D3AEF8 /* QuarterTableViewCell.swift */,
+				54B266701CCA93E000D3AEF8 /* QuarterTableViewCell.xib */,
+			);
+			name = Juz;
+			sourceTree = "<group>";
+		};
+		54547E871EC75061008AFED3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				54547E881EC75071008AFED3 /* SettingsDataSource.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		54547E941EC9D181008AFED3 /* VIPER */ = {
+			isa = PBXGroup;
+			children = (
+				542DCBC31ECC332E0023D6FD /* Services */,
+				54547EAF1ECA84C0008AFED3 /* UIKit */,
+				54547E9D1EC9D39F008AFED3 /* Search.swift */,
+				54547E991EC9D34A008AFED3 /* SearchBuilder.swift */,
+				54547E921EC9D0A9008AFED3 /* SearchInteractor.swift */,
+				54547E951EC9D1B1008AFED3 /* SearchRouter.swift */,
+				54547E971EC9D1F1008AFED3 /* SearchPresenter.swift */,
+				54547E9B1EC9D383008AFED3 /* SearchView.swift */,
+			);
+			name = VIPER;
+			sourceTree = "<group>";
+		};
+		54547EA11EC9F1F4008AFED3 /* VIPER */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = VIPER;
+			sourceTree = "<group>";
+		};
+		54547EA51ECA7CC4008AFED3 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		54547EAF1ECA84C0008AFED3 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
+				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
+				54547E9F1EC9ED05008AFED3 /* SearchViewController.xib */,
+				54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */,
+				54547EA61ECA7CE2008AFED3 /* SearchResultsDataSource.swift */,
+				54547EAB1ECA82BE008AFED3 /* SearchResultTableViewCell.swift */,
+				54547EAC1ECA82BE008AFED3 /* SearchResultTableViewCell.xib */,
+				542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */,
+				542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */,
+			);
+			name = UIKit;
 			sourceTree = "<group>";
 		};
 		5459FF661EA4E77700FBF6C5 /* AudioDownloads */ = {
@@ -1321,19 +1490,11 @@
 		5459FF721EA526B400FBF6C5 /* AudioDownloads */ = {
 			isa = PBXGroup;
 			children = (
-				5459FF751EA5286D00FBF6C5 /* cell */,
 				5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */,
-			);
-			name = AudioDownloads;
-			sourceTree = "<group>";
-		};
-		5459FF751EA5286D00FBF6C5 /* cell */ = {
-			isa = PBXGroup;
-			children = (
 				5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */,
 				5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */,
 			);
-			name = cell;
+			name = AudioDownloads;
 			sourceTree = "<group>";
 		};
 		5459FF7D1EA549B700FBF6C5 /* AudioDownloads */ = {
@@ -1373,11 +1534,11 @@
 		545EE51C1DCE0F830085D31F /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
-				545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */,
-				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 				5415A9501DC932800089F9CB /* AyahBookmarkDataSource.swift */,
+				545D964E1EBF3AE1006D758A /* BaseBookmarkDataSource.swift */,
+				54A99CAB1CF796AE003995AE /* BookmarksDataSource.swift */,
 				54A99CAD1CF7A55A003995AE /* LastPageBookmarkDataSource.swift */,
+				5435C6471DC91C3B00A0033C /* PageBookmarkDataSource.swift */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -1441,13 +1602,13 @@
 		54699B901E8DC11B00211A60 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */,
-				54699B911E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift */,
-				54699B951E8DC14C00211A60 /* QuranTranslationVerseNumberCollectionViewCell.swift */,
 				54699B991E8DC15D00211A60 /* QuranTranslationArabicTextCollectionViewCell.swift */,
-				54699B9D1E8DC16C00211A60 /* QuranTranslationTranslatorNameCollectionViewCell.swift */,
-				54699BA11E8DC17A00211A60 /* QuranTranslationTextCollectionViewCell.swift */,
+				54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */,
 				54699BA51E8DC18600211A60 /* QuranTranslationLongTextCollectionViewCell.swift */,
+				54699B911E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift */,
+				54699BA11E8DC17A00211A60 /* QuranTranslationTextCollectionViewCell.swift */,
+				54699B9D1E8DC16C00211A60 /* QuranTranslationTranslatorNameCollectionViewCell.swift */,
+				54699B951E8DC14C00211A60 /* QuranTranslationVerseNumberCollectionViewCell.swift */,
 				54699BA91E8DC25000211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift */,
 			);
 			name = Translations;
@@ -1514,15 +1675,6 @@
 			name = Interactors;
 			sourceTree = "<group>";
 		};
-		549040BC1E63577900D54625 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
-				545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
 		5494CCB31CEFAB4200031686 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -1544,26 +1696,22 @@
 		54A99CA81CF7959A003995AE /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */,
 				54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */,
-			);
-			name = Bookmarks;
-			sourceTree = "<group>";
-		};
-		54A99CAF1CF7A632003995AE /* Bookmark */ = {
-			isa = PBXGroup;
-			children = (
 				54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */,
 				54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */,
 			);
-			name = Bookmark;
+			name = Bookmarks;
 			sourceTree = "<group>";
 		};
 		54B135721E5E456A0087D0F8 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
-				549040BC1E63577900D54625 /* Views */,
-				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
+				545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */,
 				545499B21E7DB9C800F4F927 /* TranslationsSelectionViewController.swift */,
+				54B135731E5E458E0087D0F8 /* TranslationsViewController.swift */,
+				549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */,
+				545499AF1E7DB88900F4F927 /* TranslationTableViewCell.xib */,
 			);
 			name = Translations;
 			sourceTree = "<group>";
@@ -1610,11 +1758,11 @@
 		54B265FA1CC57E2000D3AEF8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				54B2664A1CC95DAC00D3AEF8 /* images */,
-				5419E4B81CFA268500071A6D /* Strings */,
-				540922761E8F006000C7537A /* plists */,
 				540922751E8F005100C7537A /* fonts */,
+				54B2664A1CC95DAC00D3AEF8 /* images */,
 				540922771E8F007B00C7537A /* others */,
+				540922761E8F006000C7537A /* plists */,
+				5419E4B81CFA268500071A6D /* strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1631,32 +1779,34 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
-		54B265FC1CC57E2D00D3AEF8 /* Shared Views */ = {
+		54B265FC1CC57E2D00D3AEF8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				5424773C1E7856040051C196 /* DownloadButton.swift */,
+				54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */,
+				54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */,
 				5463C1881E8B1427009EE603 /* AsyncLabel.swift */,
+				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
+				54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */,
+				5424773C1E7856040051C196 /* DownloadButton.swift */,
+				54B266731CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift */,
+				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
+				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
 				DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */,
-				54B2666D1CCA93C800D3AEF8 /* Launch */,
 			);
-			name = "Shared Views";
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */,
+				54547E821EC74CFA008AFED3 /* Search Module (VIPER) */,
+				54547E811EC74CE4008AFED3 /* Settings */,
 				5459FF721EA526B400FBF6C5 /* AudioDownloads */,
 				54B135721E5E456A0087D0F8 /* Translations */,
 				54A99CA81CF7959A003995AE /* Bookmarks */,
 				54C0DBEE1CE4B0A9009AAD8D /* QariList */,
 				54B266D41CD4E6C400D3AEF8 /* PageSelection */,
 				54B266BB1CD16E9800D3AEF8 /* Quran */,
-				54B265E61CC57D8F00D3AEF8 /* AppDelegate.swift */,
-				54B266201CC8010A00D3AEF8 /* BaseControllers */,
-				54B2660A1CC6D35C00D3AEF8 /* Settings */,
-				54B2660B1CC6D37800D3AEF8 /* Search */,
-				54B266011CC6CF1400D3AEF8 /* TabController */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1664,10 +1814,11 @@
 		54B265FE1CC57E4000D3AEF8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBD31CDF723D009AAD8D /* Presenter */,
-				54B2664D1CCA871E00D3AEF8 /* DataSources */,
+				54547EA11EC9F1F4008AFED3 /* VIPER */,
 				54B265FD1CC57E3200D3AEF8 /* Controllers */,
-				54B265FC1CC57E2D00D3AEF8 /* Shared Views */,
+				54B2664D1CCA871E00D3AEF8 /* DataSources */,
+				54C0DBD31CDF723D009AAD8D /* Presenter */,
+				54B265FC1CC57E2D00D3AEF8 /* Shared */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1714,30 +1865,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		54B266011CC6CF1400D3AEF8 /* TabController */ = {
-			isa = PBXGroup;
-			children = (
-				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
-			);
-			name = TabController;
-			sourceTree = "<group>";
-		};
-		54B2660A1CC6D35C00D3AEF8 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
-		54B2660B1CC6D37800D3AEF8 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				54B266101CC6D59600D3AEF8 /* SearchViewController.swift */,
-			);
-			name = Search;
-			sourceTree = "<group>";
-		};
 		54B266181CC6D72800D3AEF8 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -1746,14 +1873,6 @@
 				545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */,
 			);
 			name = Helper;
-			sourceTree = "<group>";
-		};
-		54B266201CC8010A00D3AEF8 /* BaseControllers */ = {
-			isa = PBXGroup;
-			children = (
-				54B266CA1CD3157400D3AEF8 /* Navigations */,
-			);
-			name = BaseControllers;
 			sourceTree = "<group>";
 		};
 		54B266231CC80AE800D3AEF8 /* Interactors */ = {
@@ -1799,6 +1918,8 @@
 		54B2664D1CCA871E00D3AEF8 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				54547EA51ECA7CC4008AFED3 /* Search */,
+				54547E871EC75061008AFED3 /* Settings */,
 				5459FF7D1EA549B700FBF6C5 /* AudioDownloads */,
 				545EE51C1DCE0F830085D31F /* Bookmarks */,
 				54F56C4D1E7ED96600D7AF57 /* Quran */,
@@ -1830,59 +1951,18 @@
 			name = AyahInfo;
 			sourceTree = "<group>";
 		};
-		54B266681CCA936400D3AEF8 /* Suras */ = {
-			isa = PBXGroup;
-			children = (
-				54B266691CCA93C500D3AEF8 /* SuraTableViewCell.swift */,
-				54B2666A1CCA93C500D3AEF8 /* SuraTableViewCell.xib */,
-			);
-			name = Suras;
-			sourceTree = "<group>";
-		};
-		54B2666D1CCA93C800D3AEF8 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
-			);
-			name = Launch;
-			sourceTree = "<group>";
-		};
-		54B2666E1CCA93CF00D3AEF8 /* Quarter */ = {
-			isa = PBXGroup;
-			children = (
-				54B2666F1CCA93E000D3AEF8 /* QuarterTableViewCell.swift */,
-				54B266701CCA93E000D3AEF8 /* QuarterTableViewCell.xib */,
-			);
-			name = Quarter;
-			sourceTree = "<group>";
-		};
-		54B266831CCAC8F800D3AEF8 /* Size Layout */ = {
-			isa = PBXGroup;
-			children = (
-				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
-			);
-			name = "Size Layout";
-			sourceTree = "<group>";
-		};
 		54B266991CCD206A00D3AEF8 /* cell */ = {
 			isa = PBXGroup;
 			children = (
 				540922B11E91964300C7537A /* Image */,
-				54699B901E8DC11B00211A60 /* Translations */,
 				540922B41E919C5500C7537A /* QuranBasePageCollectionViewCell.swift */,
 				54B2668D1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.swift */,
 				54B2668E1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib */,
 				54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */,
 				54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */,
+				54699B901E8DC11B00211A60 /* Translations */,
 			);
 			name = cell;
-			sourceTree = "<group>";
-		};
-		54B2669A1CCD207400D3AEF8 /* Highlighting */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Highlighting;
 			sourceTree = "<group>";
 		};
 		54B2669F1CCD8D1100D3AEF8 /* Data */ = {
@@ -1896,17 +1976,6 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
-		54B266A41CCD936A00D3AEF8 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				54A99CAF1CF7A632003995AE /* Bookmark */,
-				54B266731CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift */,
-				54B266681CCA936400D3AEF8 /* Suras */,
-				54B2666E1CCA93CF00D3AEF8 /* Quarter */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
 		54B266A71CD1628500D3AEF8 /* Timing */ = {
 			isa = PBXGroup;
 			children = (
@@ -1918,10 +1987,13 @@
 		54B266B61CD16CD500D3AEF8 /* AudioBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBDD1CDF7E95009AAD8D /* Downloading */,
-				54C0DBD61CDF7415009AAD8D /* Play */,
-				54C0DBCD1CDF6342009AAD8D /* QariBarView */,
 				54B266B71CD16CED00D3AEF8 /* AudioBannerView.swift */,
+				54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */,
+				54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */,
+				54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */,
+				54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */,
+				54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */,
+				54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */,
 				54C0DBE41CE479D7009AAD8D /* DefaultAudioBannerView.swift */,
 			);
 			name = AudioBannerView;
@@ -1931,48 +2003,21 @@
 			isa = PBXGroup;
 			children = (
 				54F56C481E7EB93600D7AF57 /* Managers */,
-				54C0DBE61CE48DED009AAD8D /* Views */,
+				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
 				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
+				54C0DBE61CE48DED009AAD8D /* Views */,
 			);
 			name = Quran;
-			sourceTree = "<group>";
-		};
-		54B266CA1CD3157400D3AEF8 /* Navigations */ = {
-			isa = PBXGroup;
-			children = (
-				54B266211CC808DE00D3AEF8 /* BaseNavigationController.swift */,
-				54A99CA61CF794AC003995AE /* BookmarksNavigationController.swift */,
-				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
-				54B2660E1CC6D39300D3AEF8 /* SearchNavigationController.swift */,
-				54B266081CC6D35300D3AEF8 /* JuzsNavigationController.swift */,
-				54B266051CC6D32F00D3AEF8 /* SurasNavigationController.swift */,
-				54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */,
-				54B135701E5E402B0087D0F8 /* TranslationsNavigationController.swift */,
-				545499B41E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift */,
-				5459FF701EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift */,
-			);
-			name = Navigations;
 			sourceTree = "<group>";
 		};
 		54B266D41CD4E6C400D3AEF8 /* PageSelection */ = {
 			isa = PBXGroup;
 			children = (
-				54B266831CCAC8F800D3AEF8 /* Size Layout */,
-				54B266A41CCD936A00D3AEF8 /* Views */,
 				54B266D51CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift */,
-				54B266161CC6D5BF00D3AEF8 /* SurasViewController.swift */,
-				54B266141CC6D5A900D3AEF8 /* JuzsViewController.swift */,
+				54547E861EC74D86008AFED3 /* Juz */,
+				54547E851EC74D6B008AFED3 /* Sura */,
 			);
 			name = PageSelection;
-			sourceTree = "<group>";
-		};
-		54C0DBCD1CDF6342009AAD8D /* QariBarView */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */,
-				54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */,
-			);
-			name = QariBarView;
 			sourceTree = "<group>";
 		};
 		54C0DBD31CDF723D009AAD8D /* Presenter */ = {
@@ -1984,32 +2029,13 @@
 			name = Presenter;
 			sourceTree = "<group>";
 		};
-		54C0DBD61CDF7415009AAD8D /* Play */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBD91CDF7E29009AAD8D /* AudioPlayBarView.swift */,
-				54C0DBDB1CDF7E34009AAD8D /* AudioPlayBarView.xib */,
-			);
-			name = Play;
-			sourceTree = "<group>";
-		};
-		54C0DBDD1CDF7E95009AAD8D /* Downloading */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBE01CDF7EC1009AAD8D /* AudioDownloadingBarView.swift */,
-				54C0DBDE1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib */,
-			);
-			name = Downloading;
-			sourceTree = "<group>";
-		};
 		54C0DBE61CE48DED009AAD8D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5E01E93AE6500245A42 /* QuranShareData.swift */,
-				54965FB61E7D4A1700A212E2 /* QuranPageTitle */,
-				54B266991CCD206A00D3AEF8 /* cell */,
-				54B2669A1CCD207400D3AEF8 /* Highlighting */,
 				54B266B61CD16CD500D3AEF8 /* AudioBannerView */,
+				54B266991CCD206A00D3AEF8 /* cell */,
+				54965FB61E7D4A1700A212E2 /* QuranPageTitle */,
+				541BA5E01E93AE6500245A42 /* QuranShareData.swift */,
 				54C0DBE71CE48DF8009AAD8D /* QuranView.swift */,
 			);
 			name = Views;
@@ -2018,20 +2044,13 @@
 		54C0DBEE1CE4B0A9009AAD8D /* QariList */ = {
 			isa = PBXGroup;
 			children = (
-				54C0DBF21CE4B155009AAD8D /* cell */,
+				54C0DBF91CE4F7C1009AAD8D /* QariNavigationController.swift */,
+				54C0DBF31CE4B162009AAD8D /* QariTableViewCell.swift */,
+				54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */,
 				54C0DBEF1CE4B0C2009AAD8D /* QariTableViewController.swift */,
 				54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */,
 			);
 			name = QariList;
-			sourceTree = "<group>";
-		};
-		54C0DBF21CE4B155009AAD8D /* cell */ = {
-			isa = PBXGroup;
-			children = (
-				54C0DBF31CE4B162009AAD8D /* QariTableViewCell.swift */,
-				54C0DBF41CE4B162009AAD8D /* QariTableViewCell.xib */,
-			);
-			name = cell;
 			sourceTree = "<group>";
 		};
 		54C0DC001CE62D2B009AAD8D /* LastAyahFinder */ = {
@@ -2057,9 +2076,9 @@
 			isa = PBXGroup;
 			children = (
 				540922AC1E91321A00C7537A /* basic */,
-				54F56C4E1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift */,
-				54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */,
 				541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */,
+				54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */,
+				54F56C4E1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift */,
 			);
 			name = translations;
 			sourceTree = "<group>";
@@ -2067,11 +2086,11 @@
 		54D2C2251E86817400128282 /* Sura/Juz */ = {
 			isa = PBXGroup;
 			children = (
-				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
-				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
-				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
-				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
 				549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */,
+				C101DBCC1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift */,
+				54C0DBF71CE4B3D6009AAD8D /* QarisDataSource.swift */,
+				54B2667B1CCAACAE00D3AEF8 /* QuartersDataSource.swift */,
+				54B266751CCA943300D3AEF8 /* SurasDataSource.swift */,
 			);
 			name = Sura/Juz;
 			sourceTree = "<group>";
@@ -2109,10 +2128,10 @@
 		54F56C481E7EB93600D7AF57 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5DF1E93ADD000245A42 /* verse-text */,
-				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
 				54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */,
+				54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */,
 				54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */,
+				541BA5DF1E93ADD000245A42 /* verse-text */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -2120,21 +2139,13 @@
 		54F56C4D1E7ED96600D7AF57 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */,
 				54D2C2261E86828000128282 /* image */,
-				54D2C2161E85DB8200128282 /* translations */,
+				541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */,
 				54F56C521E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift */,
 				54F56C501E7EDA5C00D7AF57 /* QuranDataSource.swift */,
+				54D2C2161E85DB8200128282 /* translations */,
 			);
 			name = Quran;
-			sourceTree = "<group>";
-		};
-		54F5B4341CFAE5AE0002A3B8 /* BaseTableViewController */ = {
-			isa = PBXGroup;
-			children = (
-				54F5B4351CFAE5C80002A3B8 /* BaseTableBasedViewController.swift */,
-			);
-			name = BaseTableViewController;
 			sourceTree = "<group>";
 		};
 		54F8C4221EA8104100C853C6 /* Downloadable */ = {
@@ -2204,8 +2215,7 @@
 			isa = PBXGroup;
 			children = (
 				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
-				C2E3E6CCD339F38486D8454B /* SQLiteArabicTextPersistence.swift */,
-				C2E3E4A805F4D33D701A8624 /* SQLiteTranslationTextPersistence.swift */,
+				C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */,
 			);
 			name = "Ayah Text";
 			sourceTree = "<group>";
@@ -2572,13 +2582,16 @@
 				54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */,
 				5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
+				54547EA01EC9ED05008AFED3 /* SearchViewController.xib in Resources */,
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
+				54547EAE1ECA82BE008AFED3 /* SearchResultTableViewCell.xib in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib in Resources */,
 				54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */,
 				54965FBA1E7D4A3F00A212E2 /* QuranPageTitleView.xib in Resources */,
 				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
 				5419E5301CFA3F0300071A6D /* Android.stringsdict in Resources */,
+				542DCBDD1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib in Resources */,
 				54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */,
 				54B266721CCA93E000D3AEF8 /* QuarterTableViewCell.xib in Resources */,
 				54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */,
@@ -2626,7 +2639,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		41F5987FC01565CAC04546D5 /* [CP] Copy Pods Resources */ = {
@@ -2684,7 +2697,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		5E9E610903AC9775E2016B5A /* [CP] Copy Pods Resources */ = {
@@ -2729,7 +2742,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		864C29152D7BAAC1145038E1 /* [CP] Embed Pods Frameworks */ = {
@@ -2759,7 +2772,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9F92F6AC5DB1B530253C8CAF /* [CP] Check Pods Manifest.lock */ = {
@@ -2774,7 +2787,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A7C0CB29E29693C884F7AE27 /* [CP] Embed Pods Frameworks */ = {
@@ -2819,7 +2832,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		B851C316614077E5AD813691 /* [CP] Copy Pods Resources */ = {
@@ -2849,7 +2862,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F5AD25664B0F777086EB5489 /* [CP] Copy Pods Resources */ = {
@@ -2886,9 +2899,11 @@
 				543FDFF71EB3B60400687DF8 /* CacheableService+main.swift in Sources */,
 				543FDFF41EB3B60400687DF8 /* AbstractPreloadingOperation.swift in Sources */,
 				5437D3841EB3886500795FA9 /* Cast.swift in Sources */,
+				542DCBD71ECC60A20023D6FD /* EventStream.swift in Sources */,
 				5437D3AD1EB3921F00795FA9 /* Cache.swift in Sources */,
 				5437D3AE1EB3921F00795FA9 /* Either.swift in Sources */,
 				543FDFF91EB3B60400687DF8 /* PagesCacheableService.swift in Sources */,
+				542DCBE61ED04B150023D6FD /* Promise+Rx.swift in Sources */,
 				54FD7BAA1EB9377300FA485F /* AppUpdater.swift in Sources */,
 				5437D3881EB3886500795FA9 /* Measure.swift in Sources */,
 				5437D3B01EB3921F00795FA9 /* Once.swift in Sources */,
@@ -2900,6 +2915,7 @@
 				5437D3B41EB3921F00795FA9 /* Timer.swift in Sources */,
 				5437D3B61EB392C300795FA9 /* NSLocking+Extension.swift in Sources */,
 				5437D3931EB3886500795FA9 /* URL+Extension.swift in Sources */,
+				542DCBE21ECE424C0023D6FD /* DispatchQueue+Rx.swift in Sources */,
 				5437D3941EB3886500795FA9 /* WeakSet.swift in Sources */,
 				543FDFEB1EB3B51300687DF8 /* CollectionResponse.swift in Sources */,
 				543FDFF61EB3B60400687DF8 /* CacheableService.swift in Sources */,
@@ -2920,7 +2936,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				543FE01C1EB3B94100687DF8 /* UIView+Extension.swift in Sources */,
+				54547E911EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift in Sources */,
 				543FE0461EB3C4A500687DF8 /* CircularView.swift in Sources */,
+				542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */,
 				543FE0441EB3C4A500687DF8 /* BackgroundColorButton.swift in Sources */,
 				543FE0221EB3BB4D00687DF8 /* String+Size.swift in Sources */,
 				543FE01B1EB3B94100687DF8 /* UIView+AutoLayout.swift in Sources */,
@@ -2928,8 +2946,10 @@
 				543FE0171EB3B94100687DF8 /* CALayer+Extension.swift in Sources */,
 				543FE01D1EB3B94100687DF8 /* UIViewController+Extension.swift in Sources */,
 				543FE0261EB3C0C000687DF8 /* SimultenousGestureDelegate.swift in Sources */,
+				5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,
 				543FE0181EB3B94100687DF8 /* CGRect+Extension.swift in Sources */,
+				542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */,
 				543FE03F1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift in Sources */,
 				543FE0241EB3BBE800687DF8 /* PromiseKit+UIExtension.swift in Sources */,
 				543FE01A1EB3B94100687DF8 /* UIImage+Extension.swift in Sources */,
@@ -2988,6 +3008,7 @@
 			files = (
 				54B266BA1CD16DD400D3AEF8 /* AudioRepeat.swift in Sources */,
 				54C0DC0E1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift in Sources */,
+				54547E981EC9D1F1008AFED3 /* SearchPresenter.swift in Sources */,
 				54699B8E1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift in Sources */,
 				540031E71E998AFD00BB4B7B /* Analytics.swift in Sources */,
 				54A99CAA1CF795B6003995AE /* BookmarksTableViewController.swift in Sources */,
@@ -3010,7 +3031,6 @@
 				54F8C41A1EA7EFB200C853C6 /* Downloadable.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */,
-				5459FF711EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
 				5409229F1E91312200C7537A /* QuranTranslationSuraDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
@@ -3018,6 +3038,7 @@
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,
 				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
+				542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */,
 				54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */,
 				54699BA71E8DC18600211A60 /* QuranTranslationLongTextCollectionViewCell.swift in Sources */,
 				54B266B01CD166B200D3AEF8 /* AyahTiming.swift in Sources */,
@@ -3035,14 +3056,17 @@
 				54A99CA71CF794AC003995AE /* BookmarksNavigationController.swift in Sources */,
 				54B266741CCA940900D3AEF8 /* JuzTableViewHeaderFooterView.swift in Sources */,
 				545D96491EBE7997006D758A /* TimeAgo+Quran.swift in Sources */,
+				54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */,
 				540922A31E91315800C7537A /* QuranTranslationVerseSeparatorDataSource.swift in Sources */,
 				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				545EE51B1DCE0D450085D31F /* LastPage.swift in Sources */,
+				54547E961EC9D1B1008AFED3 /* SearchRouter.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */,
 				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
 				540922B51E919C5500C7537A /* QuranBasePageCollectionViewCell.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
+				54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */,
 				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
@@ -3050,6 +3074,7 @@
 				540922881E9041D500C7537A /* TranslationPageLayoutRequest.swift in Sources */,
 				54F56C511E7EDA5C00D7AF57 /* QuranDataSource.swift in Sources */,
 				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,
+				542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */,
 				540922AB1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
@@ -3085,6 +3110,7 @@
 				54699BAB1E8DC25100211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift in Sources */,
 				540922821E90142900C7537A /* TranslationPageLayoutOperation.swift in Sources */,
 				5487241A1DC4957700ADDE54 /* BookmarksPersistence.swift in Sources */,
+				54547E9C1EC9D383008AFED3 /* SearchView.swift in Sources */,
 				541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */,
 				54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */,
 				54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */,
@@ -3108,19 +3134,23 @@
 				5459FF6A1EA4E7F900FBF6C5 /* QariAudioDownload.swift in Sources */,
 				54B266061CC6D32F00D3AEF8 /* SurasNavigationController.swift in Sources */,
 				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
+				54547EAA1ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
+				54547EA71ECA7CE2008AFED3 /* SearchResultsDataSource.swift in Sources */,
 				54699B931E8DC13800211A60 /* QuranTranslationSuraNameCollectionViewCell.swift in Sources */,
 				540922A91E91318300C7537A /* QuranTranslationTextDataSource.swift in Sources */,
 				5459FF7C1EA545CA00FBF6C5 /* QariListToQariAudioDownloadRetriever.swift in Sources */,
+				542DCBD91ECC79410023D6FD /* SearchRecentsService.swift in Sources */,
 				540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */,
-				54B135711E5E402B0087D0F8 /* TranslationsNavigationController.swift in Sources */,
 				DA0B7E1C1D175DA100F92AA3 /* ShareController.swift in Sources */,
 				544629DE1E676703005B1107 /* Download+Types.swift in Sources */,
 				5437D39F1EB38B2A00795FA9 /* Files.swift in Sources */,
 				54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */,
+				54547EAD1ECA82BE008AFED3 /* SearchResultTableViewCell.swift in Sources */,
+				54547E9A1EC9D34A008AFED3 /* SearchBuilder.swift in Sources */,
 				5459FF741EA526C700FBF6C5 /* AudioDownloadsViewController.swift in Sources */,
 				5459FF7F1EA549C400FBF6C5 /* AudioDownloadsDataSource.swift in Sources */,
 				54B266171CC6D5BF00D3AEF8 /* SurasViewController.swift in Sources */,
@@ -3145,10 +3175,12 @@
 				543FE0491EB3D8D000687DF8 /* Errors+Description.swift in Sources */,
 				545D964B1EBE83B4006D758A /* EditController.swift in Sources */,
 				540922A11E91314D00C7537A /* QuranTranslationVerseNumberDataSource.swift in Sources */,
+				54547E931EC9D0A9008AFED3 /* SearchInteractor.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54DC4AE41E8472EE00F4CBD6 /* TranslationPage.swift in Sources */,
 				5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */,
+				54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				54B266A31CCD918400D3AEF8 /* Quarter.swift in Sources */,
 				549040AD1E619A3300D54625 /* BackendServices.swift in Sources */,
@@ -3172,11 +3204,11 @@
 				54C0DC081CE633C6009AAD8D /* JuzBasedLastAyahFinder.swift in Sources */,
 				54B266151CC6D5A900D3AEF8 /* JuzsViewController.swift in Sources */,
 				54FD7BA31EB933A500FA485F /* UserDefaults+Keys.swift in Sources */,
-				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteArabicTextPersistence.swift in Sources */,
-				C2E3E82679C196C1770FA68D /* SQLiteTranslationTextPersistence.swift in Sources */,
+				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteAyahTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 				5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */,
 				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,
+				54547E9E1EC9D39F008AFED3 /* Search.swift in Sources */,
 				C2E3E08007B4A9B67363F256 /* Translation.swift in Sources */,
 				C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */,
 			);

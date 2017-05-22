@@ -44,20 +44,14 @@ class Container {
 
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
-        controller.viewControllers = [createSurasNavigationController(),
-                                      createJuzsNavigationController(),
-                                      createBookmarksController(),
-                                      createTranslationsNavigationController(),
-                                      createAudioDownloadsNavigationController()]
+        controller.viewControllers = [
+            createSearchNavigationController(), createSurasNavigationController(),
+            createJuzsNavigationController(),
+            createBookmarksController(),
+
+            createSettingsController()
+        ]
         return controller
-    }
-
-    func createAudioDownloadsNavigationController() -> UIViewController {
-        return AudioDownloadsNavigationController(rootViewController: createAudioDownloadsViewController())
-    }
-
-    func createTranslationsNavigationController() -> UIViewController {
-        return TranslationsNavigationController(rootViewController: createTranslationsViewController())
     }
 
     func createSurasNavigationController() -> UIViewController {
@@ -85,6 +79,12 @@ class Container {
                 dataSource: createTranslationsSelectionDataSource()))
     }
 
+    func createSearchNavigationController() -> UIViewController {
+        let builder = DefaultSearchBuilder(container: self) // DESIGN: should be done in tab bar router
+        let (_, controller) = builder.build()
+        return controller
+    }
+
     func createTranslationsViewController() -> UIViewController {
         return TranslationsViewController(
             interactor: createTranslationsRetrievalInteractor(),
@@ -106,12 +106,8 @@ class Container {
             lastPagesPersistence: createLastPagesPersistence())
     }
 
-    func createSearchController() -> UIViewController {
-        return SearchNavigationController(rootViewController: SearchViewController())
-    }
-
     func createSettingsController() -> UIViewController {
-        return SettingsNavigationController(rootViewController: SettingsViewController())
+        return SettingsNavigationController(rootViewController: SettingsViewController(creators: createSettingsCreators()))
     }
 
     func createBookmarksController() -> UIViewController {
@@ -195,7 +191,7 @@ class Container {
         return DefaultAyahInfoRetriever(persistence: createAyahInfoPersistence())
     }
 
-    func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
+    func createQuranController(page: Int, lastPage: LastPage?, highlightAyah: AyahNumber?) -> QuranViewController {
         return QuranViewController(
             imageService                           : createQuranImageService(),
             pageService                            : createQuranTranslationService(),
@@ -209,7 +205,8 @@ class Container {
             simplePersistence                      : createSimplePersistence(),
             verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
             page                                   : page,
-            lastPage                               : lastPage
+            lastPage                               : lastPage,
+            highlightedSearchAyah                  : highlightAyah
         )
     }
 
@@ -424,5 +421,32 @@ class Container {
 
     func createQariAudioDeleteInteractor() -> AnyInteractor<Qari, Void> {
         return QariAudioDeleteInteractor().asAnyInteractor()
+    }
+
+    func createSettingsCreators() -> SettingsCreators {
+        return NavigationSettingsCreators(
+            translationsCreator: createCreator(createTranslationsViewController),
+            audioDownloadsCreator: createCreator(createAudioDownloadsViewController))
+    }
+
+    func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
+        return SQLiteSearchService(
+            localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+            simplePersistence: createSimplePersistence(),
+            arabicPersistence: createArabicTextPersistence(),
+            translationPersistenceCreator: createCreator(createTranslationTextPersistence))
+    }
+
+    func createSQLiteSearchService() -> SearchService {
+        return SQLiteSearchService(
+            localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+            simplePersistence: createSimplePersistence(),
+            arabicPersistence: createArabicTextPersistence(),
+            translationPersistenceCreator: createCreator(createTranslationTextPersistence))
+
+    }
+
+    func createDefaultSearchRecentsService() -> SearchRecentsService {
+        return DefaultSearchRecentsService(persistence: createSimplePersistence())
     }
 }

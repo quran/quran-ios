@@ -50,19 +50,19 @@ public struct Crash {
     }
 }
 
-public func log(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+public func log(_ items: Any..., separator: String = " ") {
+    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator)
     NSLog(message)
 }
 
-public func CLog(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+public func CLog(_ items: Any..., separator: String = " ") {
+    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator)
     NSLog(message)
     Crash.crasher?.log(message)
 }
 
-public func logCriticalIssue(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator) + terminator
+public func logCriticalIssue(_ items: Any..., separator: String = " ") {
+    let message = "[\(Crash.crasher?.tag ?? "_")]: " + items.map { "\($0)" }.joined(separator: separator)
     NSLog(message)
     Crash.crasher?.logCriticalIssue(message)
 }

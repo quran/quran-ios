@@ -17,7 +17,6 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import UIKit
 
 class SettingsNavigationController: BaseNavigationController {
@@ -30,7 +29,7 @@ class SettingsNavigationController: BaseNavigationController {
         super.init(rootViewController: rootViewController)
         tabBarItem = UITabBarItem(title: NSLocalizedString("menu_settings", tableName: "Android", comment: ""),
                                   image: #imageLiteral(resourceName: "settings-25"),
-                                  selectedImage: nil)
+                                  selectedImage: #imageLiteral(resourceName: "settings_filled-25"))
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -21,3 +21,6 @@
 
 "errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
+
+"searchRecentsTitle" = "عمليات البحث الأخيرة";
+"searchPopularTitle" = "إختبر البحث بإستخدام";

@@ -24,18 +24,26 @@ enum VerseHighlightType: Int {
     case reading
     case share
     case bookmark
+    case search
 }
 
 extension VerseHighlightType {
-    static let sortedTypes: [VerseHighlightType] = [.share, .reading, .bookmark]
+    static let sortedTypes: [VerseHighlightType] = [.share, .reading, .search, .bookmark]
 }
+
+extension VerseHighlightType {
+    static let scrollingTypes: [VerseHighlightType] = [.reading, .search]
+}
+
+private let alpha: CGFloat = 0.25
 
 extension VerseHighlightType {
     var color: UIColor {
         switch self {
-        case .reading   : return UIColor.appIdentity().withAlphaComponent(0.25)
-        case .share     : return UIColor.selection().withAlphaComponent(0.25)
-        case .bookmark  : return UIColor.bookmark().withAlphaComponent(0.25)
+        case .reading   : return UIColor.appIdentity().withAlphaComponent(alpha)
+        case .share     : return UIColor.selection().withAlphaComponent(alpha)
+        case .bookmark  : return UIColor.bookmark().withAlphaComponent(alpha)
+        case .search    : return #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1).withAlphaComponent(alpha)
         }
     }
 }

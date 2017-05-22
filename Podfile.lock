@@ -25,6 +25,9 @@ PODS:
   - PromiseKit/UIKit (4.1.7):
     - PromiseKit/CorePromise
   - Result (3.2.1)
+  - RxCocoa (3.4.1):
+    - RxSwift (~> 3.4)
+  - RxSwift (3.4.1)
   - SQLite.swift (0.11.3):
     - SQLite.swift/standard (= 0.11.3)
   - SQLite.swift/standard (0.11.3)
@@ -42,6 +45,8 @@ DEPENDENCIES:
   - Moya
   - NSDate+TimeAgo
   - PromiseKit
+  - RxCocoa
+  - RxSwift
   - SQLite.swift (~> 0.11.0)
   - SwiftMonkey
   - SwiftyJSON
@@ -59,11 +64,13 @@ SPEC CHECKSUMS:
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
+  RxCocoa: a8a5f1d061d0043e28f56976829f31ce63e8eb09
+  RxSwift: 656f8fbeca5bc372121a72d9ebdd3cd3bc0ffade
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
   SwiftMonkey: dc5681bf881dd84efcc7ff684a31582d5ac67232
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: be742c8e8248772997c4841fe5ae81128299c374
+PODFILE CHECKSUM: 09888526a5237e46b33aaf66269eed5415e8befb
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.2.1

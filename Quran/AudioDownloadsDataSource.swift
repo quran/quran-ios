@@ -72,6 +72,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
 
         let item = self.item(at: indexPath)
 
+        Analytics.shared.deletingQuran(qari: item.audio.qari)
         deletionInteractor
             .execute(item.audio.qari)
             .then(on: .main) { () -> Void in
@@ -121,6 +122,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     func onShouldStartDownload(item: DownloadableQariAudio) {
         cancelled.value = false
 
+        Analytics.shared.downloadingQuran(qari: item.audio.qari)
         // download the audio
         ayahsDownloader
             .execute(AyahsAudioDownloadRequest(start: Quran.startAyah, end: Quran.lastAyah, qari: item.audio.qari))

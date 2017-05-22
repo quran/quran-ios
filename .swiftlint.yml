@@ -6,6 +6,9 @@ included:
   - UIKitExtension
   - VFoundation
 
+excluded:
+  - UIKitExtension/ActivityIndicator.swift
+
 disabled_rules:
   - cyclomatic_complexity
   - colon

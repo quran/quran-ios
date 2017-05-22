@@ -33,10 +33,6 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         return .lightContent
     }
 
-    private var activityIndicator: UIActivityIndicatorView? {
-        return navigationItem.leftBarButtonItem?.customView as? UIActivityIndicatorView
-    }
-
     init(retriever: AnyGetInteractor<[DownloadableQariAudio]>,
          downloader: DownloadManager,
          ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
@@ -59,11 +55,6 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         super.viewDidLoad()
         title = NSLocalizedString("audio_manager", tableName: "Android", comment: "")
 
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.stopAnimating()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: activityIndicator)
-
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
@@ -84,7 +75,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        activityIndicator?.startAnimating()
+        showActivityIndicator()
         loadLocalData()
     }
 
@@ -109,7 +100,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
             .always(on: .main) {
-                self.activityIndicator?.stopAnimating()
+                self.hideActivityIndicator()
             }
     }
 
@@ -122,5 +113,16 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
             }
         }
         return canEdit
+    }
+
+    private func showActivityIndicator() {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        navigationItem.titleView = activityIndicator
+    }
+
+    private func hideActivityIndicator() {
+        navigationItem.titleView = nil
     }
 }

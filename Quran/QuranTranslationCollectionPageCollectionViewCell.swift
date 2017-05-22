@@ -130,7 +130,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
 
     override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: VerseHighlightType) {
         highlights[type] = verses
-        if type == .reading {
+        if VerseHighlightType.scrollingTypes.contains(type) {
             scrollToReadingHighlightedAyat()
         }
     }
@@ -140,15 +140,24 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
     }
 
     private func scrollToReadingHighlightedAyat() {
-        // layout data if needed
+        // layout views if needed
         layoutIfNeeded()
-        guard let ayah = highlights[.reading]?.first else {
+
+        var optionalAyah: AyahNumber? = nil
+        for highlightType in VerseHighlightType.sortedTypes {
+            if let firstAyah = highlights[highlightType]?.first {
+                optionalAyah = firstAyah
+                break
+            }
+        }
+
+        guard let ayah = optionalAyah else {
             return
         }
         guard let indexPath = dataSource.indexPath(forAyah: ayah) else {
             return
         }
-        // scroll to the reading ayah
+        // scroll to the reading/search ayah
         collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.top, animated: true)
     }
 }

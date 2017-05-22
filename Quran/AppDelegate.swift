@@ -63,9 +63,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func configureAppAppearance() {
+        // window
         window?.tintColor = UIColor.appIdentity()
+
+        // navigation
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().barTintColor = UIColor.appIdentity()
+
+        // search bar
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont.systemFont(ofSize: 14)
+        ]
     }
 
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {

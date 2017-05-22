@@ -29,10 +29,6 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
     private let interactor: AnyGetInteractor<[TranslationFull]>
     private let localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>
 
-    private var activityIndicator: UIActivityIndicatorView? {
-        return navigationItem.leftBarButtonItem?.customView as? UIActivityIndicatorView
-    }
-
     init(interactor: AnyGetInteractor<[TranslationFull]>,
          localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>,
          dataSource: TranslationsDataSource) {
@@ -54,11 +50,6 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
     override func viewDidLoad() {
         super.viewDidLoad()
         title = NSLocalizedString("prefs_translations", tableName: "Android", comment: "")
-
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.stopAnimating()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: activityIndicator)
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -86,7 +77,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        activityIndicator?.startAnimating()
+        showActivityIndicator()
         loadLocalData {
             self.refreshData()
         }
@@ -110,7 +101,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
             }.catchToAlertView(viewController: self)
             .always(on: .main) { [weak self] in
                 self?.refreshControl.endRefreshing()
-                self?.activityIndicator?.stopAnimating()
+                self?.hideActivityIndicator()
             }
     }
 
@@ -126,5 +117,16 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
 
     func hasItemsToEdit() -> Bool {
         return !dataSource.downloadedDS.items.isEmpty
+    }
+
+    private func showActivityIndicator() {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        navigationItem.titleView = activityIndicator
+    }
+
+    private func hideActivityIndicator() {
+        navigationItem.titleView = nil
     }
 }

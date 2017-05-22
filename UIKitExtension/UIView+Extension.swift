@@ -50,6 +50,33 @@ extension UIView {
                                                       options: [], metrics: nil, views: ["view": contentView]))
         return contentView
     }
+
+    public func findSubview<T: UIView>(ofType type: T.Type) -> T? {
+        // breadth-first search
+        var queue = subviews
+        while !queue.isEmpty {
+            let subview = queue.removeFirst()
+            if let subview = subview as? T {
+                return subview
+            }
+            queue.append(contentsOf: subview.subviews)
+        }
+        return nil
+    }
+
+    public func findSubviews<T: UIView>(ofType type: T.Type) -> [T] {
+        // breadth-first search
+        var queue = subviews
+        var result: [T] = []
+        while !queue.isEmpty {
+            let subview = queue.removeFirst()
+            if let subview = subview as? T {
+                result.append(subview)
+            }
+            queue.append(contentsOf: subview.subviews)
+        }
+        return result
+    }
 }
 
 extension UIView {

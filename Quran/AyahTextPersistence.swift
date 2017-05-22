@@ -23,4 +23,7 @@ import Foundation
 protocol AyahTextPersistence {
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String
     func getOptionalAyahText(forNumber: AyahNumber) throws -> String?
+
+    func autocomplete(term: String) throws -> [SearchAutocompletion]
+    func search(for term: String) throws -> [SearchResult]
 }

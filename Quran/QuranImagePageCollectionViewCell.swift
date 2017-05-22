@@ -85,7 +85,15 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     }
 
     private func scrollToReadingHighlightedAyat() {
-        guard let rectangles = highlightingView.highlightingRectangles[.reading], !rectangles.isEmpty else {
+
+        var rectangles: [CGRect] = []
+        for highlightType in VerseHighlightType.sortedTypes {
+            if let rects = highlightingView.highlightingRectangles[highlightType], !rects.isEmpty {
+                rectangles = rects
+                break
+            }
+        }
+        guard !rectangles.isEmpty else {
             return
         }
 
@@ -107,7 +115,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
 
     override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: VerseHighlightType) {
         highlightingView.highlights[type] = verses
-        if type == .reading {
+        if VerseHighlightType.scrollingTypes.contains(type) {
             scrollToReadingHighlightedAyat()
         }
     }

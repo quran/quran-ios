@@ -5,6 +5,7 @@ swift_version = "3.1"
 target 'VFoundation' do
     pod 'PromiseKit'
     pod 'SwiftyJSON'
+    pod 'RxSwift'
 end
 
 target 'SQLitePersistence' do
@@ -18,6 +19,8 @@ end
 
 target 'UIKitExtension' do
     pod 'PromiseKit'
+    pod 'RxSwift'
+    pod 'RxCocoa'
 end
 
 target 'QueuePlayer' do
@@ -38,6 +41,8 @@ target 'Quran' do
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
+    pod 'RxSwift'
+    pod 'RxCocoa'
 end
 
 target 'QuranUITests' do

@@ -22,13 +22,9 @@ import UIKit
 
 class SearchNavigationController: BaseNavigationController {
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: "Search", image: nil, selectedImage: nil)
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {

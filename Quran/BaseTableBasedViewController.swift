@@ -17,13 +17,11 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import UIKit
 
 class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
 
     weak var tableView: UITableView! // swiftlint:disable:this implicitly_unwrapped_optional
-    weak var statusView: UIView?
 
     var clearsSelectionOnViewWillAppear: Bool = true
 
@@ -38,37 +36,20 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
         view.addAutoLayoutSubview(tableView)
         view.pinParentAllDirections(tableView)
 
-        let statusView = UIView()
-        statusView.backgroundColor = UIColor.appIdentity()
-        view.addAutoLayoutSubview(statusView)
-        view.pinParentHorizontal(statusView)
-        view.addParentTopConstraint(statusView)
-        statusView.addHeightConstraint(20)
-
         self.tableView = tableView
-        self.statusView = statusView
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if clearsSelectionOnViewWillAppear {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                tableView.deselectRow(at: indexPath, animated: animated)
+            if let indexPath = tableView?.indexPathForSelectedRow {
+                tableView?.deselectRow(at: indexPath, animated: animated)
             }
         }
     }
 
-    override func willTransition(to newCollection: UITraitCollection,
-                                 with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-        let isCompact = newCollection.containsTraits(in: UITraitCollection(verticalSizeClass: .compact))
-        coordinator.animate(alongsideTransition: { [weak self] _ in
-            self?.statusView?.alpha = isCompact ? 0 : 1
-            }, completion: nil)
-    }
-
     func scrollToTop() {
-        tableView.setContentOffset(CGPoint(x: 0, y: -tableView.contentInset.top), animated: true)
+        tableView?.scrollToTop(animated: true)
     }
 }

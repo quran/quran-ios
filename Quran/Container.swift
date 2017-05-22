@@ -446,6 +446,6 @@ class Container {
     }
 
     func createDefaultSearchRecentsService() -> SearchRecentsService {
-        return DefaultSearchRecentsService()
+        return DefaultSearchRecentsService(persistence: createSimplePersistence())
     }
 }

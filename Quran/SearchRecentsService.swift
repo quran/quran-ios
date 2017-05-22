@@ -18,6 +18,10 @@
 //  GNU General Public License for more details.
 //
 
+extension PersistenceKeyBase {
+    fileprivate static let searchRecentItems = PersistenceKey<NSOrderedSet>(key: "com.quran.searchRecentItems", defaultValue: [])
+}
+
 protocol SearchRecentsService {
     func getPopularTerms() -> [String]
     func getRecents() -> [String]
@@ -28,25 +32,35 @@ class DefaultSearchRecentsService: SearchRecentsService {
     private let maxCount: Int = 5
     private let removePopularWhenRecentsCount = 3
 
-    private let popularTerms: [String] = ["Popular 1", "Popular 2", "Way popular", "Way popular 2"]
-    private var recents: NSMutableOrderedSet = [] // ["A", "b", "d"]
+    private let persistence: SimplePersistence
+
+    private let popularTerms: [String] = ["الرحمن الرحيم", "الحي القيوم", "يس", "تبارك"]
+
+    init(persistence: SimplePersistence) {
+        self.persistence = persistence
+    }
 
     func getPopularTerms() -> [String] {
-        guard recents.count < removePopularWhenRecentsCount else {
+        let recentsCount = persistence.serializedValueForKey(.searchRecentItems).count
+        guard recentsCount < removePopularWhenRecentsCount else {
             return []
         }
-        return Array(popularTerms.dropLast(recents.count))
+        return Array(popularTerms.dropLast(recentsCount))
     }
 
     func getRecents() -> [String] {
+        let recents = persistence.serializedValueForKey(.searchRecentItems)
         return recents.map { $0 as! String } // swiftlint:disable:this force_cast
     }
 
     func addToRecents(_ term: String) {
-        recents.remove(term)
-        recents.insert(term, at: 0)
-        if recents.count > maxCount {
-            recents.removeObjects(in: NSRange(location: maxCount, length: recents.count - maxCount))
+        let recents = persistence.serializedValueForKey(.searchRecentItems)
+        let mutable = NSMutableOrderedSet(orderedSet: recents, copyItems: false)
+        mutable.remove(term)
+        mutable.insert(term, at: 0)
+        if mutable.count > maxCount {
+            mutable.removeObjects(in: NSRange(location: maxCount, length: mutable.count - maxCount))
         }
+        persistence.setSerializedValue(NSOrderedSet(orderedSet: mutable), forKey: .searchRecentItems)
     }
 }

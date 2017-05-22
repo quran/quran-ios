@@ -71,6 +71,12 @@ class QuranDataSource: SegmentedDataSource {
         selectedDataSourceHandler.applicationDidBecomeActive()
     }
 
+    func highlightSearchAyaht(_ ayat: Set<AyahNumber>) {
+        for (offset, ds) in dataSourceHandlers.enumerated() {
+            ds.highlightSearchAyaht(ayat, isActive: offset == selectedDataSourceIndex)
+        }
+    }
+
     func highlightAyaht(_ ayat: Set<AyahNumber>) {
         for (offset, ds) in dataSourceHandlers.enumerated() {
             ds.highlightAyaht(ayat, isActive: offset == selectedDataSourceIndex)

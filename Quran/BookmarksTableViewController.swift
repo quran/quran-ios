@@ -30,10 +30,10 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
     let pageDS: PageBookmarkDataSource
     let ayahDS: AyahBookmarkDataSource
 
-    let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
+    let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
 
     init(
-         quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>,
+         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>,
          simplePersistence: SimplePersistence,
          lastPagesPersistence: LastPagesPersistence,
          bookmarksPersistence: BookmarksPersistence,
@@ -123,7 +123,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {
-        let controller = self.quranControllerCreator.create(page, lastPage)
+        let controller = self.quranControllerCreator.create((page, lastPage, nil))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

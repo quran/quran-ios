@@ -191,7 +191,7 @@ class Container {
         return DefaultAyahInfoRetriever(persistence: createAyahInfoPersistence())
     }
 
-    func createQuranController(page: Int, lastPage: LastPage?) -> QuranViewController {
+    func createQuranController(page: Int, lastPage: LastPage?, highlightAyah: AyahNumber?) -> QuranViewController {
         return QuranViewController(
             imageService                           : createQuranImageService(),
             pageService                            : createQuranTranslationService(),
@@ -205,7 +205,8 @@ class Container {
             simplePersistence                      : createSimplePersistence(),
             verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
             page                                   : page,
-            lastPage                               : lastPage
+            lastPage                               : lastPage,
+            highlightedSearchAyah                  : highlightAyah
         )
     }
 

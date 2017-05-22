@@ -28,7 +28,7 @@ protocol SearchRouter: class {
 class NavigationSearchRouter: SearchRouter {
 
     private weak var navigationController: UINavigationController?    // DESIGN: Shouldn't be weak
-    private let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
+    private let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
 
     let interactor: SearchInteractor
     let presenter: SearchPresenter
@@ -36,7 +36,7 @@ class NavigationSearchRouter: SearchRouter {
     init(interactor: SearchInteractor,
          presenter: SearchPresenter,
          navigationController: UINavigationController?,
-         quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>) {
+         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>) {
         self.interactor = interactor
         self.presenter = presenter
         self.navigationController = navigationController
@@ -44,7 +44,7 @@ class NavigationSearchRouter: SearchRouter {
     }
 
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {
-        let controller = quranControllerCreator.create((quranPage, nil))
+        let controller = quranControllerCreator.create((quranPage, nil, highlightingAyah))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

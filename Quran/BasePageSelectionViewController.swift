@@ -23,13 +23,13 @@ import UIKit
 class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
 
     let dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>
-    let quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>
+    let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
     let lastPageDS: LastPageBookmarkDataSource
 
     init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>,
-         quranControllerCreator: AnyCreator<(Int, LastPage?), QuranViewController>,
+         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>,
          lastPagesPersistence: LastPagesPersistence) {
         self.dataRetriever = dataRetriever
         self.quranControllerCreator = quranControllerCreator
@@ -115,7 +115,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     }
 
     private func navigateToPage(_ page: Int, lastPage: LastPage?) {
-        let controller = self.quranControllerCreator.create(page, lastPage)
+        let controller = self.quranControllerCreator.create((page, lastPage, nil))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

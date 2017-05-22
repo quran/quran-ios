@@ -22,6 +22,7 @@ import Foundation
 import GenericDataSources
 
 protocol QuranDataSourceHandler: class {
+    func highlightSearchAyaht(_ ayat: Set<AyahNumber>, isActive: Bool)
     func highlightAyaht(_ ayat: Set<AyahNumber>, isActive: Bool)
     func applicationDidBecomeActive()
     func invalidate()

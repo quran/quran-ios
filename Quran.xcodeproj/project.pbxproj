@@ -43,6 +43,7 @@
 		541BA5E11E93AE6500245A42 /* QuranShareData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E01E93AE6500245A42 /* QuranShareData.swift */; };
 		541BA5E31E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */; };
 		541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */; };
+		5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5420D2C71ED3733500D36821 /* UITableView+Extension.swift */; };
 		5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */; };
 		54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */; };
 		5424773D1E7856040051C196 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5424773C1E7856040051C196 /* DownloadButton.swift */; };
@@ -539,6 +540,7 @@
 		541BA5E01E93AE6500245A42 /* QuranShareData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranShareData.swift; sourceTree = "<group>"; };
 		541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationAyahSectionDataSource.swift; sourceTree = "<group>"; };
 		541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranBaseBasicDataSource.swift; sourceTree = "<group>"; };
+		5420D2C71ED3733500D36821 /* UITableView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		5421D8CE1CDAA46800E6B019 /* ImagePreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreloadingOperation.swift; sourceTree = "<group>"; };
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
@@ -1297,6 +1299,7 @@
 				543FE0161EB3B94100687DF8 /* UIViewController+Extension.swift */,
 				543FE0231EB3BBE800687DF8 /* PromiseKit+UIExtension.swift */,
 				54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */,
+				5420D2C71ED3733500D36821 /* UITableView+Extension.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -2943,6 +2946,7 @@
 				543FE0171EB3B94100687DF8 /* CALayer+Extension.swift in Sources */,
 				543FE01D1EB3B94100687DF8 /* UIViewController+Extension.swift in Sources */,
 				543FE0261EB3C0C000687DF8 /* SimultenousGestureDelegate.swift in Sources */,
+				5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,
 				543FE0181EB3B94100687DF8 /* CGRect+Extension.swift in Sources */,
 				542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */,

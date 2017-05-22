@@ -39,6 +39,7 @@ class SearchResultsDataSource: SegmentedDataSource {
         didSet {
             ds_reusableViewDelegate?.ds_reloadData()
             ds_reusableViewDelegate?.ds_scrollView.isUserInteractionEnabled = selectedDataSource !== loading
+            ds_reusableViewDelegate?.asTableView()?.scrollToTop(animated: false)
         }
     }
 

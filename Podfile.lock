@@ -2,9 +2,29 @@ PODS:
   - Alamofire (4.4.0)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
+  - DhtKeychain (1.0)
+  - DhtStoreKit (1.0)
   - DownloadButton (0.1.0)
   - Fabric (1.6.11)
+  - Firebase/AdMob (4.0.0):
+    - Firebase/Core
+    - Google-Mobile-Ads-SDK (= 7.20.0)
+  - Firebase/Core (4.0.0):
+    - FirebaseAnalytics (= 4.0.0)
+    - FirebaseCore (= 4.0.0)
+  - FirebaseAnalytics (4.0.0):
+    - FirebaseCore (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseCore (4.0.0):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseInstanceID (2.0.0):
+    - FirebaseCore (~> 4.0)
   - GenericDataSources (2.4.4)
+  - Google-Mobile-Ads-SDK (7.20.0)
+  - GoogleToolboxForMac/Defines (2.1.1)
+  - GoogleToolboxForMac/NSData+zlib (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
   - KVOController (1.2.0)
   - MenuItemKit (2.0)
   - Moya (8.0.3):
@@ -25,6 +45,7 @@ PODS:
   - PromiseKit/UIKit (4.1.7):
     - PromiseKit/CorePromise
   - Result (3.2.1)
+  - SnapKit (3.2.0)
   - SQLite.swift (0.11.3):
     - SQLite.swift/standard (= 0.11.3)
   - SQLite.swift/standard (0.11.3)
@@ -34,36 +55,64 @@ PODS:
 
 DEPENDENCIES:
   - Crashlytics
+  - DhtKeychain (from `https://github.com/nguyenvandungb/DhtKeychain.git`)
+  - DhtStoreKit (from `https://github.com/nguyenvandungb/DhtStoreKit.git`)
   - DownloadButton
   - Fabric
+  - Firebase/AdMob
+  - Firebase/Core
   - GenericDataSources
   - KVOController
   - MenuItemKit
   - Moya
   - NSDate+TimeAgo
   - PromiseKit
+  - SnapKit
   - SQLite.swift (~> 0.11.0)
   - SwiftMonkey
   - SwiftyJSON
   - Zip (~> 0.6)
 
+EXTERNAL SOURCES:
+  DhtKeychain:
+    :git: https://github.com/nguyenvandungb/DhtKeychain.git
+  DhtStoreKit:
+    :git: https://github.com/nguyenvandungb/DhtStoreKit.git
+
+CHECKOUT OPTIONS:
+  DhtKeychain:
+    :commit: 08dab97b91ddf728a22500096ec0adb30209149c
+    :git: https://github.com/nguyenvandungb/DhtKeychain.git
+  DhtStoreKit:
+    :commit: 85b840063836dc590e43f6f67d5643a3968e345b
+    :git: https://github.com/nguyenvandungb/DhtStoreKit.git
+
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  DhtKeychain: 02e752cd0cce24d0d0719c4eeb12cbe58aa2a178
+  DhtStoreKit: facb498ff76c59e18a7cef0ced142d6e4b98da20
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  Firebase: 284eea779b73fdff309791817da7c68bff8dd572
+  FirebaseAnalytics: 6f08e746f7d66f5452931bc2e822b5df9c66b64a
+  FirebaseCore: 85ad466044c2f013cdb167f85d426d15b128114a
+  FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   GenericDataSources: 70b1ce367744c595444a7da9a43784536de9173f
+  Google-Mobile-Ads-SDK: 168312cdc167fa22746d4ea8e839fc4825dd2966
+  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
   SwiftMonkey: dc5681bf881dd84efcc7ff684a31582d5ac67232
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: be742c8e8248772997c4841fe5ae81128299c374
+PODFILE CHECKSUM: ff056b4509a0e33d49e5d7766cfb76618236fb03
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.1.1

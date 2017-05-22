@@ -38,6 +38,11 @@ target 'Quran' do
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
+    pod 'Firebase/Core'
+    pod 'Firebase/AdMob'
+    pod 'SnapKit'
+    pod 'DhtStoreKit', :git => 'https://github.com/nguyenvandungb/DhtStoreKit.git'
+    pod 'DhtKeychain', :git => 'https://github.com/nguyenvandungb/DhtKeychain.git'
 end
 
 target 'QuranUITests' do

@@ -19,24 +19,96 @@
 //
 
 import UIKit
+import GoogleMobileAds
+import SnapKit
 
 protocol ScrollableToTop {
     func scrollToTop()
 }
 
-class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+class MainTabBarController: UITabBarController, UITabBarControllerDelegate, GADInterstitialDelegate {
+    var bottomView: UIView!
+    var bannerView: AdsBannerView!
+    var interstitialView: AdsInterstitialView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.barStyle = .default
         delegate = self
+        addBottomView()
+        addBannerAdmode()
+        self.automaticallyAdjustsScrollViewInsets = false
+        self.view?.layoutIfNeeded()
+        self.registerNotification()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func registerNotification() {
+        weak var weakself = self
+        NotificationCenter.default.addObserver(forName: NotificationName.kNotificationFullAds.name(), object: nil, queue:OperationQueue.main) { (notification) in
+            weakself?.addBannerAllPageAdmode()
+        }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        bannerView?.snp.makeConstraints({ (make) in
+            make.top.bottom.left.right.equalTo(self.bottomView)
+        })
+    }
+
+    func addBottomView() {
+        bottomView = UIView(frame: CGRect(x: 0, y: 0, width: 375, height: 60))
+        self.view.addSubview(bottomView)
+        bottomView?.snp.makeConstraints({ (make) in
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.view).offset(-49)
+            make.height.equalTo(50)
+        })
+    }
+
+    func addBannerAdmode() {
+        if let appDelegate = AppDelegate.shareInstance(), appDelegate.hasPurchased() {
+            return
+        }
+        bannerView = AdsBannerView(adSize: kGADAdSizeBanner, origin: CGPoint(x: 0, y: 0))
+        bannerView?.adUnitID = GoogleAdmob.bannerUnitId
+        bannerView?.rootViewController = self
+        bannerView?.load(GADRequest())
+        bottomView?.addSubview(bannerView)
+        bottomView?.backgroundColor = UIColor.clear
+    }
+    
+    func addBannerAllPageAdmode() {
+        if let appDelegate = AppDelegate.shareInstance(), appDelegate.hasPurchased() {
+            return
+        }
+        interstitialView = AdsInterstitialView(adUnitID: GoogleAdmob.fullscreenUnitId)
+        let request = GADRequest()
+        request.testDevices = [ kGADSimulatorID ]
+        interstitialView.load(request)
+        interstitialView.delegate = self
     }
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if tabBarController.selectedViewController == viewController && viewController.isViewLoaded {
-
             (viewController as? ScrollableToTop)?.scrollToTop()
         }
         return true
+    }
+    
+    func interstitialDidReceiveAd(_ ad: GADInterstitial!) {
+        print("Interstitial loaded successfully")
+        ad.present(fromRootViewController: self)
+//        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+//            interstitialView.present(fromRootViewController: rootViewController)
+//        }
+    }
+    
+    func interstitialDidFail(toPresentScreen ad: GADInterstitial!) {
+        print("Fail to receive interstitial")
     }
 }

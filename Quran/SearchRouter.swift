@@ -44,6 +44,7 @@ class NavigationSearchRouter: SearchRouter {
     }
 
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {
+        Analytics.shared.openingQuran(from: .searchResults)
         let controller = quranControllerCreator.create((quranPage, nil, highlightingAyah))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)

@@ -123,6 +123,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {
+        Analytics.shared.openingQuran(from: screen)
         let controller = self.quranControllerCreator.create((page, lastPage, nil))
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)

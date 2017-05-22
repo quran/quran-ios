@@ -115,4 +115,9 @@ struct Analytics {
         CLog("Searching for '\(term)', getting \(resultsCount) results")
         Answers.logCustomEvent(withName: "SearchTerm", customAttributes: ["term": "term", "resultsCount": resultsCount])
     }
+
+    func openingQuran(from screen: Screen) {
+        CLog("opening Quran from:", screen.rawValue)
+        Answers.logCustomEvent(withName: "OpeningQuran", customAttributes: ["from": screen.rawValue])
+    }
 }

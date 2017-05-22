@@ -35,6 +35,8 @@ class SearchResultsDataSource: SegmentedDataSource {
     var onResultSelected: ((Int) -> Void)?
     var onAutocompletionSelected: ((Int) -> Void)?
 
+    private var headerTItle: String?
+
     override var selectedDataSource: DataSource? {
         didSet {
             ds_reusableViewDelegate?.ds_reloadData()
@@ -74,14 +76,23 @@ class SearchResultsDataSource: SegmentedDataSource {
         selectedDataSource = autocomplete
     }
 
-    func switchToResults(with items: [SearchResultUI]) {
+    func switchToResults(with items: [SearchResultUI], title: String?) {
         results.items = items
+        headerTItle = title
         selectedDataSource = results
     }
 
     func switchToNoResults(_ message: String) {
         noResults.items = [message]
         selectedDataSource = noResults
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return headerTItle
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return selectedDataSource === results ? 22 : 0
     }
 }
 

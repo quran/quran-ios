@@ -23,7 +23,7 @@ protocol SearchPresenter: class {
     weak var interactor: SearchInteractor? { get set }
 
     func show(autocompletions: [SearchAutocompletion])
-    func show(results: [SearchResult])
+    func show(results: SearchResults)
     func show(recents: [String], popular: [String])
 
     func showLoading()
@@ -49,18 +49,25 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
         view?.show(autocompletions: strings)
     }
 
-    func show(results: [SearchResult]) {
-        print("Number of results", results.count)
-        self.results = results
+    func show(results: SearchResults) {
+        print("Number of results", results.items.count)
+        self.results = results.items
 
         DispatchQueue.default.async {
-            let seachResultsUI = results.map {
+            let seachResultsUI = results.items.map {
                 SearchResultUI(attributedString: $0.asAttributedString(),
                                pageNumber: self.numberFormatter.format($0.page),
                                ayahDescription: $0.ayah.localizedName)
             }
             DispatchQueue.main.async {
-                self.view?.show(results: seachResultsUI)
+                let title: String?
+                switch results.source {
+                case .none: title = nil
+                case .translation(let translation): title = translation.translationName
+                case .quran: title = Bundle.main.localizedInfoDictionary?["CFBundleName"] as? String
+                }
+
+                self.view?.show(results: seachResultsUI, title: title)
             }
         }
     }

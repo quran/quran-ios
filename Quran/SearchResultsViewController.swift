@@ -54,8 +54,8 @@ class SearchResultsViewController: BaseTableViewController {
         dataSource.switchToAutocompletes()
     }
 
-    func show(results: [SearchResultUI]) {
-        dataSource.switchToResults(with: results)
+    func show(results: [SearchResultUI], title: String?) {
+        dataSource.switchToResults(with: results, title: title)
     }
 
     func showNoResult(_ message: String) {

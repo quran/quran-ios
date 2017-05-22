@@ -113,8 +113,8 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         }
     }
 
-    func show(results: [SearchResultUI]) {
-        searchResults.show(results: results)
+    func show(results: [SearchResultUI], title: String?) {
+        searchResults.show(results: results, title: title)
     }
 
     func show(recents: [String], popular: [String]) {

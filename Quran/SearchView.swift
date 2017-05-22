@@ -34,7 +34,7 @@ protocol SearchView: class {
     weak var delegate: SearchViewDelegate? { get set }
 
     func show(autocompletions: [NSAttributedString])
-    func show(results: [SearchResultUI])
+    func show(results: [SearchResultUI], title: String?)
     func show(recents: [String], popular: [String])
 
     func showLoading()

@@ -97,11 +97,11 @@ class DefaultSearchInteractor: SearchInteractor {
                     if results.items.isEmpty {
                         self?.presenter?.showNoResults(for: query)
                     } else {
-                        self?.presenter?.show(results: results.items)
+                        self?.presenter?.show(results: results)
                     }
                 case .failure(let error):
                     self?.source = nil
-                    self?.presenter?.show(results: [])
+                    self?.presenter?.show(results: SearchResults(source: .none, items: []))
                     self?.presenter?.showError(error)
                 }
                 self?.recentsService.addToRecents(query)

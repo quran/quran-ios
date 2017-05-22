@@ -11,6 +11,7 @@ import Foundation
 enum NotificationName: String {
     case networkStateChange = "KNotificationNetworkStateDidChange"
     case kNotificationDidPurchase = "kNotification_did_purchase"
+    case kNotificationFullAds = "kNotificationFullAds"
 
     public func name() -> NSNotification.Name {
         return Notification.Name(rawValue: self.rawValue)

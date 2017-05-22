@@ -19,7 +19,6 @@
 //
 
 import UIKit
-import Foundation
 import GoogleMobileAds
 import SnapKit
 
@@ -38,9 +37,20 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate, GADI
         delegate = self
         addBottomView()
         addBannerAdmode()
-        addBannerAllPageAdmode()
         self.automaticallyAdjustsScrollViewInsets = false
         self.view?.layoutIfNeeded()
+        self.registerNotification()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func registerNotification() {
+        weak var weakself = self
+        NotificationCenter.default.addObserver(forName: NotificationName.kNotificationFullAds.name(), object: nil, queue:OperationQueue.main) { (notification) in
+            weakself?.addBannerAllPageAdmode()
+        }
     }
 
     override func updateViewConstraints() {
@@ -48,14 +58,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate, GADI
         bannerView?.snp.makeConstraints({ (make) in
             make.top.bottom.left.right.equalTo(self.bottomView)
         })
-    }
-    
-    private func startTimer() {
-    
-    }
-    
-    private func stopTimer() {
-        
     }
 
     func addBottomView() {

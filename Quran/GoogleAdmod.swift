@@ -27,4 +27,13 @@ class GoogleAdmob {
             #endif
         }
     }
+    static var secondRepeatShow: Double {
+        get {
+            #if DEBUG
+                return 10.0
+            #else
+                return 90.0
+            #endif
+        }
+    }
 }

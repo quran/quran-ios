@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     let container: Container
+    
+    private var adsTimer: VFoundation.Timer?
 
     class func shareInstance() -> AppDelegate? {
         return UIApplication.shared.delegate as? AppDelegate ?? nil
@@ -63,9 +65,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         configureAppAppearance()
 
+        stopTimer()
+        startTimer()
+
         window.rootViewController = container.createRootViewController()
         window.makeKeyAndVisible()
         return true
+    }
+    
+    private func startTimer() {
+        adsTimer = VFoundation.Timer(interval: GoogleAdmob.secondRepeatShow, repeated: true, startNow: false, queue: DispatchQueue.main, handler: {
+            NotificationCenter.default.post(
+                name: NotificationName.kNotificationFullAds.name(),
+                object: self,
+                userInfo: nil
+            )
+        })
+    }
+    
+    private func stopTimer() {
+        adsTimer?.cancel()
+        adsTimer = nil
     }
 
     fileprivate func configureAppAppearance() {
@@ -77,6 +97,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         let downloadManager = container.createDownloadManager()
         downloadManager.backgroundSessionCompletionHandler = completionHandler
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        self.stopTimer()
+        self.startTimer()
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        self.startTimer()
     }
 
     // MARK: Config IAP

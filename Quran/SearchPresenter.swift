@@ -50,7 +50,6 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     }
 
     func show(results: SearchResults) {
-        print("Number of results", results.items.count)
         self.results = results.items
 
         DispatchQueue.default.async {

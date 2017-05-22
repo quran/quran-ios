@@ -94,6 +94,8 @@ class DefaultSearchInteractor: SearchInteractor {
                 switch result {
                 case .success(let results):
                     self?.source = results.source
+
+                    Analytics.shared.searching(for: query, resultsCount: results.items.count)
                     if results.items.isEmpty {
                         self?.presenter?.showNoResults(for: query)
                     } else {

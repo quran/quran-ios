@@ -110,4 +110,9 @@ struct Analytics {
         CLog("Deleting audio for qari:", qari.id)
         Answers.logCustomEvent(withName: "Audio Deletion", customAttributes: ["qari.id": qari.id, "qari.name": qari.name])
     }
+
+    func searching(for term: String, resultsCount: Int) {
+        CLog("Searching for '\(term)', getting \(resultsCount) results")
+        Answers.logCustomEvent(withName: "SearchTerm", customAttributes: ["term": "term", "resultsCount": resultsCount])
+    }
 }

@@ -28,3 +28,16 @@ struct SearchResult {
     let ayah: AyahNumber
     let page: Int
 }
+
+extension SearchResult {
+    enum Source {
+        case none
+        case quran
+        case translation(Translation)
+    }
+}
+
+struct SearchResults {
+    let source: SearchResult.Source
+    let items: [SearchResult]
+}

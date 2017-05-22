@@ -34,6 +34,7 @@ class DefaultSearchBuilder: SearchBuilder {
         navigation.viewControllers = [view]
 
         let interactor = DefaultSearchInteractor(
+            persistence: container.createSimplePersistence(),
             autocompleteService: container.createSQLiteSearchAutocompletionService(),
             searchService: container.createSQLiteSearchService(),
             recentsService: container.createDefaultSearchRecentsService())

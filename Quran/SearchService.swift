@@ -20,7 +20,7 @@
 import RxSwift
 
 protocol SearchService {
-    func search(for term: String) -> Observable<[SearchResult]>
+    func search(for term: String) -> Observable<SearchResults>
 }
 protocol SearchAutocompletionService {
     func autocomplete(term: String) -> Observable<[SearchAutocompletion]>
@@ -29,7 +29,6 @@ protocol SearchAutocompletionService {
 class SQLiteSearchService: SearchAutocompletionService, SearchService {
 
     private let localTranslationInteractor: AnyGetInteractor<[TranslationFull]>
-    private let simplePersistence: SimplePersistence
     private let arabicPersistence: AyahTextPersistence
     private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
     init(
@@ -38,7 +37,6 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
         arabicPersistence: AyahTextPersistence,
         translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>) {
         self.localTranslationInteractor = localTranslationInteractor
-        self.simplePersistence = simplePersistence
         self.arabicPersistence = arabicPersistence
         self.translationPersistenceCreator = translationPersistenceCreator
     }
@@ -66,39 +64,37 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
             }
     }
 
-    func search(for term: String) -> Observable<[SearchResult]> {
+    func search(for term: String) -> Observable<SearchResults> {
         let translationCreator = self.translationPersistenceCreator
         let arabicPersistence = self.arabicPersistence
 
         return prepare()
-            .map { translations -> [SearchResult] in
+            .map { translations -> SearchResults in
                 let arabicResults = try arabicPersistence.search(for: term)
                 guard arabicResults.isEmpty else {
-                    return arabicResults
+                    return SearchResults(source: .quran, items: arabicResults)
                 }
                 for translation in translations {
                     let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
                     let persistence = translationCreator.create(fileURL.absoluteString)
                     let results = try persistence.search(for: term)
                     if !results.isEmpty {
-                        return results
+                        return SearchResults(source: .translation(translation), items: results)
                     }
                 }
-                return []
+                return SearchResults(source: .none, items: [])
             }
     }
 
     private func prepare() -> Observable<[Translation]> {
-        let persistence = self.simplePersistence
         return localTranslationInteractor
             .get()
             .asObservable()
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
             .map { allTranslations -> [Translation] in
-                let selectedTranslationsIds = Set(persistence.valueForKey(.selectedTranslations))
                 return allTranslations
+                    .filter { $0.isDownloaded }
                     .map { $0.translation }
-                    .filter { selectedTranslationsIds.contains($0.id) }
             }
     }
 }

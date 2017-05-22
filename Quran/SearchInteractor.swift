@@ -42,9 +42,17 @@ class DefaultSearchInteractor: SearchInteractor {
     private let searchTerm = Variable("")
     private let startSearching = EventStream<Void>()
 
+    private let persistence: SimplePersistence
     private let recentsService: SearchRecentsService
 
-    init(autocompleteService: SearchAutocompletionService, searchService: SearchService, recentsService: SearchRecentsService) {
+    private var source: SearchResult.Source?
+
+    init(
+        persistence: SimplePersistence,
+        autocompleteService: SearchAutocompletionService,
+        searchService: SearchService,
+        recentsService: SearchRecentsService) {
+        self.persistence = persistence
         self.recentsService = recentsService
 
         // loading search
@@ -85,12 +93,14 @@ class DefaultSearchInteractor: SearchInteractor {
             }.drive(onNext: { [weak self] (result, query) in
                 switch result {
                 case .success(let results):
-                    if results.isEmpty {
+                    self?.source = results.source
+                    if results.items.isEmpty {
                         self?.presenter?.showNoResults(for: query)
                     } else {
-                        self?.presenter?.show(results: results)
+                        self?.presenter?.show(results: results.items)
                     }
                 case .failure(let error):
+                    self?.source = nil
                     self?.presenter?.show(results: [])
                     self?.presenter?.showError(error)
                 }
@@ -116,6 +126,18 @@ class DefaultSearchInteractor: SearchInteractor {
     }
 
     func onSelected(searchResult: SearchResult) {
+        // show translation if not an active translation
+        switch source {
+        case .none, .some(.quran), .some(.none): break
+        case .some(.translation(let translation)):
+            persistence.setValue(true, forKey: .showQuranTranslationView)
+            var translationIds = persistence.valueForKey(.selectedTranslations)
+            if !translationIds.contains(translation.id) {
+                translationIds.append(translation.id)
+                persistence.setValue(translationIds, forKey: .selectedTranslations)
+            }
+        }
+
         // navigate to the selected page
         router?.navigateTo(quranPage: searchResult.page, highlightingAyah: searchResult.ayah)
     }

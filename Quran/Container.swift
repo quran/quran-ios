@@ -45,10 +45,10 @@ class Container {
     func createRootViewController() -> UIViewController {
         let controller = MainTabBarController()
         controller.viewControllers = [
-            createSearchNavigationController(), createSurasNavigationController(),
+            createSurasNavigationController(),
             createJuzsNavigationController(),
             createBookmarksController(),
-
+            createSearchNavigationController(),
             createSettingsController()
         ]
         return controller

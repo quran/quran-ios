@@ -21,6 +21,8 @@ import Crashlytics
 import Fabric
 import PromiseKit
 import UIKit
+import DhtKeychain
+import DhtStoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     let container: Container
+
+    class func shareInstance() -> AppDelegate? {
+        return UIApplication.shared.delegate as? AppDelegate ?? nil
+    }
 
     override init() {
         // initialize craslytics
@@ -71,5 +77,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         let downloadManager = container.createDownloadManager()
         downloadManager.backgroundSessionCompletionHandler = completionHandler
+    }
+
+    // MARK: Config IAP
+
+    func didPurchaseSuccess(productId: String) {
+        Keychains.purchasedid.set(value: productId)
+    }
+
+    func hasPurchased() -> Bool {
+        return !Keychains.purchasedid.getStringOrEmpty().isEmpty
+    }
+
+    func configInAppPurchase() {
+        if self.hasPurchased() {
+            didPurchaseSuccess(productId: Keychains.purchasedid.getStringOrEmpty())
+        } else {
+            DhtStoreKit.shared().startProductRequest()
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.mkStoreKitProductsAvailable, object: nil, queue: OperationQueue.main) { (note) in
+                print(DhtStoreKit.shared().availableProducts)
+                let count = DhtStoreKit.shared().availableProducts?.count ?? 0
+                if count > 0 {
+//                    MKStoreKit.sharedKit().restorePurchases()
+                }
+            }
+        }
     }
 }

@@ -21,7 +21,6 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-
     var screen: Analytics.Screen { expectedToBeSubclassed() }
 
     override func viewWillAppear(_ animated: Bool) {

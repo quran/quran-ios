@@ -9,6 +9,7 @@ included:
 disabled_rules:
   - cyclomatic_complexity
   - colon
+  - empty_count
 
 opt_in_rules:
   - attributes
@@ -32,7 +33,6 @@ opt_in_rules:
   - redundant_nil_coalescing
   - sorted_imports
   #NOT NEEDED - switch_case_on_newline
-
 
 type_name:
   max_length: 60

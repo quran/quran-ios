@@ -44,8 +44,9 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
         view.pinParentHorizontal(statusView)
         view.addParentTopConstraint(statusView)
         statusView.addHeightConstraint(20)
-
+        
         self.tableView = tableView
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         self.statusView = statusView
     }
 

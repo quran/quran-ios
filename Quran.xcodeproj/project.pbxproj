@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D4A5D221ED2DDCF00E95393 /* AdsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A5D1F1ED2DDCF00E95393 /* AdsBannerView.swift */; };
+		0D4A5D231ED2DDCF00E95393 /* GoogleAdmod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A5D201ED2DDCF00E95393 /* GoogleAdmod.swift */; };
+		0D4A5D241ED2DDCF00E95393 /* Keychains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A5D211ED2DDCF00E95393 /* Keychains.swift */; };
+		0D4A5D261ED2DE2400E95393 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A5D251ED2DE2400E95393 /* Logger.swift */; };
+		0D4A5D281ED2DEC200E95393 /* NotificationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4A5D271ED2DEC200E95393 /* NotificationEnum.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
 		32A3FD57144E0B1B02BB1729 /* Pods_BatchDownloader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAAEAA5F6076B29DB5FE44 /* Pods_BatchDownloader.framework */; };
@@ -430,6 +435,11 @@
 /* Begin PBXFileReference section */
 		00A59CDA1DDFC044C1625C25 /* Pods-UIKitExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIKitExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-UIKitExtension/Pods-UIKitExtension.release.xcconfig"; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D4A5D1F1ED2DDCF00E95393 /* AdsBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdsBannerView.swift; sourceTree = "<group>"; };
+		0D4A5D201ED2DDCF00E95393 /* GoogleAdmod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleAdmod.swift; sourceTree = "<group>"; };
+		0D4A5D211ED2DDCF00E95393 /* Keychains.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychains.swift; sourceTree = "<group>"; };
+		0D4A5D251ED2DE2400E95393 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		0D4A5D271ED2DEC200E95393 /* NotificationEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnum.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		10CFDA740ED94B3515170DF3 /* Pods_QuranUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuranUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B08B5935F8D252F7CCFA3A6 /* Pods-QueuePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QueuePlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-QueuePlayer/Pods-QueuePlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -1741,6 +1751,11 @@
 		54B266181CC6D72800D3AEF8 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				0D4A5D271ED2DEC200E95393 /* NotificationEnum.swift */,
+				0D4A5D251ED2DE2400E95393 /* Logger.swift */,
+				0D4A5D1F1ED2DDCF00E95393 /* AdsBannerView.swift */,
+				0D4A5D201ED2DDCF00E95393 /* GoogleAdmod.swift */,
+				0D4A5D211ED2DDCF00E95393 /* Keychains.swift */,
 				545D964A1EBE83B4006D758A /* EditController.swift */,
 				5437D3A01EB38DE600795FA9 /* Deprecated */,
 				545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */,
@@ -3007,12 +3022,14 @@
 				54699B9B1E8DC15D00211A60 /* QuranTranslationArabicTextCollectionViewCell.swift in Sources */,
 				5424773D1E7856040051C196 /* DownloadButton.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
+				0D4A5D281ED2DEC200E95393 /* NotificationEnum.swift in Sources */,
 				54F8C41A1EA7EFB200C853C6 /* Downloadable.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */,
 				5459FF711EA5242200FBF6C5 /* AudioDownloadsNavigationController.swift in Sources */,
 				5421D8CF1CDAA46800E6B019 /* ImagePreloadingOperation.swift in Sources */,
 				5409229F1E91312200C7537A /* QuranTranslationSuraDataSource.swift in Sources */,
+				0D4A5D261ED2DE2400E95393 /* Logger.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
 				54B267071CD6B17F00D3AEF8 /* QuranPageReference.swift in Sources */,
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
@@ -3027,6 +3044,7 @@
 				5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */,
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54699BA31E8DC17B00211A60 /* QuranTranslationTextCollectionViewCell.swift in Sources */,
+				0D4A5D241ED2DDCF00E95393 /* Keychains.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
@@ -3051,6 +3069,7 @@
 				54F56C511E7EDA5C00D7AF57 /* QuranDataSource.swift in Sources */,
 				549040A01E5F945900D54625 /* NetworkManager.swift in Sources */,
 				540922AB1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift in Sources */,
+				0D4A5D221ED2DDCF00E95393 /* AdsBannerView.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
 				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
 				548724281DC4BF6000ADDE54 /* AyahBookmark.swift in Sources */,
@@ -3146,6 +3165,7 @@
 				545D964B1EBE83B4006D758A /* EditController.swift in Sources */,
 				540922A11E91314D00C7537A /* QuranTranslationVerseNumberDataSource.swift in Sources */,
 				54B266781CCAAA5200D3AEF8 /* Sura.swift in Sources */,
+				0D4A5D231ED2DDCF00E95393 /* GoogleAdmod.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				54DC4AE41E8472EE00F4CBD6 /* TranslationPage.swift in Sources */,
 				5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */,

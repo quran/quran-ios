@@ -42,6 +42,11 @@ public final class PersistenceKey<Type>: PersistenceKeyBase {
             Statics.registeredKeys.insert(key)
         #endif
     }
+
+    fileprivate init(_ key: String, _ defaultValue: Type) {
+        self.key = key
+        self.defaultValue = defaultValue
+    }
 }
 
 public protocol SimplePersistence {
@@ -49,4 +54,30 @@ public protocol SimplePersistence {
     func valueForKey<T>(_ key: PersistenceKey<T>) -> T
     func setValue<T>(_ value: T?, forKey key: PersistenceKey<T>)
     func removeValueForKey<T>(_ key: PersistenceKey<T?>)
+}
+
+extension SimplePersistence {
+    public func serializedValueForKey<T: NSCoding>(_ key: PersistenceKey<T>) -> T {
+        let _key = PersistenceKey<Data?>(key.key, nil)
+        guard let data = valueForKey(_key) else {
+            return key.defaultValue
+        }
+        let object = NSKeyedUnarchiver.unarchiveObject(with: data)
+        guard let value = object as? T else {
+            fatalError("Cannot unarchive simple persistence data for key '\(key.key)'")
+        }
+        return value
+    }
+
+    public func setSerializedValue<T: NSCoding>(_ value: T?, forKey key: PersistenceKey<T>) {
+        let _key = PersistenceKey<Data?>(key.key, nil)
+
+        let data: Data?
+        if let value = value {
+            data = NSKeyedArchiver.archivedData(withRootObject: value)
+        } else {
+            data = nil
+        }
+        setValue(data, forKey: _key)
+    }
 }

@@ -22,29 +22,35 @@ import PromiseKit
 
 class TranslationVerseTextRetrieval: Interactor {
 
-    func execute(_ input: QuranShareData) -> Promise<String> {
+    private static let numberFormatter = NumberFormatter()
+
+    func execute(_ input: QuranShareData) -> Promise<[String]> {
         guard let cell = input.cell as? QuranTranslationCollectionPageCollectionViewCell else {
             fatalError("TranslationVerseTextRetrieval works with QuranTranslationCollectionPageCollectionViewCell")
         }
 
         guard let page = cell.translationPage else {
-            return Promise(value: "")
+            return Promise(value: [""])
         }
 
         guard let verse = page.verses.first(where: { $0.ayah == input.ayah }) else {
-            return Promise(value: "")
+            return Promise(value: [""])
         }
 
         var components: [String] = []
 
         // add arabic text
         components.append(verse.arabicText)
+        components.append("")
 
         for translationText in verse.translations {
-            components.append("\(translationText.translation.translationName):\n\(translationText.text)")
+            components.append("• \(translationText.translation.translationName):")
+            components.append(translationText.text)
+            components.append("")
         }
 
-        let text = components.joined(separator: "\n\n")
-        return Promise(value: text)
+        let formatter = TranslationVerseTextRetrieval.numberFormatter
+        components.append("\(formatter.format(verse.ayah.sura)):\(formatter.format(verse.ayah.ayah))")
+        return Promise(value: components)
     }
 }

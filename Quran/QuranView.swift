@@ -22,7 +22,7 @@ import UIKit
 
 protocol QuranViewDelegate: class {
     func onQuranViewTapped(_ quranView: QuranView)
-    func quranView(_ quranView: QuranView, didSelectTextToShare text: String, sourceView: UIView, sourceRect: CGRect)
+    func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
 }
 
@@ -34,7 +34,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private let dismissBarsTapGesture = UITapGestureRecognizer()
     private let bookmarksPersistence: BookmarksPersistence
-    private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
+    private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
 
     private var shareData: QuranShareData? {
         didSet {
@@ -82,7 +82,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     init(bookmarksPersistence: BookmarksPersistence,
-         verseTextRetrieval: AnyInteractor<QuranShareData, String>) {
+         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>) {
         self.bookmarksPersistence = bookmarksPersistence
         self.verseTextRetrieval = verseTextRetrieval
         super.init(frame: .zero)
@@ -212,9 +212,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     /// Did click on copy menu item
     override func copy(_ sender: Any?) {
-        retrieveSelectedAyahText { text in
+        retrieveSelectedAyahText { textLines in
             let pasteBoard = UIPasteboard.general
-            pasteBoard.string = text
+            pasteBoard.string = textLines.joined(separator: "\n")
         }
     }
 
@@ -224,8 +224,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             return
         }
 
-        retrieveSelectedAyahText { text in
-            self.delegate?.quranView(self, didSelectTextToShare: text, sourceView: self, sourceRect: self.targetRect(for: shareData.location))
+        retrieveSelectedAyahText { textLines in
+            self.delegate?.quranView(self,
+                                     didSelectTextLinesToShare: textLines,
+                                     sourceView: self,
+                                     sourceRect: self.targetRect(for: shareData.location))
         }
     }
 
@@ -271,7 +274,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     /**
      Get the current highlighted ayah text.
      */
-    private func retrieveSelectedAyahText(completion: @escaping (String) -> Void) {
+    private func retrieveSelectedAyahText(completion: @escaping ([String]) -> Void) {
         guard let shareData = shareData else {
             return
         }

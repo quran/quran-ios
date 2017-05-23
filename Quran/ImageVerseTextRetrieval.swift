@@ -28,9 +28,9 @@ class ImageVerseTextRetrieval: Interactor {
         self.arabicAyahPersistence = arabicAyahPersistence
     }
 
-    func execute(_ input: QuranShareData) -> Promise<String> {
+    func execute(_ input: QuranShareData) -> Promise<[String]> {
         return DispatchQueue.default.promise2 {
-            try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)
+            [try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)]
         }
     }
 }

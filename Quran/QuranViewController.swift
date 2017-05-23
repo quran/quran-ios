@@ -27,7 +27,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
 
-    private let verseTextRetrieval: AnyInteractor<QuranShareData, String>
+    private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
     private let dataRetriever: AnyGetInteractor<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
@@ -106,7 +106,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
-         verseTextRetrieval                     : AnyInteractor<QuranShareData, String>,
+         verseTextRetrieval                     : AnyInteractor<QuranShareData, [String]>,
          page                                   : Int,
          lastPage                               : LastPage?,
          highlightedSearchAyah                  : AyahNumber?) {
@@ -258,8 +258,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
-    func quranView(_ quranView: QuranView, didSelectTextToShare text: String, sourceView: UIView, sourceRect: CGRect) {
-        ShareController.share(text: text, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
+    func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect) {
+        ShareController.share(textLines: textLines, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
     }
 
     private func setBarsHidden(_ hidden: Bool) {

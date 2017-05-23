@@ -22,16 +22,16 @@ import PromiseKit
 
 class CompositeVerseTextRetrieval: Interactor {
 
-    let image      : AnyInteractor<QuranShareData, String>
-    let translation: AnyInteractor<QuranShareData, String>
+    let image      : AnyInteractor<QuranShareData, [String]>
+    let translation: AnyInteractor<QuranShareData, [String]>
 
-    init(image      : AnyInteractor<QuranShareData, String>,
-         translation: AnyInteractor<QuranShareData, String>) {
+    init(image      : AnyInteractor<QuranShareData, [String]>,
+         translation: AnyInteractor<QuranShareData, [String]>) {
         self.image = image
         self.translation = translation
     }
 
-    func execute(_ input: QuranShareData) -> Promise<String> {
+    func execute(_ input: QuranShareData) -> Promise<[String]> {
         if input.cell is QuranImagePageCollectionViewCell {
             return image.execute(input)
         } else if input.cell is QuranTranslationCollectionPageCollectionViewCell {

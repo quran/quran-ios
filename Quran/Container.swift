@@ -386,15 +386,15 @@ class Container {
                                               simplePersistence: createSimplePersistence()).asPreloadingOperationRepresentable()
     }
 
-    func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+    func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
         return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).asAnyInteractor()
     }
 
-    func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+    func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
         return TranslationVerseTextRetrieval().asAnyInteractor()
     }
 
-    func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, String> {
+    func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
         return CompositeVerseTextRetrieval(
             image: createImageVerseTextRetrieval(),
             translation: createTranslationVerseTextRetrieval()).asAnyInteractor()

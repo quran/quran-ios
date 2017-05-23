@@ -87,7 +87,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     private func scrollToReadingHighlightedAyat() {
 
         var rectangles: [CGRect] = []
-        for highlightType in VerseHighlightType.sortedTypes {
+        for highlightType in VerseHighlightType.scrollingTypes {
             if let rects = highlightingView.highlightingRectangles[highlightType], !rects.isEmpty {
                 rectangles = rects
                 break

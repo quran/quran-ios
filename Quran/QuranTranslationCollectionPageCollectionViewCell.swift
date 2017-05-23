@@ -144,7 +144,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         layoutIfNeeded()
 
         var optionalAyah: AyahNumber? = nil
-        for highlightType in VerseHighlightType.sortedTypes {
+        for highlightType in VerseHighlightType.scrollingTypes {
             if let firstAyah = highlights[highlightType]?.first {
                 optionalAyah = firstAyah
                 break

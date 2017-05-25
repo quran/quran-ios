@@ -1,11 +1,11 @@
 {
   "default": {
     "keyword": {
-      "fonts": [{ "font": "./fonts/Roboto-Black.ttf" }],
+      "fonts": [{ "font": "../../fonts/Roboto-Black.ttf" }],
       "color": "#ffffff"
     },
     "title": {
-      "fonts": [{ "font": "./fonts/Roboto-Light.ttf" }],
+      "fonts": [{ "font": "../../fonts/Roboto-Light.ttf" }],
       "color": "#ffffff"
     },
     "background": "./background.jpg",

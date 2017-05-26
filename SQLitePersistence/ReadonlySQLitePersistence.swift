@@ -53,16 +53,18 @@ extension ReadonlySQLitePersistence {
                 }
             }
 
-            if inTransaction {
-                var result: T!
-                try connection.transaction {
-                    result = try block(connection)
-                }
+            return try attempt(times: 3) {
+                if inTransaction {
+                    var result: T!
+                    try connection.transaction {
+                        result = try block(connection)
+                    }
 
-                return result
-            } else {
-                // execute the query
-                return try block(connection)
+                    return result
+                } else {
+                    // execute the query
+                    return try block(connection)
+                }
             }
 
         } catch let error as PersistenceError {

@@ -36,36 +36,39 @@ extension SQLitePersistence {
     }
 
     public func openConnection() throws -> Connection {
-        // create the connection
-        let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
-        let oldVersion = try connection.getUserVersion()
-        let newVersion = version
-        precondition(newVersion != 0, "version should be greater than 0.")
+        return try attempt(times: 3) {
+            // create the connection
+            let connection = try ConnectionsPool.default.getConnection(filePath: filePath)
+            let oldVersion = try connection.getUserVersion()
+            let newVersion = version
+            precondition(newVersion != 0, "version should be greater than 0.")
 
-        // if first time
-        if oldVersion <= 0 {
-            try connection.transaction {
-                do {
-                    try onCreate(connection: connection)
-                } catch {
-                    throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
-                }
-                try connection.setUserVersion(Int(newVersion))
-            }
-        } else {
-            let unsignedOldVersion = UInt(oldVersion)
-            if newVersion != unsignedOldVersion {
+            // if first time
+
+            if oldVersion <= 0 {
                 try connection.transaction {
                     do {
-                        try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
+                        try onCreate(connection: connection)
                     } catch {
-                        throw PersistenceError.generalError(
-                            error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
+                        throw PersistenceError.generalError(error, info: "Cannot create database for file '\(filePath)'")
                     }
                     try connection.setUserVersion(Int(newVersion))
                 }
+            } else {
+                let unsignedOldVersion = UInt(oldVersion)
+                if newVersion != unsignedOldVersion {
+                    try connection.transaction {
+                        do {
+                            try onUpgrade(connection: connection, oldVersion: unsignedOldVersion, newVersion: newVersion)
+                        } catch {
+                            throw PersistenceError.generalError(
+                                error, info: "Cannot upgrade database for file '\(filePath)' from \(unsignedOldVersion) to \(newVersion)")
+                        }
+                        try connection.setUserVersion(Int(newVersion))
+                    }
+                }
             }
+            return connection
         }
-        return connection
     }
 }

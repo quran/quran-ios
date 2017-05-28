@@ -71,21 +71,23 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
     }
 
     func add(page: Int) throws -> LastPage {
-        return try run { connection in
-            let insert = LastPages.table.insert(
-                or: .replace,
-                LastPages.page <- page,
-                LastPages.createdOn <- Date(),
-                LastPages.modifiedOn <- Date())
-            let rowId = try connection.run(insert)
-            let rows = try connection.prepare(LastPages.table.filter(LastPages.id == rowId))
+        return try run { try _add(connection: $0, page: page) }
+    }
 
-            // keep top maxNumberOfLastPages rows only
-            let statement = "DELETE FROM last_page WHERE _ID NOT IN (SELECT _ID FROM last_page ORDER BY modified_date DESC LIMIT \(maxNumberOfLastPages))" // swiftlint:disable:this line_length
-            try connection.run(statement)
+    private func _add(connection: Connection, page: Int) throws -> LastPage {
+        let insert = LastPages.table.insert(
+            or: .replace,
+            LastPages.page <- page,
+            LastPages.createdOn <- Date(),
+            LastPages.modifiedOn <- Date())
+        let rowId = try connection.run(insert)
+        let rows = try connection.prepare(LastPages.table.filter(LastPages.id == rowId))
 
-            return convert(rowsToLastPages: rows)[0]
-        }
+        // keep top maxNumberOfLastPages rows only
+        let statement = "DELETE FROM last_page WHERE _ID NOT IN (SELECT _ID FROM last_page ORDER BY modified_date DESC LIMIT \(maxNumberOfLastPages))" // swiftlint:disable:this line_length
+        try connection.run(statement)
+
+        return convert(rowsToLastPages: rows)[0]
     }
 
     func update(page: LastPage, toPage newPage: Int) throws -> LastPage {

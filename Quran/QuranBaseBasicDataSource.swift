@@ -109,13 +109,18 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
     }
 
     private func scrollTo(page: Int) {
+        guard let delegate = ds_reusableViewDelegate else {
+            return
+        }
         let indexPath = IndexPath(item: page - 1, section: 0)
 
         // if the cell is there, highlight the ayah.
-        if !(ds_reusableViewDelegate?.ds_indexPathsForVisibleItems().contains(indexPath) ?? false) {
+        if !delegate.ds_indexPathsForVisibleItems().contains(indexPath) {
             // scroll to the cell
             ds_reusableViewDelegate?.ds_scrollView.endEditing(false)
-            ds_reusableViewDelegate?.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            if indexPath.section < delegate.ds_numberOfSections() && indexPath.item < delegate.ds_numberOfItems(inSection: indexPath.section) {
+                delegate.ds_scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            }
         }
     }
 

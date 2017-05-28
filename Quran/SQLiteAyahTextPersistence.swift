@@ -185,10 +185,10 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
 }
 
 private func cleanup(term: String) -> String {
-    let components = term.components(separatedBy: "\"")
-    if components.count % 2 == 1 {
-        return term.lowercased()
-    } else {
-        return components.joined(separator: "").lowercased()
+    let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
+    var cleanedTerm = term.components(separatedBy: legalTokens.inverted).joined(separator: "")
+    if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1_000, limitedBy: cleanedTerm.endIndex) {
+        cleanedTerm = cleanedTerm.substring(to: upTo)
     }
+    return cleanedTerm.lowercased()
 }

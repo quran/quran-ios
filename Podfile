@@ -45,6 +45,16 @@ target 'Quran' do
     pod 'RxCocoa'
 end
 
+target 'QuranTests' do
+
+    pod 'Zip', '~> 0.6'
+    pod 'Moya'
+    pod 'PromiseKit'
+    pod 'KVOController'
+    pod 'RxSwift'
+    pod 'RxCocoa'
+end
+
 target 'QuranUITests' do
     pod "SwiftMonkey", :inhibit_warnings => true
 end

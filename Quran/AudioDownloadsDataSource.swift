@@ -179,7 +179,6 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
 
         if newValue - oldValue > 0.9 {
             reload(item: item, response: item.response)
-            CLog("Reloading \(newValue), \(oldValue)")
         }
     }
 

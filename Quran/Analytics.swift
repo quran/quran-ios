@@ -111,8 +111,8 @@ struct Analytics {
         Answers.logCustomEvent(withName: "Audio Deletion", customAttributes: ["qari.id": qari.id, "qari.name": qari.name])
     }
 
-    func searching(for term: String, resultsCount: Int) {
-        CLog("Searching for '\(term)', getting \(resultsCount) results")
+    func searching(for term: String, source: SearchResult.Source, resultsCount: Int) {
+        CLog("Searching for '\(term)'; source=(source); getting \(resultsCount) results.")
         Answers.logCustomEvent(withName: "SearchTerm", customAttributes: ["term": "term", "resultsCount": resultsCount])
     }
 

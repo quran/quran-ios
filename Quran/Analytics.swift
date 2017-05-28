@@ -113,7 +113,7 @@ struct Analytics {
 
     func searching(for term: String, source: SearchResult.Source, resultsCount: Int) {
         CLog("Searching for '\(term)'; source=(source); getting \(resultsCount) results.")
-        Answers.logCustomEvent(withName: "SearchTerm", customAttributes: ["term": "term", "resultsCount": resultsCount])
+        Answers.logCustomEvent(withName: "SearchTerm", customAttributes: ["term": term, "resultsCount": resultsCount])
     }
 
     func openingQuran(from screen: Screen) {

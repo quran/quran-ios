@@ -32,14 +32,17 @@ class Container {
         return cache
     }()
 
-    fileprivate var downloadManager: DownloadManager! = nil // swiftlint:disable:this implicitly_unwrapped_optional
+    // singleton as we cannot have more than background download service
+    private static var downloadManager: DownloadManager! = nil // swiftlint:disable:this implicitly_unwrapped_optional
 
     init() {
-        let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
-        configuration.timeoutIntervalForRequest = 60 * 5 // 5 minutes
-        downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 600,
-                                                    configuration: configuration,
-                                                    persistence: createDownloadsPersistence())
+        if Container.downloadManager == nil {
+            let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
+            configuration.timeoutIntervalForRequest = 60 * 5 // 5 minutes
+            Container.downloadManager = URLSessionDownloadManager(maxSimultaneousDownloads: 600,
+                                                                  configuration: configuration,
+                                                                  persistence: createDownloadsPersistence())
+        }
     }
 
     func createRootViewController() -> UIViewController {
@@ -272,7 +275,7 @@ class Container {
     }
 
     func createDownloadManager() -> DownloadManager {
-        return downloadManager
+        return Container.downloadManager
     }
 
     func createGappedAudioDownloader() -> AudioFilesDownloader {

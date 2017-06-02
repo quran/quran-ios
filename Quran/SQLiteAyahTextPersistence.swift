@@ -124,6 +124,7 @@ class SQLiteTranslationTextPersistence: AyahTextPersistence, ReadonlySQLitePersi
 }
 
 private func _search(for term: String, connection: Connection, table: Table) throws -> [SearchResult] {
+    CLog("Search for:", term)
     let searchTerm = cleanup(term: term)
     let query = table
         .select(Columns.snippet, Columns.sura, Columns.ayah)
@@ -147,6 +148,7 @@ private func rowsToResults(_ rows: AnySequence<Row>, term: String) throws -> [Se
 }
 
 private func _autocomplete(term: String, connection: Connection, table: Table) throws -> [SearchAutocompletion] {
+    CLog("Autocompleting term:", term)
     let searchTerm = cleanup(term: term)
     let query = table
         .select(Columns.text)
@@ -185,10 +187,10 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
 }
 
 private func cleanup(term: String) -> String {
-    let components = term.components(separatedBy: "\"")
-    if components.count % 2 == 1 {
-        return term.lowercased()
-    } else {
-        return components.joined(separator: "").lowercased()
+    let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
+    var cleanedTerm = term.components(separatedBy: legalTokens.inverted).joined(separator: "")
+    if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1_000, limitedBy: cleanedTerm.endIndex) {
+        cleanedTerm = cleanedTerm.substring(to: upTo)
     }
+    return cleanedTerm.lowercased()
 }

@@ -38,6 +38,16 @@
                ReferencedContainer = "container:Quran.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5484C2DD1ED8C00C0068025A"
+               BuildableName = "QuranTests.xctest"
+               BlueprintName = "QuranTests"
+               ReferencedContainer = "container:Quran.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

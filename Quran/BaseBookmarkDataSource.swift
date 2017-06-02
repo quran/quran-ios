@@ -52,6 +52,9 @@ class BaseBookmarkDataSource<ItemType: Bookmark, CellType: ReusableCell>: Editab
         DispatchQueue.default.promise2 {
             try self.persistence.remove(item)
         }.then(on: .main) { () -> Void in
+            guard indexPath.item < self.items.count else {
+                return
+            }
             self.items.remove(at: indexPath.item)
             self.ds_reusableViewDelegate?.ds_deleteItems(at: [indexPath], with: .left)
         }.catch(on: .main) { error in

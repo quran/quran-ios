@@ -72,7 +72,7 @@ struct GaplessQariAudioFileListRetrieval: QariAudioFileListRetrieval {
 
             files.insert(QariSuraAudioFile(remote: remoteURL, local: localURL, sura: sura))
         }
-        return Array(files) + [dbFile]
+        return Array(files) + [dbFile as QariAudioFile]
     }
 }
 

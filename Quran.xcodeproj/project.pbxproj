@@ -223,6 +223,7 @@
 		5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461A1CE9F4E900EED886 /* AudioPlayer.swift */; };
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
 		5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */; };
+		54892D941EE6C760001E6F1A /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = 54892D931EE6C760001E6F1A /* words.db */; };
 		549040A01E5F945900D54625 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5490409F1E5F945900D54625 /* NetworkManager.swift */; };
 		549040A21E5F949D00D54625 /* MoyaNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */; };
 		549040A91E5F9A9C00D54625 /* TranslationsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A81E5F9A9C00D54625 /* TranslationsParser.swift */; };
@@ -740,6 +741,7 @@
 		5487461A1CE9F4E900EED886 /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
 		5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaplessAudioPlayer.swift; sourceTree = "<group>"; };
+		54892D931EE6C760001E6F1A /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = words.db; path = Resources/words.db; sourceTree = "<group>"; };
 		5490409F1E5F945900D54625 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoyaNetworkManager.swift; sourceTree = "<group>"; };
 		549040A81E5F9A9C00D54625 /* TranslationsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsParser.swift; sourceTree = "<group>"; };
@@ -1825,6 +1827,7 @@
 		54B265FA1CC57E2000D3AEF8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				54892D931EE6C760001E6F1A /* words.db */,
 				540922751E8F005100C7537A /* fonts */,
 				54B2664A1CC95DAC00D3AEF8 /* images */,
 				540922771E8F007B00C7537A /* others */,
@@ -2703,6 +2706,7 @@
 				5454998F1E7DB27B00F4F927 /* copyrights in Resources */,
 				54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */,
 				54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */,
+				54892D941EE6C760001E6F1A /* words.db in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */,
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,

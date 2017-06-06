@@ -39,7 +39,7 @@ public struct Files {
     public static let readers = fileURL("readers", withExtension: "plist")
 
     public static let ayahInfoPath: String = filePath("images_\(quranImagesSize)/databases/ayahinfo_\(quranImagesSize)", ofType: "db")
-    public static let quranTextPath = filePath("images_\(quranImagesSize)/databases/quran.ar", ofType: "db")
+    public static let wordsTextPath = filePath("words", ofType: "db")
 
     public static let databasesPath: String = FileManager.documentsPath.stringByAppendingPath(databasesPathComponent)
     public static let translationsURL = FileManager.documentsURL.appendingPathComponent(translationsPathComponent)

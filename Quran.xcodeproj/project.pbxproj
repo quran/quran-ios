@@ -224,6 +224,8 @@
 		5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */; };
 		5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */; };
 		54892D941EE6C760001E6F1A /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = 54892D931EE6C760001E6F1A /* words.db */; };
+		54892D971EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54892D951EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift */; };
+		54892D981EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54892D961EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib */; };
 		549040A01E5F945900D54625 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5490409F1E5F945900D54625 /* NetworkManager.swift */; };
 		549040A21E5F949D00D54625 /* MoyaNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */; };
 		549040A91E5F9A9C00D54625 /* TranslationsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040A81E5F9A9C00D54625 /* TranslationsParser.swift */; };
@@ -742,6 +744,8 @@
 		5487461C1CE9F54E00EED886 /* GappedAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayer.swift; sourceTree = "<group>"; };
 		5487461E1CE9F55600EED886 /* GaplessAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaplessAudioPlayer.swift; sourceTree = "<group>"; };
 		54892D931EE6C760001E6F1A /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = words.db; path = Resources/words.db; sourceTree = "<group>"; };
+		54892D951EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahBookmarkTableViewCell.swift; sourceTree = "<group>"; };
+		54892D961EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AyahBookmarkTableViewCell.xib; sourceTree = "<group>"; };
 		5490409F1E5F945900D54625 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		549040A11E5F949D00D54625 /* MoyaNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoyaNetworkManager.swift; sourceTree = "<group>"; };
 		549040A81E5F9A9C00D54625 /* TranslationsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsParser.swift; sourceTree = "<group>"; };
@@ -1767,6 +1771,8 @@
 				54A99CA91CF795B6003995AE /* BookmarksTableViewController.swift */,
 				54A99CB01CF7A649003995AE /* BookmarkTableViewCell.swift */,
 				54A99CB11CF7A649003995AE /* BookmarkTableViewCell.xib */,
+				54892D951EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift */,
+				54892D961EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib */,
 			);
 			name = Bookmarks;
 			sourceTree = "<group>";
@@ -2694,6 +2700,7 @@
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
 				54547EAE1ECA82BE008AFED3 /* SearchResultTableViewCell.xib in Resources */,
+				54892D981EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib in Resources */,
 				54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */,
 				54965FBA1E7D4A3F00A212E2 /* QuranPageTitleView.xib in Resources */,
@@ -3281,6 +3288,7 @@
 				54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */,
 				54B266821CCAC82600D3AEF8 /* QuranImagesDataSource.swift in Sources */,
 				54C0DC301CE889CA009AAD8D /* AudioFilesDownloader.swift in Sources */,
+				54892D971EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift in Sources */,
 				541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift in Sources */,
 				549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */,
 				5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */,

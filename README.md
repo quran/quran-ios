@@ -26,3 +26,5 @@ Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contrib
 * Quran - by Quran.com - قرآن is available under the GPLv3 license. See the LICENSE file for more info.
 * Madani images from [quran images project](https://github.com/quran/quran.com-images) on github.
 * Translation, tafsir and Arabic data come from [tanzil](http://tanzil.net) and [King Saud University](https://quran.ksu.edu.sa).
+
+**Please don't copy/paste the code as is and create an app on the App Store.**

@@ -31,6 +31,7 @@ PODS:
   - SQLite.swift (0.11.3):
     - SQLite.swift/standard (= 0.11.3)
   - SQLite.swift/standard (0.11.3)
+  - SwiftLint (0.19.0)
   - SwiftMonkey (1.0.0)
   - SwiftyJSON (3.1.4)
   - Zip (0.6.0)
@@ -48,6 +49,7 @@ DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SQLite.swift (~> 0.11.0)
+  - SwiftLint
   - SwiftMonkey
   - SwiftyJSON
   - Zip (~> 0.6)
@@ -67,10 +69,11 @@ SPEC CHECKSUMS:
   RxCocoa: a8a5f1d061d0043e28f56976829f31ce63e8eb09
   RxSwift: 656f8fbeca5bc372121a72d9ebdd3cd3bc0ffade
   SQLite.swift: 99b36c22084427f0abbeb957556ce1528cf10bb3
+  SwiftLint: 3537a05b34060e78e7510f04fb7537d738247803
   SwiftMonkey: dc5681bf881dd84efcc7ff684a31582d5ac67232
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: e8907fdc380ee6938836046219f808d23cb64182
+PODFILE CHECKSUM: 6b8f7fddf1b3f13b9b935438d9d38e32216e9b6a
 
 COCOAPODS: 1.2.1

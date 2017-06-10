@@ -4063,7 +4063,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1C4D17DF9C049CBECBB13FE /* Pods-Quran.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4089,7 +4088,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

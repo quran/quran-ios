@@ -6,6 +6,7 @@ target 'VFoundation' do
     pod 'PromiseKit'
     pod 'SwiftyJSON'
     pod 'RxSwift'
+    pod 'SwiftLint'
 end
 
 target 'SQLitePersistence' do

@@ -4,3 +4,4 @@
 
 @import VFoundation;
 @import UIKitExtension;
+@import QuranFoundation;

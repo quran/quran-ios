@@ -79,7 +79,7 @@ platform :ios do
             output_directory: './build/',
             include_symbols: true,
             include_bitcode: true
-            
+
         )
 
         # Upload to test flight
@@ -101,8 +101,55 @@ platform :ios do
         say successMessage
     end
 
+    desc 'This will build frameworks'
+    lane :build_frameworks do
+      build_framework(
+        frameworkName: "BatchDownloader",
+        workspace: "../Quran.xcworkspace",
+        outputDir: "../../QuranFoundation/Frameworks")
+      build_framework(
+          frameworkName: "VFoundation",
+          workspace: "../Quran.xcworkspace",
+          outputDir: "../../QuranFoundation/Frameworks")
+      build_framework(
+          frameworkName: "SQLitePersistence",
+          workspace: "../Quran.xcworkspace",
+          outputDir: "../../QuranFoundation/Frameworks")
+    end
+
     error do |lane, exception|
         say "Error while trying to execute fastlane command. #{exception.message}"
+    end
+
+    ######################### PRIVATE LANES #########################
+    private_lane :build_framework do |options|
+
+      frameworkName = options[:frameworkName]
+      workspace = options[:workspace] || "../#{frameworkName}.xcworkspace"
+      outputDir = options[:outputDir]
+      buildDir = "../build"
+      deviceOutput = "#{buildDir}/Release-iphoneos"
+      simulatorOutput = "#{buildDir}/Release-iphonesimulator"
+      deviceOutputXC = File.absolute_path("..") + "/build/Release-iphoneos"
+      simulatorOutputXC = File.absolute_path("..") + "/build/Release-iphonesimulator"
+      appLocation = "#{outputDir}/#{frameworkName}.framework\""
+
+      # Delete the build directory
+      sh "rm -rf \"#{buildDir}\""
+
+      # Build for Device & Simulator
+      sh "set -o pipefail && xcodebuild clean build -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphoneos\"        BUILT_PRODUCTS_DIR=\"#{deviceOutputXC}\"    CONFIGURATION_BUILD_DIR=\"#{deviceOutputXC}/$CONFIGURATION\"    | xcpretty"
+      sh "set -o pipefail && xcodebuild clean build -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphonesimulator\" BUILT_PRODUCTS_DIR=\"#{simulatorOutputXC}\" CONFIGURATION_BUILD_DIR=\"#{simulatorOutputXC}/$CONFIGURATION\" | xcpretty"
+
+      # Combine all architectures together
+      sh "cp -r \"#{deviceOutput}/#{frameworkName}.framework\" \"#{buildDir}/#{frameworkName}.framework\""
+      sh "lipo -create -output \"#{buildDir}/#{frameworkName}.framework/#{frameworkName}\" \"#{deviceOutput}/#{frameworkName}.framework/#{frameworkName}\" \"#{simulatorOutput}/#{frameworkName}.framework/#{frameworkName}\""
+      sh "cp -r \"#{simulatorOutput}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule/\" \"#{buildDir}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule\""
+
+      # Copy the framework to the output location
+      sh "rm -rf \"#{appLocation}"
+      sh "cp -r \"#{buildDir}/#{frameworkName}.framework\" \"#{appLocation}"
+
     end
 end
 

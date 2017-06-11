@@ -24,73 +24,15 @@ struct QariDataRetriever: Interactor {
 
     func execute(_ input: Void) -> Promise<[Qari]> {
         return DispatchQueue.default.promise2 {
-            guard let readersDictionary = NSDictionary(contentsOf: Files.readers) else {
-                fatalError("Couldn't load `\(Files.readers)` file")
-            }
-
-            // get the values
-            let ids: [Int] = get(from: readersDictionary, key: "quran_readers_id")
-            let names: [String] = get(from: readersDictionary, key: "quran_readers_name")
-            let haveGaplessEquivalents: [Bool] = get(from: readersDictionary, key: "quran_readers_have_gapless_equivalents")
-            let localPaths: [String] = get(from: readersDictionary, key: "quran_readers_path")
-            let databaseNames: [String] = get(from: readersDictionary, key: "quran_readers_db_name")
-            let remoteURLs: [String] = get(from: readersDictionary, key: "quran_readers_urls")
-            let images: [String] = get(from: readersDictionary, key: "quran_readers_image")
-
-            // validate the array sizes
-            validateSize(ids, names)
-            validateSize(ids, haveGaplessEquivalents)
-            validateSize(ids, localPaths)
-            validateSize(ids, databaseNames)
-            validateSize(ids, remoteURLs)
-            validateSize(ids, images)
-
-            precondition(Set(localPaths).count == localPaths.count, "quran_readers_path should have unique values")
-
-            var qaris: [Qari] = []
-            for i in 0..<names.count {
-
-                precondition(i == ids[i], "Incorrect id")
-
-                guard !haveGaplessEquivalents[i] else {
-                    continue
-                }
-
-                let type: AudioType
-                let databaseName = databaseNames[i]
-                if databaseName.isEmpty {
-                    type = .gapped
-                } else {
-                    type = .gapless(databaseName: databaseName)
-                }
-
-                let imageName = images[i]
-                let qari = Qari(
-                    id: i,
-                    name: NSLocalizedString(names[i], tableName: "Readers", comment: ""),
-                    path: localPaths[i],
-                    audioURL: URL(validURL: remoteURLs[i]),
-                    audioType: type,
-                    imageName: imageName)
-                qaris.append(qari)
-            }
-
-            qaris.sort {
+            return Qari.qaris.sorted {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
-
-            return qaris
         }
     }
 }
 
-private func get<T>(from: NSDictionary, key: String) -> T {
-    guard let value = from[key] as? T else {
-        fatalError("Couldn't read \(key) from \(Files.readers)")
+extension Qari {
+    var name: String {
+        return NSLocalizedString(nameKey, tableName: "Readers", comment: "")
     }
-    return value
-}
-
-private func validateSize<T, U>(_ first: [T], _ second: [U]) {
-    precondition(first.count == second.count, "Incorrect readers array count")
 }

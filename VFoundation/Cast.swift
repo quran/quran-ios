@@ -38,6 +38,6 @@ public func suppress(message: StaticString = #function, _ body: () throws -> Voi
     do {
         try body()
     } catch {
-        fatalError("\(message)", error)
+        Crash.recordError(error, reason: "\(message)", fatalErrorOnDebug: false)
     }
 }

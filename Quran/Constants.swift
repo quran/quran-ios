@@ -20,8 +20,6 @@
 
 import UIKit
 
-public let quranImagesSize = "1280"
-
 enum Layout { }
 extension Layout {
     enum Translation { }

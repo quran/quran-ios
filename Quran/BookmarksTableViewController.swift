@@ -65,7 +65,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
         }
         pageDS.setSelectionHandler(pageSelection)
 
-        let ayahSelection = BlockSelectionHandler<AyahBookmark, BookmarkTableViewCell>()
+        let ayahSelection = BlockSelectionHandler<AyahBookmark, AyahBookmarkTableViewCell>()
         ayahSelection.didSelectBlock = { [weak self] (ds, _, index) in
             let item = ds.item(at:index)
             self?.navigateToPage(item.page, lastPage: nil)
@@ -87,6 +87,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
 
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_register(cellNib: BookmarkTableViewCell.self)
+        tableView.ds_register(cellNib: AyahBookmarkTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
         editController.configure(tableView: tableView, delegate: self, navigationItem: navigationItem)

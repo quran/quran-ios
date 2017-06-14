@@ -21,7 +21,7 @@
 import Foundation
 import GenericDataSources
 
-class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, BookmarkTableViewCell> {
+class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, AyahBookmarkTableViewCell> {
 
     let ayahCache: Cache<AyahNumber, String> = {
         let cache = Cache<AyahNumber, String>()
@@ -38,9 +38,10 @@ class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, BookmarkTable
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: BookmarkTableViewCell,
+                                    configure cell: AyahBookmarkTableViewCell,
                                     with item: AyahBookmark,
                                     at indexPath: IndexPath) {
+        cell.ayahLabel.text = item.ayah.localizedName
         cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)
         cell.iconImage.tintColor = .bookmark()
         cell.descriptionLabel.text = item.creationDate.bookmarkTimeAgo()

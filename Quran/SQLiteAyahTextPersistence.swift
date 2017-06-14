@@ -27,35 +27,48 @@ private struct Columns {
     static let snippet = Expression<String>(literal: "snippet(verses, '<b>', '</b>', '...', -1, 64)")
 }
 
+private enum WordType: String {
+    case word
+    case end
+    case pause
+    case sajdah
+    case rubHizb = "rub-el-hizb"
+}
+
 class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
 
-    private let table = Table("arabic_text")
+    private let table = Table("words")
     private let versesTable = Table("verses")
+    private let wordType = Expression<String>("word_type")
+    private let wordPosition = Expression<Int>("word_position")
+    private let textMadani = Expression<String>("text_madani")
 
-    var filePath: String { return Files.quranTextPath }
+    var filePath: String { return Files.wordsTextPath }
 
     func getAyahTextForNumber(_ number: AyahNumber) throws -> String {
-        return try run { connection in
-            let query = table.filter(Columns.sura == number.sura && Columns.ayah == number.ayah)
-            let rows = try connection.prepare(query)
-
-            guard let first = rows.first(where: { _ in true }) else {
-                throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
-            }
-            return first[Columns.text]
+        guard let text = try getOptionalAyahText(forNumber: number) else {
+            throw PersistenceError.general("Cannot find any records for ayah '\(number)'")
         }
+        return text
     }
 
     func getOptionalAyahText(forNumber number: AyahNumber) throws -> String? {
         return try run { connection in
-            let query = table.filter(Columns.sura == number.sura && Columns.ayah == number.ayah)
+            let query = table
+                .select(textMadani)
+                .filter(Columns.sura == number.sura && Columns.ayah == number.ayah && wordType != WordType.end.rawValue)
+                .order(wordPosition)
             let rows = try connection.prepare(query)
-
-            guard let first = rows.first(where: { _ in true }) else {
-                return nil
-            }
-            return first[Columns.text]
+            return rowsToAyahText(rows)
         }
+    }
+
+    private func rowsToAyahText(_ rows: AnySequence<Row>) -> String? {
+        let words = rows.map { $0[textMadani] }
+        guard !words.isEmpty else {
+            return nil
+        }
+        return words.joined(separator: " ")
     }
 
     func autocomplete(term: String) throws -> [SearchAutocompletion] {

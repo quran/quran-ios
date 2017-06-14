@@ -22,11 +22,15 @@ import Foundation
 
 open class Timer {
 
-    open fileprivate(set) var isCancelled = false
+    open var isCancelled: Bool {
+        return cancelled.value
+    }
 
-    fileprivate let repeated: Bool
+    private let repeated: Bool
 
-    fileprivate let timer: DispatchSourceTimer
+    private let timer: DispatchSourceTimer
+
+    private var cancelled = Protected(false)
 
     public init(interval: TimeInterval,
                 repeated: Bool = false,
@@ -41,20 +45,24 @@ open class Timer {
         timer.scheduleRepeating(deadline: startTime, interval: DispatchTimeInterval.seconds(Int(interval)))
 
         timer.setEventHandler { [weak self] in
-            if self?.isCancelled == false {
-                handler()
-            }
-
-            // cancel next ones if not repeated
-            if !repeated {
-                self?.cancel()
-            }
+            self?.fired(handler)
         }
         timer.resume()
     }
 
+    private func fired(_ handler: @escaping () -> Void) {
+        if !cancelled.value {
+            handler()
+        }
+
+        // cancel next ones if not repeated
+        if !repeated {
+            cancel()
+        }
+    }
+
     public func cancel() {
-        isCancelled = true
+        cancelled.value = true
         timer.cancel()
     }
 

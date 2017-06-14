@@ -71,7 +71,9 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
     }
 
     func add(page: Int) throws -> LastPage {
-        return try run { try _add(connection: $0, page: page) }
+        return try run(inTransaction: true) {
+            try _add(connection: $0, page: page)
+        }
     }
 
     private func _add(connection: Connection, page: Int) throws -> LastPage {
@@ -93,7 +95,7 @@ struct SQLiteLastPagesPersistence: LastPagesPersistence, SQLitePersistence {
     func update(page: LastPage, toPage newPage: Int) throws -> LastPage {
         // update it if the same page, since it should upate the dates.
 
-        return try run { connection in
+        return try run(inTransaction: true) { connection in
 
             // delete conflict record for the new & old pages.
             let conflict = LastPages.table.filter([page.page, newPage].contains(LastPages.page))

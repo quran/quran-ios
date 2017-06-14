@@ -1,0 +1,10 @@
+framework module QuranFoundation {
+  umbrella header "QuranFoundation.h"
+
+  export *
+  module * { export * }
+}
+
+module QuranFoundation.Swift {
+    header "QuranFoundation-Swift.h"
+}

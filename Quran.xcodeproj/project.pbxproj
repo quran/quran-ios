@@ -277,7 +277,6 @@
 		54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DB1CD4F48900D3AEF8 /* Queue.swift */; };
 		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
 		54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */; };
-		54C0DBC81CDE6484009AAD8D /* readers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBC71CDE6484009AAD8D /* readers.plist */; };
 		54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */; };
 		54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */; };
 		54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */; };
@@ -800,7 +799,6 @@
 		54B266FD1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266FE1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataRetriever.swift; sourceTree = "<group>"; };
-		54C0DBC71CDE6484009AAD8D /* readers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = readers.plist; sourceTree = "<group>"; };
 		54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Readers.xcassets; path = ../../Readers.xcassets; sourceTree = "<group>"; };
 		54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioQariBarView.xib; sourceTree = "<group>"; };
 		54C0DBD01CDF635A009AAD8D /* AudioQariBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQariBarView.swift; sourceTree = "<group>"; };
@@ -973,7 +971,6 @@
 			isa = PBXGroup;
 			children = (
 				54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */,
-				54C0DBC71CDE6484009AAD8D /* readers.plist */,
 			);
 			name = plists;
 			sourceTree = "<group>";
@@ -2614,7 +2611,6 @@
 				54699B8F1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib in Resources */,
 				5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
-				54C0DBC81CDE6484009AAD8D /* readers.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

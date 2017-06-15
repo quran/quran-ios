@@ -303,6 +303,7 @@
 		54C0DC301CE889CA009AAD8D /* AudioFilesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */; };
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 		54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */; };
+		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
 		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
 		54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */; };
@@ -825,6 +826,7 @@
 		54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFilesDownloader.swift; sourceTree = "<group>"; };
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleteInteractor.swift; sourceTree = "<group>"; };
+		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
 		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
 		54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksManager.swift; sourceTree = "<group>"; };
@@ -1616,7 +1618,7 @@
 		5484C2EC1ED8C1A60068025A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */,
+				54D9991A1EF1FDB800BC6532 /* Integration */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -2066,6 +2068,15 @@
 				54B266811CCAC82600D3AEF8 /* QuranImagesDataSource.swift */,
 			);
 			name = image;
+			sourceTree = "<group>";
+		};
+		54D9991A1EF1FDB800BC6532 /* Integration */ = {
+			isa = PBXGroup;
+			children = (
+				5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */,
+				54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */,
+			);
+			name = Integration;
 			sourceTree = "<group>";
 		};
 		54DC4AE01E8471C700F4CBD6 /* PreloadingOperations */ = {
@@ -3057,6 +3068,7 @@
 			files = (
 				5484C3041ED9B6410068025A /* RunloopLock.swift in Sources */,
 				5484C2EF1ED8C1BD0068025A /* BlockingExtensiosn.swift in Sources */,
+				54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */,
 				5484C2EA1ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift in Sources */,
 				5484C3061ED9BAAD0068025A /* XCAssert+Extensions.swift in Sources */,
 			);
@@ -3800,6 +3812,10 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/QuranFoundation",
+				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3819,6 +3835,10 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/QuranFoundation",
+				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

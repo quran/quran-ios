@@ -54,6 +54,7 @@ target 'QuranTests' do
     pod 'KVOController'
     pod 'RxSwift'
     pod 'RxCocoa'
+    pod 'SQLite.swift', '~> 0.11.0', :inhibit_warnings => true
 end
 
 target 'QuranUITests' do

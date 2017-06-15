@@ -41,7 +41,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
     private let versesTable = Table("verses")
     private let wordType = Expression<String>("word_type")
     private let wordPosition = Expression<Int>("word_position")
-    private let textMadani = Expression<String>("text_madani")
+    private let textMadani = Expression<String?>("text_madani")
 
     var filePath: String { return Files.wordsTextPath }
 
@@ -64,7 +64,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
     }
 
     private func rowsToAyahText(_ rows: AnySequence<Row>) -> String? {
-        let words = rows.map { $0[textMadani] }
+        let words = rows.flatMap { $0[textMadani] }
         guard !words.isEmpty else {
             return nil
         }

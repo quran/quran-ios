@@ -304,6 +304,7 @@
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 		54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */; };
 		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
+		54D9991F1EF2F59C00BC6532 /* AyahWordPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991E1EF2F59C00BC6532 /* AyahWordPosition.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
 		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
 		54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */; };
@@ -827,6 +828,7 @@
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleteInteractor.swift; sourceTree = "<group>"; };
 		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
+		54D9991E1EF2F59C00BC6532 /* AyahWordPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahWordPosition.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
 		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
 		54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksManager.swift; sourceTree = "<group>"; };
@@ -1145,6 +1147,7 @@
 		5437D3701EB3867F00795FA9 /* QuranFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				54D9991D1EF2F58900BC6532 /* Model */,
 				54FD7BA11EB9339600FA485F /* UserDefaults */,
 				543FE0471EB3D8C000687DF8 /* Errors */,
 				543FDFD41EB394AE00687DF8 /* Theme */,
@@ -2077,6 +2080,14 @@
 				54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */,
 			);
 			name = Integration;
+			sourceTree = "<group>";
+		};
+		54D9991D1EF2F58900BC6532 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				54D9991E1EF2F59C00BC6532 /* AyahWordPosition.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		54DC4AE01E8471C700F4CBD6 /* PreloadingOperations */ = {
@@ -3134,6 +3145,7 @@
 				54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */,
 				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
+				54D9991F1EF2F59C00BC6532 /* AyahWordPosition.swift in Sources */,
 				54B266B81CD16CED00D3AEF8 /* AudioBannerView.swift in Sources */,
 				54C0DBE31CE479AB009AAD8D /* DefaultAudioBannerViewPresenter.swift in Sources */,
 				54F56C511E7EDA5C00D7AF57 /* QuranDataSource.swift in Sources */,

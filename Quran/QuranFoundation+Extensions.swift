@@ -22,13 +22,14 @@ import Foundation
 
 private let alpha: CGFloat = 0.25
 
-extension VerseHighlightType {
+extension QuranHighlightType {
     var color: UIColor {
         switch self {
         case .reading   : return UIColor.appIdentity().withAlphaComponent(alpha)
         case .share     : return UIColor.selection().withAlphaComponent(alpha)
         case .bookmark  : return UIColor.bookmark().withAlphaComponent(alpha)
         case .search    : return #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1).withAlphaComponent(alpha)
+        case .wordByWord: return UIColor.appIdentity().withAlphaComponent(alpha)
         }
     }
 }

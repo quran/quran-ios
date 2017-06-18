@@ -26,6 +26,7 @@ protocol QuranNavigationBarDelegate: class {
     func onBookmarkButtonTapped()
     func onTranslationButtonTapped()
     func onSelectTranslationsButtonTapped()
+    func onWordTranslationButtonTapped(isWordPointerActive: Bool)
 }
 
 class QuranNavigationBar {
@@ -37,6 +38,7 @@ class QuranNavigationBar {
         set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
         get { return simplePersistence.valueForKey(.showQuranTranslationView) }
     }
+    var isWordPointerActive: Bool = false
 
     init(simplePersistence: SimplePersistence) {
         self.simplePersistence = simplePersistence
@@ -50,10 +52,13 @@ class QuranNavigationBar {
             bookmark.tintColor = .bookmark()
         }
 
+        let wordByWordImage = isWordPointerActive ? #imageLiteral(resourceName: "word-translation-filled-25") : #imageLiteral(resourceName: "word-translation-25")
+        let wordByWord = UIBarButtonItem(image: wordByWordImage, style: .plain, target: self, action: #selector(onWordTranslationTapped))
+
         let translationImage = isTranslationView ? #imageLiteral(resourceName: "globe_filled-25") : #imageLiteral(resourceName: "globe-25")
         let translation = UIBarButtonItem(image: translationImage, style: .plain, target: self, action: #selector(onTranslationButtonTapped))
 
-        var barItems = [bookmark, translation]
+        var barItems = [bookmark, wordByWord, translation]
         if isTranslationView {
             let translationsSelection = UIBarButtonItem(image: #imageLiteral(resourceName: "Checklist_25"),
                                                         style: .plain,
@@ -83,4 +88,10 @@ class QuranNavigationBar {
         delegate?.onSelectTranslationsButtonTapped()
     }
 
+    @objc
+    private func onWordTranslationTapped() {
+        isWordPointerActive = !isWordPointerActive
+        updateRightBarItems(animated: false)
+        delegate?.onWordTranslationButtonTapped(isWordPointerActive: isWordPointerActive)
+    }
 }

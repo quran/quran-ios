@@ -258,6 +258,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
+    func quranViewHideBars() {
+        setBarsHidden(true)
+    }
+
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect) {
         ShareController.share(textLines: textLines, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
     }
@@ -344,6 +348,14 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     func onSelectTranslationsButtonTapped() {
         let controller = translationsSelectionControllerCreator.create()
         present(controller, animated: true, completion: nil)
+    }
+
+    func onWordTranslationButtonTapped(isWordPointerActive: Bool) {
+        if isWordPointerActive {
+            quranView?.showPointer()
+        } else {
+            quranView?.hidePointer()
+        }
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

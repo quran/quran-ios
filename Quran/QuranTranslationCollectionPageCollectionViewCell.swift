@@ -34,7 +34,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    private var highlights: [VerseHighlightType: Set<AyahNumber>] = [:] {
+    private var highlights: [QuranHighlightType: Set<AyahNumber>] = [:] {
         didSet { dataSource.highlights = highlights }
     }
 
@@ -119,23 +119,23 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
 
     // MARK: - share specifics
 
-    override func ayahNumber(at point: CGPoint) -> AyahNumber? {
+    override func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
 
         let localPoint = collectionView.convert(point, from: self)
         let indexPath = collectionView.indexPathForItem(at: localPoint)
         let cell = indexPath.flatMap { collectionView.cellForItem(at: $0) }
         let translationCell = cell as? QuranTranslationBaseCollectionViewCell
-        return translationCell?.ayah
+        return translationCell?.ayah.map { AyahWordPosition(ayah: $0, position: -1) }
     }
 
-    override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: VerseHighlightType) {
+    override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {
         highlights[type] = verses
-        if VerseHighlightType.scrollingTypes.contains(type) {
+        if QuranHighlightType.scrollingTypes.contains(type) {
             scrollToReadingHighlightedAyat()
         }
     }
 
-    override func highlightedVerse(forType type: VerseHighlightType) -> Set<AyahNumber>? {
+    override func highlightedVerse(forType type: QuranHighlightType) -> Set<AyahNumber>? {
         return highlights[type]
     }
 
@@ -144,7 +144,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         layoutIfNeeded()
 
         var optionalAyah: AyahNumber? = nil
-        for highlightType in VerseHighlightType.scrollingTypes {
+        for highlightType in QuranHighlightType.scrollingTypes {
             if let firstAyah = highlights[highlightType]?.first {
                 optionalAyah = firstAyah
                 break
@@ -159,5 +159,9 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         }
         // scroll to the reading/search ayah
         collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.top, animated: true)
+    }
+
+    override func highlight(position: AyahWordPosition?) {
+        // not supported yet
     }
 }

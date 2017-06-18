@@ -32,8 +32,11 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
     }
 
     private func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
+        // group by line
         var groupedLines = info.flatMap { $0.value }.group { $0.line }
         let groupedLinesKeys = groupedLines.keys.sorted()
+
+        // sort each line from left to right
         for i in 0..<groupedLinesKeys.count {
             let key = groupedLinesKeys[i]
             let value = groupedLines[key]!

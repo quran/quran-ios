@@ -20,7 +20,15 @@
 import MenuItemKit
 import UIKit
 
+private struct GestureInfo {
+    let cell: QuranBasePageCollectionViewCell
+    let indexPath: IndexPath
+    let page: QuranPage
+    let position: AyahWordPosition
+}
+
 protocol QuranViewDelegate: class {
+    func quranViewHideBars()
     func onQuranViewTapped(_ quranView: QuranView)
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
@@ -77,6 +85,35 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         return collectionView
     }()
 
+    private var _pointerTop: NSLayoutConstraint?
+    private var _pointerLeading: NSLayoutConstraint?
+    private var _pointerParentHeight: CGFloat = 0
+    private func setPointerTop(_ value: CGFloat) {
+        _pointerTop?.constant = value
+        _pointerParentHeight = bounds.height
+    }
+
+    lazy var pointer: UIView = {
+        let imageView = UIImageView()
+        imageView.image = #imageLiteral(resourceName: "pointer-25").withRenderingMode(.alwaysTemplate)
+
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 1
+        imageView.layer.shadowRadius = 3
+        imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
+
+        let container = UIView()
+        container.isHidden = true
+        container.addAutoLayoutSubview(imageView)
+        container.addParentCenter(imageView)
+
+        self.addAutoLayoutSubview(container)
+        container.addSizeConstraints(width: 44, height: 44)
+        self._pointerTop = self.addParentTopConstraint(container)
+        self._pointerLeading = self.addParentLeadingConstraint(container)
+        return container
+    }()
+
     required init?(coder aDecoder: NSCoder) {
         unimplemented()
     }
@@ -97,9 +134,21 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         sendSubview(toBack: collectionView)
         bringSubview(toFront: audioView)
+        bringSubview(toFront: pointer)
 
         // Long press gesture on verses to select
         addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
+
+        // pointer dragging
+        let pointerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onPointerPanned(_:)))
+        pointer.addGestureRecognizer(pointerPanGesture)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !pointer.isHidden && _pointerParentHeight != bounds.height {
+            setPointerTop(pointer.frame.minY * bounds.height / _pointerParentHeight)
+        }
     }
 
     func visibleIndexPath() -> IndexPath? {
@@ -140,18 +189,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         guard sender.state == .began else {
             return
         }
-        let collectionLocalPoint = sender.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: collectionLocalPoint) else {
-            return
-        }
-        guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
-            return
-        }
-        guard let page = cell.page else {
-            return
-        }
-        let cellLocalPoint = sender.location(in: cell)
-        guard let ayah = cell.ayahNumber(at: cellLocalPoint) else {
+        guard let info = gestureInfo(at: sender.location(in: self)) else {
             return
         }
 
@@ -162,11 +200,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
         let pan = UIPanGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
-        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: cell, page: page, ayah: ayah)
+        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: info.cell, page: info.page, ayah: info.position.ayah)
         self.shareData = shareData
 
         // highlight the ayah UI
-        cell.setHighlightedVerses([ayah], forType: .share)
+        info.cell.setHighlightedVerses([info.position.ayah], forType: .share)
 
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
@@ -175,6 +213,24 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
+    }
+
+    private func gestureInfo(at point: CGPoint) -> GestureInfo? {
+        let collectionLocalPoint = collectionView.convert(point, from: self)
+        guard let indexPath = collectionView.indexPathForItem(at: collectionLocalPoint) else {
+            return nil
+        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
+            return nil
+        }
+        guard let page = cell.page else {
+            return nil
+        }
+        let cellLocalPoint = cell.convert(point, from: self)
+        guard let position = cell.ayahWordPosition(at: cellLocalPoint) else {
+            return nil
+        }
+        return GestureInfo(cell: cell, indexPath: indexPath, page: page, position: position)
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -290,5 +346,91 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private func targetRect(for point: CGPoint) -> CGRect {
         let size = CGSize(width: 20, height: 20)
         return CGRect(origin: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2), size: size)
+    }
+
+    // MARK: - Word-by-word Pointer
+
+    func showPointer() {
+        delegate?.quranViewHideBars()
+        pointer.isHidden = false
+
+        setPointerTop(bounds.height)
+        _pointerLeading?.constant = bounds.width / 2
+        layoutIfNeeded()
+
+        setPointerTop(bounds.height / 4)
+        _pointerLeading?.constant = 0
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+    }
+
+    func hidePointer() {
+        setPointerTop(bounds.height + 200)
+        _pointerLeading?.constant = bounds.width / 2
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+            self.layoutIfNeeded()
+        }, completion: { _ in
+            if self._pointerTop?.constant == self.bounds.height + 200 {
+                self.pointer.isHidden = true
+            }
+        })
+    }
+
+    private var pointerPositionOld: CGPoint = .zero
+    @objc
+    private func onPointerPanned(_ gesture: UIPanGestureRecognizer) {
+
+        switch gesture.state {
+        case .began:
+            delegate?.quranViewHideBars()
+            pointerPositionOld = CGPoint(x: pointer.frame.minX, y: pointer.frame.minY)
+        case .changed:
+            let translation = gesture.translation(in: self)
+            setPointerTop(pointerPositionOld.y + translation.y)
+            _pointerLeading?.constant = pointerPositionOld.x + translation.x
+            layoutIfNeeded()
+            showTip(at: CGPoint(x: pointer.frame.maxX - 15, y: pointer.frame.minY + 15))
+        case .ended, .cancelled, .failed:
+            hideTip()
+
+            let velocity = gesture.velocity(in: self)
+
+            let goLeft: Bool
+            if abs(velocity.x) > 100 {
+                goLeft = velocity.x < 0
+            } else {
+                goLeft = pointer.center.x < bounds.width / 2
+            }
+
+            let finalY = max(10, min(bounds.height - pointer.bounds.height, velocity.y * 0.3 + pointer.frame.minY))
+            let finalX = goLeft ? 0 : bounds.width - pointer.bounds.width
+
+            let y = finalY - pointer.frame.minY
+            let x = finalX - pointer.frame.minX
+            let springVelocity = abs(velocity.x) / sqrt(x * x + y * y)
+
+            setPointerTop(finalY)
+            _pointerLeading?.constant = finalX
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: springVelocity, options: [], animations: {
+                self.layoutIfNeeded()
+            }, completion: nil)
+
+        case .possible: break
+        }
+    }
+
+    private func showTip(at point: CGPoint) {
+        guard let info = gestureInfo(at: point) else {
+            hideTip()
+            return
+        }
+        info.cell.highlight(position: info.position)
+    }
+
+    private func hideTip() {
+        for cell in collectionView.visibleCells {
+            (cell as? QuranBasePageCollectionViewCell)?.highlight(position: nil)
+        }
     }
 }

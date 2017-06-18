@@ -33,15 +33,19 @@ class QuranBasePageCollectionViewCell: UICollectionViewCell {
 
     // MARK: - share specifics
 
-    func ayahNumber(at point: CGPoint) -> AyahNumber? {
+    func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
         expectedToBeSubclassed()
     }
 
-    func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: VerseHighlightType) {
+    func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {
         expectedToBeSubclassed()
     }
 
-    func highlightedVerse(forType type: VerseHighlightType) -> Set<AyahNumber>? {
+    func highlightedVerse(forType type: QuranHighlightType) -> Set<AyahNumber>? {
+        expectedToBeSubclassed()
+    }
+
+    func highlight(position: AyahWordPosition?) {
         expectedToBeSubclassed()
     }
 }

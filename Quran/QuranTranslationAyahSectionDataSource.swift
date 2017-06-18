@@ -26,7 +26,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
 
     let ayah: AyahNumber
 
-    var highlightType: VerseHighlightType?
+    var highlightType: QuranHighlightType?
 
     init(ayah: AyahNumber) {
         self.ayah = ayah

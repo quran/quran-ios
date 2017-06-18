@@ -31,22 +31,69 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
             .then { self.processAyahInfo($0) }
     }
 
-    fileprivate func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
-        var result = [AyahNumber: [AyahInfo]]()
-        for (ayah, pieces) in info where !pieces.isEmpty {
-            var ayahResult: [AyahInfo] = []
-            ayahResult += [pieces[0]]
-            var lastAyah = ayahResult[0]
-            for i in 1..<pieces.count {
-                if pieces[i].line != lastAyah.line {
-                    lastAyah = pieces[i]
-                    ayahResult += [ pieces[i] ]
-                } else {
-                    ayahResult += [ ayahResult.removeLast().engulf(pieces[i]) ]
+    private func processAyahInfo(_ info: [AyahNumber: [AyahInfo]]) -> [AyahNumber: [AyahInfo]] {
+        var groupedLines = info.flatMap { $0.value }.group { $0.line }
+        let groupedLinesKeys = groupedLines.keys.sorted()
+        for i in 0..<groupedLinesKeys.count {
+            let key = groupedLinesKeys[i]
+            let value = groupedLines[key]!
+            groupedLines[key] = value.sorted { (info1, info2)  in
+                guard info1.ayah.sura == info2.ayah.sura else {
+                    return info1.ayah.sura < info2.ayah.sura
                 }
+                guard info1.ayah.ayah == info2.ayah.ayah else {
+                    return info1.ayah.ayah < info2.ayah.ayah
+                }
+                return info1.position < info2.position
             }
-            result[ayah] = ayahResult
         }
-        return result
+
+        // align vertically each line
+        for i in 0..<groupedLinesKeys.count {
+            let key = groupedLinesKeys[i]
+            let list = groupedLines[key]!
+            groupedLines[key] = AyahInfo.alignedVertically(list)
+        }
+
+        // union each line with its neighbors
+        for i in 0..<groupedLinesKeys.count - 1 {
+            let keyTop = groupedLinesKeys[i]
+            let keyBottom = groupedLinesKeys[i + 1]
+            var listTop = groupedLines[keyTop]!
+            var listBottom = groupedLines[keyBottom]!
+            AyahInfo.unionVertically(top: &listTop, bottom: &listBottom)
+            groupedLines[keyTop] = listTop
+            groupedLines[keyBottom] = listBottom
+        }
+
+        // union each position with its neighbors
+        for i in 0..<groupedLinesKeys.count {
+            let key = groupedLinesKeys[i]
+            var list = groupedLines[key]!
+
+            for j in 0..<list.count - 1 {
+                var first = list[j]
+                var second = list[j + 1]
+                first.unionHorizontally(left: &second)
+                list[j] = first
+                list[j + 1] = second
+            }
+            groupedLines[key] = list
+        }
+
+        // align the edges
+        var firstEdge = groupedLines.map { $0.value[0] }
+        var lastEdge = groupedLines.map { $0.value[$0.value.count - 1] }
+        AyahInfo.unionLeftEdge(&lastEdge)
+        AyahInfo.unionRightEdge(&firstEdge)
+        for i in 0..<groupedLinesKeys.count {
+            let key = groupedLinesKeys[i]
+            var list = groupedLines[key]!
+            list[0] = firstEdge[i]
+            list[list.count - 1] = lastEdge[i]
+            groupedLines[key] = list
+        }
+
+        return groupedLines.flatMap { $0.value }.group { $0.ayah }
     }
 }

@@ -119,13 +119,13 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
 
     // MARK: - share specifics
 
-    override func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
+    override func ayahWordPosition(at point: CGPoint) -> AyahWord.Position? {
 
         let localPoint = collectionView.convert(point, from: self)
         let indexPath = collectionView.indexPathForItem(at: localPoint)
         let cell = indexPath.flatMap { collectionView.cellForItem(at: $0) }
         let translationCell = cell as? QuranTranslationBaseCollectionViewCell
-        return translationCell?.ayah.map { AyahWordPosition(ayah: $0, position: -1, frame: .zero) }
+        return translationCell?.ayah.map { AyahWord.Position(ayah: $0, position: -1, frame: .zero) }
     }
 
     override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {
@@ -161,7 +161,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.top, animated: true)
     }
 
-    override func highlight(position: AyahWordPosition?) {
+    override func highlight(position: AyahWord.Position?) {
         // not supported yet
     }
 }

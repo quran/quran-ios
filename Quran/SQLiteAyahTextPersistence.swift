@@ -27,21 +27,15 @@ private struct Columns {
     static let snippet = Expression<String>(literal: "snippet(verses, '<b>', '</b>', '...', -1, 64)")
 }
 
-private enum WordType: String {
-    case word
-    case end
-    case pause
-    case sajdah
-    case rubHizb = "rub-el-hizb"
-}
-
-class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistence {
+class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPersistence, ReadonlySQLitePersistence {
 
     private let table = Table("words")
     private let versesTable = Table("verses")
     private let wordType = Expression<String>("word_type")
     private let wordPosition = Expression<Int>("word_position")
     private let textMadani = Expression<String?>("text_madani")
+    private let translation = Expression<String?>("translation")
+    private let transliteration = Expression<String?>("transliteration")
 
     var filePath: String { return Files.wordsTextPath }
 
@@ -56,7 +50,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
         return try run { connection in
             let query = table
                 .select(textMadani)
-                .filter(Columns.sura == number.sura && Columns.ayah == number.ayah && wordType != WordType.end.rawValue)
+                .filter(Columns.sura == number.sura && Columns.ayah == number.ayah && wordType != AyahWord.WordType.end.rawValue)
                 .order(wordPosition)
             let rows = try connection.prepare(query)
             return rowsToAyahText(rows)
@@ -81,6 +75,45 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, ReadonlySQLitePersistenc
         return try run { connection in
             return try _search(for: term, connection: connection, table: versesTable)
         }
+    }
+
+    func getWord(for position: AyahWord.Position, type: AyahWord.TextType) throws -> AyahWord {
+        return try run { connection in
+            let text: Expression<String?>
+            switch type {
+            case .translation: text = translation
+            case .transliteration: text = transliteration
+            }
+            let query = table
+                .select(text, wordType)
+                .filter(
+                    Columns.sura == position.ayah.sura &&
+                    Columns.ayah == position.ayah.ayah &&
+                    wordPosition == position.position)
+            let rows = try connection.prepare(query)
+            let words = rowsToWord(rows, position: position, type: type)
+            guard words.count == 1 else {
+                fatalError("Expected 1 word but found \(words.count) querying:\(position) - \(type)")
+            }
+            return words[0]
+        }
+    }
+
+    private func rowsToWord(_ rows: AnySequence<Row>, position: AyahWord.Position, type: AyahWord.TextType) -> [AyahWord] {
+        var result: [AyahWord] = []
+        for row in rows {
+            let text: String?
+            switch type {
+            case .translation: text = row[translation]
+            case .transliteration: text = row[transliteration]
+            }
+            let wordTypeRaw = row[self.wordType]
+            let wordType = unwrap(AyahWord.WordType(rawValue: wordTypeRaw))
+
+            let word = AyahWord(position: position, text: text, textType: type, wordType: wordType)
+            result.append(word)
+        }
+        return result
     }
 }
 

@@ -33,7 +33,7 @@ class QuranBasePageCollectionViewCell: UICollectionViewCell {
 
     // MARK: - share specifics
 
-    func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
+    func ayahWordPosition(at point: CGPoint) -> AyahWord.Position? {
         expectedToBeSubclassed()
     }
 
@@ -45,7 +45,7 @@ class QuranBasePageCollectionViewCell: UICollectionViewCell {
         expectedToBeSubclassed()
     }
 
-    func highlight(position: AyahWordPosition?) {
+    func highlight(position: AyahWord.Position?) {
         expectedToBeSubclassed()
     }
 }

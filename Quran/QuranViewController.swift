@@ -23,6 +23,7 @@ import UIKit
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
+    private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
@@ -107,6 +108,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
          verseTextRetrieval                     : AnyInteractor<QuranShareData, [String]>,
+         wordByWordPersistence                  : WordByWordTranslationPersistence,
          page                                   : Int,
          lastPage                               : LastPage?,
          highlightedSearchAyah                  : AyahNumber?) {
@@ -122,6 +124,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.bookmarksPersistence                   = bookmarksPersistence
         self.verseTextRetrieval                     = verseTextRetrieval
         self.highlightedSearchAyah                  = highlightedSearchAyah
+        self.wordByWordPersistence                  = wordByWordPersistence
 
         let imagesDataSource = QuranImagesDataSource(
             imageService: imageService,
@@ -168,7 +171,9 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     override func loadView() {
-        view = QuranView(bookmarksPersistence: bookmarksPersistence, verseTextRetrieval: verseTextRetrieval)
+        view = QuranView(bookmarksPersistence: bookmarksPersistence,
+                         verseTextRetrieval: verseTextRetrieval,
+                         wordByWordPersistence: wordByWordPersistence)
     }
 
     override func viewDidLoad() {

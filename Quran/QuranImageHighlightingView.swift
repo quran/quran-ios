@@ -35,7 +35,7 @@ class QuranImageHighlightingView: UIView {
         didSet { updateRectangleBounds() }
     }
 
-    var highlightedPosition: AyahWordPosition? {
+    var highlightedPosition: AyahWord.Position? {
         didSet { updateRectangleBounds() }
     }
 
@@ -95,13 +95,13 @@ class QuranImageHighlightingView: UIView {
 
     // MARK: - Location of ayah
 
-    func ayahWordPosition(at location: CGPoint, view: UIView) -> AyahWordPosition? {
+    func ayahWordPosition(at location: CGPoint, view: UIView) -> AyahWord.Position? {
         guard let ayahInfoData = ayahInfoData else { return nil }
         for (ayahNumber, ayahInfos) in ayahInfoData {
             for piece in ayahInfos {
                 let rectangle = piece.rect.scaled(by: imageScale)
                 if rectangle.contains(location) {
-                    return AyahWordPosition(ayah: ayahNumber, position: piece.position, frame: convert(rectangle, to: view))
+                    return AyahWord.Position(ayah: ayahNumber, position: piece.position, frame: convert(rectangle, to: view))
                 }
             }
         }

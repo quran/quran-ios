@@ -1,8 +1,8 @@
 //
-//  AyahWordPosition.swift
+//  WordByWordTranslationPersistence.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 6/15/17.
+//  Created by Mohamed Afifi on 6/19/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -17,8 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-struct AyahWordPosition {
-    let ayah: AyahNumber
-    let position: Int
-    let frame: CGRect
+
+protocol WordByWordTranslationPersistence {
+    func getWord(for position: AyahWord.Position, type: AyahWord.TextType) throws -> AyahWord
 }

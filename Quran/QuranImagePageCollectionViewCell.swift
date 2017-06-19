@@ -108,7 +108,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
 
     // MARK: - share specifics
 
-    override func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
+    override func ayahWordPosition(at point: CGPoint) -> AyahWord.Position? {
         let localPoint = highlightingView.convert(point, from: self)
         return highlightingView.ayahWordPosition(at: localPoint, view: self)
     }
@@ -124,7 +124,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
         return highlightingView.highlights[type]
     }
 
-    override func highlight(position: AyahWordPosition?) {
+    override func highlight(position: AyahWord.Position?) {
         highlightingView.highlightedPosition = position
     }
 }

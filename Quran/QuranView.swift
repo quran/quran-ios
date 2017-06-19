@@ -25,7 +25,7 @@ private struct GestureInfo {
     let cell: QuranBasePageCollectionViewCell
     let indexPath: IndexPath
     let page: QuranPage
-    let position: AyahWordPosition
+    let position: AyahWord.Position
 }
 
 protocol QuranViewDelegate: class {
@@ -44,6 +44,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private let dismissBarsTapGesture = UITapGestureRecognizer()
     private let bookmarksPersistence: BookmarksPersistence
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
+    private let wordByWordPersistence: WordByWordTranslationPersistence
 
     private var shareData: QuranShareData? {
         didSet {
@@ -120,9 +121,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     init(bookmarksPersistence: BookmarksPersistence,
-         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>) {
+         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>,
+         wordByWordPersistence: WordByWordTranslationPersistence) {
         self.bookmarksPersistence = bookmarksPersistence
         self.verseTextRetrieval = verseTextRetrieval
+        self.wordByWordPersistence = wordByWordPersistence
         super.init(frame: .zero)
         setUp()
     }
@@ -421,6 +424,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
+    private var lastWord: AyahWord?
+
     private func showTip(at point: CGPoint) {
         guard let info = gestureInfo(at: point) else {
             hideTip()
@@ -431,14 +436,38 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let frame = convert(info.position.frame, from: info.cell)
 
         let isUpward = frame.minY < 63
-        let point2 = CGPoint(x: frame.midX, y: isUpward ? frame.maxY + 10 : frame.minY - 10)
-        let action = PopoverAction(title: "Allah Akbar", handler: { _ in })
-        popover.show(to: point2, isUpward: isUpward, with: [action])
+        let point = CGPoint(x: frame.midX, y: isUpward ? frame.maxY + 10 : frame.minY - 10)
+
+        var word: AyahWord? = nil
+        if lastWord?.position == info.position {
+            word = lastWord
+            show(word: lastWord, at: point, isUpward: isUpward)
+        } else {
+            suppress {
+                word = try wordByWordPersistence.getWord(for: info.position, type: .translation)
+            }
+        }
+        show(word: word, at: point, isUpward: isUpward)
     }
 
-    private func hideTip() {
-        for cell in collectionView.visibleCells {
-            (cell as? QuranBasePageCollectionViewCell)?.highlight(position: nil)
+    private func show(word: AyahWord?, at point: CGPoint, isUpward: Bool) {
+        if let text = word?.text {
+            let action = PopoverAction(title: text, handler: { _ in })
+            popover.show(to: point, isUpward: isUpward, with: [action])
+        } else {
+            hideTip(updateLastWord: false)
+        }
+        if let word = word {
+            lastWord = word
+        }
+    }
+
+    private func hideTip(updateLastWord: Bool = true) {
+        if updateLastWord {
+            lastWord = nil
+            for cell in collectionView.visibleCells {
+                (cell as? QuranBasePageCollectionViewCell)?.highlight(position: nil)
+            }
         }
         popover.hideNoAnimation()
     }

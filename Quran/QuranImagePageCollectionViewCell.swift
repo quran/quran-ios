@@ -110,7 +110,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
 
     override func ayahWordPosition(at point: CGPoint) -> AyahWordPosition? {
         let localPoint = highlightingView.convert(point, from: self)
-        return highlightingView.ayahWordPosition(at: localPoint)
+        return highlightingView.ayahWordPosition(at: localPoint, view: self)
     }
 
     override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {

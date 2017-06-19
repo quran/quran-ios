@@ -20,4 +20,5 @@
 struct AyahWordPosition {
     let ayah: AyahNumber
     let position: Int
+    let frame: CGRect
 }

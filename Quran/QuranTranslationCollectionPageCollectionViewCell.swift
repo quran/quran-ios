@@ -125,7 +125,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         let indexPath = collectionView.indexPathForItem(at: localPoint)
         let cell = indexPath.flatMap { collectionView.cellForItem(at: $0) }
         let translationCell = cell as? QuranTranslationBaseCollectionViewCell
-        return translationCell?.ayah.map { AyahWordPosition(ayah: $0, position: -1) }
+        return translationCell?.ayah.map { AyahWordPosition(ayah: $0, position: -1, frame: .zero) }
     }
 
     override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {

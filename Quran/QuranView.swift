@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 import MenuItemKit
+import Popover_OC
 import UIKit
 
 private struct GestureInfo {
@@ -426,11 +427,24 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             return
         }
         info.cell.highlight(position: info.position)
+
+        let frame = convert(info.position.frame, from: info.cell)
+
+        let isUpward = frame.minY < 63
+        let point2 = CGPoint(x: frame.midX, y: isUpward ? frame.maxY + 10 : frame.minY - 10)
+        let action = PopoverAction(title: "Allah Akbar", handler: { _ in })
+        popover.show(to: point2, isUpward: isUpward, with: [action])
     }
 
     private func hideTip() {
         for cell in collectionView.visibleCells {
             (cell as? QuranBasePageCollectionViewCell)?.highlight(position: nil)
         }
+        popover.hideNoAnimation()
     }
+
+    lazy var popover: PopoverView = {
+        let popup = PopoverView(view: self)
+        return popup
+    }()
 }

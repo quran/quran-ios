@@ -44,6 +44,7 @@ target 'Quran' do
     pod 'NSDate+TimeAgo'
     pod 'RxSwift'
     pod 'RxCocoa'
+    pod 'Popover.OC'
 end
 
 target 'QuranTests' do

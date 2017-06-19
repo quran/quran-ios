@@ -1,5 +1,5 @@
 //
-//  AyahWord.swift
+//  PhonePopoverPresentationControllerDelegate.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 6/19/17.
@@ -17,34 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-struct AyahWord {
-
-    enum TextType: Int {
-        case translation
-        case transliteration
+class PhonePopoverPresentationControllerDelegate: NSObject, UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
-
-    enum WordType: String {
-        case word
-        case end
-        case pause
-        case sajdah
-        case rubHizb = "rub-el-hizb"
-    }
-
-    struct Position: Equatable {
-        let ayah: AyahNumber
-        let position: Int
-        let frame: CGRect
-
-        static func == (lhs: Position, rhs: Position) -> Bool {
-            return lhs.ayah == rhs.ayah && lhs.position == rhs.position && lhs.frame == rhs.frame
-        }
-    }
-
-    let position: Position
-    let text: String?
-    let textType: TextType
-    let wordType: WordType
 }

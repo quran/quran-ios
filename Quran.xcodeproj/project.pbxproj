@@ -305,6 +305,8 @@
 		54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */; };
 		54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */; };
 		54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D41EF76FCD00037D8C /* AyahWord.swift */; };
+		54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */; };
+		54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */; };
 		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
 		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
@@ -830,6 +832,8 @@
 		54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleteInteractor.swift; sourceTree = "<group>"; };
 		54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordTranslationPersistence.swift; sourceTree = "<group>"; };
 		54D133D41EF76FCD00037D8C /* AyahWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahWord.swift; sourceTree = "<group>"; };
+		54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionTableViewController.swift; sourceTree = "<group>"; };
+		54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresentationControllerDelegate.swift; sourceTree = "<group>"; };
 		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
 		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
@@ -1807,6 +1811,8 @@
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				54D133D91EF783F800037D8C /* Popovers */,
+				54D133D61EF7811B00037D8C /* TranslationTextTypeSelection */,
 				54547E821EC74CFA008AFED3 /* Search Module (VIPER) */,
 				54547E811EC74CE4008AFED3 /* Settings */,
 				5459FF721EA526B400FBF6C5 /* AudioDownloads */,
@@ -2042,6 +2048,22 @@
 				54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */,
 			);
 			name = AudioFilesDownloader;
+			sourceTree = "<group>";
+		};
+		54D133D61EF7811B00037D8C /* TranslationTextTypeSelection */ = {
+			isa = PBXGroup;
+			children = (
+				54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */,
+			);
+			name = TranslationTextTypeSelection;
+			sourceTree = "<group>";
+		};
+		54D133D91EF783F800037D8C /* Popovers */ = {
+			isa = PBXGroup;
+			children = (
+				54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */,
+			);
+			name = Popovers;
 			sourceTree = "<group>";
 		};
 		54D2C2161E85DB8200128282 /* translations */ = {
@@ -3130,6 +3152,7 @@
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54699BA31E8DC17B00211A60 /* QuranTranslationTextCollectionViewCell.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
+				54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
@@ -3230,6 +3253,7 @@
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
 				54965FB81E7D4A3700A212E2 /* QuranPageTitleView.swift in Sources */,
 				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
+				54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */,
 				540922A51E91316100C7537A /* QuranTranslationArabicTextDataSource.swift in Sources */,
 				5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistence.swift in Sources */,
 				5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistence.swift in Sources */,

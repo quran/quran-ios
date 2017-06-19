@@ -33,6 +33,7 @@ protocol QuranViewDelegate: class {
     func onQuranViewTapped(_ quranView: QuranView)
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
+    func selectWordTranslationTextType(from view: UIView)
 }
 
 class QuranView: UIView, UIGestureRecognizerDelegate {
@@ -45,6 +46,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private let bookmarksPersistence: BookmarksPersistence
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
     private let wordByWordPersistence: WordByWordTranslationPersistence
+    private let simplePersistence: SimplePersistence
 
     private var shareData: QuranShareData? {
         didSet {
@@ -88,7 +90,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }()
 
     private var _pointerTop: NSLayoutConstraint?
-    private var _pointerLeading: NSLayoutConstraint?
+    private var _pointerLeft: NSLayoutConstraint?
     private var _pointerParentHeight: CGFloat = 0
     private func setPointerTop(_ value: CGFloat) {
         _pointerTop?.constant = value
@@ -112,7 +114,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         self.addAutoLayoutSubview(container)
         container.addSizeConstraints(width: 44, height: 44)
         self._pointerTop = self.addParentTopConstraint(container)
-        self._pointerLeading = self.addParentLeadingConstraint(container)
+        self._pointerLeft = container.leftAnchor.constraint(equalTo: self.leftAnchor)
+        self._pointerLeft?.isActive = true
         return container
     }()
 
@@ -122,10 +125,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     init(bookmarksPersistence: BookmarksPersistence,
          verseTextRetrieval: AnyInteractor<QuranShareData, [String]>,
-         wordByWordPersistence: WordByWordTranslationPersistence) {
+         wordByWordPersistence: WordByWordTranslationPersistence,
+         simplePersistence: SimplePersistence) {
         self.bookmarksPersistence = bookmarksPersistence
         self.verseTextRetrieval = verseTextRetrieval
         self.wordByWordPersistence = wordByWordPersistence
+        self.simplePersistence = simplePersistence
         super.init(frame: .zero)
         setUp()
     }
@@ -146,6 +151,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // pointer dragging
         let pointerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onPointerPanned(_:)))
         pointer.addGestureRecognizer(pointerPanGesture)
+
+        // pointer tapping
+        pointer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pointerTapped)))
     }
 
     override func layoutSubviews() {
@@ -354,16 +362,20 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Word-by-word Pointer
 
+    func pointerTapped() {
+        delegate?.selectWordTranslationTextType(from: pointer)
+    }
+
     func showPointer() {
         delegate?.quranViewHideBars()
         pointer.isHidden = false
 
         setPointerTop(bounds.height)
-        _pointerLeading?.constant = bounds.width / 2
+        _pointerLeft?.constant = bounds.width / 2
         layoutIfNeeded()
 
         setPointerTop(bounds.height / 4)
-        _pointerLeading?.constant = 0
+        _pointerLeft?.constant = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
             self.layoutIfNeeded()
         }, completion: nil)
@@ -371,7 +383,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     func hidePointer() {
         setPointerTop(bounds.height + 200)
-        _pointerLeading?.constant = bounds.width / 2
+        _pointerLeft?.constant = bounds.width / 2
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
             self.layoutIfNeeded()
         }, completion: { _ in
@@ -392,7 +404,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         case .changed:
             let translation = gesture.translation(in: self)
             setPointerTop(pointerPositionOld.y + translation.y)
-            _pointerLeading?.constant = pointerPositionOld.x + translation.x
+            _pointerLeft?.constant = pointerPositionOld.x + translation.x
             layoutIfNeeded()
             showTip(at: CGPoint(x: pointer.frame.maxX - 15, y: pointer.frame.minY + 15))
         case .ended, .cancelled, .failed:
@@ -415,7 +427,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             let springVelocity = abs(velocity.x) / sqrt(x * x + y * y)
 
             setPointerTop(finalY)
-            _pointerLeading?.constant = finalX
+            _pointerLeft?.constant = finalX
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: springVelocity, options: [], animations: {
                 self.layoutIfNeeded()
             }, completion: nil)
@@ -443,8 +455,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             word = lastWord
             show(word: lastWord, at: point, isUpward: isUpward)
         } else {
+            let textType = simplePersistence.valueForKey(.wordTranslationType)
             suppress {
-                word = try wordByWordPersistence.getWord(for: info.position, type: .translation)
+                word = try wordByWordPersistence.getWord(for: info.position, type: AyahWord.TextType(rawValue: textType) ?? .translation)
             }
         }
         show(word: word, at: point, isUpward: isUpward)

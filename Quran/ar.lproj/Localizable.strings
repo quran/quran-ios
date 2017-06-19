@@ -24,3 +24,6 @@
 
 "searchRecentsTitle" = "عمليات البحث الأخيرة";
 "searchPopularTitle" = "إختبر البحث بإستخدام";
+
+"translationTextType" = "الترجمة إلى الإنجليزية";
+"transliterationTextType" = "نسخ الحروف للإنجليزية ";

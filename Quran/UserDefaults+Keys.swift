@@ -22,4 +22,5 @@ extension PersistenceKeyBase {
     static let lastViewedPage = PersistenceKey<Int?>(key: "LastViewedPage", defaultValue: nil)
     static let showQuranTranslationView = PersistenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
     static let selectedTranslations = PersistenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
+    static let wordTranslationType = PersistenceKey<Int>(key: "wordTranslationType", defaultValue: AyahWord.TextType.translation.rawValue)
 }

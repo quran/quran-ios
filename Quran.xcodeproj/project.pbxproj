@@ -2454,6 +2454,7 @@
 				A7C0CB29E29693C884F7AE27 /* [CP] Embed Pods Frameworks */,
 				B40DC3187BCD4205782A7E54 /* [CP] Copy Pods Resources */,
 				5467841D1EB29DDD0012FA2C /* Embed Frameworks */,
+				54D133DC1EF9852F00037D8C /* Copy Manual Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2736,6 +2737,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		54D133DC1EF9852F00037D8C /* Copy Manual Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/QuranFoundation/QuranFoundation.framework.dSYM",
+			);
+			name = "Copy Manual Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"$SCRIPT_INPUT_FILE_0\" ]; then\n    cp -r \"$SCRIPT_INPUT_FILE_0\" \"$TARGET_BUILD_DIR\"\nfi";
 		};
 		5AEE6C0E9885FD47083FB189 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

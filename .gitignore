@@ -25,4 +25,4 @@ DerivedData
 *.xcuserstate
 fastlane/Appfile
 fastlane/report.xml
-fastlane/README.md
+QuranFoundation/QuranFoundation.framework.dSYM

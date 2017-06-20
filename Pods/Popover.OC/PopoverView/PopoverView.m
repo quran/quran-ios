@@ -30,7 +30,6 @@ float DegreesToRadians(float angle) {
 @property (nonatomic, copy) NSArray<PopoverAction *> *actions;
 //@property (nonatomic, assign) CGFloat windowWidth; ///< 窗口宽度
 //@property (nonatomic, assign) CGFloat windowHeight; ///< 窗口高度
-@property (nonatomic, assign) BOOL isUpward; ///< 箭头指向, YES为向上, 反之为向下, 默认为YES.
 
 @end
 
@@ -99,6 +98,7 @@ float DegreesToRadians(float angle) {
     
     // tableView
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    _tableView.allowsSelection = NO;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.scrollEnabled = NO;
@@ -111,6 +111,7 @@ float DegreesToRadians(float angle) {
 
 /*! @brief 显示弹窗指向某个点,  */
 - (void)showToPoint:(CGPoint)toPoint {
+    self.point = toPoint;
     CGFloat _windowWidth = CGRectGetWidth(_keyWindow.bounds);
     CGFloat _windowHeight = CGRectGetHeight(_keyWindow.bounds);
 
@@ -380,14 +381,14 @@ static NSString *kPopoverCellIdentifier = @"kPopoverCellIdentifier";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 //    [UIView animateWithDuration:0.25f animations:^{
-        self.alpha = 0.f;
-        _shadeView.alpha = 0.f;
+//        self.alpha = 0.f;
+//        _shadeView.alpha = 0.f;
 //    } completion:^(BOOL finished) {
         PopoverAction *action = _actions[indexPath.row];
         action.handler ? action.handler(action) : NULL;
-        _actions = nil;
-        [_shadeView removeFromSuperview];
-        [self removeFromSuperview];
+//        _actions = nil;
+//        [_shadeView removeFromSuperview];
+//        [self removeFromSuperview];
 //    }];
 }
 

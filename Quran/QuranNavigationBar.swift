@@ -52,19 +52,21 @@ class QuranNavigationBar {
             bookmark.tintColor = .bookmark()
         }
 
-        let wordByWordImage = isWordPointerActive ? #imageLiteral(resourceName: "word-translation-filled-25") : #imageLiteral(resourceName: "word-translation-25")
-        let wordByWord = UIBarButtonItem(image: wordByWordImage, style: .plain, target: self, action: #selector(onWordTranslationTapped))
-
         let translationImage = isTranslationView ? #imageLiteral(resourceName: "globe_filled-25") : #imageLiteral(resourceName: "globe-25")
         let translation = UIBarButtonItem(image: translationImage, style: .plain, target: self, action: #selector(onTranslationButtonTapped))
 
-        var barItems = [bookmark, wordByWord, translation]
+        let barItems: [UIBarButtonItem]
         if isTranslationView {
             let translationsSelection = UIBarButtonItem(image: #imageLiteral(resourceName: "Checklist_25"),
                                                         style: .plain,
                                                         target: self,
                                                         action: #selector(onSelectTranslationsTapped))
-            barItems.append(translationsSelection)
+            barItems = [bookmark, translation, translationsSelection]
+        } else {
+            let wordByWordImage = isWordPointerActive ? #imageLiteral(resourceName: "word-translation-filled-25") : #imageLiteral(resourceName: "word-translation-25")
+            let wordByWord = UIBarButtonItem(image: wordByWordImage, style: .plain, target: self, action: #selector(onWordTranslationTapped))
+
+            barItems = [bookmark, wordByWord, translation]
         }
 
         delegate?.navigationItem.setRightBarButtonItems(barItems, animated: animated)

@@ -366,6 +366,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onTranslationButtonTapped() {
+        quranNavigationBar.isWordPointerActive = false
+        quranView?.hidePointer()
         updateTranslationView(initialization: false)
     }
 

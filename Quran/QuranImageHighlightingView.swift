@@ -23,7 +23,7 @@ import UIKit
 // This class is expected to be implemented using CoreAnimation with CAShapeLayers.
 // It's also expected to reuse layers instead of dropping & creating new ones.
 class QuranImageHighlightingView: UIView {
-    var highlights: [VerseHighlightType: Set<AyahNumber>] = [:] {
+    var highlights: [QuranHighlightType: Set<AyahNumber>] = [:] {
         didSet { updateRectangleBounds() }
     }
 
@@ -35,7 +35,11 @@ class QuranImageHighlightingView: UIView {
         didSet { updateRectangleBounds() }
     }
 
-    var highlightingRectangles: [VerseHighlightType: [CGRect]] = [:]
+    var highlightedPosition: AyahWord.Position? {
+        didSet { updateRectangleBounds() }
+    }
+
+    var highlightingRectangles: [QuranHighlightType: [CGRect]] = [:]
 
     func reset() {
         highlights = [:]
@@ -59,9 +63,9 @@ class QuranImageHighlightingView: UIView {
     private func updateRectangleBounds() {
 
         highlightingRectangles.removeAll()
-        var filteredHighlightAyats: [VerseHighlightType: Set<AyahNumber>] = [:]
+        var filteredHighlightAyats: [QuranHighlightType: Set<AyahNumber>] = [:]
 
-        for type in VerseHighlightType.sortedTypes {
+        for type in QuranHighlightType.sortedTypes {
             let existingAyahts = filteredHighlightAyats.reduce(Set<AyahNumber>()) { $0.union($1.value) }
             var ayats = highlights[type] ?? Set<AyahNumber>()
             ayats.subtract(existingAyahts)
@@ -80,18 +84,24 @@ class QuranImageHighlightingView: UIView {
             highlightingRectangles[type] = rectangles
         }
 
+        if let position = highlightedPosition, let infos = ayahInfoData?[position.ayah] {
+            for info in infos where info.position == position.position {
+                highlightingRectangles[.wordByWord] = [info.rect.scaled(by: imageScale)]
+                break
+            }
+        }
         setNeedsDisplay()
     }
 
     // MARK: - Location of ayah
 
-    func ayahNumber(at location: CGPoint) -> AyahNumber? {
+    func ayahWordPosition(at location: CGPoint, view: UIView) -> AyahWord.Position? {
         guard let ayahInfoData = ayahInfoData else { return nil }
         for (ayahNumber, ayahInfos) in ayahInfoData {
             for piece in ayahInfos {
                 let rectangle = piece.rect.scaled(by: imageScale)
                 if rectangle.contains(location) {
-                    return ayahNumber
+                    return AyahWord.Position(ayah: ayahNumber, position: piece.position, frame: convert(rectangle, to: view))
                 }
             }
         }

@@ -57,19 +57,6 @@ struct SQLiteAyahInfoPersistence: AyahInfoPersistence, ReadonlySQLitePersistence
         }
     }
 
-    func getAyahInfoForSuraAyah(_ sura: Int, ayah: Int) throws -> [AyahInfo] {
-        return try run { connection in
-            let query = glyphsTable.filter(columns.sura == sura && columns.ayah == ayah)
-
-            var result: [AyahInfo] = []
-            let ayah = AyahNumber(sura: sura, ayah: ayah)
-            for row in try connection.prepare(query) {
-                result += [ getAyahInfoFromRow(row, ayah: ayah) ]
-            }
-            return result
-        }
-    }
-
     fileprivate func getAyahInfoFromRow(_ row: Row, ayah: AyahNumber) -> AyahInfo {
         return AyahInfo(page: row[columns.page],
                         line: row[columns.line],

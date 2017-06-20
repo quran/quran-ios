@@ -30,7 +30,7 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
 
     private let bookmarkPersistence: BookmarksPersistence
 
-    private var highlights: [VerseHighlightType: Set<AyahNumber>] = [:] {
+    private var highlights: [QuranHighlightType: Set<AyahNumber>] = [:] {
         didSet {
             updateHighlightsForVisibleCells()
         }

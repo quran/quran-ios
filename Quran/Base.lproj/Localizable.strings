@@ -22,6 +22,8 @@
 "errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
 "noAvailableTranslationText" = "No translation available for this Ayah.";
 
-
 "searchRecentsTitle" = "Recent searches";
 "searchPopularTitle" = "Try searching with";
+
+"translationTextType" = "Translation";
+"transliterationTextType" = "Transliteration";

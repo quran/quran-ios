@@ -26,6 +26,7 @@ protocol QuranNavigationBarDelegate: class {
     func onBookmarkButtonTapped()
     func onTranslationButtonTapped()
     func onSelectTranslationsButtonTapped()
+    func onWordTranslationButtonTapped(isWordPointerActive: Bool)
 }
 
 class QuranNavigationBar {
@@ -37,6 +38,7 @@ class QuranNavigationBar {
         set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
         get { return simplePersistence.valueForKey(.showQuranTranslationView) }
     }
+    var isWordPointerActive: Bool = false
 
     init(simplePersistence: SimplePersistence) {
         self.simplePersistence = simplePersistence
@@ -53,13 +55,18 @@ class QuranNavigationBar {
         let translationImage = isTranslationView ? #imageLiteral(resourceName: "globe_filled-25") : #imageLiteral(resourceName: "globe-25")
         let translation = UIBarButtonItem(image: translationImage, style: .plain, target: self, action: #selector(onTranslationButtonTapped))
 
-        var barItems = [bookmark, translation]
+        let barItems: [UIBarButtonItem]
         if isTranslationView {
             let translationsSelection = UIBarButtonItem(image: #imageLiteral(resourceName: "Checklist_25"),
                                                         style: .plain,
                                                         target: self,
                                                         action: #selector(onSelectTranslationsTapped))
-            barItems.append(translationsSelection)
+            barItems = [bookmark, translation, translationsSelection]
+        } else {
+            let wordByWordImage = isWordPointerActive ? #imageLiteral(resourceName: "word-translation-filled-25") : #imageLiteral(resourceName: "word-translation-25")
+            let wordByWord = UIBarButtonItem(image: wordByWordImage, style: .plain, target: self, action: #selector(onWordTranslationTapped))
+
+            barItems = [bookmark, wordByWord, translation]
         }
 
         delegate?.navigationItem.setRightBarButtonItems(barItems, animated: animated)
@@ -83,4 +90,10 @@ class QuranNavigationBar {
         delegate?.onSelectTranslationsButtonTapped()
     }
 
+    @objc
+    private func onWordTranslationTapped() {
+        isWordPointerActive = !isWordPointerActive
+        updateRightBarItems(animated: false)
+        delegate?.onWordTranslationButtonTapped(isWordPointerActive: isWordPointerActive)
+    }
 }

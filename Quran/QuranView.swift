@@ -91,10 +91,10 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private var _pointerTop: NSLayoutConstraint?
     private var _pointerLeft: NSLayoutConstraint?
-    private var _pointerParentHeight: CGFloat = 0
+    private var _pointerParentSize: CGSize = .zero
     private func setPointerTop(_ value: CGFloat) {
         _pointerTop?.constant = value
-        _pointerParentHeight = bounds.height
+        _pointerParentSize = bounds.size
     }
 
     lazy var pointer: UIView = {
@@ -158,8 +158,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        if !pointer.isHidden && _pointerParentHeight != bounds.height {
-            setPointerTop(pointer.frame.minY * bounds.height / _pointerParentHeight)
+        if !pointer.isHidden && _pointerParentSize != bounds.size {
+            setPointerTop(pointer.frame.minY * bounds.height / _pointerParentSize.height)
+            if pointer.frame.minX != 0 {
+                _pointerLeft?.constant = bounds.width - pointer.bounds.width
+            }
         }
     }
 

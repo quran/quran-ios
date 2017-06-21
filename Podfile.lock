@@ -13,6 +13,7 @@ PODS:
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - NSDate+TimeAgo (1.0.6)
+  - Popover.OC (1.0)
   - PromiseKit (4.1.7):
     - PromiseKit/Foundation (= 4.1.7)
     - PromiseKit/QuartzCore (= 4.1.7)
@@ -45,6 +46,7 @@ DEPENDENCIES:
   - MenuItemKit
   - Moya
   - NSDate+TimeAgo
+  - Popover.OC
   - PromiseKit
   - RxCocoa
   - RxSwift
@@ -64,6 +66,7 @@ SPEC CHECKSUMS:
   MenuItemKit: 9af69953dc983803ee85230e205fadbac0f26213
   Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
+  Popover.OC: b63f258fb9a9f480d23db9e486f9b165cce17ef8
   PromiseKit: 779f2e41faf62d854e7593026ddbcb0bb5c5002d
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   RxCocoa: a8a5f1d061d0043e28f56976829f31ce63e8eb09
@@ -74,6 +77,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 805fc2fa9d2f05bbb7762d982d7a42ccdcc51f42
 
-PODFILE CHECKSUM: 6b8f7fddf1b3f13b9b935438d9d38e32216e9b6a
+PODFILE CHECKSUM: a4b3ffd9129a709cf58e094da0adb0c40e8e3819
 
 COCOAPODS: 1.2.1

@@ -18,12 +18,22 @@
 //  GNU General Public License for more details.
 //
 import MenuItemKit
+import Popover_OC
 import UIKit
 
+private struct GestureInfo {
+    let cell: QuranBasePageCollectionViewCell
+    let indexPath: IndexPath
+    let page: QuranPage
+    let position: AyahWord.Position
+}
+
 protocol QuranViewDelegate: class {
+    func quranViewHideBars()
     func onQuranViewTapped(_ quranView: QuranView)
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
+    func selectWordTranslationTextType(from view: UIView)
 }
 
 class QuranView: UIView, UIGestureRecognizerDelegate {
@@ -35,6 +45,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private let dismissBarsTapGesture = UITapGestureRecognizer()
     private let bookmarksPersistence: BookmarksPersistence
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
+    private let wordByWordPersistence: WordByWordTranslationPersistence
+    private let simplePersistence: SimplePersistence
 
     private var shareData: QuranShareData? {
         didSet {
@@ -77,14 +89,48 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         return collectionView
     }()
 
+    private var _pointerTop: NSLayoutConstraint?
+    private var _pointerLeft: NSLayoutConstraint?
+    private var _pointerParentSize: CGSize = .zero
+    private func setPointerTop(_ value: CGFloat) {
+        _pointerTop?.constant = value
+        _pointerParentSize = bounds.size
+    }
+
+    lazy var pointer: UIView = {
+        let imageView = UIImageView()
+        imageView.image = #imageLiteral(resourceName: "pointer-25").withRenderingMode(.alwaysTemplate)
+
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 1
+        imageView.layer.shadowRadius = 3
+        imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
+
+        let container = UIView()
+        container.isHidden = true
+        container.addAutoLayoutSubview(imageView)
+        container.addParentCenter(imageView)
+
+        self.addAutoLayoutSubview(container)
+        container.addSizeConstraints(width: 44, height: 44)
+        self._pointerTop = self.addParentTopConstraint(container)
+        self._pointerLeft = container.leftAnchor.constraint(equalTo: self.leftAnchor)
+        self._pointerLeft?.isActive = true
+        return container
+    }()
+
     required init?(coder aDecoder: NSCoder) {
         unimplemented()
     }
 
     init(bookmarksPersistence: BookmarksPersistence,
-         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>) {
+         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>,
+         wordByWordPersistence: WordByWordTranslationPersistence,
+         simplePersistence: SimplePersistence) {
         self.bookmarksPersistence = bookmarksPersistence
         self.verseTextRetrieval = verseTextRetrieval
+        self.wordByWordPersistence = wordByWordPersistence
+        self.simplePersistence = simplePersistence
         super.init(frame: .zero)
         setUp()
     }
@@ -97,9 +143,27 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         sendSubview(toBack: collectionView)
         bringSubview(toFront: audioView)
+        bringSubview(toFront: pointer)
 
         // Long press gesture on verses to select
         addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
+
+        // pointer dragging
+        let pointerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onPointerPanned(_:)))
+        pointer.addGestureRecognizer(pointerPanGesture)
+
+        // pointer tapping
+        pointer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pointerTapped)))
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !pointer.isHidden && _pointerParentSize != bounds.size {
+            setPointerTop(pointer.frame.minY * bounds.height / _pointerParentSize.height)
+            if pointer.frame.minX != 0 {
+                _pointerLeft?.constant = bounds.width - pointer.bounds.width
+            }
+        }
     }
 
     func visibleIndexPath() -> IndexPath? {
@@ -140,18 +204,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         guard sender.state == .began else {
             return
         }
-        let collectionLocalPoint = sender.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: collectionLocalPoint) else {
-            return
-        }
-        guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
-            return
-        }
-        guard let page = cell.page else {
-            return
-        }
-        let cellLocalPoint = sender.location(in: cell)
-        guard let ayah = cell.ayahNumber(at: cellLocalPoint) else {
+        guard let info = gestureInfo(at: sender.location(in: self)) else {
             return
         }
 
@@ -162,11 +215,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
         let pan = UIPanGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
-        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: cell, page: page, ayah: ayah)
+        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: info.cell, page: info.page, ayah: info.position.ayah)
         self.shareData = shareData
 
         // highlight the ayah UI
-        cell.setHighlightedVerses([ayah], forType: .share)
+        info.cell.setHighlightedVerses([info.position.ayah], forType: .share)
 
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
@@ -175,6 +228,24 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
+    }
+
+    private func gestureInfo(at point: CGPoint) -> GestureInfo? {
+        let collectionLocalPoint = collectionView.convert(point, from: self)
+        guard let indexPath = collectionView.indexPathForItem(at: collectionLocalPoint) else {
+            return nil
+        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
+            return nil
+        }
+        guard let page = cell.page else {
+            return nil
+        }
+        let cellLocalPoint = cell.convert(point, from: self)
+        guard let position = cell.ayahWordPosition(at: cellLocalPoint) else {
+            return nil
+        }
+        return GestureInfo(cell: cell, indexPath: indexPath, page: page, position: position)
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -291,4 +362,134 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let size = CGSize(width: 20, height: 20)
         return CGRect(origin: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2), size: size)
     }
+
+    // MARK: - Word-by-word Pointer
+
+    func pointerTapped() {
+        delegate?.selectWordTranslationTextType(from: pointer)
+    }
+
+    func showPointer() {
+        delegate?.quranViewHideBars()
+        pointer.isHidden = false
+
+        setPointerTop(bounds.height)
+        _pointerLeft?.constant = bounds.width / 2
+        layoutIfNeeded()
+
+        setPointerTop(bounds.height / 4)
+        _pointerLeft?.constant = 0
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+    }
+
+    func hidePointer() {
+        setPointerTop(bounds.height + 200)
+        _pointerLeft?.constant = bounds.width / 2
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
+            self.layoutIfNeeded()
+        }, completion: { _ in
+            if self._pointerTop?.constant == self.bounds.height + 200 {
+                self.pointer.isHidden = true
+            }
+        })
+    }
+
+    private var pointerPositionOld: CGPoint = .zero
+    @objc
+    private func onPointerPanned(_ gesture: UIPanGestureRecognizer) {
+
+        switch gesture.state {
+        case .began:
+            delegate?.quranViewHideBars()
+            pointerPositionOld = CGPoint(x: pointer.frame.minX, y: pointer.frame.minY)
+        case .changed:
+            let translation = gesture.translation(in: self)
+            setPointerTop(pointerPositionOld.y + translation.y)
+            _pointerLeft?.constant = pointerPositionOld.x + translation.x
+            layoutIfNeeded()
+            showTip(at: CGPoint(x: pointer.frame.maxX - 15, y: pointer.frame.minY + 15))
+        case .ended, .cancelled, .failed:
+            hideTip()
+
+            let velocity = gesture.velocity(in: self)
+
+            let goLeft: Bool
+            if abs(velocity.x) > 100 {
+                goLeft = velocity.x < 0
+            } else {
+                goLeft = pointer.center.x < bounds.width / 2
+            }
+
+            let finalY = max(10, min(bounds.height - pointer.bounds.height, velocity.y * 0.3 + pointer.frame.minY))
+            let finalX = goLeft ? 0 : bounds.width - pointer.bounds.width
+
+            let y = finalY - pointer.frame.minY
+            let x = finalX - pointer.frame.minX
+            let springVelocity = abs(velocity.x) / sqrt(x * x + y * y)
+
+            setPointerTop(finalY)
+            _pointerLeft?.constant = finalX
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: springVelocity, options: [], animations: {
+                self.layoutIfNeeded()
+            }, completion: nil)
+
+        case .possible: break
+        }
+    }
+
+    private var lastWord: AyahWord?
+
+    private func showTip(at point: CGPoint) {
+        guard let info = gestureInfo(at: point) else {
+            hideTip()
+            return
+        }
+        info.cell.highlight(position: info.position)
+
+        let frame = convert(info.position.frame, from: info.cell)
+
+        let isUpward = frame.minY < 63
+        let point = CGPoint(x: frame.midX, y: isUpward ? frame.maxY + 10 : frame.minY - 10)
+
+        var word: AyahWord? = nil
+        if lastWord?.position == info.position {
+            word = lastWord
+            show(word: lastWord, at: point, isUpward: isUpward)
+        } else {
+            let textType = simplePersistence.valueForKey(.wordTranslationType)
+            suppress {
+                word = try wordByWordPersistence.getWord(for: info.position, type: AyahWord.TextType(rawValue: textType) ?? .translation)
+            }
+        }
+        show(word: word, at: point, isUpward: isUpward)
+    }
+
+    private func show(word: AyahWord?, at point: CGPoint, isUpward: Bool) {
+        if let text = word?.text {
+            let action = PopoverAction(title: text, handler: { _ in })
+            popover.show(to: point, isUpward: isUpward, with: [action])
+        } else {
+            hideTip(updateLastWord: false)
+        }
+        if let word = word {
+            lastWord = word
+        }
+    }
+
+    private func hideTip(updateLastWord: Bool = true) {
+        if updateLastWord {
+            lastWord = nil
+            for cell in collectionView.visibleCells {
+                (cell as? QuranBasePageCollectionViewCell)?.highlight(position: nil)
+            }
+        }
+        popover.hideNoAnimation()
+    }
+
+    lazy var popover: PopoverView = {
+        let popup = PopoverView(view: self)
+        return popup
+    }()
 }

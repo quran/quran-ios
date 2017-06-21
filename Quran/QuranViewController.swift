@@ -23,6 +23,7 @@ import UIKit
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
 
+    private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
@@ -107,6 +108,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
          verseTextRetrieval                     : AnyInteractor<QuranShareData, [String]>,
+         wordByWordPersistence                  : WordByWordTranslationPersistence,
          page                                   : Int,
          lastPage                               : LastPage?,
          highlightedSearchAyah                  : AyahNumber?) {
@@ -122,6 +124,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.bookmarksPersistence                   = bookmarksPersistence
         self.verseTextRetrieval                     = verseTextRetrieval
         self.highlightedSearchAyah                  = highlightedSearchAyah
+        self.wordByWordPersistence                  = wordByWordPersistence
 
         let imagesDataSource = QuranImagesDataSource(
             imageService: imageService,
@@ -168,7 +171,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     override func loadView() {
-        view = QuranView(bookmarksPersistence: bookmarksPersistence, verseTextRetrieval: verseTextRetrieval)
+        view = QuranView(bookmarksPersistence: bookmarksPersistence,
+                         verseTextRetrieval: verseTextRetrieval,
+                         wordByWordPersistence: wordByWordPersistence,
+                         simplePersistence: simplePersistence)
     }
 
     override func viewDidLoad() {
@@ -258,8 +264,30 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
+    func quranViewHideBars() {
+        setBarsHidden(true)
+    }
+
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect) {
         ShareController.share(textLines: textLines, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
+    }
+
+    func selectWordTranslationTextType(from view: UIView) {
+        let selectedIndex = simplePersistence.valueForKey(.wordTranslationType)
+        let items = [NSLocalizedString("translationTextType", comment: ""),
+                     NSLocalizedString("transliterationTextType", comment: "")]
+        let controller = TranslationTextTypeSelectionTableViewController(selectedIndex: selectedIndex, items: items)
+        controller.selectionChanged = { [weak self] newIndex in
+            self?.simplePersistence.setValue(newIndex, forKey: .wordTranslationType)
+            self?.dismiss(animated: true, completion: nil)
+        }
+        controller.modalPresentationStyle = .popover
+        controller.retainedPopoverPresentationHandler = PhonePopoverPresentationControllerDelegate()
+        controller.popoverPresentationController?.sourceView = view
+        controller.popoverPresentationController?.sourceRect = view.bounds
+        controller.popoverPresentationController?.permittedArrowDirections = [.left, .right]
+
+        present(controller, animated: true, completion: nil)
     }
 
     private func setBarsHidden(_ hidden: Bool) {
@@ -338,12 +366,22 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onTranslationButtonTapped() {
+        quranNavigationBar.isWordPointerActive = false
+        quranView?.hidePointer()
         updateTranslationView(initialization: false)
     }
 
     func onSelectTranslationsButtonTapped() {
         let controller = translationsSelectionControllerCreator.create()
         present(controller, animated: true, completion: nil)
+    }
+
+    func onWordTranslationButtonTapped(isWordPointerActive: Bool) {
+        if isWordPointerActive {
+            quranView?.showPointer()
+        } else {
+            quranView?.hidePointer()
+        }
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

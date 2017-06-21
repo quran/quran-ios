@@ -186,6 +186,10 @@ class Container {
         return SQLiteArabicTextPersistence()
     }
 
+    func createWordByWordTranslationPersistence() -> WordByWordTranslationPersistence {
+        return SQLiteArabicTextPersistence()
+    }
+
     func createTranslationTextPersistence(filePath: String) -> SQLiteTranslationTextPersistence {
         return SQLiteTranslationTextPersistence(filePath: filePath)
     }
@@ -207,6 +211,7 @@ class Container {
             lastPagesPersistence                   : createLastPagesPersistence(),
             simplePersistence                      : createSimplePersistence(),
             verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
+            wordByWordPersistence                  : createWordByWordTranslationPersistence(),
             page                                   : page,
             lastPage                               : lastPage,
             highlightedSearchAyah                  : highlightAyah

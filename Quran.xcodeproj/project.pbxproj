@@ -303,6 +303,11 @@
 		54C0DC301CE889CA009AAD8D /* AudioFilesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */; };
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
 		54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */; };
+		54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */; };
+		54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D41EF76FCD00037D8C /* AyahWord.swift */; };
+		54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */; };
+		54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */; };
+		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
 		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
 		54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */; };
@@ -825,6 +830,11 @@
 		54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFilesDownloader.swift; sourceTree = "<group>"; };
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
 		54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleteInteractor.swift; sourceTree = "<group>"; };
+		54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordTranslationPersistence.swift; sourceTree = "<group>"; };
+		54D133D41EF76FCD00037D8C /* AyahWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahWord.swift; sourceTree = "<group>"; };
+		54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionTableViewController.swift; sourceTree = "<group>"; };
+		54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresentationControllerDelegate.swift; sourceTree = "<group>"; };
+		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
 		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
 		54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksManager.swift; sourceTree = "<group>"; };
@@ -1143,6 +1153,7 @@
 		5437D3701EB3867F00795FA9 /* QuranFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				54D9991D1EF2F58900BC6532 /* Model */,
 				54FD7BA11EB9339600FA485F /* UserDefaults */,
 				543FE0471EB3D8C000687DF8 /* Errors */,
 				543FDFD41EB394AE00687DF8 /* Theme */,
@@ -1616,7 +1627,7 @@
 		5484C2EC1ED8C1A60068025A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */,
+				54D9991A1EF1FDB800BC6532 /* Integration */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -1800,6 +1811,8 @@
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				54D133D91EF783F800037D8C /* Popovers */,
+				54D133D61EF7811B00037D8C /* TranslationTextTypeSelection */,
 				54547E821EC74CFA008AFED3 /* Search Module (VIPER) */,
 				54547E811EC74CE4008AFED3 /* Settings */,
 				5459FF721EA526B400FBF6C5 /* AudioDownloads */,
@@ -2037,6 +2050,22 @@
 			name = AudioFilesDownloader;
 			sourceTree = "<group>";
 		};
+		54D133D61EF7811B00037D8C /* TranslationTextTypeSelection */ = {
+			isa = PBXGroup;
+			children = (
+				54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */,
+			);
+			name = TranslationTextTypeSelection;
+			sourceTree = "<group>";
+		};
+		54D133D91EF783F800037D8C /* Popovers */ = {
+			isa = PBXGroup;
+			children = (
+				54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */,
+			);
+			name = Popovers;
+			sourceTree = "<group>";
+		};
 		54D2C2161E85DB8200128282 /* translations */ = {
 			isa = PBXGroup;
 			children = (
@@ -2066,6 +2095,23 @@
 				54B266811CCAC82600D3AEF8 /* QuranImagesDataSource.swift */,
 			);
 			name = image;
+			sourceTree = "<group>";
+		};
+		54D9991A1EF1FDB800BC6532 /* Integration */ = {
+			isa = PBXGroup;
+			children = (
+				5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */,
+				54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */,
+			);
+			name = Integration;
+			sourceTree = "<group>";
+		};
+		54D9991D1EF2F58900BC6532 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				54D133D41EF76FCD00037D8C /* AyahWord.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		54DC4AE01E8471C700F4CBD6 /* PreloadingOperations */ = {
@@ -2185,6 +2231,7 @@
 			children = (
 				C2E3E082DC45260A470C388A /* AyahTextPersistence.swift */,
 				C2E3E6CCD339F38486D8454B /* SQLiteAyahTextPersistence.swift */,
+				54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */,
 			);
 			name = "Ayah Text";
 			sourceTree = "<group>";
@@ -2407,6 +2454,7 @@
 				A7C0CB29E29693C884F7AE27 /* [CP] Embed Pods Frameworks */,
 				B40DC3187BCD4205782A7E54 /* [CP] Copy Pods Resources */,
 				5467841D1EB29DDD0012FA2C /* Embed Frameworks */,
+				54D133DC1EF9852F00037D8C /* Copy Manual Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2689,6 +2737,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		54D133DC1EF9852F00037D8C /* Copy Manual Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/QuranFoundation/QuranFoundation.framework",
+			);
+			name = "Copy Manual Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"$SCRIPT_INPUT_FILE_0\".dSYM ]; then\n  cp -r \"$SCRIPT_INPUT_FILE_0\".dSYM \"$BUILT_PRODUCTS_DIR\"\nfi";
 		};
 		5AEE6C0E9885FD47083FB189 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3056,6 +3119,7 @@
 			files = (
 				5484C3041ED9B6410068025A /* RunloopLock.swift in Sources */,
 				5484C2EF1ED8C1BD0068025A /* BlockingExtensiosn.swift in Sources */,
+				54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */,
 				5484C2EA1ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift in Sources */,
 				5484C3061ED9BAAD0068025A /* XCAssert+Extensions.swift in Sources */,
 			);
@@ -3103,6 +3167,7 @@
 				54B265E71CC57D8F00D3AEF8 /* AppDelegate.swift in Sources */,
 				54699BA31E8DC17B00211A60 /* QuranTranslationTextCollectionViewCell.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
+				54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
 				544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */,
 				54B2661D1CC7F29C00D3AEF8 /* UIColor+Theme.swift in Sources */,
@@ -3171,6 +3236,7 @@
 				545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */,
 				54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */,
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
+				54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */,
 				54B2660F1CC6D39300D3AEF8 /* SearchNavigationController.swift in Sources */,
 				54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */,
 				54B2665D1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift in Sources */,
@@ -3202,6 +3268,7 @@
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
 				54965FB81E7D4A3700A212E2 /* QuranPageTitleView.swift in Sources */,
 				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
+				54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */,
 				540922A51E91316100C7537A /* QuranTranslationArabicTextDataSource.swift in Sources */,
 				5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistence.swift in Sources */,
 				5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistence.swift in Sources */,
@@ -3232,6 +3299,7 @@
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */,
+				54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,
 				545499B71E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift in Sources */,
 				54B266A61CCD944600D3AEF8 /* QuartersDataRetriever.swift in Sources */,
@@ -3799,6 +3867,10 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/QuranFoundation",
+				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3818,6 +3890,10 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/QuranFoundation",
+				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

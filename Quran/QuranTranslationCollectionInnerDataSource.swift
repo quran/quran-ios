@@ -35,7 +35,7 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
         }
     }
 
-    var highlights: [VerseHighlightType: Set<AyahNumber>] = [:] {
+    var highlights: [QuranHighlightType: Set<AyahNumber>] = [:] {
         didSet { updateHighlights() }
     }
 
@@ -90,8 +90,8 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
     private func updateHighlights() {
 
         // reverse the grouping
-        var versesByHighlights: [AyahNumber: VerseHighlightType] = [:]
-        for type in VerseHighlightType.sortedTypes.reversed() {
+        var versesByHighlights: [AyahNumber: QuranHighlightType] = [:]
+        for type in QuranHighlightType.sortedTypes.reversed() {
             let verses = highlights[type]
             for verse in verses ?? Set() {
                 versesByHighlights[verse] = type

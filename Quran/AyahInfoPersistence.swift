@@ -22,5 +22,4 @@ import Foundation
 
 protocol AyahInfoPersistence {
     func getAyahInfoForPage(_ page: Int) throws -> [AyahNumber : [AyahInfo]]
-    func getAyahInfoForSuraAyah(_ sura: Int, ayah: Int) throws -> [AyahInfo]
 }

@@ -87,7 +87,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     private func scrollToReadingHighlightedAyat() {
 
         var rectangles: [CGRect] = []
-        for highlightType in VerseHighlightType.scrollingTypes {
+        for highlightType in QuranHighlightType.scrollingTypes {
             if let rects = highlightingView.highlightingRectangles[highlightType], !rects.isEmpty {
                 rectangles = rects
                 break
@@ -108,19 +108,23 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
 
     // MARK: - share specifics
 
-    override func ayahNumber(at point: CGPoint) -> AyahNumber? {
+    override func ayahWordPosition(at point: CGPoint) -> AyahWord.Position? {
         let localPoint = highlightingView.convert(point, from: self)
-        return highlightingView.ayahNumber(at: localPoint)
+        return highlightingView.ayahWordPosition(at: localPoint, view: self)
     }
 
-    override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: VerseHighlightType) {
+    override func setHighlightedVerses(_ verses: Set<AyahNumber>?, forType type: QuranHighlightType) {
         highlightingView.highlights[type] = verses
-        if VerseHighlightType.scrollingTypes.contains(type) {
+        if QuranHighlightType.scrollingTypes.contains(type) {
             scrollToReadingHighlightedAyat()
         }
     }
 
-    override func highlightedVerse(forType type: VerseHighlightType) -> Set<AyahNumber>? {
+    override func highlightedVerse(forType type: QuranHighlightType) -> Set<AyahNumber>? {
         return highlightingView.highlights[type]
+    }
+
+    override func highlight(position: AyahWord.Position?) {
+        highlightingView.highlightedPosition = position
     }
 }

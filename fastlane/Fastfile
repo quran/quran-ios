@@ -1,5 +1,3 @@
-require "pstore"
-
 # Customise this file, documentation can be found here:
 # https://github.com/fastlane/fastlane/tree/master/fastlane/docs
 # All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
@@ -13,6 +11,8 @@ require "pstore"
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
+fastlane_require "pstore"
+
 fastlane_version '2.27.0'
 
 default_platform :ios
@@ -37,7 +37,20 @@ platform :ios do
 
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
-    lane :beta do
+    lane :beta do |options|
+
+        clean = options[:clean].nil? ? true : options[:clean]
+
+        # Build frameworks for QuranFoundation
+        build_frameworks(
+          archive: true,
+          clean: clean,
+          target: "device")
+
+        # Build QuranFoundation
+        path = sh("pwd")
+        sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
+        sh "cd #{path}"
 
         store = PStore.new("#{Dir.home}/com.quran.ios.pstore")
 
@@ -75,7 +88,7 @@ platform :ios do
         gym(
             scheme: 'Quran',
             configuration: "Release",
-            clean: true,
+            clean: clean,
             output_directory: './build/',
             include_symbols: true,
             include_bitcode: true
@@ -93,8 +106,8 @@ platform :ios do
 
         # Reset fabric keys changes & build number
         # reset_git_repo(force: true)
-        sh "git reset --hard HEAD"
-        sh "git clean -fd"
+       sh "git reset --hard HEAD"
+       sh "git clean -fd"
 
         # Say it succeeded
         successMessage = 'New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!'
@@ -102,19 +115,28 @@ platform :ios do
     end
 
     desc 'This will build frameworks'
-    lane :build_frameworks do
+    lane :build_frameworks do |options|
       build_framework(
         frameworkName: "BatchDownloader",
         workspace: "../Quran.xcworkspace",
-        outputDir: "../../QuranFoundation/Frameworks")
+        outputDir: "../../QuranFoundation/Frameworks",
+        archive: options[:archive],
+        target: options[:target],
+        clean: options[:clean])
       build_framework(
           frameworkName: "VFoundation",
           workspace: "../Quran.xcworkspace",
-          outputDir: "../../QuranFoundation/Frameworks")
+          outputDir: "../../QuranFoundation/Frameworks",
+          archive: options[:archive],
+          target: options[:target],
+          clean: options[:clean])
       build_framework(
           frameworkName: "SQLitePersistence",
           workspace: "../Quran.xcworkspace",
-          outputDir: "../../QuranFoundation/Frameworks")
+          outputDir: "../../QuranFoundation/Frameworks",
+          archive: options[:archive],
+          target: options[:target],
+          clean: options[:clean])
     end
 
     error do |lane, exception|
@@ -132,23 +154,57 @@ platform :ios do
       simulatorOutput = "#{buildDir}/Release-iphonesimulator"
       deviceOutputXC = File.absolute_path("..") + "/build/Release-iphoneos"
       simulatorOutputXC = File.absolute_path("..") + "/build/Release-iphonesimulator"
-      appLocation = "#{outputDir}/#{frameworkName}.framework\""
+      appLocation = "#{outputDir}/#{frameworkName}.framework"
+
+      archive = options[:archive].nil? ? false : options[:archive]
+      target = options[:target].nil? ? "both" : options[:target]
+      clean = options[:clean].nil? ? true : options[:clean]
+
+      case target
+      when "both", "simulator", "device"
+      else
+        fail ArgumentError, "Unsupported target value '#{target}'. Should be one of (simulator, device, or both)!"
+      end
+
+      if archive
+        archiveString = "archive"
+      else
+        archiveString = "build"
+      end
+
+      if clean
+        cleanString = "clean"
+      else
+        cleanString = ""
+      end
 
       # Delete the build directory
       sh "rm -rf \"#{buildDir}\""
 
       # Build for Device & Simulator
-      sh "set -o pipefail && xcodebuild clean build -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphoneos\"        BUILT_PRODUCTS_DIR=\"#{deviceOutputXC}\"    CONFIGURATION_BUILD_DIR=\"#{deviceOutputXC}/$CONFIGURATION\"    | xcpretty"
-      sh "set -o pipefail && xcodebuild clean build -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphonesimulator\" BUILT_PRODUCTS_DIR=\"#{simulatorOutputXC}\" CONFIGURATION_BUILD_DIR=\"#{simulatorOutputXC}/$CONFIGURATION\" | xcpretty"
+      if target == "both" || target == "simulator"
+        sh "set -o pipefail && xcodebuild #{cleanString} #{archiveString} -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphonesimulator\" BUILT_PRODUCTS_DIR=\"#{simulatorOutputXC}\" CONFIGURATION_BUILD_DIR=\"#{simulatorOutputXC}/$CONFIGURATION\" | xcpretty"
+      end
+      if target == "both" || target == "device"
+        sh "set -o pipefail && xcodebuild #{cleanString} #{archiveString} -scheme \"#{frameworkName}\" -workspace \"#{workspace}\" -configuration \"Release\" DEBUG_INFORMATION_FORMAT=\"dwarf-with-dsym\" only_active_arch=no -sdk \"iphoneos\"        BUILT_PRODUCTS_DIR=\"#{deviceOutputXC}\"    CONFIGURATION_BUILD_DIR=\"#{deviceOutputXC}/$CONFIGURATION\" | xcpretty"
+      end
 
-      # Combine all architectures together
-      sh "cp -r \"#{deviceOutput}/#{frameworkName}.framework\" \"#{buildDir}/#{frameworkName}.framework\""
-      sh "lipo -create -output \"#{buildDir}/#{frameworkName}.framework/#{frameworkName}\" \"#{deviceOutput}/#{frameworkName}.framework/#{frameworkName}\" \"#{simulatorOutput}/#{frameworkName}.framework/#{frameworkName}\""
-      sh "cp -r \"#{simulatorOutput}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule/\" \"#{buildDir}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule\""
+      if target == "both"
+        # Combine all architectures together
+        sh "cp -r \"#{deviceOutput}/#{frameworkName}.framework\" \"#{buildDir}/#{frameworkName}.framework\""
+        sh "lipo -create -output \"#{buildDir}/#{frameworkName}.framework/#{frameworkName}\" \"#{deviceOutput}/#{frameworkName}.framework/#{frameworkName}\" \"#{simulatorOutput}/#{frameworkName}.framework/#{frameworkName}\""
+        sh "cp -r \"#{simulatorOutput}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule/\" \"#{buildDir}/#{frameworkName}.framework/Modules/#{frameworkName}.swiftmodule\""
+      end
 
-      # Copy the framework to the output location
-      sh "rm -rf \"#{appLocation}"
-      sh "cp -r \"#{buildDir}/#{frameworkName}.framework\" \"#{appLocation}"
+      # Copy the framework to the output
+      sh "rm -rf \"#{appLocation}\""
+      if target == "simulator"
+        sh "cp -r \"#{simulatorOutput}/#{frameworkName}.framework\" \"#{appLocation}\""
+      elsif target == "device"
+        sh "cp -r \"#{deviceOutput}/#{frameworkName}.framework\" \"#{appLocation}\""
+      else
+        sh "cp -r \"#{buildDir}/#{frameworkName}.framework\" \"#{appLocation}\""
+      end
 
     end
 end

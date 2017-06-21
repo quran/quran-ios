@@ -2744,14 +2744,14 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/QuranFoundation/QuranFoundation.framework.dSYM",
+				"$(SRCROOT)/QuranFoundation/QuranFoundation.framework",
 			);
 			name = "Copy Manual Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -d \"$SCRIPT_INPUT_FILE_0\" ]; then\n    cp -r \"$SCRIPT_INPUT_FILE_0\" \"$TARGET_BUILD_DIR\"\nfi";
+			shellScript = "if [ -d \"$SCRIPT_INPUT_FILE_0\".dSYM ]; then\n  cp -r \"$SCRIPT_INPUT_FILE_0\".dSYM \"$BUILT_PRODUCTS_DIR\"\nfi";
 		};
 		5AEE6C0E9885FD47083FB189 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

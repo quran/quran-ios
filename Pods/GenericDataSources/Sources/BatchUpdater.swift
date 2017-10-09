@@ -13,13 +13,13 @@ protocol BatchUpdater: class {
     func actualPerformBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?)
 }
 
-extension UICollectionView : BatchUpdater {
+extension UICollectionView: BatchUpdater {
     func actualPerformBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         performBatchUpdates(updates, completion: completion)
     }
 }
 
-extension UITableView : BatchUpdater {
+extension UITableView: BatchUpdater {
     func actualPerformBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         beginUpdates()
         updates?()

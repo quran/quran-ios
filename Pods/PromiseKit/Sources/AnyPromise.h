@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
+#import "fwd.h"
 
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
@@ -10,12 +11,6 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
 
 #if __has_include("PromiseKit-Swift.h")
-
-    // we define this because PromiseKit-Swift.h imports
-    // PromiseKit.h which then expects this header already
-    // to have been fully imported… !
-    @class AnyPromise;
-
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored"-Wdocumentation"
     #import "PromiseKit-Swift.h"
@@ -98,12 +93,41 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
  
  @warning *Note* Cancellation errors are not caught.
  
- @warning *Note* Since catch is a c++ keyword, this method is not availble in Objective-C++ files. Instead use catchWithPolicy.
+ @warning *Note* Since catch is a c++ keyword, this method is not available in Objective-C++ files. Instead use catchWithPolicy.
 
  @see catchWithPolicy
 */
 - (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))catch NS_REFINED_FOR_SWIFT;
 #endif
+
+/**
+ The provided block is executed when the receiver is rejected.
+ 
+ Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
+ 
+ The provided block always runs on the global background queue.
+ 
+ @warning *Note* Cancellation errors are not caught.
+ 
+ @warning *Note* Since catch is a c++ keyword, this method is not available in Objective-C++ files. Instead use catchWithPolicy.
+ 
+ @see catchWithPolicy
+ */
+- (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))catchInBackground NS_REFINED_FOR_SWIFT;
+
+
+/**
+ The provided block is executed when the receiver is rejected.
+ 
+ Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
+ 
+ The provided block always runs on queue provided.
+ 
+ @warning *Note* Cancellation errors are not caught.
+ 
+ @see catchWithPolicy
+ */
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))catchOn NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is rejected with the specified policy.
@@ -113,6 +137,17 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
  @see catch
 */
 - (AnyPromise * __nonnull(^ __nonnull)(PMKCatchPolicy, id __nonnull))catchWithPolicy NS_REFINED_FOR_SWIFT;
+
+/**
+ The provided block is executed when the receiver is rejected with the specified policy.
+ 
+ Specify the policy with which to catch as the first parameter to your block. Either for all errors, or all errors *except* cancellation errors.
+ 
+ The provided block always runs on queue provided.
+
+ @see catch
+ */
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, PMKCatchPolicy, id __nonnull))catchOnWithPolicy NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is resolved.

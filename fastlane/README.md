@@ -48,6 +48,12 @@ fastlane ios build_frameworks
 ```
 This will build frameworks
 
+params archive: true|false
+
+params target: device|simulator|both
+
+params clean: true|false
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [fastlane](https://fastlane.tools) is run.

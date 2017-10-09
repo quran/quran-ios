@@ -61,7 +61,7 @@ class DefaultSearchInteractor: SearchInteractor {
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
                 self?.presenter?.showLoading()
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
 
         // auto completion
         searchTerm
@@ -78,7 +78,7 @@ class DefaultSearchInteractor: SearchInteractor {
                 }
             }.drive(onNext: { [weak self] (completions) in
                 self?.presenter?.show(autocompletions: completions)
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
 
         // search
         startSearching
@@ -108,7 +108,7 @@ class DefaultSearchInteractor: SearchInteractor {
                 }
                 self?.recentsService.addToRecents(query)
                 self?.recentsUpdated()
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
     }
 
     private func recentsUpdated() {
@@ -124,7 +124,7 @@ class DefaultSearchInteractor: SearchInteractor {
         searchTerm.value = term
 
         // start searching
-        startSearching.trigger()
+        startSearching.trigger(())
     }
 
     func onSelected(searchResult: SearchResult) {
@@ -149,12 +149,12 @@ class DefaultSearchInteractor: SearchInteractor {
         searchTerm.value = autocompletion.text
 
         // start searching
-        startSearching.trigger()
+        startSearching.trigger(())
     }
 
     func onSearchButtonTapped() {
         // start searching
-        startSearching.trigger()
+        startSearching.trigger(())
     }
 
     func onSearchTextUpdated(to term: String, isActive: Bool) {

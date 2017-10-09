@@ -7,4 +7,5 @@ framework module QuranFoundation {
 
 module QuranFoundation.Swift {
     header "QuranFoundation-Swift.h"
+    requires objc
 }

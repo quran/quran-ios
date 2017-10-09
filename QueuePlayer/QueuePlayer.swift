@@ -159,9 +159,9 @@ open class QueuePlayer: NSObject {
         setCommandsEnabled(true)
 
         NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(onAudioInterruptionStateChanged(_:)),
-                                                         name: NSNotification.Name.AVAudioSessionInterruption,
-                                                         object: nil)
+                                               selector: #selector(onAudioInterruptionStateChanged(_:)),
+                                               name: NSNotification.Name.AVAudioSessionInterruption,
+                                               object: nil)
     }
 
     open func pause() {
@@ -299,6 +299,7 @@ open class QueuePlayer: NSObject {
         updatePlayNowInfo()
     }
 
+    @objc
     func onCurrentItemReachedEnd() {
         // determine to repeat or start next one
 
@@ -378,6 +379,7 @@ open class QueuePlayer: NSObject {
         notifyPlaybackEnded()
     }
 
+    @objc
     func onAudioInterruptionStateChanged(_ notification: Notification) {
         guard let info = (notification as NSNotification).userInfo, notification.name == .AVAudioSessionInterruption else {
             return

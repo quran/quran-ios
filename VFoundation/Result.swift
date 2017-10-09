@@ -1,4 +1,5 @@
-// Result.swift //swiftlint:disable:this file_header
+// swiftlint:disable file_header
+// Result.swift
 //
 // Copyright (c) 2014–2016 Alamofire Software Foundation (http://alamofire.org/)
 //

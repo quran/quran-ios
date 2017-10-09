@@ -11,7 +11,7 @@ import UIKit
 class _GeneralCollectionViewWrapperMapping: _GeneralCollectionViewMapping {
 
     let mapping: _DataSourcesCollectionMapping
-    let delegate: GeneralCollectionView?
+    let delegate: GeneralCollectionView? // swiftlint:disable:this weak_delegate
 
     init(mapping: _DataSourcesCollectionMapping, view: GeneralCollectionView) {
         self.mapping = mapping

@@ -74,10 +74,10 @@ extension TranslationText {
             style.alignment = .left
         }
 
-        let attributes = [
-            NSFontAttributeName            : translation.preferredTextFont,
-            NSForegroundColorAttributeName : UIColor.translationText,
-            NSParagraphStyleAttributeName  : style]
+        let attributes: [NSAttributedStringKey: Any] = [
+            .font            : translation.preferredTextFont,
+            .foregroundColor : UIColor.translationText,
+            .paragraphStyle  : style]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         return attributedString
     }

@@ -16,11 +16,11 @@ import Foundation
 }
 
 /// Make `UITableViewCell` reusable cell.
-extension UITableViewCell : ReusableCell {
+extension UITableViewCell: ReusableCell {
 }
 
 /// Make `UICollectionViewCell` reusable cell.
-extension UICollectionViewCell : ReusableCell {
+extension UICollectionViewCell: ReusableCell {
 }
 
 extension GeneralCollectionView {

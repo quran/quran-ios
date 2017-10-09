@@ -215,7 +215,7 @@ extension _DataSourcesCollection {
 class _DataSourcesCollectionMapping: Equatable {
 
     /// retained
-    var reusableDelegate: _DelegatedGeneralCollectionView?
+    var reusableDelegate: _DelegatedGeneralCollectionView? // swiftlint:disable:this weak_delegate
 
     let dataSource: DataSource
 

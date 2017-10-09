@@ -20,13 +20,13 @@
 
 import PromiseKit
 
-private func operationQueue() -> OperationQueue {
-    let queue = OperationQueue()
-    queue.name = "com.operation.operation-cacheable-service"
-    return queue
-}
-
 open class OperationCacheableService<Input: Hashable, Output>: CacheableService {
+
+    public class func defaultOperationQueue() -> OperationQueue {
+        let queue = OperationQueue()
+        queue.name = "com.operation.operation-cacheable-service"
+        return queue
+    }
 
     private let cache: Cache<Input, Output>
     private let queue: OperationQueue
@@ -35,7 +35,7 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
     private let lock = NSLock()
     private let operationCreator: AnyCreator<Input, AnyPreloadingOperationRepresentable<Output>>
 
-    public init(queue              : OperationQueue = operationQueue(),
+    public init(queue              : OperationQueue = defaultOperationQueue(),
                 cache              : Cache<Input, Output>,
                 operationCreator   : AnyCreator<Input, AnyPreloadingOperationRepresentable<Output>>) {
         self.queue              = queue

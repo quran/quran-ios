@@ -42,7 +42,7 @@ open class Timer {
         timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: UInt(0)), queue: queue)
         let dispatchInterval = UInt64(interval * Double(NSEC_PER_SEC))
         let startTime = DispatchTime.now() + Double(startNow ? 0 : Int64(dispatchInterval)) / Double(NSEC_PER_SEC)
-        timer.scheduleRepeating(deadline: startTime, interval: DispatchTimeInterval.seconds(Int(interval)))
+        timer.schedule(deadline: startTime, repeating: DispatchTimeInterval.seconds(Int(interval)))
 
         timer.setEventHandler { [weak self] in
             self?.fired(handler)

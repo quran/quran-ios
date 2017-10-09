@@ -28,15 +28,7 @@ import Foundation
     case canMove
     case move
     case willDisplayCell
-    case didEndDisplayingCell
-    case canPerformAction
-    case performAction
-    case canFocusItemAt
-    case shouldUpdateFocusIn
-    case didUpdateFocusIn*/
-
-    /// Represents the should show menu for item selector.
-    case shouldShowMenuForItemAt
+    case didEndDisplayingCell*/
 
     /// Represents the can edit selector.
     case canEdit
@@ -61,6 +53,27 @@ import Foundation
 
     /// Represents the did end editing selector.
     case didEndEditing
+
+    /// Represents the should show menu for item selector.
+    case shouldShowMenuForItemAt
+
+    /// Represents the can perform action selector.
+    case canPerformAction
+
+    /// Represents the perform action selector.
+    case performAction
+
+    /// Represents the can focus item at index selector.
+    case canFocusItemAt
+
+    /// Represents the should update focus in selector.
+    case shouldUpdateFocusIn
+
+    /// Represents the did update focus in selector.
+    case didUpdateFocusIn
+
+    /// Represents the index path for preferred focused in view selector.
+    case indexPathForPreferredFocusedView
 }
 
 extension DataSourceSelector {
@@ -81,13 +94,19 @@ extension DataSourceSelector {
         case .willBeginEditing: return false
         case .didEndEditing: return false
         case .shouldShowMenuForItemAt: return false
+        case .canPerformAction: return false
+        case .performAction: return false
+        case .canFocusItemAt: return false
+        case .shouldUpdateFocusIn: return false
+        case .didUpdateFocusIn: return false
+        case .indexPathForPreferredFocusedView: return false
         }
     }
 }
 
 let dataSourceSelectorToSelectorMapping: [DataSourceSelector: [Selector]] = {
 
-    let mapping: [DataSourceSelector: [Selector]] =
+    var mapping: [DataSourceSelector: [Selector]] =
         [.size: [
             #selector(UITableViewDelegate.tableView(_:heightForRowAt:)),
             #selector(UICollectionViewDelegateFlowLayout.collectionView(_:layout:sizeForItemAt:)),
@@ -129,8 +148,40 @@ let dataSourceSelectorToSelectorMapping: [DataSourceSelector: [Selector]] = {
             #selector(UITableViewDelegate.tableView(_:shouldShowMenuForRowAt:)),
             #selector(UICollectionViewDelegateFlowLayout.collectionView(_:shouldShowMenuForItemAt:)),
             #selector(DataSource.ds_collectionView(_:shouldShowMenuForItemAt:))
-            ]
-    ]
+            ],
+         .canPerformAction: [
+            #selector(UITableViewDelegate.tableView(_:canPerformAction:forRowAt:withSender:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:canPerformAction:forItemAt:withSender:)),
+            #selector(DataSource.ds_collectionView(_:canPerformAction:forItemAt:withSender:))
+            ],
+         .performAction: [
+            #selector(UITableViewDelegate.tableView(_:performAction:forRowAt:withSender:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:performAction:forItemAt:withSender:)),
+            #selector(DataSource.ds_collectionView(_:performAction:forItemAt:withSender:))
+            ]]
+
+    if #available(iOS 9.0, *) {
+        mapping[.canFocusItemAt] = [
+            #selector(UITableViewDelegate.tableView(_:canFocusRowAt:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:canFocusItemAt:)),
+            #selector(DataSource.ds_collectionView(_:canFocusItemAt:))
+        ]
+        mapping[.shouldUpdateFocusIn] = [
+            #selector(UITableViewDelegate.tableView(_:shouldUpdateFocusIn:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:shouldUpdateFocusIn:)),
+            #selector(DataSource.ds_collectionView(_:shouldUpdateFocusIn:))
+        ]
+        mapping[.didUpdateFocusIn] = [
+            #selector(UITableViewDelegate.tableView(_:didUpdateFocusIn:with:)),
+            #selector(UICollectionViewDelegateFlowLayout.collectionView(_:didUpdateFocusIn:with:)),
+            #selector(DataSource.ds_collectionView(_:didUpdateFocusIn:with:))
+        ]
+        mapping[.indexPathForPreferredFocusedView] = [
+            #selector(UITableViewDelegate.indexPathForPreferredFocusedView(in:)),
+            #selector(UICollectionViewDelegateFlowLayout.indexPathForPreferredFocusedView(in:)),
+            #selector(DataSource.ds_indexPathForPreferredFocusedView(in:))
+        ]
+    }
     return mapping
 }()
 

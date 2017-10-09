@@ -99,7 +99,7 @@ extension Reactive where Base: UITableView {
     Binds sequences of elements to table view rows using a custom reactive data used to perform the transformation.
     This method will retain the data source for as long as the subscription isn't disposed (result `Disposable` 
     being disposed).
-    In case `source` observable sequence terminates sucessfully, the data source will present latest element
+    In case `source` observable sequence terminates successfully, the data source will present latest element
     until the subscription isn't disposed.
     
     - parameter dataSource: Data source used to transform elements to view cells.
@@ -154,7 +154,7 @@ extension Reactive where Base: UITableView {
             // Therefore it's better to set delegate proxy first, just to be sure.
             _ = self.delegate
             // Strong reference is needed because data source is in use until result subscription is disposed
-            return source.subscribeProxyDataSource(ofObject: self.base, dataSource: dataSource, retainDataSource: true) { [weak tableView = self.base] (_: RxTableViewDataSourceProxy, event) -> Void in
+            return source.subscribeProxyDataSource(ofObject: self.base, dataSource: dataSource as UITableViewDataSource, retainDataSource: true) { [weak tableView = self.base] (_: RxTableViewDataSourceProxy, event) -> Void in
                 guard let tableView = tableView else {
                     return
                 }
@@ -165,36 +165,14 @@ extension Reactive where Base: UITableView {
 
 }
 
-extension UITableView {
- 
-    /**
-    Factory method that enables subclasses to implement their own `delegate`.
-    
-    - returns: Instance of delegate proxy that wraps `delegate`.
-    */
-    public override func createRxDelegateProxy() -> RxScrollViewDelegateProxy {
-        return RxTableViewDelegateProxy(parentObject: self)
-    }
-
-    /**
-    Factory method that enables subclasses to implement their own `rx.dataSource`.
-    
-    - returns: Instance of delegate proxy that wraps `dataSource`.
-    */
-    public func createRxDataSourceProxy() -> RxTableViewDataSourceProxy {
-        return RxTableViewDataSourceProxy(parentObject: self)
-    }
-
-}
-
 extension Reactive where Base: UITableView {
     /**
     Reactive wrapper for `dataSource`.
     
     For more information take a look at `DelegateProxyType` protocol documentation.
     */
-    public var dataSource: DelegateProxy {
-        return RxTableViewDataSourceProxy.proxyForObject(base)
+    public var dataSource: DelegateProxy<UITableView, UITableViewDataSource> {
+        return RxTableViewDataSourceProxy.proxy(for: base)
     }
    
     /**
@@ -358,6 +336,29 @@ extension Reactive where Base: UITableView {
             return Observable.just(try view.rx.model(at: indexPath))
         }
 
+        return ControlEvent(events: source)
+    }
+    
+    /**
+     Reactive wrapper for `delegate` message `tableView:commitEditingStyle:forRowAtIndexPath:`.
+     
+     It can be only used when one of the `rx.itemsWith*` methods is used to bind observable sequence,
+     or any other data source conforming to `SectionedViewDataSourceType` protocol.
+     
+     ```
+        tableView.rx.modelDeleted(MyModel.self)
+            .map { ...
+     ```
+     */
+    public func modelDeleted<T>(_ modelType: T.Type) -> ControlEvent<T> {
+        let source: Observable<T> = self.itemDeleted.flatMap { [weak view = self.base as UITableView] indexPath -> Observable<T> in
+            guard let view = view else {
+                return Observable.empty()
+            }
+            
+            return Observable.just(try view.rx.model(at: indexPath))
+        }
+        
         return ControlEvent(events: source)
     }
 

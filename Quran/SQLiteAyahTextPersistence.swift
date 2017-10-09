@@ -206,7 +206,7 @@ private func _autocomplete(term: String, connection: Connection, table: Table) t
 
 private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throws -> [SearchAutocompletion] {
     var result: [SearchAutocompletion] = []
-    var added: Set<String> = []
+    var added: Set<Substring> = []
     for row in rows {
         let text = row[Columns.text]
 
@@ -214,10 +214,10 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
             continue
         }
 
-        var substring = text.substring(from: range.lowerBound)
+        var substring = text[range.lowerBound...]
         if substring.characters.count > 100 {
             if let endIndex = substring.index(substring.startIndex, offsetBy: 100, limitedBy: substring.endIndex) {
-                substring = substring.substring(to: endIndex)
+                substring = substring[...endIndex]
             }
         }
         guard !added.contains(substring) else {
@@ -225,7 +225,7 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
         }
         added.insert(substring)
 
-        let autocompletion = SearchAutocompletion(text: substring, highlightedRange: term.startIndex..<term.endIndex)
+        let autocompletion = SearchAutocompletion(text: String(substring), highlightedRange: term.startIndex..<term.endIndex)
         result.append(autocompletion)
     }
 
@@ -236,7 +236,7 @@ private func cleanup(term: String) -> String {
     let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
     var cleanedTerm = term.components(separatedBy: legalTokens.inverted).joined(separator: "")
     if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1_000, limitedBy: cleanedTerm.endIndex) {
-        cleanedTerm = cleanedTerm.substring(to: upTo)
+        cleanedTerm = String(cleanedTerm[...upTo])
     }
     return cleanedTerm.lowercased()
 }

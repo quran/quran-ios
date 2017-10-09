@@ -112,7 +112,7 @@ extension GaplessAudioPlayer {
         for sura in startAyah.sura...endAyah.sura {
             let fileName = sura.as3DigitString()
             let localURL = qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
-            files.append(localURL, sura)
+            files.append((localURL, sura))
         }
         return files
     }

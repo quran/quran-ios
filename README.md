@@ -13,10 +13,9 @@ It would be great if you could send an e-mail to ios@quran.com then we will noti
 
 ## Set up
 
-1. Install [Swiftlint](https://github.com/realm/SwiftLint).
-2. Install [Cocoapods](https://cocoapods.org).
-3. Xcode 8.3.2 (with Swift 3.1.1).
-4. Clone the project and open Xcode workspace Quran.xcworkspace.
+1. Install [Cocoapods](https://cocoapods.org).
+2. Xcode 9.0 (with Swift 4.0).
+3. Clone the project and open Xcode workspace Quran.xcworkspace.
 
 ## Contributions
 Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contributions).

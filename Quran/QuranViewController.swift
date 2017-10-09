@@ -97,7 +97,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         return .lightContent
     }
 
-    init(imageService                           : AnyCacheableService<Int, UIImage>, // swiftlint:disable:this function_parameter_count
+    init(imageService                           : AnyCacheableService<Int, UIImage>,
          pageService                            : AnyCacheableService<Int, TranslationPage>,
          dataRetriever                          : AnyGetInteractor<[QuranPage]>,
          ayahInfoRetriever                      : AyahInfoRetriever,
@@ -154,7 +154,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // page behavior
         let pageBehavior = ScrollViewPageBehavior()
         dataSource.scrollViewDelegate = pageBehavior
-        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) { [weak self] _ in
+        kvoController.observe(pageBehavior, keyPath: #keyPath(ScrollViewPageBehavior.currentPage), options: .new) {  [weak self] (_, _, _) in
             self?.onPageChanged()
         }
         pageBehavior.onScrollViewWillBeginDragging = { [weak self] in
@@ -372,7 +372,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onSelectTranslationsButtonTapped() {
-        let controller = translationsSelectionControllerCreator.create()
+        let controller = translationsSelectionControllerCreator.create(())
         present(controller, animated: true, completion: nil)
     }
 

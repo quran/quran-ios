@@ -22,14 +22,16 @@
 // THE SOFTWARE.
 //
 
-import Foundation.NSUUID
+import Foundation
 import Dispatch
 #if SQLITE_SWIFT_STANDALONE
 import sqlite3
 #elseif SQLITE_SWIFT_SQLCIPHER
 import SQLCipher
-#elseif SWIFT_PACKAGE || COCOAPODS
+#elseif os(Linux)
 import CSQLite
+#else
+import SQLite3
 #endif
 
 /// A connection to SQLite.
@@ -38,12 +40,12 @@ public final class Connection {
     /// The location of a SQLite database.
     public enum Location {
 
-        /// An in-memory database (equivalent to `.URI(":memory:")`).
+        /// An in-memory database (equivalent to `.uri(":memory:")`).
         ///
         /// See: <https://www.sqlite.org/inmemorydb.html#sharedmemdb>
         case inMemory
 
-        /// A temporary, file-backed database (equivalent to `.URI("")`).
+        /// A temporary, file-backed database (equivalent to `.uri("")`).
         ///
         /// See: <https://www.sqlite.org/inmemorydb.html#temp_db>
         case temporary
@@ -93,7 +95,7 @@ public final class Connection {
     ///   - location: The location of the database. Creates a new database if it
     ///     doesn’t already exist (unless in read-only mode).
     ///
-    ///     Default: `.InMemory`.
+    ///     Default: `.inMemory`.
     ///
     ///   - readonly: Whether or not to open the database in a read-only state.
     ///
@@ -321,7 +323,7 @@ public final class Connection {
     ///
     ///   - mode: The mode in which a transaction acquires a lock.
     ///
-    ///     Default: `.Deferred`
+    ///     Default: `.deferred`
     ///
     ///   - block: A closure to run SQL statements within the transaction.
     ///     The transaction will be committed when the block returns. The block
@@ -360,11 +362,11 @@ public final class Connection {
             try self.run(begin)
             do {
                 try block()
+                try self.run(commit)
             } catch {
                 try self.run(rollback)
                 throw error
             }
-            try self.run(commit)
         }
     }
 
@@ -413,7 +415,7 @@ public final class Connection {
     ///
     ///       db.trace { SQL in print(SQL) }
     public func trace(_ callback: ((String) -> Void)?) {
-        #if SQLITE_SWIFT_SQLCIPHER
+        #if SQLITE_SWIFT_SQLCIPHER || os(Linux)
             trace_v1(callback)
         #else
             if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
@@ -583,9 +585,11 @@ public final class Connection {
             }
         }
         var flags = SQLITE_UTF8
+        #if !os(Linux)
         if deterministic {
             flags |= SQLITE_DETERMINISTIC
         }
+        #endif
         sqlite3_create_function_v2(handle, function, Int32(argc), flags, unsafeBitCast(box, to: UnsafeMutableRawPointer.self), { context, argc, value in
             let function = unsafeBitCast(sqlite3_user_data(context), to: Function.self)
             function(context, argc, value)
@@ -627,30 +631,11 @@ public final class Connection {
     // MARK: - Error Handling
 
     func sync<T>(_ block: () throws -> T) rethrows -> T {
-        var success: T?
-        var failure: Error?
-
-        func execute(_ block: () throws -> T, success: inout T?, failure: inout Error?) {
-            do {
-                success = try block()
-            } catch {
-                failure = error
-            }
-        }
-
         if DispatchQueue.getSpecific(key: Connection.queueKey) == queueContext {
-            execute(block, success: &success, failure: &failure)
+            return try block()
         } else {
-            queue.sync(execute: {
-                execute(block, success: &success, failure: &failure)
-            }) // FIXME: rdar://problem/21389236
+            return try queue.sync(execute: block)
         }
-
-        if let failure = failure {
-            try { () -> Void in throw failure }()
-        }
-
-        return success!
     }
 
     @discardableResult func check(_ resultCode: Int32, statement: Statement? = nil) throws -> Int32 {
@@ -696,6 +681,13 @@ public enum Result : Error {
 
     fileprivate static let successCodes: Set = [SQLITE_OK, SQLITE_ROW, SQLITE_DONE]
 
+    /// Represents a SQLite specific [error code](https://sqlite.org/rescode.html)
+    ///
+    /// - message: English-language text that describes the error
+    ///
+    /// - code: SQLite [error code](https://sqlite.org/rescode.html#primary_result_code_list)
+    ///
+    /// - statement: the statement which produced the error
     case error(message: String, code: Int32, statement: Statement?)
 
     init?(errorCode: Int32, connection: Connection, statement: Statement? = nil) {
@@ -721,7 +713,7 @@ extension Result : CustomStringConvertible {
     }
 }
 
-#if !SQLITE_SWIFT_SQLCIPHER
+#if !SQLITE_SWIFT_SQLCIPHER && !os(Linux)
 @available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *)
 extension Connection {
     fileprivate func trace_v2(_ callback: ((String) -> Void)?) {

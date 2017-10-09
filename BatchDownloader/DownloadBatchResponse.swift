@@ -26,7 +26,7 @@ class DownloadResponse {
     var task: URLSessionTask?
 
     let promise: Promise<Void>
-    let fulfill: ((Void) -> Void)
+    let fulfill: (() -> Void)
     let reject: ((Error) -> Void)
 
     init( download: Download, progress: QProgress) {
@@ -46,7 +46,7 @@ public final class DownloadBatchResponse {
     public let progress: QProgress
 
     public let promise: Promise<Void>
-    let fulfill: ((Void) -> Void)
+    let fulfill: (() -> Void)
     let reject: ((Error) -> Void)
 
     public var requests: [DownloadRequest] {

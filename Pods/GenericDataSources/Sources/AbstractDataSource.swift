@@ -70,15 +70,15 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
      Represents the reusable view delegate usually you treat it as if it's a UICollectionView/UITableView object. In most cases, you don't need to assign this property.
      But you will need to use it to query the view for data (e.g. number of sections, etc.)
      */
-    open weak var ds_reusableViewDelegate: GeneralCollectionView? = nil
+    open weak var ds_reusableViewDelegate: GeneralCollectionView?
 
     /**
      Initialize new instance of the AbstractDataSource `fatalError`. You should use one of its subclasses.
      */
     public override init() {
-        let type = AbstractDataSource.self
-        guard type(of: self) != type else {
-            fatalError("\(type) instances can not be created; create a subclass instance instead.")
+        let typeOf = AbstractDataSource.self
+        guard type(of: self) != typeOf else {
+            fatalError("\(typeOf) instances can not be created; create a subclass instance instead.")
         }
     }
 
@@ -269,8 +269,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
     // MARK: Size
 
     /// `UICollectionViewDataSource`/`UICollectionViewDelegateFlowLayout` implementations forwards calls to the corresponding `DataSource` methods.
-    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return ds_collectionView(collectionView, sizeForItemAt: indexPath)
     }
 
@@ -820,7 +819,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return ds_collectionView(tableView, editingStyleForItemAt: indexPath)
     }
 

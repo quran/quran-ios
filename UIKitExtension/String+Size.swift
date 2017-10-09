@@ -24,10 +24,7 @@ extension String {
 
     public func size(withFont font: UIFont, constrainedToWidth width: CGFloat = .greatestFiniteMagnitude) -> CGSize {
         let size = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let box = self.boundingRect(with: size,
-                                    options: .usesLineFragmentOrigin,
-                                    attributes: [NSFontAttributeName: font],
-                                    context: nil)
+        let box = self.boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
         return CGSize(width: ceil(box.width), height: ceil(box.height))
     }
 }

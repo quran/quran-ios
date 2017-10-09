@@ -79,7 +79,7 @@ open class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSourc
     open let reuseIdentifier: String
 
     /// Represents the selection handler used for delegating calls to selection handler.
-    private var selectionHandler: AnyDataSourceSelectionHandler<ItemType, CellType>? = nil
+    private var selectionHandler: AnyDataSourceSelectionHandler<ItemType, CellType>?
 
     /**
      Sets the selection handler used for delegating selection, highlighting calls to it.

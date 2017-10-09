@@ -34,19 +34,19 @@ extension NSObjectProtocol {
         return castedValue
     }
 
-    func subclassHasDifferentImplmentation(type: AnyClass, selector: Selector) -> Bool {
+    func subclassHasDifferentImplmentation(type typeOf: AnyClass, selector: Selector) -> Bool {
 
-        let subclassImp = method_getImplementation(class_getInstanceMethod(type(of: self), selector))
-        let superImp = method_getImplementation(class_getInstanceMethod(type, selector))
+        let subclassImp = method_getImplementation(class_getInstanceMethod(type(of: self), selector)!)
+        let superImp = method_getImplementation(class_getInstanceMethod(typeOf, selector)!)
         return subclassImp != superImp
     }
 }
 
 func describe(_ object: AnyObject, properties: [(String, Any?)]) -> String {
     let address = String(format: "%p", unsafeBitCast(object, to: Int.self))
-    let type: AnyObject.Type = type(of: object)
+    let typeOf: AnyObject.Type = type(of: object)
     let propertiesDescription = properties.filter { $1 != nil }.map { "\($0)=\($1!))" }.joined(separator: " ;")
-    return "<\(type): \(address); \(propertiesDescription)>"
+    return "<\(typeOf): \(address); \(propertiesDescription)>"
 }
 
 func isSelector(_ selector: Selector, belongsToProtocol aProtocol: Protocol) -> Bool {

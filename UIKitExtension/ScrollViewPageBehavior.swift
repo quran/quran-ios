@@ -31,7 +31,7 @@ open class ScrollViewDelegateNotifier: NSObject, UIScrollViewDelegate {
 
 open class ScrollViewPageBehavior: ScrollViewDelegateNotifier {
 
-    open fileprivate(set) dynamic var currentPage: Int = 0
+    @objc open fileprivate(set) dynamic var currentPage: Int = 0
 
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = scrollView.frame.size.width

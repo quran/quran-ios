@@ -15,11 +15,11 @@ import Foundation
 }
 
 /// Make `UITableViewHeaderFooterView` reusable supplementary view.
-extension UITableViewHeaderFooterView : ReusableSupplementaryView {
+extension UITableViewHeaderFooterView: ReusableSupplementaryView {
 }
 
 /// Make `UICollectionReusableView` reusable supplementary view.
-extension UICollectionReusableView : ReusableSupplementaryView {
+extension UICollectionReusableView: ReusableSupplementaryView {
 }
 
 extension UICollectionView {

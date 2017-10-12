@@ -46,7 +46,7 @@ extension Process {
             self.waitUntilExit()
 
             if self.terminationReason == .exit && self.terminationStatus == 0 {
-                fulfill()
+                fulfill(())
             } else {
                 reject(Error(.execution, promise, self))
             }

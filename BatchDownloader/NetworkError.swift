@@ -1,4 +1,4 @@
-// //swiftlint:disable:this file_header
+// swiftlint:disable file_header
 //  NetworkError.swift
 //  SwinjectMVVMExample
 //

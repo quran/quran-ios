@@ -70,7 +70,7 @@ extension DefaultAudioPlayerInteractor {
                     }
                 }.suppress()
         } else {
-            startPlaying(qari: qari, startAyah: startAyah, endAyah: endAyah)
+            startPlaying((qari: qari, startAyah: startAyah, endAyah: endAyah))
         }
     }
 

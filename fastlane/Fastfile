@@ -23,6 +23,7 @@ platform :ios do
     end
 
     desc 'Resets the build to 0 and version to passed version value and push it to the origin.'
+    desc 'params version: the new version of the app"
     lane :version_reset do |options|
         # Set a specific version number
         increment_version_number(version_number: options[:version])
@@ -37,6 +38,7 @@ platform :ios do
 
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
+    desc 'params clean: true|false, default is true'
     lane :beta do |options|
 
         clean = options[:clean].nil? ? true : options[:clean]
@@ -115,6 +117,9 @@ platform :ios do
     end
 
     desc 'This will build frameworks'
+    desc 'params archive: true|false'
+    desc 'params target: device|simulator|both'
+    desc 'params clean: true|false'
     lane :build_frameworks do |options|
       build_framework(
         frameworkName: "BatchDownloader",

@@ -79,13 +79,13 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
         })
 
         // page index
-        try connection.run(Bookmarks.table.createIndex([Bookmarks.page], unique: false, ifNotExists: true))
+        try connection.run(Bookmarks.table.createIndex(Bookmarks.page, unique: false, ifNotExists: true))
 
         // (page - ayah - sura) index
-        try connection.run(Bookmarks.table.createIndex([Bookmarks.page, Bookmarks.sura, Bookmarks.ayah], unique: true, ifNotExists: true))
+        try connection.run(Bookmarks.table.createIndex(Bookmarks.page, Bookmarks.sura, Bookmarks.ayah, unique: true, ifNotExists: true))
 
         // (bookmark - tag) index
-        try connection.run(BookmarkTags.table.createIndex([BookmarkTags.bookmarkId, BookmarkTags.tagId], unique: true, ifNotExists: true))
+        try connection.run(BookmarkTags.table.createIndex(BookmarkTags.bookmarkId, BookmarkTags.tagId, unique: true, ifNotExists: true))
     }
 
     func retrieveAll() throws -> [Bookmark] {

@@ -182,6 +182,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
+    @objc
     func onViewTapped(_ sender: UITapGestureRecognizer) {
         guard !audioView.bounds.contains(sender.location(in: audioView)) else {
             return
@@ -290,6 +291,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     /// Did click on share menu item
+    @objc
     func _share(_ sender: Any?) { //swiftlint:disable:this identifier_name
         guard let shareData = shareData else {
             return
@@ -365,6 +367,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Word-by-word Pointer
 
+    @objc
     func pointerTapped() {
         delegate?.selectWordTranslationTextType(from: pointer)
     }
@@ -468,7 +471,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private func show(word: AyahWord?, at point: CGPoint, isUpward: Bool) {
         if let text = word?.text {
-            let action = PopoverAction(title: text, handler: { _ in })
+            let action = PopoverAction(title: text, handler: nil)
             popover.show(to: point, isUpward: isUpward, with: [action])
         } else {
             hideTip(updateLastWord: false)

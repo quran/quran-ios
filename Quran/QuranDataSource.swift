@@ -67,6 +67,7 @@ class QuranDataSource: SegmentedDataSource {
         NotificationCenter.default.removeObserver(self)
     }
 
+    @objc
     func applicationDidBecomeActive() {
         selectedDataSourceHandler.applicationDidBecomeActive()
     }

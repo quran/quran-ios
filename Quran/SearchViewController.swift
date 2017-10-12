@@ -142,6 +142,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         searchController?.isActive = isActive
     }
 
+    @objc
     func onRecentOrPopularTapped(button: UIButton) {
         delegate?.onSearchTermSelected(button.title(for: .normal) ?? "")
     }

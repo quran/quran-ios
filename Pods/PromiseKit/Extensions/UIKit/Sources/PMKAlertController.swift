@@ -88,7 +88,7 @@ extension UIViewController {
     public func promise(_ vc: PMKAlertController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<UIAlertAction> {
         vc.retainCycle = vc
         present(vc.UIAlertController, animated: animated, completion: completion)
-        _ = vc.promise.always { _ -> Void in
+        _ = vc.promise.always {
             vc.retainCycle = nil
         }
         return vc.promise

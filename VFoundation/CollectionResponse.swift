@@ -75,7 +75,7 @@ open class CollectionResponse: Response {
                     self.result = .failure(error)
                 } else {
                     if allCompleted {
-                        self.result = .success()
+                        self.result = .success(())
                     }
                 }
             }

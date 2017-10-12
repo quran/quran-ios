@@ -69,7 +69,7 @@ class QuranPageTitleView: UIView {
         let spacing: CGFloat = isCompressed ? 0 : 3
 
         titleLabel.font = UIFont.boldSystemFont(ofSize: isCompressed ? 13 : 15)
-        detailsLabel.font = UIFont.systemFont(ofSize: isCompressed ? 11 : 13, weight: UIFontWeightLight)
+        detailsLabel.font = UIFont.systemFont(ofSize: isCompressed ? 11 : 13, weight: .light)
 
         titleLabel.sizeToFit()
         detailsLabel.sizeToFit()

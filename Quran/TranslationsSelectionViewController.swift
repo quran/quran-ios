@@ -36,6 +36,7 @@ class TranslationsSelectionViewController: TranslationsViewController {
         editController.isEnabled = false
     }
 
+    @objc
     func dismissViewController() {
         dismiss(animated: true, completion: nil)
     }

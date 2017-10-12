@@ -29,7 +29,7 @@
                 resolve(error);
             };
 
-            NSStringEncoding (^stringEncoding)() = ^NSStringEncoding{
+            NSStringEncoding (^stringEncoding)(void) = ^NSStringEncoding{
                 id encodingName = [rsp textEncodingName];
                 if (encodingName) {
                     CFStringEncoding encoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName);

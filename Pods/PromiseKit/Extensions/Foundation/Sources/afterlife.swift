@@ -20,7 +20,7 @@ private var handle: UInt8 = 0
 
 private class GrimReaper: NSObject {
     deinit {
-        fulfill()
+        fulfill(())
     }
     let (promise, fulfill, _) = Promise<Void>.pending()
 }

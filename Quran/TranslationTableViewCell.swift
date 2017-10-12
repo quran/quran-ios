@@ -99,14 +99,14 @@ extension TranslationTableViewCell {
 
         let translator = NSLocalizedString("translatorLabel: ", comment: "")
 
-        let lightFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
+        let lightFont = UIFont.systemFont(ofSize: 15, weight: .light)
         let regularFont = translation.preferredTranslatorNameFont
 
         let lightColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
         let regularColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
 
-        let lightAttributes: [String: Any] = [NSFontAttributeName: lightFont, NSForegroundColorAttributeName: lightColor]
-        let regularAttributes: [String: Any] = [NSFontAttributeName: regularFont, NSForegroundColorAttributeName: regularColor]
+        let lightAttributes: [NSAttributedStringKey: Any] = [.font: lightFont, .foregroundColor: lightColor]
+        let regularAttributes: [NSAttributedStringKey: Any] = [.font: regularFont, .foregroundColor: regularColor]
 
         let translatorAttributes = NSMutableAttributedString(string: translator, attributes: lightAttributes)
         let attributes = NSAttributedString(string: translatorName, attributes: regularAttributes)

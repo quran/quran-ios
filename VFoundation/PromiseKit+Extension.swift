@@ -45,7 +45,7 @@ extension Promise {
 
 extension URLSession {
     public func getTasks() -> Promise<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
-        return wrap(getTasksWithCompletionHandler)
+        return PromiseKit.wrap { getTasksWithCompletionHandler($0) }
     }
 }
 
@@ -107,7 +107,7 @@ extension DispatchQueue {
 extension DispatchGroup {
     public final func notify(on q: DispatchQueue = .default) -> Promise<Void> {
         return Promise(resolvers: { (fulfill, _) in
-            self.notify(queue: q, execute: fulfill)
+            self.notify(queue: q) { fulfill(()) }
         })
     }
 }

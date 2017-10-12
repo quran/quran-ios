@@ -145,8 +145,8 @@ open class CompositeSupplementaryViewCreator: NSObject, SupplementaryViewCreator
     ///                             header and footer views respectively.
     /// - parameter indexPath:      The index path at which the supplementary view is.
     open func collectionView(_ collectionView: GeneralCollectionView, willDisplayView view: ReusableSupplementaryView, ofKind kind: String, at indexPath: IndexPath) {
-        let viewCreator = creator(ofKind: kind)
-        viewCreator.collectionView(collectionView, willDisplayView: view, ofKind: kind, at: indexPath)
+        let viewCreator = creators[kind]
+        viewCreator?.collectionView(collectionView, willDisplayView: view, ofKind: kind, at: indexPath)
     }
 
     /// Supplementary view has been displayed and user scrolled it out of the screen.
@@ -161,7 +161,7 @@ open class CompositeSupplementaryViewCreator: NSObject, SupplementaryViewCreator
     ///                             header and footer views respectively.
     /// - parameter indexPath:      The index path at which the supplementary view is.
     open func collectionView(_ collectionView: GeneralCollectionView, didEndDisplayingView view: ReusableSupplementaryView, ofKind kind: String, at indexPath: IndexPath) {
-        let viewCreator = creator(ofKind: kind)
-        viewCreator.collectionView(collectionView, didEndDisplayingView: view, ofKind: kind, at: indexPath)
+        let viewCreator = creators[kind]
+        viewCreator?.collectionView(collectionView, didEndDisplayingView: view, ofKind: kind, at: indexPath)
     }
 }

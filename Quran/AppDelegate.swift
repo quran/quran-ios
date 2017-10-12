@@ -72,8 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // search bar
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [
-            NSForegroundColorAttributeName: UIColor.white,
-            NSFontAttributeName: UIFont.systemFont(ofSize: 14)
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+            NSAttributedStringKey.font.rawValue: UIFont.systemFont(ofSize: 14)
         ]
     }
 

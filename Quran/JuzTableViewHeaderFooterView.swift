@@ -61,6 +61,7 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
     }
 
+    @objc
     func onViewTapped() {
         onTapped?()
     }

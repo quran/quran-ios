@@ -22,7 +22,7 @@ open class SegmentedDataSource: AbstractDataSource, CollectionDataSource {
         return describe(self, properties: properties)
     }
 
-    private var childrenReusableDelegate: _DelegatedGeneralCollectionView!
+    private var childrenReusableDelegate: _DelegatedGeneralCollectionView! // swiftlint:disable:this weak_delegate
 
     /// Creates new instance.
     public override init() {

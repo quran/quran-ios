@@ -138,7 +138,7 @@ extension AyahTextPersistence {
         let text = try getAyahTextForNumber(number)
         let besmallah = Quran.arabicBasmAllah + " "
         if number.startsWithBesmallah && text.hasPrefix(besmallah) {
-            return AyahText(ayah: number, text: text.substring(from: besmallah.endIndex))
+            return AyahText(ayah: number, text: String(text[besmallah.endIndex...]))
         }
         return AyahText(ayah: number, text: text)
     }

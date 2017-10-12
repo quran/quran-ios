@@ -132,13 +132,13 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
 }
 
 extension NSAttributedString {
-    fileprivate static let normalAttributes: [String: Any] = [
-        NSFontAttributeName: UIFont.systemFont(ofSize: 14),
-        NSForegroundColorAttributeName: #colorLiteral(red: 0.1333333333, green: 0.1333333333, blue: 0.1333333333, alpha: 1)
+    fileprivate static let normalAttributes: [NSAttributedStringKey: Any] = [
+        .font: UIFont.systemFont(ofSize: 14),
+        .foregroundColor: #colorLiteral(red: 0.1333333333, green: 0.1333333333, blue: 0.1333333333, alpha: 1)
     ]
-    fileprivate static let highlightedAttributes: [String: Any] = [
-        NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
-        NSForegroundColorAttributeName: #colorLiteral(red: 0.1333333333, green: 0.1326085031, blue: 0.1326085031, alpha: 1)
+    fileprivate static let highlightedAttributes: [NSAttributedStringKey: Any] = [
+        .font: UIFont.boldSystemFont(ofSize: 14),
+        .foregroundColor: #colorLiteral(red: 0.1333333333, green: 0.1326085031, blue: 0.1326085031, alpha: 1)
     ]
 }
 
@@ -159,8 +159,9 @@ extension SearchResult {
             guard let data = fullText.data(using: .utf8) else {
                 return NSAttributedString(string: text)
             }
-            let options: [String: Any] = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-                                          NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue]
+            let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue]
             let string = try NSAttributedString(data: data, options: options, documentAttributes: nil)
             return string
         } catch {

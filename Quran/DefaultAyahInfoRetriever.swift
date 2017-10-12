@@ -39,7 +39,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
         // sort each line from left to right
         for i in 0..<groupedLinesKeys.count {
             let key = groupedLinesKeys[i]
-            let value = groupedLines[key]!
+            let value = groupedLines[key]! // swiftlint:disable:this force_unwrapping
             groupedLines[key] = value.sorted { (info1, info2)  in
                 guard info1.ayah.sura == info2.ayah.sura else {
                     return info1.ayah.sura < info2.ayah.sura
@@ -54,7 +54,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
         // align vertically each line
         for i in 0..<groupedLinesKeys.count {
             let key = groupedLinesKeys[i]
-            let list = groupedLines[key]!
+            let list = groupedLines[key]! // swiftlint:disable:this force_unwrapping
             groupedLines[key] = AyahInfo.alignedVertically(list)
         }
 
@@ -62,8 +62,8 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
         for i in 0..<groupedLinesKeys.count - 1 {
             let keyTop = groupedLinesKeys[i]
             let keyBottom = groupedLinesKeys[i + 1]
-            var listTop = groupedLines[keyTop]!
-            var listBottom = groupedLines[keyBottom]!
+            var listTop = groupedLines[keyTop]! // swiftlint:disable:this force_unwrapping
+            var listBottom = groupedLines[keyBottom]! // swiftlint:disable:this force_unwrapping
             AyahInfo.unionVertically(top: &listTop, bottom: &listBottom)
             groupedLines[keyTop] = listTop
             groupedLines[keyBottom] = listBottom
@@ -72,7 +72,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
         // union each position with its neighbors
         for i in 0..<groupedLinesKeys.count {
             let key = groupedLinesKeys[i]
-            var list = groupedLines[key]!
+            var list = groupedLines[key]! // swiftlint:disable:this force_unwrapping
 
             for j in 0..<list.count - 1 {
                 var first = list[j]
@@ -91,7 +91,7 @@ struct DefaultAyahInfoRetriever: AyahInfoRetriever {
         AyahInfo.unionRightEdge(&firstEdge)
         for i in 0..<groupedLinesKeys.count {
             let key = groupedLinesKeys[i]
-            var list = groupedLines[key]!
+            var list = groupedLines[key]! // swiftlint:disable:this force_unwrapping
             list[0] = firstEdge[i]
             list[list.count - 1] = lastEdge[i]
             groupedLines[key] = list

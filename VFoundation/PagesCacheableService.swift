@@ -20,13 +20,13 @@
 
 import PromiseKit
 
-private func operationQueue() -> OperationQueue {
-    let queue = OperationQueue()
-    queue.name = "com.operation.pages-cacheable-service"
-    return queue
-}
-
 open class PagesCacheableService<Output>: CacheableService {
+
+    public class func defaultOperationQueue() -> OperationQueue {
+        let queue = OperationQueue()
+        queue.name = "com.operation.pages-cacheable-service"
+        return queue
+    }
 
     private let previousPagesCount: Int
     private let nextPagesCount: Int
@@ -34,7 +34,7 @@ open class PagesCacheableService<Output>: CacheableService {
 
     private let service: OperationCacheableService<Int, Output>
 
-    public init(queue              : OperationQueue = operationQueue(),
+    public init(queue              : OperationQueue = defaultOperationQueue(),
                 cache              : Cache<Int, Output>,
                 previousPagesCount : Int,
                 nextPagesCount     : Int,

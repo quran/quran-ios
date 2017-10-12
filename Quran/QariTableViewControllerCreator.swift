@@ -28,7 +28,7 @@ class QariTableViewControllerCreator: NSObject, Creator, UIPopoverPresentationCo
     }
 
     func create(_ parameters: ([Qari], Int, UIView?)) -> QariTableViewController {
-        let controller = qarisControllerCreator.create(parameters.0, parameters.1)
+        let controller = qarisControllerCreator.create((parameters.0, parameters.1))
 
         controller.preferredContentSize = CGSize(width: 400, height: 500)
         controller.modalPresentationStyle = .popover

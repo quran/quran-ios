@@ -35,13 +35,13 @@ class NavigationSettingsCreators: SettingsCreators {
 
     func createSettingsItems() -> [Setting] {
         let translation = Setting(name: NSLocalizedString("prefs_translations", tableName: "Android", comment: ""), image: #imageLiteral(resourceName: "globe-25")) { [weak self] vc in
-            if let controller = self?.translationsCreator.create() {
+            if let controller = self?.translationsCreator.create(()) {
                 controller.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(controller, animated: true)
             }
         }
         let audio = Setting(name: NSLocalizedString("audio_manager", tableName: "Android", comment: ""), image: #imageLiteral(resourceName: "download-25")) { [weak self] vc in
-            if let controller = self?.audioDownloadsCreator.create() {
+            if let controller = self?.audioDownloadsCreator.create(()) {
                 controller.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(controller, animated: true)
             }

@@ -1,6 +1,13 @@
 # Popover
 #### 一款优雅好用的类似QQ和微信消息页面的右上角微型菜单弹窗, 最低支持iOS6<p>
 该弹窗控件有白色和黑色这两种风格, 使用方法也非常简单, 和系统的UIAlertController差不多的使用方法, 你只需要设置好对应的action和设定好弹窗箭头要指向的点(CGPoint)或者要指向的控件即可, 该弹窗控件会自动计算箭头指向和弹出位置<p>
+
+##### 支持使用CocoaPods导入, Podfile文件中添加:
+
+```objc
+pod 'Popover.OC'
+```
+
 所有效果如下图:<p>
 ![Alt text][image-5]<p>
 该弹窗有两种风格:<p>
@@ -58,7 +65,7 @@ PopoverView *popoverView = [PopoverView popoverView];
 ```
 
 ## LICENSE
-PopoverView is available under the MIT license. See the LICENSE file for more info.
+PopoverView使用 MIT 许可证，详情见 LICENSE 文件.
 
 [image-1]:http://oeysrv69b.bkt.clouddn.com/1.png
 [image-2]:http://oeysrv69b.bkt.clouddn.com/2.png

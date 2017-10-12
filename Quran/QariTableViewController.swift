@@ -75,6 +75,7 @@ class QariTableViewController: BaseTableViewController {
         tableView.ds_selectItem(at: IndexPath(item: selectedIndex, section: 0), animated: false, scrollPosition: [])
     }
 
+    @objc
     func dismissViewController() {
         dismiss(animated: true, completion: nil)
     }

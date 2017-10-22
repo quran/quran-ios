@@ -20,6 +20,7 @@
 import MenuItemKit
 import Popover_OC
 import UIKit
+import ViewConstrainer
 
 private struct GestureInfo {
     let cell: QuranBasePageCollectionViewCell
@@ -62,8 +63,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     lazy var audioView: DefaultAudioBannerView = {
         let audioView = DefaultAudioBannerView()
         self.addAutoLayoutSubview(audioView)
-        self.pinParentHorizontal(audioView)
-        self.bottomBarConstraint = self.addParentBottomConstraint(audioView)
+        audioView.vc.horizontalEdges()
+        self.bottomBarConstraint = audioView.vc.bottom().constraint
         return audioView
     }()
 
@@ -78,7 +79,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             collectionView.semanticContentAttribute = .forceRightToLeft
         }
         self.addAutoLayoutSubview(collectionView)
-        self.pinParentAllDirections(collectionView, leadingValue: -5, trailingValue: -5)
+        collectionView.vc.edges(leading: -Layout.QuranCell.horizontalInset, trailing: -Layout.QuranCell.horizontalInset)
 
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true
@@ -109,11 +110,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let container = UIView()
         container.isHidden = true
         container.addAutoLayoutSubview(imageView)
-        container.addParentCenter(imageView)
+        imageView.vc.center()
 
         self.addAutoLayoutSubview(container)
-        container.addSizeConstraints(width: 44, height: 44)
-        self._pointerTop = self.addParentTopConstraint(container)
+        container.vc.size(by: CGSize(width: 44, height: 44))
+        self._pointerTop = container.vc.top().constraint
         self._pointerLeft = container.leftAnchor.constraint(equalTo: self.leftAnchor)
         self._pointerLeft?.isActive = true
         return container
@@ -176,9 +177,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             removeConstraint(bottomBarConstraint)
         }
         if hidden {
-            bottomBarConstraint = addSiblingVerticalContiguous(top: self, bottom: audioView)
+            bottomBarConstraint = self.vc.verticalLine(audioView).constraint
         } else {
-            bottomBarConstraint = addParentBottomConstraint(audioView)
+            bottomBarConstraint = audioView.vc.bottom().constraint
         }
     }
 

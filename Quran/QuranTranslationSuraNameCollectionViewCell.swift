@@ -41,13 +41,9 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
         label.textColor = .white
 
         contentView.addAutoLayoutSubview(colorView)
-        contentView.pinParentAllDirections(colorView)
+        colorView.vc.edges()
 
         colorView.addAutoLayoutSubview(label)
-        colorView.pinParentAllDirections(label,
-                                         leadingValue: Layout.Translation.horizontalInset,
-                                         trailingValue: Layout.Translation.horizontalInset,
-                                         topValue: 15,
-                                         bottomValue: 15)
+        label.vc.edges(leading: Layout.Translation.horizontalInset, trailing: Layout.Translation.horizontalInset, top: 15, bottom: 15)
     }
 }

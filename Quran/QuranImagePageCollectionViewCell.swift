@@ -64,7 +64,7 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
             imageViewSize = CGSize(width:  bounds.width  - imageWidthDiff,
                                    height: bounds.height - imageHeightDiff)
         }
-        sizeConstraints.append(mainImageView.addHeightConstraint(imageViewSize.height))
+        sizeConstraints.append(mainImageView.vc.height(by: imageViewSize.height).constraint)
         if let imageSize = mainImageView.image?.size {
             let scale: CGFloat
             if imageSize.width / imageSize.height < imageViewSize.width / imageViewSize.height {

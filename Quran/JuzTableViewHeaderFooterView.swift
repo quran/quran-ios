@@ -50,15 +50,15 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         titleLabel.textColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         contentView.addAutoLayoutSubview(titleLabel)
-        contentView.pinParentVertical(titleLabel)
-        contentView.addParentLeadingConstraint(titleLabel, value: 20)
+        titleLabel.vc.verticalEdges()
+        titleLabel.vc.leading(by: 20)
 
         subtitleLabel.textColor = #colorLiteral(red: 0.2941176471, green: 0.2941176471, blue: 0.2941176471, alpha: 1)
         subtitleLabel.font = UIFont.systemFont(ofSize: 12)
         subtitleLabel.textAlignment = .right
         contentView.addAutoLayoutSubview(subtitleLabel)
-        contentView.pinParentVertical(subtitleLabel)
-        contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
+        subtitleLabel.vc.verticalEdges()
+        subtitleLabel.vc.trailing(by: 10)
     }
 
     @objc

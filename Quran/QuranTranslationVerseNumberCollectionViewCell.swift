@@ -45,11 +45,12 @@ class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollect
         label.minimumScaleFactor = 0.5
 
         contentView.addAutoLayoutSubview(roundedView)
-        contentView.pinParentVertical(roundedView, topValue: 10, bottomValue: 10)
-        contentView.addParentLeadingConstraint(roundedView, value: Layout.Translation.horizontalInset)
+        roundedView.vc
+            .verticalEdges(top: 10, bottom: 10)
+            .leading(by: Layout.Translation.horizontalInset)
         roundedView.heightAnchor.constraint(equalTo: roundedView.widthAnchor).isActive = true
 
         roundedView.addAutoLayoutSubview(label)
-        roundedView.pinParentAllDirections(label, leadingValue: 10, trailingValue: 10, topValue: 10, bottomValue: 10)
+        label.vc.edges(leading: 10, trailing: 10, top: 10, bottom: 10)
     }
 }

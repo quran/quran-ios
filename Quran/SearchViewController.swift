@@ -158,7 +158,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         stack.addArrangedSubview(title)
         for value in values {
             let button = UIButton(type: .system)
-            button.addHeightConstraint(44)
+            button.vc.height(by: 44)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             button.setTitle(value, for: .normal)
             button.addTarget(self, action: tapSelector, for: .touchUpInside)

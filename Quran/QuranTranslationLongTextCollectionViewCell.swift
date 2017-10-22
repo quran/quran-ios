@@ -38,11 +38,7 @@ class QuranTranslationLongTextCollectionViewCell: QuranTranslationBaseCollection
         label.backgroundColor = .readingBackground()
 
         contentView.addAutoLayoutSubview(label)
-        contentView.pinParentAllDirections(label,
-                                           leadingValue: Layout.Translation.horizontalInset,
-                                           trailingValue: Layout.Translation.horizontalInset,
-                                           topValue: 5,
-                                           bottomValue: 15)
+        label.vc.edges(leading: Layout.Translation.horizontalInset, trailing: Layout.Translation.horizontalInset, top: 5, bottom: 15)
     }
 
     override var backgroundColor: UIColor? {

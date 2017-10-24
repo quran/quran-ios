@@ -28,6 +28,21 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
 
     var highlightType: QuranHighlightType?
 
+    var topMargin: CGFloat = 0 {
+        didSet {
+            if let suraDataSource = dataSources.first as? QuranTranslationSuraDataSource {
+                suraDataSource.items = suraDataSource.items.map { ($0.text, topMargin) }
+            }
+        }
+    }
+    var bottomMargin: CGFloat = 0 {
+        didSet {
+            if let separatorDataSource = dataSources.last as? QuranTranslationVerseSeparatorDataSource {
+                separatorDataSource.items = [bottomMargin]
+            }
+        }
+    }
+
     init(ayah: AyahNumber) {
         self.ayah = ayah
         super.init(sectionType: .single)
@@ -38,7 +53,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         // if start of page or a new sura
         if index == 0 || verse.ayah.ayah == 1 {
             let sura = QuranTranslationSuraDataSource()
-            sura.items = [Quran.nameForSura(verse.ayah.sura, withPrefix: true)]
+            sura.items = [(text: Quran.nameForSura(verse.ayah.sura, withPrefix: true), additionalHeight: index == 0 ? topMargin : 0)]
             add(sura)
         }
 
@@ -87,7 +102,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         // add separator only if next verse is not a start of a new sura
         if hasSeparator {
             let separator = QuranTranslationVerseSeparatorDataSource()
-            separator.items = [()]
+            separator.items = [bottomMargin]
             add(separator)
         }
     }

@@ -35,6 +35,11 @@ class BaseNavigationController: UINavigationController, ScrollableToTop {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.barStyle = .black
+
+        // show large titles if iOS 11
+        if #available(iOS 11.0, *) {
+            navigationBar.prefersLargeTitles = true
+        }
     }
 
     func scrollToTop() {

@@ -63,8 +63,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     lazy var audioView: DefaultAudioBannerView = {
         let audioView = DefaultAudioBannerView()
         self.addAutoLayoutSubview(audioView)
-        audioView.vc.horizontalEdges()
-        self.bottomBarConstraint = audioView.vc.bottom().constraint
+        self.bottomBarConstraint = audioView.vc
+            .horizontalEdges()
+            .bottom().constraint
         return audioView
     }()
 
@@ -75,11 +76,16 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layout.minimumInteritemSpacing = 0
 
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
         if #available(iOS 9.0, *) {
             collectionView.semanticContentAttribute = .forceRightToLeft
         }
         self.addAutoLayoutSubview(collectionView)
-        collectionView.vc.edges(leading: -Layout.QuranCell.horizontalInset, trailing: -Layout.QuranCell.horizontalInset)
+        collectionView.vc
+            .verticalEdges()
+            .horizontalEdges(inset: -Layout.QuranCell.horizontalInset)
 
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true
@@ -113,8 +119,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         imageView.vc.center()
 
         self.addAutoLayoutSubview(container)
-        container.vc.size(by: CGSize(width: 44, height: 44))
-        self._pointerTop = container.vc.top().constraint
+        self._pointerTop = container.vc
+            .size(by: 44)
+            .top().constraint
         self._pointerLeft = container.leftAnchor.constraint(equalTo: self.leftAnchor)
         self._pointerLeft?.isActive = true
         return container

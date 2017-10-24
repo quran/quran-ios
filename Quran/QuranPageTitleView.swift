@@ -49,6 +49,8 @@ class QuranPageTitleView: UIView {
         guard let contentView = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
             fatalError("Couldn't load '\(nibName).xib' as the first item should be a UIView subclass.")
         }
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        detailsLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",

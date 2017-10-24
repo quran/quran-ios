@@ -20,11 +20,6 @@
 
 extension UITableView {
     public func scrollToTop(animated: Bool) {
-        for section in 0..<numberOfSections {
-            if numberOfRows(inSection: section) > 0 {
-                scrollToRow(at: IndexPath(item: 0, section: section), at: .top, animated: animated)
-                break
-            }
-        }
+        scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: true)
     }
 }

@@ -132,6 +132,7 @@
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
+		5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */; };
 		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
 		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
 		54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */; };
@@ -638,6 +639,7 @@
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
+		5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalEdgeInsets.swift; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
 		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
 		54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
@@ -1322,6 +1324,7 @@
 				543FE0231EB3BBE800687DF8 /* PromiseKit+UIExtension.swift */,
 				54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */,
 				5420D2C71ED3733500D36821 /* UITableView+Extension.swift */,
+				5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -1965,12 +1968,12 @@
 			isa = PBXGroup;
 			children = (
 				540922B11E91964300C7537A /* Image */,
+				54699B901E8DC11B00211A60 /* Translations */,
 				540922B41E919C5500C7537A /* QuranBasePageCollectionViewCell.swift */,
 				54B2668D1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.swift */,
 				54B2668E1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib */,
 				54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */,
 				54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */,
-				54699B901E8DC11B00211A60 /* Translations */,
 			);
 			name = cell;
 			sourceTree = "<group>";
@@ -3228,6 +3231,7 @@
 				543FE0191EB3B94100687DF8 /* UIColor+Extension.swift in Sources */,
 				543FE0171EB3B94100687DF8 /* CALayer+Extension.swift in Sources */,
 				543FE01D1EB3B94100687DF8 /* UIViewController+Extension.swift in Sources */,
+				5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */,
 				543FE0261EB3C0C000687DF8 /* SimultenousGestureDelegate.swift in Sources */,
 				5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,

@@ -30,6 +30,6 @@ class QuranTranslationVerseNumberDataSource: BasicDataSource<String, QuranTransl
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.ds_scrollView.bounds.width, height: 80)
+        return CGSize(width: collectionView.ds_scrollView.bounds.width, height: QuranTranslationVerseNumberCollectionViewCell.cellHeight)
     }
 }

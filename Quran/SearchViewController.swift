@@ -60,6 +60,9 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 11, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
         view.backgroundColor = UIColor.secondaryColor()
 
         recentsTitle.text = NSLocalizedString("searchRecentsTitle", comment: "")

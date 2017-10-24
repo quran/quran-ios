@@ -22,12 +22,12 @@ import UIKit
 
 class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPageLayout> {
 
-    let page: TranslationPage
-    let width: CGFloat
+    private let request: TranslationPageLayoutRequest
+    private var page: TranslationPage { return request.page }
+    private var width: CGFloat { return request.width }
 
     init(request: TranslationPageLayoutRequest) {
-        self.page = request.page
-        self.width = request.width - Layout.Translation.horizontalInset * 2
+        self.request = request
     }
 
     override func main() {

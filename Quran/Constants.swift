@@ -26,10 +26,23 @@ extension Layout {
     enum QuranCell { }
 }
 
+extension Layout {
+    // we are using window's layoutMargins to prevent the margin to change while scrolling
+    static var windowDirectionalLayoutMargins: DirectionalEdgeInsets {
+        return UIApplication.shared.keyWindow?.directionalLayoutMarginsiOS9 ?? .zero
+    }
+
+    static var windowDirectionalSafeAreaInsets: DirectionalEdgeInsets {
+        return UIApplication.shared.keyWindow?.directionalSafeAreaInsets ?? .zero
+    }
+}
+
 extension Layout.Translation {
-    static let horizontalInset: CGFloat = 15
+    static let horizontalInset: CGFloat = 7
 }
 
 extension Layout.QuranCell {
+    /// This margin is used between the pages so that we can show
+    /// a separator (horizontal line) between them.
     static let horizontalInset: CGFloat = 5
 }

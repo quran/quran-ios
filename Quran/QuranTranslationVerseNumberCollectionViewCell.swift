@@ -21,9 +21,11 @@
 import UIKit
 
 class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollectionViewCell {
+    static let cellHeight: CGFloat = 80
 
     let roundedView: UIView = CircularView()
     let label: UILabel = UILabel()
+    private var roundedViewLeading: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -45,12 +47,16 @@ class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollect
         label.minimumScaleFactor = 0.5
 
         contentView.addAutoLayoutSubview(roundedView)
-        roundedView.vc
-            .verticalEdges(top: 10, bottom: 10)
-            .leading(by: Layout.Translation.horizontalInset)
+        roundedView.vc.verticalEdges(inset: 10)
+        roundedViewLeading = roundedView.vc.leading(by: leadingMargin).constraint
         roundedView.heightAnchor.constraint(equalTo: roundedView.widthAnchor).isActive = true
 
         roundedView.addAutoLayoutSubview(label)
-        label.vc.edges(leading: 10, trailing: 10, top: 10, bottom: 10)
+        label.vc.edges(inset: 10)
+    }
+
+    override func layoutMarginsDidChange() {
+        super.layoutMarginsDidChange()
+        roundedViewLeading?.constant = leadingMargin
     }
 }

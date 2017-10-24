@@ -59,6 +59,9 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
         contentView.backgroundColor = .readingBackground()
         collectionView.backgroundColor = .readingBackground()
 
@@ -86,8 +89,26 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
     }
 
     private func updateTranslationPageLayoutIfNeeded(withCompletion completion: @escaping () -> Void = { }) {
+        // we are using window's layoutMargins to prevent the margin to change while scrolling
+        let directionalLayoutMargins = Layout.windowDirectionalLayoutMargins
+
+        // update scrollbar insets
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: layoutMargins.top,
+                                                            left: Layout.QuranCell.horizontalInset + Layout.windowDirectionalSafeAreaInsets.leading,
+                                                            bottom: layoutMargins.bottom,
+                                                            right: Layout.QuranCell.horizontalInset + Layout.windowDirectionalSafeAreaInsets.trailing)
+
+        // update top & bottom margins
+        dataSource.topMargin = layoutMargins.top
+        dataSource.bottomMargin = layoutMargins.bottom
+
+        // create a request to get page layout
         let oldRequest = request
-        request = translationPage.map { TranslationPageLayoutRequest(page: $0, width: bounds.width - 2 * Layout.QuranCell.horizontalInset) }
+        let contentWidth = bounds.width -
+            2 * Layout.QuranCell.horizontalInset -
+            2 * Layout.Translation.horizontalInset -
+            directionalLayoutMargins.horizontalInset
+        request = translationPage.map { TranslationPageLayoutRequest(page: $0, width: contentWidth) }
 
         // if the same request
         guard oldRequest != request else {

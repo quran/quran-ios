@@ -20,7 +20,7 @@
 import GenericDataSources
 import UIKit
 
-class TranslationsViewController: BaseTableBasedViewController, TranslationsDataSourceDelegate, EditControllerDelegate {
+class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate, EditControllerDelegate {
 
     override var screen: Analytics.Screen { return .translations }
 
@@ -60,8 +60,12 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
         tableView.ds_register(cellNib: TranslationTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        tableView.addSubview(refreshControl)
+        refreshControl = UIRefreshControl()
+        // on iOS 11, it should show as white as it will be part of the navigation bar
+        if #available(iOS 11, *) {
+            refreshControl?.tintColor = .white
+        }
+        refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
 
         editController.configure(tableView: tableView, delegate: self, navigationItem: navigationItem)
         dataSource.downloadedDS.onItemsUpdated = { [weak self] _ in
@@ -100,7 +104,7 @@ class TranslationsViewController: BaseTableBasedViewController, TranslationsData
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
             .always(on: .main) { [weak self] in
-                self?.refreshControl.endRefreshing()
+                self?.refreshControl?.endRefreshing()
                 self?.hideActivityIndicator()
             }
     }

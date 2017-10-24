@@ -21,7 +21,17 @@
 import UIKit
 
 class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollectionViewCell {
+    static let topPadding: CGFloat = 15
+    static let bottomPadding: CGFloat = 15
+    static let textHeight: CGFloat = 34 // deduced from the label font, if changed we need to change it
+
+    static var cellHeight: CGFloat {
+        return topPadding + bottomPadding + textHeight
+    }
+
     let label: UILabel = UILabel()
+    private var labelLeading: NSLayoutConstraint?
+    private var labelTrailing: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -35,15 +45,32 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
 
     private func setUp() {
         let colorView = UIView()
+        let contentView = UIView()
+
         colorView.backgroundColor = #colorLiteral(red: 0.08235294118, green: 0.3215686275, blue: 0.3411764706, alpha: 1)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 28)
         label.textColor = .white
 
-        contentView.addAutoLayoutSubview(colorView)
+        contentView.addAutoLayoutSubview(label)
+        colorView.addAutoLayoutSubview(contentView)
+        self.contentView.addAutoLayoutSubview(colorView)
+
+        contentView.vc
+            .horizontalEdges()
+            .bottom()
+            .height(by: type(of: self).cellHeight)
+
         colorView.vc.edges()
 
-        colorView.addAutoLayoutSubview(label)
-        label.vc.edges(leading: Layout.Translation.horizontalInset, trailing: Layout.Translation.horizontalInset, top: 15, bottom: 15)
+        label.vc.verticalEdges(top: type(of: self).topPadding, bottom: type(of: self).bottomPadding)
+        labelLeading = label.vc.leading(by: leadingMargin).constraint
+        labelTrailing = label.vc.trailing(by: trailingMargin).constraint
+    }
+
+    override func layoutMarginsDidChange() {
+        super.layoutMarginsDidChange()
+        labelLeading?.constant = leadingMargin
+        labelTrailing?.constant = trailingMargin
     }
 }

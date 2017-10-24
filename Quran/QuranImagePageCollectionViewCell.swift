@@ -20,10 +20,14 @@
 import PromiseKit
 import UIKit
 
-private let imageHeightDiff: CGFloat = 34
-private let imageWidthDiff : CGFloat = 10
-
 class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
+
+    @IBOutlet weak var scrollViewTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imageBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imageTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imageLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imageTrailingConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var juzLabel: UILabel!
     @IBOutlet weak var suraLabel: UILabel!
@@ -38,7 +42,12 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        scrollView.backgroundColor = UIColor.readingBackground()
+        if #available(iOS 11, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        }
+        contentView.backgroundColor = UIColor.readingBackground()
+        scrollViewLeadingConstraint.constant = Layout.QuranCell.horizontalInset
+        scrollViewTrailingConstraint.constant = Layout.QuranCell.horizontalInset
         scrollView.delegate = scrollNotifier
     }
 
@@ -48,21 +57,41 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
         highlightingView.reset()
     }
 
+    private func updateImageConstraints() {
+        let verticalMargin: CGFloat = 10
+        // we are using window's layoutMargins to prevent the margin to change while scrolling
+        let directionalLayoutMargins = Layout.windowDirectionalLayoutMargins
+        imageLeadingConstraint.constant = directionalLayoutMargins.leading
+        imageTrailingConstraint.constant = directionalLayoutMargins.trailing
+        imageTopConstraint.constant = directionalLayoutMargins.top + verticalMargin
+        imageBottomConstraint.constant = directionalLayoutMargins.bottom + verticalMargin
+
+        // update scrollbar insets
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: layoutMargins.top,
+                                                        left: Layout.windowDirectionalSafeAreaInsets.leading,
+                                                        bottom: layoutMargins.bottom,
+                                                        right: Layout.windowDirectionalSafeAreaInsets.trailing)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
+        updateImageConstraints()
+
+        let widthInset = imageLeadingConstraint.constant + imageTrailingConstraint.constant
+        let heightInset = imageTopConstraint.constant + imageBottomConstraint.constant
 
         sizeConstraints.forEach { mainImageView.removeConstraint($0) }
         sizeConstraints.removeAll()
 
+        let imageVisibleSize = CGSize(width: bounds.width - widthInset, height: bounds.height - heightInset)
+
         let imageViewSize: CGSize
-        if let imageSize = mainImageView.image?.size, bounds.width > bounds.height {
+        if let imageSize = mainImageView.image?.size, imageVisibleSize.width > imageVisibleSize.height {
             // add fill height
-            imageViewSize = CGSize(width: bounds.width - imageWidthDiff,
-                                   height: bounds.width * (imageSize.height / imageSize.width))
+            imageViewSize = CGSize(width: imageVisibleSize.width, height: imageVisibleSize.width * (imageSize.height / imageSize.width))
         } else {
             // add fit height
-            imageViewSize = CGSize(width:  bounds.width  - imageWidthDiff,
-                                   height: bounds.height - imageHeightDiff)
+            imageViewSize = imageVisibleSize
         }
         sizeConstraints.append(mainImageView.vc.height(by: imageViewSize.height).constraint)
         if let imageSize = mainImageView.image?.size {

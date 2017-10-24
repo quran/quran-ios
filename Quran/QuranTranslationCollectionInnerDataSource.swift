@@ -25,13 +25,38 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
 
     private var ayahsDataSources: [AyahNumber: QuranTranslationAyahSectionDataSource] = [:]
 
+    var topMargin: CGFloat = 0 {
+        didSet {
+            updateTopMarginDataSource()
+        }
+    }
+    var bottomMargin: CGFloat = 0 {
+        didSet {
+            updateBottomMarginDataSource()
+        }
+    }
+
     var page: TranslationPageLayout? {
         didSet {
             removeAllDataSources()
             if let page = page {
-                populate(page: page)
+                populate(page: page, topMargin: topMargin, bottomMargin: bottomMargin)
+                updateTopMarginDataSource()
+                updateBottomMarginDataSource()
                 updateHighlights()
             }
+        }
+    }
+
+    private func updateTopMarginDataSource() {
+        if let ayahDataSource = dataSources.first as? QuranTranslationAyahSectionDataSource {
+            ayahDataSource.topMargin = topMargin
+        }
+    }
+
+    private func updateBottomMarginDataSource() {
+        if let ayahDataSource = dataSources.last as? QuranTranslationAyahSectionDataSource {
+            ayahDataSource.bottomMargin = bottomMargin
         }
     }
 
@@ -65,7 +90,7 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
         ayahsDataSources[dataSource.ayah] = dataSource
     }
 
-    private func populate(page: TranslationPageLayout) {
+    private func populate(page: TranslationPageLayout, topMargin: CGFloat, bottomMargin: CGFloat) {
         for (offset, verse) in page.verseLayouts.enumerated() {
 
             let nextOffset = offset + 1

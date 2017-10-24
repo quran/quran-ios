@@ -20,9 +20,10 @@
 
 import GenericDataSources
 
-class QuranTranslationVerseSeparatorDataSource: BasicDataSource<(), QuranTranslationVerseSeparatorCollectionViewCell> {
+class QuranTranslationVerseSeparatorDataSource: BasicDataSource<CGFloat, QuranTranslationVerseSeparatorCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.ds_scrollView.bounds.width, height: 16)
+        return CGSize(width: collectionView.ds_scrollView.bounds.width,
+                      height: QuranTranslationVerseSeparatorCollectionViewCell.cellHeight + item(at: indexPath))
     }
 }

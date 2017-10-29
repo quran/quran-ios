@@ -133,6 +133,7 @@
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
 		5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */; };
+		5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */ = {isa = PBXBuildFile; fileRef = 5449EC0B1FA58ACE00A12337 /* quran.ar.db */; };
 		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
 		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
 		54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */; };
@@ -640,6 +641,7 @@
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
 		5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalEdgeInsets.swift; sourceTree = "<group>"; };
+		5449EC0B1FA58ACE00A12337 /* quran.ar.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran.ar.db; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
 		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
 		54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
@@ -1398,6 +1400,15 @@
 			name = Translations;
 			sourceTree = "<group>";
 		};
+		5449EC0A1FA58AAF00A12337 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5449EC0B1FA58ACE00A12337 /* quran.ar.db */,
+				5484C2E21ED8C00C0068025A /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		54547E811EC74CE4008AFED3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1643,7 +1654,7 @@
 			isa = PBXGroup;
 			children = (
 				5484C2E81ED8C0180068025A /* Sources */,
-				5484C2E21ED8C00C0068025A /* Info.plist */,
+				5449EC0A1FA58AAF00A12337 /* Resources */,
 			);
 			path = QuranTests;
 			sourceTree = "<group>";
@@ -2711,6 +2722,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

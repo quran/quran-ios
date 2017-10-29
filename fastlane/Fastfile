@@ -23,7 +23,7 @@ platform :ios do
     end
 
     desc 'Resets the build to 0 and version to passed version value and push it to the origin.'
-    desc 'params version: the new version of the app"
+    desc 'params version: the new version of the app'
     lane :version_reset do |options|
         # Set a specific version number
         increment_version_number(version_number: options[:version])

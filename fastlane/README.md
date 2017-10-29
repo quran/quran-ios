@@ -35,6 +35,8 @@ xcode-select --install
 fastlane ios version_reset
 ```
 Resets the build to 0 and version to passed version value and push it to the origin.
+
+params version: the new version of the app
 ### ios beta
 ```
 fastlane ios beta
@@ -42,6 +44,8 @@ fastlane ios beta
 Submit a new Beta Build to Apple TestFlight
 
 This will also make sure the profile is up to date
+
+params clean: true|false, default is true
 ### ios build_frameworks
 ```
 fastlane ios build_frameworks

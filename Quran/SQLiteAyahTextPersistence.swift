@@ -236,7 +236,7 @@ private func cleanup(term: String) -> String {
     let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
     var cleanedTerm = term.components(separatedBy: legalTokens.inverted).joined(separator: "")
     if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1_000, limitedBy: cleanedTerm.endIndex) {
-        cleanedTerm = String(cleanedTerm[...upTo])
+        cleanedTerm = String(cleanedTerm[..<upTo])
     }
     return cleanedTerm.lowercased()
 }

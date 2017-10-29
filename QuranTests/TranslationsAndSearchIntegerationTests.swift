@@ -21,7 +21,7 @@ class TranslationsAndSearchIntegerationTests: XCTestCase {
 
         expectNotToThrow {
             if shouldDownload {
-                let translations = try translationsRetriever.execute().wait()
+                let translations = try translationsRetriever.execute(()).wait()
                 print("Found translations.count", translations.count)
 
                 for item in translations.map({ $0.translation }) {
@@ -35,7 +35,7 @@ class TranslationsAndSearchIntegerationTests: XCTestCase {
                 }
             }
 
-            let downloadedTranslations = try localRetriever.execute().wait()
+            let downloadedTranslations = try localRetriever.execute(()).wait()
             print("downloaded translations.count", downloadedTranslations.count)
 
             for translation in downloadedTranslations/*[2..<downloadedTranslations.count]*/ {

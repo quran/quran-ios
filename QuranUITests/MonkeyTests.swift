@@ -57,17 +57,6 @@ class MonkeyTests: XCTestCase {
         monkey.addXCTestTapAlertAction(interval: 100, application: application)
 
         // Run the monkey tests for 15 minutes
-        monkey.startTesting(forDuration: 15 * 60)
-    }
-}
-
-extension Monkey {
-    func startTesting(forDuration duration: TimeInterval) {
-        let start = CFAbsoluteTimeGetCurrent() // start time
-
-        repeat {
-            actRandomly()
-            actRegularly()
-        } while ((CFAbsoluteTimeGetCurrent() - start) < duration)
+        monkey.monkeyAround(forDuration: 3 * 60)
     }
 }

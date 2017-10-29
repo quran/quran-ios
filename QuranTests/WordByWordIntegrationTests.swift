@@ -50,7 +50,7 @@ private enum WordType: String {
 
 class WordByWordIntegrationTests: XCTestCase {
 
-    func testWordsAnyAyahInfoDatabasesMatchingPositionsCount() {
+    func testWordsAndAyahInfoDatabasesMatchingPositionsCount() {
         expectNotToThrow {
             let wordsConnection = try Connection(Files.wordsTextPath, readonly: true)
             let wordsQuery = Words.table.select(Words.Columns.sura,

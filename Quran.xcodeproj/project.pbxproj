@@ -3016,7 +3016,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AEF32652F2759A39CCB1CBEC /* [CP] Embed Pods Frameworks */ = {

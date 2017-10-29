@@ -62,10 +62,10 @@ public class Monkey {
     var r: Random
     let frame: CGRect
 
-    var randomActions: [(accumulatedWeight: Double, action: (Void) -> Void)]
+    var randomActions: [(accumulatedWeight: Double, action: () -> Void)]
     var totalWeight: Double
 
-    var regularActions: [(interval: Int, action: (Void) -> Void)]
+    var regularActions: [(interval: Int, action: () -> Void)]
     var actionCounter = 0
 
     /**
@@ -147,12 +147,16 @@ public class Monkey {
         }
     }
 
-    /// Generate random events forever, or until the app crashes.
-    public func monkeyAround() {
-        while true {
+    /// Generate random events or fixed-interval events based forever, for a specific duration or until the app crashes.
+    ///
+    /// - Parameter duration: The duration for which to generate the random events.
+    ///                       Set to `.infinity` by default.
+    public func monkeyAround(forDuration duration: TimeInterval = .infinity) {
+        let monkeyTestingTime = Date().timeIntervalSince1970
+        repeat {
             actRandomly()
             actRegularly()
-        }
+        } while ((Date().timeIntervalSince1970 - monkeyTestingTime) < duration)
     }
 
     /// Generate one random event.
@@ -187,7 +191,7 @@ public class Monkey {
         - parameter action: The block to run when this event
           is generated.
     */
-    public func addAction(weight: Double, action: @escaping (Void) -> Void) {
+    public func addAction(weight: Double, action: @escaping () -> Void) {
         totalWeight += weight
         randomActions.append((accumulatedWeight: totalWeight, action: action))
     }
@@ -201,7 +205,7 @@ public class Monkey {
         - parameter action: The block to run when this event
           is generated.
     */
-    public func addAction(interval: Int, action: @escaping (Void) -> Void) {
+    public func addAction(interval: Int, action: @escaping () -> Void) {
         regularActions.append((interval: interval, action: action))
     }
 

@@ -7,33 +7,33 @@ PODS:
   - GenericDataSources (3.0.0)
   - KVOController (1.2.0)
   - MenuItemKit (3.0.0)
-  - Moya (9.0.0):
-    - Moya/Core (= 9.0.0)
-  - Moya/Core (9.0.0):
+  - Moya (10.0.0):
+    - Moya/Core (= 10.0.0)
+  - Moya/Core (10.0.0):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - NSDate+TimeAgo (1.0.6)
   - Popover.OC (1.2)
-  - PromiseKit (4.4.0):
-    - PromiseKit/Foundation (= 4.4.0)
-    - PromiseKit/QuartzCore (= 4.4.0)
-    - PromiseKit/UIKit (= 4.4.0)
-  - PromiseKit/CorePromise (4.4.0)
-  - PromiseKit/Foundation (4.4.0):
+  - PromiseKit (4.4.3):
+    - PromiseKit/Foundation (= 4.4.3)
+    - PromiseKit/QuartzCore (= 4.4.3)
+    - PromiseKit/UIKit (= 4.4.3)
+  - PromiseKit/CorePromise (4.4.3)
+  - PromiseKit/Foundation (4.4.3):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.4.0):
+  - PromiseKit/QuartzCore (4.4.3):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.4.0):
+  - PromiseKit/UIKit (4.4.3):
     - PromiseKit/CorePromise
   - Result (3.2.4)
-  - RxCocoa (4.0.0-rc.0):
-    - RxSwift (~> 4.0.0-rc.0)
-  - RxSwift (4.0.0-rc.0)
+  - RxCocoa (4.0.0):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.0.0)
   - SQLite.swift (0.11.4):
     - SQLite.swift/standard (= 0.11.4)
   - SQLite.swift/standard (0.11.4)
-  - SwiftLint (0.23.0)
-  - SwiftMonkey (1.0.2)
+  - SwiftLint (0.23.1)
+  - SwiftMonkey (1.1.0)
   - SwiftyJSON (3.1.4)
   - Zip (1.0.0)
 
@@ -48,34 +48,27 @@ DEPENDENCIES:
   - NSDate+TimeAgo
   - Popover.OC (from `git@github.com:mohamede1945/Popover.git`)
   - PromiseKit
-  - RxCocoa (from `git@github.com:ReactiveX/RxSwift.git`, branch `rxswift4.0-swift4.0`)
-  - RxSwift (from `git@github.com:ReactiveX/RxSwift.git`, branch `rxswift4.0-swift4.0`)
+  - RxCocoa
+  - RxSwift
   - SQLite.swift
   - SwiftLint
-  - SwiftMonkey
+  - SwiftMonkey (from `git@github.com:mohamede1945/SwiftMonkey.git`)
   - SwiftyJSON
   - Zip
 
 EXTERNAL SOURCES:
   Popover.OC:
     :git: git@github.com:mohamede1945/Popover.git
-  RxCocoa:
-    :branch: rxswift4.0-swift4.0
-    :git: git@github.com:ReactiveX/RxSwift.git
-  RxSwift:
-    :branch: rxswift4.0-swift4.0
-    :git: git@github.com:ReactiveX/RxSwift.git
+  SwiftMonkey:
+    :git: git@github.com:mohamede1945/SwiftMonkey.git
 
 CHECKOUT OPTIONS:
   Popover.OC:
     :commit: 7f2a6105ab1f01ba939be9c1c6f7f2bfcca61e7e
     :git: git@github.com:mohamede1945/Popover.git
-  RxCocoa:
-    :commit: 61261f2ee97ace3e08713921dd9406669b9debee
-    :git: git@github.com:ReactiveX/RxSwift.git
-  RxSwift:
-    :commit: 61261f2ee97ace3e08713921dd9406669b9debee
-    :git: git@github.com:ReactiveX/RxSwift.git
+  SwiftMonkey:
+    :commit: 85c5d4bee0eb331292f819d0d15a51c3b89df6e1
+    :git: git@github.com:mohamede1945/SwiftMonkey.git
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
@@ -85,19 +78,19 @@ SPEC CHECKSUMS:
   GenericDataSources: 8461a1852fe963e20d2364481455f17a3631e8b2
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: d9b539b28fdbbd7980d6f3668b9cd6daefeabd9b
-  Moya: cf5e6ee93af526532f92614004b8ad2ea60fd845
+  Moya: adb58b0f4e58430db43cc6e2f6ebab1836501186
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
-  PromiseKit: ecf5fe92275d57ee77c9ede858af47a162e9b97e
+  PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
-  RxCocoa: 58841348f4c6e6f6cd244522c16a6b7df5008956
-  RxSwift: f0ff3c78e1f71a7d3506defde0b79c72fe39bac3
+  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
+  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
   SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
-  SwiftLint: 6ddf7d305644c2239cb768a11d97cce804816691
-  SwiftMonkey: c73116f558e571f7036cc0186e6a1994e26f78bd
+  SwiftLint: 1b670ce79284c76520f84060e87d645078fd32fa
+  SwiftMonkey: 3a46ef0da3f081c742542bf94c6e023030e811fd
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   Zip: 115a122433829a1bbf33f5575fa84047438dcc12
 
-PODFILE CHECKSUM: 19ed7b12ad1f54e9d181cf3e1da8fa6cbbbe0041
+PODFILE CHECKSUM: ac000d9a9306f66e0dec1c6cecaddc503da6d79c
 
 COCOAPODS: 1.3.1

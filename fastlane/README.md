@@ -46,6 +46,8 @@ Submit a new Beta Build to Apple TestFlight
 This will also make sure the profile is up to date
 
 params clean: true|false, default is true
+
+params includeFrameworks: true|false, default is true
 ### ios build_frameworks
 ```
 fastlane ios build_frameworks

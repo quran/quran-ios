@@ -77,7 +77,10 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
         super.layoutSubviews()
         updateImageConstraints()
 
-        let widthInset = imageLeadingConstraint.constant + imageTrailingConstraint.constant
+        let widthInset = imageLeadingConstraint.constant +
+                         imageTrailingConstraint.constant +
+                         scrollViewLeadingConstraint.constant +
+                         scrollViewTrailingConstraint.constant
         let heightInset = imageTopConstraint.constant + imageBottomConstraint.constant
 
         sizeConstraints.forEach { mainImageView.removeConstraint($0) }

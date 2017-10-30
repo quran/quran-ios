@@ -227,7 +227,7 @@ tableView.ds_register(cellNib: AppStoreLoadingTableViewCell.self)
 tableView.ds_useDataSource(dataSource)
 ```
 
-7. Set the data when it is available.
+7. Finally set the data when it is available.
 ```Swift
   // show loading indicator
   dataSource.selectedDataSourceIndex = 0

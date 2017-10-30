@@ -4264,8 +4264,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ab1cc3f1-3b39-4bfc-a995-6d549c1ad679";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: com.quran.ios";
+				PROVISIONING_PROFILE = "0942cc72-3362-4f11-bbd8-1d5924524335";
+				PROVISIONING_PROFILE_SPECIFIER = "Quran App Store Dist";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};

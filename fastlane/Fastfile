@@ -23,7 +23,7 @@ platform :ios do
     end
 
     desc 'Resets the build to 0 and version to passed version value and push it to the origin.'
-    desc 'params version: the new version of the app"
+    desc 'params version: the new version of the app'
     lane :version_reset do |options|
         # Set a specific version number
         increment_version_number(version_number: options[:version])
@@ -39,20 +39,24 @@ platform :ios do
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
     desc 'params clean: true|false, default is true'
+    desc 'params includeFrameworks: true|false, default is true'
     lane :beta do |options|
 
         clean = options[:clean].nil? ? true : options[:clean]
+        includeFrameworks = options[:includeFrameworks].nil? ? true : options[:includeFrameworks]
 
-        # Build frameworks for QuranFoundation
-        build_frameworks(
-          archive: true,
-          clean: clean,
-          target: "device")
+        if includeFrameworks
+          # Build frameworks for QuranFoundation
+          build_frameworks(
+            archive: true,
+            clean: clean,
+            target: "device")
 
-        # Build QuranFoundation
-        path = sh("pwd")
-        sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
-        sh "cd #{path}"
+          # Build QuranFoundation
+          path = sh("pwd")
+          sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
+          sh "cd #{path}"
+        end
 
         store = PStore.new("#{Dir.home}/com.quran.ios.pstore")
 
@@ -93,8 +97,8 @@ platform :ios do
             clean: clean,
             output_directory: './build/',
             include_symbols: true,
-            include_bitcode: true
-
+            include_bitcode: true,
+            export_method: 'app-store'
         )
 
         # Upload to test flight

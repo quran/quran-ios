@@ -31,6 +31,9 @@ class QuranTranslationTextDataSource: BasicDataSource<TranslationTextLayout, Qur
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let item = self.item(at: indexPath)
-        return CGSize(width: collectionView.ds_scrollView.bounds.width, height: item.size.height + 20)
+        return CGSize(width: collectionView.ds_scrollView.bounds.width,
+                      height: item.size.height +
+                        QuranTranslationTextCollectionViewCell.topPadding +
+                        QuranTranslationTextCollectionViewCell.bottomPadding)
     }
 }

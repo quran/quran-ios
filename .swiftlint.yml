@@ -5,6 +5,7 @@ included:
   - SQLitePersistence
   - UIKitExtension
   - VFoundation
+  - ViewConstrainer
 
 excluded:
   - UIKitExtension/ActivityIndicator.swift

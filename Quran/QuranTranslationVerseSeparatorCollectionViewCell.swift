@@ -21,6 +21,8 @@
 import UIKit
 
 class QuranTranslationVerseSeparatorCollectionViewCell: QuranTranslationBaseCollectionViewCell {
+    private static let lineHeight: CGFloat = 1
+    static let cellHeight: CGFloat = 16
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -37,8 +39,9 @@ class QuranTranslationVerseSeparatorCollectionViewCell: QuranTranslationBaseColl
         lineView.backgroundColor = #colorLiteral(red: 0.4862745098, green: 0.4862745098, blue: 0.4862745098, alpha: 1)
 
         contentView.addAutoLayoutSubview(lineView)
-        contentView.pinParentHorizontal(lineView)
-        contentView.addParentBottomConstraint(lineView)
-        lineView.addHeightConstraint(1)
+        lineView.vc
+            .horizontalEdges()
+            .bottom()
+            .height(by: type(of: self).lineHeight)
     }
 }

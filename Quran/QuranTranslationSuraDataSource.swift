@@ -20,16 +20,17 @@
 
 import GenericDataSources
 
-class QuranTranslationSuraDataSource: BasicDataSource<String, QuranTranslationSuraNameCollectionViewCell> {
+class QuranTranslationSuraDataSource: BasicDataSource<(text: String, additionalHeight: CGFloat), QuranTranslationSuraNameCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuranTranslationSuraNameCollectionViewCell,
-                                    with item: String,
+                                    with item: (text: String, additionalHeight: CGFloat),
                                     at indexPath: IndexPath) {
-        cell.label.text = item
+        cell.label.text = item.text
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.ds_scrollView.bounds.width, height: 64)
+        return CGSize(width: collectionView.ds_scrollView.bounds.width,
+                      height: QuranTranslationSuraNameCollectionViewCell.cellHeight + item(at: indexPath).additionalHeight)
     }
 }

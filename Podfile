@@ -5,7 +5,7 @@ swift_version = "4.0"
 target 'VFoundation' do
     pod 'PromiseKit'
     pod 'SwiftyJSON'
-    pod 'RxSwift', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
+    pod 'RxSwift'
     pod 'SwiftLint'
 end
 
@@ -20,8 +20,8 @@ end
 
 target 'UIKitExtension' do
     pod 'PromiseKit'
-    pod 'RxSwift', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
-    pod 'RxCocoa', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
+    pod 'RxSwift'
+    pod 'RxCocoa'
 end
 
 target 'QueuePlayer' do
@@ -42,8 +42,8 @@ target 'Quran' do
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
-    pod 'RxSwift', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
-    pod 'RxCocoa', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
+    pod 'RxSwift'
+    pod 'RxCocoa'
     pod 'Popover.OC', :git => "git@github.com:mohamede1945/Popover.git" # Added modifications that we need to allow to control direction of the arrow. 
 end
 
@@ -53,11 +53,11 @@ target 'QuranTests' do
     pod 'Moya'
     pod 'PromiseKit'
     pod 'KVOController'
-    pod 'RxSwift', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
-    pod 'RxCocoa', :git => "git@github.com:ReactiveX/RxSwift.git", :branch => "rxswift4.0-swift4.0" # Until they release it.
+    pod 'RxSwift'
+    pod 'RxCocoa'
     pod 'SQLite.swift', :inhibit_warnings => true
 end
 
 target 'QuranUITests' do
-    pod "SwiftMonkey", :inhibit_warnings => true
+    pod 'SwiftMonkey', :git => "git@github.com:mohamede1945/SwiftMonkey.git" # Added modifications that would allow it to compile
 end

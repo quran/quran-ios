@@ -40,6 +40,15 @@ private struct Glyphs {
     static let table = Table("glyphs")
 }
 
+private struct QuranAr {
+    static let table = Table("arabic_text")
+    struct Columns {
+        static let sura = Expression<Int>("sura")
+        static let ayah = Expression<Int>("ayah")
+        static let text = Expression<String>("text")
+    }
+}
+
 private enum WordType: String {
     case word
     case end
@@ -50,7 +59,7 @@ private enum WordType: String {
 
 class WordByWordIntegrationTests: XCTestCase {
 
-    func testWordsAnyAyahInfoDatabasesMatchingPositionsCount() {
+    func testWordsAndAyahInfoDatabasesMatchingPositionsCount() {
         expectNotToThrow {
             let wordsConnection = try Connection(Files.wordsTextPath, readonly: true)
             let wordsQuery = Words.table.select(Words.Columns.sura,
@@ -67,8 +76,8 @@ class WordByWordIntegrationTests: XCTestCase {
 
             let ayahInfoConnection = try Connection(Files.ayahInfoPath, readonly: true)
             let ayahInfoQuery = Glyphs.table.select(Glyphs.Columns.sura,
-                                                Glyphs.Columns.ayah,
-                                                Glyphs.Columns.position.count)
+                                                    Glyphs.Columns.ayah,
+                                                    Glyphs.Columns.position.count)
             let ayahInfoRows = try ayahInfoConnection.prepare(ayahInfoQuery)
             var ayahInfoAyahs: [AyahNumber: Int] = [:]
             for row in ayahInfoRows {
@@ -83,5 +92,46 @@ class WordByWordIntegrationTests: XCTestCase {
                 XCTAssertEqual(count, ayahInfoAyahs[ayah], "Position count mismatch in ayah: \(ayah)")
             }
         }
+    }
+
+    func testWordsTextMadaniMatchesQuranText() {
+        let quarterStart = "۞ " // Hizb start
+        expectNotToThrow {
+            let persistence = SQLiteArabicTextPersistence()
+            let quranConnection = try Connection(quranArPath, readonly: true)
+            var count = 0
+            for sura in Quran.QuranSurasRange {
+                for ayah in 1...Quran.numberOfAyahsForSura(sura) {
+                    let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
+                    let quranQuery: ScalarQuery = QuranAr.table
+                        .filter(QuranAr.Columns.sura == sura && QuranAr.Columns.ayah == ayah)
+                        .select(QuranAr.Columns.text)
+
+                    var quranArText: String = try quranConnection.scalar(quranQuery)
+                    if ayah == 1 {
+                        quranArText = quranArText.replacingOccurrences(of: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ", with: "")
+                    }
+                    var wordsText = try persistence.getAyahTextForNumber(ayahNumber)
+                    if wordsText.starts(with: quarterStart) {
+                        wordsText = String(wordsText[quarterStart.endIndex...])
+                    }
+                    if quranArText != wordsText {
+                        count += 1
+                        print(ayahNumber.description, quranArText.lengthOfBytes(using: .utf8), wordsText.lengthOfBytes(using: .utf8))
+                        print(quranArText)
+                        print(wordsText)
+                        print()
+                        print()
+                    }
+                }
+            }
+            XCTAssertEqual(0, count, "Expected 0 errors. Consult to previous output for details of mistmatches")
+            print("Total of \(count) errors!")
+        }
+    }
+
+    private var quranArPath: String {
+        let testBundle = Bundle(for: type(of: self))
+        return testBundle.path(forResource: "quran.ar", ofType: "db")!
     }
 }

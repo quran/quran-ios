@@ -132,6 +132,8 @@
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
+		5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */; };
+		5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */ = {isa = PBXBuildFile; fileRef = 5449EC0B1FA58ACE00A12337 /* quran.ar.db */; };
 		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
 		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
 		54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */; };
@@ -309,6 +311,13 @@
 		54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */; };
 		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
+		54E72D9A1F9C1B2A00F85B67 /* ViewConstrainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 54E72D981F9C1B2A00F85B67 /* ViewConstrainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54E72D9D1F9C1B2A00F85B67 /* ViewConstrainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E72D961F9C1B2A00F85B67 /* ViewConstrainer.framework */; };
+		54E72D9E1F9C1B2A00F85B67 /* ViewConstrainer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54E72D961F9C1B2A00F85B67 /* ViewConstrainer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		54E72DA41F9C1B8400F85B67 /* ViewConstrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E72DA31F9C1B8400F85B67 /* ViewConstrainer.swift */; };
+		54E72DA61F9C1B9A00F85B67 /* GroupConstrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E72DA51F9C1B9A00F85B67 /* GroupConstrainer.swift */; };
+		54E72DA81F9C1BA700F85B67 /* SingleConstrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E72DA71F9C1BA700F85B67 /* SingleConstrainer.swift */; };
+		54E72DAA1F9C1BB800F85B67 /* UIView+Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E72DA91F9C1BB800F85B67 /* UIView+Const.swift */; };
 		54F56C471E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */; };
 		54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */; };
 		54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */; };
@@ -423,6 +432,13 @@
 			remoteGlobalIDString = 54B265E21CC57D8E00D3AEF8;
 			remoteInfo = Quran;
 		};
+		54E72D9B1F9C1B2A00F85B67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54B265DB1CC57D8E00D3AEF8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54E72D951F9C1B2A00F85B67;
+			remoteInfo = ViewConstrainer;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -438,6 +454,7 @@
 				543FE0341EB3C1AC00687DF8 /* QueuePlayer.framework in Embed Frameworks */,
 				546784191EB29DDD0012FA2C /* BatchDownloader.framework in Embed Frameworks */,
 				543FE00B1EB3B83800687DF8 /* UIKitExtension.framework in Embed Frameworks */,
+				54E72D9E1F9C1B2A00F85B67 /* ViewConstrainer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -623,6 +640,8 @@
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
+		5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalEdgeInsets.swift; sourceTree = "<group>"; };
+		5449EC0B1FA58ACE00A12337 /* quran.ar.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran.ar.db; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
 		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
 		54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
@@ -836,6 +855,13 @@
 		54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresentationControllerDelegate.swift; sourceTree = "<group>"; };
 		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
+		54E72D961F9C1B2A00F85B67 /* ViewConstrainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ViewConstrainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54E72D981F9C1B2A00F85B67 /* ViewConstrainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewConstrainer.h; sourceTree = "<group>"; };
+		54E72D991F9C1B2A00F85B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54E72DA31F9C1B8400F85B67 /* ViewConstrainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConstrainer.swift; sourceTree = "<group>"; };
+		54E72DA51F9C1B9A00F85B67 /* GroupConstrainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupConstrainer.swift; sourceTree = "<group>"; };
+		54E72DA71F9C1BA700F85B67 /* SingleConstrainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleConstrainer.swift; sourceTree = "<group>"; };
+		54E72DA91F9C1BB800F85B67 /* UIView+Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Const.swift"; sourceTree = "<group>"; };
 		54F56C461E7EAEF500D7AF57 /* QariTableViewControllerCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariTableViewControllerCreator.swift; sourceTree = "<group>"; };
 		54F56C491E7EB94F00D7AF57 /* BookmarksManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksManager.swift; sourceTree = "<group>"; };
 		54F56C4B1E7ECA5B00D7AF57 /* QuranNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranNavigationBar.swift; sourceTree = "<group>"; };
@@ -948,10 +974,18 @@
 				546784181EB29DDD0012FA2C /* BatchDownloader.framework in Frameworks */,
 				5467843B1EB29FD20012FA2C /* SQLitePersistence.framework in Frameworks */,
 				549A052B1EEC31D9001CF7C7 /* QuranFoundation.framework in Frameworks */,
+				54E72D9D1F9C1B2A00F85B67 /* ViewConstrainer.framework in Frameworks */,
 				543FE00A1EB3B83800687DF8 /* UIKitExtension.framework in Frameworks */,
 				543FE0331EB3C1AC00687DF8 /* QueuePlayer.framework in Frameworks */,
 				5437D3671EB385DB00795FA9 /* VFoundation.framework in Frameworks */,
 				37B1E4838697C2DC7FDAE39A /* Pods_Quran.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54E72D921F9C1B2A00F85B67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,6 +1326,7 @@
 				543FE0231EB3BBE800687DF8 /* PromiseKit+UIExtension.swift */,
 				54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */,
 				5420D2C71ED3733500D36821 /* UITableView+Extension.swift */,
+				5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -1363,6 +1398,15 @@
 				545499B61E7DDC3000F4F927 /* TranslationsSelectionDataSource.swift */,
 			);
 			name = Translations;
+			sourceTree = "<group>";
+		};
+		5449EC0A1FA58AAF00A12337 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5449EC0B1FA58ACE00A12337 /* quran.ar.db */,
+				5484C2E21ED8C00C0068025A /* Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		54547E811EC74CE4008AFED3 /* Settings */ = {
@@ -1610,7 +1654,7 @@
 			isa = PBXGroup;
 			children = (
 				5484C2E81ED8C0180068025A /* Sources */,
-				5484C2E21ED8C00C0068025A /* Info.plist */,
+				5449EC0A1FA58AAF00A12337 /* Resources */,
 			);
 			path = QuranTests;
 			sourceTree = "<group>";
@@ -1737,6 +1781,7 @@
 				543FE02D1EB3C1AC00687DF8 /* QueuePlayer */,
 				5484C2DF1ED8C00C0068025A /* QuranTests */,
 				545D96551EBF9741006D758A /* QuranUITests */,
+				54E72D971F9C1B2A00F85B67 /* ViewConstrainer */,
 				54B265E41CC57D8F00D3AEF8 /* Products */,
 				A91BC603C3D1C41446CF2E46 /* Pods */,
 				96C71D1AA1D9AFFDF1764AD3 /* Frameworks */,
@@ -1754,6 +1799,7 @@
 				543FE02C1EB3C1AC00687DF8 /* QueuePlayer.framework */,
 				545D96541EBF9741006D758A /* QuranUITests.xctest */,
 				5484C2DE1ED8C00C0068025A /* QuranTests.xctest */,
+				54E72D961F9C1B2A00F85B67 /* ViewConstrainer.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1933,12 +1979,12 @@
 			isa = PBXGroup;
 			children = (
 				540922B11E91964300C7537A /* Image */,
+				54699B901E8DC11B00211A60 /* Translations */,
 				540922B41E919C5500C7537A /* QuranBasePageCollectionViewCell.swift */,
 				54B2668D1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.swift */,
 				54B2668E1CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib */,
 				54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */,
 				54699B8D1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib */,
-				54699B901E8DC11B00211A60 /* Translations */,
 			);
 			name = cell;
 			sourceTree = "<group>";
@@ -2136,6 +2182,27 @@
 			name = Quran;
 			sourceTree = "<group>";
 		};
+		54E72D971F9C1B2A00F85B67 /* ViewConstrainer */ = {
+			isa = PBXGroup;
+			children = (
+				54E72DA21F9C1B7000F85B67 /* Sources */,
+				54E72D981F9C1B2A00F85B67 /* ViewConstrainer.h */,
+				54E72D991F9C1B2A00F85B67 /* Info.plist */,
+			);
+			path = ViewConstrainer;
+			sourceTree = "<group>";
+		};
+		54E72DA21F9C1B7000F85B67 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				54E72DA51F9C1B9A00F85B67 /* GroupConstrainer.swift */,
+				54E72DA71F9C1BA700F85B67 /* SingleConstrainer.swift */,
+				54E72DA31F9C1B8400F85B67 /* ViewConstrainer.swift */,
+				54E72DA91F9C1BB800F85B67 /* UIView+Const.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		54F56C481E7EB93600D7AF57 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2288,6 +2355,14 @@
 			files = (
 				546784521EB2A32A0012FA2C /* Quran-Bridging-Header.h in Headers */,
 				546784381EB29FD20012FA2C /* SQLitePersistence.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54E72D931F9C1B2A00F85B67 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54E72D9A1F9C1B2A00F85B67 /* ViewConstrainer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2464,11 +2539,30 @@
 				5437D3661EB385DB00795FA9 /* PBXTargetDependency */,
 				543FE0091EB3B83800687DF8 /* PBXTargetDependency */,
 				543FE0321EB3C1AC00687DF8 /* PBXTargetDependency */,
+				54E72D9C1F9C1B2A00F85B67 /* PBXTargetDependency */,
 			);
 			name = Quran;
 			productName = Quran;
 			productReference = 54B265E31CC57D8F00D3AEF8 /* Quran.app */;
 			productType = "com.apple.product-type.application";
+		};
+		54E72D951F9C1B2A00F85B67 /* ViewConstrainer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54E72DA11F9C1B2A00F85B67 /* Build configuration list for PBXNativeTarget "ViewConstrainer" */;
+			buildPhases = (
+				54E72D911F9C1B2A00F85B67 /* Sources */,
+				54E72D921F9C1B2A00F85B67 /* Frameworks */,
+				54E72D931F9C1B2A00F85B67 /* Headers */,
+				54E72D941F9C1B2A00F85B67 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ViewConstrainer;
+			productName = ViewConstrainer;
+			productReference = 54E72D961F9C1B2A00F85B67 /* ViewConstrainer.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -2533,6 +2627,12 @@
 							};
 						};
 					};
+					54E72D951F9C1B2A00F85B67 = {
+						CreatedOnToolsVersion = 9.0.1;
+						DevelopmentTeam = MKP73M5X4A;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 54B265DE1CC57D8E00D3AEF8 /* Build configuration list for PBXProject "Quran" */;
@@ -2570,6 +2670,7 @@
 				543FE02B1EB3C1AC00687DF8 /* QueuePlayer */,
 				545D96531EBF9741006D758A /* QuranUITests */,
 				5484C2DD1ED8C00C0068025A /* QuranTests */,
+				54E72D951F9C1B2A00F85B67 /* ViewConstrainer */,
 			);
 		};
 /* End PBXProject section */
@@ -2621,6 +2722,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2659,6 +2761,13 @@
 				54699B8F1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib in Resources */,
 				5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54E72D941F9C1B2A00F85B67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2919,7 +3028,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AEF32652F2759A39CCB1CBEC /* [CP] Embed Pods Frameworks */ = {
@@ -3134,6 +3243,7 @@
 				543FE0191EB3B94100687DF8 /* UIColor+Extension.swift in Sources */,
 				543FE0171EB3B94100687DF8 /* CALayer+Extension.swift in Sources */,
 				543FE01D1EB3B94100687DF8 /* UIViewController+Extension.swift in Sources */,
+				5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */,
 				543FE0261EB3C0C000687DF8 /* SimultenousGestureDelegate.swift in Sources */,
 				5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,
@@ -3394,6 +3504,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		54E72D911F9C1B2A00F85B67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54E72DA81F9C1BA700F85B67 /* SingleConstrainer.swift in Sources */,
+				54E72DA61F9C1B9A00F85B67 /* GroupConstrainer.swift in Sources */,
+				54E72DA41F9C1B8400F85B67 /* ViewConstrainer.swift in Sources */,
+				54E72DAA1F9C1BB800F85B67 /* UIView+Const.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3456,6 +3577,11 @@
 			isa = PBXTargetDependency;
 			target = 54B265E21CC57D8E00D3AEF8 /* Quran */;
 			targetProxy = 5484C2E31ED8C00C0068025A /* PBXContainerItemProxy */;
+		};
+		54E72D9C1F9C1B2A00F85B67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54E72D951F9C1B2A00F85B67 /* ViewConstrainer */;
+			targetProxy = 54E72D9B1F9C1B2A00F85B67 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4092,6 +4218,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1C4D17DF9C049CBECBB13FE /* Pods-Quran.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4121,6 +4248,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4136,10 +4264,76 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ab1cc3f1-3b39-4bfc-a995-6d549c1ad679";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: com.quran.ios";
+				PROVISIONING_PROFILE = "0942cc72-3362-4f11-bbd8-1d5924524335";
+				PROVISIONING_PROFILE_SPECIFIER = "Quran App Store Dist";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		54E72D9F1F9C1B2A00F85B67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MKP73M5X4A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ViewConstrainer/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ViewConstrainer;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		54E72DA01F9C1B2A00F85B67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MKP73M5X4A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ViewConstrainer/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ViewConstrainer;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -4223,6 +4417,15 @@
 			buildConfigurations = (
 				54B265F81CC57D8F00D3AEF8 /* Debug */,
 				54B265F91CC57D8F00D3AEF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54E72DA11F9C1B2A00F85B67 /* Build configuration list for PBXNativeTarget "ViewConstrainer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54E72D9F1F9C1B2A00F85B67 /* Debug */,
+				54E72DA01F9C1B2A00F85B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

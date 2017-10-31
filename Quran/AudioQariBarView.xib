@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,7 +34,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </button>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iN0-l3-epB">
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iN0-l3-epB" userLabel="Qari">
                     <rect key="frame" x="196" y="0.0" width="208" height="44"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Abdurrahman As-Sudais" translatesAutoresizingMaskIntoConstraints="NO" id="dTH-Zk-EFD">
@@ -62,7 +64,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" horizontalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZU-5A-szn">
-                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                    <rect key="frame" x="20" y="0.0" width="44" height="44"/>
                     <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                     <state key="normal" image="ic_play"/>
                 </button>
@@ -74,29 +76,15 @@
                 <constraint firstItem="iN0-l3-epB" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="E7m-cK-JGi"/>
                 <constraint firstAttribute="bottom" secondItem="VB4-iz-Fjs" secondAttribute="bottom" id="F1u-zd-t6X"/>
                 <constraint firstAttribute="trailing" secondItem="VB4-iz-Fjs" secondAttribute="trailing" id="GDa-vB-b5v"/>
-                <constraint firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="NHB-U8-MpO"/>
-                <constraint firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="Nap-ZR-aQy"/>
+                <constraint firstAttribute="bottomMargin" secondItem="iN0-l3-epB" secondAttribute="bottom" id="Nap-ZR-aQy"/>
                 <constraint firstItem="iN0-l3-epB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sZU-5A-szn" secondAttribute="trailing" constant="5" id="Pep-e7-dah"/>
-                <constraint firstAttribute="bottom" secondItem="sZU-5A-szn" secondAttribute="bottom" id="Vtv-Iw-FyJ"/>
-                <constraint firstItem="sZU-5A-szn" firstAttribute="leading" secondItem="To9-r8-ZrW" secondAttribute="leading" id="dKI-iY-cxG"/>
+                <constraint firstItem="sZU-5A-szn" firstAttribute="leading" secondItem="To9-r8-ZrW" secondAttribute="leadingMargin" id="dKI-iY-cxG"/>
                 <constraint firstItem="sZU-5A-szn" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="eqZ-Na-FhW"/>
-                <constraint firstItem="sZU-5A-szn" firstAttribute="centerY" secondItem="To9-r8-ZrW" secondAttribute="centerY" id="fTT-ej-pVJ"/>
-                <constraint firstItem="sZU-5A-szn" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="lr7-wl-4b1"/>
                 <constraint firstItem="VB4-iz-Fjs" firstAttribute="leading" secondItem="To9-r8-ZrW" secondAttribute="leading" id="nse-7O-nlO"/>
-                <constraint firstAttribute="bottom" secondItem="sZU-5A-szn" secondAttribute="bottom" id="s0f-rK-lE3"/>
-                <constraint firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="sL9-zK-q5k"/>
+                <constraint firstAttribute="bottomMargin" secondItem="sZU-5A-szn" secondAttribute="bottom" id="s0f-rK-lE3"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="Vtv-Iw-FyJ"/>
-                    <exclude reference="fTT-ej-pVJ"/>
-                    <exclude reference="lr7-wl-4b1"/>
-                    <exclude reference="NHB-U8-MpO"/>
-                    <exclude reference="sL9-zK-q5k"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="391" y="253"/>
         </view>
     </objects>

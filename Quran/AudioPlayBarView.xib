@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AudioPlayBarView" customModule="Quran" customModuleProvider="target">
@@ -19,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUh-dd-MPZ">
-                    <rect key="frame" x="0.0" y="0.0" width="44" height="100"/>
+                    <rect key="frame" x="20" y="0.0" width="44" height="100"/>
                     <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                     <state key="normal" image="ic_stop"/>
                 </button>
@@ -42,7 +47,7 @@
                             <state key="normal" image="ic_next"/>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="qgl-kp-WgY" firstAttribute="left" secondItem="Hsd-2H-vJi" secondAttribute="left" id="4o5-6e-cQ7"/>
                         <constraint firstItem="EdY-c0-IjO" firstAttribute="left" secondItem="qgl-kp-WgY" secondAttribute="right" constant="10" id="GYG-mb-Edl"/>
@@ -57,23 +62,17 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="yUh-dd-MPZ" secondAttribute="bottom" id="Gz3-51-ysS"/>
-                <constraint firstItem="Hsd-2H-vJi" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="MK4-uv-MRo"/>
                 <constraint firstItem="Hsd-2H-vJi" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="cqk-c8-lSp"/>
                 <constraint firstItem="Hsd-2H-vJi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qps-fI-hCq"/>
                 <constraint firstAttribute="bottom" secondItem="Hsd-2H-vJi" secondAttribute="bottom" id="wq8-95-rUq"/>
-                <constraint firstItem="yUh-dd-MPZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="wu4-5g-RpM"/>
+                <constraint firstItem="yUh-dd-MPZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="wu4-5g-RpM"/>
                 <constraint firstItem="yUh-dd-MPZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zw2-IO-IBV"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="MK4-uv-MRo"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="398.5" y="336.5"/>
         </view>
     </objects>

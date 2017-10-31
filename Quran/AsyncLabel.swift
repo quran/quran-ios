@@ -66,8 +66,9 @@ class AsyncLabel: UIView {
 
     private func setUp() {
         addAutoLayoutSubview(imageView)
-        pinParentHorizontal(imageView)
-        addParentTopConstraint(imageView)
+        imageView.vc
+            .horizontalEdges()
+            .top()
     }
 
     private func renderTextInBackground() {

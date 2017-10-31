@@ -21,8 +21,12 @@
 import UIKit
 
 class QuranTranslationTranslatorNameCollectionViewCell: QuranTranslationBaseCollectionViewCell {
+    static let topPadding: CGFloat = 15
+    static let bottomPadding: CGFloat = 5
 
     let label: UILabel = UILabel()
+    private var labelLeading: NSLayoutConstraint?
+    private var labelTrailing: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -40,11 +44,15 @@ class QuranTranslationTranslatorNameCollectionViewCell: QuranTranslationBaseColl
         label.backgroundColor = .readingBackground()
 
         contentView.addAutoLayoutSubview(label)
-        contentView.pinParentAllDirections(label,
-                                           leadingValue: Layout.Translation.horizontalInset,
-                                           trailingValue: Layout.Translation.horizontalInset,
-                                           topValue: 15,
-                                           bottomValue: 5)
+        label.vc.verticalEdges(top: type(of: self).topPadding, bottom: type(of: self).bottomPadding)
+        labelLeading = label.vc.leading(by: leadingMargin).constraint
+        labelTrailing = label.vc.trailing(by: trailingMargin).constraint
+    }
+
+    override func layoutMarginsDidChange() {
+        super.layoutMarginsDidChange()
+        labelLeading?.constant = leadingMargin
+        labelTrailing?.constant = trailingMargin
     }
 
     override var backgroundColor: UIColor? {

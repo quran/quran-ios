@@ -37,8 +37,9 @@ class FullScreenLoadingTableViewCell: UITableViewCell {
         activityIndicator.hidesWhenStopped = true
 
         contentView.addAutoLayoutSubview(activityIndicator)
-        contentView.addParentCenterXConstraint(activityIndicator)
-        contentView.addParentTopConstraint(activityIndicator, value: 50)
+        activityIndicator.vc
+            .centerX()
+            .top(by: 50)
     }
 }
 

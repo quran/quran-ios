@@ -36,7 +36,7 @@ private class TableViewCell: UITableViewCell {
 
     private func setUp() {
         contentView.addAutoLayoutSubview(label)
-        contentView.pinParentAllDirections(label, leadingValue: 15, trailingValue: 15, topValue: 0, bottomValue: 0)
+        label.vc.edges(horizontalInset: 15, verticalInset: 0)
     }
 }
 

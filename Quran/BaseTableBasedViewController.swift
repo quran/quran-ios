@@ -34,7 +34,7 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
 
         let tableView = UITableView()
         view.addAutoLayoutSubview(tableView)
-        view.pinParentAllDirections(tableView)
+        tableView.vc.edges()
 
         self.tableView = tableView
     }

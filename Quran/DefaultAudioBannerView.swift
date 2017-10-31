@@ -20,9 +20,13 @@
 
 import UIKit
 
+private let viewHeight: CGFloat = 48
+
 class DefaultAudioBannerView: UIView, AudioBannerView {
 
     weak var delegate: AudioBannerViewDelegate?
+
+    private var bottomConstraint: NSLayoutConstraint?
 
     let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 
@@ -53,23 +57,36 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
 
     func setUp() {
         backgroundColor = nil
-        addHeightConstraint(48)
 
         addAutoLayoutSubview(visualEffect)
-        pinParentAllDirections(visualEffect)
+        visualEffect.vc.edges()
+
+        let contentView = UIView()
+        visualEffect.contentView.addAutoLayoutSubview(contentView)
+        contentView.vc
+            .height(by: viewHeight)
+            .horizontalEdges()
+            .top()
+        bottomConstraint = contentView.vc.bottom(usesMargins: true).constraint
 
         let borderHeight: CGFloat = UIScreen.main.scale < 2 ? 1 : 0.5
 
         let topBorder = UIView()
         topBorder.backgroundColor = UIColor.lightGray
-        topBorder.addHeightConstraint(borderHeight)
+        topBorder.vc.height(by: borderHeight)
         addAutoLayoutSubview(topBorder)
-        pinParentHorizontal(topBorder)
-        addParentTopConstraint(topBorder, value: -borderHeight)
+        topBorder.vc
+            .horizontalEdges()
+            .top(by: -borderHeight)
+
+        visualEffect.contentView.addAutoLayoutSubview(qariView)
+        for view in [playView, downloadView] {
+            contentView.addAutoLayoutSubview(view)
+        }
 
         for view in [qariView, playView, downloadView] {
-            visualEffect.contentView.addAutoLayoutSubview(view)
-            visualEffect.contentView.pinParentAllDirections(view)
+            view.vc.edges()
+
             view.backgroundColor = nil
             view.alpha = 0
         }

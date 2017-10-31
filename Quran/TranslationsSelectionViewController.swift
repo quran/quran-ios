@@ -26,7 +26,11 @@ class TranslationsSelectionViewController: TranslationsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
 
+        refreshControl?.tintColor = nil
         title = NSLocalizedString("translationsSelectionTitle", comment: "")
         navigationItem.prompt = NSLocalizedString("translationsSelectionPrompt", comment: "")
         navigationItem.titleView = nil

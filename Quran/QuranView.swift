@@ -20,6 +20,7 @@
 import MenuItemKit
 import Popover_OC
 import UIKit
+import ViewConstrainer
 
 private struct GestureInfo {
     let cell: QuranBasePageCollectionViewCell
@@ -62,8 +63,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     lazy var audioView: DefaultAudioBannerView = {
         let audioView = DefaultAudioBannerView()
         self.addAutoLayoutSubview(audioView)
-        self.pinParentHorizontal(audioView)
-        self.bottomBarConstraint = self.addParentBottomConstraint(audioView)
+        self.bottomBarConstraint = audioView.vc
+            .horizontalEdges()
+            .bottom().constraint
         return audioView
     }()
 
@@ -74,11 +76,16 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layout.minimumInteritemSpacing = 0
 
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
         if #available(iOS 9.0, *) {
             collectionView.semanticContentAttribute = .forceRightToLeft
         }
         self.addAutoLayoutSubview(collectionView)
-        self.pinParentAllDirections(collectionView, leadingValue: -5, trailingValue: -5)
+        collectionView.vc
+            .verticalEdges()
+            .horizontalEdges(inset: -Layout.QuranCell.horizontalInset)
 
         collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true
@@ -109,11 +116,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let container = UIView()
         container.isHidden = true
         container.addAutoLayoutSubview(imageView)
-        container.addParentCenter(imageView)
+        imageView.vc.center()
 
         self.addAutoLayoutSubview(container)
-        container.addSizeConstraints(width: 44, height: 44)
-        self._pointerTop = self.addParentTopConstraint(container)
+        self._pointerTop = container.vc
+            .size(by: 44)
+            .top().constraint
         self._pointerLeft = container.leftAnchor.constraint(equalTo: self.leftAnchor)
         self._pointerLeft?.isActive = true
         return container
@@ -176,9 +184,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             removeConstraint(bottomBarConstraint)
         }
         if hidden {
-            bottomBarConstraint = addSiblingVerticalContiguous(top: self, bottom: audioView)
+            bottomBarConstraint = self.vc.verticalLine(audioView).constraint
         } else {
-            bottomBarConstraint = addParentBottomConstraint(audioView)
+            bottomBarConstraint = audioView.vc.bottom().constraint
         }
     }
 

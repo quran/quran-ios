@@ -24,6 +24,18 @@ class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
 
     var ayah: AyahNumber?
 
+    var leadingMargin: CGFloat {
+        return Layout.QuranCell.horizontalInset +
+               Layout.Translation.horizontalInset +
+               Layout.windowDirectionalLayoutMargins.leading
+    }
+
+    var trailingMargin: CGFloat {
+        return Layout.QuranCell.horizontalInset +
+               Layout.Translation.horizontalInset +
+               Layout.windowDirectionalLayoutMargins.trailing
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setUp()

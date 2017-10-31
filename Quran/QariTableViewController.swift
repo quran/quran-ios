@@ -58,6 +58,9 @@ class QariTableViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = nil
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.ds_register(cellNib: QariTableViewCell.self)

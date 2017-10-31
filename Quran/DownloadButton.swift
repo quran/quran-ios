@@ -113,14 +113,14 @@ class DownloadButton: UIView {
     private func setUp() {
         for view in stateViews {
             addAutoLayoutSubview(view)
-            var constraints: [NSLayoutConstraint] = []
-            constraints.append(addParentTrailingConstraint(view))
-            constraints.append(addParentCenterYConstraint(view))
+            var constraints = view.vc.trailing()
+                .centerY()
+                .chain
 
             if view == upgrade {
-                constraints.append(view.leadingAnchor.constraint(equalTo: leadingAnchor))
+                constraints.append(view.vc.leading(to: self).constraint)
             } else {
-                constraints.append(widthAnchor.constraint(equalToConstant: 45))
+                constraints.append(self.vc.width(by: 45).constraint)
             }
 
             if view == download {

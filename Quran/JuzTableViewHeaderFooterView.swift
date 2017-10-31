@@ -45,20 +45,25 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         addGestureRecognizer(tapGesture)
         tapGesture.addTarget(self, action: #selector(onViewTapped))
 
-        contentView.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
+        backgroundView = UIView()
+        let backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
+        contentView.backgroundColor = backgroundColor
+        backgroundView?.backgroundColor = backgroundColor
 
         titleLabel.textColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         contentView.addAutoLayoutSubview(titleLabel)
-        contentView.pinParentVertical(titleLabel)
-        contentView.addParentLeadingConstraint(titleLabel, value: 20)
+        titleLabel.vc
+            .verticalEdges()
+            .leading(by: 20)
 
         subtitleLabel.textColor = #colorLiteral(red: 0.2941176471, green: 0.2941176471, blue: 0.2941176471, alpha: 1)
         subtitleLabel.font = UIFont.systemFont(ofSize: 12)
         subtitleLabel.textAlignment = .right
         contentView.addAutoLayoutSubview(subtitleLabel)
-        contentView.pinParentVertical(subtitleLabel)
-        contentView.addParentTrailingConstraint(subtitleLabel, value: 10)
+        subtitleLabel.vc
+            .verticalEdges()
+            .trailing(by: 10)
     }
 
     @objc

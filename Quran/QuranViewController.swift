@@ -179,6 +179,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+        }
+        updateSafeAreaInsets(hidden: navigationController?.isNavigationBarHidden == true)
         quranView?.delegate = self
         quranNavigationBar.delegate = self
 
@@ -300,9 +304,18 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
         // animate the change
         UIView.animate(withDuration: 0.3, animations: {
+            self.updateSafeAreaInsets(hidden: hidden)
+
             self.statusBarHidden = hidden
             self.view.layoutIfNeeded()
         })
+    }
+
+    private func updateSafeAreaInsets(hidden: Bool) {
+        if #available(iOS 11.0, *) {
+            let navigationBarHeight = self.navigationController?.navigationBar.bounds.height ?? 0
+            self.additionalSafeAreaInsets = UIEdgeInsets(top: hidden ? 0 : -navigationBarHeight, left: 0, bottom: 0, right: 0)
+        }
     }
 
     fileprivate func startHiddenBarsTimer() {

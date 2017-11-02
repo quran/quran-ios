@@ -1,0 +1,42 @@
+{
+  "default": {
+    "keyword": {
+      "fonts": [{ "font": "../fonts/Roboto-Black.ttf" }],
+      "color": "#ffffff"
+    },
+    "title": {
+      "fonts": [{ "font": "../fonts/Roboto-Light.ttf" }],
+      "color": "#ffffff"
+    },
+    "background": "./background.jpg",
+    "padding": 50
+  },
+
+  "data": [
+    {
+      "filter": "arabic",
+      "keyword": { "text": "Offline Quran" },
+      "title": { "text": "reading & listening" }
+    },
+    {
+      "filter": "translation",
+      "keyword": { "text": "50 Translations" },
+      "title": { "text": "with 30+ languages" }
+    },
+    {
+      "filter": "bookmarks",
+      "keyword": { "text": "Bookmark" },
+      "title": { "text": "pages and verses" }
+    },
+    {
+      "filter": "qaris",
+      "keyword": { "text": "Listen" },
+      "title": { "text": "to 30+ reciters" }
+    },
+    {
+      "filter": "search",
+      "keyword": { "text": "Search" },
+      "title": { "text": "for verses" }
+    }
+  ]
+}

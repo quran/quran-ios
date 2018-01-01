@@ -156,6 +156,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // Long press gesture on verses to select
         addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
 
+        // Prevent long tap gesture on audio bottom bar
+        audioView.addGestureRecognizer(UILongPressGestureRecognizer(target: nil, action: nil))
+
         // pointer dragging
         let pointerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onPointerPanned(_:)))
         pointer.addGestureRecognizer(pointerPanGesture)

@@ -18,7 +18,6 @@
 //  GNU General Public License for more details.
 //
 import SQLite
-import sqlite3
 import VFoundation
 
 public protocol ReadonlySQLitePersistence {

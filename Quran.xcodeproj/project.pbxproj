@@ -555,8 +555,6 @@
 		54236C481DD4F79F002E6FD3 /* LastPageUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPageUpdater.swift; sourceTree = "<group>"; };
 		5424773C1E7856040051C196 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
 		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
-		542732FB1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		542732FD1EB697CD00DC5C0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		542DCBC61ECC4BDC0023D6FD /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
@@ -1103,36 +1101,10 @@
 		542732F31EB697A000DC5C0F /* support */ = {
 			isa = PBXGroup;
 			children = (
-				542732F91EB697CD00DC5C0F /* modules */,
 				546784361EB29FD20012FA2C /* SQLitePersistence.h */,
 				546784371EB29FD20012FA2C /* Info.plist */,
 			);
 			name = support;
-			sourceTree = "<group>";
-		};
-		542732F91EB697CD00DC5C0F /* modules */ = {
-			isa = PBXGroup;
-			children = (
-				542732FA1EB697CD00DC5C0F /* iphoneos */,
-				542732FC1EB697CD00DC5C0F /* iphonesimulator */,
-			);
-			path = modules;
-			sourceTree = "<group>";
-		};
-		542732FA1EB697CD00DC5C0F /* iphoneos */ = {
-			isa = PBXGroup;
-			children = (
-				542732FB1EB697CD00DC5C0F /* module.modulemap */,
-			);
-			path = iphoneos;
-			sourceTree = "<group>";
-		};
-		542732FC1EB697CD00DC5C0F /* iphonesimulator */ = {
-			isa = PBXGroup;
-			children = (
-				542732FD1EB697CD00DC5C0F /* module.modulemap */,
-			);
-			path = iphonesimulator;
 			sourceTree = "<group>";
 		};
 		542DCBC31ECC332E0023D6FD /* Services */ = {

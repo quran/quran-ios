@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* Review.swift */; };
+		06012EE9206FF079001F94F9 /* AVQueuePlayerFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012EE8206FF079001F94F9 /* AVQueuePlayerFacade.swift */; };
+		06012EEB20701A4B001F94F9 /* PlayerItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */; };
+		06012F5D2075A403001F94F9 /* Playing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012F5C2075A403001F94F9 /* Playing.swift */; };
+		06012F5F2075A560001F94F9 /* Runs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012F5E2075A560001F94F9 /* Runs.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
 		32A3FD57144E0B1B02BB1729 /* Pods_BatchDownloader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAAEAA5F6076B29DB5FE44 /* Pods_BatchDownloader.framework */; };
@@ -465,6 +469,10 @@
 
 /* Begin PBXFileReference section */
 		00A59CDA1DDFC044C1625C25 /* Pods-UIKitExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIKitExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-UIKitExtension/Pods-UIKitExtension.release.xcconfig"; sourceTree = "<group>"; };
+		06012EE8206FF079001F94F9 /* AVQueuePlayerFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVQueuePlayerFacade.swift; sourceTree = "<group>"; };
+		06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerItemInfo.swift; sourceTree = "<group>"; };
+		06012F5C2075A403001F94F9 /* Playing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playing.swift; sourceTree = "<group>"; };
+		06012F5E2075A560001F94F9 /* Runs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runs.swift; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D0BF1B3207F42E40022B6EE /* Review.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1328,7 +1336,11 @@
 		543FE0381EB3C1C300687DF8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */,
+				06012EE8206FF079001F94F9 /* AVQueuePlayerFacade.swift */,
 				543FE0391EB3C1CB00687DF8 /* QueuePlayer.swift */,
+				06012F5C2075A403001F94F9 /* Playing.swift */,
+				06012F5E2075A560001F94F9 /* Runs.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -3245,7 +3257,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06012F5D2075A403001F94F9 /* Playing.swift in Sources */,
 				543FE03A1EB3C1CB00687DF8 /* QueuePlayer.swift in Sources */,
+				06012EE9206FF079001F94F9 /* AVQueuePlayerFacade.swift in Sources */,
+				06012EEB20701A4B001F94F9 /* PlayerItemInfo.swift in Sources */,
+				06012F5F2075A560001F94F9 /* Runs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

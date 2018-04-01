@@ -17,72 +17,322 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import AVFoundation
-import KVOController
 import MediaPlayer
 import VFoundation
 
-public struct PlayerItemInfo {
-    public let title: String
-    public let artist: String
-    public let artwork: MPMediaItemArtwork?
-    public init(title: String, artist: String, artwork: MPMediaItemArtwork?) {
-        self.title = title
-        self.artist = artist
-        self.artwork = artwork
-    }
-}
-
-private class _Observer: NSObject {
-}
-
 open class QueuePlayer: NSObject {
+    private let player: AVQueuePlayerFacade = AVQueuePlayerFacade()
 
-    let player: AVQueuePlayer = AVQueuePlayer()
-
-    fileprivate (set) var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
-    var playingItems: [AVPlayerItem] = []
-    var playingItemsInfo: [PlayerItemInfo] = []
+    private var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
+    private var playingItems: [AVPlayerItem] = []
+    private var playingItemsInfo: [PlayerItemInfo] = []
+    public var verseRuns: Runs = .one
+    private var playing: Playing?
 
     open var onPlaybackEnded: (() -> Void)?
     open var onPlayerItemChangedTo: ((AVPlayerItem?) -> Void)?
     open var onPlaybackStartingTimeFrame: ((_ item: AVPlayerItem, _ timeIndex: Int) -> Void)?
     open var onPlaybackRateChanged: ((_ playing: Bool) -> Void)?
 
-    fileprivate var timeObserver: AnyObject? {
-        didSet {
-            if let oldValue = oldValue {
-                player.removeTimeObserver(oldValue)
-            }
-        }
-    }
-
-    fileprivate var durationObserver: _Observer? {
-        didSet {
-            oldValue?.kvoController.unobserveAll()
-        }
-    }
-
-    fileprivate var rateObserver: _Observer? {
-        didSet {
-            oldValue?.kvoController.unobserveAll()
-        }
-    }
-
     public override init() {
         super.init()
 
-        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [.defaultToSpeaker, .allowBluetooth])
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [.defaultToSpeaker, .allowBluetooth])
         player.actionAtItemEnd = .advance
 
         setUpRemoteControlEvents()
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    open func play(startTimeInSeconds: Double = 0,
+                   items: [AVPlayerItem],
+                   info: [PlayerItemInfo],
+                   boundaries: [AVPlayerItem: [Double]]) {
+
+        guard items.count == info.count && items.count == boundaries.count else {
+            VFoundation.fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
+        }
+
+        playing = nil
+        playingItems = items
+        playingItemsInfo = info
+        playingItemBoundaries = boundaries
+
+        player.addRateObserver { [weak self] newValue in
+            self?.updatePlayNowInfo()
+            if let newValue = newValue {
+                self?.onPlaybackRateChanged?(newValue != 0)
+            }
+        }
+        player.addInterruptionObserver { [weak self] shouldResume in
+            if shouldResume {
+                self?.player.play()
+            }
+        }
+        setCommandsEnabled(true)
+
+        play(from: startTimeInSeconds, itemIndex: 0)
     }
 
-    fileprivate func setUpRemoteControlEvents() {
+    open func pause() {
+        player.pause()
+    }
+
+    open func resume() {
+        player.play()
+    }
+
+    open func stop() {
+        stopPlayback()
+    }
+
+    open func oneStepForward() {
+        playing = nil
+        guard let currentItem = player.currentItem,
+            let boundaries = playingItemBoundaries[currentItem] else {
+            return
+        }
+
+        let timeIndex = findCurrentTimeIndexUsingBinarySearch()
+
+        if timeIndex + 1 < boundaries.count {
+            // play next time range
+            let newTimeIndex = timeIndex + 1
+            player.seek(to: boundaries[newTimeIndex])
+        } else {
+            // play next item
+            guard playingItems.last != player.currentItem else {
+                stopPlayback()
+                return
+            }
+            playNextAudioItem()
+        }
+        recalculateAndNotifyCurrentTimeChange()
+    }
+
+    private func playNextAudioItem() {
+        let oldRate = player.rate
+
+        startFromBegining()
+        player.advanceToNextItem()
+        player.play()
+
+        player.rate = oldRate
+    }
+
+    open func oneStepBackward() {
+        playing = nil
+        guard let currentItem = player.currentItem,
+              let boundaries = playingItemBoundaries[currentItem] else {
+                return
+        }
+
+        let timeIndex = findCurrentTimeIndexUsingBinarySearch()
+        if timeIndex - 1 >= 0 {
+            // play previous time range
+            let newTimeIndex = timeIndex - 1
+            player.seek(to: boundaries[newTimeIndex])
+            let oldRate = player.rate
+            player.play()
+            player.rate = oldRate
+        } else {
+            // play previous item
+            let currentItemIndex = playingItems.index(of: currentItem) ?? 0
+            let previousItemIndex = currentItemIndex - 1
+            guard previousItemIndex >= 0 else {
+                stopPlayback()
+                return
+            }
+            let previousItem = playingItems[previousItemIndex]
+            guard let previousBoundaries = playingItemBoundaries[previousItem] else {
+                return
+            }
+
+            let oldRate = player.rate
+            play(from: previousBoundaries[previousBoundaries.count - 1], itemIndex: previousItemIndex)
+            player.rate = oldRate
+        }
+        recalculateAndNotifyCurrentTimeChange()
+    }
+
+    private func play(from timeInSeconds: Double, itemIndex: Int) {
+        startFromBegining()
+        removeCurrentItemObservers()
+        player.removeAllItems()
+        playingItems.suffix(from: itemIndex).forEach { player.insert($0, after: nil) }
+        player.seek(to: timeInSeconds)
+        player.play()
+        addCurrentItemObserver()
+    }
+
+    fileprivate func startFromBegining() {
+        player.pause()
+        player.seek(to: 0)
+    }
+
+    fileprivate func addCurrentItemObserver() {
+        player.addCurrentItemObserver { [weak self] newItem in
+            self?.currentItemChanged(newItem)
+        }
+    }
+
+    private func currentItemChanged(_ newValue: AVPlayerItem?) {
+        guard let newValue = newValue else { return }
+
+        player.addCurrentItemReachedEndObserver(newValue) { [weak self] in
+            guard let `self` = self else { return }
+            // determine to repeat or stop playback
+            if self.playingItems.last == self.player.currentItem {
+                if self.verseRunsCompleted() {
+                    // last item finished playing
+                    self.stopPlayback()
+                } else {
+                    self.onTimeChange()
+                }
+            }
+        }
+        player.addDurationObserver(to: newValue) { [weak self] in
+            self?.updatePlayNowInfo()
+        }
+        startBoundaryObserver(newValue)
+        notifyPlayerItemChangedTo(newValue)
+        onTimeChange()
+        updatePlayNowInfo()
+    }
+
+    private func startBoundaryObserver(_ newItem: AVPlayerItem) {
+        guard var times = playingItemBoundaries[newItem] else { return }
+        // we don't get notified by boundary change of 0
+        if times[0] == 0 {
+            times[0] = 0.01
+        }
+        player.addBoundaryTimeObserver(for: times) { [weak self] in
+            self?.onTimeChange()
+        }
+    }
+
+    private func onTimeChange() {
+        guard let currentItem = player.currentItem else { return }
+        let timeIndex = findCurrentTimeIndexUsingBinarySearch()
+        let ignore =
+            playing?.item == currentItem &&
+            timeIndex == (playing?.time ?? -1) &&
+            (playing?.recentlyUpdated ?? false)
+        if !ignore {
+            if let playing = self.playing, !verseRunsCompleted() {
+                self.playing?.increment()
+                replay(item: playing.item, timeIndex: playing.time)
+            } else {
+                self.playing = Playing(item: currentItem, time: timeIndex)
+            }
+        }
+        // notify only on first play
+        if self.playing?.plays == 0 {
+            self.notifyCurrentTimeChanged(currentItem, timeIndex: timeIndex)
+        }
+    }
+
+    private func recalculateAndNotifyCurrentTimeChange() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard let currentItem = self.player.currentItem else { return }
+            let timeIndex = self.findCurrentTimeIndexUsingBinarySearch()
+            self.notifyCurrentTimeChanged(currentItem, timeIndex: timeIndex)
+        }
+    }
+
+    private func verseRunsCompleted() -> Bool {
+        if verseRuns == .indefinite {
+            return false
+        }
+        if let playing = playing {
+            return playing.plays  + 1 >= verseRuns.maxRuns
+        }
+        return false
+    }
+
+    private func replay(item: AVPlayerItem, timeIndex: Int) {
+        guard let itemIndex = playingItems.index(of: item),
+              let times = playingItemBoundaries[item] else {
+            return
+        }
+        play(from: times[timeIndex], itemIndex: itemIndex)
+    }
+
+    private func removeCurrentItemObservers() {
+        player.removeCurrentItemReachedEndObserver()
+        player.removeDurationObserver()
+        player.removeCurrentItemObserver()
+        player.removeBoundaryTimeObserver()
+    }
+
+    private func stopPlayback() {
+        setCommandsEnabled(false)
+        removeCurrentItemObservers()
+        player.removeInterruptionObserver()
+        player.removeRateObserver()
+        playingItems.removeAll(keepingCapacity: true)
+        playingItemBoundaries.removeAll(keepingCapacity: true)
+        player.removeAllItems()
+        playing = nil
+        updatePlayNowInfo()
+        notifyPlaybackEnded()
+    }
+
+    fileprivate func notifyPlaybackEnded() {
+        onPlaybackEnded?()
+    }
+
+    fileprivate func notifyPlayerItemChangedTo(_ newItem: AVPlayerItem?) {
+        onPlayerItemChangedTo?(newItem)
+    }
+
+    fileprivate func notifyCurrentTimeChanged(_ newItem: AVPlayerItem, timeIndex: Int) {
+        onPlaybackStartingTimeFrame?(newItem, timeIndex)
+    }
+}
+
+extension QueuePlayer {
+    private func findCurrentTimeIndexUsingBinarySearch() -> Int {
+        guard let currentItem = player.currentItem,
+            let times = playingItemBoundaries[currentItem] else {
+                VFoundation.fatalError("Cannot find current time when there are no audio playing.")
+        }
+        let time = player.currentTime.seconds
+
+        if times.isEmpty {
+            guard var index = playingItems.index(of: currentItem) else {
+                VFoundation.fatalError("Couldn't find current item in the play list.")
+            }
+            while index > 0 {
+                guard let times = playingItemBoundaries[playingItems[index - 1]] else {
+                    VFoundation.fatalError("Cannot find previous times in the array.")
+                }
+                if !times.isEmpty {
+                    return times.count - 1
+                }
+                index -= 1
+            }
+            VFoundation.fatalError("First item should have a monitor location")
+        }
+
+        // search through the array
+        return binarySearch(times, value: time + 0.2)
+    }
+
+    private func binarySearch(_ values: [Double], value: Double) -> Int {
+        let index = values.binarySearch(value)
+        guard index < values.count else {
+            return values.count - 1
+        }
+        if value < values[index] && index > 0 {
+            return index - 1
+        } else {
+            return index
+        }
+    }
+}
+
+extension QueuePlayer {
+    private func setUpRemoteControlEvents() {
         let center = MPRemoteCommandCenter.shared()
         center.playCommand.addTarget (handler: { [weak self] _ in
             self?.resume()
@@ -101,11 +351,11 @@ open class QueuePlayer: NSObject {
             return .success
         })
         center.nextTrackCommand.addTarget (handler: { [weak self] _ in
-            self?.onStepForward()
+            self?.oneStepForward()
             return .success
         })
         center.previousTrackCommand.addTarget (handler: { [weak self] _ in
-            self?.onStepBackward()
+            self?.oneStepBackward()
             return .success
         })
         setCommandsEnabled(false)
@@ -115,201 +365,18 @@ open class QueuePlayer: NSObject {
             [center.seekForwardCommand, center.seekBackwardCommand, center.skipForwardCommand,
              center.skipBackwardCommand, center.ratingCommand, center.changePlaybackRateCommand,
              center.likeCommand, center.dislikeCommand, center.bookmarkCommand, center.changePlaybackPositionCommand].forEach { $0.isEnabled = false }
-        } else {
-            // Fallback on earlier versions
         }
     }
 
-    func setCommandsEnabled(_ enabled: Bool) {
+    private func setCommandsEnabled(_ enabled: Bool) {
         let center = MPRemoteCommandCenter.shared()
         [center.playCommand, center.pauseCommand, center.togglePlayPauseCommand,
-            center.nextTrackCommand, center.previousTrackCommand].forEach { $0.isEnabled = enabled }
+         center.nextTrackCommand, center.previousTrackCommand].forEach { $0.isEnabled = enabled }
     }
+}
 
-    open func play(startTimeInSeconds: Double = 0,
-                   items: [AVPlayerItem],
-                   info: [PlayerItemInfo],
-                   boundaries: [AVPlayerItem: [Double]]) {
-
-        guard items.count == info.count && items.count == boundaries.count else {
-            VFoundation.fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
-        }
-
-        playingItems = items
-        playingItemsInfo = info
-        self.playingItemBoundaries = boundaries
-
-        rateObserver = _Observer()
-        rateObserver?.kvoController.observe(player, keyPath: #keyPath(AVQueuePlayer.rate),
-                                            options: [.initial, .new], block: { [weak self] (_, _, change) in
-            self?.updatePlayNowInfo()
-            if let newValue = change[NSKeyValueChangeKey.newKey.rawValue] as? Int {
-                self?.onPlaybackRateChanged?(newValue != 0)
-            }
-        })
-
-        // enqueue new items
-        player.removeAllItems()
-        items.forEach { self.player.insert($0, after: nil) }
-
-        seekTo(startTimeInSeconds)
-        player.play()
-        addCurrentItemObserver()
-        _currentItemChanged(player.currentItem)
-        setCommandsEnabled(true)
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onAudioInterruptionStateChanged(_:)),
-                                               name: NSNotification.Name.AVAudioSessionInterruption,
-                                               object: nil)
-    }
-
-    open func pause() {
-        player.pause()
-    }
-
-    open func resume() {
-        player.play()
-    }
-
-    open func stop() {
-        stopPlayback()
-    }
-
-    open func onStepForward() {
-        guard let currentItem = player.currentItem,
-            let boundaries = playingItemBoundaries[currentItem] else {
-            return
-        }
-
-        let currentIndex = findCurrentTimeIndexUsingBinarySearch()
-
-        if currentIndex + 1 < boundaries.count {
-            let newTimeIndex = currentIndex + 1
-            seekTo(boundaries[newTimeIndex])
-        } else {
-            playNextAudio(starting: 0)
-        }
-        recalculateAndNotifyCurrentTimeChange()
-    }
-
-    open func onStepBackward() {
-        guard let currentItem = player.currentItem,
-            let boundaries = playingItemBoundaries[currentItem] else {
-                return
-        }
-
-        let currentIndex = findCurrentTimeIndexUsingBinarySearch()
-
-        if currentIndex - 1 >= 0 {
-            let newTimeIndex = currentIndex - 1
-            seekTo(boundaries[newTimeIndex])
-        } else {
-
-            let index = playingItems.index(of: currentItem) ?? 0
-            guard index > 0 else {
-                stop()
-                return
-            }
-            guard let previousBoundaries = playingItemBoundaries[playingItems[index - 1]] else { return }
-
-            let newTimeIndex = previousBoundaries.count - 1
-            playPreviousAudio(starting: previousBoundaries[newTimeIndex])
-        }
-        recalculateAndNotifyCurrentTimeChange()
-    }
-
-    fileprivate func playNextAudio(starting timeInSeconds: Double) {
-        guard playingItems.last != player.currentItem else {
-            stop()
-            return
-        }
-
-        let oldRate = player.rate
-
-        startFromBegining()
-        player.advanceToNextItem()
-        seekTo(timeInSeconds)
-        player.play()
-        player.rate = oldRate
-    }
-
-    fileprivate func playPreviousAudio(starting timeInSeconds: Double) {
-        guard let currentItem = player.currentItem,
-            var index = playingItems.index(of: currentItem) else {
-                return
-        }
-
-        index -= 1
-        guard index >= 0 else {
-            stop()
-            return
-        }
-
-        let oldRate = player.rate
-
-        startFromBegining()
-
-        removeCurrentItemObserver()
-        player.removeAllItems()
-        for i in index..<playingItems.count {
-            player.insert(playingItems[i], after: nil)
-        }
-        addCurrentItemObserver()
-        seekTo(timeInSeconds)
-        _currentItemChanged(player.currentItem)
-        player.play()
-        player.rate = oldRate
-    }
-
-    fileprivate func startFromBegining() {
-        player.pause()
-        seekTo(0)
-    }
-
-    fileprivate func seekTo(_ timeInSeconds: Double) {
-        let time = CMTime(seconds: timeInSeconds, preferredTimescale: 1_000)
-        player.seek(to: time)
-    }
-
-    fileprivate func addCurrentItemObserver() {
-        kvoController.observe(player, keyPath: #keyPath(AVQueuePlayer.currentItem), options: .new,
-                              block: { [weak self] (_: Any, _: Any, change: [String: Any]) in
-            self?._currentItemChanged(change[NSKeyValueChangeKey.newKey.rawValue] as? AVPlayerItem)
-        })
-    }
-
-    fileprivate func _currentItemChanged(_ newValue: AVPlayerItem?) {
-        guard let newValue = newValue else { return }
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onCurrentItemReachedEnd),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: newValue)
-
-        durationObserver = _Observer()
-        durationObserver?.kvoController.observe(newValue, keyPath: #keyPath(AVPlayerItem.duration),
-                                                options: [.initial, .new], block: { [weak self] (_, _, _) in
-            self?.updatePlayNowInfo()
-        })
-
-        startBoundaryObserver(newValue)
-        notifyPlayerItemChangedTo(newValue)
-        recalculateAndNotifyCurrentTimeChange()
-        updatePlayNowInfo()
-    }
-
-    @objc
-    func onCurrentItemReachedEnd() {
-        // determine to repeat or start next one
-
-        if playingItems.last == player.currentItem {
-            // last item finished playing
-            stop()
-        }
-    }
-
-    fileprivate func updatePlayNowInfo() {
+extension QueuePlayer {
+    private func updatePlayNowInfo() {
         let center = MPNowPlayingInfoCenter.default()
 
         guard let currentItem = player.currentItem, let index = playingItems.index(of: currentItem) else {
@@ -333,122 +400,5 @@ open class QueuePlayer: NSObject {
         info[MPMediaItemPropertyArtist] = itemInfo.artist as AnyObject
         info[MPMediaItemPropertyArtwork] = itemInfo.artwork
         center.nowPlayingInfo = info
-    }
-
-    fileprivate func startBoundaryObserver(_ newItem: AVPlayerItem) {
-        guard let times = playingItemBoundaries[newItem] else { return }
-
-        let timeValues = times.map { NSValue(time: CMTime(seconds: $0, preferredTimescale: 1_000)) }
-        timeObserver = player.addBoundaryTimeObserver(forTimes: timeValues, queue: nil) { [weak self] in
-            self?.onTimeBoundaryReached()
-        } as AnyObject
-    }
-
-    fileprivate func onTimeBoundaryReached() {
-        recalculateAndNotifyCurrentTimeChange()
-    }
-
-    fileprivate func recalculateAndNotifyCurrentTimeChange() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            guard let currentItem = self.player.currentItem else { return }
-            let timeIndex = self.findCurrentTimeIndexUsingBinarySearch()
-            self.notifyCurrentTimeChanged(currentItem, timeIndex: timeIndex)
-        }
-    }
-
-    fileprivate func removeCurrentItemObserver() {
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        kvoController.unobserve(self.player, keyPath: #keyPath(AVQueuePlayer.currentItem))
-    }
-
-    fileprivate func removeInterruptionNotification() {
-        NotificationCenter.default.removeObserver(self, name: .AVAudioSessionInterruption, object: nil)
-    }
-
-    fileprivate func stopPlayback() {
-        setCommandsEnabled(false)
-        removeInterruptionNotification()
-        removeCurrentItemObserver()
-        rateObserver = nil
-        timeObserver = nil
-        durationObserver = nil
-        playingItems.removeAll(keepingCapacity: true)
-        playingItemBoundaries.removeAll(keepingCapacity: true)
-        player.removeAllItems()
-        updatePlayNowInfo()
-        notifyPlaybackEnded()
-    }
-
-    @objc
-    func onAudioInterruptionStateChanged(_ notification: Notification) {
-        guard let info = (notification as NSNotification).userInfo, notification.name == .AVAudioSessionInterruption else {
-            return
-        }
-
-        guard let rawType = info[AVAudioSessionInterruptionTypeKey] as? UInt, let type = AVAudioSessionInterruptionType(rawValue: rawType) else {
-            return
-        }
-
-        switch type {
-        case .began: break
-        case .ended:
-            if let rawOptions = info[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSessionInterruptionOptions(rawValue: rawOptions)
-                if options.contains(.shouldResume) {
-                    player.play()
-                }
-            }
-        }
-    }
-
-    fileprivate func notifyPlaybackEnded() {
-        onPlaybackEnded?()
-    }
-
-    fileprivate func notifyPlayerItemChangedTo(_ newItem: AVPlayerItem?) {
-        onPlayerItemChangedTo?(newItem)
-    }
-
-    fileprivate func notifyCurrentTimeChanged(_ newItem: AVPlayerItem, timeIndex: Int) {
-        onPlaybackStartingTimeFrame?(newItem, timeIndex)
-    }
-
-    fileprivate func findCurrentTimeIndexUsingBinarySearch() -> Int {
-        guard let currentItem = player.currentItem,
-            let times = playingItemBoundaries[currentItem] else {
-            VFoundation.fatalError("Cannot find current time when there are no audio playing.")
-        }
-        let time = player.currentTime().seconds
-
-        if times.isEmpty {
-            guard var index = playingItems.index(of: currentItem) else {
-                VFoundation.fatalError("Couldn't find current item in the play list.")
-            }
-            while index > 0 {
-                guard let times = playingItemBoundaries[playingItems[index - 1]] else {
-                    VFoundation.fatalError("Cannot find previous times in the array.")
-                }
-                if !times.isEmpty {
-                    return times.count - 1
-                }
-                index -= 1
-            }
-            VFoundation.fatalError("First item should have a monitor location")
-        }
-
-        // search through the array
-        return binarySearch(times, value: time + 0.2)
-    }
-
-    fileprivate func binarySearch(_ values: [Double], value: Double) -> Int {
-        let index = values.binarySearch(value)
-        guard index < values.count else {
-            return values.count - 1
-        }
-        if value < values[index] && index > 0 {
-            return index - 1
-        } else {
-            return index
-        }
     }
 }

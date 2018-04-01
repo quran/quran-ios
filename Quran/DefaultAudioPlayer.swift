@@ -59,11 +59,11 @@ extension DefaultAudioPlayer {
     }
 
     func goForward() {
-        player.onStepForward()
+        player.oneStepForward()
     }
 
     func goBackward() {
-        player.onStepBackward()
+        player.oneStepBackward()
     }
 
     func stopPlaybackNotifications() {

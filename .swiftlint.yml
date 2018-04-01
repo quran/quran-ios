@@ -21,7 +21,7 @@ opt_in_rules:
   #NOT NEEDED - conditional_returns_on_newline
   - empty_count
   - explicit_init
-  #NOT NEEDED -explicit_type_interface
+  #NOT NEEDED - explicit_type_interface
   - fatal_error_message
   - file_header
   - first_where
@@ -63,7 +63,7 @@ file_header:
                     \/\/  .*?\.swift
                     \/\/  Quran
                     \/\/
-                    \/\/  Created by .*? on \d{1,2}\/\d{1,2}\/\d{2}\.
+                    \/\/  Created by .*? on ((\d{1,2}\/\d{1,2}\/\d{2})|(\d{4}\-\d{2}\-\d{2}))\.
                     \/\/
                     \/\/  Quran for iOS is a Quran reading application for iOS\.
                     \/\/  Copyright \(C\) 20\d{2}  Quran\.com

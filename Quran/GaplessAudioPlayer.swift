@@ -71,9 +71,6 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                 }
                 self.ayahsDictionary = ayahs
 
-                let startSuraTimes = unwrap(mutableTimings[startAyah.sura])
-                let startTime = startAyah.ayah == 1 ? 0 : startSuraTimes[0].seconds
-
                 self.player.onPlaybackEnded = self.onPlaybackEnded()
                 self.player.onPlaybackRateChanged = self.onPlaybackRateChanged()
 
@@ -81,7 +78,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                     guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
                     self?.delegate?.playingAyah(ayahs[timeIndex])
                 }
-                self.player.play(startTimeInSeconds: startTime, items: items, info: info, boundaries: times)
+                self.player.play(items: items, info: info, boundaries: times)
             }.cauterize(tag: "QariTimingRetriever.retrieveTiming(for:suras:)")
     }
 }

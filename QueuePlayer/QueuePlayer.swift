@@ -26,13 +26,21 @@ open class QueuePlayer: NSObject {
     private var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
     private var playingItems: [AVPlayerItem] = []
     private var playingItemsInfo: [PlayerItemInfo] = []
+
     public var verseRuns: Runs = .one
     private var playing: Playing?
+
+    public var listRuns: Runs = .one
+    private var listPlays: Int = 0
 
     open var onPlaybackEnded: (() -> Void)?
     open var onPlayerItemChangedTo: ((AVPlayerItem?) -> Void)?
     open var onPlaybackStartingTimeFrame: ((_ item: AVPlayerItem, _ timeIndex: Int) -> Void)?
     open var onPlaybackRateChanged: ((_ playing: Bool) -> Void)?
+
+    private var startTime: Double {
+        return unwrap(playingItemBoundaries[playingItems[0]])[0]
+    }
 
     public override init() {
         super.init()
@@ -43,8 +51,7 @@ open class QueuePlayer: NSObject {
         setUpRemoteControlEvents()
     }
 
-    open func play(startTimeInSeconds: Double = 0,
-                   items: [AVPlayerItem],
+    open func play(items: [AVPlayerItem],
                    info: [PlayerItemInfo],
                    boundaries: [AVPlayerItem: [Double]]) {
 
@@ -52,6 +59,7 @@ open class QueuePlayer: NSObject {
             VFoundation.fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
         }
 
+        listPlays = 0
         playing = nil
         playingItems = items
         playingItemsInfo = info
@@ -70,7 +78,7 @@ open class QueuePlayer: NSObject {
         }
         setCommandsEnabled(true)
 
-        play(from: startTimeInSeconds, itemIndex: 0)
+        play(from: startTime, itemIndex: 0)
     }
 
     open func pause() {
@@ -184,7 +192,12 @@ open class QueuePlayer: NSObject {
             if self.playingItems.last == self.player.currentItem {
                 if self.verseRunsCompleted() {
                     // last item finished playing
-                    self.stopPlayback()
+                    if self.listRunsCompleted() {
+                        self.stopPlayback()
+                    } else {
+                        self.listPlays.increment()
+                        self.play(from: self.startTime, itemIndex: 0)
+                    }
                 } else {
                     self.onTimeChange()
                 }
@@ -240,11 +253,19 @@ open class QueuePlayer: NSObject {
     }
 
     private func verseRunsCompleted() -> Bool {
-        if verseRuns == .indefinite {
+        return playsCompleted(playing?.plays, runs: verseRuns)
+    }
+
+    private func listRunsCompleted() -> Bool {
+        return playsCompleted(listPlays, runs: listRuns)
+    }
+
+    private func playsCompleted(_ plays: Int?, runs: Runs) -> Bool {
+        if runs == .indefinite {
             return false
         }
-        if let playing = playing {
-            return playing.plays  + 1 >= verseRuns.maxRuns
+        if let plays = plays {
+            return plays  + 1 >= runs.maxRuns
         }
         return false
     }

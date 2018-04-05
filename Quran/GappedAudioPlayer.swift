@@ -59,7 +59,7 @@ class GappedAudioPlayer: DefaultAudioPlayer {
             self?.delegate?.playingAyah(item.ayah)
         }
 
-        player.play(startTimeInSeconds: 0, items: items, info: info, boundaries: times)
+        player.play(items: items, info: info, boundaries: times)
     }
 }
 

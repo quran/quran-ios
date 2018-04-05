@@ -34,11 +34,7 @@ struct Playing {
     }
 
     mutating func increment() {
-        // prevent overflow due to indefinite Runs
-        guard plays != Int.max else {
-            return
-        }
-        plays += 1
+        plays.increment()
     }
 
     init(item: AVPlayerItem, time: Int) {
@@ -46,5 +42,15 @@ struct Playing {
         self.time = time
         self.plays = 0
         self.lastUpdated = Date()
+    }
+}
+
+extension Int {
+    mutating func increment() {
+        // prevent overflow due to indefinite Runs
+        guard self != Int.max else {
+            return
+        }
+        self += 1
     }
 }

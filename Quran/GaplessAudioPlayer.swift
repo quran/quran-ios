@@ -49,14 +49,14 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
         self.timingRetriever = timingRetriever
     }
 
-    func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
-        let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+    func play(qari: Qari, range: VerseRange) {
+        let (items, info) = playerItemsForQari(qari, range: range)
 
         timingRetriever.retrieveTiming(for: qari, suras: items.map { $0.sura })
             .then(on: .main) { timings -> Void in
                 var mutableTimings = timings
-                if let timeArray = mutableTimings[startAyah.sura] {
-                    mutableTimings[startAyah.sura] = Array(timeArray.dropFirst(startAyah.ayah - 1))
+                if let timeArray = mutableTimings[range.lowerBound.sura] {
+                    mutableTimings[range.lowerBound.sura] = Array(timeArray.dropFirst(range.lowerBound.ayah - 1))
                 }
 
                 var times: [AVPlayerItem: [Double]] = [:]
@@ -85,8 +85,8 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
 
 extension GaplessAudioPlayer {
 
-    fileprivate func playerItemsForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GaplessPlayerItem], [PlayerItemInfo]) {
-        let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
+    fileprivate func playerItemsForQari(_ qari: Qari, range: VerseRange) -> ([GaplessPlayerItem], [PlayerItemInfo]) {
+        let files = filesToPlay(qari: qari, range: range)
         let items = files.map { GaplessPlayerItem(URL: $0, sura: $1) }
         let info = files.map {
             PlayerItemInfo(
@@ -98,7 +98,7 @@ extension GaplessAudioPlayer {
         return (items, info)
     }
 
-    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(URL, Int)] {
+    fileprivate func filesToPlay(qari: Qari, range: VerseRange) -> [(URL, Int)] {
 
         guard case AudioType.gapless = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be played here.")
@@ -106,7 +106,7 @@ extension GaplessAudioPlayer {
 
         // loop over the files
         var files: [(URL, Int)] = []
-        for sura in startAyah.sura...endAyah.sura {
+        for sura in range.lowerBound.sura...range.upperBound.sura {
             let fileName = sura.as3DigitString()
             let localURL = qari.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
             files.append((localURL, sura))

@@ -22,9 +22,6 @@ import Foundation
 import GenericDataSources
 
 class JuzHeaderSupplementaryViewCreator: BasicSupplementaryViewCreator<String, JuzTableViewHeaderFooterView> {
-
-    private let numberFormatter = NumberFormatter()
-
     var onJuzHeaderSelected: ((Juz) -> Void)?
 
     override init() {

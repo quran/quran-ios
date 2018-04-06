@@ -21,8 +21,7 @@
 import Foundation
 import QueuePlayer
 
-protocol DefaultAudioPlayer: class, AudioPlayer {
-
+protocol DefaultAudioPlayer: AudioPlayer {
     var player: QueuePlayer { get }
 }
 
@@ -71,5 +70,13 @@ extension DefaultAudioPlayer {
         player.onPlayerItemChangedTo = nil
         player.onPlaybackStartingTimeFrame = nil
         player.onPlaybackRateChanged = nil
+    }
+
+    func setVerseRuns(_ runs: Runs) {
+        player.verseRuns = runs
+    }
+
+    func setListRuns(_ runs: Runs) {
+        player.listRuns = runs
     }
 }

@@ -63,14 +63,14 @@ class QariListToQariAudioDownloadRetriever: Interactor {
 
         let gappedList: [QariAudioFile]
         if let qari = gapped {
-            gappedList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
+            gappedList = fileListCreator.create(qari).get(for: qari, range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah))
         } else {
             gappedList = []
         }
 
         let gaplessList: [QariAudioFile]
         if let qari = gapless {
-            gaplessList = fileListCreator.create(qari).get(for: qari, startAyah: Quran.startAyah, endAyah: Quran.lastAyah)
+            gaplessList = fileListCreator.create(qari).get(for: qari, range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah))
         } else {
             gaplessList = []
         }

@@ -125,7 +125,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         Analytics.shared.downloadingQuran(qari: item.audio.qari)
         // download the audio
         ayahsDownloader
-            .execute(AyahsAudioDownloadRequest(start: Quran.startAyah, end: Quran.lastAyah, qari: item.audio.qari))
+            .execute(AyahsAudioDownloadRequest(range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah), qari: item.audio.qari))
             .then { response -> Void in
 
                 guard !self.cancelled.value else {

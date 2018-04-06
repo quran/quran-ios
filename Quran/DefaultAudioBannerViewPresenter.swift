@@ -17,7 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
+import QueuePlayer
 import UIKit
 
 class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate, QProgressListener {
@@ -26,6 +26,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     let persistence: SimplePersistence
     let gaplessAudioPlayer: AudioPlayerInteractor
     let gappedAudioPlayer: AudioPlayerInteractor
+    private var audioRange: VerseRange?
 
     var audioPlayer: AudioPlayerInteractor {
         switch selectedQari.audioType {
@@ -51,10 +52,12 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         return qaris[selectedQariIndex]
     }
 
-    fileprivate var repeatCount: AudioRepeat = .none {
-        didSet {
-            view?.setRepeatCount(repeatCount)
-        }
+    var verseRuns: Runs = .one {
+        didSet { audioPlayer.setVerseRuns(verseRuns) }
+    }
+
+    var listRuns: Runs = .one {
+        didSet { audioPlayer.setListRuns(listRuns) }
     }
 
     fileprivate var playing: Bool = false {
@@ -113,12 +116,26 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         showQariView()
     }
 
+    func play(from: AyahNumber, to: AyahNumber?, page: QuranPage) {
+        audioPlayer.stopAudio()
+        let range: VerseRange
+        if let to = to {
+            range = VerseRange(lowerBound: from, upperBound: to)
+        } else {
+            range = audioPlayer.getAyahRange(starting: from, page: page)
+        }
+        self.audioRange = range
+        audioPlayer.playAudioForQari(selectedQari, range: range)
+    }
+
     // MARK: - AudioBannerViewDelegate
     func onPlayTapped() {
         guard let currentPage = delegate?.currentPage() else { return }
-        repeatCount = .none
+        verseRuns = .one
+        listRuns = .one
+
         // start downloading & playing
-        audioPlayer.playAudioForQari(selectedQari, atPage: currentPage)
+        play(from: Quran.startAyahForPage(currentPage.pageNumber), to: nil, page: currentPage)
     }
 
     func onPauseResumeTapped() {
@@ -131,6 +148,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onStopTapped() {
+        audioRange = nil
         audioPlayer.stopAudio()
     }
 
@@ -142,12 +160,15 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         audioPlayer.goBackward()
     }
 
-    func onRepeatTapped() {
-        repeatCount = repeatCount.next()
-    }
-
     func onQariTapped() {
         delegate?.showQariListSelectionWithQari(qaris, selectedIndex: selectedQariIndex)
+    }
+
+    func onMoreTapped() {
+        guard let audioRange = audioRange else {
+            return
+        }
+        delegate?.showAdvancedAudio(options: AdvancedAudioOptions(range: audioRange, verseRuns: verseRuns, listRuns: listRuns))
     }
 
     func onCancelDownloadTapped() {

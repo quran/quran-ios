@@ -19,6 +19,7 @@
 //
 import BatchDownloader
 import PromiseKit
+import QueuePlayer
 
 protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegate {
 
@@ -30,14 +31,14 @@ protocol DefaultAudioPlayerInteractor: AudioPlayerInteractor, AudioPlayerDelegat
 
     var downloadCancelled: Bool { get set }
 
-    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void)
+    func prePlayOperation(qari: Qari, range: VerseRange, completion: @escaping () -> Void)
 }
 
 extension DefaultAudioPlayerInteractor {
 
-    fileprivate typealias PlaybackInfo = (qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber)
+    fileprivate typealias PlaybackInfo = (qari: Qari, range: VerseRange)
 
-    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void) {
+    func prePlayOperation(qari: Qari, range: VerseRange, completion: @escaping () -> Void) {
         completion()
     }
 
@@ -47,17 +48,13 @@ extension DefaultAudioPlayerInteractor {
             .then { $0 != nil }
     }
 
-    func playAudioForQari(_ qari: Qari, atPage page: QuranPage) {
-
-        let startAyah = Quran.startAyahForPage(page.pageNumber)
-        let endAyah = lastAyahFinder.findLastAyah(startAyah: startAyah, page: page.pageNumber)
-
-        if downloader.needsToDownloadFiles(qari: qari, startAyah: startAyah, endAyah: endAyah) {
-            Analytics.shared.downloadingJuz(startAyah: startAyah, qari: qari)
+    func playAudioForQari(_ qari: Qari, range: VerseRange) {
+        if downloader.needsToDownloadFiles(qari: qari, range: range) {
+            Analytics.shared.downloadingJuz(startAyah: range.lowerBound, qari: qari)
             downloadCancelled = false
             delegate?.willStartDownloading()
             downloader
-                .download(qari: qari, startAyah: startAyah, endAyah: endAyah)
+                .download(qari: qari, range: range)
                 .then(on: .main) { response -> Void in
                     guard let response = response else {
                         return
@@ -66,12 +63,17 @@ extension DefaultAudioPlayerInteractor {
                     if self.downloadCancelled {
                         response.cancel()
                     } else {
-                        self.gotDownloadResponse(response, playbackInfo: (qari: qari, startAyah: startAyah, endAyah: endAyah))
+                        self.gotDownloadResponse(response, playbackInfo: (qari: qari, range: range))
                     }
                 }.suppress()
         } else {
-            startPlaying((qari: qari, startAyah: startAyah, endAyah: endAyah))
+            startPlaying((qari: qari, range: range))
         }
+    }
+
+    func getAyahRange(starting startAyah: AyahNumber, page: QuranPage) -> VerseRange {
+        let endAyah = lastAyahFinder.findLastAyah(startAyah: startAyah, page: page.pageNumber)
+        return VerseRange(lowerBound: startAyah, upperBound: endAyah)
     }
 
     func cancelDownload() {
@@ -98,6 +100,14 @@ extension DefaultAudioPlayerInteractor {
 
     func goBackward() {
         player.goBackward()
+    }
+
+    func setVerseRuns(_ runs: Runs) {
+        player.setVerseRuns(runs)
+    }
+
+    func setListRuns(_ runs: Runs) {
+        player.setListRuns(runs)
     }
 
     // MARK: - AudioPlayerDelegate
@@ -135,9 +145,9 @@ extension DefaultAudioPlayerInteractor {
     }
 
     fileprivate func startPlaying(_ playbackInfo: PlaybackInfo) {
-        Analytics.shared.playing(startAyah: playbackInfo.startAyah, qari: playbackInfo.qari)
-        prePlayOperation(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah) { [weak self] in
-            self?.player.play(qari: playbackInfo.qari, startAyah: playbackInfo.startAyah, endAyah: playbackInfo.endAyah)
+        Analytics.shared.playing(startAyah: playbackInfo.range.lowerBound, qari: playbackInfo.qari)
+        prePlayOperation(qari: playbackInfo.qari, range: playbackInfo.range) { [weak self] in
+            self?.player.play(qari: playbackInfo.qari, range: playbackInfo.range)
             self?.delegate?.onPlayingStarted()
         }
     }

@@ -47,11 +47,11 @@ struct QariSuraAudioFile: QariAudioFile, Hashable {
 }
 
 protocol QariAudioFileListRetrieval {
-    func get(for qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [QariAudioFile]
+    func get(for qari: Qari, range: VerseRange) -> [QariAudioFile]
 }
 
 struct GaplessQariAudioFileListRetrieval: QariAudioFileListRetrieval {
-    func get(for qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [QariAudioFile] {
+    func get(for qari: Qari, range: VerseRange) -> [QariAudioFile] {
         guard case AudioType.gapless(let databaseFileName) = qari.audioType else {
             fatalError("Unsupported qari type gapped. Only gapless qaris can be downloaded here.")
         }
@@ -64,7 +64,7 @@ struct GaplessQariAudioFileListRetrieval: QariAudioFileListRetrieval {
         // loop over the files
         var files = Set<QariSuraAudioFile>()
 
-        for sura in startAyah.sura...endAyah.sura {
+        for sura in range.lowerBound.sura...range.upperBound.sura {
             let fileName = sura.as3DigitString()
 
             let remoteURL = qari.audioURL.appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
@@ -77,7 +77,7 @@ struct GaplessQariAudioFileListRetrieval: QariAudioFileListRetrieval {
 }
 
 struct GappedQariAudioFileListRetrieval: QariAudioFileListRetrieval {
-    func get(for qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [QariAudioFile] {
+    func get(for qari: Qari, range: VerseRange) -> [QariAudioFile] {
         guard case AudioType.gapped = qari.audioType else {
             fatalError("Unsupported qari type gapless. Only gapless qaris can be downloaded here.")
         }
@@ -87,14 +87,8 @@ struct GappedQariAudioFileListRetrieval: QariAudioFileListRetrieval {
         // add besm Allah for all gapped audio
         files.insert(createRequestInfo(qari: qari, sura: 1, ayah: 1))
 
-        for sura in startAyah.sura...endAyah.sura {
-
-            let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : 1
-            let endAyahNumber = sura == endAyah.sura ? endAyah.ayah : Quran.numberOfAyahsForSura(sura)
-
-            for ayah in startAyahNumber...endAyahNumber {
-                files.insert(createRequestInfo(qari: qari, sura: sura, ayah: ayah))
-            }
+        for ayah in range.getAyahs() {
+            files.insert(createRequestInfo(qari: qari, sura: ayah.sura, ayah: ayah.ayah))
         }
         return Array(files)
     }

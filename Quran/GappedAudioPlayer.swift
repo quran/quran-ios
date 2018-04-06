@@ -37,14 +37,12 @@ private class GappedPlayerItem: AVPlayerItem {
 
 class GappedAudioPlayer: DefaultAudioPlayer {
 
-    let numberFormatter = NumberFormatter()
-
     weak var delegate: AudioPlayerDelegate?
 
     let player = QueuePlayer()
 
-    func play(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) {
-        let (items, info) = playerItemsForQari(qari, startAyah: startAyah, endAyah: endAyah)
+    func play(qari: Qari, range: VerseRange) {
+        let (items, info) = playerItemsForQari(qari, range: range)
 
         var times: [AVPlayerItem: [Double]] = [:]
         for item in items {
@@ -65,8 +63,8 @@ class GappedAudioPlayer: DefaultAudioPlayer {
 
 extension GappedAudioPlayer {
 
-    fileprivate func playerItemsForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> ([GappedPlayerItem], [PlayerItemInfo]) {
-        let files = filesToPlay(qari: qari, startAyah: startAyah, endAyah: endAyah)
+    fileprivate func playerItemsForQari(_ qari: Qari, range: VerseRange) -> ([GappedPlayerItem], [PlayerItemInfo]) {
+        let files = filesToPlay(qari: qari, range: range)
         let items = files.map { GappedPlayerItem(URL: $0, ayah: $1) }
         let info: [PlayerItemInfo] = files.map { (_, ayah) in
             return PlayerItemInfo(
@@ -78,7 +76,7 @@ extension GappedAudioPlayer {
         return (items, info)
     }
 
-    fileprivate func filesToPlay(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [(URL, AyahNumber)] {
+    fileprivate func filesToPlay(qari: Qari, range: VerseRange) -> [(URL, AyahNumber)] {
 
         guard case AudioType.gapped = qari.audioType else {
             fatalError("Unsupported qari type gapless. Only gapless qaris can be downloaded here.")
@@ -86,10 +84,10 @@ extension GappedAudioPlayer {
 
         var files: [(URL, AyahNumber)] = []
 
-        for sura in startAyah.sura...endAyah.sura {
+        for sura in range.lowerBound.sura...range.upperBound.sura {
 
-            let startAyahNumber = sura == startAyah.sura ? startAyah.ayah : 1
-            let endAyahNumber = sura == endAyah.sura ? endAyah.ayah : Quran.numberOfAyahsForSura(sura)
+            let startAyahNumber = sura == range.lowerBound.sura ? range.lowerBound.ayah : 1
+            let endAyahNumber   = sura == range.upperBound.sura ? range.upperBound.ayah : Quran.numberOfAyahsForSura(sura)
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
             if startAyahNumber == 1 && (sura != 1 && sura != 9) {

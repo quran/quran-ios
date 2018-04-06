@@ -21,7 +21,8 @@ import KVOController
 import UIKit
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
-                        QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate {
+                        QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
+                        AdvancedAudioOptionsViewControllerDelegate {
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -402,6 +403,21 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
             self?.audioViewPresenter.setQariIndex(index)
         }
         present(controller, animated: true, completion: nil)
+    }
+
+    func showAdvancedAudio(options: AdvancedAudioOptions) {
+        let controller = AdvancedAudioOptionsViewController(options: options)
+        controller.delegate = self
+        controller.modalTransitionStyle = .crossDissolve
+        controller.modalPresentationStyle = .overFullScreen
+        present(controller, animated: true, completion: nil)
+    }
+
+    func advancedAudioOptionsViewController(_ controller: AdvancedAudioOptionsViewController, finishedWith options: AdvancedAudioOptions) {
+        guard let page = currentPage() else { return }
+        audioViewPresenter.verseRuns = options.verseRuns
+        audioViewPresenter.listRuns = options.listRuns
+        audioViewPresenter.play(from: options.range.lowerBound, to: options.range.upperBound, page: page)
     }
 
     func highlightAyah(_ ayah: AyahNumber) {

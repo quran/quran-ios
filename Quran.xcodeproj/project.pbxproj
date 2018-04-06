@@ -12,6 +12,13 @@
 		06012EEB20701A4B001F94F9 /* PlayerItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */; };
 		06012F5D2075A403001F94F9 /* Playing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012F5C2075A403001F94F9 /* Playing.swift */; };
 		06012F5F2075A560001F94F9 /* Runs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012F5E2075A560001F94F9 /* Runs.swift */; };
+		065F58652077101F00E83AA2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58642077101F00E83AA2 /* Button.swift */; };
+		065F58F1207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58EB207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift */; };
+		065F58F2207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 065F58EC207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.xib */; };
+		065F58F3207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58ED207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.swift */; };
+		065F58F4207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 065F58EE207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib */; };
+		065F58F5207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58EF207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift */; };
+		065F58F6207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 065F58F0207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
 		32A3FD57144E0B1B02BB1729 /* Pods_BatchDownloader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAAEAA5F6076B29DB5FE44 /* Pods_BatchDownloader.framework */; };
@@ -473,6 +480,13 @@
 		06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerItemInfo.swift; sourceTree = "<group>"; };
 		06012F5C2075A403001F94F9 /* Playing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playing.swift; sourceTree = "<group>"; };
 		06012F5E2075A560001F94F9 /* Runs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runs.swift; sourceTree = "<group>"; };
+		065F58642077101F00E83AA2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		065F58EB207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsTableViewCell.swift; sourceTree = "<group>"; };
+		065F58EC207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdvancedAudioOptionsTableViewCell.xib; sourceTree = "<group>"; };
+		065F58ED207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsSelectionTableViewCell.swift; sourceTree = "<group>"; };
+		065F58EE207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdvancedAudioOptionsSelectionTableViewCell.xib; sourceTree = "<group>"; };
+		065F58EF207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsViewController.swift; sourceTree = "<group>"; };
+		065F58F0207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdvancedAudioOptionsViewController.xib; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D0BF1B3207F42E40022B6EE /* Review.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1008,6 +1022,19 @@
 				0D0BF1B3207F42E40022B6EE /* Review.swift */,
 			);
 			name = Review;
+            sourceTree = "<group>";
+        };
+		065F58EA207ADAAB00E83AA2 /* AdvancedAudioOptions */ = {
+			isa = PBXGroup;
+			children = (
+				065F58EB207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift */,
+				065F58EC207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.xib */,
+				065F58ED207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.swift */,
+				065F58EE207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib */,
+				065F58EF207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift */,
+				065F58F0207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib */,
+			);
+			path = AdvancedAudioOptions;
 			sourceTree = "<group>";
 		};
 		540031E51E99705400BB4B7B /* Analytics */ = {
@@ -1351,6 +1378,7 @@
 				543FE0411EB3C4A500687DF8 /* BackgroundColorButton.swift */,
 				543FE0421EB3C4A500687DF8 /* CircleView.swift */,
 				543FE0431EB3C4A500687DF8 /* CircularView.swift */,
+				065F58642077101F00E83AA2 /* Button.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -1853,6 +1881,7 @@
 		54B265FD1CC57E3200D3AEF8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				065F58EA207ADAAB00E83AA2 /* AdvancedAudioOptions */,
 				54D133D91EF783F800037D8C /* Popovers */,
 				54D133D61EF7811B00037D8C /* TranslationTextTypeSelection */,
 				54547E821EC74CFA008AFED3 /* Search Module (VIPER) */,
@@ -2728,6 +2757,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				065F58F6207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib in Resources */,
 				5459FF791EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib in Resources */,
 				545499B11E7DB88900F4F927 /* TranslationTableViewCell.xib in Resources */,
 				5409227A1E8F03C800C7537A /* UthmanTN1 Ver10.otf in Resources */,
@@ -2750,7 +2780,9 @@
 				54C0DBDF1CDF7EB1009AAD8D /* AudioDownloadingBarView.xib in Resources */,
 				5454998F1E7DB27B00F4F927 /* copyrights in Resources */,
 				54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */,
+				065F58F2207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.xib in Resources */,
 				54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */,
+				065F58F4207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib in Resources */,
 				54892D941EE6C760001E6F1A /* words.db in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */,
@@ -3246,6 +3278,7 @@
 				5420D2C81ED3733500D36821 /* UITableView+Extension.swift in Sources */,
 				543FE0451EB3C4A500687DF8 /* CircleView.swift in Sources */,
 				543FE0181EB3B94100687DF8 /* CGRect+Extension.swift in Sources */,
+				065F58652077101F00E83AA2 /* Button.swift in Sources */,
 				542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */,
 				543FE03F1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift in Sources */,
 				543FE0241EB3BBE800687DF8 /* PromiseKit+UIExtension.swift in Sources */,
@@ -3366,6 +3399,7 @@
 				545D96491EBE7997006D758A /* TimeAgo+Quran.swift in Sources */,
 				54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */,
 				540922A31E91315800C7537A /* QuranTranslationVerseSeparatorDataSource.swift in Sources */,
+				065F58F5207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift in Sources */,
 				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				54547E961EC9D1B1008AFED3 /* SearchRouter.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
@@ -3420,6 +3454,7 @@
 				541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift in Sources */,
 				549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */,
 				5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */,
+				065F58F1207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift in Sources */,
 				54C0DC061CE633AC009AAD8D /* PageBasedLastAyahFinder.swift in Sources */,
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,
 				54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */,
@@ -3428,6 +3463,7 @@
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
 				54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */,
 				54B2660F1CC6D39300D3AEF8 /* SearchNavigationController.swift in Sources */,
+				065F58F3207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.swift in Sources */,
 				54B266031CC6D03900D3AEF8 /* MainTabBarController.swift in Sources */,
 				54B2665D1CCA8FAE00D3AEF8 /* AyahInfoRetriever.swift in Sources */,
 				54B2666B1CCA93C500D3AEF8 /* SuraTableViewCell.swift in Sources */,

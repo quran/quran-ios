@@ -17,7 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
+import QueuePlayer
 import UIKit
 
 private let viewHeight: CGFloat = 48
@@ -109,13 +109,13 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
             playView.pauseResumeButton,
             playView.nextButton,
             playView.previousButton,
-            playView.repeatButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
+            playView.moreButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
         playView.stopButton.addTarget(self, action: #selector(stopPlayingTapped), for: .touchUpInside)
         playView.pauseResumeButton.addTarget(self, action: #selector(onPauseResumeTapped), for: .touchUpInside)
         playView.nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
         playView.previousButton.addTarget(self, action: #selector(previousTapped), for: .touchUpInside)
-        playView.repeatButton?.addTarget(self, action: #selector(repeatTapped), for: .touchUpInside)
+        playView.moreButton?.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
     }
 
     fileprivate func setUpDownloadView() {
@@ -153,25 +153,6 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         playView.pauseResumeButton.setImage(#imageLiteral(resourceName: "ic_play"), for: UIControlState())
 
         hideAllExcept(playView)
-    }
-
-    func setRepeatCount(_ count: AudioRepeat) {
-
-        let formatter = NumberFormatter()
-        let text: String
-        switch count {
-        case .none:
-            text = ""
-        case .once:
-            text = formatter.format(1)
-        case .twice:
-            text = formatter.format(2)
-        case .threeTimes:
-            text = formatter.format(3)
-        case .infinite:
-            text = "∞"
-        }
-        playView.repeatCountLabel?.text = text
     }
 
     fileprivate func hideAllExcept(_ view: UIView) {
@@ -218,8 +199,8 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
     }
 
     @objc
-    fileprivate func repeatTapped() {
-        delegate?.onRepeatTapped()
+    fileprivate func moreTapped() {
+        delegate?.onMoreTapped()
     }
 
     @objc

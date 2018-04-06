@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AudioPlayBarView" customModule="Quran" customModuleProvider="target">
             <connections>
+                <outlet property="moreButton" destination="vy9-2i-ytn" id="wGK-kX-KB0"/>
                 <outlet property="nextButton" destination="WnJ-q8-8Mu" id="mI4-Bw-EoG"/>
                 <outlet property="pauseResumeButton" destination="EdY-c0-IjO" id="bUB-rN-rS7"/>
                 <outlet property="previousButton" destination="qgl-kp-WgY" id="9rW-gm-uhD"/>
@@ -20,16 +21,16 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="543" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUh-dd-MPZ">
-                    <rect key="frame" x="20" y="0.0" width="44" height="100"/>
+                    <rect key="frame" x="16" y="0.0" width="44" height="100"/>
                     <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                     <state key="normal" image="ic_stop"/>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hsd-2H-vJi" userLabel="Centered View">
-                    <rect key="frame" x="195" y="0.0" width="152" height="100"/>
+                    <rect key="frame" x="111.5" y="0.0" width="152" height="100"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qgl-kp-WgY">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="100"/>
@@ -61,19 +62,27 @@
                         <constraint firstAttribute="bottom" secondItem="qgl-kp-WgY" secondAttribute="bottom" id="uwa-Le-gtU"/>
                     </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vy9-2i-ytn">
+                    <rect key="frame" x="315" y="0.0" width="44" height="100"/>
+                    <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
+                    <state key="normal" image="more-horiz"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="vy9-2i-ytn" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5dQ-nU-3ou"/>
                 <constraint firstAttribute="bottom" secondItem="yUh-dd-MPZ" secondAttribute="bottom" id="Gz3-51-ysS"/>
                 <constraint firstItem="Hsd-2H-vJi" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="cqk-c8-lSp"/>
+                <constraint firstAttribute="bottom" secondItem="vy9-2i-ytn" secondAttribute="bottom" id="nQS-iw-7PF"/>
                 <constraint firstItem="Hsd-2H-vJi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qps-fI-hCq"/>
+                <constraint firstAttribute="trailingMargin" secondItem="vy9-2i-ytn" secondAttribute="trailing" id="r2W-AJ-Aez"/>
                 <constraint firstAttribute="bottom" secondItem="Hsd-2H-vJi" secondAttribute="bottom" id="wq8-95-rUq"/>
                 <constraint firstItem="yUh-dd-MPZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="wu4-5g-RpM"/>
                 <constraint firstItem="yUh-dd-MPZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zw2-IO-IBV"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="398.5" y="336.5"/>
+            <point key="canvasLocation" x="381" y="321"/>
         </view>
     </objects>
     <resources>
@@ -81,5 +90,6 @@
         <image name="ic_pause" width="36" height="36"/>
         <image name="ic_previous" width="36" height="36"/>
         <image name="ic_stop" width="36" height="36"/>
+        <image name="more-horiz" width="36" height="36"/>
     </resources>
 </document>

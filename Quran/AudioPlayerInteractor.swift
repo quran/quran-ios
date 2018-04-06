@@ -17,8 +17,8 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import PromiseKit
+import QueuePlayer
 
 protocol AudioPlayerInteractorDelegate: class {
     func willStartDownloading()
@@ -44,7 +44,8 @@ protocol AudioPlayerInteractor: class {
     // will call willStartDownloadingAudioFiles if there is downloads
     func isAudioDownloading() -> Promise<Bool>
 
-    func playAudioForQari(_ qari: Qari, atPage page: QuranPage)
+    func playAudioForQari(_ qari: Qari, range: VerseRange)
+    func getAyahRange(starting startAyah: AyahNumber, page: QuranPage) -> VerseRange
 
     func cancelDownload()
 
@@ -53,4 +54,6 @@ protocol AudioPlayerInteractor: class {
     func stopAudio()
     func goForward()
     func goBackward()
+    func setVerseRuns(_ runs: Runs)
+    func setListRuns(_ runs: Runs)
 }

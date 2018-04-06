@@ -41,8 +41,8 @@ class AudioFilesDownloader {
         response = nil
     }
 
-    func needsToDownloadFiles(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Bool {
-        let files = filesForQari(qari, startAyah: startAyah, endAyah: endAyah)
+    func needsToDownloadFiles(qari: Qari, range: VerseRange) -> Bool {
+        let files = filesForQari(qari, range: range)
         return !files.filter { !FileManager.documentsURL.appendingPathComponent($0.destinationPath).isReachable }.isEmpty
     }
 
@@ -58,9 +58,9 @@ class AudioFilesDownloader {
         }
     }
 
-    func download(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> Promise<DownloadBatchResponse?> {
+    func download(qari: Qari, range: VerseRange) -> Promise<DownloadBatchResponse?> {
         return ayahDownloader
-            .execute(AyahsAudioDownloadRequest(start: startAyah, end: endAyah, qari: qari))
+            .execute(AyahsAudioDownloadRequest(range: range, qari: qari))
             .then(on: .main) { responses -> DownloadBatchResponse? in
                 // wrap the requests
                 self.createRequestWithDownloads(responses)
@@ -77,8 +77,8 @@ class AudioFilesDownloader {
         }
     }
 
-    func filesForQari(_ qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber) -> [DownloadRequest] {
-        return audioFileList.get(for: qari, startAyah: startAyah, endAyah: endAyah).map {
+    func filesForQari(_ qari: Qari, range: VerseRange) -> [DownloadRequest] {
+        return audioFileList.get(for: qari, range: range).map {
             DownloadRequest(url: $0.remote, resumePath: $0.local.stringByAppendingPath(Files.downloadResumeDataExtension), destinationPath: $0.local)
         }
     }

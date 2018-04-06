@@ -40,7 +40,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
         self.player.delegate = self
     }
 
-    func prePlayOperation(qari: Qari, startAyah: AyahNumber, endAyah: AyahNumber, completion: @escaping () -> Void) {
+    func prePlayOperation(qari: Qari, range: VerseRange, completion: @escaping () -> Void) {
         guard case .gapless(let databaseName) = qari.audioType else {
             fatalError("Unsupported qari type gapped")
         }

@@ -21,8 +21,7 @@ import BatchDownloader
 import PromiseKit
 
 struct AyahsAudioDownloadRequest {
-    let start: AyahNumber
-    let end: AyahNumber
+    let range: VerseRange
     let qari: Qari
 }
 
@@ -41,7 +40,7 @@ struct AyahsAudioDownloader: Interactor {
 
                 // get downloads
                 let files = retriever
-                    .get(for: request.qari, startAyah: request.start, endAyah: request.end)
+                    .get(for: request.qari, range: request.range)
                     .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
                     .map { DownloadRequest(url: $0.remote, resumePath: $0.local.resumePath, destinationPath: $0.local) }
                 return DownloadBatchRequest(requests: files)

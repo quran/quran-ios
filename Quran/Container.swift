@@ -457,4 +457,8 @@ class Container {
     func createDefaultSearchRecentsService() -> SearchRecentsService {
         return DefaultSearchRecentsService(persistence: createSimplePersistence())
     }
+
+    func createReviewService() -> ReviewService {
+        return ReviewService(simplePersistence: createSimplePersistence())
+    }
 }

@@ -59,6 +59,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window.rootViewController = container.createRootViewController()
         window.makeKeyAndVisible()
+
+        container.createReviewService().checkForReview()
+
         return true
     }
 

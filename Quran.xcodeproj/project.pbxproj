@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* Review.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
 		32A3FD57144E0B1B02BB1729 /* Pods_BatchDownloader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAAEAA5F6076B29DB5FE44 /* Pods_BatchDownloader.framework */; };
@@ -464,6 +465,7 @@
 /* Begin PBXFileReference section */
 		00A59CDA1DDFC044C1625C25 /* Pods-UIKitExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIKitExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-UIKitExtension/Pods-UIKitExtension.release.xcconfig"; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D0BF1B3207F42E40022B6EE /* Review.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		10CFDA740ED94B3515170DF3 /* Pods_QuranUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuranUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B08B5935F8D252F7CCFA3A6 /* Pods-QueuePlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QueuePlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-QueuePlayer/Pods-QueuePlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -990,6 +992,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D0BF1B2207F42CE0022B6EE /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				0D0BF1B3207F42E40022B6EE /* Review.swift */,
+			);
+			name = Review;
+			sourceTree = "<group>";
+		};
 		540031E51E99705400BB4B7B /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1858,6 +1868,7 @@
 		54B265FF1CC57E4B00D3AEF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				0D0BF1B2207F42CE0022B6EE /* Review */,
 				54F8C4221EA8104100C853C6 /* Downloadable */,
 				540031E51E99705400BB4B7B /* Analytics */,
 				549040B31E6334A200D54625 /* Interactors */,
@@ -3454,6 +3465,7 @@
 				545499B31E7DB9C800F4F927 /* TranslationsSelectionViewController.swift in Sources */,
 				54B2669C1CCD208800D3AEF8 /* QuranImageHighlightingView.swift in Sources */,
 				54B266AE1CD1665500D3AEF8 /* SuraTimingRetriever.swift in Sources */,
+				0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
 				545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */,
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,

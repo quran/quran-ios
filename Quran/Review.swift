@@ -38,13 +38,11 @@ struct ReviewService {
             let appInstalledDate = simplePersistence.valueForKey(.appInstalledDate)
             let oldDate = Date(timeIntervalSince1970: appInstalledDate)
             let today = Date()
-            let difference = Calendar.current.dateComponents([.day, .minute], from: oldDate, to: today)
+            let difference = Calendar.current.dateComponents([.day], from: oldDate, to: today)
 
             if let daysCount = difference.day {
-                if daysCount > 10 {
-                    if appOpenedCounter > 7 {
-                        requestReview()
-                    }
+                if daysCount > 7 && appOpenedCounter > 10 {
+                    requestReview()
                 }
             }
         }

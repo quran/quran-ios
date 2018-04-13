@@ -36,6 +36,7 @@ class SettingsViewController: BaseTableBasedViewController {
             guard let `self` = self else { return }
             let item = ds.item(at: indexPath)
             item.onSelection(self)
+            self.tableView.deselectRow(at: indexPath, animated: true)
         }
         dataSource.setSelectionHandler(selection)
     }

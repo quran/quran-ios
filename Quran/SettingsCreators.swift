@@ -46,7 +46,7 @@ class NavigationSettingsCreators: SettingsCreators {
                 vc.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        let review = Setting(name: NSLocalizedString("write_review", tableName: "Android", comment: ""), image: #imageLiteral(resourceName: "star_border")) { _ in
+        let review = Setting(name: NSLocalizedString("write_review", tableName: "Localizable", comment: ""), image: #imageLiteral(resourceName: "star_border")) { _ in
             guard let url = URL(string: "itms-apps://itunes.apple.com/app/id1118663303?action=write-review") else {
                 return
             }

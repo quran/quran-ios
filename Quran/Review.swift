@@ -2,7 +2,7 @@
 //  ReviewService.swift
 //  Quran
 //
-//  Created by Muhammad Umer on 11/04/2018.
+//  Created by Muhammad Umer on 4/11/18.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com

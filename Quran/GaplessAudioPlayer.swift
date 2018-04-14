@@ -55,9 +55,8 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
         timingRetriever.retrieveTiming(for: qari, suras: items.map { $0.sura })
             .then(on: .main) { timings -> Void in
                 var mutableTimings = timings
-                if let timeArray = mutableTimings[range.lowerBound.sura] {
-                    mutableTimings[range.lowerBound.sura] = Array(timeArray.dropFirst(range.lowerBound.ayah - 1))
-                }
+                let timeArray = unwrap(mutableTimings[range.lowerBound.sura])
+                mutableTimings[range.lowerBound.sura] = Array(timeArray.dropFirst(range.lowerBound.ayah - 1))
 
                 var times: [AVPlayerItem: [Double]] = [:]
                 var ayahs: [AVPlayerItem: [AyahNumber]] = [:]
@@ -78,7 +77,8 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
                     guard let item = item as? GaplessPlayerItem, let ayahs = self?.ayahsDictionary[item] else { return }
                     self?.delegate?.playingAyah(ayahs[timeIndex])
                 }
-                self.player.play(items: items, info: info, boundaries: times)
+                let lastTimeIndex = range.upperBound.ayah - (range.lowerBound.sura == range.upperBound.sura ? range.lowerBound.ayah : 1)
+                self.player.play(items: items, info: info, boundaries: times, lastTimeIndex: lastTimeIndex)
             }.cauterize(tag: "QariTimingRetriever.retrieveTiming(for:suras:)")
     }
 }

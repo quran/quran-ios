@@ -26,6 +26,7 @@ open class QueuePlayer: NSObject {
     private var playingItemBoundaries: [AVPlayerItem: [Double]] = [:]
     private var playingItems: [AVPlayerItem] = []
     private var playingItemsInfo: [PlayerItemInfo] = []
+    private var playingLastTimeIndex: Int?
 
     public var verseRuns: Runs = .one
     private var playing: Playing?
@@ -53,7 +54,8 @@ open class QueuePlayer: NSObject {
 
     open func play(items: [AVPlayerItem],
                    info: [PlayerItemInfo],
-                   boundaries: [AVPlayerItem: [Double]]) {
+                   boundaries: [AVPlayerItem: [Double]],
+                   lastTimeIndex: Int? = nil) {
 
         guard items.count == info.count && items.count == boundaries.count else {
             VFoundation.fatalError("Misconfigured QueuePlayer. items, info and boundaries should have the same size.")
@@ -64,6 +66,7 @@ open class QueuePlayer: NSObject {
         playingItems = items
         playingItemsInfo = info
         playingItemBoundaries = boundaries
+        playingLastTimeIndex = lastTimeIndex
 
         player.addRateObserver { [weak self] newValue in
             self?.updatePlayNowInfo()
@@ -105,6 +108,11 @@ open class QueuePlayer: NSObject {
         if timeIndex + 1 < boundaries.count {
             // play next time range
             let newTimeIndex = timeIndex + 1
+
+            guard !hasReachedEnd(timeIndex: newTimeIndex, currentItem: currentItem) else {
+                stopPlayback()
+                return
+            }
             player.seek(to: boundaries[newTimeIndex])
         } else {
             // play next item
@@ -183,6 +191,16 @@ open class QueuePlayer: NSObject {
         }
     }
 
+    private func stopIfCompleted() {
+        // last item finished playing
+        if listRunsCompleted() {
+            stopPlayback()
+        } else {
+            listPlays.increment()
+            play(from: self.startTime, itemIndex: 0)
+        }
+    }
+
     private func currentItemChanged(_ newValue: AVPlayerItem?) {
         guard let newValue = newValue else { return }
 
@@ -191,13 +209,7 @@ open class QueuePlayer: NSObject {
             // determine to repeat or stop playback
             if self.playingItems.last == self.player.currentItem {
                 if self.verseRunsCompleted() {
-                    // last item finished playing
-                    if self.listRunsCompleted() {
-                        self.stopPlayback()
-                    } else {
-                        self.listPlays.increment()
-                        self.play(from: self.startTime, itemIndex: 0)
-                    }
+                    self.stopIfCompleted()
                 } else {
                     self.onTimeChange()
                 }
@@ -210,6 +222,13 @@ open class QueuePlayer: NSObject {
         notifyPlayerItemChangedTo(newValue)
         onTimeChange()
         updatePlayNowInfo()
+    }
+
+    private func hasReachedEnd(timeIndex: Int, currentItem: AVPlayerItem) -> Bool {
+        guard let playingLastTimeIndex = playingLastTimeIndex else {
+            return false
+        }
+        return currentItem == playingItems.last && timeIndex > playingLastTimeIndex
     }
 
     private func startBoundaryObserver(_ newItem: AVPlayerItem) {
@@ -236,6 +255,10 @@ open class QueuePlayer: NSObject {
                 replay(item: playing.item, timeIndex: playing.time)
             } else {
                 self.playing = Playing(item: currentItem, time: timeIndex)
+                guard !hasReachedEnd(timeIndex: timeIndex, currentItem: currentItem) else {
+                    stopIfCompleted()
+                    return
+                }
             }
         }
         // notify only on first play

@@ -53,7 +53,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("audio_manager", tableName: "Android", comment: "")
+        title = lAndroid("audio_manager")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

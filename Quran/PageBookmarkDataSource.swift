@@ -31,7 +31,7 @@ class PageBookmarkDataSource: BaseBookmarkDataSource<PageBookmark, BookmarkTable
                                     at indexPath: IndexPath) {
         let ayah = Quran.startAyahForPage(item.page)
 
-        let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
+        let suraFormat = lAndroid("quran_sura_title")
         let suraName = Quran.nameForSura(ayah.sura)
 
         cell.iconImage.image = #imageLiteral(resourceName: "bookmark-filled").withRenderingMode(.alwaysTemplate)

@@ -38,6 +38,6 @@ class AudioDownloadingBarView: UIView {
 
     private func setUp() {
         loadViewFrom(nibName: "AudioDownloadingBarView")
-        infoLabel.text = NSLocalizedString("downloading_title", tableName: "Android", comment: "")
+        infoLabel.text = lAndroid("downloading_title")
     }
 }

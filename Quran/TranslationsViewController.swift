@@ -49,7 +49,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("prefs_translations", tableName: "Android", comment: "")
+        title = lAndroid("prefs_translations")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

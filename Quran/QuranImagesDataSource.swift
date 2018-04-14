@@ -48,7 +48,7 @@ class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionVi
         // configure the cell
         cell.pageLabel.text = numberFormatter.format(NSNumber(value: item.pageNumber))
         cell.suraLabel.text = Quran.nameForSura(item.startAyah.sura)
-        cell.juzLabel.text = String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), numberFormatter.format(item.juzNumber))
+        cell.juzLabel.text = String(format: lAndroid("juz2_description"), numberFormatter.format(item.juzNumber))
 
         // set the page image
         imageService.getOnMainThread(item.pageNumber) { [weak cell] image in

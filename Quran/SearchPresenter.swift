@@ -84,7 +84,7 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     }
 
     func showNoResults(for term: String) {
-        let message = String(format: NSLocalizedString("no_results", tableName: "Android", comment: ""), term)
+        let message = String(format: lAndroid("no_results"), term)
         view?.showNoResult(message)
     }
 

@@ -278,8 +278,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     func selectWordTranslationTextType(from view: UIView) {
         let selectedIndex = simplePersistence.valueForKey(.wordTranslationType)
-        let items = [NSLocalizedString("translationTextType", comment: ""),
-                     NSLocalizedString("transliterationTextType", comment: "")]
+        let items = [l("translationTextType"), l("transliterationTextType")]
         let controller = TranslationTextTypeSelectionTableViewController(selectedIndex: selectedIndex, items: items)
         controller.selectionChanged = { [weak self] newIndex in
             self?.simplePersistence.setValue(newIndex, forKey: .wordTranslationType)

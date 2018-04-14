@@ -27,7 +27,7 @@ class SettingsNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: NSLocalizedString("menu_settings", tableName: "Android", comment: ""),
+        tabBarItem = UITabBarItem(title: lAndroid("menu_settings"),
                                   image: #imageLiteral(resourceName: "settings-25"),
                                   selectedImage: #imageLiteral(resourceName: "settings_filled-25"))
     }

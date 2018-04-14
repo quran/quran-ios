@@ -97,7 +97,7 @@ extension TranslationTableViewCell {
             return
         }
 
-        let translator = NSLocalizedString("translatorLabel: ", comment: "")
+        let translator = l("translatorLabel: ")
 
         let lightFont = UIFont.systemFont(ofSize: 15, weight: .light)
         let regularFont = translation.preferredTranslatorNameFont

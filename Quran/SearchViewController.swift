@@ -65,8 +65,8 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         }
         view.backgroundColor = UIColor.secondaryColor()
 
-        recentsTitle.text = NSLocalizedString("searchRecentsTitle", comment: "")
-        popularTitle.text = NSLocalizedString("searchPopularTitle", comment: "")
+        recentsTitle.text = l("searchRecentsTitle")
+        popularTitle.text = l("searchPopularTitle")
 
         searchController = SearchControllerWithNoCancelButton(searchResultsController: searchResults)
 

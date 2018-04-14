@@ -28,6 +28,8 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
     let lastPageDS: LastPageBookmarkDataSource
 
+    private let numberFormatter = NumberFormatter()
+
     init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>,
          quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>,
          lastPagesPersistence: LastPagesPersistence) {
@@ -83,8 +85,9 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
             dataSource.add(ds)
         }
 
-        let lastPageHeader = NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: "")
-        let juzs = sections.map { String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""), $0.0.juzNumber) }
+        let lastPageHeader = NSLocalizedString("recent_pages", tableName: "Android", comment: "")
+        let juzs = sections.map { String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""),
+                                         numberFormatter.format($0.0.juzNumber)) }
         self.dataSource.headerCreator.setSectionedItems([lastPageHeader] + juzs)
     }
 

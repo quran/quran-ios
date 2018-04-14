@@ -22,6 +22,8 @@ import UIKit
 
 class QuranPageTitleView: UIView {
 
+    private let numberFormatter = NumberFormatter()
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailsLabel: UILabel!
 
@@ -88,7 +90,9 @@ extension QuranPageTitleView {
     func setPageNumber(_ pageNumber: Int, navigationBar: UINavigationBar?) {
         self.pageNumber = pageNumber
         let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
-        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat, pageNumber, Juz.juzFromPage(pageNumber).juzNumber)
+        let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat,
+                                                               numberFormatter.format(pageNumber),
+                                                               numberFormatter.format(Juz.juzFromPage(pageNumber).juzNumber))
         titleLabel.text = Quran.nameForSura(Quran.PageSuraStart[pageNumber - 1], withPrefix: true)
         detailsLabel.text = pageDescription
         sizeToFit()

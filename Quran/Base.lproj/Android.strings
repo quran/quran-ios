@@ -3,12 +3,14 @@
 "downloadPrompt" = "In order for Quran Android to work properly,\
 we need to download some files. If you do not do this now, the app\
 may not work reliably and will require an Internet connection for reading.\
-Would you like to download the required files now?";
+Would you like to download the required files now?\
+";
 "downloadTabletPrompt" = "We recently added improved images for\
 tablets. Would you like to download these images now?";
 "downloadImportantPrompt" = "There is a small yet important update\
 for the Quran images you have on your device. Would you like to download this\
-patch now?";
+patch now?\
+";
 "downloadPrompt_ok" = "Yes";
 "downloadPrompt_no" = "No";
 "downloading_title" = "Downloading…";
@@ -18,7 +20,6 @@ patch now?";
 "menu_other_apps" = "Other apps";
 "menu_settings" = "Settings";
 "menu_jump_last_page" = "Last page";
-"menu_tags" = "Tags";
 "menu_bookmarks" = "Bookmarks";
 "menu_bookmarks_page" = "Page Bookmarks";
 "menu_bookmarks_ayah" = "Ayah Bookmarks";
@@ -26,6 +27,7 @@ patch now?";
 "menu_sort_date" = "Date Added";
 "menu_sort_location" = "Location in Quran";
 "menu_sort_group_by_tags" = "Group by Tags";
+"menu_show_recents" = "Recent pages";
 "menu_translation" = "Show Translation";
 "menu_back_to_page" = "Show Quran";
 "menu_help" = "Help";
@@ -63,8 +65,6 @@ patch now?";
 "about_rxjava_url" = "https://github.com/ReactiveX/RxJava";
 "about_rxandroid" = "RxAndroid";
 "about_rxandroid_url" = "https://github.com/ReactiveX/RxAndroid";
-"about_rxpreferences" = "RxPreferences";
-"about_rxpreferences_url" = "https://github.com/f2prateek/rx-preferences";
 "about_moshi" = "Moshi";
 "about_moshi_url" = "https://github.com/square/moshi";
 "about_sliding_panel" = "AndroidSlidingUpPanel";
@@ -74,7 +74,8 @@ patch now?";
 "about_contributors_summary" = "A list of people who contributed to the development of Quran for Android";
 "about_contributors_url" = "https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md";
 "help_title" = "Frequently Asked Questions";
-"help" = "<b>How do I play audio?</b>\
+"help" = "\
+<b>How do I play audio?</b>\
 <br/>Open any Quran page. Tap on the screen once. At the bottom, you will notice\
 a play button and some text with the name of a qari. Click the name of the qari to\
 choose a different qari. Click play to download and play the current page or sura.\
@@ -103,7 +104,8 @@ choose to bookmark, tag, share or copy that ayah to the clipboard, see the trans
 or listen to its recitation.<br/>\
 <br/><b>Malayalam/Tamil/Bengali/Urdu fonts don\'t work!</b>\
 <br/>Unfortunately, Android versions prior to 4.0 do not support these fonts, and there is\
-little we can do to help with this.";
+little we can do to help with this.\
+";
 "search_hint" = "Search the Quran";
 "quranSearchType" = "Verses of the Quran";
 "storage_permission_rationale" = "Quran wants your permission to store its data on\
@@ -111,13 +113,10 @@ external storage. Quran will work without this permission, but if you clear data
 uninstall the app, all downloaded pages, audio, and data will be removed. Grant\
 Quran permission?";
 "storage_permission_please_restart" = "Please restart the app for this to take effect.";
-"found_in_sura" = "Found in Sura";
+"found_in_sura" = "Found in Sura %1$@, Ayah %2$d";
 "no_results" = "No results found for \"%@\"";
-"no_active_translation" = "You have no active translation set. Please set an active translation first and then search again.";
-"translation_settings" = "Translation Settings";
 "no_arabic_search_available" = "You have not downloaded the Arabic search pack. Please download it and try your search again.";
 "get_arabic_search_db" = "Get Arabic Search Database";
-"prefs_category_navigation" = "Navigation";
 "prefs_volume_key_navigation_title" = "Volume key navigation";
 "prefs_volume_key_navigation_summary" = "Navigate between pages using volume keys";
 "prefs_category_reading" = "Reading Preferences";
@@ -171,12 +170,17 @@ Quran permission?";
 "prefs_no_enough_space_to_move_files" = "Insufficient space to move app files";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_megabytes_str" = "%@ MB";
-"prefs_tablet_mode_title" = "Tablet Mode";
-"prefs_tablet_mode_enabled" = "In landscape, two pages will appear side by side.";
-"prefs_tablet_mode_disabled" = "In landscape, only one page will appear.";
+"prefs_dual_page_mode_title" = "Dual Page Mode";
+"prefs_dual_page_mode_enabled" = "In landscape, two pages will appear side by side.";
+"prefs_dual_page_mode_disabled" = "In landscape, only one page will appear.";
 "prefs_category_advanced" = "Advanced Options";
+"prefs_category_advanced_summary" = "Import/export bookmarks, set Quran data directory, etc.";
+"prefs_import_title" = "Import";
+"prefs_import_summary" = "Import bookmarks and tags";
 "prefs_export_title" = "Export";
 "prefs_export_summary" = "Export a copy of bookmarks and tags";
+"translations" = "Translations";
+"more_translations" = "More Translations";
 "import_data_permissions_error" = "Unable to read backup file due to permissions error.";
 "import_data_error" = "Invalid backup file (or unable to read backup file).";
 "import_data" = "Import Data";
@@ -207,11 +211,10 @@ sure you want to use the external SD card?";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_sura_title" = "Surat %1$@";
 "sura_ayah_notification_str" = "Sura %1$@, Ayah %2$d";
-"bookmarks_current_page" = "Current Page";
 "index_loading" = "Loading…";
 "canceling" = "Canceling…";
-"juz2_description" = "Juz\' %1$d";
-"page_description" = "page %1$d, Juz\' %2$d";
+"juz2_description" = "Juz\' %1$@";
+"page_description" = "page %1$@, Juz\' %2$@";
 "highlighting_database" = "Required Files";
 "timing_database" = "Required Files";
 "infinity" = "∞";
@@ -241,7 +244,8 @@ sure you want to use the external SD card?";
 "need_translation" = "You don\'t have any translations/tafaseer downloaded yet.";
 "get_translations" = "Get Translations";
 "email_us" = "If your question is not answered above, you can email quranandroid@gmail.com for support.\
-Please note that we receive lots of emails, so we may not be able to reply to all of them.";
+Please note that we receive lots of emails, so we may not be able to reply to all of them.\
+";
 "makki" = "Makki";
 "madani" = "Madani";
 "play_from" = "From";
@@ -266,15 +270,21 @@ Please note that we receive lots of emails, so we may not be able to reply to al
 "search_key" = "Press the search key to look up a verse";
 "copy_ayah" = "Copy Ayah";
 "ayah_copied_popup" = "Ayah Copied";
-"delete_bookmark" = "Delete Bookmark";
 "tag_bookmark" = "Tag Bookmark";
 "delete_tag" = "Delete Tag";
 "edit_tag" = "Edit Tag";
 "new_tag" = "New Tag";
 "not_tagged" = "Not Tagged";
 "undo" = "Undo";
+"recent_pages" = "Recent pages";
 "tag_dlg_title" = "Tag";
 "tag_name" = "Name";
 "bookmarks_list_empty" = "No Bookmarks";
-"tags_list_empty" = "No Tags";
 "audio_manager" = "Audio Manager";
+"sura_ayah" = "%1$d:%2$d";
+"notification_channel_download" = "Quran Downloads";
+"notification_channel_audio" = "Audio Playback";
+"repeatValues1" = "1 time";
+"repeatValues2" = "2 times";
+"repeatValues3" = "3 times";
+"repeatValues4" = "loop";

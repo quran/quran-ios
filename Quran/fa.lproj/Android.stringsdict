@@ -12,10 +12,8 @@
                 <string>NSStringPluralRuleType</string>
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
-                <key>one</key>
-                <string>جستجو براي \&quot;%1$@\&quot;:</string>
                 <key>other</key>
-                <string>%2$d جستجو براي \&quot;%1$@\&quot;:</string>
+                <string>%2$d نتیجه از جستجوی «%1$d» به دست آمد:</string>
             </dict>
         </dict>
         <key>verses</key>
@@ -28,10 +26,36 @@
                 <string>NSStringPluralRuleType</string>
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
-                <key>one</key>
-                <string>%d آيه</string>
                 <key>other</key>
-                <string>%d آيات</string>
+                <string>%d آیه</string>
+            </dict>
+        </dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>other</key>
+                <string>%1$d سوره بارگذاری شده است</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>other</key>
+                <string>%d برچسب حذف شد</string>
             </dict>
         </dict>
     </dict>

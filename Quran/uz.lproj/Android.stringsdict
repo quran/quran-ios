@@ -29,9 +29,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>\&quot;%1$@\&quot; boʻyicha bitta natija:</string>
+                <string>\&quot;%1$d\&quot; boʻyicha bitta natija:</string>
                 <key>other</key>
-                <string>\&quot;%1$@\&quot; boʻyicha %2$d ta natijalar:</string>
+                <string>\&quot;%1$d\&quot; boʻyicha %2$d ta natijalar:</string>
             </dict>
         </dict>
         <key>verses</key>

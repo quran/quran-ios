@@ -29,7 +29,7 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>versículo</string>
+                <string>%1$d versículo</string>
                 <key>other</key>
                 <string>versículos</string>
             </dict>

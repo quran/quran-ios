@@ -11,7 +11,6 @@
 "menu_about" = "Acerca de Nosotros";
 "menu_settings" = "Ajustes";
 "menu_jump_last_page" = "Última página";
-"menu_tags" = "Etiquetas";
 "menu_bookmarks" = "Favoritos";
 "menu_bookmarks_page" = "Página de favoritos";
 "menu_bookmarks_ayah" = "Versículos favoritos";
@@ -30,13 +29,10 @@
 "help" = "\n        <b>How do I play audio?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  At the bottom, you will notice\n        a play button and some text with the name of a qari.  click the name of the qari to\n        choose a different qari.  Click play to download and play the current page or sura.\n        <br/>\n        <br/><b>How do I view the translation?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  In the top, you will notice a\n        globe icon (or, if you don\'t see it, you may see an icon with three square dots - click\n        this and choose translation to view the translation).\n        <br/>\n        If you do not have any translations downloaded, it will take\n        you to a screen where you can download a translation.  Choose and download a translation,\n        then return back and tap the globe icon again to view the translation.\n        <br/>\n        <br/><b>How do I bookmark a page?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  In the top right, you will see a\n        star icon.  Tap the star icon to bookmark it (it will be solid white).  Tap the star icon\n        again to remove the bookmark.\n        <br/>\n        <br/><b>How do I make the text larger?</b>\n        <br/>For the arabic pages, hold your phone in landscape.  This makes the text larger.\n        For translations, go to settings and choose translation size.\n        <br/>\n        <br/><b>How do I share an ayah?</b>\n        <br/>While on any arabic page, press and hold on any ayah to get a menu where you can\n        choose to bookmark this ayah, share it, see the tafseer, or copy the ayah to the clipboard.\n        <br/>\n        <br/><b>Malayalm/Tamil/Bangla/Urdu fonts don\'t work!</b>\n        <br/>Unfortunately, Android versions before 4.0 do not support these fonts, and there is\n        little we can do to help with this.\n";
 "search_hint" = "Buscar en El Corán";
 "quranSearchType" = "Versículos del Corán";
-"found_in_sura" = "Capítulo encontrado";
+"found_in_sura" = "Capítulo encontrado %1$@, Versículo %2$d";
 "no_results" = "No se encontró \"%@\"";
-"no_active_translation" = "Usted no tiene grupo de traducción activa. Por favor, configure una traducción activa primero y luego volver a buscar.";
-"translation_settings" = "Ajustes de traducción";
 "no_arabic_search_available" = "Usted no ha descargado el paquete de búsqueda árabe. Por favor descargue y pruebe nuevamente su búsqueda.";
 "get_arabic_search_db" = "Buscar en la Base de Datos Árabe";
-"prefs_category_navigation" = "Navegación";
 "prefs_volume_key_navigation_title" = "Navegar con la tecla de volumen";
 "prefs_volume_key_navigation_summary" = "Navegar entre páginas utilizando las teclas de volumen";
 "prefs_category_reading" = "Preferencias de lectura";
@@ -84,9 +80,9 @@
 "prefs_copying_app_files" = "Copiando archivos de la aplicación";
 "prefs_err_moving_app_files" = "Error al mover los archivos de la aplicación";
 "prefs_no_enough_space_to_move_files" = "Espacio insuficiente para mover archivos de la aplicación";
-"prefs_tablet_mode_title" = "Modo Tableta";
-"prefs_tablet_mode_enabled" = "En modo horizontal, aparecerán dos páginas una al lado de la otra.";
-"prefs_tablet_mode_disabled" = "En modo horizontal, se mostrará solo una página.";
+"prefs_dual_page_mode_title" = "Modo Tableta";
+"prefs_dual_page_mode_enabled" = "En modo horizontal, aparecerán dos páginas una al lado de la otra.";
+"prefs_dual_page_mode_disabled" = "En modo horizontal, se mostrará solo una página.";
 "warning" = "Advertencia";
 "kitkat_external_message" = "Debido a las limitaciones de Android, si decide almacenar los datos de la aplicación en su sdcard externa y luego desinstalar, los datos de la aplicación dejarán de ser útilies. Las páginas y audios de Android serán eliminados y usted tendrá que volver a descargarlos. ¿Está seguro que quiere usar la sdcard externa?";
 "update_available" = "Actualización disponible";
@@ -103,11 +99,10 @@
 "quran_ayah" = "Versículo %1$d";
 "quran_sura_title" = "Capítulo %1$@";
 "sura_ayah_notification_str" = "Capítulo %1$@, Versículo %2$d";
-"bookmarks_current_page" = "Página corriente";
 "index_loading" = "Cargando…";
 "canceling" = "Cancelando…";
-"juz2_description" = "Yuz %1$d";
-"page_description" = "página %1$d, Yuz %2$d";
+"juz2_description" = "Yuz %1$@";
+"page_description" = "página %1$@, Yuz %2$@";
 "highlighting_database" = "Archivos requeridos";
 "timing_database" = "Archivos requeridos";
 "sdcard_error" = "No se pudo encontrar tarjetas SD. Por favor, inserte la tarjeta SD y vuelva a intentarlo.";
@@ -153,7 +148,6 @@
 "search_key" = "Pulse la tecla de búsqueda para buscar un versículo";
 "copy_ayah" = "Copiar versículo";
 "ayah_copied_popup" = "Versículo copiado";
-"delete_bookmark" = "Borrar Favorito";
 "tag_bookmark" = "Etiquetar Favorito";
 "delete_tag" = "Borrar Etiqueta";
 "edit_tag" = "Editar Etiqueta";
@@ -162,4 +156,3 @@
 "tag_dlg_title" = "Etiqueta";
 "tag_name" = "Nombre";
 "bookmarks_list_empty" = "Sin Favoritos";
-"tags_list_empty" = "Sin Etiquetas";

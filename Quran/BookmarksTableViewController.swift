@@ -45,7 +45,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
         pageDS = PageBookmarkDataSource(persistence: bookmarksPersistence)
         ayahDS = AyahBookmarkDataSource(persistence: bookmarksPersistence, ayahPersistence: ayahPersistence)
 
-        dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("menu_jump_last_page", tableName: "Android", comment: ""))
+        dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("recent_pages", tableName: "Android", comment: ""))
         dataSource.addDataSource(pageDS, headerTitle: NSLocalizedString("menu_bookmarks_page", tableName: "Android", comment: ""))
         dataSource.addDataSource(ayahDS, headerTitle: NSLocalizedString("menu_bookmarks_ayah", tableName: "Android", comment: ""))
 

@@ -11,7 +11,6 @@
 "menu_about" = "Tentang Kami";
 "menu_settings" = "Tetapan";
 "menu_jump_last_page" = "Halaman terakhir";
-"menu_tags" = "Label";
 "menu_bookmarks" = "Penanda";
 "menu_bookmarks_page" = "Penanda Halaman";
 "menu_bookmarks_ayah" = "Penanda Ayat";
@@ -27,7 +26,8 @@
 "gotoPage" = "Ke halaman";
 "cancel" = "Batal";
 "help_title" = "Soalan yang sering ditanya (FAQ)";
-"help" = "<b>Bagaimana cara memainkan audio tilawah?</b>\
+"help" = "\
+<b>Bagaimana cara memainkan audio tilawah?</b>\
 <br/>Buka Quran pada halaman yang anda inginkan. Tekan pada skrin. Di bahagian bawah, anda akan lihat butang play dan beberapa teks dengan nama qari. Klik nama qari untuk mengganti pilihan qari. Klik butang play untuk memuat turun dan/atau memainkan audio dari halaman yang terpapar.\
 <br/>\
 <br/><b>Bagaimana cara memaparkan terjemahan?</b>\
@@ -44,16 +44,14 @@
 <br/>Pada mod halaman arab, tekan dan tahan pada ayat yang diinginkan, sebuah menu akan terpapar dimana anda boleh memilih untuk menanda, berkongsi, lihat terjemahan atau menyalin ayat.\
 <br/>\
 <br/><b>Font Malayalam/Tamil/Bangla/Urdu tidak berfungsi! </b>\
-<br/>Android sebelum versi 4.0 memang tidak menyokong font tersebut.";
+<br/>Android sebelum versi 4.0 memang tidak menyokong font tersebut.\
+";
 "search_hint" = "Cari dalam Quran";
 "quranSearchType" = "Ayat Quran";
-"found_in_sura" = "Dijumpai dalam Surah";
+"found_in_sura" = "Dijumpai dalam Surah %1$@, Ayat %2$d";
 "no_results" = "Tidak dijumpai \"%@\"";
-"no_active_translation" = "Anda belum menetapkan terjemahan yang aktif. Ubah sesuai terjemahan pada menu tetapan, kemudian ulangi pencarian.";
-"translation_settings" = "Tetapan Terjemahan";
 "no_arabic_search_available" = "Anda belum memuat turun paket pencarian Arab. Sila muat turun dan ulangi pencarian";
 "get_arabic_search_db" = "Dapatkan Database Pencarian Arab";
-"prefs_category_navigation" = "Navigasi";
 "prefs_volume_key_navigation_title" = "Navigasi butang volume";
 "prefs_volume_key_navigation_summary" = "Berpindah halaman dengan menggunakan butang volume";
 "prefs_category_reading" = "Keutamaan Bacaan";
@@ -99,9 +97,9 @@
 "prefs_copying_app_files" = "Menyalin fail aplikasi";
 "prefs_err_moving_app_files" = "Gagal memindahkan fail aplikasi";
 "prefs_no_enough_space_to_move_files" = "Tidak cukup ruang untuk memindahkan fail aplikasi";
-"prefs_tablet_mode_title" = "Mod Tablet";
-"prefs_tablet_mode_enabled" = "Dalam mod landscape, dua halaman akan muncul bersebelahan.";
-"prefs_tablet_mode_disabled" = "Dalam mod landscape, hanya paparkan satu halaman.";
+"prefs_dual_page_mode_title" = "Mod Tablet";
+"prefs_dual_page_mode_enabled" = "Dalam mod landscape, dua halaman akan muncul bersebelahan.";
+"prefs_dual_page_mode_disabled" = "Dalam mod landscape, hanya paparkan satu halaman.";
 "update_available" = "Kemaskini Ada";
 "translation_updates_available" = "Terdapat kemaskini untuk terjemahan anda. Paparkan terjemahan sekarang?";
 "translation_dialog_yes" = "Ya";
@@ -116,11 +114,10 @@
 "quran_ayah" = "Ayat %1$d";
 "quran_sura_title" = "Surah %1$@";
 "sura_ayah_notification_str" = "Surah %1$@, Ayat %2$d";
-"bookmarks_current_page" = "Halaman Ketika Ini";
 "index_loading" = "Memuat…";
 "canceling" = "Membatalkan…";
-"juz2_description" = "Juz\' %1$d";
-"page_description" = "Halaman %1$d, Juz\' %2$d";
+"juz2_description" = "Juz\' %1$@";
+"page_description" = "Halaman %1$@, Juz\' %2$@";
 "highlighting_database" = "Fail yang Diperlukan";
 "timing_database" = "Fail yang Diperlukan";
 "download_successful" = "Muat Turun Berjaya";
@@ -158,7 +155,6 @@
 "search_key" = "Tekan butang carian untuk mencari ayat";
 "copy_ayah" = "Salin ayat";
 "ayah_copied_popup" = "Ayat telah disalin";
-"delete_bookmark" = "Hapus Penanda";
 "tag_bookmark" = "Beri Label pada Penanda";
 "delete_tag" = "Hapus Label";
 "edit_tag" = "Sunting Label";
@@ -167,4 +163,3 @@
 "tag_dlg_title" = "Label";
 "tag_name" = "Nama";
 "bookmarks_list_empty" = "Tidak ada Penanda";
-"tags_list_empty" = "Tidak ada Label";

@@ -86,13 +86,13 @@ extension UIImage {
         newSize.width = floor(newSize.width)
         newSize.height = floor(newSize.height)
 
-        UIGraphicsBeginImageContext(newSize);
-        let context = UIGraphicsGetCurrentContext()!
+        UIGraphicsBeginImageContext(newSize)
+        let context = UIGraphicsGetCurrentContext()
 
         // Move origin to middle
-        context.translateBy(x: newSize.width/2, y: newSize.height/2)
+        context?.translateBy(x: newSize.width/2, y: newSize.height/2)
         // Rotate around middle
-        context.rotate(by: CGFloat(radians))
+        context?.rotate(by: CGFloat(radians))
 
         draw(in: CGRect(x: -size.width/2, y: -size.height/2, width: size.width, height: size.height))
 
@@ -102,4 +102,12 @@ extension UIImage {
         return newImage
     }
 
+    public func scaled(toHeight height: CGFloat) -> UIImage? {
+        let width = height / size.height * size.width
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, scale)
+        draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: height)))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }

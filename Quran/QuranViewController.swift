@@ -420,6 +420,13 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         audioViewPresenter.play(from: options.range.lowerBound, to: options.range.upperBound, page: page)
     }
 
+    func play(from: AyahNumber) {
+        guard let page = currentPage() else { return }
+        audioViewPresenter.verseRuns = .one
+        audioViewPresenter.listRuns = .one
+        audioViewPresenter.play(from: from, to: nil, page: page)
+    }
+
     func highlightAyah(_ ayah: AyahNumber) {
         var set = Set<AyahNumber>()
         set.insert(ayah)

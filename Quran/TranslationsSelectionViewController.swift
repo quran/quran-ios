@@ -31,8 +31,8 @@ class TranslationsSelectionViewController: TranslationsViewController {
         }
 
         refreshControl?.tintColor = nil
-        title = NSLocalizedString("translationsSelectionTitle", comment: "")
-        navigationItem.prompt = NSLocalizedString("translationsSelectionPrompt", comment: "")
+        title = l("translationsSelectionTitle")
+        navigationItem.prompt = l("translationsSelectionPrompt")
         navigationItem.titleView = nil
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
 

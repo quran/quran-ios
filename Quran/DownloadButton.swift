@@ -86,7 +86,7 @@ class DownloadButton: UIView {
 
         button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.setTitle(NSLocalizedString("upgradeTranslationButtonTitle", comment: ""), for: .normal)
+        button.setTitle(l("upgradeTranslationButtonTitle"), for: .normal)
         button.setTitleColor(.white, for: .highlighted)
         button.setTitleColor(.appIdentity(), for: .normal)
 

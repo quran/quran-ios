@@ -47,7 +47,7 @@ extension Quran {
 extension AyahNumber {
 
     var localizedName: String {
-        let ayahNumberString = String.localizedStringWithFormat(NSLocalizedString("quran_ayah", tableName: "Android", comment: ""), ayah)
+        let ayahNumberString = String.localizedStringWithFormat(lAndroid("quran_ayah"), ayah)
         let suraName = Quran.nameForSura(sura)
         return "\(suraName), \(ayahNumberString)"
     }
@@ -55,11 +55,11 @@ extension AyahNumber {
 
 extension Quran {
     static func nameForSura(_ sura: Int, withPrefix: Bool = false) -> String {
-        let suraName = NSLocalizedString("sura_names[\(sura - 1)]", tableName: "Suras", comment: "")
+        let suraName = l("sura_names[\(sura - 1)]", table: "Suras")
         if !withPrefix {
             return suraName
         }
-        let suraFormat = NSLocalizedString("quran_sura_title", tableName: "Android", comment: "")
+        let suraFormat = lAndroid("quran_sura_title")
         return String(format: suraFormat, suraName)
     }
 }

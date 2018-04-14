@@ -279,6 +279,7 @@
 		54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */; };
 		54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DB1CD4F48900D3AEF8 /* Queue.swift */; };
 		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
+		54B8E564208189BF002778D4 /* Localizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B8E563208189BF002778D4 /* Localizations.swift */; };
 		54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */; };
 		54C0DBCA1CDF57EC009AAD8D /* Readers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */; };
 		54C0DBCF1CDF6352009AAD8D /* AudioQariBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */; };
@@ -822,6 +823,7 @@
 		54B266FC1CD657DE00D3AEF8 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54B266FD1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266FE1CD69DE000D3AEF8 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54B8E563208189BF002778D4 /* Localizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizations.swift; sourceTree = "<group>"; };
 		54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPagesDataRetriever.swift; sourceTree = "<group>"; };
 		54C0DBC91CDF57EC009AAD8D /* Readers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Readers.xcassets; path = ../../Readers.xcassets; sourceTree = "<group>"; };
 		54C0DBCE1CDF6352009AAD8D /* AudioQariBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioQariBarView.xib; sourceTree = "<group>"; };
@@ -1888,6 +1890,7 @@
 				545D964A1EBE83B4006D758A /* EditController.swift */,
 				5437D3A01EB38DE600795FA9 /* Deprecated */,
 				545D964C1EBF3990006D758A /* EditableBasicDataSource.swift */,
+				54B8E563208189BF002778D4 /* Localizations.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -3470,6 +3473,7 @@
 				545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */,
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
+				54B8E564208189BF002778D4 /* Localizations.swift in Sources */,
 				54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */,
 				54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */,
 				5487461B1CE9F4E900EED886 /* AudioPlayer.swift in Sources */,

@@ -89,7 +89,7 @@ class QuranPageTitleView: UIView {
 extension QuranPageTitleView {
     func setPageNumber(_ pageNumber: Int, navigationBar: UINavigationBar?) {
         self.pageNumber = pageNumber
-        let pageDescriptionFormat = NSLocalizedString("page_description", tableName: "Android", comment: "")
+        let pageDescriptionFormat = lAndroid("page_description")
         let pageDescription = String.localizedStringWithFormat(pageDescriptionFormat,
                                                                numberFormatter.format(pageNumber),
                                                                numberFormatter.format(Juz.juzFromPage(pageNumber).juzNumber))

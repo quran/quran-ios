@@ -30,10 +30,8 @@ class SurasDataSource: BasicDataSource<Sura, SuraTableViewCell> {
                                     with item: Sura,
                                     at indexPath: IndexPath) {
 
-        let ayahsString = String.localizedStringWithFormat(NSLocalizedString("verses", tableName: "Android", comment: ""), item.numberOfAyahs)
-        let makki = NSLocalizedString("makki", tableName: "Android", comment: "")
-        let madani = NSLocalizedString("madani", tableName: "Android", comment: "")
-        let suraType = item.isMAkki ? makki : madani
+        let ayahsString = String.localizedStringWithFormat(lAndroid("verses"), item.numberOfAyahs)
+        let suraType = item.isMAkki ? lAndroid("makki") : lAndroid("madani")
 
         cell.order.text = numberFormatter.format(NSNumber(value: item.suraNumber))
         cell.name.text = Quran.nameForSura(item.suraNumber)

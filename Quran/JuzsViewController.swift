@@ -30,7 +30,7 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("quran_juz2", tableName: "Android", comment: "")
+        title = lAndroid("quran_juz2")
         tableView.ds_register(cellNib: QuarterTableViewCell.self)
     }
 }

@@ -26,9 +26,9 @@ extension FileSystemError: LocalizedError {
         let text: String
         switch self {
         case .unknown:
-            text = NSLocalizedString("FileSystemError_Unknown", comment: "")
+            text = l("FileSystemError_Unknown")
         case .noDiskSpace:
-            text = NSLocalizedString("FileSystemError_NoDiskSpace", comment: "")
+            text = l("FileSystemError_NoDiskSpace")
         }
         return text
     }
@@ -40,17 +40,17 @@ extension NetworkError: LocalizedError {
         let text: String
         switch self {
         case .unknown:
-            text = NSLocalizedString("unknown_error_message", comment: "Error description")
+            text = l("unknown_error_message")
         case .serverError:
-            text = NSLocalizedString("unknown_error_message", comment: "Error description")
+            text = l("unknown_error_message")
         case .notConnectedToInternet:
-            text = NSLocalizedString("NetworkError_NotConnectedToInternet", comment: "Error description")
+            text = l("NetworkError_NotConnectedToInternet")
         case .internationalRoamingOff:
-            text = NSLocalizedString("NetworkError_InternationalRoamingOff", comment: "Error description")
+            text = l("NetworkError_InternationalRoamingOff")
         case .serverNotReachable:
-            text = NSLocalizedString("NetworkError_ServerNotReachable", comment: "Error description")
+            text = l("NetworkError_ServerNotReachable")
         case .connectionLost:
-            text = NSLocalizedString("NetworkError_ConnectionLost", comment: "Error description")
+            text = l("NetworkError_ConnectionLost")
         }
         return text
     }
@@ -58,12 +58,12 @@ extension NetworkError: LocalizedError {
 
 extension ParsingError: LocalizedError {
     public var errorDescription: String {
-        return NSLocalizedString("NetworkError_Parsing", comment: "When a parsing error occurs")
+        return l("NetworkError_Parsing")
     }
 }
 
 extension PersistenceError: LocalizedError {
     public var errorDescription: String {
-        return NSLocalizedString("unknown_error_message", comment: "")
+        return l("unknown_error_message")
     }
 }

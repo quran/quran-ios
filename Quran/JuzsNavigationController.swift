@@ -28,7 +28,7 @@ class JuzsNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_juz2", tableName: "Android", comment: ""),
+        tabBarItem = UITabBarItem(title: lAndroid("quran_juz2"),
                                   image: #imageLiteral(resourceName: "pie_chart-empty-25"),
                                   selectedImage: #imageLiteral(resourceName: "pie_chart-filled-25"))
     }

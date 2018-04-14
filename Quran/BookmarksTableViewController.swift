@@ -45,9 +45,9 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
         pageDS = PageBookmarkDataSource(persistence: bookmarksPersistence)
         ayahDS = AyahBookmarkDataSource(persistence: bookmarksPersistence, ayahPersistence: ayahPersistence)
 
-        dataSource.addDataSource(lastPageDS, headerTitle: NSLocalizedString("recent_pages", tableName: "Android", comment: ""))
-        dataSource.addDataSource(pageDS, headerTitle: NSLocalizedString("menu_bookmarks_page", tableName: "Android", comment: ""))
-        dataSource.addDataSource(ayahDS, headerTitle: NSLocalizedString("menu_bookmarks_ayah", tableName: "Android", comment: ""))
+        dataSource.addDataSource(lastPageDS, headerTitle: lAndroid("recent_pages"))
+        dataSource.addDataSource(pageDS, headerTitle: lAndroid("menu_bookmarks_page"))
+        dataSource.addDataSource(ayahDS, headerTitle: lAndroid("menu_bookmarks_ayah"))
 
         super.init(nibName: nil, bundle: nil)
 
@@ -79,7 +79,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("menu_bookmarks", tableName: "Android", comment: "")
+        title = lAndroid("menu_bookmarks")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

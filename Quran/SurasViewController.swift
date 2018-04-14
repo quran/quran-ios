@@ -30,7 +30,7 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("quran_sura", tableName: "Android", comment: "")
+        title = lAndroid("quran_sura")
         tableView.ds_register(cellNib: SuraTableViewCell.self)
     }
 }

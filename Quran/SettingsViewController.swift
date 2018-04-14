@@ -53,7 +53,7 @@ class SettingsViewController: BaseTableBasedViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("menu_settings", tableName: "Android", comment: "")
+        title = lAndroid("menu_settings")
 
         tableView.sectionHeaderHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension

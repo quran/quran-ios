@@ -115,12 +115,12 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
                 if let ayahText = try persistence.getOptionalAyahText(forNumber: ayah) {
                     text = ayahText
                 } else {
-                    text = NSLocalizedString("noAvailableTranslationText", comment: "")
+                    text = l("noAvailableTranslationText")
                 }
 
             } catch {
                 Crash.recordError(error, reason: "Issue getting ayah \(ayah), translation: \(translation.id)", fatalErrorOnDebug: false)
-                text = NSLocalizedString("errorInTranslationText", comment: "")
+                text = l("errorInTranslationText")
             }
             ayahTexts.append(AyahText(ayah: ayah, text: text))
         }

@@ -85,9 +85,8 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
             dataSource.add(ds)
         }
 
-        let lastPageHeader = NSLocalizedString("recent_pages", tableName: "Android", comment: "")
-        let juzs = sections.map { String(format: NSLocalizedString("juz2_description", tableName: "Android", comment: ""),
-                                         numberFormatter.format($0.0.juzNumber)) }
+        let lastPageHeader = lAndroid("recent_pages")
+        let juzs = sections.map { String(format: lAndroid("juz2_description"), numberFormatter.format($0.0.juzNumber)) }
         self.dataSource.headerCreator.setSectionedItems([lastPageHeader] + juzs)
     }
 

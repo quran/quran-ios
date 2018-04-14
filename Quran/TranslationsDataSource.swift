@@ -55,8 +55,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         let headers = TranslationsHeaderSupplementaryViewCreator()
         headers.setSectionedItems([
-            NSLocalizedString("downloaded_translations", tableName: "Android", comment: ""),
-            NSLocalizedString("available_translations", tableName: "Android", comment: "")])
+            lAndroid("downloaded_translations"),
+            lAndroid("available_translations")])
 
         set(headerCreator: headers)
         add(downloadedDS)

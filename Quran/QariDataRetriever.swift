@@ -33,6 +33,6 @@ struct QariDataRetriever: Interactor {
 
 extension Qari {
     var name: String {
-        return NSLocalizedString(nameKey, tableName: "Readers", comment: "")
+        return l(nameKey, table: "Readers")
     }
 }

@@ -28,7 +28,7 @@ class SurasNavigationController: BaseNavigationController {
 
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: NSLocalizedString("quran_sura", tableName: "Android", comment: ""),
+        tabBarItem = UITabBarItem(title: lAndroid("quran_sura"),
                                   image: #imageLiteral(resourceName: "page-empty-25"),
                                   selectedImage: #imageLiteral(resourceName: "page-filled-25"))
     }

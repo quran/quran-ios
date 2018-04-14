@@ -94,7 +94,7 @@ extension AudioDownloadTableViewCell {
 
         let suraCount = download.downloadedSuraCount
         let size = Int64(download.downloadedSizeInBytes)
-        let filesDownloadedFormat = NSLocalizedString("files_downloaded", tableName: "Android", comment: "")
+        let filesDownloadedFormat = lAndroid("files_downloaded")
         let filesDownloaded = String(format: filesDownloadedFormat, suraCount)
         secondLabel.text = "\(type(of: self).formatter.string(fromByteCount: size)) - \(filesDownloaded)"
     }

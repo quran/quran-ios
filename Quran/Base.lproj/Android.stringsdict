@@ -29,9 +29,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>One result for \&quot;%1$@\&quot;:</string>
+                <string>One result for \&quot;%1$d\&quot;:</string>
                 <key>other</key>
-                <string>%2$d results for \&quot;%1$@\&quot;:</string>
+                <string>%2$d results for \&quot;%1$d\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>
@@ -64,6 +64,22 @@
                 <string>Deleted one item</string>
                 <key>other</key>
                 <string>Deleted %d items</string>
+            </dict>
+        </dict>
+        <key>plural_recent_pages</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@plural_recent_pages@</string>
+            <key>plural_recent_pages</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Last page</string>
+                <key>other</key>
+                <string>Recent pages</string>
             </dict>
         </dict>
     </dict>

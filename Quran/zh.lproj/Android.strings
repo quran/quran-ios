@@ -1,6 +1,7 @@
 "app_name" = "古兰经";
 "downloadPrompt_title" = "下载所需的文件吗？";
-"downloadPrompt" = "为了更好的使用体验，需要下载一些文件。如果目前选择不下载，每个页面载入时会花较长的时间。确认开始下载这些文件吗？";
+"downloadPrompt" = "为了更好的使用体验，需要下载一些文件。如果目前选择不下载，每个页面载入时会花较长的时间。确认开始下载这些文件吗？\
+";
 "downloadPrompt_ok" = "确认";
 "downloadPrompt_no" = "取消";
 "downloading_title" = "下载中…";
@@ -9,7 +10,6 @@
 "menu_about" = "关于";
 "menu_settings" = "设置";
 "menu_jump_last_page" = "上次的页面";
-"menu_tags" = "标签";
 "menu_bookmarks" = "收藏";
 "menu_bookmarks_page" = "页面收藏";
 "menu_bookmarks_ayah" = "节收藏";
@@ -25,7 +25,8 @@
 "gotoPage" = "跳转到页数";
 "cancel" = "取消";
 "help_title" = "常见问题";
-"help" = "<b>怎样播放音频？</b>\
+"help" = "\
+<b>怎样播放音频？</b>\
 <br/>打开任意古兰经页面，轻触屏幕，屏幕底部会出现播放按钮和诵经家的名字.\
 点击诵经家的名字可以调出诵经家列表进行选择，点击播放按钮会下载当前页面或当前章的音频后开始播放。\
 <br/>\
@@ -46,16 +47,14 @@
 <br/>在阿拉伯语原文页面，长按某个章节会弹出关联菜单，包括了收藏，分享，查看译文，复制到剪贴板等功能。\
 <br/>\
 <br/><b>无法使用马拉雅拉姆语、泰米尔语、孟加拉语、乌尔都语的字体!</b>\
-<br/>很抱歉，安卓4.0以前的版本不支持这些字体，目前还没有好的解决方案。";
+<br/>很抱歉，安卓4.0以前的版本不支持这些字体，目前还没有好的解决方案。\
+";
 "search_hint" = "搜索古兰经";
 "quranSearchType" = "Verses of the Quran";
-"found_in_sura" = "对应章节";
+"found_in_sura" = "对应章节 %1$@ 节 %2$d";
 "no_results" = "未搜索到\"%@\"";
-"no_active_translation" = "当前没有可用的译文，请设置译文语言后再次进行搜索.";
-"translation_settings" = "译文设置";
 "no_arabic_search_available" = "还没有下载搜索包，请下载后再次进行搜索.";
 "get_arabic_search_db" = "下载阿拉伯语搜索包";
-"prefs_category_navigation" = "浏览";
 "prefs_volume_key_navigation_title" = "音量键翻页";
 "prefs_volume_key_navigation_summary" = "用音量键控制翻页";
 "prefs_category_reading" = "朗读设置";
@@ -105,11 +104,10 @@
 "quran_sura" = "章";
 "quran_ayah" = "节 %1$d";
 "sura_ayah_notification_str" = "第%1$@章，第%2$d节";
-"bookmarks_current_page" = "当前页";
 "index_loading" = "正在载入…";
 "canceling" = "正在取消…";
-"juz2_description" = "第%1$d卷";
-"page_description" = "第%2$d卷，第%1$d页";
+"juz2_description" = "第%1$@卷";
+"page_description" = "第%2$@卷，第%1$@页";
 "highlighting_database" = "所需文件";
 "timing_database" = "所需文件";
 "download_successful" = "下载成功";
@@ -146,7 +144,6 @@
 "search_key" = "按住搜索键来查找某节";
 "copy_ayah" = "复制此节";
 "ayah_copied_popup" = "复制成功";
-"delete_bookmark" = "取消收藏";
 "tag_bookmark" = "为收藏加标签";
 "delete_tag" = "删除标签";
 "edit_tag" = "编辑标签";
@@ -155,4 +152,3 @@
 "tag_dlg_title" = "标签";
 "tag_name" = "标签名";
 "bookmarks_list_empty" = "没有收藏";
-"tags_list_empty" = "没有标签";

@@ -1,146 +1,226 @@
 "app_name" = "قرآن";
-"downloadPrompt_title" = "فايلهاي مورد نياز بارگذاري شود؟";
-"downloadPrompt" = "براي عملکرد بهينه، برخي از فايل ها را بايد دريافت کنيد، ممکن است اين کار مقداري به طول بيانجامد، آيا براي اين کار آماده هستيد؟";
-"downloadPrompt_ok" = "بله";
-"downloadPrompt_no" = "خير";
-"downloading_title" = "بارگيري";
-"downloading_message" = "لطفا براي بارگيري فايلها صبر نماييد. (از ادامه پشتیبانی می‌شود)";
-"extracting_title" = "پردازش";
+"downloadPrompt_title" = "فایل‌های موردنیاز بارگذاری شود؟";
+"downloadPrompt" = "برای عملکرد بهینه بایستی تعدادی فایل از اینترنت دریافت گردد. این کار قدری طول خواهد کشید. آیا آمادگی این کار را دارید؟";
+"downloadPrompt_ok" = "بلی";
+"downloadPrompt_no" = "خیر";
+"downloading_title" = "بارگذاری…";
+"downloading_message" = "لطفاً برای بارگذاری فایل‌ها صبر نمایید. (از ازسرگیری پشتیبانی می‌شود.(";
+"extracting_title" = "در حال پردازش…";
 "menu_about" = "درباره ما";
-"menu_settings" = "تنظيمات";
-"menu_jump_last_page" = "آخرين صفحه";
-"menu_tags" = "برچسب ها";
-"menu_bookmarks" = "نشانکها";
-"menu_bookmarks_page" = "صفحه نشانکها";
-"menu_bookmarks_ayah" = "نشانکهاي آيه";
-"menu_sort" = "مرتب سازی";
+"menu_settings" = "تنظیمات";
+"menu_jump_last_page" = "آخرین صفحه";
+"recent_pages" = "آخرین صفحات";
+"menu_bookmarks" = "نشانک‌ها";
+"menu_bookmarks_page" = "نشانک‌های صفحه";
+"menu_bookmarks_ayah" = "نشانک‌های آیه";
+"menu_sort" = "مرتب‌سازی";
 "menu_sort_date" = "تاریخ اضافه شدن";
 "menu_sort_location" = "محل در قرآن";
 "menu_translation" = "مشاهده ترجمه";
 "menu_back_to_page" = "مشاهده قرآن";
 "menu_help" = "راهنما";
 "menu_search" = "جستجو";
-"menu_get_translations" = "دريافت ترجمه";
+"menu_get_translations" = "دریافت ترجمه‌ها";
 "menu_jump" = "پرش";
-"gotoPage" = "برو به صفحه";
+"gotoPage" = "رفتن به صفحه";
 "cancel" = "لغو";
-"help_title" = "پرسش و پاسخ هاي متداول";
-"help" = "<b>چگونه صوت را فعال کنم؟</b>\
-<br/>براي فعال کردن صوت در اين برنامه کافي است روي صفحه مورد نظر کليک کنيد بعد دکمه صدا را مشاهده خواهيد کرد مي توانيد آن را فعال نماييد.\
+"help_title" = "پرسش و پاسخ‌های متداول";
+"help" = "\
+<b>چگونه فایل‌های صوتی را پخش کنم؟</b>\
+<br/>برای فعال کردن صوت در این برنامه کافی است بر صفحه مورد نظر ضربه زده تا دکمه‌های پخش صدا را مشاهده نمایید.\
 <br/>\
-<br/><b>چگونه مي توانم ترجمه را مشاهده نمايم؟</b>\
-<br/>کافي است صفحه مورد نظر را کليک نماييد سپس علامت جهان  يا در برخي دستگاه ها علامت سه نقطه را کليک کنيد.\
+<br/><b>چگونه ترجمه را مشاهده نمایم؟</b>\
+<br/>کافی است بر صفحه مورد نظر ضربه زده و سپس علامت جهان یا در برخی دستگاه‌ها علامت سه‌نقطه را بفشارید.\
+<br/>اگر در دستگاه خود هیچ ترجمه‌ای نداشته باشید، باید به قسمت تنظیمات رفته و ترجمه‌هایی را بارگذاری نمایید.\
 <br/>\
-اگر شما هيچ ترجمه اي را بر روي دستگاه خود نداريد مي توانيد ابتدا آن را از قسمت تنظيمات بارگذاري نماييد.\
+<br/><b>چگونه یک صفحه را نشانک‌گذاری کنم؟</b>\
+<br/>صفحه مورد نظر خود را انتخاب نمایید، سپس بر صفحه ضربه زده و روبان بالای صحفه را لمس نمایید.\
 <br/>\
-<br/><b>چگونه مي توانم يک صفحه را نشانه گذاري کنم</b>\
-<br/>صفحه مورد نظر خود را انتخاب نماييد سپس صفحه را کليک کنيد و روبان را لمس نماييد.\
+<br/><b>چگونه اندازه قلم را بزرگتر کنم؟</b>\
+<br/>برای متن عربی قرآن دستگاه خود را در حالت افقی نگه دارید و برای اندازه متن ترجمه به قسمت تنظیمات مراجعه نمایید.\
 <br/>\
-<br/><b>چگونه مي توانم فونت را بزرگتر کنم؟</b>\
-<br/>براي متن عربي گوشي خود را عمودي کنيد و براي اندازه متن ترجمه به قسمت تنظيمات مراجعه نماييد.\
+<br/><b>چگونه یک آیه را به اشتراک بگذارم؟</b>\
+<br/>کافی است آیه مورد نظر خود را برای مدت زمان کوتاهی لمس نمایید تا دکمه اشتراک‌گذاری نمایان شود.\
 <br/>\
-<br/><b>چگونه يک آيه را به اشتراک بگذارم؟</b>\
-<br/>کافي است آيه مورد نظر خود را براي مدت زمان کوتاهي لمس نماييد.\
-<br/>\
-<br/><b>در ديدن فونت مشکل دارم؟</b>\
-<br/>متاسفانه برخي از فونت هاي  براي آندرويد 4 پيش بيني نشده است.";
+<br/><b>در دیدن متن ترجمه مشکل دارم.</b>\
+<br/>متأسفانه برخی قلم‌ها در آندرویدهای قدیمی‌تر از نسخه ۴ پیش‌بینی نشده است.\
+";
 "search_hint" = "جستجو در قرآن";
-"quranSearchType" = "آيات قرآن";
-"found_in_sura" = "در سوره";
-"no_results" = "هيچ نتيجه اي يافت نشد براي \"%@\"";
-"no_active_translation" = "شما هيچ ترجمه را فعال نکرده ايد";
-"translation_settings" = "تنظيمات ترجمه";
-"no_arabic_search_available" = "شما متن عربي قرآن را براي جستجو بارگذاري نکرده ايد، لطفا آنرا ابتدا دريافت نماييد";
-"get_arabic_search_db" = "دريافت متن عربي قرآن براي جستجوي در متن";
-"prefs_category_reading" = "تنظيمات خواندن";
-"prefs_category_translation" = "تنظيمات ترجمه";
-"prefs_category_display_settings" = "تنظيمات صفحه";
-"prefs_use_arabic_title" = "حالت عربي";
-"prefs_use_arabic_summary_on" = "به عربي برگردان خواهد شد";
-"prefs_lock_orientation_title" = "جهت قفل شدن صفحه نمايش";
-"prefs_lock_orientation_summary_on" = "تنظيمات جهت نمايش";
-"prefs_lock_orientation_summary_off" = "تطبيق به حالت جهت گيري فعلي";
-"prefs_landscape_orientation_title" = "جهت عمودي";
-"prefs_landscape_orientation_summary_on" = "استفاده در جهت عمودي";
-"prefs_landscape_orientation_summary_off" = "استفاده در جهت افقي";
-"prefs_night_mode_title" = "نمايش شبانه";
-"prefs_night_mode_summary" = "تاريک نمودن صفحه و روشن نمودن متن";
+"quranSearchType" = "آیات قرآن";
+"found_in_sura" = "در آیه %2$d از سوره %1$@";
+"no_results" = "جستجوی «%@» هیچ نتیجه‌ای دربرنداشت.";
+"no_arabic_search_available" = "متن عربی قرآن هنوز بارگذاری نشده است. لطفاً ابتدا آن را دریافت نمایید.";
+"get_arabic_search_db" = "متن عربی قرآن را برای جستجو در متن دریافت کنید.";
+"prefs_category_reading" = "تنظیمات خواندن";
+"prefs_category_translation" = "تنظیمات ترجمه";
+"prefs_category_display_settings" = "تنظیمات نمایش";
+"prefs_use_arabic_title" = "حالت عربی";
+"prefs_use_arabic_summary_on" = "تغییر زبان برنامه به عربی";
+"prefs_lock_orientation_title" = "حفظ جهت نمایش";
+"prefs_lock_orientation_summary_on" = "عدم تغییر خودکار جهت نمایش";
+"prefs_lock_orientation_summary_off" = "تطبیق خودکار با جهت دستگاه";
+"prefs_landscape_orientation_title" = "جهت افقی";
+"prefs_landscape_orientation_summary_on" = "استفاده در جهت افقی";
+"prefs_landscape_orientation_summary_off" = "استفاده در جهت عمودی";
+"prefs_night_mode_title" = "نمایش شبانه";
+"prefs_night_mode_summary" = "استفاده از پس‌زمینه تاریک و نوشته‌های روشن";
 "prefs_night_mode_text_brightness_title" = "روشنایی متن";
-"prefs_night_mode_text_brightness_summary" = "روشنایی متن در هنگام شب فعال می‌شود.";
-"prefs_display_marker_title" = "نمايش پيغام";
-"prefs_display_marker_summary" = "نمايش پيغام ها فعال گردد";
+"prefs_night_mode_text_brightness_summary" = "میزان روشنایی متن در حالت شبانه";
+"prefs_display_marker_title" = "نمایش پیغام‌ها";
+"prefs_display_marker_summary" = "فعال‌سازی پیغام‌های رسیدن به جزء، حزب و …";
 "prefs_translation_text_title" = "اندازه قلم ترجمه";
-"prefs_translations" = "ترجمه ها";
-"prefs_translations_summary" = "بارگذاري و مديريت ترجمه";
-"prefs_ayah_before_translation_title" = "آيه قبل از ترجمه";
-"prefs_ayah_before_translation_summary" = "نشان دادن آيه عربي بعد از ترجمه";
-"prefs_category_download" = "بارگذاري تنظيمات";
-"prefs_streaming_title" = "جريان";
-"prefs_streaming_summary" = "زماني که صوت فعال است";
-"prefs_download_amount_title" = "بارگذاري مقدار";
-"prefs_download_amount_summary" = "مقدار ترجيهي بارگذاري صوت";
-"downloaded_translations" = "بارگذاري شد";
-"available_translations" = "فعال براي بارگذاي";
+"prefs_translations" = "ترجمه‌ها";
+"prefs_translations_summary" = "بارگذاری و مدیریت ترجمه‌ها";
+"prefs_ayah_before_translation_title" = "آیه پیش از ترجمه";
+"prefs_ayah_before_translation_summary" = "نمایش متن عربی آیه پیش از ترجمه";
+"prefs_category_download" = "بارگذاری تنظیمات";
+"prefs_streaming_title" = "پخش اینترنتی";
+"prefs_streaming_summary" = "پخش جویباری صوت از اینترنت";
+"prefs_download_amount_summary" = "میزان پیشنهادی برای بارگذاری فایل‌های صوتی";
+"downloaded_translations" = "بارگذاری انجام گرفت";
+"available_translations" = "آماده بارگذاری";
 "remove_button" = "حذف";
-"dialog_ok" = "بله";
-"update_available" = "به روز رسانی موجود است";
-"translation_updates_available" = "برای برخی از ترجمه ها، به روز رسانی موجود است. صفحه ترجمه ها را مشاهده می‌کنید؟";
-"translation_dialog_yes" = "بله";
-"translation_dialog_later" = "بعدا";
-"quran_rob3" = "¼";
-"quran_nos" = "½";
-"quran_talt_arb3" = "¾";
+"dialog_ok" = "تأیید";
+"update_available" = "به‌روزرسانی موجود است";
+"translation_updates_available" = "برای برخی از ترجمه‌ها به‌روزرسانی موجود است. مایل‌اید به صفحه ترجمه‌ها بروید؟";
+"translation_dialog_yes" = "بلی";
+"translation_dialog_later" = "بعداً";
+"quran_rob3" = "ربع";
+"quran_nos" = "نصف";
+"quran_talt_arb3" = "سه‌ربع";
 "quran_hizb" = "حزب";
 "quran_juz2" = "جزء";
 "quran_page" = "صفحه";
 "quran_sura" = "سوره";
-"quran_ayah" = "%1$d آية";
+"quran_ayah" = "آیه %1$d";
 "quran_sura_title" = "سوره %1$@";
-"sura_ayah_notification_str" = "سوره %1$@, آيه %2$d";
-"bookmarks_current_page" = "صفحه کنوني";
-"index_loading" = "بارگذاري…";
+"sura_ayah_notification_str" = "سوره %1$@، آیه %2$d";
+"index_loading" = "بارگذاری…";
 "canceling" = "در حال لغو";
-"page_description" = "صفحه %1$d, جزء %2$d";
-"highlighting_database" = "فايل هاي مورد نياز";
-"timing_database" = "فايل هاي مورد نياز";
-"download_successful" = "با موفقيت بارگذاري انجام شد";
-"download_processing" = "در حال بارگذاري;";
-"download_error_general" = "خطا در بارگذاري";
-"download_error_disk" = "فضاي کافي براي بارگذاري وجود ندارد";
-"download_error_network" = "خطاي در شبکه ديتا";
-"download_error_perms" = "خطا در دسترسي";
-"download_error_invalid_download" = "بارگذاري با خطا مواجه شد";
-"download_error_invalid_download_retry" = "فايل خراب است، دوباره بارگذاري نماييد";
-"download_error_network_retry" = "خطاي شبکه;";
-"notification_download_canceled" = "بارگذاري لغو شده ها";
-"download_non_wifi_prompt" = "شبکه بي سيم شما خاموش است، در هر صورت بارگذاري نمايد؟";
-"download_progress" = "بارگذاري %1$@ / %2$@";
-"process_progress" = "پردازش %1$d / %2$d";
+"page_description" = "صفحه %1$@، جزء %2$@";
+"highlighting_database" = "فایل‌های موردنیاز";
+"timing_database" = "فایل‌های موردنیاز";
+"download_successful" = "بارگذاری موفقیت‌آمیز بود";
+"download_processing" = "در حال بارگذاری…";
+"download_error_general" = "خطا در بارگذاری";
+"download_error_disk" = "فضای کافی برای بارگذاری وجود ندارد";
+"download_error_network" = "خطای شبکه مانع بارگذاری است";
+"download_error_perms" = "خطا در دسترسی";
+"download_error_invalid_download" = "بارگذاری با خطا مواجه شد";
+"download_error_invalid_download_retry" = "فایل خراب است. دوباره بارگذاری نمایید";
+"download_error_network_retry" = "خطای شبکه، تلاش مجدد…";
+"notification_download_canceled" = "بارگذاری لغو شد";
+"download_non_wifi_prompt" = "شبکه بی‌سیم قطع است. بارگذاری انجام شود؟";
+"download_progress" = "بارگذاری %1$@ / %2$@";
+"process_progress" = "در حال پردازش %1$d / %2$d";
 "download_retry" = "تلاش دوباره";
 "download_cancel" = "لغو";
 "remove_dlg_title" = "حذف ترجمه";
-"remove_dlg_msg" = "آيا مطمئن هستيد که مي خواهيد حذف کنيد %1$@?";
-"error_getting_translation_list" = "مشکلي وجود دارد، لطفا بعداً دوباره تلاش نماييد.";
+"remove_dlg_msg" = "آیا مطمئن‌اید که می‌خواهید %1$@ را حذف کنید؟";
+"error_getting_translation_list" = "خطا در بارگذاری فهرست ترجمه‌ها. لطفاً بعداً دوباره تلاش نمایید.";
 "search_data" = "جستجو";
-"email_us" = "اگر جواب سوال شما در بالا پیدا نشد، می‌توانید برای پشتیبانی با رایانامه quranandroid@gmail.com تماس حاصل نمایید. لطفا توجه داشته باشید که نامه های زیادی دریافت می‌شود، پاسخ به نامه شما ممکن است کمی طول بکشد.";
-"makki" = "مکي";
-"madani" = "مدني";
-"bookmark_ayah" = "نشانه گذاري آيه";
-"tag_ayah" = "برچسب گذاری آیه";
-"share_ayah" = "اشتراک گذاري آيه";
-"translation_ayah" = "ترجمه آيه";
-"play_from_here" = "شروع از اينجا";
+"email_us" = "اگر پاسخ پرسشتان در بالا یافت نشد، می‌توانید برای پشتیبانی با رایانامه quranandroid@gmail.com تماس بگیرید. توجه داشته باشید که حجم نامه‌های دریافتی بالاست و شاید پاسخ به نامه شما اندکی طول بکشد.";
+"makki" = "مکی";
+"madani" = "مدنی";
+"bookmark_ayah" = "نشانک‌گذاری بر آیه";
+"tag_ayah" = "برچسب‌گذاری بر آیه";
+"share_ayah" = "اشتراک‌گذاری آیه";
+"translation_ayah" = "ترجمه آیه";
+"play_from_here" = "شروع پخش از این آیه";
 "via_string" = "توسط @QuranAndroid";
-"search_key" = "کليد جستجو را کليک نماييد";
-"copy_ayah" = "کپي کردن آيه";
-"ayah_copied_popup" = "آيه کپي شد";
-"delete_bookmark" = "حذف نشانک";
-"tag_bookmark" = "نشانک برچسب";
+"search_key" = "دکمه جستجو را بفشارید";
+"copy_ayah" = "کپی کردن آیه";
+"ayah_copied_popup" = "آیه کپی شد";
+"tag_bookmark" = "تعیین برچسب برای نشانک";
 "delete_tag" = "حذف برچسب";
 "edit_tag" = "تغییر برچسب";
 "new_tag" = "برچسب جدید";
 "not_tagged" = "بدون برچسب";
 "tag_dlg_title" = "برچسب";
 "tag_name" = "نام";
-"bookmarks_list_empty" = "لیست نشانه خالی است";
-"tags_list_empty" = "لیست برچسب خالی است.";
+"bookmarks_list_empty" = "نشانکی وجود ندارد";
+"about_data_sources" = "منبع داده‌ها";
+"about_description" = "این برنامه مجانی است. تهیه‌کنندگانش را از دعای خود محروم نسازید.";
+"about_images" = "تصاویر";
+"about_madani_images" = "تصاویر صفحه‌های این قرآن متعلق به چاپخانه ملک فهد در مدینه منوره می‌باشد.";
+"about_quranicaudio_summary" = "تلاوت‌های قرآنی (بی‌وقفه)";
+"about_quran_ksu" = "پروژه مصحف الکترونیکی";
+"about_quran_ksu_summary" = "پروژه مصحف الکترونیکی در دانشگاه ملک سعود منبع تفاسیر عربی و برخی ترجمه‌هاست.";
+"about_tanzil_summary" = "بسیاری از ترجمه‌ها";
+"about_noorhidayat_summary" = "قلم نور حرا و ترجمه مفتی تقی";
+"about_open_source" = "پروژه‌های متن‌باز";
+"about_others" = "دیگران";
+"about_contributors" = "همکاران";
+"about_contributors_summary" = "فهرستی از افرادی که به توسعه این برنامه یاری رسانده‌اند.";
+"audio_manager" = "مدیریت فایل‌های صوتی";
+"downloadImportantPrompt" = "یک به‌روزرسانی کوچک اما مهم برای تصاویر قرآن وجود دارد. آیا مایل‌اید این وصله را بارگذاری نمایید؟";
+"download_extra_data" = "برای عملکرد مناسب امکانات اشتراک‌گذاری و ترجمه باید یکی دو فایل را بارگذاری نمایید. موافق‌اید؟";
+"download_sura_progress" = "بارگذاری %1$@ / %2$@ از سوره %3$d";
+"export_data_error" = "خطا در برون‌بُرد داده‌ها";
+"exported_data" = "بُرون‌برد به %1$@ انجام گرفت.";
+"get_translations" = "دریافت ترجمه‌ها";
+"import_data" = "درون‌بُرد داده‌ها";
+"import_data_and_override" = "عملیات درون‌بُرد نشانک‌های فعلی را با %1$d نشانک و %2$d برچسب جایگزین می‌نماید. موافق‌اید؟";
+"import_successful" = "درون‌بُرد موفقیت‌آمیز";
+"import_data_permissions_error" = "هنگام عملیات درون‌برد خطای دسترسی رخ داد.";
+"import_data_error" = "درون‌برد با خطا مواجه شد.  داده‌ها معتبر نیست.";
+"more_translations" = "ترجمه‌های دیگر";
+"juz2_description" = "جزء %1$@";
+"menu_other_apps" = "برنامه‌های دیگر";
+"menu_sort_group_by_tags" = "گروه‌بندی برچسب‌ها";
+"need_translation" = "تفسیر یا ترجمه‌ای بارگذاری نشده‌ است.";
+"play" = "پخش";
+"play_apply" = "اِعمال";
+"play_apply_and_play" = "اِعمال و پخش";
+"play_each_verse" = "پخش هر آیه:";
+"play_from" = "از";
+"play_restrict_range" = "تنها این آیات را پخش کن";
+"play_to" = "تا";
+"play_verses_range" = "پخش مجموعه آیات:";
+"previous" = "قبلی";
+"pause" = "مکث";
+"stop" = "توقف";
+"next" = "بعدی";
+"prefs_app_location_summary" = "حافظه‌ای که تمایل دارید فایل‌ها روی آن ذخیره شود را انتخاب نمایید";
+"prefs_app_location_title" = "پوشه داده‌های قرآن";
+"prefs_app_size" = "حجم کنونی داده‌ها";
+"prefs_audio_manager" = "مدیریت فایل‌های صوتی (آزمایشی)";
+"prefs_audio_manager_summary" = "بارگذاری و مدیریت فایل‌های صوتی";
+"prefs_calculating_app_size" = "محاسبه حجم برنامه";
+"prefs_category_advanced" = "گزینه‌های پیشرفته";
+"prefs_category_advanced_summary" = "درون‌برد و برون‌برد نشانک‌ها و برچسب‌ها، تعیین پوشه داده‌های قرآن و …";
+"prefs_copying_app_files" = "در حال کپی نمودن فایل‌های برنامه";
+"prefs_download_amount_title" = "حجم بارگذاری";
+"prefs_err_moving_app_files" = "خطا در جابجایی فایل‌های برنامه";
+"prefs_import_title" = "درون‌برد";
+"prefs_import_summary" = "درون‌برد نشانک‌ها و برچسب‌ها";
+"prefs_export_summary" = "برون‌بُرد نشانک‌ها و برچسب‌ها";
+"prefs_export_title" = "برون‌بُرد";
+"prefs_new_background_title" = "پس‌زمینه جدید";
+"prefs_highlight_bookmarks_summary" = "برجسته‌سازی آیه‌های نشانکدار";
+"prefs_highlight_bookmarks_title" = "برجسته‌سازی نشانک‌ها";
+"prefs_no_enough_space_to_move_files" = "فضای کافی برای جابجایی فایل‌های برنامه وجود ندارد";
+"prefs_overlay_page_info_summary" = "نمایش شماره صفحه، نام سوره و شماره جزء هنگام خواندن";
+"prefs_overlay_page_info_title" = "نمایش اطلاعات صفحه";
+"prefs_sdcard_external" = "حافظه خارجی %1Sd";
+"prefs_sdcard_internal" = "حافظه داخلی";
+"prefs_dual_page_mode_disabled" = "تنها یک صفحه در حالت افقی";
+"prefs_dual_page_mode_enabled" = "نمایش دو صحفه در حالت افقی";
+"prefs_dual_page_mode_title" = "حالت مخصوص رایانه دستی";
+"prefs_volume_key_navigation_summary" = "استفاده از دکمه‌های صدا برای ورق زدن";
+"prefs_volume_key_navigation_title" = "ورق زدن با دکمه‌های صدا";
+"quran_ayah_details" = "%1$@ - آیه %2$@، جزء %3$@";
+"sdcard_error" = "کارت حافظه یافت نشد. آن را دوباره در دستگاه قرار داده و بار دیگر امتحان نمایید.";
+"share_ayah_text" = "اشتراک‌گذاری متن آیه";
+"undo" = "واگرد";
+"warning" = "هشدار";
+"download_sura_ayah_progress" = "بارگذاری سوره %1$d آیه %2$d";
+"storage_permission_rationale" = "برنامه قرآن برای ذخیره داده‌ها در حافظه خارجی\
+به اجازه شما نیاز دارد.  بدون این اجازه برنامه کار می‌کند؛ اما در صورتی که داده‌ها یا برنامه\
+را پاک نمایید، تمام صفحات، فایل‌های صوتی و دیگر داده‌های بارگذاری‌شده از بین خواهد رفت.\
+آیا اجازه ذخیره داده‌ها در حافظه خارجی را صادر می‌کنید؟";
+"storage_permission_please_restart" = "برنامه را از نو آغاز کنید تا تغییرات اثر کند.";
+"repeatValues1" = "یک بار";
+"repeatValues2" = "دو بار";
+"repeatValues3" = "سه بار";
+"repeatValues4" = "بی‌پایان";

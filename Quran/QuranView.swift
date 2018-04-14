@@ -35,6 +35,7 @@ protocol QuranViewDelegate: class {
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
     func selectWordTranslationTextType(from view: UIView)
+    func play(from: AyahNumber)
 }
 
 class QuranView: UIView, UIGestureRecognizerDelegate {
@@ -236,7 +237,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
 
-        UIMenuController.shared.menuItems = [configuredBookmarkMenuItem(shareData: shareData)]
+        UIMenuController.shared.menuItems = [createPlayMenuItem(ayah: shareData.ayah), configuredBookmarkMenuItem(shareData: shareData)]
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
@@ -313,6 +314,13 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
                                      didSelectTextLinesToShare: textLines,
                                      sourceView: self,
                                      sourceRect: self.targetRect(for: shareData.location))
+        }
+    }
+
+    private func createPlayMenuItem(ayah: AyahNumber) -> UIMenuItem {
+        let image = #imageLiteral(resourceName: "ic_play").scaled(toHeight: 25)?.tintedImage(withColor: .white)
+        return UIMenuItem(title: "Play", image: image) { [weak self] _ in
+            self?.delegate?.play(from: ayah)
         }
     }
 

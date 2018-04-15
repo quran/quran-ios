@@ -120,4 +120,9 @@ struct Analytics {
         CLog("opening Quran from:", screen.rawValue)
         Answers.logCustomEvent(withName: "OpeningQuran", customAttributes: ["from": screen.rawValue])
     }
+
+    func review(automatic: Bool) {
+        CLog("Requesting user review automatic:", automatic)
+        Answers.logCustomEvent(withName: "RequestReview", customAttributes: ["automatic": automatic.description])
+    }
 }

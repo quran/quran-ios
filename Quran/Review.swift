@@ -60,6 +60,7 @@ struct ReviewService {
     private func requestReview() {
         if #available(iOS 10.3, *) {
             SKStoreReviewController.requestReview()
+            Analytics.shared.review(automatic: true)
         }
     }
 }

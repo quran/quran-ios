@@ -56,6 +56,7 @@ class NavigationSettingsCreators: SettingsCreators {
             } else {
                 UIApplication.shared.openURL(url)
             }
+            Analytics.shared.review(automatic: false)
         }
         return [translation, audio, review]
     }

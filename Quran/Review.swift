@@ -35,19 +35,19 @@ struct ReviewService {
             let date = Date().timeIntervalSince1970
             simplePersistence.setValue(date, forKey: .appInstalledDate)
         } else {
-            let alreadyAskedForReview = simplePersistence.valueForKey(.alreadyAskedForReview)
+            let requestReviewDate = simplePersistence.valueForKey(.requestReviewDate)
 
-            if !alreadyAskedForReview {
+            if requestReviewDate == nil {
                 let appInstalledDate = simplePersistence.valueForKey(.appInstalledDate)
                 let oldDate = Date(timeIntervalSince1970: appInstalledDate)
                 let today = Date()
                 let difference = Calendar.current.dateComponents([.day], from: oldDate, to: today)
 
                 if let daysCount = difference.day {
-                    if daysCount > 7 && appOpenedCounter > 10 {
+                    if daysCount >= 7 && appOpenedCounter >= 10 {
                         requestReview()
 
-                        simplePersistence.setValue(true, forKey: .alreadyAskedForReview)
+                        simplePersistence.setValue(Date().timeIntervalSince1970, forKey: PersistenceKeyBase.requestReviewDate)
                     }
                 }
             }

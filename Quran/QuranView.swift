@@ -327,13 +327,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private func configuredBookmarkMenuItem(shareData: QuranShareData) -> UIMenuItem {
         let isBookmarked = shareData.cell.highlightedVerse(forType: .bookmark)?.contains(shareData.ayah) ?? false
         if isBookmarked {
-            Analytics.shared.unbookmark(ayah: shareData.ayah)
             let image = #imageLiteral(resourceName: "bookmark-filled").tintedImage(withColor: .bookmark())
             return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
                 self?.removeAyahFromBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)
             }
         } else {
-            Analytics.shared.bookmark(ayah: shareData.ayah)
             let image = #imageLiteral(resourceName: "bookmark-empty").tintedImage(withColor: .white)
             return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
                 self?.addAyahToBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)
@@ -342,6 +340,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func removeAyahFromBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
+        Analytics.shared.unbookmark(ayah: ayah)
         DispatchQueue.default
             .promise2 { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in
@@ -353,6 +352,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func addAyahToBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
+        Analytics.shared.bookmark(ayah: ayah)
         DispatchQueue.default
             .promise2 { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
             .then(on: .main) { _ -> Void in

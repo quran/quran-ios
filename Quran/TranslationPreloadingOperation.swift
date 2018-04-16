@@ -70,7 +70,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
             let arabicText = arabic[i].text
             let ayahTranslations = translations.map { (translation, ayahs) -> TranslationText in
                 let text = ayahs[i].text
-                let isLongText = text.characters.count >= 300
+                let isLongText = text.count >= 300
                 return TranslationText(translation: translation, text: text, isLongText: isLongText)
             }
             let prefix = ayah.startsWithBesmallah ? [Quran.arabicBasmAllah] : []

@@ -202,7 +202,6 @@
 		546784471EB2A07E0012FA2C /* DownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784451EB2A07E0012FA2C /* DownloadsPersistence.swift */; };
 		546784481EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784461EB2A07E0012FA2C /* SqliteDownloadsPersistence.swift */; };
 		546784491EB2A0C00012FA2C /* SQLitePersistence.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 546784341EB29FD20012FA2C /* SQLitePersistence.framework */; };
-		546784521EB2A32A0012FA2C /* Quran-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 5487242B1DC615CF00ADDE54 /* Quran-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		546784541EB2A3790012FA2C /* PersistenceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546784531EB2A3790012FA2C /* PersistenceError.swift */; };
 		54699B871E8DADFD00211A60 /* UIFont+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699B861E8DADFD00211A60 /* UIFont+Theme.swift */; };
 		54699B8E1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699B8C1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.swift */; };
@@ -2380,7 +2379,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				546784521EB2A32A0012FA2C /* Quran-Bridging-Header.h in Headers */,
 				546784381EB29FD20012FA2C /* SQLitePersistence.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

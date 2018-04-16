@@ -41,15 +41,3 @@ extension EventStream {
         })
     }
 }
-
-extension EventStream {
-    /// Converts `EventStream` to `SharedSequence` unit.
-    ///
-    /// - returns: Observable sequence.
-    public func asSharedSequence<SharingStrategy: SharingStrategyProtocol>(
-        strategy: SharingStrategy.Type = SharingStrategy.self) -> SharedSequence<SharingStrategy, Event> {
-        return asObservable().asSharedSequence(onErrorRecover: { _ -> SharedSequence<SharingStrategy, Event> in
-            Swift.fatalError("EventStream shouldn't error!")
-        })
-    }
-}

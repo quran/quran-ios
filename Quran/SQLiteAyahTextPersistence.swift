@@ -215,7 +215,7 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
         }
 
         var substring = text[range.lowerBound...]
-        if substring.characters.count > 100 {
+        if substring.count > 100 {
             if let endIndex = substring.index(substring.startIndex, offsetBy: 100, limitedBy: substring.endIndex) {
                 substring = substring[...endIndex]
             }

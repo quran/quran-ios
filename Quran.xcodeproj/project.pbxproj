@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* Review.swift */; };
 		06012EE9206FF079001F94F9 /* AVQueuePlayerFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012EE8206FF079001F94F9 /* AVQueuePlayerFacade.swift */; };
 		06012EEB20701A4B001F94F9 /* PlayerItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012EEA20701A4B001F94F9 /* PlayerItemInfo.swift */; };
 		06012F5D2075A403001F94F9 /* Playing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06012F5C2075A403001F94F9 /* Playing.swift */; };
@@ -19,6 +18,7 @@
 		065F58F4207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 065F58EE207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib */; };
 		065F58F5207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58EF207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift */; };
 		065F58F6207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 065F58F0207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib */; };
+		0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* Review.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
 		32A3FD57144E0B1B02BB1729 /* Pods_BatchDownloader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAAEAA5F6076B29DB5FE44 /* Pods_BatchDownloader.framework */; };
@@ -1016,14 +1016,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0D0BF1B2207F42CE0022B6EE /* Review */ = {
-			isa = PBXGroup;
-			children = (
-				0D0BF1B3207F42E40022B6EE /* Review.swift */,
-			);
-			name = Review;
-            sourceTree = "<group>";
-        };
 		065F58EA207ADAAB00E83AA2 /* AdvancedAudioOptions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1035,6 +1027,14 @@
 				065F58F0207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.xib */,
 			);
 			path = AdvancedAudioOptions;
+			sourceTree = "<group>";
+		};
+		0D0BF1B2207F42CE0022B6EE /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				0D0BF1B3207F42E40022B6EE /* Review.swift */,
+			);
+			name = Review;
 			sourceTree = "<group>";
 		};
 		540031E51E99705400BB4B7B /* Analytics */ = {
@@ -2405,7 +2405,6 @@
 				5437D35C1EB385DB00795FA9 /* Frameworks */,
 				5437D35D1EB385DB00795FA9 /* Headers */,
 				5437D35E1EB385DB00795FA9 /* Resources */,
-				5E9E610903AC9775E2016B5A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2425,7 +2424,6 @@
 				543FDFFF1EB3B83700687DF8 /* Frameworks */,
 				543FE0001EB3B83700687DF8 /* Headers */,
 				543FE0011EB3B83700687DF8 /* Resources */,
-				64F8089D971166DD107F8EC3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2446,7 +2444,6 @@
 				543FE0281EB3C1AC00687DF8 /* Frameworks */,
 				543FE0291EB3C1AC00687DF8 /* Headers */,
 				543FE02A1EB3C1AC00687DF8 /* Resources */,
-				41F5987FC01565CAC04546D5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2467,7 +2464,6 @@
 				545D96511EBF9741006D758A /* Frameworks */,
 				545D96521EBF9741006D758A /* Resources */,
 				864C29152D7BAAC1145038E1 /* [CP] Embed Pods Frameworks */,
-				F5AD25664B0F777086EB5489 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2488,7 +2484,6 @@
 				5467840D1EB29DDD0012FA2C /* Frameworks */,
 				5467840E1EB29DDD0012FA2C /* Headers */,
 				5467840F1EB29DDD0012FA2C /* Resources */,
-				1C59E034B1E3AAC6727C169E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2510,7 +2505,6 @@
 				546784301EB29FD20012FA2C /* Frameworks */,
 				546784311EB29FD20012FA2C /* Headers */,
 				546784321EB29FD20012FA2C /* Resources */,
-				B851C316614077E5AD813691 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2531,7 +2525,6 @@
 				5484C2DB1ED8C00C0068025A /* Frameworks */,
 				5484C2DC1ED8C00C0068025A /* Resources */,
 				AEF32652F2759A39CCB1CBEC /* [CP] Embed Pods Frameworks */,
-				FD0B90EEF7B73E2CFAE425BF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2554,7 +2547,6 @@
 				54B266481CC81D6500D3AEF8 /* Swiftlint Run Script */,
 				54A99CB41CF7BDF2003995AE /* Fabric Run Script */,
 				A7C0CB29E29693C884F7AE27 /* [CP] Embed Pods Frameworks */,
-				B40DC3187BCD4205782A7E54 /* [CP] Copy Pods Resources */,
 				5467841D1EB29DDD0012FA2C /* Embed Frameworks */,
 				54D133DC1EF9852F00037D8C /* Copy Manual Frameworks */,
 			);
@@ -2804,21 +2796,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1C59E034B1E3AAC6727C169E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BatchDownloader/Pods-BatchDownloader-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		29C1B7EAB12E8A1F14005966 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2835,21 +2812,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		41F5987FC01565CAC04546D5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QueuePlayer/Pods-QueuePlayer-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		54A99CB41CF7BDF2003995AE /* Fabric Run Script */ = {
@@ -2911,36 +2873,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5E9E610903AC9775E2016B5A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VFoundation/Pods-VFoundation-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		64F8089D971166DD107F8EC3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UIKitExtension/Pods-UIKitExtension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7B82AC947B7C747119562AD8 /* [CP] Check Pods Manifest.lock */ = {
@@ -3113,21 +3045,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B40DC3187BCD4205782A7E54 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B819FA81EFDDAEC3BA437E49 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3146,21 +3063,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B851C316614077E5AD813691 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SQLitePersistence/Pods-SQLitePersistence-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		EC655A47BBF74F620A71CB3B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3177,36 +3079,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F5AD25664B0F777086EB5489 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FD0B90EEF7B73E2CFAE425BF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuranTests/Pods-QuranTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

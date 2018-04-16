@@ -61,3 +61,13 @@ end
 target 'QuranUITests' do
     pod 'SwiftMonkey', :git => "git@github.com:mohamede1945/SwiftMonkey.git" # Added modifications that would allow it to compile
 end
+
+post_install do |installer|
+    installer.pods_project.build_configurations.each do |config|
+        if config.name == 'Release'
+            config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Owholemodule'
+            else
+            config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
+        end
+    end
+end

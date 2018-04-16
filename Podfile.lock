@@ -12,7 +12,7 @@ PODS:
   - Moya/Core (10.0.0):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
-  - NSDate+TimeAgo (1.0.6)
+  - "NSDate+TimeAgo (1.0.6)"
   - Popover.OC (1.2)
   - PromiseKit (4.4.3):
     - PromiseKit/Foundation (= 4.4.3)
@@ -35,7 +35,7 @@ PODS:
   - SwiftLint (0.23.1)
   - SwiftMonkey (1.1.0)
   - SwiftyJSON (3.1.4)
-  - Zip (1.0.0)
+  - Zip (1.1.0)
 
 DEPENDENCIES:
   - Crashlytics
@@ -45,30 +45,50 @@ DEPENDENCIES:
   - KVOController
   - MenuItemKit
   - Moya
-  - NSDate+TimeAgo
-  - Popover.OC (from `git@github.com:mohamede1945/Popover.git`)
+  - "NSDate+TimeAgo"
+  - "Popover.OC (from `git@github.com:mohamede1945/Popover.git`)"
   - PromiseKit
   - RxCocoa
   - RxSwift
   - SQLite.swift
   - SwiftLint
-  - SwiftMonkey (from `git@github.com:mohamede1945/SwiftMonkey.git`)
+  - "SwiftMonkey (from `git@github.com:mohamede1945/SwiftMonkey.git`)"
   - SwiftyJSON
   - Zip
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - Crashlytics
+    - DownloadButton
+    - Fabric
+    - GenericDataSources
+    - KVOController
+    - MenuItemKit
+    - Moya
+    - "NSDate+TimeAgo"
+    - PromiseKit
+    - Result
+    - RxCocoa
+    - RxSwift
+    - SQLite.swift
+    - SwiftLint
+    - SwiftyJSON
+    - Zip
+
 EXTERNAL SOURCES:
   Popover.OC:
-    :git: git@github.com:mohamede1945/Popover.git
+    :git: "git@github.com:mohamede1945/Popover.git"
   SwiftMonkey:
-    :git: git@github.com:mohamede1945/SwiftMonkey.git
+    :git: "git@github.com:mohamede1945/SwiftMonkey.git"
 
 CHECKOUT OPTIONS:
   Popover.OC:
     :commit: 7f2a6105ab1f01ba939be9c1c6f7f2bfcca61e7e
-    :git: git@github.com:mohamede1945/Popover.git
+    :git: "git@github.com:mohamede1945/Popover.git"
   SwiftMonkey:
     :commit: 85c5d4bee0eb331292f819d0d15a51c3b89df6e1
-    :git: git@github.com:mohamede1945/SwiftMonkey.git
+    :git: "git@github.com:mohamede1945/SwiftMonkey.git"
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
@@ -79,7 +99,7 @@ SPEC CHECKSUMS:
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: d9b539b28fdbbd7980d6f3668b9cd6daefeabd9b
   Moya: adb58b0f4e58430db43cc6e2f6ebab1836501186
-  NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
+  "NSDate+TimeAgo": 35601c619b2d59290055e4fe76e61d97677a2360
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
   PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
@@ -89,8 +109,8 @@ SPEC CHECKSUMS:
   SwiftLint: 1b670ce79284c76520f84060e87d645078fd32fa
   SwiftMonkey: 3a46ef0da3f081c742542bf94c6e023030e811fd
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
-  Zip: 115a122433829a1bbf33f5575fa84047438dcc12
+  Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: ac000d9a9306f66e0dec1c6cecaddc503da6d79c
+PODFILE CHECKSUM: d1e7096cb4ce325af7c912cad8dd59c562dffb0e
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.0

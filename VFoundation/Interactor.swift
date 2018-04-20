@@ -48,7 +48,7 @@ extension Interactor {
 }
 
 public struct AnyGetInteractor<Output>: Interactor {
-    private let executeClosure: () -> Promise<Output>
+    private let executeClosure: (()) -> Promise<Output>
 
     public init<InteractorType: Interactor>(_ interactor: InteractorType)
         where InteractorType.Input == Void, InteractorType.Output == Output {
@@ -56,11 +56,11 @@ public struct AnyGetInteractor<Output>: Interactor {
     }
 
     public func execute(_ input: Void) -> Promise<Output> {
-        return executeClosure()
+        return executeClosure(input)
     }
 
     public func get() -> Promise<Output> {
-        return executeClosure()
+        return executeClosure(())
     }
 }
 

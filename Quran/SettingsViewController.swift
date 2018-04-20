@@ -19,6 +19,7 @@
 //
 import GenericDataSources
 import UIKit
+import MessageUI
 
 class SettingsViewController: BaseTableBasedViewController {
 
@@ -63,5 +64,11 @@ class SettingsViewController: BaseTableBasedViewController {
         tableView.ds_useDataSource(dataSource)
 
         dataSource.items = creators.createSettingsItems()
+    }
+}
+
+extension SettingsViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }

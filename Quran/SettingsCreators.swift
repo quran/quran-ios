@@ -19,12 +19,16 @@
 //
 
 import Foundation
+import MessageUI
 
 protocol SettingsCreators {
     func createSettingsItems() -> [Setting]
+    var parentController: SettingsViewController? { get set }
 }
 
 class NavigationSettingsCreators: SettingsCreators {
+    var parentController: SettingsViewController?
+    
     private let translationsCreator: AnyCreator<Void, UIViewController>
     private let audioDownloadsCreator: AnyCreator<Void, UIViewController>
 
@@ -58,6 +62,16 @@ class NavigationSettingsCreators: SettingsCreators {
             }
             Analytics.shared.review(automatic: false)
         }
-        return [translation, audio, review]
+        let email = Setting(name: l("email_us"), image: #imageLiteral(resourceName: "email-outline")) { vc in
+            if MFMailComposeViewController.canSendMail() {
+                let mail = MFMailComposeViewController()
+                mail.navigationBar.tintColor = .white
+                mail.mailComposeDelegate = self.parentController
+                mail.setToRecipients(["ios@quran.com"])
+                mail.setSubject("Feedback About Quran Application")
+                vc.present(mail, animated: true, completion: nil)
+            }
+        }
+        return [translation, audio, review, email]
     }
 }

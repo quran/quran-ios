@@ -58,8 +58,8 @@ public protocol SimplePersistence {
 
 extension SimplePersistence {
     public func serializedValueForKey<T: NSCoding>(_ key: PersistenceKey<T>) -> T {
-        let _key = PersistenceKey<Data?>(key.key, nil)
-        guard let data = valueForKey(_key) else {
+        let persistenceKey = PersistenceKey<Data?>(key.key, nil)
+        guard let data = valueForKey(persistenceKey) else {
             return key.defaultValue
         }
         let object = NSKeyedUnarchiver.unarchiveObject(with: data)
@@ -70,7 +70,7 @@ extension SimplePersistence {
     }
 
     public func setSerializedValue<T: NSCoding>(_ value: T?, forKey key: PersistenceKey<T>) {
-        let _key = PersistenceKey<Data?>(key.key, nil)
+        let persistenceKey = PersistenceKey<Data?>(key.key, nil)
 
         let data: Data?
         if let value = value {
@@ -78,6 +78,6 @@ extension SimplePersistence {
         } else {
             data = nil
         }
-        setValue(data, forKey: _key)
+        setValue(data, forKey: persistenceKey)
     }
 }

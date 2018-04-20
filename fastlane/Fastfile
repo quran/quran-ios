@@ -17,7 +17,7 @@ fastlane_version '2.27.0'
 
 default_platform :ios
 
-xcode_select "/Applications/Xcode-9.2.app"
+xcode_select "/Applications/Xcode.app"
 
 platform :ios do
     before_all do

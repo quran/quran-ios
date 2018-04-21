@@ -27,7 +27,7 @@ protocol SettingsCreators {
 }
 
 class NavigationSettingsCreators: SettingsCreators {
-    var parentController: SettingsViewController?
+    weak var parentController: SettingsViewController?
     
     private let translationsCreator: AnyCreator<Void, UIViewController>
     private let audioDownloadsCreator: AnyCreator<Void, UIViewController>
@@ -62,13 +62,13 @@ class NavigationSettingsCreators: SettingsCreators {
             }
             Analytics.shared.review(automatic: false)
         }
-        let email = Setting(name: l("email_us"), image: #imageLiteral(resourceName: "email-outline")) { vc in
+        let email = Setting(name: l("contact_us"), image: #imageLiteral(resourceName: "email-outline")) { vc in
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 mail.navigationBar.tintColor = .white
                 mail.mailComposeDelegate = self.parentController
-                mail.setToRecipients(["ios@quran.com"])
-                mail.setSubject("Feedback About Quran Application")
+                mail.setToRecipients([l("email_recipeint")])
+                mail.setSubject(l("email_subject"))
                 vc.present(mail, animated: true, completion: nil)
             }
         }

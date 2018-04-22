@@ -110,7 +110,10 @@ class Container {
     }
 
     func createSettingsController() -> UIViewController {
-        return SettingsNavigationController(rootViewController: SettingsViewController(creators: createSettingsCreators()))
+        var settingsCreators = createSettingsCreators()
+        let settingsController = SettingsViewController(creators: settingsCreators)
+        settingsCreators.parentController = settingsController
+        return SettingsNavigationController(rootViewController: settingsController)
     }
 
     func createBookmarksController() -> UIViewController {

@@ -67,8 +67,8 @@ class NavigationSettingsCreators: SettingsCreators {
                 let mail = MFMailComposeViewController()
                 mail.navigationBar.tintColor = .white
                 mail.mailComposeDelegate = self.parentController
-                mail.setToRecipients([l("email_recipeint")])
-                mail.setSubject(l("email_subject"))
+                mail.setToRecipients(["ios@quran.com"])
+                mail.setSubject("Feedback about Quran for iOS App")
                 vc.present(mail, animated: true, completion: nil)
             }
         }

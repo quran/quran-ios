@@ -3,7 +3,7 @@ use_frameworks!
 swift_version = "4.0"
 
 target 'VFoundation' do
-    pod 'PromiseKit'
+    pod 'PromiseKit', :inhibit_warnings => true
     pod 'SwiftyJSON'
     pod 'RxSwift', :inhibit_warnings => true
     pod 'SwiftLint'
@@ -14,12 +14,12 @@ target 'SQLitePersistence' do
 end
 
 target 'BatchDownloader' do
-    pod 'PromiseKit'
+    pod 'PromiseKit', :inhibit_warnings => true
     pod 'SQLite.swift'
 end
 
 target 'UIKitExtension' do
-    pod 'PromiseKit'
+    pod 'PromiseKit', :inhibit_warnings => true
     pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
 end
@@ -38,7 +38,7 @@ target 'Quran' do
     pod 'MenuItemKit'
     pod 'Moya'
     pod 'SwiftyJSON'
-    pod 'PromiseKit'
+    pod 'PromiseKit', :inhibit_warnings => true
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
@@ -51,7 +51,7 @@ target 'QuranTests' do
 
     pod 'Zip'
     pod 'Moya'
-    pod 'PromiseKit'
+    pod 'PromiseKit', :inhibit_warnings => true
     pod 'KVOController'
     pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'

@@ -34,7 +34,7 @@ PODS:
   - SQLite.swift/standard (0.11.4)
   - SwiftLint (0.25.1)
   - SwiftMonkey (1.1.0)
-  - SwiftyJSON (3.1.4)
+  - SwiftyJSON (4.1.0)
   - Zip (1.1.0)
 
 DEPENDENCIES:
@@ -108,7 +108,7 @@ SPEC CHECKSUMS:
   SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
   SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
   SwiftMonkey: 3a46ef0da3f081c742542bf94c6e023030e811fd
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
 PODFILE CHECKSUM: d1e7096cb4ce325af7c912cad8dd59c562dffb0e

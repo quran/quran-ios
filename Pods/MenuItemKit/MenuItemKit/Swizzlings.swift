@@ -10,7 +10,7 @@ import UIKit
 import ObjectiveC.runtime
 
 // This is inspired by https://github.com/steipete/PSMenuItem
-private func swizzle(class klass: AnyClass) {
+internal func swizzle(class klass: AnyClass, shouldShowForAction: @escaping (_ action: Selector, _ default: Bool) -> Bool = { $1 }) {
   objc_sync_enter(klass)
   defer { objc_sync_exit(klass) }
   let key: StaticString = #function
@@ -29,7 +29,8 @@ private func swizzle(class klass: AnyClass) {
     typealias IMPType = @convention(c) (AnyObject, Selector, Selector, AnyObject) -> Bool
     let origIMPC = unsafeBitCast(origIMP, to: IMPType.self)
     let block: @convention(block) (AnyObject, Selector, AnyObject) -> Bool = {
-      return UIMenuItem.isMenuItemKitSelector($1) ? true : origIMPC($0, selector, $1, $2)
+      let `default` = UIMenuItem.isMenuItemKitSelector($1) ? true : origIMPC($0, selector, $1, $2)
+      return shouldShowForAction($1, `default`)
     }
 
     setNewIMPWithBlock(block, forSelector: selector, toClass: klass)
@@ -76,19 +77,18 @@ private func swizzle(class klass: AnyClass) {
 }
 
 private extension UIMenuController {
-
   @objc class func _mik_load() {
     if true {
       let selector = #selector(setter: menuItems)
       let origIMP = class_getMethodImplementation(self, selector)
-      typealias IMPType = @convention(c) (AnyObject, Selector, AnyObject) -> ()
+      typealias IMPType = @convention(c) (AnyObject, Selector, AnyObject?) -> ()
       let origIMPC = unsafeBitCast(origIMP, to: IMPType.self)
-      let block: @convention(block) (AnyObject, AnyObject) -> () = {
+      let block: @convention(block) (AnyObject, AnyObject?) -> () = {
         if let firstResp = UIResponder.mik_firstResponder {
-          swizzle(class: type(of: firstResp))
+          swizzle(class: type(of: firstResp.mik_responderToSwizzle))
         }
 
-        origIMPC($0, selector, makeUniqueImageTitles($1))
+        origIMPC($0, selector, $1.flatMap(makeUniqueImageTitles))
       }
 
       setNewIMPWithBlock(block, forSelector: selector, toClass: self)
@@ -101,11 +101,16 @@ private extension UIMenuController {
       let origIMPC = unsafeBitCast(origIMP, to: IMPType.self)
       let block: @convention(block) (AnyObject, CGRect, UIView) -> () = {
         if let firstResp = UIResponder.mik_firstResponder {
-          swizzle(class: type(of: firstResp))
+          swizzle(class: type(of: firstResp.mik_responderToSwizzle))
         } else {
-          swizzle(class: type(of: $2))
           // Must call `becomeFirstResponder` since there's no firstResponder yet
-          $2.becomeFirstResponder()
+          if let n = $2.mik_viewControllerInChain {
+            swizzle(class: type(of: n))
+            n.becomeFirstResponder()
+          } else {
+            swizzle(class: type(of: $2))
+            $2.becomeFirstResponder()
+          }
         }
 
         origIMPC($0, selector, $1, $2)
@@ -144,11 +149,9 @@ private extension UIMenuController {
     guard let selStr = selector else { return nil }
     return findMenuItemBySelector(NSSelectorFromString(selStr))
   }
-
 }
 
 private extension UILabel {
-
   @objc class func _mik_load() {
     if true {
       let selector = #selector(drawText(in:))
@@ -207,11 +210,9 @@ private extension UILabel {
       setNewIMPWithBlock(block, forSelector: selector, toClass: self)
     }
   }
-
 }
 
 private extension NSString {
-
   @objc class func _mik_load() {
     let selector = #selector(size)
     let origIMP = class_getMethodImplementation(self, selector)
@@ -230,7 +231,6 @@ private extension NSString {
 
     setNewIMPWithBlock(block, forSelector: selector, toClass: self)
   }
-
 }
 
 // MARK: Helper to find first responder
@@ -238,7 +238,6 @@ private extension NSString {
 private weak var _currentFirstResponder: UIResponder? = nil
 
 private extension UIResponder {
-
   static var mik_firstResponder: UIResponder? {
     _currentFirstResponder = nil
     UIApplication.shared.sendAction(#selector(mik_findFirstResponder(_:)), to: nil, from: nil, for: nil)
@@ -249,4 +248,17 @@ private extension UIResponder {
     _currentFirstResponder = self
   }
 
+  var mik_viewControllerInChain: UIResponder? {
+    var nextR = Optional(self)
+    while nextR != nil && nextR?.isKind(of: UIViewController.self) != true {
+      nextR = nextR?.next
+    }
+
+    return nextR?.isKind(of: UIViewController.self) == true ? nextR : nil
+  }
+
+  var mik_responderToSwizzle: UIResponder {
+    if let vc = mik_viewControllerInChain { return vc }
+    return self
+  }
 }

@@ -8,26 +8,29 @@
 
 @import UIKit;
 
-@implementation NSObject (MenuItemKit)
+#define LOAD(klass)                                               \
+@implementation klass(MenuItemKit)                                \
++ (void)load                                                      \
+{                                                                 \
+  static dispatch_once_t onceToken;                               \
+  dispatch_once(&onceToken, ^{                                    \
+    [self performSelector:NSSelectorFromString(@"_mik_load")];    \
+  });                                                             \
+}                                                                 \
+@end
 
-+ (void)load
-{
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    for (id klass in @[[UIMenuController class], [UILabel class], [NSString class]]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-      [klass performSelector:NSSelectorFromString(@"_mik_load")];
+LOAD(UIMenuController)
+LOAD(UILabel)
+LOAD(NSString)
 #pragma clang diagnostic pop
-    }
-  });
-}
+
+@implementation NSObject (MenuItemKit)
 
 + (NSMethodSignature *)_mik_fakeSignature
 {
   return [NSMethodSignature signatureWithObjCTypes:"v@:@"];
 }
-
-
 
 @end

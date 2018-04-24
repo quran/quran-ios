@@ -26,7 +26,7 @@ PODS:
   - PromiseKit/UIKit (4.4.3):
     - PromiseKit/CorePromise
   - Result (3.2.4)
-  - RxCocoa (4.0.0):
+  - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
   - RxSwift (4.1.2)
   - SQLite.swift (0.11.5):
@@ -103,7 +103,7 @@ SPEC CHECKSUMS:
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
   PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
-  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
   SwiftLint: ce933681be10c3266e82576dad676fa815a602e9

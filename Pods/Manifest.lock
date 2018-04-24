@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.5.1)
+  - Alamofire (4.7.2)
   - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DownloadButton (0.1.0)
@@ -91,7 +91,7 @@ CHECKOUT OPTIONS:
     :git: "git@github.com:mohamede1945/SwiftMonkey.git"
 
 SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DownloadButton: 49a21a89e0d7d1b42d9134f79aaa40e727cd57c3
   Fabric: 2fb5676bc811af011a04513451f463dac6803206

@@ -37,7 +37,7 @@ protocol AudioBannerViewDelegate: class {
 
 protocol AudioBannerView: class {
 
-    weak var delegate: AudioBannerViewDelegate? { get set }
+    var delegate: AudioBannerViewDelegate? { get set }
 
     func hideAllControls()
     func setQari(name: String, image: UIImage?)

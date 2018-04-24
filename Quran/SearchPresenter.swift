@@ -19,8 +19,8 @@
 //
 
 protocol SearchPresenter: class {
-    weak var view: SearchView? { get set } // DESIGN: Shouldn't be a weak
-    weak var interactor: SearchInteractor? { get set }
+    var view: SearchView? { get set } // DESIGN: Shouldn't be a weak
+    var interactor: SearchInteractor? { get set }
 
     func show(autocompletions: [SearchAutocompletion])
     func show(results: SearchResults)

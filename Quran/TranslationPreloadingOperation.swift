@@ -90,7 +90,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     private func selectedTranslations(allTranslations: [TranslationFull]) -> [Translation] {
         let selected = simplePersistence.valueForKey(.selectedTranslations)
         let translationsById = allTranslations.map { $0.translation }.flatGroup { $0.id }
-        return selected.flatMap { translationsById[$0] }
+        return selected.compactMap { translationsById[$0] }
     }
 
     private func arabicPromise(ayahs: [AyahNumber]) -> Promise<[AyahText]> {

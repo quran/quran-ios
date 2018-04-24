@@ -21,8 +21,8 @@ import RxCocoa
 import RxSwift
 
 protocol SearchInteractor: class {
-    weak var router: SearchRouter? { get set }
-    weak var presenter: SearchPresenter? { get set }
+    var router: SearchRouter? { get set }
+    var presenter: SearchPresenter? { get set }
 
     func onViewLoaded()
 

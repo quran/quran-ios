@@ -123,7 +123,7 @@ extension ViewConstrainer {
 
         let ancestor = commonAncestor(views: views)
         var constraints: [NSLayoutConstraint] = []
-        for (view1, view2) in zip([self.view, views].flatMap { $0 }, views) {
+        for (view1, view2) in zip([self.view, views].compactMap { $0 }, views) {
             let constraint = NSLayoutConstraint(
                 item: view1,
                 attribute: firstAttribute,

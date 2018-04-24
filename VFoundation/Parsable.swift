@@ -137,7 +137,7 @@ extension JSON {
                 }
                 return nil
             }
-        }.flatMap { $0 }
+        }.compactMap { $0 }
     }
 
     public func parsedOptional<T>(_ key: String, map: (JSON) throws -> T) rethrows -> T? {

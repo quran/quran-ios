@@ -157,10 +157,6 @@ extension Optional: OptionalConvertible {
     public func asOptional() -> Wrapped? { return self }
 }
 
-extension ImplicitlyUnwrappedOptional: OptionalConvertible {
-    public func asOptional() -> Wrapped? { return self }
-}
-
 extension Promise where T: OptionalConvertible {
     public func `do`(on q: DispatchQueue = .default, execute body: @escaping (T.Wrapped) throws -> Void) -> Promise<T> {
         return then(on: q) { value -> T in

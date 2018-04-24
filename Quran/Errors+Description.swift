@@ -22,7 +22,7 @@ import SQLitePersistence
 
 extension FileSystemError: LocalizedError {
 
-    public var errorDescription: String {
+    public var errorDescription: String? {
         let text: String
         switch self {
         case .unknown:
@@ -36,34 +36,26 @@ extension FileSystemError: LocalizedError {
 
 extension NetworkError: LocalizedError {
 
-    public var errorDescription: String {
-        let text: String
+    public var errorDescription: String? {
         switch self {
-        case .unknown:
-            text = l("unknown_error_message")
-        case .serverError:
-            text = l("unknown_error_message")
-        case .notConnectedToInternet:
-            text = l("NetworkError_NotConnectedToInternet")
-        case .internationalRoamingOff:
-            text = l("NetworkError_InternationalRoamingOff")
-        case .serverNotReachable:
-            text = l("NetworkError_ServerNotReachable")
-        case .connectionLost:
-            text = l("NetworkError_ConnectionLost")
+        case .unknown: return l("unknown_error_message")
+        case .serverError: return l("unknown_error_message")
+        case .notConnectedToInternet: return l("NetworkError_NotConnectedToInternet")
+        case .internationalRoamingOff: return l("NetworkError_InternationalRoamingOff")
+        case .serverNotReachable: return l("NetworkError_ServerNotReachable")
+        case .connectionLost: return l("NetworkError_ConnectionLost")
         }
-        return text
     }
 }
 
 extension ParsingError: LocalizedError {
-    public var errorDescription: String {
+    public var errorDescription: String? {
         return l("NetworkError_Parsing")
     }
 }
 
 extension PersistenceError: LocalizedError {
-    public var errorDescription: String {
+    public var errorDescription: String? {
         return l("unknown_error_message")
     }
 }

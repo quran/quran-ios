@@ -54,7 +54,7 @@ class TranslationsVersionUpdaterInteractor: Interactor {
 
         return translations.map { translation -> TranslationFull in
             // downloading...
-            let responses = translation.possibleFileNames.flatMap {
+            let responses = translation.possibleFileNames.compactMap {
                 downloadsByFile[Files.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
             }
             if let response = responses.first {

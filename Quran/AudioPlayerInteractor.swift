@@ -39,7 +39,7 @@ protocol AudioPlayerInteractorDelegate: class {
 
 protocol AudioPlayerInteractor: class {
 
-    weak var delegate: AudioPlayerInteractorDelegate? { get set }
+    var delegate: AudioPlayerInteractorDelegate? { get set }
 
     // will call willStartDownloadingAudioFiles if there is downloads
     func isAudioDownloading() -> Promise<Bool>

@@ -4,6 +4,8 @@
 
 `MenuItemKit` is a Swift project but Objective-C is supported without any doubt.
 
+![Screenshot](Screenshot.png)
+
 
 ## How to use
 
@@ -36,6 +38,10 @@ For Objective-C, `MenuItemKit` provides prefixed API names for safe reasons:
 Just init `UIMenuItem`s with above APIs, and set them to `menuItems` of `UIMenuItemController`. `MenuItemKit` will take care of the rest parts, you don't need to add any code related to responder chain in your view or view controller.
 
 Check dome projects (both Swift and Objective-C are provided) for more details.
+
+## Advance Usage
+
+For menu items out of your control, you can use `static func installTo(responder: UIResponder, shouldShowForAction: @escaping (Selector, Bool) -> Bool = default)` to configure items visibility. Check [AutoPopupMenuContorllerDemo](AutoPopupMenuContorllerDemo).
 
 ## About Me
 

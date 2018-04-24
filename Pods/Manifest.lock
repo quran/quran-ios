@@ -7,9 +7,9 @@ PODS:
   - GenericDataSources (3.0.1)
   - KVOController (1.2.0)
   - MenuItemKit (3.1.2)
-  - Moya (10.0.0):
-    - Moya/Core (= 10.0.0)
-  - Moya/Core (10.0.0):
+  - Moya (11.0.2):
+    - Moya/Core (= 11.0.2)
+  - Moya/Core (11.0.2):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - "NSDate+TimeAgo (1.0.6)"
@@ -98,7 +98,7 @@ SPEC CHECKSUMS:
   GenericDataSources: 32b442c077468a7b9c2b4568c4237788e93e5bb7
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 7d1d80040d1a5fd671ba836ad2e040a84a6528d7
-  Moya: adb58b0f4e58430db43cc6e2f6ebab1836501186
+  Moya: a725035953bc1c0eb1be505ab903984501d82440
   "NSDate+TimeAgo": 35601c619b2d59290055e4fe76e61d97677a2360
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
   PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117

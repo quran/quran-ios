@@ -30,7 +30,7 @@ struct _MappingCollection {
 }
 
 protocol _DataSourcesCollection: NSObjectProtocol {
-    unowned var parentDataSource: CompositeDataSource { get }
+    var parentDataSource: CompositeDataSource { get }
     var mappings: _MappingCollection { get set }
 
     func add(_ dataSource: DataSource)

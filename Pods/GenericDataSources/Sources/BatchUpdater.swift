@@ -38,7 +38,7 @@ private struct AssociatedKeys {
     static var completionBlocks = "completionBlocks"
 }
 
-extension GeneralCollectionView where Self : BatchUpdater {
+extension GeneralCollectionView where Self: BatchUpdater {
 
     private var performingBatchUpdates: Bool {
         get {

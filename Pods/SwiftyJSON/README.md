@@ -19,8 +19,7 @@ SwiftyJSON makes it easy to deal with JSON data in Swift.
    - [Literal convertibles](#literal-convertibles)
    - [Merging](#merging)
 5. [Work with Alamofire](#work-with-alamofire)
-
-> For Legacy Swift support, take a look at the [swift2 branch](https://github.com/SwiftyJSON/SwiftyJSON/tree/swift2)
+6. [Work with Moya](#work-with-moya)
 
 > [中文介绍](http://tangplin.github.io/swiftyjson/)
 
@@ -29,7 +28,7 @@ SwiftyJSON makes it easy to deal with JSON data in Swift.
 
 Swift is very strict about types. But although explicit typing is good for saving us from mistakes, it becomes painful when dealing with JSON and other areas that are, by nature, implicit about types.
 
-Take the Twitter API for example. Say we want to retrieve a user's "name" value of some tweet in Swift (according to Twitter's API https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline).
+Take the Twitter API for example. Say we want to retrieve a user's "name" value of some tweet in Swift (according to [Twitter's API](https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-home_timeline)).
 
 The code would look like this:
 
@@ -84,45 +83,43 @@ if let userName = json[999999]["wrong_key"]["wrong_name"].string {
 
 #### CocoaPods (iOS 8+, OS X 10.9+)
 
-You can use [CocoaPods](http://cocoapods.org/) to install `SwiftyJSON`by adding it to your `Podfile`:
+You can use [CocoaPods](http://cocoapods.org/) to install `SwiftyJSON` by adding it to your `Podfile`:
 
 ```ruby
 platform :ios, '8.0'
 use_frameworks!
 
 target 'MyApp' do
-	pod 'SwiftyJSON'
+    pod 'SwiftyJSON', '~> 4.0'
 end
 ```
-
-Note that this requires CocoaPods version 36, and your iOS deployment target to be at least 8.0:
-
 
 #### Carthage (iOS 8+, OS X 10.9+)
 
 You can use [Carthage](https://github.com/Carthage/Carthage) to install `SwiftyJSON` by adding it to your `Cartfile`:
 
 ```
-github "SwiftyJSON/SwiftyJSON"
+github "SwiftyJSON/SwiftyJSON" ~> 4.0
 ```
+
+If you use Carthage to build your dependencies, make sure you have added `SwiftyJSON.framework` to the "Linked Frameworks and Libraries" section of your target, and have included them in your Carthage framework copying build phase.
 
 #### Swift Package Manager
 
 You can use [The Swift Package Manager](https://swift.org/package-manager) to install `SwiftyJSON` by adding the proper description to your `Package.swift` file:
 
 ```swift
+// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
     name: "YOUR_PROJECT_NAME",
-    targets: [],
     dependencies: [
-        .Package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", versions: Version(1,0,0)..<Version(3, .max, .max)),
+        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "4.0.0"),
     ]
 )
 ```
-
-Note that the [Swift Package Manager](https://swift.org/package-manager) is still in early design and development, for more information checkout its [GitHub Page](https://github.com/apple/swift-package-manager)
+Then run `swift build` whenever you get prepared.
 
 #### Manually (iOS 7+, OS X 10.9+)
 
@@ -142,10 +139,12 @@ import SwiftyJSON
 ```swift
 let json = JSON(data: dataFromNetworking)
 ```
+Or
 
 ```swift
 let json = JSON(jsonObject)
 ```
+Or
 
 ```swift
 if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: false) {
@@ -156,67 +155,74 @@ if let dataFromString = jsonString.data(using: .utf8, allowLossyConversion: fals
 #### Subscript
 
 ```swift
-//Getting a double from a JSON Array
+// Getting a double from a JSON Array
 let name = json[0].double
 ```
 
 ```swift
-//Getting an array of string from a JSON Array
+// Getting an array of string from a JSON Array
 let arrayNames =  json["users"].arrayValue.map({$0["name"].stringValue})
 ```
 
 ```swift
-//Getting a string from a JSON Dictionary
+// Getting a string from a JSON Dictionary
 let name = json["name"].stringValue
 ```
 
 ```swift
-//Getting a string using a path to the element
+// Getting a string using a path to the element
 let path: [JSONSubscriptType] = [1,"list",2,"name"]
 let name = json[path].string
-//Just the same
+// Just the same
 let name = json[1]["list"][2]["name"].string
-//Alternatively
+// Alternatively
 let name = json[1,"list",2,"name"].string
 ```
 
 ```swift
-//With a hard way
+// With a hard way
 let name = json[].string
 ```
 
 ```swift
-//With a custom way
-let keys:[SubscriptType] = [1,"list",2,"name"]
+// With a custom way
+let keys:[JSONSubscriptType] = [1,"list",2,"name"]
 let name = json[keys].string
 ```
 
 #### Loop
 
 ```swift
-//If json is .Dictionary
+// If json is .Dictionary
 for (key,subJson):(String, JSON) in json {
-   //Do something you want
+   // Do something you want
 }
 ```
 
 *The first element is always a String, even if the JSON is an Array*
 
 ```swift
-//If json is .Array
-//The `index` is 0..<json.count's string value
+// If json is .Array
+// The `index` is 0..<json.count's string value
 for (index,subJson):(String, JSON) in json {
-    //Do something you want
+    // Do something you want
 }
 ```
 
 #### Error
 
+##### SwiftyJSON 4.x
+
+SwiftyJSON 4.x introduces an enum type called `SwiftyJSONError`, which includes `unsupportedType`, `indexOutOfBounds`, `elementTooDeep`, `wrongType`, `notExist` and `invalidJSON`, at the same time, `ErrorDomain` are being replaced by `SwiftyJSONError.errorDomain`.
+Note: Those old error types are deprecated in SwiftyJSON 4.x and will be removed in the future release.
+
+##### SwiftyJSON 3.x
+
 Use a subscript to get/set a value in an Array or Dictionary
 
 If the JSON is:
 *  an array, the app may crash with "index out-of-bounds."
-*  a dictionary, it will be assigned `nil` without a reason.
+*  a dictionary, it will be assigned to `nil` without a reason.
 *  not an array or a dictionary, the app may crash with an "unrecognised selector" exception.
 
 This will never happen in SwiftyJSON.
@@ -224,77 +230,77 @@ This will never happen in SwiftyJSON.
 ```swift
 let json = JSON(["name", "age"])
 if let name = json[999].string {
-    //Do something you want
+    // Do something you want
 } else {
-    print(json[999].error) // "Array[999] is out of bounds"
+    print(json[999].error!) // "Array[999] is out of bounds"
 }
 ```
 
 ```swift
 let json = JSON(["name":"Jack", "age": 25])
 if let name = json["address"].string {
-    //Do something you want
+    // Do something you want
 } else {
-    print(json["address"].error) // "Dictionary["address"] does not exist"
+    print(json["address"].error!) // "Dictionary["address"] does not exist"
 }
 ```
 
 ```swift
 let json = JSON(12345)
 if let age = json[0].string {
-    //Do something you want
+    // Do something you want
 } else {
     print(json[0])       // "Array[0] failure, It is not an array"
-    print(json[0].error) // "Array[0] failure, It is not an array"
+    print(json[0].error!) // "Array[0] failure, It is not an array"
 }
 
 if let name = json["name"].string {
-    //Do something you want
+    // Do something you want
 } else {
     print(json["name"])       // "Dictionary[\"name"] failure, It is not an dictionary"
-    print(json["name"].error) // "Dictionary[\"name"] failure, It is not an dictionary"
+    print(json["name"].error!) // "Dictionary[\"name"] failure, It is not an dictionary"
 }
 ```
 
 #### Optional getter
 
 ```swift
-//NSNumber
+// NSNumber
 if let id = json["user"]["favourites_count"].number {
-   //Do something you want
+   // Do something you want
 } else {
-   //Print the error
-   print(json["user"]["favourites_count"].error)
+   // Print the error
+   print(json["user"]["favourites_count"].error!)
 }
 ```
 
 ```swift
-//String
+// String
 if let id = json["user"]["name"].string {
-   //Do something you want
+   // Do something you want
 } else {
-   //Print the error
-   print(json["user"]["name"])
+   // Print the error
+   print(json["user"]["name"].error!)
 }
 ```
 
 ```swift
-//Bool
+// Bool
 if let id = json["user"]["is_translator"].bool {
-   //Do something you want
+   // Do something you want
 } else {
-   //Print the error
-   print(json["user"]["is_translator"])
+   // Print the error
+   print(json["user"]["is_translator"].error!)
 }
 ```
 
 ```swift
-//Int
+// Int
 if let id = json["user"]["id"].int {
-   //Do something you want
+   // Do something you want
 } else {
-   //Print the error
-   print(json["user"]["id"])
+   // Print the error
+   print(json["user"]["id"].error!)
 }
 ...
 ```
@@ -304,22 +310,22 @@ if let id = json["user"]["id"].int {
 Non-optional getter is named `xxxValue`
 
 ```swift
-//If not a Number or nil, return 0
+// If not a Number or nil, return 0
 let id: Int = json["id"].intValue
 ```
 
 ```swift
-//If not a String or nil, return ""
+// If not a String or nil, return ""
 let name: String = json["name"].stringValue
 ```
 
 ```swift
-//If not an Array or nil, return []
+// If not an Array or nil, return []
 let list: Array<JSON> = json["list"].arrayValue
 ```
 
 ```swift
-//If not a Dictionary or nil, return [:]
+// If not a Dictionary or nil, return [:]
 let user: Dictionary<String, JSON> = json["user"].dictionaryValue
 ```
 
@@ -341,31 +347,36 @@ json.dictionaryObject = ["name":"Jack", "age":25]
 #### Raw object
 
 ```swift
-let jsonObject: Any = json.object
+let rawObject: Any = json.object
 ```
 
 ```swift
-if let jsonObject: Any = json.rawValue
+let rawValue: Any = json.rawValue
 ```
 
 ```swift
 //convert the JSON to raw NSData
-if let data = json.rawData() {
-    //Do something you want
+do {
+	let rawData = try json.rawData()
+  //Do something you want
+} catch {
+	print("Error \(error)")
 }
 ```
 
 ```swift
 //convert the JSON to a raw String
-if let string = json.rawString() {
-    //Do something you want
+if let rawString = json.rawString() {
+  //Do something you want
+} else {
+	print("json.rawString is nil")
 }
 ```
 
 #### Existence
 
 ```swift
-//shows you whether value specified in JSON or not
+// shows you whether value specified in JSON or not
 if json["name"].exists()
 ```
 
@@ -374,59 +385,54 @@ if json["name"].exists()
 For more info about literal convertibles: [Swift Literal Convertibles](http://nshipster.com/swift-literal-convertible/)
 
 ```swift
-//StringLiteralConvertible
+// StringLiteralConvertible
 let json: JSON = "I'm a json"
 ```
 
 ```swift
-//IntegerLiteralConvertible
+/ /IntegerLiteralConvertible
 let json: JSON =  12345
 ```
 
 ```swift
-//BooleanLiteralConvertible
+// BooleanLiteralConvertible
 let json: JSON =  true
 ```
 
 ```swift
-//FloatLiteralConvertible
+// FloatLiteralConvertible
 let json: JSON =  2.8765
 ```
 
 ```swift
-//DictionaryLiteralConvertible
+// DictionaryLiteralConvertible
 let json: JSON =  ["I":"am", "a":"json"]
 ```
 
 ```swift
-//ArrayLiteralConvertible
+// ArrayLiteralConvertible
 let json: JSON =  ["I", "am", "a", "json"]
 ```
 
 ```swift
-//NilLiteralConvertible
-let json: JSON =  nil
-```
-
-```swift
-//With subscript in array
+// With subscript in array
 var json: JSON =  [1,2,3]
 json[0] = 100
 json[1] = 200
 json[2] = 300
-json[999] = 300 //Don't worry, nothing will happen
+json[999] = 300 // Don't worry, nothing will happen
 ```
 
 ```swift
-//With subscript in dictionary
+// With subscript in dictionary
 var json: JSON =  ["name": "Jack", "age": 25]
 json["name"] = "Mike"
-json["age"] = "25" //It's OK to set String
+json["age"] = "25" // It's OK to set String
 json["address"] = "L.A." // Add the "address": "L.A." in json
 ```
 
 ```swift
-//Array & Dictionary
+// Array & Dictionary
 var json: JSON =  ["name": "Jack", "age": 25, "list": ["a", "b", "c", ["what": "this"]]]
 json["list"][3]["what"] = "that"
 json["list",3,"what"] = "that"
@@ -435,10 +441,10 @@ json[path] = "that"
 ```
 
 ```swift
-//With other JSON objects
+// With other JSON objects
 let user: JSON = ["username" : "Steve", "password": "supersecurepassword"]
 let auth: JSON = [
-  "user": user.object //use user.object instead of just user
+  "user": user.object, // use user.object instead of just user
   "apikey": "supersecretapitoken"
 ]
 ```
@@ -449,7 +455,7 @@ It is possible to merge one JSON into another JSON. Merging a JSON into another 
 
 If both JSONs contain a value for the same key, _mostly_ this value gets overwritten in the original JSON, but there are two cases where it provides some special treatment:
 
-- In case of both values being a `JSON.Type.array` the values form the array found in the `other` JSON getting appended to the original JSON's array value. 
+- In case of both values being a `JSON.Type.array` the values form the array found in the `other` JSON getting appended to the original JSON's array value.
 - In case of both values being a `JSON.Type.dictionary` both JSON-values are getting merged the same way the encapsulating JSON is merged.
 
 In case, where two fields in a JSON have a different types, the value will get always overwritten.
@@ -502,7 +508,7 @@ let representation = json.rawString(options: [.castNilToNSNull: true])
 // representation is "{\"1\":2,\"2\":\"two\",\"3\":null}", which represents {"1":2,"2":"two","3":null}
 ```
 
-## Work with Alamofire
+## Work with [Alamofire](https://github.com/Alamofire/Alamofire)
 
 SwiftyJSON nicely wraps the result of the Alamofire JSON response handler:
 
@@ -516,4 +522,28 @@ Alamofire.request(url, method: .get).validate().responseJSON { response in
         print(error)
     }
 }
+```
+
+We also provide an extension of Alamofire for serializing NSData to SwiftyJSON's JSON.
+
+See: [Alamofire-SwiftyJSON](https://github.com/SwiftyJSON/Alamofire-SwiftyJSON)
+
+
+## Work with [Moya](https://github.com/Moya/Moya)
+
+SwiftyJSON parse data to JSON:
+
+```swift
+let provider = MoyaProvider<Backend>()
+provider.request(.showProducts) { result in
+    switch result {
+    case let .success(moyaResponse):
+        let data = moyaResponse.data
+        let json = JSON(data: data) // convert network data to json
+        print(json)
+    case let .failure(error):
+        print("error: \(error)")
+    }
+}
+
 ```

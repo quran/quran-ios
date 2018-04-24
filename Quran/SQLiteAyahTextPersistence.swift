@@ -58,7 +58,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
     }
 
     private func rowsToAyahText(_ rows: AnySequence<Row>) -> String? {
-        let words = rows.flatMap { $0[textMadani] }
+        let words = rows.compactMap { $0[textMadani] }
         guard !words.isEmpty else {
             return nil
         }

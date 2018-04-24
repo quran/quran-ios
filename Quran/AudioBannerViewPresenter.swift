@@ -36,8 +36,8 @@ protocol AudioBannerViewPresenterDelegate: class {
 
 protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
 
-    weak var delegate: AudioBannerViewPresenterDelegate? { get set }
-    weak var view: AudioBannerView? { get set }
+    var delegate: AudioBannerViewPresenterDelegate? { get set }
+    var view: AudioBannerView? { get set }
 
     var verseRuns: Runs { get set }
     var listRuns: Runs { get set }

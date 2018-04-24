@@ -28,7 +28,7 @@ protocol SettingsCreators {
 
 class NavigationSettingsCreators: SettingsCreators {
     weak var parentController: SettingsViewController?
-    
+
     private let translationsCreator: AnyCreator<Void, UIViewController>
     private let audioDownloadsCreator: AnyCreator<Void, UIViewController>
 

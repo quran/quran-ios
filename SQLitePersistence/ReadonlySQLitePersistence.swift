@@ -54,12 +54,12 @@ extension ReadonlySQLitePersistence {
 
             return try attempt(times: 3) {
                 if inTransaction {
-                    var result: T!
+                    var result: T?
                     try connection.transaction {
                         result = try block(connection)
                     }
 
-                    return result
+                    return unwrap(result)
                 } else {
                     // execute the query
                     return try block(connection)

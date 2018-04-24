@@ -32,7 +32,7 @@ protocol AudioPlayerDelegate: class {
 
 protocol AudioPlayer: class {
 
-    weak var delegate: AudioPlayerDelegate? { get set }
+    var delegate: AudioPlayerDelegate? { get set }
 
     func play(qari: Qari, range: VerseRange)
 

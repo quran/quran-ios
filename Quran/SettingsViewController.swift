@@ -18,8 +18,8 @@
 //  GNU General Public License for more details.
 //
 import GenericDataSources
-import UIKit
 import MessageUI
+import UIKit
 
 class SettingsViewController: BaseTableBasedViewController {
 

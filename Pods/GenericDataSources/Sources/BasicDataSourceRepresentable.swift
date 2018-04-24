@@ -59,7 +59,7 @@ extension BasicDataSourceRepresentable {
     }
 }
 
-extension BasicDataSourceRepresentable where Item : Equatable {
+extension BasicDataSourceRepresentable where Item: Equatable {
 
     /**
      Gets the index path for a certain item.

@@ -5,7 +5,7 @@ swift_version = "4.0"
 target 'VFoundation' do
     pod 'PromiseKit'
     pod 'SwiftyJSON'
-    pod 'RxSwift'
+    pod 'RxSwift', :inhibit_warnings => true
     pod 'SwiftLint'
 end
 
@@ -20,7 +20,7 @@ end
 
 target 'UIKitExtension' do
     pod 'PromiseKit'
-    pod 'RxSwift'
+    pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
 end
 
@@ -42,7 +42,7 @@ target 'Quran' do
     pod 'DownloadButton'
     pod 'KVOController'
     pod 'NSDate+TimeAgo'
-    pod 'RxSwift'
+    pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
     pod 'Popover.OC', :git => "git@github.com:mohamede1945/Popover.git" # Added modifications that we need to allow to control direction of the arrow. 
 end
@@ -53,7 +53,7 @@ target 'QuranTests' do
     pod 'Moya'
     pod 'PromiseKit'
     pod 'KVOController'
-    pod 'RxSwift'
+    pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
     pod 'SQLite.swift', :inhibit_warnings => true
 end

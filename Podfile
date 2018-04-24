@@ -10,12 +10,12 @@ target 'VFoundation' do
 end
 
 target 'SQLitePersistence' do
-    pod 'SQLite.swift', :inhibit_warnings => true
+    pod 'SQLite.swift'
 end
 
 target 'BatchDownloader' do
     pod 'PromiseKit'
-    pod 'SQLite.swift', :inhibit_warnings => true
+    pod 'SQLite.swift'
 end
 
 target 'UIKitExtension' do
@@ -31,7 +31,7 @@ end
 target 'Quran' do
 
     pod 'GenericDataSources'
-    pod 'SQLite.swift', :inhibit_warnings => true
+    pod 'SQLite.swift'
     pod 'Zip'
     pod 'Fabric'
     pod 'Crashlytics'
@@ -55,7 +55,7 @@ target 'QuranTests' do
     pod 'KVOController'
     pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
-    pod 'SQLite.swift', :inhibit_warnings => true
+    pod 'SQLite.swift'
 end
 
 target 'QuranUITests' do

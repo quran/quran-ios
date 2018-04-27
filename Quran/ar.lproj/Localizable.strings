@@ -30,3 +30,8 @@
 
 "write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
 "contact_us" = "اتصل بنا";
+
+"menu.arabic" = "عربي";
+"menu.translation" = "الترجمات";
+"menu.select_translation" = "إختر التفاسير والترجمات";
+"menu.pointer" = "مؤشر ترجمة الكلمات";

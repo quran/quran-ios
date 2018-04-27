@@ -22,7 +22,8 @@ import UIKit
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
-                        AdvancedAudioOptionsViewControllerDelegate {
+                        AdvancedAudioOptionsViewControllerDelegate,
+                        UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate {
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -143,7 +144,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
         super.init(nibName: nil, bundle: nil)
 
-        updateTranslationView(initialization: true)
+        updateTranslationView(from: nil)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
@@ -294,6 +295,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         present(controller, animated: true, completion: nil)
     }
 
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+
     private func setBarsHidden(_ hidden: Bool) {
         // remove the timer
         barsHiddenTimerExecuted = true
@@ -378,19 +383,40 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
             .cauterize(tag: "bookmarksPersistence.toggleBookmarking")
     }
 
-    func onTranslationButtonTapped() {
-        quranNavigationBar.isWordPointerActive = false
-        quranView?.hidePointer()
-        updateTranslationView(initialization: false)
+    func onMoreButtonTapped(_ barButton: UIBarButtonItem) {
+        let more = MoreMenuViewController(
+            mode: quranNavigationBar.isTranslationView ? .translation : .arabic,
+            isWordPointerActive: quranNavigationBar.isWordPointerActive
+        )
+        more.delegate = self
+        more.modalPresentationStyle = .popover
+        more.popoverPresentationController?.delegate = self
+        more.popoverPresentationController?.barButtonItem = barButton
+        more.popoverPresentationController?.backgroundColor = .white
+        present(more, animated: true, completion: nil)
     }
 
-    func onSelectTranslationsButtonTapped() {
+    func moreMenuViewController(_ controller: MoreMenuViewController, quranModeSelected: QuranMode) {
+        // hide word pointer
+        controller.isWordPointerActive = false
+        quranNavigationBar.isWordPointerActive = false
+        quranView?.hidePointer()
+
+        // show correct translation
+        quranNavigationBar.isTranslationView = quranModeSelected == .translation
+        updateTranslationView(from: controller)
+    }
+
+    func moreMenuViewControllerTranslationsSelectionSelected(_ controller: MoreMenuViewController) {
+        controller.dismiss(animated: true, completion: nil)
+
         let controller = translationsSelectionControllerCreator.create(())
         present(controller, animated: true, completion: nil)
     }
 
-    func onWordTranslationButtonTapped(isWordPointerActive: Bool) {
-        if isWordPointerActive {
+    func moreMenuViewController(_ controller: MoreMenuViewController, shouldShowWordPointer: Bool) {
+        quranNavigationBar.isWordPointerActive = shouldShowWordPointer
+        if shouldShowWordPointer {
             quranView?.showPointer()
         } else {
             quranView?.hidePointer()
@@ -453,12 +479,15 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         showErrorAlert(error: error)
     }
 
-    private func updateTranslationView(initialization: Bool) {
+    private func updateTranslationView(from controller: MoreMenuViewController?) {
         let isTranslationView = quranNavigationBar.isTranslationView
         dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
         let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
-        if !initialization && isTranslationView && noTranslationsSelected {
-            onSelectTranslationsButtonTapped()
+        if let controller = controller, isTranslationView && noTranslationsSelected {
+            controller.dismiss(animated: true, completion: nil)
+
+            let translationsController = translationsSelectionControllerCreator.create(())
+            present(translationsController, animated: true, completion: nil)
         }
     }
 }

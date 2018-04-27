@@ -30,3 +30,8 @@
 
 "write_review" = "Write an app store review...";
 "contact_us" = "Contact Us";
+
+"menu.arabic" = "Arabic";
+"menu.translation" = "Translation";
+"menu.select_translation" = "Select translations/tafseer";
+"menu.pointer" = "Word translation pointer";

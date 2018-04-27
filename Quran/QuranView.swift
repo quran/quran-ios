@@ -392,7 +392,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     func showPointer() {
-        delegate?.quranViewHideBars()
         pointer.isHidden = false
 
         setPointerTop(bounds.height)

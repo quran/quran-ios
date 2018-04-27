@@ -215,6 +215,16 @@
 		54699BAB1E8DC25100211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699BA91E8DC25000211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift */; };
 		54699BAE1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */; };
 		54699BB01E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */; };
+		547BCB5420915587007AFBEC /* MoreArabicTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB5220915587007AFBEC /* MoreArabicTranslationTableViewCell.swift */; };
+		547BCB5520915587007AFBEC /* MoreArabicTranslationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 547BCB5320915587007AFBEC /* MoreArabicTranslationTableViewCell.xib */; };
+		547BCB5920915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB5720915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift */; };
+		547BCB5A20915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 547BCB5820915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib */; };
+		547BCB5D20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB5B20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift */; };
+		547BCB5E20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 547BCB5C20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib */; };
+		547BCB612091567A007AFBEC /* MoreMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB5F2091567A007AFBEC /* MoreMenuViewController.swift */; };
+		547BCB622091567A007AFBEC /* MoreMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 547BCB602091567A007AFBEC /* MoreMenuViewController.xib */; };
+		547BCB6420928F16007AFBEC /* NoBorderSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB6320928F16007AFBEC /* NoBorderSegmentedControl.swift */; };
+		547BCB66209299A0007AFBEC /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */; };
 		5484C2EA1ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */; };
 		5484C2EF1ED8C1BD0068025A /* BlockingExtensiosn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484C2EE1ED8C1BD0068025A /* BlockingExtensiosn.swift */; };
 		5484C3041ED9B6410068025A /* RunloopLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484C3031ED9B6410068025A /* RunloopLock.swift */; };
@@ -740,6 +750,16 @@
 		54699BA91E8DC25000211A60 /* QuranTranslationVerseSeparatorCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationVerseSeparatorCollectionViewCell.swift; sourceTree = "<group>"; };
 		54699BAD1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationBaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		54699BAF1E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationCollectionInnerDataSource.swift; sourceTree = "<group>"; };
+		547BCB5220915587007AFBEC /* MoreArabicTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreArabicTranslationTableViewCell.swift; sourceTree = "<group>"; };
+		547BCB5320915587007AFBEC /* MoreArabicTranslationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreArabicTranslationTableViewCell.xib; sourceTree = "<group>"; };
+		547BCB5720915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreTranslationsSelectionTableViewCell.swift; sourceTree = "<group>"; };
+		547BCB5820915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreTranslationsSelectionTableViewCell.xib; sourceTree = "<group>"; };
+		547BCB5B20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreWordByWordPointerTableViewCell.swift; sourceTree = "<group>"; };
+		547BCB5C20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreWordByWordPointerTableViewCell.xib; sourceTree = "<group>"; };
+		547BCB5F2091567A007AFBEC /* MoreMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMenuViewController.swift; sourceTree = "<group>"; };
+		547BCB602091567A007AFBEC /* MoreMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreMenuViewController.xib; sourceTree = "<group>"; };
+		547BCB6320928F16007AFBEC /* NoBorderSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBorderSegmentedControl.swift; sourceTree = "<group>"; };
+		547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTableViewCell.swift; sourceTree = "<group>"; };
 		5484C2DE1ED8C00C0068025A /* QuranTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuranTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5484C2E21ED8C00C0068025A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5484C2E91ED8C03F0068025A /* TranslationsAndSearchIntegerationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsAndSearchIntegerationTests.swift; sourceTree = "<group>"; };
@@ -1378,6 +1398,7 @@
 				543FE0421EB3C4A500687DF8 /* CircleView.swift */,
 				543FE0431EB3C4A500687DF8 /* CircularView.swift */,
 				065F58642077101F00E83AA2 /* Button.swift */,
+				547BCB6320928F16007AFBEC /* NoBorderSegmentedControl.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -1673,6 +1694,29 @@
 			name = Translations;
 			sourceTree = "<group>";
 		};
+		547BCB5120915530007AFBEC /* MoreMenu */ = {
+			isa = PBXGroup;
+			children = (
+				547BCB562091558A007AFBEC /* cells */,
+				547BCB5F2091567A007AFBEC /* MoreMenuViewController.swift */,
+				547BCB602091567A007AFBEC /* MoreMenuViewController.xib */,
+			);
+			name = MoreMenu;
+			sourceTree = "<group>";
+		};
+		547BCB562091558A007AFBEC /* cells */ = {
+			isa = PBXGroup;
+			children = (
+				547BCB5220915587007AFBEC /* MoreArabicTranslationTableViewCell.swift */,
+				547BCB5320915587007AFBEC /* MoreArabicTranslationTableViewCell.xib */,
+				547BCB5720915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift */,
+				547BCB5820915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib */,
+				547BCB5B20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift */,
+				547BCB5C20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib */,
+			);
+			name = cells;
+			sourceTree = "<group>";
+		};
 		5484C2DF1ED8C00C0068025A /* QuranTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1873,6 +1917,7 @@
 				54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */,
 				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
 				DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */,
+				547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -1890,6 +1935,7 @@
 				54A99CA81CF7959A003995AE /* Bookmarks */,
 				54C0DBEE1CE4B0A9009AAD8D /* QariList */,
 				54B266D41CD4E6C400D3AEF8 /* PageSelection */,
+				547BCB5120915530007AFBEC /* MoreMenu */,
 				54B266BB1CD16E9800D3AEF8 /* Quran */,
 			);
 			name = Controllers;
@@ -2755,11 +2801,14 @@
 				5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54547EA01EC9ED05008AFED3 /* SearchViewController.xib in Resources */,
+				547BCB5520915587007AFBEC /* MoreArabicTranslationTableViewCell.xib in Resources */,
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
 				54547EAE1ECA82BE008AFED3 /* SearchResultTableViewCell.xib in Resources */,
 				54892D981EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib in Resources */,
+				547BCB5A20915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib in Resources */,
+				547BCB5E20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib in Resources */,
 				54C0DBDC1CDF7E34009AAD8D /* AudioPlayBarView.xib in Resources */,
 				54965FBA1E7D4A3F00A212E2 /* QuranPageTitleView.xib in Resources */,
 				54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */,
@@ -2774,6 +2823,7 @@
 				54F5B4381CFAF96B0002A3B8 /* images_1280 in Resources */,
 				065F58F4207ADAAB00E83AA2 /* AdvancedAudioOptionsSelectionTableViewCell.xib in Resources */,
 				54892D941EE6C760001E6F1A /* words.db in Resources */,
+				547BCB622091567A007AFBEC /* MoreMenuViewController.xib in Resources */,
 				54B266651CCA917700D3AEF8 /* Localizable.strings in Resources */,
 				5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */,
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,
@@ -3153,6 +3203,7 @@
 				543FE03F1EB3C3DE00687DF8 /* ScrollViewPageBehavior.swift in Sources */,
 				543FE0241EB3BBE800687DF8 /* PromiseKit+UIExtension.swift in Sources */,
 				543FE01A1EB3B94100687DF8 /* UIImage+Extension.swift in Sources */,
+				547BCB6420928F16007AFBEC /* NoBorderSegmentedControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3272,6 +3323,7 @@
 				065F58F5207ADAAB00E83AA2 /* AdvancedAudioOptionsViewController.swift in Sources */,
 				544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */,
 				54547E961EC9D1B1008AFED3 /* SearchRouter.swift in Sources */,
+				547BCB5420915587007AFBEC /* MoreArabicTranslationTableViewCell.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */,
 				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
@@ -3329,6 +3381,7 @@
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,
 				54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */,
 				545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */,
+				547BCB5920915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift in Sources */,
 				54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */,
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
 				54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */,
@@ -3343,6 +3396,7 @@
 				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
 				54547EAA1ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsNavigationController.swift in Sources */,
+				547BCB66209299A0007AFBEC /* EmptyTableViewCell.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
@@ -3384,6 +3438,7 @@
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */,
 				54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */,
+				547BCB612091567A007AFBEC /* MoreMenuViewController.swift in Sources */,
 				54B266261CC80AFD00D3AEF8 /* Container.swift in Sources */,
 				549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */,
 				544629E61E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift in Sources */,
@@ -3393,6 +3448,7 @@
 				0D0BF1B4207F42E40022B6EE /* Review.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
 				545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */,
+				547BCB5D20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift in Sources */,
 				5463C1891E8B1427009EE603 /* AsyncLabel.swift in Sources */,
 				54B266131CC6D5A000D3AEF8 /* SettingsViewController.swift in Sources */,
 				54B8E564208189BF002778D4 /* Localizations.swift in Sources */,

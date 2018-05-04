@@ -1,8 +1,8 @@
 //
-//  MoreWordByWordPointerTableViewCell.swift
+//  FontSizeDataSource.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/25/18.
+//  Created by Mohamed Afifi on 5/3/18.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2018  Quran.com
@@ -17,22 +17,12 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import UIKit
+import GenericDataSources
 
-class MoreWordByWordPointerTableViewCell: UITableViewCell {
-    var onSwitchChanged: ((Bool) -> Void)?
-
-    let switchControl = UISwitch()
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        separatorInset = .zero
-        accessoryView = switchControl
-        switchControl.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
-    }
-
-    @objc
-    private func switchChanged() {
-        onSwitchChanged?(switchControl.isOn)
+class FontSizeDataSource<ItemType, CellType: ReusableCell>: BasicDataSource<ItemType, CellType> {
+    let fontSize: FontSize
+    init(fontSize: FontSize) {
+        self.fontSize = fontSize
+        super.init()
     }
 }

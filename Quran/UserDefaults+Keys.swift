@@ -26,4 +26,16 @@ extension PersistenceKeyBase {
     static let appOpenedCounter = PersistenceKey<Int>(key: "appOpenedCounter", defaultValue: 0)
     static let appInstalledDate = PersistenceKey<TimeInterval>(key: "appInstalledDate", defaultValue: 0)
     static let requestReviewDate = PersistenceKey<TimeInterval?>(key: "requestReviewDate", defaultValue: nil)
+    static let fontSizeRaw = PersistenceKey<Int?>(key: "fontSize", defaultValue: nil)
+}
+
+extension SimplePersistence {
+    var fontSize: FontSize {
+        get {
+            return  valueForKey(.fontSizeRaw).flatMap { FontSize(rawValue: $0) } ?? .medium
+        }
+        set {
+            setValue(newValue.rawValue, forKey: PersistenceKeyBase.fontSizeRaw)
+        }
+    }
 }

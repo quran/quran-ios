@@ -20,12 +20,19 @@
 
 import UIKit
 
+private struct RenderInput: Hashable {
+    let layout: TranslationTextLayout
+    let fontSize: FontSize
+}
+
 class AsyncLabel: UIView {
 
-    static var sharedRenderer: AnyCacheableService<TranslationTextLayout, UIImage>  = {
-        let cache = Cache<TranslationTextLayout, UIImage>()
+    private static var sharedRenderer: AnyCacheableService<RenderInput, UIImage>  = {
+        let cache = Cache<RenderInput, UIImage>()
         cache.countLimit = 20
-        let creator = AnyCreator { TextRenderPreloadingOperation(layout: $0).asPreloadingOperationRepresentable() }
+        let creator = AnyCreator<RenderInput, AnyPreloadingOperationRepresentable<UIImage>> {
+            TextRenderPreloadingOperation(layout: $0.layout, fontSize: $0.fontSize).asPreloadingOperationRepresentable()
+        }
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         let renderer = OperationCacheableService(queue: queue, cache: cache, operationCreator: creator).asCacheableService()
@@ -34,13 +41,8 @@ class AsyncLabel: UIView {
 
     var onImageChanged: ((UIImage?) -> Void)?
 
-    var textLayout: TranslationTextLayout? {
-        didSet {
-            if oldValue != textLayout {
-                renderTextInBackground()
-            }
-        }
-    }
+    private var textLayout: TranslationTextLayout?
+    private var fontSize: FontSize?
 
     private(set) var image: UIImage? {
         set {
@@ -71,14 +73,26 @@ class AsyncLabel: UIView {
             .top()
     }
 
+    func setTextLayout(_ textLayout: TranslationTextLayout, fontSize: FontSize) {
+        let oldTextLayout = self.textLayout
+        let oldFontSize = self.fontSize
+
+        self.fontSize = fontSize
+        self.textLayout = textLayout
+
+        if oldFontSize != fontSize || oldTextLayout != textLayout {
+            renderTextInBackground()
+        }
+    }
+
     private func renderTextInBackground() {
-        guard let textLayout = textLayout else {
+        guard let textLayout = textLayout, let fontSize = fontSize else {
             return
         }
 
         let renderer = type(of: self).sharedRenderer
 
-        renderer.getOnMainThread(textLayout) { [weak self] image in
+        renderer.getOnMainThread(RenderInput(layout: textLayout, fontSize: fontSize)) { [weak self] image in
             self?.image = image
         }
     }

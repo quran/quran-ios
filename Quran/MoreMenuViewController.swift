@@ -29,6 +29,7 @@ protocol MoreMenuViewControllerDelegate: class {
     func moreMenuViewController(_ controller: MoreMenuViewController, quranModeSelected: QuranMode)
     func moreMenuViewControllerTranslationsSelectionSelected(_ controller: MoreMenuViewController)
     func moreMenuViewController(_ controller: MoreMenuViewController, shouldShowWordPointer: Bool)
+    func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected: FontSize)
 }
 
 class MoreMenuViewController: UIViewController {
@@ -38,10 +39,12 @@ class MoreMenuViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     private let dataSource = CompositeDataSource(sectionType: .single)
-    private let empty = EmptyDataSource()
     private let arabicTranslation = MoreArabicTranslationDataSource()
     private let selection = MoreTranslationsSelectionDataSource()
     private let pointer = MoreWordByWordPointerSelectionDataSource()
+    private let fontSizeDS = MoreFontSizeDataSource()
+
+    private var fontSize: FontSize
 
     var isWordPointerActive: Bool {
         didSet {
@@ -51,14 +54,15 @@ class MoreMenuViewController: UIViewController {
         }
     }
 
-    init(mode: QuranMode, isWordPointerActive: Bool) {
+    init(mode: QuranMode, isWordPointerActive: Bool, fontSize: FontSize) {
+        self.fontSize = fontSize
         self.isWordPointerActive = isWordPointerActive
         super.init(nibName: nil, bundle: nil)
 
         arabicTranslation.itemHeight = 44
         selection.itemHeight = 44
         pointer.itemHeight = 44
-        empty.itemHeight = 12
+        fontSizeDS.itemHeight = 44
 
         arabicTranslation.items = [[
             SelectableItem(text: l("menu.arabic"), isSelected: mode == .arabic) { [weak self] _ in
@@ -73,7 +77,7 @@ class MoreMenuViewController: UIViewController {
             guard let `self` = self else { return }
             self.delegate?.moreMenuViewController(self, shouldShowWordPointer: item.isSelected)
         }]
-        empty.items = [()]
+        setFontSizeItem()
 
         let selectionHandler = BlockSelectionHandler<String, MoreTranslationsSelectionTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (_, _, _) in
@@ -86,8 +90,10 @@ class MoreMenuViewController: UIViewController {
 
         if mode == .translation {
             dataSource.add(selection)
+            dataSource.add(createEmptyDataSource())
+            dataSource.add(fontSizeDS)
         } else {
-            dataSource.add(empty)
+            dataSource.add(createEmptyDataSource())
             dataSource.add(pointer)
         }
     }
@@ -103,6 +109,7 @@ class MoreMenuViewController: UIViewController {
         tableView.ds_register(cellNib: MoreArabicTranslationTableViewCell.self)
         tableView.ds_register(cellNib: MoreWordByWordPointerTableViewCell.self)
         tableView.ds_register(cellNib: MoreTranslationsSelectionTableViewCell.self)
+        tableView.ds_register(cellNib: MoreFontSizeTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
         updateSize()
@@ -126,20 +133,22 @@ class MoreMenuViewController: UIViewController {
         }
     }
 
-    private func insert(dataSource child: DataSource) {
+    private func insert(dataSource child: DataSource, at index: Int) {
         guard !dataSource.contains(child) else {
             return
         }
-        dataSource.add(child)
-        let indexPath = IndexPath(item: dataSource.dataSources.count - 1, section: 0)
+        dataSource.insert(child, at: index)
+        let indexPath = IndexPath(item: index, section: 0)
         dataSource.ds_reusableViewDelegate?.ds_insertItems(at: [indexPath], with: .fade)
     }
 
     private func arabicSelected() {
         tableView.ds_performBatchUpdates({
+            self.remove(dataSource: self.fontSizeDS)
+            self.remove(dataSource: self.dataSource.dataSources[2]) // empty datasource
             self.remove(dataSource: self.selection)
-            self.insert(dataSource: self.empty)
-            self.insert(dataSource: self.pointer)
+            self.insert(dataSource: self.createEmptyDataSource(), at: 1)
+            self.insert(dataSource: self.pointer, at: 2)
         }, completion: nil)
 
         delegate?.moreMenuViewController(self, quranModeSelected: .arabic)
@@ -149,12 +158,40 @@ class MoreMenuViewController: UIViewController {
     private func translationsSelected() {
         tableView.ds_performBatchUpdates({
             self.remove(dataSource: self.pointer)
-            self.remove(dataSource: self.empty)
-            self.insert(dataSource: self.selection)
+            self.remove(dataSource: self.dataSource.dataSources[1]) // empty datasource
+            self.insert(dataSource: self.selection, at: 1)
+            self.insert(dataSource: self.createEmptyDataSource(), at: 2)
+            self.insert(dataSource: self.fontSizeDS, at: 3)
         }, completion: nil)
 
         delegate?.moreMenuViewController(self, quranModeSelected: .translation)
         updateSize()
+    }
+
+    private func createEmptyDataSource() -> EmptyDataSource {
+        let empty = EmptyDataSource()
+        empty.itemHeight = 12
+        empty.items = [()]
+        return empty
+    }
+
+    private func setFontSizeItem() {
+        fontSizeDS.items = [
+            FontSizeItem(isIncreaseEnabled: fontSize != .xLarge,
+                         isDecreaseEnabled: fontSize != .xSmall,
+                         increase: { [weak self] in self?.updateFontSize(to: self?.fontSize.next) },
+                         decrease: { [weak self] in self?.updateFontSize(to: self?.fontSize.previous) })
+        ]
+        fontSizeDS.ds_reusableViewDelegate?.ds_reloadItems(at: [IndexPath(item: 0, section: 0)], with: .none)
+    }
+
+    private func updateFontSize(to newSize: FontSize?) {
+        guard let newSize = newSize else {
+            return
+        }
+        delegate?.moreMenuViewController(self, fontSizeSelected: newSize)
+        fontSize = newSize
+        setFontSizeItem()
     }
 }
 
@@ -162,6 +199,13 @@ private struct SelectableItem {
     let text: String
     var isSelected: Bool
     let onSelection: (SelectableItem) -> Void
+}
+
+private struct FontSizeItem {
+    var isIncreaseEnabled: Bool
+    var isDecreaseEnabled: Bool
+    var increase: () -> Void
+    var decrease: () -> Void
 }
 
 private class MoreArabicTranslationDataSource: BasicDataSource<[SelectableItem], MoreArabicTranslationTableViewCell> {
@@ -217,6 +261,23 @@ private class MoreWordByWordPointerSelectionDataSource: BasicDataSource<Selectab
             self?.items[indexPath.item] = mutableItem
             mutableItem.onSelection(mutableItem)
         }
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+}
+
+private class MoreFontSizeDataSource: BasicDataSource<FontSizeItem, MoreFontSizeTableViewCell> {
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: MoreFontSizeTableViewCell,
+                                    with item: FontSizeItem,
+                                    at indexPath: IndexPath) {
+        cell.increase.isEnabled = item.isIncreaseEnabled
+        cell.decrease.isEnabled = item.isDecreaseEnabled
+        cell.onIncreaseTapped = item.increase
+        cell.onDecreaseTapped = item.decrease
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {

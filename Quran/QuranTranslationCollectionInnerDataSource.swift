@@ -98,7 +98,7 @@ class QuranTranslationCollectionInnerDataSource: CompositeDataSource {
 
             // add an ayah data source
             let ayahDataSource = QuranTranslationAyahSectionDataSource(ayah: verse.ayah)
-            ayahDataSource.add(verse: verse, index: offset, hasSeparator: !isNextVerseStartOfSura)
+            ayahDataSource.add(verse: verse, index: offset, hasSeparator: !isNextVerseStartOfSura, fontSize: page.fontSize)
 
             // add a section
             addAyahDataSource(ayahDataSource)

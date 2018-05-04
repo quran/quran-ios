@@ -1,8 +1,8 @@
 //
-//  MoreWordByWordPointerTableViewCell.swift
+//  MoreFontSizeTableViewCell.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/25/18.
+//  Created by Mohamed Afifi on 4/29/18.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2018  Quran.com
@@ -19,20 +19,25 @@
 //
 import UIKit
 
-class MoreWordByWordPointerTableViewCell: UITableViewCell {
-    var onSwitchChanged: ((Bool) -> Void)?
+class MoreFontSizeTableViewCell: UITableViewCell {
 
-    let switchControl = UISwitch()
+    var onIncreaseTapped: (() -> Void)?
+    var onDecreaseTapped: (() -> Void)?
+
+    @IBOutlet weak var increase: UIButton!
+    @IBOutlet weak var decrease: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        separatorInset = .zero
-        accessoryView = switchControl
-        switchControl.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
+        increase.setTitle(l("menu.fontSizeLetter"), for: .normal)
+        decrease.setTitle(l("menu.fontSizeLetter"), for: .normal)
     }
 
-    @objc
-    private func switchChanged() {
-        onSwitchChanged?(switchControl.isOn)
+    @IBAction func increaseTapped(_ sender: Any) {
+        onIncreaseTapped?()
+    }
+
+    @IBAction func decreaseTapped(_ sender: Any) {
+        onDecreaseTapped?()
     }
 }

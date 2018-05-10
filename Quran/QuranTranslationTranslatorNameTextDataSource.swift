@@ -20,13 +20,13 @@
 
 import GenericDataSources
 
-class QuranTranslationTranslatorNameTextDataSource: BasicDataSource<TranslationTextLayout, QuranTranslationTranslatorNameCollectionViewCell> {
+class QuranTranslationTranslatorNameTextDataSource: FontSizeDataSource<TranslationTextLayout, QuranTranslationTranslatorNameCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuranTranslationTranslatorNameCollectionViewCell,
                                     with item: TranslationTextLayout,
                                     at indexPath: IndexPath) {
-        cell.label.font = item.text.translation.preferredTranslatorNameFont
+        cell.label.font = item.text.translation.preferredTranslatorNameFont(ofSize: fontSize)
         cell.label.text = item.text.translation.translationName
     }
 

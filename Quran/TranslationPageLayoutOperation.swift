@@ -42,18 +42,19 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
                                        arabicPrefixLayouts: arabicPrefixLayouts,
                                        arabicSuffixLayouts: arabicSuffixLayouts)
             }
-            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber, verseLayouts: verseLayouts)
+            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber, verseLayouts: verseLayouts, fontSize: page.fontSize)
             fulfill(pageLayout)
         }
     }
 
     private func arabicLayoutFrom(_ text: String) -> TranslationArabicTextLayout {
-        let size = text.size(withFont: .translationArabicQuranText, constrainedToWidth: width)
+        let size = text.size(withFont: .arabicQuranText(ofSize: page.fontSize), constrainedToWidth: width)
         return TranslationArabicTextLayout(arabicText: text, size: size)
     }
 
     private func translationTextLayoutFrom(_ text: TranslationText) -> TranslationTextLayout {
-        let translatorSize = text.translation.translationName.size(withFont: text.translation.preferredTranslatorNameFont, constrainedToWidth: width)
+        let font = text.translation.preferredTranslatorNameFont(ofSize: page.fontSize)
+        let translatorSize = text.translation.translationName.size(withFont: font, constrainedToWidth: width)
 
         if text.isLongText {
             return longTranslationTextLayoutFrom(text, translatorSize: translatorSize)
@@ -63,7 +64,7 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
     }
 
     private func shortTranslationTextLayoutFrom(_ text: TranslationText, translatorSize: CGSize) -> TranslationTextLayout {
-        let size = text.attributedText.stringSize(constrainedToWidth: width)
+        let size = text.attributedText(withFontSize: page.fontSize).stringSize(constrainedToWidth: width)
         return TranslationTextLayout(text: text, size: size, longTextLayout: nil, translatorSize: translatorSize)
     }
 
@@ -72,7 +73,7 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
         let layoutManager = NSLayoutManager()
         let textContainer = NSTextContainer(size: CGSize(width: width, height: .infinity))
         textContainer.lineFragmentPadding = 0
-        let textStorage = NSTextStorage(attributedString: text.attributedText)
+        let textStorage = NSTextStorage(attributedString: text.attributedText(withFontSize: page.fontSize))
 
         // connect the objects together
         textStorage.addLayoutManager(layoutManager)

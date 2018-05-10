@@ -100,7 +100,7 @@ extension TranslationTableViewCell {
         let translator = l("translatorLabel: ")
 
         let lightFont = UIFont.systemFont(ofSize: 15, weight: .light)
-        let regularFont = translation.preferredTranslatorNameFont
+        let regularFont = translation.preferredTranslatorNameFont(ofSize: .medium)
 
         let lightColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
         let regularColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)

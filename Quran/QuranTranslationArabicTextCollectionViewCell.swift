@@ -41,7 +41,6 @@ class QuranTranslationArabicTextCollectionViewCell: QuranTranslationBaseCollecti
     private func setUp() {
         label.numberOfLines = 0
         label.textAlignment = .right
-        label.font = .translationArabicQuranText
         label.textColor = .translationText
         label.backgroundColor = .readingBackground()
 

@@ -35,7 +35,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let audioViewPresenter: AudioBannerViewPresenter
     private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
     private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
-    private let simplePersistence: SimplePersistence
+    private var simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater
 
     private let dataSource: QuranDataSource
@@ -386,7 +386,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     func onMoreButtonTapped(_ barButton: UIBarButtonItem) {
         let more = MoreMenuViewController(
             mode: quranNavigationBar.isTranslationView ? .translation : .arabic,
-            isWordPointerActive: quranNavigationBar.isWordPointerActive
+            isWordPointerActive: quranNavigationBar.isWordPointerActive,
+            fontSize: simplePersistence.fontSize
         )
         more.delegate = self
         more.modalPresentationStyle = .popover
@@ -421,6 +422,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         } else {
             quranView?.hidePointer()
         }
+    }
+
+    func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected fontSize: FontSize) {
+        simplePersistence.fontSize = fontSize
+        dataSource.invalidate()
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {

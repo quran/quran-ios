@@ -77,7 +77,9 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
             let verse = TranslationVerse(ayah: ayah, arabicText: arabicText, translations: ayahTranslations, arabicPrefix: prefix, arabicSuffix: [])
             verses.append(verse)
         }
-        return TranslationPage(pageNumber: page, verses: verses)
+
+        let fontSize = simplePersistence.fontSize
+        return TranslationPage(pageNumber: page, verses: verses, fontSize: fontSize)
     }
 
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {

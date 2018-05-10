@@ -48,7 +48,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         super.init(sectionType: .single)
     }
 
-    func add(verse: TranslationVerseLayout, index: Int, hasSeparator: Bool) {
+    func add(verse: TranslationVerseLayout, index: Int, hasSeparator: Bool, fontSize: FontSize) {
 
         // if start of page or a new sura
         if index == 0 || verse.ayah.ayah == 1 {
@@ -59,7 +59,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
 
         // add prefixes
         if !verse.arabicPrefixLayouts.isEmpty {
-            let prefix = QuranTranslationArabicTextDataSource()
+            let prefix = QuranTranslationArabicTextDataSource(fontSize: fontSize)
             prefix.items = verse.arabicPrefixLayouts
             add(prefix)
         }
@@ -70,23 +70,23 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
         number.items = ["\(formatter.format(verse.ayah.sura)):\(formatter.format(verse.ayah.ayah))"]
         add(number)
 
-        let arabic = QuranTranslationArabicTextDataSource()
+        let arabic = QuranTranslationArabicTextDataSource(fontSize: fontSize)
         arabic.items = [verse.arabicTextLayout]
         add(arabic)
 
         for translationText in verse.translationLayouts {
             if verse.translationLayouts.count > 1 {
-                let name = QuranTranslationTranslatorNameTextDataSource()
+                let name = QuranTranslationTranslatorNameTextDataSource(fontSize: fontSize)
                 name.items = [translationText]
                 add(name)
             }
 
             if translationText.longTextLayout != nil {
-                let translation = QuranTranslationLongTextDataSource()
+                let translation = QuranTranslationLongTextDataSource(fontSize: fontSize)
                 translation.items = [translationText]
                 add(translation)
             } else {
-                let translation = QuranTranslationTextDataSource()
+                let translation = QuranTranslationTextDataSource(fontSize: fontSize)
                 translation.items = [translationText]
                 add(translation)
             }
@@ -94,7 +94,7 @@ class QuranTranslationAyahSectionDataSource: CompositeDataSource {
 
         // add prefixes suffixes
         if !verse.arabicSuffixLayouts.isEmpty {
-            let suffix = QuranTranslationArabicTextDataSource()
+            let suffix = QuranTranslationArabicTextDataSource(fontSize: fontSize)
             suffix.items = verse.arabicSuffixLayouts
             add(suffix)
         }

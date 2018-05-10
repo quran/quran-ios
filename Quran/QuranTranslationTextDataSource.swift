@@ -20,13 +20,13 @@
 
 import GenericDataSources
 
-class QuranTranslationTextDataSource: BasicDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
+class QuranTranslationTextDataSource: FontSizeDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuranTranslationTextCollectionViewCell,
                                     with item: TranslationTextLayout,
                                     at indexPath: IndexPath) {
-        cell.label.attributedText = item.text.attributedText
+        cell.label.attributedText = item.text.attributedText(withFontSize: fontSize)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="MoreFontSizeTableViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hsz-MC-ng3">
+                        <rect key="frame" x="0.0" y="0.0" width="159.5" height="43.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <state key="normal" title="A"/>
+                        <connections>
+                            <action selector="decreaseTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="JlS-KK-Huk"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1z-Jr-Ct5">
+                        <rect key="frame" x="160.5" y="0.0" width="159.5" height="43.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                        <state key="normal" title="A"/>
+                        <connections>
+                            <action selector="increaseTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="57Z-6l-TEm"/>
+                        </connections>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BZO-nB-MtX" userLabel="Line">
+                        <rect key="frame" x="159.5" y="0.0" width="1" height="43.5"/>
+                        <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="e5T-Y9-BAv"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Hsz-MC-ng3" secondAttribute="bottom" id="7ah-Rr-kqD"/>
+                    <constraint firstAttribute="bottom" secondItem="BZO-nB-MtX" secondAttribute="bottom" id="Cs5-Lc-mfm"/>
+                    <constraint firstAttribute="trailing" secondItem="h1z-Jr-Ct5" secondAttribute="trailing" id="Ess-li-d0Y"/>
+                    <constraint firstItem="h1z-Jr-Ct5" firstAttribute="leading" secondItem="BZO-nB-MtX" secondAttribute="trailing" id="HGe-hj-hKc"/>
+                    <constraint firstAttribute="bottom" secondItem="h1z-Jr-Ct5" secondAttribute="bottom" id="HNF-R3-v4d"/>
+                    <constraint firstItem="h1z-Jr-Ct5" firstAttribute="width" secondItem="Hsz-MC-ng3" secondAttribute="width" id="N1Q-Iz-Y60"/>
+                    <constraint firstItem="h1z-Jr-Ct5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="cAG-7f-zn3"/>
+                    <constraint firstItem="BZO-nB-MtX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="f0n-eg-Jwi"/>
+                    <constraint firstItem="Hsz-MC-ng3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="hxr-KT-ssc"/>
+                    <constraint firstItem="BZO-nB-MtX" firstAttribute="leading" secondItem="Hsz-MC-ng3" secondAttribute="trailing" id="rt2-S1-frO"/>
+                    <constraint firstItem="Hsz-MC-ng3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="xIX-Q2-A43"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="decrease" destination="Hsz-MC-ng3" id="4vf-K7-wMp"/>
+                <outlet property="increase" destination="h1z-Jr-Ct5" id="cOH-Ay-uKe"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

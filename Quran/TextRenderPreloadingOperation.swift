@@ -23,9 +23,11 @@ import UIKit
 class TextRenderPreloadingOperation: AbstractPreloadingOperation<UIImage> {
 
     let layout: TranslationTextLayout
+    let fontSize: FontSize
 
-    init(layout: TranslationTextLayout) {
+    init(layout: TranslationTextLayout, fontSize: FontSize) {
         self.layout = layout
+        self.fontSize = fontSize
     }
 
     override func main() {
@@ -37,7 +39,7 @@ class TextRenderPreloadingOperation: AbstractPreloadingOperation<UIImage> {
             }
 
             let layoutManager = NSLayoutManager()
-            let textStorage = NSTextStorage(attributedString: layout.text.attributedText)
+            let textStorage = NSTextStorage(attributedString: layout.text.attributedText(withFontSize: fontSize))
             textStorage.addLayoutManager(layoutManager)
             layoutManager.addTextContainer(textLayout.textContainer)
 

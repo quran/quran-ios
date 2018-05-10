@@ -20,43 +20,61 @@
 
 import UIKit
 
-private let amharic = "AbyssinicaSIL"
-private let arabic  = "KFGQPCUthmanTahaNaskh"
+private enum Font: String {
+    case arabic = "KFGQPCUthmanTahaNaskh"
+    case amharic = "AbyssinicaSIL"
+}
 
 extension UIFont {
 
-    // swiftlint:disable force_unwrapping
-    static let translationTranslatorNameArabic: UIFont = UIFont(name: arabic, size: 20)!
-    static let translationTranslatorNameEnglish: UIFont = .systemFont(ofSize: 17)
-    static let translationTranslatorNameAmharic: UIFont = UIFont(name: amharic, size: 17)!
+    private convenience init(_ font: Font, size: CGFloat) {
+        self.init(name: font.rawValue, size: size)! //swiftlint:disable:this force_unwrapping
+    }
 
-    static let translationArabicQuranText: UIFont = UIFont(name: arabic, size: 24)!
+    static func translatorNameArabic(ofSize size: FontSize) -> UIFont {
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: 20))
+    }
+    static func translatorNameEnglish(ofSize size: FontSize) -> UIFont {
+        return .systemFont(ofSize: size.fontSize(forMediumSize: 17))
+    }
+    static func translatorNameAmharic(ofSize size: FontSize) -> UIFont {
+        return UIFont(.amharic, size: size.fontSize(forMediumSize: 17))
+    }
 
-    static let translationArabicTranslation: UIFont = UIFont(name: arabic, size: 20)!
-    static let translationEnglishTranslation: UIFont = .systemFont(ofSize: 20)
-    static let translationAmharicTranslation: UIFont = UIFont(name: amharic, size: 22)!
-    // swiftlint:enable force_unwrapping
+    static func arabicQuranText(ofSize size: FontSize) -> UIFont {
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: 24))
+    }
+
+    static func arabicTranslation(ofSize size: FontSize) -> UIFont {
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: 20))
+    }
+    static func englishTranslation(ofSize size: FontSize) -> UIFont {
+        return .systemFont(ofSize: size.fontSize(forMediumSize: 20))
+    }
+    static func amharicTranslation(ofSize size: FontSize) -> UIFont {
+        return UIFont(.amharic, size: size.fontSize(forMediumSize: 22))
+    }
 }
 
 extension Translation {
 
-    var preferredTextFont: UIFont {
+    func preferredTextFont(ofSize size: FontSize) -> UIFont {
         if languageCode == "am" {
-            return .translationAmharicTranslation
+            return .amharicTranslation(ofSize: size)
         } else if languageCode == "ar" {
-            return .translationArabicTranslation
+            return .arabicTranslation(ofSize: size)
         } else {
-            return .translationEnglishTranslation
+            return .englishTranslation(ofSize: size)
         }
     }
 
-    var preferredTranslatorNameFont: UIFont {
+    func preferredTranslatorNameFont(ofSize size: FontSize) -> UIFont {
         if languageCode == "am" {
-            return .translationTranslatorNameAmharic
+            return .translatorNameAmharic(ofSize: size)
         } else if languageCode == "ar" {
-            return .translationTranslatorNameArabic
+            return .translatorNameArabic(ofSize: size)
         } else {
-            return .translationTranslatorNameEnglish
+            return .translatorNameEnglish(ofSize: size)
         }
     }
 
@@ -66,7 +84,7 @@ extension Translation {
 }
 
 extension TranslationText {
-    var attributedText: NSAttributedString {
+    func attributedText(withFontSize size: FontSize) -> NSAttributedString {
         let style = NSMutableParagraphStyle()
         if translation.characterDirection == .rightToLeft {
             style.alignment = .right
@@ -75,10 +93,24 @@ extension TranslationText {
         }
 
         let attributes: [NSAttributedStringKey: Any] = [
-            .font            : translation.preferredTextFont,
+            .font            : translation.preferredTextFont(ofSize: size),
             .foregroundColor : UIColor.translationText,
             .paragraphStyle  : style]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         return attributedString
+    }
+}
+
+private extension FontSize {
+    func fontSize(forMediumSize size: CGFloat) -> CGFloat {
+        let factor: CGFloat
+        switch self {
+        case .xSmall: factor = 0.7 * 0.7
+        case .small:  factor = 0.7
+        case .medium: factor = 1
+        case .large:  factor = 1 / 0.8
+        case .xLarge: factor = 1 / 0.8 / 0.8
+        }
+        return size * factor
     }
 }

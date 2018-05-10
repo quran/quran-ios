@@ -24,7 +24,7 @@ platform :ios do
         # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
     end
 
-    desc 'Resets the build to 0 and version to passed version value and push it to the origin.'
+    desc 'Resets the build to 1 and version to passed version value and push it to the origin.'
     desc 'params version: the new version of the app'
     lane :version_reset do |options|
         # Set a specific version number

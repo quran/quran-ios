@@ -20,7 +20,7 @@ or alternatively using `brew cask install fastlane`
 ```
 fastlane ios version_reset
 ```
-Resets the build to 0 and version to passed version value and push it to the origin.
+Resets the build to 1 and version to passed version value and push it to the origin.
 
 params version: the new version of the app
 ### ios beta

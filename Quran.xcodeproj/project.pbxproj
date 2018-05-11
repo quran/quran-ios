@@ -564,8 +564,6 @@
 		5419E5291CFA2BC900071A6D /* ug */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ug; path = ug.lproj/Readers.strings; sourceTree = "<group>"; };
 		5419E52A1CFA2BC900071A6D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Readers.strings; sourceTree = "<group>"; };
 		5419E52B1CFA2BCA00071A6D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Readers.strings; sourceTree = "<group>"; };
-		5419E52C1CFA2BCA00071A6D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Readers.strings; sourceTree = "<group>"; };
-		5419E52D1CFA2BCB00071A6D /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Readers.strings; sourceTree = "<group>"; };
 		5419E5311CFA3F0300071A6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5331CFA3F0800071A6D /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ar; path = ar.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5371CFA469500071A6D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Android.stringsdict; sourceTree = "<group>"; };
@@ -717,7 +715,6 @@
 		545EE50E1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		545EE50F1DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Android.strings; sourceTree = "<group>"; };
 		545EE5101DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Suras.strings; sourceTree = "<group>"; };
-		545EE5111DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Readers.strings; sourceTree = "<group>"; };
 		545EE5121DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		545EE5131DCBC4DE0085D31F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		545EE5161DCE08530085D31F /* LastPagesPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastPagesPersistence.swift; sourceTree = "<group>"; };
@@ -3623,9 +3620,6 @@
 				5419E5291CFA2BC900071A6D /* ug */,
 				5419E52A1CFA2BC900071A6D /* uz */,
 				5419E52B1CFA2BCA00071A6D /* ru */,
-				5419E52C1CFA2BCA00071A6D /* tr */,
-				5419E52D1CFA2BCB00071A6D /* zh */,
-				545EE5111DCBC4DE0085D31F /* nl */,
 			);
 			name = Readers.strings;
 			sourceTree = "<group>";

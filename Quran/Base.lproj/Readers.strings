@@ -14,8 +14,8 @@
 "qari_husary_mujawwad" = "Husary Mujawwad";
 "qari_hudhayfi" = "Ali Al-Hudhaify";
 "qari_muaiqly" = "Maher Al Muaiqly";
-"qari_minshawi_mujawwad" = "Minshawi Mujawwad";
-"qari_tablawy" = "Mohammad al Tablawy";
+"qari_minshawi_mujawwad" = "Minshawy Mujawwad";
+"qari_tablawy" = "Mohammad al Tablaway";
 "qari_ayyoub" = "Muhammad Ayyoub";
 "qari_jibreel" = "Muhammad Jibreel";
 "qari_shuraym" = "Saood Ash-Shuraym";
@@ -36,3 +36,15 @@
 "qari_bandar_baleela_gapless" = "Bandar Baleela (gapless)";
 "qari_mahmoud_ali_albana_gapless" = "Mahmoud Ali al Bana (gapless)";
 "qari_abdulrahman_alshahat_gapless" = "Abdulrahman Al-Shahat (gapless)";
+"qari_abdurrashid_sufi_gapless" = "Abdur-Rashid Sufi (gapless)";
+"qari_mostafa_ismaeel_gapless" = "Mostafa Ismaeel (gapless)";
+"qari_husary_iza3a_gapless" = "Husary Broadcast (gapless)";
+"qari_abdulaziz_zahrani_gapless" = "Abdulaziz Az-Zahrani (gapless)";
+"quran_readers_name1" = "@string/qari_minshawi_murattal_gapless";
+"quran_readers_name2" = "@string/qari_husary_gapless";
+"quran_readers_path1" = "minshawi_murattal";
+"quran_readers_path2" = "husary";
+"quran_readers_db_name1" = "minshawi_murattal";
+"quran_readers_db_name2" = "husary";
+"quran_readers_urls1" = "http://download.quranicaudio.com/quran/muhammad_siddeeq_al-minshaawee/";
+"quran_readers_urls2" = "http://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/";

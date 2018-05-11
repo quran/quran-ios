@@ -54,7 +54,13 @@ let converter = LocalizationConverter()
 
 for (android, ios) in zip(androidFiles, iosFiles) {
     print("Translating:", android)
-    let androidString = try! Data(contentsOf: URL(fileURLWithPath: baseAndroidDir + android))
+    let filePath = baseAndroidDir + android
+    guard FileManager.default.fileExists(atPath: filePath) else {
+        print("Cannot find file \(android)")
+        continue
+    }
+    let url = URL(fileURLWithPath: filePath)
+    let androidString = try! Data(contentsOf: url)
     let (s, p) = converter.convert(androidXml: androidString)
     try! s.write(toFile: baseIOSDir + ios + ".strings", atomically: true, encoding: .utf8)
     try! p.write(toFile: baseIOSDir + ios + ".stringsdict", atomically: true, encoding: .utf8)

@@ -47,19 +47,6 @@ platform :ios do
         clean = options[:clean].nil? ? true : options[:clean]
         includeFrameworks = options[:includeFrameworks].nil? ? true : options[:includeFrameworks]
 
-        if includeFrameworks
-          # Build frameworks for QuranFoundation
-          build_frameworks(
-            archive: true,
-            clean: clean,
-            target: "device")
-
-          # Build QuranFoundation
-          path = sh("pwd")
-          sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
-          sh "cd #{path}"
-        end
-
         store = PStore.new("#{Dir.home}/com.quran.ios.pstore")
 
         oldVersion = store.transaction { store[:versionKey] }
@@ -90,6 +77,19 @@ platform :ios do
 
             # To write changes to the file, use:
             File.open(file_name, 'w') { |file| file.puts text }
+        end
+
+        if includeFrameworks
+            # Build frameworks for QuranFoundation
+            build_frameworks(
+              archive: true,
+              clean: clean,
+              target: "device")
+
+            # Build QuranFoundation
+            path = sh("pwd")
+            sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
+            sh "cd #{path}"
         end
 
         # Build the app

@@ -382,6 +382,10 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         verseTextRetrieval
             .execute(shareData)
+            .then {
+                $0 + [shareData.ayah.localizedName] +
+                    l("shareMarketingSuffix").components(separatedBy: "\n")
+            }
             .then(on: .main, execute: completion)
             .catch(on: .main) { (error) in
                 self.delegate?.onErrorOccurred(error: error)

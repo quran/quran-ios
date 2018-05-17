@@ -36,3 +36,6 @@
 "menu.select_translation" = "إختر التفاسير والترجمات";
 "menu.pointer" = "مؤشر ترجمة الكلمات";
 "menu.fontSizeLetter" = "أ";
+
+"verseCopy" = "نسخ";
+"verseShare" = "مشاركة...";

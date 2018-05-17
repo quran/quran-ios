@@ -237,7 +237,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         // become first responder
         assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
 
-        UIMenuController.shared.menuItems = [createPlayMenuItem(ayah: shareData.ayah), configuredBookmarkMenuItem(shareData: shareData)]
+        UIMenuController.shared.menuItems = [
+            createPlayMenuItem(ayah: shareData.ayah),
+            configuredBookmarkMenuItem(shareData: shareData),
+            createCopyMenuItem(),
+            createShareMenuItem()
+        ]
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
@@ -281,13 +286,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         return super.resignFirstResponder()
     }
 
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == #selector(QuranView.copy(_:)) || action == #selector(QuranView._share(_:)) {
-            return true
-        }
-        return false
-    }
-
     @objc
     private func viewPannedOrTapped() {
         // resign first responder
@@ -295,7 +293,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     /// Did click on copy menu item
-    override func copy(_ sender: Any?) {
+    private func copyVerse() {
         retrieveSelectedAyahText { textLines in
             let pasteBoard = UIPasteboard.general
             pasteBoard.string = textLines.joined(separator: "\n")
@@ -303,8 +301,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     /// Did click on share menu item
-    @objc
-    func _share(_ sender: Any?) { //swiftlint:disable:this identifier_name
+    private func shareVerse() {
         guard let shareData = shareData else {
             return
         }
@@ -314,6 +311,18 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
                                      didSelectTextLinesToShare: textLines,
                                      sourceView: self,
                                      sourceRect: self.targetRect(for: shareData.location))
+        }
+    }
+
+    private func createCopyMenuItem() -> UIMenuItem {
+        return UIMenuItem(title: l("verseCopy")) { [weak self] _ in
+            self?.copyVerse()
+        }
+    }
+
+    private func createShareMenuItem() -> UIMenuItem {
+        return UIMenuItem(title: l("verseShare")) { [weak self] _ in
+            self?.shareVerse()
         }
     }
 

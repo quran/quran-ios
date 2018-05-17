@@ -11,3 +11,6 @@
 
 "FileSystemError_Unknown" = "Onbekende fout bij het toetreden van de hardeschijf van het toestel.";
 "FileSystemError_NoDiskSpace" = "Geen opslagruimte beschikbaar om te downloaden.";
+
+"verseCopy" = "Kopieer";
+"verseShare" = "Deel…";

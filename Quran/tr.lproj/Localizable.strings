@@ -13,3 +13,6 @@
 
 "FileSystemError_Unknown" = "Cihazi disk’e erişirken bilinmeyen bir hata oluştu";
 "FileSystemError_NoDiskSpace" = "Indirmenizi kaydetmek için hiçbir kullanılabilir disk alani bulunmamaktadir ";
+
+"verseCopy" = "Kopyala";
+"verseShare" = "Paylaş...";

@@ -68,6 +68,9 @@ class AVQueuePlayerFacade: NSObject {
     var currentTime: CMTime { return player.currentTime() }
 
     deinit {
+        durationObservation?.invalidate()
+        currentItemObservation?.invalidate()
+        rateObservation?.invalidate()
         NotificationCenter.default.removeObserver(self)
     }
 

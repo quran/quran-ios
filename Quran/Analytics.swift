@@ -43,14 +43,19 @@ struct Analytics {
                                customAttributes: nil)
     }
 
-    func showing(quranPage page: Int, isTranslation: Bool, numberOfSelectedTranslations: Int) {
-        CLog("Showing Quran Page:", page, "isTranslation:", isTranslation, "numberOfSelectedTranslations:", numberOfSelectedTranslations)
+    func showing(quranPage page: Int, isTranslation: Bool, numberOfSelectedTranslations: Int, fontSize: FontSize) {
+        CLog("Showing Quran Page:", page,
+             "isTranslation:", isTranslation,
+             "numberOfSelectedTranslations:", numberOfSelectedTranslations,
+             "fontSize:", fontSize
+        )
 
         var attributes: [String: Any] = [
             "page": "\(page)",
             "Viewing Mode": isTranslation ? "Translation" : "Arabic"]
         if isTranslation {
             attributes["Selected Translations"] = numberOfSelectedTranslations
+            attributes["Font Size"] = fontSize.rawValue.description
         }
         Answers.logCustomEvent(withName: "ShowingQuranPage", customAttributes: attributes)
     }

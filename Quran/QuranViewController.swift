@@ -371,7 +371,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private func updateLatestPageTo(page: Int) {
         Analytics.shared.showing(quranPage: page,
                                  isTranslation: isTranslationView,
-                                 numberOfSelectedTranslations: simplePersistence.valueForKey(.selectedTranslations).count)
+                                 numberOfSelectedTranslations: simplePersistence.valueForKey(.selectedTranslations).count,
+                                 fontSize: simplePersistence.fontSize)
         lastPageUpdater.updateTo(page: page)
     }
 

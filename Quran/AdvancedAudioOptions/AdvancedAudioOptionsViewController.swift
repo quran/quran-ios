@@ -93,8 +93,8 @@ class AdvancedAudioOptionsViewController: UIViewController, UIGestureRecognizerD
 
         from.items = [lAndroid("play_from")]
         to.items = [lAndroid("play_to")]
-        verseRuns.items = [lAndroid("play_each_verse").replacingOccurrences(of: ":", with: "")]
-        listRuns.items = [lAndroid("play_verses_range").replacingOccurrences(of: ":", with: "")]
+        verseRuns.items = [lAndroid("play_each_verse").replacingOccurrences(of: ":", with: "") + l("repetitionExperimentalSuffix")]
+        listRuns.items = [lAndroid("play_verses_range").replacingOccurrences(of: ":", with: "") + l("repetitionExperimentalSuffix")]
 
         tableView.ds_useDataSource(dataSource)
         tableView.ds_register(cellNib: AdvancedAudioOptionsTableViewCell.self)

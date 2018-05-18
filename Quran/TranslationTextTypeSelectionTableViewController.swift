@@ -51,7 +51,12 @@ private class DataSource: BasicDataSource<String, TableViewCell> {
     }
 }
 
-class TranslationTextTypeSelectionTableViewController: UITableViewController {
+class TranslationTextTypeSelectionTableViewController: BaseTableViewController {
+
+    override var screen: Analytics.Screen {
+        return .wordTranslationSelection
+    }
+
     private let dataSource = DataSource()
 
     var selectionChanged: ((Int) -> Void)?

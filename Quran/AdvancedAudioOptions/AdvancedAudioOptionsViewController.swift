@@ -25,7 +25,9 @@ protocol AdvancedAudioOptionsViewControllerDelegate: class {
     func advancedAudioOptionsViewController(_ controller: AdvancedAudioOptionsViewController, finishedWith options: AdvancedAudioOptions)
 }
 
-class AdvancedAudioOptionsViewController: UIViewController, UIGestureRecognizerDelegate {
+class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognizerDelegate {
+
+    override var screen: Analytics.Screen { return .advancedAudio }
 
     weak var delegate: AdvancedAudioOptionsViewControllerDelegate?
 

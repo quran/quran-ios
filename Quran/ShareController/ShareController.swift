@@ -32,5 +32,6 @@ class ShareController: NSObject {
         activityViewController.popoverPresentationController?.sourceView = sourceView
         activityViewController.popoverPresentationController?.sourceRect = sourceRect
         sourceViewController.present(activityViewController, animated: true, completion: nil)
+        Analytics.shared.showing(screen: .shareSheet)
     }
 }

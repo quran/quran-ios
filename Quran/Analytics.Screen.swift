@@ -37,5 +37,10 @@ extension Analytics {
 
         case translationsSelection
         case reciterSelection
+
+        case moreMenu
+        case advancedAudio
+        case shareSheet
+        case wordTranslationSelection
     }
 }

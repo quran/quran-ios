@@ -32,7 +32,9 @@ protocol MoreMenuViewControllerDelegate: class {
     func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected: FontSize)
 }
 
-class MoreMenuViewController: UIViewController {
+class MoreMenuViewController: BaseViewController {
+
+    override var screen: Analytics.Screen { return .moreMenu }
 
     weak var delegate: MoreMenuViewControllerDelegate?
 

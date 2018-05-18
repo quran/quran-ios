@@ -285,7 +285,6 @@ private class AyahDataSource: ItemDataSource {
         _ cell: AdvancedAudioOptionsSelectionTableViewCell,
         didSelectRow row: Int,
         in component: Int) {
-        print("sura:", cell.picker.selectedRow(inComponent: 0))
         let component1 = cell.picker.selectedRow(inComponent: 0)
         ayah = AyahNumber(sura: component1 + 1, ayah: ayah.ayah)
         if component == 0 {

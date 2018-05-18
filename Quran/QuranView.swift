@@ -329,6 +329,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private func createPlayMenuItem(ayah: AyahNumber) -> UIMenuItem {
         let image = #imageLiteral(resourceName: "ic_play").scaled(toHeight: 25)?.tintedImage(withColor: .white)
         return UIMenuItem(title: "Play", image: image) { [weak self] _ in
+            Analytics.shared.playFrom(menu: true)
             self?.delegate?.play(from: ayah)
         }
     }

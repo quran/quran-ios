@@ -143,6 +143,13 @@ struct Analytics {
         Answers.logCustomEvent(withName: "RequestReview", customAttributes: ["automatic": automatic.description])
     }
 
+    func playFrom(menu: Bool) {
+        let from = menu ? "Menu" : "AudioBar"
+        CLog("Play Audio From:", from)
+        Answers.logCustomEvent(withName: "PlayAudioFrom", customAttributes: ["from": from])
+    }
+}
+
 extension AyahNumber {
     fileprivate var shortDescription: String {
         return "\(sura):\(ayah)"

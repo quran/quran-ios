@@ -135,6 +135,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         listRuns = .one
 
         // start downloading & playing
+        Analytics.shared.playFrom(menu: false)
         play(from: Quran.startAyahForPage(currentPage.pageNumber), to: nil, page: currentPage)
     }
 

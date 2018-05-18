@@ -19,6 +19,7 @@
 //
 
 import Crashlytics
+import QueuePlayer
 
 struct Analytics {
     static let shared = Analytics()
@@ -88,11 +89,22 @@ struct Analytics {
         Answers.logCustomEvent(withName: "Unbookmark Page", customAttributes: ["page": "\(page)"])
     }
 
-    func playing(startAyah ayah: AyahNumber, qari: Qari) {
-        let ayahText = "\(ayah.sura):\(ayah.ayah)"
-        CLog("Playing Audio from:", ayahText, "qri:", qari.id)
+    func playing(startAyah start: AyahNumber, to: AyahNumber, qari: Qari, verseRuns: Runs, listRuns: Runs) {
+        CLog(
+            "Playing Audio from:", start.shortDescription,
+            "to:", to.shortDescription,
+            "qri:", qari.id,
+            "verseRuns:", verseRuns.shortDescription,
+            "listRuns:", listRuns.shortDescription
+        )
         Answers.logCustomEvent(withName: "Audio Playing", customAttributes: [
-            "ayah": ayahText, "qari.id": qari.id, "qari.name": qari.name])
+            "from": start.shortDescription,
+            "to": to.shortDescription,
+            "qari.id": qari.id,
+            "qari.name": qari.name,
+            "verseRuns": verseRuns.shortDescription,
+            "listRuns": listRuns.shortDescription
+        ])
     }
 
     func downloadingJuz(startAyah ayah: AyahNumber, qari: Qari) {
@@ -124,5 +136,22 @@ struct Analytics {
     func review(automatic: Bool) {
         CLog("Requesting user review automatic:", automatic)
         Answers.logCustomEvent(withName: "RequestReview", customAttributes: ["automatic": automatic.description])
+    }
+
+extension AyahNumber {
+    fileprivate var shortDescription: String {
+        return "\(sura):\(ayah)"
+    }
+}
+
+extension Runs {
+    fileprivate var shortDescription: String {
+        switch self {
+        case .one:          return "1"
+        case .two:          return "2"
+        case .three:        return "3"
+        case .four:         return "4"
+        case .indefinite:   return "∞"
+        }
     }
 }

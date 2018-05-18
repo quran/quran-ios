@@ -72,11 +72,13 @@ extension DefaultAudioPlayer {
         player.onPlaybackRateChanged = nil
     }
 
-    func setVerseRuns(_ runs: Runs) {
-        player.verseRuns = runs
+    var verseRuns: Runs {
+        get { return player.verseRuns }
+        set { player.verseRuns = newValue }
     }
 
-    func setListRuns(_ runs: Runs) {
-        player.listRuns = runs
+    var listRuns: Runs {
+        get { return player.listRuns }
+        set { player.listRuns = newValue }
     }
 }

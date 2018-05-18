@@ -103,11 +103,11 @@ extension DefaultAudioPlayerInteractor {
     }
 
     func setVerseRuns(_ runs: Runs) {
-        player.setVerseRuns(runs)
+        player.verseRuns = runs
     }
 
     func setListRuns(_ runs: Runs) {
-        player.setListRuns(runs)
+        player.listRuns = runs
     }
 
     // MARK: - AudioPlayerDelegate
@@ -145,7 +145,13 @@ extension DefaultAudioPlayerInteractor {
     }
 
     fileprivate func startPlaying(_ playbackInfo: PlaybackInfo) {
-        Analytics.shared.playing(startAyah: playbackInfo.range.lowerBound, qari: playbackInfo.qari)
+        Analytics.shared.playing(
+            startAyah: playbackInfo.range.lowerBound,
+            to: playbackInfo.range.upperBound,
+            qari: playbackInfo.qari,
+            verseRuns: player.verseRuns,
+            listRuns: player.listRuns
+        )
         prePlayOperation(qari: playbackInfo.qari, range: playbackInfo.range) { [weak self] in
             self?.player.play(qari: playbackInfo.qari, range: playbackInfo.range)
             self?.delegate?.onPlayingStarted()

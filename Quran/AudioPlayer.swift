@@ -46,6 +46,6 @@ protocol AudioPlayer: class {
 
     func goBackward()
 
-    func setVerseRuns(_ runs: Runs)
-    func setListRuns(_ runs: Runs)
+    var verseRuns: Runs { get set }
+    var listRuns: Runs { get set }
 }

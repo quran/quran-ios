@@ -25,6 +25,8 @@ private enum Font: String {
     case amharic = "AbyssinicaSIL"
 }
 
+private let translationTextFontSize: CGFloat = 24
+
 extension UIFont {
 
     private convenience init(_ font: Font, size: CGFloat) {
@@ -42,17 +44,17 @@ extension UIFont {
     }
 
     static func arabicQuranText(ofSize size: FontSize) -> UIFont {
-        return UIFont(.arabic, size: size.fontSize(forMediumSize: 24))
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: translationTextFontSize))
     }
 
     static func arabicTranslation(ofSize size: FontSize) -> UIFont {
-        return UIFont(.arabic, size: size.fontSize(forMediumSize: 20))
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: translationTextFontSize))
     }
     static func englishTranslation(ofSize size: FontSize) -> UIFont {
-        return .systemFont(ofSize: size.fontSize(forMediumSize: 20))
+        return .systemFont(ofSize: size.fontSize(forMediumSize: translationTextFontSize))
     }
     static func amharicTranslation(ofSize size: FontSize) -> UIFont {
-        return UIFont(.amharic, size: size.fontSize(forMediumSize: 22))
+        return UIFont(.amharic, size: size.fontSize(forMediumSize: translationTextFontSize))
     }
 }
 

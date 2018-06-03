@@ -40,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // create the dependency injection container
         container = Container()
         super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange), name: .themeDidChange, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -55,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
-        configureAppAppearance()
+        themeDidChange()
 
         window.rootViewController = container.createRootViewController()
         window.makeKeyAndVisible()
@@ -65,13 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    fileprivate func configureAppAppearance() {
+    @objc
+    private func themeDidChange() {
         // window
-        window?.tintColor = UIColor.appIdentity()
-
-        // navigation
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().barTintColor = UIColor.appIdentity()
+        window?.tintColor = .buttonsTint
 
         // search bar
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [

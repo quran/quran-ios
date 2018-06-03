@@ -20,11 +20,13 @@
 
 import UIKit
 
-class AyahBookmarkTableViewCell: UITableViewCell {
+class AyahBookmarkTableViewCell: QuranNavigationTableViewCell {
 
-    @IBOutlet weak var ayahLabel: UILabel!
+    @IBOutlet weak var ayahLabel: ThemedLabel!
     @IBOutlet weak var iconImage: UIImageView!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var startPage: UILabel!
+
+    override func awakeFromNib() {
+        ayahLabel.kind = .labelStrong
+        super.awakeFromNib()
+    }
 }

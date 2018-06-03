@@ -35,7 +35,7 @@ class SearchResultsDataSource: SegmentedDataSource {
     var onResultSelected: ((Int) -> Void)?
     var onAutocompletionSelected: ((Int) -> Void)?
 
-    private var headerTItle: String?
+    private var headerTitle: String?
 
     override var selectedDataSource: DataSource? {
         didSet {
@@ -51,7 +51,7 @@ class SearchResultsDataSource: SegmentedDataSource {
         add(autocomplete)
         add(noResults)
 
-        let autocompleteSelection = BlockSelectionHandler<NSAttributedString, UITableViewCell>()
+        let autocompleteSelection = BlockSelectionHandler<NSAttributedString, SearchAutocompleteTableViewCell>()
         autocompleteSelection.didSelectBlock = { [weak self] (_, _, indexPath) in
             self?.onAutocompletionSelected?(indexPath.item)
         }
@@ -78,7 +78,7 @@ class SearchResultsDataSource: SegmentedDataSource {
 
     func switchToResults(with items: [SearchResultUI], title: String?) {
         results.items = items
-        headerTItle = title
+        headerTitle = title
         selectedDataSource = results
     }
 
@@ -87,19 +87,25 @@ class SearchResultsDataSource: SegmentedDataSource {
         selectedDataSource = noResults
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return headerTItle
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerTitle = headerTitle else {
+            return nil
+        }
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: JuzTableViewHeaderFooterView.ds_reuseId) as? JuzTableViewHeaderFooterView
+        view?.titleLabel.text = headerTitle
+        view?.subtitleLabel.isHidden = true
+        return view
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return selectedDataSource === results ? 22 : 0
+        return selectedDataSource === results ? 44 : 0
     }
 }
 
-private class SearchAutocompletionDataSource: BasicDataSource<NSAttributedString, UITableViewCell> {
+private class SearchAutocompletionDataSource: BasicDataSource<NSAttributedString, SearchAutocompleteTableViewCell> {
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    configure cell: UITableViewCell,
+                                    configure cell: SearchAutocompleteTableViewCell,
                                     with item: NSAttributedString,
                                     at indexPath: IndexPath) {
         cell.textLabel?.attributedText = item

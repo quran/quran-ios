@@ -23,14 +23,14 @@ import GenericDataSources
 
 class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionViewCell>, QuranDataSourceHandler {
 
-    private let imageService: AnyCacheableService<Int, UIImage>
+    private let imageService: AnyCacheableService<Int, QuranUIImage>
     private let ayahInfoRetriever: AyahInfoRetriever
 
     private let numberFormatter = NumberFormatter()
 
     private var highlightedAyat: Set<AyahNumber> = Set()
 
-    init(imageService: AnyCacheableService<Int, UIImage>,
+    init(imageService: AnyCacheableService<Int, QuranUIImage>,
          ayahInfoRetriever: AyahInfoRetriever,
          bookmarkPersistence: BookmarksPersistence) {
         self.imageService = imageService
@@ -53,7 +53,12 @@ class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionVi
         // set the page image
         imageService.getOnMainThread(item.pageNumber) { [weak cell] image in
             guard cell?.page == item else { return }
-            cell?.mainImageView.image = image
+
+            // make sure theme didn't change
+            guard image?.theme == Theme.current else {
+                return
+            }
+            cell?.mainImageView.image = image?.image
         }
 
         // set the ayah dimensions
@@ -66,6 +71,6 @@ class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionVi
     }
 
     func invalidate() {
-        // does nothing
+        imageService.invalidate()
     }
 }

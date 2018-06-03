@@ -19,13 +19,16 @@
 //
 import UIKit
 
-class MoreWordByWordPointerTableViewCell: UITableViewCell {
+class MoreWordByWordPointerTableViewCell: ThemedTableViewCell {
+    override var themeTextLabel: Bool { return true }
+
     var onSwitchChanged: ((Bool) -> Void)?
 
     let switchControl = UISwitch()
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        kind = .popover
         separatorInset = .zero
         accessoryView = switchControl
         switchControl.addTarget(self, action: #selector(switchChanged), for: .valueChanged)

@@ -99,7 +99,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         return .lightContent
     }
 
-    init(imageService                           : AnyCacheableService<Int, UIImage>,
+    init(imageService                           : AnyCacheableService<Int, QuranUIImage>,
          pageService                            : AnyCacheableService<Int, TranslationPage>,
          dataRetriever                          : AnyGetInteractor<[QuranPage]>,
          ayahInfoRetriever                      : AyahInfoRetriever,
@@ -394,7 +394,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         more.modalPresentationStyle = .popover
         more.popoverPresentationController?.delegate = self
         more.popoverPresentationController?.barButtonItem = barButton
-        more.popoverPresentationController?.backgroundColor = .white
         present(more, animated: true, completion: nil)
     }
 

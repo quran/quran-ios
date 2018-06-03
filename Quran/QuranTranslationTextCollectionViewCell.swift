@@ -24,7 +24,7 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationBaseCollectionView
     static let topPadding: CGFloat = 5
     static let bottomPadding: CGFloat = 15
 
-    let label: UILabel = UILabel()
+    let label = ThemedLabel()
     private var labelLeading: NSLayoutConstraint?
     private var labelTrailing: NSLayoutConstraint?
 
@@ -40,8 +40,8 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationBaseCollectionView
 
     private func setUp() {
         label.numberOfLines = 0
-        label.textColor = .translationText
-        label.backgroundColor = .readingBackground()
+        label.kind = .labelVeryStrong
+        label.usesTextColor = false
 
         contentView.addAutoLayoutSubview(label)
         label.vc.verticalEdges(top: type(of: self).topPadding, bottom: type(of: self).bottomPadding)
@@ -53,15 +53,5 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationBaseCollectionView
         super.layoutMarginsDidChange()
         labelLeading?.constant = leadingMargin
         labelTrailing?.constant = trailingMargin
-    }
-
-    override var backgroundColor: UIColor? {
-        didSet {
-            if backgroundColor == .readingBackground() {
-                label.backgroundColor = backgroundColor
-            } else {
-                label.backgroundColor = .clear
-            }
-        }
     }
 }

@@ -20,7 +20,7 @@
 import PromiseKit
 import UIKit
 
-class QuranBasePageCollectionViewCell: UICollectionViewCell {
+class QuranBasePageCollectionViewCell: BackgroundThemedCollectionViewCell {
 
     var onScrollViewWillBeginDragging: (() -> Void)? {
         get { return scrollNotifier.onScrollViewWillBeginDragging }

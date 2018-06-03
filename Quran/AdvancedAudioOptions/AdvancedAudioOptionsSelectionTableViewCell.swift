@@ -23,7 +23,7 @@ protocol AdvancedAudioOptionsSelectionTableViewCellDelegate: class {
     func advancedAudioOptionsSelectionTableViewCell(_ cell: AdvancedAudioOptionsSelectionTableViewCell, didSelectRow: Int, in component: Int)
 }
 
-class AdvancedAudioOptionsSelectionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
+class AdvancedAudioOptionsSelectionTableViewCell: ThemedTableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
 
     weak var delegate: AdvancedAudioOptionsSelectionTableViewCellDelegate?
 
@@ -52,7 +52,7 @@ class AdvancedAudioOptionsSelectionTableViewCell: UITableViewCell, UIPickerViewD
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         var pickerLabel: UILabel? = view as? UILabel
         if pickerLabel == nil {
-            pickerLabel = UILabel()
+            pickerLabel = ThemedLabel()
             pickerLabel?.font =  UIFont.systemFont(ofSize: items.count > 1 && component == 1 ? 17 : 15)
             pickerLabel?.textAlignment = .center
         }

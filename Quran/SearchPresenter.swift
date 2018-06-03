@@ -130,31 +130,28 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
         body()
     }
 }
-
-extension NSAttributedString {
-    fileprivate static let normalAttributes: [NSAttributedStringKey: Any] = [
-        .font: UIFont.systemFont(ofSize: 14),
-        .foregroundColor: #colorLiteral(red: 0.1333333333, green: 0.1333333333, blue: 0.1333333333, alpha: 1)
-    ]
-    fileprivate static let highlightedAttributes: [NSAttributedStringKey: Any] = [
-        .font: UIFont.boldSystemFont(ofSize: 14),
-        .foregroundColor: #colorLiteral(red: 0.1333333333, green: 0.1326085031, blue: 0.1326085031, alpha: 1)
-    ]
-}
-
 extension SearchAutocompletion {
     fileprivate func asAttributedString() -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: text, attributes: NSAttributedString.highlightedAttributes)
+        let normalAttributes: [NSAttributedStringKey: Any] = [
+            .font: UIFont.systemFont(ofSize: 14),
+            .foregroundColor: Theme.Kind.labelWeak.color
+        ]
+        let highlightedAttributes: [NSAttributedStringKey: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: Theme.Kind.labelStrong.color
+        ]
+
+        let attributedString = NSMutableAttributedString(string: text, attributes: highlightedAttributes)
         let highlightedNSRange = text.rangeAsNSRange(highlightedRange)
-        attributedString.setAttributes(NSAttributedString.normalAttributes, range: highlightedNSRange)
+        attributedString.setAttributes(normalAttributes, range: highlightedNSRange)
         return attributedString
     }
 }
 
 extension SearchResult {
-    private static let style = "<style>*{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size: 14.0;color: #444444;}b{color: #222222;}</style>" // swiftlint:disable:this line_length
+    private static let style = "<style>*{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size: 14.0;color: %@;}b{color: %@;}</style>" // swiftlint:disable:this line_length
     fileprivate func asAttributedString() -> NSAttributedString {
-        let fullText = SearchResult.style + text
+        let fullText = String(format: SearchResult.style, Theme.Kind.labelWeak.color.toHexString(), Theme.Kind.labelStrong.color.toHexString()) + text
         do {
             guard let data = fullText.data(using: .utf8) else {
                 return NSAttributedString(string: text)

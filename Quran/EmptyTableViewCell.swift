@@ -20,20 +20,38 @@
 import GenericDataSources
 import UIKit
 
-class EmptyTableViewCell: UITableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.9568627451, alpha: 1)
-        separatorInset = .zero
+class EmptyTableViewCell: ThemedTableViewCell {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setUp()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUp()
+    }
+
+    private func setUp() {
+        kind = Theme.Kind.background
+        separatorInset = .zero
     }
 }
 
 class EmptyDataSource: BasicDataSource<Void, EmptyTableViewCell> {
     override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return false
+    }
+}
+
+class ThemedEmptyDataSource: BasicDataSource<Theme.Kind, EmptyTableViewCell> {
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: EmptyTableViewCell,
+                                    with item: Theme.Kind,
+                                    at indexPath: IndexPath) {
+        cell.kind = item
     }
 }

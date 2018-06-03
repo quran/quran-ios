@@ -44,10 +44,10 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
     }
 
     private func setUp() {
-        let colorView = UIView()
+        let colorView = ThemedView()
         let contentView = UIView()
 
-        colorView.backgroundColor = #colorLiteral(red: 0.08235294118, green: 0.3215686275, blue: 0.3411764706, alpha: 1)
+        colorView.kind = .suraHeader
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 28)
         label.textColor = .white

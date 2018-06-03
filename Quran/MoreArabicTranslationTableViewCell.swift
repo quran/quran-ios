@@ -19,16 +19,24 @@
 //
 import UIKit
 
-class MoreArabicTranslationTableViewCell: UITableViewCell {
+class MoreArabicTranslationTableViewCell: ThemedTableViewCell {
     var onSegmentChanged: ((Int) -> Void)?
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        kind = .popover
         separatorInset = .zero
-        segmentedControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16)], for: .normal)
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+
+        segmentedControl?.setTitleTextAttributes([
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
+            ], for: .normal)
+        segmentedControl?.setTitleTextAttributes([
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
+            NSAttributedStringKey.foregroundColor: UIColor.white
+            ], for: .selected)
     }
 
     @objc

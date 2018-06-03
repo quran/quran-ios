@@ -20,9 +20,9 @@
 import GenericDataSources
 import UIKit
 
-private class TableViewCell: UITableViewCell {
+private class TableViewCell: ThemedTableViewCell {
     static let font = UIFont.systemFont(ofSize: 17)
-    let label: UILabel = UILabel()
+    let label = ThemedLabel()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,6 +35,7 @@ private class TableViewCell: UITableViewCell {
     }
 
     private func setUp() {
+        kind = .popover
         contentView.addAutoLayoutSubview(label)
         label.vc.edges(horizontalInset: 15, verticalInset: 0)
     }
@@ -85,8 +86,9 @@ class TranslationTextTypeSelectionTableViewController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        popoverPresentationController?.backgroundColor = .white
-        view.backgroundColor = .white
+        kind = .popoverSeparator
+        separatorKind = .popoverSeparator
+
         tableView.ds_register(cellClass: TableViewCell.self)
         tableView.ds_useDataSource(dataSource)
         tableView.rowHeight = 44

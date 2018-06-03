@@ -20,11 +20,14 @@
 
 import UIKit
 
-class SearchNoResultTableViewCell: UITableViewCell {
-    @IBOutlet weak var searchImage: UIImageView!
-    @IBOutlet weak var descriptionLabel: UILabel!
+class SearchNoResultTableViewCell: ThemedTableViewCell {
+    @IBOutlet weak var searchImage: ThemedImageView!
+    @IBOutlet weak var descriptionLabel: ThemedLabel!
 
     override func awakeFromNib() {
+        kind = .background
+        searchImage.kind = .labelWeak
+        descriptionLabel.kind = .labelWeak
         super.awakeFromNib()
         searchImage.image = searchImage.image?.withRenderingMode(.alwaysTemplate)
     }

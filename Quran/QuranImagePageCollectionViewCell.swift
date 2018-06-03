@@ -29,9 +29,9 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     @IBOutlet weak var imageLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageTrailingConstraint: NSLayoutConstraint!
 
-    @IBOutlet weak var juzLabel: UILabel!
-    @IBOutlet weak var suraLabel: UILabel!
-    @IBOutlet weak var pageLabel: UILabel!
+    @IBOutlet weak var juzLabel: ThemedLabel!
+    @IBOutlet weak var suraLabel: ThemedLabel!
+    @IBOutlet weak var pageLabel: ThemedLabel!
 
     @IBOutlet weak var highlightingView: QuranImageHighlightingView!
     @IBOutlet weak var mainImageView: UIImageView!
@@ -41,11 +41,13 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     private var sizeConstraints: [NSLayoutConstraint] = []
 
     override func awakeFromNib() {
+        juzLabel.kind = .labelStrong
+        suraLabel.kind = .labelStrong
+        pageLabel.kind = .labelStrong
         super.awakeFromNib()
         if #available(iOS 11, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         }
-        contentView.backgroundColor = UIColor.readingBackground()
         scrollViewLeadingConstraint.constant = Layout.QuranCell.horizontalInset
         scrollViewTrailingConstraint.constant = Layout.QuranCell.horizontalInset
         scrollView.delegate = scrollNotifier

@@ -33,7 +33,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
     var router: SearchRouter? // DESIGN: Shouldn't be saved here
     weak var delegate: SearchViewDelegate?
 
-    var searchController: UISearchController?
+    lazy var searchController: UISearchController? = SearchControllerWithNoCancelButton(searchResultsController: searchResults)
     lazy var searchResults: SearchResultsViewController = {
         let controller = SearchResultsViewController()
         controller.dataSource.onAutocompletionSelected = { [weak self] index in
@@ -63,20 +63,14 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         if #available(iOS 11, *) {
             navigationItem.largeTitleDisplayMode = .never
         }
-        view.backgroundColor = UIColor.secondaryColor()
 
         recentsTitle.text = l("searchRecentsTitle")
         popularTitle.text = l("searchPopularTitle")
 
-        searchController = SearchControllerWithNoCancelButton(searchResultsController: searchResults)
-
         searchController?.searchResultsUpdater = self
         searchController?.searchBar.delegate = self
 
-        let searchBackgroundImage = #colorLiteral(red: 0.0716814159, green: 0.2847787611, blue: 0.3, alpha: 1).image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
-        searchController?.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
         searchController?.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
-
         searchController?.searchBar.showsCancelButton = false
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.hidesNavigationBarDuringPresentation = false
@@ -87,8 +81,8 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         delegate?.onViewLoaded()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
         if let indexPath = searchResults.tableView?.indexPathForSelectedRow {
             searchResults.tableView?.deselectRow(at: indexPath, animated: animated)
@@ -167,5 +161,11 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
             button.addTarget(self, action: tapSelector, for: .touchUpInside)
             stack.addArrangedSubview(button)
         }
+    }
+
+    override func themeDidChange() {
+        super.themeDidChange()
+        let searchBackgroundImage = UIColor.searchBarBackground.image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
+        searchController?.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
     }
 }

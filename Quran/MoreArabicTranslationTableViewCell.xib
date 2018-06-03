@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uTa-iN-KIF" customClass="NoBorderSegmentedControl" customModule="UIKitExtension">
+                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uTa-iN-KIF" customClass="ThemedSegmentedControl" customModule="Quran" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44.5"/>
                         <segments>
                             <segment title="First"/>

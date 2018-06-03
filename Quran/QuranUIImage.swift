@@ -1,11 +1,11 @@
 //
-//  QuarterTableViewCell.swift
+//  QuranUIImage.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/22/16.
+//  Created by Mohamed Afifi on 6/3/18.
 //
 //  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2017  Quran.com
+//  Copyright (C) 2018  Quran.com
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,17 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
-import UIKit
-
-class QuarterTableViewCell: QuranNavigationTableViewCell {
-
-    @IBOutlet weak var circleView: CircleView!
-    @IBOutlet weak var circleLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        circleView.fillColor = UIColor.appIdentity()
-        circleView.emptyColor = #colorLiteral(red: 0.5411764706, green: 0.6901960784, blue: 0.6156862745, alpha: 1)
-    }
+struct QuranUIImage {
+    let image: UIImage
+    let theme: Theme
 }

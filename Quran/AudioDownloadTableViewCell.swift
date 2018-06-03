@@ -20,7 +20,7 @@
 
 import UIKit
 
-class AudioDownloadTableViewCell: UITableViewCell {
+class AudioDownloadTableViewCell: ThemedTableViewCell {
 
     fileprivate static var formatter: ByteCountFormatter = {
         return ByteCountFormatter()
@@ -28,17 +28,16 @@ class AudioDownloadTableViewCell: UITableViewCell {
 
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var downloadButton: DownloadButton!
-    @IBOutlet fileprivate weak var firstLabel: UILabel!
-    @IBOutlet fileprivate weak var secondLabel: UILabel!
+    @IBOutlet fileprivate weak var firstLabel: ThemedLabel!
+    @IBOutlet fileprivate weak var secondLabel: ThemedLabel!
 
     var onShouldCancelDownload: (() -> Void)?
     var onShouldStartDownload: (() -> Void)?
 
     override func awakeFromNib() {
+        firstLabel.kind = .labelStrong
+        secondLabel.kind = .labelWeak
         super.awakeFromNib()
-        photoImageView.layer.borderColor = UIColor.lightGray.cgColor
-        photoImageView.layer.borderWidth = 0.5
-        photoImageView.layer.masksToBounds = true
 
         downloadButton.backgroundColor = .clear
         downloadButton.onButtonTapped = { [weak self] _ in
@@ -50,11 +49,6 @@ class AudioDownloadTableViewCell: UITableViewCell {
         super.prepareForReuse()
         onShouldStartDownload = nil
         onShouldCancelDownload = nil
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        photoImageView.layer.cornerRadius = photoImageView.bounds.width / 2
     }
 
     func downloadButtonTapped() {

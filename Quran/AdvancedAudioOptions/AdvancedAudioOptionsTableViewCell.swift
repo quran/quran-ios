@@ -19,5 +19,13 @@
 //
 import UIKit
 
-class AdvancedAudioOptionsTableViewCell: UITableViewCell {
+class AdvancedAudioOptionsTableViewCell: ThemedTableViewCell {
+
+    override var themeTextLabel: Bool { return true }
+    override var themeDetailTextLabel: Bool { return true }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        textLabelKind = .labelWeak
+    }
 }

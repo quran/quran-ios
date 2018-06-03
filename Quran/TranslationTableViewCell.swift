@@ -20,25 +20,31 @@
 
 import UIKit
 
-class TranslationTableViewCell: UITableViewCell {
+class TranslationTableViewCell: ThemedTableViewCell {
 
     @IBOutlet weak var checkbox: UIImageView!
     @IBOutlet weak var downloadButton: DownloadButton!
-    @IBOutlet fileprivate weak var firstLabel: UILabel!
+    @IBOutlet fileprivate weak var firstLabel: ThemedLabel!
     @IBOutlet fileprivate weak var secondLabel: UILabel!
-    @IBOutlet fileprivate weak var languageLabel: UILabel!
+    @IBOutlet fileprivate weak var languageLabel: ThemedLabel!
     @IBOutlet weak var iPhoneIcon: UIImageView!
 
     var onShouldCancelDownload: (() -> Void)?
     var onShouldStartDownload: (() -> Void)?
 
     override func awakeFromNib() {
+        firstLabel.kind = .labelStrong
+        languageLabel.kind = .appTint
         super.awakeFromNib()
-        languageLabel.textColor = .appIdentity()
         downloadButton.backgroundColor = .clear
         downloadButton.onButtonTapped = { [weak self] _ in
             self?.downloadButtonTapped()
         }
+    }
+
+    override func themeDidChange() {
+        super.themeDidChange()
+        translation.map { configure(with: $0) }
     }
 
     override func prepareForReuse() {
@@ -79,38 +85,48 @@ class TranslationTableViewCell: UITableViewCell {
         }
         checkbox.image = image
     }
+
+    private var translation: Translation? {
+        didSet {
+            guard let translation = translation else {
+                return
+            }
+
+            // show iPhone icon if the translation language is the same as device language
+            // Always hide the icon
+            iPhoneIcon.isHidden = true // Locale.current.languageCode != translation.languageCode
+            firstLabel.text = translation.displayName
+            languageLabel.text = Locale(identifier: translation.languageCode).localizedString(forLanguageCode: translation.languageCode)
+
+            let translatorNameOptional = translation.translatorForeign ?? translation.translator
+
+            guard let translatorName = translatorNameOptional, !translatorName.isEmpty else {
+                secondLabel.attributedText = NSAttributedString()
+                return
+            }
+
+            let translator = l("translatorLabel: ")
+
+            let lightFont = UIFont.systemFont(ofSize: 15, weight: .light)
+            let regularFont = translation.preferredTranslatorNameFont(ofSize: .medium)
+
+            let lightColor = Theme.Kind.labelWeak.color
+            let regularColor = Theme.Kind.labelStrong.color
+
+            let lightAttributes: [NSAttributedStringKey: Any] = [.font: lightFont, .foregroundColor: lightColor]
+            let regularAttributes: [NSAttributedStringKey: Any] = [.font: regularFont, .foregroundColor: regularColor]
+
+            let translatorAttributes = NSMutableAttributedString(string: translator, attributes: lightAttributes)
+            let attributes = NSAttributedString(string: translatorName, attributes: regularAttributes)
+            translatorAttributes.append(attributes)
+            secondLabel.attributedText = translatorAttributes
+        }
+    }
 }
 
 extension TranslationTableViewCell {
 
     func configure(with translation: Translation) {
-        // show iPhone icon if the translation language is the same as device language
-        // Always hide the icon
-        iPhoneIcon.isHidden = true // Locale.current.languageCode != translation.languageCode
-        firstLabel.text = translation.displayName
-        languageLabel.text = Locale(identifier: translation.languageCode).localizedString(forLanguageCode: translation.languageCode)
-
-        let translatorNameOptional = translation.translatorForeign ?? translation.translator
-
-        guard let translatorName = translatorNameOptional, !translatorName.isEmpty else {
-            secondLabel.attributedText = NSAttributedString()
-            return
-        }
-
-        let translator = l("translatorLabel: ")
-
-        let lightFont = UIFont.systemFont(ofSize: 15, weight: .light)
-        let regularFont = translation.preferredTranslatorNameFont(ofSize: .medium)
-
-        let lightColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
-        let regularColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
-
-        let lightAttributes: [NSAttributedStringKey: Any] = [.font: lightFont, .foregroundColor: lightColor]
-        let regularAttributes: [NSAttributedStringKey: Any] = [.font: regularFont, .foregroundColor: regularColor]
-
-        let translatorAttributes = NSMutableAttributedString(string: translator, attributes: lightAttributes)
-        let attributes = NSAttributedString(string: translatorName, attributes: regularAttributes)
-        translatorAttributes.append(attributes)
-        secondLabel.attributedText = translatorAttributes
+        self.translation = translation
     }
 }

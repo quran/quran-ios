@@ -26,8 +26,8 @@ class Container {
 
     fileprivate static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
 
-    fileprivate let imagesCache: Cache<Int, UIImage> = {
-        let cache = Cache<Int, UIImage>()
+    fileprivate let imagesCache: Cache<Int, QuranUIImage> = {
+        let cache = Cache<Int, QuranUIImage>()
         cache.countLimit = 5
         return cache
     }()
@@ -226,7 +226,7 @@ class Container {
         return AnyCreator(createClosure: creationClosure)
     }
 
-    func createQuranImageService() -> AnyCacheableService<Int, UIImage> {
+    func createQuranImageService() -> AnyCacheableService<Int, QuranUIImage> {
         return PagesCacheableService(
             cache              : createImagesCache(),
             previousPagesCount : 1,
@@ -251,7 +251,7 @@ class Container {
         return cache
     }
 
-    func createImagesCache() -> Cache<Int, UIImage> {
+    func createImagesCache() -> Cache<Int, QuranUIImage> {
         return imagesCache
     }
 
@@ -385,7 +385,7 @@ class Container {
             simplePersistence: createSimplePersistence()).asAnyInteractor()
     }
 
-    func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<UIImage> {
+    func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<QuranUIImage> {
         return ImagePreloadingOperation(page: page).asPreloadingOperationRepresentable()
     }
 

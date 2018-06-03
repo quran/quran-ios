@@ -24,7 +24,16 @@ extension UIImage {
 
     public func preloadedImage() -> UIImage {
 
-        guard let cgimg = cgImage else {
+        let targetImage: CGImage?
+        if let cgImage = cgImage {
+            targetImage = cgImage
+        } else if let ciImage = ciImage {
+            let context = CIContext(options: nil)
+            targetImage = context.createCGImage(ciImage, from: ciImage.extent)
+        } else {
+            targetImage = nil
+        }
+        guard let cgimg = targetImage else {
             return self
         }
 
@@ -109,5 +118,14 @@ extension UIImage {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage
+    }
+
+    public func inverted() -> UIImage {
+        guard let filter = CIFilter(name: "CIColorInvert") else {
+            return self
+        }
+        filter.setValue(CIImage(image: self), forKey: kCIInputImageKey)
+        let newImage = filter.outputImage.map { UIImage(ciImage: $0) }
+        return newImage ?? self
     }
 }

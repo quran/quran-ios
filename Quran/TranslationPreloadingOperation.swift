@@ -79,7 +79,8 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
         }
 
         let fontSize = simplePersistence.fontSize
-        return TranslationPage(pageNumber: page, verses: verses, fontSize: fontSize)
+        let theme = simplePersistence.theme
+        return TranslationPage(pageNumber: page, verses: verses, fontSize: fontSize, theme: theme)
     }
 
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {

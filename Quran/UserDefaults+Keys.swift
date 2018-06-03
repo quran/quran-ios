@@ -27,6 +27,7 @@ extension PersistenceKeyBase {
     static let appInstalledDate = PersistenceKey<TimeInterval>(key: "appInstalledDate", defaultValue: 0)
     static let requestReviewDate = PersistenceKey<TimeInterval?>(key: "requestReviewDate", defaultValue: nil)
     static let fontSizeRaw = PersistenceKey<Int?>(key: "fontSize", defaultValue: nil)
+    static let themeRaw = PersistenceKey<Int>(key: "theme", defaultValue: Theme.light.rawValue)
 }
 
 extension SimplePersistence {
@@ -38,4 +39,18 @@ extension SimplePersistence {
             setValue(newValue.rawValue, forKey: PersistenceKeyBase.fontSizeRaw)
         }
     }
+
+    var theme: Theme {
+        get {
+            return Theme(rawValue: valueForKey(.themeRaw)) ?? .light
+        }
+        set {
+            setValue(newValue.rawValue, forKey: .themeRaw)
+            NotificationCenter.default.post(name: .themeDidChange, object: newValue)
+        }
+    }
+}
+
+extension NSNotification.Name {
+    static let themeDidChange = NSNotification.Name("themeDidChange")
 }

@@ -48,7 +48,42 @@ extension UIColor {
         return #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
     }
 
+    static var barsBackground: UIColor {
+        switch Theme.current {
+        case .dark:  return #colorLiteral(red: 0.01194690265, green: 0.04746312684, blue: 0.05, alpha: 1)
+        case .light: return .appIdentity()
+        }
+    }
+
     static var translatorName: UIColor {
         return #colorLiteral(red: 0.5490196078, green: 0.662745098, blue: 0.662745098, alpha: 1)
+    }
+
+    static var searchBarBackground: UIColor {
+        switch Theme.current {
+        case .dark:  return .barsBackground
+        case .light: return #colorLiteral(red: 0.0716814159, green: 0.2847787611, blue: 0.3, alpha: 1)
+        }
+    }
+
+    static var barButtonsTint: UIColor {
+        switch Theme.current {
+        case .dark:  return .buttonsTint
+        case .light: return .white
+        }
+    }
+
+    static var buttonsTint: UIColor {
+        switch Theme.current {
+        case .dark:  return #colorLiteral(red: 0.1672566371, green: 0.6628318584, blue: 0.7, alpha: 1)
+        case .light: return .appIdentity()
+        }
+    }
+
+    static var suraHeader: UIColor {
+        switch Theme.current {
+        case .dark:  return #colorLiteral(red: 0.08235294118, green: 0.3215686275, blue: 0.3411764706, alpha: 1)
+        case .light: return #colorLiteral(red: 0.08235294118, green: 0.3215686275, blue: 0.3411764706, alpha: 1)
+        }
     }
 }

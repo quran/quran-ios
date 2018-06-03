@@ -42,7 +42,10 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
                                        arabicPrefixLayouts: arabicPrefixLayouts,
                                        arabicSuffixLayouts: arabicSuffixLayouts)
             }
-            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber, verseLayouts: verseLayouts, fontSize: page.fontSize)
+            let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber,
+                                                   verseLayouts: verseLayouts,
+                                                   fontSize: page.fontSize,
+                                                   theme: page.theme)
             fulfill(pageLayout)
         }
     }

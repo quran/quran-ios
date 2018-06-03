@@ -76,7 +76,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
 
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
+        let collectionView = ThemedCollectionView(frame: self.bounds, collectionViewLayout: layout)
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
@@ -88,7 +88,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             .verticalEdges()
             .horizontalEdges(inset: -Layout.QuranCell.horizontalInset)
 
-        collectionView.backgroundColor = UIColor.readingBackground()
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.ds_register(cellNib: QuranImagePageCollectionViewCell.self)
@@ -109,8 +108,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let imageView = UIImageView()
         imageView.image = #imageLiteral(resourceName: "pointer-25").withRenderingMode(.alwaysTemplate)
 
-        imageView.layer.shadowColor = UIColor.black.cgColor
-        imageView.layer.shadowOpacity = 1
+        imageView.layer.shadowColor = Theme.Kind.labelWeak.color.cgColor
+        imageView.layer.shadowOpacity = 0.6
         imageView.layer.shadowRadius = 3
         imageView.layer.shadowOffset = CGSize(width: 1, height: 1)
 

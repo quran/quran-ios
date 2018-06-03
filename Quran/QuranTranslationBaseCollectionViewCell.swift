@@ -20,7 +20,7 @@
 
 import UIKit
 
-class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
+class QuranTranslationBaseCollectionViewCell: BackgroundThemedCollectionViewCell {
 
     var ayah: AyahNumber?
 
@@ -36,24 +36,9 @@ class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
                Layout.windowDirectionalLayoutMargins.trailing
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setUp()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUp()
-    }
-
-    private func setUp() {
-        backgroundColor = .readingBackground()
-        contentView.backgroundColor = .readingBackground()
-    }
-
     override var backgroundColor: UIColor? {
         set {
-            super.backgroundColor = newValue ?? .readingBackground()
+            super.backgroundColor = newValue ?? Theme.Kind.background.color
             contentView.backgroundColor = super.backgroundColor
         }
         get {

@@ -59,19 +59,19 @@ class DownloadButton: UIView {
 
     let download: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(#imageLiteral(resourceName: "download-30").tintedImage(withColor: .appIdentity()), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "download-30").tintedImage(withColor: .buttonsTint), for: .normal)
         return button
     }()
 
     let pending: PKPendingView = {
         let button = PKPendingView()
-        button.tintColor = .appIdentity()
+        button.tintColor = .buttonsTint
         return button
     }()
 
     let downloading: PKStopDownloadButton = {
         let button = PKStopDownloadButton()
-        button.tintColor = .appIdentity()
+        button.tintColor = .buttonsTint
         button.filledLineStyleOuter = false
         return button
     }()
@@ -79,16 +79,16 @@ class DownloadButton: UIView {
     let upgrade: UIButton = {
         let button = UIButton(type: .custom)
 
-        let backgroundImage = UIImage.buttonBackground(with: .appIdentity())
+        let backgroundImage = UIImage.buttonBackground(with: .buttonsTint)
             .resizableImage(withCapInsets: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15))
         button.setBackgroundImage(backgroundImage, for: .normal)
-        button.setBackgroundImage(UIImage.highlitedButtonBackground(with: .appIdentity()), for: .highlighted)
+        button.setBackgroundImage(UIImage.highlitedButtonBackground(with: .buttonsTint), for: .highlighted)
 
         button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitle(l("upgradeTranslationButtonTitle"), for: .normal)
         button.setTitleColor(.white, for: .highlighted)
-        button.setTitleColor(.appIdentity(), for: .normal)
+        button.setTitleColor(.buttonsTint, for: .normal)
 
         return button
     }()

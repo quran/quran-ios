@@ -19,9 +19,13 @@
 //
 import GenericDataSources
 
-class FullScreenLoadingTableViewCell: UITableViewCell {
+class FullScreenLoadingTableViewCell: ThemedTableViewCell {
+    override var kind: Theme.Kind {
+        get { return .background }
+        set { }
+    }
 
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    let activityIndicator = ThemedActivityIndicatorView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

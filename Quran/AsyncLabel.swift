@@ -25,7 +25,7 @@ private struct RenderInput: Hashable {
     let fontSize: FontSize
 }
 
-class AsyncLabel: UIView {
+class AsyncLabel: ThemedView {
 
     private static var sharedRenderer: AnyCacheableService<RenderInput, UIImage>  = {
         let cache = Cache<RenderInput, UIImage>()
@@ -39,19 +39,12 @@ class AsyncLabel: UIView {
         return renderer
     }()
 
-    var onImageChanged: ((UIImage?) -> Void)?
-
     private var textLayout: TranslationTextLayout?
     private var fontSize: FontSize?
 
     private(set) var image: UIImage? {
-        set {
-            imageView.image = newValue
-            onImageChanged?(image)
-        }
-        get {
-            return imageView.image
-        }
+        set { imageView.image = newValue?.withRenderingMode(.alwaysTemplate) }
+        get { return imageView.image }
     }
 
     let imageView: UIImageView = UIImageView()
@@ -67,6 +60,8 @@ class AsyncLabel: UIView {
     }
 
     private func setUp() {
+        usesTintColor = true
+        backgroundColor = nil
         addAutoLayoutSubview(imageView)
         imageView.vc
             .horizontalEdges()

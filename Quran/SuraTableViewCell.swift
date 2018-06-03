@@ -20,21 +20,11 @@
 
 import UIKit
 
-class SuraTableViewCell: UITableViewCell {
-    @IBOutlet weak var order: UILabel!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var startPage: UILabel!
+class SuraTableViewCell: QuranNavigationTableViewCell {
+    @IBOutlet weak var order: ThemedLabel!
 
     override func awakeFromNib() {
+        order.kind = .labelWeak
         super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

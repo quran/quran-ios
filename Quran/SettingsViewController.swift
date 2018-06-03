@@ -23,7 +23,7 @@ import UIKit
 
 class SettingsViewController: BaseTableBasedViewController {
 
-    private let dataSource = SettingsDataSource()
+    private let dataSource = CompositeDataSource(sectionType: .single)
     private let creators: SettingsCreators
 
     override var screen: Analytics.Screen { return .settings }
@@ -31,25 +31,10 @@ class SettingsViewController: BaseTableBasedViewController {
     init(creators: SettingsCreators) {
         self.creators = creators
         super.init(nibName: nil, bundle: nil)
-
-        let selection = BlockSelectionHandler<Setting, UITableViewCell>()
-        selection.didSelectBlock = { [weak self] ds, _, indexPath in
-            guard let `self` = self else { return }
-            let item = ds.item(at: indexPath)
-            item.onSelection(self)
-            self.tableView.deselectRow(at: indexPath, animated: true)
-        }
-        dataSource.setSelectionHandler(selection)
     }
 
     required init?(coder aDecoder: NSCoder) {
         unimplemented()
-    }
-
-    override func loadView() {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        view = tableView
-        self.tableView = tableView
     }
 
     override func viewDidLoad() {
@@ -60,10 +45,34 @@ class SettingsViewController: BaseTableBasedViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70
 
-        tableView.ds_register(cellClass: UITableViewCell.self)
-        tableView.ds_useDataSource(dataSource)
+        let selection = BlockSelectionHandler<Setting, SettingTableViewCell>()
+        selection.didSelectBlock = { [weak self] ds, _, indexPath in
+            guard let `self` = self else { return }
+            let item = ds.item(at: indexPath)
+            item.onSelection?(self)
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
 
-        dataSource.items = creators.createSettingsItems()
+        let items = creators.createSettingsItems()
+        for (index, item) in items.enumerated() {
+            if item is EmptySetting {
+                let itemDS = EmptyDataSource()
+                itemDS.itemHeight = 35
+                itemDS.items = [()]
+                dataSource.add(itemDS)
+            } else {
+                let itemDS = SettingsDataSource()
+                itemDS.itemHeight = 51
+                itemDS.zeroInset = index == items.count - 1 || items[index + 1] is EmptySetting
+                itemDS.items = [item]
+                itemDS.setSelectionHandler(selection)
+                dataSource.add(itemDS)
+            }
+        }
+
+        tableView.ds_register(cellClass: SettingTableViewCell.self)
+        tableView.ds_register(cellClass: EmptyTableViewCell.self)
+        tableView.ds_useDataSource(dataSource)
     }
 }
 

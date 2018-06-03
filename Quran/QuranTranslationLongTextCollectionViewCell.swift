@@ -39,8 +39,7 @@ class QuranTranslationLongTextCollectionViewCell: QuranTranslationBaseCollection
     }
 
     private func setUp() {
-        label.backgroundColor = .readingBackground()
-
+        label.kind = .labelVeryStrong
         contentView.addAutoLayoutSubview(label)
         label.vc.verticalEdges(top: type(of: self).topPadding, bottom: type(of: self).bottomPadding)
         labelLeading = label.vc.leading(by: leadingMargin).constraint
@@ -51,15 +50,5 @@ class QuranTranslationLongTextCollectionViewCell: QuranTranslationBaseCollection
         super.layoutMarginsDidChange()
         labelLeading?.constant = leadingMargin
         labelTrailing?.constant = trailingMargin
-    }
-
-    override var backgroundColor: UIColor? {
-        didSet {
-            if backgroundColor == .readingBackground() {
-                label.backgroundColor = backgroundColor
-            } else {
-                label.backgroundColor = .clear
-            }
-        }
     }
 }

@@ -28,7 +28,7 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
 
     private var bottomConstraint: NSLayoutConstraint?
 
-    let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+    let visualEffect = ThemedVisualEffectView()
 
     let qariView = AudioQariBarView()
     let playView = AudioPlayBarView()
@@ -71,8 +71,8 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
 
         let borderHeight: CGFloat = UIScreen.main.scale < 2 ? 1 : 0.5
 
-        let topBorder = UIView()
-        topBorder.backgroundColor = UIColor.lightGray
+        let topBorder = ThemedView()
+        topBorder.kind = Theme.Kind.separator
         topBorder.vc.height(by: borderHeight)
         addAutoLayoutSubview(topBorder)
         topBorder.vc

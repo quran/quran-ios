@@ -28,14 +28,6 @@ extension UIColor {
         return #colorLiteral(red: 0.1058823529, green: 0.4196078431, blue: 0.4431372549, alpha: 1)
     }
 
-    class func secondaryColor() -> UIColor {
-        return UIColor.white
-    }
-
-    class func readingBackground() -> UIColor {
-        return #colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1)
-    }
-
     class func bookmark() -> UIColor {
         return #colorLiteral(red: 1, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
     }
@@ -44,19 +36,11 @@ extension UIColor {
         return #colorLiteral(red: 0.08235294118, green: 0.4274509804, blue: 0.8705882353, alpha: 1)
     }
 
-    static var translationText: UIColor {
-        return #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
-    }
-
     static var barsBackground: UIColor {
         switch Theme.current {
         case .dark:  return #colorLiteral(red: 0.01194690265, green: 0.04746312684, blue: 0.05, alpha: 1)
         case .light: return .appIdentity()
         }
-    }
-
-    static var translatorName: UIColor {
-        return #colorLiteral(red: 0.5490196078, green: 0.662745098, blue: 0.662745098, alpha: 1)
     }
 
     static var searchBarBackground: UIColor {

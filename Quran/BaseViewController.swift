@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BaseViewController: UIViewController {
+class BaseViewController: ThemedViewController {
 
     var screen: Analytics.Screen { expectedToBeSubclassed() }
 
@@ -30,7 +30,7 @@ class BaseViewController: UIViewController {
     }
 }
 
-class BaseTableViewController: UITableViewController {
+class BaseTableViewController: ThemedTableViewController {
 
     var screen: Analytics.Screen { expectedToBeSubclassed() }
 

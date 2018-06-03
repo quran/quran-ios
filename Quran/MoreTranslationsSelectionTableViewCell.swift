@@ -19,10 +19,13 @@
 //
 import UIKit
 
-class MoreTranslationsSelectionTableViewCell: UITableViewCell {
+class MoreTranslationsSelectionTableViewCell: ThemedTableViewCell {
+
+    override var themeTextLabel: Bool { return true }
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        kind = .popover
         separatorInset = .zero
     }
 }

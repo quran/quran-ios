@@ -24,7 +24,7 @@ protocol ScrollableToTop {
     func scrollToTop()
 }
 
-class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+class MainTabBarController: ThemedTabBarController, UITabBarControllerDelegate {
     override open var shouldAutorotate: Bool {
         return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
@@ -37,7 +37,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.barStyle = .default
         delegate = self
     }
 

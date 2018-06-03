@@ -59,6 +59,7 @@
 		542732D21EB541AA00DC5C0F /* DownloadBatchDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */; };
 		542732F11EB67B0400DC5C0F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5487242F1DC616D700ADDE54 /* libsqlite3.tbd */; };
 		5428A686213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428A685213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift */; };
+		5428A687213DC55500B91F13 /* QuranUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38320C45BB600D2E7B5 /* QuranUIImage.swift */; };
 		542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC61ECC4BDC0023D6FD /* SearchService.swift */; };
 		542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */; };
 		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
@@ -148,8 +149,10 @@
 		5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */; };
 		5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */ = {isa = PBXBuildFile; fileRef = 5449EC0B1FA58ACE00A12337 /* quran.ar.db */; };
 		544EC36620B9B69600D2E7B5 /* Theme+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36520B9B69600D2E7B5 /* Theme+extensions.swift */; };
+		544EC36820B9C19A00D2E7B5 /* QuranNavigationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36720B9C19A00D2E7B5 /* QuranNavigationTableViewCell.swift */; };
 		544EC36A20BA471800D2E7B5 /* ThemedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36920BA471800D2E7B5 /* ThemedImageView.swift */; };
 		544EC36C20BA479F00D2E7B5 /* ThemedActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36B20BA479F00D2E7B5 /* ThemedActivityIndicatorView.swift */; };
+		544EC36E20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36D20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift */; };
 		544EC37020BA708D00D2E7B5 /* ThemedVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC36F20BA708D00D2E7B5 /* ThemedVisualEffectView.swift */; };
 		544EC37420BA890600D2E7B5 /* ThemedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37320BA890600D2E7B5 /* ThemedButton.swift */; };
 		544EC37620BB1B4B00D2E7B5 /* ThemedNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37520BB1B4B00D2E7B5 /* ThemedNavigationBar.swift */; };
@@ -350,6 +353,7 @@
 		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC10BF209FA7DC00C57DA9 /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10BE209FA7DC00C57DA9 /* ThemedTableViewCell.swift */; };
 		54DC10C1209FA94B00C57DA9 /* ThemedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10C0209FA94B00C57DA9 /* ThemedTableView.swift */; };
+		54DC10C3209FDABC00C57DA9 /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10C2209FDABC00C57DA9 /* SettingTableViewCell.swift */; };
 		54DC10C5209FDFED00C57DA9 /* ThemedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10C4209FDFED00C57DA9 /* ThemedTableViewController.swift */; };
 		54DC10C7209FF75300C57DA9 /* ThemedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10C6209FF75300C57DA9 /* ThemedViewController.swift */; };
 		54DC4AE21E84721400F4CBD6 /* TranslationPreloadingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */; };
@@ -696,8 +700,10 @@
 		5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalEdgeInsets.swift; sourceTree = "<group>"; };
 		5449EC0B1FA58ACE00A12337 /* quran.ar.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran.ar.db; sourceTree = "<group>"; };
 		544EC36520B9B69600D2E7B5 /* Theme+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+extensions.swift"; sourceTree = "<group>"; };
+		544EC36720B9C19A00D2E7B5 /* QuranNavigationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranNavigationTableViewCell.swift; sourceTree = "<group>"; };
 		544EC36920BA471800D2E7B5 /* ThemedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedImageView.swift; sourceTree = "<group>"; };
 		544EC36B20BA479F00D2E7B5 /* ThemedActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedActivityIndicatorView.swift; sourceTree = "<group>"; };
+		544EC36D20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAutocompleteTableViewCell.swift; sourceTree = "<group>"; };
 		544EC36F20BA708D00D2E7B5 /* ThemedVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedVisualEffectView.swift; sourceTree = "<group>"; };
 		544EC37320BA890600D2E7B5 /* ThemedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedButton.swift; sourceTree = "<group>"; };
 		544EC37520BB1B4B00D2E7B5 /* ThemedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedNavigationBar.swift; sourceTree = "<group>"; };
@@ -705,6 +711,7 @@
 		544EC37920BB24EF00D2E7B5 /* ThemedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCollectionViewCell.swift; sourceTree = "<group>"; };
 		544EC37B20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedRoundedImageView.swift; sourceTree = "<group>"; };
 		544EC37D20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedSegmentedControl.swift; sourceTree = "<group>"; };
+		544EC38320C45BB600D2E7B5 /* QuranUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranUIImage.swift; sourceTree = "<group>"; };
 		544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTabBarController.swift; sourceTree = "<group>"; };
 		544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedNavigationController.swift; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
@@ -934,6 +941,7 @@
 		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC10BE209FA7DC00C57DA9 /* ThemedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewCell.swift; sourceTree = "<group>"; };
 		54DC10C0209FA94B00C57DA9 /* ThemedTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableView.swift; sourceTree = "<group>"; };
+		54DC10C2209FDABC00C57DA9 /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		54DC10C4209FDFED00C57DA9 /* ThemedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewController.swift; sourceTree = "<group>"; };
 		54DC10C6209FF75300C57DA9 /* ThemedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedViewController.swift; sourceTree = "<group>"; };
 		54DC4AE11E84721400F4CBD6 /* TranslationPreloadingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPreloadingOperation.swift; sourceTree = "<group>"; };
@@ -1501,6 +1509,7 @@
 				54B2660C1CC6D38600D3AEF8 /* SettingsNavigationController.swift */,
 				54B266121CC6D5A000D3AEF8 /* SettingsViewController.swift */,
 				54547E8A1EC75384008AFED3 /* SettingsCreators.swift */,
+				54DC10C2209FDABC00C57DA9 /* SettingTableViewCell.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1584,6 +1593,7 @@
 				54547EAC1ECA82BE008AFED3 /* SearchResultTableViewCell.xib */,
 				542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */,
 				542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */,
+				544EC36D20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -1963,6 +1973,7 @@
 				54B266021CC6D03900D3AEF8 /* MainTabBarController.swift */,
 				DA0B7E1B1D175DA100F92AA3 /* ShareController.swift */,
 				547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */,
+				544EC36720B9C19A00D2E7B5 /* QuranNavigationTableViewCell.swift */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -2273,6 +2284,7 @@
 			isa = PBXGroup;
 			children = (
 				54D133D41EF76FCD00037D8C /* AyahWord.swift */,
+				544EC38320C45BB600D2E7B5 /* QuranUIImage.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -3368,6 +3380,7 @@
 				54699B9B1E8DC15D00211A60 /* QuranTranslationArabicTextCollectionViewCell.swift in Sources */,
 				5424773D1E7856040051C196 /* DownloadButton.swift in Sources */,
 				54C0DBFA1CE4F7C1009AAD8D /* QariNavigationController.swift in Sources */,
+				544EC36820B9C19A00D2E7B5 /* QuranNavigationTableViewCell.swift in Sources */,
 				54F8C41A1EA7EFB200C853C6 /* Downloadable.swift in Sources */,
 				C120E69C1CE7B5AC00BAA7EA /* AyahInfoPersistence.swift in Sources */,
 				54F56C4A1E7EB94F00D7AF57 /* BookmarksManager.swift in Sources */,
@@ -3423,6 +3436,7 @@
 				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
 				540BCA4C1EACC4C700D28797 /* Int+Extension.swift in Sources */,
 				5459FF681EA4E79C00FBF6C5 /* DownloadableQariAudioRetriever.swift in Sources */,
+				544EC36E20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift in Sources */,
 				541092F31EAAA32F009471CB /* AyahsAudioDownloader.swift in Sources */,
 				544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */,
 				54F8C4241EA8104F00C853C6 /* DownloadingObserver.swift in Sources */,
@@ -3501,6 +3515,7 @@
 				54A99CAE1CF7A55A003995AE /* LastPageBookmarkDataSource.swift in Sources */,
 				54965FB81E7D4A3700A212E2 /* QuranPageTitleView.swift in Sources */,
 				544EC37020BA708D00D2E7B5 /* ThemedVisualEffectView.swift in Sources */,
+				5428A687213DC55500B91F13 /* QuranUIImage.swift in Sources */,
 				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
 				54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */,
 				540922A51E91316100C7537A /* QuranTranslationArabicTextDataSource.swift in Sources */,
@@ -3558,6 +3573,7 @@
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 				5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */,
 				C2E3ECB0A95078398671C6A9 /* ActiveTranslationsPersistence.swift in Sources */,
+				54DC10C3209FDABC00C57DA9 /* SettingTableViewCell.swift in Sources */,
 				54547E9E1EC9D39F008AFED3 /* Search.swift in Sources */,
 				C2E3EEFFF883535CFD936A2C /* SQLiteActiveTranslationsPersistence.swift in Sources */,
 			);

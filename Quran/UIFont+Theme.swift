@@ -96,7 +96,6 @@ extension TranslationText {
 
         let attributes: [NSAttributedStringKey: Any] = [
             .font            : translation.preferredTextFont(ofSize: size),
-            .foregroundColor : UIColor.translationText,
             .paragraphStyle  : style]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         return attributedString

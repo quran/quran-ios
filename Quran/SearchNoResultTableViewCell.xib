@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,20 +20,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUY-DB-cbX">
-                        <rect key="frame" x="109.5" y="102.5" width="270.5" height="149"/>
+                        <rect key="frame" x="20" y="102.5" width="449.5" height="149"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search-128" translatesAutoresizingMaskIntoConstraints="NO" id="fQh-vh-CJS">
-                                <rect key="frame" x="71.5" y="0.0" width="128" height="128"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search-128" translatesAutoresizingMaskIntoConstraints="NO" id="fQh-vh-CJS" customClass="ThemedImageView" customModule="Quran" customModuleProvider="target">
+                                <rect key="frame" x="161" y="0.0" width="128" height="128"/>
                                 <color key="tintColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results for &quot;What are you doing&quot;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3m-ca-dCA">
-                                <rect key="frame" x="0.0" y="128" width="270.5" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results for &quot;What are you doing&quot;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3m-ca-dCA" customClass="ThemedLabel" customModule="Quran" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="128" width="449.5" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fQh-vh-CJS" firstAttribute="top" secondItem="YUY-DB-cbX" secondAttribute="top" id="HqC-3f-GHP"/>
                             <constraint firstAttribute="bottom" secondItem="B3m-ca-dCA" secondAttribute="bottom" id="NYP-Fa-ZYS"/>
@@ -44,6 +46,7 @@
                     </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="YUY-DB-cbX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="1Go-qh-dSI"/>
                     <constraint firstItem="YUY-DB-cbX" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Vhj-zA-H3v"/>
                     <constraint firstItem="YUY-DB-cbX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zqw-dl-Ux8"/>
                 </constraints>

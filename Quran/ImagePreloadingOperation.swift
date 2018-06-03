@@ -20,7 +20,7 @@
 import PromiseKit
 import UIKit
 
-class ImagePreloadingOperation: AbstractPreloadingOperation<UIImage> {
+class ImagePreloadingOperation: AbstractPreloadingOperation<QuranUIImage> {
 
     let page: Int
 
@@ -32,10 +32,17 @@ class ImagePreloadingOperation: AbstractPreloadingOperation<UIImage> {
         guard let filePath = fullPathForPage(page), let image = UIImage(contentsOfFile: filePath) else {
             fatalError("No image found for page '\(page)'")
         }
+        let theme = Theme.current
 
         // preload the image
-        let preloadedImage = image.preloadedImage()
-        fulfill(preloadedImage)
+        let unloadedImage: UIImage
+        if theme == .dark {
+            unloadedImage = image.inverted()
+        } else {
+            unloadedImage = image
+        }
+        let preloadedImage = unloadedImage.preloadedImage()
+        fulfill(QuranUIImage(image: preloadedImage, theme: theme))
     }
 }
 

@@ -20,11 +20,6 @@
 
 import UIKit
 
-class BookmarkTableViewCell: UITableViewCell {
-
+class BookmarkTableViewCell: QuranNavigationTableViewCell {
     @IBOutlet weak var iconImage: UIImageView!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var startPage: UILabel!
-
 }

@@ -19,16 +19,23 @@
 //
 import UIKit
 
-class MoreFontSizeTableViewCell: UITableViewCell {
+class MoreFontSizeTableViewCell: ThemedTableViewCell {
 
     var onIncreaseTapped: (() -> Void)?
     var onDecreaseTapped: (() -> Void)?
 
-    @IBOutlet weak var increase: UIButton!
-    @IBOutlet weak var decrease: UIButton!
+    @IBOutlet weak var increase: ThemedButton!
+    @IBOutlet weak var decrease: ThemedButton!
+    @IBOutlet weak var separator: ThemedView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        kind = .popover
+        separator.kind = .popoverSeparator
+        for button in [increase, decrease] {
+            button?.kind = .label
+            button?.disabledKind = .labelVeryWeak
+        }
         increase.setTitle(l("menu.fontSizeLetter"), for: .normal)
         decrease.setTitle(l("menu.fontSizeLetter"), for: .normal)
     }

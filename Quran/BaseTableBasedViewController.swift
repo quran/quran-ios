@@ -32,15 +32,16 @@ class BaseTableBasedViewController: BaseViewController, ScrollableToTop {
     override func loadView() {
         view = UIView()
 
-        let tableView = UITableView()
+        let tableView = ThemedTableView()
+        tableView.tableFooterView = UIView()
         view.addAutoLayoutSubview(tableView)
         tableView.vc.edges()
 
         self.tableView = tableView
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
         if clearsSelectionOnViewWillAppear {
             if let indexPath = tableView?.indexPathForSelectedRow {

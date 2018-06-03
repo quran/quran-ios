@@ -20,8 +20,15 @@
 
 import UIKit
 
-class SearchResultTableViewCell: UITableViewCell {
-    @IBOutlet weak var pageNumber: UILabel!
+class SearchResultTableViewCell: ThemedTableViewCell {
+
+    @IBOutlet weak var pageNumber: ThemedLabel!
     @IBOutlet weak var resultLabel: UILabel!
-    @IBOutlet weak var ayahDescription: UILabel!
+    @IBOutlet weak var ayahDescription: ThemedLabel!
+
+    override func awakeFromNib() {
+        pageNumber.kind = .labelMedium
+        ayahDescription.kind = .labelWeak
+        super.awakeFromNib()
+    }
 }

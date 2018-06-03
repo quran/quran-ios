@@ -20,11 +20,18 @@
 
 import UIKit
 
+private class CircularThemedView: ThemedView {
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = circularRadius
+    }
+}
+
 class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollectionViewCell {
     static let cellHeight: CGFloat = 80
 
-    let roundedView: UIView = CircularView()
-    let label: UILabel = UILabel()
+    private let roundedView = CircularThemedView()
+    let label = ThemedLabel()
     private var roundedViewLeading: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,10 +45,10 @@ class QuranTranslationVerseNumberCollectionViewCell: QuranTranslationBaseCollect
     }
 
     private func setUp() {
-        roundedView.backgroundColor = #colorLiteral(red: 0.8861932158, green: 0.8862140179, blue: 0.8862028718, alpha: 1)
+        roundedView.kind = .labelExtremelyWeak
 
         label.textAlignment = .center
-        label.textColor = #colorLiteral(red: 0.4862189293, green: 0.4863064885, blue: 0.4862134457, alpha: 1)
+        label.kind = .labelWeak
         label.font = UIFont.systemFont(ofSize: 17)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5

@@ -35,8 +35,8 @@ class QuranTranslationVerseSeparatorCollectionViewCell: QuranTranslationBaseColl
     }
 
     private func setUp() {
-        let lineView = UIView()
-        lineView.backgroundColor = #colorLiteral(red: 0.4862745098, green: 0.4862745098, blue: 0.4862745098, alpha: 1)
+        let lineView = ThemedView()
+        lineView.kind = .separator
 
         contentView.addAutoLayoutSubview(lineView)
         lineView.vc

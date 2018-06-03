@@ -24,7 +24,7 @@ class AudioDownloadingBarView: UIView {
 
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var infoLabel: ThemedLabel!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -39,5 +39,6 @@ class AudioDownloadingBarView: UIView {
     private func setUp() {
         loadViewFrom(nibName: "AudioDownloadingBarView")
         infoLabel.text = lAndroid("downloading_title")
+        infoLabel.kind = .labelStrong
     }
 }

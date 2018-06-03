@@ -20,18 +20,19 @@
 
 import UIKit
 
-class QariTableViewCell: UITableViewCell {
+class QariTableViewCell: ThemedTableViewCell {
 
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleLabel: ThemedLabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        photoImageView.layer.borderColor = UIColor.lightGray.cgColor
+        titleLabel.kind = .labelStrong
+        photoImageView.layer.borderColor = Theme.Kind.readerImageBorder.color.cgColor
         photoImageView.layer.borderWidth = 0.5
 
-        let selectionBackground = UIView()
-        selectionBackground.backgroundColor = #colorLiteral(red: 0.9137254902, green: 0.9137254902, blue: 0.9137254902, alpha: 1)
+        let selectionBackground = ThemedView()
+        selectionBackground.kind = .labelExtremelyWeak
         selectedBackgroundView = selectionBackground
     }
 

@@ -20,10 +20,10 @@
 
 import UIKit
 
-class AudioQariBarView: UIView {
+class AudioQariBarView: ThemedView {
 
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleLabel: ThemedLabel!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var backgroundButton: BackgroundColorButton!
 
@@ -38,14 +38,8 @@ class AudioQariBarView: UIView {
     }
 
     private func setUp() {
+        kind = .none
         loadViewFrom(nibName: "AudioQariBarView")
-        imageView.layer.borderColor = UIColor.lightGray.cgColor
-        imageView.layer.borderWidth = 0.5
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageView.layer.cornerRadius = imageView.bounds.width / 2
-        imageView.layer.masksToBounds = true
+        titleLabel.kind = .labelStrong
     }
 }

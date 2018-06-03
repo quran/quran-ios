@@ -32,12 +32,12 @@ class SearchResultsViewController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.secondaryColor()
 
-        tableView.ds_register(cellClass: UITableViewCell.self)
+        tableView.ds_register(cellClass: SearchAutocompleteTableViewCell.self)
         tableView.ds_register(cellClass: FullScreenLoadingTableViewCell.self)
         tableView.ds_register(cellNib: SearchResultTableViewCell.self)
         tableView.ds_register(cellNib: SearchNoResultTableViewCell.self)
+        tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
         clearsSelectionOnViewWillAppear = true
     }

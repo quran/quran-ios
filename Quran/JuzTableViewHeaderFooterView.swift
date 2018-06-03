@@ -22,8 +22,8 @@ import UIKit
 
 class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
 
-    let titleLabel: UILabel = UILabel()
-    let subtitleLabel: UILabel = UILabel()
+    let titleLabel = ThemedLabel()
+    let subtitleLabel = ThemedLabel()
 
     let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
 
@@ -45,19 +45,16 @@ class JuzTableViewHeaderFooterView: UITableViewHeaderFooterView {
         addGestureRecognizer(tapGesture)
         tapGesture.addTarget(self, action: #selector(onViewTapped))
 
-        backgroundView = UIView()
-        let backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
-        contentView.backgroundColor = backgroundColor
-        backgroundView?.backgroundColor = backgroundColor
+        self.backgroundView = ThemedView()
 
-        titleLabel.textColor = #colorLiteral(red: 0.1960784314, green: 0.1960784314, blue: 0.1960784314, alpha: 1)
+        titleLabel.kind = .labelStrong
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         contentView.addAutoLayoutSubview(titleLabel)
         titleLabel.vc
             .verticalEdges()
             .leading(by: 20)
 
-        subtitleLabel.textColor = #colorLiteral(red: 0.2941176471, green: 0.2941176471, blue: 0.2941176471, alpha: 1)
+        subtitleLabel.kind = .labelMedium
         subtitleLabel.font = UIFont.systemFont(ofSize: 12)
         subtitleLabel.textAlignment = .right
         contentView.addAutoLayoutSubview(subtitleLabel)

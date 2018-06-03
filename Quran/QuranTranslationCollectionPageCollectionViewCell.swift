@@ -62,8 +62,6 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
-        contentView.backgroundColor = .readingBackground()
-        collectionView.backgroundColor = .readingBackground()
 
         collectionView.ds_register(cellClass: QuranTranslationSuraNameCollectionViewCell.self)
         collectionView.ds_register(cellClass: QuranTranslationVerseNumberCollectionViewCell.self)

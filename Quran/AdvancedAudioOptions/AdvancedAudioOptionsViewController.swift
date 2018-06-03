@@ -89,8 +89,7 @@ class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognize
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationBar.tintColor = .appIdentity()
-        navigationBar.barTintColor = .white
+        kind = .dimmed
         navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(customView: playButton)
 
         from.items = [lAndroid("play_from")]
@@ -235,7 +234,7 @@ private class ItemDataSource: BasicDataSource<String, AdvancedAudioOptionsTableV
                                     at indexPath: IndexPath) {
         cell.textLabel?.text = item
         cell.detailTextLabel?.text = detailsText
-        cell.detailTextLabel?.textColor = isSelected ? #colorLiteral(red: 0.1058823529, green: 0.4196078431, blue: 0.4431372549, alpha: 1) : .black
+        cell.detailTextLabelKind = isSelected ? .appTint : .label
     }
 
     var detailsText: String { unimplemented() }

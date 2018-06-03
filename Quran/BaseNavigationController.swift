@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BaseNavigationController: UINavigationController, ScrollableToTop {
+class BaseNavigationController: ThemedNavigationController, ScrollableToTop {
 
     override open var shouldAutorotate: Bool {
         return topViewController?.shouldAutorotate ?? super.shouldAutorotate

@@ -38,7 +38,7 @@ class MoreMenuViewController: BaseViewController {
 
     weak var delegate: MoreMenuViewControllerDelegate?
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView: ThemedTableView!
 
     private let dataSource = CompositeDataSource(sectionType: .single)
     private let arabicTranslation = MoreArabicTranslationDataSource()
@@ -106,6 +106,8 @@ class MoreMenuViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.kind = .popoverSeparator
+        tableView.separatorKind = .popoverSeparator
 
         tableView.ds_register(cellClass: EmptyTableViewCell.self)
         tableView.ds_register(cellNib: MoreArabicTranslationTableViewCell.self)
@@ -170,10 +172,10 @@ class MoreMenuViewController: BaseViewController {
         updateSize()
     }
 
-    private func createEmptyDataSource() -> EmptyDataSource {
-        let empty = EmptyDataSource()
+    private func createEmptyDataSource() -> ThemedEmptyDataSource {
+        let empty = ThemedEmptyDataSource()
         empty.itemHeight = 12
-        empty.items = [()]
+        empty.items = [Theme.Kind.popoverSeparator]
         return empty
     }
 

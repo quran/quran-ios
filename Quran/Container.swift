@@ -111,7 +111,7 @@ class Container {
 
     func createSettingsController() -> UIViewController {
         var settingsCreators = createSettingsCreators()
-        let settingsController = SettingsViewController(creators: settingsCreators)
+        let settingsController = SettingsViewController(creators: settingsCreators, persistence: createSimplePersistence())
         settingsCreators.parentController = settingsController
         return SettingsNavigationController(rootViewController: settingsController)
     }

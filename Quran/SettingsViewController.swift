@@ -25,11 +25,13 @@ class SettingsViewController: BaseTableBasedViewController {
 
     private let dataSource = CompositeDataSource(sectionType: .single)
     private let creators: SettingsCreators
+    private let persistence: SimplePersistence
 
     override var screen: Analytics.Screen { return .settings }
 
-    init(creators: SettingsCreators) {
+    init(creators: SettingsCreators, persistence: SimplePersistence) {
         self.creators = creators
+        self.persistence = persistence
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -55,7 +57,12 @@ class SettingsViewController: BaseTableBasedViewController {
 
         let items = creators.createSettingsItems()
         for (index, item) in items.enumerated() {
-            if item is EmptySetting {
+            if item is ThemeSetting {
+                let itemDS = ThemeSettingsDataSource(persistence: persistence)
+                itemDS.itemHeight = 44
+                itemDS.items = [()]
+                dataSource.add(itemDS)
+            } else if item is EmptySetting {
                 let itemDS = EmptyDataSource()
                 itemDS.itemHeight = 35
                 itemDS.items = [()]
@@ -72,6 +79,7 @@ class SettingsViewController: BaseTableBasedViewController {
 
         tableView.ds_register(cellClass: SettingTableViewCell.self)
         tableView.ds_register(cellClass: EmptyTableViewCell.self)
+        tableView.ds_register(cellNib: ThemeSelectionTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
     }
 }

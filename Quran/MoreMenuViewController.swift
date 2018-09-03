@@ -30,6 +30,7 @@ protocol MoreMenuViewControllerDelegate: class {
     func moreMenuViewControllerTranslationsSelectionSelected(_ controller: MoreMenuViewController)
     func moreMenuViewController(_ controller: MoreMenuViewController, shouldShowWordPointer: Bool)
     func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected: FontSize)
+    func moreMenuViewController(_ controller: MoreMenuViewController, themeSelected: Theme)
 }
 
 class MoreMenuViewController: BaseViewController {
@@ -45,7 +46,9 @@ class MoreMenuViewController: BaseViewController {
     private let selection = MoreTranslationsSelectionDataSource()
     private let pointer = MoreWordByWordPointerSelectionDataSource()
     private let fontSizeDS = MoreFontSizeDataSource()
+    private let themeDS = MoreThemeDataSource()
 
+    private var theme: Theme
     private var fontSize: FontSize
 
     var isWordPointerActive: Bool {
@@ -56,7 +59,8 @@ class MoreMenuViewController: BaseViewController {
         }
     }
 
-    init(mode: QuranMode, isWordPointerActive: Bool, fontSize: FontSize) {
+    init(mode: QuranMode, isWordPointerActive: Bool, fontSize: FontSize, theme: Theme) {
+        self.theme = theme
         self.fontSize = fontSize
         self.isWordPointerActive = isWordPointerActive
         super.init(nibName: nil, bundle: nil)
@@ -65,6 +69,7 @@ class MoreMenuViewController: BaseViewController {
         selection.itemHeight = 44
         pointer.itemHeight = 44
         fontSizeDS.itemHeight = 44
+        themeDS.itemHeight = 44
 
         arabicTranslation.items = [[
             SelectableItem(text: l("menu.arabic"), isSelected: mode == .arabic) { [weak self] _ in
@@ -80,6 +85,7 @@ class MoreMenuViewController: BaseViewController {
             self.delegate?.moreMenuViewController(self, shouldShowWordPointer: item.isSelected)
         }]
         setFontSizeItem()
+        setThemeItem()
 
         let selectionHandler = BlockSelectionHandler<String, MoreTranslationsSelectionTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (_, _, _) in
@@ -94,9 +100,12 @@ class MoreMenuViewController: BaseViewController {
             dataSource.add(selection)
             dataSource.add(createEmptyDataSource())
             dataSource.add(fontSizeDS)
+            dataSource.add(themeDS)
         } else {
             dataSource.add(createEmptyDataSource())
             dataSource.add(pointer)
+            dataSource.add(createEmptyDataSource())
+            dataSource.add(themeDS)
         }
     }
 
@@ -114,6 +123,7 @@ class MoreMenuViewController: BaseViewController {
         tableView.ds_register(cellNib: MoreWordByWordPointerTableViewCell.self)
         tableView.ds_register(cellNib: MoreTranslationsSelectionTableViewCell.self)
         tableView.ds_register(cellNib: MoreFontSizeTableViewCell.self)
+        tableView.ds_register(cellNib: ThemeSelectionTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
         updateSize()
@@ -149,7 +159,6 @@ class MoreMenuViewController: BaseViewController {
     private func arabicSelected() {
         tableView.ds_performBatchUpdates({
             self.remove(dataSource: self.fontSizeDS)
-            self.remove(dataSource: self.dataSource.dataSources[2]) // empty datasource
             self.remove(dataSource: self.selection)
             self.insert(dataSource: self.createEmptyDataSource(), at: 1)
             self.insert(dataSource: self.pointer, at: 2)
@@ -164,7 +173,6 @@ class MoreMenuViewController: BaseViewController {
             self.remove(dataSource: self.pointer)
             self.remove(dataSource: self.dataSource.dataSources[1]) // empty datasource
             self.insert(dataSource: self.selection, at: 1)
-            self.insert(dataSource: self.createEmptyDataSource(), at: 2)
             self.insert(dataSource: self.fontSizeDS, at: 3)
         }, completion: nil)
 
@@ -177,6 +185,21 @@ class MoreMenuViewController: BaseViewController {
         empty.itemHeight = 12
         empty.items = [Theme.Kind.popoverSeparator]
         return empty
+    }
+
+    private func setThemeItem() {
+        themeDS.items = [
+            ThemeItem(darkSelected: theme == .dark,
+                      onDarkTapped: { [weak self] in self?.updateThemeItem(to: .dark) },
+                      onLightTapped: { [weak self] in self?.updateThemeItem(to: .light) })
+        ]
+        themeDS.ds_reusableViewDelegate?.ds_reloadItems(at: [IndexPath(item: 0, section: 0)], with: .none)
+    }
+
+    private func updateThemeItem(to newTheme: Theme) {
+        delegate?.moreMenuViewController(self, themeSelected: newTheme)
+        theme = newTheme
+        setThemeItem()
     }
 
     private func setFontSizeItem() {
@@ -210,6 +233,12 @@ private struct FontSizeItem {
     var isDecreaseEnabled: Bool
     var increase: () -> Void
     var decrease: () -> Void
+}
+
+private struct ThemeItem {
+    var darkSelected: Bool
+    var onDarkTapped: () -> Void
+    var onLightTapped: () -> Void
 }
 
 private class MoreArabicTranslationDataSource: BasicDataSource<[SelectableItem], MoreArabicTranslationTableViewCell> {
@@ -284,6 +313,21 @@ private class MoreFontSizeDataSource: BasicDataSource<FontSizeItem, MoreFontSize
         cell.onDecreaseTapped = item.decrease
     }
 
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+}
+
+private class MoreThemeDataSource: BasicDataSource<ThemeItem, ThemeSelectionTableViewCell> {
+
+    override func ds_collectionView(_ collectionView: GeneralCollectionView,
+                                    configure cell: ThemeSelectionTableViewCell,
+                                    with item: ThemeItem,
+                                    at indexPath: IndexPath) {
+        cell.darkSelected = item.darkSelected
+        cell.onDarkTapped = item.onDarkTapped
+        cell.onLightTapped = item.onLightTapped
+    }
     override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return false
     }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ThemeSelectionTableViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pAi-nh-kKc" userLabel="container">
+                        <rect key="frame" x="100" y="3.5" width="120" height="35"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ers-2A-LQk" userLabel="Light" customClass="ThemeButton" customModule="Quran" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                <color key="backgroundColor" red="0.4039215686" green="0.4039215686" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ers-2A-LQk" secondAttribute="height" multiplier="1:1" id="JcA-df-Bkc"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="lightTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="FtR-MV-SQr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PIc-Mk-A5M" userLabel="Dark" customClass="ThemeButton" customModule="Quran" customModuleProvider="target">
+                                <rect key="frame" x="85" y="0.0" width="35" height="35"/>
+                                <color key="backgroundColor" red="0.4039215686" green="0.4039215686" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="PIc-Mk-A5M" secondAttribute="height" multiplier="1:1" id="zW6-EC-uP7"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="darkTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="GV7-0M-laq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ers-2A-LQk" firstAttribute="leading" secondItem="pAi-nh-kKc" secondAttribute="leading" id="1fI-Vq-ySm"/>
+                            <constraint firstAttribute="width" constant="120" id="CKW-Ik-cIz"/>
+                            <constraint firstAttribute="bottom" secondItem="ers-2A-LQk" secondAttribute="bottom" id="FGt-mr-DT6"/>
+                            <constraint firstItem="ers-2A-LQk" firstAttribute="top" secondItem="pAi-nh-kKc" secondAttribute="top" id="N55-3S-jfh"/>
+                            <constraint firstAttribute="trailing" secondItem="PIc-Mk-A5M" secondAttribute="trailing" id="cks-1a-7Vd"/>
+                            <constraint firstAttribute="height" constant="35" id="fNe-hH-10B"/>
+                            <constraint firstItem="PIc-Mk-A5M" firstAttribute="top" secondItem="pAi-nh-kKc" secondAttribute="top" id="qxV-zG-yyq"/>
+                            <constraint firstItem="PIc-Mk-A5M" firstAttribute="width" secondItem="PIc-Mk-A5M" secondAttribute="height" multiplier="1:1" id="yPg-Zc-x0j"/>
+                            <constraint firstAttribute="bottom" secondItem="PIc-Mk-A5M" secondAttribute="bottom" id="ydc-CC-jKR"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="pAi-nh-kKc" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="mTt-Xf-WcD"/>
+                    <constraint firstItem="pAi-nh-kKc" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="o2t-ua-EBr"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="darkButton" destination="PIc-Mk-A5M" id="4Hp-TW-y8I"/>
+                <outlet property="lightButton" destination="ers-2A-LQk" id="IS8-Hy-dOa"/>
+            </connections>
+            <point key="canvasLocation" x="18" y="28"/>
+        </tableViewCell>
+    </objects>
+</document>

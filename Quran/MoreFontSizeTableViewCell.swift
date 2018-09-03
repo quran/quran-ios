@@ -32,6 +32,7 @@ class MoreFontSizeTableViewCell: ThemedTableViewCell {
         super.awakeFromNib()
         kind = .popover
         separator.kind = .popoverSeparator
+        separatorInset = .zero
         for button in [increase, decrease] {
             button?.kind = .label
             button?.disabledKind = .labelVeryWeak

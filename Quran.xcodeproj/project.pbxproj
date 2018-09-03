@@ -160,6 +160,8 @@
 		544EC37A20BB24EF00D2E7B5 /* ThemedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37920BB24EF00D2E7B5 /* ThemedCollectionViewCell.swift */; };
 		544EC37C20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37B20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift */; };
 		544EC37E20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37D20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift */; };
+		544EC38120C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC37F20C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift */; };
+		544EC38220C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 544EC38020C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib */; };
 		544EC38620C45E7E00D2E7B5 /* ThemedTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */; };
 		544EC38820C45F1B00D2E7B5 /* ThemedNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */; };
 		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
@@ -712,6 +714,8 @@
 		544EC37B20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedRoundedImageView.swift; sourceTree = "<group>"; };
 		544EC37D20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedSegmentedControl.swift; sourceTree = "<group>"; };
 		544EC38320C45BB600D2E7B5 /* QuranUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranUIImage.swift; sourceTree = "<group>"; };
+		544EC37F20C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionTableViewCell.swift; sourceTree = "<group>"; };
+		544EC38020C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ThemeSelectionTableViewCell.xib; sourceTree = "<group>"; };
 		544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTabBarController.swift; sourceTree = "<group>"; };
 		544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedNavigationController.swift; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
@@ -1767,6 +1771,8 @@
 				547BCB5C20915638007AFBEC /* MoreWordByWordPointerTableViewCell.xib */,
 				547BCB6B20962BD8007AFBEC /* MoreFontSizeTableViewCell.swift */,
 				547BCB6C20962BD8007AFBEC /* MoreFontSizeTableViewCell.xib */,
+				544EC37F20C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift */,
+				544EC38020C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib */,
 			);
 			name = cells;
 			sourceTree = "<group>";
@@ -2888,6 +2894,7 @@
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
 				54547EAE1ECA82BE008AFED3 /* SearchResultTableViewCell.xib in Resources */,
+				544EC38220C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib in Resources */,
 				54892D981EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib in Resources */,
 				547BCB5A20915611007AFBEC /* MoreTranslationsSelectionTableViewCell.xib in Resources */,
 				54B266901CCACC9400D3AEF8 /* QuranImagePageCollectionViewCell.xib in Resources */,
@@ -3569,6 +3576,7 @@
 				54C0DC081CE633C6009AAD8D /* JuzBasedLastAyahFinder.swift in Sources */,
 				54B266151CC6D5A900D3AEF8 /* JuzsViewController.swift in Sources */,
 				54FD7BA31EB933A500FA485F /* UserDefaults+Keys.swift in Sources */,
+				544EC38120C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift in Sources */,
 				C2E3EB3DE06BD6C0E2CDE1C7 /* SQLiteAyahTextPersistence.swift in Sources */,
 				C2E3E55D9079E9F8CD960CA7 /* AyahTextPersistence.swift in Sources */,
 				5459FF6F1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift in Sources */,

@@ -372,7 +372,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         Analytics.shared.showing(quranPage: page,
                                  isTranslation: isTranslationView,
                                  numberOfSelectedTranslations: simplePersistence.valueForKey(.selectedTranslations).count,
-                                 fontSize: simplePersistence.fontSize)
+                                 fontSize: simplePersistence.fontSize,
+                                 theme: simplePersistence.theme)
         lastPageUpdater.updateTo(page: page)
     }
 
@@ -388,7 +389,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         let more = MoreMenuViewController(
             mode: quranNavigationBar.isTranslationView ? .translation : .arabic,
             isWordPointerActive: quranNavigationBar.isWordPointerActive,
-            fontSize: simplePersistence.fontSize
+            fontSize: simplePersistence.fontSize,
+            theme: simplePersistence.theme
         )
         more.delegate = self
         more.modalPresentationStyle = .popover
@@ -426,6 +428,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected fontSize: FontSize) {
         simplePersistence.fontSize = fontSize
+        dataSource.invalidate()
+    }
+
+    func moreMenuViewController(_ controller: MoreMenuViewController, themeSelected theme: Theme) {
+        simplePersistence.theme = theme
         dataSource.invalidate()
     }
 

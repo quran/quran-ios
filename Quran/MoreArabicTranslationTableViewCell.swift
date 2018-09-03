@@ -31,12 +31,10 @@ class MoreArabicTranslationTableViewCell: ThemedTableViewCell {
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
 
         segmentedControl?.setTitleTextAttributes([
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
-            ], for: .normal)
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16)], for: .normal)
         segmentedControl?.setTitleTextAttributes([
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
-            NSAttributedStringKey.foregroundColor: UIColor.white
-            ], for: .selected)
+            NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
     }
 
     @objc

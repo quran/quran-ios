@@ -72,6 +72,6 @@ class NavigationSettingsCreators: SettingsCreators {
                 vc.present(mail, animated: true, completion: nil)
             }
         }
-        return [EmptySetting(), translation, audio, EmptySetting(), review, email]
+        return [EmptySetting(), ThemeSetting(), EmptySetting(), translation, audio, EmptySetting(), review, email]
     }
 }

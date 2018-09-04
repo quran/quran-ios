@@ -24,7 +24,7 @@ private struct Columns {
     static let sura = Expression<Int>("sura")
     static let ayah = Expression<Int>("ayah")
     static let text = Expression<String>("text")
-    static let snippet = Expression<String>(literal: "snippet(verses, '<b>', '</b>', '...', -1, 64)")
+    static let snippet = Expression<String>(literal: "snippet(verses, '<b>', '<b>', '...', -1, 64)")
 }
 
 class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPersistence, ReadonlySQLitePersistence {

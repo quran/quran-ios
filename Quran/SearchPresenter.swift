@@ -149,21 +149,25 @@ extension SearchAutocompletion {
 }
 
 extension SearchResult {
-    private static let style = "<style>*{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size: 14.0;color: %@;}b{color: %@;}</style>" // swiftlint:disable:this line_length
     fileprivate func asAttributedString() -> NSAttributedString {
-        let fullText = String(format: SearchResult.style, Theme.Kind.labelWeak.color.toHexString(), Theme.Kind.labelStrong.color.toHexString()) + text
-        do {
-            guard let data = fullText.data(using: .utf8) else {
-                return NSAttributedString(string: text)
-            }
-            let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
-                .documentType: NSAttributedString.DocumentType.html,
-                .characterEncoding: String.Encoding.utf8.rawValue]
-            let string = try NSAttributedString(data: data, options: options, documentAttributes: nil)
-            return string
-        } catch {
-            Crash.recordError(error, reason: "While converting result to NSAttributedString")
-            return NSAttributedString(string: text)
+        let normalAttributes: [NSAttributedStringKey: Any] = [
+            .font: UIFont.systemFont(ofSize: 14),
+            .foregroundColor: Theme.Kind.labelWeak.color
+        ]
+        let highlightedAttributes: [NSAttributedStringKey: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: Theme.Kind.labelStrong.color
+        ]
+
+        // split the components on <b> and construct NSAttirbutedString for substring ourselves
+        // instead of loading HTML directly improves the search significantly
+        let textComponents = text.components(separatedBy: "<b>")
+        let attributedString = NSMutableAttributedString()
+        for (offset, text) in textComponents.enumerated() {
+            let attributes = offset % 2 == 0 ? normalAttributes : highlightedAttributes
+            let substring = NSAttributedString(string: text, attributes: attributes)
+            attributedString.append(substring)
         }
+        return attributedString
     }
 }

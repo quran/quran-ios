@@ -206,27 +206,25 @@ private func _autocomplete(term: String, connection: Connection, table: Table) t
 
 private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throws -> [SearchAutocompletion] {
     var result: [SearchAutocompletion] = []
-    var added: Set<Substring> = []
+    var added: Set<String> = []
     for row in rows {
         let text = row[Columns.text]
 
-        guard let range = text.range(of: term, options: .caseInsensitive, range: nil, locale: nil) else {
-            continue
-        }
-
-        var substring = text[range.lowerBound...]
-        if substring.count > 100 {
-            if let endIndex = substring.index(substring.startIndex, offsetBy: 100, limitedBy: substring.endIndex) {
-                substring = substring[...endIndex]
+        let suffixes = text.caseInsensitiveComponents(separatedBy: term)
+        for suffixIndex in 1..<suffixes.count {
+            let suffix = suffixes[suffixIndex]
+            let suffixWords = (suffix.components(separatedBy: " ")).prefix(5)
+            let trimmedSuffix = suffixWords.joined(separator: " ")
+            if trimmedSuffix.rangeOfCharacter(from: CharacterSet.whitespaces.union(.alphanumerics).inverted) != nil {
+                continue
+            }
+            let subrow = term + trimmedSuffix
+            if !added.contains(subrow) {
+                added.insert(subrow)
+                let autocompletion = SearchAutocompletion(text: subrow, highlightedRange: term.startIndex..<term.endIndex)
+                result.append(autocompletion)
             }
         }
-        guard !added.contains(substring) else {
-            continue
-        }
-        added.insert(substring)
-
-        let autocompletion = SearchAutocompletion(text: String(substring), highlightedRange: term.startIndex..<term.endIndex)
-        result.append(autocompletion)
     }
 
     return result
@@ -239,4 +237,34 @@ private func cleanup(term: String) -> String {
         cleanedTerm = String(cleanedTerm[..<upTo])
     }
     return cleanedTerm.lowercased()
+}
+
+extension String {
+    func caseInsensitiveComponents(separatedBy separator: String) -> [Substring] {
+        let ranges = caseInsensitiveRanges(of: separator)
+        var lowerBound = startIndex
+        var components: [Substring] = []
+        for range in ranges {
+            let upperBound = range.lowerBound
+            let text = self[lowerBound..<upperBound]
+            components.append(text)
+            lowerBound = range.upperBound
+        }
+        components.append(self[lowerBound..<endIndex])
+        return components
+    }
+
+    func caseInsensitiveRanges(of term: String) -> [Range<String.Index>] {
+        var ranges: [Range<String.Index>] = []
+        var maximum: Range<String.Index>? = nil
+        while(true) {
+            if let found = self.range(of: term, options: [.caseInsensitive, .backwards], range: maximum) {
+                ranges.append(found)
+                maximum = startIndex..<found.lowerBound
+            } else {
+                break
+            }
+        }
+        return ranges.reversed()
+    }
 }

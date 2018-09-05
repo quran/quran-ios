@@ -11,11 +11,19 @@ This is a simple (madani based) quran app for iOS (iPhone/iPad).
 
 It would be great if you could send an e-mail to ios@quran.com then we will notify you for beta builds and you can then help us find bugs before going live.
 
-## Set up
+## Setting up the iOS Project
 
 1. Install [Cocoapods](https://cocoapods.org).
+
 2. Xcode 9.0 (with Swift 4.0).
-3. Clone the project and open Xcode workspace Quran.xcworkspace.
+
+3. Download the _Quran-iOS_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
+
+4. Open `Quran.xcworkspace` from the folder.
+
+5. Build the project (⌘+B) and check for any errors.
+
+6. Run the app (⌘+R).and test it.
 
 ## Contributions
 Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contributions).

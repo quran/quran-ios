@@ -61,7 +61,7 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
                     }
                 }
                 return []
-            }
+            }.map { [SearchAutocompletion(text: term, highlightedRange: term.startIndex..<term.endIndex)] + $0 }
     }
 
     func search(for term: String) -> Observable<SearchResults> {

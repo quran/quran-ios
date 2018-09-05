@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="pJI-4N-6vM" customClass="SearchAutocompleteTableViewCell" customModule="Quran" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pJI-4N-6vM" id="cZh-my-odk">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="ic_ab_search" translatesAutoresizingMaskIntoConstraints="NO" id="Pjt-9b-zVx" customClass="ThemedImageView" customModule="Quran" customModuleProvider="target">
+                        <rect key="frame" x="20" y="13" width="36" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="clP-Fs-Uf5"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qfd-IR-HXO">
+                        <rect key="frame" x="66" y="0.0" width="302" height="43.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Qfd-IR-HXO" secondAttribute="trailing" constant="7" id="57h-e3-3cJ"/>
+                    <constraint firstItem="Qfd-IR-HXO" firstAttribute="top" secondItem="cZh-my-odk" secondAttribute="top" id="DIK-lC-6wM"/>
+                    <constraint firstItem="Qfd-IR-HXO" firstAttribute="leading" secondItem="Pjt-9b-zVx" secondAttribute="trailing" constant="10" id="OsW-hO-nhg"/>
+                    <constraint firstAttribute="bottom" secondItem="Qfd-IR-HXO" secondAttribute="bottom" id="Rei-d5-ZYA"/>
+                    <constraint firstItem="Pjt-9b-zVx" firstAttribute="leading" secondItem="cZh-my-odk" secondAttribute="leading" constant="20" id="gqP-WL-tFy"/>
+                    <constraint firstItem="Pjt-9b-zVx" firstAttribute="centerY" secondItem="cZh-my-odk" secondAttribute="centerY" id="peZ-Dy-L9j"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="icon" destination="Pjt-9b-zVx" id="NtZ-xA-WVf"/>
+                <outlet property="label" destination="Qfd-IR-HXO" id="xFd-h3-DYE"/>
+            </connections>
+            <point key="canvasLocation" x="-20" y="-129"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_ab_search" width="36" height="36"/>
+    </resources>
+</document>

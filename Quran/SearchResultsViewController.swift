@@ -33,12 +33,13 @@ class SearchResultsViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.ds_register(cellClass: SearchAutocompleteTableViewCell.self)
+        tableView.ds_register(cellNib: SearchAutocompleteTableViewCell.self)
         tableView.ds_register(cellClass: FullScreenLoadingTableViewCell.self)
         tableView.ds_register(cellNib: SearchResultTableViewCell.self)
         tableView.ds_register(cellNib: SearchNoResultTableViewCell.self)
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         clearsSelectionOnViewWillAppear = true
     }
 

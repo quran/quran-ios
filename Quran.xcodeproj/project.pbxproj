@@ -61,6 +61,7 @@
 		5428A686213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428A685213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift */; };
 		5428A687213DC55500B91F13 /* QuranUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38320C45BB600D2E7B5 /* QuranUIImage.swift */; };
 		5428A68B213DCD0B00B91F13 /* ThemeSettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428A68A213DCD0B00B91F13 /* ThemeSettingsDataSource.swift */; };
+		5428A68D2140444C00B91F13 /* SearchAutocompleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5428A68C2140444C00B91F13 /* SearchAutocompleteTableViewCell.xib */; };
 		542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBC61ECC4BDC0023D6FD /* SearchService.swift */; };
 		542DCBCD1ECC53D00023D6FD /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */; };
 		542DCBD21ECC56610023D6FD /* Driver+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */; };
@@ -618,6 +619,7 @@
 		542732D11EB541AA00DC5C0F /* DownloadBatchDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBatchDataController.swift; sourceTree = "<group>"; };
 		5428A685213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedBackgroundColorButton.swift; sourceTree = "<group>"; };
 		5428A68A213DCD0B00B91F13 /* ThemeSettingsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsDataSource.swift; sourceTree = "<group>"; };
+		5428A68C2140444C00B91F13 /* SearchAutocompleteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchAutocompleteTableViewCell.xib; sourceTree = "<group>"; };
 		542DCBC61ECC4BDC0023D6FD /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		542DCBCC1ECC53D00023D6FD /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542DCBD11ECC56610023D6FD /* Driver+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Extensions.swift"; sourceTree = "<group>"; };
@@ -1601,6 +1603,7 @@
 				542DCBDA1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift */,
 				542DCBDB1ECC97DD0023D6FD /* SearchNoResultTableViewCell.xib */,
 				544EC36D20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift */,
+				5428A68C2140444C00B91F13 /* SearchAutocompleteTableViewCell.xib */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2923,6 +2926,7 @@
 				5419E4BB1CFA26B900071A6D /* Android.strings in Resources */,
 				54B2666C1CCA93C500D3AEF8 /* SuraTableViewCell.xib in Resources */,
 				54699B8F1E8DC0D200211A60 /* QuranTranslationCollectionPageCollectionViewCell.xib in Resources */,
+				5428A68D2140444C00B91F13 /* SearchAutocompleteTableViewCell.xib in Resources */,
 				5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */,
 				54B265F01CC57D8F00D3AEF8 /* Assets.xcassets in Resources */,
 			);

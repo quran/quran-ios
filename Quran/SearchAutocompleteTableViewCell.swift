@@ -21,4 +21,6 @@
 import UIKit
 
 class SearchAutocompleteTableViewCell: ThemedTableViewCell {
+    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var icon: ThemedImageView!
 }

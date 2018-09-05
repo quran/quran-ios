@@ -103,12 +103,16 @@ class SearchResultsDataSource: SegmentedDataSource {
 }
 
 private class SearchAutocompletionDataSource: BasicDataSource<NSAttributedString, SearchAutocompleteTableViewCell> {
+    private let image = #imageLiteral(resourceName: "search-128").scaled(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: SearchAutocompleteTableViewCell,
                                     with item: NSAttributedString,
                                     at indexPath: IndexPath) {
-        cell.textLabel?.attributedText = item
+        cell.label?.attributedText = item
+        cell.icon?.image = image
+        cell.icon?.kind = .labelWeak
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {

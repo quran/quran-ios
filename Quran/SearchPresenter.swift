@@ -131,6 +131,7 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     }
 }
 extension SearchAutocompletion {
+    private static var arabicRegex = try! NSRegularExpression(pattern: "\\p{Arabic}") // swiftlint:disable:this force_try
     fileprivate func asAttributedString() -> NSAttributedString {
         let normalAttributes: [NSAttributedStringKey: Any] = [
             .font: UIFont.systemFont(ofSize: 14),
@@ -142,8 +143,12 @@ extension SearchAutocompletion {
         ]
 
         let attributedString = NSMutableAttributedString(string: text, attributes: highlightedAttributes)
-        let highlightedNSRange = text.rangeAsNSRange(highlightedRange)
-        attributedString.setAttributes(normalAttributes, range: highlightedNSRange)
+
+        let regex = SearchAutocompletion.arabicRegex
+        if regex.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) == nil {
+            let highlightedNSRange = text.rangeAsNSRange(highlightedRange)
+            attributedString.setAttributes(normalAttributes, range: highlightedNSRange)
+        }
         return attributedString
     }
 }

@@ -257,7 +257,7 @@ extension String {
     func caseInsensitiveRanges(of term: String) -> [Range<String.Index>] {
         var ranges: [Range<String.Index>] = []
         var maximum: Range<String.Index>? = nil
-        while(true) {
+        while true {
             if let found = self.range(of: term, options: [.caseInsensitive, .backwards], range: maximum) {
                 ranges.append(found)
                 maximum = startIndex..<found.lowerBound

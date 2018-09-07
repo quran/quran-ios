@@ -67,7 +67,10 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
 
     func autocomplete(term: String) throws -> [SearchAutocompletion] {
         return try run { connection in
-            return try _autocomplete(term: term, connection: connection, table: versesTable)
+            let suraNames = Quran.QuranSurasRange.map { Quran.nameForSura($0, withPrefix: true) }
+            let surasCompletions = createAutocompletions(for: suraNames, term: trimWords(term), shouldVerify: false)
+            let dbCompeltions = try _autocomplete(term: term, connection: connection, table: versesTable)
+            return surasCompletions + dbCompeltions
         }
     }
 
@@ -205,17 +208,20 @@ private func _autocomplete(term: String, connection: Connection, table: Table) t
 }
 
 private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throws -> [SearchAutocompletion] {
+    return createAutocompletions(for: rows.map { $0[Columns.text] }, term: term, shouldVerify: true)
+}
+
+private func createAutocompletions(for textArray: [String], term: String, shouldVerify: Bool) -> [SearchAutocompletion] {
     var result: [SearchAutocompletion] = []
     var added: Set<String> = []
-    for row in rows {
-        let text = row[Columns.text]
+    for text in textArray {
 
         let suffixes = text.caseInsensitiveComponents(separatedBy: term)
         for suffixIndex in 1..<suffixes.count {
             let suffix = suffixes[suffixIndex]
             let suffixWords = (suffix.components(separatedBy: " ")).prefix(5)
             let trimmedSuffix = suffixWords.joined(separator: " ")
-            if trimmedSuffix.rangeOfCharacter(from: CharacterSet.whitespaces.union(.alphanumerics).inverted) != nil {
+            if shouldVerify && trimmedSuffix.rangeOfCharacter(from: CharacterSet.whitespaces.union(.alphanumerics).inverted) != nil {
                 continue
             }
             let subrow = term + trimmedSuffix
@@ -232,11 +238,18 @@ private func rowsToAutocompletions(_ rows: AnySequence<Row>, term: String) throw
 
 private func cleanup(term: String) -> String {
     let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
-    var cleanedTerm = term.components(separatedBy: legalTokens.inverted).joined(separator: "")
+    var cleanedTerm = trimWords(term).components(separatedBy: legalTokens.inverted).joined(separator: "")
     if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1_000, limitedBy: cleanedTerm.endIndex) {
         cleanedTerm = String(cleanedTerm[..<upTo])
     }
     return cleanedTerm.lowercased()
+}
+
+private func trimWords(_ term: String) -> String {
+    return term.components(separatedBy: " ")
+        .map { $0.trimmingCharacters(in: .whitespaces) }
+        .filter { !$0.isEmpty }
+        .joined(separator: " ")
 }
 
 extension String {

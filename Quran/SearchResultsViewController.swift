@@ -33,6 +33,7 @@ class SearchResultsViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        kind = .cell
         tableView.ds_register(cellNib: SearchAutocompleteTableViewCell.self)
         tableView.ds_register(cellClass: FullScreenLoadingTableViewCell.self)
         tableView.ds_register(cellNib: SearchResultTableViewCell.self)

@@ -33,7 +33,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
     var router: SearchRouter? // DESIGN: Shouldn't be saved here
     weak var delegate: SearchViewDelegate?
 
-    lazy var searchController: UISearchController? = SearchControllerWithNoCancelButton(searchResultsController: searchResults)
+    lazy var searchController: UISearchController? = UISearchController(searchResultsController: searchResults)
     lazy var searchResults: SearchResultsViewController = {
         let controller = SearchResultsViewController()
         controller.dataSource.onAutocompletionSelected = { [weak self] index in
@@ -70,8 +70,9 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         searchController?.searchResultsUpdater = self
         searchController?.searchBar.delegate = self
 
-        searchController?.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
-        searchController?.searchBar.showsCancelButton = false
+        searchController?.searchBar.barStyle = .black
+        searchController?.searchBar.isTranslucent = true
+        searchController?.searchBar.searchBarStyle = .minimal
         searchController?.dimsBackgroundDuringPresentation = true
         searchController?.hidesNavigationBarDuringPresentation = false
         definesPresentationContext = true
@@ -161,11 +162,5 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
             button.addTarget(self, action: tapSelector, for: .touchUpInside)
             stack.addArrangedSubview(button)
         }
-    }
-
-    override func themeDidChange() {
-        super.themeDidChange()
-        let searchBackgroundImage = UIColor.searchBarBackground.image(size: CGSize(width: 28, height: 28))?.rounded(by: 4)
-        searchController?.searchBar.setSearchFieldBackgroundImage(searchBackgroundImage, for: .normal)
     }
 }

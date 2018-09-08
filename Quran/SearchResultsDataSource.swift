@@ -129,6 +129,7 @@ private class SearchResultDataSource: BasicDataSource<SearchResultUI, SearchResu
         cell.resultLabel.attributedText = item.attributedString
         cell.pageNumber.text = item.pageNumber
         cell.ayahDescription.text = item.ayahDescription
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {

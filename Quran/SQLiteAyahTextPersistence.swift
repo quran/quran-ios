@@ -76,7 +76,9 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
 
     func search(for term: String) throws -> [SearchResult] {
         return try run { connection in
-            return try _search(for: term, connection: connection, table: versesTable)
+            let suraResults = try searchSuras(for: trimWords(term))
+            let ayahResults = try _search(for: term, connection: connection, table: versesTable)
+            return suraResults + ayahResults
         }
     }
 
@@ -117,6 +119,19 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
             result.append(word)
         }
         return result
+    }
+
+    private func searchSuras(for term: String) throws -> [SearchResult] {
+        return Quran.QuranSurasRange.compactMap { (sura) in
+            var suraName = Quran.nameForSura(sura, withPrefix: true)
+            guard let range = suraName.range(of: term, options: .caseInsensitive) else {
+                return nil
+            }
+            let ayah = AyahNumber(sura: sura, ayah: 1)
+            suraName.insert(contentsOf: "<b>", at: range.upperBound)
+            suraName.insert(contentsOf: "<b>", at: range.lowerBound)
+            return SearchResult(text: suraName, ayah: ayah, page: Quran.pageForAyah(ayah))
+        }
     }
 }
 

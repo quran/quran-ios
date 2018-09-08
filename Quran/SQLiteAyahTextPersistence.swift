@@ -67,8 +67,11 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
 
     func autocomplete(term: String) throws -> [SearchAutocompletion] {
         return try run { connection in
-            let suraNames = Quran.QuranSurasRange.map { Quran.nameForSura($0, withPrefix: true) }
-            let surasCompletions = createAutocompletions(for: suraNames, term: trimWords(term), shouldVerify: false)
+            let defaultSuraNames = Quran.QuranSurasRange.map { Quran.nameForSura($0, withPrefix: true) }
+            let arabicSuraNames = Quran.QuranSurasRange.map { Quran.nameForSura($0, withPrefix: true, language: .arabic) }
+            var suraNames = Set(defaultSuraNames)
+            arabicSuraNames.forEach { suraNames.insert($0) }
+            let surasCompletions = createAutocompletions(for: Array(suraNames), term: trimWords(term), shouldVerify: false)
             let dbCompeltions = try _autocomplete(term: term, connection: connection, table: versesTable)
             return surasCompletions + dbCompeltions
         }
@@ -122,15 +125,20 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
     }
 
     private func searchSuras(for term: String) throws -> [SearchResult] {
-        return Quran.QuranSurasRange.compactMap { (sura) in
-            var suraName = Quran.nameForSura(sura, withPrefix: true)
-            guard let range = suraName.range(of: term, options: .caseInsensitive) else {
-                return nil
+        return Quran.QuranSurasRange.flatMap { (sura) -> [SearchResult] in
+            let defaultSuraName = Quran.nameForSura(sura, withPrefix: true)
+            let arabicSuraName = Quran.nameForSura(sura, withPrefix: true, language: .arabic)
+            let suraNames: Set<String> = [defaultSuraName, arabicSuraName]
+            return suraNames.compactMap { suraName -> SearchResult? in
+                guard let range = suraName.range(of: term, options: .caseInsensitive) else {
+                    return nil
+                }
+                let ayah = AyahNumber(sura: sura, ayah: 1)
+                var highlightedSuraName = suraName
+                highlightedSuraName.insert(contentsOf: "<b>", at: range.upperBound)
+                highlightedSuraName.insert(contentsOf: "<b>", at: range.lowerBound)
+                return SearchResult(text: highlightedSuraName, ayah: ayah, page: Quran.pageForAyah(ayah))
             }
-            let ayah = AyahNumber(sura: sura, ayah: 1)
-            suraName.insert(contentsOf: "<b>", at: range.upperBound)
-            suraName.insert(contentsOf: "<b>", at: range.lowerBound)
-            return SearchResult(text: suraName, ayah: ayah, page: Quran.pageForAyah(ayah))
         }
     }
 }

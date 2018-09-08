@@ -20,20 +20,33 @@
 
 import Foundation
 
-func l(_ key: String, table: String = "Localizable") -> String {
+enum Language: String {
+    case base = "Base"
+    case arabic = "ar"
+    case english = "en"
+}
+
+func l(_ key: String, table: String = "Localizable", language: Language? = nil) -> String {
+    if let language = language {
+        return localizedString(key, table: table, language: language)
+    }
     let value = NSLocalizedString(key, tableName: table, comment: "")
     if value != key || NSLocale.preferredLanguages.first == "en" {
         return value
     }
 
     // Fall back to en
-    guard
-        let path = Bundle.main.path(forResource: "Base", ofType: "lproj"),
-        let bundle = Bundle(path: path)
-        else { return value }
-    return NSLocalizedString(key, bundle: bundle, comment: "")
+    return localizedString(key, table: table, language: .base)
 }
 
-func lAndroid(_ key: String) -> String {
-    return l(key, table: "Android")
+private func localizedString(_ key: String, table: String = "Localizable", language: Language) -> String {
+    guard
+        let path = Bundle.main.path(forResource: language.rawValue, ofType: "lproj"),
+        let bundle = Bundle(path: path)
+        else { return key }
+    return NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
+}
+
+func lAndroid(_ key: String, language: Language? = nil) -> String {
+    return l(key, table: "Android", language: language)
 }

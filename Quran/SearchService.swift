@@ -74,15 +74,13 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
     func search(for term: String) -> Observable<SearchResults> {
         let translationCreator = self.translationPersistenceCreator
         let arabicPersistence = self.arabicPersistence
-        let ayahNumber = self.isAyahNumberSearch(term)
 
         return prepare()
             .map { translations -> SearchResults in
 
-                if let ayah = ayahNumber {
-                    let ayahText = try arabicPersistence.getAyahTextForNumber(ayah)
-                    let result = SearchResult(text: ayahText, ayah: ayah, page: Quran.pageForAyah(ayah))
-                    return SearchResults(source: .quran, items: [result])
+                let numberResults = try self.getNumberSearchResults(term)
+                if !numberResults.isEmpty {
+                    return SearchResults(source: .quran, items: numberResults)
                 } else {
                     let arabicResults = try arabicPersistence.search(for: term)
                     guard arabicResults.isEmpty else {
@@ -113,27 +111,91 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
             }
     }
 
-    private func isAyahNumberSearch(_ term: String) -> AyahNumber? {
-        let components = term.components(separatedBy: ":")
-        guard !components.isEmpty && components.count <= 2 else {
-            return nil
+    private func getNumberSearchResults(_ term: String) throws -> [SearchResult] {
+        let components = parseIntArray(term)
+        guard !components.isEmpty else {
+            return []
         }
-        guard let sura = parseInt(components[0]) else {
-            return nil
+        if components.count == 2 {
+            return [try parseAyahResult(sura: components[0], ayah: components[1])].compactMap { $0 }
+        } else {
+            return [
+                parseSuraResult(sura: components[0]),
+                parseJuzResult(juz: components[0]),
+                parseHizbResult(hizb: components[0]),
+                parsePageResult(page: components[0])
+                ].compactMap { $0 }
         }
+    }
+
+    private func parseAyahResult(sura: Int, ayah: Int) throws -> SearchResult? {
         guard sura >= Quran.QuranSurasRange.lowerBound && sura <= Quran.QuranSurasRange.upperBound else {
             return nil
         }
+        guard ayah > 0 && ayah <= Quran.numberOfAyahsForSura(sura) else {
+            return nil
+        }
+        let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
+        let ayahText = try arabicPersistence.getAyahTextForNumber(ayahNumber)
+        return SearchResult(text: ayahText, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+    }
+
+    private func parseSuraResult(sura: Int) -> SearchResult? {
+        guard sura >= Quran.QuranSurasRange.lowerBound && sura <= Quran.QuranSurasRange.upperBound else {
+            return nil
+        }
+        let ayahNumber = AyahNumber(sura: sura, ayah: 1)
+        return SearchResult(text: Quran.nameForSura(sura, withPrefix: true), ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+    }
+
+    private func parsePageResult(page: Int) -> SearchResult? {
+        guard page >= Quran.QuranPagesRange.lowerBound && page <= Quran.QuranPagesRange.upperBound else {
+            return nil
+        }
+        let ayahNumber = Quran.startAyahForPage(page)
+        let format = "\(lAndroid("quran_page")) %d"
+        let text = String.localizedStringWithFormat(format, page)
+        return SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+    }
+
+    private func parseJuzResult(juz: Int) -> SearchResult? {
+        guard juz >= Quran.QuranJuzsRange.lowerBound && juz <= Quran.QuranJuzsRange.upperBound else {
+            return nil
+        }
+        let ayahNumber = Quran.Quarters[(juz - 1) * Quran.NumberOfQuartersPerJuz]
+        let format = "\(lAndroid("quran_juz2")) %d"
+        let text = String.localizedStringWithFormat(format, juz)
+        return SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+    }
+
+    private func parseHizbResult(hizb: Int) -> SearchResult? {
+        let numberOfHizbsPerJuz = 2
+        let numberOfQuartersPerHizb = Quran.NumberOfQuartersPerJuz / numberOfHizbsPerJuz
+        guard hizb >= 1 && hizb <= Quran.Quarters.count / numberOfQuartersPerHizb else {
+            return nil
+        }
+
+        let ayahNumber = Quran.Quarters[(hizb - 1) * numberOfQuartersPerHizb]
+        let format = "\(lAndroid("quran_hizb")) %d"
+        let text = String.localizedStringWithFormat(format, hizb)
+        return SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+    }
+
+    private func parseIntArray(_ term: String) -> [Int] {
+        let components = term.components(separatedBy: ":")
+        guard !components.isEmpty && components.count <= 2 else {
+            return []
+        }
+        guard let first = parseInt(components[0]) else {
+            return []
+        }
         if components.count == 1 {
-            return AyahNumber(sura: sura, ayah: 1)
+            return [first]
         } else {
-            guard let ayah = parseInt(components[1]) else {
-                return nil
+            guard let second = parseInt(components[1]) else {
+                return []
             }
-            guard ayah > 0 && ayah <= Quran.numberOfAyahsForSura(sura) else {
-                return nil
-            }
-            return AyahNumber(sura: sura, ayah: ayah)
+            return [first, second]
         }
     }
 

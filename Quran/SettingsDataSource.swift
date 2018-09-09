@@ -23,19 +23,19 @@ import GenericDataSources
 protocol Setting {
     var name: String { get }
     var image: UIImage? { get }
-    var onSelection: ((UIViewController) -> Void)? { get }
+    var onSelection: ((UIViewController, UITableViewCell) -> Void)? { get }
 }
 
 struct EmptySetting: Setting {
     var name: String { unimplemented() }
     let image: UIImage? = nil
-    let onSelection: ((UIViewController) -> Void)?  = nil
+    let onSelection: ((UIViewController, UITableViewCell) -> Void)?  = nil
 }
 
 struct SettingItem: Setting {
     let name: String
     let image: UIImage?
-    let onSelection: ((UIViewController) -> Void)?
+    let onSelection: ((UIViewController, UITableViewCell) -> Void)?
 }
 
 class SettingsDataSource: BasicDataSource<Setting, SettingTableViewCell> {

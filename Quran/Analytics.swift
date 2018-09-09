@@ -146,6 +146,11 @@ struct Analytics {
         Answers.logCustomEvent(withName: "RequestReview", customAttributes: ["automatic": automatic.description])
     }
 
+    func shareApp() {
+        CLog("User sharing the app")
+        Answers.logCustomEvent(withName: "ShareApp", customAttributes: nil)
+    }
+
     func playFrom(menu: Bool) {
         let from = menu ? "Menu" : "AudioBar"
         CLog("Play Audio From:", from)

@@ -22,7 +22,7 @@ import UIKit
 
 class ShareController: NSObject {
 
-    class func share(textLines: [String],
+    class func share(textLines: [Any],
                      sourceView: UIView,
                      sourceRect: CGRect,
                      sourceViewController: UIViewController,

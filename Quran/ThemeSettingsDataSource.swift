@@ -23,7 +23,7 @@ import GenericDataSources
 struct ThemeSetting: Setting {
     var name: String { unimplemented() }
     let image: UIImage? = nil
-    let onSelection: ((UIViewController) -> Void)? = nil
+    let onSelection: ((UIViewController, UITableViewCell) -> Void)? = nil
 }
 
 class ThemeSettingsDataSource: BasicDataSource<Void, ThemeSelectionTableViewCell> {

@@ -38,19 +38,19 @@ class NavigationSettingsCreators: SettingsCreators {
     }
 
     func createSettingsItems() -> [Setting] {
-        let translation = SettingItem(name: lAndroid("prefs_translations"), image: #imageLiteral(resourceName: "globe-25")) { [weak self] vc in
+        let translation = SettingItem(name: lAndroid("prefs_translations"), image: #imageLiteral(resourceName: "globe-25")) { [weak self] (vc, _) in
             if let controller = self?.translationsCreator.create(()) {
                 controller.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        let audio = SettingItem(name: lAndroid("audio_manager"), image: #imageLiteral(resourceName: "download-25")) { [weak self] vc in
+        let audio = SettingItem(name: lAndroid("audio_manager"), image: #imageLiteral(resourceName: "download-25")) { [weak self] (vc, _) in
             if let controller = self?.audioDownloadsCreator.create(()) {
                 controller.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        let review = SettingItem(name: l("write_review"), image: #imageLiteral(resourceName: "star_border")) { _ in
+        let review = SettingItem(name: l("write_review"), image: #imageLiteral(resourceName: "star_border")) { (_, _) in
             guard let url = URL(string: "itms-apps://itunes.apple.com/app/id1118663303?action=write-review") else {
                 return
             }
@@ -62,7 +62,16 @@ class NavigationSettingsCreators: SettingsCreators {
             }
             Analytics.shared.review(automatic: false)
         }
-        let email = SettingItem(name: l("contact_us"), image: #imageLiteral(resourceName: "email-outline")) { vc in
+        let shareApp = SettingItem(name: l("share_app"), image: #imageLiteral(resourceName: "share")) { (vc, cell) in
+            guard let url = URL(string: "https://itunes.apple.com/app/id1118663303") else {
+                return
+            }
+            let appName = "Quran - by Quran.com - قرآن"
+
+            ShareController.share(textLines: [appName, url], sourceView: cell, sourceRect: cell.bounds, sourceViewController: vc, handler: nil)
+            Analytics.shared.shareApp()
+        }
+        let email = SettingItem(name: l("contact_us"), image: #imageLiteral(resourceName: "email-outline")) { (vc, _) in
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 mail.navigationBar.tintColor = .white
@@ -72,6 +81,6 @@ class NavigationSettingsCreators: SettingsCreators {
                 vc.present(mail, animated: true, completion: nil)
             }
         }
-        return [EmptySetting(), ThemeSetting(), EmptySetting(), translation, audio, EmptySetting(), review, email]
+        return [EmptySetting(), ThemeSetting(), EmptySetting(), translation, audio, EmptySetting(), shareApp, review, email]
     }
 }

@@ -48,11 +48,15 @@ class SettingsViewController: BaseTableBasedViewController {
         tableView.estimatedRowHeight = 70
 
         let selection = BlockSelectionHandler<Setting, SettingTableViewCell>()
-        selection.didSelectBlock = { [weak self] ds, _, indexPath in
+        selection.didSelectBlock = { [weak self] ds, collectionView, indexPath in
             guard let `self` = self else { return }
             let item = ds.item(at: indexPath)
-            item.onSelection?(self)
-            self.tableView.deselectRow(at: indexPath, animated: true)
+            let cell = collectionView.ds_cellForItem(at: indexPath)
+            guard let castedCell = cell as? UITableViewCell else {
+                fatalError("Cannot cast reusable cell \(cell.debugDescription) to UITableViewCell")
+            }
+            item.onSelection?(self, castedCell)
+            collectionView.ds_deselectItem(at: indexPath, animated: true)
         }
 
         let items = creators.createSettingsItems()

@@ -18,9 +18,15 @@
 //  GNU General Public License for more details.
 //
 
-struct SearchAutocompletion {
+struct SearchAutocompletion: Hashable {
     let text: String
     let highlightedRange: Range<String.Index>
+
+    var hashValue: Int { return text.hashValue }
+
+    static func == (lhs: SearchAutocompletion, rhs: SearchAutocompletion) -> Bool {
+        return lhs.text == rhs.text
+    }
 }
 
 struct SearchResult {

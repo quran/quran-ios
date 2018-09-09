@@ -47,6 +47,7 @@ class MoreMenuViewController: BaseViewController {
     private let pointer = MoreWordByWordPointerSelectionDataSource()
     private let fontSizeDS = MoreFontSizeDataSource()
     private let themeDS = MoreThemeDataSource()
+    private let rotationDS = MoreRotationDataSource()
 
     private var theme: Theme
     private var fontSize: FontSize
@@ -70,6 +71,7 @@ class MoreMenuViewController: BaseViewController {
         pointer.itemHeight = 44
         fontSizeDS.itemHeight = 44
         themeDS.itemHeight = 44
+        rotationDS.itemHeight = 44
 
         arabicTranslation.items = [[
             SelectableItem(text: l("menu.arabic"), isSelected: mode == .arabic) { [weak self] _ in
@@ -86,6 +88,7 @@ class MoreMenuViewController: BaseViewController {
         }]
         setFontSizeItem()
         setThemeItem()
+        rotationDS.items = [Void()]
 
         let selectionHandler = BlockSelectionHandler<String, MoreTranslationsSelectionTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (_, _, _) in
@@ -105,6 +108,7 @@ class MoreMenuViewController: BaseViewController {
             dataSource.add(createEmptyDataSource())
             dataSource.add(pointer)
             dataSource.add(createEmptyDataSource())
+            dataSource.add(rotationDS)
             dataSource.add(themeDS)
         }
     }
@@ -124,6 +128,7 @@ class MoreMenuViewController: BaseViewController {
         tableView.ds_register(cellNib: MoreTranslationsSelectionTableViewCell.self)
         tableView.ds_register(cellNib: MoreFontSizeTableViewCell.self)
         tableView.ds_register(cellNib: ThemeSelectionTableViewCell.self)
+        tableView.ds_register(cellNib: MoreRotationTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
 
         updateSize()
@@ -162,6 +167,7 @@ class MoreMenuViewController: BaseViewController {
             self.remove(dataSource: self.selection)
             self.insert(dataSource: self.createEmptyDataSource(), at: 1)
             self.insert(dataSource: self.pointer, at: 2)
+            self.insert(dataSource: self.rotationDS, at: 4)
         }, completion: nil)
 
         delegate?.moreMenuViewController(self, quranModeSelected: .arabic)
@@ -170,6 +176,7 @@ class MoreMenuViewController: BaseViewController {
 
     private func translationsSelected() {
         tableView.ds_performBatchUpdates({
+            self.remove(dataSource: self.rotationDS)
             self.remove(dataSource: self.pointer)
             self.remove(dataSource: self.dataSource.dataSources[1]) // empty datasource
             self.insert(dataSource: self.selection, at: 1)
@@ -313,6 +320,12 @@ private class MoreFontSizeDataSource: BasicDataSource<FontSizeItem, MoreFontSize
         cell.onDecreaseTapped = item.decrease
     }
 
+    override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+}
+
+private class MoreRotationDataSource: BasicDataSource<Void, MoreRotationTableViewCell> {
     override func ds_collectionView(_ collectionView: GeneralCollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return false
     }

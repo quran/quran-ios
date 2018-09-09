@@ -53,6 +53,7 @@ class ThemedButton: UIButton {
 
     @objc
     func themeDidChange() {
+        tintColor = kind.color
         setTitleColor(kind.color, for: .normal)
         setTitleColor(disabledKind?.color, for: .disabled)
         layer.borderColor = borderKind?.color.cgColor

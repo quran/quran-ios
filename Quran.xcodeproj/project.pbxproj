@@ -262,6 +262,8 @@
 		54892D941EE6C760001E6F1A /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = 54892D931EE6C760001E6F1A /* words.db */; };
 		54892D971EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54892D951EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift */; };
 		54892D981EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54892D961EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib */; };
+		548C2B3B2145A40D005266AA /* MoreRotationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548C2B392145A40D005266AA /* MoreRotationTableViewCell.swift */; };
+		548C2B3C2145A40D005266AA /* MoreRotationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548C2B3A2145A40D005266AA /* MoreRotationTableViewCell.xib */; };
 		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
 		549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BA1E63566D00D54625 /* TranslationsDataSource.swift */; };
 		549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */; };
@@ -827,6 +829,8 @@
 		54892D931EE6C760001E6F1A /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = words.db; path = Resources/words.db; sourceTree = "<group>"; };
 		54892D951EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahBookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		54892D961EE6CA30001E6F1A /* AyahBookmarkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AyahBookmarkTableViewCell.xib; sourceTree = "<group>"; };
+		548C2B392145A40D005266AA /* MoreRotationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreRotationTableViewCell.swift; sourceTree = "<group>"; };
+		548C2B3A2145A40D005266AA /* MoreRotationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreRotationTableViewCell.xib; sourceTree = "<group>"; };
 		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
 		549040BA1E63566D00D54625 /* TranslationsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsDataSource.swift; sourceTree = "<group>"; };
 		549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTableViewCell.swift; sourceTree = "<group>"; };
@@ -1779,6 +1783,8 @@
 				547BCB6C20962BD8007AFBEC /* MoreFontSizeTableViewCell.xib */,
 				544EC37F20C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.swift */,
 				544EC38020C3B5DF00D2E7B5 /* ThemeSelectionTableViewCell.xib */,
+				548C2B392145A40D005266AA /* MoreRotationTableViewCell.swift */,
+				548C2B3A2145A40D005266AA /* MoreRotationTableViewCell.xib */,
 			);
 			name = cells;
 			sourceTree = "<group>";
@@ -2896,6 +2902,7 @@
 				5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */,
 				54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */,
 				54547EA01EC9ED05008AFED3 /* SearchViewController.xib in Resources */,
+				548C2B3C2145A40D005266AA /* MoreRotationTableViewCell.xib in Resources */,
 				547BCB5520915587007AFBEC /* MoreArabicTranslationTableViewCell.xib in Resources */,
 				54A99CB31CF7A649003995AE /* BookmarkTableViewCell.xib in Resources */,
 				54C0DBF61CE4B162009AAD8D /* QariTableViewCell.xib in Resources */,
@@ -3487,6 +3494,7 @@
 				5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */,
 				065F58F1207ADAAB00E83AA2 /* AdvancedAudioOptionsTableViewCell.swift in Sources */,
 				54C0DC061CE633AC009AAD8D /* PageBasedLastAyahFinder.swift in Sources */,
+				548C2B3B2145A40D005266AA /* MoreRotationTableViewCell.swift in Sources */,
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,
 				54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */,
 				545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */,

@@ -42,3 +42,7 @@
 "verseShare" = "مشاركة...";
 
 "repetitionExperimentalSuffix" = "   (تجريبي)";
+
+"update.dark-theme.title" = "القراءة الليلية";
+"update.dark-theme.desc" = "لقد أضفنا مؤخرًا القراءة الليلية. هل ترغب في تشغيلها؟";
+"update.dark-theme.turnOn" = "تشغيل";

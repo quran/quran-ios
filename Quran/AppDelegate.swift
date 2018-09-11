@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     let container: Container
+    private let updateHandler = UpdateHandler()
 
     override init() {
         // initialize craslytics
@@ -54,10 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Analytics.shared.logSystemLanguage()
 
-        let updater = AppUpdater()
-        let versionUpdate = updater.updated()
-        CLog("Version Update:", versionUpdate)
-
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
         themeDidChange()
@@ -67,7 +64,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         container.createReviewService().checkForReview()
 
+        versionUpdate()
+
         return true
+    }
+
+    private func versionUpdate() {
+        updateHandler.add(updater: DarkThemeUpdater(persistence: container.createSimplePersistence()), for: "1.8.0")
+        let updater = AppUpdater()
+        let versionUpdate = updater.updated()
+        CLog("Version Update:", versionUpdate)
+        updateHandler.onUpdate(versionUpdate: versionUpdate)
     }
 
     @objc

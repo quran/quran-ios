@@ -156,6 +156,11 @@ struct Analytics {
         CLog("Play Audio From:", from)
         Answers.logCustomEvent(withName: "PlayAudioFrom", customAttributes: ["from": from])
     }
+
+    func darkThemeUpdate(turnOn: Bool) {
+        CLog("Dark Theme Update Dialog:", turnOn)
+        Answers.logCustomEvent(withName: "DarkThemeUpdate", customAttributes: ["turnOn": turnOn.description])
+    }
 }
 
 extension AyahNumber {

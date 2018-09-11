@@ -43,3 +43,7 @@
 "shareMarketingSuffix" = "-\nQuran - by Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
 
 "repetitionExperimentalSuffix" = "   (Experimental)";
+
+"update.dark-theme.title" = "Dark Theme";
+"update.dark-theme.desc" = "We have recently added a dark theme. Would you like to turn it on?";
+"update.dark-theme.turnOn" = "Turn On";

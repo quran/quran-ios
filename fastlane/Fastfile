@@ -114,8 +114,8 @@ platform :ios do
 
         # Reset fabric keys changes & build number
         # reset_git_repo(force: true)
-       sh "git reset --hard HEAD"
-       sh "git clean -fd"
+#       sh "git reset --hard HEAD"
+#       sh "git clean -fd"
 
         # Say it succeeded
         successMessage = 'New app version uploaded to TestFlight! Please wait while itunes connect process it. Success!'

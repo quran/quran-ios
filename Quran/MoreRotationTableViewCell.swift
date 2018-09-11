@@ -47,24 +47,22 @@ class MoreRotationTableViewCell: ThemedTableViewCell {
 
     @objc
     private func setOrientation() {
-        let orientation = UIDevice.current.orientation
+        let orientation = UIApplication.shared.statusBarOrientation
         portrait.isEnabled = orientation.isLandscape
         landscape.isEnabled = orientation.isPortrait
     }
 
     @IBAction func portraitTapped(_ sender: Any) {
-        let device = UIDevice.current
-        guard !device.orientation.isPortrait else {
+        guard !UIApplication.shared.statusBarOrientation.isPortrait else {
             return
         }
-        device.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
     }
 
     @IBAction func landscapeTapped(_ sender: Any) {
-        let device = UIDevice.current
-        guard !device.orientation.isLandscape else {
+        guard !UIApplication.shared.statusBarOrientation.isLandscape else {
             return
         }
-        device.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
     }
 }

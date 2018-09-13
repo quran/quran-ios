@@ -4355,7 +4355,6 @@
 				PROVISIONING_PROFILE = "1eeb2cc1-8ea8-4337-aee7-5fdc00f8b640";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;

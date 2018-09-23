@@ -2,48 +2,49 @@
  New Localizations in Quran for iOS
  */
 
-"NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
-"NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
-"NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-"NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
-"unknown_error_message" = "Oops! Something went wrong. Please try again.";
-"NetworkError_Parsing" = "Oops! Something went wrong. Please try again.";
+"NetworkError_ConnectionLost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
+"NetworkError_InternationalRoamingOff" = "Perayauan antarabangsa tidak dibenarkan. Ubah tetapan perayauan atau hidupkan Wi-Fi anda.";
+"NetworkError_NotConnectedToInternet" = "Tiada sambungan internet. Hidupkan Wi-Fi atau hidupkan sambungan data selular.";
+"NetworkError_ServerNotReachable" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"unknown_error_message" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"NetworkError_Parsing" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
 
-"FileSystemError_Unknown" = "Oops! Something went wrong. Please try again.";
-"FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+"FileSystemError_Unknown" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"FileSystemError_NoDiskSpace" = "Ruang storan tidak mencukupi untuk memuat turun.";
 
 
-"translatorLabel: " = "Translator: ";
-"upgradeTranslationButtonTitle" = "UPDATE";
+"translatorLabel: " = "Penterjemah: ";
+"upgradeTranslationButtonTitle" = "KEMASKINI";
 
-"translationsSelectionTitle" = "Select Translations/Tafseer";
-"translationsSelectionPrompt" = "Select in the order you want to see them";
+"translationsSelectionTitle" = "Pilih Terjemahan/Tafsir";
+"translationsSelectionPrompt" = "Pilih mengikut susunan yang mahu dilihat";
 
-"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
-"noAvailableTranslationText" = "No translation available for this Ayah.";
+"errorInTranslationText" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
+"noAvailableTranslationText" = "Tiada terjemahan untuk Ayat ini.";
 
-"searchRecentsTitle" = "Recent searches";
-"searchPopularTitle" = "Try searching with";
+"searchRecentsTitle" = "Carian terbaharu";
+"searchPopularTitle" = "Cuba cari";
 
-"translationTextType" = "Translation";
-"transliterationTextType" = "Transliteration";
+"translationTextType" = "Terjemahan";
+"transliterationTextType" = "Transliterasi";
 
-"write_review" = "Write an app store review...";
-"contact_us" = "Contact Us";
-"share_app" = "Share the app...";
+"write_review" = "Tinggalkan ulasan di app store...";
+"contact_us" = "Hubungi Kami";
+"share_app" = "Kongi aplikasi ini...";
 
-"menu.arabic" = "Arabic";
-"menu.translation" = "Translation";
-"menu.select_translation" = "Select translations/tafseer";
-"menu.pointer" = "Word translation pointer";
+"menu.arabic" = "Arab";
+"menu.translation" = "Terjemahan";
+"menu.select_translation" = "Pilih terjemahan/tafsir";
+"menu.pointer" = "Penuding terjemahan perkataan";
 "menu.fontSizeLetter" = "A";
 
-"verseCopy" = "Copy";
-"verseShare" = "Share...";
-"shareMarketingSuffix" = "-\nQuran - by Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+"verseCopy" = "Salin";
+"verseShare" = "Kongsi...";
+"shareMarketingSuffix" = "-\nQuran - oleh Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
 
-"repetitionExperimentalSuffix" = "   (Experimental)";
+"repetitionExperimentalSuffix" = "   (Eksperimentasi)";
 
-"update.dark-theme.title" = "Dark Theme";
-"update.dark-theme.desc" = "We have recently added a dark theme. Would you like to turn it on?";
-"update.dark-theme.turnOn" = "Turn On";
+"update.dark-theme.title" = "Tema Gelap";
+"update.dark-theme.desc" = "Kami baru menambahkan tema gelap ke aplikasi ini. Anda ingin menghidupkannya?";
+
+"update.dark-theme.turnOn" = "Hidupkan";

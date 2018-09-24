@@ -162,7 +162,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         // layout views if needed
         layoutIfNeeded()
 
-        var optionalAyah: AyahNumber? = nil
+        var optionalAyah: AyahNumber?
         for highlightType in QuranHighlightType.scrollingTypes {
             if let firstAyah = highlights[highlightType]?.first {
                 optionalAyah = firstAyah
@@ -177,7 +177,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
             return
         }
         // scroll to the reading/search ayah
-        collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.top, animated: true)
+        collectionView.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.top, animated: true)
     }
 
     override func highlight(position: AyahWord.Position?) {

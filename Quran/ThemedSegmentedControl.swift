@@ -48,7 +48,7 @@ class ThemedSegmentedControl: UISegmentedControl {
     @objc
     func themeDidChange() {
         var attributes = titleTextAttributes(for: .normal) ?? [:]
-        attributes[NSAttributedStringKey.foregroundColor] = kind.color
+        attributes[NSAttributedString.Key.foregroundColor] = kind.color
         setTitleTextAttributes(attributes, for: .normal)
     }
 

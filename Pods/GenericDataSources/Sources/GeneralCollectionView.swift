@@ -81,15 +81,15 @@ import Foundation
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_insertSections(_ sections: IndexSet, with animation: UITableViewRowAnimation)
+    func ds_insertSections(_ sections: IndexSet, with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_deleteSections(_ sections: IndexSet, with animation: UITableViewRowAnimation)
+    func ds_deleteSections(_ sections: IndexSet, with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_reloadSections(_ sections: IndexSet, with animation: UITableViewRowAnimation)
+    func ds_reloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
@@ -98,15 +98,15 @@ import Foundation
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation)
+    func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation)
+    func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation)
+    func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
@@ -117,14 +117,14 @@ import Foundation
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionViewScrollPosition, animated: Bool)
+    func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool)
 
     // MARK: - Select/Deselect
 
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */
-    func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionViewScrollPosition)
+    func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition)
     /**
      Check documentation of the corresponding methods from `UICollectionView` and `UITableView`.
      */

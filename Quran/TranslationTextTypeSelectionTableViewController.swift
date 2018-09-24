@@ -24,7 +24,7 @@ private class TableViewCell: ThemedTableViewCell {
     static let font = UIFont.systemFont(ofSize: 17)
     let label = ThemedLabel()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUp()
     }

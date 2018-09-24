@@ -24,8 +24,8 @@ A generic small reusable components for data source implementation for `UITableV
 ## Requirements
 
 - iOS 8.0+
-- Xcode 8
-- Swift 3.0+
+- Xcode 10
+- Swift 4.0+
 
 ## Installation
 

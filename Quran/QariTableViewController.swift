@@ -34,7 +34,7 @@ class QariTableViewController: BaseTableViewController {
 
     var onSelectedIndexChanged: ((Int) -> Void)?
 
-    init(style: UITableViewStyle, qaris: [Qari], selectedQariIndex: Int) {
+    init(style: UITableView.Style, qaris: [Qari], selectedQariIndex: Int) {
         selectedIndex = selectedQariIndex
         super.init(style: style)
         setUp()
@@ -65,7 +65,7 @@ class QariTableViewController: BaseTableViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.ds_register(cellNib: QariTableViewCell.self)
 
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
 
         tableView.ds_useDataSource(dataSource)

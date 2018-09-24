@@ -77,17 +77,17 @@ protocol _GeneralCollectionViewMapping {
         delegate.ds_performBatchUpdates(updates, completion: completion)
     }
 
-    func ds_insertSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    func ds_insertSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         let globalSections = ds_globalSectionSetForLocalSectionSet(sections)
         delegate.ds_insertSections(globalSections, with: animation)
     }
 
-    func ds_deleteSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    func ds_deleteSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         let globalSections = ds_globalSectionSetForLocalSectionSet(sections)
         delegate.ds_deleteSections(globalSections, with: animation)
     }
 
-    func ds_reloadSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    func ds_reloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         let globalSections = ds_globalSectionSetForLocalSectionSet(sections)
         delegate.ds_reloadSections(globalSections, with: animation)
     }
@@ -98,17 +98,17 @@ protocol _GeneralCollectionViewMapping {
         delegate.ds_moveSection(globalSection, toSection: globalNewSection)
     }
 
-    func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         let globalIndexPaths = ds_globalIndexPathsForLocalIndexPaths(indexPaths)
         delegate.ds_insertItems(at: globalIndexPaths, with: animation)
     }
 
-    func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         let globalIndexPaths = ds_globalIndexPathsForLocalIndexPaths(indexPaths)
         delegate.ds_deleteItems(at: globalIndexPaths, with: animation)
     }
 
-    func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         let globalIndexPaths = ds_globalIndexPathsForLocalIndexPaths(indexPaths)
         delegate.ds_reloadItems(at: globalIndexPaths, with: animation)
     }
@@ -122,14 +122,14 @@ protocol _GeneralCollectionViewMapping {
 
     // MARK: - Scroll
 
-    func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionViewScrollPosition, animated: Bool) {
+    func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         let globalIndexPath = ds_globalIndexPathForLocalIndexPath(indexPath)
         delegate.ds_scrollToItem(at: globalIndexPath, at: scrollPosition, animated: animated)
     }
 
     // MARK: - Select/Deselect
 
-    func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionViewScrollPosition) {
+    func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
 
         let globalIndexPath: IndexPath?
         if let indexPath = indexPath {

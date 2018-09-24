@@ -19,8 +19,8 @@
 //
 
 open class CollectionResponse: Response {
-    open let responses: [Response]
-    open let progress: QProgress
+    public let responses: [Response]
+    public let progress: QProgress
 
     private let completionLock = NSLock()
 

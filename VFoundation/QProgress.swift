@@ -38,7 +38,7 @@ open class BlockQProgressListener: QProgressListener {
 open class QProgress: NSObject, QProgressListener {
 
     private var children: [QProgress: Double] = [:]
-    open let progressListeners = WeakSet<QProgressListener>()
+    public let progressListeners = WeakSet<QProgressListener>()
 
     open var totalUnitCount: Double {
         didSet { notifyProgressChanged() }

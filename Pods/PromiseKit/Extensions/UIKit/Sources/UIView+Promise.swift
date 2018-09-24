@@ -40,7 +40,7 @@ extension UIView {
      - Returns: A promise that fulfills with a boolean NSNumber indicating
      whether or not the animations actually finished.
     */
-    public class func promise(animateWithDuration duration: TimeInterval, delay: TimeInterval = 0, options: UIViewAnimationOptions = [], animations: @escaping () -> Void) -> Promise<Bool> {
+    public class func promise(animateWithDuration duration: TimeInterval, delay: TimeInterval = 0, options: UIView.AnimationOptions = [], animations: @escaping () -> Void) -> Promise<Bool> {
         return PromiseKit.wrap { animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: $0) }
     }
 }

@@ -65,21 +65,21 @@ extension UITableView: GeneralCollectionView {
     /**
      Just calls the corresponding method `insertSections(sections, with: animation)`.
      */
-    open func ds_insertSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    open func ds_insertSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         insertSections(sections, with: animation)
     }
 
     /**
      Just calls the corresponding method `deleteSections(sections, with: animation)`.
      */
-    open func ds_deleteSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    open func ds_deleteSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         deleteSections(sections, with: animation)
     }
 
     /**
      Just calls the corresponding method `reloadSections(sections, with: animation)`.
      */
-    open func ds_reloadSections(_ sections: IndexSet, with animation: UITableViewRowAnimation) {
+    open func ds_reloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         reloadSections(sections, with: animation)
     }
 
@@ -93,21 +93,21 @@ extension UITableView: GeneralCollectionView {
     /**
      Just calls the corresponding method `insertRowsAtIndexPaths(indexPaths, with: animation)`.
      */
-    open func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    open func ds_insertItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         insertRows(at: indexPaths, with: animation)
     }
 
     /**
      Just calls the corresponding method `deleteRowsAtIndexPaths(indexPaths, with: animation)`.
      */
-    open func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    open func ds_deleteItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         deleteRows(at: indexPaths, with: animation)
     }
 
     /**
      Just calls the corresponding method `reloadRowsAtIndexPaths(indexPaths, with: animation)`.
      */
-    open func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableViewRowAnimation) {
+    open func ds_reloadItems(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         reloadRows(at: indexPaths, with: animation)
     }
 
@@ -121,15 +121,15 @@ extension UITableView: GeneralCollectionView {
     /**
      Just calls the corresponding method `scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition(scrollPosition: scrollPosition), animated: animated)`.
      */
-    open func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionViewScrollPosition, animated: Bool) {
-        scrollToRow(at: indexPath, at: UITableViewScrollPosition(scrollPosition: scrollPosition), animated: animated)
+    open func ds_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        scrollToRow(at: indexPath, at: UITableView.ScrollPosition(scrollPosition: scrollPosition), animated: animated)
     }
 
     /**
      Just calls the corresponding method `selectRowAtIndexPath(indexPath, animated: animated, scrollPosition: UITableViewScrollPosition(scrollPosition: scrollPosition))`.
      */
-    open func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionViewScrollPosition) {
-        selectRow(at: indexPath, animated: animated, scrollPosition: UITableViewScrollPosition(scrollPosition: scrollPosition))
+    open func ds_selectItem(at indexPath: IndexPath?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
+        selectRow(at: indexPath, animated: animated, scrollPosition: UITableView.ScrollPosition(scrollPosition: scrollPosition))
     }
 
     /**

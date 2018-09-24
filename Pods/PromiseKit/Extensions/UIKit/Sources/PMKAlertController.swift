@@ -33,7 +33,7 @@ public class PMKAlertController {
     /// Descriptive text that provides more details about the reason for the alert.
     public var message: String? { return UIAlertController.message }
     /// The style of the alert controller.
-    public var preferredStyle: UIAlertControllerStyle { return UIAlertController.preferredStyle }
+    public var preferredStyle: UIAlertController.Style { return UIAlertController.preferredStyle }
     /// The actions that the user can take in response to the alert or action sheet.
     public var actions: [UIAlertAction] { return UIAlertController.actions }
     /// The array of text fields displayed by the alert.
@@ -45,12 +45,12 @@ public class PMKAlertController {
 #endif
 
     /// Creates and returns a view controller for displaying an alert to the user.
-    public required init(title: String?, message: String?  = nil, preferredStyle: UIAlertControllerStyle = .alert) {
+    public required init(title: String?, message: String?  = nil, preferredStyle: UIAlertController.Style = .alert) {
         UIAlertController = UIKit.UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
     }
 
     /// Attaches an action title to the alert or action sheet.
-    public func addActionWithTitle(title: String, style: UIAlertActionStyle = .default) -> UIAlertAction {
+    public func addActionWithTitle(title: String, style: UIAlertAction.Style = .default) -> UIAlertAction {
         let action = UIAlertAction(title: title, style: style) { action in
             if style != .cancel {
                 self.fulfill(action)

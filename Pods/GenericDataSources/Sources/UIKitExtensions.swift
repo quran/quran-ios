@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension UITableViewScrollPosition {
-    init(scrollPosition: UICollectionViewScrollPosition) {
+extension UITableView.ScrollPosition {
+    init(scrollPosition: UICollectionView.ScrollPosition) {
         if scrollPosition.contains(.top) {
             self = .top
         } else if scrollPosition.contains(.bottom) {

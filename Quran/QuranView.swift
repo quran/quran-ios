@@ -149,9 +149,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         dismissBarsTapGesture.delegate = self
         addGestureRecognizer(dismissBarsTapGesture)
 
-        sendSubview(toBack: collectionView)
-        bringSubview(toFront: audioView)
-        bringSubview(toFront: pointer)
+        sendSubviewToBack(collectionView)
+        bringSubviewToFront(audioView)
+        bringSubviewToFront(pointer)
 
         // Long press gesture on verses to select
         addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
@@ -244,7 +244,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         ]
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
-        NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: .UIMenuControllerWillHideMenu, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: UIMenuController.willHideMenuNotification, object: nil)
     }
 
     private func gestureInfo(at point: CGPoint) -> GestureInfo? {
@@ -274,7 +274,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         shareData?.cell.setHighlightedVerses(nil, forType: .share)
 
         // hide the menu controller
-        NotificationCenter.default.removeObserver(self, name: .UIMenuControllerWillHideMenu, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIMenuController.willHideMenuNotification, object: nil)
         UIMenuController.shared.setMenuVisible(false, animated: true)
 
         // remove gestures
@@ -487,7 +487,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         let isUpward = frame.minY < 63
         let point = CGPoint(x: frame.midX, y: isUpward ? frame.maxY + 10 : frame.minY - 10)
 
-        var word: AyahWord? = nil
+        var word: AyahWord?
         if lastWord?.position == info.position {
             word = lastWord
             show(word: lastWord, at: point, isUpward: isUpward)

@@ -56,7 +56,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         title = lAndroid("audio_manager")
 
         tableView.sectionHeaderHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
         tableView.allowsSelection = false
@@ -116,7 +116,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
     }
 
     private func showActivityIndicator() {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let activityIndicator = UIActivityIndicatorView(style: .white)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
         navigationItem.titleView = activityIndicator

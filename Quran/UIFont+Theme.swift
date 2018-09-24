@@ -94,7 +94,7 @@ extension TranslationText {
             style.alignment = .left
         }
 
-        let attributes: [NSAttributedStringKey: Any] = [
+        let attributes: [NSAttributedString.Key: Any] = [
             .font            : translation.preferredTextFont(ofSize: size),
             .paragraphStyle  : style]
         let attributedString = NSAttributedString(string: text, attributes: attributes)

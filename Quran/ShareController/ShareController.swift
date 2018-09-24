@@ -26,7 +26,7 @@ class ShareController: NSObject {
                      sourceView: UIView,
                      sourceRect: CGRect,
                      sourceViewController: UIViewController,
-                     handler: UIActivityViewControllerCompletionWithItemsHandler?) {
+                     handler: UIActivityViewController.CompletionWithItemsHandler?) {
         let activityViewController = UIActivityViewController(activityItems: textLines, applicationActivities: nil)
         activityViewController.completionWithItemsHandler = handler
         activityViewController.popoverPresentationController?.sourceView = sourceView

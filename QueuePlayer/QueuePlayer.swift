@@ -45,8 +45,11 @@ open class QueuePlayer: NSObject {
 
     public override init() {
         super.init()
-
-        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [.defaultToSpeaker, .allowBluetooth])
+        if #available(iOS 10.0, *) {
+            try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+        } else {
+            try? AVAudioSession.sharedInstance().setCategoryiO9Compatible(.playback)
+        }
         player.actionAtItemEnd = .advance
 
         setUpRemoteControlEvents()

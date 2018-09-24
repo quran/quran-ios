@@ -54,7 +54,7 @@ class QuranDataSource: SegmentedDataSource {
         }
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationDidBecomeActive),
-                                               name: .UIApplicationDidBecomeActive,
+                                               name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
         handlers.forEach {
             $0.onScrollViewWillBeginDragging = { [weak self] in

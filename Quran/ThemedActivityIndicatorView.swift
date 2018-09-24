@@ -32,7 +32,7 @@ class ThemedActivityIndicatorView: UIActivityIndicatorView {
     }
 
     init() {
-        super.init(activityIndicatorStyle: .gray)
+        super.init(style: .gray)
         setUp()
     }
 
@@ -47,6 +47,6 @@ class ThemedActivityIndicatorView: UIActivityIndicatorView {
 
     @objc
     func themeDidChange() {
-        activityIndicatorViewStyle = Theme.current == .dark ? .white : .gray
+        style = Theme.current == .dark ? .white : .gray
     }
 }

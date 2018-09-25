@@ -36,7 +36,7 @@ target 'Quran' do
     pod 'Fabric'
     pod 'Crashlytics'
     pod 'MenuItemKit'
-    pod 'Moya'
+    pod 'Moya', :inhibit_warnings => true
     pod 'SwiftyJSON'
     pod 'PromiseKit', :inhibit_warnings => true
     pod 'DownloadButton'
@@ -50,7 +50,7 @@ end
 target 'QuranTests' do
 
     pod 'Zip'
-    pod 'Moya'
+    pod 'Moya', :inhibit_warnings => true
     pod 'PromiseKit', :inhibit_warnings => true
     pod 'KVOController'
     pod 'RxSwift', :inhibit_warnings => true

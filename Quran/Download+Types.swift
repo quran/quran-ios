@@ -34,10 +34,10 @@ extension DownloadRequest {
 
 extension DownloadBatchResponse {
     var isAudio: Bool {
-        return requests.first(where: { $0.isAudio }) != nil
+        return requests.contains(where: { $0.isAudio })
     }
 
     var isTranslation: Bool {
-        return requests.count == 1 && requests.first(where: { $0.isTranslation }) != nil
+        return requests.count == 1 && requests.contains(where: { $0.isTranslation })
     }
 }

@@ -54,7 +54,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     private var barsTimer: VFoundation.Timer?
 
-    private var interactivePopGestureOldEnabled: Bool?
+    private var interactivePopGestureOldEnabled: Bool = true
     private var barsHiddenTimerExecuted = false
 
     override var screen: Analytics.Screen {
@@ -215,7 +215,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(false, animated: animated)
         interactiveGestureToken.once {
-            interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled
+            interactivePopGestureOldEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled ?? interactivePopGestureOldEnabled
         }
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 
@@ -233,7 +233,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.isIdleTimerDisabled = false
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = interactivePopGestureOldEnabled ?? true
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = interactivePopGestureOldEnabled
     }
 
     override func viewDidLayoutSubviews() {

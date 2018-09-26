@@ -244,7 +244,10 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         ]
         UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
         UIMenuController.shared.setMenuVisible(true, animated: true)
-        NotificationCenter.default.addObserver(self, selector: #selector(resignFirstResponder), name: UIMenuController.willHideMenuNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(resignFirstResponder),
+                                               name: UIMenuController.willHideMenuNotification,
+                                               object: nil)
     }
 
     private func gestureInfo(at point: CGPoint) -> GestureInfo? {

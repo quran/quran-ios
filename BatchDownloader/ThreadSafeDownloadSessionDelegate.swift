@@ -66,10 +66,10 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         unsafeHandler.urlSession(session,
-                           downloadTask: downloadTask,
-                           didWriteData: bytesWritten,
-                           totalBytesWritten: totalBytesWritten,
-                           totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+                                 downloadTask: downloadTask,
+                                 didWriteData: bytesWritten,
+                                 totalBytesWritten: totalBytesWritten,
+                                 totalBytesExpectedToWrite: totalBytesExpectedToWrite)
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {

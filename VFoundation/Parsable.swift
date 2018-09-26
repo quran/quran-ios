@@ -131,7 +131,7 @@ extension JSON {
         return try array.map { element -> ElementType? in
             do {
                 return try ElementType(json: element)
-            } catch let error {
+            } catch {
                 if !continueOnError {
                     throw error // rethrow
                 }

@@ -36,7 +36,10 @@ class MoreRotationTableViewCell: ThemedTableViewCell {
             button?.disabledKind = .labelVeryWeak
         }
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(setOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(setOrientation),
+                                               name: UIDevice.orientationDidChangeNotification,
+                                               object: nil)
         setOrientation()
     }
 

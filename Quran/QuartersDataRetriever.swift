@@ -43,10 +43,10 @@ struct QuartersDataRetriever: Interactor {
                     let ayah = Quran.Quarters[order]
 
                     let quarter = Quarter(order: order,
-                        ayah: ayah,
-                        juz: juz,
-                        startPageNumber: ayah.getStartPage(),
-                        ayahText: ayahsText[order])
+                                          ayah: ayah,
+                                          juz: juz,
+                                          startPageNumber: ayah.getStartPage(),
+                                          ayahText: ayahsText[order])
                     quarters.append(quarter)
                 }
                 juzsGroup.append((juz, quarters))

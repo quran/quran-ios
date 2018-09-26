@@ -36,7 +36,7 @@ class BaseBookmarkDataSource<ItemType: Bookmark, CellType: ReusableCell>: Editab
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    commit editingStyle: UITableViewCellEditingStyle,
+                                    commit editingStyle: UITableViewCell.EditingStyle,
                                     forItemAt indexPath: IndexPath) {
         guard editingStyle == .delete else {
             return

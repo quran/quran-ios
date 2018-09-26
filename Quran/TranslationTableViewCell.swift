@@ -113,8 +113,8 @@ class TranslationTableViewCell: ThemedTableViewCell {
             let lightColor = Theme.Kind.labelWeak.color
             let regularColor = Theme.Kind.labelStrong.color
 
-            let lightAttributes: [NSAttributedStringKey: Any] = [.font: lightFont, .foregroundColor: lightColor]
-            let regularAttributes: [NSAttributedStringKey: Any] = [.font: regularFont, .foregroundColor: regularColor]
+            let lightAttributes: [NSAttributedString.Key: Any] = [.font: lightFont, .foregroundColor: lightColor]
+            let regularAttributes: [NSAttributedString.Key: Any] = [.font: regularFont, .foregroundColor: regularColor]
 
             let translatorAttributes = NSMutableAttributedString(string: translator, attributes: lightAttributes)
             let attributes = NSAttributedString(string: translatorName, attributes: regularAttributes)

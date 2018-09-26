@@ -55,15 +55,15 @@ public final class AnyBasicDataSourceRepresentable<Item>: BasicDataSourceReprese
     }
 
     /// Represents the underlying data source.
-    open var dataSource: AbstractDataSource { return box.dataSource }
+    public var dataSource: AbstractDataSource { return box.dataSource }
 
     /// Represents the list of items that is managed by this data source.
-    open var items: [Item] {
+    public var items: [Item] {
         get { return box.items }
         set { box.items = newValue }
     }
 
-    open var onItemsUpdated: (([Item]) -> Void)? {
+    public var onItemsUpdated: (([Item]) -> Void)? {
         get { return box.onItemsUpdated }
         set { box.onItemsUpdated = newValue }
     }

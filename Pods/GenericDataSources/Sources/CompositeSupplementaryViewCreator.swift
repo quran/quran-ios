@@ -45,14 +45,14 @@ open class CompositeSupplementaryViewCreator: NSObject, SupplementaryViewCreator
     ///
     /// - parameter headerCreator: The header creator.
     public convenience init(headerCreator: SupplementaryViewCreator) {
-        self.init(creators: [UICollectionElementKindSectionHeader: headerCreator])
+        self.init(creators: [headerKind: headerCreator])
     }
 
     /// Creates new instance with footer creator.
     ///
     /// - parameter footerCreator: The footer creator.
     public convenience init(footerCreator: SupplementaryViewCreator) {
-        self.init(creators: [UICollectionElementKindSectionFooter: footerCreator])
+        self.init(creators: [footerKind: footerCreator])
     }
 
     /// Creates new instance with header and footer creator.
@@ -60,7 +60,7 @@ open class CompositeSupplementaryViewCreator: NSObject, SupplementaryViewCreator
     /// - parameter headerCreator: The header creator.
     /// - parameter footerCreator: The footer creator.
     public convenience init(headerCreator: SupplementaryViewCreator, footerCreator: SupplementaryViewCreator) {
-        self.init(creators: [UICollectionElementKindSectionHeader: headerCreator, UICollectionElementKindSectionFooter: footerCreator])
+        self.init(creators: [headerKind: headerCreator, footerKind: footerCreator])
     }
 
     /// Adds a new child creator for the specified kind.

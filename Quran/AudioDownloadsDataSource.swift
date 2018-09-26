@@ -64,7 +64,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    commit editingStyle: UITableViewCellEditingStyle,
+                                    commit editingStyle: UITableViewCell.EditingStyle,
                                     forItemAt indexPath: IndexPath) {
         guard editingStyle == .delete else {
             return

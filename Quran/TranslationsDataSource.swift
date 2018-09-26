@@ -90,7 +90,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
-                                    commit editingStyle: UITableViewCellEditingStyle,
+                                    commit editingStyle: UITableViewCell.EditingStyle,
                                     forItemAt globalIndexPath: IndexPath) {
         guard editingStyle == .delete else {
             return

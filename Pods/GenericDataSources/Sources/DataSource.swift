@@ -297,7 +297,7 @@ import Foundation
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - editingStyle: The
     ///   - indexPath: An index path locating an item in the view.
-    func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath)
+    func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath)
 
     /// Gets the editing style for an item.
     ///
@@ -305,7 +305,7 @@ import Foundation
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - indexPath: An index path locating an item in the view.
     /// - Returns: The editing style.
-    func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle
+    func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
 
     /// Gets the localized title for the delete button to show for editing an item (e.g. swipe to delete).
     ///

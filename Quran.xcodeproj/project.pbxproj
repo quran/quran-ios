@@ -385,6 +385,8 @@
 		54F8C41A1EA7EFB200C853C6 /* Downloadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F8C4191EA7EFB200C853C6 /* Downloadable.swift */; };
 		54F8C41C1EA7F29A00C853C6 /* DownloadableQariAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F8C41B1EA7F29A00C853C6 /* DownloadableQariAudio.swift */; };
 		54F8C4241EA8104F00C853C6 /* DownloadingObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F8C4231EA8104F00C853C6 /* DownloadingObserver.swift */; };
+		54F9CD932159586E0068FBAB /* AVAudioSession+Category.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F9CD912159586E0068FBAB /* AVAudioSession+Category.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54F9CD942159586E0068FBAB /* AVAudioSession+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F9CD922159586E0068FBAB /* AVAudioSession+Category.m */; };
 		54FD7BA31EB933A500FA485F /* UserDefaults+Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD7BA21EB933A500FA485F /* UserDefaults+Keys.swift */; };
 		54FD7BA71EB9342D00FA485F /* SimplePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD7BA51EB9342D00FA485F /* SimplePersistence.swift */; };
 		54FD7BA81EB9342D00FA485F /* UserDefaultsSimplePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD7BA61EB9342D00FA485F /* UserDefaultsSimplePersistence.swift */; };
@@ -981,6 +983,8 @@
 		54F8C4191EA7EFB200C853C6 /* Downloadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloadable.swift; sourceTree = "<group>"; };
 		54F8C41B1EA7F29A00C853C6 /* DownloadableQariAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadableQariAudio.swift; sourceTree = "<group>"; };
 		54F8C4231EA8104F00C853C6 /* DownloadingObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadingObserver.swift; sourceTree = "<group>"; };
+		54F9CD912159586E0068FBAB /* AVAudioSession+Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVAudioSession+Category.h"; sourceTree = "<group>"; };
+		54F9CD922159586E0068FBAB /* AVAudioSession+Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVAudioSession+Category.m"; sourceTree = "<group>"; };
 		54FD7BA21EB933A500FA485F /* UserDefaults+Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Keys.swift"; sourceTree = "<group>"; };
 		54FD7BA51EB9342D00FA485F /* SimplePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePersistence.swift; sourceTree = "<group>"; };
 		54FD7BA61EB9342D00FA485F /* UserDefaultsSimplePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsSimplePersistence.swift; sourceTree = "<group>"; };
@@ -1453,6 +1457,8 @@
 				543FE0391EB3C1CB00687DF8 /* QueuePlayer.swift */,
 				06012F5C2075A403001F94F9 /* Playing.swift */,
 				06012F5E2075A560001F94F9 /* Runs.swift */,
+				54F9CD912159586E0068FBAB /* AVAudioSession+Category.h */,
+				54F9CD922159586E0068FBAB /* AVAudioSession+Category.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -2525,6 +2531,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				543FE0301EB3C1AC00687DF8 /* QueuePlayer.h in Headers */,
+				54F9CD932159586E0068FBAB /* AVAudioSession+Category.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2755,49 +2762,51 @@
 					5437D35F1EB385DB00795FA9 = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					543FE0021EB3B83700687DF8 = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					543FE02B1EB3C1AC00687DF8 = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					545D96531EBF9741006D758A = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 54B265E21CC57D8E00D3AEF8;
 					};
 					546784101EB29DDD0012FA2C = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					546784331EB29FD20012FA2C = {
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					5484C2DD1ED8C00C0068025A = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = MKP73M5X4A;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 54B265E21CC57D8E00D3AEF8;
 					};
 					54B265E21CC57D8E00D3AEF8 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -2808,7 +2817,7 @@
 					54E72D951F9C1B2A00F85B67 = {
 						CreatedOnToolsVersion = 9.0.1;
 						DevelopmentTeam = MKP73M5X4A;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -3330,6 +3339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54F9CD942159586E0068FBAB /* AVAudioSession+Category.m in Sources */,
 				06012F5D2075A403001F94F9 /* Playing.swift in Sources */,
 				543FE03A1EB3C1CB00687DF8 /* QueuePlayer.swift in Sources */,
 				06012EE9206FF079001F94F9 /* AVQueuePlayerFacade.swift in Sources */,
@@ -3859,8 +3869,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3889,8 +3898,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.VFoundation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3921,7 +3929,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3949,7 +3957,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.UIKitExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3980,7 +3988,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4008,7 +4016,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QueuePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4028,7 +4036,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ab1cc3f1-3b39-4bfc-a995-6d549c1ad679";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = Quran;
 			};
 			name = Debug;
@@ -4046,7 +4054,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QuranUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ab1cc3f1-3b39-4bfc-a995-6d549c1ad679";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = Quran;
 			};
 			name = Release;
@@ -4076,7 +4084,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4104,7 +4112,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.BatchDownloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4139,7 +4147,7 @@
 				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(TARGET_NAME)/modules/iphonesimulator";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4171,7 +4179,7 @@
 				"SWIFT_INCLUDE_PATHS[sdk=iphoneos*]" = "$(TARGET_NAME)/modules/iphoneos";
 				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(TARGET_NAME)/modules/iphonesimulator";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4195,7 +4203,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.QuranTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quran.app/Quran";
 			};
 			name = Debug;
@@ -4217,7 +4225,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.QuranTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quran.app/Quran";
 			};
 			name = Release;
@@ -4334,7 +4342,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1C4D17DF9C049CBECBB13FE /* Pods-Quran.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4355,8 +4362,7 @@
 				PROVISIONING_PROFILE = "1eeb2cc1-8ea8-4337-aee7-5fdc00f8b640";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -4364,7 +4370,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 979C2D6F1401844F1962C482 /* Pods-Quran.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4383,7 +4388,7 @@
 				PROVISIONING_PROFILE = "0942cc72-3362-4f11-bbd8-1d5924524335";
 				PROVISIONING_PROFILE_SPECIFIER = "Quran App Store Dist";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -4414,7 +4419,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -4446,7 +4451,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ViewConstrainer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

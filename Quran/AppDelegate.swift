@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.removeObserver(self)
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         #if DEBUG
             print("Document path:", FileManager.documentsPath)
         #endif
@@ -84,8 +84,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // search bar
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
-            NSAttributedStringKey.font.rawValue: UIFont.systemFont(ofSize: 14)
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)
         ]
     }
 

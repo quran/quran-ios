@@ -76,7 +76,7 @@ open class BasicDataSource<ItemType, CellType: ReusableCell> : AbstractDataSourc
     }
 
     /// Represents the reuse identifier to use for dequeuing cells from the `UICollectionView`/`UITableView`.
-    open let reuseIdentifier: String
+    public let reuseIdentifier: String
 
     /// Represents the selection handler used for delegating calls to selection handler.
     private var selectionHandler: AnyDataSourceSelectionHandler<ItemType, CellType>?

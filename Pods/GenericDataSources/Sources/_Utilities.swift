@@ -58,3 +58,11 @@ func isSelector(_ selector: Selector, belongsToProtocol aProtocol: Protocol, isR
     let method = protocol_getMethodDescription(aProtocol, selector, isRequired, isInstance)
     return method.types != nil
 }
+
+#if swift(>=4.2)
+let headerKind = UICollectionView.elementKindSectionHeader
+let footerKind = UICollectionView.elementKindSectionFooter
+#else
+let headerKind = UICollectionElementKindSectionHeader
+let footerKind = UICollectionElementKindSectionFooter
+#endif

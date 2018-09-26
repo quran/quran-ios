@@ -87,8 +87,9 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
             try fileManager.moveItem(at: location, to: destinationURL)
 
         } catch {
-            Crash.recordError(error, reason: "Problem with create directory or copying item to the new location '\(destinationURL)'",
-                fatalErrorOnDebug: false)
+            Crash.recordError(error,
+                              reason: "Problem with create directory or copying item to the new location '\(destinationURL)'",
+                              fatalErrorOnDebug: false)
             // fail the batch since we save the file
             do {
                 try dataController.downloadFailed(response, with: FileSystemError(error: error))

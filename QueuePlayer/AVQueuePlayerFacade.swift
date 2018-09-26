@@ -42,7 +42,7 @@ class AVQueuePlayerFacade: NSObject {
     private var interruptionObserver: ((Bool) -> Void)? {
         didSet {
             if interruptionObserver == nil {
-                NotificationCenter.default.removeObserver(self, name: .AVAudioSessionInterruption, object: nil)
+                NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
             }
         }
     }
@@ -55,7 +55,7 @@ class AVQueuePlayerFacade: NSObject {
         }
     }
 
-    var actionAtItemEnd: AVPlayerActionAtItemEnd {
+    var actionAtItemEnd: AVPlayer.ActionAtItemEnd {
         get { return player.actionAtItemEnd }
         set { player.actionAtItemEnd = newValue }
     }
@@ -146,18 +146,18 @@ class AVQueuePlayerFacade: NSObject {
         interruptionObserver = observer
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onAudioInterruptionStateChanged(_:)),
-                                               name: NSNotification.Name.AVAudioSessionInterruption,
+                                               name: AVAudioSession.interruptionNotification,
                                                object: nil)
     }
 
     @objc
     private func onAudioInterruptionStateChanged(_ notification: Notification) {
-        guard let info = notification.userInfo, notification.name == .AVAudioSessionInterruption else {
+        guard let info = notification.userInfo, notification.name == AVAudioSession.interruptionNotification else {
             return
         }
 
         guard let rawType = info[AVAudioSessionInterruptionTypeKey] as? UInt,
-            let type = AVAudioSessionInterruptionType(rawValue: rawType) else {
+            let type = AVAudioSession.InterruptionType(rawValue: rawType) else {
                 return
         }
 
@@ -165,7 +165,7 @@ class AVQueuePlayerFacade: NSObject {
         case .began: break
         case .ended:
             if let rawOptions = info[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSessionInterruptionOptions(rawValue: rawOptions)
+                let options = AVAudioSession.InterruptionOptions(rawValue: rawOptions)
                 let shouldResume = options.contains(.shouldResume)
                 interruptionObserver?(shouldResume)
             }

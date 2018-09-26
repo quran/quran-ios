@@ -82,7 +82,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
         title = lAndroid("menu_bookmarks")
 
         tableView.sectionHeaderHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)

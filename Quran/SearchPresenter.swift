@@ -133,11 +133,11 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
 extension SearchAutocompletion {
     private static var arabicRegex = try! NSRegularExpression(pattern: "\\p{Arabic}") // swiftlint:disable:this force_try
     fileprivate func asAttributedString() -> NSAttributedString {
-        let normalAttributes: [NSAttributedStringKey: Any] = [
+        let normalAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 14),
             .foregroundColor: Theme.Kind.labelWeak.color
         ]
-        let highlightedAttributes: [NSAttributedStringKey: Any] = [
+        let highlightedAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.boldSystemFont(ofSize: 14),
             .foregroundColor: Theme.Kind.labelStrong.color
         ]
@@ -155,11 +155,11 @@ extension SearchAutocompletion {
 
 extension SearchResult {
     fileprivate func asAttributedString() -> NSAttributedString {
-        let normalAttributes: [NSAttributedStringKey: Any] = [
+        let normalAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 14),
             .foregroundColor: Theme.Kind.labelWeak.color
         ]
-        let highlightedAttributes: [NSAttributedStringKey: Any] = [
+        let highlightedAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.boldSystemFont(ofSize: 14),
             .foregroundColor: Theme.Kind.labelStrong.color
         ]

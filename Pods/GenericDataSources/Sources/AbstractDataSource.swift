@@ -412,48 +412,48 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = ds_collectionView(tableView, supplementaryViewOfKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: section))
+        let view = ds_collectionView(tableView, supplementaryViewOfKind: headerKind, at: IndexPath(item: 0, section: section))
         return optionalCast(view)
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return ds_collectionView(tableView, sizeForSupplementaryViewOfKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: section)).height
+        return ds_collectionView(tableView, sizeForSupplementaryViewOfKind: headerKind, at: IndexPath(item: 0, section: section)).height
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let castedView: UITableViewHeaderFooterView = cast(view)
-        ds_collectionView(tableView, willDisplaySupplementaryView: castedView, ofKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: section))
+        ds_collectionView(tableView, willDisplaySupplementaryView: castedView, ofKind: headerKind, at: IndexPath(item: 0, section: section))
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
         let castedView: UITableViewHeaderFooterView = cast(view)
-        ds_collectionView(tableView, didEndDisplayingSupplementaryView: castedView, ofKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: section))
+        ds_collectionView(tableView, didEndDisplayingSupplementaryView: castedView, ofKind: headerKind, at: IndexPath(item: 0, section: section))
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = ds_collectionView(tableView, supplementaryViewOfKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: section))
+        let view = ds_collectionView(tableView, supplementaryViewOfKind: footerKind, at: IndexPath(item: 0, section: section))
         return optionalCast(view)
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return ds_collectionView(tableView, sizeForSupplementaryViewOfKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: section)).height
+        return ds_collectionView(tableView, sizeForSupplementaryViewOfKind: footerKind, at: IndexPath(item: 0, section: section)).height
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         let castedView: UITableViewHeaderFooterView = cast(view)
-        ds_collectionView(tableView, willDisplaySupplementaryView: castedView, ofKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: section))
+        ds_collectionView(tableView, willDisplaySupplementaryView: castedView, ofKind: footerKind, at: IndexPath(item: 0, section: section))
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
     open func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
         let castedView: UITableViewHeaderFooterView = cast(view)
-        ds_collectionView(tableView, didEndDisplayingSupplementaryView: castedView, ofKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: section))
+        ds_collectionView(tableView, didEndDisplayingSupplementaryView: castedView, ofKind: footerKind, at: IndexPath(item: 0, section: section))
     }
 
     // MARK: UICollectionView
@@ -466,7 +466,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
 
     /// `UICollectionViewDataSource`/`UICollectionViewDelegateFlowLayout` implementations forwards calls to the corresponding `DataSource` methods.
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: section))
+        return ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: headerKind, at: IndexPath(item: 0, section: section))
     }
 
     /// `UICollectionViewDataSource`/`UICollectionViewDelegateFlowLayout` implementations forwards calls to the corresponding `DataSource` methods.
@@ -481,7 +481,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
 
     /// `UICollectionViewDataSource`/`UICollectionViewDelegateFlowLayout` implementations forwards calls to the corresponding `DataSource` methods.
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: section))
+        return ds_collectionView(collectionView, sizeForSupplementaryViewOfKind: footerKind, at: IndexPath(item: 0, section: section))
     }
 
     // MARK: DataSource
@@ -814,12 +814,12 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
-    open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         return ds_collectionView(tableView, commit: editingStyle, forItemAt: indexPath)
     }
 
     /// `UITableViewDataSource`/`UITableViewDelegate` implementations forwards calls to the corresponding `DataSource` methods.
-    open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return ds_collectionView(tableView, editingStyleForItemAt: indexPath)
     }
 
@@ -868,7 +868,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - editingStyle: The
     ///   - indexPath: An index path locating an item in the view.
-    open func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath) {
+    open func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath) {
         fatalError("\(self): \(#function) Should be implemented by subclasses")
     }
 
@@ -878,7 +878,7 @@ open class AbstractDataSource: NSObject, DataSource, UITableViewDataSource, UICo
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - indexPath: An index path locating an item in the view.
     /// - Returns: The editing style.
-    open func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    open func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return ds_collectionView(collectionView, canEditItemAt: indexPath) ? .delete : .none
     }
 

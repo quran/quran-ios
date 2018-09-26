@@ -56,7 +56,7 @@ class NavigationSettingsCreators: SettingsCreators {
             }
 
             if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                UIApplication.shared.open(url)
             } else {
                 UIApplication.shared.openURL(url)
             }

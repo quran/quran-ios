@@ -40,7 +40,7 @@ open class CompositeDataSource: AbstractDataSource, CollectionDataSource {
     private var collection: _DataSourcesCollection!
 
     ///  Represents the section type of the composite data source.
-    open let sectionType: SectionType
+    public let sectionType: SectionType
 
     /// Returns a string that describes the contents of the receiver.
     open override var description: String {
@@ -656,7 +656,7 @@ open class CompositeDataSource: AbstractDataSource, CollectionDataSource {
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - editingStyle: The
     ///   - indexPath: An index path locating an item in the view.
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath) {
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath) {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, commit: editingStyle, forItemAt: transformed.indexPath)
     }
@@ -667,7 +667,7 @@ open class CompositeDataSource: AbstractDataSource, CollectionDataSource {
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - indexPath: An index path locating an item in the view.
     /// - Returns: The editing style.
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let transformed = unsafeTransform(globalIndexPath: indexPath, globalCollectionView: collectionView)
         return transformed.dataSource.ds_collectionView(collectionView, editingStyleForItemAt: transformed.indexPath)
     }

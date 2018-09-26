@@ -30,7 +30,7 @@ open class EditController {
 
     open var isEnabled: Bool = true
 
-    open let usesRightBarButton: Bool
+    public let usesRightBarButton: Bool
     public init(usesRightBarButton: Bool) {
         self.usesRightBarButton = usesRightBarButton
     }

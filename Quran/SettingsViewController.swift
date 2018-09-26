@@ -44,7 +44,7 @@ class SettingsViewController: BaseTableBasedViewController {
         title = lAndroid("menu_settings")
 
         tableView.sectionHeaderHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
         let selection = BlockSelectionHandler<Setting, SettingTableViewCell>()

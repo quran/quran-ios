@@ -93,7 +93,7 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
             case .transliteration: text = transliteration
             }
             let query = table
-                .select(text, wordType)
+                .select(text, textMadani, wordType)
                 .filter(
                     Columns.sura == position.ayah.sura &&
                     Columns.ayah == position.ayah.ayah &&
@@ -110,10 +110,13 @@ class SQLiteArabicTextPersistence: AyahTextPersistence, WordByWordTranslationPer
     private func rowsToWord(_ rows: AnySequence<Row>, position: AyahWord.Position, type: AyahWord.TextType) -> [AyahWord] {
         var result: [AyahWord] = []
         for row in rows {
-            let text: String?
+            var text: String?
             switch type {
             case .translation: text = row[translation]
             case .transliteration: text = row[transliteration]
+            }
+            if let arabicText = row[textMadani] {
+                text?.append(contentsOf: ": " + arabicText)
             }
             let wordTypeRaw = row[self.wordType]
             let wordType = unwrap(AyahWord.WordType(rawValue: wordTypeRaw))
@@ -292,7 +295,7 @@ extension String {
 
     func caseInsensitiveRanges(of term: String) -> [Range<String.Index>] {
         var ranges: [Range<String.Index>] = []
-        var maximum: Range<String.Index>? = nil
+        var maximum: Range<String.Index>?
         while true {
             if let found = self.range(of: term, options: [.caseInsensitive, .backwards], range: maximum) {
                 ranges.append(found)

@@ -36,7 +36,7 @@ open class BasicSupplementaryViewCreator<ItemType, SupplementaryView: ReusableSu
     open var size: CGSize?
 
     /// Represents the reuse identfier used to dequeue to the supplementary view.
-    open let identifier: String
+    public let identifier: String
 
     /// Represents the list of items to be binded to the supplementary views.
     /// **Note That**: The supplementary views can be associated with any index path.

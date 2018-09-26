@@ -52,7 +52,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
         title = lAndroid("prefs_translations")
 
         tableView.sectionHeaderHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
         tableView.allowsSelection = false
@@ -124,7 +124,7 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     }
 
     private func showActivityIndicator() {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let activityIndicator = UIActivityIndicatorView(style: .white)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
         navigationItem.titleView = activityIndicator

@@ -37,10 +37,10 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
                 let arabicPrefixLayouts = verse.arabicPrefix.map { arabicLayoutFrom($0) }
                 let arabicSuffixLayouts = verse.arabicSuffix.map { arabicLayoutFrom($0) }
                 return TranslationVerseLayout(ayah: verse.ayah,
-                                       arabicTextLayout: arabicLayoutFrom(verse.arabicText),
-                                       translationLayouts: verse.translations.map { translationTextLayoutFrom($0) },
-                                       arabicPrefixLayouts: arabicPrefixLayouts,
-                                       arabicSuffixLayouts: arabicSuffixLayouts)
+                                              arabicTextLayout: arabicLayoutFrom(verse.arabicText),
+                                              translationLayouts: verse.translations.map { translationTextLayoutFrom($0) },
+                                              arabicPrefixLayouts: arabicPrefixLayouts,
+                                              arabicSuffixLayouts: arabicSuffixLayouts)
             }
             let pageLayout = TranslationPageLayout(pageNumber: page.pageNumber,
                                                    verseLayouts: verseLayouts,

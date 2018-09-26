@@ -50,7 +50,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.sectionHeaderHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
         tableView.ds_register(cellNib: BookmarkTableViewCell.self)

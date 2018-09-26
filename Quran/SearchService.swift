@@ -124,7 +124,7 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
                 parseJuzResult(juz: components[0]),
                 parseHizbResult(hizb: components[0]),
                 parsePageResult(page: components[0])
-                ].compactMap { $0 }
+            ].compactMap { $0 }
         }
     }
 

@@ -137,7 +137,7 @@ class DownloadButton: UIView {
         downloadedConstraints = [widthAnchor.constraint(equalToConstant: 0)]
 
         for control in [download, pending, downloading.stopButton, upgrade] {
-            control.addTarget(self, action: #selector(onAnyButtonTapped), for: .touchUpInside)
+            control?.addTarget(self, action: #selector(onAnyButtonTapped), for: .touchUpInside)
         }
 
         state = .needsUpgrade

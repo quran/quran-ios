@@ -51,7 +51,7 @@ extension ViewConstrainer {
         return ancestor
     }
 
-    private func constraintSelf(on attribute: NSLayoutAttribute, value: CGFloat) -> SingleConstrainer {
+    private func constraintSelf(on attribute: NSLayoutConstraint.Attribute, value: CGFloat) -> SingleConstrainer {
         let constraint = NSLayoutConstraint(
             item: self.view,
             attribute: attribute,
@@ -64,7 +64,7 @@ extension ViewConstrainer {
         return SingleConstrainer(view: self.view, constraint: constraint, chain: [constraint])
     }
 
-    private func align(views: [UIView], by value: CGFloat, on attribute: NSLayoutAttribute) -> GroupConstrainer {
+    private func align(views: [UIView], by value: CGFloat, on attribute: NSLayoutConstraint.Attribute) -> GroupConstrainer {
         assert(!views.isEmpty, "should have at least 1 view")
 
         let ancestor = commonAncestor(views: views)
@@ -84,11 +84,11 @@ extension ViewConstrainer {
         return GroupConstrainer(view: self.view, constraints: constraints, chain: constraints)
     }
 
-    private func constraintToSuperview(on attribute: NSLayoutAttribute,
+    private func constraintToSuperview(on attribute: NSLayoutConstraint.Attribute,
                                        by value: CGFloat,
                                        superviewFirst: Bool,
                                        usesMargins: Bool) -> SingleConstrainer {
-        let marginalAttribute: NSLayoutAttribute
+        let marginalAttribute: NSLayoutConstraint.Attribute
         if usesMargins {
             switch attribute {
             case .leading:  marginalAttribute = .leadingMargin
@@ -117,8 +117,8 @@ extension ViewConstrainer {
 
     private func makeLine(views: [UIView],
                           by value: CGFloat,
-                          on firstAttribute: NSLayoutAttribute,
-                          and secondAttribute: NSLayoutAttribute) -> GroupConstrainer {
+                          on firstAttribute: NSLayoutConstraint.Attribute,
+                          and secondAttribute: NSLayoutConstraint.Attribute) -> GroupConstrainer {
         assert(!views.isEmpty, "should have at least 1 view")
 
         let ancestor = commonAncestor(views: views)

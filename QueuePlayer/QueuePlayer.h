@@ -15,5 +15,5 @@ FOUNDATION_EXPORT double QueuePlayerVersionNumber;
 FOUNDATION_EXPORT const unsigned char QueuePlayerVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <QueuePlayer/PublicHeader.h>
-
+#import "AVAudioSession+Category.h"
 

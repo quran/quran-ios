@@ -552,7 +552,7 @@ open class SegmentedDataSource: AbstractDataSource, CollectionDataSource {
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - editingStyle: The
     ///   - indexPath: An index path locating an item in the view.
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCellEditingStyle, forItemAt indexPath: IndexPath) {
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath) {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, commit: editingStyle, forItemAt: indexPath)
     }
 
@@ -562,7 +562,7 @@ open class SegmentedDataSource: AbstractDataSource, CollectionDataSource {
     ///   - collectionView: A general collection view object initiating the operation.
     ///   - indexPath: An index path locating an item in the view.
     /// - Returns: The editing style.
-    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    open override func ds_collectionView(_ collectionView: GeneralCollectionView, editingStyleForItemAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return unsafeSelectedDataSource.ds_collectionView(collectionView, editingStyleForItemAt: indexPath)
     }
 

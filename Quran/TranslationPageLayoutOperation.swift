@@ -83,6 +83,7 @@ class TranslationPageLayoutOperation: AbstractPreloadingOperation<TranslationPag
         layoutManager.addTextContainer(textContainer)
 
         // get number of glyphs
+        layoutManager.ensureLayout(for: textContainer)
         let numberOfGlyphs = layoutManager.numberOfGlyphs
         let range = NSRange(location: 0, length: numberOfGlyphs)
 

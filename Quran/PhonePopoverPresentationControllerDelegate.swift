@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 class PhonePopoverPresentationControllerDelegate: NSObject, UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
     }
 }

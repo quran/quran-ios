@@ -39,7 +39,7 @@ class QariTableViewControllerCreator: NSObject, Creator, UIPopoverPresentationCo
         return controller
     }
 
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .fullScreen
     }
 

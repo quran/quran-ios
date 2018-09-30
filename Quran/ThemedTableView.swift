@@ -58,5 +58,6 @@ class ThemedTableView: UITableView {
     func themeDidChange() {
         backgroundColor = kind.color
         separatorColor = separatorKind.color
+        indicatorStyle = themedScrollIndicatorStyle
     }
 }

@@ -1,8 +1,8 @@
 //
-//  ThemedTableViewController.swift
+//  ThemedScrollView.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 5/6/18.
+//  Created by Mohamed Afifi on 9/29/18.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2018  Quran.com
@@ -17,24 +17,21 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import UIKit
 
-class ThemedTableViewController: UITableViewController {
+class ThemedScrollView: UIScrollView {
 
-    open var kind: Theme.Kind = .background {
-        didSet { themeDidChange() }
-    }
-    open var separatorKind: Theme.Kind = .separator {
-        didSet { themeDidChange() }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setUp()
     }
 
-    override var modalPresentationStyle: UIModalPresentationStyle {
-        didSet { themeDidChange() }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUp()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func setUp() {
         themeDidChange()
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange), name: .themeDidChange, object: nil)
     }
@@ -50,11 +47,15 @@ class ThemedTableViewController: UITableViewController {
 
     @objc
     func themeDidChange() {
-        tableView.backgroundColor = kind.color
-        tableView.separatorColor = separatorKind.color
-        tableView.indicatorStyle = tableView.themedScrollIndicatorStyle
-        if modalPresentationStyle == .popover {
-            popoverPresentationController?.backgroundColor = Theme.Kind.popover.color
+        indicatorStyle = themedScrollIndicatorStyle
+    }
+}
+
+extension UIScrollView {
+    var themedScrollIndicatorStyle: UIScrollView.IndicatorStyle {
+        switch Theme.current {
+        case .dark: return .white
+        case .light: return .black
         }
     }
 }

@@ -26,6 +26,7 @@
 		540031E71E998AFD00BB4B7B /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031E61E998AFD00BB4B7B /* Analytics.swift */; };
 		540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031E81E99924000BB4B7B /* Analytics.Screen.swift */; };
 		540031EB1E99925500BB4B7B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540031EA1E99925500BB4B7B /* BaseViewController.swift */; };
+		54012CE0216059A70059057A /* ThemedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54012CDF216059A70059057A /* ThemedScrollView.swift */; };
 		5409227A1E8F03C800C7537A /* UthmanTN1 Ver10.otf in Resources */ = {isa = PBXBuildFile; fileRef = 540922791E8F03C200C7537A /* UthmanTN1 Ver10.otf */; };
 		5409227C1E8F062600C7537A /* AbyssinicaSIL-R.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */; };
 		540922821E90142900C7537A /* TranslationPageLayoutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540922811E90142900C7537A /* TranslationPageLayoutOperation.swift */; };
@@ -542,6 +543,7 @@
 		540031E61E998AFD00BB4B7B /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		540031E81E99924000BB4B7B /* Analytics.Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.Screen.swift; sourceTree = "<group>"; };
 		540031EA1E99925500BB4B7B /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		54012CDF216059A70059057A /* ThemedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedScrollView.swift; sourceTree = "<group>"; };
 		540922791E8F03C200C7537A /* UthmanTN1 Ver10.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UthmanTN1 Ver10.otf"; sourceTree = "<group>"; };
 		540922811E90142900C7537A /* TranslationPageLayoutOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationPageLayoutOperation.swift; sourceTree = "<group>"; };
 		5409229E1E91312200C7537A /* QuranTranslationSuraDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationSuraDataSource.swift; sourceTree = "<group>"; };
@@ -2375,6 +2377,7 @@
 			children = (
 				544EC36520B9B69600D2E7B5 /* Theme+extensions.swift */,
 				544EC36B20BA479F00D2E7B5 /* ThemedActivityIndicatorView.swift */,
+				5428A685213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift */,
 				544EC37320BA890600D2E7B5 /* ThemedButton.swift */,
 				544EC37720BB248400D2E7B5 /* ThemedCollectionView.swift */,
 				544EC37920BB24EF00D2E7B5 /* ThemedCollectionViewCell.swift */,
@@ -2383,6 +2386,7 @@
 				544EC37520BB1B4B00D2E7B5 /* ThemedNavigationBar.swift */,
 				544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */,
 				544EC37B20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift */,
+				54012CDF216059A70059057A /* ThemedScrollView.swift */,
 				544EC37D20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift */,
 				544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */,
 				54DC10C0209FA94B00C57DA9 /* ThemedTableView.swift */,
@@ -2391,7 +2395,6 @@
 				54F11E73209D4EFA00367340 /* ThemedView.swift */,
 				54DC10C6209FF75300C57DA9 /* ThemedViewController.swift */,
 				544EC36F20BA708D00D2E7B5 /* ThemedVisualEffectView.swift */,
-				5428A685213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift */,
 			);
 			name = Theme;
 			sourceTree = "<group>";
@@ -3507,6 +3510,7 @@
 				540922821E90142900C7537A /* TranslationPageLayoutOperation.swift in Sources */,
 				5487241A1DC4957700ADDE54 /* BookmarksPersistence.swift in Sources */,
 				54547E9C1EC9D383008AFED3 /* SearchView.swift in Sources */,
+				54012CE0216059A70059057A /* ThemedScrollView.swift in Sources */,
 				541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */,
 				54DC10C1209FA94B00C57DA9 /* ThemedTableView.swift in Sources */,
 				54B266AB1CD1642600D3AEF8 /* QariDataRetriever.swift in Sources */,

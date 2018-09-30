@@ -52,5 +52,6 @@ class ThemedCollectionView: UICollectionView {
     @objc
     func themeDidChange() {
         backgroundColor = kind.color
+        indicatorStyle = themedScrollIndicatorStyle
     }
 }

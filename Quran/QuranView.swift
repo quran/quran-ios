@@ -103,6 +103,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         _pointerTop?.constant = value
         _pointerParentSize = bounds.size
     }
+    private var minX: CGFloat {
+        return Layout.windowDirectionalSafeAreaInsets.leading
+    }
+    private var maxX: CGFloat {
+        return bounds.width - Layout.windowDirectionalSafeAreaInsets.trailing
+    }
 
     lazy var pointer: UIView = {
         let imageView = UIImageView()
@@ -171,8 +177,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         super.layoutSubviews()
         if !pointer.isHidden && _pointerParentSize != bounds.size {
             setPointerTop(pointer.frame.minY * bounds.height / _pointerParentSize.height)
-            if pointer.frame.minX != 0 {
-                _pointerLeft?.constant = bounds.width - pointer.bounds.width
+            // using bounds.height because it has been rotated but pointer.frame.minX has not
+            if pointer.frame.minX > bounds.height / 2 {
+                _pointerLeft?.constant = maxX - pointer.bounds.width
+            } else {
+                _pointerLeft?.constant = minX
             }
         }
     }
@@ -415,7 +424,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layoutIfNeeded()
 
         setPointerTop(bounds.height / 4)
-        _pointerLeft?.constant = 0
+        _pointerLeft?.constant = minX
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: {
             self.layoutIfNeeded()
         }, completion: nil)
@@ -460,7 +469,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             }
 
             let finalY = max(10, min(bounds.height - pointer.bounds.height, velocity.y * 0.3 + pointer.frame.minY))
-            let finalX = goLeft ? 0 : bounds.width - pointer.bounds.width
+            let finalX = goLeft ? minX : maxX - pointer.bounds.width
 
             let y = finalY - pointer.frame.minY
             let x = finalX - pointer.frame.minX

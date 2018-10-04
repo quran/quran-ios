@@ -75,6 +75,6 @@ class BackgroundThemedCollectionViewCell: ThemedCollectionViewCell {
     }
 
     private func setUp() {
-        kind = .background
+        kind = .backgroundOLED
     }
 }

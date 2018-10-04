@@ -37,10 +37,12 @@ class QuranImagePageCollectionViewCell: QuranBasePageCollectionViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
 
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var backgroundThemedView: ThemedView!
 
     private var sizeConstraints: [NSLayoutConstraint] = []
 
     override func awakeFromNib() {
+        backgroundThemedView.kind = .backgroundOLED
         juzLabel.kind = .labelStrong
         suraLabel.kind = .labelStrong
         pageLabel.kind = .labelStrong

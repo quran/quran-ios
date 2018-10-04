@@ -77,6 +77,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layout.minimumInteritemSpacing = 0
 
         let collectionView = ThemedCollectionView(frame: self.bounds, collectionViewLayout: layout)
+        collectionView.kind = .backgroundOLED
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
@@ -196,7 +197,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             removeConstraint(bottomBarConstraint)
         }
         if hidden {
-            bottomBarConstraint = self.vc.verticalLine(audioView).constraint
+            bottomBarConstraint = self.vc.verticalLine(audioView, by: -1).constraint
         } else {
             bottomBarConstraint = audioView.vc.bottom().constraint
         }

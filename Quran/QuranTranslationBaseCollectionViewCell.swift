@@ -38,7 +38,7 @@ class QuranTranslationBaseCollectionViewCell: BackgroundThemedCollectionViewCell
 
     override var backgroundColor: UIColor? {
         set {
-            super.backgroundColor = newValue ?? Theme.Kind.background.color
+            super.backgroundColor = newValue ?? Theme.Kind.backgroundOLED.color
             contentView.backgroundColor = super.backgroundColor
         }
         get {

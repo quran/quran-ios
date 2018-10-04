@@ -70,4 +70,11 @@ extension UIColor {
         case .light: return #colorLiteral(red: 0.08235294118, green: 0.3215686275, blue: 0.3411764706, alpha: 1)
         }
     }
+
+    static var backgroundOLED: UIColor {
+        switch Theme.current {
+        case .dark:  return UIColor.black
+        case .light: return #colorLiteral(red: 0.9521597028, green: 0.9521597028, blue: 0.9521597028, alpha: 1)
+        }
+    }
 }

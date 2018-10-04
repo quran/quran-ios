@@ -32,7 +32,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
         return renderer
     }()
 
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionView: ThemedCollectionView!
 
     private var highlights: [QuranHighlightType: Set<AyahNumber>] = [:] {
         didSet { dataSource.highlights = highlights }
@@ -63,6 +63,7 @@ class QuranTranslationCollectionPageCollectionViewCell: QuranBasePageCollectionV
             collectionView.contentInsetAdjustmentBehavior = .never
         }
 
+        collectionView.kind = .backgroundOLED
         collectionView.ds_register(cellClass: QuranTranslationSuraNameCollectionViewCell.self)
         collectionView.ds_register(cellClass: QuranTranslationVerseNumberCollectionViewCell.self)
         collectionView.ds_register(cellClass: QuranTranslationVerseSeparatorCollectionViewCell.self)

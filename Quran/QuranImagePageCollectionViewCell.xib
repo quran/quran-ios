@@ -99,6 +99,7 @@
             </constraints>
             <size key="customSize" width="442" height="474"/>
             <connections>
+                <outlet property="backgroundThemedView" destination="NtI-Di-d4F" id="CUK-Nz-IP5"/>
                 <outlet property="highlightingView" destination="qex-Ar-4zg" id="d28-rD-SMq"/>
                 <outlet property="imageBottomConstraint" destination="Gwz-DF-ucR" id="ADA-f5-zmU"/>
                 <outlet property="imageLeadingConstraint" destination="f1Q-cq-ag4" id="qMd-hd-nne"/>

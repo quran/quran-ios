@@ -197,7 +197,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             removeConstraint(bottomBarConstraint)
         }
         if hidden {
-            bottomBarConstraint = self.vc.verticalLine(audioView).constraint
+            bottomBarConstraint = self.vc.verticalLine(audioView, by: -1).constraint
         } else {
             bottomBarConstraint = audioView.vc.bottom().constraint
         }

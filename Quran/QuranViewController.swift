@@ -181,6 +181,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        kind = .backgroundOLED
         if #available(iOS 11.0, *) {
             navigationItem.largeTitleDisplayMode = .never
         }

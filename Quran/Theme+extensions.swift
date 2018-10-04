@@ -46,6 +46,7 @@ extension Theme {
         case labelExtremelyWeak
 
         // general
+        case backgroundOLED
         case background
         case separator
         case appTint
@@ -79,6 +80,7 @@ extension Theme {
             case .popover:          return Theme.current == .dark ? Theme.current.color(lightGray: 0.80) : .white
             case .popoverSeparator: return Theme.current.color(lightGray: 0.90)
 
+            case .backgroundOLED:    return .backgroundOLED
             case .background:        return Theme.current.color(lightGray: 0.94)
             case .separator:         return Theme.current.color(lightGray: 0.78)
             case .appTint:           return .buttonsTint

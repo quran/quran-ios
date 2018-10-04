@@ -77,6 +77,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         layout.minimumInteritemSpacing = 0
 
         let collectionView = ThemedCollectionView(frame: self.bounds, collectionViewLayout: layout)
+        collectionView.kind = .backgroundOLED
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }

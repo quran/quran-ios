@@ -1,11 +1,11 @@
 //
-//  FontSizeDataSource.swift
+//  QuranFoundation+Extensions.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 5/3/18.
+//  Created by Mohamed Afifi on 6/11/17.
 //
 //  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2018  Quran.com
+//  Copyright (C) 2017  Quran.com
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,12 +17,15 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import GenericDataSources
 
-class FontSizeDataSource<ItemType, CellType: ReusableCell>: BasicDataSource<ItemType, CellType> {
-    let fontSize: FontSize
-    init(fontSize: FontSize) {
-        self.fontSize = fontSize
-        super.init()
+import Foundation
+
+extension Quran {
+
+    static func range(forPage page: Int) -> VerseRange {
+        let lowerBound = startAyahForPage(page)
+        let finder = PageBasedLastAyahFinder()
+        let upperBound = finder.findLastAyah(startAyah: lowerBound, page: page)
+        return VerseRange(lowerBound: lowerBound, upperBound: upperBound)
     }
 }

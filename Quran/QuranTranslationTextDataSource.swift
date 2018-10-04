@@ -20,7 +20,12 @@
 
 import GenericDataSources
 
-class QuranTranslationTextDataSource: FontSizeDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
+class QuranTranslationTextDataSource: BasicDataSource<TranslationTextLayout, QuranTranslationTextCollectionViewCell> {
+    private let fontSize: FontSize
+    init(fontSize: FontSize) {
+        self.fontSize = fontSize
+        super.init()
+    }
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: QuranTranslationTextCollectionViewCell,

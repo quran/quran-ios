@@ -56,6 +56,8 @@ target 'QuranTests' do
     pod 'RxSwift', :inhibit_warnings => true
     pod 'RxCocoa'
     pod 'SQLite.swift'
+    pod 'Nimble'
+    pod 'Quick'
 end
 
 target 'QuranUITests' do

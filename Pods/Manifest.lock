@@ -12,6 +12,7 @@ PODS:
   - Moya/Core (11.0.2):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
+  - Nimble (7.3.1)
   - "NSDate+TimeAgo (1.0.6)"
   - Popover.OC (1.2)
   - PromiseKit (4.4.3):
@@ -25,6 +26,7 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (4.4.3):
     - PromiseKit/CorePromise
+  - Quick (1.3.2)
   - Result (3.2.4)
   - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
@@ -45,9 +47,11 @@ DEPENDENCIES:
   - KVOController
   - MenuItemKit
   - Moya
+  - Nimble
   - "NSDate+TimeAgo"
   - "Popover.OC (from `git@github.com:mohamede1945/Popover.git`)"
   - PromiseKit
+  - Quick
   - RxCocoa
   - RxSwift
   - SQLite.swift
@@ -66,8 +70,10 @@ SPEC REPOS:
     - KVOController
     - MenuItemKit
     - Moya
+    - Nimble
     - "NSDate+TimeAgo"
     - PromiseKit
+    - Quick
     - Result
     - RxCocoa
     - RxSwift
@@ -99,9 +105,11 @@ SPEC CHECKSUMS:
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MenuItemKit: 7d1d80040d1a5fd671ba836ad2e040a84a6528d7
   Moya: a725035953bc1c0eb1be505ab903984501d82440
+  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   "NSDate+TimeAgo": 35601c619b2d59290055e4fe76e61d97677a2360
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
   PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
+  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
@@ -111,6 +119,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 541da30b5537cc496aa7da04455a4944370b45e9
+PODFILE CHECKSUM: c17201d9fd3ab605f0cb3c38122443594dfd3606
 
 COCOAPODS: 1.5.3

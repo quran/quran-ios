@@ -203,7 +203,7 @@ pasti anda ingin menggunakan SD kad luaran?";
 "quran_hizb" = "Hizb";
 "quran_juz2" = "Juz\'";
 "quran_page" = "Halaman";
-"quran_sura" = "Surah-Surah";
+"quran_sura" = "Surah";
 "quran_ayah" = "Ayat %1$d";
 "quran_ayah_details" = "%1$@ - Ayat %2$@, Juz\' %3$@";
 "quran_sura_title" = "Surah %1$@";

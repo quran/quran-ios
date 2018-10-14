@@ -1,9 +1,9 @@
-"app_name" = "Al-Quran";
-"downloadPrompt_title" = "Muat Turun Fail yang Diperlukan?";
-"downloadPrompt" = "Supaya Al-Quran Android dapat berfungsi dengan baik,\
-kami perlu memuat turun beberapa fail. Jika anda tidak melakukannya sekarang, app ini\
-mungkin tidak berfungsi dengan baik dan memerlukan sambungan internet untuk meneruskan bacaan.\
-Adakah anda mahu memuat turun fail tersebut sekarang?\
+"app_name" = "Quran";
+"downloadPrompt_title" = "Download Required Files?";
+"downloadPrompt" = "In order for Quran Android to work properly,\
+we need to download some files. If you do not do this now, the app\
+may not work reliably and will require an Internet connection for reading.\
+Would you like to download the required files now?\
 ";
 "downloadTabletPrompt" = "We recently added improved images for\
 tablets. Would you like to download these images now?";
@@ -11,31 +11,31 @@ tablets. Would you like to download these images now?";
 for the Quran images you have on your device. Would you like to download this\
 patch now?\
 ";
-"downloadPrompt_ok" = "Ya";
-"downloadPrompt_no" = "Tidak";
-"downloading_title" = "Memuat turun…";
+"downloadPrompt_ok" = "Yes";
+"downloadPrompt_no" = "No";
+"downloading_title" = "Downloading…";
 "downloading_message" = "Please wait for the files to download (resume supported).";
-"extracting_title" = "Sedang memproses…";
-"menu_about" = "Tentang Kami";
-"menu_other_apps" = "Aplikasi - aplikasi yang lain";
-"menu_settings" = "Tetapan";
-"menu_jump_last_page" = "Halaman terakhir";
-"menu_bookmarks" = "Penanda";
-"menu_bookmarks_page" = "Penanda Halaman";
-"menu_bookmarks_ayah" = "Penanda Ayat";
-"menu_sort" = "Susunan";
-"menu_sort_date" = "Tarikh Ditambah";
-"menu_sort_location" = "Lokasi di dalam Al-Quran";
-"menu_sort_group_by_tags" = "Kumpul mengikut Tag";
-"menu_show_recents" = "Halaman terkini";
-"menu_translation" = "Tunjukkan Terjemahan";
-"menu_back_to_page" = "Tunjukkan Al-Quran";
-"menu_help" = "Bantuan";
-"menu_search" = "Carian";
-"menu_get_translations" = "Dapatkan Terjemahan";
-"menu_jump" = "Lompat";
-"gotoPage" = "Pergi ke halaman";
-"cancel" = "Batal";
+"extracting_title" = "Processing…";
+"menu_about" = "About Us";
+"menu_other_apps" = "Other apps";
+"menu_settings" = "Settings";
+"menu_jump_last_page" = "Last page";
+"menu_bookmarks" = "Bookmarks";
+"menu_bookmarks_page" = "Page Bookmarks";
+"menu_bookmarks_ayah" = "Ayah Bookmarks";
+"menu_sort" = "Sort";
+"menu_sort_date" = "Date Added";
+"menu_sort_location" = "Location in Quran";
+"menu_sort_group_by_tags" = "Group by Tags";
+"menu_show_recents" = "Recent pages";
+"menu_translation" = "Show Translation";
+"menu_back_to_page" = "Show Quran";
+"menu_help" = "Help";
+"menu_search" = "Search";
+"menu_get_translations" = "Get Translations";
+"menu_jump" = "Jump";
+"gotoPage" = "Go to page";
+"cancel" = "Cancel";
 "about_description" = "Quran for Android is a free Quran application. Please do not forget the contributors in your prayers.";
 "about_data_sources" = "Data Sources";
 "about_images" = "Images";
@@ -204,12 +204,12 @@ sure you want to use the external SD card?";
 "quran_nos" = "½";
 "quran_talt_arb3" = "¾";
 "quran_hizb" = "Hizb";
-"quran_juz2" = "Juz";
-"quran_page" = "Halaman";
-"quran_sura" = "Surah";
-"quran_ayah" = "Ayat %1$d";
+"quran_juz2" = "Juz\'";
+"quran_page" = "Page";
+"quran_sura" = "Surahs";
+"quran_ayah" = "Ayah %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
-"quran_sura_title" = "Surah %1$@";
+"quran_sura_title" = "Surat %1$@";
 "sura_ayah_notification_str" = "Sura %1$@, Ayah %2$d";
 "index_loading" = "Loading…";
 "canceling" = "Canceling…";

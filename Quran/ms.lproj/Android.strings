@@ -1,6 +1,6 @@
-"app_name" = "Al-Quran";
+"app_name" = "Quran";
 "downloadPrompt_title" = "Muat Turun Fail yang Diperlukan?";
-"downloadPrompt" = "Supaya Al-Quran Android dapat berfungsi dengan baik,\
+"downloadPrompt" = "Supaya Quran Android dapat berfungsi dengan baik,\
 kami perlu memuat turun beberapa fail. Jika anda tidak melakukannya sekarang, app ini\
 mungkin tidak berfungsi dengan baik dan memerlukan sambungan internet untuk meneruskan bacaan.\
 Adakah anda mahu memuat turun fail tersebut sekarang?\
@@ -8,7 +8,7 @@ Adakah anda mahu memuat turun fail tersebut sekarang?\
 "downloadTabletPrompt" = "Kami baru sahaja menambah baik imej untuk\
 tablet. Adakah anda ingin memuat-turunnya sekarang?";
 "downloadImportantPrompt" = "Ada kemaskini kecil yang penting\
-untuk imej Al-Quran di peranti anda. Adakah anda ingin memuat-turunnya sekarang?";
+untuk imej Quran di peranti anda. Adakah anda ingin memuat-turunnya sekarang?";
 "downloadPrompt_ok" = "Ya";
 "downloadPrompt_no" = "Tidak";
 "downloading_title" = "Memuat Turun…";
@@ -23,11 +23,11 @@ untuk imej Al-Quran di peranti anda. Adakah anda ingin memuat-turunnya sekarang?
 "menu_bookmarks_ayah" = "Penanda Ayat";
 "menu_sort" = "Susun";
 "menu_sort_date" = "Tarikh Ditambah";
-"menu_sort_location" = "Lokasi di Al-Quran";
+"menu_sort_location" = "Lokasi di Quran";
 "menu_sort_group_by_tags" = "Kumpulkan mengikut Tags";
 "menu_show_recents" = "Halaman terbaharu";
 "menu_translation" = "Papar Terjemahan";
-"menu_back_to_page" = "Papar Al-Quran";
+"menu_back_to_page" = "Papar Quran";
 "menu_help" = "Bantuan";
 "menu_search" = "Carian";
 "menu_get_translations" = "Dapatkan Terjemahan";
@@ -69,12 +69,12 @@ untuk imej Al-Quran di peranti anda. Adakah anda ingin memuat-turunnya sekarang?
 "about_sliding_panel_url" = "https://github.com/umano/AndroidSlidingUpPanel";
 "about_others" = "Others";
 "about_contributors" = "Penyumbang";
-"about_contributors_summary" = "Senarai penyumbang-penyumbang yang membantu didalam pembangunan Al-Quran untuk Android";
+"about_contributors_summary" = "Senarai penyumbang-penyumbang yang membantu didalam pembangunan Quran untuk Android";
 "about_contributors_url" = "https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md";
 "help_title" = "Soalan Yang Kerap Ditanya";
 "help" = "\
 <b>Bagaimana saya memainkan audio?</b>\
-<br/>Buka mana-mana halaman Al-Quran. Ketik sekali pada skrin. Di bawah skrin, anda akan melihat\
+<br/>Buka mana-mana halaman Quran. Ketik sekali pada skrin. Di bawah skrin, anda akan melihat\
 satu butang 'main' dan sedikit ayat yang mengandungi nama qari. Klik pada nama qari tersebut untuk\
 memilih qari yang lain. Klik 'main' untuk memuat turun dan memainkan halaman semasa atau surah.\
 <br/>\
@@ -88,7 +88,7 @@ anda ke skrin untuk memuat-turun terjemahan. Pilih dan memuat-turun terjemahan,\
 kemudian kembali dan ketik ikon 'globe' sekali lagi untuk melihat terjemahannya.\
 <br/>\
 <br/><b>Bagaimana saya menandakan halaman?</b>\
-<br/>Buka mana-mana halaman Al-Quran. Ketik sekali pada skrin. Di bahagian kanan-atas, anda akan melihat\
+<br/>Buka mana-mana halaman Quran. Ketik sekali pada skrin. Di bahagian kanan-atas, anda akan melihat\
 ikon penanda buku. Ketik ikon penanda buku untuk menandakan halaman(warna akan bertukar putih). Ketik pada ikon penanda buku\
 sekali lagi untuk memadam penanda buku.\
 <br/>\
@@ -104,12 +104,12 @@ atau mendengar terjemahannya.<br/>\
 <br/>Malangnya, versi Android sebelum 4.0 tidak menyokong fon ini, dan hanya\
 sedikit yang kami boleh lakukan untuk membantu anda.\
 ";
-"search_hint" = "Cari Al-Quran";
-"quranSearchType" = "Ayat-ayat Al-Quran";
-"storage_permission_rationale" = "Al-Quran mahukan kebenaran anda untuk menyimpan data pada\
-simpanan luaran. Al-Quran masih akan berfungsi tanpa kebenaran ini, tapi jika anda mengosongkan data atau\
+"search_hint" = "Cari Quran";
+"quranSearchType" = "Ayat-ayat Quran";
+"storage_permission_rationale" = "Quran mahukan kebenaran anda untuk menyimpan data pada\
+simpanan luaran. Quran masih akan berfungsi tanpa kebenaran ini, tapi jika anda mengosongkan data atau\
 memadam aplikasi ini, semua halaman, audio dan data yang dimuat-turun akan dipadam. Berikan\
-kebenaran untuk Al-Quran?";
+kebenaran untuk Quran?";
 "storage_permission_please_restart" = "Sila mulakan semula aplikasi ini untuk memberikan kebenaran";
 "found_in_sura" = "Jumpa di surah %1$@, ayat %2$d";
 "no_results" = "Tiada hasil dijumpai untuk \"%@\"";

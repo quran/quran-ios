@@ -13,9 +13,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>1 sura downloaded</string>
+                <string>1 surah dimuat turun</string>
                 <key>other</key>
-                <string>%1$d suras downloaded</string>
+                <string>%1$d surah dimuat turun</string>
             </dict>
         </dict>
         <key>search_results</key>
@@ -29,9 +29,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>One result for \&quot;%1$d\&quot;:</string>
+                <string>Satu hasil carian untuk \&quot;%1$d\&quot;:</string>
                 <key>other</key>
-                <string>%2$d results for \&quot;%1$d\&quot;:</string>
+                <string>%2$d hasil carian untuk \&quot;%1$d\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>
@@ -45,9 +45,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>One verse</string>
+                <string>Satu ayat</string>
                 <key>other</key>
-                <string>%d verses</string>
+                <string>%d ayat-ayat</string>
             </dict>
         </dict>
         <key>bookmark_tag_deleted</key>
@@ -61,9 +61,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Deleted one item</string>
+                <string>Satu item dipadam</string>
                 <key>other</key>
-                <string>Deleted %d items</string>
+                <string>%d item dipadam</string>
             </dict>
         </dict>
         <key>plural_recent_pages</key>
@@ -77,9 +77,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Last page</string>
+                <string>Halaman terakhir</string>
                 <key>other</key>
-                <string>Recent pages</string>
+                <string>Halaman terkini</string>
             </dict>
         </dict>
     </dict>

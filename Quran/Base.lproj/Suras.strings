@@ -1,6 +1,6 @@
 "sura_names[0]" = "Al-Fatihah";
 "sura_names[1]" = "Al-Baqarah";
-"sura_names[2]" = "Al-Imran";
+"sura_names[2]" = "Aal-E-Imran";
 "sura_names[3]" = "An-Nisa'";
 "sura_names[4]" = "Al-Ma'idah";
 "sura_names[5]" = "Al-An'am";
@@ -15,7 +15,7 @@
 "sura_names[14]" = "Al-Hijr";
 "sura_names[15]" = "An-Nahl";
 "sura_names[16]" = "Al-Isra'";
-"sura_names[17]" = "Al-Kahfi";
+"sura_names[17]" = "Al-Kahf";
 "sura_names[18]" = "Maryam";
 "sura_names[19]" = "Ta-Ha";
 "sura_names[20]" = "Al-Anbiya'";
@@ -103,7 +103,7 @@
 "sura_names[102]" = "Al-Asr";
 "sura_names[103]" = "Al-Humazah";
 "sura_names[104]" = "Al-Fil";
-"sura_names[105]" = "Quraish";
+"sura_names[105]" = "Quraysh";
 "sura_names[106]" = "Al-Ma'un";
 "sura_names[107]" = "Al-Kawthar";
 "sura_names[108]" = "Al-Kafirun";

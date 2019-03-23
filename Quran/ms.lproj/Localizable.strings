@@ -1,0 +1,50 @@
+/*
+ New Localizations in Quran for iOS
+ */
+
+"NetworkError_ConnectionLost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
+"NetworkError_InternationalRoamingOff" = "Perayauan antarabangsa tidak dibenarkan. Ubah tetapan perayauan atau hidupkan Wi-Fi anda.";
+"NetworkError_NotConnectedToInternet" = "Tiada sambungan internet. Hidupkan Wi-Fi atau hidupkan sambungan data selular.";
+"NetworkError_ServerNotReachable" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"unknown_error_message" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"NetworkError_Parsing" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+
+"FileSystemError_Unknown" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"FileSystemError_NoDiskSpace" = "Ruang storan tidak mencukupi untuk memuat turun.";
+
+
+"translatorLabel: " = "Penterjemah: ";
+"upgradeTranslationButtonTitle" = "KEMASKINI";
+
+"translationsSelectionTitle" = "Pilih Terjemahan/Tafsir";
+"translationsSelectionPrompt" = "Pilih mengikut susunan yang mahu dilihat";
+
+"errorInTranslationText" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
+"noAvailableTranslationText" = "Tiada terjemahan untuk Ayat ini.";
+
+"searchRecentsTitle" = "Carian terbaharu";
+"searchPopularTitle" = "Cuba cari";
+
+"translationTextType" = "Terjemahan";
+"transliterationTextType" = "Transliterasi";
+
+"write_review" = "Tinggalkan ulasan di App Store...";
+"contact_us" = "Hubungi Kami";
+"share_app" = "Kongi aplikasi ini...";
+
+"menu.arabic" = "Arab";
+"menu.translation" = "Terjemahan";
+"menu.select_translation" = "Pilih terjemahan/tafsir";
+"menu.pointer" = "Penuding terjemahan perkataan";
+"menu.fontSizeLetter" = "A";
+
+"verseCopy" = "Salin";
+"verseShare" = "Kongsi...";
+"shareMarketingSuffix" = "-\nQuran - oleh Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+
+"repetitionExperimentalSuffix" = "   (Eksperimentasi)";
+
+"update.dark-theme.title" = "Tema Gelap";
+"update.dark-theme.desc" = "Kami baru menambahkan tema gelap ke aplikasi ini. Anda ingin menghidupkannya?";
+
+"update.dark-theme.turnOn" = "Hidupkan";

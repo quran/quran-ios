@@ -23,7 +23,7 @@ import PromiseKit
 struct SurasDataRetriever: Interactor {
 
     func execute(_ input: Void) -> Promise<[(Juz, [Sura])]> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
             let juzs = Juz.getJuzs()
             let suras = Sura.getSuras()
 

@@ -55,3 +55,17 @@ extension Sequence where Iterator.Element: Hashable {
         return buffer
     }
 }
+
+extension Collection {
+    public func parallelMap<T>(_ transform: (Element) -> T) -> [T] {
+        var result = Array<T?>(repeating: nil, count: count)
+
+        result.withUnsafeMutableBufferPointer { pointer in
+            DispatchQueue.concurrentPerform(iterations: count) { i in
+                pointer[i] = transform(self[index(startIndex, offsetBy: i)])
+            }
+        }
+
+        return result.map { $0! } // swiftlint:disable:this force_unwrapping
+    }
+}

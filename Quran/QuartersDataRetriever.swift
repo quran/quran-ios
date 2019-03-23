@@ -23,7 +23,7 @@ import PromiseKit
 struct QuartersDataRetriever: Interactor {
 
     func execute(_ input: Void) -> Promise<[(Juz, [Quarter])]> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
             guard let ayahsText = NSArray(contentsOf: Files.quarterPrefixArray) as? [String] else {
                 fatalError("Couldn't load `\(Files.quarterPrefixArray)` file")
             }

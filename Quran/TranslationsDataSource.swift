@@ -102,7 +102,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         deletionInteractor
             .execute(item)
-            .then(on: .main) { newItem -> Void in
+            .done(on: .main) { newItem -> Void in
 
                 let newGlobalIndexPath = self.move(item: item,
                                                    atLocalPath: localIndexPath,
@@ -172,7 +172,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
         // download the translation
         let destinationPath = Files.translationsPathComponent.stringByAppendingPath(item.translation.rawFileName)
         let download = DownloadRequest(url: item.translation.fileURL, resumePath: destinationPath.resumePath, destinationPath: destinationPath)
-        self.downloader.download(DownloadBatchRequest(requests: [download])).then(on: .main) { response -> Void in
+        self.downloader.download(DownloadBatchRequest(requests: [download])).done(on: .main) { response -> Void in
             // update the item to be downloading
             let newItem = TranslationFull(translation: item.translation, response: response)
             var newItems = ds.items
@@ -224,7 +224,7 @@ extension TranslationsDataSource: DownloadingObserverDelegate {
 
         versionUpdater
             .execute([translation.translation])
-            .then(on: .main) { newItems -> Void in
+            .done(on: .main) { newItems -> Void in
 
                 guard let (ds, localIndexPath) = self.indexPathFor(translation: translation) else {
                     CLog("Cannot complete download for translation \(translation.translation.displayName)")

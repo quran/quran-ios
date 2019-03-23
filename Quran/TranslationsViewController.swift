@@ -99,11 +99,11 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     @objc
     private func refreshData() {
         interactor.get()
-            .then(on: .main) { [weak self] translations -> Void in
+            .done(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
-            .always(on: .main) { [weak self] in
+            .finally(on: .main) { [weak self] in
                 self?.refreshControl?.endRefreshing()
                 self?.hideActivityIndicator()
             }
@@ -111,12 +111,13 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     private func loadLocalData(completion: @escaping () -> Void = { }) {
         localTranslationsInteractor.get()
-            .then(on: .main) { [weak self] translations -> Void in
+            .done(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
-            } .always {
-                completion()
             }.catchToAlertView(viewController: self)
+            .finally {
+                completion()
+            }
     }
 
     func hasItemsToEdit() -> Bool {

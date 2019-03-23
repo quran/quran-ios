@@ -20,6 +20,8 @@
 
 import PromiseKit
 
+// TODO: REVIEW ME
+
 extension Promise {
 
     public func cauterize(tag: StaticString?) {
@@ -38,112 +40,53 @@ extension Promise {
         return cauterize(tag: function)
     }
 
+    @available(*, deprecated, message: "Use cauterize instead or handle the error")
     public func suppress() {
         return cauterize(tag: "Suppress")
     }
 }
 
 extension URLSession {
-    public func getTasks() -> Promise<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
-        return PromiseKit.wrap { getTasksWithCompletionHandler($0) }
+    public func getTasks() -> Guarantee<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
+        return Guarantee { getTasksWithCompletionHandler($0) }
     }
 }
 
 extension OperationQueue {
 
-    public func promise<T>(execute body: @escaping () throws -> T) -> Promise<T> {
-        return Promise(resolvers: { (fulfill, reject) in
+    public func async<T>(_ namespace: PMKNamespacer, execute body: @escaping () throws -> T) -> Promise<T> {
+        return Promise(resolver: { resolver in
             addOperation {
                 do {
-                    fulfill(try body())
+                    resolver.fulfill(try body())
                 } catch {
-                    reject(error)
+                    resolver.reject(error)
                 }
             }
         })
     }
 
-    public func promise2<T>(execute body: @escaping () throws -> T) -> Promise<T> {
-
-        // if the same operation queue, then execute it immediately
-        if self == OperationQueue.current {
-            do {
-                return Promise(value: try body())
-            } catch {
-                return Promise(error: error)
-            }
+    public func async<T>(_ namespace: PMKNamespacer, execute body: @escaping () -> T) -> Guarantee<T> {
+        return Guarantee { resolver in
+            addOperation { resolver(body()) }
         }
-
-        return Promise(resolvers: { (fulfill, reject) in
-            addOperation {
-                do {
-                    fulfill(try body())
-                } catch {
-                    reject(error)
-                }
-            }
-        })
-    }
-}
-
-extension DispatchQueue {
-    public final func promise2<T>(execute body: @escaping () throws -> T) -> Promise<T> {
-        return Promise(resolvers: { (fulfill, reject) in
-            if self === zalgo || self === waldo && !Thread.isMainThread {
-                fulfill(try body())
-            } else {
-                async {
-                    do {
-                        fulfill(try body())
-                    } catch {
-                        reject(error)
-                    }
-                }
-            }
-        })
     }
 }
 
 extension DispatchGroup {
-    public final func notify(on q: DispatchQueue = .default) -> Promise<Void> {
-        return Promise(resolvers: { (fulfill, _) in
-            self.notify(queue: q) { fulfill(()) }
-        })
+    public final func notify(on q: DispatchQueue = .global()) -> Guarantee<Void> {
+        return Guarantee { resolve in
+            self.notify(queue: q) { resolve(()) }
+        }
     }
 }
 
-extension Promise where T: Sequence {
-    public func parallelMap<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
-        return then(on: zalgo) { sequence -> Promise<[U]> in
-
-            var promises: [Promise<U>] = []
-            for item in sequence {
-                promises.append(q.promise2 {
-                    try body(item)
-                })
+extension Guarantee where T: Collection {
+    public func parallelMap<U>(on q: DispatchQueue = .global(), execute body: @escaping (T.Iterator.Element) -> U) -> Guarantee<[U]> {
+        return then(on: q) { collection in
+            Guarantee<[U]> { resolver in
+                resolver(collection.parallelMap(body))
             }
-            return when(fulfilled: promises)
-        }
-    }
-
-    public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
-        return then(on: q) { sequence -> [U] in
-            var array: [U] = []
-            for item in sequence {
-                array.append(try body(item))
-            }
-            return array
-        }
-    }
-
-    public func map<U>(on q: DispatchQueue = .default, execute body: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
-        return then(on: q) { sequence -> Promise<[U]> in
-            var array: [Promise<U>] = []
-            for item in sequence {
-                array.append(try body(item))
-            }
-            return when(fulfilled: array)
-
         }
     }
 }
@@ -157,13 +100,36 @@ extension Optional: OptionalConvertible {
     public func asOptional() -> Wrapped? { return self }
 }
 
-extension Promise where T: OptionalConvertible {
-    public func `do`(on q: DispatchQueue = .default, execute body: @escaping (T.Wrapped) throws -> Void) -> Promise<T> {
-        return then(on: q) { value -> T in
+extension Guarantee where T: OptionalConvertible {
+    public func `do`(on q: DispatchQueue = .global(), execute body: @escaping (T.Wrapped) -> Void) -> Promise<T> {
+        return map(on: q) { value -> T in
             if let wrapped = value.asOptional() {
-                try body(wrapped)
+                body(wrapped)
             }
             return value
         }
     }
 }
+
+extension Guarantee {
+    @available(*, deprecated, message: "It should not be needed")
+    public func asPromise() -> Promise<T> {
+        return Promise(self)
+    }
+}
+// swiftlint:disable force_unwrapping
+/// Wait for all guaratnees in a set to fulfill.
+public func when<U, V>(_ pu: Guarantee<U>, _ pv: Guarantee<V>) -> Guarantee<(U, V)> {
+    return when(pu.asVoid(), pv.asVoid()).map(on: nil) { (pu.value!, pv.value!) }
+}
+
+/// Wait for all guaratnees in a set to fulfill.
+public func when<U, V, W>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>) -> Guarantee<(U, V, W)> {
+    return when(pu.asVoid(), pv.asVoid(), pw.asVoid()).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
+}
+
+/// Wait for all guaratnees in a set to fulfill.
+public func when<U, V, W, X>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>, _ px: Guarantee<X>) -> Promise<(U, V, W, X)> {
+    return when(pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
+}
+// swiftlint:enable force_unwrapping

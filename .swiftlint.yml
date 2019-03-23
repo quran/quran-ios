@@ -13,6 +13,7 @@ excluded:
 disabled_rules:
   - cyclomatic_complexity
   - colon
+  - syntactic_sugar
 
 opt_in_rules:
   - array_init

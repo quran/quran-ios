@@ -21,29 +21,23 @@
 import Foundation
 import PromiseKit
 
+// TODO: should use a promise instead
 open class AbstractPreloadingOperation<T>: Operation, PreloadingOperationRepresentable {
 
     open var operation: Operation {
         return self
     }
 
-    private let pending = Promise<T>.pending()
+    private let pending = Guarantee<T>.pending()
 
-    open var promise: Promise<T> {
-        return pending.promise
-    }
-
-    open func reject(_ error: Error) {
-        guard !promise.isResolved else {
-            return
-        }
-        pending.reject(error)
+    open var guarantee: Guarantee<T> {
+        return pending.guarantee
     }
 
     open func fulfill(_ value: T) {
-        guard !promise.isResolved else {
+        guard !guarantee.isResolved else {
             return
         }
-        pending.fulfill(value)
+        pending.resolve(value)
     }
 }

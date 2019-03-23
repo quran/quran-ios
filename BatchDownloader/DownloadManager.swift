@@ -25,7 +25,7 @@ public protocol DownloadManager: class {
 
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
 
-    func getOnGoingDownloads() -> Promise<[DownloadBatchResponse]>
+    func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]>
 
     func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse>
 }

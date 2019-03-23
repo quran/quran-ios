@@ -49,9 +49,9 @@ class BaseBookmarkDataSource<ItemType: Bookmark, CellType: ReusableCell>: Editab
             Analytics.shared.unbookmark(ayah: ayah.ayah)
         }
 
-        DispatchQueue.default.promise2 {
+        DispatchQueue.global().async(.promise) {
             try self.persistence.remove(item)
-        }.then(on: .main) { () -> Void in
+        }.done(on: .main) {
             guard indexPath.item < self.items.count else {
                 return
             }

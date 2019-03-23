@@ -57,7 +57,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
 
-        dataRetriever.get().then(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
+        dataRetriever.get().done(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
             self?.setSections(data)
             self?.tableView.reloadData()
         }.suppress()

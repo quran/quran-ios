@@ -33,17 +33,15 @@ class QariListToQariAudioDownloadRetriever: Interactor {
     }
 
     func execute(_ qaris: [Qari]) -> Promise<[QariAudioDownload]> {
-        let suras = DispatchQueue.default.promise2 {
+        let suras = DispatchQueue.global().async(.promise) {
             Set(Sura.getSuras().map { $0.suraNumber })
         }
-        let fileLists = DispatchQueue.default.promise2 {
+        let fileLists = DispatchQueue.global().async(.promise) {
             self.createFileLists(for: qaris)
         }
-        let qarisAndSuras = when(fulfilled: Promise(value: qaris), suras, fileLists)
-            .then { qaris, suras, fileLists in
-                qaris.map { ($0, suras, fileLists) }
-            }
-        return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:))
+        let qarisAndSuras = when(suras, fileLists)
+            .map { suras, fileLists in qaris.map { q in (q, suras, fileLists) } }
+        return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:)).asPromise()
     }
 
     private func createFileLists(for qaris: [Qari]) -> AudioFileLists {

@@ -53,7 +53,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
             return
         }
 
-        Queue.background.async {
+        DispatchQueue.global().async {
             do {
                 try Zip.unzipFile(zipFile, destination: qari.localFolder(), overwrite: true, password: nil, progress: nil)
             } catch {
@@ -62,7 +62,7 @@ class GaplessAudioPlayerInteractor: DefaultAudioPlayerInteractor {
                 try? FileManager.default.removeItem(at: zipFile)
             }
 
-            Queue.main.async {
+            DispatchQueue.main.async {
                 completion()
             }
         }

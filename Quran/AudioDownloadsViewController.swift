@@ -95,11 +95,11 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
         // get new data
         retriever.get()
-            .then(on: .main) { [weak self] audios -> Void in
+            .done(on: .main) { [weak self] audios -> Void in
                 self?.dataSource.items = audios.sorted { $0.audio.downloadedSizeInBytes > $1.audio.downloadedSizeInBytes }
                 self?.tableView.reloadData()
             }.catchToAlertView(viewController: self)
-            .always(on: .main) {
+            .finally(on: .main) {
                 self.hideActivityIndicator()
             }
     }

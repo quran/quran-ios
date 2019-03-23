@@ -51,36 +51,30 @@ open class OperationCacheableService<Input: Hashable, Output>: CacheableService 
         }
     }
 
-    open func get(_ input: Input) -> Promise<Output> {
-        return lock.synchronized { () -> Promise<Output> in
+    open func get(_ input: Input) -> Guarantee<Output> {
+        return lock.synchronized { () -> Guarantee<Output> in
 
             if let result = cache.object(forKey: input) {
-//                print("already cached: \(input)")
-                return Promise(value: result)
+                return Guarantee.value(result)
             } else  if let operation = inProgressOperations[input] {
-//                print("queuing: \(input)")
-                return operation.promise
+                return operation.guarantee
             } else {
-//                print("requesting: \(input)")
-
                 // create the operation
                 let operation = operationCreator.create(input)
                 // add it to the in progress
                 inProgressOperations[input] = operation
 
                 // cache the result
-                let promise = operation.promise
-                    .then { result -> Output in
-                        self.lock.synchronized {
-                            self.cache.setObject(result, forKey: input)
-                            // remove from in progress
-                            self.inProgressOperations.removeValue(forKey: input)
-                        }
-//                        print("retrieved: \(input)")
-                        return result
+                let guarantee = operation.guarantee.map { result -> Output in
+                    self.lock.synchronized {
+                        self.cache.setObject(result, forKey: input)
+                        // remove from in progress
+                        self.inProgressOperations.removeValue(forKey: input)
                     }
+                    return result
+                }
                 queue.addOperation(operation.operation)
-                return promise
+                return guarantee
             }
         }
     }

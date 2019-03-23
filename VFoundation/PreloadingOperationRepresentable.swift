@@ -25,13 +25,13 @@ public protocol PreloadingOperationRepresentable {
     associatedtype Output
 
     var operation: Operation { get }
-    var promise: Promise<Output> { get }
+    var guarantee: Guarantee<Output> { get }
 }
 
 private class _AnyPreloadingOperationRepresentableBoxBase<Output>: PreloadingOperationRepresentable {
 
     var operation: Operation { expectedToBeSubclassed() }
-    var promise: Promise<Output> { expectedToBeSubclassed() }
+    var guarantee: Guarantee<Output> { expectedToBeSubclassed() }
 }
 
 private class _AnyPreloadingOperationRepresentableBox<O: PreloadingOperationRepresentable>:
@@ -43,7 +43,7 @@ private class _AnyPreloadingOperationRepresentableBox<O: PreloadingOperationRepr
     }
 
     override var operation: Operation { return ds.operation }
-    override var promise: Promise<O.Output> { return ds.promise }
+    override var guarantee: Guarantee<O.Output> { return ds.guarantee }
 }
 
 public final class AnyPreloadingOperationRepresentable<Output>: PreloadingOperationRepresentable {
@@ -55,7 +55,7 @@ public final class AnyPreloadingOperationRepresentable<Output>: PreloadingOperat
     }
 
     public var operation: Operation { return box.operation }
-    public var promise: Promise<Output> { return box.promise }
+    public var guarantee: Guarantee<Output> { return box.guarantee }
 }
 
 extension PreloadingOperationRepresentable {

@@ -15,16 +15,14 @@ PODS:
   - Nimble (7.3.1)
   - "NSDate+TimeAgo (1.0.6)"
   - Popover.OC (1.2)
-  - PromiseKit (4.4.3):
-    - PromiseKit/Foundation (= 4.4.3)
-    - PromiseKit/QuartzCore (= 4.4.3)
-    - PromiseKit/UIKit (= 4.4.3)
-  - PromiseKit/CorePromise (4.4.3)
-  - PromiseKit/Foundation (4.4.3):
+  - PromiseKit (6.5.1):
+    - PromiseKit/CorePromise (= 6.5.1)
+    - PromiseKit/Foundation (= 6.5.1)
+    - PromiseKit/UIKit (= 6.5.1)
+  - PromiseKit/CorePromise (6.5.1)
+  - PromiseKit/Foundation (6.5.1):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.4.3):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.4.3):
+  - PromiseKit/UIKit (6.5.1):
     - PromiseKit/CorePromise
   - Quick (1.3.2)
   - Result (3.2.4)
@@ -108,7 +106,7 @@ SPEC CHECKSUMS:
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   "NSDate+TimeAgo": 35601c619b2d59290055e4fe76e61d97677a2360
   Popover.OC: e9e1d168b3ecf26d597a1fc47dd6c40359d8fb6d
-  PromiseKit: fbb52a0d154402c57eeb6eccd36dd7724fcf6117
+  PromiseKit: 162f56c89aae9989ffc14476a5f821af17c3f4ba
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635

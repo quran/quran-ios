@@ -75,7 +75,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         Analytics.shared.deletingQuran(qari: item.audio.qari)
         deletionInteractor
             .execute(item.audio.qari)
-            .then(on: .main) { () -> Void in
+            .done(on: .main) { () -> Void in
 
                 let newDownload = QariAudioDownload(qari: item.audio.qari, downloadedSizeInBytes: 0, downloadedSuraCount: 0)
                 let newItem = DownloadableQariAudio(audio: newDownload, response: nil)
@@ -126,7 +126,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         // download the audio
         ayahsDownloader
             .execute(AyahsAudioDownloadRequest(range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah), qari: item.audio.qari))
-            .then { response -> Void in
+            .done { response -> Void in
 
                 guard !self.cancelled.value else {
                     response.cancel()
@@ -217,7 +217,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
 
     private func reload(item: DownloadableQariAudio, response: DownloadBatchResponse?) {
         qariAudioDownloadRetriever.execute([item.audio.qari])
-            .then(on: .main) { audios -> Void in
+            .done(on: .main) { audios -> Void in
                 guard let audio = audios.first else {
                     return
                 }

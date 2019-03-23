@@ -33,8 +33,8 @@ class LocalTranslationsRetrievalInteractor: Interactor {
     }
 
     func execute(_ input: Void) -> Promise<[TranslationFull]> {
-        return DispatchQueue.default
-            .promise2(execute: persistence.retrieveAll)
-            .then(execute: versionUpdater.execute)
+        return DispatchQueue.global()
+            .async(.promise, execute: persistence.retrieveAll)
+            .then(versionUpdater.execute)
     }
 }

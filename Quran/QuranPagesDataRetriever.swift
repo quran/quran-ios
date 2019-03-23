@@ -23,7 +23,7 @@ import PromiseKit
 struct QuranPagesDataRetriever: Interactor {
 
     func execute(_ input: Void) -> Promise<[QuranPage]> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
 
             var pages: [QuranPage] = []
 

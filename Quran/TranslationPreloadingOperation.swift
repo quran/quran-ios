@@ -56,10 +56,10 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
         // get the arabic text
         // get the translations text
         // merge them
-        when(fulfilled: Promise(value: ayahs), translationsPromise(ayahs: ayahs), arabicPromise(ayahs: ayahs))
-            .then(execute: self.merge(ayahs:translations:arabic:))
-            .then(execute: self.fulfill)
-            .catch(execute: self.reject)
+        when(fulfilled: Promise.value(ayahs), translationsPromise(ayahs: ayahs), arabicPromise(ayahs: ayahs))
+            .map(self.merge(ayahs:translations:arabic:))
+            .done(self.fulfill)
+            .cauterize(tag: "TranslationPreloadingOperation error")
     }
 
     private func merge(ayahs: [AyahNumber], translations: [(Translation, [AyahText])], arabic: [AyahText]) -> TranslationPage {
@@ -86,8 +86,8 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     private func translationsPromise(ayahs: [AyahNumber]) -> Promise<[(Translation, [AyahText])]> {
         return localTranslationInteractor
             .get()
-            .then(execute: selectedTranslations(allTranslations:))
-            .then { self.retrieveAllTranslations(ayahs: ayahs, translations: $0) }
+            .map(selectedTranslations(allTranslations:))
+            .map { self.retrieveAllTranslations(ayahs: ayahs, translations: $0) }
     }
 
     private func selectedTranslations(allTranslations: [TranslationFull]) -> [Translation] {
@@ -97,7 +97,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     }
 
     private func arabicPromise(ayahs: [AyahNumber]) -> Promise<[AyahText]> {
-        return Promise(value: ayahs).then(execute: retrieveArabicText(ayahs:))
+        return Promise.value(ayahs).map(retrieveArabicText(ayahs:))
     }
 
     private func retrieveArabicText(ayahs: [AyahNumber]) throws -> [AyahText] {

@@ -3,6 +3,8 @@
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/7/18.
+//
+//  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2018  Quran.com
 //
 //  This program is free software: you can redistribute it and/or modify

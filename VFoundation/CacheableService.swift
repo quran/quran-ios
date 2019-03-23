@@ -26,6 +26,6 @@ public protocol CacheableService {
     associatedtype Output
 
     func invalidate()
-    func get(_ input: Input) -> Promise<Output>
+    func get(_ input: Input) -> Guarantee<Output>
     func getCached(_ input: Input) -> Output?
 }

@@ -42,20 +42,20 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
     func populateRunningTasks(from session: URLSession) {
         session.getTasks()
             .then { (_, _, downloadTasks) in
-                self.queue.promise {
+                self.queue.async(.promise) {
                     try self.unsafeHandler.setRunningTasks(downloadTasks)
                 }
             }.cauterize()
     }
 
     func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
-        return queue.promise {
+        return queue.async(.promise) {
             try self.unsafeHandler.download(batch)
         }
     }
 
-    func getOnGoingDownloads() -> Promise<[DownloadBatchResponse]> {
-        return queue.promise {
+    func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]> {
+        return queue.async(.promise) {
             self.unsafeHandler.getOnGoingDownloads()
         }
     }
@@ -85,7 +85,7 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
     }
 
     func cancel(batch: DownloadBatchResponse) {
-        queue.promise {
+        queue.async(.promise) {
             try self.unsafeHandler.cancel(batch: batch)
         }.cauterize()
     }

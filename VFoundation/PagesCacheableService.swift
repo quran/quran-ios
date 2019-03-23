@@ -50,7 +50,7 @@ open class PagesCacheableService<Output>: CacheableService {
         service.invalidate()
     }
 
-    open func get(_ page: Int) -> Promise<Output> {
+    open func get(_ page: Int) -> Guarantee<Output> {
         defer {
             // schedule for closer pages
             cachePagesCloserToPage(page)
@@ -67,7 +67,7 @@ open class PagesCacheableService<Output>: CacheableService {
     private func cachePagesCloserToPage(_ page: Int) {
         func cacheCloser(_ page: Int) {
             if range.contains(page) {
-                preload(page).suppress()
+                _ = preload(page)
             }
         }
 
@@ -82,7 +82,7 @@ open class PagesCacheableService<Output>: CacheableService {
         }
     }
 
-    private func preload(_ page: Int) -> Promise<Output> {
+    private func preload(_ page: Int) -> Guarantee<Output> {
         guard range.contains(page) else {
             fatalError("page '\(page)' is out of the range \(range)")
         }

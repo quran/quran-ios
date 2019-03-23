@@ -44,8 +44,11 @@ extension DefaultAudioPlayerInteractor {
 
     func isAudioDownloading() -> Promise<Bool> {
         return downloader.getCurrentDownloadResponse()
-            .do { self.gotDownloadResponse($0, playbackInfo: nil) }
-            .then { $0 != nil }
+            .get { response in
+                if let response = response {
+                    self.gotDownloadResponse(response, playbackInfo: nil)
+                }
+            }.map { $0 != nil }
     }
 
     func playAudioForQari(_ qari: Qari, range: VerseRange) {
@@ -55,7 +58,7 @@ extension DefaultAudioPlayerInteractor {
             delegate?.willStartDownloading()
             downloader
                 .download(qari: qari, range: range)
-                .then(on: .main) { response -> Void in
+                .done(on: .main) { response -> Void in
                     guard let response = response else {
                         return
                     }
@@ -132,7 +135,7 @@ extension DefaultAudioPlayerInteractor {
 
         delegate?.didStartDownloadingAudioFiles(progress: response.progress)
         response.promise
-            .then { [weak self] () -> Void in
+            .done { [weak self] () -> Void in
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {

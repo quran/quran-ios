@@ -105,7 +105,7 @@ class DownloadBatchDataController {
             // if it is running, add it to running tasks
             if download.status == .completed {
                 response.progress.completedUnitCount = 1
-                response.fulfill(())
+                response.fulfill()
             } else if let taskId = download.taskId {
                 runningDownloads[taskId] = response
             }
@@ -181,7 +181,7 @@ class DownloadBatchDataController {
                 // if successful
                 if state.isCompleted {
                     // fulfill it
-                    batch.fulfill(())
+                    batch.fulfill()
                     CLog("Batch \(batch.batchId) completed successfully")
                 } else if state.isFailed { // if failed
 
@@ -292,7 +292,7 @@ class DownloadBatchDataController {
     func downloadCompleted(_ response: DownloadResponse) throws {
         try update(response, to: .completed)
         // fulfill
-        response.fulfill(())
+        response.fulfill()
         responseIsDone(response)
 
         // clean up the model

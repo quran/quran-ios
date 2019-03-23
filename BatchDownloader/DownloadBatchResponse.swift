@@ -26,13 +26,20 @@ class DownloadResponse {
     var task: URLSessionTask?
 
     let promise: Promise<Void>
-    let fulfill: ((()) -> Void)
-    let reject: ((Error) -> Void)
+    private let resolver: Resolver<Void>
 
     init( download: Download, progress: QProgress) {
         self.download = download
         self.progress = progress
-        (promise, fulfill, reject) = Promise<Void>.pending()
+        (promise, resolver) = Promise<Void>.pending()
+    }
+
+    func fulfill() {
+        resolver.fulfill(())
+    }
+
+    func reject(_ error: Error) {
+        resolver.reject(error)
     }
 }
 
@@ -46,8 +53,7 @@ public final class DownloadBatchResponse {
     public let progress: QProgress
 
     public let promise: Promise<Void>
-    let fulfill: ((()) -> Void)
-    let reject: ((Error) -> Void)
+    private let resolver: Resolver<Void>
 
     public var requests: [DownloadRequest] {
         return responses.map { $0.download.request }
@@ -57,7 +63,7 @@ public final class DownloadBatchResponse {
         self.batchId = batchId
         self.responses = responses
         self.cancellable = cancellable
-        (promise, fulfill, reject) = Promise<Void>.pending()
+        (promise, resolver) = Promise<Void>.pending()
 
         progress = QProgress(totalUnitCount: Double(responses.count))
         responses.forEach {
@@ -67,5 +73,13 @@ public final class DownloadBatchResponse {
 
     public func cancel() {
         cancellable?.cancel(batch: self)
+    }
+
+    func fulfill() {
+        resolver.fulfill(())
+    }
+
+    func reject(_ error: Error) {
+        resolver.reject(error)
     }
 }

@@ -29,7 +29,7 @@ class ImageVerseTextRetrieval: Interactor {
     }
 
     func execute(_ input: QuranShareData) -> Promise<[String]> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
             [try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)]
         }
     }

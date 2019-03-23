@@ -39,12 +39,12 @@ class TranslationsVersionUpdaterInteractor: Interactor {
     }
 
     func execute(_ translations: [Translation]) -> Promise<[TranslationFull]> {
-        let update = Promise(value: translations)
-            .then(execute: unzipIfNeeded)    // unzip if needed
-            .then(execute: updateInstalledVersions) // update versions
+        let update = Promise.value(translations)
+            .map(unzipIfNeeded)    // unzip if needed
+            .map(updateInstalledVersions) // update versions
         let downloads = downloader.getOnGoingDownloads()
         return when(fulfilled: update, downloads)
-            .then(execute: createTranslations)
+            .map(createTranslations)
     }
 
     private func createTranslations(translations: [Translation], downloadsBatches: [DownloadBatchResponse]) -> [TranslationFull] {

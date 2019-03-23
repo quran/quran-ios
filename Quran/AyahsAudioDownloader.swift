@@ -35,7 +35,7 @@ struct AyahsAudioDownloader: Interactor {
     }
 
     func execute(_ request: AyahsAudioDownloadRequest) -> Promise<DownloadBatchResponse> {
-        return DispatchQueue.default.promise2 { () -> DownloadBatchRequest in
+        return DispatchQueue.global().async(.promise) { () -> DownloadBatchRequest in
                 let retriever = self.creator.create(request.qari)
 
                 // get downloads

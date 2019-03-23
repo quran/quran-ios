@@ -23,7 +23,7 @@ import PromiseKit
 private class _AnyCacheableServiceBoxBase<Input: Hashable, Output>: CacheableService {
 
     func invalidate() { expectedToBeSubclassed() }
-    func get(_ input: Input) -> Promise<Output> { expectedToBeSubclassed() }
+    func get(_ input: Input) -> Guarantee<Output> { expectedToBeSubclassed() }
     func getCached(_ input: Input) -> Output? { expectedToBeSubclassed() }
 }
 
@@ -38,7 +38,7 @@ private class _AnyCacheableServiceBox<O: CacheableService>: _AnyCacheableService
         return ds.invalidate()
     }
 
-    override func get(_ input: O.Input) -> Promise<O.Output> {
+    override func get(_ input: O.Input) -> Guarantee<O.Output> {
         return ds.get(input)
     }
 
@@ -59,7 +59,7 @@ public final class AnyCacheableService<Input: Hashable, Output>: CacheableServic
         return box.invalidate()
     }
 
-    public func get(_ input: Input) -> Promise<Output> {
+    public func get(_ input: Input) -> Guarantee<Output> {
         return box.get(input)
     }
 

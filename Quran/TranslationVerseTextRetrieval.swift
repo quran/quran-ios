@@ -30,11 +30,11 @@ class TranslationVerseTextRetrieval: Interactor {
         }
 
         guard let page = cell.translationPage else {
-            return Promise(value: [""])
+            return Promise.value([""])
         }
 
         guard let verse = page.verses.first(where: { $0.ayah == input.ayah }) else {
-            return Promise(value: [""])
+            return Promise.value([""])
         }
 
         var components: [String] = []
@@ -51,6 +51,6 @@ class TranslationVerseTextRetrieval: Interactor {
 
         let formatter = TranslationVerseTextRetrieval.numberFormatter
         components.append("\(formatter.format(verse.ayah.sura)):\(formatter.format(verse.ayah.ayah))")
-        return Promise(value: components)
+        return Promise.value(components)
     }
 }

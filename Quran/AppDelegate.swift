@@ -36,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // mandatory to be at the top
         Crash.crasher = CrashlyticsCrasher()
-        DispatchQueue.default = .global()
 
         // create the dependency injection container
         container = Container()

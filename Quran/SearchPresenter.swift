@@ -52,7 +52,7 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
     func show(results: SearchResults) {
         self.results = results.items
 
-        DispatchQueue.default.async {
+        DispatchQueue.global().async {
             let seachResultsUI = results.items.map {
                 SearchResultUI(attributedString: $0.asAttributedString(),
                                pageNumber: self.numberFormatter.format($0.page),

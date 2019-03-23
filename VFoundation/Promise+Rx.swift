@@ -23,7 +23,7 @@ import RxSwift
 extension Promise {
     public func asObservable() -> Observable<T> {
         return Observable.create { observer -> Disposable in
-            self.then { value -> Void in
+            self.done { value -> Void in
                     observer.on(.next(value))
                     observer.on(.completed)
             }.catch { error in

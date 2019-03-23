@@ -58,9 +58,9 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
         }
 
         // set bookmarked ayat
-        DispatchQueue.default
-            .promise2 { try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }
-            .then(on: .main) { (_, ayahBookmarks) -> Void in
+        DispatchQueue.global()
+            .async(.promise) { try self.bookmarkPersistence.retrieve(inPage: item.pageNumber) }
+            .done(on: .main) { (_, ayahBookmarks) in
                 cell.setHighlightedVerses(Set(ayahBookmarks.map { $0.ayah }), forType: .bookmark)
             }.cauterize(tag: "bookmarkPersistence.retrieve(inPage:)")
     }
@@ -102,9 +102,9 @@ class QuranBaseBasicDataSource<CellType: QuranBasePageCollectionViewCell>: Basic
     }
 
     private func scrollToHighlightedAyaIfNeeded(_ ayah: AyahNumber) {
-        DispatchQueue.default
-            .promise2(execute: ayah.getStartPage)
-            .then(on: .main) { self.scrollTo(page: $0) }
+        DispatchQueue.global()
+            .async(.promise, execute: ayah.getStartPage)
+            .done(on: .main) { self.scrollTo(page: $0) }
             .cauterize(tag: "Never.getStartPage")
     }
 

@@ -20,6 +20,8 @@
 
 import PromiseKit
 
+// TODO: Should be removed
+// execute can be promise or guaratnee
 public protocol Interactor {
     associatedtype Input
     associatedtype Output

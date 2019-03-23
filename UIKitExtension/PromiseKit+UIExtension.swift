@@ -22,8 +22,7 @@ import PromiseKit
 
 extension Promise {
 
-    @discardableResult
-    public func catchToAlertView(viewController: UIViewController?) -> Promise {
+    public func catchToAlertView(viewController: UIViewController?) -> PromiseKit.PMKFinalizer {
         return self.`catch`(on: .main) { [weak viewController] error in
             viewController?.showErrorAlert(error: error)
         }

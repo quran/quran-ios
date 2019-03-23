@@ -21,6 +21,7 @@
 import Foundation
 import PromiseKit
 
+// TODO Review the design, it seems isBookmarked should be tight to a page
 class BookmarksManager {
     private let bookmarksPersistence: BookmarksPersistence
     init(bookmarksPersistence: BookmarksPersistence) {
@@ -30,12 +31,9 @@ class BookmarksManager {
     private(set) var isBookmarked: Bool = false
 
     func calculateIsBookmarked(pageNumber: Int) -> Promise<Bool> {
-        return DispatchQueue.default
-            .promise2 { self.bookmarksPersistence.isPageBookmarked(pageNumber) }
-            .then(on: .main) { bookmarked -> Bool in
-                self.isBookmarked = bookmarked
-                return bookmarked
-            }
+        return DispatchQueue.global()
+            .async(.promise) { self.bookmarksPersistence.isPageBookmarked(pageNumber) }
+            .get(on: .main) { self.isBookmarked = $0 }
     }
 
     func toggleBookmarking(pageNumber: Int) -> Promise<Void> {
@@ -43,12 +41,12 @@ class BookmarksManager {
 
         if isBookmarked {
             Analytics.shared.bookmark(quranPage: pageNumber)
-            return DispatchQueue.default.promise2 {
+            return DispatchQueue.global().async(.promise) {
                 try self.bookmarksPersistence.insertPageBookmark(forPage: pageNumber)
             }
         } else {
             Analytics.shared.unbookmark(quranPage: pageNumber)
-            return DispatchQueue.default.promise2 {
+            return DispatchQueue.global().async(.promise) {
                 try self.bookmarksPersistence.removePageBookmark(atPage: pageNumber)
             }
         }

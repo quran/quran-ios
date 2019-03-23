@@ -91,7 +91,7 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
         stopped.value = false
 
         response.progress.progressListeners.insert(self)
-        response.promise.then(on: .main) { [weak self] _ -> Void in
+        response.promise.done(on: .main) { [weak self] _ -> Void in
             guard let `self` = self, !self.stopped.value else {
                 return
             }
@@ -101,7 +101,7 @@ class DownloadingObserver<Item: Downloadable>: NSObject, QProgressListener {
                 return
             }
             self.observer?.onDownloadCompleted(withError: error, for: self.item)
-        }.always { [weak self] in
+        }.finally { [weak self] in
             self?.stopped.value = true
         }
         onProgressUpdated(to: response.progress.progress)

@@ -33,7 +33,6 @@ extension CacheableService {
 
         // load remotely
         self.get(input)
-            .then(on: .main, execute: body)
-            .cauterize(tag: function)
+            .done(on: .main, body)
     }
 }

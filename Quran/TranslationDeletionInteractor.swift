@@ -42,15 +42,15 @@ class TranslationDeletionInteractor: Interactor {
             simplePersistence.setValue(updatedTranslations, forKey: .selectedTranslations)
         }
 
-        return DispatchQueue.default
-            .promise2 {
+        return DispatchQueue.global()
+            .async(.promise) {
                 // delete from disk
                 item.translation.possibleFileNames.forEach { fileName in
                     let url = Files.translationsURL.appendingPathComponent(fileName)
                     try? FileManager.default.removeItem(at: url)
                 }
             }
-            .then { () -> TranslationFull in
+            .map { () -> TranslationFull in
                 var translation = item.translation
                 translation.installedVersion = nil
                 try self.persistence.update(translation)

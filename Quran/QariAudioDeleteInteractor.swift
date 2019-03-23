@@ -23,7 +23,7 @@ import PromiseKit
 struct QariAudioDeleteInteractor: Interactor {
 
     func execute(_ qari: Qari) -> Promise<Void> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
             try FileManager.default.removeItem(at: qari.localFolder())
         }
     }

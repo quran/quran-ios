@@ -44,47 +44,42 @@ open class URLSessionDownloadManager: DownloadManager {
         initializationGroup.enter()
 
         let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)
-        queue.promise {
+        queue.async(.promise) {
                 try attempt(times: 3) {
                     try dataController.loadBatchesFromPersistence()
                 }
-        }.always {
+        }.ensure {
+            // create handler classes
+            let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
+            let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: queue)
+            unsafeHandler.cancellable = self.handler
 
-                // create handler classes
-                let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
-                let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: queue)
-                unsafeHandler.cancellable = self.handler
+            // create the session
+            let session = URLSession(configuration: configuration, delegate: handler, delegateQueue: queue)
 
-                // create the session
-                let session = URLSession(configuration: configuration, delegate: handler, delegateQueue: queue)
+            // set the handler and session
+            self.handler = handler
+            self.session = session
 
-                // set the handler and session
-                self.handler = handler
-                self.session = session
+            dataController.cancellable = handler
+            dataController.session = session
 
-                dataController.cancellable = handler
-                dataController.session = session
+            handler.populateRunningTasks(from: session)
 
-                handler.populateRunningTasks(from: session)
-
-                self.initializationGroup.leave()
+            self.initializationGroup.leave()
         }.cauterize()
     }
 
-    open func getOnGoingDownloads() -> Promise<[DownloadBatchResponse]> {
+    open func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]> {
         return initializationGroup
             .notify()
-            .then {
-                self.handler?.getOnGoingDownloads() ?? Promise(value: [])
-            }
+            .then { self.handler?.getOnGoingDownloads() ?? .value([]) }
     }
 
     open func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
         return initializationGroup
             .notify()
-            .then {
-                self.handler?.download(batch) ?? Promise(value: self.createFailureResponse())
-            }
+            .then { self.handler?.download(batch) ?? Promise.value(self.createFailureResponse()) }
     }
 
     private func createFailureResponse() -> DownloadBatchResponse {

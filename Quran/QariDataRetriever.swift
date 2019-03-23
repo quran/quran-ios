@@ -23,7 +23,7 @@ import PromiseKit
 struct QariDataRetriever: Interactor {
 
     func execute(_ input: Void) -> Promise<[Qari]> {
-        return DispatchQueue.default.promise2 {
+        return DispatchQueue.global().async(.promise) {
             return Qari.qaris.sorted {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }

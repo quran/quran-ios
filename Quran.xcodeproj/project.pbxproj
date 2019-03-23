@@ -317,7 +317,6 @@
 		54B266C21CD2B6D100D3AEF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54B266C41CD2B6D100D3AEF8 /* InfoPlist.strings */; };
 		54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266D51CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift */; };
 		54B266D81CD4EFA900D3AEF8 /* quarter_prefix_array.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */; };
-		54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B266DB1CD4F48900D3AEF8 /* Queue.swift */; };
 		54B266DE1CD5267B00D3AEF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */; };
 		54B8E564208189BF002778D4 /* Localizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B8E563208189BF002778D4 /* Localizations.swift */; };
 		54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DBBD1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift */; };
@@ -892,7 +891,6 @@
 		54B266D31CD4D03400D3AEF8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266D51CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePageSelectionViewController.swift; sourceTree = "<group>"; };
 		54B266D71CD4EFA900D3AEF8 /* quarter_prefix_array.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = quarter_prefix_array.plist; sourceTree = "<group>"; };
-		54B266DB1CD4F48900D3AEF8 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		54B266DD1CD5267B00D3AEF8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		54B266E31CD63F2C00D3AEF8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		54B266E41CD63F2C00D3AEF8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1327,14 +1325,6 @@
 				543FDFE91EB3B4FE00687DF8 /* Response */,
 			);
 			name = Deprecated;
-			sourceTree = "<group>";
-		};
-		5437D3A01EB38DE600795FA9 /* _Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				54B266DB1CD4F48900D3AEF8 /* Queue.swift */,
-			);
-			name = _Deprecated;
 			sourceTree = "<group>";
 		};
 		543FDFE91EB3B4FE00687DF8 /* Response */ = {
@@ -1893,7 +1883,6 @@
 		54B265FB1CC57E2900D3AEF8 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				5437D3A01EB38DE600795FA9 /* _Deprecated */,
 				54F35F79216A7F6400276220 /* AdvancedAudioOptions */,
 				540031E51E99705400BB4B7B /* Analytics */,
 				548C2B4021470FD6005266AA /* AppUpdates */,
@@ -3187,6 +3176,8 @@
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3199,6 +3190,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3476,7 +3469,6 @@
 				542DCBC71ECC4BDC0023D6FD /* SearchService.swift in Sources */,
 				540922AB1E91318E00C7537A /* QuranTranslationLongTextDataSource.swift in Sources */,
 				54C0DBF01CE4B0C2009AAD8D /* QariTableViewController.swift in Sources */,
-				54B266DC1CD4F48900D3AEF8 /* Queue.swift in Sources */,
 				54C0DBD51CDF7250009AAD8D /* AudioBannerViewPresenter.swift in Sources */,
 				544EC38820C45F1B00D2E7B5 /* ThemedNavigationController.swift in Sources */,
 				54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */,

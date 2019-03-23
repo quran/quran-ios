@@ -48,9 +48,9 @@ class AudioFilesDownloader {
 
     func getCurrentDownloadResponse() -> Promise<DownloadBatchResponse?> {
         if let response = response {
-            return Promise(value: response)
+            return Promise.value(response)
         } else {
-            return downloader.getOnGoingDownloads().then { batches -> DownloadBatchResponse? in
+            return downloader.getOnGoingDownloads().map { batches -> DownloadBatchResponse? in
                 let downloading = batches.first { $0.isAudio }
                 self.createRequestWithDownloads(downloading)
                 return self.response
@@ -61,7 +61,7 @@ class AudioFilesDownloader {
     func download(qari: Qari, range: VerseRange) -> Promise<DownloadBatchResponse?> {
         return ayahDownloader
             .execute(AyahsAudioDownloadRequest(range: range, qari: qari))
-            .then(on: .main) { responses -> DownloadBatchResponse? in
+            .map(on: .main) { responses -> DownloadBatchResponse? in
                 // wrap the requests
                 self.createRequestWithDownloads(responses)
                 return self.response
@@ -72,9 +72,9 @@ class AudioFilesDownloader {
         guard let batch = batch else { return }
 
         response = batch
-        response?.promise.always { [weak self] in
+        response?.promise.ensure { [weak self] in
             self?.response = nil
-        }
+        }.cauterize(tag: "AudioFilesDownloader.createRequestWithDownloads")
     }
 
     func filesForQari(_ qari: Qari, range: VerseRange) -> [DownloadRequest] {

@@ -69,9 +69,9 @@ class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, AyahBookmarkT
     }
 
     func reloadData() {
-       DispatchQueue.default
-        .promise2(execute: self.persistence.retrieveAyahBookmarks)
-            .then(on: .main) { items -> Void in
+       DispatchQueue.global()
+        .async(.promise, execute: self.persistence.retrieveAyahBookmarks)
+            .done(on: .main) { items -> Void in
                 self.items = items
                 self.ds_reusableViewDelegate?.ds_reloadSections(IndexSet(integer: 0), with: .automatic)
             }.cauterize(tag: "BookmarksPersistence.retrieveAyahBookmarks")

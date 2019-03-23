@@ -363,9 +363,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private func removeAyahFromBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
         Analytics.shared.unbookmark(ayah: ayah)
-        DispatchQueue.default
-            .promise2 { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
-            .then(on: .main) { _ -> Void in
+        DispatchQueue.global()
+            .async(.promise) { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
+            .done(on: .main) { _ -> Void in
                 // remove bookmark from model
                 var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
                 bookmarks.remove(ayah)
@@ -375,9 +375,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private func addAyahToBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
         Analytics.shared.bookmark(ayah: ayah)
-        DispatchQueue.default
-            .promise2 { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
-            .then(on: .main) { _ -> Void in
+        DispatchQueue.global()
+            .async(.promise) { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
+            .done(on: .main) { _ -> Void in
                 // add a bookmark to the model
                 var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
                 bookmarks.insert(ayah)
@@ -395,11 +395,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         verseTextRetrieval
             .execute(shareData)
-            .then {
-                $0 + [shareData.ayah.localizedName] +
-                    l("shareMarketingSuffix").components(separatedBy: "\n")
-            }
-            .then(on: .main, execute: completion)
+            .map { $0 + [shareData.ayah.localizedName] + l("shareMarketingSuffix").components(separatedBy: "\n") }
+            .done(on: .main, completion)
             .catch(on: .main) { (error) in
                 self.delegate?.onErrorOccurred(error: error)
             }

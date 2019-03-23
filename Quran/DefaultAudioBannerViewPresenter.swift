@@ -88,7 +88,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         view?.hideAllControls()
 
         qariRetreiver.get()
-            .then(on: .main) { (qaris) -> Void in
+            .done(on: .main) { (qaris) -> Void in
                 self.qaris = qaris
 
                 // get last selected qari id
@@ -99,7 +99,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
                 }
             }
             .then { self.audioPlayer.isAudioDownloading() }
-            .then(on: .main) { downloading -> Void in
+            .done(on: .main) { downloading -> Void in
                 if !downloading {
                     self.showQariView()
                 }
@@ -206,27 +206,27 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     func onPlayingStarted() {
         self.progress = nil
         Crash.setValue(false, forKey: .DownloadingQuran)
-        Queue.main.async { self.playing = true }
+        DispatchQueue.main.async { self.playing = true }
     }
 
     func onPlaybackResumed() {
         self.progress = nil
-        Queue.main.async { self.playing = true }
+        DispatchQueue.main.async { self.playing = true }
     }
 
     func onPlaybackPaused() {
         self.progress = nil
-        Queue.main.async { self.playing = false }
+        DispatchQueue.main.async { self.playing = false }
     }
 
     func highlight(_ ayah: AyahNumber) {
         Crash.setValue(ayah, forKey: .PlayingAyah)
-        Queue.main.async { self.delegate?.highlightAyah(ayah) }
+        DispatchQueue.main.async { self.delegate?.highlightAyah(ayah) }
     }
 
     func onFailedDownloadingWithError(_ error: Error) {
         self.progress = nil
-        Queue.main.async {
+        DispatchQueue.main.async {
             self.delegate?.onErrorOccurred(error: error)
         }
     }
@@ -236,7 +236,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
         Crash.setValue(nil, forKey: .PlayingAyah)
         Crash.setValue(false, forKey: .DownloadingQuran)
-        Queue.main.async {
+        DispatchQueue.main.async {
             self.showQariView()
             self.delegate?.removeHighlighting()
         }

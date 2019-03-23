@@ -35,10 +35,10 @@ class DownloadableQariAudioRetriever: Interactor {
     func execute(_ p: Void) -> Promise<[DownloadableQariAudio]> {
         let retriever = qarisRetriever
             .get()
-            .then(execute: downloadsInfoRetriever.execute)
+            .then(downloadsInfoRetriever.execute)
 
         let downloads = downloader.getOnGoingDownloads()
-        return when(fulfilled: downloads, retriever).then(execute: createDownloadableQariAudio(downloads:qaris:))
+        return when(fulfilled: downloads, retriever).map(createDownloadableQariAudio(downloads:qaris:))
     }
 
     private func createDownloadableQariAudio(downloads: [DownloadBatchResponse], qaris: [QariAudioDownload]) -> [DownloadableQariAudio] {

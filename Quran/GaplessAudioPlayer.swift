@@ -53,7 +53,7 @@ class GaplessAudioPlayer: DefaultAudioPlayer {
         let (items, info) = playerItemsForQari(qari, range: range)
 
         timingRetriever.retrieveTiming(for: qari, suras: items.map { $0.sura })
-            .then(on: .main) { timings -> Void in
+            .done(on: .main) { timings -> Void in
                 var mutableTimings = timings
                 let timeArray = unwrap(mutableTimings[range.lowerBound.sura])
                 mutableTimings[range.lowerBound.sura] = Array(timeArray.dropFirst(range.lowerBound.ayah - 1))

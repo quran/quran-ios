@@ -195,7 +195,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // set the custom title view
         navigationItem.titleView = QuranPageTitleView()
 
-        dataRetriever.get().then(on: .main) { [weak self] items -> Void in
+        dataRetriever.get().done(on: .main) { [weak self] items -> Void in
             self?.dataSource.setItems(items)
             self?.scrollToFirstPage()
         }.suppress()
@@ -357,7 +357,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         titleView?.setPageNumber(page.pageNumber, navigationBar: navigationController?.navigationBar)
 
         bookmarksManager.calculateIsBookmarked(pageNumber: page.pageNumber)
-            .then(on: .main) { _ -> Void in
+            .done(on: .main) { _ -> Void in
                 guard page.pageNumber == self.currentPage()?.pageNumber else { return }
                 self.quranNavigationBar.updateRightBarItems(animated: false)
             }.cauterize(tag: "bookmarksPersistence.isPageBookmarked")
@@ -474,7 +474,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
         // persist if not active
         guard UIApplication.shared.applicationState != .active else { return }
-        Queue.background.async {
+        DispatchQueue.global().async {
             let page = ayah.getStartPage()
             self.updateLatestPageTo(page: page)
             Crash.setValue(page, forKey: .QuranPage)

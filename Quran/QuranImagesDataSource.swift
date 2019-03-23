@@ -64,7 +64,7 @@ class QuranImagesDataSource: QuranBaseBasicDataSource<QuranImagePageCollectionVi
         // set the ayah dimensions
         ayahInfoRetriever
             .retrieveAyahs(in: item.pageNumber)
-            .then(on: .main) { [weak cell] data -> Void in
+            .done(on: .main) { [weak cell] data -> Void in
                 guard cell?.page == item else { return }
                 cell?.setAyahInfo(data)
             }.cauterize(tag: "retrieveAyahs(in:)")

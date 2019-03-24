@@ -3066,7 +3066,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-QuranUITests/Pods-QuranUITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SwiftMonkey/SwiftMonkey.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -3075,7 +3075,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QuranUITests/Pods-QuranUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		99224E4D724C447BEBB0EE30 /* [CP] Check Pods Manifest.lock */ = {
@@ -3120,7 +3120,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -3157,7 +3157,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Quran/Pods-Quran-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AEF32652F2759A39CCB1CBEC /* [CP] Embed Pods Frameworks */ = {
@@ -3166,7 +3166,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-QuranTests/Pods-QuranTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-QuranTests/Pods-QuranTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
@@ -3195,7 +3195,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuranTests/Pods-QuranTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QuranTests/Pods-QuranTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B05F86ED3BD116EA59D8B565 /* [CP] Check Pods Manifest.lock */ = {

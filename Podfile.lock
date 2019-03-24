@@ -38,25 +38,25 @@ PODS:
   - Zip (1.1.0)
 
 DEPENDENCIES:
-  - Crashlytics
-  - DownloadButton
-  - Fabric
-  - GenericDataSources
-  - KVOController
-  - MenuItemKit
-  - Moya
-  - Nimble
-  - "NSDate+TimeAgo"
+  - Crashlytics (~> 3.10)
+  - DownloadButton (~> 0.1)
+  - Fabric (~> 1.7)
+  - GenericDataSources (~> 3.0)
+  - KVOController (~> 1.2)
+  - MenuItemKit (~> 3.1)
+  - Moya (~> 11.0)
+  - Nimble (~> 7.3)
+  - "NSDate+TimeAgo (~> 1.0)"
   - "Popover.OC (from `git@github.com:mohamede1945/Popover.git`)"
-  - PromiseKit
-  - Quick
-  - RxCocoa
-  - RxSwift
-  - SQLite.swift
-  - SwiftLint
+  - PromiseKit (~> 6.5)
+  - Quick (~> 1.3)
+  - RxCocoa (~> 4.3)
+  - RxSwift (~> 4.3)
+  - SQLite.swift (~> 0.11)
+  - SwiftLint (~> 0.27)
   - "SwiftMonkey (from `git@github.com:mohamede1945/SwiftMonkey.git`)"
-  - SwiftyJSON
-  - Zip
+  - SwiftyJSON (~> 4.1)
+  - Zip (~> 1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -117,6 +117,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: c17201d9fd3ab605f0cb3c38122443594dfd3606
+PODFILE CHECKSUM: c9b217f6eaa9903a0a7ef78a7d07dea3c8dd628e
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

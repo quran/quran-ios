@@ -56,6 +56,9 @@ end
 def quick
     pod 'Quick', '~>  1.3'
 end
+def ribs
+    pod 'RIBs', '~> 0.9', :inhibit_warnings => true
+end
 def swift_monkey
     pod 'SwiftMonkey', :git => "git@github.com:mohamede1945/SwiftMonkey.git" # Added modifications that would allow it to compile
 end
@@ -102,6 +105,7 @@ target 'Quran' do
     rx_swift
     rx_cocoa
     popover_oc
+    ribs
 end
 
 target 'QuranTests' do

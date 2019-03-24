@@ -26,6 +26,8 @@ PODS:
     - PromiseKit/CorePromise
   - Quick (1.3.2)
   - Result (3.2.4)
+  - RIBs (0.9.1):
+    - RxSwift (~> 4.0)
   - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
   - RxSwift (4.3.1)
@@ -50,6 +52,7 @@ DEPENDENCIES:
   - "Popover.OC (from `git@github.com:mohamede1945/Popover.git`)"
   - PromiseKit (~> 6.5)
   - Quick (~> 1.3)
+  - RIBs (~> 0.9)
   - RxCocoa (~> 4.3)
   - RxSwift (~> 4.3)
   - SQLite.swift (~> 0.11)
@@ -73,6 +76,7 @@ SPEC REPOS:
     - PromiseKit
     - Quick
     - Result
+    - RIBs
     - RxCocoa
     - RxSwift
     - SQLite.swift
@@ -109,6 +113,7 @@ SPEC CHECKSUMS:
   PromiseKit: 162f56c89aae9989ffc14476a5f821af17c3f4ba
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  RIBs: 879184fbca567425c488d6b3d14a9c5abfbf9d47
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
@@ -117,6 +122,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: c9b217f6eaa9903a0a7ef78a7d07dea3c8dd628e
+PODFILE CHECKSUM: 4d49578080d2ffc9cb8b2040d493854a59516d00
 
 COCOAPODS: 1.6.1

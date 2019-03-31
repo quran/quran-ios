@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let container: Container
     private let updateHandler = UpdateHandler()
+    private var appRouter: AppRouting?
 
     override init() {
         // initialize craslytics
@@ -58,8 +59,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         themeDidChange()
 
-        window.rootViewController = container.createRootViewController()
-        window.makeKeyAndVisible()
+        let appRouter = AppBuilder(container: container).build()
+        self.appRouter = appRouter
+        appRouter.launchFromWindow(window)
 
         container.createReviewService().checkForReview()
 

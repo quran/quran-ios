@@ -45,22 +45,6 @@ class Container {
         }
     }
 
-    func createRootViewController() -> UIViewController {
-        let controller = MainTabBarController()
-        controller.viewControllers = [
-            createSurasNavigationController(),
-            createJuzsNavigationController(),
-            createBookmarksController(),
-            createSearchNavigationController(),
-            createSettingsController()
-        ]
-        return controller
-    }
-
-    func createSurasNavigationController() -> UIViewController {
-        return SurasNavigationController(rootViewController: createSurasViewController())
-    }
-
     func createAudioDownloadsViewController() -> UIViewController {
         return AudioDownloadsViewController(
             retriever: createDownloadableQariAudioRetriever(),
@@ -68,10 +52,6 @@ class Container {
             ayahsDownloader: createAyahsAudioDownloader(),
             qariAudioDownloadRetriever: createQariListToQariAudioDownloadRetriever(),
             deletionInteractor: createQariAudioDeleteInteractor())
-    }
-
-    func createJuzsNavigationController() -> UIViewController {
-        return JuzsNavigationController(rootViewController: createJuzsViewController())
     }
 
     func createTranslationsSelectionViewController() -> UIViewController {
@@ -82,50 +62,11 @@ class Container {
                 dataSource: createTranslationsSelectionDataSource()))
     }
 
-    func createSearchNavigationController() -> UIViewController {
-        let builder = DefaultSearchBuilder(container: self) // DESIGN: should be done in tab bar router
-        let (_, controller) = builder.build()
-        return controller
-    }
-
     func createTranslationsViewController() -> UIViewController {
         return TranslationsViewController(
             interactor: createTranslationsRetrievalInteractor(),
             localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
             dataSource: createTranslationsDataSource())
-    }
-
-    func createSurasViewController() -> UIViewController {
-        return SurasViewController(
-            dataRetriever: createSurasRetriever(),
-            quranControllerCreator: createCreator(createQuranController),
-            lastPagesPersistence: createLastPagesPersistence())
-    }
-
-    func createJuzsViewController() -> UIViewController {
-        return JuzsViewController(
-            dataRetriever: createQuartersRetriever(),
-            quranControllerCreator: createCreator(createQuranController),
-            lastPagesPersistence: createLastPagesPersistence())
-    }
-
-    func createSettingsController() -> UIViewController {
-        var settingsCreators = createSettingsCreators()
-        let settingsController = SettingsViewController(creators: settingsCreators, persistence: createSimplePersistence())
-        settingsCreators.parentController = settingsController
-        return SettingsNavigationController(rootViewController: settingsController)
-    }
-
-    func createBookmarksController() -> UIViewController {
-        return BookmarksNavigationController(rootViewController: createBookmarksViewController())
-    }
-
-    func createBookmarksViewController() -> UIViewController {
-        return BookmarksTableViewController(quranControllerCreator: createCreator(createQuranController),
-                                            simplePersistence: createSimplePersistence(),
-                                            lastPagesPersistence: createLastPagesPersistence(),
-                                            bookmarksPersistence: createBookmarksPersistence(),
-                                            ayahPersistence: createArabicTextPersistence())
     }
 
     func createQariTableViewController(qaris: [Qari], selectedQariIndex: Int) -> QariTableViewController {
@@ -163,14 +104,6 @@ class Container {
         pendingDS.delegate = dataSource
         downloadedDS.delegate = dataSource
         return dataSource
-    }
-
-    func createSurasRetriever() -> AnyGetInteractor<[(Juz, [Sura])]> {
-        return SurasDataRetriever().asAnyGetInteractor()
-    }
-
-    func createQuartersRetriever() -> AnyGetInteractor<[(Juz, [Quarter])]> {
-        return QuartersDataRetriever().asAnyGetInteractor()
     }
 
     func createQuranPagesRetriever() -> AnyGetInteractor<[QuranPage]> {

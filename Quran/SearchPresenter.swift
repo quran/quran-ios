@@ -17,36 +17,38 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import RIBs
 
-protocol SearchPresenter: class {
-    var view: SearchView? { get set } // DESIGN: Shouldn't be a weak
-    var interactor: SearchInteractor? { get set }
+protocol SearchPresentableListener: class {
+    func onViewLoaded()
 
-    func show(autocompletions: [SearchAutocompletion])
-    func show(results: SearchResults)
-    func show(recents: [String], popular: [String])
-
-    func showLoading()
-    func showError(_ error: Error)
-    func showNoResults(for term: String)
+    func onSearchTermSelected(_ searchTerm: String)
+    func onSelected(searchResult: SearchResult)
+    func onSelected(autocompletion: SearchAutocompletion)
+    func onSearchButtonTapped()
+    func onSearchTextUpdated(to: String, isActive: Bool)
 }
 
-class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
+final class SearchPresenter: Presenter<SearchViewControllable>, SearchPresentable, SearchViewControllableListener {
 
-    weak var view: SearchView? // DESIGN: Shouldn't be a weak
-    weak var interactor: SearchInteractor?
+    weak var listener: SearchPresentableListener?
 
     private var results: [SearchResult] = []
     private var autocompletions: [SearchAutocompletion] = []
 
     private lazy var numberFormatter = NumberFormatter()
 
+    override init(viewController: SearchViewControllable) {
+        super.init(viewController: viewController)
+        viewController.listener = self
+    }
+
     // MARK: - SearchPresenter
 
     func show(autocompletions: [SearchAutocompletion]) {
         self.autocompletions = autocompletions
         let strings = autocompletions.map { $0.asAttributedString() }
-        view?.show(autocompletions: strings)
+        viewController.show(autocompletions: strings)
     }
 
     func show(results: SearchResults) {
@@ -66,66 +68,66 @@ class DefaultSearchPresenter: SearchPresenter, SearchViewDelegate {
                 case .quran: title = Bundle.main.localizedInfoDictionary?["CFBundleName"] as? String
                 }
 
-                self.view?.show(results: seachResultsUI, title: title)
+                self.viewController.show(results: seachResultsUI, title: title)
             }
         }
     }
 
     func show(recents: [String], popular: [String]) {
-        view?.show(recents: recents, popular: popular)
+        viewController.show(recents: recents, popular: popular)
     }
 
     func showLoading() {
-        view?.showLoading()
+        viewController.showLoading()
     }
 
     func showError(_ error: Error) {
-        view?.showError(error)
+        viewController.showError(error)
     }
 
     func showNoResults(for term: String) {
         let message = String(format: lAndroid("no_results"), term)
-        view?.showNoResult(message)
+        viewController.showNoResult(message)
     }
 
     // MARK: - SearchViewDelegate
 
     func onViewLoaded() {
-        interactor?.onViewLoaded()
+        listener?.onViewLoaded()
     }
 
     func onSearchTermSelected(_ searchTerm: String) {
         withoutDelegate {
-            view?.setSearchBarActive(true)
-            view?.updateSearchBarText(to: searchTerm)
+            viewController.setSearchBarActive(true)
+            viewController.updateSearchBarText(to: searchTerm)
         }
-        interactor?.onSearchTermSelected(searchTerm)
+        listener?.onSearchTermSelected(searchTerm)
     }
 
     func onSelected(searchResultAt index: Int) {
-        interactor?.onSelected(searchResult: self.results[index])
+        listener?.onSelected(searchResult: self.results[index])
     }
 
     func onSelected(autocompletionAt index: Int) {
         let autocompletion = self.autocompletions[index]
         withoutDelegate {
-            view?.updateSearchBarText(to: autocompletion.text)
+            viewController.updateSearchBarText(to: autocompletion.text)
         }
-        interactor?.onSelected(autocompletion: autocompletion)
+        listener?.onSelected(autocompletion: autocompletion)
     }
 
     func onSearchButtonTapped() {
-        interactor?.onSearchButtonTapped()
+        listener?.onSearchButtonTapped()
     }
 
     func onSearchTextUpdated(to text: String, isActive: Bool) {
-        interactor?.onSearchTextUpdated(to: text, isActive: isActive)
+        listener?.onSearchTextUpdated(to: text, isActive: isActive)
     }
 
     private func withoutDelegate(_ body: () -> Void) {
-        view?.delegate = nil
+        viewController.listener = nil
         defer {
-            view?.delegate = self
+            viewController.listener = self
         }
         body()
     }

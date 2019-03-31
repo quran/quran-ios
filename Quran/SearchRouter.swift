@@ -17,36 +17,34 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import RIBs
 
-protocol SearchRouter: class {
-    var interactor: SearchInteractor { get }
-    var presenter: SearchPresenter { get }
-
-    func navigateTo(quranPage: Int, highlightingAyah: AyahNumber)
+protocol SearchInteractable: class {
+    var router: SearchRouting? { get set }
+    var listener: SearchListener? { get set }
 }
 
-class NavigationSearchRouter: SearchRouter {
+protocol SearchViewControllable: ViewControllable {
+    var listener: SearchViewControllableListener? { get set }
 
-    private weak var navigationController: UINavigationController?    // DESIGN: Shouldn't be weak
-    private let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
+    func show(autocompletions: [NSAttributedString])
+    func show(results: [SearchResultUI], title: String?)
+    func show(recents: [String], popular: [String])
 
-    let interactor: SearchInteractor
-    let presenter: SearchPresenter
+    func showLoading()
+    func showError(_ error: Error)
+    func showNoResult(_ message: String)
 
-    init(interactor: SearchInteractor,
-         presenter: SearchPresenter,
-         navigationController: UINavigationController?,
-         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>) {
-        self.interactor = interactor
-        self.presenter = presenter
-        self.navigationController = navigationController
-        self.quranControllerCreator = quranControllerCreator
-    }
+    func updateSearchBarText(to text: String)
+    func setSearchBarActive(_ isActive: Bool)
+}
 
-    func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {
-        Analytics.shared.openingQuran(from: .searchResults)
-        let controller = quranControllerCreator.create((quranPage, nil, highlightingAyah))
-        controller.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(controller, animated: true)
+final class SearchRouter: ViewableRouter<SearchInteractable, SearchViewControllable>, SearchRouting {
+
+    override init(
+        interactor: SearchInteractable,
+        viewController: SearchViewControllable) {
+        super.init(interactor: interactor, viewController: viewController)
+        interactor.router = self
     }
 }

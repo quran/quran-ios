@@ -1,8 +1,8 @@
 //
-//  SearchNavigationController.swift
+//  BookmarksNavigationController.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
+//  Created by Mohamed Afifi on 5/26/16.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -20,14 +20,11 @@
 
 import UIKit
 
-class SearchNavigationController: BaseNavigationController {
+class BookmarksTabViewController: TabViewController {
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+    override func getTabBarItem() -> UITabBarItem {
+        return UITabBarItem(title: lAndroid("menu_bookmarks"),
+                            image: #imageLiteral(resourceName: "bookmarks-empty-25"),
+                            selectedImage: #imageLiteral(resourceName: "bookmarks-filled-25"))
     }
 }

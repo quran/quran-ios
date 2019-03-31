@@ -17,14 +17,19 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
+import RIBs
 import UIKit
 
 protocol ScrollableToTop {
     func scrollToTop()
 }
 
-class MainTabBarController: ThemedTabBarController, UITabBarControllerDelegate {
+protocol AppPresentableListener: class {
+}
+
+class AppViewController: ThemedTabBarController, UITabBarControllerDelegate, AppPresentable, AppViewControllable {
+    weak var listener: AppPresentableListener?
+
     override open var shouldAutorotate: Bool {
         return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
@@ -56,6 +61,10 @@ class MainTabBarController: ThemedTabBarController, UITabBarControllerDelegate {
                 }
             }
         }
+    }
+
+    func setViewControllers(_ viewControllers: [ViewControllable], animated: Bool) {
+        setViewControllers(viewControllers.map { $0.uiviewController }, animated: animated)
     }
 }
 

@@ -17,45 +17,22 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-protocol SearchBuilder: class {
-    func build() -> (SearchRouter, UIViewController) // DESIGN: should remove UIViewController
+protocol SearchBuildable: class {
+    func build(withListener listener: SearchListener) -> SearchRouting
 }
 
-class DefaultSearchBuilder: SearchBuilder {
+class SearchBuilder: Builder, SearchBuildable {
 
-    let container: Container // DESIGN: shouldn't be here
-    init(container: Container) {
-        self.container = container
-    }
-
-    func build() -> (SearchRouter, UIViewController) {
-        let view = SearchViewController()
-        let navigation = SearchNavigationController() // DESIGN: shouldn't be created here
-        navigation.viewControllers = [view]
-
-        let interactor = DefaultSearchInteractor(
+    func build(withListener listener: SearchListener) -> SearchRouting {
+        let viewController = SearchViewController()
+        let presenter = SearchPresenter(viewController: viewController)
+        let interactor = SearchInteractor(
+            presenter: presenter,
             persistence: container.createSimplePersistence(),
             autocompleteService: container.createSQLiteSearchAutocompletionService(),
             searchService: container.createSQLiteSearchService(),
             recentsService: container.createDefaultSearchRecentsService())
-        let presenter = DefaultSearchPresenter()
-
-        let router: SearchRouter = NavigationSearchRouter(
-            interactor: interactor,
-            presenter: presenter,
-            navigationController: navigation,
-            quranControllerCreator: AnyCreator(createClosure: container.createQuranController)) // DESIGN: should be quran router
-
-        view.delegate = presenter
-
-        presenter.interactor = interactor
-        presenter.view = view
-
-        interactor.presenter = presenter
-        interactor.router = router
-
-        view.router = router // DESIGN: Shouldn't be saved here
-
-        return (router, navigation)
+        interactor.listener = listener
+        return SearchRouter(interactor: interactor, viewController: viewController)
     }
 }

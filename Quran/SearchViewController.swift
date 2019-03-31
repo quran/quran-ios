@@ -20,7 +20,19 @@
 
 import UIKit
 
-class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchBarDelegate, SearchView {
+protocol SearchViewControllableListener: class {
+    func onViewLoaded()
+
+    func onSearchTermSelected(_ searchTerm: String)
+    func onSelected(searchResultAt index: Int)
+    func onSelected(autocompletionAt index: Int)
+
+    func onSearchButtonTapped()
+
+    func onSearchTextUpdated(to text: String, isActive: Bool)
+}
+
+final class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchBarDelegate, SearchViewControllable {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -30,19 +42,18 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         }
     }
 
-    var router: SearchRouter? // DESIGN: Shouldn't be saved here
-    weak var delegate: SearchViewDelegate?
+    weak var listener: SearchViewControllableListener?
 
     lazy var searchController: UISearchController? = UISearchController(searchResultsController: searchResults)
     lazy var searchResults: SearchResultsViewController = {
         let controller = SearchResultsViewController()
         controller.dataSource.onAutocompletionSelected = { [weak self] index in
             self?.searchController?.searchBar.resignFirstResponder()
-            self?.delegate?.onSelected(autocompletionAt: index)
+            self?.listener?.onSelected(autocompletionAt: index)
         }
         controller.dataSource.onResultSelected = { [weak self] index in
             self?.searchController?.searchBar.resignFirstResponder() // defensive
-            self?.delegate?.onSelected(searchResultAt: index)
+            self?.listener?.onSelected(searchResultAt: index)
         }
         return controller
     }()
@@ -79,7 +90,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
 
         navigationItem.titleView = searchController?.searchBar
 
-        delegate?.onViewLoaded()
+        listener?.onViewLoaded()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -91,11 +102,11 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
     }
 
     func updateSearchResults(for searchController: UISearchController) {
-        delegate?.onSearchTextUpdated(to: searchController.searchBar.text ?? "", isActive: searchController.isActive)
+        listener?.onSearchTextUpdated(to: searchController.searchBar.text ?? "", isActive: searchController.isActive)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        delegate?.onSearchButtonTapped()
+        listener?.onSearchButtonTapped()
     }
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -142,7 +153,7 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
 
     @objc
     func onRecentOrPopularTapped(button: UIButton) {
-        delegate?.onSearchTermSelected(button.title(for: .normal) ?? "")
+        listener?.onSearchTermSelected(button.title(for: .normal) ?? "")
     }
 
     private func updateList(stack: UIStackView, title: UIView, values: [String], tapSelector: Selector) {

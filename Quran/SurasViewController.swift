@@ -20,7 +20,11 @@
 import GenericDataSources
 import UIKit
 
-class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell> {
+protocol SurasPresentableListener: class {
+}
+
+class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell>, SurasPresentable, SurasViewControllable {
+    weak var listener: SurasPresentableListener?
 
     override var screen: Analytics.Screen { return .suras }
 

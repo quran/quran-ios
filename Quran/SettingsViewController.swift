@@ -21,7 +21,12 @@ import GenericDataSources
 import MessageUI
 import UIKit
 
-class SettingsViewController: BaseTableBasedViewController {
+protocol SettingsPresentableListener: class {
+}
+
+class SettingsViewController: BaseTableBasedViewController, SettingsPresentable, SettingsViewControllable {
+
+    weak var listener: SettingsPresentableListener?
 
     private let dataSource = CompositeDataSource(sectionType: .single)
     private let creators: SettingsCreators

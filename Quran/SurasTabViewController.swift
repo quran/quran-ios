@@ -20,20 +20,10 @@
 
 import UIKit
 
-class SurasNavigationController: BaseNavigationController {
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: lAndroid("quran_sura"),
-                                  image: #imageLiteral(resourceName: "page-empty-25"),
-                                  selectedImage: #imageLiteral(resourceName: "page-filled-25"))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+final class SurasTabViewController: TabViewController {
+    override func getTabBarItem() -> UITabBarItem {
+        return UITabBarItem(title: lAndroid("quran_sura"),
+                            image: #imageLiteral(resourceName: "page-empty-25"),
+                            selectedImage: #imageLiteral(resourceName: "page-filled-25"))
     }
 }

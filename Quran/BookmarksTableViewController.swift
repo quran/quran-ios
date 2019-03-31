@@ -20,7 +20,12 @@
 import GenericDataSources
 import UIKit
 
-class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate, BookmarkDataSourceDelegate {
+protocol BookmarksPresentableListener: class {
+}
+
+class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate, BookmarkDataSourceDelegate, BookmarksPresentable, BookmarksViewControllable {
+
+    weak var listener: BookmarksPresentableListener?
 
     override var screen: Analytics.Screen { return .bookmarks }
 

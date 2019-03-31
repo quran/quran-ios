@@ -17,26 +17,33 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import RIBs
 import RxCocoa
 import RxSwift
 
-protocol SearchInteractor: class {
-    var router: SearchRouter? { get set }
-    var presenter: SearchPresenter? { get set }
-
-    func onViewLoaded()
-
-    func onSearchTermSelected(_ searchTerm: String)
-    func onSelected(searchResult: SearchResult)
-    func onSelected(autocompletion: SearchAutocompletion)
-    func onSearchButtonTapped()
-    func onSearchTextUpdated(to: String, isActive: Bool)
+protocol SearchRouting: ViewableRouting {
 }
 
-class DefaultSearchInteractor: SearchInteractor {
+protocol SearchPresentable: class {
+    var listener: SearchPresentableListener? { get set }
 
-    weak var router: SearchRouter?
-    weak var presenter: SearchPresenter?
+    func show(autocompletions: [SearchAutocompletion])
+    func show(results: SearchResults)
+    func show(recents: [String], popular: [String])
+
+    func showLoading()
+    func showError(_ error: Error)
+    func showNoResults(for term: String)
+}
+
+protocol SearchListener: class {
+    func navigateTo(quranPage: Int, highlightingAyah: AyahNumber)
+}
+
+final class SearchInteractor: PresentableInteractor<SearchPresentable>, SearchInteractable, SearchPresentableListener {
+
+    weak var router: SearchRouting?
+    weak var listener: SearchListener?
 
     private let disposeBag = DisposeBag()
     private let searchTerm = Variable("")
@@ -48,19 +55,22 @@ class DefaultSearchInteractor: SearchInteractor {
     private var source: SearchResult.Source?
 
     init(
+        presenter: SearchPresentable,
         persistence: SimplePersistence,
         autocompleteService: SearchAutocompletionService,
         searchService: SearchService,
         recentsService: SearchRecentsService) {
         self.persistence = persistence
         self.recentsService = recentsService
+        super.init(presenter: presenter)
+        presenter.listener = self
 
         // loading search
         let loading = ActivityIndicator()
         loading
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
-                self?.presenter?.showLoading()
+                self?.presenter.showLoading()
             }).disposed(by: disposeBag)
 
         // auto completion
@@ -77,7 +87,7 @@ class DefaultSearchInteractor: SearchInteractor {
                         .asDriver(onErrorJustReturn: [])
                 }
             }.drive(onNext: { [weak self] (completions) in
-                self?.presenter?.show(autocompletions: completions)
+                self?.presenter.show(autocompletions: completions)
             }).disposed(by: disposeBag)
 
         // search
@@ -97,14 +107,14 @@ class DefaultSearchInteractor: SearchInteractor {
 
                     Analytics.shared.searching(for: query, source: results.source, resultsCount: results.items.count)
                     if results.items.isEmpty {
-                        self?.presenter?.showNoResults(for: query)
+                        self?.presenter.showNoResults(for: query)
                     } else {
-                        self?.presenter?.show(results: results)
+                        self?.presenter.show(results: results)
                     }
                 case .failure(let error):
                     self?.source = nil
-                    self?.presenter?.show(results: SearchResults(source: .none, items: []))
-                    self?.presenter?.showError(error)
+                    self?.presenter.show(results: SearchResults(source: .none, items: []))
+                    self?.presenter.showError(error)
                 }
                 self?.recentsService.addToRecents(query)
                 self?.recentsUpdated()
@@ -112,7 +122,7 @@ class DefaultSearchInteractor: SearchInteractor {
     }
 
     private func recentsUpdated() {
-        presenter?.show(recents: recentsService.getRecents(), popular: recentsService.getPopularTerms())
+        presenter.show(recents: recentsService.getRecents(), popular: recentsService.getPopularTerms())
     }
 
     func onViewLoaded() {
@@ -140,8 +150,10 @@ class DefaultSearchInteractor: SearchInteractor {
             }
         }
 
+
         // navigate to the selected page
-        router?.navigateTo(quranPage: searchResult.page, highlightingAyah: searchResult.ayah)
+        Analytics.shared.openingQuran(from: .searchResults)
+        listener?.navigateTo(quranPage: searchResult.page, highlightingAyah: searchResult.ayah)
     }
 
     func onSelected(autocompletion: SearchAutocompletion) {

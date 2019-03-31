@@ -20,20 +20,11 @@
 
 import UIKit
 
-class JuzsNavigationController: BaseNavigationController {
+final class JuzsTabViewController: TabViewController {
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: lAndroid("quran_juz2"),
-                                  image: #imageLiteral(resourceName: "pie_chart-empty-25"),
-                                  selectedImage: #imageLiteral(resourceName: "pie_chart-filled-25"))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+    override func getTabBarItem() -> UITabBarItem {
+        return UITabBarItem(title: lAndroid("quran_juz2"),
+                            image: #imageLiteral(resourceName: "pie_chart-empty-25"),
+                            selectedImage: #imageLiteral(resourceName: "pie_chart-filled-25"))
     }
 }

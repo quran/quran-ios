@@ -19,20 +19,10 @@
 //
 import UIKit
 
-class SettingsNavigationController: BaseNavigationController {
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        tabBarItem = UITabBarItem(title: lAndroid("menu_settings"),
-                                  image: #imageLiteral(resourceName: "settings-25"),
-                                  selectedImage: #imageLiteral(resourceName: "settings_filled-25"))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+class SettingsTabViewController: TabViewController {
+    override func getTabBarItem() -> UITabBarItem {
+        return UITabBarItem(title: lAndroid("menu_settings"),
+                            image: #imageLiteral(resourceName: "settings-25"),
+                            selectedImage: #imageLiteral(resourceName: "settings_filled-25"))
     }
 }

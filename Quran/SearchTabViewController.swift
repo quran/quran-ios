@@ -1,5 +1,5 @@
 //
-//  JuzsViewController.swift
+//  SearchNavigationController.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/19/16.
@@ -17,24 +17,11 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import GenericDataSources
+
 import UIKit
 
-protocol JuzsPresentableListener: class {
-}
-
-class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell>, JuzsPresentable, JuzsViewControllable {
-    weak var listener: JuzsPresentableListener?
-
-    override var screen: Analytics.Screen { return .juzs }
-
-    override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
-        return QuartersDataSource()
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = lAndroid("quran_juz2")
-        tableView.ds_register(cellNib: QuarterTableViewCell.self)
+class SearchTabViewController: TabViewController {
+    override func getTabBarItem() -> UITabBarItem {
+        return UITabBarItem(tabBarSystemItem: .search, tag: 0)
     }
 }

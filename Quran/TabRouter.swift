@@ -45,4 +45,10 @@ class TabRouter: NavigationRouter<TabInteractable, TabViewControllable>, TabRout
         controller.hidesBottomBarWhenPushed = true
         viewController.uinavigationController.pushViewController(controller, animated: true)
     }
+
+    func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        let controller = deps.quranControllerCreator.create((quranPage, lastPage, nil))
+        controller.hidesBottomBarWhenPushed = true
+        viewController.uinavigationController.pushViewController(controller, animated: true)
+    }
 }

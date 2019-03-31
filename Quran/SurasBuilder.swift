@@ -19,7 +19,6 @@ final class SurasBuilder: Builder, SurasBuildable {
     func build(withListener listener: SurasListener) -> SurasRouting {
         let viewController = SurasViewController(
             dataRetriever: SurasDataRetriever().asAnyGetInteractor(),
-            quranControllerCreator: container.createCreator(container.createQuranController), // TODO: shouldn't be needed
             lastPagesPersistence: container.createLastPagesPersistence()
         )
         let interactor = SurasInteractor(presenter: viewController)

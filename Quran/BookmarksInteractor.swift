@@ -19,7 +19,7 @@ protocol BookmarksPresentable: Presentable {
 }
 
 protocol BookmarksListener: class {
-    // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 final class BookmarksInteractor: PresentableInteractor<BookmarksPresentable>, BookmarksInteractable, BookmarksPresentableListener {
@@ -34,13 +34,8 @@ final class BookmarksInteractor: PresentableInteractor<BookmarksPresentable>, Bo
         presenter.listener = self
     }
 
-    override func didBecomeActive() {
-        super.didBecomeActive()
-        // TODO: Implement business logic here.
-    }
-
-    override func willResignActive() {
-        super.willResignActive()
-        // TODO: Pause any business logic.
+    func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        Analytics.shared.openingQuran(from: .bookmarks)
+        listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
     }
 }

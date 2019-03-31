@@ -19,7 +19,6 @@ final class JuzsBuilder: Builder, JuzsBuildable {
     func build(withListener listener: JuzsListener) -> JuzsRouting {
         let viewController = JuzsViewController(
             dataRetriever: QuartersDataRetriever().asAnyGetInteractor(),
-            quranControllerCreator: container.createCreator(container.createQuranController), // TODO shouldn't be needed
             lastPagesPersistence: container.createLastPagesPersistence())
         let interactor = JuzsInteractor(presenter: viewController)
         interactor.listener = listener

@@ -18,7 +18,6 @@ final class BookmarksBuilder: Builder, BookmarksBuildable {
 
     func build(withListener listener: BookmarksListener) -> BookmarksRouting {
         let viewController = BookmarksTableViewController(
-            quranControllerCreator: container.createCreator(container.createQuranController),
             simplePersistence: container.createSimplePersistence(),
             lastPagesPersistence: container.createLastPagesPersistence(),
             bookmarksPersistence: container.createBookmarksPersistence(),

@@ -21,6 +21,7 @@ import GenericDataSources
 import UIKit
 
 protocol BookmarksPresentableListener: class {
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate, BookmarkDataSourceDelegate, BookmarksPresentable, BookmarksViewControllable {
@@ -35,15 +36,11 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
     let pageDS: PageBookmarkDataSource
     let ayahDS: AyahBookmarkDataSource
 
-    let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
-
     init(
-         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>,
          simplePersistence: SimplePersistence,
          lastPagesPersistence: LastPagesPersistence,
          bookmarksPersistence: BookmarksPersistence,
          ayahPersistence: AyahTextPersistence) {
-        self.quranControllerCreator = quranControllerCreator
 
         // configure the data sources
         lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
@@ -129,10 +126,7 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
     }
 
     fileprivate func navigateToPage(_ page: Int, lastPage: LastPage?) {
-        Analytics.shared.openingQuran(from: screen)
-        let controller = self.quranControllerCreator.create((page, lastPage, nil))
-        controller.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(controller, animated: true)
+        listener?.navigateTo(quranPage: page, lastPage: lastPage)
     }
 
     func hasItemsToEdit() -> Bool {

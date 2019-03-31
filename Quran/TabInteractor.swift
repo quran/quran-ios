@@ -11,6 +11,7 @@ import RxSwift
 
 protocol TabRouting: NavigationRouting {
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber)
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 protocol TabPresentable: Presentable {
@@ -46,5 +47,9 @@ class TabInteractor: PresentableInteractor<TabPresentable>, TabInteractable, Tab
 
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {
         router?.navigateTo(quranPage: quranPage, highlightingAyah: highlightingAyah)
+    }
+
+    func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        router?.navigateTo(quranPage: quranPage, lastPage: lastPage)
     }
 }

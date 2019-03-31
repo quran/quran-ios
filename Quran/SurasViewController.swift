@@ -21,6 +21,7 @@ import GenericDataSources
 import UIKit
 
 protocol SurasPresentableListener: class {
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell>, SurasPresentable, SurasViewControllable {
@@ -36,5 +37,9 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
         super.viewDidLoad()
         title = lAndroid("quran_sura")
         tableView.ds_register(cellNib: SuraTableViewCell.self)
+    }
+
+    override func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
     }
 }

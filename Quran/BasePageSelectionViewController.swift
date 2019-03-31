@@ -23,7 +23,6 @@ import UIKit
 class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
 
     let dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>
-    let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
     let lastPageDS: LastPageBookmarkDataSource
@@ -31,10 +30,8 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
     private let numberFormatter = NumberFormatter()
 
     init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>,
-         quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController>,
          lastPagesPersistence: LastPagesPersistence) {
         self.dataRetriever = dataRetriever
-        self.quranControllerCreator = quranControllerCreator
         self.lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
         super.init(nibName: nil, bundle: nil)
     }
@@ -63,7 +60,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         }.suppress()
 
         dataSource.onJuzHeaderSelected = { [weak self] juz in
-            self?.navigateToPage(juz.startPageNumber, lastPage: nil)
+            self?.navigateTo(quranPage: juz.startPageNumber, lastPage: nil)
         }
     }
 
@@ -95,7 +92,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         let lastPageSelection = BlockSelectionHandler<LastPage, BookmarkTableViewCell>()
         lastPageSelection.didSelectBlock = { [weak self] (ds, _, index) in
             let item = ds.item(at:index)
-            self?.navigateToPage(item.page, lastPage: item)
+            self?.navigateTo(quranPage: item.page, lastPage: item)
         }
         lastPageDS.setSelectionHandler(lastPageSelection)
     }
@@ -104,7 +101,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
         selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
             let item = ds.item(at: index)
-            self?.navigateToPage(item.startPageNumber, lastPage: nil)
+            self?.navigateTo(quranPage: item.startPageNumber, lastPage: nil)
         }
 
         let dataSource = createItemsDataSource()
@@ -116,10 +113,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         fatalError("Should be implemented by subclasses")
     }
 
-    private func navigateToPage(_ page: Int, lastPage: LastPage?) {
-        Analytics.shared.openingQuran(from: screen)
-        let controller = self.quranControllerCreator.create((page, lastPage, nil))
-        controller.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(controller, animated: true)
+    func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        expectedToBeSubclassed()
     }
 }

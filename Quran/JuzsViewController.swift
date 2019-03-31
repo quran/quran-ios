@@ -21,6 +21,7 @@ import GenericDataSources
 import UIKit
 
 protocol JuzsPresentableListener: class {
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell>, JuzsPresentable, JuzsViewControllable {
@@ -36,5 +37,9 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
         super.viewDidLoad()
         title = lAndroid("quran_juz2")
         tableView.ds_register(cellNib: QuarterTableViewCell.self)
+    }
+
+    override func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
     }
 }

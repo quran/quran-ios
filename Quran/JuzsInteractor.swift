@@ -19,7 +19,7 @@ protocol JuzsPresentable: Presentable {
 }
 
 protocol JuzsListener: class {
-    // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
 final class JuzsInteractor: PresentableInteractor<JuzsPresentable>, JuzsInteractable, JuzsPresentableListener {
@@ -34,13 +34,8 @@ final class JuzsInteractor: PresentableInteractor<JuzsPresentable>, JuzsInteract
         presenter.listener = self
     }
 
-    override func didBecomeActive() {
-        super.didBecomeActive()
-        // TODO: Implement business logic here.
-    }
-
-    override func willResignActive() {
-        super.willResignActive()
-        // TODO: Pause any business logic.
+    func navigateTo(quranPage: Int, lastPage: LastPage?) {
+        Analytics.shared.openingQuran(from: .juzs)
+        listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
     }
 }

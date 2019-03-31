@@ -20,10 +20,16 @@
 import KVOController
 import UIKit
 
+protocol QuranPresentableListener: class {
+}
+
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
                         AdvancedAudioOptionsViewControllerDelegate,
-                        UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate {
+                        UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate,
+                        QuranViewControllable, QuranPresentable {
+
+    weak var listener: QuranPresentableListener?
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -143,6 +149,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         dataSource = QuranDataSource(dataSources: dataSources, handlers: handlers)
 
         super.init(nibName: nil, bundle: nil)
+        hidesBottomBarWhenPushed = true
 
         updateTranslationView(from: nil)
 

@@ -8,7 +8,7 @@
 
 import RIBs
 
-protocol TabInteractable: Interactable, SurasListener, JuzsListener, BookmarksListener, SearchListener, SettingsListener {
+protocol TabInteractable: Interactable, SurasListener, JuzsListener, BookmarksListener, SearchListener, SettingsListener, QuranListener {
     var router: TabRouting? { get set }
     var listener: TabListener? { get set }
 }
@@ -19,7 +19,7 @@ protocol TabViewControllable: NavigationControllable {
 class TabRouter: NavigationRouter<TabInteractable, TabViewControllable>, TabRouting {
 
     struct Deps {
-        let quranControllerCreator: AnyCreator<(Int, LastPage?, AyahNumber?), QuranViewController> // TODO: should be a router
+        let quranBuilder: QuranBuildable
     }
 
     private let deps: Deps
@@ -41,14 +41,12 @@ class TabRouter: NavigationRouter<TabInteractable, TabViewControllable>, TabRout
     }
 
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {
-        let controller = deps.quranControllerCreator.create((quranPage, nil, highlightingAyah))
-        controller.hidesBottomBarWhenPushed = true
-        viewController.uinavigationController.pushViewController(controller, animated: true)
+        let router = deps.quranBuilder.build(withListener: interactor, page: quranPage, lastPage: nil, highlightAyah: highlightingAyah)
+        push(router, animated: true)
     }
 
     func navigateTo(quranPage: Int, lastPage: LastPage?) {
-        let controller = deps.quranControllerCreator.create((quranPage, lastPage, nil))
-        controller.hidesBottomBarWhenPushed = true
-        viewController.uinavigationController.pushViewController(controller, animated: true)
+        let router = deps.quranBuilder.build(withListener: interactor, page: quranPage, lastPage: lastPage, highlightAyah: nil)
+        push(router, animated: true)
     }
 }

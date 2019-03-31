@@ -26,12 +26,6 @@ class Container {
 
     fileprivate static let DownloadsBackgroundIdentifier = "com.quran.ios.downloading.audio"
 
-    fileprivate let imagesCache: Cache<Int, QuranUIImage> = {
-        let cache = Cache<Int, QuranUIImage>()
-        cache.countLimit = 5
-        return cache
-    }()
-
     // singleton as we cannot have more than background download service
     private static var downloadManager: DownloadManager! = nil // swiftlint:disable:this implicitly_unwrapped_optional
 
@@ -106,23 +100,11 @@ class Container {
         return dataSource
     }
 
-    func createQuranPagesRetriever() -> AnyGetInteractor<[QuranPage]> {
-        return QuranPagesDataRetriever().asAnyGetInteractor()
-    }
-
     func createQarisDataRetriever() -> AnyGetInteractor<[Qari]> {
         return QariDataRetriever().asAnyGetInteractor()
     }
 
-    func createAyahInfoPersistence() -> AyahInfoPersistence {
-        return SQLiteAyahInfoPersistence()
-    }
-
     func createArabicTextPersistence() -> AyahTextPersistence {
-        return SQLiteArabicTextPersistence()
-    }
-
-    func createWordByWordTranslationPersistence() -> WordByWordTranslationPersistence {
         return SQLiteArabicTextPersistence()
     }
 
@@ -130,69 +112,9 @@ class Container {
         return SQLiteTranslationTextPersistence(filePath: filePath)
     }
 
-    func createAyahInfoRetriever() -> AyahInfoRetriever {
-        return DefaultAyahInfoRetriever(persistence: createAyahInfoPersistence())
-    }
-
-    func createQuranController(page: Int, lastPage: LastPage?, highlightAyah: AyahNumber?) -> QuranViewController {
-        return QuranViewController(
-            imageService                           : createQuranImageService(),
-            pageService                            : createQuranTranslationService(),
-            dataRetriever                          : createQuranPagesRetriever(),
-            ayahInfoRetriever                      : createAyahInfoRetriever(),
-            audioViewPresenter                     : createAudioBannerViewPresenter(),
-            qarisControllerCreator                 : createQariTableViewControllerCreator(),
-            translationsSelectionControllerCreator : createCreator(createTranslationsSelectionViewController),
-            bookmarksPersistence                   : createBookmarksPersistence(),
-            lastPagesPersistence                   : createLastPagesPersistence(),
-            simplePersistence                      : createSimplePersistence(),
-            verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
-            wordByWordPersistence                  : createWordByWordTranslationPersistence(),
-            page                                   : page,
-            lastPage                               : lastPage,
-            highlightedSearchAyah                  : highlightAyah
-        )
-    }
-
     func createCreator<CreatedObject, Parameters>(
         _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<Parameters, CreatedObject> {
         return AnyCreator(createClosure: creationClosure)
-    }
-
-    func createQuranImageService() -> AnyCacheableService<Int, QuranUIImage> {
-        return PagesCacheableService(
-            cache              : createImagesCache(),
-            previousPagesCount : 1,
-            nextPagesCount     : 2,
-            pageRange          : Quran.QuranPagesRange,
-            operationCreator   : createCreator(createImagePreloadingOperation)).asCacheableService()
-    }
-
-    func createQuranTranslationService() -> AnyCacheableService<Int, TranslationPage> {
-        let d = PagesCacheableService(
-            cache              : createTranslationPageCache(),
-            previousPagesCount : 1,
-            nextPagesCount     : 2,
-            pageRange          : Quran.QuranPagesRange,
-            operationCreator   : createCreator(createTranslationPreloadingOperation))
-        return d.asCacheableService()
-    }
-
-    func createTranslationPageCache() -> Cache<Int, TranslationPage> {
-        let cache = Cache<Int, TranslationPage>()
-        cache.countLimit = 5
-        return cache
-    }
-
-    func createImagesCache() -> Cache<Int, QuranUIImage> {
-        return imagesCache
-    }
-
-    func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
-        return DefaultAudioBannerViewPresenter(persistence: createSimplePersistence(),
-                                               qariRetreiver: createQarisDataRetriever(),
-                                               gaplessAudioPlayer: createGaplessAudioPlayerInteractor(),
-                                               gappedAudioPlayer: createGappedAudioPlayerInteractor())
     }
 
     func createUserDefaults() -> UserDefaults {
@@ -211,52 +133,8 @@ class Container {
         return PageBasedLastAyahFinder()
     }
 
-    func createJuzLastAyahFinder() -> LastAyahFinder {
-        return JuzBasedLastAyahFinder()
-    }
-
     func createDownloadManager() -> DownloadManager {
         return Container.downloadManager
-    }
-
-    func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GappedQariAudioFileListRetrieval(),
-                                    downloader: createDownloadManager(),
-                                    ayahDownloader: createAyahsAudioDownloader())
-    }
-
-    func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GaplessQariAudioFileListRetrieval(),
-                                    downloader: createDownloadManager(),
-                                    ayahDownloader: createAyahsAudioDownloader())
-    }
-
-    func createGappedAudioPlayer() -> AudioPlayer {
-        return GappedAudioPlayer()
-    }
-
-    func createGaplessAudioPlayer() -> AudioPlayer {
-        return GaplessAudioPlayer(timingRetriever: createQariTimingRetriever())
-    }
-
-    func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(),
-                                            lastAyahFinder: createJuzLastAyahFinder(),
-                                            player: createGaplessAudioPlayer())
-    }
-
-    func createGappedAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
-                                           lastAyahFinder: createJuzLastAyahFinder(),
-                                           player: createGappedAudioPlayer())
-    }
-
-    func createQariTimingRetriever() -> QariTimingRetriever {
-        return SQLiteQariTimingRetriever(persistenceCreator: createCreator(createQariAyahTimingPersistence))
-    }
-
-    func createQariAyahTimingPersistence(filePath: URL) -> QariAyahTimingPersistence {
-        return SQLiteAyahTimingPersistence(filePath: filePath)
     }
 
     func createBookmarksPersistence() -> BookmarksPersistence {
@@ -316,32 +194,6 @@ class Container {
         return TranslationDeletionInteractor(
             persistence: createActiveTranslationsPersistence(),
             simplePersistence: createSimplePersistence()).asAnyInteractor()
-    }
-
-    func createImagePreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<QuranUIImage> {
-        return ImagePreloadingOperation(page: page).asPreloadingOperationRepresentable()
-    }
-
-    func createTranslationPreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<TranslationPage> {
-        return TranslationPreloadingOperation(page: page,
-                                              localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
-                                              arabicPersistence: createArabicTextPersistence(),
-                                              translationPersistenceCreator: createCreator(createTranslationTextPersistence),
-                                              simplePersistence: createSimplePersistence()).asPreloadingOperationRepresentable()
-    }
-
-    func createImageVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
-        return ImageVerseTextRetrieval(arabicAyahPersistence: createArabicTextPersistence()).asAnyInteractor()
-    }
-
-    func createTranslationVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
-        return TranslationVerseTextRetrieval().asAnyInteractor()
-    }
-
-    func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
-        return CompositeVerseTextRetrieval(
-            image: createImageVerseTextRetrieval(),
-            translation: createTranslationVerseTextRetrieval()).asAnyInteractor()
     }
 
     func createDownloadableQariAudioRetriever() -> AnyGetInteractor<[DownloadableQariAudio]> {

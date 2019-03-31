@@ -20,7 +20,7 @@ final class TabDependenciesBuilder: Builder {
 
     func build() -> TabRouter.Deps {
         return TabRouter.Deps(
-            quranControllerCreator: container.createCreator(container.createQuranController)
+            quranBuilder: QuranBuilder(container: container)
         )
     }
 }

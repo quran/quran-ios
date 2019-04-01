@@ -8,18 +8,20 @@
 
 import RIBs
 
-protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener {
+protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
 
 protocol QuranViewControllable: ViewControllable {
+    func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable)
 }
 
 final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
 
     struct Deps {
         let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuildable
+        let translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuildable
     }
 
     private let deps: Deps
@@ -36,6 +38,16 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
     }
 
     func dismissAdvancedAudioOptions() {
+        dismiss(animated: true)
+    }
+
+    func presentTranslationTextTypeSelection() {
+        let router = deps.translationTextTypeSelectionBuilder.build(withListener: interactor)
+        viewController.presentTranslationTextTypeSelectionViewController(router.viewControllable)
+        attachChild(router)
+    }
+
+    func dismissTranslationTextTypeSelection() {
         dismiss(animated: true)
     }
 }

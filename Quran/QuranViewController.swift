@@ -19,16 +19,18 @@
 //
 import KVOController
 import QueuePlayer
+import RIBs
 import UIKit
 
 protocol QuranPresentableListener: class {
     func onAdvancedAudioOptionsButtonTapped()
+    func onWordPointerTapped()
 }
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
                         UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate,
-QuranViewControllable, QuranPresentable {
+                        QuranViewControllable, QuranPresentable {
 
     var verseRuns: Runs { return audioViewPresenter.verseRuns }
     var listRuns: Runs { return audioViewPresenter.listRuns }
@@ -291,21 +293,17 @@ QuranViewControllable, QuranPresentable {
         ShareController.share(textLines: textLines, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
     }
 
-    func selectWordTranslationTextType(from view: UIView) {
-        let selectedIndex = simplePersistence.valueForKey(.wordTranslationType)
-        let items = [l("translationTextType"), l("transliterationTextType")]
-        let controller = TranslationTextTypeSelectionTableViewController(selectedIndex: selectedIndex, items: items)
-        controller.selectionChanged = { [weak self] newIndex in
-            self?.simplePersistence.setValue(newIndex, forKey: .wordTranslationType)
-            self?.dismiss(animated: true, completion: nil)
-        }
-        controller.modalPresentationStyle = .popover
-        controller.retainedPopoverPresentationHandler = PhonePopoverPresentationControllerDelegate()
-        controller.popoverPresentationController?.sourceView = view
-        controller.popoverPresentationController?.sourceRect = view.bounds
-        controller.popoverPresentationController?.permittedArrowDirections = [.left, .right]
+    func onWordPointerTapped() {
+        listener?.onWordPointerTapped()
+    }
 
-        present(controller, animated: true, completion: nil)
+    func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable) {
+        viewController.uiviewController.modalPresentationStyle = .popover
+        viewController.uiviewController.popoverPresentationController?.delegate = self
+        viewController.uiviewController.popoverPresentationController?.sourceView = quranView?.pointer
+        viewController.uiviewController.popoverPresentationController?.sourceRect = quranView?.pointer.bounds ?? .zero
+        viewController.uiviewController.popoverPresentationController?.permittedArrowDirections = [.left, .right]
+        present(viewController.uiviewController, animated: true, completion: nil)
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {

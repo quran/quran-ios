@@ -46,7 +46,9 @@ final class QuranBuilder: Builder, QuranBuildable {
             interactor: interactor,
             viewController: viewController,
             deps: QuranRouter.Deps(
-                advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container)))
+                advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container),
+                translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container))
+        )
     }
 
     private let imagesCache: Cache<Int, QuranUIImage> = {

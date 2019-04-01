@@ -34,7 +34,7 @@ protocol QuranViewDelegate: class {
     func onQuranViewTapped(_ quranView: QuranView)
     func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
     func onErrorOccurred(error: Error)
-    func selectWordTranslationTextType(from view: UIView)
+    func onWordPointerTapped()
     func play(from: AyahNumber)
 }
 
@@ -411,7 +411,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     @objc
     func pointerTapped() {
-        delegate?.selectWordTranslationTextType(from: pointer)
+        delegate?.onWordPointerTapped()
     }
 
     func showPointer() {

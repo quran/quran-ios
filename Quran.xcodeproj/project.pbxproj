@@ -30,6 +30,9 @@
 		06A7E6A52251648700AC2634 /* AdvancedAudioOptionsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A22251648700AC2634 /* AdvancedAudioOptionsRouter.swift */; };
 		06A7E6A62251648700AC2634 /* AdvancedAudioOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A32251648700AC2634 /* AdvancedAudioOptionsBuilder.swift */; };
 		06A7E6A72251648700AC2634 /* AdvancedAudioOptionsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A42251648700AC2634 /* AdvancedAudioOptionsInteractor.swift */; };
+		06A7E6AC2251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A82251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift */; };
+		06A7E6AE2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6AA2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift */; };
+		06A7E6AF2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6AB2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift */; };
 		06B2407F2248299C0003D628 /* AppInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B240792248299B0003D628 /* AppInteractor.swift */; };
 		06B240812248299C0003D628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407B2248299C0003D628 /* AppDelegate.swift */; };
 		06B240822248299C0003D628 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407C2248299C0003D628 /* AppRouter.swift */; };
@@ -587,6 +590,9 @@
 		06A7E6A22251648700AC2634 /* AdvancedAudioOptionsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsRouter.swift; sourceTree = "<group>"; };
 		06A7E6A32251648700AC2634 /* AdvancedAudioOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsBuilder.swift; sourceTree = "<group>"; };
 		06A7E6A42251648700AC2634 /* AdvancedAudioOptionsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsInteractor.swift; sourceTree = "<group>"; };
+		06A7E6A82251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionRouter.swift; sourceTree = "<group>"; };
+		06A7E6AA2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionBuilder.swift; sourceTree = "<group>"; };
+		06A7E6AB2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionInteractor.swift; sourceTree = "<group>"; };
 		06B240792248299B0003D628 /* AppInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInteractor.swift; sourceTree = "<group>"; };
 		06B2407B2248299C0003D628 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		06B2407C2248299C0003D628 /* AppRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -2249,14 +2255,6 @@
 			name = LastAyahFinder;
 			sourceTree = "<group>";
 		};
-		54D133D61EF7811B00037D8C /* View */ = {
-			isa = PBXGroup;
-			children = (
-				54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */,
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
 		54D2C2161E85DB8200128282 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -2395,7 +2393,10 @@
 		54F35F63216A649D00276220 /* Word Translation */ = {
 			isa = PBXGroup;
 			children = (
-				54D133D61EF7811B00037D8C /* View */,
+				06A7E6AA2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift */,
+				06A7E6AB2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift */,
+				06A7E6A82251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift */,
+				54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */,
 			);
 			name = "Word Translation";
 			sourceTree = "<group>";
@@ -3653,9 +3654,11 @@
 				06A7E6A1225155F700AC2634 /* QuranInteractor.swift in Sources */,
 				545499B51E7DBD8800F4F927 /* TranslationsSelectionNavigationController.swift in Sources */,
 				54C0DBD11CDF635A009AAD8D /* AudioQariBarView.swift in Sources */,
+				06A7E6AE2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift in Sources */,
 				5435C6481DC91C3B00A0033C /* PageBookmarkDataSource.swift in Sources */,
 				54699BA31E8DC17B00211A60 /* QuranTranslationTextCollectionViewCell.swift in Sources */,
 				54B2667C1CCAACAE00D3AEF8 /* QuartersDataSource.swift in Sources */,
+				06A7E6AC2251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift in Sources */,
 				06B240CC22483ED10003D628 /* SearchTabBuilder.swift in Sources */,
 				54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */,
 				54C0DC021CE62D4E009AAD8D /* LastAyahFinder.swift in Sources */,
@@ -3823,6 +3826,7 @@
 				540922A11E91314D00C7537A /* QuranTranslationVerseNumberDataSource.swift in Sources */,
 				5428A68B213DCD0B00B91F13 /* ThemeSettingsDataSource.swift in Sources */,
 				54547E931EC9D0A9008AFED3 /* SearchInteractor.swift in Sources */,
+				06A7E6AF2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift in Sources */,
 				54A99CAC1CF796AE003995AE /* BookmarksDataSource.swift in Sources */,
 				5459FF781EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift in Sources */,
 				54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */,

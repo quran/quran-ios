@@ -52,31 +52,28 @@ private class DataSource: BasicDataSource<String, TableViewCell> {
     }
 }
 
-class TranslationTextTypeSelectionTableViewController: BaseTableViewController {
+protocol TranslationTextTypeSelectionPresentableListener: class {
+    func onItemTapped(at index: Int)
+}
+
+class TranslationTextTypeSelectionTableViewController: BaseTableViewController, TranslationTextTypeSelectionViewControllable, TranslationTextTypeSelectionPresentable {
+
+    weak var listener: TranslationTextTypeSelectionPresentableListener?
 
     override var screen: Analytics.Screen {
         return .wordTranslationSelection
     }
 
     private let dataSource = DataSource()
+    private let itemHeight: CGFloat = 44
 
-    var selectionChanged: ((Int) -> Void)?
-
-    var retainedPopoverPresentationHandler: UIPopoverPresentationControllerDelegate? {
-        didSet {
-            popoverPresentationController?.delegate = retainedPopoverPresentationHandler
-        }
-    }
-
-    init(selectedIndex: Int?, items: [String]) {
+    init() {
         super.init(style: .plain)
-        dataSource.selectedIndex = selectedIndex
-        dataSource.items = items
 
         let block = BlockSelectionHandler<String, TableViewCell>()
         dataSource.setSelectionHandler(block)
         block.didSelectBlock = { [weak self] (_, _, indexPath) in
-            self?.selectionChanged?(indexPath.item)
+            self?.listener?.onItemTapped(at: indexPath.item)
         }
     }
 
@@ -91,11 +88,18 @@ class TranslationTextTypeSelectionTableViewController: BaseTableViewController {
 
         tableView.ds_register(cellClass: TableViewCell.self)
         tableView.ds_useDataSource(dataSource)
-        tableView.rowHeight = 44
+        tableView.rowHeight = itemHeight
+    }
 
-        let itemsWidths = dataSource.items.map { $0.size(withFont: TableViewCell.font).width }
+    func setSelectedIndex(selectedIndex: Int?, items: [String]) {
+        dataSource.selectedIndex = selectedIndex
+        dataSource.items = items
+
+        let itemsWidths = items.map { $0.size(withFont: TableViewCell.font).width }
         let width = unwrap(itemsWidths.max()) + 70
-        let height = tableView.rowHeight * CGFloat(dataSource.items.count)
+        let height = itemHeight * CGFloat(dataSource.items.count)
         preferredContentSize = CGSize(width: width, height: height)
+
+        tableView.reloadData()
     }
 }

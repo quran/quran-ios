@@ -21,15 +21,18 @@ import GenericDataSources
 import QueuePlayer
 import UIKit
 
-protocol AdvancedAudioOptionsViewControllerDelegate: class {
-    func advancedAudioOptionsViewController(_ controller: AdvancedAudioOptionsViewController, finishedWith options: AdvancedAudioOptions)
+protocol AdvancedAudioOptionsPresentableListener: class {
+    func onPlayButtonTapped()
+    func onDismissTapped()
 }
 
-class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognizerDelegate {
+class AdvancedAudioOptionsViewController
+    : BaseViewController, UIGestureRecognizerDelegate,
+      AdvancedAudioOptionsViewControllable, AdvancedAudioOptionsPresentable {
 
     override var screen: Analytics.Screen { return .advancedAudio }
 
-    weak var delegate: AdvancedAudioOptionsViewControllerDelegate?
+    weak var listener: AdvancedAudioOptionsPresentableListener?
 
     private let dataSource = CompositeDataSource(sectionType: .multi)
     private let firstSection = SectionDataSource(sectionType: .single)
@@ -61,6 +64,13 @@ class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognize
         return button
     }()
 
+    var options: AdvancedAudioOptions {
+        return AdvancedAudioOptions(
+            range: VerseRange(lowerBound: from.ayah, upperBound: to.ayah),
+            verseRuns: verseRuns.runs,
+            listRuns: listRuns.runs)
+    }
+
     init(options: AdvancedAudioOptions) {
 
         from = AyahDataSource(ayah: options.range.lowerBound)
@@ -81,6 +91,9 @@ class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognize
 
         secondSection.add(verseRuns)
         secondSection.add(listRuns)
+
+        modalTransitionStyle = .crossDissolve
+        modalPresentationStyle = .overFullScreen
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -162,28 +175,20 @@ class AdvancedAudioOptionsViewController: BaseViewController, UIGestureRecognize
         if let editingDS = selectionDS?.editingDS {
             deselect(indexPath: IndexPath(item: 0, section: 0), collection: unwrap(editingDS.ds_reusableViewDelegate), ds: editingDS)
         } else {
-            let options = AdvancedAudioOptions(
-                range: VerseRange(lowerBound: from.ayah, upperBound: to.ayah),
-                verseRuns: verseRuns.runs,
-                listRuns: listRuns.runs)
-            delegate?.advancedAudioOptionsViewController(self, finishedWith: options)
-            dismissController()
+            listener?.onPlayButtonTapped()
         }
     }
 
     @IBAction func dismissView(_ sender: Any) {
-        dismissController()
+        listener?.onDismissTapped()
     }
 
-    private func dismissController() {
+    func dismissView(withDuration duration: TimeInterval) {
         view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [], animations: {
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [], animations: {
             self.bottomConstraint.constant = -self.tableView.frame.height
             self.view.layoutIfNeeded()
         }, completion: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

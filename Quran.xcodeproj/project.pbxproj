@@ -27,6 +27,9 @@
 		06A7E69F225155F700AC2634 /* QuranRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E69C225155F700AC2634 /* QuranRouter.swift */; };
 		06A7E6A0225155F700AC2634 /* QuranBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E69D225155F700AC2634 /* QuranBuilder.swift */; };
 		06A7E6A1225155F700AC2634 /* QuranInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E69E225155F700AC2634 /* QuranInteractor.swift */; };
+		06A7E6A52251648700AC2634 /* AdvancedAudioOptionsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A22251648700AC2634 /* AdvancedAudioOptionsRouter.swift */; };
+		06A7E6A62251648700AC2634 /* AdvancedAudioOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A32251648700AC2634 /* AdvancedAudioOptionsBuilder.swift */; };
+		06A7E6A72251648700AC2634 /* AdvancedAudioOptionsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A42251648700AC2634 /* AdvancedAudioOptionsInteractor.swift */; };
 		06B2407F2248299C0003D628 /* AppInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B240792248299B0003D628 /* AppInteractor.swift */; };
 		06B240812248299C0003D628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407B2248299C0003D628 /* AppDelegate.swift */; };
 		06B240822248299C0003D628 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407C2248299C0003D628 /* AppRouter.swift */; };
@@ -581,6 +584,9 @@
 		06A7E69C225155F700AC2634 /* QuranRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranRouter.swift; sourceTree = "<group>"; };
 		06A7E69D225155F700AC2634 /* QuranBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranBuilder.swift; sourceTree = "<group>"; };
 		06A7E69E225155F700AC2634 /* QuranInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranInteractor.swift; sourceTree = "<group>"; };
+		06A7E6A22251648700AC2634 /* AdvancedAudioOptionsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsRouter.swift; sourceTree = "<group>"; };
+		06A7E6A32251648700AC2634 /* AdvancedAudioOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsBuilder.swift; sourceTree = "<group>"; };
+		06A7E6A42251648700AC2634 /* AdvancedAudioOptionsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAudioOptionsInteractor.swift; sourceTree = "<group>"; };
 		06B240792248299B0003D628 /* AppInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInteractor.swift; sourceTree = "<group>"; };
 		06B2407B2248299C0003D628 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		06B2407C2248299C0003D628 /* AppRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -2351,6 +2357,7 @@
 				06A7E69D225155F700AC2634 /* QuranBuilder.swift */,
 				06A7E69E225155F700AC2634 /* QuranInteractor.swift */,
 				06A7E69C225155F700AC2634 /* QuranRouter.swift */,
+				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
 				54F35F87216A80E800276220 /* Audio */,
 				54F35F74216A798000276220 /* Models */,
 				54F35F62216A633900276220 /* Logic */,
@@ -2366,7 +2373,6 @@
 				54965FB61E7D4A1700A212E2 /* Page Title */,
 				54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */,
 				54C0DBE71CE48DF8009AAD8D /* QuranView.swift */,
-				54B266BC1CD16EA200D3AEF8 /* QuranViewController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2527,6 +2533,10 @@
 		54F35F79216A7F6400276220 /* AdvancedAudioOptions */ = {
 			isa = PBXGroup;
 			children = (
+				06A7E6A32251648700AC2634 /* AdvancedAudioOptionsBuilder.swift */,
+				06A7E6A42251648700AC2634 /* AdvancedAudioOptionsInteractor.swift */,
+				06A7E6A22251648700AC2634 /* AdvancedAudioOptionsRouter.swift */,
+				54F35F80216A7F7700276220 /* AdvancedAudioOptionsViewController.swift */,
 				54F35F7A216A7F6B00276220 /* View */,
 			);
 			name = AdvancedAudioOptions;
@@ -2539,7 +2549,6 @@
 				54F35F7E216A7F7700276220 /* AdvancedAudioOptionsSelectionTableViewCell.xib */,
 				54F35F7B216A7F7600276220 /* AdvancedAudioOptionsTableViewCell.swift */,
 				54F35F7F216A7F7700276220 /* AdvancedAudioOptionsTableViewCell.xib */,
-				54F35F80216A7F7700276220 /* AdvancedAudioOptionsViewController.swift */,
 				54F35F7D216A7F7600276220 /* AdvancedAudioOptionsViewController.xib */,
 			);
 			name = View;
@@ -3733,6 +3742,7 @@
 				548C2B3B2145A40D005266AA /* MoreRotationTableViewCell.swift in Sources */,
 				54B266761CCA943300D3AEF8 /* SurasDataSource.swift in Sources */,
 				06A7E68F22511A9E00AC2634 /* SettingsBuilder.swift in Sources */,
+				06A7E6A72251648700AC2634 /* AdvancedAudioOptionsInteractor.swift in Sources */,
 				54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */,
 				545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */,
 				547BCB5920915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift in Sources */,
@@ -3797,6 +3807,7 @@
 				544629DC1E67636F005B1107 /* TranslationFull.swift in Sources */,
 				548C2B4221470FE7005266AA /* DarkThemeUpdater.swift in Sources */,
 				541BA5E11E93AE6500245A42 /* QuranShareData.swift in Sources */,
+				06A7E6A52251648700AC2634 /* AdvancedAudioOptionsRouter.swift in Sources */,
 				54C0DC041CE63387009AAD8D /* SuraBasedLastAyahFinder.swift in Sources */,
 				548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */,
 				5437D39E1EB38B2A00795FA9 /* CrashlyticsCrasher.swift in Sources */,
@@ -3823,6 +3834,7 @@
 				54B2669C1CCD208800D3AEF8 /* QuranImageHighlightingView.swift in Sources */,
 				0D0BF1B4207F42E40022B6EE /* ReviewService.swift in Sources */,
 				54C0DBDA1CDF7E29009AAD8D /* AudioPlayBarView.swift in Sources */,
+				06A7E6A62251648700AC2634 /* AdvancedAudioOptionsBuilder.swift in Sources */,
 				545D964F1EBF3AE1006D758A /* BaseBookmarkDataSource.swift in Sources */,
 				547BCB5D20915638007AFBEC /* MoreWordByWordPointerTableViewCell.swift in Sources */,
 				54DC10BF209FA7DC00C57DA9 /* ThemedTableViewCell.swift in Sources */,

@@ -26,7 +26,7 @@ struct AdvancedAudioOptions {
 }
 
 protocol AudioBannerViewPresenterDelegate: class {
-    func showAdvancedAudio(options: AdvancedAudioOptions)
+    func onAdvancedAudioOptionsButtonTapped()
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int)
     func highlightAyah(_ ayah: AyahNumber)
     func removeHighlighting()
@@ -41,6 +41,7 @@ protocol AudioBannerViewPresenter: AudioBannerViewDelegate {
 
     var verseRuns: Runs { get set }
     var listRuns: Runs { get set }
+    var audioRange: VerseRange? { get }
 
     func onViewDidLoad()
     func setQariIndex(_ index: Int)

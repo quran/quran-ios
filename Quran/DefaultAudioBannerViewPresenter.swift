@@ -26,7 +26,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     let persistence: SimplePersistence
     let gaplessAudioPlayer: AudioPlayerInteractor
     let gappedAudioPlayer: AudioPlayerInteractor
-    private var audioRange: VerseRange?
+    var audioRange: VerseRange?
 
     var audioPlayer: AudioPlayerInteractor {
         switch selectedQari.audioType {
@@ -169,7 +169,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         guard let audioRange = audioRange else {
             return
         }
-        delegate?.showAdvancedAudio(options: AdvancedAudioOptions(range: audioRange, verseRuns: verseRuns, listRuns: listRuns))
+        delegate?.onAdvancedAudioOptionsButtonTapped()
     }
 
     func onCancelDownloadTapped() {

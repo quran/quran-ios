@@ -8,14 +8,21 @@
 
 import RIBs
 import RxSwift
+import QueuePlayer
 
 protocol QuranRouting: ViewableRouting {
-    // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
+    func presentAdvancedAudioOptions(with options: AdvancedAudioOptions)
+    func dismissAdvancedAudioOptions()
 }
 
 protocol QuranPresentable: Presentable {
     var listener: QuranPresentableListener? { get set }
-    // TODO: Declare methods the interactor can invoke the presenter to present data.
+
+    var verseRuns: Runs { get }
+    var listRuns: Runs { get }
+    var audioRange: VerseRange? { get }
+
+    func updateAudioOptions(to newOptions: AdvancedAudioOptions)
 }
 
 protocol QuranListener: class {
@@ -34,13 +41,20 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
         presenter.listener = self
     }
 
-    override func didBecomeActive() {
-        super.didBecomeActive()
-        // TODO: Implement business logic here.
+    // MARK:- AudioOptions
+
+    func onAdvancedAudioOptionsButtonTapped() {
+        let options = AdvancedAudioOptions(range: unwrap(presenter.audioRange),
+                                           verseRuns: presenter.verseRuns,
+                                           listRuns: presenter.listRuns)
+        router?.presentAdvancedAudioOptions(with: options)
     }
 
-    override func willResignActive() {
-        super.willResignActive()
-        // TODO: Pause any business logic.
+    func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        presenter.updateAudioOptions(to: newOptions)
+    }
+
+    func dismissAudioOptions() {
+        router?.dismissAdvancedAudioOptions()
     }
 }

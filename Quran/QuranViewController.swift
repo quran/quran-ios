@@ -18,16 +18,21 @@
 //  GNU General Public License for more details.
 //
 import KVOController
+import QueuePlayer
 import UIKit
 
 protocol QuranPresentableListener: class {
+    func onAdvancedAudioOptionsButtonTapped()
 }
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
-                        AdvancedAudioOptionsViewControllerDelegate,
                         UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate,
-                        QuranViewControllable, QuranPresentable {
+QuranViewControllable, QuranPresentable {
+
+    var verseRuns: Runs { return audioViewPresenter.verseRuns }
+    var listRuns: Runs { return audioViewPresenter.listRuns }
+    var audioRange: VerseRange? { return audioViewPresenter.audioRange }
 
     weak var listener: QuranPresentableListener?
 
@@ -452,15 +457,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         present(controller, animated: true, completion: nil)
     }
 
-    func showAdvancedAudio(options: AdvancedAudioOptions) {
-        let controller = AdvancedAudioOptionsViewController(options: options)
-        controller.delegate = self
-        controller.modalTransitionStyle = .crossDissolve
-        controller.modalPresentationStyle = .overFullScreen
-        present(controller, animated: true, completion: nil)
+    func onAdvancedAudioOptionsButtonTapped() {
+        listener?.onAdvancedAudioOptionsButtonTapped()
     }
 
-    func advancedAudioOptionsViewController(_ controller: AdvancedAudioOptionsViewController, finishedWith options: AdvancedAudioOptions) {
+    func updateAudioOptions(to options: AdvancedAudioOptions) {
         guard let page = currentPage() else { return }
         audioViewPresenter.verseRuns = options.verseRuns
         audioViewPresenter.listRuns = options.listRuns

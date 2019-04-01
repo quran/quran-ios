@@ -8,20 +8,34 @@
 
 import RIBs
 
-protocol QuranInteractable: Interactable {
+protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
 
 protocol QuranViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
 }
 
 final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
 
-    // TODO: Constructor inject child builder protocols to allow building children.
-    override init(interactor: QuranInteractable, viewController: QuranViewControllable) {
+    struct Deps {
+        let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuildable
+    }
+
+    private let deps: Deps
+
+    init(interactor: QuranInteractable, viewController: QuranViewControllable, deps: Deps) {
+        self.deps = deps
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
+    }
+
+    func presentAdvancedAudioOptions(with options: AdvancedAudioOptions) {
+        let router = deps.advancedAudioOptionsBuilder.build(withListener: interactor, options: options)
+        present(router, animated: true)
+    }
+
+    func dismissAdvancedAudioOptions() {
+        dismiss(animated: true)
     }
 }

@@ -42,7 +42,11 @@ final class QuranBuilder: Builder, QuranBuildable {
         )
         let interactor = QuranInteractor(presenter: viewController)
         interactor.listener = listener
-        return QuranRouter(interactor: interactor, viewController: viewController)
+        return QuranRouter(
+            interactor: interactor,
+            viewController: viewController,
+            deps: QuranRouter.Deps(
+                advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container)))
     }
 
     private let imagesCache: Cache<Int, QuranUIImage> = {

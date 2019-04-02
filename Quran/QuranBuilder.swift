@@ -40,15 +40,18 @@ final class QuranBuilder: Builder, QuranBuildable {
             lastPage                               : lastPage,
             highlightedSearchAyah                  : highlightAyah
         )
-        let interactor = QuranInteractor(presenter: viewController)
+        let interactor = QuranInteractor(presenter: viewController, deps: QuranInteractor.Deps(
+            simplePersistence: container.createSimplePersistence()
+        ))
         interactor.listener = listener
         return QuranRouter(
             interactor: interactor,
             viewController: viewController,
             deps: QuranRouter.Deps(
                 advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container),
-                translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container))
-        )
+                translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
+                moreMenuBuilder: MoreMenuBuilder(container: container)
+        ))
     }
 
     private let imagesCache: Cache<Int, QuranUIImage> = {

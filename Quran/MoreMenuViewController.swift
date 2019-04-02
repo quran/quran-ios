@@ -25,19 +25,19 @@ enum QuranMode {
     case translation
 }
 
-protocol MoreMenuViewControllerDelegate: class {
-    func moreMenuViewController(_ controller: MoreMenuViewController, quranModeSelected: QuranMode)
-    func moreMenuViewControllerTranslationsSelectionSelected(_ controller: MoreMenuViewController)
-    func moreMenuViewController(_ controller: MoreMenuViewController, shouldShowWordPointer: Bool)
-    func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected: FontSize)
-    func moreMenuViewController(_ controller: MoreMenuViewController, themeSelected: Theme)
+protocol MoreMenuPresentableListener: class {
+    func onQuranModeUpdated(to mode: QuranMode)
+    func onTranslationsSelectionsTapped()
+    func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool)
+    func onFontSizedUpdated(to fontSize: FontSize)
+    func onThemeSelectedUpdated(to theme: Theme)
 }
 
-class MoreMenuViewController: BaseViewController {
+class MoreMenuViewController: BaseViewController, MoreMenuViewControllable, MoreMenuPresentable {
 
     override var screen: Analytics.Screen { return .moreMenu }
 
-    weak var delegate: MoreMenuViewControllerDelegate?
+    weak var listener: MoreMenuPresentableListener?
 
     @IBOutlet weak var tableView: ThemedTableView!
 
@@ -49,21 +49,7 @@ class MoreMenuViewController: BaseViewController {
     private let themeDS = MoreThemeDataSource()
     private let rotationDS = MoreRotationDataSource()
 
-    private var theme: Theme
-    private var fontSize: FontSize
-
-    var isWordPointerActive: Bool {
-        didSet {
-            pointer.items[0].isSelected = isWordPointerActive
-            let cell = pointer.ds_reusableViewDelegate?.ds_cellForItem(at: IndexPath(item: 0, section: 0)) as? MoreWordByWordPointerTableViewCell
-            cell?.switchControl.setOn(isWordPointerActive, animated: true)
-        }
-    }
-
-    init(mode: QuranMode, isWordPointerActive: Bool, fontSize: FontSize, theme: Theme) {
-        self.theme = theme
-        self.fontSize = fontSize
-        self.isWordPointerActive = isWordPointerActive
+    init(model: MoreMenuModel) {
         super.init(nibName: nil, bundle: nil)
 
         arabicTranslation.itemHeight = 44
@@ -74,32 +60,30 @@ class MoreMenuViewController: BaseViewController {
         rotationDS.itemHeight = 44
 
         arabicTranslation.items = [[
-            SelectableItem(text: l("menu.arabic"), isSelected: mode == .arabic) { [weak self] _ in
+            SelectableItem(text: l("menu.arabic"), isSelected: model.mode == .arabic) { [weak self] _ in
                 self?.arabicSelected()
             },
-            SelectableItem(text: l("menu.translation"), isSelected: mode == .translation) { [weak self] _ in
+            SelectableItem(text: l("menu.translation"), isSelected: model.mode == .translation) { [weak self] _ in
                 self?.translationsSelected()
             }
         ]]
         selection.items = [l("menu.select_translation")]
-        pointer.items = [SelectableItem(text: l("menu.pointer"), isSelected: isWordPointerActive) { [weak self] item in
-            guard let `self` = self else { return }
-            self.delegate?.moreMenuViewController(self, shouldShowWordPointer: item.isSelected)
+        pointer.items = [SelectableItem(text: l("menu.pointer"), isSelected: model.isWordPointerActive) { [weak self] item in
+            self?.listener?.onIsWordPointerActiveUpdated(to: item.isSelected)
         }]
-        setFontSizeItem()
-        setThemeItem()
+        setFontSizeItem(to: model.fontSize)
+        setThemeItem(to: model.theme)
         rotationDS.items = [Void()]
 
         let selectionHandler = BlockSelectionHandler<String, MoreTranslationsSelectionTableViewCell>()
         selectionHandler.didSelectBlock = { [weak self] (_, _, _) in
-            guard let `self` = self else { return }
-            self.delegate?.moreMenuViewControllerTranslationsSelectionSelected(self)
+            self?.listener?.onTranslationsSelectionsTapped()
         }
         selection.setSelectionHandler(selectionHandler)
 
         dataSource.add(arabicTranslation)
 
-        if mode == .translation {
+        if model.mode == .translation {
             dataSource.add(selection)
             dataSource.add(createEmptyDataSource())
             dataSource.add(fontSizeDS)
@@ -170,8 +154,7 @@ class MoreMenuViewController: BaseViewController {
             self.insert(dataSource: self.rotationDS, at: 4)
         }, completion: nil)
 
-        delegate?.moreMenuViewController(self, quranModeSelected: .arabic)
-        updateSize()
+        quranModeUpdated(to: .arabic)
     }
 
     private func translationsSelected() {
@@ -183,8 +166,23 @@ class MoreMenuViewController: BaseViewController {
             self.insert(dataSource: self.fontSizeDS, at: 3)
         }, completion: nil)
 
-        delegate?.moreMenuViewController(self, quranModeSelected: .translation)
+        quranModeUpdated(to: .translation)
+    }
+
+    private func quranModeUpdated(to quranMode: QuranMode) {
+        listener?.onQuranModeUpdated(to: quranMode)
+
+        // hide word pointer
+        setWordPointerActive(to: false)
+        listener?.onIsWordPointerActiveUpdated(to: false)
+
         updateSize()
+    }
+
+    private func setWordPointerActive(to isWordPointerActive: Bool) {
+        pointer.items[0].isSelected = isWordPointerActive
+        let cell = pointer.ds_reusableViewDelegate?.ds_cellForItem(at: IndexPath(item: 0, section: 0)) as? MoreWordByWordPointerTableViewCell
+        cell?.switchControl.setOn(isWordPointerActive, animated: true)
     }
 
     private func createEmptyDataSource() -> ThemedEmptyDataSource {
@@ -194,7 +192,7 @@ class MoreMenuViewController: BaseViewController {
         return empty
     }
 
-    private func setThemeItem() {
+    private func setThemeItem(to theme: Theme) {
         themeDS.items = [
             ThemeItem(darkSelected: theme == .dark,
                       onDarkTapped: { [weak self] in self?.updateThemeItem(to: .dark) },
@@ -204,17 +202,16 @@ class MoreMenuViewController: BaseViewController {
     }
 
     private func updateThemeItem(to newTheme: Theme) {
-        delegate?.moreMenuViewController(self, themeSelected: newTheme)
-        theme = newTheme
-        setThemeItem()
+        listener?.onThemeSelectedUpdated(to: newTheme)
+        setThemeItem(to: newTheme)
     }
 
-    private func setFontSizeItem() {
+    private func setFontSizeItem(to fontSize: FontSize) {
         fontSizeDS.items = [
             FontSizeItem(isIncreaseEnabled: fontSize != .xLarge,
                          isDecreaseEnabled: fontSize != .xSmall,
-                         increase: { [weak self] in self?.updateFontSize(to: self?.fontSize.next) },
-                         decrease: { [weak self] in self?.updateFontSize(to: self?.fontSize.previous) })
+                         increase: { [weak self] in self?.updateFontSize(to: fontSize.next) },
+                         decrease: { [weak self] in self?.updateFontSize(to: fontSize.previous) })
         ]
         fontSizeDS.ds_reusableViewDelegate?.ds_reloadItems(at: [IndexPath(item: 0, section: 0)], with: .none)
     }
@@ -223,9 +220,8 @@ class MoreMenuViewController: BaseViewController {
         guard let newSize = newSize else {
             return
         }
-        delegate?.moreMenuViewController(self, fontSizeSelected: newSize)
-        fontSize = newSize
-        setFontSizeItem()
+        listener?.onFontSizedUpdated(to: newSize)
+        setFontSizeItem(to: newSize)
     }
 }
 

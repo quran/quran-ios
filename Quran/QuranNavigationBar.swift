@@ -32,10 +32,6 @@ class QuranNavigationBar {
 
     weak var delegate: QuranNavigationBarDelegate?
 
-    var isTranslationView: Bool {
-        set { simplePersistence.setValue(newValue, forKey: .showQuranTranslationView) }
-        get { return simplePersistence.valueForKey(.showQuranTranslationView) }
-    }
     var isWordPointerActive: Bool = false
 
     init(simplePersistence: SimplePersistence) {

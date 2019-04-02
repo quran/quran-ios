@@ -25,16 +25,18 @@ import UIKit
 protocol QuranPresentableListener: class {
     func onAdvancedAudioOptionsButtonTapped()
     func onWordPointerTapped()
+    func onMoreBarButtonTapped()
 }
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
-                        UIPopoverPresentationControllerDelegate, MoreMenuViewControllerDelegate,
+                        UIPopoverPresentationControllerDelegate,
                         QuranViewControllable, QuranPresentable {
 
     var verseRuns: Runs { return audioViewPresenter.verseRuns }
     var listRuns: Runs { return audioViewPresenter.listRuns }
     var audioRange: VerseRange? { return audioViewPresenter.audioRange }
+    var isWordPointerActive: Bool { return quranNavigationBar.isWordPointerActive }
 
     weak var listener: QuranPresentableListener?
 
@@ -157,8 +159,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
-
-        updateTranslationView(from: nil)
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
@@ -306,6 +306,13 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         present(viewController.uiviewController, animated: true, completion: nil)
     }
 
+    func presentMoreMenuViewController(_ viewController: ViewControllable) {
+        viewController.uiviewController.modalPresentationStyle = .popover
+        viewController.uiviewController.popoverPresentationController?.delegate = self
+        viewController.uiviewController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
+        present(viewController.uiviewController, animated: true, completion: nil)
+    }
+
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
     }
@@ -397,54 +404,30 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func onMoreButtonTapped(_ barButton: UIBarButtonItem) {
-        let more = MoreMenuViewController(
-            mode: quranNavigationBar.isTranslationView ? .translation : .arabic,
-            isWordPointerActive: quranNavigationBar.isWordPointerActive,
-            fontSize: simplePersistence.fontSize,
-            theme: simplePersistence.theme
-        )
-        more.delegate = self
-        more.modalPresentationStyle = .popover
-        more.popoverPresentationController?.delegate = self
-        more.popoverPresentationController?.barButtonItem = barButton
-        present(more, animated: true, completion: nil)
+        listener?.onMoreBarButtonTapped()
     }
 
-    func moreMenuViewController(_ controller: MoreMenuViewController, quranModeSelected: QuranMode) {
-        // hide word pointer
-        controller.isWordPointerActive = false
-        quranNavigationBar.isWordPointerActive = false
-        quranView?.hidePointer()
-
-        // show correct translation
-        quranNavigationBar.isTranslationView = quranModeSelected == .translation
-        updateTranslationView(from: controller)
-    }
-
-    func moreMenuViewControllerTranslationsSelectionSelected(_ controller: MoreMenuViewController) {
-        controller.dismiss(animated: true, completion: nil)
-
+    func presentTranslationsSelection() {
         let controller = translationsSelectionControllerCreator.create(())
         present(controller, animated: true, completion: nil)
     }
 
-    func moreMenuViewController(_ controller: MoreMenuViewController, shouldShowWordPointer: Bool) {
-        quranNavigationBar.isWordPointerActive = shouldShowWordPointer
-        if shouldShowWordPointer {
-            quranView?.showPointer()
-        } else {
-            quranView?.hidePointer()
-        }
+    func showWordPointer() {
+        quranNavigationBar.isWordPointerActive = true
+        quranView?.showPointer()
     }
 
-    func moreMenuViewController(_ controller: MoreMenuViewController, fontSizeSelected fontSize: FontSize) {
-        simplePersistence.fontSize = fontSize
+    func hideWordPointer() {
+        quranNavigationBar.isWordPointerActive = false
+        quranView?.hidePointer()
+    }
+
+    func reloadView() {
         dataSource.invalidate()
     }
 
-    func moreMenuViewController(_ controller: MoreMenuViewController, themeSelected theme: Theme) {
-        simplePersistence.theme = theme
-        dataSource.invalidate()
+    func setQuranMode(_ quranMode: QuranMode) {
+        dataSource.selectedDataSourceIndex = quranMode == .arabic ? 0 : 1
     }
 
     func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
@@ -497,17 +480,5 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     func onErrorOccurred(error: Error) {
         showErrorAlert(error: error)
-    }
-
-    private func updateTranslationView(from controller: MoreMenuViewController?) {
-        let isTranslationView = quranNavigationBar.isTranslationView
-        dataSource.selectedDataSourceIndex = isTranslationView ? 1 : 0
-        let noTranslationsSelected = simplePersistence.valueForKey(.selectedTranslations).isEmpty
-        if let controller = controller, isTranslationView && noTranslationsSelected {
-            controller.dismiss(animated: true, completion: nil)
-
-            let translationsController = translationsSelectionControllerCreator.create(())
-            present(translationsController, animated: true, completion: nil)
-        }
     }
 }

@@ -33,6 +33,9 @@
 		06A7E6AC2251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6A82251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift */; };
 		06A7E6AE2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6AA2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift */; };
 		06A7E6AF2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6AB2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift */; };
+		06A7E6B32252F5C000AC2634 /* MoreMenuRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6B02252F5C000AC2634 /* MoreMenuRouter.swift */; };
+		06A7E6B42252F5C000AC2634 /* MoreMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6B12252F5C000AC2634 /* MoreMenuBuilder.swift */; };
+		06A7E6B52252F5C000AC2634 /* MoreMenuInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E6B22252F5C000AC2634 /* MoreMenuInteractor.swift */; };
 		06B2407F2248299C0003D628 /* AppInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B240792248299B0003D628 /* AppInteractor.swift */; };
 		06B240812248299C0003D628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407B2248299C0003D628 /* AppDelegate.swift */; };
 		06B240822248299C0003D628 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B2407C2248299C0003D628 /* AppRouter.swift */; };
@@ -593,6 +596,9 @@
 		06A7E6A82251B52E00AC2634 /* TranslationTextTypeSelectionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionRouter.swift; sourceTree = "<group>"; };
 		06A7E6AA2251B52E00AC2634 /* TranslationTextTypeSelectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionBuilder.swift; sourceTree = "<group>"; };
 		06A7E6AB2251B52E00AC2634 /* TranslationTextTypeSelectionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionInteractor.swift; sourceTree = "<group>"; };
+		06A7E6B02252F5C000AC2634 /* MoreMenuRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMenuRouter.swift; sourceTree = "<group>"; };
+		06A7E6B12252F5C000AC2634 /* MoreMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMenuBuilder.swift; sourceTree = "<group>"; };
+		06A7E6B22252F5C000AC2634 /* MoreMenuInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMenuInteractor.swift; sourceTree = "<group>"; };
 		06B240792248299B0003D628 /* AppInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInteractor.swift; sourceTree = "<group>"; };
 		06B2407B2248299C0003D628 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		06B2407C2248299C0003D628 /* AppRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -1942,6 +1948,10 @@
 		547BCB5120915530007AFBEC /* QuranMoreMenu */ = {
 			isa = PBXGroup;
 			children = (
+				06A7E6B12252F5C000AC2634 /* MoreMenuBuilder.swift */,
+				06A7E6B22252F5C000AC2634 /* MoreMenuInteractor.swift */,
+				06A7E6B02252F5C000AC2634 /* MoreMenuRouter.swift */,
+				547BCB5F2091567A007AFBEC /* MoreMenuViewController.swift */,
 				54F35F75216A79DC00276220 /* View */,
 			);
 			name = QuranMoreMenu;
@@ -2506,7 +2516,6 @@
 			isa = PBXGroup;
 			children = (
 				547BCB562091558A007AFBEC /* cells */,
-				547BCB5F2091567A007AFBEC /* MoreMenuViewController.swift */,
 				547BCB602091567A007AFBEC /* MoreMenuViewController.xib */,
 			);
 			name = View;
@@ -3615,6 +3624,7 @@
 				54699BAE1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift in Sources */,
 				549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */,
 				06B240A122482D450003D628 /* SurasInteractor.swift in Sources */,
+				06A7E6B32252F5C000AC2634 /* MoreMenuRouter.swift in Sources */,
 				541BA5E31E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift in Sources */,
 				54699BB01E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift in Sources */,
 				06B2409222482A020003D628 /* ViewableRouter+Extensions.swift in Sources */,
@@ -3647,6 +3657,7 @@
 				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
 				06B2409422482A020003D628 /* NavigationRouter+Pop.swift in Sources */,
 				542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */,
+				06A7E6B42252F5C000AC2634 /* MoreMenuBuilder.swift in Sources */,
 				06A7E69F225155F700AC2634 /* QuranRouter.swift in Sources */,
 				54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */,
 				54699BA71E8DC18600211A60 /* QuranTranslationLongTextCollectionViewCell.swift in Sources */,
@@ -3707,6 +3718,7 @@
 				54F8C4241EA8104F00C853C6 /* DownloadingObserver.swift in Sources */,
 				54F56C4F1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift in Sources */,
 				54F11E74209D4EFA00367340 /* ThemedView.swift in Sources */,
+				06A7E6B52252F5C000AC2634 /* MoreMenuInteractor.swift in Sources */,
 				547BCB6D20962BD8007AFBEC /* MoreFontSizeTableViewCell.swift in Sources */,
 				54B266891CCACB8F00D3AEF8 /* DefaultAyahInfoRetriever.swift in Sources */,
 				06B240C822483B8C0003D628 /* BookmarksTabBuilder.swift in Sources */,

@@ -15,6 +15,11 @@ protocol QuranRouting: ViewableRouting {
 
     func presentTranslationTextTypeSelection()
     func dismissTranslationTextTypeSelection()
+
+    func presentMoreMenu(withModel model: MoreMenuModel)
+    func dismissMoreMenu()
+
+    func presentTranslationsSelection()
 }
 
 protocol QuranPresentable: Presentable {
@@ -24,7 +29,13 @@ protocol QuranPresentable: Presentable {
     var listRuns: Runs { get }
     var audioRange: VerseRange? { get }
 
+    var isWordPointerActive: Bool { get }
+
     func updateAudioOptions(to newOptions: AdvancedAudioOptions)
+    func setQuranMode(_ quranMode: QuranMode)
+    func showWordPointer()
+    func hideWordPointer()
+    func reloadView()
 }
 
 protocol QuranListener: class {
@@ -32,12 +43,31 @@ protocol QuranListener: class {
 
 final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInteractable, QuranPresentableListener {
 
+    struct Deps {
+        var simplePersistence: SimplePersistence
+    }
+
     weak var router: QuranRouting?
     weak var listener: QuranListener?
 
-    override init(presenter: QuranPresentable) {
+    private var deps: Deps
+
+    init(presenter: QuranPresentable, deps: Deps) {
+        self.deps = deps
         super.init(presenter: presenter)
         presenter.listener = self
+    }
+
+    override func didBecomeActive() {
+        super.didBecomeActive()
+        presenter.setQuranMode(quranMode)
+    }
+
+    // MARK: - SimplePersistence
+
+    private var quranMode: QuranMode {
+        set { deps.simplePersistence.setValue(newValue == .translation, forKey: .showQuranTranslationView) }
+        get { return deps.simplePersistence.valueForKey(.showQuranTranslationView) ? .translation : .arabic }
     }
 
     // MARK: - AudioOptions
@@ -65,5 +95,50 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     func dismissTranslationTextTypeSelection() {
         router?.dismissTranslationTextTypeSelection()
+    }
+
+    // MARK: - More Menu
+
+    func onMoreBarButtonTapped() {
+        router?.presentMoreMenu(withModel: MoreMenuModel(
+            mode: quranMode,
+            isWordPointerActive: presenter.isWordPointerActive,
+            fontSize: deps.simplePersistence.fontSize,
+            theme: deps.simplePersistence.theme
+        ))
+    }
+
+    func onQuranModeUpdated(to mode: QuranMode) {
+        self.quranMode = mode
+        presenter.setQuranMode(mode)
+
+        let noTranslationsSelected = deps.simplePersistence.valueForKey(.selectedTranslations).isEmpty
+        if mode == .translation && noTranslationsSelected {
+            router?.dismissMoreMenu()
+            router?.presentTranslationsSelection()
+        }
+    }
+
+    func onTranslationsSelectionsTapped() {
+        router?.dismissMoreMenu()
+        router?.presentTranslationsSelection()
+    }
+
+    func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool) {
+        if isWordPointerActive {
+            presenter.showWordPointer()
+        } else {
+            presenter.hideWordPointer()
+        }
+    }
+
+    func onFontSizedUpdated(to fontSize: FontSize) {
+        deps.simplePersistence.fontSize = fontSize
+        presenter.reloadView()
+    }
+
+    func onThemeSelectedUpdated(to theme: Theme) {
+        deps.simplePersistence.theme = theme
+        presenter.reloadView()
     }
 }

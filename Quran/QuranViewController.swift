@@ -30,7 +30,6 @@ protocol QuranPresentableListener: class {
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
-                        UIPopoverPresentationControllerDelegate,
                         QuranViewControllable, QuranPresentable {
 
     var verseRuns: Runs { return audioViewPresenter.verseRuns }
@@ -39,6 +38,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     var isWordPointerActive: Bool { return quranNavigationBar.isWordPointerActive }
 
     weak var listener: QuranPresentableListener?
+
+    private lazy var popoverPresenter = PopoverPresenter()
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -298,23 +299,17 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     }
 
     func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable) {
-        viewController.uiviewController.modalPresentationStyle = .popover
-        viewController.uiviewController.popoverPresentationController?.delegate = self
-        viewController.uiviewController.popoverPresentationController?.sourceView = quranView?.pointer
-        viewController.uiviewController.popoverPresentationController?.sourceRect = quranView?.pointer.bounds ?? .zero
-        viewController.uiviewController.popoverPresentationController?.permittedArrowDirections = [.left, .right]
-        present(viewController.uiviewController, animated: true, completion: nil)
+        popoverPresenter.present(presenting: self,
+                                 presented: viewController.uiviewController,
+                                 pointingTo: unwrap(quranView).pointer,
+                                 at: quranView?.pointer.bounds ?? .zero,
+                                 permittedArrowDirections: [.left, .right])
     }
 
     func presentMoreMenuViewController(_ viewController: ViewControllable) {
-        viewController.uiviewController.modalPresentationStyle = .popover
-        viewController.uiviewController.popoverPresentationController?.delegate = self
-        viewController.uiviewController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
-        present(viewController.uiviewController, animated: true, completion: nil)
-    }
-
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+        popoverPresenter.present(presenting: self,
+                                 presented: viewController.uiviewController,
+                                 poiontingTo: unwrap(navigationItem.rightBarButtonItems?.first))
     }
 
     private func setBarsHidden(_ hidden: Bool) {

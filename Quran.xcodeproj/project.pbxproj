@@ -398,7 +398,7 @@
 		54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */; };
 		54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D41EF76FCD00037D8C /* AyahWord.swift */; };
 		54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */; };
-		54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */; };
+		54D133DB1EF7840C00037D8C /* PopoverPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133DA1EF7840C00037D8C /* PopoverPresenter.swift */; };
 		54D9991C1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */; };
 		54DC10BF209FA7DC00C57DA9 /* ThemedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10BE209FA7DC00C57DA9 /* ThemedTableViewCell.swift */; };
 		54DC10C1209FA94B00C57DA9 /* ThemedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DC10C0209FA94B00C57DA9 /* ThemedTableView.swift */; };
@@ -1045,7 +1045,7 @@
 		54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordTranslationPersistence.swift; sourceTree = "<group>"; };
 		54D133D41EF76FCD00037D8C /* AyahWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahWord.swift; sourceTree = "<group>"; };
 		54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionTableViewController.swift; sourceTree = "<group>"; };
-		54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresentationControllerDelegate.swift; sourceTree = "<group>"; };
+		54D133DA1EF7840C00037D8C /* PopoverPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverPresenter.swift; sourceTree = "<group>"; };
 		54D9991B1EF1FDE800BC6532 /* WordByWordIntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordIntegrationTests.swift; sourceTree = "<group>"; };
 		54DC10BE209FA7DC00C57DA9 /* ThemedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableViewCell.swift; sourceTree = "<group>"; };
 		54DC10C0209FA94B00C57DA9 /* ThemedTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableView.swift; sourceTree = "<group>"; };
@@ -2159,7 +2159,7 @@
 			isa = PBXGroup;
 			children = (
 				54F35F8D216A84A800276220 /* root */,
-				54D133DA1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift */,
+				54D133DA1EF7840C00037D8C /* PopoverPresenter.swift */,
 				54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */,
 				5424773C1E7856040051C196 /* DownloadButton.swift */,
 				547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */,
@@ -3814,7 +3814,7 @@
 				544EC37020BA708D00D2E7B5 /* ThemedVisualEffectView.swift in Sources */,
 				5428A687213DC55500B91F13 /* QuranUIImage.swift in Sources */,
 				54236C491DD4F79F002E6FD3 /* LastPageUpdater.swift in Sources */,
-				54D133DB1EF7840C00037D8C /* PhonePopoverPresentationControllerDelegate.swift in Sources */,
+				54D133DB1EF7840C00037D8C /* PopoverPresenter.swift in Sources */,
 				540922A51E91316100C7537A /* QuranTranslationArabicTextDataSource.swift in Sources */,
 				5416B4C11CEE7C820062FF54 /* QariAyahTimingPersistence.swift in Sources */,
 				5416B4C31CEE7D440062FF54 /* SQLiteAyahTimingPersistence.swift in Sources */,

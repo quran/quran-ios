@@ -20,12 +20,18 @@
 
 import PromiseKit
 
-struct QariDataRetriever: Interactor {
+protocol QariDataRetrieverType {
+    func getQaris() -> Guarantee<[Qari]>
+}
 
-    func execute(_ input: Void) -> Promise<[Qari]> {
-        return DispatchQueue.global().async(.promise) {
-            return Qari.qaris.sorted {
-                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+struct QariDataRetriever: QariDataRetrieverType {
+
+    func getQaris() -> Guarantee<[Qari]> {
+        return Guarantee { resolver in
+            DispatchQueue.global().async {
+                resolver(Qari.qaris.sorted {
+                    $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+                })
             }
         }
     }

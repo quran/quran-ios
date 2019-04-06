@@ -63,14 +63,6 @@ class Container {
             dataSource: createTranslationsDataSource())
     }
 
-    func createQariTableViewController(qaris: [Qari], selectedQariIndex: Int) -> QariTableViewController {
-        return QariTableViewController(style: .plain, qaris: qaris, selectedQariIndex: selectedQariIndex)
-    }
-
-    func createQariTableViewControllerCreator() -> AnyCreator<([Qari], Int, UIView?), QariTableViewController> {
-        return QariTableViewControllerCreator(qarisControllerCreator: createCreator(createQariTableViewController)).asAnyCreator()
-    }
-
     func createTranslationsDataSource() -> TranslationsDataSource {
         let pendingDS = TranslationsBasicDataSource()
         let downloadedDS = TranslationsBasicDataSource()
@@ -100,8 +92,8 @@ class Container {
         return dataSource
     }
 
-    func createQarisDataRetriever() -> AnyGetInteractor<[Qari]> {
-        return QariDataRetriever().asAnyGetInteractor()
+    func createQarisDataRetriever() -> QariDataRetrieverType {
+        return QariDataRetriever()
     }
 
     func createArabicTextPersistence() -> AyahTextPersistence {

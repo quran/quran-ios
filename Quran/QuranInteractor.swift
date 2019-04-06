@@ -20,6 +20,9 @@ protocol QuranRouting: ViewableRouting {
     func dismissMoreMenu()
 
     func presentTranslationsSelection()
+
+    func presentQariList()
+    func dismissQariList()
 }
 
 protocol QuranPresentable: Presentable {
@@ -36,6 +39,8 @@ protocol QuranPresentable: Presentable {
     func showWordPointer()
     func hideWordPointer()
     func reloadView()
+
+    func updateSelectedQari()
 }
 
 protocol QuranListener: class {
@@ -95,6 +100,20 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     func dismissTranslationTextTypeSelection() {
         router?.dismissTranslationTextTypeSelection()
+    }
+
+    // MARK: - Qari List
+
+    func onQariListButtonTapped() {
+        router?.presentQariList()
+    }
+
+    func dismissQariList() {
+        router?.dismissQariList()
+    }
+
+    func onSelectedQariChanged() {
+        presenter.updateSelectedQari()
     }
 
     // MARK: - More Menu

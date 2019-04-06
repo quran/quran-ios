@@ -29,7 +29,6 @@ final class QuranBuilder: Builder, QuranBuildable {
             dataRetriever                          : QuranPagesDataRetriever().asAnyGetInteractor(),
             ayahInfoRetriever                      : DefaultAyahInfoRetriever(persistence: SQLiteAyahInfoPersistence()),
             audioViewPresenter                     : createAudioBannerViewPresenter(),
-            qarisControllerCreator                 : container.createQariTableViewControllerCreator(),
             translationsSelectionControllerCreator : container.createCreator(container.createTranslationsSelectionViewController),
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
@@ -50,7 +49,8 @@ final class QuranBuilder: Builder, QuranBuildable {
             deps: QuranRouter.Deps(
                 advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container),
                 translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
-                moreMenuBuilder: MoreMenuBuilder(container: container)
+                moreMenuBuilder: MoreMenuBuilder(container: container),
+                qariListBuilder: QariListBuilder(container: container)
         ))
     }
 

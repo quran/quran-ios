@@ -22,11 +22,11 @@ import PromiseKit
 
 class DownloadableQariAudioRetriever: Interactor {
 
-    private let qarisRetriever: AnyGetInteractor<[Qari]>
+    private let qarisRetriever: QariDataRetrieverType
     private let downloadsInfoRetriever: AnyInteractor<[Qari], [QariAudioDownload]>
     private let downloader: DownloadManager
 
-    init(downloader: DownloadManager, qarisRetriever: AnyGetInteractor<[Qari]>, downloadsInfoRetriever: AnyInteractor<[Qari], [QariAudioDownload]>) {
+    init(downloader: DownloadManager, qarisRetriever: QariDataRetrieverType, downloadsInfoRetriever: AnyInteractor<[Qari], [QariAudioDownload]>) {
         self.downloader             = downloader
         self.qarisRetriever         = qarisRetriever
         self.downloadsInfoRetriever = downloadsInfoRetriever
@@ -34,7 +34,7 @@ class DownloadableQariAudioRetriever: Interactor {
 
     func execute(_ p: Void) -> Promise<[DownloadableQariAudio]> {
         let retriever = qarisRetriever
-            .get()
+            .getQaris()
             .then(downloadsInfoRetriever.execute)
 
         let downloads = downloader.getOnGoingDownloads()

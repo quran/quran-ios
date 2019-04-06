@@ -22,7 +22,7 @@ import UIKit
 
 class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, AudioPlayerInteractorDelegate, QProgressListener {
 
-    let qariRetreiver: AnyGetInteractor<[Qari]>
+    let qariRetreiver: QariDataRetrieverType
     let persistence: SimplePersistence
     let gaplessAudioPlayer: AudioPlayerInteractor
     let gappedAudioPlayer: AudioPlayerInteractor
@@ -41,15 +41,11 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
 
     weak var delegate: AudioBannerViewPresenterDelegate?
 
-    var selectedQariIndex: Int = 0 {
-        didSet {
-            persistence.setValue(selectedQari.id, forKey: .lastSelectedQariId)
-        }
-    }
+    var selectedQariId: Int?
     var qaris: [Qari] = []
 
     var selectedQari: Qari {
-        return qaris[selectedQariIndex]
+        return qaris.first { $0.id == selectedQariId } ?? qaris[0]
     }
 
     var verseRuns: Runs = .one {
@@ -71,7 +67,7 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     init(persistence: SimplePersistence,
-         qariRetreiver: AnyGetInteractor<[Qari]>,
+         qariRetreiver: QariDataRetrieverType,
          gaplessAudioPlayer: AudioPlayerInteractor,
          gappedAudioPlayer: AudioPlayerInteractor) {
         self.persistence = persistence
@@ -87,23 +83,19 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     func onViewDidLoad() {
         view?.hideAllControls()
 
-        qariRetreiver.get()
+        qariRetreiver.getQaris()
             .done(on: .main) { (qaris) -> Void in
                 self.qaris = qaris
 
                 // get last selected qari id
-                let lastSelectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
-                let index = qaris.index { $0.id == lastSelectedQariId }
-                if let selectedIndex = index {
-                    self.selectedQariIndex = selectedIndex
-                }
+                self.reloadSelectedQariId()
             }
             .then { self.audioPlayer.isAudioDownloading() }
             .done(on: .main) { downloading -> Void in
                 if !downloading {
                     self.showQariView()
                 }
-            }.suppress()
+            }
     }
 
     fileprivate func showQariView() {
@@ -111,8 +103,12 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
         view?.setQari(name: selectedQari.name, image: UIImage(named: selectedQari.imageName))
     }
 
-    func setQariIndex(_ index: Int) {
-        selectedQariIndex = index
+    private func reloadSelectedQariId() {
+        selectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
+    }
+
+    func updateSelectedQari() {
+        self.reloadSelectedQariId()
         showQariView()
     }
 
@@ -162,13 +158,10 @@ class DefaultAudioBannerViewPresenter: NSObject, AudioBannerViewPresenter, Audio
     }
 
     func onQariTapped() {
-        delegate?.showQariListSelectionWithQari(qaris, selectedIndex: selectedQariIndex)
+        delegate?.onQariListButtonTapped()
     }
 
     func onMoreTapped() {
-        guard let audioRange = audioRange else {
-            return
-        }
         delegate?.onAdvancedAudioOptionsButtonTapped()
     }
 

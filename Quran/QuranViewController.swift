@@ -26,6 +26,7 @@ protocol QuranPresentableListener: class {
     func onAdvancedAudioOptionsButtonTapped()
     func onWordPointerTapped()
     func onMoreBarButtonTapped()
+    func onQariListButtonTapped()
 }
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
@@ -40,6 +41,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     weak var listener: QuranPresentableListener?
 
     private lazy var popoverPresenter = PopoverPresenter()
+    private lazy var qariListPresenter = QariListPresenter()
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -49,7 +51,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
     private let dataRetriever: AnyGetInteractor<[QuranPage]>
     private let audioViewPresenter: AudioBannerViewPresenter
-    private let qarisControllerCreator: AnyCreator<([Qari], Int, UIView?), QariTableViewController>
     private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
     private var simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater
@@ -120,7 +121,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          dataRetriever                          : AnyGetInteractor<[QuranPage]>,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
-         qarisControllerCreator                 : AnyCreator<([Qari], Int, UIView?), QariTableViewController>,
          translationsSelectionControllerCreator : AnyGetCreator<UIViewController>,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
@@ -136,7 +136,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.bookmarksManager                       = BookmarksManager(bookmarksPersistence: bookmarksPersistence)
         self.simplePersistence                      = simplePersistence
         self.audioViewPresenter                     = audioViewPresenter
-        self.qarisControllerCreator                 = qarisControllerCreator
         self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
@@ -425,12 +424,16 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         dataSource.selectedDataSourceIndex = quranMode == .arabic ? 0 : 1
     }
 
-    func showQariListSelectionWithQari(_ qaris: [Qari], selectedIndex: Int) {
-        let controller = qarisControllerCreator.create((qaris, selectedIndex, quranView?.audioView))
-        controller.onSelectedIndexChanged = { [weak self] index in
-            self?.audioViewPresenter.setQariIndex(index)
-        }
-        present(controller, animated: true, completion: nil)
+    func onQariListButtonTapped() {
+        listener?.onQariListButtonTapped()
+    }
+
+    func presentQariList(_ viewController: ViewControllable) {
+        qariListPresenter.present(presenting: self, presented: viewController.uiviewController, pointingTo: unwrap(quranView).audioView)
+    }
+
+    func updateSelectedQari() {
+        audioViewPresenter.updateSelectedQari()
     }
 
     func onAdvancedAudioOptionsButtonTapped() {

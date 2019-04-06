@@ -31,17 +31,29 @@ extension ViewableRouter {
     }
 
     func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
-        let presentedController = viewControllable.uiviewController.presentedViewController
-        if let child = children.first(where: { router in
-            if let viewableRouter = router as? ViewableRouting {
-                return viewableRouter.viewControllable.uiviewController === presentedController
-            }
-            return false
-        }) as? ViewableRouting {
-            viewControllable.dismiss(animated: animated) {
-                self.detachChild(child)
-                completion?()
+        guard let presentedController = viewControllable.uiviewController.presentedViewController else {
+            fatalError("No controller presented to dismiss")
+        }
+        guard let child = getChildRouterForPresentedController(presentedController) else {
+            fatalError("Cannot find child router for presented controller '\(presentedController)'")
+        }
+        viewControllable.dismiss(animated: animated) {
+            self.detachChild(child)
+            completion?()
+        }
+    }
+
+    private func getChildRouterForPresentedController(_ presentedController: UIViewController) -> ViewableRouting? {
+        // search children controller since we could change hierarchy with viewControllerForAdaptivePresentationStyle
+        for controller in [presentedController] + presentedController.children {
+            for child in children {
+                if let viewableChild = child as? ViewableRouting {
+                    if viewableChild.viewControllable.uiviewController === controller {
+                        return viewableChild
+                    }
+                }
             }
         }
+        return nil
     }
 }

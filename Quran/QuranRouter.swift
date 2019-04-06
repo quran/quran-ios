@@ -8,7 +8,7 @@
 
 import RIBs
 
-protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener, MoreMenuListener {
+protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener, MoreMenuListener, QariListListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
@@ -17,6 +17,7 @@ protocol QuranViewControllable: ViewControllable {
     func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable)
     func presentMoreMenuViewController(_ viewController: ViewControllable)
     func presentTranslationsSelection()
+    func presentQariList(_ viewController: ViewControllable)
 }
 
 final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
@@ -25,6 +26,7 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
         let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuildable
         let translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuildable
         let moreMenuBuilder: MoreMenuBuildable
+        let qariListBuilder: QariListBuildable
     }
 
     private let deps: Deps
@@ -74,5 +76,17 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
 
     func presentTranslationsSelection() {
         viewController.presentTranslationsSelection()
+    }
+
+    // MARK: - Qari List
+
+    func presentQariList() {
+        let router = deps.qariListBuilder.build(withListener: interactor)
+        viewController.presentQariList(router.viewControllable)
+        attachChild(router)
+    }
+
+    func dismissQariList() {
+        dismiss(animated: true)
     }
 }

@@ -14,12 +14,10 @@ protocol MoreMenuInteractable: Interactable {
 }
 
 protocol MoreMenuViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
 }
 
 final class MoreMenuRouter: ViewableRouter<MoreMenuInteractable, MoreMenuViewControllable>, MoreMenuRouting {
 
-    // TODO: Constructor inject child builder protocols to allow building children.
     override init(interactor: MoreMenuInteractable, viewController: MoreMenuViewControllable) {
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self

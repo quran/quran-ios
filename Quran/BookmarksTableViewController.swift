@@ -24,7 +24,8 @@ protocol BookmarksPresentableListener: class {
     func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
-class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate, BookmarkDataSourceDelegate, BookmarksPresentable, BookmarksViewControllable {
+class BookmarksTableViewController: BaseTableBasedViewController, EditControllerDelegate,
+                    BookmarkDataSourceDelegate, BookmarksPresentable, BookmarksViewControllable {
 
     weak var listener: BookmarksPresentableListener?
 

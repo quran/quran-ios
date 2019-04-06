@@ -10,7 +10,6 @@ import RIBs
 import RxSwift
 
 protocol AdvancedAudioOptionsRouting: ViewableRouting {
-    // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
 }
 
 protocol AdvancedAudioOptionsPresentable: Presentable {
@@ -24,13 +23,12 @@ protocol AdvancedAudioOptionsListener: class {
     func dismissAudioOptions()
 }
 
-final class AdvancedAudioOptionsInteractor: PresentableInteractor<AdvancedAudioOptionsPresentable>, AdvancedAudioOptionsInteractable, AdvancedAudioOptionsPresentableListener {
+final class AdvancedAudioOptionsInteractor: PresentableInteractor<AdvancedAudioOptionsPresentable>,
+                                            AdvancedAudioOptionsInteractable, AdvancedAudioOptionsPresentableListener {
 
     weak var router: AdvancedAudioOptionsRouting?
     weak var listener: AdvancedAudioOptionsListener?
 
-    // TODO: Add additional dependencies to constructor. Do not perform any logic
-    // in constructor.
     override init(presenter: AdvancedAudioOptionsPresentable) {
         super.init(presenter: presenter)
         presenter.listener = self

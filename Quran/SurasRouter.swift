@@ -14,12 +14,10 @@ protocol SurasInteractable: Interactable {
 }
 
 protocol SurasViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
 }
 
 final class SurasRouter: ViewableRouter<SurasInteractable, SurasViewControllable>, SurasRouting {
 
-    // TODO: Constructor inject child builder protocols to allow building children.
     override init(interactor: SurasInteractable, viewController: SurasViewControllable) {
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self

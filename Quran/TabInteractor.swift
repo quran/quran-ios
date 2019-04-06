@@ -16,11 +16,9 @@ protocol TabRouting: NavigationRouting {
 
 protocol TabPresentable: Presentable {
     var listener: TabPresentableListener? { get set }
-    // TODO: Declare methods the interactor can invoke the presenter to present data.
 }
 
 protocol TabListener: class {
-    // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
 }
 
 class TabInteractor: PresentableInteractor<TabPresentable>, TabInteractable, TabPresentableListener {
@@ -28,21 +26,9 @@ class TabInteractor: PresentableInteractor<TabPresentable>, TabInteractable, Tab
     weak var router: TabRouting?
     weak var listener: TabListener?
 
-    // TODO: Add additional dependencies to constructor. Do not perform any logic
-    // in constructor.
     override init(presenter: TabPresentable) {
         super.init(presenter: presenter)
         presenter.listener = self
-    }
-
-    override func didBecomeActive() {
-        super.didBecomeActive()
-        // TODO: Implement business logic here.
-    }
-
-    override func willResignActive() {
-        super.willResignActive()
-        // TODO: Pause any business logic.
     }
 
     func navigateTo(quranPage: Int, highlightingAyah: AyahNumber) {

@@ -150,7 +150,6 @@ final class SearchInteractor: PresentableInteractor<SearchPresentable>, SearchIn
             }
         }
 
-
         // navigate to the selected page
         Analytics.shared.openingQuran(from: .searchResults)
         listener?.navigateTo(quranPage: searchResult.page, highlightingAyah: searchResult.ayah)

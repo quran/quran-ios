@@ -56,7 +56,8 @@ protocol TranslationTextTypeSelectionPresentableListener: class {
     func onItemTapped(at index: Int)
 }
 
-class TranslationTextTypeSelectionTableViewController: BaseTableViewController, TranslationTextTypeSelectionViewControllable, TranslationTextTypeSelectionPresentable {
+class TranslationTextTypeSelectionTableViewController: BaseTableViewController,
+                TranslationTextTypeSelectionViewControllable, TranslationTextTypeSelectionPresentable {
 
     weak var listener: TranslationTextTypeSelectionPresentableListener?
 

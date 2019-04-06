@@ -20,13 +20,15 @@
 
 import PromiseKit
 
-struct QuranPagesDataRetriever: Interactor {
+protocol QuranPagesDataRetrieverType {
+    func getPages() -> Guarantee<[QuranPage]>
+}
 
-    func execute(_ input: Void) -> Promise<[QuranPage]> {
-        return DispatchQueue.global().async(.promise) {
+struct QuranPagesDataRetriever: QuranPagesDataRetrieverType {
 
+    func getPages() -> Guarantee<[QuranPage]> {
+        return DispatchQueue.global().async(.guarantee) {
             var pages: [QuranPage] = []
-
             for pageNumber in Quran.QuranPagesRange {
 
                 let ayah = Quran.startAyahForPage(pageNumber)

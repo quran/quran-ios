@@ -42,7 +42,7 @@ extension DefaultAudioPlayerInteractor {
         completion()
     }
 
-    func isAudioDownloading() -> Promise<Bool> {
+    func isAudioDownloading() -> Guarantee<Bool> {
         return downloader.getCurrentDownloadResponse()
             .get { response in
                 if let response = response {

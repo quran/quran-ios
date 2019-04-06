@@ -25,7 +25,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
 
     private let editController = EditController(usesRightBarButton: true)
     private let dataSource: AudioDownloadsDataSource
-    private let retriever: AnyGetInteractor<[DownloadableQariAudio]>
+    private let retriever: DownloadableQariAudioRetrieverType
 
     override var screen: Analytics.Screen { return .audioDownloads }
 
@@ -33,10 +33,10 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         return .lightContent
     }
 
-    init(retriever: AnyGetInteractor<[DownloadableQariAudio]>,
+    init(retriever: DownloadableQariAudioRetrieverType,
          downloader: DownloadManager,
          ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
-         qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>,
+         qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType,
          deletionInteractor: AnyInteractor<Qari, Void>) {
         self.retriever = retriever
         self.dataSource = AudioDownloadsDataSource(downloader: downloader,
@@ -94,7 +94,7 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
         tableView.reloadData()
 
         // get new data
-        retriever.get()
+        retriever.getDownloadableQariAudios()
             .done(on: .main) { [weak self] audios -> Void in
                 self?.dataSource.items = audios.sorted { $0.audio.downloadedSizeInBytes > $1.audio.downloadedSizeInBytes }
                 self?.tableView.reloadData()

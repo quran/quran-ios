@@ -42,7 +42,7 @@ protocol AudioPlayerInteractor: class {
     var delegate: AudioPlayerInteractorDelegate? { get set }
 
     // will call willStartDownloadingAudioFiles if there is downloads
-    func isAudioDownloading() -> Promise<Bool>
+    func isAudioDownloading() -> Guarantee<Bool>
 
     func playAudioForQari(_ qari: Qari, range: VerseRange)
     func getAyahRange(starting startAyah: AyahNumber, page: QuranPage) -> VerseRange

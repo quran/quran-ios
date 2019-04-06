@@ -20,25 +20,29 @@
 import BatchDownloader
 import PromiseKit
 
-class DownloadableQariAudioRetriever: Interactor {
+protocol DownloadableQariAudioRetrieverType {
+    func getDownloadableQariAudios() -> Guarantee<[DownloadableQariAudio]>
+}
+
+class DownloadableQariAudioRetriever: DownloadableQariAudioRetrieverType {
 
     private let qarisRetriever: QariDataRetrieverType
-    private let downloadsInfoRetriever: AnyInteractor<[Qari], [QariAudioDownload]>
+    private let downloadsInfoRetriever: QariListToQariAudioDownloadRetrieverType
     private let downloader: DownloadManager
 
-    init(downloader: DownloadManager, qarisRetriever: QariDataRetrieverType, downloadsInfoRetriever: AnyInteractor<[Qari], [QariAudioDownload]>) {
+    init(downloader: DownloadManager, qarisRetriever: QariDataRetrieverType, downloadsInfoRetriever: QariListToQariAudioDownloadRetrieverType) {
         self.downloader             = downloader
         self.qarisRetriever         = qarisRetriever
         self.downloadsInfoRetriever = downloadsInfoRetriever
     }
 
-    func execute(_ p: Void) -> Promise<[DownloadableQariAudio]> {
+    func getDownloadableQariAudios() -> Guarantee<[DownloadableQariAudio]> {
         let retriever = qarisRetriever
             .getQaris()
-            .then(downloadsInfoRetriever.execute)
+            .then(downloadsInfoRetriever.getQariAudioDownloads(for:))
 
         let downloads = downloader.getOnGoingDownloads()
-        return when(fulfilled: downloads, retriever).map(createDownloadableQariAudio(downloads:qaris:))
+        return when(downloads, retriever).map(createDownloadableQariAudio(downloads:qaris:))
     }
 
     private func createDownloadableQariAudio(downloads: [DownloadBatchResponse], qaris: [QariAudioDownload]) -> [DownloadableQariAudio] {

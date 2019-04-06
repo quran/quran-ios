@@ -111,12 +111,6 @@ extension Guarantee where T: OptionalConvertible {
     }
 }
 
-extension Guarantee {
-    @available(*, deprecated, message: "It should not be needed")
-    public func asPromise() -> Promise<T> {
-        return Promise(self)
-    }
-}
 // swiftlint:disable force_unwrapping
 /// Wait for all guaratnees in a set to fulfill.
 public func when<U, V>(_ pu: Guarantee<U>, _ pv: Guarantee<V>) -> Guarantee<(U, V)> {
@@ -133,3 +127,36 @@ public func when<U, V, W, X>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guara
     return when(pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 // swiftlint:enable force_unwrapping
+
+public extension DispatchQueue {
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+         DispatchQueue.global().async(.guaratnee) {
+            try md5(input)
+         }.done { md5 in
+            //…
+         }
+
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Guarantee` resolved by the result of the provided closure.
+     */
+    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+    final func async<T>(
+        _: PMKGuaranteeNamespacer,
+        group: DispatchGroup? = nil,
+        qos: DispatchQoS = .default,
+        flags: DispatchWorkItemFlags = [],
+        execute body: @escaping () -> T) -> Guarantee<T> {
+        return Guarantee<T> { resolver in
+            self.async(group: group, qos: qos, flags: flags) {
+                resolver(body())
+            }
+        }
+    }
+}
+
+/// used by our extensions to provide unambiguous functions with the same name as the original function
+public enum PMKGuaranteeNamespacer {
+    case guarantee
+}

@@ -27,11 +27,9 @@ protocol QariDataRetrieverType {
 struct QariDataRetriever: QariDataRetrieverType {
 
     func getQaris() -> Guarantee<[Qari]> {
-        return Guarantee { resolver in
-            DispatchQueue.global().async {
-                resolver(Qari.qaris.sorted {
-                    $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
-                })
+        return DispatchQueue.global().async(.guarantee) {
+            Qari.qaris.sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
         }
     }

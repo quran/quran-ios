@@ -26,7 +26,7 @@ final class QuranBuilder: Builder, QuranBuildable {
         let viewController = QuranViewController(
             imageService                           : createQuranImageService(),
             pageService                            : createQuranTranslationService(),
-            dataRetriever                          : QuranPagesDataRetriever().asAnyGetInteractor(),
+            pagesRetriever                         : QuranPagesDataRetriever(),
             ayahInfoRetriever                      : DefaultAyahInfoRetriever(persistence: SQLiteAyahInfoPersistence()),
             audioViewPresenter                     : createAudioBannerViewPresenter(),
             translationsSelectionControllerCreator : container.createCreator(container.createTranslationsSelectionViewController),

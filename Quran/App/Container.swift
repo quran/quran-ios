@@ -188,15 +188,15 @@ class Container {
             simplePersistence: createSimplePersistence()).asAnyInteractor()
     }
 
-    func createDownloadableQariAudioRetriever() -> AnyGetInteractor<[DownloadableQariAudio]> {
+    func createDownloadableQariAudioRetriever() -> DownloadableQariAudioRetrieverType {
         return DownloadableQariAudioRetriever(
             downloader: createDownloadManager(),
             qarisRetriever: createQarisDataRetriever(),
-            downloadsInfoRetriever: createQariListToQariAudioDownloadRetriever()).asAnyGetInteractor()
+            downloadsInfoRetriever: createQariListToQariAudioDownloadRetriever())
     }
 
-    func createQariListToQariAudioDownloadRetriever() -> AnyInteractor<[Qari], [QariAudioDownload]> {
-        return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    func createQariListToQariAudioDownloadRetriever() -> QariListToQariAudioDownloadRetrieverType {
+        return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator())
     }
 
     func createQariAudioFileListRetrievalCreator() -> AnyCreator<Qari, QariAudioFileListRetrieval> {

@@ -25,14 +25,18 @@ private struct AudioFileLists {
     let gapless: [QariAudioFile]
 }
 
-class QariListToQariAudioDownloadRetriever: Interactor {
+protocol QariListToQariAudioDownloadRetrieverType {
+    func getQariAudioDownloads(for qaris: [Qari]) -> Guarantee<[QariAudioDownload]>
+}
+
+class QariListToQariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType {
 
     let fileListCreator: AnyCreator<Qari, QariAudioFileListRetrieval>
     init(fileListCreator: AnyCreator<Qari, QariAudioFileListRetrieval>) {
         self.fileListCreator = fileListCreator
     }
 
-    func execute(_ qaris: [Qari]) -> Promise<[QariAudioDownload]> {
+    func getQariAudioDownloads(for qaris: [Qari]) -> Guarantee<[QariAudioDownload]> {
         let suras = DispatchQueue.global().async(.promise) {
             Set(Sura.getSuras().map { $0.suraNumber })
         }
@@ -41,7 +45,7 @@ class QariListToQariAudioDownloadRetriever: Interactor {
         }
         let qarisAndSuras = when(suras, fileLists)
             .map { suras, fileLists in qaris.map { q in (q, suras, fileLists) } }
-        return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:)).asPromise()
+        return qarisAndSuras.parallelMap(execute: self.createAudioDownload(for:suras:fileLists:))
     }
 
     private func createFileLists(for qaris: [Qari]) -> AudioFileLists {

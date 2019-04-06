@@ -49,7 +49,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let quranNavigationBar: QuranNavigationBar
 
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
-    private let dataRetriever: AnyGetInteractor<[QuranPage]>
+    private let pagesRetriever: QuranPagesDataRetrieverType
     private let audioViewPresenter: AudioBannerViewPresenter
     private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
     private var simplePersistence: SimplePersistence
@@ -118,7 +118,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     init(imageService                           : AnyCacheableService<Int, QuranUIImage>,
          pageService                            : AnyCacheableService<Int, TranslationPage>,
-         dataRetriever                          : AnyGetInteractor<[QuranPage]>,
+         pagesRetriever                         : QuranPagesDataRetrieverType,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
          translationsSelectionControllerCreator : AnyGetCreator<UIViewController>,
@@ -131,7 +131,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          lastPage                               : LastPage?,
          highlightedSearchAyah                  : AyahNumber?) {
         self.initialPage                            = page
-        self.dataRetriever                          = dataRetriever
+        self.pagesRetriever                         = pagesRetriever
         self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
         self.bookmarksManager                       = BookmarksManager(bookmarksPersistence: bookmarksPersistence)
         self.simplePersistence                      = simplePersistence
@@ -209,10 +209,11 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         // set the custom title view
         navigationItem.titleView = QuranPageTitleView()
 
-        dataRetriever.get().done(on: .main) { [weak self] items -> Void in
-            self?.dataSource.setItems(items)
-            self?.scrollToFirstPage()
-        }.suppress()
+        pagesRetriever.getPages()
+            .done(on: .main) { [weak self] items -> Void in
+                self?.dataSource.setItems(items)
+                self?.scrollToFirstPage()
+            }
 
         audioViewPresenter.onViewDidLoad()
     }

@@ -46,9 +46,9 @@ class AudioFilesDownloader {
         return !files.filter { !FileManager.documentsURL.appendingPathComponent($0.destinationPath).isReachable }.isEmpty
     }
 
-    func getCurrentDownloadResponse() -> Promise<DownloadBatchResponse?> {
+    func getCurrentDownloadResponse() -> Guarantee<DownloadBatchResponse?> {
         if let response = response {
-            return Promise.value(response)
+            return Guarantee.value(response)
         } else {
             return downloader.getOnGoingDownloads().map { batches -> DownloadBatchResponse? in
                 let downloading = batches.first { $0.isAudio }

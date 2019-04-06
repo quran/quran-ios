@@ -29,7 +29,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     private let deletionInteractor: AnyInteractor<Qari, Void>
     private let downloader: DownloadManager
     private let ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
-    fileprivate let qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>
+    fileprivate let qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType
     fileprivate var downloadingObservers: [Qari: DownloadingObserver<DownloadableQariAudio>] = [:]
 
     weak var delegate: AudioDownloadsDataSourceDelegate?
@@ -38,7 +38,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
 
     init(downloader: DownloadManager,
          ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
-         qariAudioDownloadRetriever: AnyInteractor<[Qari], [QariAudioDownload]>,
+         qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType,
          deletionInteractor: AnyInteractor<Qari, Void>) {
         self.downloader = downloader
         self.ayahsDownloader = ayahsDownloader
@@ -216,7 +216,7 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
     }
 
     private func reload(item: DownloadableQariAudio, response: DownloadBatchResponse?) {
-        qariAudioDownloadRetriever.execute([item.audio.qari])
+        qariAudioDownloadRetriever.getQariAudioDownloads(for: [item.audio.qari])
             .done(on: .main) { audios -> Void in
                 guard let audio = audios.first else {
                     return
@@ -240,7 +240,6 @@ extension AudioDownloadsDataSource: DownloadingObserverDelegate {
 
                 let cell = self.ds_reusableViewDelegate?.ds_cellForItem(at: localIndexPath) as? AudioDownloadTableViewCell
                 cell?.configure(with: audio)
-
-            }.suppress()
+            }
     }
 }

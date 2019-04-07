@@ -20,7 +20,13 @@
 import GenericDataSources
 import UIKit
 
-class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate, EditControllerDelegate {
+protocol TranslationsListPresentableListener: class {
+}
+
+class TranslationsViewController: BaseTableViewController, TranslationsDataSourceDelegate, EditControllerDelegate,
+                        TranslationsListPresentable, TranslationsListViewControllable {
+
+    weak var listener: TranslationsListPresentableListener?
 
     override var screen: Analytics.Screen { return .translations }
 

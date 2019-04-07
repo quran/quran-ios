@@ -47,27 +47,6 @@ class Container {
                 dataSource: createTranslationsSelectionDataSource()))
     }
 
-    func createTranslationsViewController() -> UIViewController {
-        return TranslationsViewController(
-            interactor: createTranslationsRetrievalInteractor(),
-            localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
-            dataSource: createTranslationsDataSource())
-    }
-
-    func createTranslationsDataSource() -> TranslationsDataSource {
-        let pendingDS = TranslationsBasicDataSource()
-        let downloadedDS = TranslationsBasicDataSource()
-        let dataSource = TranslationsDataSource(
-            downloader: createDownloadManager(),
-            deletionInteractor: createTranslationDeletionInteractor(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor(),
-            pendingDataSource: pendingDS,
-            downloadedDataSource: downloadedDS)
-        pendingDS.delegate = dataSource
-        downloadedDS.delegate = dataSource
-        return dataSource
-    }
-
     func createTranslationsSelectionDataSource() -> TranslationsDataSource {
         let pendingDS = TranslationsBasicDataSource()
         let downloadedDS = TranslationsSelectionBasicDataSource(

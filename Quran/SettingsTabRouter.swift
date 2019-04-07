@@ -7,12 +7,12 @@
 //
 import RIBs
 
-protocol SettingsTabInteractable: TabInteractable, SettingsListener, AudioDownloadsListener {
+protocol SettingsTabInteractable: TabInteractable, SettingsListener, AudioDownloadsListener, TranslationsListListener {
 }
 
 final class SettingsTabRouter: TabRouter, SettingsTabRouting {
 
-    private let translationsListCreator: AnyCreator<Void, UIViewController>
+    private let translationsListBuilder: TranslationsListBuildable
     private let audioDownloadsBuilder: AudioDownloadsBuildable
     private let settingsBuilder: SettingsBuildable
     private let settingsInteractor: SettingsTabInteractable
@@ -20,12 +20,12 @@ final class SettingsTabRouter: TabRouter, SettingsTabRouting {
     init(interactor: SettingsTabInteractable,
          viewController: TabViewControllable,
          settingsBuilder: SettingsBuildable,
-         translationsListCreator: AnyCreator<Void, UIViewController>,
+         translationsListBuilder: TranslationsListBuildable,
          audioDownloadsBuilder: AudioDownloadsBuildable,
          deps: Deps) {
         self.settingsInteractor = interactor
         self.settingsBuilder = settingsBuilder
-        self.translationsListCreator = translationsListCreator
+        self.translationsListBuilder = translationsListBuilder
         self.audioDownloadsBuilder = audioDownloadsBuilder
         super.init(interactor: interactor, viewController: viewController, deps: deps)
     }
@@ -35,8 +35,8 @@ final class SettingsTabRouter: TabRouter, SettingsTabRouting {
     }
 
     func presentTranslationsList() {
-        let translationsListController = translationsListCreator.create(())
-        self.viewController.uinavigationController.pushViewController(translationsListController, animated: true)
+        let router = translationsListBuilder.build(withListener: settingsInteractor)
+        push(router, animated: true)
     }
 
     func presentAudioDownloads() {

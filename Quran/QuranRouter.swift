@@ -8,7 +8,8 @@
 
 import RIBs
 
-protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener, MoreMenuListener, QariListListener {
+protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener,
+                MoreMenuListener, QariListListener, TranslationsListListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
@@ -16,7 +17,7 @@ protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, Translat
 protocol QuranViewControllable: ViewControllable {
     func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable)
     func presentMoreMenuViewController(_ viewController: ViewControllable)
-    func presentTranslationsSelection()
+    func presentTranslationsSelection(_ viewController: ViewControllable)
     func presentQariList(_ viewController: ViewControllable)
 }
 
@@ -27,6 +28,7 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
         let translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuildable
         let moreMenuBuilder: MoreMenuBuildable
         let qariListBuilder: QariListBuildable
+        let translationsSelectionBuilder: TranslationsSelectionBuildble
     }
 
     private let deps: Deps
@@ -37,44 +39,53 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
         interactor.router = self
     }
 
-    func dismissPresentedRouter() {
-        dismiss(animated: true)
+    func dismissPresentedRouter(completion: (() -> Void)?) {
+        dismiss(animated: true, completion: completion)
     }
 
     // MARK: - AudioOptions
 
     func presentAdvancedAudioOptions(with options: AdvancedAudioOptions) {
-        let router = deps.advancedAudioOptionsBuilder.build(withListener: interactor, options: options)
-        present(router, animated: true)
+        present { $0.advancedAudioOptionsBuilder.build(withListener: $1, options: options) }
     }
 
     // MARK: - Translation Text Type
 
     func presentTranslationTextTypeSelection() {
-        let router = deps.translationTextTypeSelectionBuilder.build(withListener: interactor)
-        saveAsPresented(router)
-        viewController.presentTranslationTextTypeSelectionViewController(router.viewControllable)
+        present({ $0.translationTextTypeSelectionBuilder.build(withListener: $1) },
+                { $0.presentTranslationTextTypeSelectionViewController($1) }) // swiftlint:disable:this opening_brace
     }
 
     // MARK: - More Menu
 
     func presentMoreMenu(withModel model: MoreMenuModel) {
-        let router = deps.moreMenuBuilder.build(withListener: interactor, model: model)
-        saveAsPresented(router)
-        viewController.presentMoreMenuViewController(router.viewControllable)
+        present({ $0.moreMenuBuilder.build(withListener: $1, model: model) },
+                { $0.presentMoreMenuViewController($1) }) // swiftlint:disable:this opening_brace
     }
 
     // MARK: - Translation Selection
 
     func presentTranslationsSelection() {
-        viewController.presentTranslationsSelection()
+        present({ $0.translationsSelectionBuilder.build(withListener: $1) },
+                { $0.presentTranslationsSelection($1) }) // swiftlint:disable:this opening_brace
     }
 
     // MARK: - Qari List
 
     func presentQariList() {
-        let router = deps.qariListBuilder.build(withListener: interactor)
+        present({ $0.qariListBuilder.build(withListener: $1) },
+                { $0.presentQariList($1) }) // swiftlint:disable:this opening_brace
+    }
+
+    private func present(_ building: (Deps, QuranInteractable) -> ViewableRouting,
+                         _ present: (QuranViewControllable, ViewControllable) -> Void) {
+        let router = building(deps, interactor)
         saveAsPresented(router)
-        viewController.presentQariList(router.viewControllable)
+        present(viewController, router.viewControllable)
+    }
+
+    private func present(_ building: (Deps, QuranInteractable) -> ViewableRouting) {
+        let router = building(deps, interactor)
+        present(router, animated: true)
     }
 }

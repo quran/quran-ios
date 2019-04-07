@@ -27,6 +27,8 @@ protocol QuranPresentableListener: class {
     func onWordPointerTapped()
     func onMoreBarButtonTapped()
     func onQariListButtonTapped()
+
+    func onTranslationsSelectionDoneTapped()
     func didDismissPopover()
 }
 
@@ -52,7 +54,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
     private let pagesRetriever: QuranPagesDataRetrieverType
     private let audioViewPresenter: AudioBannerViewPresenter
-    private let translationsSelectionControllerCreator: AnyGetCreator<UIViewController>
     private var simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater
 
@@ -122,7 +123,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          pagesRetriever                         : QuranPagesDataRetrieverType,
          ayahInfoRetriever                      : AyahInfoRetriever,
          audioViewPresenter                     : AudioBannerViewPresenter,
-         translationsSelectionControllerCreator : AnyGetCreator<UIViewController>,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
@@ -137,7 +137,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.bookmarksManager                       = BookmarksManager(bookmarksPersistence: bookmarksPersistence)
         self.simplePersistence                      = simplePersistence
         self.audioViewPresenter                     = audioViewPresenter
-        self.translationsSelectionControllerCreator = translationsSelectionControllerCreator
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
         self.verseTextRetrieval                     = verseTextRetrieval
@@ -407,9 +406,18 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         listener?.onMoreBarButtonTapped()
     }
 
-    func presentTranslationsSelection() {
-        let controller = translationsSelectionControllerCreator.create(())
-        present(controller, animated: true, completion: nil)
+    func presentTranslationsSelection(_ viewController: ViewControllable) {
+        let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController.uiviewController)
+
+        viewController.uiviewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                                                            target: self,
+                                                                                            action: #selector(onTranslationsSelectionDoneTapped))
+        present(translationsNavigationController, animated: true, completion: nil)
+    }
+
+    @objc
+    func onTranslationsSelectionDoneTapped() {
+        listener?.onTranslationsSelectionDoneTapped()
     }
 
     func showWordPointer() {

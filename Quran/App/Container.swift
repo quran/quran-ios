@@ -39,29 +39,6 @@ class Container {
         }
     }
 
-    func createTranslationsSelectionViewController() -> UIViewController {
-        return TranslationsSelectionNavigationController(
-            rootViewController: TranslationsSelectionViewController(
-                interactor: createTranslationsRetrievalInteractor(),
-                localTranslationsInteractor: createLocalTranslationsRetrievalInteractor(),
-                dataSource: createTranslationsSelectionDataSource()))
-    }
-
-    func createTranslationsSelectionDataSource() -> TranslationsDataSource {
-        let pendingDS = TranslationsBasicDataSource()
-        let downloadedDS = TranslationsSelectionBasicDataSource(
-            simplePersistence: createSimplePersistence())
-        let dataSource = TranslationsSelectionDataSource(
-            downloader: createDownloadManager(),
-            deletionInteractor: createTranslationDeletionInteractor(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor(),
-            pendingDataSource: pendingDS,
-            downloadedDataSource: downloadedDS)
-        pendingDS.delegate = dataSource
-        downloadedDS.delegate = dataSource
-        return dataSource
-    }
-
     func createQarisDataRetriever() -> QariDataRetrieverType {
         return QariDataRetriever()
     }

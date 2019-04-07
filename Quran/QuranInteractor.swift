@@ -10,13 +10,19 @@ import RIBs
 import RxSwift
 
 protocol QuranRouting: ViewableRouting {
-    func dismissPresentedRouter()
+    func dismissPresentedRouter(completion: (() -> Void)?)
 
     func presentAdvancedAudioOptions(with options: AdvancedAudioOptions)
     func presentTranslationTextTypeSelection()
     func presentMoreMenu(withModel model: MoreMenuModel)
     func presentTranslationsSelection()
     func presentQariList()
+}
+
+extension QuranRouting {
+    func dismissPresentedRouter() {
+        dismissPresentedRouter(completion: nil)
+    }
 }
 
 protocol QuranPresentable: Presentable {
@@ -67,6 +73,12 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     private var quranMode: QuranMode {
         set { deps.simplePersistence.setValue(newValue == .translation, forKey: .showQuranTranslationView) }
         get { return deps.simplePersistence.valueForKey(.showQuranTranslationView) ? .translation : .arabic }
+    }
+
+    // MARK: - TranslationsSelection
+
+    func onTranslationsSelectionDoneTapped() {
+        router?.dismissPresentedRouter()
     }
 
     // MARK: - Popover
@@ -133,14 +145,18 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
         let noTranslationsSelected = deps.simplePersistence.valueForKey(.selectedTranslations).isEmpty
         if mode == .translation && noTranslationsSelected {
-            router?.dismissPresentedRouter()
-            router?.presentTranslationsSelection()
+            presentTranslationsSelection()
         }
     }
 
     func onTranslationsSelectionsTapped() {
-        router?.dismissPresentedRouter()
-        router?.presentTranslationsSelection()
+        presentTranslationsSelection()
+    }
+
+    private func presentTranslationsSelection() {
+        router?.dismissPresentedRouter { [weak self] in
+            self?.router?.presentTranslationsSelection()
+        }
     }
 
     func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool) {

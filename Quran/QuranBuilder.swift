@@ -29,7 +29,6 @@ final class QuranBuilder: Builder, QuranBuildable {
             pagesRetriever                         : QuranPagesDataRetriever(),
             ayahInfoRetriever                      : DefaultAyahInfoRetriever(persistence: SQLiteAyahInfoPersistence()),
             audioViewPresenter                     : createAudioBannerViewPresenter(),
-            translationsSelectionControllerCreator : container.createCreator(container.createTranslationsSelectionViewController),
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
             simplePersistence                      : container.createSimplePersistence(),
@@ -50,7 +49,8 @@ final class QuranBuilder: Builder, QuranBuildable {
                 advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container),
                 translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(container: container),
-                qariListBuilder: QariListBuilder(container: container)
+                qariListBuilder: QariListBuilder(container: container),
+                translationsSelectionBuilder: TranslationsSelectionBuilder(container: container)
         ))
     }
 

@@ -34,14 +34,8 @@ class TranslationsSelectionViewController: TranslationsViewController {
         title = l("translationsSelectionTitle")
         navigationItem.prompt = l("translationsSelectionPrompt")
         navigationItem.titleView = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
 
         tableView.allowsSelection = true
         editController.isEnabled = false
-    }
-
-    @objc
-    func dismissViewController() {
-        dismiss(animated: true, completion: nil)
     }
 }

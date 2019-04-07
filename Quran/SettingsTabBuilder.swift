@@ -21,7 +21,7 @@ final class SettingsTabBuilder: Builder, TabBuildable {
             viewController: viewController,
             settingsBuilder: SettingsBuilder(container: container),
             translationsListCreator: container.createCreator(container.createTranslationsViewController),
-            audioDownloadsCreator: container.createCreator(container.createAudioDownloadsViewController),
+            audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             deps: TabDependenciesBuilder(container: container).build())
     }
 }

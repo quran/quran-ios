@@ -21,7 +21,13 @@ import BatchDownloader
 import GenericDataSources
 import UIKit
 
-class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate, EditControllerDelegate {
+protocol AudioDownloadsPresentableListener: class {
+}
+
+class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloadsDataSourceDelegate, EditControllerDelegate,
+                    AudioDownloadsPresentable, AudioDownloadsViewControllable {
+
+    weak var listener: AudioDownloadsPresentableListener?
 
     private let editController = EditController(usesRightBarButton: true)
     private let dataSource: AudioDownloadsDataSource

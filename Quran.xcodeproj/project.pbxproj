@@ -19,6 +19,9 @@
 		068323A02259940800D01297 /* SettingsTabInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683239F2259940800D01297 /* SettingsTabInteractor.swift */; };
 		068323A2225A4D3600D01297 /* PresentingViewableRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A1225A4D3600D01297 /* PresentingViewableRouter.swift */; };
 		068323A4225A552C00D01297 /* PhonePopoverPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A3225A552C00D01297 /* PhonePopoverPresenter.swift */; };
+		068323A8225A563B00D01297 /* AudioDownloadsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A5225A563B00D01297 /* AudioDownloadsRouter.swift */; };
+		068323A9225A563B00D01297 /* AudioDownloadsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A6225A563B00D01297 /* AudioDownloadsBuilder.swift */; };
+		068323AA225A563B00D01297 /* AudioDownloadsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A7225A563B00D01297 /* AudioDownloadsInteractor.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -587,6 +590,9 @@
 		0683239F2259940800D01297 /* SettingsTabInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTabInteractor.swift; sourceTree = "<group>"; };
 		068323A1225A4D3600D01297 /* PresentingViewableRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentingViewableRouter.swift; sourceTree = "<group>"; };
 		068323A3225A552C00D01297 /* PhonePopoverPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresenter.swift; sourceTree = "<group>"; };
+		068323A5225A563B00D01297 /* AudioDownloadsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDownloadsRouter.swift; sourceTree = "<group>"; };
+		068323A6225A563B00D01297 /* AudioDownloadsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDownloadsBuilder.swift; sourceTree = "<group>"; };
+		068323A7225A563B00D01297 /* AudioDownloadsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDownloadsInteractor.swift; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -1837,6 +1843,10 @@
 		5459FF721EA526B400FBF6C5 /* AudioDownloads */ = {
 			isa = PBXGroup;
 			children = (
+				068323A6225A563B00D01297 /* AudioDownloadsBuilder.swift */,
+				068323A7225A563B00D01297 /* AudioDownloadsInteractor.swift */,
+				068323A5225A563B00D01297 /* AudioDownloadsRouter.swift */,
+				5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */,
 				5459FF661EA4E77700FBF6C5 /* Logic */,
 				54F35F64216A64E100276220 /* View */,
 			);
@@ -2432,7 +2442,6 @@
 			isa = PBXGroup;
 			children = (
 				5459FF7E1EA549C400FBF6C5 /* AudioDownloadsDataSource.swift */,
-				5459FF731EA526C700FBF6C5 /* AudioDownloadsViewController.swift */,
 				5459FF761EA5289100FBF6C5 /* AudioDownloadTableViewCell.swift */,
 				5459FF771EA5289100FBF6C5 /* AudioDownloadTableViewCell.xib */,
 			);
@@ -3713,6 +3722,7 @@
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
 				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				06B240A522482D5C0003D628 /* JuzsRouter.swift in Sources */,
+				068323A8225A563B00D01297 /* AudioDownloadsRouter.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,
 				06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */,
 				06B2409022482A020003D628 /* NavigationRouter.swift in Sources */,
@@ -3779,6 +3789,7 @@
 				06A7E6A72251648700AC2634 /* AdvancedAudioOptionsInteractor.swift in Sources */,
 				54F56C531E7EDAAA00D7AF57 /* QuranBasicDataSourceRepresentable.swift in Sources */,
 				545EE5171DCE08530085D31F /* LastPagesPersistence.swift in Sources */,
+				068323AA225A563B00D01297 /* AudioDownloadsInteractor.swift in Sources */,
 				547BCB5920915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift in Sources */,
 				54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */,
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
@@ -3794,6 +3805,7 @@
 				06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */,
 				541BA5DC1E93929C00245A42 /* TranslationVerseTextRetrieval.swift in Sources */,
 				5459FF6A1EA4E7F900FBF6C5 /* QariAudioDownload.swift in Sources */,
+				068323A9225A563B00D01297 /* AudioDownloadsBuilder.swift in Sources */,
 				54B266061CC6D32F00D3AEF8 /* SurasTabViewController.swift in Sources */,
 				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
 				06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */,

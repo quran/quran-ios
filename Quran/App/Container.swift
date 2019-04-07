@@ -39,15 +39,6 @@ class Container {
         }
     }
 
-    func createAudioDownloadsViewController() -> UIViewController {
-        return AudioDownloadsViewController(
-            retriever: createDownloadableQariAudioRetriever(),
-            downloader: createDownloadManager(),
-            ayahsDownloader: createAyahsAudioDownloader(),
-            qariAudioDownloadRetriever: createQariListToQariAudioDownloadRetriever(),
-            deletionInteractor: createQariAudioDeleteInteractor())
-    }
-
     func createTranslationsSelectionViewController() -> UIViewController {
         return TranslationsSelectionNavigationController(
             rootViewController: TranslationsSelectionViewController(
@@ -188,27 +179,12 @@ class Container {
             simplePersistence: createSimplePersistence()).asAnyInteractor()
     }
 
-    func createDownloadableQariAudioRetriever() -> DownloadableQariAudioRetrieverType {
-        return DownloadableQariAudioRetriever(
-            downloader: createDownloadManager(),
-            qarisRetriever: createQarisDataRetriever(),
-            downloadsInfoRetriever: createQariListToQariAudioDownloadRetriever())
-    }
-
-    func createQariListToQariAudioDownloadRetriever() -> QariListToQariAudioDownloadRetrieverType {
-        return QariListToQariAudioDownloadRetriever(fileListCreator: createQariAudioFileListRetrievalCreator())
-    }
-
     func createQariAudioFileListRetrievalCreator() -> AnyCreator<Qari, QariAudioFileListRetrieval> {
         return QariAudioFileListRetrievalCreator().asAnyCreator()
     }
 
     func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse> {
         return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
-    }
-
-    func createQariAudioDeleteInteractor() -> AnyInteractor<Qari, Void> {
-        return QariAudioDeleteInteractor().asAnyInteractor()
     }
 
     func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {

@@ -22,7 +22,11 @@ import Foundation
 import PromiseKit
 import Zip
 
-class LocalTranslationsRetrievalInteractor: Interactor {
+protocol LocalTranslationsRetrieverType {
+    func getLocalTranslations() -> Promise<[TranslationFull]>
+}
+
+class LocalTranslationsRetriever: LocalTranslationsRetrieverType {
 
     private let persistence: ActiveTranslationsPersistence
     private let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
@@ -32,7 +36,7 @@ class LocalTranslationsRetrievalInteractor: Interactor {
         self.versionUpdater = versionUpdater
     }
 
-    func execute(_ input: Void) -> Promise<[TranslationFull]> {
+    func getLocalTranslations() -> Promise<[TranslationFull]> {
         return DispatchQueue.global()
             .async(.promise, execute: persistence.retrieveAll)
             .then(versionUpdater.execute)

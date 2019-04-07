@@ -21,29 +21,32 @@
 import Foundation
 import PromiseKit
 
-class TranslationsRetrievalInteractor: Interactor {
+protocol TranslationsRetrieverType {
+    func getTranslations() -> Promise<[TranslationFull]>
+}
+
+class TranslationsRetriever: TranslationsRetrieverType {
 
     private let networkManager: AnyNetworkManager<[Translation]>
     private let persistence: ActiveTranslationsPersistence
-    private let localInteractor: AnyGetInteractor<[TranslationFull]>
+    private let localRetriever: LocalTranslationsRetrieverType
 
     init(networkManager: AnyNetworkManager<[Translation]>,
          persistence: ActiveTranslationsPersistence,
-         localInteractor: AnyGetInteractor<[TranslationFull]>) {
+         localRetriever: LocalTranslationsRetrieverType) {
         self.networkManager = networkManager
         self.persistence = persistence
-        self.localInteractor = localInteractor
+        self.localRetriever = localRetriever
     }
 
-    func execute(_ input: Void) -> Promise<[TranslationFull]> {
-
+    func getTranslations() -> Promise<[TranslationFull]> {
         let local = DispatchQueue.global().async(.promise, execute: persistence.retrieveAll)
         let remote = networkManager.execute(.translations)
 
         return when(fulfilled: local, remote)                       // get local and remote
             .map(combine)                  // combine local and remote
             .map(saveCombined)         // save combined list
-            .then(localInteractor.get)  // get local data
+            .then(localRetriever.getLocalTranslations)  // get local data
     }
 
     private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [Int: Translation]) {

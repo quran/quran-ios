@@ -16,8 +16,8 @@ final class TranslationsSelectionBuilder: Builder, TranslationsSelectionBuildble
 
     func build(withListener listener: TranslationsListListener) -> TranslationsListRouting {
         let viewController = TranslationsSelectionViewController(
-            interactor: container.createTranslationsRetrievalInteractor(),
-            localTranslationsInteractor: container.createLocalTranslationsRetrievalInteractor(),
+            translationsRetriever: container.createTranslationsRetriever(),
+            localTranslationsRetriever: container.createLocalTranslationsRetriever(),
             dataSource: createTranslationsSelectionDataSource())
         let interactor = TranslationsListInteractor(presenter: viewController)
         interactor.listener = listener

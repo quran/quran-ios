@@ -91,7 +91,7 @@ final class QuranBuilder: Builder, QuranBuildable {
 
     private func createTranslationPreloadingOperation(page: Int) -> AnyPreloadingOperationRepresentable<TranslationPage> {
         return TranslationPreloadingOperation(page: page,
-                                              localTranslationInteractor: container.createLocalTranslationsRetrievalInteractor(),
+                                              localTranslationRetriever: container.createLocalTranslationsRetriever(),
                                               arabicPersistence: container.createArabicTextPersistence(),
                                               translationPersistenceCreator: container.createCreator(container.createTranslationTextPersistence),
                                               simplePersistence: container.createSimplePersistence()).asPreloadingOperationRepresentable()

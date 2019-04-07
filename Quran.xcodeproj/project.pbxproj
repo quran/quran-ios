@@ -204,7 +204,7 @@
 		544629DE1E676703005B1107 /* Download+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629DD1E676703005B1107 /* Download+Types.swift */; };
 		544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */; };
 		544629E61E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */; };
-		544629E81E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */; };
+		544629E81E6F67D1005B1107 /* LocalTranslationsRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E71E6F67D1005B1107 /* LocalTranslationsRetriever.swift */; };
 		544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */; };
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
 		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
@@ -324,7 +324,7 @@
 		548C2B3C2145A40D005266AA /* MoreRotationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548C2B3A2145A40D005266AA /* MoreRotationTableViewCell.xib */; };
 		548C2B3F21470D17005266AA /* UpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548C2B3E21470D17005266AA /* UpdateHandler.swift */; };
 		548C2B4221470FE7005266AA /* DarkThemeUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548C2B4121470FE7005266AA /* DarkThemeUpdater.swift */; };
-		549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */; };
+		549040B71E63385200D54625 /* TranslationsRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040B61E63385200D54625 /* TranslationsRetriever.swift */; };
 		549040BB1E63566D00D54625 /* TranslationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BA1E63566D00D54625 /* TranslationsDataSource.swift */; };
 		549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */; };
 		549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */; };
@@ -825,7 +825,7 @@
 		544629DD1E676703005B1107 /* Download+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Download+Types.swift"; sourceTree = "<group>"; };
 		544629E31E6AE049005B1107 /* TranslationsBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsBasicDataSource.swift; sourceTree = "<group>"; };
 		544629E51E6AE185005B1107 /* TranslationsHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
-		544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalTranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
+		544629E71E6F67D1005B1107 /* LocalTranslationsRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalTranslationsRetriever.swift; sourceTree = "<group>"; };
 		544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AbyssinicaSIL-R.ttf"; sourceTree = "<group>"; };
 		544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
@@ -956,7 +956,7 @@
 		548C2B3A2145A40D005266AA /* MoreRotationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MoreRotationTableViewCell.xib; sourceTree = "<group>"; };
 		548C2B3E21470D17005266AA /* UpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHandler.swift; sourceTree = "<group>"; };
 		548C2B4121470FE7005266AA /* DarkThemeUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkThemeUpdater.swift; sourceTree = "<group>"; };
-		549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetrievalInteractor.swift; sourceTree = "<group>"; };
+		549040B61E63385200D54625 /* TranslationsRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsRetriever.swift; sourceTree = "<group>"; };
 		549040BA1E63566D00D54625 /* TranslationsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsDataSource.swift; sourceTree = "<group>"; };
 		549040BD1E63578D00D54625 /* TranslationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTableViewCell.swift; sourceTree = "<group>"; };
 		549040C51E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JuzHeaderSupplementaryViewCreator.swift; sourceTree = "<group>"; };
@@ -2743,8 +2743,8 @@
 		C2E3EDAD1B85C45E1A173674 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				549040B61E63385200D54625 /* TranslationsRetrievalInteractor.swift */,
-				544629E71E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift */,
+				549040B61E63385200D54625 /* TranslationsRetriever.swift */,
+				544629E71E6F67D1005B1107 /* LocalTranslationsRetriever.swift */,
 				544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */,
 				544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */,
 				544629DB1E67636F005B1107 /* TranslationFull.swift */,
@@ -3673,13 +3673,13 @@
 				54699BB01E8DC3BA00211A60 /* QuranTranslationCollectionInnerDataSource.swift in Sources */,
 				06B2409222482A020003D628 /* ViewableRouter+Extensions.swift in Sources */,
 				544EC37C20C3B1C300D2E7B5 /* ThemedRoundedImageView.swift in Sources */,
-				544629E81E6F67D1005B1107 /* LocalTranslationsRetrievalInteractor.swift in Sources */,
+				544629E81E6F67D1005B1107 /* LocalTranslationsRetriever.swift in Sources */,
 				06A7E68A22511A5F00AC2634 /* SearchTabRouter.swift in Sources */,
 				548C2B3F21470D17005266AA /* UpdateHandler.swift in Sources */,
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
 				068323B0225A5BB600D01297 /* TranslationsListRouter.swift in Sources */,
-				549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */,
+				549040B71E63385200D54625 /* TranslationsRetriever.swift in Sources */,
 				068323A02259940800D01297 /* SettingsTabInteractor.swift in Sources */,
 				5428A686213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift in Sources */,
 				544EC38620C45E7E00D2E7B5 /* ThemedTabBarController.swift in Sources */,

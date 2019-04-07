@@ -33,15 +33,15 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
         formatter.locale = Locale(identifier: "en")
         return formatter
     }()
-    private let localTranslationInteractor: AnyGetInteractor<[TranslationFull]>
+    private let localTranslationRetriever: LocalTranslationsRetrieverType
     private let arabicPersistence: AyahTextPersistence
     private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
     init(
-        localTranslationInteractor: AnyGetInteractor<[TranslationFull]>,
+        localTranslationRetriever: LocalTranslationsRetrieverType,
         simplePersistence: SimplePersistence,
         arabicPersistence: AyahTextPersistence,
         translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>) {
-        self.localTranslationInteractor = localTranslationInteractor
+        self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
         self.translationPersistenceCreator = translationPersistenceCreator
     }
@@ -100,8 +100,8 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
     }
 
     private func prepare() -> Observable<[Translation]> {
-        return localTranslationInteractor
-            .get()
+        return localTranslationRetriever
+            .getLocalTranslations()
             .asObservable()
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
             .map { allTranslations -> [Translation] in

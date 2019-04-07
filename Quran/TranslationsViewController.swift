@@ -32,14 +32,14 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     let editController = EditController(usesRightBarButton: true)
     private let dataSource: TranslationsDataSource
-    private let interactor: AnyGetInteractor<[TranslationFull]>
-    private let localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>
+    private let translationsRetriever: TranslationsRetrieverType
+    private let localTranslationsRetriever: LocalTranslationsRetrieverType
 
-    init(interactor: AnyGetInteractor<[TranslationFull]>,
-         localTranslationsInteractor: AnyGetInteractor<[TranslationFull]>,
+    init(translationsRetriever: TranslationsRetrieverType,
+         localTranslationsRetriever: LocalTranslationsRetrieverType,
          dataSource: TranslationsDataSource) {
-        self.interactor = interactor
-        self.localTranslationsInteractor = localTranslationsInteractor
+        self.translationsRetriever = translationsRetriever
+        self.localTranslationsRetriever = localTranslationsRetriever
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
@@ -104,7 +104,8 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
 
     @objc
     private func refreshData() {
-        interactor.get()
+        translationsRetriever
+            .getTranslations()
             .done(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()
@@ -116,7 +117,8 @@ class TranslationsViewController: BaseTableViewController, TranslationsDataSourc
     }
 
     private func loadLocalData(completion: @escaping () -> Void = { }) {
-        localTranslationsInteractor.get()
+        localTranslationsRetriever
+            .getLocalTranslations()
             .done(on: .main) { [weak self] translations -> Void in
                 self?.dataSource.setItems(items: translations)
                 self?.tableView.reloadData()

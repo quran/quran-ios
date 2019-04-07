@@ -104,17 +104,17 @@ class Container {
         return SQLiteActiveTranslationsPersistence()
     }
 
-    func createTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
-        return TranslationsRetrievalInteractor(
+    func createTranslationsRetriever() -> TranslationsRetrieverType {
+        return TranslationsRetriever(
             networkManager: createNetworkManager(parser: createTranslationsParser()),
             persistence: createActiveTranslationsPersistence(),
-            localInteractor: createLocalTranslationsRetrievalInteractor()).asAnyGetInteractor()
+            localRetriever: createLocalTranslationsRetriever())
     }
 
-    func createLocalTranslationsRetrievalInteractor() -> AnyGetInteractor<[TranslationFull]> {
-        return LocalTranslationsRetrievalInteractor(
+    func createLocalTranslationsRetriever() -> LocalTranslationsRetrieverType {
+        return LocalTranslationsRetriever(
             persistence: createActiveTranslationsPersistence(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor()).asAnyGetInteractor()
+            versionUpdater: createTranslationsVersionUpdaterInteractor())
     }
 
     func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
@@ -145,7 +145,7 @@ class Container {
 
     func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
         return SQLiteSearchService(
-            localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+            localTranslationRetriever: createLocalTranslationsRetriever(),
             simplePersistence: createSimplePersistence(),
             arabicPersistence: createArabicTextPersistence(),
             translationPersistenceCreator: createCreator(createTranslationTextPersistence))
@@ -153,7 +153,7 @@ class Container {
 
     func createSQLiteSearchService() -> SearchService {
         return SQLiteSearchService(
-            localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),
+            localTranslationRetriever: createLocalTranslationsRetriever(),
             simplePersistence: createSimplePersistence(),
             arabicPersistence: createArabicTextPersistence(),
             translationPersistenceCreator: createCreator(createTranslationTextPersistence))

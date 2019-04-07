@@ -13,8 +13,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-import UIKit
 import RIBs
+import UIKit
 
 /// Basic interface between a `NavigationRouter` and the UIKit `UINavigationController`.
 public protocol NavigationControllable: ViewControllable {

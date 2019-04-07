@@ -20,7 +20,7 @@ protocol QuranViewControllable: ViewControllable {
     func presentQariList(_ viewController: ViewControllable)
 }
 
-final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
+final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
 
     struct Deps {
         let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuildable
@@ -37,6 +37,10 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
         interactor.router = self
     }
 
+    func dismissPresentedRouter() {
+        dismiss(animated: true)
+    }
+
     // MARK: - AudioOptions
 
     func presentAdvancedAudioOptions(with options: AdvancedAudioOptions) {
@@ -44,32 +48,20 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
         present(router, animated: true)
     }
 
-    func dismissAdvancedAudioOptions() {
-        dismiss(animated: true)
-    }
-
     // MARK: - Translation Text Type
 
     func presentTranslationTextTypeSelection() {
         let router = deps.translationTextTypeSelectionBuilder.build(withListener: interactor)
+        saveAsPresented(router)
         viewController.presentTranslationTextTypeSelectionViewController(router.viewControllable)
-        attachChild(router)
-    }
-
-    func dismissTranslationTextTypeSelection() {
-        dismiss(animated: true)
     }
 
     // MARK: - More Menu
 
     func presentMoreMenu(withModel model: MoreMenuModel) {
         let router = deps.moreMenuBuilder.build(withListener: interactor, model: model)
+        saveAsPresented(router)
         viewController.presentMoreMenuViewController(router.viewControllable)
-        attachChild(router)
-    }
-
-    func dismissMoreMenu() {
-        dismiss(animated: true)
     }
 
     // MARK: - Translation Selection
@@ -82,11 +74,7 @@ final class QuranRouter: ViewableRouter<QuranInteractable, QuranViewControllable
 
     func presentQariList() {
         let router = deps.qariListBuilder.build(withListener: interactor)
+        saveAsPresented(router)
         viewController.presentQariList(router.viewControllable)
-        attachChild(router)
-    }
-
-    func dismissQariList() {
-        dismiss(animated: true)
     }
 }

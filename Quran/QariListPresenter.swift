@@ -8,8 +8,7 @@
 
 import Foundation
 
-final class QariListPresenter: NSObject, UIPopoverPresentationControllerDelegate {
-
+final class QariListPresenter: PopoverPresenter {
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .fullScreen
     }
@@ -25,13 +24,11 @@ extension QariListPresenter {
         presenting: UIViewController,
         presented: UIViewController,
         pointingTo sourceView: UIView) {
-
         presented.preferredContentSize = CGSize(width: 400, height: 500)
-        presented.modalPresentationStyle = .popover
-        presented.popoverPresentationController?.delegate = self
-        presented.popoverPresentationController?.sourceView = sourceView
-        presented.popoverPresentationController?.sourceRect = sourceView.bounds
-        presented.popoverPresentationController?.permittedArrowDirections = .down
-        presenting.present(presented, animated: true, completion: nil)
+        super.present(presenting: presenting,
+                      presented: presented,
+                      pointingTo: sourceView,
+                      at: sourceView.bounds,
+                      permittedArrowDirections: .down)
     }
 }

@@ -10,19 +10,13 @@ import RIBs
 import RxSwift
 
 protocol QuranRouting: ViewableRouting {
+    func dismissPresentedRouter()
+
     func presentAdvancedAudioOptions(with options: AdvancedAudioOptions)
-    func dismissAdvancedAudioOptions()
-
     func presentTranslationTextTypeSelection()
-    func dismissTranslationTextTypeSelection()
-
     func presentMoreMenu(withModel model: MoreMenuModel)
-    func dismissMoreMenu()
-
     func presentTranslationsSelection()
-
     func presentQariList()
-    func dismissQariList()
 }
 
 protocol QuranPresentable: Presentable {
@@ -75,6 +69,12 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
         get { return deps.simplePersistence.valueForKey(.showQuranTranslationView) ? .translation : .arabic }
     }
 
+    // MARK: - Popover
+
+    func didDismissPopover() {
+        router?.dismissPresentedRouter()
+    }
+
     // MARK: - AudioOptions
 
     func onAdvancedAudioOptionsButtonTapped() {
@@ -89,7 +89,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     }
 
     func dismissAudioOptions() {
-        router?.dismissAdvancedAudioOptions()
+        router?.dismissPresentedRouter()
     }
 
     // MARK: - Word Translation Type Selection
@@ -99,7 +99,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     }
 
     func dismissTranslationTextTypeSelection() {
-        router?.dismissTranslationTextTypeSelection()
+        router?.dismissPresentedRouter()
     }
 
     // MARK: - Qari List
@@ -109,7 +109,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     }
 
     func dismissQariList() {
-        router?.dismissQariList()
+        router?.dismissPresentedRouter()
     }
 
     func onSelectedQariChanged() {
@@ -133,13 +133,13 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
         let noTranslationsSelected = deps.simplePersistence.valueForKey(.selectedTranslations).isEmpty
         if mode == .translation && noTranslationsSelected {
-            router?.dismissMoreMenu()
+            router?.dismissPresentedRouter()
             router?.presentTranslationsSelection()
         }
     }
 
     func onTranslationsSelectionsTapped() {
-        router?.dismissMoreMenu()
+        router?.dismissPresentedRouter()
         router?.presentTranslationsSelection()
     }
 

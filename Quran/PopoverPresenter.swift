@@ -17,21 +17,29 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+protocol PopoverPresenterDelegate: class {
+    func didDismissPopover()
+}
+
 class PopoverPresenter: NSObject, UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+    weak var delegate: PopoverPresenterDelegate?
+    init(delegate: PopoverPresenterDelegate?) {
+        self.delegate = delegate
+    }
+
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        delegate?.didDismissPopover()
     }
 }
 
 extension PopoverPresenter {
-    func present(
-        presenting: UIViewController,
-        presented: UIViewController,
-        pointingTo sourceView: UIView,
-        at sourceRect: CGRect,
-        permittedArrowDirections: UIPopoverArrowDirection = .any,
-        animated: Bool = true,
-        completion: (() -> Void)? = nil) {
+    func present(presenting: UIViewController,
+                 presented: UIViewController,
+                 pointingTo sourceView: UIView,
+                 at sourceRect: CGRect,
+                 permittedArrowDirections: UIPopoverArrowDirection = .any,
+                 animated: Bool = true,
+                 completion: (() -> Void)? = nil) {
         presented.modalPresentationStyle = .popover
         presented.popoverPresentationController?.delegate = self
         presented.popoverPresentationController?.sourceView = sourceView
@@ -40,13 +48,12 @@ extension PopoverPresenter {
         presenting.present(presented, animated: animated, completion: completion)
     }
 
-    func present(
-        presenting: UIViewController,
-        presented: UIViewController,
-        poiontingTo barButtonItem: UIBarButtonItem,
-        permittedArrowDirections: UIPopoverArrowDirection = .any,
-        animated: Bool = true,
-        completion: (() -> Void)? = nil) {
+    func present(presenting: UIViewController,
+                 presented: UIViewController,
+                 poiontingTo barButtonItem: UIBarButtonItem,
+                 permittedArrowDirections: UIPopoverArrowDirection = .any,
+                 animated: Bool = true,
+                 completion: (() -> Void)? = nil) {
         presented.modalPresentationStyle = .popover
         presented.popoverPresentationController?.delegate = self
         presented.popoverPresentationController?.barButtonItem = barButtonItem

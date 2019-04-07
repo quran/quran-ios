@@ -27,11 +27,12 @@ protocol QuranPresentableListener: class {
     func onWordPointerTapped()
     func onMoreBarButtonTapped()
     func onQariListButtonTapped()
+    func didDismissPopover()
 }
 
 class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
-                        QuranViewControllable, QuranPresentable {
+                        QuranViewControllable, QuranPresentable, PopoverPresenterDelegate {
 
     var verseRuns: Runs { return audioViewPresenter.verseRuns }
     var listRuns: Runs { return audioViewPresenter.listRuns }
@@ -40,8 +41,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     weak var listener: QuranPresentableListener?
 
-    private lazy var popoverPresenter = PopoverPresenter()
-    private lazy var qariListPresenter = QariListPresenter()
+    private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
+    private lazy var qariListPresenter = QariListPresenter(delegate: self)
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -310,6 +311,10 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         popoverPresenter.present(presenting: self,
                                  presented: viewController.uiviewController,
                                  poiontingTo: unwrap(navigationItem.rightBarButtonItems?.first))
+    }
+
+    func didDismissPopover() {
+        listener?.didDismissPopover()
     }
 
     private func setBarsHidden(_ hidden: Bool) {

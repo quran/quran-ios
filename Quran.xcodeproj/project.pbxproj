@@ -17,6 +17,8 @@
 		06832341225902C000D01297 /* QariListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683233D225902C000D01297 /* QariListInteractor.swift */; };
 		068323432259183600D01297 /* QariListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323422259183600D01297 /* QariListPresenter.swift */; };
 		068323A02259940800D01297 /* SettingsTabInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683239F2259940800D01297 /* SettingsTabInteractor.swift */; };
+		068323A2225A4D3600D01297 /* PresentingViewableRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A1225A4D3600D01297 /* PresentingViewableRouter.swift */; };
+		068323A4225A552C00D01297 /* PhonePopoverPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323A3225A552C00D01297 /* PhonePopoverPresenter.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -583,6 +585,8 @@
 		0683233D225902C000D01297 /* QariListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QariListInteractor.swift; sourceTree = "<group>"; };
 		068323422259183600D01297 /* QariListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QariListPresenter.swift; sourceTree = "<group>"; };
 		0683239F2259940800D01297 /* SettingsTabInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTabInteractor.swift; sourceTree = "<group>"; };
+		068323A1225A4D3600D01297 /* PresentingViewableRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentingViewableRouter.swift; sourceTree = "<group>"; };
+		068323A3225A552C00D01297 /* PhonePopoverPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonePopoverPresenter.swift; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -1308,6 +1312,7 @@
 				06B2408922482A020003D628 /* NavigationControllerPopMonitor.swift */,
 				06B2408A22482A020003D628 /* ViewableRouter+Extensions.swift */,
 				06B2408B22482A020003D628 /* ViewControllable+Extensions.swift */,
+				068323A1225A4D3600D01297 /* PresentingViewableRouter.swift */,
 				06B2408C22482A020003D628 /* NavigationRouter+Pop.swift */,
 				06B2408D22482A020003D628 /* LaunchRouting+Extensions.swift */,
 				06B2408E22482A020003D628 /* NavigationControllable.swift */,
@@ -2167,6 +2172,7 @@
 			children = (
 				54F35F8D216A84A800276220 /* root */,
 				54D133DA1EF7840C00037D8C /* PopoverPresenter.swift */,
+				068323A3225A552C00D01297 /* PhonePopoverPresenter.swift */,
 				54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */,
 				5424773C1E7856040051C196 /* DownloadButton.swift */,
 				547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */,
@@ -3662,6 +3668,7 @@
 				54DC10C5209FDFED00C57DA9 /* ThemedTableViewController.swift in Sources */,
 				5409229F1E91312200C7537A /* QuranTranslationSuraDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
+				068323A4225A552C00D01297 /* PhonePopoverPresenter.swift in Sources */,
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,
 				06B2409522482A020003D628 /* LaunchRouting+Extensions.swift in Sources */,
@@ -3839,6 +3846,7 @@
 				548746181CE9E44D00EED886 /* DefaultAudioPlayerInteractor.swift in Sources */,
 				5437D39E1EB38B2A00795FA9 /* CrashlyticsCrasher.swift in Sources */,
 				5487461F1CE9F55600EED886 /* GaplessAudioPlayer.swift in Sources */,
+				068323A2225A4D3600D01297 /* PresentingViewableRouter.swift in Sources */,
 				54C0DC0C1CE68F46009AAD8D /* GaplessAudioPlayerInteractor.swift in Sources */,
 				544EC37E20C3B34D00D2E7B5 /* ThemedSegmentedControl.swift in Sources */,
 				5494CCB21CEFA5F700031686 /* Constants.swift in Sources */,

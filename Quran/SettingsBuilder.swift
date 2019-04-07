@@ -17,10 +17,10 @@ protocol SettingsBuildable: Buildable {
 final class SettingsBuilder: Builder, SettingsBuildable {
 
     func build(withListener listener: SettingsListener) -> SettingsRouting {
-        var settingsCreators = container.createSettingsCreators()
-        let viewController = SettingsViewController(creators: settingsCreators, persistence: container.createSimplePersistence())
-        settingsCreators.parentController = viewController
-        let interactor = SettingsInteractor(presenter: viewController)
+        let viewController = SettingsViewController()
+        let interactor = SettingsInteractor(presenter: viewController, application: .shared, deps: SettingsInteractor.Deps(
+            persistence: container.createSimplePersistence()
+        ))
         interactor.listener = listener
         return SettingsRouter(interactor: interactor, viewController: viewController)
     }

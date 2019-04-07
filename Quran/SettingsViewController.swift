@@ -22,6 +22,13 @@ import MessageUI
 import UIKit
 
 protocol SettingsPresentableListener: class {
+    func viewWillAppear()
+    func onThemeUpdated(to newTheme: Theme)
+    func onTranslationsTapped()
+    func onAudioDownloadsTapped()
+    func onShareAppTapped()
+    func onReviewAppTapped()
+    func onContactUsTapped()
 }
 
 class SettingsViewController: BaseTableBasedViewController, SettingsPresentable, SettingsViewControllable {
@@ -29,19 +36,14 @@ class SettingsViewController: BaseTableBasedViewController, SettingsPresentable,
     weak var listener: SettingsPresentableListener?
 
     private let dataSource = CompositeDataSource(sectionType: .single)
-    private let creators: SettingsCreators
-    private let persistence: SimplePersistence
+    private lazy var themeDataSource: ThemeSettingsDataSource = createThemeDataSource()
+    private lazy var shareAppDataSource = createSelectableSettingsDataSource { $0?.onShareAppTapped() }
 
     override var screen: Analytics.Screen { return .settings }
 
-    init(creators: SettingsCreators, persistence: SimplePersistence) {
-        self.creators = creators
-        self.persistence = persistence
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        unimplemented()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        listener?.viewWillAppear()
     }
 
     override func viewDidLoad() {
@@ -52,44 +54,91 @@ class SettingsViewController: BaseTableBasedViewController, SettingsPresentable,
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 70
 
-        let selection = BlockSelectionHandler<Setting, SettingTableViewCell>()
-        selection.didSelectBlock = { [weak self] ds, collectionView, indexPath in
-            guard let `self` = self else { return }
-            let item = ds.item(at: indexPath)
-            let cell = collectionView.ds_cellForItem(at: indexPath)
-            guard let castedCell = cell as? UITableViewCell else {
-                fatalError("Cannot cast reusable cell \(cell.debugDescription) to UITableViewCell")
-            }
-            item.onSelection?(self, castedCell)
-            collectionView.ds_deselectItem(at: indexPath, animated: true)
-        }
-
-        let items = creators.createSettingsItems()
-        for (index, item) in items.enumerated() {
-            if item is ThemeSetting {
-                let itemDS = ThemeSettingsDataSource(persistence: persistence)
-                itemDS.itemHeight = 44
-                itemDS.items = [()]
-                dataSource.add(itemDS)
-            } else if item is EmptySetting {
-                let itemDS = EmptyDataSource()
-                itemDS.itemHeight = 35
-                itemDS.items = [()]
-                dataSource.add(itemDS)
-            } else {
-                let itemDS = SettingsDataSource()
-                itemDS.itemHeight = 51
-                itemDS.zeroInset = index == items.count - 1 || items[index + 1] is EmptySetting
-                itemDS.items = [item]
-                itemDS.setSelectionHandler(selection)
-                dataSource.add(itemDS)
-            }
-        }
-
         tableView.ds_register(cellClass: SettingTableViewCell.self)
         tableView.ds_register(cellClass: EmptyTableViewCell.self)
         tableView.ds_register(cellNib: ThemeSelectionTableViewCell.self)
         tableView.ds_useDataSource(dataSource)
+
+        let translationsDataSource = createSelectableSettingsDataSource { $0?.onTranslationsTapped() }
+        translationsDataSource.items = [Setting(name: lAndroid("prefs_translations"), image: #imageLiteral(resourceName: "globe-25"), zeroInset: false)]
+
+        let audioDownloadsDataSource = createSelectableSettingsDataSource { $0?.onAudioDownloadsTapped() }
+        audioDownloadsDataSource.items = [Setting(name: lAndroid("audio_manager"), image: #imageLiteral(resourceName: "download-25"), zeroInset: true)]
+
+        shareAppDataSource.items = [Setting(name: l("share_app"), image: #imageLiteral(resourceName: "share"), zeroInset: false)]
+
+        let reviewAppDataSource = createSelectableSettingsDataSource { $0?.onReviewAppTapped() }
+        reviewAppDataSource.items = [Setting(name: l("write_review"), image: #imageLiteral(resourceName: "star_border"), zeroInset: false)]
+
+        let contactUsDataSource = createSelectableSettingsDataSource { $0?.onContactUsTapped() }
+        contactUsDataSource.items = [Setting(name: l("contact_us"), image: #imageLiteral(resourceName: "email-outline"), zeroInset: true)]
+
+        dataSource.add(createEmptyDataSource())
+        dataSource.add(themeDataSource)
+        dataSource.add(createEmptyDataSource())
+        dataSource.add(translationsDataSource)
+        dataSource.add(audioDownloadsDataSource)
+        dataSource.add(createEmptyDataSource())
+        dataSource.add(shareAppDataSource)
+        dataSource.add(reviewAppDataSource)
+        dataSource.add(contactUsDataSource)
+    }
+
+    private func createSelectableSettingsDataSource(onSelection: @escaping (SettingsPresentableListener?) -> Void) -> SettingsDataSource {
+        let selection = BlockSelectionHandler<Setting, SettingTableViewCell>()
+        selection.didSelectBlock = { [weak self] ds, collectionView, indexPath in
+            onSelection(self?.listener)
+            collectionView.ds_deselectItem(at: indexPath, animated: true)
+        }
+
+        let itemDS = SettingsDataSource()
+        itemDS.itemHeight = 51
+        itemDS.setSelectionHandler(selection)
+        return itemDS
+    }
+
+    private func createEmptyDataSource() -> EmptyDataSource {
+        let itemDS = EmptyDataSource()
+        itemDS.itemHeight = 35
+        itemDS.items = [()]
+        return itemDS
+    }
+
+    private func createThemeDataSource() -> ThemeSettingsDataSource {
+        let itemDS = ThemeSettingsDataSource()
+        itemDS.onThemeUpdated = { [weak self] newTheme in
+            self?.listener?.onThemeUpdated(to: newTheme)
+        }
+        itemDS.itemHeight = 44
+        return itemDS
+    }
+
+    func setTheme(_ theme: Theme) {
+        themeDataSource.items = [theme]
+        tableView?.reloadData()
+    }
+
+    func presentShareApp() {
+        let url = unwrap(URL(string: "https://itunes.apple.com/app/id1118663303"))
+        let appName = "Quran - by Quran.com - قرآن"
+
+        let view: UIView = cast(shareAppDataSource.ds_reusableViewDelegate?.ds_cellForItem(at: IndexPath(item: 0, section: 0)))
+        ShareController.share(textLines: [appName, url], sourceView: view, sourceRect: view.bounds, sourceViewController: self, handler: nil)
+    }
+
+    func presentContactUs() {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.navigationBar.tintColor = .white
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["ios@quran.com"])
+            mail.setSubject("Feedback about Quran for iOS App")
+            present(mail, animated: true, completion: nil)
+        } else {
+            let controller = UIAlertController(title: nil, message: "iPhone is not configured to send emails", preferredStyle: .alert)
+            controller.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(controller, animated: true)
+        }
     }
 }
 

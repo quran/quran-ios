@@ -211,12 +211,6 @@ class Container {
         return QariAudioDeleteInteractor().asAnyInteractor()
     }
 
-    func createSettingsCreators() -> SettingsCreators {
-        return NavigationSettingsCreators(
-            translationsCreator: createCreator(createTranslationsViewController),
-            audioDownloadsCreator: createCreator(createAudioDownloadsViewController))
-    }
-
     func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
         return SQLiteSearchService(
             localTranslationInteractor: createLocalTranslationsRetrievalInteractor(),

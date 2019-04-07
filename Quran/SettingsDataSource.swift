@@ -20,33 +20,19 @@
 
 import GenericDataSources
 
-protocol Setting {
-    var name: String { get }
-    var image: UIImage? { get }
-    var onSelection: ((UIViewController, UITableViewCell) -> Void)? { get }
-}
-
-struct EmptySetting: Setting {
-    var name: String { unimplemented() }
-    let image: UIImage? = nil
-    let onSelection: ((UIViewController, UITableViewCell) -> Void)?  = nil
-}
-
-struct SettingItem: Setting {
+struct Setting {
     let name: String
     let image: UIImage?
-    let onSelection: ((UIViewController, UITableViewCell) -> Void)?
+    let zeroInset: Bool
 }
 
 class SettingsDataSource: BasicDataSource<Setting, SettingTableViewCell> {
-
-    var zeroInset: Bool = true
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: SettingTableViewCell,
                                     with item: Setting,
                                     at indexPath: IndexPath) {
-        cell.separatorInset = zeroInset ? .zero : UIEdgeInsets(top: 0, left: 55, bottom: 0, right: 0)
+        cell.separatorInset = item.zeroInset ? .zero : UIEdgeInsets(top: 0, left: 55, bottom: 0, right: 0)
         cell.textLabel?.text = item.name
         cell.imageView?.image = item.image?.withRenderingMode(.alwaysTemplate)
         cell.accessoryType = .disclosureIndicator

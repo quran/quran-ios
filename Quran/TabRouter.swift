@@ -8,7 +8,7 @@
 
 import RIBs
 
-protocol TabInteractable: Interactable, SurasListener, JuzsListener, BookmarksListener, SearchListener, SettingsListener, QuranListener {
+protocol TabInteractable: Interactable, SurasListener, JuzsListener, BookmarksListener, SearchListener, QuranListener {
     var router: TabRouting? { get set }
     var listener: TabListener? { get set }
 }

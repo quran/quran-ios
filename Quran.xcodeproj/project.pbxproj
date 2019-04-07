@@ -16,6 +16,7 @@
 		06832340225902C000D01297 /* QariListBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683233C225902C000D01297 /* QariListBuilder.swift */; };
 		06832341225902C000D01297 /* QariListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683233D225902C000D01297 /* QariListInteractor.swift */; };
 		068323432259183600D01297 /* QariListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323422259183600D01297 /* QariListPresenter.swift */; };
+		068323A02259940800D01297 /* SettingsTabInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0683239F2259940800D01297 /* SettingsTabInteractor.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -218,7 +219,6 @@
 		544EC38620C45E7E00D2E7B5 /* ThemedTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */; };
 		544EC38820C45F1B00D2E7B5 /* ThemedNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */; };
 		54547E891EC75071008AFED3 /* SettingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E881EC75071008AFED3 /* SettingsDataSource.swift */; };
-		54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8A1EC75384008AFED3 /* SettingsCreators.swift */; };
 		54547E8F1EC8D674008AFED3 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */; };
 		54547E911EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */; };
 		54547E931EC9D0A9008AFED3 /* SearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54547E921EC9D0A9008AFED3 /* SearchInteractor.swift */; };
@@ -582,6 +582,7 @@
 		0683233C225902C000D01297 /* QariListBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QariListBuilder.swift; sourceTree = "<group>"; };
 		0683233D225902C000D01297 /* QariListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QariListInteractor.swift; sourceTree = "<group>"; };
 		068323422259183600D01297 /* QariListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QariListPresenter.swift; sourceTree = "<group>"; };
+		0683239F2259940800D01297 /* SettingsTabInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTabInteractor.swift; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -832,7 +833,6 @@
 		544EC38520C45E7E00D2E7B5 /* ThemedTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTabBarController.swift; sourceTree = "<group>"; };
 		544EC38720C45F1B00D2E7B5 /* ThemedNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedNavigationController.swift; sourceTree = "<group>"; };
 		54547E881EC75071008AFED3 /* SettingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDataSource.swift; sourceTree = "<group>"; };
-		54547E8A1EC75384008AFED3 /* SettingsCreators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCreators.swift; sourceTree = "<group>"; };
 		54547E8E1EC8D674008AFED3 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		54547E901EC8D972008AFED3 /* SearchControllerWithNoCancelButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchControllerWithNoCancelButton.swift; sourceTree = "<group>"; };
 		54547E921EC9D0A9008AFED3 /* SearchInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; };
@@ -1238,8 +1238,9 @@
 			isa = PBXGroup;
 			children = (
 				06B240C922483C1B0003D628 /* SettingsTabBuilder.swift */,
-				54B2660C1CC6D38600D3AEF8 /* SettingsTabViewController.swift */,
+				0683239F2259940800D01297 /* SettingsTabInteractor.swift */,
 				06A7E687225119FC00AC2634 /* SettingsTabRouter.swift */,
+				54B2660C1CC6D38600D3AEF8 /* SettingsTabViewController.swift */,
 			);
 			name = SettingsTab;
 			sourceTree = "<group>";
@@ -2436,7 +2437,6 @@
 			isa = PBXGroup;
 			children = (
 				54F35F76216A7CD900276220 /* DataSource */,
-				54547E8A1EC75384008AFED3 /* SettingsCreators.swift */,
 				54DC10C2209FDABC00C57DA9 /* SettingTableViewCell.swift */,
 			);
 			name = View;
@@ -3644,6 +3644,7 @@
 				54B266D61CD4E6EF00D3AEF8 /* BasePageSelectionViewController.swift in Sources */,
 				5415A9511DC932800089F9CB /* AyahBookmarkDataSource.swift in Sources */,
 				549040B71E63385200D54625 /* TranslationsRetrievalInteractor.swift in Sources */,
+				068323A02259940800D01297 /* SettingsTabInteractor.swift in Sources */,
 				5428A686213DBDDA00B91F13 /* ThemedBackgroundColorButton.swift in Sources */,
 				544EC38620C45E7E00D2E7B5 /* ThemedTabBarController.swift in Sources */,
 				54699B9B1E8DC15D00211A60 /* QuranTranslationArabicTextCollectionViewCell.swift in Sources */,
@@ -3703,7 +3704,6 @@
 				540922B51E919C5500C7537A /* QuranBasePageCollectionViewCell.swift in Sources */,
 				06832340225902C000D01297 /* QariListBuilder.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,
-				54547E8B1EC75384008AFED3 /* SettingsCreators.swift in Sources */,
 				540031E91E99924000BB4B7B /* Analytics.Screen.swift in Sources */,
 				06B240A522482D5C0003D628 /* JuzsRouter.swift in Sources */,
 				544629E41E6AE049005B1107 /* TranslationsBasicDataSource.swift in Sources */,

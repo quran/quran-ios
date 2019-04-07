@@ -20,34 +20,29 @@
 
 import GenericDataSources
 
-struct ThemeSetting: Setting {
-    var name: String { unimplemented() }
+struct ThemeSetting {
     let image: UIImage? = nil
     let onSelection: ((UIViewController, UITableViewCell) -> Void)? = nil
 }
 
-class ThemeSettingsDataSource: BasicDataSource<Void, ThemeSelectionTableViewCell> {
+class ThemeSettingsDataSource: BasicDataSource<Theme, ThemeSelectionTableViewCell> {
 
     var zeroInset: Bool = true
 
-    private var persistence: SimplePersistence
-    init(persistence: SimplePersistence) {
-        self.persistence = persistence
-        super.init()
-    }
+    var onThemeUpdated: ((Theme) -> Void)?
 
     override func ds_collectionView(_ collectionView: GeneralCollectionView,
                                     configure cell: ThemeSelectionTableViewCell,
-                                    with item: Void,
+                                    with item: Theme,
                                     at indexPath: IndexPath) {
         cell.separatorInset = zeroInset ? .zero : UIEdgeInsets(top: 0, left: 55, bottom: 0, right: 0)
         cell.kind = .cell
-        cell.darkSelected = persistence.theme == .dark
+        cell.darkSelected = item == .dark
         cell.onDarkTapped = { [weak self] in
-            self?.updateThemeItem(to: .dark)
+            self?.updateThemeItem(at: indexPath.item, to: .dark)
         }
         cell.onLightTapped = { [weak self] in
-            self?.updateThemeItem(to: .light)
+            self?.updateThemeItem(at: indexPath.item, to: .light)
         }
     }
 
@@ -55,8 +50,9 @@ class ThemeSettingsDataSource: BasicDataSource<Void, ThemeSelectionTableViewCell
         return false
     }
 
-    private func updateThemeItem(to newTheme: Theme) {
-        persistence.theme = newTheme
+    private func updateThemeItem(at index: Int, to newTheme: Theme) {
+        items[index] = newTheme
+        onThemeUpdated?(newTheme)
         ds_reusableViewDelegate?.ds_reloadItems(at: [IndexPath(item: 0, section: 0)], with: .none)
     }
 }

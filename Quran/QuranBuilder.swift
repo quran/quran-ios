@@ -32,7 +32,7 @@ final class QuranBuilder: Builder, QuranBuildable {
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
             simplePersistence                      : container.createSimplePersistence(),
-            verseTextRetrieval                     : createCompositeVerseTextRetrieval(),
+            verseTextRetriever                     : createCompositeVerseTextRetriever(),
             wordByWordPersistence                  : SQLiteArabicTextPersistence(),
             page                                   : page,
             lastPage                               : lastPage,
@@ -144,9 +144,9 @@ final class QuranBuilder: Builder, QuranBuildable {
         return SQLiteAyahTimingPersistence(filePath: filePath)
     }
 
-    private func createCompositeVerseTextRetrieval() -> AnyInteractor<QuranShareData, [String]> {
-        return CompositeVerseTextRetrieval(
-            image: ImageVerseTextRetrieval(arabicAyahPersistence: container.createArabicTextPersistence()).asAnyInteractor(),
-            translation: TranslationVerseTextRetrieval().asAnyInteractor()).asAnyInteractor()
+    private func createCompositeVerseTextRetriever() -> VerseTextRetriever {
+        return CompositeVerseTextRetriever(
+            image: ImageVerseTextRetriever(arabicAyahPersistence: container.createArabicTextPersistence()),
+            translation: TranslationVerseTextRetriever())
     }
 }

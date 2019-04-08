@@ -1,5 +1,5 @@
 //
-//  ImageVerseTextRetrieval.swift
+//  ImageVerseTextRetriever.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/4/17.
@@ -20,7 +20,7 @@
 
 import PromiseKit
 
-class ImageVerseTextRetrieval: Interactor {
+class ImageVerseTextRetriever: VerseTextRetriever {
 
     private let arabicAyahPersistence: AyahTextPersistence
 
@@ -28,7 +28,7 @@ class ImageVerseTextRetrieval: Interactor {
         self.arabicAyahPersistence = arabicAyahPersistence
     }
 
-    func execute(_ input: QuranShareData) -> Promise<[String]> {
+    func getText(for input: QuranShareData) -> Promise<[String]> {
         return DispatchQueue.global().async(.promise) {
             [try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)]
         }

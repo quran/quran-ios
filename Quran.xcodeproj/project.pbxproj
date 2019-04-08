@@ -27,6 +27,7 @@
 		068323B3225A5BB600D01297 /* TranslationsListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323AF225A5BB600D01297 /* TranslationsListInteractor.swift */; };
 		068323B5225A5E6800D01297 /* TranslationsSelectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */; };
 		068323B7225A9A2800D01297 /* BasicDataSource+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */; };
+		06832445225AF55500D01297 /* VerseTextRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06832444225AF55500D01297 /* VerseTextRetriever.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -108,9 +109,9 @@
 		5419E50C1CFA2BA700071A6D /* Suras.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E50E1CFA2BA700071A6D /* Suras.strings */; };
 		5419E51E1CFA2BC100071A6D /* Readers.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5419E5201CFA2BC100071A6D /* Readers.strings */; };
 		5419E5301CFA3F0300071A6D /* Android.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 5419E5321CFA3F0300071A6D /* Android.stringsdict */; };
-		541BA5DA1E938F6800245A42 /* ImageVerseTextRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5D91E938F6800245A42 /* ImageVerseTextRetrieval.swift */; };
-		541BA5DC1E93929C00245A42 /* TranslationVerseTextRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5DB1E93929C00245A42 /* TranslationVerseTextRetrieval.swift */; };
-		541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */; };
+		541BA5DA1E938F6800245A42 /* ImageVerseTextRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5D91E938F6800245A42 /* ImageVerseTextRetriever.swift */; };
+		541BA5DC1E93929C00245A42 /* TranslationVerseTextRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5DB1E93929C00245A42 /* TranslationVerseTextRetriever.swift */; };
+		541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetriever.swift */; };
 		541BA5E11E93AE6500245A42 /* QuranShareData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E01E93AE6500245A42 /* QuranShareData.swift */; };
 		541BA5E31E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */; };
 		541BA5E51E93B7F800245A42 /* QuranBaseBasicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */; };
@@ -603,6 +604,7 @@
 		068323AF225A5BB600D01297 /* TranslationsListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsListInteractor.swift; sourceTree = "<group>"; };
 		068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionBuilder.swift; sourceTree = "<group>"; };
 		068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicDataSource+Selection.swift"; sourceTree = "<group>"; };
+		06832444225AF55500D01297 /* VerseTextRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseTextRetriever.swift; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -735,9 +737,9 @@
 		5419E5401CFA46A200071A6D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5411CFA46A300071A6D /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = zh; path = zh.lproj/Android.stringsdict; sourceTree = "<group>"; };
 		5419E5421CFA46A500071A6D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Android.stringsdict; sourceTree = "<group>"; };
-		541BA5D91E938F6800245A42 /* ImageVerseTextRetrieval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageVerseTextRetrieval.swift; sourceTree = "<group>"; };
-		541BA5DB1E93929C00245A42 /* TranslationVerseTextRetrieval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationVerseTextRetrieval.swift; sourceTree = "<group>"; };
-		541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeVerseTextRetrieval.swift; sourceTree = "<group>"; };
+		541BA5D91E938F6800245A42 /* ImageVerseTextRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageVerseTextRetriever.swift; sourceTree = "<group>"; };
+		541BA5DB1E93929C00245A42 /* TranslationVerseTextRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationVerseTextRetriever.swift; sourceTree = "<group>"; };
+		541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetriever.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeVerseTextRetriever.swift; sourceTree = "<group>"; };
 		541BA5E01E93AE6500245A42 /* QuranShareData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranShareData.swift; sourceTree = "<group>"; };
 		541BA5E21E93B29C00245A42 /* QuranTranslationAyahSectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranTranslationAyahSectionDataSource.swift; sourceTree = "<group>"; };
 		541BA5E41E93B7F800245A42 /* QuranBaseBasicDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranBaseBasicDataSource.swift; sourceTree = "<group>"; };
@@ -1526,9 +1528,10 @@
 		541BA5DF1E93ADD000245A42 /* verse-text */ = {
 			isa = PBXGroup;
 			children = (
-				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift */,
-				541BA5D91E938F6800245A42 /* ImageVerseTextRetrieval.swift */,
-				541BA5DB1E93929C00245A42 /* TranslationVerseTextRetrieval.swift */,
+				541BA5DD1E9392AD00245A42 /* CompositeVerseTextRetriever.swift */,
+				541BA5D91E938F6800245A42 /* ImageVerseTextRetriever.swift */,
+				541BA5DB1E93929C00245A42 /* TranslationVerseTextRetriever.swift */,
+				06832444225AF55500D01297 /* VerseTextRetriever.swift */,
 			);
 			name = "verse-text";
 			sourceTree = "<group>";
@@ -3666,7 +3669,7 @@
 				54F11E76209DECA600367340 /* ThemedLabel.swift in Sources */,
 				54F8C41C1EA7F29A00C853C6 /* DownloadableQariAudio.swift in Sources */,
 				06A7E688225119FC00AC2634 /* SettingsTabRouter.swift in Sources */,
-				541BA5DA1E938F6800245A42 /* ImageVerseTextRetrieval.swift in Sources */,
+				541BA5DA1E938F6800245A42 /* ImageVerseTextRetriever.swift in Sources */,
 				54699B9F1E8DC16C00211A60 /* QuranTranslationTranslatorNameCollectionViewCell.swift in Sources */,
 				54699BAE1E8DC2A200211A60 /* QuranTranslationBaseCollectionViewCell.swift in Sources */,
 				549040BF1E63578D00D54625 /* TranslationTableViewCell.swift in Sources */,
@@ -3804,7 +3807,7 @@
 				54B266821CCAC82600D3AEF8 /* QuranImagesDataSource.swift in Sources */,
 				54C0DC301CE889CA009AAD8D /* AudioFilesDownloader.swift in Sources */,
 				54892D971EE6CA30001E6F1A /* AyahBookmarkTableViewCell.swift in Sources */,
-				541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetrieval.swift in Sources */,
+				541BA5DE1E9392AD00245A42 /* CompositeVerseTextRetriever.swift in Sources */,
 				549040C61E63902A00D54625 /* JuzHeaderSupplementaryViewCreator.swift in Sources */,
 				5459FF6D1EA50AC300FBF6C5 /* QariAudioFileListRetrieval.swift in Sources */,
 				54F35F5D216A628B00276220 /* QuranHighlightType+Theme.swift in Sources */,
@@ -3829,7 +3832,7 @@
 				54B2666B1CCA93C500D3AEF8 /* SuraTableViewCell.swift in Sources */,
 				06B240822248299C0003D628 /* AppRouter.swift in Sources */,
 				06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */,
-				541BA5DC1E93929C00245A42 /* TranslationVerseTextRetrieval.swift in Sources */,
+				541BA5DC1E93929C00245A42 /* TranslationVerseTextRetriever.swift in Sources */,
 				5459FF6A1EA4E7F900FBF6C5 /* QariAudioDownload.swift in Sources */,
 				068323A9225A563B00D01297 /* AudioDownloadsBuilder.swift in Sources */,
 				54B266061CC6D32F00D3AEF8 /* SurasTabViewController.swift in Sources */,
@@ -3843,6 +3846,7 @@
 				06B2408F22482A020003D628 /* UIViewController+Extensions.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
+				06832445225AF55500D01297 /* VerseTextRetriever.swift in Sources */,
 				06B2409822482A670003D628 /* Builder.swift in Sources */,
 				C101DBCD1DCAEA4900BDD9EE /* JuzsMultipleSectionDataSource.swift in Sources */,
 				06A7E69722511CDF00AC2634 /* BookmarksBuilder.swift in Sources */,

@@ -46,7 +46,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     private let dismissBarsTapGesture = UITapGestureRecognizer()
     private let bookmarksPersistence: BookmarksPersistence
-    private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
+    private let verseTextRetriever: VerseTextRetriever
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let simplePersistence: SimplePersistence
 
@@ -139,11 +139,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     }
 
     init(bookmarksPersistence: BookmarksPersistence,
-         verseTextRetrieval: AnyInteractor<QuranShareData, [String]>,
+         verseTextRetriever: VerseTextRetriever,
          wordByWordPersistence: WordByWordTranslationPersistence,
          simplePersistence: SimplePersistence) {
         self.bookmarksPersistence = bookmarksPersistence
-        self.verseTextRetrieval = verseTextRetrieval
+        self.verseTextRetriever = verseTextRetriever
         self.wordByWordPersistence = wordByWordPersistence
         self.simplePersistence = simplePersistence
         super.init(frame: .zero)
@@ -393,8 +393,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
             return
         }
 
-        verseTextRetrieval
-            .execute(shareData)
+        verseTextRetriever
+            .getText(for: shareData)
             .map { $0 + [shareData.ayah.localizedName] + l("shareMarketingSuffix").components(separatedBy: "\n") }
             .done(on: .main, completion)
             .catch(on: .main) { (error) in

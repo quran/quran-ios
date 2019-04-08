@@ -1,5 +1,5 @@
 //
-//  TranslationVerseTextRetrieval.swift
+//  TranslationVerseTextRetriever.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/4/17.
@@ -20,11 +20,11 @@
 
 import PromiseKit
 
-class TranslationVerseTextRetrieval: Interactor {
+class TranslationVerseTextRetriever: VerseTextRetriever {
 
     private static let numberFormatter = NumberFormatter()
 
-    func execute(_ input: QuranShareData) -> Promise<[String]> {
+    func getText(for input: QuranShareData) -> Promise<[String]> {
         guard let cell = input.cell as? QuranTranslationCollectionPageCollectionViewCell else {
             fatalError("TranslationVerseTextRetrieval works with QuranTranslationCollectionPageCollectionViewCell")
         }
@@ -49,7 +49,7 @@ class TranslationVerseTextRetrieval: Interactor {
             components.append("")
         }
 
-        let formatter = TranslationVerseTextRetrieval.numberFormatter
+        let formatter = TranslationVerseTextRetriever.numberFormatter
         components.append("\(formatter.format(verse.ayah.sura)):\(formatter.format(verse.ayah.ayah))")
         return Promise.value(components)
     }

@@ -1,5 +1,5 @@
 //
-//  CompositeVerseTextRetrieval.swift
+//  CompositeVerseTextRetriever.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/4/17.
@@ -20,22 +20,21 @@
 
 import PromiseKit
 
-class CompositeVerseTextRetrieval: Interactor {
+class CompositeVerseTextRetriever: VerseTextRetriever {
 
-    let image      : AnyInteractor<QuranShareData, [String]>
-    let translation: AnyInteractor<QuranShareData, [String]>
+    let image: VerseTextRetriever
+    let translation: VerseTextRetriever
 
-    init(image      : AnyInteractor<QuranShareData, [String]>,
-         translation: AnyInteractor<QuranShareData, [String]>) {
+    init(image: VerseTextRetriever, translation: VerseTextRetriever) {
         self.image = image
         self.translation = translation
     }
 
-    func execute(_ input: QuranShareData) -> Promise<[String]> {
+    func getText(for input: QuranShareData) -> Promise<[String]> {
         if input.cell is QuranImagePageCollectionViewCell {
-            return image.execute(input)
+            return image.getText(for: input)
         } else if input.cell is QuranTranslationCollectionPageCollectionViewCell {
-            return translation.execute(input)
+            return translation.getText(for: input)
         }
         fatalError("Unsupported quran cell type.")
     }

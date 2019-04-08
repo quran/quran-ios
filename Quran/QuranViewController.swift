@@ -51,7 +51,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
 
-    private let verseTextRetrieval: AnyInteractor<QuranShareData, [String]>
+    private let verseTextRetriever: VerseTextRetriever
     private let pagesRetriever: QuranPagesDataRetrieverType
     private let audioViewPresenter: AudioBannerViewPresenter
     private var simplePersistence: SimplePersistence
@@ -126,7 +126,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
-         verseTextRetrieval                     : AnyInteractor<QuranShareData, [String]>,
+         verseTextRetriever                     : VerseTextRetriever,
          wordByWordPersistence                  : WordByWordTranslationPersistence,
          page                                   : Int,
          lastPage                               : LastPage?,
@@ -139,7 +139,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.audioViewPresenter                     = audioViewPresenter
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
-        self.verseTextRetrieval                     = verseTextRetrieval
+        self.verseTextRetriever                     = verseTextRetriever
         self.highlightedSearchAyah                  = highlightedSearchAyah
         self.wordByWordPersistence                  = wordByWordPersistence
 
@@ -188,7 +188,7 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     override func loadView() {
         view = QuranView(bookmarksPersistence: bookmarksPersistence,
-                         verseTextRetrieval: verseTextRetrieval,
+                         verseTextRetriever: verseTextRetriever,
                          wordByWordPersistence: wordByWordPersistence,
                          simplePersistence: simplePersistence)
     }

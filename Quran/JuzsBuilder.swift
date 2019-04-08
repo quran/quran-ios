@@ -17,10 +17,9 @@ protocol JuzsBuildable: Buildable {
 final class JuzsBuilder: Builder, JuzsBuildable {
 
     func build(withListener listener: JuzsListener) -> JuzsRouting {
-        let viewController = JuzsViewController(
-            dataRetriever: QuartersDataRetriever().asAnyGetInteractor(),
-            lastPagesPersistence: container.createLastPagesPersistence())
-        let interactor = JuzsInteractor(presenter: viewController)
+        let viewController = JuzsViewController(lastPagesPersistence: container.createLastPagesPersistence())
+        let interactor = JuzsInteractor(presenter: viewController,
+                                        quartersRetriever: QuartersDataRetriever())
         interactor.listener = listener
         return JuzsRouter(interactor: interactor, viewController: viewController)
     }

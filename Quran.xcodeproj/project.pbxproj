@@ -26,6 +26,7 @@
 		068323B2225A5BB600D01297 /* TranslationsListBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323AE225A5BB600D01297 /* TranslationsListBuilder.swift */; };
 		068323B3225A5BB600D01297 /* TranslationsListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323AF225A5BB600D01297 /* TranslationsListInteractor.swift */; };
 		068323B5225A5E6800D01297 /* TranslationsSelectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */; };
+		068323B7225A9A2800D01297 /* BasicDataSource+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -601,6 +602,7 @@
 		068323AE225A5BB600D01297 /* TranslationsListBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsListBuilder.swift; sourceTree = "<group>"; };
 		068323AF225A5BB600D01297 /* TranslationsListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsListInteractor.swift; sourceTree = "<group>"; };
 		068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionBuilder.swift; sourceTree = "<group>"; };
+		068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicDataSource+Selection.swift"; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -2209,6 +2211,7 @@
 				54547EA91ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift */,
 				5424773C1E7856040051C196 /* DownloadButton.swift */,
 				547BCB65209299A0007AFBEC /* EmptyTableViewCell.swift */,
+				068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -3698,6 +3701,7 @@
 				54DC10C5209FDFED00C57DA9 /* ThemedTableViewController.swift in Sources */,
 				5409229F1E91312200C7537A /* QuranTranslationSuraDataSource.swift in Sources */,
 				54B266221CC808DE00D3AEF8 /* BaseNavigationController.swift in Sources */,
+				068323B7225A9A2800D01297 /* BasicDataSource+Selection.swift in Sources */,
 				068323A4225A552C00D01297 /* PhonePopoverPresenter.swift in Sources */,
 				54C0DBE11CDF7EC1009AAD8D /* AudioDownloadingBarView.swift in Sources */,
 				54C0DBBE1CDB5DE1009AAD8D /* QuranPagesDataRetriever.swift in Sources */,

@@ -24,14 +24,10 @@ protocol SurasPresentableListener: class {
     func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
-class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCell>, SurasPresentable, SurasViewControllable {
+class SurasViewController: BasePageSelectionViewController, SurasPresentable, SurasViewControllable {
     weak var listener: SurasPresentableListener?
 
     override var screen: Analytics.Screen { return .suras }
-
-    override func createItemsDataSource() -> BasicDataSource<Sura, SuraTableViewCell> {
-        return SurasDataSource()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,5 +37,25 @@ class SurasViewController: BasePageSelectionViewController<Sura, SuraTableViewCe
 
     override func navigateTo(quranPage: Int, lastPage: LastPage?) {
         listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
+    }
+
+    func setSuras(_ surasArray: [JuzSuras]) {
+        setJuzs(surasArray.map { $0.juz })
+
+        for ds in dataSource.dataSources where ds is SurasDataSource {
+            dataSource.remove(ds)
+        }
+
+        for suras in surasArray {
+            let surasDataSource = SurasDataSource()
+            surasDataSource.setDidSelect { [weak self] (ds, _, index) in
+                let item = ds.item(at: index)
+                self?.navigateTo(quranPage: item.startPageNumber, lastPage: nil)
+            }
+            surasDataSource.items = suras.suras
+            dataSource.add(surasDataSource)
+        }
+
+        tableView?.reloadData()
     }
 }

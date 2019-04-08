@@ -24,14 +24,10 @@ protocol JuzsPresentableListener: class {
     func navigateTo(quranPage: Int, lastPage: LastPage?)
 }
 
-class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableViewCell>, JuzsPresentable, JuzsViewControllable {
+class JuzsViewController: BasePageSelectionViewController, JuzsPresentable, JuzsViewControllable {
     weak var listener: JuzsPresentableListener?
 
     override var screen: Analytics.Screen { return .juzs }
-
-    override func createItemsDataSource() -> BasicDataSource<Quarter, QuarterTableViewCell> {
-        return QuartersDataSource()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,5 +37,25 @@ class JuzsViewController: BasePageSelectionViewController<Quarter, QuarterTableV
 
     override func navigateTo(quranPage: Int, lastPage: LastPage?) {
         listener?.navigateTo(quranPage: quranPage, lastPage: lastPage)
+    }
+
+    func setQuarters(_ quartersArray: [JuzQuarters]) {
+        setJuzs(quartersArray.map { $0.juz })
+
+        for ds in dataSource.dataSources where ds is QuartersDataSource {
+            dataSource.remove(ds)
+        }
+
+        for quarters in quartersArray {
+            let quartersDataSource = QuartersDataSource()
+            quartersDataSource.setDidSelect { [weak self] (ds, _, index) in
+                let item = ds.item(at: index)
+                self?.navigateTo(quranPage: item.startPageNumber, lastPage: nil)
+            }
+            quartersDataSource.items = quarters.quarters
+            dataSource.add(quartersDataSource)
+        }
+
+        tableView?.reloadData()
     }
 }

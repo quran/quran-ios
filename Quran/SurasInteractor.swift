@@ -14,6 +14,8 @@ protocol SurasRouting: ViewableRouting {
 
 protocol SurasPresentable: Presentable {
     var listener: SurasPresentableListener? { get set }
+
+    func setSuras(_ surasArray: [JuzSuras])
 }
 
 protocol SurasListener: class {
@@ -25,9 +27,21 @@ final class SurasInteractor: PresentableInteractor<SurasPresentable>, SurasInter
     weak var router: SurasRouting?
     weak var listener: SurasListener?
 
-    override init(presenter: SurasPresentable) {
+    private let surasRetriever: SurasDataRetrieverType
+
+    init(presenter: SurasPresentable, surasRetriever: SurasDataRetrieverType) {
+        self.surasRetriever = surasRetriever
         super.init(presenter: presenter)
         presenter.listener = self
+    }
+
+    override func didBecomeActive() {
+        super.didBecomeActive()
+        surasRetriever
+            .getSuras()
+            .done(on: .main) { [weak self] suras in
+                self?.presenter.setSuras(suras)
+            }
     }
 
     func navigateTo(quranPage: Int, lastPage: LastPage?) {

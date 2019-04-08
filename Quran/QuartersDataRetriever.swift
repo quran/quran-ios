@@ -20,17 +20,26 @@
 
 import PromiseKit
 
-struct QuartersDataRetriever: Interactor {
+struct JuzQuarters {
+    let juz: Juz
+    let quarters: [Quarter]
+}
 
-    func execute(_ input: Void) -> Promise<[(Juz, [Quarter])]> {
-        return DispatchQueue.global().async(.promise) {
+protocol QuartersDataRetrieverType {
+    func getQuarters() -> Guarantee<[JuzQuarters]>
+}
+
+final class QuartersDataRetriever: QuartersDataRetrieverType {
+
+    func getQuarters() -> Guarantee<[JuzQuarters]> {
+        return DispatchQueue.global().async(.guarantee) {
             guard let ayahsText = NSArray(contentsOf: Files.quarterPrefixArray) as? [String] else {
                 fatalError("Couldn't load `\(Files.quarterPrefixArray)` file")
             }
 
             let juzs = Juz.getJuzs()
 
-            var juzsGroup: [(Juz, [Quarter])] = []
+            var juzsGroup: [JuzQuarters] = []
 
             let numberOfQuarters = Quran.Quarters.count / juzs.count
 
@@ -49,7 +58,7 @@ struct QuartersDataRetriever: Interactor {
                                           ayahText: ayahsText[order])
                     quarters.append(quarter)
                 }
-                juzsGroup.append((juz, quarters))
+                juzsGroup.append(JuzQuarters(juz: juz, quarters: quarters))
             }
             return juzsGroup
         }

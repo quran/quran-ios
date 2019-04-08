@@ -14,6 +14,8 @@ protocol JuzsRouting: ViewableRouting {
 
 protocol JuzsPresentable: Presentable {
     var listener: JuzsPresentableListener? { get set }
+
+    func setQuarters(_ quartersArray: [JuzQuarters])
 }
 
 protocol JuzsListener: class {
@@ -25,9 +27,21 @@ final class JuzsInteractor: PresentableInteractor<JuzsPresentable>, JuzsInteract
     weak var router: JuzsRouting?
     weak var listener: JuzsListener?
 
-    override init(presenter: JuzsPresentable) {
+    private let quartersRetriever: QuartersDataRetrieverType
+
+    init(presenter: JuzsPresentable, quartersRetriever: QuartersDataRetriever) {
+        self.quartersRetriever = quartersRetriever
         super.init(presenter: presenter)
         presenter.listener = self
+    }
+
+    override func didBecomeActive() {
+        super.didBecomeActive()
+        quartersRetriever
+            .getQuarters()
+            .done(on: .main) { [weak self] quarters in
+                self?.presenter.setQuarters(quarters)
+            }
     }
 
     func navigateTo(quranPage: Int, lastPage: LastPage?) {

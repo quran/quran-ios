@@ -20,18 +20,14 @@
 import GenericDataSources
 import UIKit
 
-class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: ReusableCell>: BaseTableBasedViewController {
-
-    let dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>
+class BasePageSelectionViewController: BaseTableBasedViewController {
 
     let dataSource = JuzsMultipleSectionDataSource(sectionType: .multi)
     let lastPageDS: LastPageBookmarkDataSource
 
     private let numberFormatter = NumberFormatter()
 
-    init(dataRetriever: AnyGetInteractor<[(Juz, [ItemType])]>,
-         lastPagesPersistence: LastPagesPersistence) {
-        self.dataRetriever = dataRetriever
+    init(lastPagesPersistence: LastPagesPersistence) {
         self.lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,10 +50,7 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         tableView.ds_register(headerFooterClass: JuzTableViewHeaderFooterView.self)
         tableView.ds_useDataSource(dataSource)
 
-        dataRetriever.get().done(on: .main) { [weak self] (data: [(Juz, [ItemType])]) -> Void in
-            self?.setSections(data)
-            self?.tableView.reloadData()
-        }.suppress()
+        addLastPageDataSource()
 
         dataSource.onJuzHeaderSelected = { [weak self] juz in
             self?.navigateTo(quranPage: juz.startPageNumber, lastPage: nil)
@@ -69,48 +62,18 @@ class BasePageSelectionViewController<ItemType: QuranPageReference, CellType: Re
         lastPageDS.reloadData()
     }
 
-    private func setSections(_ sections: [(Juz, [ItemType])]) {
-        for ds in dataSource.dataSources {
-            self.dataSource.remove(ds)
-        }
-
-        addLastPageDataSource()
-
-        for section in sections {
-            let ds = wrappedCreateItemsDataSource()
-            ds.items = section.1
-            dataSource.add(ds)
-        }
-
+    func setJuzs(_ juzs: [Juz]) {
         let lastPageHeader = lAndroid("recent_pages")
-        let juzs = sections.map { String(format: lAndroid("juz2_description"), numberFormatter.format($0.0.juzNumber)) }
-        self.dataSource.headerCreator.setSectionedItems([lastPageHeader] + juzs)
+        let localizedJuzs = juzs.map { String(format: lAndroid("juz2_description"), numberFormatter.format($0.juzNumber)) }
+        self.dataSource.headerCreator.setSectionedItems([lastPageHeader] + localizedJuzs)
     }
 
     private func addLastPageDataSource() {
-        self.dataSource.add(self.lastPageDS)
-        let lastPageSelection = BlockSelectionHandler<LastPage, BookmarkTableViewCell>()
-        lastPageSelection.didSelectBlock = { [weak self] (ds, _, index) in
+        self.dataSource.insert(lastPageDS, at: 0)
+        lastPageDS.setDidSelect { [weak self] (ds, _, index) in
             let item = ds.item(at:index)
             self?.navigateTo(quranPage: item.page, lastPage: item)
         }
-        lastPageDS.setSelectionHandler(lastPageSelection)
-    }
-
-    private func wrappedCreateItemsDataSource() -> BasicDataSource<ItemType, CellType> {
-        let selectionHandler = BlockSelectionHandler<ItemType, CellType>()
-        selectionHandler.didSelectBlock = { [weak self] (ds, _, index) in
-            let item = ds.item(at: index)
-            self?.navigateTo(quranPage: item.startPageNumber, lastPage: nil)
-        }
-
-        let dataSource = createItemsDataSource()
-        dataSource.setSelectionHandler(selectionHandler)
-        return dataSource
-    }
-
-    func createItemsDataSource() -> BasicDataSource<ItemType, CellType> {
-        fatalError("Should be implemented by subclasses")
     }
 
     func navigateTo(quranPage: Int, lastPage: LastPage?) {

@@ -20,14 +20,23 @@
 
 import PromiseKit
 
-struct SurasDataRetriever: Interactor {
+struct JuzSuras {
+    let juz: Juz
+    let suras: [Sura]
+}
 
-    func execute(_ input: Void) -> Promise<[(Juz, [Sura])]> {
-        return DispatchQueue.global().async(.promise) {
+protocol SurasDataRetrieverType {
+    func getSuras() -> Guarantee<[JuzSuras]>
+}
+
+final class SurasDataRetriever: SurasDataRetrieverType {
+
+    func getSuras() -> Guarantee<[JuzSuras]> {
+        return DispatchQueue.global().async(.guarantee) {
             let juzs = Juz.getJuzs()
             let suras = Sura.getSuras()
 
-            var juzsGroup: [(Juz, [Sura])] = []
+            var juzsGroup: [JuzSuras] = []
 
             var suraIndex = 0
             for juzIndex in 0..<juzs.count {
@@ -44,7 +53,7 @@ struct SurasDataRetriever: Interactor {
                     currentSuras.append(sura)
                     suraIndex += 1
                 }
-                juzsGroup.append((juz, currentSuras))
+                juzsGroup.append(JuzSuras(juz: juz, suras: currentSuras))
             }
             return juzsGroup
         }

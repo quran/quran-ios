@@ -48,26 +48,3 @@ extension Interactor {
         return AnyInteractor(self)
     }
 }
-
-public struct AnyGetInteractor<Output>: Interactor {
-    private let executeClosure: (()) -> Promise<Output>
-
-    public init<InteractorType: Interactor>(_ interactor: InteractorType)
-        where InteractorType.Input == Void, InteractorType.Output == Output {
-            executeClosure = interactor.execute
-    }
-
-    public func execute(_ input: Void) -> Promise<Output> {
-        return executeClosure(input)
-    }
-
-    public func get() -> Promise<Output> {
-        return executeClosure(())
-    }
-}
-
-extension Interactor where Input == Void {
-    public func asAnyGetInteractor() -> AnyGetInteractor<Output> {
-        return AnyGetInteractor(self)
-    }
-}

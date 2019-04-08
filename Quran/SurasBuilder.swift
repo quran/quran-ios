@@ -17,11 +17,9 @@ protocol SurasBuildable: Buildable {
 final class SurasBuilder: Builder, SurasBuildable {
 
     func build(withListener listener: SurasListener) -> SurasRouting {
-        let viewController = SurasViewController(
-            dataRetriever: SurasDataRetriever().asAnyGetInteractor(),
-            lastPagesPersistence: container.createLastPagesPersistence()
-        )
-        let interactor = SurasInteractor(presenter: viewController)
+        let viewController = SurasViewController(lastPagesPersistence: container.createLastPagesPersistence())
+        let interactor = SurasInteractor(presenter: viewController,
+                                         surasRetriever: SurasDataRetriever())
         interactor.listener = listener
         return SurasRouter(interactor: interactor, viewController: viewController)
     }

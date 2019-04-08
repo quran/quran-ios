@@ -29,9 +29,9 @@ protocol LocalTranslationsRetrieverType {
 class LocalTranslationsRetriever: LocalTranslationsRetrieverType {
 
     private let persistence: ActiveTranslationsPersistence
-    private let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
+    private let versionUpdater: TranslationsVersionUpdaterType
 
-    init(persistence: ActiveTranslationsPersistence, versionUpdater: AnyInteractor<[Translation], [TranslationFull]>) {
+    init(persistence: ActiveTranslationsPersistence, versionUpdater: TranslationsVersionUpdaterType) {
         self.persistence = persistence
         self.versionUpdater = versionUpdater
     }
@@ -39,6 +39,6 @@ class LocalTranslationsRetriever: LocalTranslationsRetrieverType {
     func getLocalTranslations() -> Promise<[TranslationFull]> {
         return DispatchQueue.global()
             .async(.promise, execute: persistence.retrieveAll)
-            .then(versionUpdater.execute)
+            .then(versionUpdater.updateVersion(for:))
     }
 }

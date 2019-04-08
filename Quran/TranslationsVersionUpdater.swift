@@ -1,5 +1,5 @@
 //
-//  TranslationsVersionUpdaterInteractor.swift
+//  TranslationsVersionUpdater.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/12/17.
@@ -21,7 +21,11 @@ import BatchDownloader
 import PromiseKit
 import Zip
 
-class TranslationsVersionUpdaterInteractor: Interactor {
+protocol TranslationsVersionUpdaterType {
+    func updateVersion(for translations: [Translation]) -> Promise<[TranslationFull]>
+}
+
+class TranslationsVersionUpdater: TranslationsVersionUpdaterType {
 
     private let simplePersistence: SimplePersistence
     private let persistence: ActiveTranslationsPersistence
@@ -38,7 +42,7 @@ class TranslationsVersionUpdaterInteractor: Interactor {
         self.versionPersistenceCreator = versionPersistenceCreator
     }
 
-    func execute(_ translations: [Translation]) -> Promise<[TranslationFull]> {
+    func updateVersion(for translations: [Translation]) -> Promise<[TranslationFull]> {
         let update = Promise.value(translations)
             .map(unzipIfNeeded)    // unzip if needed
             .map(updateInstalledVersions) // update versions

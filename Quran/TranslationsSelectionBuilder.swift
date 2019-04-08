@@ -31,7 +31,7 @@ final class TranslationsSelectionBuilder: Builder, TranslationsSelectionBuildble
         let dataSource = TranslationsSelectionDataSource(
             downloader: container.createDownloadManager(),
             deletionInteractor: container.createTranslationDeletionInteractor(),
-            versionUpdater: container.createTranslationsVersionUpdaterInteractor(),
+            versionUpdater: container.createTranslationsVersionUpdater(),
             pendingDataSource: pendingDS,
             downloadedDataSource: downloadedDS)
         pendingDS.delegate = dataSource

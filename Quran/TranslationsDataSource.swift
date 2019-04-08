@@ -33,7 +33,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     private let downloader: DownloadManager
     private let deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>
-    fileprivate let versionUpdater: AnyInteractor<[Translation], [TranslationFull]>
+    fileprivate let versionUpdater: TranslationsVersionUpdaterType
 
     let downloadedDS: TranslationsBasicDataSource
     let pendingDS: TranslationsBasicDataSource
@@ -42,7 +42,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
     public init(downloader: DownloadManager,
                 deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
-                versionUpdater: AnyInteractor<[Translation], [TranslationFull]>,
+                versionUpdater: TranslationsVersionUpdaterType,
                 pendingDataSource: TranslationsBasicDataSource,
                 downloadedDataSource: TranslationsBasicDataSource) {
         self.downloader = downloader
@@ -223,7 +223,7 @@ extension TranslationsDataSource: DownloadingObserverDelegate {
     func onDownloadCompleted(for translation: TranslationFull) {
 
         versionUpdater
-            .execute([translation.translation])
+            .updateVersion(for: [translation.translation])
             .done(on: .main) { newItems -> Void in
 
                 guard let (ds, localIndexPath) = self.indexPathFor(translation: translation) else {

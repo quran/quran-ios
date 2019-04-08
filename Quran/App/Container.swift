@@ -114,15 +114,15 @@ class Container {
     func createLocalTranslationsRetriever() -> LocalTranslationsRetrieverType {
         return LocalTranslationsRetriever(
             persistence: createActiveTranslationsPersistence(),
-            versionUpdater: createTranslationsVersionUpdaterInteractor())
+            versionUpdater: createTranslationsVersionUpdater())
     }
 
-    func createTranslationsVersionUpdaterInteractor() -> AnyInteractor<[Translation], [TranslationFull]> {
-        return TranslationsVersionUpdaterInteractor(
+    func createTranslationsVersionUpdater() -> TranslationsVersionUpdaterType {
+        return TranslationsVersionUpdater(
             simplePersistence: createSimplePersistence(),
             persistence: createActiveTranslationsPersistence(),
             downloader: createDownloadManager(),
-            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence)).asAnyInteractor()
+            versionPersistenceCreator: createCreator(createSQLiteDatabaseVersionPersistence))
     }
 
     func createSQLiteDatabaseVersionPersistence(filePath: String) -> DatabaseVersionPersistence {

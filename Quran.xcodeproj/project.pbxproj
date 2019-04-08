@@ -208,7 +208,7 @@
 		544629E81E6F67D1005B1107 /* LocalTranslationsRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629E71E6F67D1005B1107 /* LocalTranslationsRetriever.swift */; };
 		544629EE1E7564C7005B1107 /* DatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */; };
 		544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */; };
-		544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */; };
+		544629F21E75A5BD005B1107 /* TranslationsVersionUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F11E75A5BD005B1107 /* TranslationsVersionUpdater.swift */; };
 		544629F41E75C48D005B1107 /* TranslationDeletionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */; };
 		5449EC071F9D26B300A12337 /* DirectionalEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */; };
 		5449EC0C1FA58ACE00A12337 /* quran.ar.db in Resources */ = {isa = PBXBuildFile; fileRef = 5449EC0B1FA58ACE00A12337 /* quran.ar.db */; };
@@ -831,7 +831,7 @@
 		544629E91E71F94F005B1107 /* AbyssinicaSIL-R.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AbyssinicaSIL-R.ttf"; sourceTree = "<group>"; };
 		544629ED1E7564C7005B1107 /* DatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseVersionPersistence.swift; sourceTree = "<group>"; };
 		544629EF1E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDatabaseVersionPersistence.swift; sourceTree = "<group>"; };
-		544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdaterInteractor.swift; sourceTree = "<group>"; };
+		544629F11E75A5BD005B1107 /* TranslationsVersionUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationsVersionUpdater.swift; sourceTree = "<group>"; };
 		544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationDeletionInteractor.swift; sourceTree = "<group>"; };
 		5449EC061F9D26B300A12337 /* DirectionalEdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalEdgeInsets.swift; sourceTree = "<group>"; };
 		5449EC0B1FA58ACE00A12337 /* quran.ar.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran.ar.db; sourceTree = "<group>"; };
@@ -2748,7 +2748,7 @@
 			children = (
 				549040B61E63385200D54625 /* TranslationsRetriever.swift */,
 				544629E71E6F67D1005B1107 /* LocalTranslationsRetriever.swift */,
-				544629F11E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift */,
+				544629F11E75A5BD005B1107 /* TranslationsVersionUpdater.swift */,
 				544629F31E75C48D005B1107 /* TranslationDeletionInteractor.swift */,
 				544629DB1E67636F005B1107 /* TranslationFull.swift */,
 			);
@@ -3742,7 +3742,7 @@
 				547BCB5420915587007AFBEC /* MoreArabicTranslationTableViewCell.swift in Sources */,
 				54B266111CC6D59600D3AEF8 /* SearchViewController.swift in Sources */,
 				54F56C4C1E7ECA5B00D7AF57 /* QuranNavigationBar.swift in Sources */,
-				544629F21E75A5BD005B1107 /* TranslationsVersionUpdaterInteractor.swift in Sources */,
+				544629F21E75A5BD005B1107 /* TranslationsVersionUpdater.swift in Sources */,
 				540922B51E919C5500C7537A /* QuranBasePageCollectionViewCell.swift in Sources */,
 				06832340225902C000D01297 /* QariListBuilder.swift in Sources */,
 				54B266711CCA93E000D3AEF8 /* QuarterTableViewCell.swift in Sources */,

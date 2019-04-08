@@ -139,8 +139,8 @@ class Container {
         return QariAudioFileListRetrievalCreator().asAnyCreator()
     }
 
-    func createAyahsAudioDownloader() -> AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse> {
-        return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator()).asAnyInteractor()
+    func createAyahsAudioDownloader() -> AyahsAudioDownloaderType {
+        return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator())
     }
 
     func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {

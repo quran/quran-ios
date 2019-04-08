@@ -24,13 +24,13 @@ class AudioFilesDownloader {
 
     let audioFileList: QariAudioFileListRetrieval
     let downloader: DownloadManager
-    let ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
+    let ayahDownloader: AyahsAudioDownloaderType
 
     private var response: DownloadBatchResponse?
 
     init(audioFileList: QariAudioFileListRetrieval,
          downloader: DownloadManager,
-         ayahDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>) {
+         ayahDownloader: AyahsAudioDownloaderType) {
         self.audioFileList  = audioFileList
         self.downloader     = downloader
         self.ayahDownloader = ayahDownloader
@@ -60,7 +60,7 @@ class AudioFilesDownloader {
 
     func download(qari: Qari, range: VerseRange) -> Promise<DownloadBatchResponse?> {
         return ayahDownloader
-            .execute(AyahsAudioDownloadRequest(range: range, qari: qari))
+            .download(AyahsAudioDownloadRequest(range: range, qari: qari))
             .map(on: .main) { responses -> DownloadBatchResponse? in
                 // wrap the requests
                 self.createRequestWithDownloads(responses)

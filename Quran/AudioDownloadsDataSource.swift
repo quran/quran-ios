@@ -28,7 +28,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
 
     private let deletionInteractor: AnyInteractor<Qari, Void>
     private let downloader: DownloadManager
-    private let ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>
+    private let ayahsDownloader: AyahsAudioDownloaderType
     fileprivate let qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType
     fileprivate var downloadingObservers: [Qari: DownloadingObserver<DownloadableQariAudio>] = [:]
 
@@ -37,7 +37,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     var onEditingChanged: (() -> Void)?
 
     init(downloader: DownloadManager,
-         ayahsDownloader: AnyInteractor<AyahsAudioDownloadRequest, DownloadBatchResponse>,
+         ayahsDownloader: AyahsAudioDownloaderType,
          qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType,
          deletionInteractor: AnyInteractor<Qari, Void>) {
         self.downloader = downloader
@@ -125,7 +125,7 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         Analytics.shared.downloadingQuran(qari: item.audio.qari)
         // download the audio
         ayahsDownloader
-            .execute(AyahsAudioDownloadRequest(range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah), qari: item.audio.qari))
+            .download(AyahsAudioDownloadRequest(range: VerseRange(lowerBound: Quran.startAyah, upperBound: Quran.lastAyah), qari: item.audio.qari))
             .done { response -> Void in
 
                 guard !self.cancelled.value else {

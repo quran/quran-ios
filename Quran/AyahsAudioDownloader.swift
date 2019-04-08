@@ -25,7 +25,11 @@ struct AyahsAudioDownloadRequest {
     let qari: Qari
 }
 
-struct AyahsAudioDownloader: Interactor {
+protocol AyahsAudioDownloaderType {
+    func download(_ request: AyahsAudioDownloadRequest) -> Promise<DownloadBatchResponse>
+}
+
+struct AyahsAudioDownloader: AyahsAudioDownloaderType {
 
     let downloader: DownloadManager
     let creator: AnyCreator<Qari, QariAudioFileListRetrieval>
@@ -34,7 +38,7 @@ struct AyahsAudioDownloader: Interactor {
         self.creator = creator
     }
 
-    func execute(_ request: AyahsAudioDownloadRequest) -> Promise<DownloadBatchResponse> {
+    func download(_ request: AyahsAudioDownloadRequest) -> Promise<DownloadBatchResponse> {
         return DispatchQueue.global().async(.guarantee) { () -> DownloadBatchRequest in
             let retriever = self.creator.create(request.qari)
 

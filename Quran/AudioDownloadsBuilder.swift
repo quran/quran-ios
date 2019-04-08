@@ -20,7 +20,7 @@ final class AudioDownloadsBuilder: Builder, AudioDownloadsBuildable {
             downloader: container.createDownloadManager(),
             ayahsDownloader: container.createAyahsAudioDownloader(),
             qariAudioDownloadRetriever: createQariListToQariAudioDownloadRetriever(),
-            deletionInteractor: QariAudioDeleteInteractor().asAnyInteractor())
+            deleter: QariAudioDeleteInteractor())
         let interactor = AudioDownloadsInteractor(presenter: viewController)
         interactor.listener = listener
         return AudioDownloadsRouter(interactor: interactor, viewController: viewController)

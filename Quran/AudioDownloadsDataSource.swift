@@ -26,7 +26,7 @@ protocol AudioDownloadsDataSourceDelegate: class {
 
 class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDownloadTableViewCell> {
 
-    private let deletionInteractor: AnyInteractor<Qari, Void>
+    private let deleter: QariAudioDeleterType
     private let downloader: DownloadManager
     private let ayahsDownloader: AyahsAudioDownloaderType
     fileprivate let qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType
@@ -39,11 +39,11 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
     init(downloader: DownloadManager,
          ayahsDownloader: AyahsAudioDownloaderType,
          qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType,
-         deletionInteractor: AnyInteractor<Qari, Void>) {
+         deleter: QariAudioDeleterType) {
         self.downloader = downloader
         self.ayahsDownloader = ayahsDownloader
         self.qariAudioDownloadRetriever = qariAudioDownloadRetriever
-        self.deletionInteractor = deletionInteractor
+        self.deleter = deleter
         super.init()
     }
 
@@ -73,8 +73,8 @@ class AudioDownloadsDataSource: BasicDataSource<DownloadableQariAudio, AudioDown
         let item = self.item(at: indexPath)
 
         Analytics.shared.deletingQuran(qari: item.audio.qari)
-        deletionInteractor
-            .execute(item.audio.qari)
+        deleter
+            .deleteAudioFiles(for: item.audio.qari)
             .done(on: .main) { () -> Void in
 
                 let newDownload = QariAudioDownload(qari: item.audio.qari, downloadedSizeInBytes: 0, downloadedSuraCount: 0)

@@ -408,7 +408,7 @@
 		54C0DC0E1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC0D1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift */; };
 		54C0DC301CE889CA009AAD8D /* AudioFilesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */; };
 		54C3C8A01CD818560045F18F /* QuranPageFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */; };
-		54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */; };
+		54C750971EAD5504005208D8 /* QariAudioDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C750961EAD5504005208D8 /* QariAudioDeleter.swift */; };
 		54D133D31EF76FB900037D8C /* WordByWordTranslationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */; };
 		54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D41EF76FCD00037D8C /* AyahWord.swift */; };
 		54D133D81EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */; };
@@ -1068,7 +1068,7 @@
 		54C0DC0D1CE68F84009AAD8D /* GappedAudioPlayerInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GappedAudioPlayerInteractor.swift; sourceTree = "<group>"; };
 		54C0DC2F1CE889CA009AAD8D /* AudioFilesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFilesDownloader.swift; sourceTree = "<group>"; };
 		54C3C89F1CD818560045F18F /* QuranPageFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuranPageFlowLayout.swift; sourceTree = "<group>"; };
-		54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleteInteractor.swift; sourceTree = "<group>"; };
+		54C750961EAD5504005208D8 /* QariAudioDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QariAudioDeleter.swift; sourceTree = "<group>"; };
 		54D133D21EF76FB900037D8C /* WordByWordTranslationPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordByWordTranslationPersistence.swift; sourceTree = "<group>"; };
 		54D133D41EF76FCD00037D8C /* AyahWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AyahWord.swift; sourceTree = "<group>"; };
 		54D133D71EF7813C00037D8C /* TranslationTextTypeSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationTextTypeSelectionTableViewController.swift; sourceTree = "<group>"; };
@@ -1855,7 +1855,7 @@
 				5459FF6E1EA510B200FBF6C5 /* QariAudioFileListRetrievalCreator.swift */,
 				5459FF7B1EA545CA00FBF6C5 /* QariListToQariAudioDownloadRetriever.swift */,
 				5459FF671EA4E79C00FBF6C5 /* DownloadableQariAudioRetriever.swift */,
-				54C750961EAD5504005208D8 /* QariAudioDeleteInteractor.swift */,
+				54C750961EAD5504005208D8 /* QariAudioDeleter.swift */,
 			);
 			name = Logic;
 			sourceTree = "<group>";
@@ -3763,7 +3763,7 @@
 				544EC38820C45F1B00D2E7B5 /* ThemedNavigationController.swift in Sources */,
 				06A7E69022511A9E00AC2634 /* SettingsInteractor.swift in Sources */,
 				54C0DBF81CE4B3D6009AAD8D /* QarisDataSource.swift in Sources */,
-				54C750971EAD5504005208D8 /* QariAudioDeleteInteractor.swift in Sources */,
+				54C750971EAD5504005208D8 /* QariAudioDeleter.swift in Sources */,
 				5494CCB51CEFAB8400031686 /* QariTimingRetriever.swift in Sources */,
 				540BCA4C1EACC4C700D28797 /* Int+Extension.swift in Sources */,
 				5459FF681EA4E79C00FBF6C5 /* DownloadableQariAudioRetriever.swift in Sources */,

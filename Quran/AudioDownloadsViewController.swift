@@ -43,12 +43,12 @@ class AudioDownloadsViewController: BaseTableBasedViewController, AudioDownloads
          downloader: DownloadManager,
          ayahsDownloader: AyahsAudioDownloaderType,
          qariAudioDownloadRetriever: QariListToQariAudioDownloadRetrieverType,
-         deletionInteractor: AnyInteractor<Qari, Void>) {
+         deleter: QariAudioDeleterType) {
         self.retriever = retriever
         self.dataSource = AudioDownloadsDataSource(downloader: downloader,
                                                    ayahsDownloader: ayahsDownloader,
                                                    qariAudioDownloadRetriever: qariAudioDownloadRetriever,
-                                                   deletionInteractor: deletionInteractor)
+                                                   deleter: deleter)
         super.init(nibName: nil, bundle: nil)
         dataSource.delegate = self
     }

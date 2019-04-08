@@ -1,5 +1,5 @@
 //
-//  QariAudioDeleteInteractor.swift
+//  QariAudioDeleter.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/23/17.
@@ -20,9 +20,13 @@
 
 import PromiseKit
 
-struct QariAudioDeleteInteractor: Interactor {
+protocol QariAudioDeleterType {
+    func deleteAudioFiles(for qari: Qari) -> Promise<Void>
+}
 
-    func execute(_ qari: Qari) -> Promise<Void> {
+struct QariAudioDeleteInteractor: QariAudioDeleterType {
+
+    func deleteAudioFiles(for qari: Qari) -> Promise<Void> {
         return DispatchQueue.global().async(.promise) {
             try FileManager.default.removeItem(at: qari.localFolder())
         }

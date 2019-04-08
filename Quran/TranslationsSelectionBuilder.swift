@@ -30,7 +30,7 @@ final class TranslationsSelectionBuilder: Builder, TranslationsSelectionBuildble
             simplePersistence: container.createSimplePersistence())
         let dataSource = TranslationsSelectionDataSource(
             downloader: container.createDownloadManager(),
-            deletionInteractor: container.createTranslationDeletionInteractor(),
+            deleter: container.createTranslationDeleter(),
             versionUpdater: container.createTranslationsVersionUpdater(),
             pendingDataSource: pendingDS,
             downloadedDataSource: downloadedDS)

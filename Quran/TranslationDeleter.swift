@@ -1,5 +1,5 @@
 //
-//  TranslationDeletionInteractor.swift
+//  TranslationDeleter.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/12/17.
@@ -20,7 +20,11 @@
 
 import PromiseKit
 
-class TranslationDeletionInteractor: Interactor {
+protocol TranslationDeleterType {
+    func delete(translation: TranslationFull) -> Promise<TranslationFull>
+}
+
+class TranslationDeleter: TranslationDeleterType {
 
     private let persistence: ActiveTranslationsPersistence
     private let simplePersistence: SimplePersistence
@@ -30,8 +34,7 @@ class TranslationDeletionInteractor: Interactor {
         self.simplePersistence = simplePersistence
     }
 
-    func execute(_ item: TranslationFull) -> Promise<TranslationFull> {
-
+    func delete(translation item: TranslationFull) -> Promise<TranslationFull> {
         // update the selected translations
         let translations = simplePersistence.valueForKey(.selectedTranslations)
         var updatedTranslations: [Int] = []

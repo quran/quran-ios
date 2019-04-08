@@ -129,10 +129,10 @@ class Container {
         return SQLiteDatabaseVersionPersistence(filePath: filePath)
     }
 
-    func createTranslationDeletionInteractor() -> AnyInteractor<TranslationFull, TranslationFull> {
-        return TranslationDeletionInteractor(
+    func createTranslationDeleter() -> TranslationDeleterType {
+        return TranslationDeleter(
             persistence: createActiveTranslationsPersistence(),
-            simplePersistence: createSimplePersistence()).asAnyInteractor()
+            simplePersistence: createSimplePersistence())
     }
 
     func createQariAudioFileListRetrievalCreator() -> AnyCreator<Qari, QariAudioFileListRetrieval> {

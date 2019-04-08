@@ -29,7 +29,7 @@ final class TranslationsListBuilder: Builder, TranslationsListBuildable {
         let downloadedDS = TranslationsBasicDataSource()
         let dataSource = TranslationsDataSource(
             downloader: container.createDownloadManager(),
-            deletionInteractor: container.createTranslationDeletionInteractor(),
+            deleter: container.createTranslationDeleter(),
             versionUpdater: container.createTranslationsVersionUpdater(),
             pendingDataSource: pendingDS,
             downloadedDataSource: downloadedDS)

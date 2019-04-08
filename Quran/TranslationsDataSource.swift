@@ -32,7 +32,7 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     weak var delegate: TranslationsDataSourceDelegate?
 
     private let downloader: DownloadManager
-    private let deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>
+    private let deleter: TranslationDeleterType
     fileprivate let versionUpdater: TranslationsVersionUpdaterType
 
     let downloadedDS: TranslationsBasicDataSource
@@ -41,12 +41,12 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
     fileprivate var downloadingObservers: [Int: DownloadingObserver<TranslationFull>] = [:]
 
     public init(downloader: DownloadManager,
-                deletionInteractor: AnyInteractor<TranslationFull, TranslationFull>,
+                deleter: TranslationDeleterType,
                 versionUpdater: TranslationsVersionUpdaterType,
                 pendingDataSource: TranslationsBasicDataSource,
                 downloadedDataSource: TranslationsBasicDataSource) {
         self.downloader = downloader
-        self.deletionInteractor = deletionInteractor
+        self.deleter = deleter
         self.versionUpdater = versionUpdater
         pendingDS = pendingDataSource
         downloadedDS = downloadedDataSource
@@ -100,8 +100,8 @@ class TranslationsDataSource: CompositeDataSource, TranslationsBasicDataSourceDe
 
         Analytics.shared.deleting(translation: item.translation)
 
-        deletionInteractor
-            .execute(item)
+        deleter
+            .delete(translation: item)
             .done(on: .main) { newItem -> Void in
 
                 let newGlobalIndexPath = self.move(item: item,

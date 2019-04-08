@@ -155,7 +155,6 @@
 		5437D3991EB38A7D00795FA9 /* VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5437D3601EB385DB00795FA9 /* VFoundation.framework */; };
 		5437D39E1EB38B2A00795FA9 /* CrashlyticsCrasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D39C1EB38B2A00795FA9 /* CrashlyticsCrasher.swift */; };
 		5437D3A31EB3912000795FA9 /* Creator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A11EB3912000795FA9 /* Creator.swift */; };
-		5437D3A41EB3912000795FA9 /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A21EB3912000795FA9 /* Interactor.swift */; };
 		5437D3AD1EB3921F00795FA9 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A51EB3921F00795FA9 /* Cache.swift */; };
 		5437D3AE1EB3921F00795FA9 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A61EB3921F00795FA9 /* Either.swift */; };
 		5437D3AF1EB3921F00795FA9 /* NotImplemented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5437D3A71EB3921F00795FA9 /* NotImplemented.swift */; };
@@ -780,7 +779,6 @@
 		5437D3831EB3886500795FA9 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		5437D39C1EB38B2A00795FA9 /* CrashlyticsCrasher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrashlyticsCrasher.swift; sourceTree = "<group>"; };
 		5437D3A11EB3912000795FA9 /* Creator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creator.swift; sourceTree = "<group>"; };
-		5437D3A21EB3912000795FA9 /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
 		5437D3A51EB3921F00795FA9 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		5437D3A61EB3921F00795FA9 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		5437D3A71EB3921F00795FA9 /* NotImplemented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotImplemented.swift; sourceTree = "<group>"; };
@@ -1645,7 +1643,6 @@
 				5437D3741EB3886500795FA9 /* Crasher.swift */,
 				5437D3A11EB3912000795FA9 /* Creator.swift */,
 				5437D3A61EB3921F00795FA9 /* Either.swift */,
-				5437D3A21EB3912000795FA9 /* Interactor.swift */,
 				5437D3771EB3886500795FA9 /* Measure.swift */,
 				5437D3A71EB3921F00795FA9 /* NotImplemented.swift */,
 				5437D3A81EB3921F00795FA9 /* Once.swift */,
@@ -3557,7 +3554,6 @@
 				5437D3911EB3886500795FA9 /* String+Extension.swift in Sources */,
 				54FD7BA71EB9342D00FA485F /* SimplePersistence.swift in Sources */,
 				5437D3861EB3886500795FA9 /* FileManager+Extension.swift in Sources */,
-				5437D3A41EB3912000795FA9 /* Interactor.swift in Sources */,
 				543FE04D1EB3DA4800687DF8 /* ParsingError.swift in Sources */,
 				5437D3AF1EB3921F00795FA9 /* NotImplemented.swift in Sources */,
 				54FD7BA81EB9342D00FA485F /* UserDefaultsSimplePersistence.swift in Sources */,

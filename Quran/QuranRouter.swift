@@ -7,9 +7,10 @@
 //
 
 import RIBs
+import RxSwift
 
-protocol QuranInteractable: Interactable, AdvancedAudioOptionsListener, TranslationTextTypeSelectionListener,
-                MoreMenuListener, QariListListener, TranslationsListListener {
+protocol QuranInteractable: Interactable, TranslationTextTypeSelectionListener,
+                MoreMenuListener, TranslationsListListener, QuranAudioBannerListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
@@ -18,17 +19,16 @@ protocol QuranViewControllable: ViewControllable {
     func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable)
     func presentMoreMenuViewController(_ viewController: ViewControllable)
     func presentTranslationsSelection(_ viewController: ViewControllable)
-    func presentQariList(_ viewController: ViewControllable)
+    func presentAudioBanner(_ viewController: ViewControllable)
 }
 
 final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
 
     struct Deps {
-        let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuildable
         let translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuildable
         let moreMenuBuilder: MoreMenuBuildable
-        let qariListBuilder: QariListBuildable
         let translationsSelectionBuilder: TranslationsSelectionBuildble
+        let audioBannerBuilder: QuranAudioBannerBuildable
     }
 
     private let deps: Deps
@@ -43,49 +43,33 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
         dismiss(animated: true, completion: completion)
     }
 
-    // MARK: - AudioOptions
-
-    func presentAdvancedAudioOptions(with options: AdvancedAudioOptions) {
-        present { $0.advancedAudioOptionsBuilder.build(withListener: $1, options: options) }
-    }
-
-    // MARK: - Translation Text Type
-
     func presentTranslationTextTypeSelection() {
         present({ $0.translationTextTypeSelectionBuilder.build(withListener: $1) },
                 { $0.presentTranslationTextTypeSelectionViewController($1) }) // swiftlint:disable:this opening_brace
     }
-
-    // MARK: - More Menu
 
     func presentMoreMenu(withModel model: MoreMenuModel) {
         present({ $0.moreMenuBuilder.build(withListener: $1, model: model) },
                 { $0.presentMoreMenuViewController($1) }) // swiftlint:disable:this opening_brace
     }
 
-    // MARK: - Translation Selection
-
     func presentTranslationsSelection() {
         present({ $0.translationsSelectionBuilder.build(withListener: $1) },
                 { $0.presentTranslationsSelection($1) }) // swiftlint:disable:this opening_brace
     }
 
-    // MARK: - Qari List
-
-    func presentQariList() {
-        present({ $0.qariListBuilder.build(withListener: $1) },
-                { $0.presentQariList($1) }) // swiftlint:disable:this opening_brace
+    func presentAudioBanner(playFromAyahStream: Observable<AyahNumber>) {
+        let router = deps.audioBannerBuilder.build(withListener: interactor, playFromAyahStream: playFromAyahStream)
+        attachChild(router)
+        viewController.presentAudioBanner(router.viewControllable)
     }
+
+    // MARK: - Private
 
     private func present(_ building: (Deps, QuranInteractable) -> ViewableRouting,
                          _ present: (QuranViewControllable, ViewControllable) -> Void) {
         let router = building(deps, interactor)
         saveAsPresented(router)
         present(viewController, router.viewControllable)
-    }
-
-    private func present(_ building: (Deps, QuranInteractable) -> ViewableRouting) {
-        let router = building(deps, interactor)
-        present(router, animated: true)
     }
 }

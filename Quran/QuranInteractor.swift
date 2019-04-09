@@ -7,16 +7,16 @@
 //
 import QueuePlayer
 import RIBs
+import RxCocoa
 import RxSwift
 
 protocol QuranRouting: ViewableRouting {
     func dismissPresentedRouter(completion: (() -> Void)?)
 
-    func presentAdvancedAudioOptions(with options: AdvancedAudioOptions)
     func presentTranslationTextTypeSelection()
     func presentMoreMenu(withModel model: MoreMenuModel)
     func presentTranslationsSelection()
-    func presentQariList()
+    func presentAudioBanner(playFromAyahStream: Observable<AyahNumber>)
 }
 
 extension QuranRouting {
@@ -28,19 +28,17 @@ extension QuranRouting {
 protocol QuranPresentable: Presentable {
     var listener: QuranPresentableListener? { get set }
 
-    var verseRuns: Runs { get }
-    var listRuns: Runs { get }
-    var audioRange: VerseRange? { get }
-
     var isWordPointerActive: Bool { get }
 
-    func updateAudioOptions(to newOptions: AdvancedAudioOptions)
     func setQuranMode(_ quranMode: QuranMode)
     func showWordPointer()
     func hideWordPointer()
     func reloadView()
 
-    func updateSelectedQari()
+    func currentPage() -> QuranPage?
+    func stopBarHiddenTimer()
+    func highlightAyah(_ ayah: AyahNumber)
+    func removeHighlighting()
 }
 
 protocol QuranListener: class {
@@ -57,6 +55,8 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     private var deps: Deps
 
+    private let playFromAyahStream = PublishRelay<AyahNumber>()
+
     init(presenter: QuranPresentable, deps: Deps) {
         self.deps = deps
         super.init(presenter: presenter)
@@ -66,6 +66,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     override func didBecomeActive() {
         super.didBecomeActive()
         presenter.setQuranMode(quranMode)
+        router?.presentAudioBanner(playFromAyahStream: playFromAyahStream.asObservable())
     }
 
     // MARK: - SimplePersistence
@@ -87,23 +88,6 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
         router?.dismissPresentedRouter()
     }
 
-    // MARK: - AudioOptions
-
-    func onAdvancedAudioOptionsButtonTapped() {
-        let options = AdvancedAudioOptions(range: unwrap(presenter.audioRange),
-                                           verseRuns: presenter.verseRuns,
-                                           listRuns: presenter.listRuns)
-        router?.presentAdvancedAudioOptions(with: options)
-    }
-
-    func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
-        presenter.updateAudioOptions(to: newOptions)
-    }
-
-    func dismissAudioOptions() {
-        router?.dismissPresentedRouter()
-    }
-
     // MARK: - Word Translation Type Selection
 
     func onWordPointerTapped() {
@@ -112,20 +96,6 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     func dismissTranslationTextTypeSelection() {
         router?.dismissPresentedRouter()
-    }
-
-    // MARK: - Qari List
-
-    func onQariListButtonTapped() {
-        router?.presentQariList()
-    }
-
-    func dismissQariList() {
-        router?.dismissPresentedRouter()
-    }
-
-    func onSelectedQariChanged() {
-        presenter.updateSelectedQari()
     }
 
     // MARK: - More Menu
@@ -175,5 +145,27 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     func onThemeSelectedUpdated(to theme: Theme) {
         deps.simplePersistence.theme = theme
         presenter.reloadView()
+    }
+
+    // MARK: - Audio Banner
+
+    func getCurrentQuranPage() -> QuranPage? {
+        return presenter.currentPage()
+    }
+
+    func onAudioBannerTouchesBegan() {
+        presenter.stopBarHiddenTimer()
+    }
+
+    func highlightAyah(_ ayah: AyahNumber) {
+        presenter.highlightAyah(ayah)
+    }
+
+    func removeHighlighting() {
+        presenter.removeHighlighting()
+    }
+
+    func onPlayButtonTapped(from: AyahNumber) {
+        playFromAyahStream.accept(from)
     }
 }

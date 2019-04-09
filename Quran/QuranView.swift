@@ -61,14 +61,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    lazy var audioView: DefaultAudioBannerView = {
-        let audioView = DefaultAudioBannerView()
-        self.addAutoLayoutSubview(audioView)
-        self.bottomBarConstraint = audioView.vc
-            .horizontalEdges()
-            .bottom().constraint
-        return audioView
-    }()
+    var audioView: UIView?
 
     lazy var collectionView: UICollectionView = {
         let layout = QuranPageFlowLayout()
@@ -96,6 +89,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
         return collectionView
     }()
+
+    private lazy var popover: PopoverView = PopoverView(view: self)
 
     private var _pointerTop: NSLayoutConstraint?
     private var _pointerLeft: NSLayoutConstraint?
@@ -157,14 +152,10 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         addGestureRecognizer(dismissBarsTapGesture)
 
         sendSubviewToBack(collectionView)
-        bringSubviewToFront(audioView)
         bringSubviewToFront(pointer)
 
         // Long press gesture on verses to select
         addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPress(_:))))
-
-        // Prevent long tap gesture on audio bottom bar
-        audioView.addGestureRecognizer(UILongPressGestureRecognizer(target: nil, action: nil))
 
         // pointer dragging
         let pointerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onPointerPanned(_:)))
@@ -187,12 +178,26 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
+    func addAudioBannerView(_ audioBannerView: UIView) {
+        self.audioView = audioBannerView
+        addAutoLayoutSubview(audioBannerView)
+        bottomBarConstraint = audioBannerView.vc
+            .horizontalEdges()
+            .bottom().constraint
+
+        // Prevent long tap gesture on audio bottom bar
+        audioBannerView.addGestureRecognizer(UILongPressGestureRecognizer(target: nil, action: nil))
+    }
+
     func visibleIndexPath() -> IndexPath? {
         let offset = collectionView.contentOffset
         return collectionView.indexPathForItem(at: CGPoint(x: offset.x + bounds.width / 2, y: 0))
     }
 
     func setBarsHidden(_ hidden: Bool) {
+        guard let audioView = audioView else {
+            return
+        }
         if let bottomBarConstraint = self.bottomBarConstraint {
             removeConstraint(bottomBarConstraint)
         }
@@ -205,7 +210,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
 
     @objc
     func onViewTapped(_ sender: UITapGestureRecognizer) {
-        guard !audioView.bounds.contains(sender.location(in: audioView)) else {
+        if let audioView = audioView, audioView.bounds.contains(sender.location(in: audioView)) {
             return
         }
         delegate?.onQuranViewTapped(self)
@@ -531,9 +536,4 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         }
         popover.hideNoAnimation()
     }
-
-    lazy var popover: PopoverView = {
-        let popup = PopoverView(view: self)
-        return popup
-    }()
 }

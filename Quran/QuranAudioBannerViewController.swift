@@ -1,64 +1,62 @@
 //
-//  DefaultAudioBannerView.swift
+//  QuranAudioBannerViewController.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 5/12/16.
+//  Created by Afifi, Mohamed on 4/7/19.
+//  Copyright © 2019 Quran.com. All rights reserved.
 //
-//  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2017  Quran.com
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-import QueuePlayer
+
+import RIBs
+import RxSwift
 import UIKit
 
 private let viewHeight: CGFloat = 48
 
-class DefaultAudioBannerView: UIView, AudioBannerView {
+protocol QuranAudioBannerPresentableListener: class {
+    func onPlayTapped()
+    func onPauseResumeTapped()
+    func onStopTapped()
+    func onForwardTapped()
+    func onBackwardTapped()
+    func onMoreTapped()
+    func onQariTapped()
+    func onCancelDownloadTapped()
 
-    weak var delegate: AudioBannerViewDelegate?
+    func onTouchesBegan()
+
+    func didDismissPopover()
+}
+
+final class QuranAudioBannerViewController: UIViewController, QuranAudioBannerPresentable,
+                                QuranAudioBannerViewControllable, PopoverPresenterDelegate {
+
+    private lazy var qariListPresenter = QariListPresenter(delegate: self)
+
+    weak var listener: QuranAudioBannerPresentableListener?
 
     private var bottomConstraint: NSLayoutConstraint?
 
-    let visualEffect = ThemedVisualEffectView()
+    private let visualEffect = ThemedVisualEffectView()
 
-    let qariView = AudioQariBarView()
-    let playView = AudioPlayBarView()
-    let downloadView = AudioDownloadingBarView()
+    private let qariView = AudioQariBarView()
+    private let playView = AudioPlayBarView()
+    private let downloadView = AudioDownloadingBarView()
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        onTouchesBegan?()
+        listener?.onTouchesBegan()
     }
-
-    var onTouchesBegan: (() -> Void)?
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setUp()
-    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUp()
-    }
+        view.backgroundColor = nil
 
-    func setUp() {
-        backgroundColor = nil
-
-        addAutoLayoutSubview(visualEffect)
+        view.addAutoLayoutSubview(visualEffect)
         visualEffect.vc.edges()
 
         let contentView = UIView()
@@ -74,7 +72,7 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         let topBorder = ThemedView()
         topBorder.kind = Theme.Kind.separator
         topBorder.vc.height(by: borderHeight)
-        addAutoLayoutSubview(topBorder)
+        view.addAutoLayoutSubview(topBorder)
         topBorder.vc
             .horizontalEdges()
             .top(by: -borderHeight)
@@ -96,20 +94,20 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         setUpDownloadView()
     }
 
-    fileprivate func setUpQariView() {
+    private func setUpQariView() {
         [qariView.playButton,
-            qariView.backgroundButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
+         qariView.backgroundButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
         qariView.playButton.addTarget(self, action: #selector(qariPlayTapped), for: .touchUpInside)
         qariView.backgroundButton.addTarget(self, action: #selector(qariTapped), for: .touchUpInside)
     }
 
-    fileprivate func setUpPlayView() {
+    private func setUpPlayView() {
         [playView.stopButton,
-            playView.pauseResumeButton,
-            playView.nextButton,
-            playView.previousButton,
-            playView.moreButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
+         playView.pauseResumeButton,
+         playView.nextButton,
+         playView.previousButton,
+         playView.moreButton].forEach { $0?.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
         playView.stopButton.addTarget(self, action: #selector(stopPlayingTapped), for: .touchUpInside)
         playView.pauseResumeButton.addTarget(self, action: #selector(onPauseResumeTapped), for: .touchUpInside)
@@ -118,19 +116,19 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         playView.moreButton?.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
     }
 
-    fileprivate func setUpDownloadView() {
+    private func setUpDownloadView() {
         [downloadView.cancelButton].forEach { $0.addTarget(self, action: #selector(buttonTouchesBegan), for: .touchDown) }
 
         downloadView.cancelButton.addTarget(self, action: #selector(cancelDownloadTapped), for: .touchUpInside)
     }
 
     func hideAllControls() {
+        loadViewIfNeeded()
         [qariView, playView, downloadView].forEach { $0.alpha = 0 }
     }
 
-    func setQari(name: String, image: UIImage?) {
-
-        qariView.imageView.image = image
+    func setQari(name: String, imageName: String) {
+        qariView.imageView.image = UIImage(named: imageName)
         qariView.titleLabel.text = name
 
         hideAllExcept(qariView)
@@ -155,7 +153,7 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
         hideAllExcept(playView)
     }
 
-    fileprivate func hideAllExcept(_ view: UIView) {
+    private func hideAllExcept(_ view: UIView) {
         UIView.animate(withDuration: 0.25, animations: {
             for subview in [self.qariView, self.playView, self.downloadView] {
                 subview.alpha = subview == view ? 1 : 0
@@ -164,47 +162,55 @@ class DefaultAudioBannerView: UIView, AudioBannerView {
     }
 
     @objc
-    fileprivate func buttonTouchesBegan() {
-        onTouchesBegan?()
+    private func buttonTouchesBegan() {
+        listener?.onTouchesBegan()
     }
 
     @objc
-    fileprivate func qariTapped() {
-        delegate?.onQariTapped()
+    private func qariTapped() {
+        listener?.onQariTapped()
     }
 
     @objc
-    fileprivate func qariPlayTapped() {
-        delegate?.onPlayTapped()
+    private func qariPlayTapped() {
+        listener?.onPlayTapped()
     }
 
     @objc
-    fileprivate func stopPlayingTapped() {
-        delegate?.onStopTapped()
+    private func stopPlayingTapped() {
+        listener?.onStopTapped()
     }
 
     @objc
-    fileprivate func onPauseResumeTapped() {
-        delegate?.onPauseResumeTapped()
+    private func onPauseResumeTapped() {
+        listener?.onPauseResumeTapped()
     }
 
     @objc
-    fileprivate func previousTapped() {
-        delegate?.onBackwardTapped()
+    private func previousTapped() {
+        listener?.onBackwardTapped()
     }
 
     @objc
-    fileprivate func nextTapped() {
-        delegate?.onForwardTapped()
+    private func nextTapped() {
+        listener?.onForwardTapped()
     }
 
     @objc
-    fileprivate func moreTapped() {
-        delegate?.onMoreTapped()
+    private func moreTapped() {
+        listener?.onMoreTapped()
     }
 
     @objc
-    fileprivate func cancelDownloadTapped() {
-        delegate?.onCancelDownloadTapped()
+    private func cancelDownloadTapped() {
+        listener?.onCancelDownloadTapped()
+    }
+
+    func presentQariList(_ viewController: ViewControllable) {
+        qariListPresenter.present(presenting: self, presented: viewController.uiviewController, pointingTo: view)
+    }
+
+    func didDismissPopover() {
+        listener?.didDismissPopover()
     }
 }

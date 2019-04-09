@@ -28,7 +28,6 @@ final class QuranBuilder: Builder, QuranBuildable {
             pageService                            : createQuranTranslationService(),
             pagesRetriever                         : QuranPagesDataRetriever(),
             ayahInfoRetriever                      : DefaultAyahInfoRetriever(persistence: SQLiteAyahInfoPersistence()),
-            audioViewPresenter                     : createAudioBannerViewPresenter(),
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
             simplePersistence                      : container.createSimplePersistence(),
@@ -46,11 +45,10 @@ final class QuranBuilder: Builder, QuranBuildable {
             interactor: interactor,
             viewController: viewController,
             deps: QuranRouter.Deps(
-                advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder(container: container),
                 translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(container: container),
-                qariListBuilder: QariListBuilder(container: container),
-                translationsSelectionBuilder: TranslationsSelectionBuilder(container: container)
+                translationsSelectionBuilder: TranslationsSelectionBuilder(container: container),
+                audioBannerBuilder: QuranAudioBannerBuilder(container: container)
         ))
     }
 
@@ -95,53 +93,6 @@ final class QuranBuilder: Builder, QuranBuildable {
                                               arabicPersistence: container.createArabicTextPersistence(),
                                               translationPersistenceCreator: container.createCreator(container.createTranslationTextPersistence),
                                               simplePersistence: container.createSimplePersistence()).asPreloadingOperationRepresentable()
-    }
-
-    private func createAudioBannerViewPresenter() -> AudioBannerViewPresenter {
-        return DefaultAudioBannerViewPresenter(persistence: container.createSimplePersistence(),
-                                               qariRetreiver: container.createQarisDataRetriever(),
-                                               gaplessAudioPlayer: createGaplessAudioPlayerInteractor(),
-                                               gappedAudioPlayer: createGappedAudioPlayerInteractor())
-    }
-
-    private func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GappedQariAudioFileListRetrieval(),
-                                    downloader: container.createDownloadManager(),
-                                    ayahDownloader: container.createAyahsAudioDownloader())
-    }
-
-    private func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GaplessQariAudioFileListRetrieval(),
-                                    downloader: container.createDownloadManager(),
-                                    ayahDownloader: container.createAyahsAudioDownloader())
-    }
-
-    private func createGaplessAudioPlayer() -> AudioPlayer {
-        return GaplessAudioPlayer(timingRetriever: createQariTimingRetriever())
-    }
-
-    private func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(),
-                                            lastAyahFinder: createJuzLastAyahFinder(),
-                                            player: createGaplessAudioPlayer())
-    }
-
-    private func createGappedAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
-                                           lastAyahFinder: createJuzLastAyahFinder(),
-                                           player: GappedAudioPlayer())
-    }
-
-    private func createJuzLastAyahFinder() -> LastAyahFinder {
-        return JuzBasedLastAyahFinder()
-    }
-
-    private func createQariTimingRetriever() -> QariTimingRetriever {
-        return SQLiteQariTimingRetriever(persistenceCreator: container.createCreator(createQariAyahTimingPersistence))
-    }
-
-    private func createQariAyahTimingPersistence(filePath: URL) -> QariAyahTimingPersistence {
-        return SQLiteAyahTimingPersistence(filePath: filePath)
     }
 
     private func createCompositeVerseTextRetriever() -> VerseTextRetriever {

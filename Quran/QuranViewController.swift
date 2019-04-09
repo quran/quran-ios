@@ -23,28 +23,23 @@ import RIBs
 import UIKit
 
 protocol QuranPresentableListener: class {
-    func onAdvancedAudioOptionsButtonTapped()
     func onWordPointerTapped()
     func onMoreBarButtonTapped()
-    func onQariListButtonTapped()
+    func onPlayButtonTapped(from: AyahNumber)
 
     func onTranslationsSelectionDoneTapped()
     func didDismissPopover()
 }
 
-class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
+class QuranViewController: BaseViewController,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
                         QuranViewControllable, QuranPresentable, PopoverPresenterDelegate {
 
-    var verseRuns: Runs { return audioViewPresenter.verseRuns }
-    var listRuns: Runs { return audioViewPresenter.listRuns }
-    var audioRange: VerseRange? { return audioViewPresenter.audioRange }
     var isWordPointerActive: Bool { return quranNavigationBar.isWordPointerActive }
 
     weak var listener: QuranPresentableListener?
 
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
-    private lazy var qariListPresenter = QariListPresenter(delegate: self)
 
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
@@ -53,7 +48,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
     private let verseTextRetriever: VerseTextRetriever
     private let pagesRetriever: QuranPagesDataRetrieverType
-    private let audioViewPresenter: AudioBannerViewPresenter
     private var simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater
 
@@ -122,7 +116,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
          pageService                            : AnyCacheableService<Int, TranslationPage>,
          pagesRetriever                         : QuranPagesDataRetrieverType,
          ayahInfoRetriever                      : AyahInfoRetriever,
-         audioViewPresenter                     : AudioBannerViewPresenter,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
@@ -136,7 +129,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         self.lastPageUpdater                        = LastPageUpdater(persistence: lastPagesPersistence)
         self.bookmarksManager                       = BookmarksManager(bookmarksPersistence: bookmarksPersistence)
         self.simplePersistence                      = simplePersistence
-        self.audioViewPresenter                     = audioViewPresenter
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
         self.verseTextRetriever                     = verseTextRetriever
@@ -162,7 +154,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
 
         self.lastPageUpdater.configure(initialPage: page, lastPage: lastPage)
 
-        audioViewPresenter.delegate = self
         imagesDataSource.delegate = self
 
         automaticallyAdjustsScrollViewInsets = false
@@ -202,8 +193,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         updateSafeAreaInsets(hidden: navigationController?.isNavigationBarHidden == true)
         quranView?.delegate = self
         quranNavigationBar.delegate = self
-
-        configureAudioView()
         quranView?.collectionView.ds_useDataSource(dataSource)
 
         // set the custom title view
@@ -214,16 +203,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
                 self?.dataSource.setItems(items)
                 self?.scrollToFirstPage()
             }
-
-        audioViewPresenter.onViewDidLoad()
-    }
-
-    private func configureAudioView() {
-        quranView?.audioView.onTouchesBegan = { [weak self] in
-            self?.stopBarHiddenTimer()
-        }
-        audioViewPresenter.view = quranView?.audioView
-        quranView?.audioView.delegate = audioViewPresenter
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -298,6 +277,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         listener?.onWordPointerTapped()
     }
 
+    // MARK: - View Controllable
+
     func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable) {
         popoverPresenter.present(presenting: self,
                                  presented: viewController.uiviewController,
@@ -310,6 +291,21 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         popoverPresenter.present(presenting: self,
                                  presented: viewController.uiviewController,
                                  poiontingTo: unwrap(navigationItem.rightBarButtonItems?.first))
+    }
+
+    func presentTranslationsSelection(_ viewController: ViewControllable) {
+        let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController.uiviewController)
+
+        viewController.uiviewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                                                            target: self,
+                                                                                            action: #selector(onTranslationsSelectionDoneTapped))
+        present(translationsNavigationController, animated: true, completion: nil)
+    }
+
+    func presentAudioBanner(_ audioBanner: ViewControllable) {
+        addChild(audioBanner.uiviewController)
+        quranView?.addAudioBannerView(audioBanner.uiviewController.view)
+        audioBanner.uiviewController.didMove(toParent: self)
     }
 
     func didDismissPopover() {
@@ -406,15 +402,6 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         listener?.onMoreBarButtonTapped()
     }
 
-    func presentTranslationsSelection(_ viewController: ViewControllable) {
-        let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController.uiviewController)
-
-        viewController.uiviewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                                                            target: self,
-                                                                                            action: #selector(onTranslationsSelectionDoneTapped))
-        present(translationsNavigationController, animated: true, completion: nil)
-    }
-
     @objc
     func onTranslationsSelectionDoneTapped() {
         listener?.onTranslationsSelectionDoneTapped()
@@ -438,34 +425,8 @@ class QuranViewController: BaseViewController, AudioBannerViewPresenterDelegate,
         dataSource.selectedDataSourceIndex = quranMode == .arabic ? 0 : 1
     }
 
-    func onQariListButtonTapped() {
-        listener?.onQariListButtonTapped()
-    }
-
-    func presentQariList(_ viewController: ViewControllable) {
-        qariListPresenter.present(presenting: self, presented: viewController.uiviewController, pointingTo: unwrap(quranView).audioView)
-    }
-
-    func updateSelectedQari() {
-        audioViewPresenter.updateSelectedQari()
-    }
-
-    func onAdvancedAudioOptionsButtonTapped() {
-        listener?.onAdvancedAudioOptionsButtonTapped()
-    }
-
-    func updateAudioOptions(to options: AdvancedAudioOptions) {
-        guard let page = currentPage() else { return }
-        audioViewPresenter.verseRuns = options.verseRuns
-        audioViewPresenter.listRuns = options.listRuns
-        audioViewPresenter.play(from: options.range.lowerBound, to: options.range.upperBound, page: page)
-    }
-
     func play(from: AyahNumber) {
-        guard let page = currentPage() else { return }
-        audioViewPresenter.verseRuns = .one
-        audioViewPresenter.listRuns = .one
-        audioViewPresenter.play(from: from, to: nil, page: page)
+        listener?.onPlayButtonTapped(from: from)
     }
 
     func highlightAyah(_ ayah: AyahNumber) {

@@ -218,11 +218,6 @@ class QuranViewController: BaseViewController,
         if !barsHiddenTimerExecuted {
             startHiddenBarsTimer()
         }
-
-        // reload when coming from translation
-        if presentedViewController is TranslationsSelectionNavigationController {
-            dataSource.invalidate()
-        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {

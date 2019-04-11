@@ -79,6 +79,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     // MARK: - TranslationsSelection
 
     func onTranslationsSelectionDoneTapped() {
+        presenter.reloadView()
         router?.dismissPresentedRouter()
     }
 

@@ -23,8 +23,13 @@ import Foundation
 protocol BookmarksPersistence {
     func retrieveAll() throws -> [Bookmark]
     func retrieve(inPage page: Int) throws -> [Bookmark]
-    func insert(_ bookmark: Bookmark) throws
-    func remove(_ bookmark: Bookmark) throws
+    func isAyahBookmarked(_ ayah: AyahNumber) throws -> Bool
+
+    func insertPageBookmark(_ page: Int) throws
+    func insertAyahBookmark(_ ayah: AyahNumber) throws
+
+    func removePageBookmark(_ page: Int) throws
+    func removeAyahBookmark(_ ayah: AyahNumber) throws
 }
 
 extension BookmarksPersistence {
@@ -47,22 +52,6 @@ extension BookmarksPersistence {
 
     func isPageBookmarked(_ page: Int) -> Bool {
         return !((try? retrieve(inPage: page))?.0.isEmpty ?? true)
-    }
-
-    func removePageBookmark(atPage page: Int) throws {
-        try remove(PageBookmark(page: page, creationDate: Date(), tags: []))
-    }
-
-    func insertPageBookmark(forPage page: Int) throws {
-        try insert(PageBookmark(page: page, creationDate: Date(), tags: []))
-    }
-
-    func removeAyahBookmark(atPage page: Int, ayah: AyahNumber) throws {
-        try remove(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
-    }
-
-    func insertAyahBookmark(forPage page: Int, ayah: AyahNumber) throws {
-        try insert(AyahBookmark(ayah: ayah, page: page, creationDate: Date(), tags: []))
     }
 
     private func split(bookmarks: [Bookmark]) -> ([PageBookmark], [AyahBookmark]) {

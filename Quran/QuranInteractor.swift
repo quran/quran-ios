@@ -16,7 +16,8 @@ protocol QuranRouting: ViewableRouting {
     func presentTranslationTextTypeSelection()
     func presentMoreMenu(withModel model: MoreMenuModel)
     func presentTranslationsSelection()
-    func presentAudioBanner(playFromAyahStream: Observable<AyahNumber>)
+    func presentAudioBanner(playFromAyahStream: PlayFromAyahStream)
+    func presentAyahMenu(input: AyahMenuInput)
 }
 
 extension QuranRouting {
@@ -48,14 +49,13 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     struct Deps {
         var simplePersistence: SimplePersistence
+        let playFromAyahStream: MutablePlayFromAyahStream
     }
 
     weak var router: QuranRouting?
     weak var listener: QuranListener?
 
     private var deps: Deps
-
-    private let playFromAyahStream = PublishRelay<AyahNumber>()
 
     init(presenter: QuranPresentable, deps: Deps) {
         self.deps = deps
@@ -66,7 +66,7 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     override func didBecomeActive() {
         super.didBecomeActive()
         presenter.setQuranMode(quranMode)
-        router?.presentAudioBanner(playFromAyahStream: playFromAyahStream.asObservable())
+        router?.presentAudioBanner(playFromAyahStream: deps.playFromAyahStream)
     }
 
     // MARK: - SimplePersistence
@@ -166,7 +166,22 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
         presenter.removeHighlighting()
     }
 
-    func onPlayButtonTapped(from: AyahNumber) {
-        playFromAyahStream.accept(from)
+    // MARK: Ayah Menu
+
+    func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint) {
+        guard let wordPosition = cell.ayahWordPosition(at: point) else {
+            return
+        }
+        router?.presentAyahMenu(input: AyahMenuInput(
+            cell: cell,
+            pointInCell: point,
+            ayah: wordPosition.ayah,
+            translationPage: (cell as? QuranTranslationCollectionPageCollectionViewCell)?.translationPage,
+            playFromAyahStream: deps.playFromAyahStream
+        ))
+    }
+
+    func dismissAyahMenu() {
+        router?.dismissPresentedRouter()
     }
 }

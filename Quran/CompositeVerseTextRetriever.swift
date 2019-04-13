@@ -22,20 +22,19 @@ import PromiseKit
 
 class CompositeVerseTextRetriever: VerseTextRetriever {
 
-    let image: VerseTextRetriever
+    let arabicText: VerseTextRetriever
     let translation: VerseTextRetriever
 
-    init(image: VerseTextRetriever, translation: VerseTextRetriever) {
-        self.image = image
+    init(arabicText: VerseTextRetriever, translation: VerseTextRetriever) {
+        self.arabicText = arabicText
         self.translation = translation
     }
 
-    func getText(for input: QuranShareData) -> Promise<[String]> {
-        if input.cell is QuranImagePageCollectionViewCell {
-            return image.getText(for: input)
-        } else if input.cell is QuranTranslationCollectionPageCollectionViewCell {
+    func getText(for input: VerseTextRetrieverInput) -> Promise<[String]> {
+        if input.translationPage == nil {
+            return arabicText.getText(for: input)
+        } else {
             return translation.getText(for: input)
         }
-        fatalError("Unsupported quran cell type.")
     }
 }

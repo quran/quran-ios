@@ -18,7 +18,7 @@ disabled_rules:
 
 opt_in_rules:
   - array_init
-  - attributes
+# - attributes
   - closure_end_indentation
   - closure_spacing
   #NOT NEEDED - conditional_returns_on_newline

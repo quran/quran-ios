@@ -10,7 +10,7 @@ import RIBs
 import RxSwift
 
 protocol QuranInteractable: Interactable, TranslationTextTypeSelectionListener,
-                MoreMenuListener, TranslationsListListener, QuranAudioBannerListener {
+                MoreMenuListener, TranslationsListListener, QuranAudioBannerListener, AyahMenuListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
@@ -20,6 +20,7 @@ protocol QuranViewControllable: ViewControllable {
     func presentMoreMenuViewController(_ viewController: ViewControllable)
     func presentTranslationsSelection(_ viewController: ViewControllable)
     func presentAudioBanner(_ viewController: ViewControllable)
+    func presentAyahMenu(_ viewController: ViewControllable)
 }
 
 final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
@@ -29,6 +30,7 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
         let moreMenuBuilder: MoreMenuBuildable
         let translationsSelectionBuilder: TranslationsSelectionBuildble
         let audioBannerBuilder: QuranAudioBannerBuildable
+        let ayahMenuBuilder: AyahMenuBuildable
     }
 
     private let deps: Deps
@@ -58,7 +60,12 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
                 { $0.presentTranslationsSelection($1) }) // swiftlint:disable:this opening_brace
     }
 
-    func presentAudioBanner(playFromAyahStream: Observable<AyahNumber>) {
+    func presentAyahMenu(input: AyahMenuInput) {
+        present({ $0.ayahMenuBuilder.build(withListener: $1, input: input) },
+                { $0.presentAyahMenu($1) }) // swiftlint:disable:this opening_brace
+    }
+
+    func presentAudioBanner(playFromAyahStream: PlayFromAyahStream) {
         let router = deps.audioBannerBuilder.build(withListener: interactor, playFromAyahStream: playFromAyahStream)
         attachChild(router)
         viewController.presentAudioBanner(router.viewControllable)

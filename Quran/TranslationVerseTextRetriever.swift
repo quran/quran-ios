@@ -24,12 +24,8 @@ class TranslationVerseTextRetriever: VerseTextRetriever {
 
     private static let numberFormatter = NumberFormatter()
 
-    func getText(for input: QuranShareData) -> Promise<[String]> {
-        guard let cell = input.cell as? QuranTranslationCollectionPageCollectionViewCell else {
-            fatalError("TranslationVerseTextRetrieval works with QuranTranslationCollectionPageCollectionViewCell")
-        }
-
-        guard let page = cell.translationPage else {
+    func getText(for input: VerseTextRetrieverInput) -> Promise<[String]> {
+        guard let page = input.translationPage else {
             return Promise.value([""])
         }
 

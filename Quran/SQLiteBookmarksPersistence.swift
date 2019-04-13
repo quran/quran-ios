@@ -106,29 +106,50 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
         }
     }
 
-    func insert(_ bookmark: Bookmark) throws {
+    func isAyahBookmarked(_ ayah: AyahNumber) throws -> Bool {
+        return try run { connection in
+            let query = Bookmarks.table.filter(
+                Bookmarks.sura == ayah.sura &&
+                Bookmarks.ayah == ayah.ayah)
+            let rows = try connection.scalar(query.count)
+            return rows > 0
+        }
+    }
+
+    func insertPageBookmark(_ page: Int) throws {
         return try run { connection in
 
-            let ayah = (bookmark as? AyahBookmark)?.ayah
-
             let insert = Bookmarks.table.insert(
-                Bookmarks.sura <- ayah?.sura,
-                Bookmarks.ayah <- ayah?.ayah,
-                Bookmarks.page <- bookmark.page,
-                Bookmarks.creationDate <- bookmark.creationDate)
+                Bookmarks.page <- page,
+                Bookmarks.creationDate <- Date())
             try connection.run(insert)
         }
     }
 
-    func remove(_ bookmark: Bookmark) throws {
+    func insertAyahBookmark(_ ayah: AyahNumber) throws {
+        return try run { connection in
+            let insert = Bookmarks.table.insert(
+                Bookmarks.sura <- ayah.sura,
+                Bookmarks.ayah <- ayah.ayah,
+                Bookmarks.page <- Quran.pageForAyah(ayah),
+                Bookmarks.creationDate <- Date())
+            try connection.run(insert)
+        }
+    }
+
+    func removePageBookmark(_ page: Int) throws {
+        return try run { connection in
+            let filter = Bookmarks.table.filter(Bookmarks.page == page)
+            try connection.run(filter.delete())
+        }
+    }
+
+    func removeAyahBookmark(_ ayah: AyahNumber) throws {
         return try run { connection in
 
-            let ayah = (bookmark as? AyahBookmark)?.ayah
-
             let filter = Bookmarks.table.filter(
-                Bookmarks.sura == ayah?.sura &&
-                Bookmarks.ayah == ayah?.ayah &&
-                Bookmarks.page == bookmark.page)
+                Bookmarks.sura == ayah.sura &&
+                Bookmarks.ayah == ayah.ayah)
             try connection.run(filter.delete())
         }
     }

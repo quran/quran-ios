@@ -17,25 +17,20 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import MenuItemKit
 import Popover_OC
 import UIKit
 import ViewConstrainer
 
 private struct GestureInfo {
     let cell: QuranBasePageCollectionViewCell
-    let indexPath: IndexPath
-    let page: QuranPage
     let position: AyahWord.Position
 }
 
 protocol QuranViewDelegate: class {
     func quranViewHideBars()
     func onQuranViewTapped(_ quranView: QuranView)
-    func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect)
-    func onErrorOccurred(error: Error)
     func onWordPointerTapped()
-    func play(from: AyahNumber)
+    func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint)
 }
 
 class QuranView: UIView, UIGestureRecognizerDelegate {
@@ -45,22 +40,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
     private weak var bottomBarConstraint: NSLayoutConstraint?
 
     private let dismissBarsTapGesture = UITapGestureRecognizer()
-    private let bookmarksPersistence: BookmarksPersistence
-    private let verseTextRetriever: VerseTextRetriever
     private let wordByWordPersistence: WordByWordTranslationPersistence
     private let simplePersistence: SimplePersistence
-
-    private var shareData: QuranShareData? {
-        didSet {
-            // remove old gestures
-            oldValue?.gestures.forEach { $0.view?.removeGestureRecognizer($0) }
-
-            // add new gestures
-            shareData?.gestures.forEach { addGestureRecognizer($0) }
-            shareData?.gestures.forEach { $0.delegate = self }
-        }
-    }
-
     var audioView: UIView?
 
     lazy var collectionView: UICollectionView = {
@@ -133,12 +114,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         unimplemented()
     }
 
-    init(bookmarksPersistence: BookmarksPersistence,
-         verseTextRetriever: VerseTextRetriever,
-         wordByWordPersistence: WordByWordTranslationPersistence,
+    init(wordByWordPersistence: WordByWordTranslationPersistence,
          simplePersistence: SimplePersistence) {
-        self.bookmarksPersistence = bookmarksPersistence
-        self.verseTextRetriever = verseTextRetriever
         self.wordByWordPersistence = wordByWordPersistence
         self.simplePersistence = simplePersistence
         super.init(frame: .zero)
@@ -231,38 +208,18 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         guard sender.state == .began else {
             return
         }
-        guard let info = gestureInfo(at: sender.location(in: self)) else {
+
+        let point = sender.location(in: self)
+        let collectionLocalPoint = collectionView.convert(point, from: self)
+        guard let indexPath = collectionView.indexPathForItem(at: collectionLocalPoint) else {
             return
         }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
+            return
+        }
+        let cellLocalPoint = cell.convert(point, from: self)
 
-        // set up dismiss gestures
-        subviews.forEach { $0.isUserInteractionEnabled = false }
-
-        let localPoint = sender.location(in: self)
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(viewPannedOrTapped))
-        let shareData = QuranShareData(location: localPoint, gestures: [tap, pan], cell: info.cell, page: info.page, ayah: info.position.ayah)
-        self.shareData = shareData
-
-        // highlight the ayah UI
-        info.cell.setHighlightedVerses([info.position.ayah], forType: .share)
-
-        // become first responder
-        assert(becomeFirstResponder(), "UIMenuController will not work with a view that cannot become first responder")
-
-        UIMenuController.shared.menuItems = [
-            createPlayMenuItem(ayah: shareData.ayah),
-            configuredBookmarkMenuItem(shareData: shareData),
-            createCopyMenuItem(),
-            createShareMenuItem()
-        ]
-        UIMenuController.shared.setTargetRect(targetRect(for: localPoint), in: self)
-        UIMenuController.shared.setMenuVisible(true, animated: true)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(resignFirstResponder),
-                                               name: UIMenuController.willHideMenuNotification,
-                                               object: nil)
+        delegate?.onViewLongTapped(cell: cell, point: cellLocalPoint)
     }
 
     private func gestureInfo(at point: CGPoint) -> GestureInfo? {
@@ -273,143 +230,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? QuranBasePageCollectionViewCell else {
             return nil
         }
-        guard let page = cell.page else {
-            return nil
-        }
         let cellLocalPoint = cell.convert(point, from: self)
         guard let position = cell.ayahWordPosition(at: cellLocalPoint) else {
             return nil
         }
-        return GestureInfo(cell: cell, indexPath: indexPath, page: page, position: position)
-    }
-
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-
-    override func resignFirstResponder() -> Bool {
-        // update the model
-        shareData?.cell.setHighlightedVerses(nil, forType: .share)
-
-        // hide the menu controller
-        NotificationCenter.default.removeObserver(self, name: UIMenuController.willHideMenuNotification, object: nil)
-        UIMenuController.shared.setMenuVisible(false, animated: true)
-
-        // remove gestures
-        subviews.forEach { $0.isUserInteractionEnabled = true }
-
-        shareData = nil
-
-        return super.resignFirstResponder()
-    }
-
-    @objc
-    private func viewPannedOrTapped() {
-        // resign first responder
-        _ = resignFirstResponder()
-    }
-
-    /// Did click on copy menu item
-    private func copyVerse() {
-        retrieveSelectedAyahText { textLines in
-            let pasteBoard = UIPasteboard.general
-            pasteBoard.string = textLines.joined(separator: "\n")
-        }
-    }
-
-    /// Did click on share menu item
-    private func shareVerse() {
-        guard let shareData = shareData else {
-            return
-        }
-
-        retrieveSelectedAyahText { textLines in
-            self.delegate?.quranView(self,
-                                     didSelectTextLinesToShare: textLines,
-                                     sourceView: self,
-                                     sourceRect: self.targetRect(for: shareData.location))
-        }
-    }
-
-    private func createCopyMenuItem() -> UIMenuItem {
-        return UIMenuItem(title: l("verseCopy")) { [weak self] _ in
-            self?.copyVerse()
-        }
-    }
-
-    private func createShareMenuItem() -> UIMenuItem {
-        return UIMenuItem(title: l("verseShare")) { [weak self] _ in
-            self?.shareVerse()
-        }
-    }
-
-    private func createPlayMenuItem(ayah: AyahNumber) -> UIMenuItem {
-        let image = #imageLiteral(resourceName: "ic_play").scaled(toHeight: 25)?.tintedImage(withColor: .white)
-        return UIMenuItem(title: "Play", image: image) { [weak self] _ in
-            Analytics.shared.playFrom(menu: true)
-            self?.delegate?.play(from: ayah)
-        }
-    }
-
-    private func configuredBookmarkMenuItem(shareData: QuranShareData) -> UIMenuItem {
-        let isBookmarked = shareData.cell.highlightedVerse(forType: .bookmark)?.contains(shareData.ayah) ?? false
-        if isBookmarked {
-            let image = #imageLiteral(resourceName: "bookmark-filled").tintedImage(withColor: .bookmark())
-            return UIMenuItem(title: "Unbookmark", image: image) { [weak self] _ in
-                self?.removeAyahFromBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)
-            }
-        } else {
-            let image = #imageLiteral(resourceName: "bookmark-empty").tintedImage(withColor: .white)
-            return UIMenuItem(title: "Bookmark", image: image) { [weak self] _ in
-                self?.addAyahToBookmarks(atPage: shareData.page.pageNumber, ayah: shareData.ayah, cell: shareData.cell)
-            }
-        }
-    }
-
-    private func removeAyahFromBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        Analytics.shared.unbookmark(ayah: ayah)
-        DispatchQueue.global()
-            .async(.promise) { try self.bookmarksPersistence.removeAyahBookmark(atPage: page, ayah: ayah) }
-            .done(on: .main) { _ -> Void in
-                // remove bookmark from model
-                var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
-                bookmarks.remove(ayah)
-                cell.setHighlightedVerses(bookmarks, forType: .bookmark)
-            }.cauterize(tag: "BookmarksPersistence.removeAyahBookmark")
-    }
-
-    private func addAyahToBookmarks(atPage page: Int, ayah: AyahNumber, cell: QuranBasePageCollectionViewCell) {
-        Analytics.shared.bookmark(ayah: ayah)
-        DispatchQueue.global()
-            .async(.promise) { try self.bookmarksPersistence.insertAyahBookmark(forPage: page, ayah: ayah) }
-            .done(on: .main) { _ -> Void in
-                // add a bookmark to the model
-                var bookmarks = cell.highlightedVerse(forType: .bookmark) ?? Set()
-                bookmarks.insert(ayah)
-                cell.setHighlightedVerses(bookmarks, forType: .bookmark)
-            }.cauterize(tag: "BookmarksPersistence.insertAyahBookmark")
-    }
-
-    /**
-     Get the current highlighted ayah text.
-     */
-    private func retrieveSelectedAyahText(completion: @escaping ([String]) -> Void) {
-        guard let shareData = shareData else {
-            return
-        }
-
-        verseTextRetriever
-            .getText(for: shareData)
-            .map { $0 + [shareData.ayah.localizedName] + l("shareMarketingSuffix").components(separatedBy: "\n") }
-            .done(on: .main, completion)
-            .catch(on: .main) { (error) in
-                self.delegate?.onErrorOccurred(error: error)
-            }
-    }
-
-    private func targetRect(for point: CGPoint) -> CGRect {
-        let size = CGSize(width: 20, height: 20)
-        return CGRect(origin: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2), size: size)
+        return GestureInfo(cell: cell, position: position)
     }
 
     // MARK: - Word-by-word Pointer

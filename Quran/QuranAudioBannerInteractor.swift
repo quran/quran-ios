@@ -89,14 +89,14 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         }
     }
 
-    private let playFromAyahStream: Observable<AyahNumber>
+    private let playFromAyahStream: PlayFromAyahStream
 
     init(presenter: QuranAudioBannerPresentable,
          persistence: SimplePersistence,
          qariRetreiver: QariDataRetrieverType,
          gaplessAudioPlayer: AudioPlayerInteractor,
          gappedAudioPlayer: AudioPlayerInteractor,
-         playFromAyahStream: Observable<AyahNumber>) {
+         playFromAyahStream: PlayFromAyahStream) {
         self.persistence = persistence
         self.qariRetreiver = qariRetreiver
         self.gaplessAudioPlayer = gaplessAudioPlayer
@@ -127,7 +127,7 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
                 }
             }
 
-        playFromAyahStream.subscribe(onNext: { (ayah) in
+        playFromAyahStream.ayah.subscribe(onNext: { (ayah) in
             self.play(from: ayah)
         }).disposeOnDeactivate(interactor: self)
     }
@@ -138,6 +138,7 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         }
         self.listRuns = .one
         self.verseRuns = .one
+        Analytics.shared.playFrom(menu: true)
         self.play(from: ayah, to: nil, page: page)
     }
 

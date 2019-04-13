@@ -1,5 +1,5 @@
 //
-//  QuranShareData.swift
+//  ArabicVerseTextRetriever.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/4/17.
@@ -18,12 +18,19 @@
 //  GNU General Public License for more details.
 //
 
-import UIKit
+import PromiseKit
 
-struct QuranShareData {
-    let location: CGPoint
-    let gestures: [UIGestureRecognizer]
-    let cell: QuranBasePageCollectionViewCell
-    let page: QuranPage
-    let ayah: AyahNumber
+class ArabicVerseTextRetriever: VerseTextRetriever {
+
+    private let arabicAyahPersistence: AyahTextPersistence
+
+    init(arabicAyahPersistence: AyahTextPersistence) {
+        self.arabicAyahPersistence = arabicAyahPersistence
+    }
+
+    func getText(for input: VerseTextRetrieverInput) -> Promise<[String]> {
+        return DispatchQueue.global().async(.promise) {
+            [try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)]
+        }
+    }
 }

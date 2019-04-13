@@ -31,14 +31,14 @@ final class QuranBuilder: Builder, QuranBuildable {
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
             simplePersistence                      : container.createSimplePersistence(),
-            verseTextRetriever                     : createCompositeVerseTextRetriever(),
             wordByWordPersistence                  : SQLiteArabicTextPersistence(),
             page                                   : page,
             lastPage                               : lastPage,
             highlightedSearchAyah                  : highlightAyah
         )
         let interactor = QuranInteractor(presenter: viewController, deps: QuranInteractor.Deps(
-            simplePersistence: container.createSimplePersistence()
+            simplePersistence: container.createSimplePersistence(),
+            playFromAyahStream: PlayFromAyahStreamImpl()
         ))
         interactor.listener = listener
         return QuranRouter(
@@ -48,7 +48,8 @@ final class QuranBuilder: Builder, QuranBuildable {
                 translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(container: container),
                 translationsSelectionBuilder: TranslationsSelectionBuilder(container: container),
-                audioBannerBuilder: QuranAudioBannerBuilder(container: container)
+                audioBannerBuilder: QuranAudioBannerBuilder(container: container),
+                ayahMenuBuilder: AyahMenuBuilder(container: container)
         ))
     }
 
@@ -93,11 +94,5 @@ final class QuranBuilder: Builder, QuranBuildable {
                                               arabicPersistence: container.createArabicTextPersistence(),
                                               translationPersistenceCreator: container.createCreator(container.createTranslationTextPersistence),
                                               simplePersistence: container.createSimplePersistence()).asPreloadingOperationRepresentable()
-    }
-
-    private func createCompositeVerseTextRetriever() -> VerseTextRetriever {
-        return CompositeVerseTextRetriever(
-            image: ImageVerseTextRetriever(arabicAyahPersistence: container.createArabicTextPersistence()),
-            translation: TranslationVerseTextRetriever())
     }
 }

@@ -8,6 +8,11 @@
 
 import PromiseKit
 
+struct VerseTextRetrieverInput {
+    let ayah: AyahNumber
+    let translationPage: TranslationPage?
+}
+
 protocol VerseTextRetriever {
-    func getText(for input: QuranShareData) -> Promise<[String]>
+    func getText(for input: VerseTextRetrieverInput) -> Promise<[String]>
 }

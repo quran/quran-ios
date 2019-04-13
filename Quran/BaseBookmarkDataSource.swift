@@ -50,7 +50,15 @@ class BaseBookmarkDataSource<ItemType: Bookmark, CellType: ReusableCell>: Editab
         }
 
         DispatchQueue.global().async(.promise) {
-            try self.persistence.remove(item)
+            if let page = item as? PageBookmark {
+                Analytics.shared.unbookmark(quranPage: page.page)
+                try self.persistence.removePageBookmark(page.page)
+            } else if let ayah = item as? AyahBookmark {
+                Analytics.shared.unbookmark(ayah: ayah.ayah)
+                try self.persistence.removeAyahBookmark(ayah.ayah)
+            } else {
+                fatalError("Unsupported bookmark type '\(type(of: item))'")
+            }
         }.done(on: .main) {
             guard indexPath.item < self.items.count else {
                 return

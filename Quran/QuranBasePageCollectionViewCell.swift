@@ -20,7 +20,7 @@
 import PromiseKit
 import UIKit
 
-class QuranBasePageCollectionViewCell: BackgroundThemedCollectionViewCell {
+class QuranBasePageCollectionViewCell: BackgroundThemedCollectionViewCell, AyahMenuCell {
 
     var onScrollViewWillBeginDragging: (() -> Void)? {
         get { return scrollNotifier.onScrollViewWillBeginDragging }

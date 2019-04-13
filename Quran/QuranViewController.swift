@@ -25,7 +25,7 @@ import UIKit
 protocol QuranPresentableListener: class {
     func onWordPointerTapped()
     func onMoreBarButtonTapped()
-    func onPlayButtonTapped(from: AyahNumber)
+    func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint)
 
     func onTranslationsSelectionDoneTapped()
     func didDismissPopover()
@@ -45,8 +45,6 @@ class QuranViewController: BaseViewController,
     private let bookmarksPersistence: BookmarksPersistence
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
-
-    private let verseTextRetriever: VerseTextRetriever
     private let pagesRetriever: QuranPagesDataRetrieverType
     private var simplePersistence: SimplePersistence
     private var lastPageUpdater: LastPageUpdater
@@ -119,7 +117,6 @@ class QuranViewController: BaseViewController,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
-         verseTextRetriever                     : VerseTextRetriever,
          wordByWordPersistence                  : WordByWordTranslationPersistence,
          page                                   : Int,
          lastPage                               : LastPage?,
@@ -131,7 +128,6 @@ class QuranViewController: BaseViewController,
         self.simplePersistence                      = simplePersistence
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
-        self.verseTextRetriever                     = verseTextRetriever
         self.highlightedSearchAyah                  = highlightedSearchAyah
         self.wordByWordPersistence                  = wordByWordPersistence
 
@@ -178,10 +174,7 @@ class QuranViewController: BaseViewController,
     }
 
     override func loadView() {
-        view = QuranView(bookmarksPersistence: bookmarksPersistence,
-                         verseTextRetriever: verseTextRetriever,
-                         wordByWordPersistence: wordByWordPersistence,
-                         simplePersistence: simplePersistence)
+        view = QuranView(wordByWordPersistence: wordByWordPersistence, simplePersistence: simplePersistence)
     }
 
     override func viewDidLoad() {
@@ -264,12 +257,12 @@ class QuranViewController: BaseViewController,
         setBarsHidden(true)
     }
 
-    func quranView(_ quranView: QuranView, didSelectTextLinesToShare textLines: [String], sourceView: UIView, sourceRect: CGRect) {
-        ShareController.share(textLines: textLines, sourceView: sourceView, sourceRect: sourceRect, sourceViewController: self, handler: nil)
-    }
-
     func onWordPointerTapped() {
         listener?.onWordPointerTapped()
+    }
+
+    func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint) {
+        listener?.onViewLongTapped(cell: cell, point: point)
     }
 
     // MARK: - View Controllable
@@ -290,7 +283,6 @@ class QuranViewController: BaseViewController,
 
     func presentTranslationsSelection(_ viewController: ViewControllable) {
         let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController.uiviewController)
-
         viewController.uiviewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
                                                                                             target: self,
                                                                                             action: #selector(onTranslationsSelectionDoneTapped))
@@ -301,6 +293,11 @@ class QuranViewController: BaseViewController,
         addChild(audioBanner.uiviewController)
         quranView?.addAudioBannerView(audioBanner.uiviewController.view)
         audioBanner.uiviewController.didMove(toParent: self)
+    }
+
+    func presentAyahMenu(_ viewController: ViewControllable) {
+        viewController.uiviewController.modalPresentationStyle = .overCurrentContext
+        present(viewController.uiviewController, animated: false, completion: nil)
     }
 
     func didDismissPopover() {
@@ -420,10 +417,6 @@ class QuranViewController: BaseViewController,
         dataSource.selectedDataSourceIndex = quranMode == .arabic ? 0 : 1
     }
 
-    func play(from: AyahNumber) {
-        listener?.onPlayButtonTapped(from: from)
-    }
-
     func highlightAyah(_ ayah: AyahNumber) {
         var set = Set<AyahNumber>()
         set.insert(ayah)
@@ -444,9 +437,5 @@ class QuranViewController: BaseViewController,
 
     func currentPage() -> QuranPage? {
         return quranView?.visibleIndexPath().map { dataSource.selectedBasicDataSource.item(at: $0) }
-    }
-
-    func onErrorOccurred(error: Error) {
-        showErrorAlert(error: error)
     }
 }

@@ -10,12 +10,12 @@ import RIBs
 import RxSwift
 
 protocol QuranAudioBannerBuildable: Buildable {
-    func build(withListener listener: QuranAudioBannerListener, playFromAyahStream: Observable<AyahNumber>) -> QuranAudioBannerRouting
+    func build(withListener listener: QuranAudioBannerListener, playFromAyahStream: PlayFromAyahStream) -> QuranAudioBannerRouting
 }
 
 final class QuranAudioBannerBuilder: Builder, QuranAudioBannerBuildable {
 
-    func build(withListener listener: QuranAudioBannerListener, playFromAyahStream: Observable<AyahNumber>) -> QuranAudioBannerRouting {
+    func build(withListener listener: QuranAudioBannerListener, playFromAyahStream: PlayFromAyahStream) -> QuranAudioBannerRouting {
         let viewController = QuranAudioBannerViewController()
         let interactor = QuranAudioBannerInteractor(
             presenter: viewController,

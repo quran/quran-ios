@@ -33,6 +33,8 @@
 		068323B5225A5E6800D01297 /* TranslationsSelectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */; };
 		068323B7225A9A2800D01297 /* BasicDataSource+Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */; };
 		06832445225AF55500D01297 /* VerseTextRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06832444225AF55500D01297 /* VerseTextRetriever.swift */; };
+		06A18C49226398A400E68CB0 /* HideWordPointerStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A18C48226398A400E68CB0 /* HideWordPointerStream.swift */; };
+		06A18C4B2263BD5900E68CB0 /* ShowWordPointerStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A18C4A2263BD5900E68CB0 /* ShowWordPointerStream.swift */; };
 		06A7E682225115A800AC2634 /* TabBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E681225115A800AC2634 /* TabBuilder.swift */; };
 		06A7E684225118BF00AC2634 /* JuzsTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */; };
 		06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7E685225119A400AC2634 /* SurasTabRouter.swift */; };
@@ -90,6 +92,10 @@
 		06BFAC16225F987300E34DCA /* AyahMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC12225F987300E34DCA /* AyahMenuBuilder.swift */; };
 		06BFAC17225F987300E34DCA /* AyahMenuInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC13225F987300E34DCA /* AyahMenuInteractor.swift */; };
 		06BFAC1F225FDDDF00E34DCA /* PlayFromAyahStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC1E225FDDDF00E34DCA /* PlayFromAyahStream.swift */; };
+		06BFAC702262886700E34DCA /* WordPointerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6C2262886700E34DCA /* WordPointerRouter.swift */; };
+		06BFAC712262886700E34DCA /* WordPointerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6D2262886700E34DCA /* WordPointerViewController.swift */; };
+		06BFAC722262886700E34DCA /* WordPointerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6E2262886700E34DCA /* WordPointerBuilder.swift */; };
+		06BFAC732262886700E34DCA /* WordPointerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6F2262886700E34DCA /* WordPointerInteractor.swift */; };
 		0D0BF1B4207F42E40022B6EE /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* ReviewService.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
@@ -614,6 +620,8 @@
 		068323B4225A5E6800D01297 /* TranslationsSelectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSelectionBuilder.swift; sourceTree = "<group>"; };
 		068323B6225A9A2700D01297 /* BasicDataSource+Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicDataSource+Selection.swift"; sourceTree = "<group>"; };
 		06832444225AF55500D01297 /* VerseTextRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseTextRetriever.swift; sourceTree = "<group>"; };
+		06A18C48226398A400E68CB0 /* HideWordPointerStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideWordPointerStream.swift; sourceTree = "<group>"; };
+		06A18C4A2263BD5900E68CB0 /* ShowWordPointerStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowWordPointerStream.swift; sourceTree = "<group>"; };
 		06A7E681225115A800AC2634 /* TabBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBuilder.swift; sourceTree = "<group>"; };
 		06A7E683225118BF00AC2634 /* JuzsTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuzsTabRouter.swift; sourceTree = "<group>"; };
 		06A7E685225119A400AC2634 /* SurasTabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurasTabRouter.swift; sourceTree = "<group>"; };
@@ -671,6 +679,10 @@
 		06BFAC12225F987300E34DCA /* AyahMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AyahMenuBuilder.swift; sourceTree = "<group>"; };
 		06BFAC13225F987300E34DCA /* AyahMenuInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AyahMenuInteractor.swift; sourceTree = "<group>"; };
 		06BFAC1E225FDDDF00E34DCA /* PlayFromAyahStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayFromAyahStream.swift; sourceTree = "<group>"; };
+		06BFAC6C2262886700E34DCA /* WordPointerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerRouter.swift; sourceTree = "<group>"; };
+		06BFAC6D2262886700E34DCA /* WordPointerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerViewController.swift; sourceTree = "<group>"; };
+		06BFAC6E2262886700E34DCA /* WordPointerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerBuilder.swift; sourceTree = "<group>"; };
+		06BFAC6F2262886700E34DCA /* WordPointerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerInteractor.swift; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D0BF1B3207F42E40022B6EE /* ReviewService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewService.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1422,6 +1434,19 @@
 				06BFAC11225F987300E34DCA /* AyahMenuViewController.swift */,
 			);
 			name = AyahMenu;
+			sourceTree = "<group>";
+		};
+		06BFAC6B2262885200E34DCA /* WordPointer */ = {
+			isa = PBXGroup;
+			children = (
+				06BFAC6E2262886700E34DCA /* WordPointerBuilder.swift */,
+				06BFAC6F2262886700E34DCA /* WordPointerInteractor.swift */,
+				06BFAC6C2262886700E34DCA /* WordPointerRouter.swift */,
+				06BFAC6D2262886700E34DCA /* WordPointerViewController.swift */,
+				06A18C48226398A400E68CB0 /* HideWordPointerStream.swift */,
+				06A18C4A2263BD5900E68CB0 /* ShowWordPointerStream.swift */,
+			);
+			name = WordPointer;
 			sourceTree = "<group>";
 		};
 		540031E51E99705400BB4B7B /* Analytics */ = {
@@ -2233,6 +2258,7 @@
 				54B265FE1CC57E4000D3AEF8 /* UI */,
 				54FD7BA11EB9339600FA485F /* UserDefaults */,
 				54F35F63216A649D00276220 /* Word Translation */,
+				06BFAC6B2262885200E34DCA /* WordPointer */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -3725,7 +3751,9 @@
 				06B2409522482A020003D628 /* LaunchRouting+Extensions.swift in Sources */,
 				5494CCB71CEFAB9500031686 /* SQLiteQariTimingRetriever.swift in Sources */,
 				06B2409422482A020003D628 /* NavigationRouter+Pop.swift in Sources */,
+				06BFAC732262886700E34DCA /* WordPointerInteractor.swift in Sources */,
 				542DCBDC1ECC97DD0023D6FD /* SearchNoResultTableViewCell.swift in Sources */,
+				06A18C49226398A400E68CB0 /* HideWordPointerStream.swift in Sources */,
 				06A7E6B42252F5C000AC2634 /* MoreMenuBuilder.swift in Sources */,
 				06A7E69F225155F700AC2634 /* QuranRouter.swift in Sources */,
 				54AC67211E8B0F4900FBE96E /* TextRenderPreloadingOperation.swift in Sources */,
@@ -3784,6 +3812,7 @@
 				5459FF681EA4E79C00FBF6C5 /* DownloadableQariAudioRetriever.swift in Sources */,
 				544EC36E20BA6BCF00D2E7B5 /* SearchAutocompleteTableViewCell.swift in Sources */,
 				541092F31EAAA32F009471CB /* AyahsAudioDownloader.swift in Sources */,
+				06BFAC722262886700E34DCA /* WordPointerBuilder.swift in Sources */,
 				544629F01E75650A005B1107 /* SQLiteDatabaseVersionPersistence.swift in Sources */,
 				54F8C4241EA8104F00C853C6 /* DownloadingObserver.swift in Sources */,
 				54F56C4F1E7EDA5300D7AF57 /* QuranTranslationsDataSource.swift in Sources */,
@@ -3833,6 +3862,7 @@
 				068323AA225A563B00D01297 /* AudioDownloadsInteractor.swift in Sources */,
 				547BCB5920915611007AFBEC /* MoreTranslationsSelectionTableViewCell.swift in Sources */,
 				54B135741E5E458E0087D0F8 /* TranslationsViewController.swift in Sources */,
+				06BFAC712262886700E34DCA /* WordPointerViewController.swift in Sources */,
 				54B266A11CCD8D3200D3AEF8 /* SurasDataRetriever.swift in Sources */,
 				54D133D51EF76FCD00037D8C /* AyahWord.swift in Sources */,
 				54B2660F1CC6D39300D3AEF8 /* SearchTabViewController.swift in Sources */,
@@ -3851,12 +3881,14 @@
 				54B266061CC6D32F00D3AEF8 /* SurasTabViewController.swift in Sources */,
 				54A99CB21CF7A649003995AE /* BookmarkTableViewCell.swift in Sources */,
 				06A7E686225119A400AC2634 /* SurasTabRouter.swift in Sources */,
+				06A18C4B2263BD5900E68CB0 /* ShowWordPointerStream.swift in Sources */,
 				54547EAA1ECA7D75008AFED3 /* FullScreenLoadingDataSource.swift in Sources */,
 				54B266091CC6D35300D3AEF8 /* JuzsTabViewController.swift in Sources */,
 				547BCB66209299A0007AFBEC /* EmptyTableViewCell.swift in Sources */,
 				06B240A622482D5C0003D628 /* JuzsBuilder.swift in Sources */,
 				06B240CA22483C1B0003D628 /* SettingsTabBuilder.swift in Sources */,
 				06B2408F22482A020003D628 /* UIViewController+Extensions.swift in Sources */,
+				06BFAC702262886700E34DCA /* WordPointerRouter.swift in Sources */,
 				54F5B4361CFAE5C80002A3B8 /* BaseTableBasedViewController.swift in Sources */,
 				5487461D1CE9F54E00EED886 /* GappedAudioPlayer.swift in Sources */,
 				06832445225AF55500D01297 /* VerseTextRetriever.swift in Sources */,

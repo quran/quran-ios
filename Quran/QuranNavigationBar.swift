@@ -32,8 +32,6 @@ class QuranNavigationBar {
 
     weak var delegate: QuranNavigationBarDelegate?
 
-    var isWordPointerActive: Bool = false
-
     init(simplePersistence: SimplePersistence) {
         self.simplePersistence = simplePersistence
     }

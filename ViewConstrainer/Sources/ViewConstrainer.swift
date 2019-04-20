@@ -221,6 +221,21 @@ extension ViewConstrainer {
     }
 
     @discardableResult
+    public func left(by value: CGFloat = 0, usesMargins: Bool = false) -> SingleConstrainer {
+        return constraintToSuperview(on: .left, by: value, superviewFirst: false, usesMargins: usesMargins)
+    }
+
+    @discardableResult
+    public func left(to view: UIView, by value: CGFloat = 0) -> SingleConstrainer {
+        return SingleConstrainer(constrainer: self, group: left(to: [view], by: value))
+    }
+
+    @discardableResult
+    public func left(to views: [UIView], by value: CGFloat = 0) -> GroupConstrainer {
+        return align(views: views, by: value, on: .left)
+    }
+
+    @discardableResult
     public func trailing(by value: CGFloat = 0, usesMargins: Bool = false) -> SingleConstrainer {
         return constraintToSuperview(on: .trailing, by: value, superviewFirst: true, usesMargins: usesMargins)
     }
@@ -233,6 +248,21 @@ extension ViewConstrainer {
     @discardableResult
     public func trailing(to views: [UIView], by value: CGFloat = 0) -> GroupConstrainer {
         return align(views: views, by: value, on: .trailing)
+    }
+
+    @discardableResult
+    public func right(by value: CGFloat = 0, usesMargins: Bool = false) -> SingleConstrainer {
+        return constraintToSuperview(on: .right, by: value, superviewFirst: true, usesMargins: usesMargins)
+    }
+
+    @discardableResult
+    public func right(to view: UIView, by value: CGFloat = 0) -> SingleConstrainer {
+        return SingleConstrainer(constrainer: self, group: right(to: [view], by: value))
+    }
+
+    @discardableResult
+    public func right(to views: [UIView], by value: CGFloat = 0) -> GroupConstrainer {
+        return align(views: views, by: value, on: .right)
     }
 
     @discardableResult

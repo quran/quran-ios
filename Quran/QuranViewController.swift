@@ -23,7 +23,6 @@ import RIBs
 import UIKit
 
 protocol QuranPresentableListener: class {
-    func onWordPointerTapped()
     func onMoreBarButtonTapped()
     func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint)
 
@@ -35,13 +34,10 @@ class QuranViewController: BaseViewController,
                         QuranDataSourceDelegate, QuranViewDelegate, QuranNavigationBarDelegate,
                         QuranViewControllable, QuranPresentable, PopoverPresenterDelegate {
 
-    var isWordPointerActive: Bool { return quranNavigationBar.isWordPointerActive }
-
     weak var listener: QuranPresentableListener?
 
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
 
-    private let wordByWordPersistence: WordByWordTranslationPersistence
     private let bookmarksPersistence: BookmarksPersistence
     private let bookmarksManager: BookmarksManager
     private let quranNavigationBar: QuranNavigationBar
@@ -117,7 +113,6 @@ class QuranViewController: BaseViewController,
          bookmarksPersistence                   : BookmarksPersistence,
          lastPagesPersistence                   : LastPagesPersistence,
          simplePersistence                      : SimplePersistence,
-         wordByWordPersistence                  : WordByWordTranslationPersistence,
          page                                   : Int,
          lastPage                               : LastPage?,
          highlightedSearchAyah                  : AyahNumber?) {
@@ -129,7 +124,6 @@ class QuranViewController: BaseViewController,
         self.quranNavigationBar                     = QuranNavigationBar(simplePersistence: simplePersistence)
         self.bookmarksPersistence                   = bookmarksPersistence
         self.highlightedSearchAyah                  = highlightedSearchAyah
-        self.wordByWordPersistence                  = wordByWordPersistence
 
         let imagesDataSource = QuranImagesDataSource(
             imageService: imageService,
@@ -174,7 +168,7 @@ class QuranViewController: BaseViewController,
     }
 
     override func loadView() {
-        view = QuranView(wordByWordPersistence: wordByWordPersistence, simplePersistence: simplePersistence)
+        view = QuranView()
     }
 
     override func viewDidLoad() {
@@ -253,27 +247,35 @@ class QuranViewController: BaseViewController,
         setBarsHidden(navigationController?.isNavigationBarHidden == false)
     }
 
-    func quranViewHideBars() {
-        setBarsHidden(true)
-    }
-
-    func onWordPointerTapped() {
-        listener?.onWordPointerTapped()
-    }
-
     func onViewLongTapped(cell: QuranBasePageCollectionViewCell, point: CGPoint) {
         listener?.onViewLongTapped(cell: cell, point: point)
     }
 
-    // MARK: - View Controllable
+    // MARK: - Word Pointer
 
-    func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable) {
-        popoverPresenter.present(presenting: self,
-                                 presented: viewController.uiviewController,
-                                 pointingTo: unwrap(quranView).pointer,
-                                 at: quranView?.pointer.bounds ?? .zero,
-                                 permittedArrowDirections: [.left, .right])
+    func hideBars() {
+        setBarsHidden(true)
     }
+
+    func highlightWordPosition(_ position: AyahWord.Position?) {
+        quranView?.highlightWordPosition(position)
+    }
+
+    func getWordPosition(at point: CGPoint, in view: UIView) -> AyahWord.Position? {
+        return quranView?.getWordPosition(at: point, in: view)
+    }
+
+    func presentWordPointer(_ viewController: ViewControllable) {
+        addChild(viewController.uiviewController)
+        quranView?.addWordPointerView(viewController.uiviewController.view)
+        viewController.uiviewController.didMove(toParent: self)
+    }
+
+    func dismissWordPointer(_ viewController: ViewControllable) {
+        removeChild(viewController.uiviewController)
+    }
+
+    // MARK: - View Controllable
 
     func presentMoreMenuViewController(_ viewController: ViewControllable) {
         popoverPresenter.present(presenting: self,
@@ -397,16 +399,6 @@ class QuranViewController: BaseViewController,
     @objc
     func onTranslationsSelectionDoneTapped() {
         listener?.onTranslationsSelectionDoneTapped()
-    }
-
-    func showWordPointer() {
-        quranNavigationBar.isWordPointerActive = true
-        quranView?.showPointer()
-    }
-
-    func hideWordPointer() {
-        quranNavigationBar.isWordPointerActive = false
-        quranView?.hidePointer()
     }
 
     func reloadView() {

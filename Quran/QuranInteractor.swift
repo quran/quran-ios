@@ -13,11 +13,14 @@ import RxSwift
 protocol QuranRouting: ViewableRouting {
     func dismissPresentedRouter(completion: (() -> Void)?)
 
-    func presentTranslationTextTypeSelection()
     func presentMoreMenu(withModel model: MoreMenuModel)
     func presentTranslationsSelection()
     func presentAudioBanner(playFromAyahStream: PlayFromAyahStream)
     func presentAyahMenu(input: AyahMenuInput)
+
+    func presentWordPointerIfNeeded(hideWordPointerStream: HideWordPointerStream,
+                                    showWordPointerStream: ShowWordPointerStream)
+    func dismissWordPointer()
 }
 
 extension QuranRouting {
@@ -29,17 +32,18 @@ extension QuranRouting {
 protocol QuranPresentable: Presentable {
     var listener: QuranPresentableListener? { get set }
 
-    var isWordPointerActive: Bool { get }
-
     func setQuranMode(_ quranMode: QuranMode)
-    func showWordPointer()
-    func hideWordPointer()
     func reloadView()
 
-    func currentPage() -> QuranPage?
     func stopBarHiddenTimer()
+    func hideBars()
+
+    func currentPage() -> QuranPage?
     func highlightAyah(_ ayah: AyahNumber)
     func removeHighlighting()
+
+    func getWordPosition(at point: CGPoint, in view: UIView) -> AyahWord.Position?
+    func highlightWordPosition(_ position: AyahWord.Position?)
 }
 
 protocol QuranListener: class {
@@ -50,12 +54,15 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     struct Deps {
         var simplePersistence: SimplePersistence
         let playFromAyahStream: MutablePlayFromAyahStream
+        let hideWordPointerStream: MutableHideWordPointerStream
+        let showWordPointerStream: MutableShowWordPointerStream
     }
 
     weak var router: QuranRouting?
     weak var listener: QuranListener?
-
     private var deps: Deps
+
+    private var isWordPointerActive: Bool = false
 
     init(presenter: QuranPresentable, deps: Deps) {
         self.deps = deps
@@ -89,22 +96,12 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
         router?.dismissPresentedRouter()
     }
 
-    // MARK: - Word Translation Type Selection
-
-    func onWordPointerTapped() {
-        router?.presentTranslationTextTypeSelection()
-    }
-
-    func dismissTranslationTextTypeSelection() {
-        router?.dismissPresentedRouter()
-    }
-
     // MARK: - More Menu
 
     func onMoreBarButtonTapped() {
         router?.presentMoreMenu(withModel: MoreMenuModel(
             mode: quranMode,
-            isWordPointerActive: presenter.isWordPointerActive,
+            isWordPointerActive: isWordPointerActive,
             fontSize: deps.simplePersistence.fontSize,
             theme: deps.simplePersistence.theme
         ))
@@ -131,10 +128,11 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
     }
 
     func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool) {
+        self.isWordPointerActive = isWordPointerActive
         if isWordPointerActive {
-            presenter.showWordPointer()
+            showWordPointer()
         } else {
-            presenter.hideWordPointer()
+            hideWordPointer()
         }
     }
 
@@ -183,5 +181,33 @@ final class QuranInteractor: PresentableInteractor<QuranPresentable>, QuranInter
 
     func dismissAyahMenu() {
         router?.dismissPresentedRouter()
+    }
+
+    // MARK: - Word Pointer
+
+    func onWordPointerPanBegan() {
+        presenter.hideBars()
+    }
+
+    func getWordPosition(at point: CGPoint, in view: UIView) -> AyahWord.Position? {
+        return presenter.getWordPosition(at: point, in: view)
+    }
+
+    func highlightWordPosition(_ position: AyahWord.Position?) {
+        presenter.highlightWordPosition(position)
+    }
+
+    func dismissWordPointer() {
+        router?.dismissWordPointer()
+    }
+
+    private func showWordPointer() {
+        router?.presentWordPointerIfNeeded(hideWordPointerStream: deps.hideWordPointerStream,
+                                           showWordPointerStream: deps.showWordPointerStream)
+        deps.showWordPointerStream.showWordPointer()
+    }
+
+    private func hideWordPointer() {
+        deps.hideWordPointerStream.hideWordPointer()
     }
 }

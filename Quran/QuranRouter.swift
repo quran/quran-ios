@@ -9,28 +9,30 @@
 import RIBs
 import RxSwift
 
-protocol QuranInteractable: Interactable, TranslationTextTypeSelectionListener,
+protocol QuranInteractable: Interactable, WordPointerListener,
                 MoreMenuListener, TranslationsListListener, QuranAudioBannerListener, AyahMenuListener {
     var router: QuranRouting? { get set }
     var listener: QuranListener? { get set }
 }
 
 protocol QuranViewControllable: ViewControllable {
-    func presentTranslationTextTypeSelectionViewController(_ viewController: ViewControllable)
     func presentMoreMenuViewController(_ viewController: ViewControllable)
     func presentTranslationsSelection(_ viewController: ViewControllable)
     func presentAudioBanner(_ viewController: ViewControllable)
     func presentAyahMenu(_ viewController: ViewControllable)
+
+    func presentWordPointer(_ viewController: ViewControllable)
+    func dismissWordPointer(_ viewController: ViewControllable)
 }
 
 final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewControllable>, QuranRouting {
 
     struct Deps {
-        let translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuildable
         let moreMenuBuilder: MoreMenuBuildable
         let translationsSelectionBuilder: TranslationsSelectionBuildble
         let audioBannerBuilder: QuranAudioBannerBuildable
         let ayahMenuBuilder: AyahMenuBuildable
+        let wordPointerBuilder: WordPointerBuildable
     }
 
     private let deps: Deps
@@ -43,11 +45,6 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
 
     func dismissPresentedRouter(completion: (() -> Void)?) {
         dismiss(animated: true, completion: completion)
-    }
-
-    func presentTranslationTextTypeSelection() {
-        present({ $0.translationTextTypeSelectionBuilder.build(withListener: $1) },
-                { $0.presentTranslationTextTypeSelectionViewController($1) }) // swiftlint:disable:this opening_brace
     }
 
     func presentMoreMenu(withModel model: MoreMenuModel) {
@@ -69,6 +66,32 @@ final class QuranRouter: PresentingViewableRouter<QuranInteractable, QuranViewCo
         let router = deps.audioBannerBuilder.build(withListener: interactor, playFromAyahStream: playFromAyahStream)
         attachChild(router)
         viewController.presentAudioBanner(router.viewControllable)
+    }
+
+    // MARK: - Word Pointer
+
+    private var wordPointerRouter: WordPointerRouting?
+
+    func presentWordPointerIfNeeded(hideWordPointerStream: HideWordPointerStream,
+                                    showWordPointerStream: ShowWordPointerStream) {
+        guard wordPointerRouter == nil else {
+            return
+        }
+        let router = deps.wordPointerBuilder.build(withListener: interactor,
+                                                   hideWordPointerStream: hideWordPointerStream,
+                                                   showWordPointerStream: showWordPointerStream)
+        attachChild(router)
+        wordPointerRouter = router
+        viewController.presentWordPointer(router.viewControllable)
+    }
+
+    func dismissWordPointer() {
+        guard let router = wordPointerRouter else {
+            return
+        }
+        viewController.dismissWordPointer(router.viewControllable)
+        detachChild(router)
+        wordPointerRouter = nil
     }
 
     // MARK: - Private

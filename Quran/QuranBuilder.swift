@@ -31,25 +31,26 @@ final class QuranBuilder: Builder, QuranBuildable {
             bookmarksPersistence                   : container.createBookmarksPersistence(),
             lastPagesPersistence                   : container.createLastPagesPersistence(),
             simplePersistence                      : container.createSimplePersistence(),
-            wordByWordPersistence                  : SQLiteArabicTextPersistence(),
             page                                   : page,
             lastPage                               : lastPage,
             highlightedSearchAyah                  : highlightAyah
         )
         let interactor = QuranInteractor(presenter: viewController, deps: QuranInteractor.Deps(
             simplePersistence: container.createSimplePersistence(),
-            playFromAyahStream: PlayFromAyahStreamImpl()
+            playFromAyahStream: PlayFromAyahStreamImpl(),
+            hideWordPointerStream: HideWordPointerStreamImpl(),
+            showWordPointerStream: ShowWordPointerStreamImpl()
         ))
         interactor.listener = listener
         return QuranRouter(
             interactor: interactor,
             viewController: viewController,
             deps: QuranRouter.Deps(
-                translationTextTypeSelectionBuilder: TranslationTextTypeSelectionBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(container: container),
                 translationsSelectionBuilder: TranslationsSelectionBuilder(container: container),
                 audioBannerBuilder: QuranAudioBannerBuilder(container: container),
-                ayahMenuBuilder: AyahMenuBuilder(container: container)
+                ayahMenuBuilder: AyahMenuBuilder(container: container),
+                wordPointerBuilder: WordPointerBuilder(container: container)
         ))
     }
 

@@ -38,6 +38,22 @@ platform :ios do
         say message
     end
 
+    lane :quran_foundation do |options|
+      clean = options[:clean].nil? ? true : options[:clean]
+      build_frameworks(
+        archive: false,
+        target: 'both',
+        clean: clean)
+    end
+
+    lane :release_quran_foundation do |options|
+      clean = options[:clean].nil? ? true : options[:clean]
+      build_frameworks(
+        archive: true,
+        target: 'device',
+        clean: clean)
+    end
+
     desc 'Submit a new Beta Build to Apple TestFlight'
     desc 'This will also make sure the profile is up to date'
     desc 'params clean: true|false, default is true'
@@ -81,14 +97,11 @@ platform :ios do
 
         if includeFrameworks
             # Build frameworks for QuranFoundation
-            build_frameworks(
-              archive: true,
-              clean: clean,
-              target: "device")
+            release_quran_foundation(clean: clean)
 
             # Build QuranFoundation
             path = sh("pwd")
-            sh "cd ../../QuranFoundation; fastlane build openSource:false target:device clean:#{clean} symbols:true archive:true"
+            sh "cd ../../QuranFoundation; fastlane release clean:#{clean}"
             sh "cd #{path}"
         end
 

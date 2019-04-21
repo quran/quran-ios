@@ -30,10 +30,10 @@ class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, AyahBookmarkT
     }()
 
     let numberFormatter = NumberFormatter()
-    let ayahPersistence: AyahTextPersistence
+    let quranAyahTextPersistence: QuranAyahTextPersistence
 
-    init(persistence: BookmarksPersistence, ayahPersistence: AyahTextPersistence) {
-        self.ayahPersistence = ayahPersistence
+    init(persistence: BookmarksPersistence, quranAyahTextPersistence: QuranAyahTextPersistence) {
+        self.quranAyahTextPersistence = quranAyahTextPersistence
         super.init(persistence: persistence)
     }
 
@@ -54,7 +54,7 @@ class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, AyahBookmarkT
         } else {
             do {
                 // get from persistence
-                let text = try self.ayahPersistence.getAyahTextForNumber(item.ayah)
+                let text = try self.quranAyahTextPersistence.getQuranAyahTextForNumber(item.ayah)
                 // save to cache
                 self.ayahCache.setObject(text, forKey: item.ayah)
 
@@ -62,7 +62,7 @@ class AyahBookmarkDataSource: BaseBookmarkDataSource<AyahBookmark, AyahBookmarkT
                 name = text
             } catch {
                 name = item.ayah.localizedName
-                Crash.recordError(error, reason: "AyahTextPersistence.getAyahTextForNumber", fatalErrorOnDebug: false)
+                Crash.recordError(error, reason: "QuranAyahTextPersistence.getAyahTextForNumber", fatalErrorOnDebug: false)
             }
         }
         cell.name.text = name

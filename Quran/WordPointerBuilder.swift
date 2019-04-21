@@ -22,7 +22,7 @@ final class WordPointerBuilder: Builder, WordPointerBuildable {
         let viewController = WordPointerViewController()
         let interactor = WordPointerInteractor(presenter: viewController, deps: WordPointerInteractor.Deps(
             simplePersistence: container.createSimplePersistence(),
-            wordByWordPersistence: SQLiteArabicTextPersistence(),
+            wordByWordPersistence: SQLiteWordByWordTranslationPersistence(),
             hideWordPointerStream: hideWordPointerStream,
             showWordPointerStream: showWordPointerStream))
         interactor.listener = listener

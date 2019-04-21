@@ -29,10 +29,19 @@ class SearchBuilder: Builder, SearchBuildable {
         let interactor = SearchInteractor(
             presenter: presenter,
             persistence: container.createSimplePersistence(),
-            autocompleteService: container.createSQLiteSearchAutocompletionService(),
-            searchService: container.createSQLiteSearchService(),
+            autocompleteService: createSQLiteSearchService(),
+            searchService: createSQLiteSearchService(),
             recentsService: container.createDefaultSearchRecentsService())
         interactor.listener = listener
         return SearchRouter(interactor: interactor, viewController: viewController)
+    }
+
+    private func createSQLiteSearchService() -> SearchService & SearchAutocompletionService {
+        return SQLiteSearchService(
+            localTranslationRetriever: container.createLocalTranslationsRetriever(),
+            simplePersistence: container.createSimplePersistence(),
+            searchableQuranPersistence: SQLiteSearchableQuranAyahTextPersistence(),
+            quranAyahTextPersistence: SQLiteQuranAyahTextPersistence(),
+            searchableTranslationPersistenceBuilder: SearchableTranslationAyahTextPersistenceBuilder())
     }
 }

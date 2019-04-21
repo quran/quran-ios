@@ -31,20 +31,20 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     let page: Int
 
     private let localTranslationRetriever: LocalTranslationsRetrieverType
-    private let arabicPersistence: AyahTextPersistence
-    private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
+    private let arabicPersistence: QuranAyahTextPersistence
+    private let translationsPersistenceBuilder: TranslationAyahTextPersistenceBuildable
     private let simplePersistence: SimplePersistence
 
-    init(page                          : Int,
-         localTranslationRetriever     : LocalTranslationsRetrieverType,
-         arabicPersistence             : AyahTextPersistence,
-         translationPersistenceCreator : AnyCreator<String, AyahTextPersistence>,
-         simplePersistence             : SimplePersistence) {
-        self.page                          = page
-        self.simplePersistence             = simplePersistence
-        self.arabicPersistence             = arabicPersistence
-        self.localTranslationRetriever     = localTranslationRetriever
-        self.translationPersistenceCreator = translationPersistenceCreator
+    init(page: Int,
+         localTranslationRetriever: LocalTranslationsRetrieverType,
+         arabicPersistence: QuranAyahTextPersistence,
+         translationsPersistenceBuilder: TranslationAyahTextPersistenceBuildable,
+         simplePersistence: SimplePersistence) {
+        self.page = page
+        self.simplePersistence = simplePersistence
+        self.arabicPersistence = arabicPersistence
+        self.localTranslationRetriever = localTranslationRetriever
+        self.translationsPersistenceBuilder = translationsPersistenceBuilder
     }
 
     override func main() {
@@ -101,7 +101,7 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     }
 
     private func retrieveArabicText(ayahs: [AyahNumber]) throws -> [AyahText] {
-        return try ayahs.map(arabicPersistence.getAyahTextWithoutBesmallah(forNumber:))
+        return try ayahs.map(arabicPersistence.getQuranAyahTextForNumberAsAyahText)
     }
 
     private func retrieveAllTranslations(ayahs: [AyahNumber], translations: [Translation]) -> [(Translation, [AyahText])] {
@@ -110,17 +110,16 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
 
     private func retrieveTranslationText(ayahs: [AyahNumber], translation: Translation) -> (Translation, [AyahText]) {
         let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
-        let persistence = translationPersistenceCreator.create(fileURL.absoluteString)
+        let persistence = translationsPersistenceBuilder.build(with: fileURL.absoluteString)
         var ayahTexts: [AyahText] = []
         for ayah in ayahs {
             let text: String
             do {
-                if let ayahText = try persistence.getOptionalAyahText(forNumber: ayah) {
+                if let ayahText = try persistence.getTranslationAyahTextForNumber(ayah) {
                     text = ayahText
                 } else {
                     text = l("noAvailableTranslationText")
                 }
-
             } catch {
                 Crash.recordError(error, reason: "Issue getting ayah \(ayah), translation: \(translation.id)", fatalErrorOnDebug: false)
                 text = l("errorInTranslationText")
@@ -131,18 +130,15 @@ class TranslationPreloadingOperation: AbstractPreloadingOperation<TranslationPag
     }
 }
 
-extension AyahTextPersistence {
-    fileprivate func getOptionalAyahText(forNumber number: AyahNumber) throws -> AyahText? {
-        let text = try getOptionalAyahText(forNumber: number)
+private extension TranslationAyahTextPersistence {
+    func getTranslationAyahTextForNumberAsAyahText(_ number: AyahNumber) throws -> AyahText? {
+        let text = try getTranslationAyahTextForNumber(number)
         return text.map { AyahText(ayah: number, text: $0) }
     }
+}
 
-    fileprivate func getAyahTextWithoutBesmallah(forNumber number: AyahNumber) throws -> AyahText {
-        let text = try getAyahTextForNumber(number)
-        let besmallah = Quran.arabicBasmAllah + " "
-        if number.startsWithBesmallah && text.hasPrefix(besmallah) {
-            return AyahText(ayah: number, text: String(text[besmallah.endIndex...]))
-        }
-        return AyahText(ayah: number, text: text)
+private extension QuranAyahTextPersistence {
+    func getQuranAyahTextForNumberAsAyahText(_ number: AyahNumber) throws -> AyahText {
+        return AyahText(ayah: number, text: try getQuranAyahTextForNumber(number))
     }
 }

@@ -43,14 +43,6 @@ class Container {
         return QariDataRetriever()
     }
 
-    func createArabicTextPersistence() -> AyahTextPersistence {
-        return SQLiteArabicTextPersistence()
-    }
-
-    func createTranslationTextPersistence(filePath: String) -> SQLiteTranslationTextPersistence {
-        return SQLiteTranslationTextPersistence(filePath: filePath)
-    }
-
     func createCreator<CreatedObject, Parameters>(
         _ creationClosure: @escaping (Parameters) -> CreatedObject) -> AnyCreator<Parameters, CreatedObject> {
         return AnyCreator(createClosure: creationClosure)
@@ -141,23 +133,6 @@ class Container {
 
     func createAyahsAudioDownloader() -> AyahsAudioDownloaderType {
         return AyahsAudioDownloader(downloader: createDownloadManager(), creator: createQariAudioFileListRetrievalCreator())
-    }
-
-    func createSQLiteSearchAutocompletionService() -> SearchAutocompletionService {
-        return SQLiteSearchService(
-            localTranslationRetriever: createLocalTranslationsRetriever(),
-            simplePersistence: createSimplePersistence(),
-            arabicPersistence: createArabicTextPersistence(),
-            translationPersistenceCreator: createCreator(createTranslationTextPersistence))
-    }
-
-    func createSQLiteSearchService() -> SearchService {
-        return SQLiteSearchService(
-            localTranslationRetriever: createLocalTranslationsRetriever(),
-            simplePersistence: createSimplePersistence(),
-            arabicPersistence: createArabicTextPersistence(),
-            translationPersistenceCreator: createCreator(createTranslationTextPersistence))
-
     }
 
     func createDefaultSearchRecentsService() -> SearchRecentsService {

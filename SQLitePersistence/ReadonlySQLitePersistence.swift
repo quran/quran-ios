@@ -92,6 +92,9 @@ extension ReadonlySQLitePersistence {
 
 extension ReadonlySQLitePersistence {
     public func validateFileExists() throws {
+        guard !FileManager.default.fileExists(atPath: filePath) else {
+            return
+        }
         if let url = URL(string: filePath) {
             if !url.isReachable {
                 throw PersistenceError.badFile(nil)

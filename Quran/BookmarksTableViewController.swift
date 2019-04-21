@@ -41,12 +41,12 @@ class BookmarksTableViewController: BaseTableBasedViewController, EditController
          simplePersistence: SimplePersistence,
          lastPagesPersistence: LastPagesPersistence,
          bookmarksPersistence: BookmarksPersistence,
-         ayahPersistence: AyahTextPersistence) {
+         quranAyahTextPersistence: QuranAyahTextPersistence) {
 
         // configure the data sources
         lastPageDS = LastPageBookmarkDataSource(persistence: lastPagesPersistence)
         pageDS = PageBookmarkDataSource(persistence: bookmarksPersistence)
-        ayahDS = AyahBookmarkDataSource(persistence: bookmarksPersistence, ayahPersistence: ayahPersistence)
+        ayahDS = AyahBookmarkDataSource(persistence: bookmarksPersistence, quranAyahTextPersistence: quranAyahTextPersistence)
 
         dataSource.addDataSource(lastPageDS, headerTitle: lAndroid("recent_pages"))
         dataSource.addDataSource(pageDS, headerTitle: lAndroid("menu_bookmarks_page"))

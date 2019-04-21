@@ -21,8 +21,9 @@
 import UIKit
 
 private enum Font: String {
-    case arabic = "KFGQPCUthmanTahaNaskh"
-    case amharic = "AbyssinicaSIL"
+    case arabic = "KFGQPCUthmanTahaNaskh"          // family: KFGQPC Uthman Taha Naskh
+    case amharic = "AbyssinicaSIL"                 // family: Abyssinica SIL
+    case quran = "KFGQPCHAFSUthmanicScript-Regula" // family: KFGQPC HAFS Uthmanic Script
 }
 
 private let translationTextFontSize: CGFloat = 24
@@ -32,6 +33,8 @@ extension UIFont {
     private convenience init(_ font: Font, size: CGFloat) {
         self.init(name: font.rawValue, size: size)! //swiftlint:disable:this force_unwrapping
     }
+
+    // Translator
 
     static func translatorNameArabic(ofSize size: FontSize) -> UIFont {
         return UIFont(.arabic, size: size.fontSize(forMediumSize: 20))
@@ -43,16 +46,22 @@ extension UIFont {
         return UIFont(.amharic, size: size.fontSize(forMediumSize: 17))
     }
 
+    // Quran
+
     static func arabicQuranText(ofSize size: FontSize) -> UIFont {
-        return UIFont(.arabic, size: size.fontSize(forMediumSize: translationTextFontSize))
+        return UIFont(.quran, size: size.fontSize(forMediumSize: translationTextFontSize))
     }
+
+    // Translations
 
     static func arabicTranslation(ofSize size: FontSize) -> UIFont {
         return UIFont(.arabic, size: size.fontSize(forMediumSize: translationTextFontSize))
     }
+
     static func englishTranslation(ofSize size: FontSize) -> UIFont {
         return .systemFont(ofSize: size.fontSize(forMediumSize: translationTextFontSize))
     }
+
     static func amharicTranslation(ofSize size: FontSize) -> UIFont {
         return UIFont(.amharic, size: size.fontSize(forMediumSize: translationTextFontSize))
     }

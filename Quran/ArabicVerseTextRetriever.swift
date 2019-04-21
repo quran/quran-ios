@@ -22,15 +22,15 @@ import PromiseKit
 
 class ArabicVerseTextRetriever: VerseTextRetriever {
 
-    private let arabicAyahPersistence: AyahTextPersistence
+    private let quranShareableAyahPersistence: QuranShareableAyahTextPersistence
 
-    init(arabicAyahPersistence: AyahTextPersistence) {
-        self.arabicAyahPersistence = arabicAyahPersistence
+    init(quranShareableAyahPersistence: QuranShareableAyahTextPersistence) {
+        self.quranShareableAyahPersistence = quranShareableAyahPersistence
     }
 
     func getText(for input: VerseTextRetrieverInput) -> Promise<[String]> {
         return DispatchQueue.global().async(.promise) {
-            [try self.arabicAyahPersistence.getAyahTextForNumber(input.ayah)]
+            [try self.quranShareableAyahPersistence.getQuranShareableAyahTextForNumber(input.ayah)]
         }
     }
 }

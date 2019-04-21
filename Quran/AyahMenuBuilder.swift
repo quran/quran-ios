@@ -37,7 +37,7 @@ final class AyahMenuBuilder: Builder, AyahMenuBuildable {
 
     private func createCompositeVerseTextRetriever() -> VerseTextRetriever {
         return CompositeVerseTextRetriever(
-            arabicText: ArabicVerseTextRetriever(arabicAyahPersistence: container.createArabicTextPersistence()),
+            arabicText: ArabicVerseTextRetriever(quranShareableAyahPersistence: SQLiteQuranAyahTextPersistence()),
             translation: TranslationVerseTextRetriever())
     }
 }

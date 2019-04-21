@@ -21,7 +21,7 @@ final class BookmarksBuilder: Builder, BookmarksBuildable {
             simplePersistence: container.createSimplePersistence(),
             lastPagesPersistence: container.createLastPagesPersistence(),
             bookmarksPersistence: container.createBookmarksPersistence(),
-            ayahPersistence: container.createArabicTextPersistence()
+            quranAyahTextPersistence: SQLiteQuranAyahTextPersistence()
         )
         let interactor = BookmarksInteractor(presenter: viewController)
         interactor.listener = listener

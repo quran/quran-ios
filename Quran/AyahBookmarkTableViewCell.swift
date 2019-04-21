@@ -27,6 +27,7 @@ class AyahBookmarkTableViewCell: QuranNavigationTableViewCell {
 
     override func awakeFromNib() {
         ayahLabel.kind = .labelStrong
+        name.font = UIFont.arabicQuranText(ofSize: .small)
         super.awakeFromNib()
     }
 }

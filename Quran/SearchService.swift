@@ -34,32 +34,35 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
         return formatter
     }()
     private let localTranslationRetriever: LocalTranslationsRetrieverType
-    private let arabicPersistence: AyahTextPersistence
-    private let translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>
+    private let quranAyahTextPersistence: QuranAyahTextPersistence
+    private let searchableQuranPersistence: SearchableAyahTextPersistence
+    private let searchableTranslationPersistenceBuilder: SearchableTranslationAyahTextPersistenceBuildable
     init(
         localTranslationRetriever: LocalTranslationsRetrieverType,
         simplePersistence: SimplePersistence,
-        arabicPersistence: AyahTextPersistence,
-        translationPersistenceCreator: AnyCreator<String, AyahTextPersistence>) {
+        searchableQuranPersistence: SearchableAyahTextPersistence,
+        quranAyahTextPersistence: QuranAyahTextPersistence,
+        searchableTranslationPersistenceBuilder: SearchableTranslationAyahTextPersistenceBuildable) {
         self.localTranslationRetriever = localTranslationRetriever
-        self.arabicPersistence = arabicPersistence
-        self.translationPersistenceCreator = translationPersistenceCreator
+        self.quranAyahTextPersistence = quranAyahTextPersistence
+        self.searchableQuranPersistence = searchableQuranPersistence
+        self.searchableTranslationPersistenceBuilder = searchableTranslationPersistenceBuilder
     }
 
     func autocomplete(term: String) -> Observable<[SearchAutocompletion]> {
 
-        let translationCreator = self.translationPersistenceCreator
-        let arabicPersistence = self.arabicPersistence
+        let searchableTranslationPersistenceBuilder = self.searchableTranslationPersistenceBuilder
+        let searchableQuranPersistence = self.searchableQuranPersistence
 
         return prepare()
             .map { translations -> [SearchAutocompletion] in
-                let arabicResults = try arabicPersistence.autocomplete(term: term)
+                let arabicResults = try searchableQuranPersistence.autocomplete(term: term)
                 guard arabicResults.isEmpty else {
                     return arabicResults
                 }
                 for translation in translations {
                     let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
-                    let persistence = translationCreator.create(fileURL.absoluteString)
+                    let persistence = searchableTranslationPersistenceBuilder.build(with: fileURL.absoluteString)
                     let results = try persistence.autocomplete(term: term)
                     if !results.isEmpty {
                         return results
@@ -72,8 +75,8 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
     }
 
     func search(for term: String) -> Observable<SearchResults> {
-        let translationCreator = self.translationPersistenceCreator
-        let arabicPersistence = self.arabicPersistence
+        let searchableTranslationPersistenceBuilder = self.searchableTranslationPersistenceBuilder
+        let searchableQuranPersistence = self.searchableQuranPersistence
 
         return prepare()
             .map { translations -> SearchResults in
@@ -82,13 +85,13 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
                 if !numberResults.isEmpty {
                     return SearchResults(source: .quran, items: numberResults)
                 } else {
-                    let arabicResults = try arabicPersistence.search(for: term)
+                    let arabicResults = try searchableQuranPersistence.search(for: term)
                     guard arabicResults.isEmpty else {
                         return SearchResults(source: .quran, items: arabicResults)
                     }
                     for translation in translations {
                         let fileURL = Files.translationsURL.appendingPathComponent(translation.fileName)
-                        let persistence = translationCreator.create(fileURL.absoluteString)
+                        let persistence = searchableTranslationPersistenceBuilder.build(with: fileURL.absoluteString)
                         let results = try persistence.search(for: term)
                         if !results.isEmpty {
                             return SearchResults(source: .translation(translation), items: results)
@@ -136,7 +139,7 @@ class SQLiteSearchService: SearchAutocompletionService, SearchService {
             return nil
         }
         let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
-        let ayahText = try arabicPersistence.getAyahTextForNumber(ayahNumber)
+        let ayahText = try quranAyahTextPersistence.getQuranAyahTextForNumber(ayahNumber)
         return SearchResult(text: ayahText, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
     }
 

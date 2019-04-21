@@ -20,10 +20,23 @@
 
 import Foundation
 
-protocol AyahTextPersistence {
-    func getAyahTextForNumber(_ number: AyahNumber) throws -> String
-    func getOptionalAyahText(forNumber: AyahNumber) throws -> String?
+protocol QuranAyahTextPersistence {
+    func getQuranAyahTextForNumber(_ number: AyahNumber) throws -> String
+}
 
+protocol QuranShareableAyahTextPersistence {
+    func getQuranShareableAyahTextForNumber(_ number: AyahNumber) throws -> String
+}
+
+protocol TranslationAyahTextPersistence {
+    func getTranslationAyahTextForNumber(_ number: AyahNumber) throws -> String?
+}
+
+protocol SearchableAyahTextPersistence {
     func autocomplete(term: String) throws -> [SearchAutocompletion]
     func search(for term: String) throws -> [SearchResult]
+}
+
+protocol WordByWordTranslationPersistence {
+    func getWord(for position: AyahWord.Position, type: AyahWord.TextType) throws -> AyahWord
 }

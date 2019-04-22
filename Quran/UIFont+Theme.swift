@@ -26,7 +26,10 @@ private enum Font: String {
     case quran = "KFGQPCHAFSUthmanicScript-Regula" // family: KFGQPC HAFS Uthmanic Script
 }
 
-private let translationTextFontSize: CGFloat = 24
+private let arabicQuranTextFontSize: CGFloat = 24
+private let arabicTranslationTextFontSize: CGFloat = 24
+private let englishTranslationTextFontSize: CGFloat = 20
+private let amharicTranslationTextFontSize: CGFloat = 20
 
 extension UIFont {
 
@@ -49,21 +52,21 @@ extension UIFont {
     // Quran
 
     static func arabicQuranText(ofSize size: FontSize) -> UIFont {
-        return UIFont(.quran, size: size.fontSize(forMediumSize: translationTextFontSize))
+        return UIFont(.quran, size: size.fontSize(forMediumSize: arabicQuranTextFontSize))
     }
 
     // Translations
 
     static func arabicTranslation(ofSize size: FontSize) -> UIFont {
-        return UIFont(.arabic, size: size.fontSize(forMediumSize: translationTextFontSize))
+        return UIFont(.arabic, size: size.fontSize(forMediumSize: arabicTranslationTextFontSize))
     }
 
     static func englishTranslation(ofSize size: FontSize) -> UIFont {
-        return .systemFont(ofSize: size.fontSize(forMediumSize: translationTextFontSize))
+        return .systemFont(ofSize: size.fontSize(forMediumSize: englishTranslationTextFontSize))
     }
 
     static func amharicTranslation(ofSize size: FontSize) -> UIFont {
-        return UIFont(.amharic, size: size.fontSize(forMediumSize: translationTextFontSize))
+        return UIFont(.amharic, size: size.fontSize(forMediumSize: amharicTranslationTextFontSize))
     }
 }
 

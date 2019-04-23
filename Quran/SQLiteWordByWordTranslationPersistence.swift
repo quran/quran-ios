@@ -26,9 +26,7 @@ class SQLiteWordByWordTranslationPersistence: ReadonlySQLitePersistence, WordByW
     private struct Database {
         static let wordsTable = Table("words")
         struct Columns {
-            static let wordType = Expression<String>("word_type")
             static let wordPosition = Expression<Int>("word_position")
-            static let textMadani = Expression<String?>("text_madani")
             static let translation = Expression<String?>("translation")
             static let transliteration = Expression<String?>("transliteration")
             static let sura = Expression<Int>("sura")
@@ -46,7 +44,7 @@ class SQLiteWordByWordTranslationPersistence: ReadonlySQLitePersistence, WordByW
             case .transliteration: text = Database.Columns.transliteration
             }
             let query = Database.wordsTable
-                .select(text, Database.Columns.wordType)
+                .select(text)
                 .filter(Database.Columns.sura == position.ayah.sura &&
                         Database.Columns.ayah == position.ayah.ayah &&
                         Database.Columns.wordPosition == position.position)
@@ -67,10 +65,8 @@ class SQLiteWordByWordTranslationPersistence: ReadonlySQLitePersistence, WordByW
             case .translation: text = row[Database.Columns.translation]
             case .transliteration: text = row[Database.Columns.transliteration]
             }
-            let wordTypeRaw = row[Database.Columns.wordType]
-            let wordType = unwrap(AyahWord.WordType(rawValue: wordTypeRaw))
 
-            let word = AyahWord(position: position, text: text, textType: type, wordType: wordType)
+            let word = AyahWord(position: position, text: text, textType: type)
             result.append(word)
         }
         return result

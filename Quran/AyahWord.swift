@@ -46,5 +46,4 @@ struct AyahWord {
     let position: Position
     let text: String?
     let textType: TextType
-    let wordType: WordType
 }

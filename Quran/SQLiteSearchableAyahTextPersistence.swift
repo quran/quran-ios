@@ -22,6 +22,36 @@ private struct Database {
 class SQLiteSearchableAyahTextPersistence: ReadonlySQLitePersistence, SearchableAyahTextPersistence {
 
     let filePath: String
+    let regex = "[\u{0627}\u{0623}\u{0621}\u{062a}\u{0629}\u{0647}\u{0649}]"
+    let replacements: [Character: String] = [
+        // given: ا
+        // match: آأإاﻯ
+        "\u{0627}" : "\u{0622}\u{0623}\u{0625}\u{0627}\u{0649}",
+
+        // given: ﺃ
+        // match: ﺃﺀﺆﺋ
+        "\u{0623}" : "\u{0621}\u{0623}\u{0624}\u{0626}",
+
+        // given: ﺀ
+        // match: ﺀﺃﺆ
+        "\u{0621}" : "\u{0621}\u{0623}\u{0624}\u{0626}",
+
+        // given: ﺕ
+        // match: ﺕﺓ
+        "\u{062a}" : "\u{062a}\u{0629}",
+
+        // given: ﺓ
+        // match: ﺓتﻫ
+        "\u{0629}" : "\u{0629}\u{062a}\u{0647}",
+
+        // given: ه
+        // match: ةه
+        "\u{0647}" : "\u{0647}\u{0629}",
+
+        // given: ﻯ
+        // match: ﻯي
+        "\u{0649}" : "\u{0649}\u{064a}"
+    ]
 
     init(filePath: String) {
         self.filePath = filePath
@@ -39,22 +69,33 @@ class SQLiteSearchableAyahTextPersistence: ReadonlySQLitePersistence, Searchable
     private func search(for term: String, connection: Connection) throws -> [SearchResult] {
         CLog("Search for:", term)
         let searchTerm = cleanup(term: term)
+        let arabicSearchTerm = searchTerm.replacingOccurrences(of: regex,
+                                                               with: "_",
+                                                               options: .regularExpression)
+        let pattern = generateRegexPattern(term: term)
         let query = Database.table
-            .select(Database.Columns.snippet, Database.Columns.sura, Database.Columns.ayah)
-            .filter(Database.Columns.text.match("\(searchTerm)"))
-            .limit(300)
+            .select(Database.Columns.text, Database.Columns.sura, Database.Columns.ayah)
+            .filter(Database.Columns.text.like("%\(arabicSearchTerm)%"))
         let rows = try connection.prepare(query)
-        return try rowsToResults(rows, term: searchTerm)
+        return try rowsToResults(rows, term: searchTerm, regexPattern: pattern)
     }
 
-    private func rowsToResults(_ rows: AnySequence<Row>, term: String) throws -> [SearchResult] {
+    private func rowsToResults(_ rows: AnySequence<Row>,
+                               term: String,
+                               regexPattern: String) throws -> [SearchResult] {
         var results: [SearchResult] = []
         for row in rows {
-            let text = row[Database.Columns.snippet]
+            let text = row[Database.Columns.text]
+            if text.range(of: regexPattern, options: .regularExpression) == nil {
+                continue
+            }
+            let highlightedText = highlightResult(text: text, regexPattern: regexPattern)
             let sura = row[Database.Columns.sura]
             let ayah = row[Database.Columns.ayah]
             let ayahNumber = AyahNumber(sura: sura, ayah: ayah)
-            let result = SearchResult(text: text, ayah: ayahNumber, page: Quran.pageForAyah(ayahNumber))
+            let result = SearchResult(text: highlightedText,
+                                      ayah: ayahNumber,
+                                      page: Quran.pageForAyah(ayahNumber))
             results.append(result)
         }
         return results
@@ -119,6 +160,29 @@ class SQLiteSearchableAyahTextPersistence: ReadonlySQLitePersistence, Searchable
         }
         return cleanedTerm.lowercased()
     }
+
+    private func generateRegexPattern(term: String) -> String {
+        var regex = "("
+        for char in term {
+            if let replacement = replacements[char] {
+                regex = "\(regex)[\(replacement)]"
+            } else {
+                regex = "\(regex)\(char)"
+            }
+        }
+        return regex + ")"
+    }
+
+    private func highlightResult(text: String, regexPattern: String) -> String {
+        let ranges = text.regexRanges(of: regexPattern)
+
+        var textCopy = text
+        for range in ranges {
+            let snippet = String(textCopy[range.lowerBound..<range.upperBound])
+            textCopy = textCopy.replacingOccurrences(of: snippet, with: "<b>\(snippet)<b>")
+        }
+        return textCopy
+    }
 }
 
 extension String {
@@ -150,6 +214,20 @@ private extension String {
         var maximum: Range<String.Index>?
         while true {
             if let found = self.range(of: term, options: [.caseInsensitive, .backwards], range: maximum) {
+                ranges.append(found)
+                maximum = startIndex..<found.lowerBound
+            } else {
+                break
+            }
+        }
+        return ranges.reversed()
+    }
+
+    func regexRanges(of term: String) -> [Range<String.Index>] {
+        var ranges: [Range<String.Index>] = []
+        var maximum: Range<String.Index>?
+        while true {
+            if let found = self.range(of: term, options: [.regularExpression, .backwards], range: maximum) {
                 ranges.append(found)
                 maximum = startIndex..<found.lowerBound
             } else {

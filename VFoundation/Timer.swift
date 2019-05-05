@@ -32,6 +32,8 @@ open class Timer {
 
     private var cancelled = Protected(false)
 
+    private var eventHandler: (() -> Void)?
+
     public init(interval: TimeInterval,
                 repeated: Bool = false,
                 startNow: Bool = false,
@@ -44,15 +46,16 @@ open class Timer {
         let startTime = DispatchTime.now() + Double(startNow ? 0 : Int64(dispatchInterval)) / Double(NSEC_PER_SEC)
         timer.schedule(deadline: startTime, repeating: DispatchTimeInterval.seconds(Int(interval)))
 
+        self.eventHandler = handler
         timer.setEventHandler { [weak self] in
-            self?.fired(handler)
+            self?.fired()
         }
         timer.resume()
     }
 
-    private func fired(_ handler: @escaping () -> Void) {
+    private func fired() {
         if !cancelled.value {
-            handler()
+            self.eventHandler?()
         }
 
         // cancel next ones if not repeated
@@ -67,6 +70,42 @@ open class Timer {
     }
 
     deinit {
-        cancel()
+        timer.setEventHandler {}
+        timer.cancel()
+        /*
+         If the timer is suspended, calling cancel without resuming
+         triggers a crash. This is documented here https://forums.developer.apple.com/thread/15902
+         */
+        resume()
+        eventHandler = nil
+    }
+
+    // MARK: - Pause/Resume
+
+    private enum State {
+        case paused
+        case resumed
+    }
+
+    private var state = Protected(State.resumed)
+
+    public func pause() {
+        state.sync { (state) in
+            guard state == .resumed else {
+                return
+            }
+            state = .paused
+            timer.suspend()
+        }
+    }
+
+    public func resume() {
+        state.sync { (state) in
+            guard state == .paused else {
+                return
+            }
+            state = .resumed
+            timer.resume()
+        }
     }
 }

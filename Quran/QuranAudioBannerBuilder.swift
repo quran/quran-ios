@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import QueuePlayer
 import RIBs
 import RxSwift
 
@@ -21,8 +22,8 @@ final class QuranAudioBannerBuilder: Builder, QuranAudioBannerBuildable {
             presenter: viewController,
             persistence: container.createSimplePersistence(),
             qariRetreiver: container.createQarisDataRetriever(),
-            gaplessAudioPlayer: createGaplessAudioPlayerInteractor(),
-            gappedAudioPlayer: createGappedAudioPlayerInteractor(),
+            audioPlayer: createQuranAudioPlayer(),
+            remoteCommandsHandler: RemoteCommandsHandler(center: .shared()),
             playFromAyahStream: playFromAyahStream
         )
         interactor.listener = listener
@@ -35,32 +36,21 @@ final class QuranAudioBannerBuilder: Builder, QuranAudioBannerBuildable {
         )
     }
 
-    private func createGaplessAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GaplessAudioPlayerInteractor(downloader: createGaplessAudioDownloader(),
-                                            lastAyahFinder: createJuzLastAyahFinder(),
-                                            player: createGaplessAudioPlayer())
+    private func createQuranAudioPlayer() -> QuranAudioPlayer {
+        return QuranAudioPlayer(downloader: createAudioDownloader(),
+                                lastAyahFinder: createJuzLastAyahFinder(),
+                                player: QueuePlayer(),
+                                unzipper: AudioUnzipper(),
+                                gappedAudioRequestBuilder: GappedAudioRequestBuilder(),
+                                gaplessAudioRequestBuilder: GaplessAudioRequestBuilder(timingRetriever: createQariTimingRetriever()),
+                                nowPlaying: NowPlayingUpdater(center: .default()))
     }
 
-    private func createGappedAudioPlayerInteractor() -> AudioPlayerInteractor {
-        return GappedAudioPlayerInteractor(downloader: createGappedAudioDownloader(),
-                                           lastAyahFinder: createJuzLastAyahFinder(),
-                                           player: GappedAudioPlayer())
-    }
-
-    private func createGaplessAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GaplessQariAudioFileListRetrieval(),
+    private func createAudioDownloader() -> AudioFilesDownloader {
+        return AudioFilesDownloader(gapplessAudioFileList: GaplessQariAudioFileListRetrieval(),
+                                    gappedAudioFileList: GappedQariAudioFileListRetrieval(),
                                     downloader: container.createDownloadManager(),
                                     ayahDownloader: container.createAyahsAudioDownloader())
-    }
-
-    private func createGappedAudioDownloader() -> AudioFilesDownloader {
-        return AudioFilesDownloader(audioFileList: GappedQariAudioFileListRetrieval(),
-                                    downloader: container.createDownloadManager(),
-                                    ayahDownloader: container.createAyahsAudioDownloader())
-    }
-
-    private func createGaplessAudioPlayer() -> AudioPlayer {
-        return GaplessAudioPlayer(timingRetriever: createQariTimingRetriever())
     }
 
     private func createQariTimingRetriever() -> QariTimingRetriever {

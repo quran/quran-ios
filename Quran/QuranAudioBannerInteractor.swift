@@ -37,41 +37,34 @@ protocol QuranAudioBannerListener: class {
     func removeHighlighting()
 }
 
+private enum PlaybackState {
+    case playing
+    case paused
+    case stopped
+    case downloading(progress: Float)
+}
+
 final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPresentable>,
                                 QuranAudioBannerInteractable, QuranAudioBannerPresentableListener,
-                                AudioPlayerInteractorDelegate, QProgressListener {
+                                QuranAudioPlayerDelegate, QProgressListener, RemoteCommandsHandlerDelegate {
 
     weak var router: QuranAudioBannerRouting?
     weak var listener: QuranAudioBannerListener?
 
     private let qariRetreiver: QariDataRetrieverType
     private let persistence: SimplePersistence
-    private let gaplessAudioPlayer: AudioPlayerInteractor
-    private let gappedAudioPlayer: AudioPlayerInteractor
+    private let audioPlayer: QuranAudioPlayer
+    private let remoteCommandsHandler: RemoteCommandsHandler
 
-    private var audioPlayer: AudioPlayerInteractor {
-        switch selectedQari.audioType {
-        case .gapless:
-            return gaplessAudioPlayer
-        case .gapped:
-            return gappedAudioPlayer
-        }
-    }
-
-    private var verseRuns: Runs = .one {
-        didSet { audioPlayer.setVerseRuns(verseRuns) }
-    }
-    private var listRuns: Runs = .one {
-        didSet { audioPlayer.setListRuns(listRuns) }
-    }
     private var audioRange: VerseRange?
 
-    private var playing: Bool = false {
+    private var playingState: PlaybackState = .stopped {
         didSet {
-            if playing {
-                presenter.setPlaying()
-            } else {
-                presenter.setPaused()
+            switch playingState {
+            case .playing: presenter.setPlaying()
+            case .paused: presenter.setPaused()
+            case .stopped: showQariView()
+            case .downloading(let progress): presenter.setDownloading(progress)
             }
         }
     }
@@ -94,22 +87,23 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
     init(presenter: QuranAudioBannerPresentable,
          persistence: SimplePersistence,
          qariRetreiver: QariDataRetrieverType,
-         gaplessAudioPlayer: AudioPlayerInteractor,
-         gappedAudioPlayer: AudioPlayerInteractor,
+         audioPlayer: QuranAudioPlayer,
+         remoteCommandsHandler: RemoteCommandsHandler,
          playFromAyahStream: PlayFromAyahStream) {
         self.persistence = persistence
         self.qariRetreiver = qariRetreiver
-        self.gaplessAudioPlayer = gaplessAudioPlayer
-        self.gappedAudioPlayer = gappedAudioPlayer
+        self.audioPlayer = audioPlayer
+        self.remoteCommandsHandler = remoteCommandsHandler
         self.playFromAyahStream = playFromAyahStream
         super.init(presenter: presenter)
         presenter.listener = self
-        gaplessAudioPlayer.delegate = self
-        gappedAudioPlayer.delegate = self
+        audioPlayer.delegate = self
+        remoteCommandsHandler.delegate = self
     }
 
     override func didBecomeActive() {
         super.didBecomeActive()
+        remoteCommandsHandler.startListeningToPlayCommand()
 
         presenter.hideAllControls()
 
@@ -123,7 +117,7 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
             .then { self.audioPlayer.isAudioDownloading() }
             .done(on: .main) { downloading -> Void in
                 if !downloading {
-                    self.showQariView()
+                    self.playingState = .stopped
                 }
             }
 
@@ -132,12 +126,17 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         }).disposeOnDeactivate(interactor: self)
     }
 
+    override func willResignActive() {
+        super.willResignActive()
+        remoteCommandsHandler.stopListening()
+    }
+
     private func play(from ayah: AyahNumber) {
         guard let page = listener?.getCurrentQuranPage() else {
             return
         }
-        self.listRuns = .one
-        self.verseRuns = .one
+        audioPlayer.listRuns = .one
+        audioPlayer.verseRuns = .one
         Analytics.shared.playFrom(menu: true)
         self.play(from: ayah, to: nil, page: page)
     }
@@ -148,8 +147,8 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         guard let page = listener?.getCurrentQuranPage() else {
             return
         }
-        verseRuns = newOptions.verseRuns
-        listRuns = newOptions.listRuns
+        audioPlayer.verseRuns = newOptions.verseRuns
+        audioPlayer.listRuns = newOptions.listRuns
         play(from: newOptions.range.lowerBound, to: newOptions.range.upperBound, page: page)
     }
 
@@ -165,7 +164,7 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
 
     func onSelectedQariChanged() {
         reloadSelectedQariId()
-        showQariView()
+        playingState = .stopped
     }
 
     func dismissQariList() {
@@ -176,12 +175,79 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         selectedQariId = self.persistence.valueForKey(.lastSelectedQariId)
     }
 
+    // MARK: - Remote Commands
+
+    func onPlayCommandFired() {
+        switch playingState {
+        case .stopped: playStartingCurrentPage()
+        case .paused, .playing: resume()
+        case .downloading: break
+        }
+    }
+
+    func onPauseCommandFired() {
+        pause()
+    }
+
+    func onTogglePlayPauseCommandFired() {
+        togglePlayPause()
+    }
+
+    func onStepForwardCommandFired() {
+        stepForward()
+    }
+
+    func onStepBackwardCommandFire() {
+        stepBackward()
+    }
+
     // MARK: - Presenter Listener
 
     func onPlayTapped() {
+        playStartingCurrentPage()
+    }
+
+    func onPauseResumeTapped() {
+        togglePlayPause()
+    }
+
+    func onStopTapped() {
+        stop()
+    }
+
+    func onForwardTapped() {
+        stepForward()
+    }
+
+    func onBackwardTapped() {
+        stepBackward()
+    }
+
+    func onMoreTapped() {
+        let options = AdvancedAudioOptions(range: unwrap(audioRange),
+                                           verseRuns: audioPlayer.verseRuns,
+                                           listRuns: audioPlayer.listRuns)
+        router?.presentAdvancedAudioOptions(with: options)
+    }
+
+    func onQariTapped() {
+        router?.presentQariList()
+    }
+
+    func onCancelDownloadTapped() {
+        audioPlayer.cancelDownload()
+    }
+
+    func onTouchesBegan() {
+        listener?.onAudioBannerTouchesBegan()
+    }
+
+    // MARK: - Playback Controls
+
+    private func playStartingCurrentPage() {
         guard let currentPage = listener?.getCurrentQuranPage() else { return }
-        verseRuns = .one
-        listRuns = .one
+        audioPlayer.verseRuns = .one
+        audioPlayer.listRuns = .one
 
         // start downloading & playing
         Analytics.shared.playFrom(menu: false)
@@ -200,52 +266,43 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
         audioPlayer.playAudioForQari(selectedQari, range: range)
     }
 
-    func onPauseResumeTapped() {
-        playing = !playing
-        if playing {
-            audioPlayer.resumeAudio()
-        } else {
-            audioPlayer.pauseAudio()
+    private func togglePlayPause() {
+        switch playingState {
+        case .playing: pause()
+        case .paused: resume()
+        default:
+            CLog("Invalid playingState \(playingState) found while trying to pause/resume playback")
         }
     }
 
-    func onStopTapped() {
+    private func pause() {
+        playingState = .paused
+        audioPlayer.pauseAudio()
+    }
+
+    private func resume() {
+        playingState = .playing
+        audioPlayer.resumeAudio()
+    }
+
+    private func stepForward() {
+        audioPlayer.stepForward()
+    }
+
+    private func stepBackward() {
+        audioPlayer.stepBackward()
+    }
+
+    private func stop() {
         audioRange = nil
         audioPlayer.stopAudio()
-    }
-
-    func onForwardTapped() {
-        audioPlayer.goForward()
-    }
-
-    func onBackwardTapped() {
-        audioPlayer.goBackward()
-    }
-
-    func onMoreTapped() {
-        let options = AdvancedAudioOptions(range: unwrap(audioRange),
-                                           verseRuns: verseRuns,
-                                           listRuns: listRuns)
-        router?.presentAdvancedAudioOptions(with: options)
-    }
-
-    func onQariTapped() {
-        router?.presentQariList()
-    }
-
-    func onCancelDownloadTapped() {
-        audioPlayer.cancelDownload()
-    }
-
-    func onTouchesBegan() {
-        listener?.onAudioBannerTouchesBegan()
     }
 
     // MARK: - Audio Interactor Delegate
 
     func willStartDownloading() {
         Crash.setValue(true, forKey: .DownloadingQuran)
-        DispatchQueue.main.async { self.presenter.setDownloading(0) }
+        DispatchQueue.main.async { self.playingState = .downloading(progress: 0) }
     }
 
     func didStartDownloadingAudioFiles(progress: QProgress) {
@@ -255,33 +312,42 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
 
     func onProgressUpdated(to progress: Double) {
         DispatchQueue.main.async {
-            self.presenter.setDownloading(Float(progress))
+            self.playingState = .downloading(progress: Float(progress))
         }
     }
 
     func onPlayingStarted() {
         self.progress = nil
         Crash.setValue(false, forKey: .DownloadingQuran)
-        DispatchQueue.main.async { self.playing = true }
+        DispatchQueue.main.async { self.playingState = .playing }
+        remoteCommandsHandler.startListening()
     }
 
     func onPlaybackPaused() {
         self.progress = nil
-        DispatchQueue.main.async { self.playing = false }
+        DispatchQueue.main.async { self.playingState = .paused }
     }
 
     func onPlaybackResumed() {
         self.progress = nil
-        DispatchQueue.main.async { self.playing = true }
+        DispatchQueue.main.async { self.playingState = .playing }
     }
 
-    func highlight(_ ayah: AyahNumber) {
+    func onPlaying(ayah: AyahNumber) {
         Crash.setValue(ayah, forKey: .PlayingAyah)
         DispatchQueue.main.async { self.listener?.highlightAyah(ayah) }
     }
 
     func onFailedDownloadingWithError(_ error: Error) {
-        self.progress = nil
+        showError(error)
+    }
+
+    func onFailedPlaybackWithError(_ error: Error) {
+        showError(error)
+    }
+
+    private func showError(_ error: Error) {
+        progress = nil
         DispatchQueue.main.async {
             self.presenter.showErrorAlert(error: error)
         }
@@ -292,14 +358,15 @@ final class QuranAudioBannerInteractor: PresentableInteractor<QuranAudioBannerPr
 
         Crash.setValue(nil, forKey: .PlayingAyah)
         Crash.setValue(false, forKey: .DownloadingQuran)
-        DispatchQueue.main.async {
-            self.showQariView()
-            self.listener?.removeHighlighting()
-        }
+        DispatchQueue.main.async { self.playingState = .stopped }
     }
 
     private func showQariView() {
         Crash.setValue(selectedQari.id, forKey: .QariId)
         presenter.setQari(name: selectedQari.name, imageName: selectedQari.imageName)
+        self.listener?.removeHighlighting()
+
+        self.remoteCommandsHandler.stopListening()
+        self.remoteCommandsHandler.startListeningToPlayCommand()
     }
 }

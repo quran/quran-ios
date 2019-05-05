@@ -23,9 +23,13 @@ public struct PlayerItemInfo {
     public let title: String
     public let artist: String
     public let artwork: MPMediaItemArtwork?
-    public init(title: String, artist: String, artwork: MPMediaItemArtwork?) {
+    public init(title: String, artist: String, image: UIImage?) {
         self.title = title
         self.artist = artist
-        self.artwork = artwork
+        if let image = image {
+            artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        } else {
+            artwork = nil
+        }
     }
 }

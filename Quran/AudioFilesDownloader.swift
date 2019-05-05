@@ -22,17 +22,21 @@ import PromiseKit
 
 class AudioFilesDownloader {
 
-    let audioFileList: QariAudioFileListRetrieval
-    let downloader: DownloadManager
-    let ayahDownloader: AyahsAudioDownloaderType
+    private let gapplessAudioFileList: QariAudioFileListRetrieval
+    private let gappedAudioFileList: QariAudioFileListRetrieval
+
+    private let downloader: DownloadManager
+    private let ayahDownloader: AyahsAudioDownloaderType
 
     private var response: DownloadBatchResponse?
 
-    init(audioFileList: QariAudioFileListRetrieval,
+    init(gapplessAudioFileList: QariAudioFileListRetrieval,
+         gappedAudioFileList: QariAudioFileListRetrieval,
          downloader: DownloadManager,
          ayahDownloader: AyahsAudioDownloaderType) {
-        self.audioFileList  = audioFileList
-        self.downloader     = downloader
+        self.gapplessAudioFileList = gapplessAudioFileList
+        self.gappedAudioFileList = gappedAudioFileList
+        self.downloader = downloader
         self.ayahDownloader = ayahDownloader
     }
 
@@ -78,8 +82,16 @@ class AudioFilesDownloader {
     }
 
     func filesForQari(_ qari: Qari, range: VerseRange) -> [DownloadRequest] {
+        let audioFileList = getAudioFileList(for: qari)
         return audioFileList.get(for: qari, range: range).map {
             DownloadRequest(url: $0.remote, resumePath: $0.local.stringByAppendingPath(Files.downloadResumeDataExtension), destinationPath: $0.local)
+        }
+    }
+
+    private func getAudioFileList(for qari: Qari) -> QariAudioFileListRetrieval {
+        switch qari.audioType {
+        case .gapless: return gapplessAudioFileList
+        case .gapped: return gappedAudioFileList
         }
     }
 }

@@ -23,6 +23,16 @@ fastlane ios version_reset
 Resets the build to 1 and version to passed version value and push it to the origin.
 
 params version: the new version of the app
+### ios quran_foundation
+```
+fastlane ios quran_foundation
+```
+
+### ios release_quran_foundation
+```
+fastlane ios release_quran_foundation
+```
+
 ### ios beta
 ```
 fastlane ios beta

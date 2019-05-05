@@ -4385,7 +4385,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = QueuePlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QueuePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4415,7 +4415,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = QueuePlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QueuePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4758,12 +4758,11 @@
 					"$(PROJECT_DIR)/QuranFoundation",
 				);
 				INFOPLIST_FILE = Quran/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1eeb2cc1-8ea8-4337-aee7-5fdc00f8b640";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
@@ -4785,11 +4784,10 @@
 					"$(PROJECT_DIR)/QuranFoundation",
 				);
 				INFOPLIST_FILE = Quran/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0942cc72-3362-4f11-bbd8-1d5924524335";
 				PROVISIONING_PROFILE_SPECIFIER = "Quran App Store Dist";
 				SWIFT_OBJC_BRIDGING_HEADER = "Quran/Quran-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;

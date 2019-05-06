@@ -29,6 +29,7 @@
 		0656B548226BCFDD003962A9 /* uthmanic_hafs_ver12.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0656B545226BCFDD003962A9 /* uthmanic_hafs_ver12.otf */; };
 		0656B54A226BD536003962A9 /* quran.ar.uthmani.v2.db in Resources */ = {isa = PBXBuildFile; fileRef = 0656B549226BD536003962A9 /* quran.ar.uthmani.v2.db */; };
 		065F58652077101F00E83AA2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065F58642077101F00E83AA2 /* Button.swift */; };
+		06612C45227F8974006C0B24 /* AppScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06612C44227F8974006C0B24 /* AppScreenshots.swift */; };
 		067D56BD227690D800B03009 /* RemoteCommandsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067D56BC227690D800B03009 /* RemoteCommandsHandler.swift */; };
 		067D56BF22769CC000B03009 /* NowPlayingUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067D56BE22769CC000B03009 /* NowPlayingUpdater.swift */; };
 		067D56C32277F96400B03009 /* AudioInterruptionMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067D56C22277F96400B03009 /* AudioInterruptionMonitor.swift */; };
@@ -115,8 +116,10 @@
 		06BFAC712262886700E34DCA /* WordPointerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6D2262886700E34DCA /* WordPointerViewController.swift */; };
 		06BFAC722262886700E34DCA /* WordPointerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6E2262886700E34DCA /* WordPointerBuilder.swift */; };
 		06BFAC732262886700E34DCA /* WordPointerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFAC6F2262886700E34DCA /* WordPointerInteractor.swift */; };
+		06D2A736227FBA1E00E14FBB /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D2A735227FBA1E00E14FBB /* SnapshotHelper.swift */; };
 		06D470B6227665BC00A4AC84 /* GaplessAudioRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D470B5227665BC00A4AC84 /* GaplessAudioRequestBuilder.swift */; };
 		06D470B8227665C700A4AC84 /* GappedAudioRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D470B7227665C700A4AC84 /* GappedAudioRequestBuilder.swift */; };
+		06DEC42A227F8E9000163FF1 /* Springboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DEC429227F8E9000163FF1 /* Springboard.swift */; };
 		0D0BF1B4207F42E40022B6EE /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BF1B3207F42E40022B6EE /* ReviewService.swift */; };
 		13FE651AD050C1195EA98683 /* Pods_VFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63202218298A5188DAAFC6C3 /* Pods_VFoundation.framework */; };
 		2F1DFC6777C692FB63EB6F0F /* Pods_QueuePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98886280A49AD0690D9F5B0 /* Pods_QueuePlayer.framework */; };
@@ -625,6 +628,7 @@
 		0656B545226BCFDD003962A9 /* uthmanic_hafs_ver12.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = uthmanic_hafs_ver12.otf; sourceTree = "<group>"; };
 		0656B549226BD536003962A9 /* quran.ar.uthmani.v2.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = quran.ar.uthmani.v2.db; path = Resources/quran.ar.uthmani.v2.db; sourceTree = "<group>"; };
 		065F58642077101F00E83AA2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		06612C44227F8974006C0B24 /* AppScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreenshots.swift; sourceTree = "<group>"; };
 		067D56BC227690D800B03009 /* RemoteCommandsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandsHandler.swift; sourceTree = "<group>"; };
 		067D56BE22769CC000B03009 /* NowPlayingUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingUpdater.swift; sourceTree = "<group>"; };
 		067D56C22277F96400B03009 /* AudioInterruptionMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInterruptionMonitor.swift; sourceTree = "<group>"; };
@@ -711,9 +715,11 @@
 		06BFAC6D2262886700E34DCA /* WordPointerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerViewController.swift; sourceTree = "<group>"; };
 		06BFAC6E2262886700E34DCA /* WordPointerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerBuilder.swift; sourceTree = "<group>"; };
 		06BFAC6F2262886700E34DCA /* WordPointerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordPointerInteractor.swift; sourceTree = "<group>"; };
+		06D2A735227FBA1E00E14FBB /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		06D470B5227665BC00A4AC84 /* GaplessAudioRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaplessAudioRequestBuilder.swift; sourceTree = "<group>"; };
 		06D470B7227665C700A4AC84 /* GappedAudioRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GappedAudioRequestBuilder.swift; sourceTree = "<group>"; };
 		06DB453FD466D51920429985 /* Pods_Quran.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Quran.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		06DEC429227F8E9000163FF1 /* Springboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Springboard.swift; sourceTree = "<group>"; };
 		0D0BF1B3207F42E40022B6EE /* ReviewService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewService.swift; sourceTree = "<group>"; };
 		0DC8E565E1680EEBA186D733 /* Pods-QuranUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuranUITests/Pods-QuranUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		10CFDA740ED94B3515170DF3 /* Pods_QuranUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuranUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1970,7 +1976,10 @@
 		545D96601EBF9766006D758A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				06D2A735227FBA1E00E14FBB /* SnapshotHelper.swift */,
+				06DEC429227F8E9000163FF1 /* Springboard.swift */,
 				545D965E1EBF9761006D758A /* MonkeyTests.swift */,
+				06612C44227F8974006C0B24 /* AppScreenshots.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -3657,6 +3666,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				545D965F1EBF9761006D758A /* MonkeyTests.swift in Sources */,
+				06612C45227F8974006C0B24 /* AppScreenshots.swift in Sources */,
+				06DEC42A227F8E9000163FF1 /* Springboard.swift in Sources */,
+				06D2A736227FBA1E00E14FBB /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4586,7 +4598,6 @@
 					"$(PROJECT_DIR)/QuranFoundation",
 				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.QuranTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4609,7 +4620,6 @@
 					"$(PROJECT_DIR)/QuranFoundation",
 				);
 				INFOPLIST_FILE = QuranTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.QuranTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4666,7 +4676,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -4717,7 +4727,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

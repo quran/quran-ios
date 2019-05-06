@@ -26,3 +26,8 @@ DerivedData
 fastlane/Appfile
 fastlane/report.xml
 QuranFoundation/QuranFoundation.framework.dSYM
+
+fastlane/screenshots
+fastlane/metadata
+fastlane/Preview.html
+fastlane/Deliverfile

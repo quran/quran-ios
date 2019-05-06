@@ -100,6 +100,7 @@ final class QuranAudioBannerViewController: UIViewController, QuranAudioBannerPr
 
         qariView.playButton.addTarget(self, action: #selector(qariPlayTapped), for: .touchUpInside)
         qariView.backgroundButton.addTarget(self, action: #selector(qariTapped), for: .touchUpInside)
+        qariView.backgroundButton.accessibilityLabel = "Qari banner"
     }
 
     private func setUpPlayView() {

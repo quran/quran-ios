@@ -16,6 +16,11 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
+### ios screenshots
+```
+fastlane ios screenshots
+```
+
 ### ios version_reset
 ```
 fastlane ios version_reset

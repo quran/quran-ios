@@ -139,7 +139,10 @@ struct SQLiteBookmarksPersistence: BookmarksPersistence, SQLitePersistence {
 
     func removePageBookmark(_ page: Int) throws {
         return try run { connection in
-            let filter = Bookmarks.table.filter(Bookmarks.page == page)
+            let filter = Bookmarks.table.filter(
+                Bookmarks.page == page &&
+                Bookmarks.sura == nil &&
+                Bookmarks.ayah == nil)
             try connection.run(filter.delete())
         }
     }

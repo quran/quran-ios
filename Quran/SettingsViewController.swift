@@ -129,7 +129,6 @@ class SettingsViewController: BaseTableBasedViewController, SettingsPresentable,
     func presentContactUs() {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
-            mail.navigationBar.tintColor = .white
             mail.mailComposeDelegate = self
             mail.setToRecipients(["ios@quran.com"])
             mail.setSubject("Feedback about Quran for iOS App")

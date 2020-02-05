@@ -21,6 +21,7 @@ protocol WordPointerPresentable: Presentable {
     func animateOut(completion: @escaping () -> Void)
 
     func showWordPopover(text: String, at point: CGPoint)
+    func showWordPopover(text: String, at point: CGPoint, word: AyahWord, position: AyahWord.Position)
     func hideWordPopover()
 }
 
@@ -106,7 +107,7 @@ final class WordPointerInteractor: PresentableInteractor<WordPointerPresentable>
     }
 
     private func showWordPopover(text: String, at point: CGPoint, word: AyahWord, position: AyahWord.Position) {
-        presenter.showWordPopover(text: text, at: point)
+        presenter.showWordPopover(text: text, at: point, word: word, position: position)
         selectedWord = word
     }
 

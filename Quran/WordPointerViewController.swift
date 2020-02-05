@@ -226,6 +226,27 @@ final class WordPointerViewController: UIViewController, WordPointerPresentable,
     func hideWordPopover() {
         popover.hideNoAnimation()
     }
+    
+    lazy var castParent = container as? QuranView
+
+    func showWordPopover(text: String, at point: CGPoint, word: AyahWord, position: AyahWord.Position) {
+        let page = Quran.pageForAyah(position.ayah)
+
+        guard let cells = castParent?.collectionView.visibleCells as? [QuranImagePageCollectionViewCell],
+            let cell = cells.first(where: { $0.page?.pageNumber == page }),
+            let infos = cell.highlightingView.ayahInfoData?[position.ayah],
+            let info = infos.first(where: { $0.position == position.position }),
+            let croppedImage = cell.mainImageView.image?.cgImage?.cropping(to: info.rect) else { return }
+        var action: PopoverAction
+        var wordImage = UIImage(cgImage: croppedImage)
+        if Theme.current == .light {
+            wordImage = wordImage.inverted()
+        }
+        wordImage = wordImage.aspectFittedToHeight(40.0 - 8.0 * 2)
+        action = PopoverAction(image: wordImage, title: text, handler: nil)
+        let isUpward = point.y < 63
+        popover.show(to: point, isUpward: isUpward, with: [action])
+    }
 
     // MARK: - Translation Selection
 

@@ -2,15 +2,15 @@
  New Localizations in Quran for iOS. TODO: need to be reviewed by a native speaker.
  */
 
-"NetworkError_ConnectionLost" = "Internet verbinding is verbroken. Ga naar een locatie waar meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug stabiel te zijn.";
+"NetworkError_ConnectionLost" = "Internet verbinding is verbroken. Ga naar een locatie waar een meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug tot stand is gekomen.";
 "NetworkError_InternationalRoamingOff" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
 "NetworkError_NotConnectedToInternet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
-"NetworkError_ServerNotReachable" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-"unknown_error_message" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-"NetworkError_Parsing" = "Oops! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"NetworkError_ServerNotReachable" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"unknown_error_message" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"NetworkError_Parsing" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
 
-"FileSystemError_Unknown" = "Onbekende fout bij het toetreden van de hardeschijf van het toestel.";
-"FileSystemError_NoDiskSpace" = "Geen opslagruimte beschikbaar om te downloaden.";
+"FileSystemError_Unknown" = "Er is een onbekende fout opgetreden bij het toetreden van de hardeschijf van het toestel.";
+"FileSystemError_NoDiskSpace" = "Er is geen opslagruimte meer beschikbaar. Downloaden mislukt.";
 
 "verseCopy" = "Kopieer";
-"verseShare" = "Deel…";
+"verseShare" = "Delen…";

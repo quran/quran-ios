@@ -7,6 +7,16 @@
 
 This is a simple (madani based) quran app for iOS (iPhone/iPad).
 
+
+# IMPORTANT ANNOUNCEMENT
+
+We decided to close source the full app code due to multiple incidents of publishing the app code **as it is** without any -even minor- changes on the app store (to the extent that some use our screenshots). Other incidents include selling the source code online to take advantage of innocent people who are unaware of this open source project.
+
+We currently thinking of splitting up the app into modules and open source individual modules. People can use these modules in their existing Islamic apps to add Quran reading functionalities or create a full Quran reading app. We don't have a timeline on when this is going to be released.
+
+
+In the mean time, you can use this repo to file issues and we will do our best to address them inshaa'Allah.
+
 ## Beta Testing
 
 It would be great if you could send an e-mail to ios@quran.com then we will notify you for beta builds and you can then help us find bugs before going live.

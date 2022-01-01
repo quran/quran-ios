@@ -1,0 +1,125 @@
+/*
+ Author: Salih Aydin <slhydn@icloud.com>
+ */
+
+// MARK: - General
+
+"button.done" = "Tamam";
+"button.delete" = "Sil";
+
+// MARK: - Errors
+
+"NetworkError_ConnectionLost" = "İnternet bağlantısı bulunamadı. İnternet bağlantısının daha stabil olduğu bir yere geçin veya düzelene kadar bekleyin.";
+"NetworkError_InternationalRoamingOff" = "Uluslararası dolaşıma izin verilmedi. Uluslararası dolaşım ayarlarını değiştirin veya bir kablosuz ağa bağlanın.";
+"NetworkError_NotConnectedToInternet" = "İnternet bağlantısı bulunamadı. Kablosuz bağlantıyı veya hücresel ağ bağlantısını etkinleştirin.";
+"NetworkError_ServerNotReachable" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
+"unknown_error_message" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
+"NetworkError_Parsing" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
+
+"FileSystemError_Unknown" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
+"FileSystemError_NoDiskSpace" = "İndirilenleri kaydetmek için disk alanı yetersiz";
+
+// MARK: - Quran
+
+"ayah" = "Ayet";
+"surah" = "Sure";
+
+
+"translatorLabel: " = "Çevirmen: ";
+"upgradeTranslationButtonTitle" = "GÜNCELLE";
+
+"translationsSelectionTitle" = "Meal/Tefsir Seç";
+"translationsSelectionPrompt" = "Görmek istediğiniz sırada seçin";
+
+"errorInTranslationText" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
+"noAvailableTranslationText" = "Bu Ayetin meali bulunmamaktadır.";
+
+"searchRecentsTitle" = "Son aramalar";
+"searchPopularTitle" = "Bununla aramayı deneyin";
+"searchPlaceholder" = "Sure, ayet, meal, tefsir, and numaralar";
+
+"translationTextType" = "Meal";
+"transliterationTextType" = "Okunuşu";
+
+"write_review" = "Uygulamamızı AppStore'de değerlendirin...";
+"contact_us" = "Bizimle iletişime geçin!";
+"share_app" = "Uygulamayı paylaşın...";
+
+"menu.arabic" = "Arapça";
+"menu.translation" = "Meal";
+"menu.select_translation" = "Meal/Tefsir seç";
+"menu.pointer" = "Meal imleci";
+"menu.pointer.select_translation" = "İmleç Göstersin";
+"menu.fontSizeLetter" = "A";
+"menu.fontSize" = "Yazı Boyutu";
+
+"tab.notes" = "Notlar";
+
+"shareMarketingSuffix" = "-\nQuran - by Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+
+"repetitionExperimentalSuffix" = "   (Deneysel)";
+
+"update.dark-theme.title" = "Koyu Tema";
+"update.dark-theme.desc" = "Uygulamamıza koyu tema ekledik. Denemek ister misiniz?";
+"update.dark-theme.turnOn" = "Etkinleştir";
+
+"update.filesystem.title" = "Veritabanı güncelleniyor...";
+
+"theme.light" = "Açık";
+"theme.dark" = "Koyu";
+"theme.auto" = "Otomatik";
+"theme.auto.message" = "Kur'an uygulamasının teması iPhone ayarlarına göre belirlenecek";
+
+"reciters.title" = "Dinlemek istediğiniz hafızı seçiniz";
+
+// MARK: - Audio
+
+"audio.playing.action.modify" = "Düzenle";
+"audio.playing.message" = "%d numaralı cüzün sonuna kadar sesli okunuyor";
+"audio.downloading.message" = "%d numaralı cüzün sonuna kadar ses indiriliyor ";
+
+"audio.playing-verses.label" = "Okunan ayetler";
+"audio.adjust-end-verse-to-the-end.label" = "Bitişi sonuna ayarla";
+
+"audio.select-start-verse" = "Başlangıç Ayetini Seçin";
+"audio.select-end-verse" = "Son Ayeti Seçin";
+
+// MARK: - Bookmarks
+
+"bookmarks.no-data.title" = "Ayraçlar ekleniyor...";
+"bookmarks.no-data.text" = "Kur'an okurken, bulunduğunuz sayfayı işaretlemek için Ayraç butonuna basın.";
+
+// MARK: - Notes
+
+"notes.no-data.title" = "Vurgulanan ayetler kaydediliyor...";
+"notes.no-data.text" = "Ayete dokunup basılı tutun. Birden fazla ayet seçmek için parmağınızı sürükleyebilirsiniz, sonrasında tekrar Ayraç butonuna basın.";
+"notes.verses-count" = "(+%d ayet)";
+"notes.delete.alert.title" = "Vurguyu silin";
+"notes.delete.alert.body" = "İlgili not silinecek.";
+"notes.icloud.alert.title" = "iCloud Senkronizasyonu";
+"notes.icloud.alert.body" = "Uygulama ayraçları ve notlarınızı farklı cihazlarınız arasında kullanabilmeniz için iCloud senkronizasyonunu kullanmaktadır. Bu özelliği cihazınızın iCloud ayarlarından kapatabilirsiniz.";
+
+// MARK: - Ayah Menu
+
+"ayah.menu.copy" = "Kopyala";
+"ayah.menu.share" = "Paylaş...";
+"ayah.menu.play-end-juz" = "Cüzün sonuna kadar";
+"ayah.menu.highlight" = "Vurgula";
+"ayah.menu.highlight-select-color" = "renk seç";
+"ayah.menu.add-note" = "Not Ekle";
+"ayah.menu.edit-note" = "Notu Düzenle";
+"ayah.menu.delete-note" = "Notu Sil";
+"ayah.menu.delete-highlight" = "Vurgulanan Yeri Sil";
+
+"ayah.text.read-more" = "Daha fazlası";
+
+// MARK: - What's new
+
+"new.title" = "Yenilikler";
+"new.action" = "Devam Et";
+
+"new.bookmarks-notes" = "Ayraç & Notlar";
+"new.bookmarks-notes.details" = "* Uygulama ayraçlarınızı, kaldığınız sayfaları ve vurguladığınız ayetleri iCloud kullanarak otomatik olarak senkronize edecektir.\n* Ayete not ekleyin.\n* Ayeti vurgulayacağınız rengi seçin.\n* Birden fazla ayeti vurgulamak için parmağınızı basılı tutup sürükleyin.";
+
+"new.audio" = "Ses";
+"new.audio.details" = "* Yeni hafız: Dr. Ayman Suwaid.\n* Ses tekrarı daha iyi bir deneyim için tekrar tasarlandı.\n* Birden fazla ayeti vurgulamak için parmağınızı basılı tutup sürükleyin, sadece seçili ayetleri dinlemek için oynatma tuşuna basın.";

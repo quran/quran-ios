@@ -23,11 +23,9 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-fastlane/Appfile
-fastlane/report.xml
-QuranFoundation/QuranFoundation.framework.dSYM
 
-fastlane/screenshots
-fastlane/metadata
-fastlane/Preview.html
-fastlane/Deliverfile
+# Swift Package Manager
+
+.build/
+Packages/
+.swiftpm

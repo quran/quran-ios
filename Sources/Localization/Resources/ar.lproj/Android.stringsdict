@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<plist version="1.0">
+    <dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>zero</key>
+                <string>لم يتم تحميل سور بعد‎</string>
+                <key>one</key>
+                <string>تم تحميل سورة واحده</string>
+                <key>two</key>
+                <string>تم تحميل سورتان</string>
+                <key>few</key>
+                <string>تم تحميل %1$d سور</string>
+                <key>many</key>
+                <string>تم تحميل %1$d سورة</string>
+                <key>other</key>
+                <string>تم تحميل %1$d سورة</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>zero</key>
+                <string>لا توجد نتائج في البحث عن \&quot;%1$d\&quot;</string>
+                <key>one</key>
+                <string>نتيجة واحده في البحث عن \&quot;%1$d\&quot;</string>
+                <key>two</key>
+                <string>نتيجتان في البحث عن \&quot;%1$d\&quot;</string>
+                <key>few</key>
+                <string>%2$d نتائج في البحث عن \&quot;%1$d\&quot;</string>
+                <key>many</key>
+                <string>%2$d نتيجة في البحث عن \&quot;%1$d\&quot;</string>
+                <key>other</key>
+                <string>%2$d نتيجة في البحث عن \&quot;%1$d\&quot;</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>zero</key>
+                <string>آية</string>
+                <key>one</key>
+                <string>آية</string>
+                <key>two</key>
+                <string>آيتان</string>
+                <key>few</key>
+                <string>%d آيات</string>
+                <key>many</key>
+                <string>%d آية</string>
+                <key>other</key>
+                <string>%d آية</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>zero</key>
+                <string>لم يتم حذف عناصر</string>
+                <key>one</key>
+                <string>تم حذف عنصر واحد</string>
+                <key>two</key>
+                <string>تم حذف عنصران</string>
+                <key>few</key>
+                <string>تم حذف %d عناصر</string>
+                <key>many</key>
+                <string>تم حذف %d عنصر</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

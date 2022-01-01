@@ -1,0 +1,121 @@
+/*
+ New Localizations in Quran for iOS.
+ */
+
+// MARK: - General
+
+"button.done" = "تم";
+"button.delete" = "حذف";
+
+// MARK: - Errors
+
+"NetworkError_ConnectionLost" = "فقد الإتصال بشبكة الإنترنت. من فضلك تحرك إلى مكان به إشارة أفضل.";
+"NetworkError_InternationalRoamingOff" = "لا يسمح باستخدام التجوال الدولي. من فضلك قم بتغيير إعدادات خدمة التجوال الدولي، أو إتصل بالإنترنت عن طريق Wi-Fi.";
+"NetworkError_NotConnectedToInternet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";
+"NetworkError_ServerNotReachable" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"unknown_error_message" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"NetworkError_Parsing" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+
+"FileSystemError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"FileSystemError_NoDiskSpace" = "لا توجد مساحة كافيه في ذاكرة الهاتف لحفظ التنزيلات.";
+
+// MARK: - Quran
+
+"ayah" = "آية";
+"surah" = "سورة";
+
+"translatorLabel: " = "المفسر: ";
+"upgradeTranslationButtonTitle" = "تحديث";
+
+"translationsSelectionTitle" = "اختر التفاسير والترجمات";
+"translationsSelectionPrompt" = "اختار بالترتيب المرغوب فيه";
+
+"errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
+
+"searchRecentsTitle" = "عمليات البحث الأخيرة";
+"searchPopularTitle" = "اختبر البحث بإستخدام";
+"searchPlaceholder" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
+
+"translationTextType" = "الترجمة إلى الإنجليزية";
+"transliterationTextType" = "نسخ الحروف للإنجليزية ";
+
+"write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
+"contact_us" = "اتصل بنا";
+"share_app" = "مشاركة التطبيق...";
+
+"menu.arabic" = "عربي";
+"menu.translation" = "الترجمات";
+"menu.select_translation" = "اختر التفاسير والترجمات";
+"menu.pointer" = "مؤشر ترجمة الكلمات";
+"menu.pointer.select_translation" = "لغة المؤشر";
+"menu.fontSizeLetter" = "أ";
+"menu.fontSize" = "حجم الخط";
+
+"tab.notes" = "الملاحظات";
+
+"ayah.menu.copy" = "نسخ";
+"ayah.menu.share" = "مشاركة...";
+
+"repetitionExperimentalSuffix" = "   (تجريبي)";
+
+"update.dark-theme.title" = "القراءة الليلية";
+"update.dark-theme.desc" = "لقد أضفنا مؤخرًا القراءة الليلية. هل ترغب في تشغيلها؟";
+"update.dark-theme.turnOn" = "تشغيل";
+
+"update.filesystem.title" = "جاري تحديث قواعد البيانات ...";
+
+"theme.light" = "فاتح";
+"theme.dark" = "داكن";
+"theme.auto" = "تلقائي";
+"theme.auto.message" = "سوف يلتزم تطبيق القرآن بإعداد مظهر iPhone الخاص بك";
+
+"reciters.title" = "اختر القارئ";
+
+// MARK: - Audio
+
+"audio.playing.action.modify" = "تغير";
+"audio.playing.message" = "تشغيل الصوت حتى نهاية الجزء %d";
+"audio.downloading.message" = "تنزيل الصوت إلى نهاية الجزء %d";
+
+"audio.playing-verses.label" = "سماع آيات";
+"audio.adjust-end-verse-to-the-end.label" = "ضبط نهاية الآية لنهاية";
+
+"audio.select-start-verse" = "حدد بداية التشغيل الصوتي";
+"audio.select-end-verse" = "حدد نهاية التشغيل الصوتي";
+
+// MARK: - Bookmarks
+
+"bookmarks.no-data.title" = "إضافة الإشارات المرجعية...";
+"bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
+
+// MARK: - Notes
+
+"notes.no-data.title" = "إضافة آيات مرجعية...";
+"notes.no-data.text" = "اضغط مع الاستمرار على الآيات. يمكنك تمديد التحديد ليشمل عدة آيات ، ثم اضغط على زر الإشارة المرجعية.";
+"notes.verses-count" = "(+%d آيات)";
+"notes.delete.alert.title" = "حذف الإشارة المرجعية";
+"notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
+"notes.icloud.alert.title" = "مزامنة iCloud";
+"notes.icloud.alert.body" = "يستخدم التطبيق iCloud لمزامنة الإشارات المرجعية والملاحظات عبر أجهزتك. يمكنك تعطيله من جهازك من خلال إعدادات iCloud.";
+
+// MARK: - Ayah Menu
+
+"ayah.menu.copy" = "نسخ";
+"ayah.menu.share" = "مشاركة...";
+"ayah.menu.play-end-juz" = "حتى نهاية الجزء";
+"ayah.menu.highlight" = "تحديد";
+"ayah.menu.highlight-select-color" = "إختر لون";
+"ayah.menu.add-note" = "اضف ملاحظة";
+"ayah.menu.edit-note" = "تحرير الملاحظة";
+"ayah.menu.delete-note" = "حذف الملاحظة";
+"ayah.menu.delete-highlight" = "حذف التحديد";
+
+"ayah.text.read-more" = "اقرأ المزيد";
+
+// MARK: - What's new
+
+"new.title" = "المضاف حديثاً";
+"new.action" = "استمر";
+
+"new.reciters" = "القراء الجدد";

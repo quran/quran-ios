@@ -1,0 +1,288 @@
+"app_name" = "Qurʼon";
+"downloadPrompt_title" = "Kerakli fayllar yuklansinmi?";
+"downloadPrompt" = "Ilova toʻliq ishlashi uchun baʼzi fayllarni koʻchirib olish lozim.\
+Agar fayllarni hozir saqlab olmasangiz, Qurʼon sahifalarining ochilishi biroz sekin amalga oshishi mumkin\
+hamda doimiy Internet aloqasi kerak boʻladi. Fayllarni hozir saqlab olasizmi?";
+"downloadTabletPrompt" = "Planshetlar uchun rasmlar yangilandi. Yangi fayllarni hozir saqlab olasizmi?";
+"downloadImportantPrompt" = "Uskunangizdagi Qurʼon rasmlari uchun kichik, ammo muhim oʻzgartirishlar kiritish lozim.\
+Yangilangan fayllarni hozir saqlab olasizmi?";
+"downloadPrompt_ok" = "Ha";
+"downloadPrompt_no" = "Yoʻq";
+"downloading_title" = "Saqlanmoqda…";
+"downloading_message" = "Iltimos, fayllar toʻliq saqlanib olinguncha biroz kutib turing.";
+"extracting_title" = "Ishlanmoqda…";
+"menu_about" = "Ilova haqida";
+"menu_other_apps" = "Boshqa ilovalar";
+"menu_settings" = "Sozlamalar";
+"menu_jump_last_page" = "Soʻnggi oʻqilgan sahifa";
+"menu_bookmarks" = "Xatchoʻplar";
+"menu_bookmarks_page" = "Sahifa xatchoʻplari";
+"menu_bookmarks_ayah" = "Oyat xatchoʻplari";
+"menu_sort" = "Tartib";
+"menu_sort_date" = "Sana";
+"menu_sort_location" = "Qurʼondagi yeri";
+"menu_sort_group_by_tags" = "Teglarga boʻlish";
+"menu_show_date" = "Sanalarni koʻrsatish";
+"menu_translation" = "Tarjimalar";
+"menu_back_to_page" = "Qurʼon";
+"menu_help" = "Yordam";
+"menu_search" = "Izlash";
+"menu_get_translations" = "Tarjimalar yuklab olish";
+"menu_jump" = "Oʻtish";
+"gotoPage" = "Sahifaga oʻtish";
+"cancel" = "Bekor qilish";
+"please_wait" = "Iltimos, biroz kuting…";
+"about_description" = "\"Quran for Android\" - bu bepul Qurʼon ilovasidir. Iltimos, ilovani ishlab chiqarishda ishtirok etganlarni duolaringizda unutmang.";
+"about_data_sources" = "Maʼlumotlar manbalari";
+"about_images" = "Rasmlar";
+"about_madani_images" = "Qurʼon sahifalari rasmlari Podshoh Fahd Qurʼon Bosma Kompleksi shriftlari asosida yaratildi";
+"about_naskh_images" = "\"Quran - Naskh\" ilovasi uchun rasmlar \"SHL Info Systems\" ruhsati bilan olindi";
+"about_qaloon_images" = "\"Quran - Qaloon\" ilovasi uchun rasmlar \"Nous Memes Editions Et Diffusion (Tunisia)\" ruhsati bilan olindi";
+"about_quranicaudio_summary" = "Muttasil mp3 Qurʼon tilovatlari";
+"about_quran_ksu" = "Elektron Musʼhaf proyekti";
+"about_quran_ksu_summary" = "Arabcha tafsir hamda baʼzi tarjimalar Podshoh Saud Universiteti qoshidagi Elektron Musʼhaf proyektidan olindi.\
+Shuningdek doktor Ayman Suvayd qiroati ham ushbu proyektdan olingan.\
+";
+"about_furqan_summary" = "Usmoniy matn hamda arabcha tafsirlar";
+"about_quran_enc_summary" = "Koʻplab tillardagi Qurʼon maʼnolari tarjimalari";
+"about_tanzil_summary" = "Baʼzi tillardagi Qurʼon maʼnolari tarjimalari";
+"about_noorhidayat_summary" = "\"Noorehira\" shrifti hamda Mufti Taqi Usmoniy tarjimasi";
+"about_open_source" = "Ochiq kodli proyektlar";
+"about_others" = "Boshqalar";
+"about_contributors" = "Ishtirokchilar";
+"about_contributors_summary" = "Ushbu \"Quran for Android\" ilovasini ishlab chiqarishda ishtirok etganlar roʻyxati";
+"help_title" = "Koʻp soʻralgan savollar";
+"help" = "\
+<b>Audiolarni qanday eshitish mumkin?</b>\
+<br/>Qurʼonning istalgan sahifasini oching va ekranga bir marta bosing.\
+Ekranning quyi qismida chalish tugmasi va qorining ismini koʻrasiz.\
+Qori nomiga bosib roʻyxatdan boshqalarini ham tanlash mumkin.\
+Chalish tugmasiga bosib ochiq turgan sahifa yoki surani eshitish mumkin.\
+<br/>\
+<br/><b>Tarjimalarni qanday oʻqish mumkin?</b>\
+<br/>Qurʼonning istalgan sahifasini oching va ekranga bir marta bosing.\
+Ekranning yuqori qismida globus rasmini koʻrasiz. Globusga bosib tarjima tanlang.\
+<br/>\
+Agar avval saqlangan tarjimalar mavjud boʻlmasa, tarjimalarni saqlab olish sahifasi ochiladi.\
+Istalgan tarjimani tanlab, saqlab oling. Shundan keyin orqaga qaytib globus rasmini yana bir marta bosing.\
+<br/>\
+<br/><b>Sahifani qanday xatchoʻplash mumkin?</b>\
+<br/>Qurʼonning istalgan sahifasini oching va ekranga bir marta bosing.\
+Ekranning yuqori qismida xatchoʻp rasmini koʻrasiz. Xatchoʻpga bir marta bosish orqali sahifani\
+xatchoʻplang (rasm rangi toʻq oq rangga oʻzgaradi), yana bir marta bosilsa sahifa xatchoʻplardan oʻchiriladi.\
+<br/>\
+<br/><b>Shriftlarni qanday kattalashtirish mumkin?</b>\
+<br/>Arabcha matnlarni kattalashtirish uchun uskunangizni landshaft (yotiq) holatda tuting.\
+Tarjima matnlari shriftini esa sozlamalar orqali oʻzgartirishingiz mumkin.\
+<br/>\
+<br/><b>Oyatni boshqalar bilan qanday boʻlishish mumkin?</b>\
+<br/>Qurʼonning istalgan sahifasini oching va biror oyat ustiga biroz bosib turing.\
+Yangi ochilgan menyu orqali oyatni xatchoʻplarga qoʻshishingiz, teglashingiz, boʻlishingiz,\
+tarjimasini koʻrishingiz hamda qiroatini tinglashingiz mumkin.\
+<br/>\
+<br/><b>Malayalam/Tamil/Bengali/Urdu shriflari ishlamayabdi!</b>\
+<br/>Afsuski, Android 4.0 dan avvalgi versiyalarda ushbu shriftlar umuman ishlamaydi va\
+bu boradi biz biror yordam qila olmaymiz.\
+";
+"search_hint" = "Izlash";
+"quranSearchType" = "Suralar";
+"search_full_results" = "Barcha natijalar";
+"search_entire_mushaf" = "Butun musʼhafni qidirish";
+"storage_permission_rationale" = "Qurʼon maʼlumotlarni saqlash uchun tashqi xotiraga\
+bogʻlanishga ruxsat berishingizni soʻramoqda. Ushbu ruxsatni bermasangiz ham Qurʼon ishlashi\
+mumkin, biroq ilovani oʻchirsangiz yoki maʼlumotlarni tozalasangiz barcha saqlab olingan\
+suralar, audio va tarjimalar ham oʻchib ketadi. Tashqi xotiraga bogʻlanishga ruxsat\
+berasizmi?";
+"storage_permission_please_restart" = "Iltimos, ushbu oʻzgarish amalga kirishi uchun\
+ilovani qayta ishga tushiring.";
+"found_in_sura" = "%1$@ surasi, %2$d-oyat";
+"no_results" = "\"%@\" boʻyicha natija topilmadi";
+"no_arabic_search_available" = "Arabcha izlash moduli oʻrnatilmagan, iltimos, avval uni saqlab oling. Soʻngra qayta izlab koʻring.";
+"get_arabic_search_db" = "Arabcha izlash bazasini oʻrnatish";
+"prefs_volume_key_navigation_title" = "Ovoz tugmalaridan foydalanish";
+"prefs_volume_key_navigation_summary" = "Qurilmaning ovoz tugmalari yordamida varoqlash";
+"prefs_category_reading" = "Oʻqish";
+"prefs_category_translation" = "Tarjima sozlamalari";
+"prefs_category_display_settings" = "Koʻrinish";
+"prefs_use_arabic_title" = "Arabcha rejim (الوضع العربي)";
+"prefs_use_arabic_summary_on" = "Ilova arab tilida ishlaydi";
+"prefs_new_background_title" = "Yangi fon";
+"prefs_lock_orientation_title" = "Ekran oriyentatsiyasini qulflash";
+"prefs_lock_orientation_summary_on" = "Qurʼon sahifalari doim belgilangan oriyentatsiyada boʻladi";
+"prefs_lock_orientation_summary_off" = "Joriy oriyentatsiyadan foydalaniladi";
+"prefs_landscape_orientation_title" = "Landshaft rejim";
+"prefs_landscape_orientation_summary_on" = "Yotiq oriyentatsiyadan foydalaniladi";
+"prefs_landscape_orientation_summary_off" = "Tik oriyentatsiyadan foydalaniladi";
+"prefs_night_mode_title" = "Tunggi rejim";
+"prefs_night_mode_summary" = "Qora fon va porloq shriftlardan foydalaniladi";
+"prefs_night_mode_text_brightness_title" = "Matn porloqliligi";
+"prefs_night_mode_text_brightness_summary" = "Tunggi rejim ishga tushirilgan paytdagi matn porloqliligi";
+"prefs_overlay_page_info_title" = "Sahifa maʼlumotlari";
+"prefs_overlay_page_info_summary" = "Sura nomi, sahifa va juz raqamlarini koʻrsatish";
+"prefs_display_marker_title" = "Boʻlim maʼlumotlari";
+"prefs_display_marker_summary" = "Juz, hizb kabi boʻlimlarga yetib kelganda bu haqida maʼlumot koʻrsatish";
+"prefs_highlight_bookmarks_title" = "Xatchoʻp maʼlumotlari";
+"prefs_highlight_bookmarks_summary" = "Xatchoʻplangan oyatlarni alohida ajratib koʻrsatish";
+"prefs_translation_text_title" = "Tarjima shrifti oʻlchami";
+"prefs_translations" = "Tarjimalar";
+"prefs_translations_summary" = "Tarjimalarni saqlab olish va boshqarish";
+"prefs_ayah_before_translation_title" = "Oyatni avval koʻrsatish";
+"prefs_ayah_before_translation_summary" = "Arabcha oyatlarni tarjima matni ustida koʻrsatish";
+"prefs_category_download" = "Saqlab olish";
+"prefs_streaming_title" = "Striming";
+"prefs_streaming_summary" = "Imkon qadar audio strimingdan foydalanish";
+"prefs_download_amount_title" = "Hajm";
+"prefs_download_amount_summary" = "Nomuttasil audio fayllarni saqlab olish hajmi";
+"prefs_audio_manager_summary" = "Qurʼon audio fayllarini saqlab olish va boshqarish";
+"downloaded_translations" = "Saqlab olingan";
+"available_translations" = "Saqlab olish mumkin";
+"remove_button" = "Oʻchirish";
+"dialog_ok" = "OK";
+"prefs_app_location_title" = "Maʼlumotlar jildi";
+"prefs_app_location_summary" = "Qurʼon fayllari saqlanadigan joy";
+"prefs_send_logs_title" = "Qaydlarni yuborish";
+"prefs_send_logs_summary" = "Ishlab chiqaruvchiga debag qaydlarini yuborish";
+"prefs_sdcard_internal" = "Ichki xotira";
+"prefs_sdcard_external" = "Tashqi xotira (SD karta %1$d)";
+"prefs_app_size" = "Mavjud fayllar hajmi:";
+"prefs_calculating_app_size" = "Ilova hajmi hisoblanmoqda…";
+"prefs_copying_app_files" = "Ilova fayllari koʻchirilmoqda…";
+"prefs_err_moving_app_files" = "Fayllarni koʻchirib oʻtkazishda xatolik yuz berdi";
+"prefs_no_enough_space_to_move_files" = "Fayllarni koʻchirib oʻtkazish uchun yetarli joy mavjud emas";
+"prefs_megabytes_int" = "%1$d Mb";
+"prefs_megabytes_str" = "%@ Mb";
+"prefs_dual_page_mode_title" = "Juft sahifa rejimi";
+"prefs_dual_page_mode_enabled" = "Yotiq holatda ikki sahifa yonma-yon koʻrinadi";
+"prefs_dual_page_mode_disabled" = "Yotiq holatda ham faqat bitta sahifa koʻrinadi";
+"prefs_category_advanced" = "Ilgʻor";
+"prefs_category_advanced_summary" = "Xatchoʻplarni import/eksport qilish, maʼlumotlar jildini tanlash va h.k.";
+"prefs_export_title" = "Eksport";
+"prefs_export_summary" = "Xatchoʻp va teglarni eksport qilish";
+"prefs_import_title" = "Import";
+"prefs_import_summary" = "Xatchoʻp va teglarni import qilish";
+"prefs_page_type_title" = "Sahifa turi (eksperimental)";
+"prefs_page_type_summary" = "Qurʼon sahifalari turini tanlash";
+"prefs_sura_translated_name_title" = "Sura nomi tarjimasi";
+"prefs_sura_translated_name_summary" = "Sura nomi tarjimasi koʻrsatilsin";
+"more_translations" = "Yana tarjimalar";
+"import_data_permissions_error" = "Ruxsat xatoliklari tufayli zaxira faylini oʻqib boʻlmadi.";
+"import_data_error" = "Yaroqsiz zaxira fayl (yoxud zaxira faylni oʻqib boʻlmadi).";
+"import_data" = "Import";
+"import_data_and_override" = "Ushbu import barcha xatchoʻplarni %1$d ta xatchoʻp(lar) va %2$d ta teg(lar) bilan almashtiradi.\
+Import qilinsinmi?";
+"import_successful" = "Muvaffaqiyatli import qilindi";
+"export_data_error" = "Eksport qilishda xatolik yuz berdi";
+"exported_data" = "Maʼlumotlar \"%1$@\"ga eksport qilindi";
+"move_up" = "Yuqoriga";
+"move_down" = "Pastga";
+"delete_translation" = "Oʻchirish";
+"warning" = "Ogohlantirish";
+"kitkat_external_message" = "Ilovani tashqi xotiraga (SD kartaga) koʻchirib oʻtkazgach, agar u oʻchirib tashlab-qayta oʻrnatilsa\
+yoki maʼlumotlari tozalansa barcha Qurʼon rasmlari va audio fayllar ham oʻchib ketadi va ushbu kerakli maʼlumotlarni yana qayta saqlab\
+olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
+"scoped_storage_message" = "Foydalanuvchilar xavfsizligini taʼminotini oshirish boʻyicha oʻzgarishlar tufayli Android tizimining\
+yangi versiyalarida ilovamiz ushbu jilddagi maʼlumotlarni oʻqiy olmay qolishi mumkin. Shunga qaramasdan hozir ushbu jilddan foydalanmoqchimisiz?\
+";
+"please_grant_permissions" = "Iltimos, ilova sozlamalari orqali kerakli ruxsatlarni bering";
+"see_tafseer_of_verse" = "Ushbu oyatning tafsiri %d-oyatning tafsirida mavjud (koʻrish uchun bosing).";
+"update_available" = "Yangilanishlar mavjud";
+"translation_updates_available" = "Tarjimalar uchun yangilanishlar mavjud, hozir tekshirib koʻrasizmi?";
+"translation_dialog_yes" = "Ha";
+"translation_dialog_later" = "Keyinroq";
+"quran_rob3" = "¼";
+"quran_nos" = "½";
+"quran_talt_arb3" = "¾";
+"quran_hizb" = "Hizb";
+"quran_juz2" = "Juz";
+"quran_page" = "Sahifa";
+"quran_sura" = "Sura";
+"quran_ayah" = "%1$d-oyat";
+"quran_ayah_details" = "%1$@ %2$@-oyat, %3$@-juz";
+"quran_sura_title" = "%1$@ surasi";
+"sura_ayah_notification_str" = "%1$@ surasi %2$d-oyat";
+"index_loading" = "Yuklanmoqda…";
+"canceling" = "Bekor qilinmoqda…";
+"juz2_description" = "%1$@-juz";
+"page_description" = "%1$@-bet, %2$@-juz";
+"highlighting_database" = "Kerakli fayllar";
+"timing_database" = "Kerakli fayllar";
+"sdcard_error" = "SD karta topilmadi.Iltimos, kartani montaj qiling va qayta harakat qilib koʻring.";
+"download_successful" = "Muvaffaqiyatli saqlandi";
+"download_processing" = "Saqlanmoqda…";
+"download_error_general" = "Saqlash muvaffaqiyatsiz boʻldi";
+"download_error_disk" = "Uskunada yetarli xotira mavjud emas";
+"download_error_network" = "Tarmoq bogʻlanishida xatolik yuz berdi";
+"download_error_perms" = "Ruhsat muammosi tufayli saqlab boʻlmadi";
+"download_error_invalid_download" = "Saqlab olingan fayl buzilgan";
+"download_error_invalid_download_retry" = "Fayl buzilgan, qayta saqlab olishga harakat qilinmoqda…";
+"download_error_network_retry" = "Tarqmoq xatoligi, qayta harakat qilinmoqda…";
+"notification_download_canceled" = "Saqlash bekor qilindi";
+"download_non_wifi_prompt" = "Wi-Fi tarmogʻiga ulanmagansiz, baribir fayllarni saqlab olmoqchimisiz?";
+"download_progress" = "%1$@/%2$@ saqlandi";
+"download_sura_progress" = "%3$d-suraning %1$@ (jami: %2$@) saqlanmoqda…";
+"download_sura_ayah_progress" = "%1$d-sura %2$d-oyat saqlanmoqda…";
+"process_progress" = "%1$d/%2$d ishlandi";
+"download_retry" = "Qayta harakat qilish";
+"download_cancel" = "Bekor qilish";
+"download_extra_data" = "Boʻlishish va tarjimalardan foydalana olish uchun bir-ikkita kichik hajmdagi fayllar lozim. Hozir saqlab olasizmi?";
+"remove_dlg_title" = "Tarjima oʻchirilsinmi?";
+"remove_dlg_msg" = "Haqiqatda \"%1$@\" tarjimasini oʻchirmoqchimisiz??";
+"error_getting_translation_list" = "Tarjimalar roʻyxatini olib boʻlmadi. Iltimos, birozdan keyin qayta harakat qilib koʻring.";
+"search_data" = "Maʼlumot izlash";
+"need_translation" = "Birorta ham tarjima saqlab olinmagan.";
+"get_translations" = "Tarjimalar saqlab olish";
+"email_us" = "Agar savollaringizga yuqorida javob olmagan boʻlsangiz quranandroid@gmail.com\
+adresiga maktub yoʻllashingiz mumkin. Faqat, shuni yodda tutingki, biz juda ham koʻplab e-mail\
+xabarlar olamiz va shu sababli barcha xatlarga javob yoza olmasligimiz mumkin.\
+Iltimos, maktubni ingliz tilida yuborishni unutmang.\
+";
+"makki" = "Makkiy";
+"madani" = "Madaniy";
+"play_from" = "Boshi";
+"play_to" = "Oxiri";
+"play_restrict_range" = "Yuqorida oyatlarnigina eshitish";
+"play_verses_range" = "Oyatlar toʻplamini:";
+"play_each_verse" = "Har bir oyatni:";
+"play_apply" = "Joriy qilish";
+"play_apply_and_play" = "Joriy qilish va chalish";
+"previous" = "Avvalgi";
+"play" = "Chalish";
+"pause" = "Pauza";
+"stop" = "Toʻxtatish";
+"next" = "Keyingi";
+"playback_prompt_title" = "Boshlash joyi:";
+"starting_page_label" = "Sahifa boshlanishi";
+"ayah_copied_popup" = "Oyat xotiraga koʻchirildi";
+"tag_bookmark" = "Xatchoʻpni teglash";
+"delete_tag" = "Tegni oʻchirish";
+"edit_tag" = "Tegni tahrir qilish";
+"new_tag" = "Yangi teg";
+"not_tagged" = "Teglanmagan";
+"undo" = "Bekor qilish";
+"recent_pages" = "Soʻnggi sahifalar";
+"tag_dlg_title" = "Teg";
+"tag_name" = "Nom";
+"tag_blank_tag_error" = "Teg nomi boʻsh boʻlmasligi kerak!";
+"tag_duplicate_tag_error" = "Ushbu teg nom allaqachon mavjud!";
+"bookmarks_list_empty" = "Xatchoʻplar mavjud emas";
+"audio_manager" = "Audio menejer";
+"audio_manager_remove_audio_title" = "Oʻchirish";
+"audio_manager_remove_audio_msg" = "%1$@ audio fayllari oʻchirilsinmi?";
+"audio_manager_surah_download" = "Saqlab olish";
+"audio_manager_surah_delete" = "Oʻchirish";
+"audio_manager_download_all" = "Hammasini saqlash";
+"audio_manager_download_selection" = "Tanlanganlarni saqlash";
+"audio_manager_delete_selection" = "Tanlanganlarni oʻchirish";
+"audio_updated_title" = "Audio fayllar yangilandi";
+"audio_updated_text" = "Bir necha Qurʼon audio fayllar yangilandi. Qurilmangizdagi eski\
+versiyalar oʻchirildi, keyingi safar foydalanganingizda yangilangan versiyalari qayta saqlab olinadi.\
+";
+"prefs_category_dual_screen" = "Juft sahifa sozlamalari";
+"prefs_split_page_and_translation_title" = "Tarjima rejimida Qurʼon";
+"prefs_split_page_and_translation_summary" = "Juft sahifa rejimi yoniq boʻlsa, tarjimalar ekranida Qurʼonning toʻliq sahifasi koʻrsatiladi";
+"notification_channel_download" = "Qurʼon yuklamalari";
+"notification_channel_audio" = "Qurʼon qiroati";
+"repeatValues1" = "1 marta";
+"repeatValues2" = "2 marta";
+"repeatValues3" = "3 marta";
+"repeatValues4" = "davomiy";

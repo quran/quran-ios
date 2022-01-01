@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<plist version="1.0">
+    <dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 surah downloaded</string>
+                <key>other</key>
+                <string>%1$d surahs downloaded</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>One result for \&quot;%1$d\&quot;:</string>
+                <key>other</key>
+                <string>%2$d results for \&quot;%1$d\&quot;:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>One verse</string>
+                <key>other</key>
+                <string>%d verses</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Deleted one item</string>
+                <key>other</key>
+                <string>Deleted %d items</string>
+            </dict>
+        </dict>
+        <key>plural_recent_pages</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@plural_recent_pages@</string>
+            <key>plural_recent_pages</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Last page</string>
+                <key>other</key>
+                <string>Recent pages</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_success</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_success@</string>
+            <key>audio_manager_delete_surah_success</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Successfully deleted the surah</string>
+                <key>other</key>
+                <string>Successfully deleted %1$d surahs</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_error</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_error@</string>
+            <key>audio_manager_delete_surah_error</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>There was an error while deleting the surah</string>
+                <key>other</key>
+                <string>There was an error while deleting %1$d surahs</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

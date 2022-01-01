@@ -1,0 +1,122 @@
+/*
+ New Localizations in Quran for iOS
+ */
+
+// MARK: - General
+
+"button.done" = "Done";
+"button.delete" = "Delete";
+
+// MARK: - Errors
+
+"NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
+"NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
+"NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
+"NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
+"unknown_error_message" = "Oops! Something went wrong. Please try again.";
+"NetworkError_Parsing" = "Oops! Something went wrong. Please try again.";
+
+"FileSystemError_Unknown" = "Oops! Something went wrong. Please try again.";
+"FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+
+// MARK: - Quran
+
+"ayah" = "Ayah";
+"surah" = "Surah";
+
+
+"translatorLabel: " = "Translator: ";
+"upgradeTranslationButtonTitle" = "UPDATE";
+
+"translationsSelectionTitle" = "Select Translations/Tafseer";
+"translationsSelectionPrompt" = "Select in the order you want to see them";
+
+"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
+"noAvailableTranslationText" = "No translation available for this Ayah.";
+
+"searchRecentsTitle" = "Recent searches";
+"searchPopularTitle" = "Try searching with";
+"searchPlaceholder" = "Surah, verse, translation, tafseer, and numbers";
+
+"translationTextType" = "Translation";
+"transliterationTextType" = "Transliteration";
+
+"write_review" = "Write an app store review...";
+"contact_us" = "Contact Us";
+"share_app" = "Share the app...";
+
+"menu.arabic" = "Arabic";
+"menu.translation" = "Translation";
+"menu.select_translation" = "Select translations/tafseer";
+"menu.pointer" = "Word translation pointer";
+"menu.pointer.select_translation" = "Pointer Showing";
+"menu.fontSizeLetter" = "A";
+"menu.fontSize" = "Font Size";
+
+"tab.notes" = "Notes";
+
+"shareMarketingSuffix" = "-\nQuran - by Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+
+"repetitionExperimentalSuffix" = "   (Experimental)";
+
+"update.dark-theme.title" = "Dark Theme";
+"update.dark-theme.desc" = "We have recently added a dark theme. Would you like to turn it on?";
+"update.dark-theme.turnOn" = "Turn On";
+
+"update.filesystem.title" = "Upgrading databases...";
+
+"theme.light" = "Light";
+"theme.dark" = "Dark";
+"theme.auto" = "Auto";
+"theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
+
+"reciters.title" = "Select the reciter to listen to";
+
+// MARK: - Audio
+
+"audio.playing.action.modify" = "Modify";
+"audio.playing.message" = "Playing audio to the end of Juz' %d";
+"audio.downloading.message" = "Downloading audio to the end of Juz' %d";
+
+"audio.playing-verses.label" = "Playing Verses";
+"audio.adjust-end-verse-to-the-end.label" = "Adjust end verse to the end of the";
+
+"audio.select-start-verse" = "Select Starting Verse";
+"audio.select-end-verse" = "Select Ending Verse";
+
+// MARK: - Bookmarks
+
+"bookmarks.no-data.title" = "Adding Bookmarks...";
+"bookmarks.no-data.text" = "When you're reading the Quran, tap the Bookmark button to mark the current page.";
+
+// MARK: - Notes
+
+"notes.no-data.title" = "Adding Ayah Highlights...";
+"notes.no-data.text" = "Tap and hold on an Ayah. You can extend the selection to include multiple Ayat, then tap the Bookmark button.";
+"notes.verses-count" = "(+%d ayat)";
+"notes.delete.alert.title" = "Delete Highlight";
+"notes.delete.alert.body" = "The associated note will also be deleted.";
+"notes.icloud.alert.title" = "iCloud Sync";
+"notes.icloud.alert.body" = "The app uses iCloud to sync bookmarks & notes across your devices. You can disable it from your device's iCloud settings.";
+
+// MARK: - Ayah Menu
+
+"ayah.menu.copy" = "Copy";
+"ayah.menu.share" = "Share...";
+"ayah.menu.play-end-juz" = "to the end of Juz'";
+"ayah.menu.highlight" = "Highlight";
+"ayah.menu.highlight-select-color" = "select color";
+"ayah.menu.add-note" = "Add Note";
+"ayah.menu.edit-note" = "Edit Note";
+"ayah.menu.delete-note" = "Delete Note";
+"ayah.menu.delete-highlight" = "Delete Highlight";
+
+"ayah.text.read-more" = "Read more";
+
+// MARK: - What's new
+
+"new.title" = "What's new";
+"new.action" = "Continue";
+
+"new.reciters" = "New Reciters";
+"new.reciters.details" = "* %%Readers:qari_muaiqly_haramain_gapless%%\n* %%Readers:qari_hudhayfi_gapless%%\n* %%Readers:qari_khaled_muhanna_gapless%%\n* %%Readers:qari_husary_mujawwad_gapless%%\n* %%Readers:qari_husary_muallim_gapless%%\n* %%Readers:qari_ibrahim_alakhdar_gapless%%\n* %%Readers:qari_yasser_salama_hadr_gapless%%\n* %%Readers:qari_khalid_qahtani_gapless%%\n* %%Readers:qari_mokhtasar_asmari_gapless%%";

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<plist version="1.0">
+    <dict>
+        <key>files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@files_downloaded@</string>
+            <key>files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Загружено %1$d сура</string>
+                <key>few</key>
+                <string>Загружено %1$d суры</string>
+                <key>many</key>
+                <string>Загружено %1$d сур</string>
+                <key>other</key>
+                <string>Загружено %1$d сур</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>%2$d результат для \&quot;%1$d\&quot;:</string>
+                <key>few</key>
+                <string>%2$d результата для \&quot;%1$d\&quot;:</string>
+                <key>many</key>
+                <string>%2$d результатов для \&quot;%1$d\&quot;:</string>
+                <key>other</key>
+                <string>%2$d результатов для \&quot;%1$d\&quot;:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>%d аят</string>
+                <key>few</key>
+                <string>%d аятa</string>
+                <key>many</key>
+                <string>%d аятов</string>
+                <key>other</key>
+                <string>%d аятов</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Удалено %d элемент</string>
+                <key>few</key>
+                <string>Удалено %d элемента</string>
+                <key>many</key>
+                <string>Удалено %d элементов</string>
+                <key>other</key>
+                <string>Удалено %d элементов</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_success</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_success@</string>
+            <key>audio_manager_delete_surah_success</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Удалено %1$d сура</string>
+                <key>few</key>
+                <string>Удалено %1$d суры</string>
+                <key>many</key>
+                <string>Удалено %1$d сур</string>
+                <key>other</key>
+                <string>Удалено %1$d сур</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_error</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_error@</string>
+            <key>audio_manager_delete_surah_error</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Произошла ошибка при удалении %1$d сура</string>
+                <key>few</key>
+                <string>Произошла ошибка при удалении %d суры</string>
+                <key>many</key>
+                <string>Произошла ошибка при удалении %d сур</string>
+                <key>other</key>
+                <string>Произошла ошибка при удалении %1$d сур</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

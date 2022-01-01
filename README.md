@@ -1,47 +1,81 @@
-# Quran - by Quran.com - قرآن
 
-[<img src="https://cloud.githubusercontent.com/assets/5665498/24449585/04481cfe-1478-11e7-9079-35c9532fc661.png" />](https://itunes.apple.com/app/id1118663303)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/5665498/147855777-fc7d645c-6522-4bb3-8886-32c9f90b20df.png" width="350pt">
+</p>
+
+QuranEngine is the engine powering the [Quran.com iOS app](https://itunes.apple.com/app/id1118663303). It's a collection of libraries that can be used to create a Quran app or a quran reading/listening experience within an Islamic app.
+
+- [Libraries](#libraries)
+  - [QuranKit](#qurankit)
+  - [QuranTextKit](#qurantextkit)
+- [Libraries to Open Source Soon](#libraries-to-open-source-soon)
+  - [QuranMadaniData](#quranmadanidata)
+  - [QuranAudioKit](#quranaudiokit)
+  - [QuranBookmarkingKit](#quranbookmarkingkit)
+- [Installation](#installation)
+  - [Swift Package Manager](#swift-package-manager)
+- [Contributions](#contributions)
+- [License](#license)
+
+## Libraries
+
+We have currently open sourced the following libraries:
+
+### QuranKit
+A quranic numbering library. It can be used to locate the page of a verse or juz' of a page, etc.
+
+### QuranTextKit
+A quranic text kit to search and retrieve quran, translations and tafseers text.
 
 
-[<img align="right" src="https://cloud.githubusercontent.com/assets/5665498/25025425/85720cc8-20a2-11e7-9860-c1e37353b049.png"  width="175"/>](https://itunes.apple.com/app/id1118663303)
+## Libraries to Open Source Soon
 
-This is a simple (madani based) quran app for iOS (iPhone/iPad).
+The following are libraries we are going to open source soon.
+
+### QuranMadaniData
+
+The data for the madani Quran.
+
+### QuranAudioKit
+
+A library for downloading and playing quran recitations.
+
+### QuranBookmarkingKit
+
+A library for taking bookmarks and notes.
 
 
-# IMPORTANT ANNOUNCEMENT
+## Installation
 
-We decided to close source the full app code due to multiple incidents of publishing the app code **as it is** without any -even minor- changes on the app store (to the extent that some use our screenshots). Other incidents include selling the source code online to take advantage of innocent people who are unaware of this open source project.
+### Swift Package Manager
 
-We currently thinking of splitting up the app into modules and open source individual modules. People can use these modules in their existing Islamic apps to add Quran reading functionalities or create a full Quran reading app. We don't have a timeline on when this is going to be released.
-
-
-In the mean time, you can use this repo to file issues and we will do our best to address them inshaa'Allah.
-
-## Beta Testing
+```swift
+let package = Package(
+    name: "<YOUR PACKAGE>",
+    products: [
+        .library(name: "<YOUR PACKAGE>", targets: ["Caching"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/quran/quran-ios", .from("2.0.0")),
+    ],
+    targets: [
+        .target(
+            name: "<YOUR PACKAGE>",
+            dependencies: [
+                .product(name: "QuranTextKit", package: "quran-ios"),
+            ]
+        ),
+    ]
+)
+```
 
 It would be great if you could send an e-mail to ios@quran.com then we will notify you for beta builds and you can then help us find bugs before going live.
-
-## Setting up the iOS Project
-
-1. Install [Cocoapods](https://cocoapods.org).
-
-2. Xcode 9.0 (with Swift 4.0).
-
-3. Download the _Quran-iOS_ project source. You can do this either by forking and cloning the repository (recommended if you plan on pushing changes) or by downloading it as a ZIP file and extracting it.
-
-4. Open `Quran.xcworkspace` from the folder.
-
-5. Build the project (⌘+B) and check for any errors.
-
-6. Run the app (⌘+R).and test it.
 
 ## Contributions
 Please read [Contributions page](https://github.com/quran/quran-ios/wiki/Contributions).
 
 ## License
 
-* Quran - by Quran.com - قرآن is available under the GPLv3 license. See the LICENSE file for more info.
+* QuranEngine is available under Apache-2.0 license. See the LICENSE file for more info.
 * Madani images from [quran images project](https://github.com/quran/quran.com-images) on github.
 * Translation, tafsir and Arabic data come from [tanzil](http://tanzil.net) and [King Saud University](https://quran.ksu.edu.sa).
-
-**Please do not rebuild the app and push it to the app store - please contribute your fixes to this project instead.**

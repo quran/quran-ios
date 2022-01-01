@@ -1,0 +1,119 @@
+included:
+  - BatchDownloader
+  - QueuePlayer
+  - Quran
+  - SQLitePersistence
+  - UIKitExtension
+  - VFoundation
+  - ViewConstrainer
+
+excluded:
+  - UIKitExtension/ActivityIndicator.swift
+
+disabled_rules:
+  - cyclomatic_complexity
+  - colon
+  - syntactic_sugar
+  - generic_type_name
+  - nesting
+
+opt_in_rules:
+  - array_init
+# - attributes
+  - closure_end_indentation
+  - closure_spacing
+  #NOT NEEDED - conditional_returns_on_newline
+  - contains_over_first_not_nil
+  #NOT NEEDED - discouraged_object_literal
+  - discouraged_optional_boolean
+  #NOT NEEDED for now - discouraged_optional_collection
+  - empty_count
+  - empty_string
+  #NOT NEEDED - explicit_acl
+  #NOT NEEDED - explicit_enum_raw_value
+  #NOT NEEDED - explicit_top_level_acl
+  - explicit_init
+  #NOT NEEDED - explicit_type_interface
+  #NOT NEEDED - extension_access_modifier
+  - fatal_error_message
+  #- file_header
+  - first_where
+  - force_unwrapping
+  #NOT NEEDED - implicit_return
+  - implicitly_unwrapped_optional
+  #NOT NEEDED - joined_default_parameter
+  #NOT NEEDED - let_var_whitespace
+  - literal_expression_end_indentation
+  #NOT NEEDED - lower_acl_than_parent
+  #NOT NEEDED - multiline_arguments
+  - nimble_operator
+  #NOT NEEDED - no_extension_access_modifier
+  #NOT NEEDED - no_grouping_extension
+  - notification_center_detachment
+  - number_separator
+  - object_literal
+  #DISABLED until https://github.com/realm/SwiftLint/issues/1497 operator_usage_whitespace
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  #NOT NEEDED - prefixed_toplevel_constant
+  #NOT NEEDED - private_action
+  #NOT NEEDED - private_outlet
+  - prohibited_super_call
+  - quick_discouraged_call
+  - quick_discouraged_focused_test
+  - quick_discouraged_pending_test
+  - redundant_nil_coalescing
+  #NOT CONFIGURED - required_enum_case
+  - single_test_class
+  - sorted_first_last
+  - sorted_imports
+  #NOT NEEDED - strict_fileprivate
+  #NOT NEEDED - switch_case_on_newline
+  #NOT NEEDED - trailing_closure
+  #NOT NEEDED - unneeded_parentheses_in_closure_argument
+  - untyped_error_in_catch
+  - vertical_parameter_alignment_on_call
+  #NOT NEEDED - yoda_condition
+
+
+type_name:
+  max_length: 60
+  
+identifier_name:
+  min_length: 1
+  max_length: 60
+  
+file_length: 600
+
+line_length: 150 # Needs to configure it correctly!
+
+type_body_length: 300 
+
+function_parameter_count: 10
+
+function_body_length: 80
+
+large_tuple: 4
+
+file_header:
+  required_pattern: |
+                    \/\/
+                    \/\/  .*?\.swift
+                    \/\/  Quran
+                    \/\/
+                    \/\/  Created by .*? on ((\d{1,2}\/\d{1,2}\/\d{2})|(\d{4}\-\d{2}\-\d{2}))\.
+                    \/\/
+                    \/\/  Quran for iOS is a Quran reading application for iOS\.
+                    \/\/  Copyright \(C\) 20\d{2}  Quran\.com
+                    \/\/
+                    \/\/  This program is free software: you can redistribute it and/or modify
+                    \/\/  it under the terms of the GNU General Public License as published by
+                    \/\/  the Free Software Foundation, either version 3 of the License, or
+                    \/\/  \(at your option\) any later version\.
+                    \/\/
+                    \/\/  This program is distributed in the hope that it will be useful,
+                    \/\/  but WITHOUT ANY WARRANTY; without even the implied warranty of
+                    \/\/  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\.  See the
+                    \/\/  GNU General Public License for more details\.
+                    \/\/

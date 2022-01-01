@@ -12,7 +12,7 @@ private class BundleFinder {}
 extension Foundation.Bundle {
     /// SwiftUI Previews stores the resources in a location not accessible by the generated `Bundle.module`
     static var fixedModule: Bundle = {
-        let bundleName = "QuranKit_Localization"
+        let bundleName = "QuranEngine_Localization"
 
         let candidates = [
             // Bundle should be present here when the package is linked into an App.

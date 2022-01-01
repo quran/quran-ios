@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
         .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.12.2"),
-        .package(url: "https://github.com/marmelroy/Zip", .branch("master")), // TODO: use a release
+        .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
     ],
     targets: [
         .target(

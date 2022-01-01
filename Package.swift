@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "quran-ios",
+    name: "QuranEngine",
     defaultLocalization: "en",
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),

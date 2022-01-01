@@ -56,7 +56,7 @@ let package = Package(
         .library(name: "<YOUR PACKAGE>", targets: ["Caching"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/quran/quran-ios", .from("2.0.0")),
+        .package(url: "https://github.com/quran/quran-ios", .from("2.0.1")),
     ],
     targets: [
         .target(

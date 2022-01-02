@@ -10,7 +10,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Build QuranEngine.xcworkspace
       run: xcrun xcodebuild build -scheme QuranEngine -sdk "iphonesimulator" | xcpretty
+
     - name: Run tests
       run: xcrun xcodebuild test -scheme QuranEngine -sdk "iphonesimulator" -destination "name=iPhone 11 Pro,OS=15.2" | xcpretty
+
+    - uses: sersoft-gmbh/swift-coverage-action@v2
+      id: coverage-files
+
+    - uses: codecov/codecov-action@v2
+      with:
+        files: ${{join(fromJSON(steps.coverage-files.outputs.files), ',')}}

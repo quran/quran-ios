@@ -3,19 +3,25 @@
     <img src="https://user-images.githubusercontent.com/5665498/147855777-fc7d645c-6522-4bb3-8886-32c9f90b20df.png" width="350pt">
 </p>
 
+QuranEngine
+===============
+[![CI](https://github.com/quran/quran-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/quran/quran-ios/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/quran/quran-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/quran/quran-ios)
+
 QuranEngine is the engine powering the [Quran.com iOS app](https://itunes.apple.com/app/id1118663303). It's a collection of libraries that can be used to create a Quran app or a quran reading/listening experience within an Islamic app.
 
-- [Libraries](#libraries)
-  - [QuranKit](#qurankit)
-  - [QuranTextKit](#qurantextkit)
-- [Libraries to Open Source Soon](#libraries-to-open-source-soon)
-  - [QuranMadaniData](#quranmadanidata)
-  - [QuranAudioKit](#quranaudiokit)
-  - [QuranBookmarkingKit](#quranbookmarkingkit)
-- [Installation](#installation)
-  - [Swift Package Manager](#swift-package-manager)
-- [Contributions](#contributions)
-- [License](#license)
+- [QuranEngine](#quranengine)
+  - [Libraries](#libraries)
+    - [QuranKit](#qurankit)
+    - [QuranTextKit](#qurantextkit)
+  - [Libraries to Open Source Soon](#libraries-to-open-source-soon)
+    - [QuranMadaniData](#quranmadanidata)
+    - [QuranAudioKit](#quranaudiokit)
+    - [QuranBookmarkingKit](#quranbookmarkingkit)
+  - [Installation](#installation)
+    - [Swift Package Manager](#swift-package-manager)
+  - [Contributions](#contributions)
+  - [License](#license)
 
 ## Libraries
 

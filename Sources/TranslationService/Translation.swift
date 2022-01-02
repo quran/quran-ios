@@ -19,7 +19,6 @@
 //
 
 import Foundation
-import UIKit
 
 public struct Translation: Hashable {
     public let id: Int

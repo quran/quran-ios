@@ -1,0 +1,16 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  xcode:
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build QuranEngine.xcworkspace
+      run: xcrun xcodebuild build -scheme QuranEngine -sdk "iphonesimulator" | xcpretty
+    - name: Run tests
+      run: xcrun xcodebuild test -scheme QuranEngine -sdk "iphonesimulator" -destination "name=iPhone 11 Pro,OS=15.2" | xcpretty

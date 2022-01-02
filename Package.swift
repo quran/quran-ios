@@ -5,6 +5,7 @@ import PackageDescription
 let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
+    platforms: [.iOS(.v10)],
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),

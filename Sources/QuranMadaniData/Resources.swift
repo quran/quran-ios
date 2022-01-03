@@ -8,3 +8,5 @@
 import Foundation
 
 public let wordsDatabase = Bundle.module.url(forResource: "words", withExtension: "db")!
+public let ayahInfoDatabase = Bundle.module.url(forResource: "images_1280/databases/ayahinfo", withExtension: "db")!
+public let images = Bundle.module.url(forResource: "images_1280/images", withExtension: nil)!

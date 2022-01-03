@@ -44,9 +44,10 @@ struct SQLiteWordFramePersistence: WordFramePersistence, ReadonlySQLitePersisten
     private let glyphsTable = Table("glyphs")
     private let columns = Columns()
 
-    let imageSize: String
-    var filePath: String {
-        Bundle.main.path(forResource: "images_\(imageSize)/databases/ayahinfo_\(imageSize)", ofType: "db")!
+    let filePath: String
+
+    init(fileURL: URL) {
+        self.filePath = fileURL.path
     }
 
     func wordFrameCollectionForPage(_ page: Page) throws -> WordFrameCollection {

@@ -49,7 +49,7 @@ public final class QProgress: NSObject, QProgressListener {
     }
 
     private func notifyProgressChanged() {
-        let progress = self.progress
+        let progress = progress
         for listener in progressListeners {
             listener.onProgressUpdated(to: progress)
         }

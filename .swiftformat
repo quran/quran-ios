@@ -1,0 +1,2 @@
+--exclude .build,Tests/QuranTextKitTests/Mocks.swift
+--disable unusedArguments,emptyBraces,extensionAccessControl,hoistPatternLet,enumNamespaces,redundantType,andOperator

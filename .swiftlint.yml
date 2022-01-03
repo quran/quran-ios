@@ -1,94 +1,163 @@
-included:
-  - BatchDownloader
-  - QueuePlayer
-  - Quran
-  - SQLitePersistence
-  - UIKitExtension
-  - VFoundation
-  - ViewConstrainer
-
 excluded:
-  - UIKitExtension/ActivityIndicator.swift
+  - .build
+  - Tests/QuranTextKitTests/Mocks.swift
 
 disabled_rules:
-  - cyclomatic_complexity
   - colon
+  - for_where
   - syntactic_sugar
-  - generic_type_name
   - nesting
+  - opening_brace
+  - trailing_comma # should be useful for git
+  - multiple_closures_with_trailing_closure
+  - todo
 
 opt_in_rules:
+  #NOT NEEDED - anonymous_argument_in_multiline_closure
+  - anyobject_protocol
   - array_init
-# - attributes
-  - closure_end_indentation
+  #NOT NEEDED - attributes
+  #NOT NEEDED - balanced_xctest_lifecycle
+  #NOT NEEDED - closure_end_indentation
   - closure_spacing
+  #NOT NEEDED - collection_alignment
   #NOT NEEDED - conditional_returns_on_newline
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
   - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  #NOT NEEDED - convenience_type
+  #NOT NEEDED - discouraged_assert
+  #NOT NEEDED - discouraged_none_name
+  - discarded_notification_center_observer
   #NOT NEEDED - discouraged_object_literal
   - discouraged_optional_boolean
   #NOT NEEDED for now - discouraged_optional_collection
   - empty_count
   - empty_string
+  - empty_xctest_method
+  - enum_case_associated_values_count
+  #NOT NEEDED - expiring_todo
   #NOT NEEDED - explicit_acl
   #NOT NEEDED - explicit_enum_raw_value
+  #NOT NEEDED - explicit_self
   #NOT NEEDED - explicit_top_level_acl
+  #NOT NEEDED - explicit_type_interface
   - explicit_init
   #NOT NEEDED - explicit_type_interface
   #NOT NEEDED - extension_access_modifier
+  #NOT NEEDED - fallthrough
   - fatal_error_message
   #- file_header
+  #NOT NEEDED - file_name
+  - file_name_no_space
+  #NOT NEEDED - file_types_order
+  - flatmap_over_map_reduce
   - first_where
-  - force_unwrapping
+  # Frequently used - force_unwrapping
+  #NOT NEEDED - function_default_parameter_at_end
   #NOT NEEDED - implicit_return
+  - ibinspectable_in_extension
+  - identical_operands
+  - implicit_return
   - implicitly_unwrapped_optional
+  #NOT NEEDED - indentation_width
   #NOT NEEDED - joined_default_parameter
+  - last_where
+  #NOT NEEDED - legacy_multiple
+  #NOT NEEDED - legacy_objc_type
+  - legacy_random
   #NOT NEEDED - let_var_whitespace
   - literal_expression_end_indentation
   #NOT NEEDED - lower_acl_than_parent
+  #NOT NEEDED - missing_docs
+  - modifier_order
   #NOT NEEDED - multiline_arguments
+  #NOT NEEDED - multiline_arguments_brackets
+  - multiline_function_chains
+  #NOT NEEDED - multiline_literal_brackets
+  - multiline_parameters
+  #NOT NEEDED - multiline_parameters_brackets
+  - multiple_closures_with_trailing_closure
+  - nesting
   - nimble_operator
   #NOT NEEDED - no_extension_access_modifier
   #NOT NEEDED - no_grouping_extension
   - notification_center_detachment
-  - number_separator
+  #NOT NEEDED - nslocalizedstring_key
+  #NOT NEEDED - nslocalizedstring_require_bundle
+  #NOT NEEDED - number_separator
   - object_literal
-  #DISABLED until https://github.com/realm/SwiftLint/issues/1497 operator_usage_whitespace
+  #NOT NEEDED - opening_brace
+  #NOT NEEDED - operator_usage_whitespace
+  - optional_enum_case_matching
   - overridden_super_call
   - override_in_extension
   - pattern_matching_keywords
+  #NOT NEEDED - prefer_nimble
+  - prefer_self_in_static_references
+  #NOT NEEDED - prefer_self_type_over_type_of_self
+  - prefer_zero_over_explicit_init
   #NOT NEEDED - prefixed_toplevel_constant
   #NOT NEEDED - private_action
   #NOT NEEDED - private_outlet
+  - private_subject
+  # // TODO: uncomment - prohibited_interface_builder
   - prohibited_super_call
   - quick_discouraged_call
   - quick_discouraged_focused_test
   - quick_discouraged_pending_test
+  #NOT NEEDED - raw_value_for_camel_cased_codable_enum
+  - reduce_into
   - redundant_nil_coalescing
+  #NOT NEEDED - redundant_type_annotation
+  #NOT NEEDED - required_deinit
   #NOT CONFIGURED - required_enum_case
   - single_test_class
   - sorted_first_last
   - sorted_imports
-  #NOT NEEDED - strict_fileprivate
+  - static_operator
+  - strict_fileprivate
+  #NOT NEEDED - strong_iboutlet
   #NOT NEEDED - switch_case_on_newline
+  - syntactic_sugar
+  #NOT NEEDED - test_case_accessibility
+  #NOT NEEDED - toggle_bool
   #NOT NEEDED - trailing_closure
+  #NOT NEEDED - trailing_comma
+  #NOT NEEDED - unavailable_function
   #NOT NEEDED - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
   - untyped_error_in_catch
   - vertical_parameter_alignment_on_call
+  #NOT NEEDED - vertical_whitespace_between_cases
+  #NOT NEEDED - vertical_whitespace_closing_braces
+  #NOT NEEDED - vertical_whitespace_opening_braces
+  #NOT NEEDED - xct_specific_matcher
   #NOT NEEDED - yoda_condition
 
+analyzer_rules: # Rules run by `swiftlint analyze` (experimental)
+  - capture_variable
+  # - explicit_self
+  - unused_declaration
+  - unused_import
 
 type_name:
+  min_length: 2
   max_length: 60
-  
+
 identifier_name:
   min_length: 1
   max_length: 60
-  
+
 file_length: 600
+
+generic_type_name:
+  max_length: 30
 
 line_length: 150 # Needs to configure it correctly!
 
-type_body_length: 300 
+type_body_length: 300
 
 function_parameter_count: 10
 
@@ -96,24 +165,5 @@ function_body_length: 80
 
 large_tuple: 4
 
-file_header:
-  required_pattern: |
-                    \/\/
-                    \/\/  .*?\.swift
-                    \/\/  Quran
-                    \/\/
-                    \/\/  Created by .*? on ((\d{1,2}\/\d{1,2}\/\d{2})|(\d{4}\-\d{2}\-\d{2}))\.
-                    \/\/
-                    \/\/  Quran for iOS is a Quran reading application for iOS\.
-                    \/\/  Copyright \(C\) 20\d{2}  Quran\.com
-                    \/\/
-                    \/\/  This program is free software: you can redistribute it and/or modify
-                    \/\/  it under the terms of the GNU General Public License as published by
-                    \/\/  the Free Software Foundation, either version 3 of the License, or
-                    \/\/  \(at your option\) any later version\.
-                    \/\/
-                    \/\/  This program is distributed in the hope that it will be useful,
-                    \/\/  but WITHOUT ANY WARRANTY; without even the implied warranty of
-                    \/\/  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\.  See the
-                    \/\/  GNU General Public License for more details\.
-                    \/\/
+object_literal:
+  color_literal: false

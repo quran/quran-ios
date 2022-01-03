@@ -5,7 +5,6 @@ import PackageDescription
 let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
-    platforms: [.iOS(.v10)],
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
@@ -25,100 +24,60 @@ let package = Package(
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
     ],
     targets: [
-        .target(
-            name: "QuranKit",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "QuranKitTests",
-            dependencies: ["QuranKit"]
-        ),
+        .target(name: "QuranKit", dependencies: []),
+        .testTarget(name: "QuranKitTests", dependencies: [
+            "QuranKit",
+        ]),
 
-        .target(
-            name: "QuranTextKit",
-            dependencies: [
-                "TranslationService",
-                "QuranKit",
-            ]
-        ),
-        .testTarget(
-            name: "QuranTextKitTests",
-            dependencies: ["QuranTextKit"],
-            resources: [
-                .copy("test_data"),
-            ]
-        ),
+        .target(name: "QuranTextKit", dependencies: [
+            "TranslationService",
+            "QuranKit",
+        ]),
+        .testTarget(name: "QuranTextKitTests", dependencies: [
+            "QuranTextKit",
+        ],
+        resources: [
+            .copy("test_data"),
+        ]),
 
-        .target(
-            name: "Preferences",
-            dependencies: []
-        ),
+        .target(name: "TranslationService", dependencies: [
+            "Zip",
+            "SQLitePersistence",
+            "BatchDownloader",
+            "Localization",
+            "Preferences",
+        ]),
 
-        .target(
-            name: "Localization",
-            dependencies: []
-        ),
+        .target(name: "BatchDownloader", dependencies: [
+            "SQLitePersistence",
+            "Crashing",
+            "WeakSet",
+        ]),
 
-        .target(
-            name: "VLogging",
-            dependencies: [
-                .product(name: "Logging", package: "swift-log"),
-            ]
-        ),
+        .target(name: "SQLitePersistence", dependencies: [
+            "Utilities",
+            "VLogging",
+            .product(name: "SQLite", package: "SQLite.swift"),
+        ]),
 
-        .target(
-            name: "Utilities",
-            dependencies: [
-                "PromiseKit",
-            ]
-        ),
+        .target(name: "Utilities", dependencies: [
+            "PromiseKit",
+        ]),
 
-        .target(
-            name: "SQLitePersistence",
-            dependencies: [
-                "Utilities",
-                "VLogging",
-                .product(name: "SQLite", package: "SQLite.swift"),
-            ]
-        ),
+        .target(name: "WeakSet", dependencies: [
+            "Locking",
+        ]),
 
-        .target(
-            name: "Locking",
-            dependencies: []
-        ),
+        .target(name: "Crashing", dependencies: [
+            "Locking",
+        ]),
 
-        .target(
-            name: "WeakSet",
-            dependencies: [
-                "Locking",
-            ]
-        ),
+        .target(name: "VLogging", dependencies: [
+            .product(name: "Logging", package: "swift-log"),
+        ]),
 
-        .target(
-            name: "Crashing",
-            dependencies: [
-                "Locking",
-            ]
-        ),
-
-        .target(
-            name: "BatchDownloader",
-            dependencies: [
-                "SQLitePersistence",
-                "Crashing",
-                "WeakSet",
-            ]
-        ),
-
-        .target(
-            name: "TranslationService",
-            dependencies: [
-                "Zip",
-                "SQLitePersistence",
-                "BatchDownloader",
-                "Localization",
-                "Preferences",
-            ]
-        ),
+        .target(name: "Locking", dependencies: []),
+        .target(name: "Preferences", dependencies: []),
+        .target(name: "Localization", dependencies: []),
     ]
 )

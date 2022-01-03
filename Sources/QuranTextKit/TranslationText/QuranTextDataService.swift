@@ -23,8 +23,8 @@ public struct QuranTextDataService {
     let translationsPersistenceBuilder: (Translation, Quran) -> VerseTextPersistence
     let selectedTranslationsPreferences: SelectedTranslationsPreferences
 
-    public init(databasesPath: String) {
-        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: Quran.madani))
+    public init(databasesPath: String, quranFileURL: URL) {
+        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: Quran.madani, fileURL: quranFileURL))
     }
 
     init(databasesPath: String, arabicPersistence: VerseTextPersistence) {

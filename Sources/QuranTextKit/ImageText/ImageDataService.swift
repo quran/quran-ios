@@ -8,30 +8,27 @@
 import QuranKit
 import UIKit
 
-public protocol ImageDataService {
-    func imageForPage(_ page: Page) throws -> ImagePage
-}
-
-public struct DefaultImageDataService: ImageDataService {
+public struct ImageDataService {
     private let processor: WordFrameProcessor
     private let persistence: WordFramePersistence
     private let madaniCropInsets = UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
-    private let imageSize: String
+    private let imagesURL: URL
 
-    init(imageSize: String, processor: WordFrameProcessor, persistence: WordFramePersistence) {
-        self.imageSize = imageSize
+    init(imagesURL: URL, processor: WordFrameProcessor, persistence: WordFramePersistence) {
+        self.imagesURL = imagesURL
         self.persistence = persistence
         self.processor = processor
     }
 
-    public init(imageSize: String) {
-        self.imageSize = imageSize
+    public init(ayahInfoDatabase: URL, imagesURL: URL) {
+        self.imagesURL = imagesURL
         processor = DefaultWordFrameProcessor()
-        persistence = SQLiteWordFramePersistence(imageSize: imageSize)
+        persistence = SQLiteWordFramePersistence(fileURL: ayahInfoDatabase)
     }
 
     public func imageForPage(_ page: Page) throws -> ImagePage {
-        guard let filePath = fullPathForPage(page), let image = UIImage(contentsOfFile: filePath) else {
+        let imageURL = imageURLForPage(page)
+        guard let image = UIImage(contentsOfFile: imageURL.path) else {
             fatalError("No image found for page '\(page)'")
         }
 
@@ -44,14 +41,8 @@ public struct DefaultImageDataService: ImageDataService {
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
     }
 
-    private func fullPathForPage(_ page: Page) -> String? {
-        let relativePath = fileNameForPage(page)
-        return Bundle.main.path(forResource: relativePath, ofType: nil)
-    }
-
-    private func fileNameForPage(_ page: Page) -> String {
-        let file = "images_\(imageSize)/width_\(imageSize)/page" + page.pageNumber.as3DigitString() + ".png"
-        return file
+    private func imageURLForPage(_ page: Page) -> URL {
+        imagesURL.appendingPathComponent("page\(page.pageNumber.as3DigitString()).png")
     }
 
     private func preloadImage(_ imageToPreload: UIImage, cropInsets: UIEdgeInsets = .zero) -> UIImage {

@@ -44,6 +44,7 @@ let package = Package(
 
         .target(name: "QuranMadaniData", dependencies: [], resources: [
             .process("words.db"),
+            .copy("images_1280"),
         ]),
 
         .target(name: "TranslationService", dependencies: [

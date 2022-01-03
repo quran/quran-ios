@@ -20,8 +20,8 @@ public struct CompositeSearcher: AsyncSearcher {
         self.translationsSearcher = translationsSearcher
     }
 
-    public init(databasesPath: String) {
-        let persistence = SQLiteQuranVerseTextPersistence(quran: Quran.madani)
+    public init(databasesPath: String, quranFileURL: URL) {
+        let persistence = SQLiteQuranVerseTextPersistence(quran: Quran.madani, fileURL: quranFileURL)
 
         let numberSearcher = NumberSearcher(quran: Quran.madani, quranVerseTextPersistence: persistence)
         let quranSearcher = PersistenceSearcher(versePersistence: persistence, source: .quran)

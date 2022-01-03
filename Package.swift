@@ -37,12 +37,14 @@ let package = Package(
         ]),
         .testTarget(name: "QuranTextKitTests", dependencies: [
             "QuranTextKit",
+            "QuranMadaniData",
         ],
         resources: [
             .copy("test_data"),
         ]),
 
         .target(name: "QuranMadaniData", dependencies: [], resources: [
+            .process("quran.ar.uthmani.v2.db"),
             .copy("images_1280"),
         ]),
 

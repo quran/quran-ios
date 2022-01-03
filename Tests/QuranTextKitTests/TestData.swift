@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranMadaniData
 @testable import QuranTextKit
 @testable import TranslationService
 
@@ -34,7 +35,7 @@ struct TestData {
         return SQLiteTranslationVerseTextPersistence(fileURL: url, quran: quran)
     }
 
-    static let quranTextURL = resourceURL("quran.ar.uthmani.v2.db")
+    static let quranTextURL = QuranMadaniData.quranUthmaniV2Database
 
     static func resourceURL(_ path: String) -> URL {
         let components = path.components(separatedBy: ".")

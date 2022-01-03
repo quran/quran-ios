@@ -39,10 +39,11 @@ class SQLiteWordTextPersistence: ReadonlySQLitePersistence, WordTextPersistence 
         }
     }
 
-    private static let wordsTextPath = Bundle.main.path(forResource: "words", ofType: "db")!
-    var filePath: String { Self.wordsTextPath }
+    let filePath: String
 
-    init() { }
+    init(fileURL: URL) {
+        filePath = fileURL.path
+    }
 
     func translationForWord(_ word: Word) throws -> String? {
         try wordText(word, textColumn: Database.Columns.translation)

@@ -8,6 +8,8 @@ let package = Package(
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
+        .library(name: "QuranMadaniData", targets: ["QuranMadaniData"]),
+
         .library(name: "SQLitePersistence", targets: ["SQLitePersistence"]),
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Locking", targets: ["Locking"]),
@@ -38,6 +40,10 @@ let package = Package(
         ],
         resources: [
             .copy("test_data"),
+        ]),
+
+        .target(name: "QuranMadaniData", dependencies: [], resources: [
+            .process("words.db"),
         ]),
 
         .target(name: "TranslationService", dependencies: [

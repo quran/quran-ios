@@ -12,9 +12,9 @@ public struct WordTextService {
     let preferences: QuranContentStatePreferences
     let persistence: WordTextPersistence
 
-    public init() {
+    public init(fileURL: URL) {
         preferences = DefaultsQuranContentStatePreferences(userDefaults: .standard)
-        persistence = SQLiteWordTextPersistence()
+        persistence = SQLiteWordTextPersistence(fileURL: fileURL)
     }
 
     public func textForWord(_ word: Word) throws -> String? {

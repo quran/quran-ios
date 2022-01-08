@@ -42,6 +42,10 @@ final class AyahNumberTests: XCTestCase {
         XCTAssertEqual(verses[27], verses[29].previous?.previous)
         XCTAssertNil(verses[0].previous)
 
+        XCTAssertEqual(verses[0].page.pageNumber, 1)
+        XCTAssertEqual(verses.last!.page.pageNumber, 604)
+        XCTAssertEqual(quran.suras[111].firstVerse.page.pageNumber, 604)
+        XCTAssertEqual(quran.suras[111].firstVerse.previous!.page.pageNumber, 603)
         XCTAssertEqual(verses[29].page.pageNumber, 4)
         XCTAssertEqual(verses[3].page.pageNumber, 1)
         XCTAssertEqual(verses[6235].page.pageNumber, 604)

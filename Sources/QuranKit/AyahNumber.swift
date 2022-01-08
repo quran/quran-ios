@@ -70,11 +70,6 @@ public struct AyahNumber: Navigatable {
     }
 
     public var page: Page {
-        for (page, nextPage) in zip(quran.pages, quran.pages.dropFirst()) {
-            if self < nextPage.firstVerse {
-                return page
-            }
-        }
-        return quran.pages.last!
+        quran.pages.binarySearchFirst { self >= $0.firstVerse }
     }
 }

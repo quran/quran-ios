@@ -39,6 +39,11 @@ final class PageTests: XCTestCase {
         XCTAssertEqual(pages[206].startSura.suraNumber, 9)
         XCTAssertEqual(pages[207].startSura.suraNumber, 10)
 
+        XCTAssertEqual(pages[0].startJuz.juzNumber, 1)
+        XCTAssertEqual(pages.last!.startJuz.juzNumber, 30)
+        XCTAssertEqual(pages[540].startJuz.juzNumber, 27)
+        XCTAssertEqual(pages[541].startJuz.juzNumber, 28)
+        XCTAssertEqual(pages[542].startJuz.juzNumber, 28)
         XCTAssertEqual(pages[599].startJuz.juzNumber, 30)
         XCTAssertEqual(pages[1].startJuz.juzNumber, 1)
         XCTAssertEqual(pages[207].startJuz.juzNumber, 11)

@@ -48,12 +48,7 @@ public struct Page: QuranValueGroup {
     }
 
     public var startJuz: Juz {
-        for (juz, nextJuz) in zip(quran.juzs, quran.juzs.dropFirst()) {
-            if self < nextJuz.page {
-                return juz
-            }
-        }
-        return quran.juzs.last!
+        return quran.juzs.binarySearchFirst { self >= $0.page }
     }
 
     public var quarter: Quarter? {

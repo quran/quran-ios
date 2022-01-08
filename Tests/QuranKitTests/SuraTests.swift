@@ -79,4 +79,23 @@ final class SuraTests: XCTestCase {
         XCTAssertEqual(suras[24].lastVerse.sura.suraNumber, 25)
         XCTAssertEqual(suras[24].lastVerse.ayah, 77)
     }
+
+    func testSurasPagesTime() {
+        measure {
+            let quran = Quran(raw: MadaniQuranReadingInfoRawData())
+            let suras = quran.suras
+            _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
+        }
+    }
+
+    func testSurasPagesCachedTime() {
+        let quran = Quran(raw: MadaniQuranReadingInfoRawData())
+        let suras = quran.suras
+        _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
+
+        measure {
+            let suras = quran.suras
+            _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
+        }
+    }
 }

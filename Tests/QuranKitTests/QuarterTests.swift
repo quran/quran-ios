@@ -57,4 +57,11 @@ final class QuarterTests: XCTestCase {
         XCTAssertEqual(quarters[8].hizb.hizbNumber, 3)
         XCTAssertEqual(quarters[239].hizb.hizbNumber, 60)
     }
+
+    func testQuartersJuzTime() {
+        measure {
+            let quarters = quran.quarters
+            _ = Dictionary(grouping: quarters, by: \.juz)
+        }
+    }
 }

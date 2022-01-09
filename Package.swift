@@ -9,6 +9,7 @@ let package = Package(
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
         .library(name: "QuranMadaniData", targets: ["QuranMadaniData"]),
+        .library(name: "Caching", targets: ["Caching"]),
 
         .library(name: "SQLitePersistence", targets: ["SQLitePersistence"]),
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
@@ -18,6 +19,7 @@ let package = Package(
         .library(name: "Crashing", targets: ["Crashing"]),
         .library(name: "Preferences", targets: ["Preferences"]),
         .library(name: "Localization", targets: ["Localization"]),
+
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
@@ -67,6 +69,12 @@ let package = Package(
             "VLogging",
             .product(name: "SQLite", package: "SQLite.swift"),
         ]),
+
+        .target(name: "Caching", dependencies: [
+                "Locking",
+                "PromiseKit",
+            ]
+        ),
 
         .target(name: "Utilities", dependencies: [
             "PromiseKit",

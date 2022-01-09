@@ -14,9 +14,9 @@ QuranEngine is the engine powering the [Quran.com iOS app](https://itunes.apple.
   - [Libraries](#libraries)
     - [QuranKit](#qurankit)
     - [QuranTextKit](#qurantextkit)
-  - [Libraries to Open Source Soon](#libraries-to-open-source-soon)
     - [QuranMadaniData](#quranmadanidata)
     - [QuranAudioKit](#quranaudiokit)
+  - [Libraries to Open Source Soon](#libraries-to-open-source-soon)
     - [QuranBookmarkingKit](#quranbookmarkingkit)
   - [Installation](#installation)
     - [Swift Package Manager](#swift-package-manager)
@@ -33,11 +33,6 @@ A quranic numbering library. It can be used to locate the page of a verse or juz
 ### QuranTextKit
 A quranic text kit to search and retrieve quran, translations and tafseers text.
 
-
-## Libraries to Open Source Soon
-
-The following are libraries we are going to open source soon.
-
 ### QuranMadaniData
 
 The data for the madani Quran.
@@ -46,10 +41,13 @@ The data for the madani Quran.
 
 A library for downloading and playing quran recitations.
 
+## Libraries to Open Source Soon
+
+The following are libraries we are going to open source soon.
+
 ### QuranBookmarkingKit
 
 A library for taking bookmarks and notes.
-
 
 ## Installation
 
@@ -62,13 +60,16 @@ let package = Package(
         .library(name: "<YOUR PACKAGE>", targets: ["Caching"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/quran/quran-ios", .from("2.0.1")),
+        .package(name: "QuranEngine", url: "https://github.com/quran/quran-ios", .from("2.0.1")),
     ],
     targets: [
         .target(
             name: "<YOUR PACKAGE>",
             dependencies: [
-                .product(name: "QuranTextKit", package: "quran-ios"),
+                .product(name: "QuranKit", package: "QuranEngine"),
+                .product(name: "QuranTextKit", package: "QuranEngine"),
+                .product(name: "QuranMadaniData", package: "QuranEngine"),
+                .product(name: "QuranAudioKit", package: "QuranEngine"),
             ]
         ),
     ]

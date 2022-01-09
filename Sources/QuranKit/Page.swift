@@ -48,7 +48,7 @@ public struct Page: QuranValueGroup {
     }
 
     public var startJuz: Juz {
-        return quran.juzs.binarySearchFirst { self >= $0.page }
+        quran.juzs.binarySearchFirst { self >= $0.page }
     }
 
     public var quarter: Quarter? {

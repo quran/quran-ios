@@ -47,13 +47,12 @@ let package = Package(
         ]),
 
         .target(name: "QuranAudioKit", dependencies: [
-                "SQLitePersistence",
-                "BatchDownloader",
-                "QuranTextKit",
-                "QueuePlayer",
-                "Zip",
-            ]
-        ),
+            "SQLitePersistence",
+            "BatchDownloader",
+            "QuranTextKit",
+            "QueuePlayer",
+            "Zip",
+        ]),
 
         .target(name: "QuranMadaniData", dependencies: [], resources: [
             .process("quran.ar.uthmani.v2.db"),
@@ -69,12 +68,10 @@ let package = Package(
         ]),
 
         .target(name: "QueuePlayer", dependencies: [
-                "Timing",
-                "QueuePlayerObjc",
-            ]
-        ),
-        .target(name: "QueuePlayerObjc", dependencies: []
-        ),
+            "Timing",
+            "QueuePlayerObjc",
+        ]),
+        .target(name: "QueuePlayerObjc", dependencies: []),
 
         .target(name: "BatchDownloader", dependencies: [
             "SQLitePersistence",
@@ -89,19 +86,17 @@ let package = Package(
         ]),
 
         .target(name: "Caching", dependencies: [
-                "Locking",
-                "PromiseKit",
-            ]
-        ),
+            "Locking",
+            "PromiseKit",
+        ]),
 
         .target(name: "Utilities", dependencies: [
             "PromiseKit",
         ]),
 
         .target(name: "Timing", dependencies: [
-                "Locking"
-            ]
-        ),
+            "Locking",
+        ]),
 
         .target(name: "WeakSet", dependencies: [
             "Locking",

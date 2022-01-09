@@ -31,23 +31,8 @@ public protocol QuranAudioPlayerDelegate: AnyObject {
     func onPlaybackOrDownloadingCompleted()
 }
 
-public protocol QuranAudioPlayer: AnyObject {
-    var delegate: QuranAudioPlayerDelegate? { get set }
-    var verseRuns: Runs { get set }
-    var listRuns: Runs { get set }
-
-    func isAudioDownloading() -> Guarantee<Bool>
-    func cancelDownload()
-    func playAudioForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber)
-    func pauseAudio()
-    func resumeAudio()
-    func stopAudio()
-    func stepForward()
-    func stepBackward()
-}
-
-class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
-    weak var delegate: QuranAudioPlayerDelegate?
+public class QuranAudioPlayer: QueuePlayerDelegate {
+    public weak var delegate: QuranAudioPlayerDelegate?
 
     private let downloader: AudioFilesDownloader
     private let player: QueuePlayer
@@ -60,8 +45,8 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
 
     private var downloadCancelled: Bool = false
 
-    var verseRuns: Runs = .one
-    var listRuns: Runs = .one
+    public var verseRuns: Runs = .one
+    public var listRuns: Runs = .one
 
     init(downloader: AudioFilesDownloader,
          player: QueuePlayer,
@@ -78,33 +63,51 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
         self.nowPlaying = nowPlaying
     }
 
+    public init(baseURL: URL, downloadManager: DownloadManager) {
+        let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
+        let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
+        let gappedBuilder = GappedAudioRequestBuilder()
+        let fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
+        let versesDownloader = AyahsAudioDownloader(downloader: downloadManager, fileListFactory: fileListFactory)
+        downloader = AudioFilesDownloader(gapplessAudioFileList: GaplessReciterAudioFileListRetrieval(baseURL: baseURL),
+                                          gappedAudioFileList: GappedReciterAudioFileListRetrieval(quran: Quran.madani),
+                                          downloader: downloadManager,
+                                          ayahDownloader: versesDownloader)
+        player = QueuePlayer()
+        unzipper = AudioUnzipper()
+        gappedAudioRequestBuilder = gappedBuilder
+        gaplessAudioRequestBuilder = gaplessBuilder
+        nowPlaying = NowPlayingUpdater(center: .default())
+    }
+
     private typealias PlaybackInfo = (reciter: Reciter, start: AyahNumber, end: AyahNumber)
 
     // MARK: - Playback Controls
 
-    func pauseAudio() {
+    public func pauseAudio() {
         player.pause()
     }
 
-    func resumeAudio() {
+    public func resumeAudio() {
         player.resume()
     }
 
-    func stopAudio() {
+    public func stopAudio() {
         player.stop()
     }
 
-    func stepForward() {
+    public func stepForward() {
         player.stepForward()
     }
 
-    func stepBackward() {
+    public func stepBackward() {
         player.stepBackward()
     }
 
     // MARK: - AudioPlayerDelegate
 
-    func onPlaybackEnded() {
+    // TODO: remove public
+    public func onPlaybackEnded() {
         nowPlaying.clear()
         delegate?.onPlaybackOrDownloadingCompleted()
         // not interested to get more notifications
@@ -112,7 +115,8 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
         audioRequest = nil
     }
 
-    func onPlaybackRateChanged(rate: Float) {
+    // TODO: remove public
+    public func onPlaybackRateChanged(rate: Float) {
         nowPlaying.update(rate: rate)
         if rate > 0.1 {
             delegate?.onPlaybackResumed()
@@ -121,7 +125,8 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
         }
     }
 
-    func onAudioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
+    // TODO: remove public
+    public func onAudioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
         guard let audioRequest = audioRequest else {
             return
         }
@@ -139,7 +144,7 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
     // MARK: - Download
 
     // will call willStartDownloadingAudioFiles if there is downloads
-    func isAudioDownloading() -> Guarantee<Bool> {
+    public func isAudioDownloading() -> Guarantee<Bool> {
         downloader.getCurrentDownloadResponse()
             .get { response in
                 if let response = response {
@@ -149,7 +154,7 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
             .map { $0 != nil }
     }
 
-    func cancelDownload() {
+    public func cancelDownload() {
         downloadCancelled = true
         downloader.cancel()
         delegate?.onPlaybackOrDownloadingCompleted()
@@ -173,7 +178,7 @@ class DefaultQuranAudioPlayer: QuranAudioPlayer, QueuePlayerDelegate {
 
     // MARK: - Play
 
-    func playAudioForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) {
+    public func playAudioForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) {
         let playbackInfo = (reciter: reciter, start: start, end: end)
         if downloader.needsToDownloadFiles(reciter: reciter, from: start, to: end) {
             logger.notice("Downloading Juz starting ayah: \(start) to \(end). Reciter: \(reciter)")

@@ -9,11 +9,11 @@ let package = Package(
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
         .library(name: "QuranMadaniData", targets: ["QuranMadaniData"]),
+        .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
         .library(name: "Caching", targets: ["Caching"]),
 
-        .library(name: "SQLitePersistence", targets: ["SQLitePersistence"]),
-        .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
-        .library(name: "Locking", targets: ["Locking"]),
+        // Utilities packages
+
         .library(name: "Timing", targets: ["Timing"]),
         .library(name: "Utilities", targets: ["Utilities"]),
         .library(name: "VLogging", targets: ["VLogging"]),
@@ -46,6 +46,15 @@ let package = Package(
             .copy("test_data"),
         ]),
 
+        .target(name: "QuranAudioKit", dependencies: [
+                "SQLitePersistence",
+                "BatchDownloader",
+                "QuranTextKit",
+                "QueuePlayer",
+                "Zip",
+            ]
+        ),
+
         .target(name: "QuranMadaniData", dependencies: [], resources: [
             .process("quran.ar.uthmani.v2.db"),
             .copy("images_1280"),
@@ -58,6 +67,14 @@ let package = Package(
             "Localization",
             "Preferences",
         ]),
+
+        .target(name: "QueuePlayer", dependencies: [
+                "Timing",
+                "QueuePlayerObjc",
+            ]
+        ),
+        .target(name: "QueuePlayerObjc", dependencies: []
+        ),
 
         .target(name: "BatchDownloader", dependencies: [
             "SQLitePersistence",

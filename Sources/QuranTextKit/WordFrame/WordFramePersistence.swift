@@ -47,7 +47,7 @@ struct SQLiteWordFramePersistence: WordFramePersistence, ReadonlySQLitePersisten
     let filePath: String
 
     init(fileURL: URL) {
-        self.filePath = fileURL.path
+        filePath = fileURL.path
     }
 
     func wordFrameCollectionForPage(_ page: Page) throws -> WordFrameCollection {

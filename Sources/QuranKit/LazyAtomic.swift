@@ -1,6 +1,6 @@
 //
 //  LazyAtomic.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2022-01-04.
 //
@@ -9,7 +9,6 @@ import Foundation
 
 @propertyWrapper
 final class LazyAtomic<Value> {
-
     private var initializer: (() -> Value)?
     private var value: Value?
     private let lock = NSLock()
@@ -18,7 +17,7 @@ final class LazyAtomic<Value> {
 
     var wrappedValue: () -> Value {
         get {
-            return {
+            {
                 self.lock.lock()
                 defer {
                     self.lock.unlock()

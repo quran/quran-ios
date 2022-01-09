@@ -35,8 +35,8 @@ public final class Quran: Hashable {
     }
 
     @LazyAtomic private var lazySuras: () -> [Sura]
-     public var suras: [Sura] {
-         lazySuras()
+    public var suras: [Sura] {
+        lazySuras()
     }
 
     @LazyAtomic private var lazyPages: () -> [Page]
@@ -84,13 +84,11 @@ extension Quran {
 extension Quran {
     private static let numberOfHizbsInJuz = 2
     private var numberOfJuzs: Int { numberOfHizbs / Self.numberOfHizbsInJuz }
-
 }
 
 extension Quran {
     private static let numberOfQuartersInHizb = 4
     private var numberOfHizbs: Int { raw.quarters.count / Self.numberOfQuartersInHizb }
-
 }
 
 extension Quran {

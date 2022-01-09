@@ -14,6 +14,7 @@ let package = Package(
         .library(name: "SQLitePersistence", targets: ["SQLitePersistence"]),
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Locking", targets: ["Locking"]),
+        .library(name: "Timing", targets: ["Timing"]),
         .library(name: "Utilities", targets: ["Utilities"]),
         .library(name: "VLogging", targets: ["VLogging"]),
         .library(name: "Crashing", targets: ["Crashing"]),
@@ -79,6 +80,11 @@ let package = Package(
         .target(name: "Utilities", dependencies: [
             "PromiseKit",
         ]),
+
+        .target(name: "Timing", dependencies: [
+                "Locking"
+            ]
+        ),
 
         .target(name: "WeakSet", dependencies: [
             "Locking",

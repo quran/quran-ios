@@ -21,14 +21,13 @@
 import Foundation
 import PromiseKit
 
-public protocol ReciterDataRetriever {
-    func getReciters() -> Guarantee<[Reciter]>
-}
-
-struct DefaultReciterDataRetriever: ReciterDataRetriever {
+public struct ReciterDataRetriever {
     private static let reciters = Bundle.main.url(forResource: "reciters", withExtension: "plist")!
 
-    func getReciters() -> Guarantee<[Reciter]> {
+    public init() {
+    }
+
+    public func getReciters() -> Guarantee<[Reciter]> {
         DispatchQueue.global().async(.guarantee) {
             guard let array = NSArray(contentsOf: Self.reciters) else {
                 fatalError("Couldn't load `\(Self.reciters)` file")

@@ -6,16 +6,13 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import BatchDownloader
 import Crashing
 import Foundation
 import PromiseKit
 import VLogging
 
-public protocol AudioUpdater {
-    func updateAudioIfNeeded()
-}
-
-class DefaultAudioUpdater: AudioUpdater {
+public final class AudioUpdater {
     private let recitersRetriever: ReciterDataRetriever
     private let networkService: AudioUpdatesNetworkManager
     private let preferences: AudioUpdatePreferences
@@ -30,7 +27,14 @@ class DefaultAudioUpdater: AudioUpdater {
         self.recitersRetriever = recitersRetriever
     }
 
-    func updateAudioIfNeeded() {
+    public init(baseURL: URL) {
+        let networkManager = BatchDownloader.NetworkManager(session: .shared, baseURL: baseURL)
+        networkService = DefaultAudioUpdatesNetworkManager(networkManager: networkManager)
+        preferences = DefaultAudioUpdatePreferences(userDefaults: .standard)
+        recitersRetriever = ReciterDataRetriever()
+    }
+
+    public func updateAudioIfNeeded() {
         let fileManager = FileManager.default
         let audioFiles = FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
         let downloadedReciters = try? fileManager.contentsOfDirectory(at: audioFiles, includingPropertiesForKeys: nil)

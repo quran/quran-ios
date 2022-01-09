@@ -23,12 +23,7 @@ import Foundation
 import PromiseKit
 import QuranKit
 
-public protocol AyahsAudioDownloader {
-    func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) -> Promise<DownloadBatchResponse>
-    func downloadingAudios(_ reciters: [Reciter]) -> Guarantee<[Reciter: DownloadBatchResponse]>
-}
-
-struct DefaultAyahsAudioDownloader: AyahsAudioDownloader {
+public struct AyahsAudioDownloader {
     let downloader: DownloadManager
     let fileListFactory: ReciterAudioFileListRetrievalFactory
     init(downloader: DownloadManager, fileListFactory: ReciterAudioFileListRetrievalFactory) {
@@ -36,7 +31,12 @@ struct DefaultAyahsAudioDownloader: AyahsAudioDownloader {
         self.fileListFactory = fileListFactory
     }
 
-    func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) -> Promise<DownloadBatchResponse> {
+    public init(baseURL: URL, downloader: DownloadManager) {
+        self.downloader = downloader
+        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
+    }
+
+    public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) -> Promise<DownloadBatchResponse> {
         DispatchQueue.global()
             .async(.guarantee) { () -> DownloadBatchRequest in
                 let retriever = self.fileListFactory.fileListRetrievalForReciter(reciter)
@@ -54,7 +54,7 @@ struct DefaultAyahsAudioDownloader: AyahsAudioDownloader {
             }
     }
 
-    func downloadingAudios(_ reciters: [Reciter]) -> Guarantee<[Reciter: DownloadBatchResponse]> {
+    public func downloadingAudios(_ reciters: [Reciter]) -> Guarantee<[Reciter: DownloadBatchResponse]> {
         downloader.getOnGoingDownloads()
             .map { self.audioResponses(reciters, downloads: $0) }
     }

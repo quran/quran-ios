@@ -21,12 +21,11 @@
 import Foundation
 import PromiseKit
 
-public protocol ReciterAudioDeleter {
-    func deleteAudioFiles(for reciter: Reciter) -> Promise<Void>
-}
+public struct ReciterAudioDeleter {
+    public init() {
+    }
 
-struct DefaultReciterAudioDeleter: ReciterAudioDeleter {
-    func deleteAudioFiles(for reciter: Reciter) -> Promise<Void> {
+    public func deleteAudioFiles(for reciter: Reciter) -> Promise<Void> {
         DispatchQueue.global().async(.promise) {
             try FileManager.default.removeItem(at: reciter.localFolder())
         }

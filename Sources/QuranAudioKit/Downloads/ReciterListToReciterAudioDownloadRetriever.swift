@@ -28,15 +28,16 @@ private struct AudioFileLists {
     let gapless: [ReciterAudioFile]
 }
 
-public protocol ReciterListToReciterAudioDownloadRetriever {
-    func getReciterAudioDownloads(for reciters: [Reciter]) -> Guarantee<[ReciterAudioDownload]>
-}
-
-struct DefaultReciterListToReciterAudioDownloadRetriever: ReciterListToReciterAudioDownloadRetriever {
+public struct ReciterListToReciterAudioDownloadRetriever {
     let fileListFactory: ReciterAudioFileListRetrievalFactory
     let quran: Quran
 
-    func getReciterAudioDownloads(for reciters: [Reciter]) -> Guarantee<[ReciterAudioDownload]> {
+    public init(baseURL: URL) {
+        quran = Quran.madani
+        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
+    }
+
+    public func getReciterAudioDownloads(for reciters: [Reciter]) -> Guarantee<[ReciterAudioDownload]> {
         let suras = Set(quran.suras)
         // TODO: needs refactoring. createFileLists should be part of createAudioDownload and remove the parallel map.
         let fileLists = DispatchQueue.global().async(.promise) {

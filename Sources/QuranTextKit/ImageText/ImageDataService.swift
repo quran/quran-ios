@@ -9,19 +9,15 @@ import QuranKit
 import UIKit
 
 public struct ImageDataService {
+    public static let madaniCropInsets = UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
     private let processor: WordFrameProcessor
     private let persistence: WordFramePersistence
-    private let madaniCropInsets = UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
+    private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
 
-    init(imagesURL: URL, processor: WordFrameProcessor, persistence: WordFramePersistence) {
+    public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets = madaniCropInsets) {
         self.imagesURL = imagesURL
-        self.persistence = persistence
-        self.processor = processor
-    }
-
-    public init(ayahInfoDatabase: URL, imagesURL: URL) {
-        self.imagesURL = imagesURL
+        self.cropInsets = cropInsets
         processor = DefaultWordFrameProcessor()
         persistence = SQLiteWordFramePersistence(fileURL: ayahInfoDatabase)
     }
@@ -34,10 +30,10 @@ public struct ImageDataService {
 
         // preload the image
         let unloadedImage: UIImage = image
-        let preloadedImage = preloadImage(unloadedImage, cropInsets: madaniCropInsets)
+        let preloadedImage = preloadImage(unloadedImage, cropInsets: cropInsets)
 
         let plainWordFrames = try persistence.wordFrameCollectionForPage(page)
-        let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: madaniCropInsets)
+        let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
     }
 

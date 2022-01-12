@@ -5,6 +5,9 @@ import PackageDescription
 let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
+    platforms: [
+        .iOS(.v11),
+    ],
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
@@ -27,6 +30,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
         .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.12.2"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
+        .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ],
     targets: [
         .target(name: "QuranKit", dependencies: []),
@@ -41,6 +45,10 @@ let package = Package(
         .testTarget(name: "QuranTextKitTests", dependencies: [
             "QuranTextKit",
             "QuranMadaniData",
+            "SnapshotTesting",
+        ],
+        exclude: [
+            "__Snapshots__",
         ],
         resources: [
             .copy("test_data"),

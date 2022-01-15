@@ -12,10 +12,10 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build QuranEngine.xcworkspace
-      run: xcrun xcodebuild build -scheme QuranEngine -sdk "iphonesimulator" | xcpretty
+      run: set -o pipefail && xcrun xcodebuild build -scheme QuranEngine -sdk "iphonesimulator" | xcpretty
 
     - name: Run tests
-      run: xcrun xcodebuild test -scheme QuranEngine -sdk "iphonesimulator" -destination "name=iPhone 11 Pro,OS=15.2" | xcpretty
+      run: set -o pipefail && xcrun xcodebuild test -scheme QuranEngine -sdk "iphonesimulator" -destination "name=iPhone 11 Pro,OS=15.2" | xcpretty
 
     - uses: sersoft-gmbh/swift-coverage-action@v2
       id: coverage-files

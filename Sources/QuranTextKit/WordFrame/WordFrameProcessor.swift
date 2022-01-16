@@ -28,67 +28,97 @@ protocol WordFrameProcessor {
 
 struct DefaultWordFrameProcessor: WordFrameProcessor {
     func processWordFrames(_ wordFrames: WordFrameCollection, cropInsets: UIEdgeInsets) -> WordFrameCollection {
-        let frames = wordFrames.frames.mapValues { $0.map { $0.withCropInsets(cropInsets) } }
+        let frames = wordFrames.frames.flatMap { $0.value }.map { $0.withCropInsets(cropInsets) }
 
         // group by line
-        var groupedLines = frames.flatMap(\.value).group { $0.line }
-        let groupedLinesKeys = groupedLines.keys.sorted()
+        var framesByLines = Dictionary(grouping: frames, by: { $0.line })
+        let sortedLines = framesByLines.keys.sorted()
 
+        framesByLines = sortFramesInEachLine(sortedLines, framesByLines)
+        framesByLines = alignFramesVerticallyInEachLine(sortedLines, framesByLines)
+        framesByLines = unionLinesVertically(sortedLines, framesByLines)
+        framesByLines = unionFramesHorizontallyInEachLine(sortedLines, framesByLines)
+        framesByLines = alignLineEdges(sortedLines, framesByLines)
+
+        let framesDictionary = Dictionary(grouping: framesByLines.flatMap(\.value), by: { $0.word.verse })
+        return WordFrameCollection(frames: framesDictionary)
+    }
+
+    private func sortFramesInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
         // sort each line from left to right
-        for i in 0 ..< groupedLinesKeys.count {
-            let key = groupedLinesKeys[i]
-            let value = groupedLines[key]!
-            groupedLines[key] = value.sorted { lhs, rhs in
+        var sortedFramesByLines: [Int : [WordFrame]] = [:]
+        for line in sortedLines {
+            let frames = framesByLines[line]!
+            sortedFramesByLines[line] = frames.sorted { lhs, rhs in
                 lhs.word < rhs.word
             }
         }
+        return sortedFramesByLines
+    }
 
+    private func alignFramesVerticallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
         // align vertically each line
-        for i in 0 ..< groupedLinesKeys.count {
-            let key = groupedLinesKeys[i]
-            let list = groupedLines[key]!
-            groupedLines[key] = WordFrame.alignedVertically(list)
+        var alignedFrames: [Int : [WordFrame]] = [:]
+        for line in sortedLines {
+            let list = framesByLines[line]!
+            alignedFrames[line] = WordFrame.alignedVertically(list)
         }
+        return alignedFrames
+    }
 
+    private func unionLinesVertically(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
         // union each line with its neighbors
-        for i in 0 ..< groupedLinesKeys.count - 1 {
-            let keyTop = groupedLinesKeys[i]
-            let keyBottom = groupedLinesKeys[i + 1]
-            var listTop = groupedLines[keyTop]!
-            var listBottom = groupedLines[keyBottom]!
-            WordFrame.unionVertically(top: &listTop, bottom: &listBottom)
-            groupedLines[keyTop] = listTop
-            groupedLines[keyBottom] = listBottom
-        }
+        var unionFrames: [Int : [WordFrame]] = framesByLines
+        for i in 0 ..< sortedLines.count - 1 {
+            let lineTop = sortedLines[i]
+            var framesTop = unionFrames[lineTop]!
 
+            let lineBottom = sortedLines[i + 1]
+            var framesBottom = unionFrames[lineBottom]!
+
+            WordFrame.unionVertically(top: &framesTop, bottom: &framesBottom)
+
+            unionFrames[lineTop] = framesTop
+            unionFrames[lineBottom] = framesBottom
+        }
+        return unionFrames
+    }
+
+    private func unionFramesHorizontallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
         // union each position with its neighbors
-        for i in 0 ..< groupedLinesKeys.count {
-            let key = groupedLinesKeys[i]
-            var list = groupedLines[key]!
+        var unionFrames: [Int : [WordFrame]] = [:]
+        for line in sortedLines {
+            var frames = framesByLines[line]!
 
-            for j in 0 ..< list.count - 1 {
-                var first = list[j]
-                var second = list[j + 1]
+            for j in 0 ..< frames.count - 1 {
+                var first = frames[j]
+                var second = frames[j + 1]
                 first.unionHorizontally(left: &second)
-                list[j] = first
-                list[j + 1] = second
+                frames[j] = first
+                frames[j + 1] = second
             }
-            groupedLines[key] = list
+            unionFrames[line] = frames
         }
+        return unionFrames
+    }
 
+    private func alignLineEdges(_ sortedLines: [Dictionary<Int, [WordFrame]>.Keys.Element],
+                                _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]]
+    {
         // align the edges
-        var firstEdge = groupedLines.map { $0.value[0] }
-        var lastEdge = groupedLines.map { $0.value[$0.value.count - 1] }
+        var firstEdge = sortedLines.map { framesByLines[$0]!.first! }
+        var lastEdge = sortedLines.map { framesByLines[$0]!.last! }
         WordFrame.unionLeftEdge(&lastEdge)
         WordFrame.unionRightEdge(&firstEdge)
-        for i in 0 ..< groupedLinesKeys.count {
-            let key = groupedLinesKeys[i]
-            var list = groupedLines[key]!
+
+        var alignedEdges: [Int : [WordFrame]] = [:]
+        for i in 0 ..< sortedLines.count {
+            let key = sortedLines[i]
+            var list = framesByLines[key]!
             list[0] = firstEdge[i]
             list[list.count - 1] = lastEdge[i]
-            groupedLines[key] = list
+            alignedEdges[key] = list
         }
-
-        return WordFrameCollection(frames: groupedLines.flatMap(\.value).group { $0.word.verse })
+        return alignedEdges
     }
 }

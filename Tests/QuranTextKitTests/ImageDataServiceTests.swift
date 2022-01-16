@@ -44,15 +44,24 @@ class ImageDataServiceTests: XCTestCase {
     }
 
     private func verifyImagePage(_ imagePage: ImagePage, testName: String = #function) throws {
+        // assert the image
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
-        assertSnapshot(matching: try drawFrames(imagePage.image, frames: imagePage.wordFrames), as: .image, testName: testName)
+
+        // assert the word frames values
         let frames = imagePage.wordFrames.frames.values.flatMap { $0 }.sorted { $0.word < $1.word }
         assertSnapshot(matching: frames, as: .json, testName: testName)
+
+        if ProcessInfo.processInfo.environment["LocalSnapshots"] != nil {
+            print("[Test] Asserting LocalSnapshots")
+            // assert the drawn word frames
+            let highlightedImage = try drawFrames(imagePage.image, frames: imagePage.wordFrames, strokeWords: false)
+            assertSnapshot(matching: highlightedImage, as: .image, testName: testName)
+        }
     }
 
-    private func drawFrames(_ image: UIImage, frames: WordFrameCollection) throws -> UIImage {
+    private func drawFrames(_ image: UIImage, frames: WordFrameCollection, strokeWords: Bool) throws -> UIImage {
         UIGraphicsBeginImageContextWithOptions(image.size, false, 0)
-        let colors: [UIColor] = [
+        let fillColors: [UIColor] = [
             .systemRed,
             .systemBlue,
             .systemGreen,
@@ -60,13 +69,19 @@ class ImageDataServiceTests: XCTestCase {
             .systemPurple,
             .systemTeal,
         ]
+        let strokeColor = UIColor.gray
         let verses = frames.frames.keys.sorted()
         for (offset, verse) in verses.enumerated() {
             let frames = try XCTUnwrap(frames.frames[verse])
-            let color = colors[offset % colors.count]
+            let color = fillColors[offset % fillColors.count]
             color.setFill()
+            strokeColor.setStroke()
             for frame in frames {
-                UIBezierPath(rect: frame.rect).fill()
+                let path = UIBezierPath(rect: frame.rect)
+                path.fill()
+                if strokeWords {
+                    path.stroke()
+                }
             }
         }
         image.draw(at: .zero)

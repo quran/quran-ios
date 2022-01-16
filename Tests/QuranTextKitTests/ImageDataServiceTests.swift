@@ -8,8 +8,8 @@
 import QuranKit
 import QuranMadaniData
 @testable import QuranTextKit
-import XCTest
 import SnapshotTesting
+import XCTest
 
 class ImageDataServiceTests: XCTestCase {
     var service: ImageDataService!
@@ -46,6 +46,8 @@ class ImageDataServiceTests: XCTestCase {
     private func verifyImagePage(_ imagePage: ImagePage, testName: String = #function) throws {
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
         assertSnapshot(matching: try drawFrames(imagePage.image, frames: imagePage.wordFrames), as: .image, testName: testName)
+        let frames = imagePage.wordFrames.frames.values.flatMap { $0 }.sorted { $0.word < $1.word }
+        assertSnapshot(matching: frames, as: .json, testName: testName)
     }
 
     private func drawFrames(_ image: UIImage, frames: WordFrameCollection) throws -> UIImage {
@@ -63,15 +65,52 @@ class ImageDataServiceTests: XCTestCase {
             let frames = try XCTUnwrap(frames.frames[verse])
             let color = colors[offset % colors.count]
             color.setFill()
-            UIColor.gray.setStroke()
             for frame in frames {
                 UIBezierPath(rect: frame.rect).fill()
-                UIBezierPath(rect: frame.rect).stroke()
             }
         }
         image.draw(at: .zero)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return try XCTUnwrap(newImage)
+    }
+}
+
+extension AyahNumber: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case sura
+        case ayah
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sura.suraNumber, forKey: .sura)
+        try container.encode(ayah, forKey: .ayah)
+    }
+}
+
+extension Word: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case verse
+        case word
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(verse, forKey: .verse)
+        try container.encode(wordNumber, forKey: .word)
+    }
+}
+
+extension WordFrame: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case word
+        case frame
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(word, forKey: .word)
+        try container.encode(rect, forKey: .frame)
     }
 }

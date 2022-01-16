@@ -174,8 +174,7 @@ final class SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence 
     private func convert(rowsToDownloads rows: AnySequence<Row>) -> [DownloadBatch] {
         let downloads = rows.map { convert(rowToDownload: $0) }
 
-        let batches = downloads
-            .group { $0.batchId }
+        let batches = Dictionary(grouping: downloads, by: { $0.batchId })
             .map { DownloadBatch(id: $0, downloads: $1) }
 
         return batches

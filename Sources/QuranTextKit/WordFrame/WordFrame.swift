@@ -54,8 +54,8 @@ public struct WordFrame: Equatable {
     }
 
     static func alignedVertically(_ list: [WordFrame]) -> [WordFrame] {
-        let minY = list.min { $0.minY < $1.minY }!.minY
-        let maxY = list.max { $0.maxY < $1.maxY }!.maxY
+        let minY = list.map(\.minY).min()!
+        let maxY = list.map(\.maxY).max()!
         var result: [WordFrame] = []
         for var frame in list {
             frame.minY = minY
@@ -77,8 +77,8 @@ public struct WordFrame: Equatable {
             return
         }
 
-        var topMaxY = top.max { $0.maxY < $1.maxY }!.maxY
-        var bottomMinY = bottom.min { $0.minY < $1.minY }!.minY
+        var topMaxY = top.map(\.maxY).max()!
+        var bottomMinY = bottom.map(\.minY).min()!
 
         let distance = Int(ceil((CGFloat(bottomMinY) - CGFloat(topMaxY)) / 2))
         topMaxY += distance
@@ -94,8 +94,7 @@ public struct WordFrame: Equatable {
     }
 
     private static func unionEdge(_ list: inout [WordFrame],
-                                  get: (WordFrame) -> Int,
-                                  set: (inout WordFrame, Int) -> Void,
+                                  keyPath: WritableKeyPath<WordFrame, Int>,
                                   isMin: Bool)
     {
         var longest: [Int] = []
@@ -104,7 +103,7 @@ public struct WordFrame: Equatable {
             var running = [i]
             for j in i + 1 ..< list.count {
                 let other = list[j]
-                if abs(get(pivot) - get(other)) < 50 {
+                if abs(pivot[keyPath: keyPath] - other[keyPath: keyPath]) < 50 {
                     running.append(j)
                 }
             }
@@ -117,23 +116,20 @@ public struct WordFrame: Equatable {
             return
         }
 
-        var value = get(list[longest[0]])
-        for i in 1 ..< longest.count {
-            let other = get(list[longest[i]])
-            value = isMin ? min(value, other) : max(value, other)
-        }
+        let values = longest.map { list[$0][keyPath: keyPath] }
+        let value = isMin ? values.min()! : values.max()!
         for i in longest {
             var frame = list[i]
-            set(&frame, value)
+            frame[keyPath: keyPath] = value
             list[i] = frame
         }
     }
 
-    public static func unionLeftEdge(_ list: inout [WordFrame]) {
-        unionEdge(&list, get: { $0.minX }, set: { $0.minX = $1 }, isMin: true)
+    static func unionLeftEdge(_ list: inout [WordFrame]) {
+        unionEdge(&list, keyPath: \.minX, isMin: true)
     }
 
-    public static func unionRightEdge(_ list: inout [WordFrame]) {
-        unionEdge(&list, get: { $0.maxX }, set: { $0.maxX = $1 }, isMin: false)
+    static func unionRightEdge(_ list: inout [WordFrame]) {
+        unionEdge(&list, keyPath: \.maxX, isMin: false)
     }
 }

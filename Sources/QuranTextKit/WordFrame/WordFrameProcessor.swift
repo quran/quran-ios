@@ -28,7 +28,7 @@ protocol WordFrameProcessor {
 
 struct DefaultWordFrameProcessor: WordFrameProcessor {
     func processWordFrames(_ wordFrames: WordFrameCollection, cropInsets: UIEdgeInsets) -> WordFrameCollection {
-        let frames = wordFrames.frames.flatMap { $0.value }.map { $0.withCropInsets(cropInsets) }
+        let frames = wordFrames.frames.flatMap(\.value).map { $0.withCropInsets(cropInsets) }
 
         // group by line
         var framesByLines = Dictionary(grouping: frames, by: { $0.line })
@@ -44,9 +44,9 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
         return WordFrameCollection(frames: framesDictionary)
     }
 
-    private func sortFramesInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
+    private func sortFramesInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
         // sort each line from left to right
-        var sortedFramesByLines: [Int : [WordFrame]] = [:]
+        var sortedFramesByLines: [Int: [WordFrame]] = [:]
         for line in sortedLines {
             let frames = framesByLines[line]!
             sortedFramesByLines[line] = frames.sorted { lhs, rhs in
@@ -56,9 +56,9 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
         return sortedFramesByLines
     }
 
-    private func alignFramesVerticallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
+    private func alignFramesVerticallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
         // align vertically each line
-        var alignedFrames: [Int : [WordFrame]] = [:]
+        var alignedFrames: [Int: [WordFrame]] = [:]
         for line in sortedLines {
             let list = framesByLines[line]!
             alignedFrames[line] = WordFrame.alignedVertically(list)
@@ -66,9 +66,9 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
         return alignedFrames
     }
 
-    private func unionLinesVertically(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
+    private func unionLinesVertically(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
         // union each line with its neighbors
-        var unionFrames: [Int : [WordFrame]] = framesByLines
+        var unionFrames: [Int: [WordFrame]] = framesByLines
         for i in 0 ..< sortedLines.count - 1 {
             let lineTop = sortedLines[i]
             var framesTop = unionFrames[lineTop]!
@@ -84,9 +84,9 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
         return unionFrames
     }
 
-    private func unionFramesHorizontallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]] {
+    private func unionFramesHorizontallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
         // union each position with its neighbors
-        var unionFrames: [Int : [WordFrame]] = [:]
+        var unionFrames: [Int: [WordFrame]] = [:]
         for line in sortedLines {
             var frames = framesByLines[line]!
 
@@ -103,7 +103,7 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
     }
 
     private func alignLineEdges(_ sortedLines: [Dictionary<Int, [WordFrame]>.Keys.Element],
-                                _ framesByLines: [Int : [WordFrame]]) -> [Int : [WordFrame]]
+                                _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]]
     {
         // align the edges
         var firstEdge = sortedLines.map { framesByLines[$0]!.first! }
@@ -111,7 +111,7 @@ struct DefaultWordFrameProcessor: WordFrameProcessor {
         WordFrame.unionLeftEdge(&lastEdge)
         WordFrame.unionRightEdge(&firstEdge)
 
-        var alignedEdges: [Int : [WordFrame]] = [:]
+        var alignedEdges: [Int: [WordFrame]] = [:]
         for i in 0 ..< sortedLines.count {
             let key = sortedLines[i]
             var list = framesByLines[key]!

@@ -7,8 +7,8 @@
 
 import QuranKit
 @testable import QuranTextKit
-import XCTest
 import SnapshotTesting
+import XCTest
 
 class CompositeSearcherTests: XCTestCase {
     private var searcher: CompositeSearcher!
@@ -108,10 +108,10 @@ class CompositeSearcherTests: XCTestCase {
         let result = wait(for: searcher.autocomplete(term: term))
 
         // assert the range
-        let ranges = result.map { Set($0.map { $0.highlightedRange }) }
+        let ranges = result.map { Set($0.map(\.highlightedRange)) }
         XCTAssertEqual(ranges, [term.startIndex ..< term.endIndex])
 
         // assert the text
-        assertSnapshot(matching: result?.map { $0.text }.sorted(), as: .json, testName: testName)
+        assertSnapshot(matching: result?.map(\.text).sorted(), as: .json, testName: testName)
     }
 }

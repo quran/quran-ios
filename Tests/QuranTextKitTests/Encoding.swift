@@ -1,12 +1,12 @@
 //
 //  Encoding.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2022-01-16.
 //
 
-@testable import QuranTextKit
 import QuranKit
+@testable import QuranTextKit
 
 extension AyahNumber: Encodable {
     enum CodingKeys: String, CodingKey {

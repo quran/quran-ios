@@ -7,7 +7,7 @@
 
 import QuranKit
 
-public struct SearchResult {
+public struct SearchResult: Equatable {
     public let text: String
     public let ayah: AyahNumber
 }

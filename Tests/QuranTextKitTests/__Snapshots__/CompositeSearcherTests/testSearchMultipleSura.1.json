@@ -1,0 +1,23 @@
+[
+  {
+    "items" : [
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 10
+        },
+        "text" : "Surah <b>Yu<b>nus"
+      },
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 12
+        },
+        "text" : "Surah <b>Yu<b>suf"
+      }
+    ],
+    "source" : {
+      "rawKey" : "quran"
+    }
+  }
+]

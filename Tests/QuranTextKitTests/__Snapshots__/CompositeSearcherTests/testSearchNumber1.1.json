@@ -1,0 +1,37 @@
+[
+  {
+    "items" : [
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 1
+        },
+        "text" : "Surah Al-Fatihah"
+      },
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 1
+        },
+        "text" : "Juz' 1"
+      },
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 1
+        },
+        "text" : "Hizb 1"
+      },
+      {
+        "ayah" : {
+          "ayah" : 1,
+          "sura" : 1
+        },
+        "text" : "Page 1"
+      }
+    ],
+    "source" : {
+      "rawKey" : "quran"
+    }
+  }
+]

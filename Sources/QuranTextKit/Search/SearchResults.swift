@@ -21,7 +21,7 @@
 import TranslationService
 
 extension SearchResult {
-    public enum Source {
+    public enum Source: Equatable {
         case quran
         case translation(Translation)
 
@@ -34,7 +34,7 @@ extension SearchResult {
     }
 }
 
-public struct SearchResults {
+public struct SearchResults: Equatable {
     public let source: SearchResult.Source
     public let items: [SearchResult]
 }

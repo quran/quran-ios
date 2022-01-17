@@ -15,27 +15,35 @@ public struct CompositeSearcher: AsyncSearcher {
     private let simpleSearchers: [Searcher]
     private let translationsSearcher: AsyncSearcher
 
-    init(simpleSearchers: [Searcher], translationsSearcher: AsyncSearcher) {
-        self.simpleSearchers = simpleSearchers
-        self.translationsSearcher = translationsSearcher
-    }
-
-    public init(databasesPath: String, quranFileURL: URL) {
-        let persistence = SQLiteQuranVerseTextPersistence(quran: Quran.madani, fileURL: quranFileURL)
-
-        let numberSearcher = NumberSearcher(quran: Quran.madani, quranVerseTextPersistence: persistence)
-        let quranSearcher = PersistenceSearcher(versePersistence: persistence, source: .quran)
-        let suraSearcher = SuraSearcher(quran: Quran.madani)
+    init(quran: Quran,
+         quranVerseTextPersistence: VerseTextPersistence,
+         localTranslationRetriever: LocalTranslationsRetriever,
+         versePersistenceBuilder: @escaping (Translation, Quran) -> VerseTextPersistence)
+    {
+        let numberSearcher = NumberSearcher(quran: quran, quranVerseTextPersistence: quranVerseTextPersistence)
+        let quranSearcher = PersistenceSearcher(versePersistence: quranVerseTextPersistence, source: .quran)
+        let suraSearcher = SuraSearcher(quran: quran)
         let translationSearcher = TranslationSearcher(
-            localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath),
-            versePersistenceBuilder: { translation, quran in
-                SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL, quran: quran)
-            },
-            quran: Quran.madani
+            localTranslationRetriever: localTranslationRetriever,
+            versePersistenceBuilder: versePersistenceBuilder,
+            quran: quran
         )
 
         let simpleSearchers: [Searcher] = [numberSearcher, suraSearcher, quranSearcher]
-        self.init(simpleSearchers: simpleSearchers, translationsSearcher: translationSearcher)
+        self.simpleSearchers = simpleSearchers
+        translationsSearcher = translationSearcher
+    }
+
+    public init(databasesPath: String, quranFileURL: URL) {
+        let quran = Quran.madani
+        let persistence = SQLiteQuranVerseTextPersistence(quran: quran, fileURL: quranFileURL)
+        let localTranslationRetriever = TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath)
+        self.init(quran: quran,
+                  quranVerseTextPersistence: persistence,
+                  localTranslationRetriever: localTranslationRetriever,
+                  versePersistenceBuilder: { translation, quran in
+                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL, quran: quran)
+                  })
     }
 
     public func autocomplete(term: String) -> Promise<[SearchAutocompletion]> {

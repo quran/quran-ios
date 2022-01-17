@@ -9,7 +9,7 @@ import PromiseKit
 import XCTest
 
 extension XCTestCase {
-    func wait<T>(for promise: Promise<T>) -> T? {
+    func wait<T>(for promise: Promise<T>, timeout: TimeInterval = 1) -> T? {
         let expectation = expectation(description: "promise")
         var result: T?
         promise.done { value in
@@ -20,7 +20,7 @@ extension XCTestCase {
             XCTFail("Promise failed!")
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: timeout)
         return result
     }
 }

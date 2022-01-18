@@ -69,9 +69,9 @@ extension SearchResult.Source: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .quran:
-            try container.encode("quran", forKey: .rawKey)
+            try container.encode(name.lowercased(), forKey: .rawKey)
         case .translation(let translation):
-            try container.encode("translation: \(translation.id)", forKey: .rawKey)
+            try container.encode("\(name.lowercased()): \(translation.id)", forKey: .rawKey)
         }
     }
 }

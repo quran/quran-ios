@@ -22,6 +22,28 @@ class ImageDataServiceTests: XCTestCase {
         )
     }
 
+    func testWordFrameCollection() throws {
+        let page = quran.pages[0]
+        let image = try service.imageForPage(page)
+        let wordFrames = image.wordFrames
+
+        XCTAssertEqual(wordFrames.frames[page.firstVerse], wordFrames.wordFramesForVerse(page.firstVerse))
+        XCTAssertEqual(CGRect(x: 671.0, y: 244.0, width: 46.0, height: 95.0),
+                       wordFrames.wordFrameForWord(Word(verse: page.firstVerse, wordNumber: 2))?.rect)
+        XCTAssertNil(wordFrames.wordFramesForVerse(quran.lastVerse))
+
+        let verticalScaling = WordFrameScale.scaling(imageSize: image.image.size, into: CGSize(width: 359, height: 668))
+        let horizontalScaling = WordFrameScale.scaling(imageSize: image.image.size, into: CGSize(width: 708, height: 1170.923076923077))
+
+        XCTAssertEqual(Word(verse: AyahNumber(quran: quran, sura: 1, ayah: 6)!, wordNumber: 1),
+                       wordFrames.wordAtLocation(CGPoint(x: 69, y: 225), imageScale: verticalScaling))
+
+        XCTAssertEqual(Word(verse: AyahNumber(quran: quran, sura: 1, ayah: 3)!, wordNumber: 1),
+                       wordFrames.wordAtLocation(CGPoint(x: 570, y: 280), imageScale: horizontalScaling))
+
+        XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
+    }
+
     func testGettingImageAtPage1() throws {
         let page = quran.pages[0]
         let image = try service.imageForPage(page)

@@ -24,7 +24,7 @@ import PromiseKit
 class DownloadResponse {
     let progress: QProgress
     var download: Download
-    var task: URLSessionTask?
+    var task: NetworkSessionTask?
 
     let promise: Promise<Void>
     private let resolver: Resolver<Void>

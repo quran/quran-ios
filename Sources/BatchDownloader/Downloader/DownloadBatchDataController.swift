@@ -21,7 +21,7 @@
 import Foundation
 import VLogging
 
-func describe(_ task: URLSessionTask) -> String {
+func describe(_ task: NetworkSessionTask) -> String {
     "\(task.taskIdentifier) " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "")
 }
 
@@ -29,7 +29,7 @@ class DownloadBatchDataController {
     private let maxSimultaneousDownloads: Int
     private let persistence: DownloadsPersistence
 
-    var session: URLSession?
+    var session: NetworkSession?
     weak var cancellable: NetworkResponseCancellable?
 
     private var runningDownloads: [Int: DownloadResponse] = [:]
@@ -49,7 +49,7 @@ class DownloadBatchDataController {
         return batchesByIds
     }
 
-    func downloadResponse(for task: URLSessionTask) -> DownloadResponse? {
+    func downloadResponse(for task: NetworkSessionTask) -> DownloadResponse? {
         // get from running
         if let response = runningDownloads[task.taskIdentifier] {
             return response
@@ -119,7 +119,7 @@ class DownloadBatchDataController {
         return response
     }
 
-    func setRunningTasks(_ tasks: [URLSessionTask]) throws {
+    func setRunningTasks(_ tasks: [NetworkSessionTask]) throws {
         guard !tasks.isEmpty else {
             return
         }
@@ -229,13 +229,13 @@ class DownloadBatchDataController {
         try startDownloads(downloads)
     }
 
-    private func downloads(session: URLSession) -> [(task: URLSessionDownloadTask, response: DownloadResponse)] {
+    private func downloads(session: NetworkSession) -> [(task: NetworkSessionDownloadTask, response: DownloadResponse)] {
         let emptySlots = maxSimultaneousDownloads - runningDownloads.count
 
         // sort the batches by id
         let batches = batchesByIds.sorted { $0.key < $1.key }
 
-        var downloads: [(task: URLSessionDownloadTask, response: DownloadResponse)] = []
+        var downloads: [(task: NetworkSessionDownloadTask, response: DownloadResponse)] = []
         for (_, batch) in batches {
             for download in batch.responses {
                 guard download.task == nil else {
@@ -261,7 +261,7 @@ class DownloadBatchDataController {
         return downloads
     }
 
-    private func startDownloads(_ downloads: [(task: URLSessionDownloadTask, response: DownloadResponse)]) throws {
+    private func startDownloads(_ downloads: [(task: NetworkSessionDownloadTask, response: DownloadResponse)]) throws {
         // continue if there are data
         guard !downloads.isEmpty else {
             return

@@ -28,8 +28,8 @@ extension OperationQueue {
     }
 }
 
-extension URLSession {
-    func getTasks() -> Guarantee<([URLSessionDataTask], [URLSessionUploadTask], [URLSessionDownloadTask])> {
+extension NetworkSession {
+    func tasks() -> Guarantee<([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])> {
         Guarantee { resolver in
             getTasksWithCompletionHandler { resolver(($0, $1, $2)) }
         }

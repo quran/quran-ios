@@ -26,7 +26,7 @@ protocol NetworkResponseCancellable: AnyObject {
     func cancel(batch: DownloadBatchResponse)
 }
 
-class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, NetworkResponseCancellable {
+class ThreadSafeDownloadSessionDelegate: NetworkSessionDelegate, NetworkResponseCancellable {
     private let unsafeHandler: DownloadSessionDelegate
     private let queue: OperationQueue
 
@@ -40,8 +40,8 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
         self.queue = queue
     }
 
-    func populateRunningTasks(from session: URLSession) {
-        session.getTasks()
+    func populateRunningTasks(from session: NetworkSession) {
+        session.tasks()
             .then { _, _, downloadTasks in
                 self.queue.async(.promise) {
                     try self.unsafeHandler.setRunningTasks(downloadTasks)
@@ -64,29 +64,29 @@ class ThreadSafeDownloadSessionDelegate: NSObject, URLSessionDownloadDelegate, N
         }
     }
 
-    func urlSession(_ session: URLSession,
-                    downloadTask: URLSessionDownloadTask,
-                    didWriteData bytesWritten: Int64,
-                    totalBytesWritten: Int64,
-                    totalBytesExpectedToWrite: Int64)
+    func networkSession(_ session: NetworkSession,
+                        downloadTask: NetworkSessionDownloadTask,
+                        didWriteData bytesWritten: Int64,
+                        totalBytesWritten: Int64,
+                        totalBytesExpectedToWrite: Int64)
     {
-        unsafeHandler.urlSession(session,
-                                 downloadTask: downloadTask,
-                                 didWriteData: bytesWritten,
-                                 totalBytesWritten: totalBytesWritten,
-                                 totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+        unsafeHandler.networkSession(session,
+                                     downloadTask: downloadTask,
+                                     didWriteData: bytesWritten,
+                                     totalBytesWritten: totalBytesWritten,
+                                     totalBytesExpectedToWrite: totalBytesExpectedToWrite)
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        unsafeHandler.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
+    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        unsafeHandler.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        unsafeHandler.urlSession(session, task: task, didCompleteWithError: error)
+    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError error: Error?) {
+        unsafeHandler.networkSession(session, task: task, didCompleteWithError: error)
     }
 
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        unsafeHandler.urlSessionDidFinishEvents(forBackgroundURLSession: session)
+    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
+        unsafeHandler.networkSessionDidFinishEvents(forBackgroundURLSession: session)
     }
 
     func cancel(batch: DownloadBatchResponse) {

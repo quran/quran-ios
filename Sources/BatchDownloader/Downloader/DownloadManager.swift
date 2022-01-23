@@ -31,7 +31,8 @@ private let queue: OperationQueue = {
 }()
 
 public final class DownloadManager {
-    private(set) var session: URLSession! // swiftlint:disable:this implicitly_unwrapped_optional
+    typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
+    private(set) var session: NetworkSession! // swiftlint:disable:this implicitly_unwrapped_optional
     private var handler: ThreadSafeDownloadSessionDelegate?
 
     public var backgroundSessionCompletionHandler: (() -> Void)? {
@@ -47,13 +48,17 @@ public final class DownloadManager {
         downloadsPath: String
     ) {
         self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
-                  configuration: configuration,
+                  sessionFactory: {
+                      URLSession(configuration: configuration,
+                                 delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
+                                 delegateQueue: $1)
+                  },
                   persistence: SqliteDownloadsPersistence(filePath: downloadsPath))
     }
 
     init(
         maxSimultaneousDownloads: Int,
-        configuration: URLSessionConfiguration,
+        sessionFactory: @escaping SessionFactory,
         persistence: DownloadsPersistence
     ) {
         initializationGroup.enter()
@@ -71,7 +76,7 @@ public final class DownloadManager {
             unsafeHandler.cancellable = self.handler
 
             // create the session
-            let session = URLSession(configuration: configuration, delegate: handler, delegateQueue: queue)
+            let session = sessionFactory(handler, queue)
 
             // set the handler and session
             self.handler = handler

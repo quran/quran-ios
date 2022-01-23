@@ -46,6 +46,7 @@ let package = Package(
             "QuranTextKit",
             "QuranMadaniData",
             "SnapshotTesting",
+            "TestUtilities",
         ],
         exclude: [
             "__Snapshots__",
@@ -121,5 +122,10 @@ let package = Package(
         .target(name: "Locking", dependencies: []),
         .target(name: "Preferences", dependencies: []),
         .target(name: "Localization", dependencies: []),
+
+        // Testing helpers
+        .target(name: "TestUtilities", dependencies: [
+            "PromiseKit",
+        ]),
     ]
 )

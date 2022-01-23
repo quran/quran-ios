@@ -8,6 +8,7 @@
 import PromiseKit
 import QuranKit
 @testable import QuranTextKit
+import TestUtilities
 import TranslationService
 import XCTest
 

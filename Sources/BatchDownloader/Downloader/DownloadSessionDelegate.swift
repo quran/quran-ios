@@ -22,7 +22,7 @@ import Crashing
 import Foundation
 import VLogging
 
-class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
+class DownloadSessionDelegate: NetworkSessionDelegate {
     private let acceptableStatusCodes = 200 ..< 300
 
     private let dataController: DownloadBatchDataController
@@ -34,7 +34,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         self.dataController = dataController
     }
 
-    func setRunningTasks(_ tasks: [URLSessionTask]) throws {
+    func setRunningTasks(_ tasks: [NetworkSessionTask]) throws {
         try dataController.setRunningTasks(tasks)
     }
 
@@ -46,11 +46,11 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         dataController.getOnGoingDownloads().map { $1 }
     }
 
-    func urlSession(_ session: URLSession,
-                    downloadTask: URLSessionDownloadTask,
-                    didWriteData bytesWritten: Int64,
-                    totalBytesWritten: Int64,
-                    totalBytesExpectedToWrite: Int64)
+    func networkSession(_ session: NetworkSession,
+                        downloadTask: NetworkSessionDownloadTask,
+                        didWriteData bytesWritten: Int64,
+                        totalBytesWritten: Int64,
+                        totalBytesExpectedToWrite: Int64)
     {
         guard let response = dataController.downloadResponse(for: downloadTask) else {
             logger.warning("Cannot find onGoingDownloads for task \(describe(downloadTask))")
@@ -60,7 +60,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         response.progress.completedUnitCount = Double(totalBytesWritten)
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) {
         // validate task response
         guard validate(task: downloadTask) == nil else {
             return
@@ -102,7 +102,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
+    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) {
         guard let response = dataController.downloadResponse(for: task) else {
             logger.warning("Cannot find onGoingDownloads for task \(describe(task))")
             return
@@ -161,7 +161,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         return finalError
     }
 
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
         let handler = backgroundSessionCompletionHandler
         backgroundSessionCompletionHandler = nil
         handler?()
@@ -171,7 +171,7 @@ class DownloadSessionDelegate: NSObject, URLSessionDownloadDelegate {
         try dataController.cancel(batch: batch)
     }
 
-    private func validate(task: URLSessionTask) -> Error? {
+    private func validate(task: NetworkSessionTask) -> Error? {
         let httpResponse = task.response as? HTTPURLResponse
         let statusCode = httpResponse?.statusCode ?? 0
         if !acceptableStatusCodes.contains(statusCode) {

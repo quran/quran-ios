@@ -45,8 +45,8 @@ public struct DownloadBatchRequest {
     }
 }
 
-extension URLSession {
-    func downloadTask(with request: DownloadRequest) -> URLSessionDownloadTask {
+extension NetworkSession {
+    func downloadTask(with request: DownloadRequest) -> NetworkSessionDownloadTask {
         let resumeURL = FileManager.documentsURL.appendingPathComponent(request.resumePath)
         if let data = try? Data(contentsOf: resumeURL) {
             return downloadTask(withResumeData: data)

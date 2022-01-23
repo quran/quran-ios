@@ -5,15 +5,14 @@
 //  Created by Mohamed Afifi on 2022-01-18.
 //
 
-import XCTest
 @testable import QuranTextKit
 import SnapshotTesting
+import XCTest
 
 class SearchRecentsServiceTests: XCTestCase {
     private var service: SearchRecentsService!
     private var preferences: DefaultRecentSearchPreferences!
     private let userDefaults = UserDefaults.standard
-
 
     override func setUpWithError() throws {
         preferences = DefaultRecentSearchPreferences(userDefaults: userDefaults)

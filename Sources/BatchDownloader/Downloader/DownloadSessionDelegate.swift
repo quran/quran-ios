@@ -34,7 +34,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
         self.dataController = dataController
     }
 
-    func setRunningTasks(_ tasks: [NetworkSessionTask]) throws {
+    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) throws {
         try dataController.setRunningTasks(tasks)
     }
 
@@ -63,6 +63,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) {
         // validate task response
         guard validate(task: downloadTask) == nil else {
+            logger.error("Invalid server response \(downloadTask.taskIdentifier) - \(String(describing: downloadTask.response))")
             return
         }
 
@@ -103,7 +104,11 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) {
-        guard let response = dataController.downloadResponse(for: task) else {
+        guard let downloadTask = task as? NetworkSessionDownloadTask else {
+            logger.warning("cannot update non download task: \(describe(task))")
+            return
+        }
+        guard let response = dataController.downloadResponse(for: downloadTask) else {
             logger.warning("Cannot find onGoingDownloads for task \(describe(task))")
             return
         }

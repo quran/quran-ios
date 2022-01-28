@@ -35,9 +35,18 @@ public protocol CrashInfoHandler {
     func recordError(_ error: Error, reason: String, file: StaticString, line: UInt)
 }
 
+private struct NoOpCrashInfoHandler: CrashInfoHandler {
+    func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
+        print("[NoOpCrashInfoHandler] setValue called. Don't use NoOpCrashInfoHandler in production")
+    }
+    func recordError(_ error: Error, reason: String, file: StaticString, line: UInt) {
+        print("[NoOpCrashInfoHandler] recordError called. Don't use NoOpCrashInfoHandler in production")
+    }
+}
+
 public enum CrashInfoSystem {
     private static let lock = NSLock()
-    private(set) static var factory: (() -> CrashInfoHandler)?
+    private(set) static var factory: (() -> CrashInfoHandler) = NoOpCrashInfoHandler.init
     private static var initialized = false
 
     public static func bootstrap(_ factory: @escaping () -> CrashInfoHandler) {
@@ -52,10 +61,7 @@ public enum CrashInfoSystem {
 public struct Crasher {
     public let handler: CrashInfoHandler
     public init() {
-        guard let factory = CrashInfoSystem.factory else {
-            fatalError("CrashInfoSystem.bootstrap should be called before creating Crasher instance.")
-        }
-        handler = factory()
+        handler = CrashInfoSystem.factory()
     }
 
     public func recordError(_ error: Error, reason: String, file: StaticString = #file, line: UInt = #line) {

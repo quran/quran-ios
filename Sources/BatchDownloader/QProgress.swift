@@ -41,7 +41,11 @@ public final class QProgress: NSObject, QProgressListener {
     public let progressListeners = WeakSet<QProgressListener>()
 
     public var totalUnitCount: Double {
-        didSet { notifyProgressChanged() }
+        didSet {
+            if oldValue != totalUnitCount {
+                notifyProgressChanged()
+            }
+        }
     }
 
     public var completedUnitCount: Double = 0 {

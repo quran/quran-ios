@@ -49,7 +49,7 @@ class DownloadBatchDataController {
         return batchesByIds
     }
 
-    func downloadResponse(for task: NetworkSessionTask) -> DownloadResponse? {
+    func downloadResponse(for task: NetworkSessionDownloadTask) -> DownloadResponse? {
         // get from running
         if let response = runningDownloads[task.taskIdentifier] {
             return response
@@ -119,7 +119,7 @@ class DownloadBatchDataController {
         return response
     }
 
-    func setRunningTasks(_ tasks: [NetworkSessionTask]) throws {
+    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) throws {
         guard !tasks.isEmpty else {
             return
         }
@@ -273,6 +273,7 @@ class DownloadBatchDataController {
         do {
             try persistence.update(downloads: downloads.map(\.response.download))
         } catch {
+            logger.error("Couldn't update downloads persistence with error: \(error)")
             // roll back
             for download in downloads {
                 download.response.task = nil

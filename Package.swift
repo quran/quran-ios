@@ -87,6 +87,10 @@ let package = Package(
             "Crashing",
             "WeakSet",
         ]),
+        .testTarget(name: "BatchDownloaderTests", dependencies: [
+            "BatchDownloader",
+            "TestUtilities",
+        ]),
 
         .target(name: "SQLitePersistence", dependencies: [
             "Utilities",

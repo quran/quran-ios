@@ -23,17 +23,19 @@ import Foundation
 import PromiseKit
 import Utilities
 
-private let queue: OperationQueue = {
-    let queue = OperationQueue()
-    queue.name = "com.quran.downloads"
-    queue.maxConcurrentOperationCount = 1
-    return queue
-}()
-
 public final class DownloadManager {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
     private(set) var session: NetworkSession! // swiftlint:disable:this implicitly_unwrapped_optional
     private var handler: ThreadSafeDownloadSessionDelegate?
+
+    private let operationQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.quran.downloads"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+
+    private let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
 
     public var backgroundSessionCompletionHandler: (() -> Void)? {
         get { handler?.backgroundSessionCompletionHandler }
@@ -61,37 +63,48 @@ public final class DownloadManager {
         sessionFactory: @escaping SessionFactory,
         persistence: DownloadsPersistence
     ) {
+        operationQueue.underlyingQueue = dispatchQueue
         initializationGroup.enter()
 
         let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)
-        queue.async(.promise) {
-            try attempt(times: 3) {
-                try dataController.loadBatchesFromPersistence()
+        dispatchQueue.async(.guarantee) {
+            do {
+                try attempt(times: 3) {
+                    try dataController.loadBatchesFromPersistence()
+                }
+            } catch {
+                crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
             }
         }
-        .ensure {
-            // create handler classes
-            let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
-            let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: queue)
-            unsafeHandler.cancellable = self.handler
-
-            // create the session
-            let session = sessionFactory(handler, queue)
-
-            // set the handler and session
-            self.handler = handler
-            self.session = session
-
-            dataController.cancellable = handler
-            dataController.session = session
-
-            handler.populateRunningTasks(from: session)
-
-            self.initializationGroup.leave()
+        .then(on: dispatchQueue) { () -> Promise<Void> in
+            let (handler, session) = self.createSessionHandler(sessionFactory: sessionFactory, dataController: dataController)
+            return handler.populateRunningTasks(from: session)
         }
         .catch { error in
-            crasher.recordError(error, reason: "Failed to retrieve initial download batches.")
+            crasher.recordError(error, reason: "Failed to retrieve download tasks.")
         }
+        .finally {
+            self.initializationGroup.leave()
+        }
+    }
+
+    private func createSessionHandler(sessionFactory: @escaping SessionFactory,
+                                      dataController: DownloadBatchDataController) -> (ThreadSafeDownloadSessionDelegate, NetworkSession) {
+        // create handler classes
+        let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
+        let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: self.dispatchQueue)
+        unsafeHandler.cancellable = self.handler
+
+        // create the session
+        let session = sessionFactory(handler, self.operationQueue)
+
+        // set the handler and session
+        self.handler = handler
+        self.session = session
+
+        dataController.cancellable = handler
+        dataController.session = session
+        return (handler, session)
     }
 
     public func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]> {

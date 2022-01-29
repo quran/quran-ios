@@ -41,14 +41,14 @@ final class DownloadManagerTests: XCTestCase {
     }
 
 
-    private func newDownloader() {
+    private func newDownloader(downloads: [DownloadTask] = []) {
         let downloadsURL = tempDirectory.appendingPathComponent("ongoing-downloads.db")
 
         persistence = SqliteDownloadsPersistence(filePath: downloadsURL.path)
         downloader = DownloadManager(
             maxSimultaneousDownloads: maxSimultaneousDownloads,
             sessionFactory: { delegate, queue in
-                self.session = NetworkSessionFake(queue: queue, delegate: delegate)
+                self.session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
                 return self.session!
             },
             persistence: persistence
@@ -61,7 +61,7 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
-    func testLoadingOnGoingDownload() {
+    func testLoadingOnGoingDownload() throws {
         let emptyDownloads = wait(for: downloader.getOnGoingDownloads())
         XCTAssertEqual(emptyDownloads?.count, 0)
 
@@ -71,15 +71,18 @@ final class DownloadManagerTests: XCTestCase {
 
         // keeping downloads in memory
         let memoryDownloads = wait(for: downloader.getOnGoingDownloads())
+        let downloads = downloadTasks(from: memoryDownloads)
         XCTAssertEqual(memoryDownloads?.count, 1)
+        XCTAssertEqual(downloads.count, 2)
 
         // deallocate downloader & create new one
         downloader = nil
-        newDownloader()
+        newDownloader(downloads: downloads)
 
         // loaded downlodas from disk
         let diskDownloads = wait(for: downloader.getOnGoingDownloads())
         XCTAssertEqual(diskDownloads?.count, 1)
+        XCTAssertEqual(downloadTasks(from: diskDownloads).count, 2)
     }
 
     func testDownloadBatchCompleted() throws {
@@ -206,6 +209,10 @@ final class DownloadManagerTests: XCTestCase {
         let data = try XCTUnwrap(content.data(using: .utf8))
         try data.write(to: url)
         return url
+    }
+
+    private func downloadTasks(from responses: [DownloadBatchResponse]?) -> [DownloadTask] {
+        responses?.flatMap { $0.responses.compactMap { $0.task as? DownloadTask } } ?? []
     }
 
     private struct CompletedTask {

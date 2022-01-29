@@ -28,27 +28,22 @@ protocol NetworkResponseCancellable: AnyObject {
 
 class ThreadSafeDownloadSessionDelegate: NetworkSessionDelegate, NetworkResponseCancellable {
     private let unsafeHandler: DownloadSessionDelegate
-    private let queue: OperationQueue
+    private let queue: DispatchQueue
 
     var backgroundSessionCompletionHandler: (() -> Void)? {
         get { unsafeHandler.backgroundSessionCompletionHandler }
         set { unsafeHandler.backgroundSessionCompletionHandler = newValue }
     }
 
-    init(unsafeHandler: DownloadSessionDelegate, queue: OperationQueue) {
+    init(unsafeHandler: DownloadSessionDelegate, queue: DispatchQueue) {
         self.unsafeHandler = unsafeHandler
         self.queue = queue
     }
 
-    func populateRunningTasks(from session: NetworkSession) {
+    func populateRunningTasks(from session: NetworkSession) -> Promise<Void> {
         session.tasks()
-            .then { _, _, downloadTasks in
-                self.queue.async(.promise) {
-                    try self.unsafeHandler.setRunningTasks(downloadTasks)
-                }
-            }
-            .catch { error in
-                crasher.recordError(error, reason: "Failed to retrieve download tasks.")
+            .map(on: queue) { _, _, downloadTasks in
+                try self.unsafeHandler.setRunningTasks(downloadTasks)
             }
     }
 
@@ -70,6 +65,7 @@ class ThreadSafeDownloadSessionDelegate: NetworkSessionDelegate, NetworkResponse
                         totalBytesWritten: Int64,
                         totalBytesExpectedToWrite: Int64)
     {
+        dispatchPrecondition(condition: .onQueue(queue))
         unsafeHandler.networkSession(session,
                                      downloadTask: downloadTask,
                                      didWriteData: bytesWritten,
@@ -78,14 +74,17 @@ class ThreadSafeDownloadSessionDelegate: NetworkSessionDelegate, NetworkResponse
     }
 
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        dispatchPrecondition(condition: .onQueue(queue))
         unsafeHandler.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError error: Error?) {
+        dispatchPrecondition(condition: .onQueue(queue))
         unsafeHandler.networkSession(session, task: task, didCompleteWithError: error)
     }
 
     func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
+        dispatchPrecondition(condition: .onQueue(queue))
         unsafeHandler.networkSessionDidFinishEvents(forBackgroundURLSession: session)
     }
 

@@ -53,7 +53,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
                         totalBytesExpectedToWrite: Int64)
     {
         guard let response = dataController.downloadResponse(for: downloadTask) else {
-            logger.warning("Cannot find onGoingDownloads for task \(describe(downloadTask))")
+            logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return
         }
         response.progress.totalUnitCount = Double(totalBytesExpectedToWrite)
@@ -92,7 +92,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
         } catch {
             crasher.recordError(
                 error,
-                reason: "Problem with create directory or copying item to the new location '\(destinationURL)'"
+                reason: "Problem with creating directory or copying item to the new location '\(destinationURL)'"
             )
             // fail the batch since we save the file
             do {
@@ -109,7 +109,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
         guard let response = dataController.downloadResponse(for: downloadTask) else {
-            logger.warning("Cannot find onGoingDownloads for task \(describe(task))")
+            logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
             return
         }
 
@@ -167,9 +167,10 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
     }
 
     func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
-        let handler = backgroundSessionCompletionHandler
-        backgroundSessionCompletionHandler = nil
-        handler?()
+        DispatchQueue.main.async {
+            self.backgroundSessionCompletionHandler?()
+            self.backgroundSessionCompletionHandler = nil
+        }
     }
 
     func cancel(batch: DownloadBatchResponse) throws {

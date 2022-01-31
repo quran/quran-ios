@@ -22,7 +22,7 @@ import Foundation
 import VLogging
 
 func describe(_ task: NetworkSessionTask) -> String {
-    "\(task.taskIdentifier) " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "")
+    "\(type(of: task))(\(task.taskIdentifier): " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "") + ")"
 }
 
 class DownloadBatchDataController {
@@ -139,9 +139,9 @@ class DownloadBatchDataController {
                 runningDownloads[task.taskIdentifier] = response
                 response.task = task
 
-                logger.info("Associating download with a DownloadTask: \(describe(task))")
+                logger.info("Associating download with a task: \(describe(task))")
             } else {
-                logger.info("Cancelling DownloadTask: \(describe(task))")
+                logger.info("Cancelling task: \(describe(task))")
 
                 // cancel the task
                 task.cancel()

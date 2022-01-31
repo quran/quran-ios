@@ -9,6 +9,7 @@ import PromiseKit
 import XCTest
 
 extension XCTestCase {
+    @nonobjc
     public func wait<Future: Thenable>(for promise: Future, timeout: TimeInterval = 1) -> Future.T? {
         let expectation = expectation(description: "promise")
         var result: Future.T?
@@ -24,7 +25,7 @@ extension XCTestCase {
         return result
     }
 
-    public func wait(for queue: OperationQueue, timeout: TimeInterval = 10) {
+    public func wait(for queue: OperationQueue, timeout: TimeInterval = 1) {
         if queue.operationCount == 0 {
             return
         }
@@ -32,6 +33,15 @@ extension XCTestCase {
             queue.operationCount == 0
         }
 
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    @nonobjc
+    public func wait(for queue: DispatchQueue, timeout: TimeInterval = 1) {
+        let expectation = expectation(description: "DispatchQueue")
+        queue.async(flags: .barrier) {
+            expectation.fulfill()
+        }
         wait(for: [expectation], timeout: timeout)
     }
 }

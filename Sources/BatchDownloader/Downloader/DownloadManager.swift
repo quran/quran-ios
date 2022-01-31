@@ -26,20 +26,25 @@ import Utilities
 public final class DownloadManager {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
     private(set) var session: NetworkSession! // swiftlint:disable:this implicitly_unwrapped_optional
-    private var handler: ThreadSafeDownloadSessionDelegate?
+    private var handler: ThreadSafeDownloadSessionDelegate? {
+        didSet {
+            handler?.backgroundSessionCompletionHandler = backgroundSessionCompletionHandler
+        }
+    }
 
-    private let operationQueue: OperationQueue = {
+    let operationQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = "com.quran.downloads"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
 
-    private let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
+    let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
 
     public var backgroundSessionCompletionHandler: (() -> Void)? {
-        get { handler?.backgroundSessionCompletionHandler }
-        set { handler?.backgroundSessionCompletionHandler = newValue }
+        didSet {
+            handler?.backgroundSessionCompletionHandler = backgroundSessionCompletionHandler
+        }
     }
 
     private let initializationGroup = DispatchGroup()
@@ -67,7 +72,7 @@ public final class DownloadManager {
         initializationGroup.enter()
 
         let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)
-        dispatchQueue.async(.guarantee) {
+        dispatchQueue.async(.guarantee) { () -> (ThreadSafeDownloadSessionDelegate, NetworkSession) in
             do {
                 try attempt(times: 3) {
                     try dataController.loadBatchesFromPersistence()
@@ -75,9 +80,10 @@ public final class DownloadManager {
             } catch {
                 crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
             }
+
+            return self.createSessionHandler(sessionFactory: sessionFactory, dataController: dataController)
         }
-        .then(on: dispatchQueue) { () -> Promise<Void> in
-            let (handler, session) = self.createSessionHandler(sessionFactory: sessionFactory, dataController: dataController)
+        .then(on: dispatchQueue) { (handler, session) -> Promise<Void> in
             return handler.populateRunningTasks(from: session)
         }
         .catch { error in

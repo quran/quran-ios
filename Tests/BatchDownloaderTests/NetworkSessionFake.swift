@@ -13,6 +13,13 @@ final class NetworkSessionFake: NetworkSession {
     let delegate: NetworkSessionDelegate
     var downloads: [DownloadTask] = []
 
+    private var taskIdentifierCounter = 0
+    private var taskIdentifier: Int {
+        let temp = taskIdentifierCounter
+        taskIdentifierCounter += 1
+        return temp
+    }
+
     init(queue: OperationQueue, delegate: NetworkSessionDelegate, downloads: [DownloadTask] = []) {
         self.queue = queue
         self.delegate = delegate
@@ -29,14 +36,14 @@ final class NetworkSessionFake: NetworkSession {
     }
 
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
-        let task = DownloadTask(taskIdentifier: .random(in: 0 ..< Int.max))
+        let task = DownloadTask(taskIdentifier: taskIdentifier)
         downloads.append(task)
         task.resumeData = resumeData
         return task
     }
 
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
-        let task = DownloadTask(taskIdentifier: .random(in: 0 ..< Int.max))
+        let task = DownloadTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         downloads.append(task)
         return task
@@ -68,6 +75,18 @@ final class NetworkSessionFake: NetworkSession {
             self.delegate.networkSession(self, task: task, didCompleteWithError: error)
         }
     }
+
+    func cancelTask(_ task: DownloadTask) {
+        queue.addOperation {
+            self.delegate.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
+        }
+    }
+
+    func finishBackgroundEvents() {
+        queue.addOperation {
+            self.delegate.networkSessionDidFinishEvents(forBackgroundURLSession: self)
+        }
+    }
 }
 
 final class DownloadTask: NetworkSessionDownloadTask, Hashable {
@@ -77,6 +96,8 @@ final class DownloadTask: NetworkSessionDownloadTask, Hashable {
     var response: URLResponse?
     var resumeData: Data?
 
+    weak var session: NetworkSessionFake?
+
     init(taskIdentifier: Int) {
         self.taskIdentifier = taskIdentifier
     }
@@ -85,6 +106,7 @@ final class DownloadTask: NetworkSessionDownloadTask, Hashable {
 
     func cancel() {
         isCancelled = true
+        session?.cancelTask(self)
     }
 
     func resume() {

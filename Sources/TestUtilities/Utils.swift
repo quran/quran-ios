@@ -9,20 +9,20 @@ import PromiseKit
 import XCTest
 
 extension XCTestCase {
-    @nonobjc
-    public func wait<Future: Thenable>(for promise: Future, timeout: TimeInterval = 1) -> Future.T? {
+    public func wait<Future: Thenable>(for promise: Future, timeout: TimeInterval = 1, file: StaticString = #filePath, line: UInt = #line) throws -> Future.T {
         let expectation = expectation(description: "promise")
-        var result: Future.T?
+        var result: Swift.Result<Future.T, Error>?
         promise.done { value in
-            result = value
+            result = .success(value)
             expectation.fulfill()
         }
-        .catch { _ in
-            XCTFail("Promise failed!")
+        .catch { error in
+            result = .failure(error)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
-        return result
+        let unboxedResult = try XCTUnwrap(result, file: file, line: line)
+        return try unboxedResult.get()
     }
 
     public func wait(for queue: OperationQueue, timeout: TimeInterval = 1) {
@@ -43,5 +43,31 @@ extension XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
+    }
+
+    // From: https://www.swiftbysundell.com/articles/testing-error-code-paths-in-swift/
+    public func assert<T, E: Error & Equatable>(
+        _ expression: @autoclosure () throws -> T,
+        throws error: E,
+        in file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        var thrownError: Error?
+
+        XCTAssertThrowsError(try expression(),
+                             file: file, line: line) {
+            thrownError = $0
+        }
+
+        XCTAssertTrue(
+            thrownError is E,
+            "Unexpected error type: \(type(of: thrownError))",
+            file: file, line: line
+        )
+
+        XCTAssertEqual(
+            thrownError as? E, error,
+            file: file, line: line
+        )
     }
 }

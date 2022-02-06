@@ -72,7 +72,9 @@ public final class DownloadBatchResponse {
     }
 
     public func cancel() {
-        cancellable?.cancel(batch: self)
+        if promise.isPending {
+            cancellable?.cancel(batch: self)
+        }
     }
 
     func fulfill() {

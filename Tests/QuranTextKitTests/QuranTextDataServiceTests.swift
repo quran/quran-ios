@@ -46,7 +46,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[1].verses[0]],
         ]
         for verses in tests {
-            let versesText = wait(for: textService.textForVerses(verses, translations: []))
+            let versesText = try wait(for: textService.textForVerses(verses, translations: []))
 
             let expected = verses.map {
                 VerseText(verse: $0,
@@ -65,7 +65,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[0].verses[1], quran.suras[0].verses[2]],
         ]
         for verses in tests {
-            let versesText = wait(for: textService.textForVerses(verses))
+            let versesText = try wait(for: textService.textForVerses(verses))
 
             let expected = verses.map { verse in
                 VerseText(verse: verse,

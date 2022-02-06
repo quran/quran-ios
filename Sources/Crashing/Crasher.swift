@@ -39,6 +39,7 @@ private struct NoOpCrashInfoHandler: CrashInfoHandler {
     func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
         print("[NoOpCrashInfoHandler] setValue called. Don't use NoOpCrashInfoHandler in production")
     }
+
     func recordError(_ error: Error, reason: String, file: StaticString, line: UInt) {
         print("[NoOpCrashInfoHandler] recordError called. Don't use NoOpCrashInfoHandler in production")
     }

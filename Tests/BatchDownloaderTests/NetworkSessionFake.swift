@@ -10,8 +10,9 @@ import Foundation
 
 final class NetworkSessionFake: NetworkSession {
     let queue: OperationQueue
-    let delegate: NetworkSessionDelegate
-    var downloads: [DownloadTask] = []
+    let delegate: NetworkSessionDelegate?
+    var downloads: [Task] = []
+    var dataTasks: [Task] = []
 
     private var taskIdentifierCounter = 0
     private var taskIdentifier: Int {
@@ -20,7 +21,7 @@ final class NetworkSessionFake: NetworkSession {
         return temp
     }
 
-    init(queue: OperationQueue, delegate: NetworkSessionDelegate, downloads: [DownloadTask] = []) {
+    init(queue: OperationQueue, delegate: NetworkSessionDelegate? = nil, downloads: [Task] = []) {
         self.queue = queue
         self.delegate = delegate
         self.downloads = downloads
@@ -36,65 +37,75 @@ final class NetworkSessionFake: NetworkSession {
     }
 
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
-        let task = DownloadTask(taskIdentifier: taskIdentifier)
+        let task = Task(taskIdentifier: taskIdentifier)
         downloads.append(task)
         task.resumeData = resumeData
         return task
     }
 
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
-        let task = DownloadTask(taskIdentifier: taskIdentifier)
+        let task = Task(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         downloads.append(task)
         return task
     }
 
-    func completeDownloadTask(_ task: DownloadTask, location: URL, totalBytes: Int, progressLoops: Int) {
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
+        let task = Task(taskIdentifier: taskIdentifier)
+        task.originalRequest = request
+        task.completionHandler = completionHandler
+        dataTasks.append(task)
+        return task
+    }
+
+    func completeDownloadTask(_ task: Task, location: URL, totalBytes: Int, progressLoops: Int) {
         let step = Int64(1 / Double(progressLoops) * Double(totalBytes))
         for i in 0 ... progressLoops {
             let written = Int64(Double(i) / Double(progressLoops) * Double(totalBytes))
             queue.addOperation {
-                self.delegate.networkSession(self,
-                                             downloadTask: task,
-                                             didWriteData: step,
-                                             totalBytesWritten: written,
-                                             totalBytesExpectedToWrite: Int64(totalBytes))
+                self.delegate?.networkSession(self,
+                                              downloadTask: task,
+                                              didWriteData: step,
+                                              totalBytesWritten: written,
+                                              totalBytesExpectedToWrite: Int64(totalBytes))
             }
         }
 
         queue.addOperation {
             task.response = HTTPURLResponse(url: task.originalRequest!.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
-            self.delegate.networkSession(self, downloadTask: task, didFinishDownloadingTo: location)
-            self.delegate.networkSession(self, task: task, didCompleteWithError: nil)
+            self.delegate?.networkSession(self, downloadTask: task, didFinishDownloadingTo: location)
+            self.delegate?.networkSession(self, task: task, didCompleteWithError: nil)
             self.downloads = self.downloads.filter { $0 == task }
         }
     }
 
-    func failDownloadTask(_ task: DownloadTask, error: Error) {
+    func failDownloadTask(_ task: Task, error: Error) {
         queue.addOperation {
-            self.delegate.networkSession(self, task: task, didCompleteWithError: error)
+            self.delegate?.networkSession(self, task: task, didCompleteWithError: error)
         }
     }
 
-    func cancelTask(_ task: DownloadTask) {
+    func cancelTask(_ task: Task) {
         queue.addOperation {
-            self.delegate.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
+            self.delegate?.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
         }
     }
 
     func finishBackgroundEvents() {
         queue.addOperation {
-            self.delegate.networkSessionDidFinishEvents(forBackgroundURLSession: self)
+            self.delegate?.networkSessionDidFinishEvents(forBackgroundURLSession: self)
         }
     }
 }
 
-final class DownloadTask: NetworkSessionDownloadTask, Hashable {
+final class Task: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable {
     let taskIdentifier: Int
     var originalRequest: URLRequest?
     var currentRequest: URLRequest?
     var response: URLResponse?
     var resumeData: Data?
+
+    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
 
     weak var session: NetworkSessionFake?
 
@@ -113,7 +124,7 @@ final class DownloadTask: NetworkSessionDownloadTask, Hashable {
         isCancelled = false
     }
 
-    static func == (lhs: DownloadTask, rhs: DownloadTask) -> Bool {
+    static func == (lhs: Task, rhs: Task) -> Bool {
         lhs.taskIdentifier == rhs.taskIdentifier
     }
 

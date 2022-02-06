@@ -9,9 +9,14 @@ import Foundation
 import PromiseKit
 
 public final class NetworkManager {
-    private let session: URLSession
+    private let session: NetworkSession
     private let baseURL: URL
     public init(session: URLSession = .shared, baseURL: URL) {
+        self.session = session
+        self.baseURL = baseURL
+    }
+
+    init(session: NetworkSession, baseURL: URL) {
         self.session = session
         self.baseURL = baseURL
     }

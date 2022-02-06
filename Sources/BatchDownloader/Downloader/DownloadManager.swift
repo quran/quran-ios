@@ -83,8 +83,8 @@ public final class DownloadManager {
 
             return self.createSessionHandler(sessionFactory: sessionFactory, dataController: dataController)
         }
-        .then(on: dispatchQueue) { (handler, session) -> Promise<Void> in
-            return handler.populateRunningTasks(from: session)
+        .then(on: dispatchQueue) { handler, session -> Promise<Void> in
+            handler.populateRunningTasks(from: session)
         }
         .catch { error in
             crasher.recordError(error, reason: "Failed to retrieve download tasks.")
@@ -95,14 +95,15 @@ public final class DownloadManager {
     }
 
     private func createSessionHandler(sessionFactory: @escaping SessionFactory,
-                                      dataController: DownloadBatchDataController) -> (ThreadSafeDownloadSessionDelegate, NetworkSession) {
+                                      dataController: DownloadBatchDataController) -> (ThreadSafeDownloadSessionDelegate, NetworkSession)
+    {
         // create handler classes
         let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
-        let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: self.dispatchQueue)
+        let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: dispatchQueue)
         unsafeHandler.cancellable = self.handler
 
         // create the session
-        let session = sessionFactory(handler, self.operationQueue)
+        let session = sessionFactory(handler, operationQueue)
 
         // set the handler and session
         self.handler = handler

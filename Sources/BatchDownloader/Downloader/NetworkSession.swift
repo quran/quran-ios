@@ -14,6 +14,7 @@ protocol NetworkSession {
                                                                        [NetworkSessionDownloadTask]) -> Void)
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
 }
 
 protocol NetworkSessionTask {
@@ -64,6 +65,10 @@ extension URLSession: NetworkSession {
 
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
         downloadTask(withResumeData: resumeData) as URLSessionDownloadTask
+    }
+
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
+        dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
     }
 }
 

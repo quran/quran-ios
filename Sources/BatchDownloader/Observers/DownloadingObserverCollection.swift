@@ -55,11 +55,6 @@ public class DownloadingObserverCollection<Item: Hashable> {
         self.responses = responses
     }
 
-    public func updateItem(_ item: Item, at index: Int, response: DownloadBatchResponse?) {
-        items[index] = item
-        responses[item] = response
-    }
-
     public func startDownloading(item: Item, response: DownloadBatchResponse) {
         guard !cancelling.value.contains(item) else {
             logger.warning("Not starting download, but canceling it for \(item)")

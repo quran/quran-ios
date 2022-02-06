@@ -41,7 +41,8 @@ class ThreadSafeDownloadSessionDelegate: NetworkSessionDelegate, NetworkResponse
     }
 
     func populateRunningTasks(from session: NetworkSession) -> Promise<Void> {
-        session.tasks()
+        dispatchPrecondition(condition: .onQueue(queue))
+        return session.tasks()
             .map(on: queue) { _, _, downloadTasks in
                 try self.unsafeHandler.setRunningTasks(downloadTasks)
             }

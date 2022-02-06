@@ -60,7 +60,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
+            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
             XCTAssertEqual(test.result, versesText)
         }
     }
@@ -95,7 +95,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
+            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
             XCTAssertEqual(test.result, versesText)
         }
     }

@@ -49,7 +49,7 @@ class DownloadBatchDataController {
         return batchesByIds
     }
 
-    func downloadResponse(for task: NetworkSessionDownloadTask) -> DownloadResponse? {
+    func downloadResponse(for task: NetworkSessionTask) -> DownloadResponse? {
         // get from running
         if let response = runningDownloads[task.taskIdentifier] {
             return response

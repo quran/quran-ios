@@ -104,11 +104,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) {
-        guard let downloadTask = task as? NetworkSessionDownloadTask else {
-            logger.warning("cannot update non download task: \(describe(task))")
-            return
-        }
-        guard let response = dataController.downloadResponse(for: downloadTask) else {
+        guard let response = dataController.downloadResponse(for: task) else {
             logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
             return
         }

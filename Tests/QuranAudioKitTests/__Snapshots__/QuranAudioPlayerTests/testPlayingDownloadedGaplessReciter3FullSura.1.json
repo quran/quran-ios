@@ -1,0 +1,86 @@
+{
+  "playing" : {
+    "_0" : {
+      "endTime" : null,
+      "files" : [
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            },
+            {
+              "endTime" : null,
+              "startTime" : 10.034000000000001
+            },
+            {
+              "endTime" : null,
+              "startTime" : 12.680999999999999
+            },
+            {
+              "endTime" : null,
+              "startTime" : 15.811
+            }
+          ],
+          "url" : "\/audio_files\/reciter2\/112.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            },
+            {
+              "endTime" : null,
+              "startTime" : 10.805999999999999
+            },
+            {
+              "endTime" : null,
+              "startTime" : 14.606999999999999
+            },
+            {
+              "endTime" : null,
+              "startTime" : 19.893999999999998
+            },
+            {
+              "endTime" : null,
+              "startTime" : 26.256
+            }
+          ],
+          "url" : "\/audio_files\/reciter2\/113.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            },
+            {
+              "endTime" : null,
+              "startTime" : 13.324
+            },
+            {
+              "endTime" : null,
+              "startTime" : 18.951000000000001
+            },
+            {
+              "endTime" : null,
+              "startTime" : 24.57
+            },
+            {
+              "endTime" : null,
+              "startTime" : 32.968000000000004
+            },
+            {
+              "endTime" : null,
+              "startTime" : 41.412999999999997
+            }
+          ],
+          "url" : "\/audio_files\/reciter2\/114.mp3"
+        }
+      ],
+      "frameRuns" : 1,
+      "requestRuns" : 1
+    }
+  }
+}

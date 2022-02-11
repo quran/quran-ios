@@ -62,6 +62,17 @@ let package = Package(
             "QueuePlayer",
             "Zip",
         ]),
+        .testTarget(name: "QuranAudioKitTests", dependencies: [
+            "QuranAudioKit",
+            "TestUtilities",
+            "SnapshotTesting",
+        ],
+        exclude: [
+            "__Snapshots__",
+        ],
+        resources: [
+            .copy("test_data"),
+        ]),
 
         .target(name: "QuranMadaniData", dependencies: [], resources: [
             .process("quran.ar.uthmani.v2.db"),

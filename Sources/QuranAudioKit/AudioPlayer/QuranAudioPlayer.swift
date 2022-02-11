@@ -35,7 +35,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
     public weak var delegate: QuranAudioPlayerDelegate?
 
     private let downloader: AudioFilesDownloader
-    private let player: QueuePlayer
+    private let player: QueuingPlayer
     private let unzipper: AudioUnzipper
     private let nowPlaying: NowPlayingUpdater
 
@@ -48,22 +48,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
     public var verseRuns: Runs = .one
     public var listRuns: Runs = .one
 
-    init(downloader: AudioFilesDownloader,
-         player: QueuePlayer,
-         unzipper: AudioUnzipper,
-         gappedAudioRequestBuilder: QuranAudioRequestBuilder,
-         gaplessAudioRequestBuilder: QuranAudioRequestBuilder,
-         nowPlaying: NowPlayingUpdater)
-    {
-        self.downloader = downloader
-        self.player = player
-        self.unzipper = unzipper
-        self.gappedAudioRequestBuilder = gappedAudioRequestBuilder
-        self.gaplessAudioRequestBuilder = gaplessAudioRequestBuilder
-        self.nowPlaying = nowPlaying
-    }
-
-    public init(baseURL: URL, downloadManager: DownloadManager) {
+    init(baseURL: URL, downloadManager: DownloadManager, player: QueuingPlayer, fileSystem: FileSystem) {
         let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
         let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
         let gappedBuilder = GappedAudioRequestBuilder()
@@ -72,12 +57,17 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         downloader = AudioFilesDownloader(gapplessAudioFileList: GaplessReciterAudioFileListRetrieval(baseURL: baseURL),
                                           gappedAudioFileList: GappedReciterAudioFileListRetrieval(quran: Quran.madani),
                                           downloader: downloadManager,
-                                          ayahDownloader: versesDownloader)
-        player = QueuePlayer()
+                                          ayahDownloader: versesDownloader,
+                                          fileSystem: fileSystem)
+        self.player = player
         unzipper = AudioUnzipper()
         gappedAudioRequestBuilder = gappedBuilder
         gaplessAudioRequestBuilder = gaplessBuilder
         nowPlaying = NowPlayingUpdater(center: .default())
+    }
+
+    public convenience init(baseURL: URL, downloadManager: DownloadManager) {
+        self.init(baseURL: baseURL, downloadManager: downloadManager, player: QueuePlayer(), fileSystem: DefaultFileSystem())
     }
 
     private typealias PlaybackInfo = (reciter: Reciter, start: AyahNumber, end: AyahNumber)
@@ -216,7 +206,6 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
         unzipper.unzip(reciter: playbackInfo.reciter).done(on: .main) {
             self.play(reciter: playbackInfo.reciter, from: playbackInfo.start, to: playbackInfo.end)
-            self.delegate?.onPlayingStarted()
         }
     }
 
@@ -225,6 +214,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
             .done(on: .main) { audioRequest in
                 let request = audioRequest.getRequest()
+                self.delegate?.onPlayingStarted()
                 self.willPlay(request)
                 self.audioRequest = audioRequest
                 self.player.delegate = self

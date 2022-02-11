@@ -1,0 +1,38 @@
+{
+  "playing" : {
+    "_0" : {
+      "endTime" : null,
+      "files" : [
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/009001.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/009002.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/009003.mp3"
+        }
+      ],
+      "frameRuns" : 1,
+      "requestRuns" : 1
+    }
+  }
+}

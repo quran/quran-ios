@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct DownloadRequest {
+public struct DownloadRequest: Hashable {
     public static let downloadResumeDataExtension = "resume"
 
     public let url: URL
@@ -38,7 +38,7 @@ public struct DownloadRequest {
     }
 }
 
-public struct DownloadBatchRequest {
+public struct DownloadBatchRequest: Hashable {
     public let requests: [DownloadRequest]
     public init(requests: [DownloadRequest]) {
         self.requests = requests

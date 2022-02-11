@@ -1,0 +1,44 @@
+{
+  "playing" : {
+    "_0" : {
+      "endTime" : null,
+      "files" : [
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            },
+            {
+              "endTime" : null,
+              "startTime" : 12.206
+            },
+            {
+              "endTime" : null,
+              "startTime" : 17.731999999999999
+            },
+            {
+              "endTime" : null,
+              "startTime" : 22.329999999999998
+            },
+            {
+              "endTime" : null,
+              "startTime" : 26.881
+            },
+            {
+              "endTime" : null,
+              "startTime" : 33.567999999999998
+            },
+            {
+              "endTime" : null,
+              "startTime" : 39.009999999999998
+            }
+          ],
+          "url" : "\/audio_files\/reciter2\/001.mp3"
+        }
+      ],
+      "frameRuns" : 1,
+      "requestRuns" : 1
+    }
+  }
+}

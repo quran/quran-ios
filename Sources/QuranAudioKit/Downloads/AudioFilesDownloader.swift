@@ -30,18 +30,21 @@ class AudioFilesDownloader {
 
     private let downloader: DownloadManager
     private let ayahDownloader: AyahsAudioDownloader
+    private let fileSystem: FileSystem
 
     private var response: DownloadBatchResponse?
 
     init(gapplessAudioFileList: ReciterAudioFileListRetrieval,
          gappedAudioFileList: ReciterAudioFileListRetrieval,
          downloader: DownloadManager,
-         ayahDownloader: AyahsAudioDownloader)
+         ayahDownloader: AyahsAudioDownloader,
+         fileSystem: FileSystem)
     {
         self.gapplessAudioFileList = gapplessAudioFileList
         self.gappedAudioFileList = gappedAudioFileList
         self.downloader = downloader
         self.ayahDownloader = ayahDownloader
+        self.fileSystem = fileSystem
     }
 
     func cancel() {
@@ -51,7 +54,7 @@ class AudioFilesDownloader {
 
     func needsToDownloadFiles(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> Bool {
         let files = filesForReciter(reciter, from: start, to: end)
-        return files.contains { !FileManager.documentsURL.appendingPathComponent($0.destinationPath).isReachable }
+        return files.contains { !fileSystem.fileExists(at: FileManager.documentsURL.appendingPathComponent($0.destinationPath)) }
     }
 
     func getCurrentDownloadResponse() -> Guarantee<DownloadBatchResponse?> {

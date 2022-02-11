@@ -17,7 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-public enum Runs {
+public enum Runs: Equatable {
     case one
     case two
     case three

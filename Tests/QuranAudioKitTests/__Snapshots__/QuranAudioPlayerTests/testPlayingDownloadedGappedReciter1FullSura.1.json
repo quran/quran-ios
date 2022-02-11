@@ -1,0 +1,74 @@
+{
+  "playing" : {
+    "_0" : {
+      "endTime" : null,
+      "files" : [
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001001.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001002.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001003.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001004.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001005.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001006.mp3"
+        },
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 0
+            }
+          ],
+          "url" : "\/audio_files\/reciter1\/001007.mp3"
+        }
+      ],
+      "frameRuns" : 1,
+      "requestRuns" : 1
+    }
+  }
+}

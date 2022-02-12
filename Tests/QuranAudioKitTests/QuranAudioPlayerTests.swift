@@ -84,12 +84,23 @@ class QuranAudioPlayerTests: XCTestCase {
                                                  "114.mp3"])
     }
 
-    // TODO: Fix the bug of creating AyahNumber with ayah value of 999 from persistence
-    func DISABLED_testPlayingDownloadedGaplessReciter2Suras1stSuraHasEndTimestamp() throws {
+    func testPlayingDownloadedGaplessReciter2Suras1stSuraHasEndTimestamp() throws {
         try runDownloadedGaplessTestCase(from: suras[76].verses[48],
                                          to: suras[77].verses[2],
                                          files: ["077.mp3",
                                                  "078.mp3"])
+    }
+
+    func testPlayingDownloadedGaplessReciter1SurasHasEndTimestamp() throws {
+        try runDownloadedGaplessTestCase(from: suras[76].verses[48],
+                                         to: suras[76].lastVerse,
+                                         files: ["077.mp3"])
+    }
+
+    func testPlayingDownloadedGaplessReciter1SurasHasEndTimestampStopBeforeEnd() throws {
+        try runDownloadedGaplessTestCase(from: suras[76].verses[48],
+                                         to: suras[76].verses[48],
+                                         files: ["077.mp3"])
     }
 
     func testPlayingDownloadedGappedReciter1FullSura() throws {

@@ -1,0 +1,24 @@
+{
+  "playing" : {
+    "_0" : {
+      "endTime" : 284.899,
+      "files" : [
+        {
+          "frames" : [
+            {
+              "endTime" : null,
+              "startTime" : 269.197
+            },
+            {
+              "endTime" : 284.899,
+              "startTime" : 275.88099999999997
+            }
+          ],
+          "url" : "\/audio_files\/reciter2\/077.mp3"
+        }
+      ],
+      "frameRuns" : 1,
+      "requestRuns" : 1
+    }
+  }
+}

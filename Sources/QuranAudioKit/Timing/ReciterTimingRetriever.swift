@@ -23,13 +23,13 @@ import PromiseKit
 import QuranKit
 
 protocol ReciterTimingRetriever {
-    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: [AyahTiming]]>
+    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: SuraTiming]>
 }
 
 struct SQLiteReciterTimingRetriever: ReciterTimingRetriever {
     let persistenceFactory: AyahTimingPersistenceFactory
 
-    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: [AyahTiming]]> {
+    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: SuraTiming]> {
         guard case .gapless(let databaseName) = reciter.audioType else {
             fatalError("Gapped reciters are not supported.")
         }
@@ -37,7 +37,7 @@ struct SQLiteReciterTimingRetriever: ReciterTimingRetriever {
             let fileURL = reciter.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
             let persistence = self.persistenceFactory.persistenceForURL(fileURL)
 
-            var result: [Sura: [AyahTiming]] = [:]
+            var result: [Sura: SuraTiming] = [:]
             for sura in suras {
                 let timings = try persistence.getOrderedTimingForSura(startAyah: sura.firstVerse)
                 result[sura] = timings

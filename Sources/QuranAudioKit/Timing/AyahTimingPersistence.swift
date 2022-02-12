@@ -25,7 +25,7 @@ import SQLite
 import SQLitePersistence
 
 protocol AyahTimingPersistence {
-    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> [AyahTiming]
+    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> SuraTiming
 }
 
 struct SQLiteAyahTimingPersistence: AyahTimingPersistence, ReadonlySQLitePersistence {
@@ -62,20 +62,27 @@ struct SQLiteAyahTimingPersistence: AyahTimingPersistence, ReadonlySQLitePersist
         }
     }
 
-    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> [AyahTiming] {
+    func getOrderedTimingForSura(startAyah: AyahNumber) throws -> SuraTiming {
         try validateFileExists()
 
         return try run { connection in
             let query = timingsTable.filter(Column.sura == startAyah.sura.suraNumber && Column.ayah >= startAyah.ayah).order(Column.ayah)
             do {
                 var timings: [AyahTiming] = []
+                var endTime: Timing?
                 let rows = try connection.prepare(query)
                 for row in rows {
-                    let ayah = AyahNumber(quran: startAyah.quran, sura: row[Column.sura], ayah: row[Column.ayah])!
-                    let timing = AyahTiming(ayah: ayah, time: row[Column.time])
-                    timings.append(timing)
+                    let ayah = row[Column.ayah]
+                    let time = Timing(time: row[Column.time])
+                    if ayah == 999 {
+                        endTime = time
+                    } else {
+                        let verse = AyahNumber(quran: startAyah.quran, sura: row[Column.sura], ayah: ayah)!
+                        let timing = AyahTiming(ayah: verse, time: time)
+                        timings.append(timing)
+                    }
                 }
-                return timings
+                return SuraTiming(verses: timings, endTime: endTime)
             } catch {
                 crasher.recordError(error, reason: "Couldn't get ordered timing for sura starting from '\(startAyah)")
                 throw PersistenceError.query(error)

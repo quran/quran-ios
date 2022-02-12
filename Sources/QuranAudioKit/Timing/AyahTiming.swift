@@ -20,15 +20,20 @@
 
 import QuranKit
 
-public struct AyahTiming {
-    public let ayah: AyahNumber
-    public let time: Int
-    public init(ayah: AyahNumber, time: Int) {
-        self.ayah = ayah
-        self.time = time
-    }
+struct Timing {
+    let time: Int
 
-    public var seconds: Double {
+    var seconds: Double {
         Double(time) / 1000
     }
+}
+
+struct AyahTiming {
+    let ayah: AyahNumber
+    let time: Timing
+}
+
+struct SuraTiming {
+    let verses: [AyahTiming]
+    let endTime: Timing?
 }

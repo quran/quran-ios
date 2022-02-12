@@ -11,6 +11,7 @@ import PromiseKit
 import QueuePlayer
 import QuranKit
 import QuranTextKit
+import VLogging
 
 struct GaplessAudioRequest: QuranAudioRequest {
     let request: AudioRequest
@@ -64,54 +65,52 @@ final class GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
                     var frames: [AudioFrame] = []
                     var fileAyahs: [AyahNumber] = []
 
-                    for (offset, timing) in suraTimings.timings.enumerated() {
+                    for (offset, verse) in suraTimings.verses.enumerated() {
                         // start from 0 (beginning) if first ayah of the sura
-                        let endTime = offset == suraTimings.timings.count - 1 ? suraTimings.endTime : nil
-                        let frame = AudioFrame(startTime: offset == 0 && timing.ayah.ayah == 1 ? 0 : timing.seconds, endTime: endTime)
+                        let endTime = offset == suraTimings.verses.count - 1 ? suraTimings.endTime : nil
+                        let frame = AudioFrame(startTime: offset == 0 && verse.ayah.ayah == 1 ? 0 : verse.time.seconds, endTime: endTime?.seconds)
                         frames.append(frame)
-                        fileAyahs.append(timing.ayah)
+                        fileAyahs.append(verse.ayah)
                     }
                     files.append(AudioFile(url: url, frames: frames))
                     ayahs.append(fileAyahs)
                 }
-                let request = AudioRequest(files: files, endTime: endTime, frameRuns: frameRuns, requestRuns: requestRuns)
+                let request = AudioRequest(files: files, endTime: endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
                 let quranRequest = GaplessAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
                 return quranRequest
             }
     }
 
-    private func filteredTimings(timings: [Sura: [AyahTiming]],
+    private func filteredTimings(timings: [Sura: SuraTiming],
                                  from start: AyahNumber,
-                                 to end: AyahNumber) -> [Sura: (timings: [AyahTiming], endTime: TimeInterval?)]
+                                 to end: AyahNumber) -> [Sura: SuraTiming]
     {
         // filter out uneeded timings
-        var mutableTimings: [Sura: ([AyahTiming], endTime: TimeInterval?)] = [:]
+        var mutableTimings: [Sura: SuraTiming] = [:]
         let ayahSet = Set(start.array(to: end))
         for (sura, suraTimings) in timings {
-            var endTime: TimeInterval?
-            if let clippedVerseTiming = suraTimings.last,
-               clippedVerseTiming.ayah.ayah == 999 && suraTimings.count > 1
-            {
-                let lastVerseTiming = suraTimings[suraTimings.count - 2]
-                if ayahSet.contains(lastVerseTiming.ayah) {
-                    endTime = clippedVerseTiming.seconds
+            var endTime: Timing?
+            if let suraEndTime = suraTimings.endTime {
+                if ayahSet.contains(suraTimings.verses.last!.ayah) {
+                    endTime = suraEndTime
                 }
             }
-            mutableTimings[sura] = (suraTimings.filter { ayahSet.contains($0.ayah) }, endTime)
+            mutableTimings[sura] = SuraTiming(verses: suraTimings.verses.filter { ayahSet.contains($0.ayah) }, endTime: endTime)
         }
         return mutableTimings
     }
 
-    private func getEndTime(timings: [Sura: [AyahTiming]], from start: AyahNumber, to end: AyahNumber) -> TimeInterval? {
-        var endTime: TimeInterval?
+    private func getEndTime(timings: [Sura: SuraTiming], from start: AyahNumber, to end: AyahNumber) -> Timing? {
         let lastSuraTimings = timings[end.sura]!
-        if let lastAyahIndex = lastSuraTimings.firstIndex(where: { $0.ayah == end }) {
-            if lastAyahIndex + 1 < lastSuraTimings.count {
-                let endTiming = lastSuraTimings[lastAyahIndex + 1]
-                endTime = endTiming.seconds
-            }
+        // end is the last verse in the sura
+        if lastSuraTimings.verses.last?.ayah == end {
+            return lastSuraTimings.endTime
         }
-        return endTime
+        if let endIndex = lastSuraTimings.verses.firstIndex(where: { $0.ayah == end }) {
+            return lastSuraTimings.verses[endIndex + 1].time
+        }
+        logger.error("lastSuraTimings doesn't have the end verse")
+        return nil
     }
 
     private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [(url: URL, sura: Sura)] {

@@ -21,10 +21,17 @@
 import Foundation
 import QuranKit
 
-protocol VerseTextPersistence {
-    func textForVerse(_ verse: AyahNumber) throws -> String
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String]
-
+protocol SearchableTextPersistence {
     func autocomplete(term: String) throws -> [String]
     func search(for term: String) throws -> [(verse: AyahNumber, text: String)]
+}
+
+protocol VerseTextPersistence: SearchableTextPersistence {
+    func textForVerse(_ verse: AyahNumber) throws -> String
+    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String]
+}
+
+protocol TranslationVerseTextPersistence: SearchableTextPersistence {
+    func textForVerse(_ verse: AyahNumber) throws -> TranslationText
+    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: TranslationText]
 }

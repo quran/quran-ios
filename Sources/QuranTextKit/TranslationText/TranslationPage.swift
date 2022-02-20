@@ -22,20 +22,19 @@ import Foundation
 import QuranKit
 import TranslationService
 
-public struct TranslationText: Hashable {
-    public let translation: Translation
-    public let text: String
+public enum TranslationText: Hashable {
+    case string(String)
+    case reference(AyahNumber)
 }
 
 public struct VerseText: Hashable {
-    public let verse: AyahNumber
     public let arabicText: String
-    public let translations: [TranslationText]
+    public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
     public let arabicPrefix: [String]
     public let arabicSuffix: [String]
 }
 
-public struct PageText: Hashable {
-    public let page: Page
+public struct TranslatedVerses: Hashable {
+    public let translations: [Translation]
     public let verses: [VerseText]
 }

@@ -32,6 +32,7 @@
 
 "errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
+"referenceVerseTranslationText" = "انظر آية رقم %d.";
 
 "searchRecentsTitle" = "عمليات البحث الأخيرة";
 "searchPopularTitle" = "اختبر البحث بإستخدام";

@@ -24,6 +24,10 @@ let package = Package(
         .library(name: "Preferences", targets: ["Preferences"]),
         .library(name: "Localization", targets: ["Localization"]),
 
+        // Testing
+
+        .library(name: "TestUtilities", targets: ["TestUtilities"]),
+
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),

@@ -12,15 +12,10 @@ import PromiseKit
 import QuranKit
 import TranslationService
 
-private struct AyahText {
-    let ayah: AyahNumber
-    let text: String
-}
-
 public struct QuranTextDataService {
     let localTranslationRetriever: LocalTranslationsRetriever
     let arabicPersistence: VerseTextPersistence
-    let translationsPersistenceBuilder: (Translation, Quran) -> VerseTextPersistence
+    let translationsPersistenceBuilder: (Translation, Quran) -> TranslationVerseTextPersistence
     let selectedTranslationsPreferences: SelectedTranslationsPreferences
 
     public init(databasesPath: String, quranFileURL: URL) {
@@ -37,7 +32,7 @@ public struct QuranTextDataService {
 
     init(localTranslationRetriever: LocalTranslationsRetriever,
          arabicPersistence: VerseTextPersistence,
-         translationsPersistenceBuilder: @escaping (Translation, Quran) -> VerseTextPersistence)
+         translationsPersistenceBuilder: @escaping (Translation, Quran) -> TranslationVerseTextPersistence)
     {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
@@ -45,20 +40,15 @@ public struct QuranTextDataService {
         selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences(userDefaults: .standard)
     }
 
-    public func textForPage(_ page: Page) -> Promise<PageText> {
-        textForVerses(page.verses)
-            .map { PageText(page: page, verses: $0) }
-    }
-
-    func textForVerses(_ verses: [AyahNumber]) -> Promise<[VerseText]> {
+    public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {
         textForVerses(verses, translations: localTranslations())
     }
 
-    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) -> Promise<[VerseText]> {
+    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) -> Promise<TranslatedVerses> {
         textForVerses(verses, translations: .value(translations))
     }
 
-    private func textForVerses(_ verses: [AyahNumber], translations: Promise<[Translation]>) -> Promise<[VerseText]> {
+    private func textForVerses(_ verses: [AyahNumber], translations: Promise<[Translation]>) -> Promise<TranslatedVerses> {
         // get Arabic text
         // get translations text
         // merge them
@@ -68,21 +58,22 @@ public struct QuranTextDataService {
         }
         return when(fulfilled: translations, arabicText)
             .map { translations, arabic in
-                self.merge(verses: verses, translations: translations, arabic: arabic)
+                TranslatedVerses(translations: translations.map { $0.0 },
+                                 verses: self.merge(verses: verses, translations: translations, arabic: arabic))
             }
     }
 
-    private func merge(verses: [AyahNumber], translations: [(Translation, [AyahText])], arabic: [AyahText]) -> [VerseText] {
+    private func merge(verses: [AyahNumber], translations: [(Translation, [TranslationText])], arabic: [String]) -> [VerseText] {
         var versesText: [VerseText] = []
 
         for i in 0 ..< verses.count {
             let verse = verses[i]
-            let arabicText = arabic[i].text
-            let ayahTranslations = translations.map { translation, ayahs -> TranslationText in
-                TranslationText(translation: translation, text: ayahs[i].text)
+            let arabicText = arabic[i]
+            let ayahTranslations = translations.map { translation, ayahs in
+                ayahs[i]
             }
             let prefix = verse == verse.sura.firstVerse && verse.sura.startsWithBesmAllah ? [verse.quran.arabicBesmAllah] : []
-            let verseText = VerseText(verse: verse, arabicText: arabicText, translations: ayahTranslations, arabicPrefix: prefix, arabicSuffix: [])
+            let verseText = VerseText(arabicText: arabicText, translations: ayahTranslations, arabicPrefix: prefix, arabicSuffix: [])
             versesText.append(verseText)
         }
         return versesText
@@ -99,41 +90,36 @@ public struct QuranTextDataService {
         return selected.compactMap { translationsById[$0] }
     }
 
-    private func versesArabicText(verses: [AyahNumber]) -> Promise<[AyahText]> {
+    private func versesArabicText(verses: [AyahNumber]) -> Promise<[String]> {
         DispatchQueue.global().async(.promise) {
             try self.retrieveArabicText(verses: verses)
         }
     }
 
-    private func retrieveArabicText(verses: [AyahNumber]) throws -> [AyahText] {
+    private func retrieveArabicText(verses: [AyahNumber]) throws -> [String] {
         let versesText = try arabicPersistence.textForVerses(verses)
-        var verseTextList: [AyahText] = []
+        var verseTextList: [String] = []
         for verse in verses {
             let text = versesText[verse]!
-            verseTextList.append(AyahText(ayah: verse, text: text))
+            verseTextList.append(text)
         }
         return verseTextList
     }
 
-    private func fetchTranslationsText(verses: [AyahNumber], translations: [Translation]) -> Promise<[(Translation, [AyahText])]> {
+    private func fetchTranslationsText(verses: [AyahNumber], translations: [Translation]) -> Promise<[(Translation, [TranslationText])]> {
         when(fulfilled: translations.map { fetchTranslation(verses: verses, translation: $0) })
     }
 
-    private func fetchTranslation(verses: [AyahNumber], translation: Translation) -> Promise<(Translation, [AyahText])> {
+    private func fetchTranslation(verses: [AyahNumber], translation: Translation) -> Promise<(Translation, [TranslationText])> {
         DispatchQueue.global().async(.promise) {
             let translationPersistence = self.translationsPersistenceBuilder(translation, verses[0].quran)
 
-            var verseTextList: [AyahText] = []
+            var verseTextList: [TranslationText] = []
             do {
                 let versesText = try translationPersistence.textForVerses(verses)
                 for verse in verses {
-                    let text: String
-                    if let verseText = versesText[verse] {
-                        text = verseText
-                    } else {
-                        text = l("noAvailableTranslationText")
-                    }
-                    verseTextList.append(AyahText(ayah: verse, text: text))
+                    let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
+                    verseTextList.append(text)
                 }
             } catch {
                 crasher.recordError(
@@ -141,8 +127,8 @@ public struct QuranTextDataService {
                     reason: "Issue getting verse \(verses), translation: \(translation.id)"
                 )
                 let errorText = l("errorInTranslationText")
-                for verse in verses {
-                    verseTextList.append(AyahText(ayah: verse, text: errorText))
+                for _ in verses {
+                    verseTextList.append(.string(errorText))
                 }
             }
             return (translation, verseTextList)

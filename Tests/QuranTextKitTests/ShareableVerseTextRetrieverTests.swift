@@ -60,7 +60,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
+            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses))
             XCTAssertEqual(test.result, versesText)
         }
     }
@@ -95,8 +95,32 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses, page: quran.pages[0]))
+            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses))
             XCTAssertEqual(test.result, versesText)
         }
+    }
+
+    func testShareTranslationTextReferenceVerse() throws {
+        statePreferences.quranMode = .translation
+
+        mockTranslationsRetriever.getLocalTranslationsHandler = {
+            .value([TestData.khanTranslation])
+        }
+
+        let numberReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[49]]))
+        XCTAssertEqual(numberReference, ["وَإِذۡ فَرَقۡنَا بِكُمُ ٱلۡبَحۡرَ فَأَنجَیۡنَـٰكُمۡ وَأَغۡرَقۡنَاۤ ءَالَ فِرۡعَوۡنَ وَأَنتُمۡ تَنظُرُونَ﴿ ٥٠ ﴾",
+                                         "",
+                                         "• Khan & Hilai:",
+                                         "See ayah 38.",
+                                         "",
+                                         "Al-Baqarah, Ayah 50"])
+
+        let verseSavedAsTextReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[50]]))
+        XCTAssertEqual(verseSavedAsTextReference, ["وَإِذۡ وَ ٰ⁠عَدۡنَا مُوسَىٰۤ أَرۡبَعِینَ لَیۡلَةࣰ ثُمَّ ٱتَّخَذۡتُمُ ٱلۡعِجۡلَ مِنۢ بَعۡدِهِۦ وَأَنتُمۡ ظَـٰلِمُونَ﴿ ٥١ ﴾",
+                                                   "",
+                                                   "• Khan & Hilai:",
+                                                   "See ayah 38.",
+                                                   "",
+                                                   "Al-Baqarah, Ayah 51"])
     }
 }

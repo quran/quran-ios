@@ -48,13 +48,13 @@ final class QuranTextDataServiceTests: XCTestCase {
         for verses in tests {
             let versesText = try wait(for: textService.textForVerses(verses, translations: []))
 
-            let expected = verses.map {
-                VerseText(verse: $0,
-                          arabicText: TestData.quranTextAt($0),
+            let expectedVerses = verses.map {
+                VerseText(arabicText: TestData.quranTextAt($0),
                           translations: [],
                           arabicPrefix: $0 == quran.suras[1].verses[0] ? [TestData.quranTextAt(quran.firstVerse)] : [],
                           arabicSuffix: [])
             }
+            let expected = TranslatedVerses(translations: [], verses: expectedVerses)
             XCTAssertEqual(expected, versesText)
         }
     }
@@ -67,15 +67,15 @@ final class QuranTextDataServiceTests: XCTestCase {
         for verses in tests {
             let versesText = try wait(for: textService.textForVerses(verses))
 
-            let expected = verses.map { verse in
-                VerseText(verse: verse,
-                          arabicText: TestData.quranTextAt(verse),
+            let expectedVerses = verses.map { verse in
+                VerseText(arabicText: TestData.quranTextAt(verse),
                           translations: translations.map {
-                              TranslationText(translation: $0, text: TestData.translationTextAt($0, verse))
+                              .string(TestData.translationTextAt($0, verse))
                           },
                           arabicPrefix: [],
                           arabicSuffix: [])
             }
+            let expected = TranslatedVerses(translations: translations, verses: expectedVerses)
             XCTAssertEqual(expected, versesText)
         }
     }

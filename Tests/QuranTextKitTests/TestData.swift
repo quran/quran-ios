@@ -30,7 +30,7 @@ struct TestData {
                                               version: 1,
                                               installedVersion: 1)
 
-    static let translationsPersistenceBuilder = { (translation: Translation, quran: Quran) -> VerseTextPersistence in
+    static let translationsPersistenceBuilder = { (translation: Translation, quran: Quran) -> TranslationVerseTextPersistence in
         let url = resourceURL(translation.fileName)
         return SQLiteTranslationVerseTextPersistence(fileURL: url, quran: quran)
     }

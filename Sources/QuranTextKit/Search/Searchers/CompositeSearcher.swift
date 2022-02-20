@@ -18,7 +18,7 @@ public struct CompositeSearcher: AsyncSearcher {
     init(quran: Quran,
          quranVerseTextPersistence: VerseTextPersistence,
          localTranslationRetriever: LocalTranslationsRetriever,
-         versePersistenceBuilder: @escaping (Translation, Quran) -> VerseTextPersistence)
+         versePersistenceBuilder: @escaping (Translation, Quran) -> TranslationVerseTextPersistence)
     {
         let numberSearcher = NumberSearcher(quran: quran, quranVerseTextPersistence: quranVerseTextPersistence)
         let quranSearcher = PersistenceSearcher(versePersistence: quranVerseTextPersistence, source: .quran)

@@ -17,7 +17,7 @@ struct DefaultTranslationNetworkManager: TranslationNetworkManager {
     let parser: TranslationsParser
 
     func getTranslations() -> Promise<[Translation]> {
-        networkManager.request("/data/translations.php", parameters: [("v", "4")])
+        networkManager.request("/data/translations.php", parameters: [("v", "5")])
             .map(parser.parse)
     }
 }

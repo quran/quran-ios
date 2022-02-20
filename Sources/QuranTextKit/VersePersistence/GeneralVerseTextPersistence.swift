@@ -22,20 +22,26 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
 
     private let searchTable = Table("verses")
 
-    func textForVerse(_ verse: AyahNumber) throws -> String {
-        if let text = try textForVerseIfExists(verse) {
-            return text
-        }
-        throw PersistenceError.general("Cannot find any records for verse '\(verse)'")
-    }
-
-    private func textForVerseIfExists(_ verse: AyahNumber) throws -> String? {
+    func textForVerse<T>(_ verse: AyahNumber, transform: (Row) throws -> T) throws -> T {
         try run { connection in
-            try textForVerse(verse, connection: connection)
+            if let text = try textForVerse(verse, connection: connection, transform: transform) {
+                return text
+            }
+            throw PersistenceError.general("Cannot find any records for verse '\(verse)'")
         }
     }
 
-    private func textForVerse(_ verse: AyahNumber, connection: Connection) throws -> String? {
+    func textForVerses<T>(_ verses: [AyahNumber], transform: (Row) throws -> T) throws -> [AyahNumber: T] {
+        try run { connection in
+            var dictionary: [AyahNumber: T] = [:]
+            for verse in verses {
+                dictionary[verse] = try textForVerse(verse, connection: connection, transform: transform)
+            }
+            return dictionary
+        }
+    }
+
+    private func textForVerse<T>(_ verse: AyahNumber, connection: Connection, transform: (Row) throws -> T) throws -> T? {
         let query = table
             .select(Columns.text)
             .filter(Columns.sura == verse.sura.suraNumber && Columns.ayah == verse.ayah)
@@ -43,17 +49,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         guard let first = rows.first(where: { _ in true }) else {
             return nil
         }
-        return first[Columns.text]
-    }
-
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String] {
-        try run { connection in
-            var dictionary: [AyahNumber: String] = [:]
-            for verse in verses {
-                dictionary[verse] = try textForVerse(verse, connection: connection)
-            }
-            return dictionary
-        }
+        return try transform(first)
     }
 
     // MARK: - Search

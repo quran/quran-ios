@@ -1,5 +1,5 @@
 //
-//  SQLiteQuranAyahTextPersistence.swift
+//  SQLiteQuranVerseTextPersistence.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 4/20/19.
@@ -35,11 +35,11 @@ struct SQLiteQuranVerseTextPersistence: VerseTextPersistence {
     }
 
     func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String] {
-        try persistence.textForVerses(verses)
+        try persistence.textForVerses(verses, transform: textFromRow)
     }
 
     func textForVerse(_ verse: AyahNumber) throws -> String {
-        try persistence.textForVerse(verse)
+        try persistence.textForVerse(verse, transform: textFromRow)
     }
 
     func autocomplete(term: String) throws -> [String] {
@@ -48,5 +48,10 @@ struct SQLiteQuranVerseTextPersistence: VerseTextPersistence {
 
     func search(for term: String) throws -> [(verse: AyahNumber, text: String)] {
         try persistence.search(for: term)
+    }
+
+    private func textFromRow(_ row: Row) -> String {
+        let text = Expression<String>("text")
+        return row[text]
     }
 }

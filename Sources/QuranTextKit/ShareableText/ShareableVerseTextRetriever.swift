@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import Localization
 import PromiseKit
 import QuranKit
 import TranslationService
@@ -43,8 +44,8 @@ public class ShareableVerseTextRetriever {
         self.shareableVersePersistence = shareableVersePersistence
     }
 
-    public func textForVerses(_ verses: [AyahNumber], page: Page) -> Promise<[String]> {
-        when(fulfilled: arabicScript(for: verses), translations(for: verses, page: page))
+    public func textForVerses(_ verses: [AyahNumber]) -> Promise<[String]> {
+        when(fulfilled: arabicScript(for: verses), translations(for: verses))
             .map { [$0, $1].flatMap { $0 } }
             .map { $0 + ["", self.versesSummary(verses)] }
     }
@@ -71,32 +72,40 @@ public class ShareableVerseTextRetriever {
             .map { [$0] }
     }
 
-    private func translations(for verses: [AyahNumber], page: Page) -> Promise<[String]> {
+    private func translations(for verses: [AyahNumber]) -> Promise<[String]> {
         guard preferences.quranMode == .translation else {
             return .value([])
         }
 
-        return textService.textForPage(page).map { page -> [String] in
-            let versesText = page.verses.filter { verses.contains($0.verse) }
-            return self.versesTranslationsText(versesText)
+        return textService.textForVerses(verses).map { translatedVerses -> [String] in
+            return self.versesTranslationsText(translatedVerses: translatedVerses)
         }
     }
 
-    private func versesTranslationsText(_ verses: [VerseText]) -> [String] {
+    private func versesTranslationsText(translatedVerses: TranslatedVerses) -> [String] {
         var components = [""]
 
         // group by translation
-        for (i, translation) in verses[0].translations.enumerated() {
+        for (i, translation) in translatedVerses.translations.enumerated() {
             // translator
-            components.append("• \(translation.translation.translationName):")
+            components.append("• \(translation.translationName):")
 
             // translation text for all verses
-            components.append(contentsOf: verses.map { $0.translations[i].text })
+            components.append(contentsOf: translatedVerses.verses.map { stringFromTranslationText($0.translations[i]) })
 
             // separate multiple translations
             components.append("")
         }
 
         return components.dropLast()
+    }
+
+    private func stringFromTranslationText(_ text: TranslationText) -> String {
+        switch text {
+        case .reference(let verse):
+            return lFormat("referenceVerseTranslationText", verse.ayah)
+        case .string(let string):
+            return string
+        }
     }
 }

@@ -12,7 +12,7 @@ import TranslationService
 
 struct TranslationSearcher: AsyncSearcher {
     let localTranslationRetriever: LocalTranslationsRetriever
-    let versePersistenceBuilder: (Translation, Quran) -> VerseTextPersistence
+    let versePersistenceBuilder: (Translation, Quran) -> SearchableTextPersistence
     let quran: Quran
 
     private func getLocalTranslations() -> Promise<[Translation]> {

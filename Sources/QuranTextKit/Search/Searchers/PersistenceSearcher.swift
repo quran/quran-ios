@@ -8,7 +8,7 @@
 import Foundation
 
 struct PersistenceSearcher: Searcher {
-    let versePersistence: VerseTextPersistence
+    let versePersistence: SearchableTextPersistence
     let source: SearchResult.Source
 
     private let termProcessor = SearchTermProcessor()

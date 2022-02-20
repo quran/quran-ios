@@ -17,9 +17,13 @@ struct NumberSearcher: Searcher {
 
     let quran: Quran
     let quranVerseTextPersistence: VerseTextPersistence
+    private let resultsProcessor = SearchResultsProcessor()
 
     func autocomplete(term: String) throws -> [SearchAutocompletion] {
-        []
+        if Int(term) != nil {
+            return resultsProcessor.buildAutocompletions(searchResults: [term], term: term)
+        }
+        return []
     }
 
     func search(for term: String) throws -> [SearchResults] {

@@ -58,7 +58,7 @@ public struct CompositeSearcher: AsyncSearcher {
                 }
                 return self.translationsSearcher.autocomplete(term: term)
             }
-            .map { [SearchAutocompletion(text: term, highlightedRange: term.startIndex ..< term.endIndex)] + $0 }
+            .map { [SearchAutocompletion(text: term, term: term)] + $0 }
             .map { $0.orderedUnique() }
     }
 

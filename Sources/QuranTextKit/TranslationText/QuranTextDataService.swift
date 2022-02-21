@@ -58,7 +58,7 @@ public struct QuranTextDataService {
         }
         return when(fulfilled: translations, arabicText)
             .map { translations, arabic in
-                TranslatedVerses(translations: translations.map { $0.0 },
+                TranslatedVerses(translations: translations.map(\.0),
                                  verses: self.merge(verses: verses, translations: translations, arabic: arabic))
             }
     }

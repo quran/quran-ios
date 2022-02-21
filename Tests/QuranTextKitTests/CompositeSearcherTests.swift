@@ -47,7 +47,7 @@ class CompositeSearcherTests: XCTestCase {
 
     private func autocompleteNumber(_ number: String) throws {
         let result = try wait(for: searcher.autocomplete(term: number))
-        XCTAssertEqual(result, [SearchAutocompletion(text: number, highlightedRange: number.startIndex ..< number.endIndex)])
+        XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
     }
 
     func testSearchNumber1() throws {

@@ -24,7 +24,7 @@ struct SearchResultsProcessor {
                 let subrow = term + trimmedSuffix
                 if !added.contains(subrow) {
                     added.insert(subrow)
-                    let autocompletion = SearchAutocompletion(text: subrow, highlightedRange: term.startIndex ..< term.endIndex)
+                    let autocompletion = SearchAutocompletion(text: subrow, term: term)
                     result.append(autocompletion)
                 }
             }

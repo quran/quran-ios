@@ -78,7 +78,7 @@ public class ShareableVerseTextRetriever {
         }
 
         return textService.textForVerses(verses).map { translatedVerses -> [String] in
-            return self.versesTranslationsText(translatedVerses: translatedVerses)
+            self.versesTranslationsText(translatedVerses: translatedVerses)
         }
     }
 

@@ -24,12 +24,12 @@ class SQLiteTranslationVerseTextPersistence: ReadonlySQLitePersistence, Translat
                                                   quran: quran)
     }
 
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: TranslationText] {
+    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: RawTranslationText] {
         try validateFileExists()
         return try persistence.textForVerses(verses, transform: textFromRow)
     }
 
-    func textForVerse(_ verse: AyahNumber) throws -> TranslationText {
+    func textForVerse(_ verse: AyahNumber) throws -> RawTranslationText {
         try validateFileExists()
         return try persistence.textForVerse(verse, transform: textFromRow)
     }
@@ -44,7 +44,7 @@ class SQLiteTranslationVerseTextPersistence: ReadonlySQLitePersistence, Translat
         return try persistence.search(for: term)
     }
 
-    private func textFromRow(_ row: Row) throws -> TranslationText {
+    private func textFromRow(_ row: Row) throws -> RawTranslationText {
         let stringText = Expression<String?>("text")
         let intText = Expression<Int?>("text")
         let quran = persistence.quran
@@ -62,7 +62,7 @@ class SQLiteTranslationVerseTextPersistence: ReadonlySQLitePersistence, Translat
         throw PersistenceError.general("Text for verse is neither Int nor String. File: \(filePath.lastPathComponent)")
     }
 
-    private func referenceVerse(_ verseId: Int) -> TranslationText {
+    private func referenceVerse(_ verseId: Int) -> RawTranslationText {
         // VerseId saved is an index in the quran.verses starts with 0
         let verse = persistence.quran.verses[verseId - 1]
         return .reference(verse)

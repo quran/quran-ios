@@ -31,7 +31,12 @@ protocol VerseTextPersistence: SearchableTextPersistence {
     func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String]
 }
 
+enum RawTranslationText: Equatable {
+    case string(String)
+    case reference(AyahNumber)
+}
+
 protocol TranslationVerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) throws -> TranslationText
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: TranslationText]
+    func textForVerse(_ verse: AyahNumber) throws -> RawTranslationText
+    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: RawTranslationText]
 }

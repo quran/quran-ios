@@ -70,7 +70,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             let expectedVerses = verses.map { verse in
                 VerseText(arabicText: TestData.quranTextAt(verse),
                           translations: translations.map {
-                              .string(TestData.translationTextAt($0, verse))
+                              .string(TranslationString(text: TestData.translationTextAt($0, verse), quranRanges: [], footerRanges: []))
                           },
                           arabicPrefix: [],
                           arabicSuffix: [])
@@ -78,5 +78,25 @@ final class QuranTextDataServiceTests: XCTestCase {
             let expected = TranslatedVerses(translations: translations, verses: expectedVerses)
             XCTAssertEqual(expected, versesText)
         }
+    }
+
+    func testTranslationWithFooterAndVerses() throws {
+        let translations = [TestData.khanTranslation]
+        mockTranslationsRetriever.getLocalTranslationsHandler = {
+            .value(translations)
+        }
+        let verse = quran.suras[0].verses[5]
+        let versesText = try wait(for: textService.textForVerses([verse]))
+
+        let translationText = TestData.translationTextAt(translations[0], verse)
+        let string = TranslationString(text: translationText,
+                                       quranRanges: [translationText.range(of: "{ABC}")!, translationText.range(of: "{DE}")!],
+                                       footerRanges: [translationText.range(of: "[[Footer1]]")!, translationText.range(of: "[[Footer2]]")!])
+        let expectedVerse = VerseText(arabicText: TestData.quranTextAt(verse),
+                                      translations: [.string(string)],
+                                      arabicPrefix: [],
+                                      arabicSuffix: [])
+        let expected = TranslatedVerses(translations: translations, verses: [expectedVerse])
+        XCTAssertEqual(expected, versesText)
     }
 }

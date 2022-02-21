@@ -1,5 +1,5 @@
 //
-//  PageText.swift
+//  TranslatedVerses.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 3/23/17.
@@ -22,19 +22,31 @@ import Foundation
 import QuranKit
 import TranslationService
 
-public enum TranslationText: Hashable {
-    case string(String)
+public struct TranslationString: Equatable {
+    public init(text: String, quranRanges: [Range<String.Index>], footerRanges: [Range<String.Index>]) {
+        self.text = text
+        self.footerRanges = footerRanges
+        self.quranRanges = quranRanges
+    }
+
+    public let text: String
+    public let quranRanges: [Range<String.Index>]
+    public let footerRanges: [Range<String.Index>]
+}
+
+public enum TranslationText: Equatable {
+    case string(TranslationString)
     case reference(AyahNumber)
 }
 
-public struct VerseText: Hashable {
+public struct VerseText: Equatable {
     public let arabicText: String
     public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
     public let arabicPrefix: [String]
     public let arabicSuffix: [String]
 }
 
-public struct TranslatedVerses: Hashable {
+public struct TranslatedVerses: Equatable {
     public let translations: [Translation]
     public let verses: [VerseText]
 }

@@ -18,6 +18,11 @@ public struct QuranTextDataService {
     let translationsPersistenceBuilder: (Translation, Quran) -> TranslationVerseTextPersistence
     let selectedTranslationsPreferences: SelectedTranslationsPreferences
 
+    // regex to detect quran text in translation text
+    private static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
+    // regex to detect footer notes in translation text
+    private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
+
     public init(databasesPath: String, quranFileURL: URL) {
         self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: Quran.madani, fileURL: quranFileURL))
     }
@@ -119,7 +124,7 @@ public struct QuranTextDataService {
                 let versesText = try translationPersistence.textForVerses(verses)
                 for verse in verses {
                     let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
-                    verseTextList.append(text)
+                    verseTextList.append(translationText(text))
                 }
             } catch {
                 crasher.recordError(
@@ -128,10 +133,31 @@ public struct QuranTextDataService {
                 )
                 let errorText = l("errorInTranslationText")
                 for _ in verses {
-                    verseTextList.append(.string(errorText))
+                    verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footerRanges: [])))
                 }
             }
             return (translation, verseTextList)
         }
+    }
+
+    private func translationText(_ from: RawTranslationText) -> TranslationText {
+        switch from {
+        case .string(let string):
+            return .string(translationString(string))
+        case .reference(let verse):
+            return .reference(verse)
+        }
+    }
+
+    private func translationString(_ string: String) -> TranslationString {
+        let range = NSRange(string.startIndex..<string.endIndex, in: string)
+        let quranRanges = ranges(of: Self.quranRegex, in: string, range: range)
+        let footerRanges = ranges(of: Self.footerRegex, in: string, range: range)
+        return TranslationString(text: string, quranRanges: quranRanges, footerRanges: footerRanges)
+    }
+
+    private func ranges(of regex: NSRegularExpression, in string: String, range: NSRange) -> [Range<String.Index>] {
+        let matches = regex.matches(in: string, options: [], range: range)
+        return matches.map { Range($0.range, in: string)! }
     }
 }

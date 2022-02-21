@@ -105,7 +105,7 @@ public class ShareableVerseTextRetriever {
         case .reference(let verse):
             return lFormat("referenceVerseTranslationText", verse.ayah)
         case .string(let string):
-            return string
+            return string.text
         }
     }
 }

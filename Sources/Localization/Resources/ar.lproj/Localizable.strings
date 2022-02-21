@@ -39,7 +39,7 @@
 "searchPlaceholder" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
 
 "translationTextType" = "الترجمة إلى الإنجليزية";
-"transliterationTextType" = "نسخ الحروف للإنجليزية ";
+"transliterationTextType" = "نسخ الحروف للإنجليزية";
 
 "write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
 "contact_us" = "اتصل بنا";
@@ -106,7 +106,7 @@
 "ayah.menu.share" = "مشاركة...";
 "ayah.menu.play-end-juz" = "حتى نهاية الجزء";
 "ayah.menu.highlight" = "تحديد";
-"ayah.menu.highlight-select-color" = "إختر لون";
+"ayah.menu.highlight-select-color" = "اختر لون";
 "ayah.menu.add-note" = "اضف ملاحظة";
 "ayah.menu.edit-note" = "تحرير الملاحظة";
 "ayah.menu.delete-note" = "حذف الملاحظة";

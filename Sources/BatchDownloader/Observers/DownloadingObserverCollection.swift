@@ -30,19 +30,17 @@ public class DownloadingObserverCollection<Item: Hashable> {
     public init() {
     }
 
-    private lazy var observerActions: DownloadingObserverActions<Item> = {
-        DownloadingObserverActions(
-            onDownloadProgressUpdated: { [weak self] progress, item in
-                self?.onDownloadProgressUpdated(progress: progress, for: item)
-            },
-            onDownloadFailed: { [weak self] error, item in
-                self?.onDownloadFailed(withError: error, for: item)
-            },
-            onDownloadCompleted: { [weak self] item in
-                self?.onDownloadCompleted(for: item)
-            }
-        )
-    }()
+    private lazy var observerActions: DownloadingObserverActions<Item> = DownloadingObserverActions(
+        onDownloadProgressUpdated: { [weak self] progress, item in
+            self?.onDownloadProgressUpdated(progress: progress, for: item)
+        },
+        onDownloadFailed: { [weak self] error, item in
+            self?.onDownloadFailed(withError: error, for: item)
+        },
+        onDownloadCompleted: { [weak self] item in
+            self?.onDownloadCompleted(for: item)
+        }
+    )
 
     public func removeAll() {
         downloadingObservers.forEach { $1.stop() }

@@ -153,7 +153,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
     private func gotDownloadResponse(_ response: DownloadBatchResponse, playbackInfo: PlaybackInfo?) {
         delegate?.didStartDownloadingAudioFiles(progress: response.progress)
         response.promise
-            .done { [weak self] () -> Void in
+            .done { [weak self] () in
                 if let playbackInfo = playbackInfo {
                     self?.startPlaying(playbackInfo)
                 } else {
@@ -176,7 +176,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
             delegate?.willStartDownloading()
             downloader
                 .download(reciter: reciter, from: start, to: end)
-                .done(on: .main) { response -> Void in
+                .done(on: .main) { response in
                     guard let response = response else {
                         return
                     }

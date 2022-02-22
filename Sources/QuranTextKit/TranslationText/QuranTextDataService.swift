@@ -150,7 +150,7 @@ public struct QuranTextDataService {
     }
 
     private func translationString(_ string: String) -> TranslationString {
-        let range = NSRange(string.startIndex..<string.endIndex, in: string)
+        let range = NSRange(string.startIndex ..< string.endIndex, in: string)
         let quranRanges = ranges(of: Self.quranRegex, in: string, range: range)
         let footerRanges = ranges(of: Self.footerRegex, in: string, range: range)
         return TranslationString(text: string, quranRanges: quranRanges, footerRanges: footerRanges)

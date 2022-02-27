@@ -94,13 +94,12 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
     func update(_ translation: Translation) throws {
         try run { connection in
             let update = Translations.table
-                .where(Translations.id == translation.id)
+                .where(Translations.fileName == translation.fileName)
                 .update(
                     Translations.name <- translation.displayName,
                     Translations.translator <- translation.translator,
                     Translations.translatorForeign <- translation.translatorForeign,
                     Translations.fileURL <- translation.fileURL.absoluteString,
-                    Translations.fileName <- translation.fileName,
                     Translations.languageCode <- translation.languageCode,
                     Translations.version <- translation.version,
                     Translations.installedVersion <- translation.installedVersion

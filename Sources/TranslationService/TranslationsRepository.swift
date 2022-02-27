@@ -41,16 +41,16 @@ public struct TranslationsRepository {
             .map(saveCombined) // save combined list
     }
 
-    private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [Int: Translation]) {
-        let localMapConstant = local.flatGroup { $0.id }
+    private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {
+        let localMapConstant = local.flatGroup { $0.fileName }
         var localMap = localMapConstant
 
         var combinedList: [Translation] = []
         remote.forEach { remote in
             var combined = remote
-            if let local = localMap[remote.id] {
+            if let local = localMap[remote.fileName] {
                 combined.installedVersion = local.installedVersion
-                localMap[remote.id] = nil
+                localMap[remote.fileName] = nil
             }
             combinedList.append(combined)
         }
@@ -58,9 +58,9 @@ public struct TranslationsRepository {
         return (combinedList, localMapConstant)
     }
 
-    private func saveCombined(translations: [Translation], localMap: [Int: Translation]) throws {
+    private func saveCombined(translations: [Translation], localMap: [String: Translation]) throws {
         try translations.forEach { translation in
-            if localMap[translation.id] != nil {
+            if localMap[translation.fileName] != nil {
                 try self.persistence.update(translation)
             } else {
                 try self.persistence.insert(translation)

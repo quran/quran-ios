@@ -34,9 +34,12 @@
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
 "referenceVerseTranslationText" = "انظر آية رقم %d.";
 
+// MARK: - Search
+
 "searchRecentsTitle" = "عمليات البحث الأخيرة";
 "searchPopularTitle" = "اختبر البحث بإستخدام";
 "searchPlaceholder" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
+"searchResultTitle" = "(%2$d) %1$@";
 
 "translationTextType" = "الترجمة إلى الإنجليزية";
 "transliterationTextType" = "نسخ الحروف للإنجليزية";

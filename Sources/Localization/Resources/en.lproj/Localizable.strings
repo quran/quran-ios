@@ -35,9 +35,12 @@
 "noAvailableTranslationText" = "No translation available for this Ayah.";
 "referenceVerseTranslationText" = "See ayah %d.";
 
+// MARK: - Search
+
 "searchRecentsTitle" = "Recent searches";
 "searchPopularTitle" = "Try searching with";
 "searchPlaceholder" = "Surah, verse, translation, tafseer, and numbers";
+"searchResultTitle" = "%@ (%d)";
 
 "translationTextType" = "Translation";
 "transliterationTextType" = "Transliteration";

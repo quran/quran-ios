@@ -51,7 +51,8 @@
 "menu.pointer" = "Meal imleci";
 "menu.pointer.select_translation" = "İmleç Göstersin";
 "menu.fontSizeLetter" = "A";
-"menu.fontSize" = "Yazı Boyutu";
+"menu.translationFontSize" = "Çeviri Boyutu";
+"menu.arabicFontSize" = "Kuran Boyutu";
 
 "tab.notes" = "Notlar";
 

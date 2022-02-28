@@ -55,7 +55,9 @@
 "menu.pointer" = "Word translation pointer";
 "menu.pointer.select_translation" = "Pointer Showing";
 "menu.fontSizeLetter" = "A";
-"menu.fontSize" = "Font Size";
+"menu.translationFontSize" = "Translation Size";
+"menu.arabicFontSize" = "Quran Size";
+
 
 "tab.notes" = "Notes";
 

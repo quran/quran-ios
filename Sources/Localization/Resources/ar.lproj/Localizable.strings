@@ -54,7 +54,8 @@
 "menu.pointer" = "مؤشر ترجمة الكلمات";
 "menu.pointer.select_translation" = "لغة المؤشر";
 "menu.fontSizeLetter" = "أ";
-"menu.fontSize" = "حجم الخط";
+"menu.translationFontSize" = "حجم خط تفسير";
+"menu.arabicFontSize" = "حجم خط القرآن";
 
 "tab.notes" = "الملاحظات";
 

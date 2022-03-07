@@ -70,7 +70,7 @@ Pour les traductions, allez dans paramètres et choisissez la taille de la tradu
 <br/>Malheureusement, Android avant la version 4.0 ne prend pas en charge ces polices, et nous ne pouvons pas faire grand chose pour y remédier.";
 "search_hint" = "Rechercher dans le coran";
 "quranSearchType" = "Ayāt du Coran";
-"found_in_sura" = "Trouvée dans la sourate %1$@ Aya %2$d";
+"found_in_sura" = "Trouvée dans la sourate %1$@: %2$d (Page %3$d)";
 "no_results" = "Aucun resultat pour \"%@\"";
 "no_arabic_search_available" = "Vous n\'avez pas téléchargé le pack de recherche arabe.  S\'il vous plaît veuillez le télécharger et recommencez votre recherche.";
 "get_arabic_search_db" = "Télécharger la base de données de recherche arabe";
@@ -162,6 +162,7 @@ vouloir utiliser la carte SD externe ?";
 "quran_ayah_details" = "%1$@ - Aya %2$@, Juz\' %3$@";
 "quran_sura_title" = "Sourate %1$@";
 "sura_ayah_notification_str" = "Sourate %1$@, Aya %2$d";
+"sura_ayah_sharing_str" = "Sourate %1$@: %2$d";
 "index_loading" = "Chargement…";
 "canceling" = "Annulation…";
 "juz2_description" = "Juz\' %1$@";

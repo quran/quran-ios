@@ -113,7 +113,7 @@ Quran for Android\
 "storage_permission_please_restart" = "Пожалуйста, перезапустите приложение, чтобы\
 изменения вступили в силу.\
 ";
-"found_in_sura" = "Найдено в суре %1$@, Аят %2$d";
+"found_in_sura" = "Найдено в суре %1$@: %2$d (Страница %3$d)";
 "no_results" = "Результатов для \"%@\" не найдено";
 "no_arabic_search_available" = "Вы не скачали пакет данных для арабского поиска.\
 Пожалуйста, сначала скачайте его и воспользуйтесь поиском снова.\
@@ -222,6 +222,7 @@ Quran for Android\
 "quran_ayah_details" = "%1$@ - аят %2$@, джуз %3$@";
 "quran_sura_title" = "Сура %1$@";
 "sura_ayah_notification_str" = "Сура %1$@, аят %2$d";
+"sura_ayah_sharing_str" = "Сура %1$@: %2$d";
 "index_loading" = "Загрузка…";
 "canceling" = "Отмена…";
 "juz2_description" = "джуз %1$@";

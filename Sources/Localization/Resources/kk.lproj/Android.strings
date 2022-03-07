@@ -91,7 +91,7 @@
 "storage_permission_please_restart" = "Өзгерістер күшіне ену үшін\
 бағдарламаны қайта қосу керек.\
 ";
-"found_in_sura" = "Сүреде табылды %1$@, %2$d-аят";
+"found_in_sura" = "Сүреде табылды %1$@, %2$d-аят (Бет %3$d)";
 "no_results" = "\"%@\" бойынша нәтиже табылмады";
 "no_arabic_search_available" = "Арабша іздеу деректері орнатылмаған.\
 Алдымен оны жүктеңіз. Кейін қайта іздеп көріңіз.\
@@ -181,6 +181,7 @@
 "quran_ayah_details" = "%1$@ %2$@-аят, %3$@-пара";
 "quran_sura_title" = "%1$@ сүресі";
 "sura_ayah_notification_str" = "%1$@ сүресі, %2$d-аят";
+"sura_ayah_sharing_str" = "%1$@ сүресі: %2$d";
 "index_loading" = "Жүктеу…";
 "canceling" = "Болдырмау…";
 "juz2_description" = "%1$@-пара";

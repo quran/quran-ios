@@ -29,7 +29,7 @@
 "help" = "\n        <b>How do I play audio?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  At the bottom, you will notice\n        a play button and some text with the name of a qari.  click the name of the qari to\n        choose a different qari.  Click play to download and play the current page or sura.\n        <br/>\n        <br/><b>How do I view the translation?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  In the top, you will notice a\n        globe icon (or, if you don\'t see it, you may see an icon with three square dots - click\n        this and choose translation to view the translation).\n        <br/>\n        If you do not have any translations downloaded, it will take\n        you to a screen where you can download a translation.  Choose and download a translation,\n        then return back and tap the globe icon again to view the translation.\n        <br/>\n        <br/><b>How do I bookmark a page?</b>\n        <br/>Open any Quran page.  Tap on the screen once.  In the top right, you will see a\n        star icon.  Tap the star icon to bookmark it (it will be solid white).  Tap the star icon\n        again to remove the bookmark.\n        <br/>\n        <br/><b>How do I make the text larger?</b>\n        <br/>For the arabic pages, hold your phone in landscape.  This makes the text larger.\n        For translations, go to settings and choose translation size.\n        <br/>\n        <br/><b>How do I share an ayah?</b>\n        <br/>While on any arabic page, press and hold on any ayah to get a menu where you can\n        choose to bookmark this ayah, share it, see the tafseer, or copy the ayah to the clipboard.\n        <br/>\n        <br/><b>Malayalm/Tamil/Bangla/Urdu fonts don\'t work!</b>\n        <br/>Unfortunately, Android versions before 4.0 do not support these fonts, and there is\n        little we can do to help with this.\n";
 "search_hint" = "Buscar en El Corán";
 "quranSearchType" = "Versículos del Corán";
-"found_in_sura" = "Capítulo encontrado %1$@, Versículo %2$d";
+"found_in_sura" = "Capítulo encontrado %1$@: %2$d (Página %3$d)";
 "no_results" = "No se encontró \"%@\"";
 "no_arabic_search_available" = "Usted no ha descargado el paquete de búsqueda árabe. Por favor descargue y pruebe nuevamente su búsqueda.";
 "get_arabic_search_db" = "Buscar en la Base de Datos Árabe";
@@ -99,6 +99,7 @@
 "quran_ayah" = "Versículo %1$d";
 "quran_sura_title" = "Capítulo %1$@";
 "sura_ayah_notification_str" = "Capítulo %1$@, Versículo %2$d";
+"sura_ayah_sharing_str" = "Capítulo %1$@: %2$d";
 "index_loading" = "Cargando…";
 "canceling" = "Cancelando…";
 "juz2_description" = "Yuz %1$@";

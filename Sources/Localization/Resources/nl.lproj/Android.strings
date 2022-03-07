@@ -78,7 +78,7 @@ Voor de vertaalde pagina\'s (/voor vertalingen): Ga naar instellingen en wijzig 
 uw externe opslag. Koran zal werken zonder deze toestemming, maar als je de app deinstalleerd zullen alle gedownloade pagina\'s, audio en gegevens verwijderd worden. Verleen je Koran toestemming?\
 ";
 "storage_permission_please_restart" = "Gelieve de app opnieuw opstarten om de veranderingen uit te voeren.";
-"found_in_sura" = "Gevonden in Soera %1$@, Ayah %2$d";
+"found_in_sura" = "Gevonden in Soera %1$@: %2$d (Pagina %3$d)";
 "no_results" = "Geen resultaten gevonden voor \"%@\"";
 "no_arabic_search_available" = "Je hebt \"Arabisch Zoeken\" niet gedownload. Download het en probeer uw zoekopdracht opnieuw.";
 "get_arabic_search_db" = "Verkrijg \"Arabisch Zoeken\" Database";
@@ -167,6 +167,7 @@ zeker dat je de externe SD-kaart wilt gebruiken?";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_sura_title" = "Soera %1$@";
 "sura_ayah_notification_str" = "Soera %1$@, Ayah %2$d";
+"sura_ayah_sharing_str" = "Soera %1$@: %2$d";
 "index_loading" = "Laden…";
 "canceling" = "annuleren…";
 "juz2_description" = "Juz\' %1$@";

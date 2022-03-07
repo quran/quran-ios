@@ -13,6 +13,8 @@
                 <string>d</string>
                 <key>one</key>
                 <string>%d Aya</string>
+                <key>many</key>
+                <string>%d Ayāt</string>
                 <key>other</key>
                 <string>%d Ayāt</string>
             </dict>
@@ -29,6 +31,8 @@
                 <string>d</string>
                 <key>one</key>
                 <string>résultat pour \&quot;%1$d\&quot;:</string>
+                <key>many</key>
+                <string>%2$d résultats pour \&quot;%1$d\&quot;:</string>
                 <key>other</key>
                 <string>%2$d résultats pour \&quot;%1$d\&quot;:</string>
             </dict>

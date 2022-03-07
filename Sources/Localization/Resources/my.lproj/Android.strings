@@ -69,7 +69,7 @@
 Quran masih akan berfungsi tanpa kebenaran ini tetapi jika anda nyahpasang aplikasi, segala data surah, audio dan lain-lain yang dimuat turun akan hilang.\
 Beri kebenaran?";
 "storage_permission_please_restart" = "Sila keluar dan mulakan semula aplikasi untuk tetapan terkini.";
-"found_in_sura" = "Dijumpai dalam Surah %1$@, Ayat %2$d";
+"found_in_sura" = "Dijumpai dalam Surah %1$@: %2$d (Halaman %3$d)";
 "no_results" = "Tidak dijumpai \"%@\"";
 "no_arabic_search_available" = "Anda belum memuat turun paket pencarian Arab. Sila muat turun dan ulangi pencarian";
 "get_arabic_search_db" = "Dapatkan Database Pencarian Arab";
@@ -151,6 +151,7 @@ Beri kebenaran?";
 "quran_ayah" = "Ayat %1$d";
 "quran_sura_title" = "Surah %1$@";
 "sura_ayah_notification_str" = "Surah %1$@, Ayat %2$d";
+"sura_ayah_sharing_str" = "Surah %1$@: %2$d";
 "index_loading" = "Memuat…";
 "canceling" = "Membatalkan…";
 "juz2_description" = "Juz\' %1$@";

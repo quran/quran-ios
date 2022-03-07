@@ -95,7 +95,7 @@ suralar, audio va tarjimalar ham oʻchib ketadi. Tashqi xotiraga bogʻlanishga r
 berasizmi?";
 "storage_permission_please_restart" = "Iltimos, ushbu oʻzgarish amalga kirishi uchun\
 ilovani qayta ishga tushiring.";
-"found_in_sura" = "%1$@ surasi, %2$d-oyat";
+"found_in_sura" = "%1$@ surasi, %2$d-oyat (Sahifa %3$d)";
 "no_results" = "\"%@\" boʻyicha natija topilmadi";
 "no_arabic_search_available" = "Arabcha izlash moduli oʻrnatilmagan, iltimos, avval uni saqlab oling. Soʻngra qayta izlab koʻring.";
 "get_arabic_search_db" = "Arabcha izlash bazasini oʻrnatish";
@@ -200,6 +200,7 @@ yangi versiyalarida ilovamiz ushbu jilddagi maʼlumotlarni oʻqiy olmay qolishi 
 "quran_ayah_details" = "%1$@ %2$@-oyat, %3$@-juz";
 "quran_sura_title" = "%1$@ surasi";
 "sura_ayah_notification_str" = "%1$@ surasi %2$d-oyat";
+"sura_ayah_sharing_str" = "%1$@ surasi: %2$d";
 "index_loading" = "Yuklanmoqda…";
 "canceling" = "Bekor qilinmoqda…";
 "juz2_description" = "%1$@-juz";

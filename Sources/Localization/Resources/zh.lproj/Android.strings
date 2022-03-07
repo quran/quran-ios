@@ -51,7 +51,7 @@
 ";
 "search_hint" = "搜索古兰经";
 "quranSearchType" = "Verses of the Quran";
-"found_in_sura" = "对应章节 %1$@ 节 %2$d";
+"found_in_sura" = "对应章节 %1$@ 节 %2$d (页 %3$d)";
 "no_results" = "未搜索到\"%@\"";
 "no_arabic_search_available" = "还没有下载搜索包，请下载后再次进行搜索.";
 "get_arabic_search_db" = "下载阿拉伯语搜索包";
@@ -104,6 +104,7 @@
 "quran_sura" = "章";
 "quran_ayah" = "节 %1$d";
 "sura_ayah_notification_str" = "第%1$@章，第%2$d节";
+"sura_ayah_sharing_str" = "第%1$@章: %2$d";
 "index_loading" = "正在载入…";
 "canceling" = "正在取消…";
 "juz2_description" = "第%1$@卷";

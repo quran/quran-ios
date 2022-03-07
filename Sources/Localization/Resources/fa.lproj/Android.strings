@@ -47,7 +47,7 @@
 ";
 "search_hint" = "جستجو در قرآن";
 "quranSearchType" = "آیات قرآن";
-"found_in_sura" = "در آیه %2$d از سوره %1$@";
+"found_in_sura" = "در آیه %2$d از سوره %1$@ (صفحه %3$d)";
 "no_results" = "جستجوی «%@» هیچ نتیجه‌ای دربرنداشت.";
 "no_arabic_search_available" = "متن عربی قرآن هنوز بارگذاری نشده است. لطفاً ابتدا آن را دریافت نمایید.";
 "get_arabic_search_db" = "متن عربی قرآن را برای جستجو در متن دریافت کنید.";
@@ -95,6 +95,7 @@
 "quran_ayah" = "آیه %1$d";
 "quran_sura_title" = "سوره %1$@";
 "sura_ayah_notification_str" = "سوره %1$@، آیه %2$d";
+"sura_ayah_sharing_str" = "سوره %1$@: %2$d";
 "index_loading" = "بارگذاری…";
 "canceling" = "در حال لغو";
 "page_description" = "صفحه %1$@، جزء %2$@";

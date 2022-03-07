@@ -48,7 +48,7 @@
 "quranSearchType" = "آيات القرآن";
 "search_full_results" = "نتائج كاملة";
 "search_entire_mushaf" = "ابحث في المصحف بأكمله";
-"found_in_sura" = "سورة %1$@ آية %2$d";
+"found_in_sura" = "سورة %1$@: %2$d (صفحة %3$d)";
 "no_results" = "لا توجد نتائج ل \"%@\"";
 "no_arabic_search_available" = "لتفعيل البحث بالعربية يجب تحميل قاعدة البيانات.. هل ترغب في ذلك ؟";
 "get_arabic_search_db" = "حمل قاعدة البيانات";
@@ -123,6 +123,7 @@
 "quran_ayah_details" = "%1$@ - آية %2$@، جزء %3$@";
 "quran_sura_title" = "سُورَةُ %1$@";
 "sura_ayah_notification_str" = "سورة %1$@، آية %2$d";
+"sura_ayah_sharing_str" = "سُورَةُ %1$@: %2$d";
 "index_loading" = "جاري التحميل…";
 "canceling" = "جاري إلغاء اﻷمر…";
 "juz2_description" = "الجزء %1$@";

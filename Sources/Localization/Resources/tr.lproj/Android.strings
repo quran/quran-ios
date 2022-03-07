@@ -69,7 +69,7 @@ Menüden âyeti işaretleyebilir, paylaşabilir, meâlini okuyabilir veya âyeti
 Kur'an bu izin olmadan çalışabılır, ancak verileri temizlerseniz veya uygulamayı kaldırırsanız indirilen tüm sayfalar,\
 ses ve diğer veriler kaldırılır. Kur'an'a izin verir misiniz?\"";
 "storage_permission_please_restart" = "Bu değişikliğin geçerli olması için lütfen uygulamayı yeniden başlatın";
-"found_in_sura" = "%1$@ suresi, %2$d.âyet";
+"found_in_sura" = "%1$@ suresi, %2$d.âyet (Sayfa %3$d)";
 "no_results" = "Bir sonuç bulunamadı \"%@\"";
 "no_arabic_search_available" = "Arapça arama paketi indirilmedi. Lütfen indirip daha sonra tekrar deneyin";
 "get_arabic_search_db" = "Arapça arama veritabanını indirin";
@@ -161,6 +161,7 @@ Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
 "quran_ayah_details" = "%1$@ %2$@.âyet, %3$@.cüz";
 "quran_sura_title" = "%1$@ suresi";
 "sura_ayah_notification_str" = "Sure %1$@, âyet %2$d";
+"sura_ayah_sharing_str" = "Sure %1$@: %2$d";
 "index_loading" = "Yükleniyor…";
 "update_available" = "Güncelleme var";
 "translation_updates_available" = "Meâller için güncelleme mevcut. Meâl indirme sayfasını şimdi gözetmek istermisiniz?";

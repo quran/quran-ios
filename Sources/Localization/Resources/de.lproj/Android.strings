@@ -87,7 +87,7 @@ wir Ihnen leider auch nicht weiterhelfen.\
 ";
 "search_hint" = "Durchsuche den Quran";
 "quranSearchType" = "Quranverse";
-"found_in_sura" = "Gefunden in Sure %1$@, Vers %2$d";
+"found_in_sura" = "Gefunden in Sure %1$@: %2$d (Seite %3$d)";
 "no_results" = "Es wurden keine Resultate für \"%@\" gefunden.";
 "no_arabic_search_available" = "Sie haben das arabische Such-Paket noch nicht\
 heruntergeladen. Bitte laden Sie dieses herunter und versuchen Sie es danach erneut.\
@@ -188,6 +188,7 @@ vorhanden. Wollen Sie die Übersetzung jetzt aktualisieren?\
 "quran_ayah" = "Vers %1$d";
 "quran_sura_title" = "Sure %1$@";
 "sura_ayah_notification_str" = "Sure %1$@, Vers %2$d";
+"sura_ayah_sharing_str" = "Sure %1$@: %2$d";
 "index_loading" = "Lade…";
 "canceling" = "Abbrechen…";
 "juz2_description" = "Juz\' %1$@";

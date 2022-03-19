@@ -156,8 +156,8 @@ public struct QuranTextDataService {
         return TranslationString(text: string, quranRanges: quranRanges, footerRanges: footerRanges)
     }
 
-    private func ranges(of regex: NSRegularExpression, in string: String, range: NSRange) -> [Range<String.Index>] {
+    private func ranges(of regex: NSRegularExpression, in string: String, range: NSRange) -> [NSRange] {
         let matches = regex.matches(in: string, options: [], range: range)
-        return matches.map { Range($0.range, in: string)! }
+        return matches.map { $0.range }
     }
 }

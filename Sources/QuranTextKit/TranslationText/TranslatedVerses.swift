@@ -23,15 +23,15 @@ import QuranKit
 import TranslationService
 
 public struct TranslationString: Equatable {
-    public init(text: String, quranRanges: [Range<String.Index>], footerRanges: [Range<String.Index>]) {
+    public init(text: String, quranRanges: [NSRange], footerRanges: [NSRange]) {
         self.text = text
         self.footerRanges = footerRanges
         self.quranRanges = quranRanges
     }
 
     public let text: String
-    public let quranRanges: [Range<String.Index>]
-    public let footerRanges: [Range<String.Index>]
+    public let quranRanges: [NSRange]
+    public let footerRanges: [NSRange]
 }
 
 public enum TranslationText: Equatable {

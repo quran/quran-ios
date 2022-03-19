@@ -9,10 +9,10 @@ import Foundation
 
 public struct SearchAutocompletion: Hashable {
     public let text: String
-    public let highlightedRange: Range<String.Index>?
+    public let highlightedRange: NSRange?
 
     init(text: String, term: String) {
         self.text = text
-        highlightedRange = text.range(of: term)
+        highlightedRange = (text as NSString).range(of: term)
     }
 }

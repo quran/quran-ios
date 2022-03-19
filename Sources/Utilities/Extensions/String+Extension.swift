@@ -53,10 +53,6 @@ extension String {
         let index = utf8.index(utf8.startIndex, offsetBy: byteOffset)
         return index.samePosition(in: self)
     }
-
-    public func rangeAsNSRange(_ range: Range<String.Index>) -> NSRange {
-        NSRange(range, in: self)
-    }
 }
 
 extension String {

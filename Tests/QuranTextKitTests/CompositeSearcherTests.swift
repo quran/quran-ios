@@ -109,7 +109,7 @@ class CompositeSearcherTests: XCTestCase {
 
         // assert the range
         let ranges = Set(result.map(\.highlightedRange))
-        XCTAssertEqual(ranges, [term.startIndex ..< term.endIndex])
+        XCTAssertEqual(ranges, [NSRange(location: 0, length: (term as NSString).length)])
 
         // assert the text
         assertSnapshot(matching: result.map(\.text).sorted(), as: .json, testName: testName)

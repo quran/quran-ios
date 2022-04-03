@@ -90,13 +90,19 @@ final class QuranTextDataServiceTests: XCTestCase {
 
         let translationText = TestData.translationTextAt(translations[0], verse)
         let string = TranslationString(text: translationText,
-                                       quranRanges: [translationText.range(of: "{ABC}")!, translationText.range(of: "{DE}")!],
-                                       footerRanges: [translationText.range(of: "[[Footer1]]")!, translationText.range(of: "[[Footer2]]")!])
+                                       quranRanges: [translationText.nsRange(of: "{ABC}"), translationText.nsRange(of: "{DE}")],
+                                       footerRanges: [translationText.nsRange(of: "[[Footer1]]"), translationText.nsRange(of: "[[Footer2]]")])
         let expectedVerse = VerseText(arabicText: TestData.quranTextAt(verse),
                                       translations: [.string(string)],
                                       arabicPrefix: [],
                                       arabicSuffix: [])
         let expected = TranslatedVerses(translations: translations, verses: [expectedVerse])
         XCTAssertEqual(expected, versesText)
+    }
+}
+
+extension String {
+    func nsRange(of substring: String) -> NSRange {
+        (self as NSString).range(of: substring)
     }
 }

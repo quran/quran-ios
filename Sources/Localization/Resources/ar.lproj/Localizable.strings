@@ -80,14 +80,16 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "تغير";
-"audio.playing.message" = "تشغيل الصوت حتى نهاية الجزء %d";
-"audio.downloading.message" = "تنزيل الصوت إلى نهاية الجزء %d";
+"audio.playing.message" = "تشغيل الصوت من %@ إلى %@";
+"audio.downloading.message" = "تنزيل الصوت من %@ إلى %@";
 
 "audio.playing-verses.label" = "سماع آيات";
 "audio.adjust-end-verse-to-the-end.label" = "ضبط نهاية الآية لنهاية";
 
 "audio.select-start-verse" = "حدد بداية التشغيل الصوتي";
 "audio.select-end-verse" = "حدد نهاية التشغيل الصوتي";
+
+"audio.download-play-amount" = "تحميل وتشغيل الصوت لنهاية";
 
 // MARK: - Bookmarks
 

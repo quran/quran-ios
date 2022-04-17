@@ -81,14 +81,16 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "Modify";
-"audio.playing.message" = "Playing audio to the end of Juz' %d";
-"audio.downloading.message" = "Downloading audio to the end of Juz' %d";
+"audio.playing.message" = "Playing audio from %@ to %@";
+"audio.downloading.message" = "Downloading audio from %@ to %@";
 
 "audio.playing-verses.label" = "Playing Verses";
 "audio.adjust-end-verse-to-the-end.label" = "Adjust end verse to the end of the";
 
 "audio.select-start-verse" = "Select Starting Verse";
 "audio.select-end-verse" = "Select Ending Verse";
+
+"audio.download-play-amount" = "Download/Play up to";
 
 // MARK: - Bookmarks
 

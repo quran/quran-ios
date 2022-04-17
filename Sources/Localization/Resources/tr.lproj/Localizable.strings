@@ -76,8 +76,6 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "Düzenle";
-"audio.playing.message" = "%d numaralı cüzün sonuna kadar sesli okunuyor";
-"audio.downloading.message" = "%d numaralı cüzün sonuna kadar ses indiriliyor ";
 
 "audio.playing-verses.label" = "Okunan ayetler";
 "audio.adjust-end-verse-to-the-end.label" = "Bitişi sonuna ayarla";

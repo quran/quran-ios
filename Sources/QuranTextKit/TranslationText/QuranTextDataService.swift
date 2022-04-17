@@ -158,6 +158,6 @@ public struct QuranTextDataService {
 
     private func ranges(of regex: NSRegularExpression, in string: String, range: NSRange) -> [NSRange] {
         let matches = regex.matches(in: string, options: [], range: range)
-        return matches.map { $0.range }
+        return matches.map(\.range)
     }
 }

@@ -91,6 +91,7 @@
 "audio.select-end-verse" = "Select Ending Verse";
 
 "audio.download-play-amount" = "Download/Play up to";
+"audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 
 // MARK: - Bookmarks
 

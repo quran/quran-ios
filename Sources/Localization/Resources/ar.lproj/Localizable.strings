@@ -90,6 +90,7 @@
 "audio.select-end-verse" = "حدد نهاية التشغيل الصوتي";
 
 "audio.download-play-amount" = "تحميل وتشغيل الصوت لنهاية";
+"audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
 
 // MARK: - Bookmarks
 

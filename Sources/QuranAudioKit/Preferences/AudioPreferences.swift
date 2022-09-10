@@ -22,35 +22,16 @@ public class AudioPreferences: WriteableSelectedReciterPreferences {
     private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
 
-    private let preferences: Preferences
-    private let audioEndPreferences: PreferencesValue<Int>
+    private static let audioEndTransfomer = PreferenceTransformer<Int, AudioEnd>(
+        forward: { AudioEnd(rawValue: $0) ?? .juz },
+        backward: { $0.rawValue })
 
-    public init(userDefaults: UserDefaults) {
-        preferences = Preferences(userDefaults: userDefaults)
-        audioEndPreferences = PreferencesValue(userDefaults: userDefaults, key: Self.audioEndKey)
-    }
+    @TransformedPreference(audioEndKey, transformer: audioEndTransfomer)
+    public var audioEnd: AudioEnd
 
-    public var lastSelectedReciterId: Int {
-        get {
-            preferences.valueForKey(Self.lastSelectedReciterId)
-        }
-        set {
-            preferences.setValue(newValue, forKey: Self.lastSelectedReciterId)
-        }
-    }
+    @Preference(lastSelectedReciterId)
+    public var lastSelectedReciterId: Int
 
-    public var audioEndPublisher: AnyPublisher<AudioEnd, Never> {
-        audioEndPreferences.publisher
-            .map { AudioEnd(rawValue: $0) ?? .juz }
-            .eraseToAnyPublisher()
-    }
+    public init() {}
 
-    public var audioEnd: AudioEnd {
-        get {
-            AudioEnd(rawValue: audioEndPreferences.value) ?? .juz
-        }
-        set {
-            audioEndPreferences.value = newValue.rawValue
-        }
-    }
 }

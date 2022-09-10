@@ -6,7 +6,7 @@ let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v11),
+        .iOS(.v13),
     ],
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),

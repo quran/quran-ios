@@ -30,7 +30,7 @@ public final class AudioUpdater {
     public init(baseURL: URL) {
         let networkManager = BatchDownloader.NetworkManager(session: .shared, baseURL: baseURL)
         networkService = DefaultAudioUpdatesNetworkManager(networkManager: networkManager)
-        preferences = DefaultAudioUpdatePreferences(userDefaults: .standard)
+        preferences = DefaultAudioUpdatePreferences()
         recitersRetriever = ReciterDataRetriever()
     }
 

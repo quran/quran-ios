@@ -22,16 +22,11 @@ public class AudioPreferences: WriteableSelectedReciterPreferences {
     private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
 
-    private static let audioEndTransfomer = PreferenceTransformer<Int, AudioEnd>(
-        forward: { AudioEnd(rawValue: $0) ?? .juz },
-        backward: { $0.rawValue })
-
-    @TransformedPreference(audioEndKey, transformer: audioEndTransfomer)
+    @TransformedPreference(audioEndKey, transformer: .rawRepresentable(defaultValue: .juz))
     public var audioEnd: AudioEnd
 
     @Preference(lastSelectedReciterId)
     public var lastSelectedReciterId: Int
 
     public init() {}
-
 }

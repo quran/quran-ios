@@ -7,27 +7,18 @@
 
 import Foundation
 import Preferences
+import Utilities
 
 protocol RecentSearchPreferences: AnyObject {
     var recentSearchItems: [String] { get set }
 }
 
 final class DefaultRecentSearchPreferences: RecentSearchPreferences {
-    private static let searchRecentItems = PreferenceKey<NSOrderedSet>(key: "com.quran.searchRecentItems", defaultValue: [])
+    private static let searchRecentItems = PreferenceKey<[String]>(key: "com.quran.searchRecentItems", defaultValue: [])
+    private static let searchRecentItemsTransfomer = PreferenceTransformer<[String], [String]>(
+        rawToValue: { $0.orderedUnique() },
+        valueToRaw: { $0 })
 
-    private let preferences: Preferences
-
-    init(userDefaults: UserDefaults) {
-        preferences = Preferences(userDefaults: userDefaults)
-    }
-
-    var recentSearchItems: [String] {
-        get {
-            let recents = preferences.serializedValueForKey(Self.searchRecentItems)
-            return recents.map { $0 as! String } // swiftlint:disable:this force_cast
-        }
-        set {
-            preferences.setSerializedValue(NSOrderedSet(array: newValue), forKey: Self.searchRecentItems)
-        }
-    }
+    @TransformedPreference(searchRecentItems, transformer: searchRecentItemsTransfomer)
+    var recentSearchItems: [String]
 }

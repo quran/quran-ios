@@ -30,7 +30,7 @@ public class ShareableVerseTextRetriever {
     private let shareableVersePersistence: VerseTextPersistence
 
     public init(databasesPath: String, quranFileURL: URL) {
-        preferences = DefaultsQuranContentStatePreferences(userDefaults: .standard)
+        preferences = DefaultsQuranContentStatePreferences()
         textService = QuranTextDataService(databasesPath: databasesPath, quranFileURL: quranFileURL)
         shareableVersePersistence = SQLiteQuranVerseTextPersistence(quran: Quran.madani, mode: .share, fileURL: quranFileURL)
     }

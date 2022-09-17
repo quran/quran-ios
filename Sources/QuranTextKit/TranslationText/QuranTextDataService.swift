@@ -42,7 +42,7 @@ public struct QuranTextDataService {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
         self.translationsPersistenceBuilder = translationsPersistenceBuilder
-        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences(userDefaults: .standard)
+        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
     }
 
     public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {

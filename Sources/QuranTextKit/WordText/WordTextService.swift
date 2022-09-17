@@ -13,7 +13,7 @@ public struct WordTextService {
     private let persistence: WordTextPersistence
 
     public init(fileURL: URL) {
-        preferences = DefaultsQuranContentStatePreferences(userDefaults: .standard)
+        preferences = DefaultsQuranContentStatePreferences()
         persistence = SQLiteWordTextPersistence(fileURL: fileURL)
     }
 

@@ -22,28 +22,16 @@ public class DefaultsQuranContentStatePreferences: WriteableQuranContentStatePre
     private static let defaultWordTextType = WordTextType.translation
     private static let wordTextType = PreferenceKey<Int>(key: "wordTranslationType", defaultValue: defaultWordTextType.rawValue)
     private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
-    private let preferences: Preferences
 
-    public init(userDefaults: UserDefaults) {
-        preferences = Preferences(userDefaults: userDefaults)
-    }
+    private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
+        rawToValue: { $0 ? .translation : .arabic },
+        valueToRaw: { $0 == .translation })
 
-    public var quranMode: QuranMode {
-        get {
-            preferences.valueForKey(Self.showQuranTranslationView) ? .translation : .arabic
-        }
-        set {
-            preferences.setValue(newValue == .translation, forKey: Self.showQuranTranslationView)
-        }
-    }
+    public init() { }
 
-    public var wordTextType: WordTextType {
-        get {
-            let type = WordTextType(rawValue: preferences.valueForKey(Self.wordTextType))
-            return type ?? Self.defaultWordTextType
-        }
-        set {
-            preferences.setValue(newValue.rawValue, forKey: Self.wordTextType)
-        }
-    }
+    @TransformedPreference(showQuranTranslationView, transformer: quranModeTransfomer)
+    public var quranMode: QuranMode
+
+    @TransformedPreference(wordTextType, transformer: .rawRepresentable(defaultValue: defaultWordTextType))
+    public var wordTextType: WordTextType
 }

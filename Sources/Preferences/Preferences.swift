@@ -45,29 +45,3 @@ public struct Preferences {
         userDefaults.removeObject(forKey: key.key)
     }
 }
-
-extension Preferences {
-    public func serializedValueForKey<T: NSCoding>(_ key: PreferenceKey<T>) -> T {
-        let preferenceKey = PreferenceKey<Data?>(key.key, nil)
-        guard let data = valueForKey(preferenceKey) else {
-            return key.defaultValue
-        }
-        let object = NSKeyedUnarchiver.unarchiveObject(with: data)
-        guard let value = object as? T else {
-            fatalError("Cannot unarchive perference data for key '\(key.key)'")
-        }
-        return value
-    }
-
-    public func setSerializedValue<T: NSCoding>(_ value: T?, forKey key: PreferenceKey<T>) {
-        let preferenceKey = PreferenceKey<Data?>(key.key, nil)
-
-        let data: Data?
-        if let value = value {
-            data = NSKeyedArchiver.archivedData(withRootObject: value)
-        } else {
-            data = nil
-        }
-        setValue(data, forKey: preferenceKey)
-    }
-}

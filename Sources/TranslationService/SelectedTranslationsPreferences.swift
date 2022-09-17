@@ -20,20 +20,11 @@ public protocol WriteableSelectedTranslationsPreferences: AnyObject, SelectedTra
 
 public class DefaultsSelectedTranslationsPreferences: WriteableSelectedTranslationsPreferences {
     private static let selectedTranslations = PreferenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
-    private let preferences: Preferences
 
-    public init(userDefaults: UserDefaults) {
-        preferences = Preferences(userDefaults: userDefaults)
-    }
+    public init() {}
 
-    public var selectedTranslations: [Int] {
-        get {
-            preferences.valueForKey(Self.selectedTranslations)
-        }
-        set {
-            preferences.setValue(newValue, forKey: Self.selectedTranslations)
-        }
-    }
+    @Preference(selectedTranslations)
+    public var selectedTranslations: [Int]
 
     public func isSelected(_ translationId: Int) -> Bool {
         selectedTranslations.contains(translationId)

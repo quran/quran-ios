@@ -18,7 +18,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
     private var textService: QuranTextDataService!
     private var mockTranslationsRetriever: LocalTranslationsRetrieverMock!
     private let quran = Quran.madani
-    let statePreferences = DefaultsQuranContentStatePreferences(userDefaults: .standard)
+    let statePreferences = DefaultsQuranContentStatePreferences()
 
     private let translations = [
         TestData.khanTranslation,
@@ -39,7 +39,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
             shareableVersePersistence: persistence
         )
 
-        let selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences(userDefaults: .standard)
+        let selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
         mockTranslationsRetriever.getLocalTranslationsHandler = {

@@ -48,6 +48,7 @@
 "write_review" = "Write an app store review...";
 "contact_us" = "Contact Us";
 "share_app" = "Share the app...";
+"app_version" = "App Version";
 
 "menu.arabic" = "Arabic";
 "menu.translation" = "Translation";

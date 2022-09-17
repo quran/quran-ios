@@ -12,7 +12,7 @@ import XCTest
 class WordTextServiceTests: XCTestCase {
     private var service: WordTextService!
     private let word = Word(verse: AyahNumber(quran: Quran.madani, sura: 110, ayah: 3)!, wordNumber: 3)
-    private let preferences = DefaultsQuranContentStatePreferences(userDefaults: .standard)
+    private let preferences = DefaultsQuranContentStatePreferences()
 
     override func setUpWithError() throws {
         service = WordTextService(fileURL: TestData.resourceURL("words.db"))

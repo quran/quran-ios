@@ -28,8 +28,8 @@ public class SearchRecentsService {
 
     private let popularTerms: [String] = ["الرحمن الرحيم", "الحي القيوم", "يس", "تبارك"]
 
-    public init(userDefaults: UserDefaults) {
-        preferences = DefaultRecentSearchPreferences(userDefaults: userDefaults)
+    public init() {
+        preferences = DefaultRecentSearchPreferences()
     }
 
     public func getPopularTerms() -> [String] {

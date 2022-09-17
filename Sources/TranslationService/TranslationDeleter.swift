@@ -27,7 +27,7 @@ public struct TranslationDeleter {
 
     public init(databasesPath: String) {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
-        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences(userDefaults: .standard)
+        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
     }
 
     public func deleteTranslation(_ translation: Translation) -> Promise<Translation> {

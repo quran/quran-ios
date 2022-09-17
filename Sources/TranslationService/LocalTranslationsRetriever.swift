@@ -18,7 +18,7 @@ public struct LocalTranslationsRetriever {
             SQLiteDatabaseVersionPersistence(filePath: filePath)
         }
         versionUpdater = DefaultTranslationsVersionUpdater(
-            selectedTranslationsPreferences: DefaultsSelectedTranslationsPreferences(userDefaults: .standard),
+            selectedTranslationsPreferences: DefaultsSelectedTranslationsPreferences(),
             persistence: persistence,
             versionPersistenceCreator: versionFactory,
             unzipper: DefaultTranslationUnzipper()

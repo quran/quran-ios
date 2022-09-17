@@ -15,8 +15,8 @@ class SearchRecentsServiceTests: XCTestCase {
     private let userDefaults = UserDefaults.standard
 
     override func setUpWithError() throws {
-        preferences = DefaultRecentSearchPreferences(userDefaults: userDefaults)
-        service = SearchRecentsService(userDefaults: userDefaults)
+        preferences = DefaultRecentSearchPreferences()
+        service = SearchRecentsService()
         let keys = userDefaults.dictionaryRepresentation().keys
         for key in keys {
             userDefaults.removeObject(forKey: key)

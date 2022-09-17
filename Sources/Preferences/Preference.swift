@@ -21,12 +21,11 @@ public final class Preference<T> {
     private let key: PreferenceKey<T>
     private let preferences: Preferences
     private var observer: PreferenceObserver<T>?
-    private let subject: CurrentValueSubject<T, Never>
+    private let subject = PassthroughSubject<T, Never>()
 
     public init(_ key: PreferenceKey<T>, preferences: Preferences = Preferences(userDefaults: .standard)) {
         self.key = key
         self.preferences = preferences
-        self.subject = CurrentValueSubject(preferences.valueForKey(key))
         self.observer = PreferenceObserver(self)
     }
 
@@ -58,7 +57,7 @@ public final class Preference<T> {
                 return
             }
             if context == &observerContext {
-                preference.subject.value = preference.wrappedValue
+                preference.subject.send(preference.wrappedValue)
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }

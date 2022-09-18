@@ -25,21 +25,18 @@ import QuranKit
 import TranslationService
 
 public class ShareableVerseTextRetriever {
-    private let preferences: QuranContentStatePreferences
+    private let preferences = QuranContentStatePreferences.shared
     private let textService: QuranTextDataService
     private let shareableVersePersistence: VerseTextPersistence
 
     public init(databasesPath: String, quranFileURL: URL) {
-        preferences = DefaultsQuranContentStatePreferences()
         textService = QuranTextDataService(databasesPath: databasesPath, quranFileURL: quranFileURL)
         shareableVersePersistence = SQLiteQuranVerseTextPersistence(quran: Quran.madani, mode: .share, fileURL: quranFileURL)
     }
 
-    init(preferences: QuranContentStatePreferences,
-         textService: QuranTextDataService,
+    init(textService: QuranTextDataService,
          shareableVersePersistence: VerseTextPersistence)
     {
-        self.preferences = preferences
         self.textService = textService
         self.shareableVersePersistence = shareableVersePersistence
     }

@@ -11,11 +11,10 @@ import XCTest
 
 class SearchRecentsServiceTests: XCTestCase {
     private var service: SearchRecentsService!
-    private var preferences: DefaultRecentSearchPreferences!
+    private let preferences = RecentSearchPreferences.shared
     private let userDefaults = UserDefaults.standard
 
     override func setUpWithError() throws {
-        preferences = DefaultRecentSearchPreferences()
         service = SearchRecentsService()
         let keys = userDefaults.dictionaryRepresentation().keys
         for key in keys {

@@ -16,7 +16,7 @@ public struct QuranTextDataService {
     let localTranslationRetriever: LocalTranslationsRetriever
     let arabicPersistence: VerseTextPersistence
     let translationsPersistenceBuilder: (Translation, Quran) -> TranslationVerseTextPersistence
-    let selectedTranslationsPreferences: SelectedTranslationsPreferences
+    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     // regex to detect quran text in translation text
     private static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
@@ -42,7 +42,6 @@ public struct QuranTextDataService {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
         self.translationsPersistenceBuilder = translationsPersistenceBuilder
-        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
     }
 
     public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {

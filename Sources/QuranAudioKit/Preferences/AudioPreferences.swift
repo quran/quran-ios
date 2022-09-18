@@ -9,16 +9,11 @@ import Combine
 import Foundation
 import Preferences
 
-public protocol SelectedReciterPreferences {
-    var lastSelectedReciterId: Int { get }
-}
-
-public protocol WriteableSelectedReciterPreferences: AnyObject, SelectedReciterPreferences {
-    var lastSelectedReciterId: Int { get set }
-}
-
 @available(iOS 13.0, *)
-public class AudioPreferences: WriteableSelectedReciterPreferences {
+public class AudioPreferences {
+    public static let shared = AudioPreferences()
+    private init() {}
+
     private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
 
@@ -27,6 +22,4 @@ public class AudioPreferences: WriteableSelectedReciterPreferences {
 
     @Preference(lastSelectedReciterId)
     public var lastSelectedReciterId: Int
-
-    public init() {}
 }

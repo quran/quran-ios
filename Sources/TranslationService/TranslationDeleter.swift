@@ -23,11 +23,10 @@ import PromiseKit
 
 public struct TranslationDeleter {
     let persistence: ActiveTranslationsPersistence
-    let selectedTranslationsPreferences: WriteableSelectedTranslationsPreferences
+    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     public init(databasesPath: String) {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
-        selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
     }
 
     public func deleteTranslation(_ translation: Translation) -> Promise<Translation> {

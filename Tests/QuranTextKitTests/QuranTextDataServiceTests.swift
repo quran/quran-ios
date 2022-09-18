@@ -30,7 +30,7 @@ final class QuranTextDataServiceTests: XCTestCase {
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)
 
-        let selectedTranslationsPreferences = DefaultsSelectedTranslationsPreferences()
+        let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
         mockTranslationsRetriever.getLocalTranslationsHandler = {

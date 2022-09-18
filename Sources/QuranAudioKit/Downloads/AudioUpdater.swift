@@ -15,22 +15,19 @@ import VLogging
 public final class AudioUpdater {
     private let recitersRetriever: ReciterDataRetriever
     private let networkService: AudioUpdatesNetworkManager
-    private let preferences: AudioUpdatePreferences
+    private let preferences = AudioUpdatePreferences.shared
     private let md5Calculator = MD5Calculator()
 
     init(networkService: AudioUpdatesNetworkManager,
-         preferences: AudioUpdatePreferences,
          recitersRetriever: ReciterDataRetriever)
     {
         self.networkService = networkService
-        self.preferences = preferences
         self.recitersRetriever = recitersRetriever
     }
 
     public init(baseURL: URL) {
         let networkManager = BatchDownloader.NetworkManager(session: .shared, baseURL: baseURL)
         networkService = DefaultAudioUpdatesNetworkManager(networkManager: networkManager)
-        preferences = DefaultAudioUpdatePreferences()
         recitersRetriever = ReciterDataRetriever()
     }
 

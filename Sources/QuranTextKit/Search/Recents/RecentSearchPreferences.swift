@@ -9,11 +9,10 @@ import Foundation
 import Preferences
 import Utilities
 
-protocol RecentSearchPreferences: AnyObject {
-    var recentSearchItems: [String] { get set }
-}
+final class RecentSearchPreferences {
+    static let shared = RecentSearchPreferences()
+    private init() {}
 
-final class DefaultRecentSearchPreferences: RecentSearchPreferences {
     private static let searchRecentItems = PreferenceKey<[String]>(key: "com.quran.searchRecentItems", defaultValue: [])
     private static let searchRecentItemsTransfomer = PreferenceTransformer<[String], [String]>(
         rawToValue: { $0.orderedUnique() },

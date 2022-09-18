@@ -8,20 +8,11 @@
 import Foundation
 import Preferences
 
-public protocol SelectedTranslationsPreferences {
-    var selectedTranslations: [Int] { get }
-    func isSelected(_ translationId: Int) -> Bool
-}
+public class SelectedTranslationsPreferences {
+    public static let shared = SelectedTranslationsPreferences()
+    private init() {}
 
-public protocol WriteableSelectedTranslationsPreferences: AnyObject, SelectedTranslationsPreferences {
-    var selectedTranslations: [Int] { get set }
-    func toggleSelection(_ translationId: Int)
-}
-
-public class DefaultsSelectedTranslationsPreferences: WriteableSelectedTranslationsPreferences {
     private static let selectedTranslations = PreferenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
-
-    public init() {}
 
     @Preference(selectedTranslations)
     public var selectedTranslations: [Int]

@@ -8,12 +8,10 @@
 import Foundation
 import Preferences
 
-protocol AudioUpdatePreferences: AnyObject {
-    var lastRevision: Int { get set }
-    var lastChecked: Date? { get set }
-}
+final class AudioUpdatePreferences {
+    static let shared = AudioUpdatePreferences()
+    private init() {}
 
-final class DefaultAudioUpdatePreferences: AudioUpdatePreferences {
     private static let lastRevision = PreferenceKey<Int>(key: "audio-update.last-revision", defaultValue: 0)
     private static let lastChecked = PreferenceKey<Date?>(key: "audio-update.last-checked", defaultValue: nil)
 

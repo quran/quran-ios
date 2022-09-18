@@ -30,7 +30,7 @@ struct VersionPersistenceFactory {
 }
 
 struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
-    let selectedTranslationsPreferences: WriteableSelectedTranslationsPreferences
+    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     let persistence: ActiveTranslationsPersistence
     let versionPersistenceCreator: VersionPersistenceFactory
     let unzipper: TranslationUnzipper

@@ -9,11 +9,10 @@ import Crashing
 import Foundation
 
 public struct WordTextService {
-    private let preferences: QuranContentStatePreferences
+    private let preferences = QuranContentStatePreferences.shared
     private let persistence: WordTextPersistence
 
     public init(fileURL: URL) {
-        preferences = DefaultsQuranContentStatePreferences()
         persistence = SQLiteWordTextPersistence(fileURL: fileURL)
     }
 

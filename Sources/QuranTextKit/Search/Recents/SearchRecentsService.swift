@@ -24,12 +24,11 @@ public class SearchRecentsService {
     private let maxCount: Int = 5
     private let removePopularWhenRecentsCount = 3
 
-    private let preferences: RecentSearchPreferences
+    private let preferences = RecentSearchPreferences.shared
 
     private let popularTerms: [String] = ["الرحمن الرحيم", "الحي القيوم", "يس", "تبارك"]
 
     public init() {
-        preferences = DefaultRecentSearchPreferences()
     }
 
     public func getPopularTerms() -> [String] {

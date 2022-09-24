@@ -22,31 +22,26 @@ import Foundation
 import Locking
 import PromiseKit
 
-open class OperationCacheableService<Operation: CacheableOperation>: CacheableService
-    where Operation.Input: Hashable
-{
-    public typealias Input = Operation.Input
-    public typealias Output = Operation.Output
-
+class OperationCacheableService<Input: Hashable, Output> {
     private let cache: Cache<Input, Output>
 
     private var inProgressOperations: [Input: Promise<Output>] = [:]
     private let lock = NSLock()
-    private let operation: Operation
+    private let operation: (Input) -> Promise<Output>
 
-    public init(cache: Cache<Input, Output>, operation: Operation) {
+    init(cache: Cache<Input, Output>, operation: @escaping (Input) -> Promise<Output>) {
         self.cache = cache
         self.operation = operation
     }
 
-    open func invalidate() {
+    func invalidate() {
         lock.sync {
             inProgressOperations.removeAll()
             cache.removeAllObjects()
         }
     }
 
-    open func get(_ input: Input) -> Promise<Output> {
+    func get(_ input: Input) -> Promise<Output> {
         lock.sync { () -> Promise<Output> in
 
             if let result = cache.object(forKey: input) {
@@ -55,7 +50,7 @@ open class OperationCacheableService<Operation: CacheableOperation>: CacheableSe
                 return promise
             } else {
                 // create the operation
-                let operationPromise = operation.perform(input)
+                let operationPromise = operation(input)
                 // add it to the in progress
                 inProgressOperations[input] = operationPromise
 
@@ -73,7 +68,7 @@ open class OperationCacheableService<Operation: CacheableOperation>: CacheableSe
         }
     }
 
-    open func getCached(_ input: Input) -> Output? {
+    func getCached(_ input: Input) -> Output? {
         lock.sync {
             cache.object(forKey: input)
         }

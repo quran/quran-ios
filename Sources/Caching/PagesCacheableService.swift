@@ -21,28 +21,24 @@
 import Foundation
 import PromiseKit
 
-public protocol Pageable {
+public protocol Pageable: Hashable {
     var pageNumber: Int { get }
 }
 
-open class PagesCacheableService<Operation: CacheableOperation>: CacheableService
-    where Operation.Input: Hashable, Operation.Input: Pageable
-{
-    public typealias Page = Operation.Input
-    public typealias Input = Operation.Input
-    public typealias Output = Operation.Output
+public class PagesCacheableService<Input: Pageable, Output> {
+    public typealias Page = Input
 
     private let previousPagesCount: Int
     private let nextPagesCount: Int
     private let pages: [Page]
 
-    private let service: OperationCacheableService<Operation>
+    private let service: OperationCacheableService<Input, Output>
 
     public init(cache: Cache<Input, Output>,
                 previousPagesCount: Int,
                 nextPagesCount: Int,
                 pages: [Page],
-                operation: Operation)
+                operation: @escaping (Input) -> Promise<Output>)
     {
         service = OperationCacheableService(cache: cache, operation: operation)
         self.pages = pages
@@ -50,11 +46,11 @@ open class PagesCacheableService<Operation: CacheableOperation>: CacheableServic
         self.previousPagesCount = previousPagesCount
     }
 
-    open func invalidate() {
+    public func invalidate() {
         service.invalidate()
     }
 
-    open func get(_ page: Page) -> Promise<Output> {
+    public func get(_ page: Page) -> Promise<Output> {
         defer {
             // schedule for closer pages
             cachePagesCloserToPage(page)
@@ -64,7 +60,7 @@ open class PagesCacheableService<Operation: CacheableOperation>: CacheableServic
         return preload(page)
     }
 
-    open func getCached(_ input: Page) -> Output? {
+    public func getCached(_ input: Page) -> Output? {
         service.getCached(input)
     }
 

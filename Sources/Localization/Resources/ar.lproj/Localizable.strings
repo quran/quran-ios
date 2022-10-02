@@ -57,6 +57,7 @@
 "menu.fontSizeLetter" = "أ";
 "menu.translationFontSize" = "حجم خط تفسير";
 "menu.arabicFontSize" = "حجم خط القرآن";
+"menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
 
 "tab.notes" = "الملاحظات";
 

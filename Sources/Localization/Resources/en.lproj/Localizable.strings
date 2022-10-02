@@ -58,6 +58,7 @@
 "menu.fontSizeLetter" = "A";
 "menu.translationFontSize" = "Translation Size";
 "menu.arabicFontSize" = "Quran Size";
+"menu.twoPages" = "2 pages side-by-side (in landscape)";
 
 
 "tab.notes" = "Notes";

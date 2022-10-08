@@ -19,7 +19,8 @@ public struct QuranContentStatePreferences {
 
     private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
         rawToValue: { $0 ? .translation : .arabic },
-        valueToRaw: { $0 == .translation })
+        valueToRaw: { $0 == .translation }
+    )
 
     @TransformedPreference(showQuranTranslationView, transformer: quranModeTransfomer)
     public var quranMode: QuranMode

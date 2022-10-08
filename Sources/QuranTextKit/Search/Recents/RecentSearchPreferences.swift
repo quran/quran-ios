@@ -16,7 +16,8 @@ final class RecentSearchPreferences {
     private static let searchRecentItems = PreferenceKey<[String]>(key: "com.quran.searchRecentItems", defaultValue: [])
     private static let searchRecentItemsTransfomer = PreferenceTransformer<[String], [String]>(
         rawToValue: { $0.orderedUnique() },
-        valueToRaw: { $0 })
+        valueToRaw: { $0 }
+    )
 
     @TransformedPreference(searchRecentItems, transformer: searchRecentItemsTransfomer)
     var recentSearchItems: [String]

@@ -32,6 +32,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
+        .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
         .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.12.2"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
@@ -65,6 +66,7 @@ let package = Package(
             "QuranTextKit",
             "QueuePlayer",
             "Zip",
+            .product(name: "OrderedCollections", package: "swift-collections"),
         ]),
         .testTarget(name: "QuranAudioKitTests", dependencies: [
             "QuranAudioKit",

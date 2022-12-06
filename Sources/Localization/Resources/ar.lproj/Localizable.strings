@@ -79,6 +79,7 @@
 "theme.auto.message" = "سوف يلتزم تطبيق القرآن بإعداد مظهر iPhone الخاص بك";
 
 "reciters.title" = "اختر القارئ";
+"reciters.recent" = "الأخيرة";
 
 // MARK: - Audio
 

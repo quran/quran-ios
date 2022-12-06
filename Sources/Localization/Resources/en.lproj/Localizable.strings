@@ -80,6 +80,7 @@
 "theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
 
 "reciters.title" = "Select the reciter to listen to";
+"reciters.recent" = "Recent";
 
 // MARK: - Audio
 

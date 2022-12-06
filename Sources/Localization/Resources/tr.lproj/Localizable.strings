@@ -72,6 +72,7 @@
 "theme.auto.message" = "Kur'an uygulamasının teması iPhone ayarlarına göre belirlenecek";
 
 "reciters.title" = "Dinlemek istediğiniz hafızı seçiniz";
+"reciters.recent" = "Son";
 
 // MARK: - Audio
 

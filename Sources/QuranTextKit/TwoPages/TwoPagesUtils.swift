@@ -1,6 +1,6 @@
 //
 //  TwoPagesUtils.swift
-//  
+//
 //
 //  Created by Zubair Khan on 2022-11-12.
 //

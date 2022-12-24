@@ -1,12 +1,12 @@
 //
 //  RecentRecitersServiceTests.swift
-//  
+//
 //
 //  Created by Zubair Khan on 12/5/22.
 //
 
-@testable import QuranAudioKit
 import Foundation
+@testable import QuranAudioKit
 import XCTest
 
 class RecentRecitersServiceTests: XCTestCase {
@@ -63,7 +63,7 @@ class RecentRecitersServiceTests: XCTestCase {
     }
 
     private func getRecentRecitersIds(_ allReciters: [Reciter]) -> [Int] {
-        service.recentReciters(allReciters).map{ $0.id }
+        service.recentReciters(allReciters).map(\.id)
     }
 
     private func createReciter(id: Int) -> Reciter {

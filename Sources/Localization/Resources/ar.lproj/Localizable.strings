@@ -118,6 +118,7 @@
 "ayah.menu.play-end-juz" = "إلى نهاية الجزء";
 "ayah.menu.play-end-surah" = "إلى نهاية السورة";
 "ayah.menu.play-end-page" = "إلى نهاية الصفحة";
+"ayah.menu.play-selected-verses" = "آيات مختارة";
 "ayah.menu.highlight" = "تحديد";
 "ayah.menu.highlight-select-color" = "اختر لون";
 "ayah.menu.add-note" = "اضف ملاحظة";

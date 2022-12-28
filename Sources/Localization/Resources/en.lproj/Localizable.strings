@@ -119,6 +119,7 @@
 "ayah.menu.play-end-juz" = "to the end of Juz'";
 "ayah.menu.play-end-surah" = "to the end of Surah";
 "ayah.menu.play-end-page" = "to the end of Page";
+"ayah.menu.play-selected-verses" = "selected verses";
 "ayah.menu.highlight" = "Highlight";
 "ayah.menu.highlight-select-color" = "select color";
 "ayah.menu.add-note" = "Add Note";

@@ -41,11 +41,31 @@ extension NumberFormatter {
         format(NSNumber(value: number))
     }
 
-    public static let shared = NumberFormatter()
+    public static let shared: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = formatter.locale?.fixedLocaleNumbers()
+        return formatter
+    }()
 
     public static var arabicNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "ar")
         return formatter
     }()
+}
+
+public extension Locale {
+    func fixedLocaleNumbers() -> Locale {
+        let latinSuffix = "@numbers=latn"
+        if identifier.hasSuffix(latinSuffix) {
+            let localId = identifier.replacingOccurrences(of: latinSuffix, with: "")
+            return Locale(identifier: localId)
+        } else {
+            return self
+        }
+    }
+
+    static var fixedCurrentLocaleNumbers: Locale {
+        current.fixedLocaleNumbers()
+    }
 }

@@ -25,16 +25,23 @@ public enum Language: String {
     case english = "en"
 }
 
-public func lFormat(_ key: String, table: String = "Localizable", language: Language? = nil, _ arguments: CVarArg...) -> String {
-    let localization = l(key, table: table, language: language)
-    return String(format: localization, locale: .current, arguments: arguments)
+public enum Table: String {
+    case localizable = "Localizable"
+    case android = "Android"
+    case suras = "Suras"
+    case readers = "Readers"
 }
 
-public func l(_ key: String, table: String = "Localizable", language: Language? = nil) -> String {
+public func lFormat(_ key: String, table: Table = .localizable, language: Language? = nil, _ arguments: CVarArg...) -> String {
+    let localization = l(key, table: table, language: language)
+    return String(format: localization, locale: .fixedCurrentLocaleNumbers, arguments: arguments)
+}
+
+public func l(_ key: String, table: Table = .localizable, language: Language? = nil) -> String {
     if let language = language {
         return localizedString(key, table: table, language: language)
     }
-    let value = NSLocalizedString(key, tableName: table, bundle: Bundle.fixedModule, comment: "")
+    let value = NSLocalizedString(key, tableName: table.rawValue, bundle: Bundle.fixedModule, comment: "")
     if value != key || NSLocale.preferredLanguages.first == "en" {
         return value
     }
@@ -43,14 +50,14 @@ public func l(_ key: String, table: String = "Localizable", language: Language? 
     return localizedString(key, table: table, language: .english)
 }
 
-private func localizedString(_ key: String, table: String = "Localizable", language: Language) -> String {
+private func localizedString(_ key: String, table: Table = .localizable, language: Language) -> String {
     guard
         let path = Bundle.fixedModule.path(forResource: language.rawValue, ofType: "lproj"),
         let bundle = Bundle(path: path)
     else { return key }
-    return NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
+    return NSLocalizedString(key, tableName: table.rawValue, bundle: bundle, comment: "")
 }
 
 public func lAndroid(_ key: String, language: Language? = nil) -> String {
-    l(key, table: "Android", language: language)
+    l(key, table: .android, language: language)
 }

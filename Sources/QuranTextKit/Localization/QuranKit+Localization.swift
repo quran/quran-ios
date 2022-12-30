@@ -10,29 +10,27 @@ import Localization
 import QuranKit
 
 extension AyahNumber {
+    private var ayahNumberString: String { lFormat("quran_ayah", table: .android, ayah) }
     public var localizedName: String {
-        let ayahNumberString = String.localizedStringWithFormat(lAndroid("quran_ayah"), ayah)
         let suraName = sura.localizedName()
         return "\(suraName), \(ayahNumberString)"
     }
 
     public var localizedNameWithSuraNumber: String {
         let localizedSura = "\(NumberFormatter.shared.format(sura.suraNumber)). \(sura.localizedName())"
-        let localizedVerse = String.localizedStringWithFormat(lAndroid("quran_ayah"), ayah)
-        return "\(localizedSura) - \(localizedVerse)"
+        return "\(localizedSura) - \(ayahNumberString)"
     }
 }
 
 extension Juz {
     public var localizedName: String {
-        String(format: lAndroid("juz2_description"), NumberFormatter.shared.format(juzNumber))
+        lFormat("juz2_description", table: .android, NumberFormatter.shared.format(juzNumber))
     }
 }
 
 extension Page {
     public var localizedName: String {
-        let format = "\(lAndroid("quran_page")) %d"
-        return String.localizedStringWithFormat(format, pageNumber)
+        "\(lAndroid("quran_page")) \(NumberFormatter.shared.format(pageNumber))"
     }
 
     public var localizedNumber: String {
@@ -51,8 +49,7 @@ extension Page {
 
 extension Hizb {
     public var localizedName: String {
-        let format = "\(lAndroid("quran_hizb")) %d"
-        return String.localizedStringWithFormat(format, hizbNumber)
+        "\(lAndroid("quran_hizb")) \(NumberFormatter.shared.format(hizbNumber))"
     }
 }
 
@@ -81,12 +78,11 @@ extension Sura {
     }
 
     public func localizedName(withPrefix: Bool = false, language: Language? = nil) -> String {
-        let suraName = l("sura_names[\(suraNumber - 1)]", table: "Suras", language: language)
+        let suraName = l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
         if !withPrefix {
             return suraName
         }
-        let suraFormat = lAndroid("quran_sura_title", language: language)
-        return String(format: suraFormat, suraName)
+        return lFormat("quran_sura_title", table: .android, language: language, suraName)
     }
 }
 

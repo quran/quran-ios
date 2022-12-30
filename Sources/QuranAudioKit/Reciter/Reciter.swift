@@ -45,6 +45,6 @@ public struct Reciter: Hashable {
 
 extension Reciter {
     public var localizedName: String {
-        l(nameKey, table: "Readers")
+        l(nameKey, table: .readers)
     }
 }

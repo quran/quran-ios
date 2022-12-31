@@ -82,7 +82,7 @@ let package = Package(
 
         .target(name: "QuranMadaniData", dependencies: [], resources: [
             .process("quran.ar.uthmani.v2.db"),
-            .copy("images_1280"),
+            .copy("images_1920"),
         ]),
 
         .target(name: "TranslationService", dependencies: [

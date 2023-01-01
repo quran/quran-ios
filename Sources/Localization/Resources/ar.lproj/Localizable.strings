@@ -27,7 +27,7 @@
 "translatorLabel: " = "المفسر: ";
 "upgradeTranslationButtonTitle" = "تحديث";
 
-"translationsSelectionTitle" = "اختر التفاسير والترجمات";
+"translationsSelectionTitle" = "اختر التفاسير والتراجم";
 "translationsSelectionPrompt" = "اختار بالترتيب المرغوب فيه";
 
 "errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
@@ -50,8 +50,8 @@
 "app_version" = "نسخة التطبيق";
 
 "menu.arabic" = "عربي";
-"menu.translation" = "الترجمات";
-"menu.select_translation" = "اختر التفاسير والترجمات";
+"menu.translation" = "التفاسير والتراجم";
+"menu.select_translation" = "اختر التفاسير والتراجم";
 "menu.pointer" = "مؤشر ترجمة الكلمات";
 "menu.pointer.select_translation" = "لغة المؤشر";
 "menu.fontSizeLetter" = "أ";
@@ -135,5 +135,5 @@
 
 "new.reciters" = "القراء الجدد";
 
-"new.translations" = "التفاسير والترجمات";
+"new.translations" = "التفاسير والتراجم";
 "new.translations.details" = "* تكبير / تصغير حجم خط القرآن بغض النظر عن حجم خط الترجمة.\n* إبراز النص القرآني في التفسير.\n* استخدام خط كتاب للتفسير.\n* تحديث أسلوب عرض الترجمة.";

@@ -51,7 +51,7 @@
 "app_version" = "App Version";
 
 "menu.arabic" = "Arabic";
-"menu.translation" = "Translation";
+"menu.translation" = "Translation/Tafseer";
 "menu.select_translation" = "Select translations/tafseer";
 "menu.pointer" = "Word translation pointer";
 "menu.pointer.select_translation" = "Pointer Showing";

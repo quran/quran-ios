@@ -81,6 +81,8 @@
 
 "reciters.title" = "Select the reciter to listen to";
 "reciters.recent" = "Recent";
+"reciters.downloaded" = "Downloaded";
+"reciters.all" = "All";
 
 // MARK: - Audio
 

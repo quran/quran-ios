@@ -80,6 +80,8 @@
 
 "reciters.title" = "اختر القارئ";
 "reciters.recent" = "الأخيرة";
+"reciters.downloaded" = "التنزيلات";
+"reciters.all" = "الكل";
 
 // MARK: - Audio
 

@@ -63,7 +63,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
                 .select(Columns.text)
                 .filter(Columns.text.match("\(term)*"))
                 .limit(100)
-            let rows = try connection.prepare(query)
+            let rows = try connection.fetchArray(query)
             return rows.map { $0[Columns.text] }
         }
     }
@@ -73,12 +73,12 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
             let query = searchTable
                 .select(Columns.text, Columns.sura, Columns.ayah)
                 .filter(Columns.text.like("%\(term)%"))
-            let rows = try connection.prepare(query)
+            let rows = try connection.fetchArray(query)
             return rowsToResults(rows)
         }
     }
 
-    private func rowsToResults(_ rows: AnySequence<Row>) -> [(verse: AyahNumber, text: String)] {
+    private func rowsToResults(_ rows: Array<Row>) -> [(verse: AyahNumber, text: String)] {
         rows.map { row in
             let text = row[Columns.text]
             let sura = row[Columns.sura]
@@ -86,5 +86,12 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
             let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah)!
             return (verse: verse, text: text)
         }
+    }
+}
+
+private extension Connection {
+    func fetchArray(_ query: QueryType) throws -> Array<Row> {
+        let iterator = try prepareRowIterator(query)
+        return (try? Array(iterator)) ?? []
     }
 }

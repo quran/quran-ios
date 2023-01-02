@@ -13,6 +13,8 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
     struct Columns {
         static let sura = Expression<Int>("sura")
         static let ayah = Expression<Int>("ayah")
+        static let suraStr = Expression<String>("sura")
+        static let ayahStr = Expression<String>("ayah")
         static let text = Expression<String>("text")
     }
 
@@ -44,7 +46,8 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
     private func textForVerse<T>(_ verse: AyahNumber, connection: Connection, transform: (Row) throws -> T) throws -> T? {
         let query = table
             .select(Columns.text)
-            .filter(Columns.sura == verse.sura.suraNumber && Columns.ayah == verse.ayah)
+            .filter((Columns.sura == verse.sura.suraNumber || Columns.suraStr == String(verse.sura.suraNumber)) &&
+                    (Columns.ayah == verse.ayah || Columns.ayahStr == String(verse.ayah)))
         let rows = try connection.prepare(query)
         guard let first = rows.first(where: { _ in true }) else {
             return nil

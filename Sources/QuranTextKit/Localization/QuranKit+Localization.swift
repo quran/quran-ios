@@ -10,15 +10,15 @@ import Localization
 import QuranKit
 
 extension AyahNumber {
-    private var ayahNumberString: String { lFormat("quran_ayah", table: .android, ayah) }
+    public var localizedAyahNumber: String { lFormat("quran_ayah", table: .android, ayah) }
     public var localizedName: String {
         let suraName = sura.localizedName()
-        return "\(suraName), \(ayahNumberString)"
+        return "\(suraName), \(localizedAyahNumber)"
     }
 
     public var localizedNameWithSuraNumber: String {
-        let localizedSura = "\(NumberFormatter.shared.format(sura.suraNumber)). \(sura.localizedName())"
-        return "\(localizedSura) - \(ayahNumberString)"
+        let localizedSura = sura.localizedName(withNumber: true)
+        return "\(localizedSura) - \(localizedAyahNumber)"
     }
 }
 
@@ -77,12 +77,15 @@ extension Sura {
         NumberFormatter.shared.format(suraNumber)
     }
 
-    public func localizedName(withPrefix: Bool = false, language: Language? = nil) -> String {
-        let suraName = l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
-        if !withPrefix {
-            return suraName
+    public func localizedName(withPrefix: Bool = false, withNumber: Bool = false, language: Language? = nil) -> String {
+        var suraName = l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
+        if withPrefix {
+            suraName = lFormat("quran_sura_title", table: .android, language: language, suraName)
         }
-        return lFormat("quran_sura_title", table: .android, language: language, suraName)
+        if withNumber {
+            suraName = "\(localizedSuraNumber). \(suraName)"
+        }
+        return suraName
     }
 }
 

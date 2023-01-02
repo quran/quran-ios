@@ -73,6 +73,8 @@
 
 "reciters.title" = "Dinlemek istediğiniz hafızı seçiniz";
 "reciters.recent" = "Son";
+"reciters.downloaded" = "İndirilenler";
+"reciters.all" = "Herkes";
 
 // MARK: - Audio
 

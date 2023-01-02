@@ -20,12 +20,30 @@
         }
       },
       {
+        "package": "swift-collections",
+        "repositoryURL": "https://github.com/apple/swift-collections",
+        "state": {
+          "branch": null,
+          "revision": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+          "version": "1.0.4"
+        }
+      },
+      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log",
         "state": {
           "branch": null,
           "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
           "version": "1.4.2"
+        }
+      },
+      {
+        "package": "swift-snapshot-testing",
+        "repositoryURL": "https://github.com/pointfreeco/swift-snapshot-testing.git",
+        "state": {
+          "branch": null,
+          "revision": "f29e2014f6230cf7d5138fc899da51c7f513d467",
+          "version": "1.10.0"
         }
       },
       {

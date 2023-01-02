@@ -16,12 +16,18 @@ struct PersistenceSearcher: Searcher {
 
     func autocomplete(term: String) throws -> [SearchAutocompletion] {
         let processedTerm = termProcessor.prepareSearchTermForAutocompletion(term)
+        if processedTerm.isEmpty {
+            return []
+        }
         let matches = try versePersistence.autocomplete(term: processedTerm)
         return resultsProcessor.buildAutocompletions(searchResults: matches, term: processedTerm)
     }
 
     func search(for term: String) throws -> [SearchResults] {
         let processedTerm = termProcessor.prepareSearchTermForSearching(term)
+        if processedTerm.searchTerm.isEmpty {
+            return []
+        }
         let matches = try versePersistence.search(for: processedTerm.searchTerm)
         let items = resultsProcessor.buildSearchResults(searchRegex: processedTerm.pattern, verses: matches)
         return [SearchResults(source: source, items: items)]

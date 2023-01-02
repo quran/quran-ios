@@ -47,7 +47,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         let query = table
             .select(Columns.text)
             .filter((Columns.sura == verse.sura.suraNumber || Columns.suraStr == String(verse.sura.suraNumber)) &&
-                    (Columns.ayah == verse.ayah || Columns.ayahStr == String(verse.ayah)))
+                (Columns.ayah == verse.ayah || Columns.ayahStr == String(verse.ayah)))
         let rows = try connection.prepare(query)
         guard let first = rows.first(where: { _ in true }) else {
             return nil
@@ -78,7 +78,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         }
     }
 
-    private func rowsToResults(_ rows: Array<Row>) -> [(verse: AyahNumber, text: String)] {
+    private func rowsToResults(_ rows: [Row]) -> [(verse: AyahNumber, text: String)] {
         rows.map { row in
             let text = row[Columns.text]
             let sura = row[Columns.sura]
@@ -90,7 +90,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
 }
 
 private extension Connection {
-    func fetchArray(_ query: QueryType) throws -> Array<Row> {
+    func fetchArray(_ query: QueryType) throws -> [Row] {
         let iterator = try prepareRowIterator(query)
         return (try? Array(iterator)) ?? []
     }

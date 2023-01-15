@@ -8,7 +8,6 @@
 import Foundation
 
 public class DownloadedRecitersService {
-
     public init() {
     }
 

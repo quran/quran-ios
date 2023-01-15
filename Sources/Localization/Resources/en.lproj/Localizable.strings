@@ -137,7 +137,13 @@
 "new.action" = "Continue";
 
 "new.reciters" = "New Reciters";
-"new.reciters.details" = "* %%Readers:qari_muaiqly_haramain_gapless%%\n* %%Readers:qari_hudhayfi_gapless%%\n* %%Readers:qari_khaled_muhanna_gapless%%\n* %%Readers:qari_husary_mujawwad_gapless%%\n* %%Readers:qari_husary_muallim_gapless%%\n* %%Readers:qari_ibrahim_alakhdar_gapless%%\n* %%Readers:qari_yasser_salama_hadr_gapless%%\n* %%Readers:qari_khalid_qahtani_gapless%%\n* %%Readers:qari_mokhtasar_asmari_gapless%%\n* %%Readers:qari_alzain_ahmad_gapless%%\n* %%Readers:qari_aloosi_gapless%%";
+"new.reciters.details" = "* %%Readers:qari_muhammad_rashad_shereef_gapless%%\n* %%Readers:qari_wadee3_alyamani_gapless%%";
 
 "new.translations" = "Translations & Tafseers";
-"new.translations.details" = "* Increase/decrease Quran font size independent of translation font size.\n* Highlighting quranic text in tafseers.\n* Using Kitab font for tafseer text.\n* Updated translation display style.";
+"new.translations.details" = "* Long tap on a verse to see %%Localizable:menu.translation%% for a single Ayah on Arabic view.";
+
+"new.quran-ui" = "Quran UI";
+"new.quran-ui.details" = "* 2-page support on landscape for iPads, iPhone Max and iPhone Plus devices.\n* Page left and right borders.\n* Additional font sizes for translation UI.";
+
+"new.reciters-selection" = "Reciters Selection";
+"new.reciters-selection.details" = "* Section showing up to the last 3 recent reciters.\n* Section for downloaded reciters.";

@@ -64,11 +64,13 @@ final class GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
 
                     var frames: [AudioFrame] = []
                     var fileAyahs: [AyahNumber] = []
+                    let isRepeating = frameRuns != .one || requestRuns != .one
 
                     for (offset, verse) in suraTimings.verses.enumerated() {
-                        // start from 0 (beginning) if first ayah of the sura
+                        // start from 0 (to include basmallah) if first ayah of the sura unless ayah selection is repeating
+                        let startTime = !isRepeating && offset == 0 && verse.ayah.ayah == 1 ? 0 : verse.time.seconds
                         let endTime = offset == suraTimings.verses.count - 1 ? suraTimings.endTime : nil
-                        let frame = AudioFrame(startTime: offset == 0 && verse.ayah.ayah == 1 ? 0 : verse.time.seconds, endTime: endTime?.seconds)
+                        let frame = AudioFrame(startTime: startTime, endTime: endTime?.seconds)
                         frames.append(frame)
                         fileAyahs.append(verse.ayah)
                     }

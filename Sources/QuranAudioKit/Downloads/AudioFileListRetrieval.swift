@@ -50,7 +50,7 @@ protocol ReciterAudioFileListRetrieval {
 struct GaplessReciterAudioFileListRetrieval: ReciterAudioFileListRetrieval {
     let baseURL: URL
 
-    private let path = "data/databases/audio/"
+    private let path = "hafs/databases/audio/"
     var audioDatabaseURL: URL { baseURL.appendingPathComponent(path) }
 
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {

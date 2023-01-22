@@ -54,8 +54,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         let gappedBuilder = GappedAudioRequestBuilder()
         let fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
         let versesDownloader = AyahsAudioDownloader(downloader: downloadManager, fileListFactory: fileListFactory)
-        downloader = AudioFilesDownloader(gapplessAudioFileList: GaplessReciterAudioFileListRetrieval(baseURL: baseURL),
-                                          gappedAudioFileList: GappedReciterAudioFileListRetrieval(quran: Quran.madani),
+        downloader = AudioFilesDownloader(fileListFactory: fileListFactory,
                                           downloader: downloadManager,
                                           ayahDownloader: versesDownloader,
                                           fileSystem: fileSystem)

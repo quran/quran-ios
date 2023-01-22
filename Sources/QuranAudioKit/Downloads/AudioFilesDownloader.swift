@@ -25,8 +25,7 @@ import PromiseKit
 import QuranKit
 
 class AudioFilesDownloader {
-    private let gapplessAudioFileList: ReciterAudioFileListRetrieval
-    private let gappedAudioFileList: ReciterAudioFileListRetrieval
+    private let fileListFactory: ReciterAudioFileListRetrievalFactory
 
     private let downloader: DownloadManager
     private let ayahDownloader: AyahsAudioDownloader
@@ -34,14 +33,12 @@ class AudioFilesDownloader {
 
     private var response: DownloadBatchResponse?
 
-    init(gapplessAudioFileList: ReciterAudioFileListRetrieval,
-         gappedAudioFileList: ReciterAudioFileListRetrieval,
+    init(fileListFactory: ReciterAudioFileListRetrievalFactory,
          downloader: DownloadManager,
          ayahDownloader: AyahsAudioDownloader,
          fileSystem: FileSystem)
     {
-        self.gapplessAudioFileList = gapplessAudioFileList
-        self.gappedAudioFileList = gappedAudioFileList
+        self.fileListFactory = fileListFactory
         self.downloader = downloader
         self.ayahDownloader = ayahDownloader
         self.fileSystem = fileSystem
@@ -99,9 +96,6 @@ class AudioFilesDownloader {
     }
 
     private func getAudioFileList(for reciter: Reciter) -> ReciterAudioFileListRetrieval {
-        switch reciter.audioType {
-        case .gapless: return gapplessAudioFileList
-        case .gapped: return gappedAudioFileList
-        }
+        fileListFactory.fileListRetrievalForReciter(reciter)
     }
 }

@@ -39,14 +39,16 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
                       frameRuns: Runs,
                       requestRuns: Runs) -> Promise<QuranAudioRequest>
     {
-        let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end)
-        let files = urls.map { AudioFile(url: $0, frames: [AudioFrame(startTime: 0, endTime: nil)]) }
+        let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns)
+        let files = urls.map {
+            AudioFile(url: $0, frames: [AudioFrame(startTime: 0, endTime: nil)])
+        }
         let request = AudioRequest(files: files, endTime: nil, frameRuns: frameRuns, requestRuns: requestRuns)
         let quranRequest = GappedAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
         return Promise.value(quranRequest)
     }
 
-    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> (urls: [URL], ayahs: [AyahNumber]) {
+    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [URL], ayahs: [AyahNumber]) {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")
         }
@@ -60,7 +62,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
             let verses = surasDictionary[sura] ?? []
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
-            if sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
+            if (requestRuns == .one || ayahs.isEmpty == false) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
                 urls.append(createRequestInfo(reciter: reciter, verse: start.quran.firstVerse))
                 ayahs.append(verses[0])
             }

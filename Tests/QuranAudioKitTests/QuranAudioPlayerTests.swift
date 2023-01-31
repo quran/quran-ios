@@ -23,24 +23,10 @@ class QuranAudioPlayerTests: XCTestCase {
 
     private let suras = Quran.madani.suras
     private static let baseURL = URL(validURL: "http://example.com")
-    private static let gaplessDatabaseName = "mishari_alafasy"
-    private static let gaplessDatabaseZip = gaplessDatabaseName + ".zip"
-    let request = DownloadRequest(url: baseURL.appendingPathComponent("reciter2/001.mp3"),
-                                  destinationPath: "audio_files/reciter2/001.mp3")
-    private let gappedReciter = Reciter(id: 11,
-                                        nameKey: "reciter1",
-                                        directory: "reciter1",
-                                        audioURL: baseURL.appendingPathComponent("reciter1"),
-                                        audioType: .gapped,
-                                        hasGaplessAlternative: false,
-                                        category: .arabic)
-    private let gaplessReciter = Reciter(id: 22,
-                                         nameKey: "reciter2",
-                                         directory: "reciter2",
-                                         audioURL: baseURL.appendingPathComponent("reciter2"),
-                                         audioType: .gapless(databaseName: gaplessDatabaseName),
-                                         hasGaplessAlternative: false,
-                                         category: .arabic)
+    let request = DownloadRequest(url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
+                                  destinationPath: "audio_files/mishari_alafasy/001.mp3")
+    private let gappedReciter: Reciter = .gappedReciter
+    private let gaplessReciter: Reciter = .gaplessReciter
 
     override func setUpWithError() throws {
         downloader = DownloadManagerFake()
@@ -228,7 +214,7 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     func testDownloadFirstBeforePlaying() throws {
-        try prepareGaplessReciter(gaplessReciter)
+        try gaplessReciter.prepareGaplessReciterForTests()
 
         // start downloading
         let response = startDownloadingGaplessAudio()
@@ -242,7 +228,7 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     func testDownloadingFailedInTheMiddle() throws {
-        try prepareGaplessReciter(gaplessReciter)
+        try gaplessReciter.prepareGaplessReciterForTests()
 
         // start downloading
         let response = startDownloadingGaplessAudio()
@@ -259,7 +245,7 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     func testDownloadingThenCanceling() throws {
-        try prepareGaplessReciter(gaplessReciter)
+        try gaplessReciter.prepareGaplessReciterForTests()
 
         // start downloading
         let response = startDownloadingGaplessAudio()
@@ -376,9 +362,9 @@ class QuranAudioPlayerTests: XCTestCase {
                                               testName: String = #function) throws
     {
         let reciter = gaplessReciter
-        try prepareGaplessReciter(reciter)
+        try reciter.prepareGaplessReciterForTests()
         let directory = reciter.localFolder()
-        let reciterFiles = (files + [Self.gaplessDatabaseZip])
+        let reciterFiles = (files + [reciter.gaplessDatabaseZip])
             .compactMap { directory.appendingPathComponent($0) }
         let reciterFilesSet = Set(reciterFiles)
         fileSystem.files = reciterFilesSet
@@ -397,13 +383,7 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
-    private func prepareGaplessReciter(_ reciter: Reciter) throws {
-        let directory = reciter.localFolder()
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        let dbSource = resource(Self.gaplessDatabaseZip)
-        let dbDesitnation = directory.appendingPathComponent(Self.gaplessDatabaseZip)
-        try FileManager.default.copyItem(at: dbSource, to: dbDesitnation)
-    }
+
 
     private func waitForPlayingToStart(timeout: TimeInterval = 1) {
         waitForDelegateMethod(timeout: timeout) { done in
@@ -415,9 +395,5 @@ class QuranAudioPlayerTests: XCTestCase {
         let delegateExpectation = expectation(description: "delegate")
         block(delegateExpectation.fulfill)
         wait(for: [delegateExpectation], timeout: timeout)
-    }
-
-    private func resource(_ path: String) -> URL {
-        Bundle.module.url(forResource: "test_data/" + path, withExtension: nil)!
     }
 }

@@ -95,7 +95,7 @@ opt_in_rules:
   - override_in_extension
   - pattern_matching_keywords
   #NOT NEEDED - prefer_nimble
-  - prefer_self_in_static_references
+  #NOT NEEDED - prefer_self_in_static_references
   #NOT NEEDED - prefer_self_type_over_type_of_self
   - prefer_zero_over_explicit_init
   #NOT NEEDED - prefixed_toplevel_constant

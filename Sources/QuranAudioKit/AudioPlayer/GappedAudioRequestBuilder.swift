@@ -62,7 +62,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
             let verses = surasDictionary[sura] ?? []
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
-            if (requestRuns == .one || ayahs.isEmpty == false) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
+            if (requestRuns == .one || !ayahs.isEmpty) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
                 urls.append(createRequestInfo(reciter: reciter, verse: start.quran.firstVerse))
                 ayahs.append(verses[0])
             }

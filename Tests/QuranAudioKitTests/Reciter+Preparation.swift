@@ -1,5 +1,5 @@
 //
-//  Reciter+Preperation.swift
+//  Reciter+Preparation.swift
 //  
 //
 //  Created by Mohammad Abdurraafay on 2023-02-11.
@@ -30,10 +30,10 @@ extension Reciter {
         let zipFileExists = FileManager.default.fileExists(atPath: zipDestination.path)
         let dbFileExists = FileManager.default.fileExists(atPath: dbDestination.path)
         
-        if zipFileExists == false {
+        if !zipFileExists {
             try FileManager.default.copyItem(at: dbSource, to: zipDestination)
         }
-        if unZip, dbFileExists == false {
+        if unZip && !dbFileExists {
             try Zip.unzipFile(zipDestination, destination: directory, overwrite: true, password: nil, progress: nil)
         }
     }

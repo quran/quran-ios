@@ -11,7 +11,6 @@ let package = Package(
     products: [
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
-        .library(name: "QuranMadaniData", targets: ["QuranMadaniData"]),
         .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
         .library(name: "Caching", targets: ["Caching"]),
 
@@ -49,7 +48,6 @@ let package = Package(
         ]),
         .testTarget(name: "QuranTextKitTests", dependencies: [
             "QuranTextKit",
-            "QuranMadaniData",
             "SnapshotTesting",
             "TestUtilities",
         ],
@@ -78,11 +76,6 @@ let package = Package(
         ],
         resources: [
             .copy("test_data"),
-        ]),
-
-        .target(name: "QuranMadaniData", dependencies: [], resources: [
-            .process("quran.ar.uthmani.v2.db"),
-            .copy("images_1280"),
         ]),
 
         .target(name: "TranslationService", dependencies: [

@@ -14,7 +14,6 @@ QuranEngine is the engine powering the [Quran.com iOS app](https://itunes.apple.
   - [Libraries](#libraries)
     - [QuranKit](#qurankit)
     - [QuranTextKit](#qurantextkit)
-    - [QuranMadaniData](#quranmadanidata)
     - [QuranAudioKit](#quranaudiokit)
   - [Libraries to Open Source Soon](#libraries-to-open-source-soon)
     - [QuranBookmarkingKit](#quranbookmarkingkit)
@@ -32,10 +31,6 @@ A quranic numbering library. It can be used to locate the page of a verse or juz
 
 ### QuranTextKit
 A quranic text kit to search and retrieve quran, translations and tafseers text.
-
-### QuranMadaniData
-
-The data for the madani Quran.
 
 ### QuranAudioKit
 
@@ -68,7 +63,6 @@ let package = Package(
             dependencies: [
                 .product(name: "QuranKit", package: "QuranEngine"),
                 .product(name: "QuranTextKit", package: "QuranEngine"),
-                .product(name: "QuranMadaniData", package: "QuranEngine"),
                 .product(name: "QuranAudioKit", package: "QuranEngine"),
             ]
         ),

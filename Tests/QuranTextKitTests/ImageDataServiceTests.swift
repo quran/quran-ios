@@ -6,7 +6,6 @@
 //
 
 import QuranKit
-import QuranMadaniData
 @testable import QuranTextKit
 import SnapshotTesting
 import XCTest
@@ -17,8 +16,8 @@ class ImageDataServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         service = ImageDataService(
-            ayahInfoDatabase: QuranMadaniData.ayahInfoDatabase,
-            imagesURL: QuranMadaniData.images
+            ayahInfoDatabase: TestData.resourceURL("ayahinfo.db"),
+            imagesURL: TestData.testDataURL.appendingPathComponent("images")
         )
     }
 

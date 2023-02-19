@@ -28,7 +28,7 @@
 "upgradeTranslationButtonTitle" = "تحديث";
 
 "translationsSelectionTitle" = "اختر التفاسير والتراجم";
-"translationsSelectionPrompt" = "اختار بالترتيب المرغوب فيه";
+"translationsSelectionPrompt" = "اختر بالترتيب المرغوب فيه";
 
 "errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
@@ -131,6 +131,13 @@
 "ayah.menu.delete-highlight" = "حذف التحديد";
 
 "ayah.text.read-more" = "اقرأ المزيد";
+
+// MARK: - Reading Selector
+
+"reading.selector.selectMuhaf.short" = "اختر";
+"reading.selector.selectMuhaf.long" = "اختر هذا المصحف";
+"reading.selector.title" = "اختر المصحف";
+"reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
 
 // MARK: - What's new
 

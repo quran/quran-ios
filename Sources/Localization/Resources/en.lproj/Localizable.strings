@@ -133,6 +133,13 @@
 
 "ayah.text.read-more" = "Read more";
 
+// MARK: - Reading Selector
+
+"reading.selector.selectMuhaf.short" = "Select";
+"reading.selector.selectMuhaf.long" = "Set as current Mushaf";
+"reading.selector.title" = "Choose Mushaf";
+"reading.selector.selection-description" = "Tap on a Mushaf for more information.";
+
 // MARK: - What's new
 
 "new.title" = "What's new";

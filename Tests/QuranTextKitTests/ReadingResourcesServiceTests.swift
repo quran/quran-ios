@@ -1,6 +1,6 @@
 //
 //  ReadingResourcesServiceTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-02-20.
 //
@@ -96,5 +96,4 @@ private class BundleResourceRequestFake: NSBundleResourceRequest {
             }
         }
     }
-
 }

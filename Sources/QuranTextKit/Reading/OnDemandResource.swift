@@ -49,7 +49,7 @@ public final class OnDemandResource {
         }
     }
 
-    // MARK:- KVO
+    // MARK: - KVO
 
     private var progressCancellable: AnyCancellable?
 

@@ -1,6 +1,6 @@
 //
 //  Reciter+Fixture.swift
-//  
+//
 //
 //  Created by Mohammad Abdurraafay on 2023-02-11.
 //
@@ -11,7 +11,7 @@ import Foundation
 extension Reciter {
     private static let baseURL = URL(validURL: "http://example.com")
     private static let gaplessDatabaseName = "mishari_alafasy"
-    
+
     static var gappedReciter: Reciter {
         Reciter(id: 11,
                 nameKey: "reciter1",
@@ -21,7 +21,7 @@ extension Reciter {
                 hasGaplessAlternative: false,
                 category: .arabic)
     }
-    
+
     static var gaplessReciter: Reciter {
         Reciter(id: 22,
                 nameKey: "qari_afasy_gapless",

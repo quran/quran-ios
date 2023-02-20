@@ -1,6 +1,6 @@
 //
 //  XCTestCase+Publisher.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-02-20.
 //
@@ -18,7 +18,7 @@ extension XCTestCase {
         // This time, we use Swift's Result type to keep track
         // of the result of our Combine pipeline:
         var result: Result<T.Output, Error>?
-        let expectation = self.expectation(description: "Awaiting publisher")
+        let expectation = expectation(description: "Awaiting publisher")
 
         let cancellable = publisher.sink(
             receiveCompletion: { completion in

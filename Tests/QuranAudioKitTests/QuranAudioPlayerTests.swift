@@ -383,8 +383,6 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
-
-
     private func waitForPlayingToStart(timeout: TimeInterval = 1) {
         waitForDelegateMethod(timeout: timeout) { done in
             delegate.onPlayingStartedBlock = { done() }

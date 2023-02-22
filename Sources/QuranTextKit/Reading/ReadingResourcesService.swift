@@ -23,8 +23,8 @@ public class ReadingResourcesService {
     private var resource: OnDemandResource?
 
     private var resourceCancellable: AnyCancellable?
-    private let subject = CurrentValueSubject<ResourceStatus?, Error>(nil)
-    public var publisher: AnyPublisher<ResourceStatus, Error> {
+    private let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
+    public var publisher: AnyPublisher<ResourceStatus, Never> {
         subject
             .compactMap { $0 }
             .eraseToAnyPublisher()

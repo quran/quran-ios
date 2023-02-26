@@ -31,9 +31,9 @@ public struct AyahsAudioDownloader {
         self.fileListFactory = fileListFactory
     }
 
-    public init(baseURL: URL, downloader: DownloadManager) {
+    public init(baseURL: URL, downloader: DownloadManager, quran: Quran) {
         self.downloader = downloader
-        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
+        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: quran, baseURL: baseURL)
     }
 
     public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) -> Promise<DownloadBatchResponse> {

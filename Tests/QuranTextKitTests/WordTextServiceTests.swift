@@ -11,7 +11,7 @@ import XCTest
 
 class WordTextServiceTests: XCTestCase {
     private var service: WordTextService!
-    private let word = Word(verse: AyahNumber(quran: Quran.madani, sura: 110, ayah: 3)!, wordNumber: 3)
+    private let word = Word(verse: AyahNumber(quran: Quran.hafsMadani1405, sura: 110, ayah: 3)!, wordNumber: 3)
     private let preferences = QuranContentStatePreferences.shared
 
     override func setUpWithError() throws {

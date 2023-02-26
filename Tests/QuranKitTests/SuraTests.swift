@@ -9,7 +9,7 @@
 import XCTest
 
 final class SuraTests: XCTestCase {
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     func testSuras() throws {
         let suras = quran.suras

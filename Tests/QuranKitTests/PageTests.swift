@@ -9,7 +9,7 @@
 import XCTest
 
 final class PageTests: XCTestCase {
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     func testPages() throws {
         let pages = quran.pages

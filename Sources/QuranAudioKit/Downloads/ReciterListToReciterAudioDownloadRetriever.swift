@@ -32,9 +32,9 @@ public struct ReciterListToReciterAudioDownloadRetriever {
     let fileListFactory: ReciterAudioFileListRetrievalFactory
     let quran: Quran
 
-    public init(baseURL: URL) {
-        quran = Quran.madani
-        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: Quran.madani, baseURL: baseURL)
+    public init(baseURL: URL, quran: Quran) {
+        self.quran = quran
+        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: quran, baseURL: baseURL)
     }
 
     public func getReciterAudioDownloads(for reciters: [Reciter]) -> Guarantee<[ReciterAudioDownload]> {

@@ -9,7 +9,7 @@
 import XCTest
 
 final class AyahNumberTests: XCTestCase {
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     func testVerses() throws {
         let verses = quran.verses

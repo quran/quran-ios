@@ -15,7 +15,7 @@ final class QuranTextDataServiceTests: XCTestCase {
     // swiftlint:disable implicitly_unwrapped_optional
     private var textService: QuranTextDataService!
     private var mockTranslationsRetriever: LocalTranslationsRetrieverMock!
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     private let translations = [
         TestData.khanTranslation,

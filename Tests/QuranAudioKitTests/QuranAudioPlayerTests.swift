@@ -21,7 +21,8 @@ class QuranAudioPlayerTests: XCTestCase {
     private var fileSystem: FileSystemFake!
     private var delegate: QuranAudioPlayerDelegateClosures!
 
-    private let suras = Quran.madani.suras
+    private let quran = Quran.hafsMadani1405
+    private let suras = Quran.hafsMadani1405.suras
     private static let baseURL = URL(validURL: "http://example.com")
     let request = DownloadRequest(url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
                                   destinationPath: "audio_files/mishari_alafasy/001.mp3")
@@ -38,7 +39,8 @@ class QuranAudioPlayerTests: XCTestCase {
             baseURL: Self.baseURL,
             downloadManager: downloader,
             player: queuePlayer,
-            fileSystem: fileSystem
+            fileSystem: fileSystem,
+            quran: quran
         )
         player.delegate = delegate
     }
@@ -201,7 +203,7 @@ class QuranAudioPlayerTests: XCTestCase {
             let playerItem = AVPlayerItem(url: FileManager.documentsURL)
             let frameChange = frameChanges[i]
             queuePlayer.delegate?.onAudioFrameChanged(fileIndex: frameChange.file, frameIndex: frameChange.frame, playerItem: playerItem)
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: .madani, sura: 1, ayah: 3)!)])
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
             queuePlayer.delegate?.onPlaybackEnded()

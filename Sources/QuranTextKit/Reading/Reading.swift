@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-02-14.
 //
 
+import QuranKit
 import Foundation
 
 public enum Reading: Int, CaseIterable {
@@ -15,6 +16,15 @@ public enum Reading: Int, CaseIterable {
         switch self {
         case .hafs_1405: return "hafs_1405"
         case .hafs_1440: return "hafs_1440"
+        }
+    }
+
+    public var quran: Quran {
+        switch self {
+        case .hafs_1405:
+            return .hafsMadani1405
+        case .hafs_1440:
+            return .hafsMadani1405
         }
     }
 }

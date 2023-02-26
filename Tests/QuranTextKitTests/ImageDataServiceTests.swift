@@ -12,7 +12,7 @@ import XCTest
 
 class ImageDataServiceTests: XCTestCase {
     var service: ImageDataService!
-    let quran = Quran.madani
+    let quran = Quran.hafsMadani1405
 
     override func setUpWithError() throws {
         service = ImageDataService(

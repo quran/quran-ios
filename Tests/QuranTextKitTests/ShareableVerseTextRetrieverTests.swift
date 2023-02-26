@@ -17,7 +17,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
     private var shareableTextRetriever: ShareableVerseTextRetriever!
     private var textService: QuranTextDataService!
     private var mockTranslationsRetriever: LocalTranslationsRetrieverMock!
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
     private let statePreferences = QuranContentStatePreferences.shared
 
     private let translations = [

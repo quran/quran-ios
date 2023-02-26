@@ -13,6 +13,7 @@ import XCTest
 class GappedAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!
     private var reciter: Reciter!
+    private let quran = Quran.hafsMadani1405
 
     override func setUpWithError() throws {
         reciter = .gappedReciter
@@ -26,8 +27,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
 
     func testAudioRequestContainsBismillahWhenThePlaybackIsNotRepeated() throws {
         let expectation = expectation(description: "waiting for promise to fulfill")
-        let from = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: Quran.madani.suras[1].firstVerse.ayah))
-        let to = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: Quran.madani.suras[1].firstVerse.ayah))
+        let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
+        let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
         _ = audioRequestBuilder.buildRequest(
             with: reciter,
@@ -52,8 +53,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
 
     func testAudioRequestDoesNotContainsBismillahWhenThePlaybackIsRepeated() throws {
         let expectation = expectation(description: "waiting for promise to fulfill")
-        let from = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: Quran.madani.suras[1].firstVerse.ayah))
-        let to = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: Quran.madani.suras[1].firstVerse.ayah))
+        let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
+        let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
         _ = audioRequestBuilder.buildRequest(
             with: reciter,
@@ -78,8 +79,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
 
     func testAudioRequestContainsBismillahIfTheRepeatIsInContinuationFromPreviousSura() throws {
         let expectation = expectation(description: "waiting for promise to fulfill")
-        let from = try XCTUnwrap(AyahNumber(sura: Quran.madani.firstSura, ayah: Quran.madani.firstSura.lastVerse.ayah))
-        let to = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: Quran.madani.suras[1].firstVerse.ayah))
+        let from = try XCTUnwrap(AyahNumber(sura: quran.firstSura, ayah: quran.firstSura.lastVerse.ayah))
+        let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
         _ = audioRequestBuilder.buildRequest(
             with: reciter,

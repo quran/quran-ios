@@ -13,7 +13,7 @@ import XCTest
 class CompositeSearcherTests: XCTestCase {
     private var searcher: CompositeSearcher!
     private var translationsRetriever: LocalTranslationsRetrieverMock!
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     private let translations = [
         TestData.khanTranslation,

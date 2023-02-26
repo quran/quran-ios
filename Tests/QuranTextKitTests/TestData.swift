@@ -57,24 +57,26 @@ struct TestData {
     }
 }
 
+private let quran = Quran.hafsMadani1405
+
 private let quranText: [AyahNumber: String] = [
-    Quran.madani.suras[0].verses[0]: "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
-    Quran.madani.suras[0].verses[1]: "ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ",
-    Quran.madani.suras[0].verses[5]: "ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ",
-    Quran.madani.suras[0].verses[2]: "ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
-    Quran.madani.suras[1].verses[0]: "الٓمٓ",
+    quran.suras[0].verses[0]: "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+    quran.suras[0].verses[1]: "ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ",
+    quran.suras[0].verses[5]: "ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ",
+    quran.suras[0].verses[2]: "ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+    quran.suras[1].verses[0]: "الٓمٓ",
 ]
 
 private let translationText: [Translation: [AyahNumber: String]] = [
     TestData.khanTranslation: [
-        Quran.madani.suras[0].verses[0]: "In the Name of Allah, the Most Beneficent, the Most Merciful.",
-        Quran.madani.suras[0].verses[1]: "All the praises and thanks be to Allah, the Lord of the 'Alamin (mankind, jinns and all that exists).",
-        Quran.madani.suras[0].verses[2]: "The Most Beneficent, the Most Merciful.",
-        Quran.madani.suras[0].verses[5]: "Guide us to the Straight Way.  {ABC} [[Footer1]] {DE} [[Footer2]] FG",
+        quran.suras[0].verses[0]: "In the Name of Allah, the Most Beneficent, the Most Merciful.",
+        quran.suras[0].verses[1]: "All the praises and thanks be to Allah, the Lord of the 'Alamin (mankind, jinns and all that exists).",
+        quran.suras[0].verses[2]: "The Most Beneficent, the Most Merciful.",
+        quran.suras[0].verses[5]: "Guide us to the Straight Way.  {ABC} [[Footer1]] {DE} [[Footer2]] FG",
     ],
     TestData.sahihTranslation: [
-        Quran.madani.suras[0].verses[0]: "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
-        Quran.madani.suras[0].verses[1]: "[All] praise is [due] to Allah, Lord of the worlds -",
-        Quran.madani.suras[0].verses[2]: "The Entirely Merciful, the Especially Merciful,",
+        quran.suras[0].verses[0]: "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
+        quran.suras[0].verses[1]: "[All] praise is [due] to Allah, Lord of the worlds -",
+        quran.suras[0].verses[2]: "The Entirely Merciful, the Especially Merciful,",
     ],
 ]

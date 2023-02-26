@@ -23,8 +23,8 @@ public struct QuranTextDataService {
     // regex to detect footer notes in translation text
     private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
-    public init(databasesPath: String, quranFileURL: URL) {
-        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: Quran.madani, fileURL: quranFileURL))
+    public init(databasesPath: String, quranFileURL: URL, quran: Quran) {
+        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: quran, fileURL: quranFileURL))
     }
 
     init(databasesPath: String, arabicPersistence: VerseTextPersistence) {

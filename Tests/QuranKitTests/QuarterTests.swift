@@ -9,7 +9,7 @@
 import XCTest
 
 final class QuarterTests: XCTestCase {
-    private let quran = Quran.madani
+    private let quran = Quran.hafsMadani1405
 
     func testQuarters() throws {
         let quarters = quran.quarters

@@ -31,7 +31,7 @@ struct DefaultReciterAudioFileListRetrievalFactory: ReciterAudioFileListRetrieva
 
     func fileListRetrievalForReciter(_ reciter: Reciter) -> ReciterAudioFileListRetrieval {
         switch reciter.audioType {
-        case .gapped: return GappedReciterAudioFileListRetrieval(quran: Quran.madani)
+        case .gapped: return GappedReciterAudioFileListRetrieval(quran: quran)
         case .gapless: return GaplessReciterAudioFileListRetrieval(baseURL: baseURL)
         }
     }

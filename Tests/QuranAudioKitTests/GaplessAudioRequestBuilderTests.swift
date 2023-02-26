@@ -13,6 +13,7 @@ import XCTest
 class GaplessAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!
     private var reciter: Reciter!
+    private let quran = Quran.hafsMadani1405
 
     override func setUpWithError() throws {
         reciter = .gaplessReciter
@@ -29,8 +30,8 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
 
     func testAudioFrameStartingFromZeroSecondsWhenThePlaybackIsNotRepeated() throws {
         let expectation = expectation(description: "waiting for promise to fulfill")
-        let from = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: 1))
-        let to = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: 2))
+        let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 1))
+        let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 2))
 
         _ = audioRequestBuilder.buildRequest(
             with: reciter,
@@ -52,8 +53,8 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
 
     func testAudioFrameIsNotStartingFromZeroSecondsWhenThePlaybackIsRepeated() throws {
         let expectation = expectation(description: "waiting for promise to fulfill")
-        let from = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: 1))
-        let to = try XCTUnwrap(AyahNumber(sura: Quran.madani.suras[1], ayah: 2))
+        let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 1))
+        let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 2))
 
         _ = audioRequestBuilder.buildRequest(
             with: reciter,

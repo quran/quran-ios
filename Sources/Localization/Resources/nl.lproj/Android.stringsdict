@@ -65,5 +65,53 @@
                 <string>%d items verwijderd</string>
             </dict>
         </dict>
+   <key>plural_recent_pages</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@plural_recent_pages@</string>
+            <key>plural_recent_pages</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Laatste pagina</string>
+                <key>other</key>
+                <string>Recente pagina's</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_success</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_success@</string>
+            <key>audio_manager_delete_surah_success</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>De soera is succesvol verwijderd</string>
+                <key>other</key>
+                <string>%1$d soera's succesvol verwijderd</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_error</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_error@</string>
+            <key>audio_manager_delete_surah_error</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Er is een fout opgetreden bij het verwijderen van de soera</string>
+                <key>other</key>
+                <string>Er is een fout opgetreden bij het verwijderen van %1$d soera's</string>
+            </dict>
+        </dict>
     </dict>
 </plist>

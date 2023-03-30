@@ -1,6 +1,13 @@
 /*
- New Localizations in Quran for iOS. TODO: need to be reviewed by a native speaker.
+ New Localizations in Quran for iOS
  */
+
+// MARK: - General
+
+"button.done" = "Klaar";
+"button.delete" = "Verwijderen";
+
+// MARK: - Errors
 
 "NetworkError_ConnectionLost" = "Internet verbinding is verbroken. Ga naar een locatie waar een meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug tot stand is gekomen.";
 "NetworkError_InternationalRoamingOff" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
@@ -12,6 +19,148 @@
 "FileSystemError_Unknown" = "Er is een onbekende fout opgetreden bij het toetreden van de hardeschijf van het toestel.";
 "FileSystemError_NoDiskSpace" = "Er is geen opslagruimte meer beschikbaar. Downloaden mislukt.";
 
+// MARK: - Quran
+
+"ayah" = "Ayah";
+"surah" = "Soera";
+
+
+"translatorLabel: " = "Vertaler: ";
+"upgradeTranslationButtonTitle" = "BIJWERKEN";
+
+"translationsSelectionTitle" = "Selecteer Vertalingen/Tafseer";
+"translationsSelectionPrompt" = "Selecteer in de volgorde waarin u ze wilt zien";
+
+"errorInTranslationText" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
+"noAvailableTranslationText" = "Er is geen vertaling beschikbaar voor deze ayah.";
+"referenceVerseTranslationText" = "Zie ayah %d.";
+
+// MARK: - Search
+
+"searchRecentsTitle" = "Recente zoekopdrachten";
+"searchPopularTitle" = "Probeer te zoeken met";
+"searchPlaceholder" = "Soera, vers, vertaling, tafseer en nummers";
+"searchResultTitle" = "%@ (%d)";
+
+"translationTextType" = "Vertaling";
+"transliterationTextType" = "Transliteratie";
+
+"write_review" = "Schrijf een app store-recensie...";
+"contact_us" = "Contacteer ons";
+"share_app" = "Deel de app...";
+"app_version" = "App Versie";
+
+"menu.arabic" = "Arabisch";
+"menu.translation" = "Vertaling/Tafseer";
+"menu.select_translation" = "Selecteer vertalingen/tafseer";
+"menu.pointer" = "Aanwijzer voor woordvertaling";
+"menu.pointer.select_translation" = "Aanwijzer weergegeven";
+"menu.fontSizeLetter" = "A";
+"menu.translationFontSize" = "Vertaalgrootte";
+"menu.arabicFontSize" = "Koran Grootte";
+"menu.twoPages" = "2 pagina's naast elkaar (liggend)";
+"menu.verticalScrolling" = "Verticaal scrollen";
+
+
+"tab.notes" = "Notities";
+
+"shareMarketingSuffix" = "-\nQuran - door Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+
+"repetitionExperimentalSuffix" = "   (Experimenteel)";
+
+"update.dark-theme.title" = "Donker Thema";
+"update.dark-theme.desc" = "Onlangs hebben we een donker thema toegevoegd. Wilt u deze inschakelen?";
+"update.dark-theme.turnOn" = "Schakel in";
+
+"update.filesystem.title" = "Databases bijwerken...";
+
+"theme.light" = "Licht";
+"theme.dark" = "Donker";
+"theme.auto" = "Auto";
+"theme.auto.message" = "De Koran-app houdt zich aan de weergave-instelling van uw iPhone";
+
+"reciters.title" = "Selecteer de reciteerder om naar te luisteren";
+"reciters.recent" = "Recent";
+"reciters.downloaded" = "Gedownload";
+"reciters.all" = "Alle";
+
+// MARK: - Audio
+
+"audio.playing.action.modify" = "Wijzigen";
+"audio.playing.message" = "Audio afspelen van %@ tot %@";
+"audio.downloading.message" = "Audio downloaden van %@ tot %@";
+
+"audio.playing-verses.label" = "Verzen Afgespeeld";
+"audio.adjust-end-verse-to-the-end.label" = "Pas het eindvers aan het einde van de";
+
+"audio.select-start-verse" = "Selecteer Beginvers";
+"audio.select-end-verse" = "Selecteer Eindvers";
+
+"audio.download-play-amount" = "Downloaden/Afspelen tot";
+"audio.download-play-amount.description" = "Bij het afspelen van audio wordt deze afgespeeld tot het einde van de";
+
+// MARK: - Bookmarks
+
+"bookmarks.no-data.title" = "Bladwijzers toevoegen...";
+"bookmarks.no-data.text" = "Tik tijdens het lezen van de Koran op de knop Bladwijzer om de huidige pagina te markeren.";
+
+// MARK: - Notes
+
+"notes.no-data.title" = "Ayah-hoogtepunten toevoegen...";
+"notes.no-data.text" = "Tik op een Ayah en houd deze vast. U kunt de selectie uitbreiden om meerdere Ayat op te nemen en tik vervolgens op de bladwijzerknop.";
+"notes.verses-count" = "(+%d ayat)";
+"notes.delete.alert.title" = "Hoogtepunt verwijderen";
+"notes.delete.alert.body" = "De bijbehorende notitie zal ook worden verwijderd.";
+"notes.icloud.alert.title" = "iCloud-synchronisatie";
+"notes.icloud.alert.body" = "De app gebruikt iCloud om bladwijzers en notities op al je apparaten te synchroniseren. U kunt het uitschakelen via de iCloud-instellingen van uw apparaat.";
+
+// MARK: - Ayah Menu
+
 "ayah.menu.copy" = "Kopieer";
-"ayah.menu.share" = "Delen…";
+"ayah.menu.share" = "Deel...";
+"ayah.menu.play-end-juz" = "tot het einde van Juz'";
+"ayah.menu.play-end-surah" = "tot het einde van Soera";
+"ayah.menu.play-end-page" = "tot het einde van Pagina";
 "ayah.menu.repeat" = "Herhaal";
+"ayah.menu.selected-verse" = "geselecteerd vers";
+"ayah.menu.selected-verses" = "geselecteerde verzen";
+"ayah.menu.highlight" = "Markeer";
+"ayah.menu.highlight-select-color" = "selecteer kleur";
+"ayah.menu.add-note" = "Voeg Notitie Toe";
+"ayah.menu.edit-note" = "Bewerk Notitie";
+"ayah.menu.delete-note" = "Verwijder Notitie";
+"ayah.menu.delete-highlight" = "Verwijder Hoogtepunt";
+
+"ayah.text.read-more" = "Lees Meer";
+
+// MARK: - Reading Selector
+
+"reading.selector.selectMuhaf.short" = "Selecteer";
+"reading.selector.selectMuhaf.long" = "Stel in als huidige Mushaf";
+"reading.selector.title" = "Kies Musaf";
+"reading.selector.selection-description" = "Tik op een Mushaf voor meer informatie.";
+
+"reading.hafs-1405.title" = "Hafs, klassieke Madina, 1405 AH";
+"reading.hafs-1405.description" = "De klassieke hafs Muhaf, uitgegeven in Madina in 1405 Hijri. De app bood deze versie lange tijd aan.\nUit het King Fahd Quran Printing Complex.";
+"reading.hafs-1405.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\nWoord-voor-woord vertaling";
+
+"reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
+"reading.hafs-1440.description" = "De hafs Muhaf uitgegeven in Medina in 1440 Hijri. Van het King Fahd Quran Printing Complex.";
+"reading.hafs-1440.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\nWoord-voor-woord vertaling";
+
+// MARK: - What's new
+
+"new.title" = "Wat is er nieuw";
+"new.action" = "Ga verder";
+
+"new.reciters" = "Nieuwe Reciteurs";
+"new.reciters.details" = "* %%Readers:qari_muhammad_rashad_shereef_gapless%%\n* %%Readers:qari_wadee3_alyamani_gapless%%";
+
+"new.translations" = "Vertalingen & Tafseers";
+"new.translations.details" = "* Tik lang op een vers om te zien %%Localizable:menu.translation%% voor een enkele Ayah op Arabische weergave.";
+
+"new.quran-ui" = "Quran UI";
+"new.quran-ui.details" = "* Herhaal Ayah-menu-item, om geselecteerde ayah of ayat te herhalen.\n* Ondersteuning van 2 pagina's in landschap voor iPads, iPhone Max en iPhone Plus-apparaten.\n* Pagina linker- en rechterrand.\n* Extra lettergroottes voor vertaal-UI.";
+
+"new.reciters-selection" = "Selectie van Reciteur";
+"new.reciters-selection.details" = "* Sectie die de laatste 3 recente reciteurs laat zien.\n* Sectie voor gedownloade reciteurs.";

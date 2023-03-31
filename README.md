@@ -27,7 +27,7 @@ QuranEngine is the engine powering the [Quran.com iOS app](https://itunes.apple.
 We have currently open sourced the following libraries:
 
 ### QuranKit
-A quranic numbering library. It can be used to locate the page of a verse or juz' of a page, etc.
+A quranic numbering library. It can be used to locate the page of a verse or juzʾ of a page, etc.
 
 ### QuranTextKit
 A quranic text kit to search and retrieve quran, translations and tafseers text.

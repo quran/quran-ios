@@ -10,7 +10,8 @@ import Foundation
 public final class Quran: Hashable {
     private let id = UUID()
     let raw: QuranReadingInfoRawData
-    public static let hafsMadani1405 = Quran(raw: MadaniQuranReadingInfoRawData())
+    public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())
+    public static let hafsMadani1440 = Quran(raw: Madani1440QuranReadingInfoRawData())
 
     init(raw: QuranReadingInfoRawData) {
         self.raw = raw

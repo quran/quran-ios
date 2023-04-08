@@ -1,12 +1,12 @@
 //
-//  MadaniQuranReadingInfoRawData.swift
+//  Madani1405QuranReadingInfoRawData.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 3/22/20.
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-struct MadaniQuranReadingInfoRawData: QuranReadingInfoRawData {
+struct Madani1405QuranReadingInfoRawData: QuranReadingInfoRawData {
     var arabicBesmAllah: String { "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ" }
 
     var startPageOfSura: [Int] {

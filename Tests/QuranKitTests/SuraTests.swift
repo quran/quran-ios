@@ -82,14 +82,14 @@ final class SuraTests: XCTestCase {
 
     func testSurasPagesTime() {
         measure {
-            let quran = Quran(raw: MadaniQuranReadingInfoRawData())
+            let quran = Quran(raw: Madani1405QuranReadingInfoRawData())
             let suras = quran.suras
             _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
         }
     }
 
     func testSurasPagesCachedTime() {
-        let quran = Quran(raw: MadaniQuranReadingInfoRawData())
+        let quran = Quran(raw: Madani1405QuranReadingInfoRawData())
         let suras = quran.suras
         _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
 

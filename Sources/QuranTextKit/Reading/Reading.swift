@@ -24,7 +24,7 @@ public enum Reading: Int, CaseIterable {
         case .hafs_1405:
             return .hafsMadani1405
         case .hafs_1440:
-            return .hafsMadani1405
+            return .hafsMadani1440
         }
     }
 }

@@ -29,9 +29,9 @@ struct TestData {
                                               version: 1,
                                               installedVersion: 1)
 
-    static let translationsPersistenceBuilder = { (translation: Translation, quran: Quran) -> TranslationVerseTextPersistence in
+    static let translationsPersistenceBuilder = { (translation: Translation) -> TranslationVerseTextPersistence in
         let url = resourceURL(translation.fileName)
-        return SQLiteTranslationVerseTextPersistence(fileURL: url, quran: quran)
+        return SQLiteTranslationVerseTextPersistence(fileURL: url)
     }
 
     static let quranTextURL = TestData.resourceURL("quran.ar.uthmani.v2.db")

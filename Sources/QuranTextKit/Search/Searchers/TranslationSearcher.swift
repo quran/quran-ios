@@ -12,8 +12,7 @@ import TranslationService
 
 struct TranslationSearcher: AsyncSearcher {
     let localTranslationRetriever: LocalTranslationsRetriever
-    let versePersistenceBuilder: (Translation, Quran) -> SearchableTextPersistence
-    let quran: Quran
+    let versePersistenceBuilder: (Translation) -> SearchableTextPersistence
 
     private func getLocalTranslations() -> Promise<[Translation]> {
         localTranslationRetriever
@@ -21,13 +20,13 @@ struct TranslationSearcher: AsyncSearcher {
             .map { $0.filter(\.isDownloaded) }
     }
 
-    func autocomplete(term: String) -> Promise<[SearchAutocompletion]> {
+    func autocomplete(term: String, quran: Quran) -> Promise<[SearchAutocompletion]> {
         getLocalTranslations()
             .map { translations -> [SearchAutocompletion] in
                 for translation in translations {
-                    let persistence = self.versePersistenceBuilder(translation, quran)
+                    let persistence = self.versePersistenceBuilder(translation)
                     let persistenceSearcher = PersistenceSearcher(versePersistence: persistence, source: .translation(translation))
-                    let results = try persistenceSearcher.autocomplete(term: term)
+                    let results = try persistenceSearcher.autocomplete(term: term, quran: quran)
                     if !results.isEmpty {
                         return results
                     }
@@ -36,13 +35,13 @@ struct TranslationSearcher: AsyncSearcher {
             }
     }
 
-    func search(for term: String) -> Promise<[SearchResults]> {
+    func search(for term: String, quran: Quran) -> Promise<[SearchResults]> {
         getLocalTranslations()
             .map { translations -> [SearchResults] in
                 let results = try translations.map { translation -> [SearchResults] in
-                    let persistence = self.versePersistenceBuilder(translation, quran)
+                    let persistence = self.versePersistenceBuilder(translation)
                     let persistenceSearcher = PersistenceSearcher(versePersistence: persistence, source: .translation(translation))
-                    let results = try persistenceSearcher.search(for: term)
+                    let results = try persistenceSearcher.search(for: term, quran: quran)
                     return results
                 }
                 return results.flatMap { $0 }

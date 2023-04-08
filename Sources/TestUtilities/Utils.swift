@@ -9,7 +9,9 @@ import PromiseKit
 import XCTest
 
 extension XCTestCase {
-    public func wait<Future: Thenable>(for promise: Future, timeout: TimeInterval = 1, file: StaticString = #filePath, line: UInt = #line) throws -> Future.T {
+    public static let defaultTimeout: TimeInterval = 5
+
+    public func wait<Future: Thenable>(for promise: Future, timeout: TimeInterval = defaultTimeout, file: StaticString = #filePath, line: UInt = #line) throws -> Future.T {
         let expectation = expectation(description: "promise")
         var result: Swift.Result<Future.T, Error>?
         promise.done { value in
@@ -25,7 +27,7 @@ extension XCTestCase {
         return try unboxedResult.get()
     }
 
-    public func wait(for queue: OperationQueue, timeout: TimeInterval = 1) {
+    public func wait(for queue: OperationQueue, timeout: TimeInterval = defaultTimeout) {
         if queue.operationCount == 0 {
             return
         }
@@ -37,7 +39,7 @@ extension XCTestCase {
     }
 
     @nonobjc
-    public func wait(for queue: DispatchQueue, timeout: TimeInterval = 1) {
+    public func wait(for queue: DispatchQueue, timeout: TimeInterval = defaultTimeout) {
         let expectation = expectation(description: "DispatchQueue")
         queue.async(flags: .barrier) {
             expectation.fulfill()

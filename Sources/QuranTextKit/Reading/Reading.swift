@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-02-14.
 //
 
-import QuranKit
 import Foundation
+import QuranKit
 
 public enum Reading: Int, CaseIterable {
     case hafs_1405 = 0

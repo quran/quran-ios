@@ -15,7 +15,7 @@ import TranslationService
 public struct QuranTextDataService {
     let localTranslationRetriever: LocalTranslationsRetriever
     let arabicPersistence: VerseTextPersistence
-    let translationsPersistenceBuilder: (Translation, Quran) -> TranslationVerseTextPersistence
+    let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     // regex to detect quran text in translation text
@@ -23,21 +23,21 @@ public struct QuranTextDataService {
     // regex to detect footer notes in translation text
     private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
-    public init(databasesPath: String, quranFileURL: URL, quran: Quran) {
-        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(quran: quran, fileURL: quranFileURL))
+    public init(databasesPath: String, quranFileURL: URL) {
+        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(fileURL: quranFileURL))
     }
 
     init(databasesPath: String, arabicPersistence: VerseTextPersistence) {
         self.init(localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath),
                   arabicPersistence: arabicPersistence,
-                  translationsPersistenceBuilder: { translation, quran in
-                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL, quran: quran)
+                  translationsPersistenceBuilder: { translation in
+                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL)
                   })
     }
 
     init(localTranslationRetriever: LocalTranslationsRetriever,
          arabicPersistence: VerseTextPersistence,
-         translationsPersistenceBuilder: @escaping (Translation, Quran) -> TranslationVerseTextPersistence)
+         translationsPersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence)
     {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
@@ -116,7 +116,7 @@ public struct QuranTextDataService {
 
     private func fetchTranslation(verses: [AyahNumber], translation: Translation) -> Promise<(Translation, [TranslationText])> {
         DispatchQueue.global().async(.promise) {
-            let translationPersistence = self.translationsPersistenceBuilder(translation, verses[0].quran)
+            let translationPersistence = self.translationsPersistenceBuilder(translation)
 
             var verseTextList: [TranslationText] = []
             do {

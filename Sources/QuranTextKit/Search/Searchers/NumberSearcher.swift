@@ -15,40 +15,39 @@ struct NumberSearcher: Searcher {
         return formatter
     }()
 
-    let quran: Quran
     let quranVerseTextPersistence: VerseTextPersistence
     private let resultsProcessor = SearchResultsProcessor()
 
-    func autocomplete(term: String) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
         if Int(term) != nil {
             return resultsProcessor.buildAutocompletions(searchResults: [term], term: term)
         }
         return []
     }
 
-    func search(for term: String) throws -> [SearchResults] {
-        let items: [SearchResult] = try search(for: term)
+    func search(for term: String, quran: Quran) throws -> [SearchResults] {
+        let items: [SearchResult] = try search(for: term, quran: quran)
         return [SearchResults(source: .quran, items: items)]
     }
 
-    private func search(for term: String) throws -> [SearchResult] {
+    private func search(for term: String, quran: Quran) throws -> [SearchResult] {
         let components = parseIntArray(term)
         guard !components.isEmpty else {
             return []
         }
         if components.count == 2 {
-            return [try parseVerseResult(sura: components[0], verse: components[1])].compactMap { $0 }
+            return [try parseVerseResult(sura: components[0], verse: components[1], quran: quran)].compactMap { $0 }
         } else {
             return [
-                parseSuraResult(sura: components[0]),
-                parseJuzResult(juz: components[0]),
-                parseHizbResult(hizb: components[0]),
-                parsePageResult(page: components[0]),
+                parseSuraResult(sura: components[0], quran: quran),
+                parseJuzResult(juz: components[0], quran: quran),
+                parseHizbResult(hizb: components[0], quran: quran),
+                parsePageResult(page: components[0], quran: quran),
             ].compactMap { $0 }
         }
     }
 
-    private func parseVerseResult(sura: Int, verse: Int) throws -> SearchResult? {
+    private func parseVerseResult(sura: Int, verse: Int, quran: Quran) throws -> SearchResult? {
         guard let verse = quran.verses.first(where: { $0.sura.suraNumber == sura && $0.ayah == verse }) else {
             return nil
         }
@@ -56,28 +55,28 @@ struct NumberSearcher: Searcher {
         return SearchResult(text: ayahText, ayah: verse)
     }
 
-    private func parseSuraResult(sura: Int) -> SearchResult? {
+    private func parseSuraResult(sura: Int, quran: Quran) -> SearchResult? {
         guard let sura = quran.suras.first(where: { $0.suraNumber == sura }) else {
             return nil
         }
         return SearchResult(text: sura.localizedName(withPrefix: true), ayah: sura.firstVerse)
     }
 
-    private func parsePageResult(page: Int) -> SearchResult? {
+    private func parsePageResult(page: Int, quran: Quran) -> SearchResult? {
         guard let page = quran.pages.first(where: { $0.pageNumber == page }) else {
             return nil
         }
         return SearchResult(text: page.localizedName, ayah: page.firstVerse)
     }
 
-    private func parseJuzResult(juz: Int) -> SearchResult? {
+    private func parseJuzResult(juz: Int, quran: Quran) -> SearchResult? {
         guard let juz = quran.juzs.first(where: { $0.juzNumber == juz }) else {
             return nil
         }
         return SearchResult(text: juz.localizedName, ayah: juz.firstVerse)
     }
 
-    private func parseHizbResult(hizb: Int) -> SearchResult? {
+    private func parseHizbResult(hizb: Int, quran: Quran) -> SearchResult? {
         guard let hizb = quran.hizbs.first(where: { $0.hizbNumber == hizb }) else {
             return nil
         }

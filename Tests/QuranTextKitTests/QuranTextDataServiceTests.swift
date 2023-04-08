@@ -25,7 +25,7 @@ final class QuranTextDataServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockTranslationsRetriever = LocalTranslationsRetrieverMock()
-        let persistence = SQLiteQuranVerseTextPersistence(quran: quran, mode: .arabic, fileURL: TestData.quranTextURL)
+        let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
         textService = QuranTextDataService(localTranslationRetriever: mockTranslationsRetriever,
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)

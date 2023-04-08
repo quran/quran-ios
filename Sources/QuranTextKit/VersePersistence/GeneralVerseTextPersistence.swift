@@ -20,11 +20,10 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
 
     let filePath: String
     let table: Table
-    let quran: Quran
 
     private let searchTable = Table("verses")
 
-    func textForVerse<T>(_ verse: AyahNumber, transform: (Row) throws -> T) throws -> T {
+    func textForVerse<T>(_ verse: AyahNumber, transform: (Row, Quran) throws -> T) throws -> T {
         try run { connection in
             if let text = try textForVerse(verse, connection: connection, transform: transform) {
                 return text
@@ -33,7 +32,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         }
     }
 
-    func textForVerses<T>(_ verses: [AyahNumber], transform: (Row) throws -> T) throws -> [AyahNumber: T] {
+    func textForVerses<T>(_ verses: [AyahNumber], transform: (Row, Quran) throws -> T) throws -> [AyahNumber: T] {
         try run { connection in
             var dictionary: [AyahNumber: T] = [:]
             for verse in verses {
@@ -43,7 +42,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         }
     }
 
-    private func textForVerse<T>(_ verse: AyahNumber, connection: Connection, transform: (Row) throws -> T) throws -> T? {
+    private func textForVerse<T>(_ verse: AyahNumber, connection: Connection, transform: (Row, Quran) throws -> T) throws -> T? {
         let query = table
             .select(Columns.text)
             .filter((Columns.sura == verse.sura.suraNumber || Columns.suraStr == String(verse.sura.suraNumber)) &&
@@ -52,7 +51,7 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         guard let first = rows.first(where: { _ in true }) else {
             return nil
         }
-        return try transform(first)
+        return try transform(first, verse.quran)
     }
 
     // MARK: - Search
@@ -68,17 +67,17 @@ struct GeneralVerseTextPersistence: ReadonlySQLitePersistence {
         }
     }
 
-    func search(for term: String) throws -> [(verse: AyahNumber, text: String)] {
+    func search(for term: String, quran: Quran) throws -> [(verse: AyahNumber, text: String)] {
         try run { connection in
             let query = searchTable
                 .select(Columns.text, Columns.sura, Columns.ayah)
                 .filter(Columns.text.like("%\(term)%"))
             let rows = try connection.fetchArray(query)
-            return rowsToResults(rows)
+            return rowsToResults(rows, quran: quran)
         }
     }
 
-    private func rowsToResults(_ rows: [Row]) -> [(verse: AyahNumber, text: String)] {
+    private func rowsToResults(_ rows: [Row], quran: Quran) -> [(verse: AyahNumber, text: String)] {
         rows.map { row in
             let text = row[Columns.text]
             let sura = row[Columns.sura]

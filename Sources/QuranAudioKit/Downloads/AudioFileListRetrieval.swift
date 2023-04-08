@@ -79,8 +79,6 @@ struct GaplessReciterAudioFileListRetrieval: ReciterAudioFileListRetrieval {
 }
 
 struct GappedReciterAudioFileListRetrieval: ReciterAudioFileListRetrieval {
-    let quran: Quran
-
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")
@@ -89,7 +87,7 @@ struct GappedReciterAudioFileListRetrieval: ReciterAudioFileListRetrieval {
         var files = Set<ReciterSuraAudioFile>()
 
         // add besm Allah for all gapped audio
-        files.insert(createRequestInfo(reciter: reciter, sura: quran.firstSura, ayah: 1))
+        files.insert(createRequestInfo(reciter: reciter, sura: start.quran.firstSura, ayah: 1))
 
         for ayah in start.array(to: end) {
             files.insert(createRequestInfo(reciter: reciter, sura: ayah.sura, ayah: ayah.ayah))

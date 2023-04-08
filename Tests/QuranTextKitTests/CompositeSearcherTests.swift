@@ -27,10 +27,9 @@ class CompositeSearcherTests: XCTestCase {
         translationsRetriever.getLocalTranslationsHandler = {
             .value(self.translations)
         }
-        let persistence = SQLiteQuranVerseTextPersistence(quran: quran, mode: .arabic, fileURL: TestData.quranTextURL)
+        let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
 
         searcher = CompositeSearcher(
-            quran: quran,
             quranVerseTextPersistence: persistence,
             localTranslationRetriever: translationsRetriever,
             versePersistenceBuilder: TestData.translationsPersistenceBuilder
@@ -46,27 +45,27 @@ class CompositeSearcherTests: XCTestCase {
     }
 
     private func autocompleteNumber(_ number: String) throws {
-        let result = try wait(for: searcher.autocomplete(term: number))
+        let result = try wait(for: searcher.autocomplete(term: number, quran: quran))
         XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
     }
 
     func testSearchNumber1() throws {
-        let result = try wait(for: searcher.search(for: "1"))
+        let result = try wait(for: searcher.search(for: "1", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
     func testSearchNumber33() throws {
-        let result = try wait(for: searcher.search(for: "33"))
+        let result = try wait(for: searcher.search(for: "33", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
     func testSearchNumber605() throws {
-        let result = try wait(for: searcher.search(for: "605"))
+        let result = try wait(for: searcher.search(for: "605", quran: quran))
         XCTAssertEqual(result, [])
     }
 
     func testSearchNumberVerse() throws {
-        let result = try wait(for: searcher.search(for: "68:1"))
+        let result = try wait(for: searcher.search(for: "68:1", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
@@ -75,12 +74,12 @@ class CompositeSearcherTests: XCTestCase {
     }
 
     func testSearchOneSura() throws {
-        let result = try wait(for: searcher.search(for: "Al-Ahzab"))
+        let result = try wait(for: searcher.search(for: "Al-Ahzab", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
     func testSearchMultipleSura() throws {
-        let result = try wait(for: searcher.search(for: "Yu"))
+        let result = try wait(for: searcher.search(for: "Yu", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
@@ -91,7 +90,7 @@ class CompositeSearcherTests: XCTestCase {
 
     func testSearchArabicQuran() throws {
         let term = "لكنا"
-        let result = try wait(for: searcher.search(for: term))
+        let result = try wait(for: searcher.search(for: term, quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
@@ -100,12 +99,12 @@ class CompositeSearcherTests: XCTestCase {
     }
 
     func testSearchTranslation() throws {
-        let result = try wait(for: searcher.search(for: "All"))
+        let result = try wait(for: searcher.search(for: "All", quran: quran))
         assertSnapshot(matching: result, as: .json)
     }
 
     private func testAutocomplete(term: String, testName: String = #function) throws {
-        let result = try wait(for: searcher.autocomplete(term: term))
+        let result = try wait(for: searcher.autocomplete(term: term, quran: quran))
 
         // assert the range
         let ranges = Set(result.map(\.highlightedRange))

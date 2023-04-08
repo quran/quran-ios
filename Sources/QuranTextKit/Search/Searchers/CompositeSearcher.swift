@@ -15,18 +15,16 @@ public struct CompositeSearcher: AsyncSearcher {
     private let simpleSearchers: [Searcher]
     private let translationsSearcher: AsyncSearcher
 
-    init(quran: Quran,
-         quranVerseTextPersistence: VerseTextPersistence,
+    init(quranVerseTextPersistence: VerseTextPersistence,
          localTranslationRetriever: LocalTranslationsRetriever,
-         versePersistenceBuilder: @escaping (Translation, Quran) -> TranslationVerseTextPersistence)
+         versePersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence)
     {
-        let numberSearcher = NumberSearcher(quran: quran, quranVerseTextPersistence: quranVerseTextPersistence)
+        let numberSearcher = NumberSearcher(quranVerseTextPersistence: quranVerseTextPersistence)
         let quranSearcher = PersistenceSearcher(versePersistence: quranVerseTextPersistence, source: .quran)
-        let suraSearcher = SuraSearcher(quran: quran)
+        let suraSearcher = SuraSearcher()
         let translationSearcher = TranslationSearcher(
             localTranslationRetriever: localTranslationRetriever,
-            versePersistenceBuilder: versePersistenceBuilder,
-            quran: quran
+            versePersistenceBuilder: versePersistenceBuilder
         )
 
         let simpleSearchers: [Searcher] = [numberSearcher, suraSearcher, quranSearcher]
@@ -34,38 +32,37 @@ public struct CompositeSearcher: AsyncSearcher {
         translationsSearcher = translationSearcher
     }
 
-    public init(databasesPath: String, quranFileURL: URL, quran: Quran) {
-        let persistence = SQLiteQuranVerseTextPersistence(quran: quran, fileURL: quranFileURL)
+    public init(databasesPath: String, quranFileURL: URL) {
+        let persistence = SQLiteQuranVerseTextPersistence(fileURL: quranFileURL)
         let localTranslationRetriever = TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath)
-        self.init(quran: quran,
-                  quranVerseTextPersistence: persistence,
+        self.init(quranVerseTextPersistence: persistence,
                   localTranslationRetriever: localTranslationRetriever,
-                  versePersistenceBuilder: { translation, quran in
-                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL, quran: quran)
+                  versePersistenceBuilder: { translation in
+                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL)
                   })
     }
 
-    public func autocomplete(term: String) -> Promise<[SearchAutocompletion]> {
+    public func autocomplete(term: String, quran: Quran) -> Promise<[SearchAutocompletion]> {
         logger.info("Autocompleting term: \(term)")
         return DispatchQueue.global()
             .async(.promise) {
-                try self.simpleSearchers.flatMap { try $0.autocomplete(term: term) }
+                try self.simpleSearchers.flatMap { try $0.autocomplete(term: term, quran: quran) }
             }
-            .then { results -> Promise<[SearchAutocompletion]> in
+            .then { (results: [SearchAutocompletion]) -> Promise<[SearchAutocompletion]> in
                 if !results.isEmpty {
                     return .value(results)
                 }
-                return self.translationsSearcher.autocomplete(term: term)
+                return self.translationsSearcher.autocomplete(term: term, quran: quran)
             }
             .map { [SearchAutocompletion(text: term, term: term)] + $0 }
             .map { $0.orderedUnique() }
     }
 
-    public func search(for term: String) -> Promise<[SearchResults]> {
+    public func search(for term: String, quran: Quran) -> Promise<[SearchResults]> {
         logger.info("Search for: \(term)")
         return DispatchQueue.global()
             .async(.promise) {
-                try self.simpleSearchers.flatMap { try $0.search(for: term) }
+                try self.simpleSearchers.flatMap { try $0.search(for: term, quran: quran) }
             }
             .map {
                 $0.filter { !$0.items.isEmpty }
@@ -74,7 +71,7 @@ public struct CompositeSearcher: AsyncSearcher {
                 if !results.isEmpty {
                     return .value(results)
                 }
-                return self.translationsSearcher.search(for: term)
+                return self.translationsSearcher.search(for: term, quran: quran)
             }
             .map {
                 $0.filter { !$0.items.isEmpty }

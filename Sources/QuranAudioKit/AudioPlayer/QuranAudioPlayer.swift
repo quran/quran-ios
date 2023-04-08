@@ -48,11 +48,11 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
     public var verseRuns: Runs = .one
     public var listRuns: Runs = .one
 
-    init(baseURL: URL, downloadManager: DownloadManager, player: QueuingPlayer, fileSystem: FileSystem, quran: Quran) {
+    init(baseURL: URL, downloadManager: DownloadManager, player: QueuingPlayer, fileSystem: FileSystem) {
         let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
         let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
         let gappedBuilder = GappedAudioRequestBuilder()
-        let fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: quran, baseURL: baseURL)
+        let fileListFactory = DefaultReciterAudioFileListRetrievalFactory(baseURL: baseURL)
         let versesDownloader = AyahsAudioDownloader(downloader: downloadManager, fileListFactory: fileListFactory)
         downloader = AudioFilesDownloader(fileListFactory: fileListFactory,
                                           downloader: downloadManager,
@@ -65,8 +65,8 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         nowPlaying = NowPlayingUpdater(center: .default())
     }
 
-    public convenience init(baseURL: URL, downloadManager: DownloadManager, quran: Quran) {
-        self.init(baseURL: baseURL, downloadManager: downloadManager, player: QueuePlayer(), fileSystem: DefaultFileSystem(), quran: quran)
+    public convenience init(baseURL: URL, downloadManager: DownloadManager) {
+        self.init(baseURL: baseURL, downloadManager: downloadManager, player: QueuePlayer(), fileSystem: DefaultFileSystem())
     }
 
     private typealias PlaybackInfo = (reciter: Reciter, start: AyahNumber, end: AyahNumber)

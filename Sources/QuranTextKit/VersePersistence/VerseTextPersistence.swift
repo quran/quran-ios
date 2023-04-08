@@ -23,7 +23,7 @@ import QuranKit
 
 protocol SearchableTextPersistence {
     func autocomplete(term: String) throws -> [String]
-    func search(for term: String) throws -> [(verse: AyahNumber, text: String)]
+    func search(for term: String, quran: Quran) throws -> [(verse: AyahNumber, text: String)]
 }
 
 protocol VerseTextPersistence: SearchableTextPersistence {

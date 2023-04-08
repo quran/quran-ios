@@ -19,11 +19,11 @@ struct SQLiteQuranVerseTextPersistence: VerseTextPersistence {
 
     private let persistence: GeneralVerseTextPersistence
 
-    init(quran: Quran, fileURL: URL) {
-        self.init(quran: quran, mode: .arabic, fileURL: fileURL)
+    init(fileURL: URL) {
+        self.init(mode: .arabic, fileURL: fileURL)
     }
 
-    init(quran: Quran, mode: Mode, fileURL: URL) {
+    init(mode: Mode, fileURL: URL) {
         let table: Table
         switch mode {
         case .arabic:
@@ -31,7 +31,7 @@ struct SQLiteQuranVerseTextPersistence: VerseTextPersistence {
         case .share:
             table = Table("share_text")
         }
-        persistence = GeneralVerseTextPersistence(filePath: fileURL.path, table: table, quran: quran)
+        persistence = GeneralVerseTextPersistence(filePath: fileURL.path, table: table)
     }
 
     func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String] {
@@ -46,11 +46,11 @@ struct SQLiteQuranVerseTextPersistence: VerseTextPersistence {
         try persistence.autocomplete(term: term)
     }
 
-    func search(for term: String) throws -> [(verse: AyahNumber, text: String)] {
-        try persistence.search(for: term)
+    func search(for term: String, quran: Quran) throws -> [(verse: AyahNumber, text: String)] {
+        try persistence.search(for: term, quran: quran)
     }
 
-    private func textFromRow(_ row: Row) -> String {
+    private func textFromRow(_ row: Row, quran: Quran) -> String {
         let text = Expression<String>("text")
         return row[text]
     }

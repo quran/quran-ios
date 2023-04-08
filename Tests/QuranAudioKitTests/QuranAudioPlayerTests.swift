@@ -39,8 +39,7 @@ class QuranAudioPlayerTests: XCTestCase {
             baseURL: Self.baseURL,
             downloadManager: downloader,
             player: queuePlayer,
-            fileSystem: fileSystem,
-            quran: quran
+            fileSystem: fileSystem
         )
         player.delegate = delegate
     }

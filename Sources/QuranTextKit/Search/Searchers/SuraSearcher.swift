@@ -8,10 +8,9 @@
 import QuranKit
 
 struct SuraSearcher: Searcher {
-    let quran: Quran
     private let resultsProcessor = SearchResultsProcessor()
 
-    func autocomplete(term: String) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
         let defaultSuraNames = quran.suras.map { $0.localizedName(withPrefix: true) }
         let arabicSuraNames = quran.suras.map { $0.localizedName(withPrefix: true, language: .arabic) }
         var suraNames = Set(defaultSuraNames)
@@ -20,7 +19,7 @@ struct SuraSearcher: Searcher {
         return surasCompletions
     }
 
-    func search(for term: String) throws -> [SearchResults] {
+    func search(for term: String, quran: Quran) throws -> [SearchResults] {
         let items = quran.suras.flatMap { sura -> [SearchResult] in
             let defaultSuraName = sura.localizedName(withPrefix: true)
             let arabicSuraName = sura.localizedName(withPrefix: true, language: .arabic)

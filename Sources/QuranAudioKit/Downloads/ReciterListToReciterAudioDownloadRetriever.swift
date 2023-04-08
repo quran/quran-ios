@@ -30,25 +30,25 @@ private struct AudioFileLists {
 
 public struct ReciterListToReciterAudioDownloadRetriever {
     let fileListFactory: ReciterAudioFileListRetrievalFactory
-    let quran: Quran
 
-    public init(baseURL: URL, quran: Quran) {
-        self.quran = quran
-        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(quran: quran, baseURL: baseURL)
+    public init(baseURL: URL) {
+        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(baseURL: baseURL)
     }
 
-    public func getReciterAudioDownloads(for reciters: [Reciter]) -> Guarantee<[ReciterAudioDownload]> {
+    public func getReciterAudioDownloads(for reciters: [Reciter], quran: Quran) -> Guarantee<[ReciterAudioDownload]> {
         let suras = Set(quran.suras)
         // TODO: needs refactoring. createFileLists should be part of createAudioDownload and remove the parallel map.
         let fileLists = DispatchQueue.global().async(.promise) {
-            self.createFileLists(for: reciters)
+            self.createFileLists(for: reciters, quran: quran)
         }
         let recitersAndSuras = fileLists
             .map { fileLists in reciters.map { q in (q, suras, fileLists) } }
-        return recitersAndSuras.parallelMap(execute: createAudioDownload(for:suras:fileLists:))
+        return recitersAndSuras.parallelMap { reciter, suras, fileLists in
+            self.createAudioDownload(for: reciter, suras: suras, fileLists: fileLists, quran: quran)
+        }
     }
 
-    private func createFileLists(for reciters: [Reciter]) -> AudioFileLists {
+    private func createFileLists(for reciters: [Reciter], quran: Quran) -> AudioFileLists {
         let gapped = reciters.first(where: {
             if case .gapped = $0.audioType {
                 return true
@@ -83,7 +83,7 @@ public struct ReciterListToReciterAudioDownloadRetriever {
         return AudioFileLists(gapped: gappedList, gapless: gaplessList)
     }
 
-    private func createAudioDownload(for reciter: Reciter, suras: Set<Sura>, fileLists: AudioFileLists) -> ReciterAudioDownload {
+    private func createAudioDownload(for reciter: Reciter, suras: Set<Sura>, fileLists: AudioFileLists, quran: Quran) -> ReciterAudioDownload {
         // get the list of files for the entire Quran.
         let fileList: [ReciterAudioFile]
         switch reciter.audioType {

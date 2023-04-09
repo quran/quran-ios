@@ -55,4 +55,33 @@ extension XCTestCase {
 
         return try unwrappedResult.get()
     }
+
+    public func awaitPublisher<T: Publisher>(
+        _ publisher: T,
+        numberOfElements: Int,
+        timeout: TimeInterval = 10,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws -> [T.Output]
+        where T.Failure == Never
+    {
+        var elements: [T.Output] = []
+        let expectation = expectation(description: "Awaiting publisher")
+
+        let cancellable = publisher.sink { value in
+            elements.append(value)
+            if elements.count == numberOfElements {
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: timeout)
+        cancellable.cancel()
+
+        if elements.count < numberOfElements {
+            XCTFail("Received less than \(numberOfElements) elements \(elements)")
+        }
+
+        return elements
+    }
 }

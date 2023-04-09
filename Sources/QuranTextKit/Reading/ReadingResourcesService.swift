@@ -45,14 +45,16 @@ public class ReadingResourcesService {
     private func loadResource(of reading: Reading) {
         let tag = reading.resourcesTag
         resource = OnDemandResource(tags: [tag])
-        resourceCancellable = resource?.publisher.sink(receiveCompletion: { [weak self] completion in
-            switch completion {
-            case .finished: self?.send(.ready, from: reading)
-            case .failure(let error): self?.send(.error(error as NSError), from: reading)
+        resourceCancellable = resource?.publisher.sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished: self?.send(.ready, from: reading)
+                case .failure(let error): self?.send(.error(error as NSError), from: reading)
+                }
+            }, receiveValue: { [weak self] progress in
+                self?.send(.downloading(progress: progress), from: reading)
             }
-        }, receiveValue: { [weak self] progress in
-            self?.send(.downloading(progress: progress), from: reading)
-        })
+        )
     }
 
     private func send(_ status: ResourceStatus, from reading: Reading) {

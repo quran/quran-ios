@@ -146,7 +146,7 @@
 
 "reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
 "reading.hafs-1440.description" = "De hafs Muhaf uitgegeven in Medina in 1440 Hijri. Van het King Fahd Quran Printing Complex.";
-"reading.hafs-1440.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\nWoord-voor-woord vertaling";
+"reading.hafs-1440.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\n!Woord-voor-woord vertaling";
 
 // MARK: - What's new
 

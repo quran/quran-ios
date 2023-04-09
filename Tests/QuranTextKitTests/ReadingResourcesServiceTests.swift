@@ -21,8 +21,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         BundleResourceRequestFake.resourceAvailable = true
         let service = ReadingResourcesService()
 
-        let publisher = service.publisher.collect(1).first()
-        let events = try awaitPublisher(publisher)
+        let events = try awaitPublisher(service.publisher, numberOfElements: 1)
 
         XCTAssertEqual(events, [.ready])
     }
@@ -32,8 +31,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         BundleResourceRequestFake.downloadResult = .success(())
         let service = ReadingResourcesService()
 
-        let publisher = service.publisher.collect(3).first()
-        let events = try awaitPublisher(publisher)
+        let events = try awaitPublisher(service.publisher, numberOfElements: 3)
 
         XCTAssertEqual(events, [.downloading(progress: 0),
                                 .downloading(progress: 1),
@@ -46,8 +44,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         BundleResourceRequestFake.downloadResult = .failure(error)
         let service = ReadingResourcesService()
 
-        let publisher = service.publisher.collect(2).first()
-        let events = try awaitPublisher(publisher)
+        let events = try awaitPublisher(service.publisher, numberOfElements: 2)
 
         XCTAssertEqual(events, [.downloading(progress: 0),
                                 .error(error as NSError)])
@@ -57,8 +54,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         BundleResourceRequestFake.resourceAvailable = true
         let service = ReadingResourcesService()
 
-        let publisher = service.publisher.collect(1).first()
-        let events = try awaitPublisher(publisher)
+        let events = try awaitPublisher(service.publisher, numberOfElements: 1)
         XCTAssertEqual(events, [.ready])
 
         // Switch preference
@@ -66,8 +62,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         BundleResourceRequestFake.downloadResult = .success(())
         ReadingPreferences.shared.reading = .hafs_1440
 
-        let newPublisher = service.publisher.collect(4).first()
-        let newEvents = try awaitPublisher(newPublisher)
+        let newEvents = try awaitPublisher(service.publisher, numberOfElements: 4)
         XCTAssertEqual(newEvents, [events.last,
                                    .downloading(progress: 0),
                                    .downloading(progress: 1),

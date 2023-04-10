@@ -81,7 +81,7 @@ private class BundleResourceRequestFake: NSBundleResourceRequest {
     }
 
     override func beginAccessingResources(completionHandler: @escaping (Error?) -> Void) {
-        DispatchQueue.global().async {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
             switch Self.downloadResult! {
             case .success:
                 self.progress.completedUnitCount = self.progress.totalUnitCount

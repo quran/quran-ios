@@ -7,16 +7,22 @@
 
 import QuranKit
 import UIKit
+import VLogging
 
 public struct ImageDataService {
+    // Page 585 (surah abasa) has the widest image for 1405 that I've come across
+    public static let madani1405CropInsets = UIEdgeInsets(top: 0, left: 42, bottom: 0, right: 26)
+    public static let madani1440CropInsets = UIEdgeInsets(top: 0, left: 22, bottom: 15, right: 22)
+
+    private let reading = ReadingPreferences.shared.reading
     private let processor: WordFrameProcessor
     private let persistence: WordFramePersistence
     private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
 
-    public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets) {
+    public init(ayahInfoDatabase: URL, imagesURL: URL) {
         self.imagesURL = imagesURL
-        self.cropInsets = cropInsets
+        self.cropInsets = Self.cropInsetsForMushaf(reading)
         processor = DefaultWordFrameProcessor()
         persistence = SQLiteWordFramePersistence(fileURL: ayahInfoDatabase)
     }
@@ -34,6 +40,21 @@ public struct ImageDataService {
         let plainWordFrames = try persistence.wordFrameCollectionForPage(page)
         let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
+    }
+
+    private static func cropInsetsForMushaf(_ reading: Reading) -> UIEdgeInsets {
+        switch (reading) {
+            case .hafs_1405:
+                return madani1405CropInsets
+            case .hafs_1440:
+                return madani1440CropInsets
+            default:
+                // Reaching here means we didn't account for a new mushaf type
+                // FIXME: question: should an exception be thrown instead?
+                logger.warning("Reading \(reading) does not have insets defined.");
+                return madani1405CropInsets;
+        }
+
     }
 
     private func imageURLForPage(_ page: Page) -> URL {

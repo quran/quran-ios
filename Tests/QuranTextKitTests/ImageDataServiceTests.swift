@@ -17,8 +17,7 @@ class ImageDataServiceTests: XCTestCase {
     override func setUpWithError() throws {
         service = ImageDataService(
             ayahInfoDatabase: TestData.resourceURL("ayahinfo.db"),
-            imagesURL: TestData.testDataURL.appendingPathComponent("images"),
-            cropInsets: UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
+            imagesURL: TestData.testDataURL.appendingPathComponent("images")
         )
     }
 

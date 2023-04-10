@@ -148,6 +148,10 @@
 "reading.hafs-1440.description" = "The hafs Muhaf issued in Madina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1440.properties" = "Hafs Mushaf\nIssued in 1405 Hijri\n604 pages\n15-line page\n!No Word-by-word translation";
 
+"reading.tajweed.title" = "Hafs, Tajweed";
+"reading.tajweed.description" = "The tajweed hafs Muhaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
+"reading.tajweed.properties" = "Hafs Mushaf\n604 pages\n15-line page\nWord-by-word translation";
+
 // MARK: - What's new
 
 "new.title" = "What's new";

@@ -9,13 +9,12 @@ import QuranKit
 import UIKit
 
 public struct ImageDataService {
-    public static let madaniCropInsets = UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
     private let processor: WordFrameProcessor
     private let persistence: WordFramePersistence
     private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
 
-    public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets = madaniCropInsets) {
+    public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets) {
         self.imagesURL = imagesURL
         self.cropInsets = cropInsets
         processor = DefaultWordFrameProcessor()

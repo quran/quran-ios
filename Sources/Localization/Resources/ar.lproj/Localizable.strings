@@ -121,6 +121,10 @@
 "reading.hafs-1440.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٤٠ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
 "reading.hafs-1440.properties" = "مصحف حفص عن عاصم\nإصدار١٤٤٠ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
 
+"reading.tajweed.title" = "مصحف التجويد";
+"reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";
+"reading.tajweed.properties" = "مصحف حفص عن عاصم\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
+
 // MARK: - Ayah Menu
 
 "ayah.menu.copy" = "نسخ";

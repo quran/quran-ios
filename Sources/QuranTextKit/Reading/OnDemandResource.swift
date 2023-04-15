@@ -29,18 +29,24 @@ public final class OnDemandResource {
 
     private func fetch() {
         logger.info("Fetching resources \(request.tags)")
-        request.conditionallyBeginAccessingResources { [unowned self] available in
-            logger.info("Resources \(request.tags) availability \(available)")
+        request.conditionallyBeginAccessingResources { [weak self] available in
+            guard let self else {
+                return
+            }
+            logger.info("Resources \(self.request.tags) availability \(available)")
             guard available else {
                 self.kvoSubscribe()
-                self.request.beginAccessingResources { [unowned self] error in
+                self.request.beginAccessingResources { [weak self] error in
+                    guard let self else {
+                        return
+                    }
                     self.kvoUnsubscribe()
                     guard let error = error else {
-                        logger.info("Resources \(request.tags) downloaded")
+                        logger.info("Resources \(self.request.tags) downloaded")
                         self.subject.send(completion: .finished)
                         return
                     }
-                    logger.error("Resources \(request.tags) failed. Error: \(error)")
+                    logger.error("Resources \(self.request.tags) failed. Error: \(error)")
                     self.subject.send(completion: .failure(error))
                 }
                 return

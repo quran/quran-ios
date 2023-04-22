@@ -15,7 +15,7 @@ public enum Reading: Int {
     case hafs_1421 = 3
 
     public static let sortedReadings: [Reading] = [
-        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440
+        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440,
     ]
 
     var resourcesTag: String {
@@ -24,7 +24,6 @@ public enum Reading: Int {
         case .hafs_1440: return "hafs_1440"
         case .hafs_1421: return "hafs_1421"
         case .tajweed: return "tajweed"
-
         }
     }
 

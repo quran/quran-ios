@@ -23,11 +23,7 @@ import QuranKit
 import SQLite
 import SQLitePersistence
 
-protocol WordFramePersistence {
-    func wordFrameCollectionForPage(_ page: Page) throws -> WordFrameCollection
-}
-
-struct SQLiteWordFramePersistence: WordFramePersistence, ReadonlySQLitePersistence {
+struct WordFramePersistence: ReadonlySQLitePersistence {
     private struct Columns {
         let id = Expression<Int>("glyph_id")
         let page = Expression<Int>("page_number")
@@ -49,6 +45,8 @@ struct SQLiteWordFramePersistence: WordFramePersistence, ReadonlySQLitePersisten
     init(fileURL: URL) {
         filePath = fileURL.path
     }
+
+    // MARK: - glyphs
 
     func wordFrameCollectionForPage(_ page: Page) throws -> WordFrameCollection {
         try run { connection in
@@ -74,5 +72,54 @@ struct SQLiteWordFramePersistence: WordFramePersistence, ReadonlySQLitePersisten
             minY: row[columns.minY],
             maxY: row[columns.maxY]
         )
+    }
+
+    // MARK: - Sura header
+
+    func suraHeaders(_ page: Page) throws -> [SuraHeaderLocation] {
+        let suraHeadersTable = Table("sura_headers")
+        struct SuraHeaderColumns {
+            static let suraNumber = Expression<Int>("sura_number")
+            static let x = Expression<Int>("x")
+            static let y = Expression<Int>("y")
+            static let width = Expression<Int>("width")
+            static let height = Expression<Int>("height")
+            static let page = Expression<Int>("page_number")
+        }
+
+        return try run { connection in
+            let query = suraHeadersTable.filter(SuraHeaderColumns.page == page.pageNumber)
+            let rows = try connection.prepare(query)
+            return rows.map { row in
+                SuraHeaderLocation(sura: Sura(quran: page.quran, suraNumber: row[SuraHeaderColumns.suraNumber])!,
+                                   x: row[SuraHeaderColumns.x],
+                                   y: row[SuraHeaderColumns.y],
+                                   width: row[SuraHeaderColumns.width],
+                                   height: row[SuraHeaderColumns.height])
+            }
+        }
+    }
+
+    func ayahNumbers(_ page: Page) throws -> [AyahNumberLocation] {
+        let ayahMarkersTable = Table("ayah_markers")
+        struct AyahMarkerColumns {
+            static let suraNumber = Expression<Int>("sura_number")
+            static let ayahNumber = Expression<Int>("ayah_number")
+            static let x = Expression<Int>("x")
+            static let y = Expression<Int>("y")
+            static let page = Expression<Int>("page_number")
+        }
+
+        return try run { connection in
+            let query = ayahMarkersTable.filter(AyahMarkerColumns.page == page.pageNumber)
+            let rows = try connection.prepare(query)
+            return rows.map { row in
+                AyahNumberLocation(ayah: AyahNumber(quran: page.quran,
+                                                    sura: row[AyahMarkerColumns.suraNumber],
+                                                    ayah: row[AyahMarkerColumns.ayahNumber])!,
+                                   x: row[AyahMarkerColumns.x],
+                                   y: row[AyahMarkerColumns.y])
+            }
+        }
     }
 }

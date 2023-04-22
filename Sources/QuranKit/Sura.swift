@@ -28,7 +28,7 @@ public struct Sura: QuranValueGroup {
         storage.quran
     }
 
-    init?(quran: Quran, suraNumber: Int) {
+    public init?(quran: Quran, suraNumber: Int) {
         if !quran.surasRange.contains(suraNumber) {
             return nil
         }

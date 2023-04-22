@@ -16,10 +16,27 @@ class ImageDataServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         service = ImageDataService(
-            ayahInfoDatabase: TestData.resourceURL("ayahinfo.db"),
+            ayahInfoDatabase: TestData.resourceURL("hafs_1405_ayahinfo.db"),
             imagesURL: TestData.testDataURL.appendingPathComponent("images"),
             cropInsets: UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
         )
+    }
+
+    func testPageMarkers() throws {
+        let quran = Reading.hafs_1421.quran
+        service = ImageDataService(
+            ayahInfoDatabase: TestData.resourceURL("hafs_1421_ayahinfo_1120.db"),
+            imagesURL: URL(string: "invalid")!,
+            cropInsets: .zero
+        )
+
+        var surasHeaders = 0
+        for page in quran.pages {
+            let markers = try service.pageMarkers(page)
+            XCTAssertEqual(markers.ayahNumbers.count, page.verses.count, "Page \(page.pageNumber)")
+            surasHeaders += markers.suraHeaders.count
+        }
+        XCTAssertEqual(surasHeaders, quran.suras.count)
     }
 
     func testWordFrameCollection() throws {

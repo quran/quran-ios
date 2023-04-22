@@ -18,7 +18,14 @@ public struct ImageDataService {
         self.imagesURL = imagesURL
         self.cropInsets = cropInsets
         processor = DefaultWordFrameProcessor()
-        persistence = SQLiteWordFramePersistence(fileURL: ayahInfoDatabase)
+        persistence = WordFramePersistence(fileURL: ayahInfoDatabase)
+    }
+
+    public func pageMarkers(_ page: Page) throws -> PageMarkers {
+        PageMarkers(
+            suraHeaders: try persistence.suraHeaders(page),
+            ayahNumbers: try persistence.ayahNumbers(page)
+        )
     }
 
     public func imageForPage(_ page: Page) throws -> ImagePage {

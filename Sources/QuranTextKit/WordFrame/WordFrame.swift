@@ -73,7 +73,8 @@ public struct WordFrame: Equatable {
     }
 
     static func unionVertically(top: inout [WordFrame], bottom: inout [WordFrame]) {
-        guard abs(top[0].line - bottom[0].line) == 1 else {
+        // If not continuous lines (different suras).
+        guard top.last!.word.verse.sura == bottom.first!.word.verse.sura else {
             return
         }
 

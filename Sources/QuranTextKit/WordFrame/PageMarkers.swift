@@ -11,6 +11,11 @@ import QuranKit
 public struct PageMarkers {
     public let suraHeaders: [SuraHeaderLocation]
     public let ayahNumbers: [AyahNumberLocation]
+
+    public init(suraHeaders: [SuraHeaderLocation], ayahNumbers: [AyahNumberLocation]) {
+        self.suraHeaders = suraHeaders
+        self.ayahNumbers = ayahNumbers
+    }
 }
 
 public struct SuraHeaderLocation {

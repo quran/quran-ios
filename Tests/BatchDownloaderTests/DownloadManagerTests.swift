@@ -24,23 +24,23 @@ final class DownloadManagerTests: XCTestCase {
     private let request4 = DownloadRequest(url: URL(validURL: "http://request/4"), destinationPath: downloads + "/4.txt")
     private let request5 = DownloadRequest(url: URL(validURL: "http://request/5"), destinationPath: downloads + "/5.txt")
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         try fileManager.createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
-        newDownloader()
+        await newDownloader()
     }
 
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        waitForQueue()
+    override func tearDown() async throws {
+        try await super.tearDown()
+        await Task.megaYield()
         try fileManager.removeItem(at: Self.downloadsURL)
     }
 
-    private func newDownloader(downloads: [Task] = []) {
+    private func newDownloader(downloads: [SessionTask] = []) async {
         let downloadsDBURL = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db")
 
         persistence = SqliteDownloadsPersistence(filePath: downloadsDBURL.path)
-        downloader = DownloadManager(
+        downloader = await DownloadManager(
             maxSimultaneousDownloads: maxSimultaneousDownloads,
             sessionFactory: { delegate, queue in
                 self.session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
@@ -50,64 +50,49 @@ final class DownloadManagerTests: XCTestCase {
         )
     }
 
-    private func waitForQueue() {
-        // operation queue used by network session
-        wait(for: downloader.operationQueue)
-    }
-
-    // Disabling this as it's a flaky test case
-    func DISABLED_testBackgroundSessionCompletionHandler() {
+    func testBackgroundSessionCompletionHandler() async {
         // assign a completion handler
         var calls = 0
-        downloader.backgroundSessionCompletionHandler = {
+        await downloader.setBackgroundSessionCompletion {
             XCTAssertTrue(Thread.isMainThread)
             calls += 1
         }
 
-        // wait for the queue to finish so the session is initialized
-        wait(for: downloader.dispatchQueue)
-
         // finish background events
         session?.finishBackgroundEvents()
-
-        // wait for the queue to finish
-        waitForQueue()
-
-        // wait for the main thread dispatch async as completion is called on main thread
-        wait(for: DispatchQueue.main)
+        await Task.megaYield()
 
         // verify completion handler called
         XCTAssertEqual(calls, 1)
     }
 
-    func testLoadingOnGoingDownload() throws {
-        let emptyDownloads = try wait(for: downloader.getOnGoingDownloads())
+    func testLoadingOnGoingDownload() async throws {
+        let emptyDownloads = await downloader.getOnGoingDownloads()
         XCTAssertEqual(emptyDownloads.count, 0)
 
         let batch = DownloadBatchRequest(requests: [request1, request2])
-        _ = try wait(for: downloader.download(batch))
-        waitForQueue()
+        _ = try await downloader.download(batch)
 
         // keeping downloads in memory
-        let memoryDownloads = try wait(for: downloader.getOnGoingDownloads())
+        let memoryDownloads = await downloader.getOnGoingDownloads()
         let downloads = downloadTasks(from: memoryDownloads)
         XCTAssertEqual(memoryDownloads.count, 1)
         XCTAssertEqual(downloads.count, 2)
 
         // deallocate downloader & create new one
         downloader = nil
-        newDownloader(downloads: downloads)
+        await newDownloader(downloads: downloads)
 
         // loaded downlodas from disk
-        let diskDownloads = try wait(for: downloader.getOnGoingDownloads())
+        let diskDownloads = await downloader.getOnGoingDownloads()
         XCTAssertEqual(diskDownloads.count, 1)
         XCTAssertEqual(downloadTasks(from: diskDownloads).count, 2)
     }
 
-    func testDownloadBatchCompleted() throws {
+    func testDownloadBatchCompleted() async throws {
         // download a batch of 2 requests
         let batch = DownloadBatchRequest(requests: [request1, request2])
-        let response = try XCTUnwrap(wait(for: downloader.download(batch)))
+        let response = try await downloader.download(batch)
         let responses = response.responses
         XCTAssertEqual(responses.count, 2)
 
@@ -119,7 +104,7 @@ final class DownloadManagerTests: XCTestCase {
         let task2 = try completeTask(response, i: 1, totalBytes: 100, progressLoops: 2)
 
         // wait for async operations to finish
-        waitForQueue()
+        await Task.megaYield()
 
         // verify progress and promise result
         verifyCompletedTask(task: task1)
@@ -128,19 +113,19 @@ final class DownloadManagerTests: XCTestCase {
         XCTAssertNotNil(response.promise.value)
     }
 
-    func testDownloadBatch1Success1Error1CancelOthers() throws {
+    func testDownloadBatch1Success1Error1CancelOthers() async throws {
         // download a batch of 2 requests
         let batch = DownloadBatchRequest(requests: [request1, request2, request3, request4, request5])
-        let response = try XCTUnwrap(wait(for: downloader.download(batch)))
+        let response = try await downloader.download(batch)
 
         // complete 1st download
         let task1 = try completeTask(response, i: 0)
 
         // fail 2nd download with no resume data
-        let task2 = try XCTUnwrap(response.responses[1].task as? Task)
+        let task2 = try XCTUnwrap(response.responses[1].task as? SessionTask)
         session?.failDownloadTask(task2, error: URLError(.timedOut))
 
-        waitForQueue()
+        await Task.megaYield()
 
         // verify promise result
         XCTAssertEqual(response.promise.error as NSError?, NetworkError.serverNotReachable as NSError)
@@ -159,13 +144,13 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
-    func testDownloadFailWithResumeData() throws {
+    func testDownloadFailWithResumeData() async throws {
         // download a batch of 2 requests
         let batch = DownloadBatchRequest(requests: [request1])
-        let response = try XCTUnwrap(wait(for: downloader.download(batch)))
+        let response = try await downloader.download(batch)
 
         // fail download with resume data
-        let task = try XCTUnwrap(response.responses[0].task as? Task)
+        let task = try XCTUnwrap(response.responses[0].task as? SessionTask)
         let resumeText = "some data"
         let error = URLError(.networkConnectionLost, userInfo: [
             NSURLSessionDownloadTaskResumeData: resumeText.data(using: .utf8) as Any,
@@ -173,7 +158,7 @@ final class DownloadManagerTests: XCTestCase {
         session?.failDownloadTask(task, error: error)
 
         // wait for async operations to finish
-        waitForQueue()
+        await Task.megaYield()
 
         // verify promise result
         XCTAssertEqual(response.promise.error as NSError?, NetworkError.connectionLost as NSError)
@@ -183,10 +168,10 @@ final class DownloadManagerTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: resumeURL(response: response.responses[0])), resumeText)
     }
 
-    func testDownloadBatchAfterEnquingThem() throws {
+    func testDownloadBatchAfterEnquingThem() async throws {
         // download a batch of 2 requests
         let batch = DownloadBatchRequest(requests: [request1, request2, request3, request4])
-        let response = try XCTUnwrap(wait(for: downloader.download(batch)))
+        let response = try await downloader.download(batch)
 
         XCTAssertNotNil(response.responses[0].task)
         XCTAssertNotNil(response.responses[1].task)
@@ -199,7 +184,7 @@ final class DownloadManagerTests: XCTestCase {
         }
 
         // wait for async operations to finish
-        waitForQueue()
+        await Task.megaYield()
 
         // assert the batch not completed but the others finished
         XCTAssertNil(response.promise.result)
@@ -213,34 +198,34 @@ final class DownloadManagerTests: XCTestCase {
 
         // complete the pending task
         let lastTask = try completeTask(response, i: 3)
-        waitForQueue()
+        await Task.megaYield()
 
         // assert the task completed
         XCTAssertNotNil(response.promise.value)
         verifyCompletedTask(task: lastTask)
     }
 
-    func testDownloadBatchAfterEnquingThemInWithDifferentSession() throws {
+    func testDownloadBatchAfterEnquingThemInWithDifferentSession() async throws {
         // start first session
         let batch = DownloadBatchRequest(requests: [request1, request2, request3])
-        let memoryResponse = try wait(for: downloader.download(batch))
+        let memoryResponse = try await downloader.download(batch)
 
         // get the tasks to pass them to the next session
-        let memoryDownloads = try wait(for: downloader.getOnGoingDownloads())
+        let memoryDownloads = await downloader.getOnGoingDownloads()
         let downloads = downloadTasks(from: memoryDownloads)
 
         // complete first task in the first session
         let task1 = try completeTask(memoryResponse, i: 0)
 
         // wait for all operations to complete, however tasks didn't start yet
-        waitForQueue()
+        await Task.megaYield()
 
         // deallocate downloader & create new one
         downloader = nil
         session = nil
-        newDownloader(downloads: downloads)
+        await newDownloader(downloads: downloads)
 
-        let diskDownloads = try wait(for: downloader.getOnGoingDownloads())
+        let diskDownloads = await downloader.getOnGoingDownloads()
         let diskResponse = try XCTUnwrap(diskDownloads.first)
 
         // wait for the queue to finish so the session is initialized
@@ -250,7 +235,7 @@ final class DownloadManagerTests: XCTestCase {
         let task3 = try completeTask(diskResponse, i: 2)
 
         // wait for async operations to finish
-        waitForQueue()
+        await Task.megaYield()
 
         // assert the response & tasks completed
         XCTAssertNotNil(diskResponse.promise.value)
@@ -259,18 +244,15 @@ final class DownloadManagerTests: XCTestCase {
         verifyCompletedTask(task: task3)
     }
 
-    func testDownloadBatchCancelled() throws {
+    func testDownloadBatchCancelled() async throws {
         // download a batch of 2 requests, then cancel it
         let batch = DownloadBatchRequest(requests: [request1, request2])
-        let response = try XCTUnwrap(wait(for: downloader.download(batch)))
+        let response = try await downloader.download(batch)
         // cancel
-        response.cancel()
-
-        // wait for async operations to finish
-        waitForQueue()
+        await response.cancel()
 
         // verify response is cancelled
-        let downloads = try wait(for: downloader.getOnGoingDownloads())
+        let downloads = await downloader.getOnGoingDownloads()
         XCTAssertEqual(downloads.count, 0)
 
         // other tasks should be cancelled as well
@@ -286,7 +268,7 @@ final class DownloadManagerTests: XCTestCase {
                               file: StaticString = #filePath,
                               line: UInt = #line) throws -> CompletedTask
     {
-        let task = try XCTUnwrap(response.responses[i].task as? Task, file: file, line: line)
+        let task = try XCTUnwrap(response.responses[i].task as? SessionTask, file: file, line: line)
         let text = Int.random(in: 0 ..< Int.max).description
         let source = try createTextFile(at: "loc-\(i).txt", content: text)
         let destination = destinationURL(response: response.responses[i])
@@ -308,7 +290,7 @@ final class DownloadManagerTests: XCTestCase {
         for i in 0 ..< (task.progressLoops + 1) {
             progressValues.append(1 / Double(task.progressLoops) * Double(i))
         }
-        XCTAssertEqual(progressValues, Array(task.listener.values.dropFirst()), file: file, line: line)
+        XCTAssertEqual(progressValues, task.listener.values, file: file, line: line)
         XCTAssertNotNil(task.response.promise.value, file: file, line: line)
 
         // verify downloads saved
@@ -325,8 +307,8 @@ final class DownloadManagerTests: XCTestCase {
         return url
     }
 
-    private func downloadTasks(from responses: [DownloadBatchResponse]?) -> [Task] {
-        responses?.flatMap { $0.responses.compactMap { $0.task as? Task } } ?? []
+    private func downloadTasks(from responses: [DownloadBatchResponse]?) -> [SessionTask] {
+        responses?.flatMap { $0.responses.compactMap { $0.task as? SessionTask } } ?? []
     }
 
     private func resumeURL(response: DownloadResponse) -> URL {
@@ -338,7 +320,7 @@ final class DownloadManagerTests: XCTestCase {
     }
 
     private struct CompletedTask {
-        let task: Task
+        let task: SessionTask
         let text: String
         let source: URL
         let destination: URL

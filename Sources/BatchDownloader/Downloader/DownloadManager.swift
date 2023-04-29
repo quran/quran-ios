@@ -20,17 +20,12 @@
 
 import Crashing
 import Foundation
-import PromiseKit
 import Utilities
 
 public final class DownloadManager {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
-    private(set) var session: NetworkSession! // swiftlint:disable:this implicitly_unwrapped_optional
-    private var handler: ThreadSafeDownloadSessionDelegate? {
-        didSet {
-            handler?.backgroundSessionCompletionHandler = backgroundSessionCompletionHandler
-        }
-    }
+    private let session: NetworkSession
+    private let handler: DownloadSessionDelegate
 
     let operationQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -41,20 +36,12 @@ public final class DownloadManager {
 
     let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
 
-    public var backgroundSessionCompletionHandler: (() -> Void)? {
-        didSet {
-            handler?.backgroundSessionCompletionHandler = backgroundSessionCompletionHandler
-        }
-    }
-
-    private let initializationGroup = DispatchGroup()
-
     public convenience init(
         maxSimultaneousDownloads: Int,
         configuration: URLSessionConfiguration,
         downloadsPath: String
-    ) {
-        self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
+    ) async {
+        await self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
                   sessionFactory: {
                       URLSession(configuration: configuration,
                                  delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
@@ -67,76 +54,39 @@ public final class DownloadManager {
         maxSimultaneousDownloads: Int,
         sessionFactory: @escaping SessionFactory,
         persistence: DownloadsPersistence
-    ) {
+    ) async {
         operationQueue.underlyingQueue = dispatchQueue
-        initializationGroup.enter()
 
         let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)
-        dispatchQueue.async(.guarantee) { () -> (ThreadSafeDownloadSessionDelegate, NetworkSession) in
-            do {
-                try attempt(times: 3) {
-                    try dataController.loadBatchesFromPersistence()
-                }
-            } catch {
-                crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
+        do {
+            try await attempt(times: 3) {
+                try await dataController.loadBatchesFromPersistence()
             }
+        } catch {
+            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
+        }
 
-            return self.createSessionHandler(sessionFactory: sessionFactory, dataController: dataController)
-        }
-        .then(on: dispatchQueue) { handler, session -> Promise<Void> in
-            handler.populateRunningTasks(from: session)
-        }
-        .catch { error in
+        do {
+            handler = DownloadSessionDelegate(dataController: dataController)
+            session = sessionFactory(handler, operationQueue)
+
+            await dataController.update(session: session)
+            try await handler.populateRunningTasks(from: session)
+        } catch {
             crasher.recordError(error, reason: "Failed to retrieve download tasks.")
         }
-        .finally {
-            self.initializationGroup.leave()
-        }
     }
 
-    private func createSessionHandler(sessionFactory: @escaping SessionFactory,
-                                      dataController: DownloadBatchDataController) -> (ThreadSafeDownloadSessionDelegate, NetworkSession)
-    {
-        // create handler classes
-        let unsafeHandler = DownloadSessionDelegate(dataController: dataController)
-        let handler = ThreadSafeDownloadSessionDelegate(unsafeHandler: unsafeHandler, queue: dispatchQueue)
-        unsafeHandler.cancellable = self.handler
-
-        // create the session
-        let session = sessionFactory(handler, operationQueue)
-
-        // set the handler and session
-        self.handler = handler
-        self.session = session
-
-        dataController.cancellable = handler
-        dataController.session = session
-        return (handler, session)
+    @MainActor
+    public func setBackgroundSessionCompletion(_ backgroundSessionCompletion: (() -> Void)?) {
+        handler.setBackgroundSessionCompletion(backgroundSessionCompletion)
     }
 
-    public func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]> {
-        initializationGroup
-            .notify()
-            .then { self.handler?.getOnGoingDownloads() ?? .value([]) }
+    public func getOnGoingDownloads() async -> [DownloadBatchResponse] {
+        await handler.getOnGoingDownloads()
     }
 
-    public func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
-        initializationGroup
-            .notify()
-            .then { self.handler?.download(batch) ?? Promise.value(self.createFailureResponse()) }
-    }
-
-    private func createFailureResponse() -> DownloadBatchResponse {
-        let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.reject(NetworkError.unknown(nil))
-        return response
-    }
-}
-
-private extension DispatchGroup {
-    func notify(on q: DispatchQueue = .global()) -> Guarantee<Void> {
-        Guarantee { resolve in
-            self.notify(queue: q) { resolve(()) }
-        }
+    public func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
+        try await handler.download(batch)
     }
 }

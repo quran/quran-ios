@@ -19,18 +19,18 @@ class DownloadManagerFake: QuranAudioKit.DownloadManager {
         case notFound
     }
 
-    func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]> {
-        queue.async(.guarantee) {
+    func getOnGoingDownloads() async -> [DownloadBatchResponse] {
+        await Task {
             self.downloads
-        }
+        }.value
     }
 
-    func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse> {
-        queue.async(.promise) {
+    func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
+        try await Task {
             if let response = self.responses[batch] {
                 return response
             }
             throw DownloadError.notFound
-        }
+        }.value
     }
 }

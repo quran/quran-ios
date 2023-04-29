@@ -9,10 +9,10 @@
 import Foundation
 
 final class NetworkSessionFake: NetworkSession {
-    let queue: OperationQueue
+    let delegateQueue: OperationQueue
     let delegate: NetworkSessionDelegate?
-    var downloads: [Task] = []
-    var dataTasks: [Task] = []
+    var downloads: [SessionTask] = []
+    var dataTasks: [SessionTask] = []
 
     private var taskIdentifierCounter = 0
     private var taskIdentifier: Int {
@@ -21,8 +21,8 @@ final class NetworkSessionFake: NetworkSession {
         return temp
     }
 
-    init(queue: OperationQueue, delegate: NetworkSessionDelegate? = nil, downloads: [Task] = []) {
-        self.queue = queue
+    init(queue: OperationQueue, delegate: NetworkSessionDelegate? = nil, downloads: [SessionTask] = []) {
+        self.delegateQueue = queue
         self.delegate = delegate
         self.downloads = downloads
     }
@@ -31,74 +31,86 @@ final class NetworkSessionFake: NetworkSession {
                                                                        [NetworkSessionUploadTask],
                                                                        [NetworkSessionDownloadTask]) -> Void)
     {
-        queue.addOperation {
+        delegateQueue.addOperation {
             completionHandler([], [], self.downloads)
         }
     }
 
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
-        let task = Task(taskIdentifier: taskIdentifier)
+        let task = SessionTask(taskIdentifier: taskIdentifier)
         downloads.append(task)
         task.resumeData = resumeData
         return task
     }
 
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
-        let task = Task(taskIdentifier: taskIdentifier)
+        let task = SessionTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         downloads.append(task)
         return task
     }
 
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
-        let task = Task(taskIdentifier: taskIdentifier)
+        let task = SessionTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         task.completionHandler = completionHandler
         dataTasks.append(task)
         return task
     }
 
-    func completeDownloadTask(_ task: Task, location: URL, totalBytes: Int, progressLoops: Int) {
+    func completeDownloadTask(_ task: SessionTask, location: URL, totalBytes: Int, progressLoops: Int) {
         let step = Int64(1 / Double(progressLoops) * Double(totalBytes))
         for i in 0 ... progressLoops {
             let written = Int64(Double(i) / Double(progressLoops) * Double(totalBytes))
-            queue.addOperation {
-                self.delegate?.networkSession(self,
-                                              downloadTask: task,
-                                              didWriteData: step,
-                                              totalBytesWritten: written,
-                                              totalBytesExpectedToWrite: Int64(totalBytes))
+            delegateQueue.addOperation {
+                Task {
+                    await self.delegate?.networkSession(self,
+                                                        downloadTask: task,
+                                                        didWriteData: step,
+                                                        totalBytesWritten: written,
+                                                        totalBytesExpectedToWrite: Int64(totalBytes))
+                }
             }
         }
 
-        queue.addOperation {
+        delegateQueue.addOperation {
             task.response = HTTPURLResponse(url: task.originalRequest!.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
-            self.delegate?.networkSession(self, downloadTask: task, didFinishDownloadingTo: location)
-            self.delegate?.networkSession(self, task: task, didCompleteWithError: nil)
+            Task {
+                await self.delegate?.networkSession(self, downloadTask: task, didFinishDownloadingTo: location)
+            }
+            Task {
+                await self.delegate?.networkSession(self, task: task, didCompleteWithError: nil)
+            }
             self.downloads = self.downloads.filter { $0 == task }
         }
     }
 
-    func failDownloadTask(_ task: Task, error: Error) {
-        queue.addOperation {
-            self.delegate?.networkSession(self, task: task, didCompleteWithError: error)
+    func failDownloadTask(_ task: SessionTask, error: Error) {
+        delegateQueue.addOperation {
+            Task {
+                await self.delegate?.networkSession(self, task: task, didCompleteWithError: error)
+            }
         }
     }
 
-    func cancelTask(_ task: Task) {
-        queue.addOperation {
-            self.delegate?.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
+    func cancelTask(_ task: SessionTask) {
+        delegateQueue.addOperation {
+            Task {
+                await self.delegate?.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
+            }
         }
     }
 
     func finishBackgroundEvents() {
-        queue.addOperation {
-            self.delegate?.networkSessionDidFinishEvents(forBackgroundURLSession: self)
+        delegateQueue.addOperation {
+            Task {
+                await self.delegate?.networkSessionDidFinishEvents(forBackgroundURLSession: self)
+            }
         }
     }
 }
 
-final class Task: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable {
+final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable {
     let taskIdentifier: Int
     var originalRequest: URLRequest?
     var currentRequest: URLRequest?
@@ -124,7 +136,7 @@ final class Task: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable {
         isCancelled = false
     }
 
-    static func == (lhs: Task, rhs: Task) -> Bool {
+    static func == (lhs: SessionTask, rhs: SessionTask) -> Bool {
         lhs.taskIdentifier == rhs.taskIdentifier
     }
 

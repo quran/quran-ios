@@ -24,11 +24,11 @@ import SQLitePersistence
 import Utilities
 
 protocol DownloadsPersistence {
-    func retrieveAll() throws -> [DownloadBatch]
-    func insert(batch: DownloadBatchRequest) throws -> DownloadBatch
-    func update(url: URL, newStatus status: Download.Status) throws
-    func update(downloads: [Download]) throws
-    func delete(batchIds: [Int64]) throws
+    func retrieveAll() async throws -> [DownloadBatch]
+    func insert(batch: DownloadBatchRequest) async throws -> DownloadBatch
+    func update(url: URL, newStatus status: Download.Status) async throws
+    func update(downloads: [Download]) async throws
+    func delete(batchIds: [Int64]) async throws
 }
 
 final class SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {

@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 
+import Crashing
 import Foundation
 import PromiseKit
 
@@ -71,9 +72,13 @@ public final class DownloadBatchResponse {
         }
     }
 
-    public func cancel() {
+    public func cancel() async {
         if promise.isPending {
-            cancellable?.cancel(batch: self)
+            do {
+                try await cancellable?.cancel(batch: self)
+            } catch {
+                crasher.recordError(error, reason: "Failed to cancel batch download.")
+            }
         }
     }
 

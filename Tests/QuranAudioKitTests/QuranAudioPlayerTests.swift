@@ -272,7 +272,7 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     func testStartingDownloadInProgress() throws {
-        let childResponse = DownloadResponse(download: Download(request: request, batchId: 1), progress: QProgress(totalUnitCount: 1))
+        let childResponse = DownloadResponse(download: Download(request: request, batchId: 1))
         let response = DownloadBatchResponse(batchId: 1, responses: [childResponse], cancellable: nil)
         downloader.downloads = [response]
 

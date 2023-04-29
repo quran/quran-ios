@@ -99,7 +99,7 @@ actor DownloadBatchDataController: NetworkResponseCancellable {
         var responses: [DownloadResponse] = []
         for download in batch.downloads {
             // create the response
-            let response = DownloadResponse(download: download, progress: QProgress(totalUnitCount: 1))
+            let response = DownloadResponse(download: download)
 
             response.promise.catch { _ in
                 // ignore all errors
@@ -108,7 +108,7 @@ actor DownloadBatchDataController: NetworkResponseCancellable {
             // if completed, then show that
             // if it is running, add it to running tasks
             if download.status == .completed {
-                await response.progress.update(completedUnitCount: 1)
+                response.progressSubject.send(DownloadProgress(total: 1, completed: 1))
                 response.fulfill()
             } else if let taskId = download.taskId {
                 runningDownloads[taskId] = response

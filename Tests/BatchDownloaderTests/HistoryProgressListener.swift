@@ -6,11 +6,15 @@
 //
 
 import BatchDownloader
+import Combine
 
-final class HistoryProgressListener: QProgressListener {
+final class HistoryProgressListener {
     var values: [Double] = []
+    var cancellable: AnyCancellable?
 
-    func onProgressUpdated(to progress: Double) {
-        values.append(progress)
+    init(_ subject: AnyPublisher<DownloadProgress, Never>) {
+        cancellable = subject.sink { [weak self] progress in
+            self?.values.append(progress.progress)
+        }
     }
 }

@@ -25,12 +25,10 @@ func describe(_ task: NetworkSessionTask) -> String {
     "\(type(of: task))(\(task.taskIdentifier): " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "") + ")"
 }
 
-class DownloadBatchDataController {
+actor DownloadBatchDataController: NetworkResponseCancellable {
     private let maxSimultaneousDownloads: Int
     private let persistence: DownloadsPersistence
-
-    var session: NetworkSession?
-    weak var cancellable: NetworkResponseCancellable?
+    private var session: NetworkSession?
 
     private var runningDownloads: [Int: DownloadResponse] = [:]
     private var batchesByIds: [Int64: DownloadBatchResponse] = [:]
@@ -40,11 +38,15 @@ class DownloadBatchDataController {
         self.persistence = persistence
     }
 
+    func update(session: NetworkSession) {
+        self.session = session
+    }
+
     func getOnGoingDownloads() -> [Int64: DownloadBatchResponse] {
         // make sure we set the cancellable
         // as we could load the requests before the cancellable is set
         for (_, batch) in batchesByIds {
-            batch.cancellable = cancellable
+            batch.cancellable = self
         }
         return batchesByIds
     }
@@ -69,31 +71,31 @@ class DownloadBatchDataController {
         return nil
     }
 
-    func download(_ batchRequest: DownloadBatchRequest) throws -> DownloadBatchResponse {
+    func download(_ batchRequest: DownloadBatchRequest) async throws -> DownloadBatchResponse {
         logger.info("Batching \(batchRequest.requests.count) to download.")
         // save to persistence
-        let batch = try persistence.insert(batch: batchRequest)
+        let batch = try await persistence.insert(batch: batchRequest)
 
         // create the response
-        let response = createResponse(forBatch: batch)
+        let response = await createResponse(forBatch: batch)
         batchesByIds[batch.id] = response
 
         // start pending downloads if needed
-        try startPendingTasksIfNeeded()
+        try await startPendingTasksIfNeeded()
 
         return response
     }
 
-    func loadBatchesFromPersistence() throws {
-        let batches = try persistence.retrieveAll()
+    func loadBatchesFromPersistence() async throws {
+        let batches = try await persistence.retrieveAll()
         logger.info("Loading \(batches.count) from persistence")
         for batch in batches {
-            let response = createResponse(forBatch: batch)
+            let response = await createResponse(forBatch: batch)
             batchesByIds[batch.id] = response
         }
     }
 
-    private func createResponse(forBatch batch: DownloadBatch) -> DownloadBatchResponse {
+    private func createResponse(forBatch batch: DownloadBatch) async -> DownloadBatchResponse {
         var responses: [DownloadResponse] = []
         for download in batch.downloads {
             // create the response
@@ -106,7 +108,7 @@ class DownloadBatchDataController {
             // if completed, then show that
             // if it is running, add it to running tasks
             if download.status == .completed {
-                response.progress.completedUnitCount = 1
+                await response.progress.update(completedUnitCount: 1)
                 response.fulfill()
             } else if let taskId = download.taskId {
                 runningDownloads[taskId] = response
@@ -115,17 +117,17 @@ class DownloadBatchDataController {
         }
 
         // create batch response
-        let response = DownloadBatchResponse(batchId: batch.id, responses: responses, cancellable: cancellable)
+        let response = DownloadBatchResponse(batchId: batch.id, responses: responses, cancellable: self)
         return response
     }
 
-    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) throws {
+    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async throws {
         guard !tasks.isEmpty else {
             return
         }
         // load the models from persistence if not loaded yet
         if batchesByIds.isEmpty {
-            try loadBatchesFromPersistence()
+            try await loadBatchesFromPersistence()
         }
 
         let previouslyDownloading = batchesByIds
@@ -157,10 +159,10 @@ class DownloadBatchDataController {
         }
 
         // start pending tasks if needed
-        try startPendingTasksIfNeeded()
+        try await startPendingTasksIfNeeded()
     }
 
-    private func removeCompletedDownloadsAndNotify() throws {
+    private func removeCompletedDownloadsAndNotify() async throws {
         // complete fulfilled/rejected batches
         var batchesToDelete: [Int64] = []
         let batches = batchesByIds
@@ -200,11 +202,11 @@ class DownloadBatchDataController {
 
         if !batchesToDelete.isEmpty {
             // delete the completed batches
-            try persistence.delete(batchIds: batchesToDelete)
+            try await persistence.delete(batchIds: batchesToDelete)
         }
     }
 
-    private func startPendingTasksIfNeeded() throws {
+    private func startPendingTasksIfNeeded() async throws {
         // if we have a session
         guard let session = session else {
             return
@@ -226,7 +228,7 @@ class DownloadBatchDataController {
         }
 
         // start downloads
-        try startDownloads(downloads)
+        try await startDownloads(downloads)
     }
 
     private func downloads(session: NetworkSession) -> [(task: NetworkSessionDownloadTask, response: DownloadResponse)] {
@@ -248,7 +250,7 @@ class DownloadBatchDataController {
                 download.download.status = .downloading
 
                 downloads.append((task, download))
-                // if all slots are filled, exist
+                // if all slots are filled, exit
                 if downloads.count >= emptySlots {
                     break
                 }
@@ -261,7 +263,7 @@ class DownloadBatchDataController {
         return downloads
     }
 
-    private func startDownloads(_ downloads: [(task: NetworkSessionDownloadTask, response: DownloadResponse)]) throws {
+    private func startDownloads(_ downloads: [(task: NetworkSessionDownloadTask, response: DownloadResponse)]) async throws {
         // continue if there are data
         guard !downloads.isEmpty else {
             return
@@ -271,7 +273,7 @@ class DownloadBatchDataController {
 
         // updated downloads
         do {
-            try persistence.update(downloads: downloads.map(\.response.download))
+            try await persistence.update(downloads: downloads.map(\.response.download))
         } catch {
             logger.error("Couldn't update downloads persistence with error: \(error)")
             // roll back
@@ -300,41 +302,41 @@ class DownloadBatchDataController {
         }
     }
 
-    func downloadCompleted(_ response: DownloadResponse) throws {
-        try update(response, to: .completed)
+    func downloadCompleted(_ response: DownloadResponse) async throws {
+        try await update(response, to: .completed)
         // fulfill
         response.fulfill()
         responseIsDone(response)
 
         // clean up the model
-        try removeCompletedDownloadsAndNotify()
+        try await removeCompletedDownloadsAndNotify()
 
         // start pending tasks if needed
-        try startPendingTasksIfNeeded()
+        try await startPendingTasksIfNeeded()
     }
 
-    func downloadFailed(_ response: DownloadResponse, with error: Error) throws {
+    func downloadFailed(_ response: DownloadResponse, with error: Error) async throws {
         if response.promise.isPending {
             response.reject(error)
         }
         responseIsDone(response)
 
         // clean up the model
-        try removeCompletedDownloadsAndNotify()
+        try await removeCompletedDownloadsAndNotify()
 
         // start pending tasks if needed
-        try startPendingTasksIfNeeded()
+        try await startPendingTasksIfNeeded()
     }
 
-    func cancel(batch: DownloadBatchResponse) throws {
+    func cancel(batch: DownloadBatchResponse) async throws {
         // cancel any on-going downloads
         cancelOngoingResponses(for: batch)
 
         // clean up the model
-        try removeCompletedDownloadsAndNotify()
+        try await removeCompletedDownloadsAndNotify()
 
         // start pending tasks if needed
-        try startPendingTasksIfNeeded()
+        try await startPendingTasksIfNeeded()
     }
 
     private func cancelOngoingResponses(for batch: DownloadBatchResponse) {
@@ -347,11 +349,11 @@ class DownloadBatchDataController {
         }
     }
 
-    private func update(_ response: DownloadResponse, to status: Download.Status) throws {
+    private func update(_ response: DownloadResponse, to status: Download.Status) async throws {
         let oldStatus = response.download.status
         response.download.status = status
         do {
-            try persistence.update(url: response.download.request.url, newStatus: status)
+            try await persistence.update(url: response.download.request.url, newStatus: status)
         } catch {
             // roll back
             response.download.status = oldStatus

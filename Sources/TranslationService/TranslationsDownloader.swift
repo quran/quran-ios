@@ -19,12 +19,16 @@ public struct TranslationsDownloader {
         // download the translation
         let destinationPath = Translation.translationsPathComponent.stringByAppendingPath(translation.rawFileName)
         let download = DownloadRequest(url: translation.fileURL, destinationPath: destinationPath)
-        return downloader.download(DownloadBatchRequest(requests: [download]))
+        return DispatchQueue.global().asyncPromise {
+            try await downloader.download(DownloadBatchRequest(requests: [download]))
+        }
     }
 
     public func downloadingTranslations(_ translations: [Translation]) -> Guarantee<[Translation: DownloadBatchResponse]> {
-        downloader.getOnGoingDownloads()
-            .map { self.translationResponses(translations, downloadsBatches: $0) }
+        DispatchQueue.global().asyncGuarantee {
+            let downloads = await self.downloader.getOnGoingDownloads()
+            return self.translationResponses(translations, downloadsBatches: downloads)
+        }
     }
 
     private func translationResponses(_ translations: [Translation],

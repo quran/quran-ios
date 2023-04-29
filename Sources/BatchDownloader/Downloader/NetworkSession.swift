@@ -5,10 +5,11 @@
 //  Created by Mohamed Afifi on 2022-01-23.
 //
 
+import Crashing
 import Foundation
-import PromiseKit
 
 protocol NetworkSession {
+    var delegateQueue: OperationQueue { get }
     func getTasksWithCompletionHandler(_ completionHandler: @escaping ([NetworkSessionDataTask],
                                                                        [NetworkSessionUploadTask],
                                                                        [NetworkSessionDownloadTask]) -> Void)
@@ -40,12 +41,12 @@ protocol NetworkSessionDelegate {
                         downloadTask: NetworkSessionDownloadTask,
                         didWriteData bytesWritten: Int64,
                         totalBytesWritten: Int64,
-                        totalBytesExpectedToWrite: Int64)
+                        totalBytesExpectedToWrite: Int64) async
 
-    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL)
-    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?)
+    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async
+    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async
 
-    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession)
+    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) async
 }
 
 extension URLSession: NetworkSession {
@@ -96,22 +97,45 @@ final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDele
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64)
     {
-        networkSessionDelegate.networkSession(session,
-                                              downloadTask: downloadTask,
-                                              didWriteData: bytesWritten,
-                                              totalBytesWritten: totalBytesWritten,
-                                              totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+        Task {
+            await networkSessionDelegate.networkSession(session,
+                                                        downloadTask: downloadTask,
+                                                        didWriteData: bytesWritten,
+                                                        totalBytesWritten: totalBytesWritten,
+                                                        totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+        }
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
+        let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let filePath = UUID().uuidString
+        let temporaryFile = temporaryDirectory.appendingPathComponent(filePath)
+        do {
+            // Move the file to a temporary location as URLSession would delete it before the async task starts.
+            try FileManager.default.moveItem(at: location, to: temporaryFile)
+            Task {
+                await networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: temporaryFile)
+                try? FileManager.default.removeItem(at: temporaryFile)
+            }
+        }
+        catch {
+            crasher.recordError(
+                error,
+                reason: "Problem moving the downloaded file to a temporary location '\(temporaryFile)'"
+            )
+        }
+
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
-        networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: sessionError)
+        Task {
+            await networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: sessionError)
+        }
     }
 
     func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        networkSessionDelegate.networkSessionDidFinishEvents(forBackgroundURLSession: session)
+        Task {
+            await networkSessionDelegate.networkSessionDidFinishEvents(forBackgroundURLSession: session)
+        }
     }
 }

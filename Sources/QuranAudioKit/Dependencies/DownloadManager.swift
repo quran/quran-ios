@@ -10,8 +10,8 @@ import Foundation
 import PromiseKit
 
 public protocol DownloadManager {
-    func getOnGoingDownloads() -> Guarantee<[DownloadBatchResponse]>
-    func download(_ batch: DownloadBatchRequest) -> Promise<DownloadBatchResponse>
+    func getOnGoingDownloads() async -> [DownloadBatchResponse]
+    func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse
 }
 
 extension BatchDownloader.DownloadManager: DownloadManager {

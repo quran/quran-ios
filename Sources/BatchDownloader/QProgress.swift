@@ -22,40 +22,26 @@ import Foundation
 import WeakSet
 
 public protocol QProgressListener: AnyObject {
-    func onProgressUpdated(to progress: Double)
-}
-
-public final class BlockQProgressListener: QProgressListener {
-    private let body: (Double) -> Void
-    public init(_ body: @escaping (Double) -> Void) {
-        self.body = body
-    }
-
-    public func onProgressUpdated(to progress: Double) {
-        body(progress)
-    }
+    func onProgressUpdated(to progress: Double) async
 }
 
 public final class QProgress: NSObject, QProgressListener {
     private var children: [QProgress: Double] = [:]
     public let progressListeners = WeakSet<QProgressListener>()
 
-    public var totalUnitCount: Double {
-        didSet {
-            if oldValue != totalUnitCount {
-                notifyProgressChanged()
-            }
-        }
+    public private(set) var totalUnitCount: Double
+    public private(set) var completedUnitCount: Double = 0
+
+    public func update(totalUnitCount: Double? = nil, completedUnitCount: Double? = nil) async {
+        self.totalUnitCount = totalUnitCount ?? self.totalUnitCount
+        self.completedUnitCount = completedUnitCount ?? self.completedUnitCount
+        await notifyProgressChanged()
     }
 
-    public var completedUnitCount: Double = 0 {
-        didSet { notifyProgressChanged() }
-    }
-
-    private func notifyProgressChanged() {
+    private func notifyProgressChanged() async {
         let progress = progress
         for listener in progressListeners {
-            listener.onProgressUpdated(to: progress)
+            await listener.onProgressUpdated(to: progress)
         }
     }
 
@@ -77,11 +63,11 @@ public final class QProgress: NSObject, QProgressListener {
         child.progressListeners.remove(self)
     }
 
-    public func onProgressUpdated(to progress: Double) {
+    public func onProgressUpdated(to progress: Double) async {
         var completedUnitCount: Double = 0
         for (child, pendingUnitCount) in children {
             completedUnitCount += child.progress * pendingUnitCount
         }
-        self.completedUnitCount = completedUnitCount
+        await update(completedUnitCount: completedUnitCount)
     }
 }

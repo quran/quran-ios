@@ -38,7 +38,7 @@ public struct AyahsAudioDownloader {
 
     public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) -> Promise<DownloadBatchResponse> {
         DispatchQueue.global()
-            .async(.guarantee) { () -> DownloadBatchRequest in
+            .asyncPromise {
                 let retriever = self.fileListFactory.fileListRetrievalForReciter(reciter)
 
                 // get downloads
@@ -46,17 +46,18 @@ public struct AyahsAudioDownloader {
                     .get(for: reciter, from: start, to: end)
                     .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
                     .map { DownloadRequest(url: $0.remote, destinationPath: $0.local) }
-                return DownloadBatchRequest(requests: files)
-            }
-            .then {
+                let request = DownloadBatchRequest(requests: files)
                 // create downloads
-                self.downloader.download($0)
+                return try await self.downloader.download(request)
             }
     }
 
     public func downloadingAudios(_ reciters: [Reciter]) -> Guarantee<[Reciter: DownloadBatchResponse]> {
-        downloader.getOnGoingDownloads()
-            .map { self.audioResponses(reciters, downloads: $0) }
+        DispatchQueue.global()
+            .asyncGuarantee {
+                let downloads = await self.downloader.getOnGoingDownloads()
+                return self.audioResponses(reciters, downloads: downloads)
+            }
     }
 
     private func audioResponses(_ reciters: [Reciter], downloads: [DownloadBatchResponse]) -> [Reciter: DownloadBatchResponse] {

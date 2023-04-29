@@ -6,12 +6,13 @@
 //
 
 import Foundation
-import PromiseKit
 
 extension NetworkSession {
-    func tasks() -> Guarantee<([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])> {
-        Guarantee { resolver in
-            getTasksWithCompletionHandler { resolver(($0, $1, $2)) }
+    func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
+        await withCheckedContinuation { continuation in
+            getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+                continuation.resume(returning: (dataTasks, uploadTasks, downloadTasks))
+            }
         }
     }
 }

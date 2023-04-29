@@ -45,8 +45,10 @@ class AudioFilesDownloader {
     }
 
     func cancel() {
-        response?.cancel()
-        response = nil
+        Task {
+            await response?.cancel()
+            response = nil
+        }
     }
 
     func needsToDownloadFiles(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> Bool {
@@ -55,10 +57,11 @@ class AudioFilesDownloader {
     }
 
     func getCurrentDownloadResponse() -> Guarantee<DownloadBatchResponse?> {
-        if let response = response {
-            return Guarantee.value(response)
-        } else {
-            return downloader.getOnGoingDownloads().map { batches -> DownloadBatchResponse? in
+        DispatchQueue.global().asyncGuarantee {
+            if let response = self.response {
+                return response
+            } else {
+                let batches = await self.downloader.getOnGoingDownloads()
                 let downloading = batches.first { $0.isAudio }
                 self.createRequestWithDownloads(downloading)
                 return self.response

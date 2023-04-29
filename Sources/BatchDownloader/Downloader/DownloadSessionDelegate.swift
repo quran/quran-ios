@@ -22,52 +22,56 @@ import Crashing
 import Foundation
 import VLogging
 
-class DownloadSessionDelegate: NetworkSessionDelegate {
+actor DownloadSessionDelegate: NetworkSessionDelegate {
     private let acceptableStatusCodes = 200 ..< 300
 
     private let dataController: DownloadBatchDataController
 
-    weak var cancellable: NetworkResponseCancellable?
-    var backgroundSessionCompletionHandler: (() -> Void)?
+    @MainActor var backgroundSessionCompletion: (() -> Void)?
 
     init(dataController: DownloadBatchDataController) {
         self.dataController = dataController
     }
 
-    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) throws {
-        try dataController.setRunningTasks(tasks)
+    @MainActor
+    func setBackgroundSessionCompletion(_ backgroundSessionCompletion: (() -> Void)?) {
+        self.backgroundSessionCompletion = backgroundSessionCompletion
     }
 
-    func download(_ batch: DownloadBatchRequest) throws -> DownloadBatchResponse {
-        try dataController.download(batch)
+    func populateRunningTasks(from session: NetworkSession) async throws {
+        let (_, _, downloadTasks) = await session.tasks()
+        try await dataController.setRunningTasks(downloadTasks)
     }
 
-    func getOnGoingDownloads() -> [DownloadBatchResponse] {
-        dataController.getOnGoingDownloads().map { $1 }
+    func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
+        try await dataController.download(batch)
+    }
+
+    func getOnGoingDownloads() async -> [DownloadBatchResponse] {
+        await dataController.getOnGoingDownloads().map { $1 }
     }
 
     func networkSession(_ session: NetworkSession,
                         downloadTask: NetworkSessionDownloadTask,
                         didWriteData bytesWritten: Int64,
                         totalBytesWritten: Int64,
-                        totalBytesExpectedToWrite: Int64)
+                        totalBytesExpectedToWrite: Int64) async
     {
-        guard let response = dataController.downloadResponse(for: downloadTask) else {
+        guard let response = await dataController.downloadResponse(for: downloadTask) else {
             logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return
         }
-        response.progress.totalUnitCount = Double(totalBytesExpectedToWrite)
-        response.progress.completedUnitCount = Double(totalBytesWritten)
+        await response.progress.update(totalUnitCount: Double(totalBytesExpectedToWrite), completedUnitCount: Double(totalBytesWritten))
     }
 
-    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async {
         // validate task response
         guard validate(task: downloadTask) == nil else {
             logger.error("Invalid server response \(downloadTask.taskIdentifier) - \(String(describing: downloadTask.response))")
             return
         }
 
-        guard let response = dataController.downloadResponse(for: downloadTask) else {
+        guard let response = await dataController.downloadResponse(for: downloadTask) else {
             logger.warning("Missed saving task \(describe(downloadTask))")
             return
         }
@@ -96,15 +100,15 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
             )
             // fail the batch since we save the file
             do {
-                try dataController.downloadFailed(response, with: FileSystemError(error: error))
+                try await dataController.downloadFailed(response, with: FileSystemError(error: error))
             } catch {
                 crasher.recordError(error, reason: "download task failed")
             }
         }
     }
 
-    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) {
-        guard let response = dataController.downloadResponse(for: task) else {
+    func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async {
+        guard let response = await dataController.downloadResponse(for: task) else {
             logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
             return
         }
@@ -115,7 +119,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
         // if success, early return
         guard let error = theError else {
             do {
-                try dataController.downloadCompleted(response)
+                try await dataController.downloadCompleted(response)
             } catch {
                 crasher.recordError(error, reason: "downloadCompleted")
             }
@@ -125,7 +129,7 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
         let finalError = wrap(error: error, resumePath: response.download.request.resumePath)
 
         do {
-            try dataController.downloadFailed(response, with: finalError)
+            try await dataController.downloadFailed(response, with: finalError)
         } catch {
             crasher.recordError(error, reason: "downloadFailed")
         }
@@ -162,15 +166,10 @@ class DownloadSessionDelegate: NetworkSessionDelegate {
         return finalError
     }
 
+    @MainActor
     func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
-        DispatchQueue.main.async {
-            self.backgroundSessionCompletionHandler?()
-            self.backgroundSessionCompletionHandler = nil
-        }
-    }
-
-    func cancel(batch: DownloadBatchResponse) throws {
-        try dataController.cancel(batch: batch)
+        backgroundSessionCompletion?()
+        backgroundSessionCompletion = nil
     }
 
     private func validate(task: NetworkSessionTask) -> Error? {

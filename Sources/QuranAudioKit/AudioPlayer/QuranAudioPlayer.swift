@@ -181,7 +181,9 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
                     }
 
                     if self.downloadCancelled {
-                        response.cancel()
+                        Task {
+                            await response.cancel()
+                        }
                     } else {
                         self.gotDownloadResponse(response, playbackInfo: playbackInfo)
                     }

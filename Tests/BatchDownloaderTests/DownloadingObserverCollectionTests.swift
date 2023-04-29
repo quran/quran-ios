@@ -7,6 +7,7 @@
 
 @testable import BatchDownloader
 import XCTest
+import TestUtilities
 
 class DownloadingObserverCollectionTests: XCTestCase {
     private var observers: DownloadingObserverCollection<AudioDownload>!
@@ -21,36 +22,25 @@ class DownloadingObserverCollectionTests: XCTestCase {
         recorder = DownloadObserversRecorder(observer: observers)
     }
 
-    private func waitForProgressUpdates() {
-        // wait for the main thread dispatch async as completion is called on main thread
-        wait(for: DispatchQueue.main)
-    }
-
-    func testStartingDownloadCompletedSuccessfully() {
+    func testStartingDownloadCompletedSuccessfully() async {
         XCTAssertEqual(recorder.diffSinceLastCalled, [])
 
         // prepare response
         let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.progress.totalUnitCount = 1
+        await response.progress.update(totalUnitCount: 1)
         // start downloading
-        observers.observe([item1, item2, item3], responses: [:])
-        observers.startDownloading(item: item2, response: response)
+        await observers.observe([item1, item2, item3], responses: [:])
+        await observers.startDownloading(item: item2, response: response)
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
             .itemsUpdated([item1, item2, item3]),
+            .progress(item2, 1, 0.0),
             .itemsUpdated([item1, item2, item3]),
         ])
 
-        waitForProgressUpdates()
-
-        // at the start, we get 0%
-        XCTAssertEqual(recorder.diffSinceLastCalled, [
-            .progress(item2, 1, 0),
-        ])
-
-        response.progress.completedUnitCount = 0.5
-        response.progress.completedUnitCount = 1
-        waitForProgressUpdates()
+        await response.progress.update(completedUnitCount: 0.5)
+        await response.progress.update(completedUnitCount: 1)
+        await Task.megaYield()
 
         // get 50% then 100%
         XCTAssertEqual(recorder.diffSinceLastCalled, [
@@ -59,7 +49,7 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
 
         response.fulfill()
-        waitForProgressUpdates()
+        await Task.megaYield()
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
             .itemsUpdated([item1, item2, item3]),
@@ -67,20 +57,20 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
     }
 
-    func testStartingDownloadFailedToComplete() {
+    func testStartingDownloadFailedToComplete() async {
         // start downloading and immediately fail it
         let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.progress.totalUnitCount = 1
-        observers.observe([item1, item2, item3], responses: [:])
-        observers.startDownloading(item: item3, response: response)
+        await response.progress.update(totalUnitCount: 1)
+        await observers.observe([item1, item2, item3], responses: [:])
+        await observers.startDownloading(item: item3, response: response)
         response.reject(FileSystemError(error: CocoaError(.fileWriteOutOfSpace)))
 
-        waitForProgressUpdates()
+        await Task.megaYield()
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
             .itemsUpdated([item1, item2, item3]),
-            .itemsUpdated([item1, item2, item3]),
             .progress(item3, 2, 0),
+            .itemsUpdated([item1, item2, item3]),
 
             // failed
             .itemsUpdated([item1, item2, item3]),
@@ -88,20 +78,19 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
     }
 
-    func testObserveMethod() {
+    func testObserveMethod() async {
         let response1 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         let response2 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         let response3 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         for response in [response1, response2, response3] {
-            response.progress.totalUnitCount = 1
+            await response.progress.update(totalUnitCount: 1)
         }
 
-        observers.observe([item1, item2, item3], responses: [
+        await observers.observe([item1, item2, item3], responses: [
             item1: response1,
             item2: response2,
             item3: response3,
         ])
-        waitForProgressUpdates()
 
         XCTAssertEqual(Set(recorder.diffSinceLastCalled), [
             .itemsUpdated([item1, item2, item3]),
@@ -111,15 +100,16 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
     }
 
-    func testStopDownloading() {
+    func testStopDownloading() async {
         let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.progress.totalUnitCount = 1
-        observers.observe([item1, item2, item3], responses: [item1: response])
-        observers.stopDownloading(item1)
-        observers.stopDownloading(item2)
-        waitForProgressUpdates()
+        await response.progress.update(totalUnitCount: 1)
+
+        await observers.observe([item1, item2, item3], responses: [item1: response])
+        await observers.stopDownloading(item1)
+        await observers.stopDownloading(item2)
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
+            .progress(item1, 0, 0),
             .itemsUpdated([item1, item2, item3]),
             .cancel(response: response),
             .itemsUpdated([item1, item2, item3]),
@@ -128,26 +118,28 @@ class DownloadingObserverCollectionTests: XCTestCase {
 
         // if promise fulfilled, we don't get notified
         response.fulfill()
-        waitForProgressUpdates()
+        await Task.megaYield()
+
         XCTAssertTrue(recorder.diffSinceLastCalled.isEmpty)
     }
 
-    func testStopDownloadingThenRedownloading() {
+    func testStopDownloadingThenRedownloading() async {
         let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.progress.totalUnitCount = 1
-        observers.observe([item1, item2, item3], responses: [item1: response])
-        observers.stopDownloading(item1)
+        await response.progress.update(totalUnitCount: 1)
+        await observers.observe([item1, item2, item3], responses: [item1: response])
+        await observers.stopDownloading(item1)
         observers.preparingDownloading(item1)
-        observers.startDownloading(item: item1, response: response)
+        await observers.startDownloading(item: item1, response: response)
         response.fulfill()
-        waitForProgressUpdates()
+        await Task.megaYield()
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
+            .progress(item1, 0, 0),
             .itemsUpdated([item1, item2, item3]),
             .cancel(response: response),
             .itemsUpdated([item1, item2, item3]),
-            .itemsUpdated([item1, item2, item3]),
             .progress(item1, 0, 0),
+            .itemsUpdated([item1, item2, item3]),
 
             // completed
             .itemsUpdated([item1, item2, item3]),
@@ -155,15 +147,15 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
     }
 
-    func testCantRestartDownloadImmediately() {
+    func testCantRestartDownloadImmediately() async {
         let response = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
-        response.progress.totalUnitCount = 1
-        observers.observe([item1, item2, item3], responses: [item1: response])
-        observers.stopDownloading(item1)
-        observers.startDownloading(item: item1, response: response)
-        waitForProgressUpdates()
+        await response.progress.update(totalUnitCount: 1)
+        await observers.observe([item1, item2, item3], responses: [item1: response])
+        await observers.stopDownloading(item1)
+        await observers.startDownloading(item: item1, response: response)
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
+            .progress(item1, 0, 0),
             .itemsUpdated([item1, item2, item3]),
             .cancel(response: response),
             .itemsUpdated([item1, item2, item3]),
@@ -171,30 +163,30 @@ class DownloadingObserverCollectionTests: XCTestCase {
         ])
     }
 
-    func testRemoveAllResponses() {
+    func testRemoveAllResponses() async {
         let response1 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         let response2 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         let response3 = DownloadBatchResponse(batchId: -1, responses: [], cancellable: nil)
         for response in [response1, response2, response3] {
-            response.progress.totalUnitCount = 1
+            await response.progress.update(totalUnitCount: 1)
         }
-        observers.observe([item1, item2, item3], responses: [
+        await observers.observe([item1, item2, item3], responses: [
             item1: response1,
             item2: response2,
             item3: response3,
         ])
-        waitForProgressUpdates()
         // start the diff now
         _ = recorder.diffSinceLastCalled
 
-        observers.removeAll()
-        waitForProgressUpdates()
+        await observers.removeAll()
+        await Task.megaYield()
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [
             .itemsUpdated([]),
         ])
 
         response1.fulfill()
+        await Task.megaYield()
 
         XCTAssertEqual(recorder.diffSinceLastCalled, [])
     }

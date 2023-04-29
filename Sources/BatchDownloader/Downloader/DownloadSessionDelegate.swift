@@ -61,7 +61,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return
         }
-        await response.progress.update(totalUnitCount: Double(totalBytesExpectedToWrite), completedUnitCount: Double(totalBytesWritten))
+        response.progressSubject.send(DownloadProgress(total: Double(totalBytesExpectedToWrite), completed: Double(totalBytesWritten)))
     }
 
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async {

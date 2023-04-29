@@ -18,6 +18,7 @@
 //  GNU General License for more details.
 //
 
+import Combine
 import Foundation
 import Locking
 
@@ -27,8 +28,10 @@ struct DownloadingObserverActions<Item> {
     let onDownloadCompleted: (Item) async -> Void
 }
 
-final class DownloadingObserver<Item>: NSObject, QProgressListener {
+final class DownloadingObserver<Item>: NSObject {
     private let actions: DownloadingObserverActions<Item>
+
+    private var progressCancellable: AnyCancellable?
 
     private let item: Item
     let response: DownloadBatchResponse
@@ -55,7 +58,11 @@ final class DownloadingObserver<Item>: NSObject, QProgressListener {
     func start() async {
         stopped.value = false
 
-        response.progress.progressListeners.insert(self)
+        progressCancellable = response.progress.sink { [weak self] progress in
+            Task { [self] in
+                await self?.onProgressUpdated(to: progress.progress)
+            }
+        }
         response.promise.done(on: .main) { [weak self] _ in
             guard let self = self, !self.stopped.value else {
                 return
@@ -72,10 +79,9 @@ final class DownloadingObserver<Item>: NSObject, QProgressListener {
                 await self.actions.onDownloadFailed(error, self.item)
             }
         }
-        await onProgressUpdated(to: response.progress.progress)
     }
 
-    func onProgressUpdated(to progress: Double) async {
+    private func onProgressUpdated(to progress: Double) async {
         guard !stopped.value else {
             return
         }

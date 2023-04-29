@@ -96,8 +96,7 @@ final class DownloadManagerTests: XCTestCase {
         let responses = response.responses
         XCTAssertEqual(responses.count, 2)
 
-        let batchListener = HistoryProgressListener()
-        response.progress.progressListeners.insert(batchListener)
+        let batchListener = HistoryProgressListener(response.progress)
 
         // complete the downloads
         let task1 = try completeTask(response, i: 0)
@@ -273,8 +272,7 @@ final class DownloadManagerTests: XCTestCase {
         let source = try createTextFile(at: "loc-\(i).txt", content: text)
         let destination = destinationURL(response: response.responses[i])
         XCTAssertTrue(source.isReachable, file: file, line: line)
-        let listener = HistoryProgressListener()
-        response.responses[i].progress.progressListeners.insert(listener)
+        let listener = HistoryProgressListener(response.responses[i].progressSubject.eraseToAnyPublisher())
         session?.completeDownloadTask(task, location: source, totalBytes: totalBytes, progressLoops: progressLoops)
         return CompletedTask(task: task,
                              text: text,
@@ -290,7 +288,7 @@ final class DownloadManagerTests: XCTestCase {
         for i in 0 ..< (task.progressLoops + 1) {
             progressValues.append(1 / Double(task.progressLoops) * Double(i))
         }
-        XCTAssertEqual(progressValues, task.listener.values, file: file, line: line)
+        XCTAssertEqual(progressValues, task.listener.values.removingNeighboringDuplicates(), file: file, line: line)
         XCTAssertNotNil(task.response.promise.value, file: file, line: line)
 
         // verify downloads saved

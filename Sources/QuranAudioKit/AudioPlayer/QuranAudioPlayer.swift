@@ -8,6 +8,7 @@
 
 import AVFoundation
 import BatchDownloader
+import Combine
 import PromiseKit
 import QueuePlayer
 import QuranKit
@@ -15,7 +16,7 @@ import VLogging
 
 public protocol QuranAudioPlayerDelegate: AnyObject {
     func willStartDownloading()
-    func didStartDownloadingAudioFiles(progress: QProgress)
+    func didStartDownloadingAudioFiles(progress: AnyPublisher<DownloadProgress, Never>)
 
     func onPlayingStarted()
 

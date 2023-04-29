@@ -6,6 +6,7 @@
 //
 
 import BatchDownloader
+import Combine
 import Locking
 @testable import QuranAudioKit
 import QuranKit
@@ -40,8 +41,8 @@ class QuranAudioPlayerDelegateClosures: QuranAudioPlayerDelegate {
         willStartDownloadingBlock?()
     }
 
-    var didStartDownloadingAudioFiles: ((QProgress) -> Void)?
-    func didStartDownloadingAudioFiles(progress: QProgress) {
+    var didStartDownloadingAudioFiles: ((AnyPublisher<DownloadProgress, Never>) -> Void)?
+    func didStartDownloadingAudioFiles(progress: AnyPublisher<DownloadProgress, Never>) {
         events.sync { $0.append(.didStartDownloadingAudioFiles) }
         didStartDownloadingAudioFiles?(progress)
     }

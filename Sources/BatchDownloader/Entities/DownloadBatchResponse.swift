@@ -18,21 +18,22 @@
 //  GNU General Public License for more details.
 //
 
+import Combine
 import Crashing
 import Foundation
 import PromiseKit
 
 class DownloadResponse {
-    let progress: QProgress
+    let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+
     var download: Download
     var task: NetworkSessionTask?
 
     let promise: Promise<Void>
     private let resolver: Resolver<Void>
 
-    init(download: Download, progress: QProgress) {
+    init(download: Download) {
         self.download = download
-        self.progress = progress
         (promise, resolver) = Promise<Void>.pending()
     }
 
@@ -47,11 +48,16 @@ class DownloadResponse {
 
 public final class DownloadBatchResponse {
     weak var cancellable: NetworkResponseCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     let batchId: Int64
     let responses: [DownloadResponse]
 
-    public let progress: QProgress
+    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+
+    public var progress: AnyPublisher<DownloadProgress, Never> {
+        progressSubject.eraseToAnyPublisher()
+    }
 
     public let promise: Promise<Void>
     private let resolver: Resolver<Void>
@@ -66,10 +72,28 @@ public final class DownloadBatchResponse {
         self.cancellable = cancellable
         (promise, resolver) = Promise<Void>.pending()
 
-        progress = QProgress(totalUnitCount: Double(responses.count))
-        responses.forEach {
-            progress.add(child: $0.progress, withPendingUnitCount: 1)
+        responses.forEach { response in
+            response.progressSubject
+                .sink { [weak self] progress in
+                    self?.updateResponsesProgress()
+                }
+                .store(in: &cancellables)
         }
+    }
+
+    private func updateResponsesProgress() {
+        var accumulated: Double = 0
+        for response in responses {
+            accumulated += response.progressSubject.value.progress
+        }
+        updateProgress(completed: accumulated / Double(responses.count))
+    }
+
+    func updateProgress(total: Double? = nil, completed: Double? = nil) {
+        var value = progressSubject.value
+        value.total = total ?? value.total
+        value.completed = completed ?? value.completed
+        progressSubject.send(value)
     }
 
     public func cancel() async {

@@ -20,8 +20,8 @@
 
 import Foundation
 
-public extension Sequence {
-    func flatGroup<U: Hashable>(by key: (Iterator.Element) -> U) -> [U: Iterator.Element] {
+extension Sequence {
+    public func flatGroup<U: Hashable>(by key: (Iterator.Element) -> U) -> [U: Iterator.Element] {
         var categories: [U: Iterator.Element] = [:]
         for element in self {
             let key = key(element)
@@ -42,5 +42,34 @@ extension Sequence where Iterator.Element: Hashable {
             }
         }
         return buffer
+    }
+}
+
+extension Sequence {
+    public func asyncMap<T>(_ transform: (Element) async throws -> T) async rethrows -> [T] {
+        var values = [T]()
+        for element in self {
+            try await values.append(transform(element))
+        }
+        return values
+    }
+
+    public func asyncFilter(_ isIncluded: (Element) async throws -> Bool) async rethrows -> [Element] {
+        var filtered = [Element]()
+        for element in self {
+            if try await isIncluded(element) {
+                filtered.append(element)
+            }
+        }
+        return filtered
+    }
+
+    public func asyncFlatGroup<U: Hashable>(by key: (Iterator.Element) async -> U) async -> [U: Iterator.Element] {
+        var categories: [U: Iterator.Element] = [:]
+        for element in self {
+            let key = await key(element)
+            categories[key] = element
+        }
+        return categories
     }
 }

@@ -26,7 +26,6 @@ import Utilities
 protocol DownloadsPersistence {
     func retrieveAll() async throws -> [DownloadBatch]
     func insert(batch: DownloadBatchRequest) async throws -> DownloadBatch
-    func update(url: URL, newStatus status: Download.Status) async throws
     func update(downloads: [Download]) async throws
     func delete(batchIds: [Int64]) async throws
 }
@@ -134,15 +133,6 @@ final class SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence 
             // prepare the result
             let downloads = batch.requests.map { Download(request: $0, batchId: batchId) }
             return DownloadBatch(id: batchId, downloads: downloads)
-        }
-    }
-
-    func update(url: URL, newStatus status: Download.Status) throws {
-        try run(using: connection) { connection in
-            let rows = Downloads.table.filter(Downloads.url == url.absoluteString)
-            let update = rows.update(
-                Downloads.status <- status.rawValue)
-            try connection.run(update)
         }
     }
 

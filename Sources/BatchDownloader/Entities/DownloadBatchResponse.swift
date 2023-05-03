@@ -18,78 +18,164 @@
 //  GNU General Public License for more details.
 //
 
-import Combine
+import AsyncExtensions
 import Crashing
 import Foundation
-import PromiseKit
+import Utilities
 
-class DownloadResponse {
-    let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+actor DownloadResponse {
+    private(set) var download: Download
+    private(set) var task: NetworkSessionTask?
 
-    var download: Download
-    var task: NetworkSessionTask?
+    private let continuations = MulticastContinuation<Void, Error>()
 
-    let promise: Promise<Void>
-    private let resolver: Resolver<Void>
+    var isPending: Bool {
+        get async {
+            await continuations.isPending
+        }
+    }
 
     init(download: Download) {
         self.download = download
-        (promise, resolver) = Promise<Void>.pending()
     }
 
-    func fulfill() {
-        resolver.fulfill(())
+    private let progressSubject = AsyncCurrentValueSubject(DownloadProgress(total: 1))
+    var progress: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>> {
+        progressSubject.eraseToOpaqueAsyncSequence()
     }
 
-    func reject(_ error: Error) {
-        resolver.reject(error)
+    var currentProgress: DownloadProgress { progressSubject.value }
+
+    func updateProgress(_ progress: DownloadProgress) async {
+        if await isPending {
+            progressSubject.send(progress)
+        }
+    }
+
+    func setDownloading(task: NetworkSessionTask) async {
+        assert(self.task == nil, "Cannot set task twice")
+        if await continuations.isPending {
+            self.task = task
+            download.taskId = task.taskIdentifier
+            download.status = .downloading
+        }
+    }
+
+    func setPending() async {
+        if await continuations.isPending {
+            task = nil
+            download.taskId = nil
+            download.status = .pending
+        }
+    }
+
+    func completion() async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            Task {
+                await self.continuations.addContinuation(continuation)
+            }
+        }
+    }
+
+    func fulfill() async {
+        if await continuations.isPending {
+            download.status = .completed
+            task = nil
+            download.taskId = nil
+            await continuations.resume(returning: ())
+            progressSubject.send(.finished)
+        }
+    }
+
+    func reject(_ error: Error) async {
+        if await continuations.isPending {
+            task = nil
+            download.taskId = nil
+            await continuations.resume(throwing: error)
+        }
+    }
+
+    func cancel() async {
+        if await continuations.isPending {
+            await reject(CancellationError())
+            task?.cancel()
+        }
     }
 }
 
-public final class DownloadBatchResponse {
-    weak var cancellable: NetworkResponseCancellable?
-    private var cancellables: Set<AnyCancellable> = []
-
+public actor DownloadBatchResponse {
     let batchId: Int64
     let responses: [DownloadResponse]
 
-    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
-
-    public var progress: AnyPublisher<DownloadProgress, Never> {
-        progressSubject.eraseToAnyPublisher()
+    private let progressSubject = AsyncCurrentValueSubject(DownloadProgress(total: 1))
+    public var progress: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>> {
+        progressSubject.eraseToOpaqueAsyncSequence()
     }
 
-    public let promise: Promise<Void>
-    private let resolver: Resolver<Void>
+    private var completionTask: Task<Void, Error>?
 
     public var requests: [DownloadRequest] {
-        responses.map(\.download.request)
+        get async {
+            await responses.asyncMap { await $0.download.request }
+        }
     }
 
-    init(batchId: Int64, responses: [DownloadResponse], cancellable: NetworkResponseCancellable?) {
+    init(batchId: Int64, responses: [DownloadResponse]) async {
         self.batchId = batchId
         self.responses = responses
-        self.cancellable = cancellable
-        (promise, resolver) = Promise<Void>.pending()
 
-        responses.forEach { response in
-            response.progressSubject
-                .sink { [weak self] progress in
-                    self?.updateResponsesProgress()
+        let progressTask = Task {
+            await withTaskGroup(of: Void.self) { group in
+                for response in responses {
+                    group.addTask { [weak self] in
+                        for await _ in await response.progress {
+                            await self?.updateResponsesProgress()
+                        }
+                    }
                 }
-                .store(in: &cancellables)
+            }
+        }
+
+        completionTask = Task {
+            try await withThrowingTaskGroup(of: Void.self) { taskGroup in
+                defer {
+                    // Stop progress resporting, when task completes.
+                    progressSubject.send(.finished)
+                    progressTask.cancel()
+                }
+
+                for response in responses {
+                    taskGroup.addTask {
+                        try await response.completion()
+                    }
+                }
+
+                do {
+                    while try await taskGroup.next() != nil {
+                        // execute until it completes or throw an error
+                    }
+                } catch {
+                    // Cancel other tasks if any has failed
+                    for response in responses {
+                        await response.cancel()
+                    }
+                    // rethrow
+                    crasher.recordError(error, reason: "Download failed \(batchId)")
+                    throw error
+                }
+            }
         }
     }
 
-    private func updateResponsesProgress() {
+    private func updateResponsesProgress() async {
         var accumulated: Double = 0
         for response in responses {
-            accumulated += response.progressSubject.value.progress
+            accumulated += await response.currentProgress.progress
         }
-        updateProgress(completed: accumulated / Double(responses.count))
+        await updateProgress(completed: accumulated / Double(responses.count))
     }
 
-    func updateProgress(total: Double? = nil, completed: Double? = nil) {
+    func updateProgress(total: Double? = nil, completed: Double? = nil) async {
         var value = progressSubject.value
         value.total = total ?? value.total
         value.completed = completed ?? value.completed
@@ -97,20 +183,23 @@ public final class DownloadBatchResponse {
     }
 
     public func cancel() async {
-        if promise.isPending {
-            do {
-                try await cancellable?.cancel(batch: self)
-            } catch {
-                crasher.recordError(error, reason: "Failed to cancel batch download.")
-            }
+        completionTask?.cancel()
+        for response in responses {
+            await response.cancel()
         }
     }
 
-    func fulfill() {
-        resolver.fulfill(())
+    public func completion() async throws {
+        try await completionTask?.value
+    }
+}
+
+extension DownloadBatchResponse: Hashable {
+    public static func == (lhs: DownloadBatchResponse, rhs: DownloadBatchResponse) -> Bool {
+        lhs.batchId == rhs.batchId
     }
 
-    func reject(_ error: Error) {
-        resolver.reject(error)
+    public nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(batchId)
     }
 }

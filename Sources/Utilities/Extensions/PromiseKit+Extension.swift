@@ -72,7 +72,8 @@ public extension DispatchQueue {
     func asyncGuarantee<T>(group: DispatchGroup? = nil,
                            qos: DispatchQoS = .default,
                            flags: DispatchWorkItemFlags = [],
-                           execute body: @escaping () async -> T) -> Guarantee<T> {
+                           execute body: @escaping () async -> T) -> Guarantee<T>
+    {
         Guarantee<T> { resolver in
             async(group: group, qos: qos, flags: flags) {
                 Task {
@@ -85,7 +86,8 @@ public extension DispatchQueue {
     func asyncPromise<T>(group: DispatchGroup? = nil,
                          qos: DispatchQoS = .default,
                          flags: DispatchWorkItemFlags = [],
-                         execute body: @escaping () async throws -> T) -> Promise<T> {
+                         execute body: @escaping () async throws -> T) -> Promise<T>
+    {
         Promise<T> { resolver in
             async(group: group, qos: qos, flags: flags) {
                 Task {
@@ -102,8 +104,8 @@ public enum PMKGuaranteeNamespacer {
 }
 
 public extension Guarantee {
-    func map<U>(_ body: @escaping(T) async throws -> U) -> Promise<U> {
-        self.then { value in
+    func map<U>(_ body: @escaping (T) async throws -> U) -> Promise<U> {
+        then { value in
             Promise<U> { resolver in
                 let transformed = try await body(value)
                 resolver.fulfill(transformed)
@@ -111,8 +113,8 @@ public extension Guarantee {
         }
     }
 
-    func map<U>(_ body: @escaping(T) async -> U) -> Guarantee<U> {
-        self.then { value in
+    func map<U>(_ body: @escaping (T) async -> U) -> Guarantee<U> {
+        then { value in
             Guarantee<U> { resolver in
                 Task {
                     let transformed = await body(value)

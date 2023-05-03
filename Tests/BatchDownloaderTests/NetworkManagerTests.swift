@@ -6,6 +6,7 @@
 //
 
 @testable import BatchDownloader
+import TestUtilities
 import XCTest
 
 class NetworkManagerTests: XCTestCase {

@@ -5,16 +5,26 @@
 //  Created by Mohamed Afifi on 2022-01-23.
 //
 
+import AsyncAlgorithms
+import AsyncExtensions
 import BatchDownloader
-import Combine
+import Utilities
 
 final class HistoryProgressListener {
     var values: [Double] = []
-    var cancellable: AnyCancellable?
+    var cancellable: CancellableTask?
 
-    init(_ subject: AnyPublisher<DownloadProgress, Never>) {
-        cancellable = subject.sink { [weak self] progress in
-            self?.values.append(progress.progress)
+    init(_ subject: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>>) async {
+        let taskStarted = AsyncChannel<Void>()
+        cancellable = Task {
+            await taskStarted.send(())
+            for await progress in subject {
+                if progress.progress != values.last {
+                    values.append(progress.progress)
+                }
+            }
         }
+        .asCancellableTask()
+        await taskStarted.next()
     }
 }

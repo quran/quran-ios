@@ -26,6 +26,7 @@ public final class DownloadManager {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
     private let session: NetworkSession
     private let handler: DownloadSessionDelegate
+    private let dataController: DownloadBatchDataController
 
     let operationQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -42,12 +43,12 @@ public final class DownloadManager {
         downloadsPath: String
     ) async {
         await self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
-                  sessionFactory: {
-                      URLSession(configuration: configuration,
-                                 delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
-                                 delegateQueue: $1)
-                  },
-                  persistence: SqliteDownloadsPersistence(filePath: downloadsPath))
+                        sessionFactory: {
+                            URLSession(configuration: configuration,
+                                       delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
+                                       delegateQueue: $1)
+                        },
+                        persistence: SqliteDownloadsPersistence(filePath: downloadsPath))
     }
 
     init(
@@ -66,15 +67,12 @@ public final class DownloadManager {
             crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
         }
 
-        do {
-            handler = DownloadSessionDelegate(dataController: dataController)
-            session = sessionFactory(handler, operationQueue)
+        self.dataController = dataController
+        handler = DownloadSessionDelegate(dataController: dataController)
+        session = sessionFactory(handler, operationQueue)
 
-            await dataController.update(session: session)
-            try await handler.populateRunningTasks(from: session)
-        } catch {
-            crasher.recordError(error, reason: "Failed to retrieve download tasks.")
-        }
+        await dataController.update(session: session)
+        await populateRunningTasks()
     }
 
     @MainActor
@@ -83,10 +81,15 @@ public final class DownloadManager {
     }
 
     public func getOnGoingDownloads() async -> [DownloadBatchResponse] {
-        await handler.getOnGoingDownloads()
+        await dataController.getOnGoingDownloads()
     }
 
     public func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
-        try await handler.download(batch)
+        try await dataController.download(batch)
+    }
+
+    private func populateRunningTasks() async {
+        let (_, _, downloadTasks) = await session.tasks()
+        await dataController.setRunningTasks(downloadTasks)
     }
 }

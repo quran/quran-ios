@@ -38,19 +38,6 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         self.backgroundSessionCompletion = backgroundSessionCompletion
     }
 
-    func populateRunningTasks(from session: NetworkSession) async throws {
-        let (_, _, downloadTasks) = await session.tasks()
-        try await dataController.setRunningTasks(downloadTasks)
-    }
-
-    func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
-        try await dataController.download(batch)
-    }
-
-    func getOnGoingDownloads() async -> [DownloadBatchResponse] {
-        await dataController.getOnGoingDownloads().map { $1 }
-    }
-
     func networkSession(_ session: NetworkSession,
                         downloadTask: NetworkSessionDownloadTask,
                         didWriteData bytesWritten: Int64,
@@ -61,7 +48,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return
         }
-        response.progressSubject.send(DownloadProgress(total: Double(totalBytesExpectedToWrite), completed: Double(totalBytesWritten)))
+        await response.updateProgress(DownloadProgress(total: Double(totalBytesExpectedToWrite), completed: Double(totalBytesWritten)))
     }
 
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async {
@@ -77,8 +64,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         }
         let fileManager = FileManager.default
 
-        let resumeURL = FileManager.documentsURL.appendingPathComponent(response.download.request.resumePath)
-        let destinationURL = FileManager.documentsURL.appendingPathComponent(response.download.request.destinationPath)
+        let resumeURL = FileManager.documentsURL.appendingPathComponent(await response.download.request.resumePath)
+        let destinationURL = FileManager.documentsURL.appendingPathComponent(await response.download.request.destinationPath)
 
         // remove the resume data
         try? fileManager.removeItem(at: resumeURL)
@@ -99,11 +86,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
                 reason: "Problem with creating directory or copying item to the new location '\(destinationURL)'"
             )
             // fail the batch since we save the file
-            do {
-                try await dataController.downloadFailed(response, with: FileSystemError(error: error))
-            } catch {
-                crasher.recordError(error, reason: "download task failed")
-            }
+            await dataController.downloadFailed(response, with: FileSystemError(error: error))
         }
     }
 
@@ -118,21 +101,12 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
         // if success, early return
         guard let error = theError else {
-            do {
-                try await dataController.downloadCompleted(response)
-            } catch {
-                crasher.recordError(error, reason: "downloadCompleted")
-            }
+            await dataController.downloadCompleted(response)
             return
         }
 
-        let finalError = wrap(error: error, resumePath: response.download.request.resumePath)
-
-        do {
-            try await dataController.downloadFailed(response, with: finalError)
-        } catch {
-            crasher.recordError(error, reason: "downloadFailed")
-        }
+        let finalError = wrap(error: error, resumePath: await response.download.request.resumePath)
+        await dataController.downloadFailed(response, with: finalError)
     }
 
     private func wrap(error theError: Error, resumePath: String) -> Error {

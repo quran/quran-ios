@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AsyncExtensions",
+        "repositoryURL": "https://github.com/sideeffect-io/AsyncExtensions",
+        "state": {
+          "branch": null,
+          "revision": "1f0729e4f1f6c7166acfac3cec43b3cbe83be0e6",
+          "version": "0.5.2"
+        }
+      },
+      {
         "package": "PromiseKit",
         "repositoryURL": "https://github.com/mxcl/PromiseKit",
         "state": {
@@ -17,6 +26,15 @@
           "branch": null,
           "revision": "60a65015f6402b7c34b9a924f755ca0a73afeeaa",
           "version": "0.13.1"
+        }
+      },
+      {
+        "package": "AsyncAlgorithms",
+        "repositoryURL": "https://github.com/apple/swift-async-algorithms",
+        "state": {
+          "branch": null,
+          "revision": "9cfed92b026c524674ed869a4ff2dcfdeedf8a2a",
+          "version": "0.1.0"
         }
       },
       {

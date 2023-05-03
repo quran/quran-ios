@@ -117,14 +117,12 @@ final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDele
                 await networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: temporaryFile)
                 try? FileManager.default.removeItem(at: temporaryFile)
             }
-        }
-        catch {
+        } catch {
             crasher.recordError(
                 error,
                 reason: "Problem moving the downloaded file to a temporary location '\(temporaryFile)'"
             )
         }
-
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {

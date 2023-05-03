@@ -33,7 +33,6 @@ public func attempt<T>(times: UInt, _ body: () throws -> T) throws -> T {
     throw lastError!
 }
 
-
 public func attempt<T>(times: UInt, _ body: () async throws -> T) async throws -> T {
     precondition(times > 0, "cannot execute something 0 times")
     var lastError: Error?

@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
         .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
+        .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Caching", targets: ["Caching"]),
 
         // Utilities packages
@@ -34,6 +35,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
         .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.12.2"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
+        .package(url: "https://github.com/sideeffect-io/AsyncExtensions", from: "0.5.2"),
+        .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ],
     targets: [
@@ -96,10 +99,12 @@ let package = Package(
             "SQLitePersistence",
             "Crashing",
             "WeakSet",
+            "AsyncExtensions",
         ]),
         .testTarget(name: "BatchDownloaderTests", dependencies: [
             "BatchDownloader",
             "TestUtilities",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
         .target(name: "SQLitePersistence", dependencies: [
@@ -115,6 +120,8 @@ let package = Package(
 
         .target(name: "Utilities", dependencies: [
             "PromiseKit",
+            "AsyncExtensions",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
         .target(name: "Timing", dependencies: [
@@ -140,6 +147,7 @@ let package = Package(
         // Testing helpers
         .target(name: "TestUtilities", dependencies: [
             "PromiseKit",
+            "BatchDownloader",
         ]),
     ]
 )

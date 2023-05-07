@@ -19,30 +19,27 @@
 //
 
 import Foundation
-import PromiseKit
 import QuranKit
 
 protocol ReciterTimingRetriever {
-    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: SuraTiming]>
+    func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming]
 }
 
 struct SQLiteReciterTimingRetriever: ReciterTimingRetriever {
     let persistenceFactory: AyahTimingPersistenceFactory
 
-    func retrieveTiming(for reciter: Reciter, suras: [Sura]) -> Promise<[Sura: SuraTiming]> {
+    func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
         guard case .gapless(let databaseName) = reciter.audioType else {
             fatalError("Gapped reciters are not supported.")
         }
-        return DispatchQueue.global().async(.promise) {
-            let fileURL = reciter.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-            let persistence = self.persistenceFactory.persistenceForURL(fileURL)
+        let fileURL = reciter.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
+        let persistence = persistenceFactory.persistenceForURL(fileURL)
 
-            var result: [Sura: SuraTiming] = [:]
-            for sura in suras {
-                let timings = try persistence.getOrderedTimingForSura(startAyah: sura.firstVerse)
-                result[sura] = timings
-            }
-            return result
+        var result: [Sura: SuraTiming] = [:]
+        for sura in suras {
+            let timings = try persistence.getOrderedTimingForSura(startAyah: sura.firstVerse)
+            result[sura] = timings
         }
+        return result
     }
 }

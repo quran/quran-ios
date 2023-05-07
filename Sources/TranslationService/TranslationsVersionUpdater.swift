@@ -77,16 +77,16 @@ struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
     }
 }
 
-private extension DownloadRequest {
+extension DownloadRequest {
     var isTranslation: Bool {
         destinationPath.hasPrefix(Translation.translationsPathComponent)
     }
 }
 
-private extension DownloadBatchResponse {
+extension DownloadBatchResponse {
     var isTranslation: Bool {
         get async {
-            let requests = await self.requests
+            let requests = await requests
             return requests.count == 1 && requests.contains(where: \.isTranslation)
         }
     }

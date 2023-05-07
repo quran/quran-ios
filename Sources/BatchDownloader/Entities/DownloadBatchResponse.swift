@@ -30,9 +30,7 @@ actor DownloadResponse {
     private let continuations = MulticastContinuation<Void, Error>()
 
     var isPending: Bool {
-        get async {
-            await continuations.isPending
-        }
+        continuations.isPending
     }
 
     init(download: Download) {
@@ -46,23 +44,39 @@ actor DownloadResponse {
 
     var currentProgress: DownloadProgress { progressSubject.value }
 
-    func updateProgress(_ progress: DownloadProgress) async {
-        if await isPending {
+    func updateProgress(_ progress: DownloadProgress) {
+        if isPending {
             progressSubject.send(progress)
         }
     }
 
-    func setDownloading(task: NetworkSessionTask) async {
+    func downloadIfPending(session: NetworkSession) -> NetworkSessionDownloadTask? {
+        if !isPending { // completed?
+            return nil
+        }
+        if task != nil { // already downloading?
+            return nil
+        }
+        // Create a download task.
+        let task = session.downloadTask(with: download.request)
+        setDownloading(task: task)
+        return task
+    }
+
+    func setDownloading(task: NetworkSessionTask) {
+        if task === self.task {
+            return
+        }
         assert(self.task == nil, "Cannot set task twice")
-        if await continuations.isPending {
+        if continuations.isPending {
             self.task = task
             download.taskId = task.taskIdentifier
             download.status = .downloading
         }
     }
 
-    func setPending() async {
-        if await continuations.isPending {
+    func setPending() {
+        if continuations.isPending {
             task = nil
             download.taskId = nil
             download.status = .pending
@@ -71,34 +85,35 @@ actor DownloadResponse {
 
     func completion() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            Task {
-                await self.continuations.addContinuation(continuation)
-            }
+            continuations.addContinuation(continuation)
         }
     }
 
-    func fulfill() async {
-        if await continuations.isPending {
+    func fulfill() {
+        if continuations.isPending {
             download.status = .completed
             task = nil
             download.taskId = nil
-            await continuations.resume(returning: ())
+            continuations.resume(returning: ())
             progressSubject.send(.finished)
         }
     }
 
-    func reject(_ error: Error) async {
-        if await continuations.isPending {
+    func reject(_ error: Error) {
+        if continuations.isPending {
             task = nil
             download.taskId = nil
-            await continuations.resume(throwing: error)
+            continuations.resume(throwing: error)
         }
     }
 
-    func cancel() async {
-        if await continuations.isPending {
-            await reject(CancellationError())
+    func cancel() {
+        if continuations.isPending {
             task?.cancel()
+            if let task {
+                print("Cancelling task \(describe(task))")
+            }
+            reject(CancellationError())
         }
     }
 }
@@ -110,6 +125,10 @@ public actor DownloadBatchResponse {
     private let progressSubject = AsyncCurrentValueSubject(DownloadProgress(total: 1))
     public var progress: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>> {
         progressSubject.eraseToOpaqueAsyncSequence()
+    }
+
+    public var currentProgress: DownloadProgress {
+        progressSubject.value
     }
 
     private var completionTask: Task<Void, Error>?
@@ -172,10 +191,10 @@ public actor DownloadBatchResponse {
         for response in responses {
             accumulated += await response.currentProgress.progress
         }
-        await updateProgress(completed: accumulated / Double(responses.count))
+        updateProgress(completed: accumulated / Double(responses.count))
     }
 
-    func updateProgress(total: Double? = nil, completed: Double? = nil) async {
+    func updateProgress(total: Double? = nil, completed: Double? = nil) {
         var value = progressSubject.value
         value.total = total ?? value.total
         value.completed = completed ?? value.completed
@@ -184,8 +203,12 @@ public actor DownloadBatchResponse {
 
     public func cancel() async {
         completionTask?.cancel()
-        for response in responses {
-            await response.cancel()
+        await withTaskGroup(of: Void.self) { group in
+            for response in responses {
+                group.addTask {
+                    await response.cancel()
+                }
+            }
         }
     }
 

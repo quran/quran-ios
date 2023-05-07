@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PromiseKit
 import QueuePlayer
 import QuranKit
 
@@ -37,7 +36,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
                       from start: AyahNumber,
                       to end: AyahNumber,
                       frameRuns: Runs,
-                      requestRuns: Runs) -> Promise<QuranAudioRequest>
+                      requestRuns: Runs) async throws -> QuranAudioRequest
     {
         let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns)
         let files = urls.map {
@@ -45,7 +44,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
         }
         let request = AudioRequest(files: files, endTime: nil, frameRuns: frameRuns, requestRuns: requestRuns)
         let quranRequest = GappedAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
-        return Promise.value(quranRequest)
+        return quranRequest
     }
 
     private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [URL], ayahs: [AyahNumber]) {

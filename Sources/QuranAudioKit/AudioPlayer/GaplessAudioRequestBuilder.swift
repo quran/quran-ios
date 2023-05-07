@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PromiseKit
 import QueuePlayer
 import QuranKit
 import QuranTextKit
@@ -44,49 +43,47 @@ final class GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
                       from start: AyahNumber,
                       to end: AyahNumber,
                       frameRuns: Runs,
-                      requestRuns: Runs) -> Promise<QuranAudioRequest>
+                      requestRuns: Runs) async throws -> QuranAudioRequest
     {
         let urls = urlsToPlay(reciter: reciter, from: start, to: end)
-        return timingRetriever.retrieveTiming(for: reciter, suras: urls.map(\.sura))
-            .map(on: .global()) { timings -> QuranAudioRequest in
+        let timings = try await timingRetriever.retrieveTiming(for: reciter, suras: urls.map(\.sura))
 
-                // determine end time
-                let endTime = self.getEndTime(timings: timings, from: start, to: end)
+        // determine end time
+        let endTime = getEndTime(timings: timings, from: start, to: end)
 
-                // filter out uneeded timings
-                let filteredTimings = self.filteredTimings(timings: timings, from: start, to: end)
+        // filter out uneeded timings
+        let filteredTimings = filteredTimings(timings: timings, from: start, to: end)
 
-                var files: [AudioFile] = []
-                var ayahs: [[AyahNumber]] = []
+        var files: [AudioFile] = []
+        var ayahs: [[AyahNumber]] = []
 
-                for (url, sura) in urls {
-                    let suraTimings = filteredTimings[sura]!
+        for (url, sura) in urls {
+            let suraTimings = filteredTimings[sura]!
 
-                    var frames: [AudioFrame] = []
-                    var fileAyahs: [AyahNumber] = []
+            var frames: [AudioFrame] = []
+            var fileAyahs: [AyahNumber] = []
 
-                    for (offset, verse) in suraTimings.verses.enumerated() {
-                        // start from 0 (beginning) if first ayah of the sura
-                        let endTime = offset == suraTimings.verses.count - 1 ? suraTimings.endTime : nil
+            for (offset, verse) in suraTimings.verses.enumerated() {
+                // start from 0 (beginning) if first ayah of the sura
+                let endTime = offset == suraTimings.verses.count - 1 ? suraTimings.endTime : nil
 
-                        var startTimeSeconds = verse.time.seconds
+                var startTimeSeconds = verse.time.seconds
 
-                        // Do not include the basmalah when the first verse is repeated
-                        if offset == 0 && verse.ayah.ayah == 1 && (requestRuns == .one || !ayahs.isEmpty) {
-                            startTimeSeconds = 0
-                        }
-
-                        let frame = AudioFrame(startTime: startTimeSeconds, endTime: endTime?.seconds)
-                        frames.append(frame)
-                        fileAyahs.append(verse.ayah)
-                    }
-                    files.append(AudioFile(url: url, frames: frames))
-                    ayahs.append(fileAyahs)
+                // Do not include the basmalah when the first verse is repeated
+                if offset == 0 && verse.ayah.ayah == 1 && (requestRuns == .one || !ayahs.isEmpty) {
+                    startTimeSeconds = 0
                 }
-                let request = AudioRequest(files: files, endTime: endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
-                let quranRequest = GaplessAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
-                return quranRequest
+
+                let frame = AudioFrame(startTime: startTimeSeconds, endTime: endTime?.seconds)
+                frames.append(frame)
+                fileAyahs.append(verse.ayah)
             }
+            files.append(AudioFile(url: url, frames: frames))
+            ayahs.append(fileAyahs)
+        }
+        let request = AudioRequest(files: files, endTime: endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
+        let quranRequest = GaplessAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
+        return quranRequest
     }
 
     private func filteredTimings(timings: [Sura: SuraTiming],

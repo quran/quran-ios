@@ -25,81 +25,57 @@ class GappedAudioRequestBuilderTests: XCTestCase {
         reciter = nil
     }
 
-    func testAudioRequestContainsBismillahWhenThePlaybackIsNotRepeated() throws {
-        let expectation = expectation(description: "waiting for promise to fulfill")
+    func testAudioRequestContainsBismillahWhenThePlaybackIsNotRepeated() async throws {
         let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
         let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
-        _ = audioRequestBuilder.buildRequest(
+        let request = try await audioRequestBuilder.buildRequest(
             with: reciter,
             from: from,
             to: to,
             frameRuns: .one,
             requestRuns: .one
-        ).done { audioRequest in
-            let audioRequest = try XCTUnwrap(audioRequest as? GappedAudioRequest).request
-            let bismillahFile = audioRequest.files.first { audioFile in
-                audioFile.url.lastPathComponent == "001001.mp3"
-            }
-            XCTAssertNotNil(bismillahFile)
-            expectation.fulfill()
+        )
+        let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
+        let bismillahFile = audioRequest.files.first { audioFile in
+            audioFile.url.lastPathComponent == "001001.mp3"
         }
-        .catch { error in
-            XCTFail(error.localizedDescription)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
+        XCTAssertNotNil(bismillahFile)
     }
 
-    func testAudioRequestDoesNotContainsBismillahWhenThePlaybackIsRepeated() throws {
-        let expectation = expectation(description: "waiting for promise to fulfill")
+    func testAudioRequestDoesNotContainsBismillahWhenThePlaybackIsRepeated() async throws {
         let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
         let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
-        _ = audioRequestBuilder.buildRequest(
+        let request = try await audioRequestBuilder.buildRequest(
             with: reciter,
             from: from,
             to: to,
             frameRuns: .one,
             requestRuns: .indefinite
-        ).done { audioRequest in
-            let audioRequest = try XCTUnwrap(audioRequest as? GappedAudioRequest).request
-            let bismillahFile = audioRequest.files.first { audioFile in
-                audioFile.url.lastPathComponent == "001001.mp3"
-            }
-            XCTAssertNil(bismillahFile)
-            expectation.fulfill()
+        )
+        let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
+        let bismillahFile = audioRequest.files.first { audioFile in
+            audioFile.url.lastPathComponent == "001001.mp3"
         }
-        .catch { error in
-            XCTFail(error.localizedDescription)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
+        XCTAssertNil(bismillahFile)
     }
 
-    func testAudioRequestContainsBismillahIfTheRepeatIsInContinuationFromPreviousSura() throws {
-        let expectation = expectation(description: "waiting for promise to fulfill")
+    func testAudioRequestContainsBismillahIfTheRepeatIsInContinuationFromPreviousSura() async throws {
         let from = try XCTUnwrap(AyahNumber(sura: quran.firstSura, ayah: quran.firstSura.lastVerse.ayah))
         let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: quran.suras[1].firstVerse.ayah))
 
-        _ = audioRequestBuilder.buildRequest(
+        let request = try await audioRequestBuilder.buildRequest(
             with: reciter,
             from: from,
             to: to,
             frameRuns: .one,
             requestRuns: .indefinite
-        ).done { audioRequest in
-            let audioRequest = try XCTUnwrap(audioRequest as? GappedAudioRequest).request
-            let bismillahFile = audioRequest.files.first { audioFile in
-                audioFile.url.lastPathComponent == "001001.mp3"
-            }
-            XCTAssertNotNil(bismillahFile)
-            expectation.fulfill()
+        )
+        let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
+        let bismillahFile = audioRequest.files.first { audioFile in
+            audioFile.url.lastPathComponent == "001001.mp3"
         }
-        .catch { error in
-            XCTFail(error.localizedDescription)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
+        XCTAssertNotNil(bismillahFile)
     }
 }

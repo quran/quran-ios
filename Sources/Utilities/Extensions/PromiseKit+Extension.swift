@@ -68,73 +68,9 @@ public extension DispatchQueue {
             }
         }
     }
-
-    func asyncGuarantee<T>(group: DispatchGroup? = nil,
-                           qos: DispatchQoS = .default,
-                           flags: DispatchWorkItemFlags = [],
-                           execute body: @escaping () async -> T) -> Guarantee<T>
-    {
-        Guarantee<T> { resolver in
-            async(group: group, qos: qos, flags: flags) {
-                Task {
-                    resolver(await body())
-                }
-            }
-        }
-    }
-
-    func asyncPromise<T>(group: DispatchGroup? = nil,
-                         qos: DispatchQoS = .default,
-                         flags: DispatchWorkItemFlags = [],
-                         execute body: @escaping () async throws -> T) -> Promise<T>
-    {
-        Promise<T> { resolver in
-            async(group: group, qos: qos, flags: flags) {
-                Task {
-                    resolver.fulfill(try await body())
-                }
-            }
-        }
-    }
 }
 
 /// used by our extensions to provide unambiguous functions with the same name as the original function
 public enum PMKGuaranteeNamespacer {
     case guarantee
-}
-
-public extension Guarantee {
-    func map<U>(_ body: @escaping (T) async throws -> U) -> Promise<U> {
-        then { value in
-            Promise<U> { resolver in
-                let transformed = try await body(value)
-                resolver.fulfill(transformed)
-            }
-        }
-    }
-
-    func map<U>(_ body: @escaping (T) async -> U) -> Guarantee<U> {
-        then { value in
-            Guarantee<U> { resolver in
-                Task {
-                    let transformed = await body(value)
-                    resolver(transformed)
-                }
-            }
-        }
-    }
-}
-
-public extension Promise {
-    convenience init(resolver body: @escaping (Resolver<T>) async throws -> Void) {
-        self.init { resolver in
-            Task {
-                do {
-                    try await body(resolver)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
-        }
-    }
 }

@@ -8,7 +8,7 @@
 import AsyncAlgorithms
 import Foundation
 
-public final class CancellableTask {
+public final class CancellableTask: Hashable {
     private let cancel: () -> Void
 
     init<T, E>(task: Task<T, E>) {
@@ -17,6 +17,14 @@ public final class CancellableTask {
 
     deinit {
         cancel()
+    }
+
+    public static func == (lhs: CancellableTask, rhs: CancellableTask) -> Bool {
+        lhs === rhs
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
     }
 }
 

@@ -7,30 +7,41 @@
 
 import Foundation
 
-public actor MulticastContinuation<T, E: Error> {
-    private(set) var continuations: [CheckedContinuation<T, E>] = []
-    public private(set) var result: Result<T, E>?
+public struct MulticastContinuation<T, E: Error> {
+    private struct State {
+        var continuations: [CheckedContinuation<T, E>] = []
+        var result: Result<T, E>?
+    }
+
+    private let state = ManagedCriticalState(State())
+
 
     public var isPending: Bool {
-        result == nil
+        state.withCriticalRegion { state in
+            state.result == nil
+        }
     }
 
     public init() { }
 
     public func addContinuation(_ continuation: CheckedContinuation<T, E>) {
-        if let result {
-            continuation.resume(with: result)
-        } else {
-            continuations.append(continuation)
+        state.withCriticalRegion { state in
+            if let result = state.result {
+                continuation.resume(with: result)
+            } else {
+                state.continuations.append(continuation)
+            }
         }
     }
 
     public func resume(with result: Result<T, E>) {
-        self.result = result
-        for continuation in continuations {
-            continuation.resume(with: result)
+        state.withCriticalRegion { state in
+            state.result = result
+            for continuation in state.continuations {
+                continuation.resume(with: result)
+            }
+            state.continuations.removeAll()
         }
-        continuations.removeAll()
     }
 
     public func resume(returning value: T) {

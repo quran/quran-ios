@@ -7,7 +7,6 @@
 
 import BatchDownloader
 import Foundation
-import PromiseKit
 
 public struct TranslationsDownloader {
     let downloader: DownloadManager
@@ -15,51 +14,47 @@ public struct TranslationsDownloader {
         self.downloader = downloader
     }
 
-    public func download(_ translation: Translation) -> Promise<DownloadBatchResponse> {
+    public func download(_ translation: Translation) async throws -> DownloadBatchResponse {
         // download the translation
         let destinationPath = Translation.translationsPathComponent.stringByAppendingPath(translation.rawFileName)
         let download = DownloadRequest(url: translation.fileURL, destinationPath: destinationPath)
-        return DispatchQueue.global().asyncPromise {
-            try await downloader.download(DownloadBatchRequest(requests: [download]))
-        }
+        let response = try await downloader.download(DownloadBatchRequest(requests: [download]))
+        return response
     }
 
-    public func downloadingTranslations(_ translations: [Translation]) -> Guarantee<[Translation: DownloadBatchResponse]> {
-        DispatchQueue.global().asyncGuarantee {
-            let downloads = await self.downloader.getOnGoingDownloads()
-            return self.translationResponses(translations, downloadsBatches: downloads)
-        }
-    }
-
-    private func translationResponses(_ translations: [Translation],
-                                      downloadsBatches: [DownloadBatchResponse]) -> [Translation: DownloadBatchResponse]
-    {
-        let downloads = downloadsBatches.filter(\.isTranslation)
-
-        let downloadsByFile = downloads.flatGroup { $0.requests.first?.destinationPath.stringByDeletingPathExtension ?? "_" }
-
-        var translationResponses: [Translation: DownloadBatchResponse] = [:]
-        for translation in translations {
-            // downloading...
-            let responses = translation.possibleFileNames.compactMap {
-                downloadsByFile[Translation.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension)]
-            }
-            if let response = responses.first {
-                translationResponses[translation] = response
-            }
-        }
-        return translationResponses
+    public func runningTranslationDownloads() async -> [DownloadBatchResponse] {
+        let allDownloads = await downloader.getOnGoingDownloads()
+        let downloads = await allDownloads.asyncFilter { await $0.isTranslation }
+        return downloads
     }
 }
 
-private extension DownloadRequest {
-    var isTranslation: Bool {
-        destinationPath.hasPrefix(Translation.translationsPathComponent)
+extension Set where Element == DownloadBatchResponse {
+    public func firstMatches(_ translation: Translation) async -> DownloadBatchResponse? {
+        for batch in self {
+            if let request = await batch.requests.first {
+                if translation.matches(request) {
+                    return batch
+                }
+            }
+        }
+        return nil
     }
 }
 
-private extension DownloadBatchResponse {
-    var isTranslation: Bool {
-        requests.count == 1 && requests.contains(where: \.isTranslation)
+extension Array where Element == Translation {
+    public func firstMatches(_ batch: DownloadBatchResponse) async -> Translation? {
+        guard let request = await batch.requests.first else {
+            return nil
+        }
+
+        return first { $0.matches(request) }
+    }
+}
+
+private extension Translation {
+    func matches(_ request: DownloadRequest) -> Bool {
+        possibleFileNames.map { Translation.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension) }
+            .contains(request.destinationPath.stringByDeletingPathExtension)
     }
 }

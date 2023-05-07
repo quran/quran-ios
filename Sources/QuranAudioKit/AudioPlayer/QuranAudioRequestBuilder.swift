@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import PromiseKit
 import QueuePlayer
 import QuranKit
 
@@ -21,5 +20,5 @@ protocol QuranAudioRequestBuilder {
                       from start: AyahNumber,
                       to end: AyahNumber,
                       frameRuns: Runs,
-                      requestRuns: Runs) -> Promise<QuranAudioRequest>
+                      requestRuns: Runs) async throws -> QuranAudioRequest
 }

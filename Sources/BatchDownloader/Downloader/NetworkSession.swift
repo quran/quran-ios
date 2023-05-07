@@ -18,7 +18,7 @@ protocol NetworkSession {
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
 }
 
-protocol NetworkSessionTask {
+protocol NetworkSessionTask: AnyObject {
     var taskIdentifier: Int { get }
     var originalRequest: URLRequest? { get }
     var currentRequest: URLRequest? { get }

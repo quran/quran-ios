@@ -28,49 +28,33 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
         reciter = nil
     }
 
-    func testAudioFrameStartingFromZeroSecondsWhenThePlaybackIsNotRepeated() throws {
-        let expectation = expectation(description: "waiting for promise to fulfill")
+    func testAudioFrameStartingFromZeroSecondsWhenThePlaybackIsNotRepeated() async throws {
         let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 1))
         let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 2))
 
-        _ = audioRequestBuilder.buildRequest(
+        let audioRequest = try await audioRequestBuilder.buildRequest(
             with: reciter,
             from: from,
             to: to,
             frameRuns: .one,
             requestRuns: .one
-        ).done { audioRequest in
-            let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
-            XCTAssertEqual(firstFrame.startTime, .zero)
-            expectation.fulfill()
-        }
-        .catch { error in
-            XCTFail(error.localizedDescription)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
+        )
+        let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
+        XCTAssertEqual(firstFrame.startTime, .zero)
     }
 
-    func testAudioFrameIsNotStartingFromZeroSecondsWhenThePlaybackIsRepeated() throws {
-        let expectation = expectation(description: "waiting for promise to fulfill")
+    func testAudioFrameIsNotStartingFromZeroSecondsWhenThePlaybackIsRepeated() async throws {
         let from = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 1))
         let to = try XCTUnwrap(AyahNumber(sura: quran.suras[1], ayah: 2))
 
-        _ = audioRequestBuilder.buildRequest(
+        let audioRequest = try await audioRequestBuilder.buildRequest(
             with: reciter,
             from: from,
             to: to,
             frameRuns: .one,
             requestRuns: .indefinite
-        ).done { audioRequest in
-            let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
-            XCTAssertNotEqual(firstFrame.startTime, .zero)
-            expectation.fulfill()
-        }
-        .catch { error in
-            XCTFail(error.localizedDescription)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1.0)
+        )
+        let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
+        XCTAssertNotEqual(firstFrame.startTime, .zero)
     }
 }

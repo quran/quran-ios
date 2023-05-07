@@ -8,30 +8,30 @@
 
 import Crashing
 import Foundation
-import PromiseKit
+import VLogging
 import Zip
 
-class AudioUnzipper {
-    func unzip(reciter: Reciter) -> Guarantee<Void> {
+struct AudioUnzipper {
+    func unzip(reciter: Reciter) async throws {
         guard case .gapless(let databaseName) = reciter.audioType else {
-            return Guarantee.value(())
+            return
         }
         let baseFileName = reciter.localFolder().appendingPathComponent(databaseName)
         let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
         let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
         guard !dbFile.isReachable else {
-            return Guarantee.value(())
+            return
         }
 
-        return DispatchQueue.global().async(.guarantee) {
-            do {
-                try Zip.unzipFile(zipFile, destination: reciter.localFolder(), overwrite: true, password: nil, progress: nil)
-            } catch {
-                crasher.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(reciter.localFolder())'")
-                // delete the zip and try to re-download it again, next time.
-                try? FileManager.default.removeItem(at: zipFile)
-            }
+        logger.info("Unzipping audio file. Reciter=\(reciter.nameKey) file=\(zipFile).")
+        do {
+            try Zip.unzipFile(zipFile, destination: reciter.localFolder(), overwrite: true, password: nil, progress: nil)
+        } catch {
+            crasher.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(reciter.localFolder())'")
+            // delete the zip and try to re-download it again, next time.
+            try? FileManager.default.removeItem(at: zipFile)
+            throw error
         }
     }
 }

@@ -73,7 +73,6 @@ actor DownloadBatchDataController {
             }
             return response
         } else {
-            logger.info("Didn't find a DownloadResponse associated with task \(describe(task))")
             return nil
         }
     }
@@ -138,10 +137,9 @@ actor DownloadBatchDataController {
         await startPendingTasksIfNeeded()
     }
 
+    private var loadedInitialRunningTasks = false
+
     func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async {
-        guard !tasks.isEmpty else {
-            return
-        }
         let tasksById = Dictionary(uniqueKeysWithValues: tasks.map { ($0.taskIdentifier, $0) })
         for batch in batches {
             for response in batch.responses {
@@ -157,11 +155,17 @@ actor DownloadBatchDataController {
             }
         }
 
+        loadedInitialRunningTasks = true
+
         // start pending tasks if needed
         await startPendingTasksIfNeeded()
     }
 
     private func startPendingTasksIfNeeded() async {
+        if !loadedInitialRunningTasks {
+            return
+        }
+
         // if we have a session
         guard let session = session else {
             return
@@ -190,18 +194,11 @@ actor DownloadBatchDataController {
                 if downloadTasks.count >= maxNumberOfDownloads { // Max download channels?
                     break
                 }
-                if await response.task != nil { // already downloading?
-                    continue
+                if let task = await response.downloadIfPending(session: session) {
+                    await updateDownloadPersistence(response)
+                    task.resume()
+                    downloadTasks.append((task, response))
                 }
-                if await !response.isPending { // completed?
-                    continue
-                }
-                // Create a download task.
-                let task = session.downloadTask(with: await response.download.request)
-                await response.setDownloading(task: task)
-                await updateDownloadPersistence(response)
-                task.resume()
-                downloadTasks.append((task, response))
             }
         }
 

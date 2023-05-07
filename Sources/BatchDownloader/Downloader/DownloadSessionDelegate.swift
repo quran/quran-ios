@@ -92,7 +92,9 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async {
         guard let response = await dataController.downloadResponse(for: task) else {
-            logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
+            if let sessionError, !sessionError.isCancelled {
+                logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
+            }
             return
         }
 

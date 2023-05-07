@@ -63,13 +63,4 @@ extension Sequence {
         }
         return filtered
     }
-
-    public func asyncFlatGroup<U: Hashable>(by key: (Iterator.Element) async -> U) async -> [U: Iterator.Element] {
-        var categories: [U: Iterator.Element] = [:]
-        for element in self {
-            let key = await key(element)
-            categories[key] = element
-        }
-        return categories
-    }
 }

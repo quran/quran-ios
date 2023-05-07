@@ -28,6 +28,9 @@ extension DownloadRequest {
 
 extension DownloadBatchResponse {
     var isAudio: Bool {
-        requests.contains(where: \.isAudio)
+        get async {
+            let requests = await requests
+            return requests.contains(where: \.isAudio)
+        }
     }
 }

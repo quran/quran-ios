@@ -72,7 +72,7 @@ public struct ReciterDataRetriever {
 
 extension Reciter {
     public static var audioFiles: URL {
-        FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
+        FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent, isDirectory: true)
     }
 
     var path: String {
@@ -81,11 +81,11 @@ extension Reciter {
 
     // TODO: should be internal
     public func localFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(path)
+        FileManager.documentsURL.appendingPathComponent(path, isDirectory: true)
     }
 
     // TODO: should be internal
     public func oldLocalFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(directory)
+        FileManager.documentsURL.appendingPathComponent(directory, isDirectory: true)
     }
 }

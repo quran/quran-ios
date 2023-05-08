@@ -31,10 +31,7 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        let audioDirectory = FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
-        if audioDirectory.isReachable {
-            try FileManager.default.removeItem(at: audioDirectory)
-        }
+        Reciter.cleanUpAudio()
     }
 
     func testPlayingDownloadedGaplessReciter1FullSura() async throws {

@@ -40,10 +40,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     override func tearDownWithError() throws {
         NetworkSessionFake.tearDown()
-        let audioDirectory = FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
-        if audioDirectory.isReachable {
-            try FileManager.default.removeItem(at: audioDirectory)
-        }
+        Reciter.cleanUpAudio()
     }
 
     // MARK: - Downloading
@@ -111,7 +108,7 @@ class QuranAudioDownloaderTests: XCTestCase {
         let start = suras[0].firstVerse
         let end = suras[3].lastVerse
         let suraPaths = start.sura.array(to: end.sura).map { suraLocalURL($0, reciter: reciter) }
-        fileSystem.files = Set([databaseLocalURL(reciter)] + suraPaths)
+        fileSystem.files = Set([reciter.gaplessDatabaseZipURL] + suraPaths)
 
         let downloaded = await downloader.downloaded(reciter: reciter, from: start, to: end)
         XCTAssertTrue(downloaded)
@@ -191,10 +188,6 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     private func databaseRemoteURL(_ reciter: Reciter) -> URL {
         Self.baseURL.appendingPathComponent(GaplessReciterAudioFileListRetrieval.path + reciter.gaplessDatabaseZip)
-    }
-
-    private func databaseLocalURL(_ reciter: Reciter) -> URL {
-        reciter.localFolder().appendingPathComponent(reciter.gaplessDatabaseZip)
     }
 
     private func suraRemoteURL(_ sura: Sura, reciter: Reciter) -> URL {

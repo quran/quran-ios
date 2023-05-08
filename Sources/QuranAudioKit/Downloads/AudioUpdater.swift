@@ -40,8 +40,7 @@ public final class AudioUpdater {
     }
 
     public func updateAudioIfNeeded() async {
-        let audioFiles = FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
-        let downloadedReciters = try? fileSystem.contentsOfDirectory(at: audioFiles, includingPropertiesForKeys: nil)
+        let downloadedReciters = try? fileSystem.contentsOfDirectory(at: Reciter.audioFiles, includingPropertiesForKeys: nil)
         if downloadedReciters?.isEmpty ?? true {
             return
         }

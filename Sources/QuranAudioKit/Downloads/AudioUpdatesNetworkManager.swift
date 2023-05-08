@@ -11,8 +11,11 @@ import Foundation
 struct AudioUpdatesNetworkManager {
     let networkManager: NetworkManager
 
+    static let path = "/data/audio_updates.php"
+    static let revision = "revision"
+
     func getAudioUpdates(revision: Int) async throws -> AudioUpdates? {
-        let data = try await networkManager.request("/data/audio_updates.php", parameters: [("revision", "\(revision)")])
+        let data = try await networkManager.request(Self.path, parameters: [(Self.revision, "\(revision)")])
         return try parse(data: data)
     }
 

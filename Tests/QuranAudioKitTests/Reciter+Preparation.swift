@@ -20,22 +20,27 @@ extension Reciter {
         return databaseName + ".db"
     }
 
+    var gaplessDatabaseZipURL: URL {
+        localFolder().appendingPathComponent(gaplessDatabaseZip)
+    }
+
+    var gaplessDatabaseURL: URL {
+        localFolder().appendingPathComponent(gaplessDatabaseDB)
+    }
+
     func prepareGaplessReciterForTests(unZip: Bool = false) throws {
         let directory = localFolder()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let dbSource = resource(gaplessDatabaseZip)
-        let zipDestination = directory.appendingPathComponent(gaplessDatabaseZip)
-        let dbDestination = directory.appendingPathComponent(gaplessDatabaseDB)
-
-        let zipFileExists = FileManager.default.fileExists(atPath: zipDestination.path)
-        let dbFileExists = FileManager.default.fileExists(atPath: dbDestination.path)
-
-        if !zipFileExists {
-            try FileManager.default.copyItem(at: dbSource, to: zipDestination)
-        }
-        if unZip && !dbFileExists {
+        let zipDestination = gaplessDatabaseZipURL
+        try FileManager.default.copyItem(at: dbSource, to: gaplessDatabaseZipURL)
+        if unZip {
             try Zip.unzipFile(zipDestination, destination: directory, overwrite: true, password: nil, progress: nil)
         }
+    }
+
+    static func cleanUpAudio() {
+        try? FileManager.default.removeItem(at: audioFiles)
     }
 
     private func resource(_ path: String) -> URL {

@@ -12,11 +12,10 @@ import XCTest
 
 class GaplessAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!
-    private var reciter: Reciter!
+    private var reciter = Reciter.gaplessReciter
     private let quran = Quran.hafsMadani1405
 
     override func setUpWithError() throws {
-        reciter = .gaplessReciter
         try reciter.prepareGaplessReciterForTests(unZip: true)
 
         let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
@@ -24,8 +23,7 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        audioRequestBuilder = nil
-        reciter = nil
+        Reciter.cleanUpAudio()
     }
 
     func testAudioFrameStartingFromZeroSecondsWhenThePlaybackIsNotRepeated() async throws {

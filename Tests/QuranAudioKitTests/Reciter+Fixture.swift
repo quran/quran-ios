@@ -31,4 +31,21 @@ extension Reciter {
                 hasGaplessAlternative: false,
                 category: .arabic)
     }
+
+    func toPlistDictionary() -> [String: Any] {
+        let databaseName: String
+        switch audioType {
+        case .gapless(let db): databaseName = db
+        case .gapped: databaseName = ""
+        }
+        return [
+            "id": id,
+            "name": nameKey,
+            "path": directory,
+            "url": audioURL.absoluteString,
+            "databaseName": databaseName,
+            "hasGaplessAlternative": hasGaplessAlternative,
+            "category": category.rawValue,
+        ]
+    }
 }

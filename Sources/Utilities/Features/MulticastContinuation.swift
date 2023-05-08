@@ -15,7 +15,6 @@ public struct MulticastContinuation<T, E: Error> {
 
     private let state = ManagedCriticalState(State())
 
-
     public var isPending: Bool {
         state.withCriticalRegion { state in
             state.result == nil

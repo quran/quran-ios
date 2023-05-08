@@ -6,16 +6,16 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-struct AudioUpdates: Decodable {
+struct AudioUpdates: Codable {
     let currentRevision: Int
     let updates: [Update]
 
-    struct Update: Decodable {
+    struct Update: Codable {
         let path: String
         let databaseVersion: Int?
         let files: [File]
 
-        struct File: Decodable {
+        struct File: Codable {
             let filename: String
             let md5: String
         }

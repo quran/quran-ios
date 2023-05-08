@@ -20,37 +20,45 @@
 
 import Foundation
 import PromiseKit
+import Utilities
 
 public struct ReciterDataRetriever {
-    private static let reciters = Bundle.main.url(forResource: "reciters", withExtension: "plist")!
+    private let bundle: SystemBundle
 
     public init() {
+        bundle = DefaultSystemBundle()
+    }
+
+    init(bundle: SystemBundle) {
+        self.bundle = bundle
     }
 
     public func getReciters() -> Guarantee<[Reciter]> {
-        DispatchQueue.global().async(.guarantee) {
-            guard let array = NSArray(contentsOf: Self.reciters) else {
-                fatalError("Couldn't load `\(Self.reciters)` file")
-            }
-            // swiftlint:disable force_cast
-            let recitersArray = array as! [NSDictionary]
-            let reciters: [Reciter] = recitersArray.map { item in
-                Reciter(id: item["id"] as! Int,
-                        nameKey: item["name"] as! String,
-                        directory: item["path"] as! String,
-                        audioURL: URL(validURL: item["url"] as! String),
-                        audioType: Self.audioType(item["databaseName"] as! String),
-                        hasGaplessAlternative: item["hasGaplessAlternative"] as! Bool,
-                        category: Reciter.Category(rawValue: item["category"] as! String)!)
-            }
-            // swiftlint:enable force_cast
+        DispatchQueue.global().asyncGuarantee {
+            await getReciters()
+        }
+    }
 
-            return reciters.filter { reciter in
-                !reciter.hasGaplessAlternative || reciter.localFolder().isReachable
-            }
-            .sorted {
-                $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
-            }
+    public func getReciters() async -> [Reciter] {
+        let array = bundle.readArray(resource: "reciters", withExtension: "plist")
+        // swiftlint:disable force_cast
+        let recitersArray = array as! [NSDictionary]
+        let reciters: [Reciter] = recitersArray.map { item in
+            Reciter(id: item["id"] as! Int,
+                    nameKey: item["name"] as! String,
+                    directory: item["path"] as! String,
+                    audioURL: URL(validURL: item["url"] as! String),
+                    audioType: Self.audioType(item["databaseName"] as! String),
+                    hasGaplessAlternative: item["hasGaplessAlternative"] as! Bool,
+                    category: Reciter.Category(rawValue: item["category"] as! String)!)
+        }
+        // swiftlint:enable force_cast
+
+        return reciters.filter { reciter in
+            !reciter.hasGaplessAlternative || reciter.localFolder().isReachable
+        }
+        .sorted {
+            $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
         }
     }
 

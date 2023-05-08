@@ -17,24 +17,31 @@ public final class AudioUpdater {
     private let networkService: AudioUpdatesNetworkManager
     private let preferences = AudioUpdatePreferences.shared
     private let md5Calculator = MD5Calculator()
+    private let fileSystem: FileSystem
+    private let time: SystemTime
 
-    init(networkService: AudioUpdatesNetworkManager,
-         recitersRetriever: ReciterDataRetriever)
+    init(networkManager: NetworkManager,
+         recitersRetriever: ReciterDataRetriever,
+         fileSystem: FileSystem,
+         time: SystemTime)
     {
-        self.networkService = networkService
+        networkService = AudioUpdatesNetworkManager(networkManager: networkManager)
         self.recitersRetriever = recitersRetriever
+        self.fileSystem = fileSystem
+        self.time = time
     }
 
     public init(baseURL: URL) {
-        let networkManager = BatchDownloader.NetworkManager(session: .shared, baseURL: baseURL)
-        networkService = DefaultAudioUpdatesNetworkManager(networkManager: networkManager)
+        let networkManager = NetworkManager(session: .shared, baseURL: baseURL)
+        networkService = AudioUpdatesNetworkManager(networkManager: networkManager)
         recitersRetriever = ReciterDataRetriever()
+        fileSystem = DefaultFileSystem()
+        time = DefaultSystemTime()
     }
 
-    public func updateAudioIfNeeded() {
-        let fileManager = FileManager.default
+    public func updateAudioIfNeeded() async {
         let audioFiles = FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent)
-        let downloadedReciters = try? fileManager.contentsOfDirectory(at: audioFiles, includingPropertiesForKeys: nil)
+        let downloadedReciters = try? fileSystem.contentsOfDirectory(at: audioFiles, includingPropertiesForKeys: nil)
         if downloadedReciters?.isEmpty ?? true {
             return
         }
@@ -42,7 +49,7 @@ public final class AudioUpdater {
         // update if 7 days passed since last checked
         let lastChecked = preferences.lastChecked
         if let lastChecked = lastChecked {
-            let today = Date()
+            let today = time.now
             let difference = Calendar.current.dateComponents([.day], from: lastChecked, to: today)
             if let day = difference.day, day < 7 {
                 return
@@ -52,27 +59,26 @@ public final class AudioUpdater {
         let lastRevision = preferences.lastRevision
 
         logger.notice("Running AudioUpdater for revision \(lastRevision)")
-        networkService
-            .getAudioUpdates(revision: lastRevision)
-            .get(on: .global()) { _ in self.updateLastChecked() }
-            .then(update)
-            .catch { error in
-                crasher.recordError(error, reason: "Audio Update request failed.")
-            }
+        do {
+            let updates = try await networkService.getAudioUpdates(revision: lastRevision)
+            updateLastChecked()
+            await update(updates)
+        } catch {
+            crasher.recordError(error, reason: "Audio Update request failed.")
+        }
     }
 
     private func updateLastChecked() {
-        preferences.lastChecked = Date()
+        preferences.lastChecked = time.now
     }
 
-    private func update(_ updates: AudioUpdates?) -> Guarantee<Void> {
+    private func update(_ updates: AudioUpdates?) async {
         guard let updates = updates else {
             logger.notice("No new audio updates")
-            return .value(())
+            return
         }
-        return recitersRetriever.getReciters().map {
-            self.update(reciters: $0, updates: updates)
-        }
+        let reciters = await recitersRetriever.getReciters()
+        update(reciters: reciters, updates: updates)
     }
 
     private func update(reciters: [Reciter], updates: AudioUpdates) {
@@ -85,7 +91,7 @@ public final class AudioUpdater {
             }
 
             // not downloaded before
-            if !reciter.localFolder().isReachable {
+            if !fileSystem.fileExists(at: reciter.localFolder()) {
                 continue
             }
 
@@ -102,7 +108,7 @@ public final class AudioUpdater {
     private func deleteFileIfNeeded(for reciter: Reciter, file: AudioUpdates.Update.File) {
         let directory = reciter.localFolder()
         let localFile = directory.appendingPathComponent(file.filename)
-        if !localFile.isReachable {
+        if !fileSystem.fileExists(at: localFile) {
             return
         }
         let localMD5 = try? md5Calculator.stringMD5(for: localFile)
@@ -120,7 +126,7 @@ public final class AudioUpdater {
         let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
         let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
-        if !dbFile.isReachable {
+        if !fileSystem.fileExists(at: dbFile) {
             // in case we failed to unzip the file, it could contain an old version
             delete(zipFile)
             return
@@ -139,7 +145,7 @@ public final class AudioUpdater {
 
     private func delete(_ file: URL) {
         logger.notice("About to delete old audio file: \(file.absoluteString)")
-        try? FileManager.default.removeItem(at: file)
+        try? fileSystem.removeItem(at: file)
     }
 }
 

@@ -9,8 +9,8 @@ import Foundation
 @testable import QuranAudioKit
 
 extension Reciter {
-    private static let baseURL = URL(validURL: "http://example.com")
-    private static let gaplessDatabaseName = "mishari_alafasy"
+    static let baseURL = URL(validURL: "http://example.com")
+    static let gaplessDatabaseName = "mishari_alafasy"
 
     static var gappedReciter: Reciter {
         Reciter(id: 11,

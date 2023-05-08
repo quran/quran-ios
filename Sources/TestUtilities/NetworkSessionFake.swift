@@ -16,6 +16,8 @@ public final class NetworkSessionFake: NetworkSession {
     public var downloads: [SessionTask] = []
     public var dataTasks: [SessionTask] = []
 
+    public var dataResults: [URL: Result<Data, Error>] = [:]
+
     private var taskIdentifierCounter = 0
     private var taskIdentifier: Int {
         let temp = taskIdentifierCounter
@@ -58,6 +60,12 @@ public final class NetworkSessionFake: NetworkSession {
         task.completionHandler = completionHandler
         dataTasks.append(task)
         return task
+    }
+
+    public func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        let result = dataResults[request.url!] ?? .success(Data())
+        let data = try result.get()
+        return (data, URLResponse())
     }
 
     public func completeDownloadTask(_ task: SessionTask, location: URL, totalBytes: Int, progressLoops: Int) async {

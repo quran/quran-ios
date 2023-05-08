@@ -68,6 +68,20 @@ public extension DispatchQueue {
             }
         }
     }
+
+    func asyncGuarantee<T>(group: DispatchGroup? = nil,
+                           qos: DispatchQoS = .default,
+                           flags: DispatchWorkItemFlags = [],
+                           execute body: @escaping () async -> T) -> Guarantee<T>
+    {
+        Guarantee<T> { resolver in
+            async(group: group, qos: qos, flags: flags) {
+                Task {
+                    resolver(await body())
+                }
+            }
+        }
+    }
 }
 
 /// used by our extensions to provide unambiguous functions with the same name as the original function

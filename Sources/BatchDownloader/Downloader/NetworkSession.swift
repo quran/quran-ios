@@ -16,6 +16,7 @@ protocol NetworkSession {
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
+    func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
 protocol NetworkSessionTask: AnyObject {

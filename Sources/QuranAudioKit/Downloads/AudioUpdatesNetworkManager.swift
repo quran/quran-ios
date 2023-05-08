@@ -7,18 +7,13 @@
 
 import BatchDownloader
 import Foundation
-import PromiseKit
 
-protocol AudioUpdatesNetworkManager {
-    func getAudioUpdates(revision: Int) -> Promise<AudioUpdates?>
-}
-
-struct DefaultAudioUpdatesNetworkManager: AudioUpdatesNetworkManager {
+struct AudioUpdatesNetworkManager {
     let networkManager: NetworkManager
 
-    func getAudioUpdates(revision: Int) -> Promise<AudioUpdates?> {
-        networkManager.request("/data/audio_updates.php", parameters: [("revision", "\(revision)")])
-            .map(parse)
+    func getAudioUpdates(revision: Int) async throws -> AudioUpdates? {
+        let data = try await networkManager.request("/data/audio_updates.php", parameters: [("revision", "\(revision)")])
+        return try parse(data: data)
     }
 
     private func parse(data: Data) throws -> AudioUpdates? {

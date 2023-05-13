@@ -14,10 +14,10 @@ import Utilities
 import VLogging
 
 public struct QuranAudioPlayerActions {
-    let playbackEnded: () -> Void
-    let playbackPaused: () -> Void
-    let playbackResumed: () -> Void
-    let playing: (AyahNumber) -> Void
+    let playbackEnded: @MainActor () -> Void
+    let playbackPaused: @MainActor () -> Void
+    let playbackResumed: @MainActor () -> Void
+    let playing: @MainActor (AyahNumber) -> Void
 
     public init(playbackEnded: @escaping () -> Void,
                 playbackPaused: @escaping () -> Void,
@@ -31,8 +31,12 @@ public struct QuranAudioPlayerActions {
     }
 }
 
+@MainActor
 public class QuranAudioPlayer {
     public var actions: QuranAudioPlayerActions?
+    public func setActions(_ actions: QuranAudioPlayerActions) {
+        self.actions = actions
+    }
 
     private let player: QueuingPlayer
     private let unzipper: AudioUnzipper
@@ -42,7 +46,7 @@ public class QuranAudioPlayer {
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder
     private var audioRequest: QuranAudioRequest?
 
-    init(player: QueuingPlayer) {
+    nonisolated init(player: QueuingPlayer) {
         let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
         let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
         let gappedBuilder = GappedAudioRequestBuilder()

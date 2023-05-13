@@ -9,9 +9,11 @@
 import Foundation
 import Timing
 
-class AudioPlayer: AudioInterruptionMonitorDelegate {
+@MainActor
+class AudioPlayer {
     var actions: QueuePlayerActions?
 
+    private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
     private var player: Player {
@@ -30,7 +32,9 @@ class AudioPlayer: AudioInterruptionMonitorDelegate {
         self.request = request
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         player = Player(url: request.files[0].url)
-        interruptionMonitor.delegate = self
+        interruptionMonitor.onAudioInterruption = { [weak self] in
+            self?.onAudioInterruption(type: $0)
+        }
     }
 
     // MARK: - Repeat Logic
@@ -124,8 +128,6 @@ class AudioPlayer: AudioInterruptionMonitorDelegate {
     }
 
     // MARK: - Interruption
-
-    private let interruptionMonitor = AudioInterruptionMonitor()
 
     func onAudioInterruption(type: AudioInterruptionType) {
         switch type {

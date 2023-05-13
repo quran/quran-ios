@@ -12,12 +12,20 @@ import Locking
 import QuranKit
 import Utilities
 
-class QuranAudioPlayerDelegateClosures: QuranAudioPlayerDelegate {
+class QuranAudioPlayerDelegateClosures {
     enum Event: Equatable {
         case onPlaybackPaused
         case onPlaybackResumed
         case onPlaying(AyahNumber)
         case onPlaybackEnded
+    }
+
+    func makeActions() -> QuranAudioPlayerActions {
+        QuranAudioPlayerActions(
+            playbackEnded: { [weak self] in self?.onPlaybackEnded() },
+            playbackPaused: { [weak self] in self?.onPlaybackPaused() },
+            playbackResumed: {[weak self] in self?.onPlaybackResumed()},
+            playing: { [weak self] in self?.onPlaying(ayah: $0)})
     }
 
     private var events: Protected<[Event]> = Protected([])

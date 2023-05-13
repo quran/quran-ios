@@ -9,13 +9,17 @@
 import Foundation
 import Timing
 
-class AudioPlayer: AudioInterruptionMonitorDelegate, PlayerDelegate {
-    weak var delegate: QueuePlayerDelegate?
+class AudioPlayer: AudioInterruptionMonitorDelegate {
+    var actions: QueuePlayerActions?
 
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
     private var player: Player {
-        didSet { player.delegate = self }
+        didSet {
+            player.onRateChanged = { [weak self] in
+                self?.rateChanged(to: $0)
+            }
+        }
     }
 
     private var timer: Timing.Timer? {
@@ -59,7 +63,7 @@ class AudioPlayer: AudioInterruptionMonitorDelegate, PlayerDelegate {
         waitUntilFrameEnds(currentTime: currentTime)
 
         // inform the delegate of a frame changed
-        delegate?.onAudioFrameChanged(fileIndex: fileIndex, frameIndex: frameIndex, playerItem: player.playerItem)
+        actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem)
     }
 
     private func onFrameEnded() {
@@ -115,8 +119,8 @@ class AudioPlayer: AudioInterruptionMonitorDelegate, PlayerDelegate {
 
     // MARK: - PlayerDelegate
 
-    func onRateChanged(to rate: Float) {
-        delegate?.onPlaybackRateChanged(rate: rate)
+    private func rateChanged(to rate: Float) {
+        actions?.playbackRateChanged(rate)
     }
 
     // MARK: - Interruption
@@ -154,7 +158,7 @@ class AudioPlayer: AudioInterruptionMonitorDelegate, PlayerDelegate {
     func stop() {
         timer?.cancel()
         player.stop()
-        delegate?.onPlaybackEnded()
+        actions?.playbackEnded()
     }
 
     func stepForward() {

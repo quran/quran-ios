@@ -10,7 +10,7 @@ import QueuePlayer
 @testable import QuranAudioKit
 
 class QueuePlayerFake: QueuingPlayer {
-    var delegate: QueuePlayerDelegate?
+    var actions: QueuePlayerActions?
 
     var state: PlayingState = .stopped
     enum PlayingState: Equatable, Encodable {

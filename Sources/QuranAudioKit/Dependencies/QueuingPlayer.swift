@@ -8,7 +8,7 @@
 import QueuePlayer
 
 protocol QueuingPlayer: AnyObject {
-    var delegate: QueuePlayerDelegate? { get set }
+    var actions: QueuePlayerActions? { get set }
 
     func play(request: AudioRequest)
     func pause()

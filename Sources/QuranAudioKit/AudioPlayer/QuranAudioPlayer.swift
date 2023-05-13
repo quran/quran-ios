@@ -13,15 +13,26 @@ import QuranKit
 import Utilities
 import VLogging
 
-public protocol QuranAudioPlayerDelegate: AnyObject {
-    func onPlaybackPaused()
-    func onPlaybackResumed()
-    func onPlaying(ayah: AyahNumber)
-    func onPlaybackEnded()
+public struct QuranAudioPlayerActions {
+    let playbackEnded: () -> Void
+    let playbackPaused: () -> Void
+    let playbackResumed: () -> Void
+    let playing: (AyahNumber) -> Void
+
+    public init(playbackEnded: @escaping () -> Void,
+                playbackPaused: @escaping () -> Void,
+                playbackResumed: @escaping () -> Void,
+                playing: @escaping (AyahNumber) -> Void)
+    {
+        self.playbackEnded = playbackEnded
+        self.playbackPaused = playbackPaused
+        self.playbackResumed = playbackResumed
+        self.playing = playing
+    }
 }
 
-public class QuranAudioPlayer: QueuePlayerDelegate {
-    public weak var delegate: QuranAudioPlayerDelegate?
+public class QuranAudioPlayer {
+    public var actions: QuranAudioPlayerActions?
 
     private let player: QueuingPlayer
     private let unzipper: AudioUnzipper
@@ -68,29 +79,26 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         player.stepBackward()
     }
 
-    // MARK: - AudioPlayerDelegate
+    // MARK: - AudioPlayerActions
 
-    // TODO: remove public
-    public func onPlaybackEnded() {
+    private func playbackEnded() {
         nowPlaying.clear()
-        delegate?.onPlaybackEnded()
+        actions?.playbackEnded()
         // not interested to get more notifications
-        player.delegate = nil
+        player.actions = nil
         audioRequest = nil
     }
 
-    // TODO: remove public
-    public func onPlaybackRateChanged(rate: Float) {
+    private func playbackRateChanged(rate: Float) {
         nowPlaying.update(rate: rate)
         if rate > 0.1 {
-            delegate?.onPlaybackResumed()
+            actions?.playbackResumed()
         } else {
-            delegate?.onPlaybackPaused()
+            actions?.playbackPaused()
         }
     }
 
-    // TODO: remove public
-    public func onAudioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
+    private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
         guard let audioRequest = audioRequest else {
             return
         }
@@ -102,7 +110,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
-        delegate?.onPlaying(ayah: ayah)
+        actions?.playing(ayah)
     }
 
     // MARK: - Play
@@ -128,7 +136,7 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         let request = audioRequest.getRequest()
         willPlay(request)
         self.audioRequest = audioRequest
-        player.delegate = self
+        player.actions = newPlayerActions()
         player.play(request: request)
     }
 
@@ -142,5 +150,19 @@ public class QuranAudioPlayer: QueuePlayerDelegate {
         case .gapless: return gaplessAudioRequestBuilder
         case .gapped: return gappedAudioRequestBuilder
         }
+    }
+
+    private func newPlayerActions() -> QueuePlayerActions {
+        QueuePlayerActions(
+            playbackEnded: { [weak self] in
+                self?.playbackEnded()
+            },
+            playbackRateChanged: { [weak self] rate in
+                self?.playbackRateChanged(rate: rate)
+            },
+            audioFrameChanged: { [weak self] in
+                self?.audioFrameChanged(fileIndex: $0, frameIndex: $1, playerItem: $2)
+            }
+        )
     }
 }

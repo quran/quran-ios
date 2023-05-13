@@ -8,12 +8,8 @@
 
 import AVFoundation
 
-protocol PlayerDelegate: AnyObject {
-    func onRateChanged(to rate: Float)
-}
-
 class Player {
-    weak var delegate: PlayerDelegate?
+    var onRateChanged: ((Float) -> Void)?
 
     private let asset: AVURLAsset
     let playerItem: AVPlayerItem
@@ -34,7 +30,7 @@ class Player {
 
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
             if let rate = change.newValue {
-                self?.delegate?.onRateChanged(to: rate)
+                self?.onRateChanged?(rate)
             }
         }
     }

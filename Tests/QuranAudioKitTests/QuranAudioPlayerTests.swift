@@ -6,7 +6,7 @@
 //
 
 import AVFoundation
-import QueuePlayer
+@testable import QueuePlayer
 @testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
@@ -27,7 +27,7 @@ class QuranAudioPlayerTests: XCTestCase {
         delegate = QuranAudioPlayerDelegateClosures()
 
         player = QuranAudioPlayer(player: queuePlayer)
-        player.delegate = delegate
+        player.actions = delegate.makeActions()
     }
 
     override func tearDownWithError() throws {
@@ -174,25 +174,25 @@ class QuranAudioPlayerTests: XCTestCase {
             try await runDownloadedTestCase(gapless: i == 0)
 
             // pause
-            queuePlayer.delegate?.onPlaybackRateChanged(rate: 0)
+            queuePlayer.actions?.playbackRateChanged(0)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackPaused])
 
             // resume
-            queuePlayer.delegate?.onPlaybackRateChanged(rate: 1)
+            queuePlayer.actions?.playbackRateChanged(1)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackResumed])
 
             // frame update
             let playerItem = AVPlayerItem(url: FileManager.documentsURL)
             let frameChange = frameChanges[i]
-            queuePlayer.delegate?.onAudioFrameChanged(fileIndex: frameChange.file, frameIndex: frameChange.frame, playerItem: playerItem)
+            queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
-            queuePlayer.delegate?.onPlaybackEnded()
+            queuePlayer.actions?.playbackEnded()
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
 
             // cannot end playback again or change frame
-            queuePlayer.delegate?.onPlaybackEnded()
+            queuePlayer.actions?.playbackEnded()
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [])
         }
     }

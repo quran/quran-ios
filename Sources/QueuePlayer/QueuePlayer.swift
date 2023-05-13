@@ -9,14 +9,23 @@
 import AVFoundation
 import QueuePlayerObjc
 
-public protocol QueuePlayerDelegate: AnyObject {
-    func onPlaybackEnded()
-    func onPlaybackRateChanged(rate: Float)
-    func onAudioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem)
+public struct QueuePlayerActions {
+    let playbackEnded: () -> Void
+    let playbackRateChanged: (Float) -> Void
+    let audioFrameChanged: (Int, Int, AVPlayerItem) -> Void
+
+    public init(playbackEnded: @escaping () -> Void,
+                playbackRateChanged: @escaping (Float) -> Void,
+                audioFrameChanged: @escaping (Int, Int, AVPlayerItem) -> Void)
+    {
+        self.playbackEnded = playbackEnded
+        self.playbackRateChanged = playbackRateChanged
+        self.audioFrameChanged = audioFrameChanged
+    }
 }
 
-open class QueuePlayer: QueuePlayerDelegate {
-    open weak var delegate: QueuePlayerDelegate?
+public class QueuePlayer {
+    public var actions: QueuePlayerActions?
 
     public init() {
         if #available(iOS 10.0, *) {
@@ -28,13 +37,13 @@ open class QueuePlayer: QueuePlayerDelegate {
 
     private var player: AudioPlayer? {
         didSet {
-            oldValue?.delegate = nil
+            oldValue?.actions = nil
         }
     }
 
     open func play(request: AudioRequest) {
         player = AudioPlayer(request: request)
-        player?.delegate = self
+        player?.actions = newPlayerActions()
         player?.startPlaying()
     }
 
@@ -48,7 +57,6 @@ open class QueuePlayer: QueuePlayerDelegate {
 
     public func stop() {
         player?.stop()
-        player = nil
     }
 
     public func stepForward() {
@@ -59,18 +67,18 @@ open class QueuePlayer: QueuePlayerDelegate {
         player?.stepBackgward()
     }
 
-    // MARK: - QueuePlayerDelegate
-
-    public func onPlaybackEnded() {
-        player = nil
-        delegate?.onPlaybackEnded()
-    }
-
-    public func onPlaybackRateChanged(rate: Float) {
-        delegate?.onPlaybackRateChanged(rate: rate)
-    }
-
-    public func onAudioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
-        delegate?.onAudioFrameChanged(fileIndex: fileIndex, frameIndex: frameIndex, playerItem: playerItem)
+    private func newPlayerActions() -> QueuePlayerActions {
+        QueuePlayerActions(
+            playbackEnded: { [weak self] in
+                self?.player = nil
+                self?.actions?.playbackEnded()
+            },
+            playbackRateChanged: { [weak self] in
+                self?.actions?.playbackRateChanged($0)
+            },
+            audioFrameChanged: { [weak self] in
+                self?.actions?.audioFrameChanged($0, $1, $2)
+            }
+        )
     }
 }

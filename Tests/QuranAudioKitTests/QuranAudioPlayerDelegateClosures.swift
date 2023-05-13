@@ -24,8 +24,9 @@ class QuranAudioPlayerDelegateClosures {
         QuranAudioPlayerActions(
             playbackEnded: { [weak self] in self?.onPlaybackEnded() },
             playbackPaused: { [weak self] in self?.onPlaybackPaused() },
-            playbackResumed: {[weak self] in self?.onPlaybackResumed()},
-            playing: { [weak self] in self?.onPlaying(ayah: $0)})
+            playbackResumed: { [weak self] in self?.onPlaybackResumed() },
+            playing: { [weak self] in self?.onPlaying(ayah: $0) }
+        )
     }
 
     private var events: Protected<[Event]> = Protected([])

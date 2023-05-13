@@ -9,8 +9,12 @@ import Foundation
 import QueuePlayer
 @testable import QuranAudioKit
 
+@MainActor
 class QueuePlayerFake: QueuingPlayer {
     var actions: QueuePlayerActions?
+
+    nonisolated init() {
+    }
 
     var state: PlayingState = .stopped
     enum PlayingState: Equatable, Encodable {

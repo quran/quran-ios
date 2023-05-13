@@ -7,6 +7,7 @@
 
 import QueuePlayer
 
+@MainActor
 protocol QueuingPlayer: AnyObject {
     var actions: QueuePlayerActions? { get set }
 

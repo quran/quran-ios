@@ -10,9 +10,9 @@ import AVFoundation
 import QueuePlayerObjc
 
 public struct QueuePlayerActions {
-    let playbackEnded: () -> Void
-    let playbackRateChanged: (Float) -> Void
-    let audioFrameChanged: (Int, Int, AVPlayerItem) -> Void
+    let playbackEnded: @MainActor () -> Void
+    let playbackRateChanged: @MainActor (Float) -> Void
+    let audioFrameChanged: @MainActor (Int, Int, AVPlayerItem) -> Void
 
     public init(playbackEnded: @escaping () -> Void,
                 playbackRateChanged: @escaping (Float) -> Void,
@@ -24,6 +24,7 @@ public struct QueuePlayerActions {
     }
 }
 
+@MainActor
 public class QueuePlayer {
     public var actions: QueuePlayerActions?
 

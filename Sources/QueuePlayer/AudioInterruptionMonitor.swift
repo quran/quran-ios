@@ -14,12 +14,8 @@ enum AudioInterruptionType {
     case endedShouldNotResume
 }
 
-protocol AudioInterruptionMonitorDelegate: AnyObject {
-    func onAudioInterruption(type: AudioInterruptionType)
-}
-
-class AudioInterruptionMonitor {
-    weak var delegate: AudioInterruptionMonitorDelegate?
+final class AudioInterruptionMonitor {
+    @MainActor var onAudioInterruption: (@MainActor (AudioInterruptionType) -> Void)?
 
     init() {
         let center = NotificationCenter.default
@@ -29,34 +25,41 @@ class AudioInterruptionMonitor {
                            object: nil)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
+    @objc
+    private func onInterruption(_ notification: Notification) {
+        if let type = Self.extractInterruptionType(from: notification) {
+            Task {
+                await onAudioInterruption?(type)
+            }
+        }
     }
 
-    @objc private func onInterruption(_ notification: Notification) {
+    private static func extractInterruptionType(from notification: Notification) -> AudioInterruptionType? {
         guard let info = notification.userInfo else {
-            return
+            return nil
         }
         guard let rawType = info[AVAudioSessionInterruptionTypeKey] as? UInt else {
-            return
+            return nil
         }
         guard let type = AVAudioSession.InterruptionType(rawValue: rawType) else {
-            return
+            return nil
         }
         switch type {
-        case .began: delegate?.onAudioInterruption(type: .began)
+        case .began:
+            return .began
         case .ended:
             guard let rawOptions = info[AVAudioSessionInterruptionOptionKey] as? UInt else {
-                return
+                return nil
             }
             let options = AVAudioSession.InterruptionOptions(rawValue: rawOptions)
             if options.contains(.shouldResume) {
-                delegate?.onAudioInterruption(type: .endedShouldResume)
+                return .endedShouldResume
             } else {
-                delegate?.onAudioInterruption(type: .endedShouldNotResume)
+                return .endedShouldNotResume
             }
         @unknown default:
-            fatalError("Unimplemented case")
+            assertionFailure("Unimplemented case")
+            return nil
         }
     }
 }

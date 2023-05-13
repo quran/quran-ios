@@ -8,8 +8,9 @@
 
 import AVFoundation
 
-class Player {
-    var onRateChanged: ((Float) -> Void)?
+@MainActor
+final class Player {
+    var onRateChanged: (@MainActor (Float) -> Void)?
 
     private let asset: AVURLAsset
     let playerItem: AVPlayerItem
@@ -30,7 +31,10 @@ class Player {
 
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
             if let rate = change.newValue {
-                self?.onRateChanged?(rate)
+                guard let self else { return }
+                Task {
+                    await self.onRateChanged?(rate)
+                }
             }
         }
     }

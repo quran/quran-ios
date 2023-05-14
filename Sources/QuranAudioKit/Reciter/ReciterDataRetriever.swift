@@ -22,7 +22,7 @@ import Foundation
 import PromiseKit
 import Utilities
 
-public struct ReciterDataRetriever {
+public struct ReciterDataRetriever: Sendable {
     private let bundle: SystemBundle
 
     public init() {

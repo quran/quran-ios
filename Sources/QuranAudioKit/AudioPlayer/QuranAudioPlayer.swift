@@ -13,16 +13,16 @@ import QuranKit
 import Utilities
 import VLogging
 
-public struct QuranAudioPlayerActions {
-    let playbackEnded: @MainActor () -> Void
-    let playbackPaused: @MainActor () -> Void
-    let playbackResumed: @MainActor () -> Void
-    let playing: @MainActor (AyahNumber) -> Void
+public struct QuranAudioPlayerActions: Sendable {
+    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackPaused: @Sendable @MainActor () -> Void
+    let playbackResumed: @Sendable @MainActor () -> Void
+    let playing: @Sendable @MainActor (AyahNumber) -> Void
 
-    public init(playbackEnded: @escaping () -> Void,
-                playbackPaused: @escaping () -> Void,
-                playbackResumed: @escaping () -> Void,
-                playing: @escaping (AyahNumber) -> Void)
+    public init(playbackEnded: @Sendable @MainActor @escaping () -> Void,
+                playbackPaused: @Sendable @MainActor @escaping () -> Void,
+                playbackResumed: @Sendable @MainActor @escaping () -> Void,
+                playing: @Sendable @MainActor @escaping (AyahNumber) -> Void)
     {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused

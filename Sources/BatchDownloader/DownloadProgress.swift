@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-public struct DownloadProgress {
+public struct DownloadProgress: Sendable {
     public var total: Double
     public var completed: Double = 0
 

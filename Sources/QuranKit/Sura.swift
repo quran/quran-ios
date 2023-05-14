@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct Sura: QuranValueGroup {
+public struct Sura: QuranValueGroup, Sendable {
     public var suraNumber: Int { storage.value }
     let storage: QuranValueStorage<Self>
 

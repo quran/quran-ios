@@ -10,7 +10,7 @@ import AsyncAlgorithms
 import Foundation
 import XCTest
 
-public final class NetworkSessionFake: NetworkSession {
+public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     public let delegateQueue: OperationQueue
     let delegate: NetworkSessionDelegate?
     public var downloads: [SessionTask] = []
@@ -31,13 +31,8 @@ public final class NetworkSessionFake: NetworkSession {
         self.downloads = downloads
     }
 
-    public func getTasksWithCompletionHandler(_ completionHandler: @escaping ([NetworkSessionDataTask],
-                                                                              [NetworkSessionUploadTask],
-                                                                              [NetworkSessionDownloadTask]) -> Void)
-    {
-        delegateQueue.addOperation {
-            completionHandler([], [], self.downloads)
-        }
+    public func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
+        ([], [], downloads)
     }
 
     public func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
@@ -125,7 +120,7 @@ public final class NetworkSessionFake: NetworkSession {
     }
 }
 
-public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable {
+public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable, @unchecked Sendable {
     public let taskIdentifier: Int
     public var originalRequest: URLRequest?
     public var currentRequest: URLRequest?

@@ -21,7 +21,7 @@
 import Foundation
 import QuranKit
 
-protocol ReciterAudioFile {
+protocol ReciterAudioFile: Sendable {
     var remote: URL { get }
     var local: String { get }
 }

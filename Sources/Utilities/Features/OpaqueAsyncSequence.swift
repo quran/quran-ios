@@ -16,7 +16,7 @@ public extension AsyncSequence {
 }
 
 /// Type erased version of an AsyncSequence.
-public struct OpaqueAsyncSequence<Base: AsyncSequence>: AsyncSequence {
+public struct OpaqueAsyncSequence<Base: AsyncSequence>: AsyncSequence, Sendable where Base: Sendable {
     public typealias Element = Base.Element
     public typealias AsyncIterator = Iterator<Base.AsyncIterator>
 

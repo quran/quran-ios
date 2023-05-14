@@ -23,12 +23,15 @@ import SQLite
 import SQLitePersistence
 import Utilities
 
-protocol DownloadsPersistence {
+protocol DownloadsPersistence: Sendable {
     func retrieveAll() async throws -> [DownloadBatch]
     func insert(batch: DownloadBatchRequest) async throws -> DownloadBatch
     func update(downloads: [Download]) async throws
     func delete(batchIds: [Int64]) async throws
 }
+
+// TODO: Remove @unchecked
+extension SqliteDownloadsPersistence: @unchecked Sendable { }
 
 final class SqliteDownloadsPersistence: DownloadsPersistence, SQLitePersistence {
     let version: UInt = 2

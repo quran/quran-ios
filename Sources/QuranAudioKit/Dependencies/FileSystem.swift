@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol FileSystem {
+protocol FileSystem: Sendable {
     func fileExists(at url: URL) -> Bool
     func removeItem(at url: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]

@@ -10,7 +10,7 @@ import AsyncExtensions
 import BatchDownloader
 import Utilities
 
-final class HistoryProgressListener {
+actor HistoryProgressListener {
     var values: [Double] = []
     var cancellable: CancellableTask?
 

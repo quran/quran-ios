@@ -9,14 +9,14 @@
 import AVFoundation
 import QueuePlayerObjc
 
-public struct QueuePlayerActions {
-    let playbackEnded: @MainActor () -> Void
-    let playbackRateChanged: @MainActor (Float) -> Void
-    let audioFrameChanged: @MainActor (Int, Int, AVPlayerItem) -> Void
+public struct QueuePlayerActions: Sendable {
+    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackRateChanged: @Sendable @MainActor (Float) -> Void
+    let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem) -> Void
 
-    public init(playbackEnded: @escaping () -> Void,
-                playbackRateChanged: @escaping (Float) -> Void,
-                audioFrameChanged: @escaping (Int, Int, AVPlayerItem) -> Void)
+    public init(playbackEnded: @Sendable @MainActor @escaping () -> Void,
+                playbackRateChanged: @Sendable @MainActor @escaping (Float) -> Void,
+                audioFrameChanged: @Sendable @MainActor @escaping (Int, Int, AVPlayerItem) -> Void)
     {
         self.playbackEnded = playbackEnded
         self.playbackRateChanged = playbackRateChanged
@@ -68,11 +68,15 @@ public class QueuePlayer {
         player?.stepBackgward()
     }
 
+    private func playbackEnded() {
+        player = nil
+        actions?.playbackEnded()
+    }
+
     private func newPlayerActions() -> QueuePlayerActions {
         QueuePlayerActions(
             playbackEnded: { [weak self] in
-                self?.player = nil
-                self?.actions?.playbackEnded()
+                self?.playbackEnded()
             },
             playbackRateChanged: { [weak self] in
                 self?.actions?.playbackRateChanged($0)

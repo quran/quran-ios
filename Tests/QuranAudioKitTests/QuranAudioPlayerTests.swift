@@ -176,25 +176,25 @@ class QuranAudioPlayerTests: XCTestCase {
 
             // pause
             await queuePlayer.actions?.playbackRateChanged(0)
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackPaused])
+            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackPaused])
 
             // resume
             await queuePlayer.actions?.playbackRateChanged(1)
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackResumed])
+            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackResumed])
 
             // frame update
             let playerItem = AVPlayerItem(url: FileManager.documentsURL)
             let frameChange = frameChanges[i]
             await queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem)
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
+            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
             await queuePlayer.actions?.playbackEnded()
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
+            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
 
             // cannot end playback again or change frame
             await queuePlayer.actions?.playbackEnded()
-            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [])
+            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [])
         }
     }
 

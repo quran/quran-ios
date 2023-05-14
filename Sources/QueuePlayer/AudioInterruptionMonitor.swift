@@ -14,8 +14,9 @@ enum AudioInterruptionType {
     case endedShouldNotResume
 }
 
+@MainActor
 final class AudioInterruptionMonitor {
-    @MainActor var onAudioInterruption: (@MainActor (AudioInterruptionType) -> Void)?
+    var onAudioInterruption: (@Sendable @MainActor (AudioInterruptionType) -> Void)?
 
     init() {
         let center = NotificationCenter.default
@@ -26,7 +27,7 @@ final class AudioInterruptionMonitor {
     }
 
     @objc
-    private func onInterruption(_ notification: Notification) {
+    private nonisolated func onInterruption(_ notification: Notification) {
         if let type = Self.extractInterruptionType(from: notification) {
             Task {
                 await onAudioInterruption?(type)
@@ -34,7 +35,7 @@ final class AudioInterruptionMonitor {
         }
     }
 
-    private static func extractInterruptionType(from notification: Notification) -> AudioInterruptionType? {
+    private nonisolated static func extractInterruptionType(from notification: Notification) -> AudioInterruptionType? {
         guard let info = notification.userInfo else {
             return nil
         }

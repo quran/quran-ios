@@ -15,7 +15,7 @@ private struct AudioFileLists {
     let gapless: [ReciterAudioFile]
 }
 
-public struct ReciterSizeInfoRetriever {
+public struct ReciterSizeInfoRetriever: Sendable {
     let fileListFactory: ReciterAudioFileListRetrievalFactory
     let fileSystem: FileSystem
 

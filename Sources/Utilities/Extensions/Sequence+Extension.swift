@@ -46,7 +46,7 @@ extension Sequence where Iterator.Element: Hashable {
 }
 
 extension Sequence {
-    public func asyncMap<T>(_ transform: (Element) async throws -> T) async rethrows -> [T] {
+    public func asyncMap<T>(_ transform: @Sendable (Element) async throws -> T) async rethrows -> [T] {
         var values = [T]()
         for element in self {
             try await values.append(transform(element))
@@ -54,7 +54,7 @@ extension Sequence {
         return values
     }
 
-    public func asyncFilter(_ isIncluded: (Element) async throws -> Bool) async rethrows -> [Element] {
+    public func asyncFilter(_ isIncluded: @Sendable (Element) async throws -> Bool) async rethrows -> [Element] {
         var filtered = [Element]()
         for element in self {
             if try await isIncluded(element) {

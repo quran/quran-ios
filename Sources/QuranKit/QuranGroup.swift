@@ -18,7 +18,7 @@ extension QuranGroup {
     }
 }
 
-protocol QuranValueGroup: QuranGroup, Navigatable {
+protocol QuranValueGroup: QuranGroup, Navigatable, Sendable {
     var storage: QuranValueStorage<Self> { get }
     init(_ storage: QuranValueStorage<Self>)
 }

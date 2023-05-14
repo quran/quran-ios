@@ -2,6 +2,17 @@
 
 import PackageDescription
 
+// Disable before commit, see https://forums.swift.org/t/concurrency-checking-in-swift-packages-unsafeflags/61135
+let enforceSwiftConcurrencyChecks = false
+
+let swiftConcurrencySettings: [SwiftSetting] = [
+    .unsafeFlags([
+        "-Xfrontend", "-strict-concurrency=complete",
+    ]),
+]
+
+let settings = enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []
+
 let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
@@ -40,7 +51,8 @@ let package = Package(
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ],
     targets: [
-        .target(name: "QuranKit", dependencies: []),
+        .target(name: "QuranKit", dependencies: [],
+                swiftSettings: settings),
         .testTarget(name: "QuranKitTests", dependencies: [
             "QuranKit",
         ]),
@@ -68,7 +80,8 @@ let package = Package(
             "QueuePlayer",
             "Zip",
             .product(name: "OrderedCollections", package: "swift-collections"),
-        ]),
+        ],
+        swiftSettings: settings),
         .testTarget(name: "QuranAudioKitTests", dependencies: [
             "QuranAudioKit",
             "TestUtilities",
@@ -79,7 +92,8 @@ let package = Package(
         ],
         resources: [
             .copy("test_data"),
-        ]),
+        ],
+        swiftSettings: settings),
 
         .target(name: "TranslationService", dependencies: [
             "Zip",
@@ -92,7 +106,8 @@ let package = Package(
         .target(name: "QueuePlayer", dependencies: [
             "Timing",
             "QueuePlayerObjc",
-        ]),
+        ],
+        swiftSettings: settings),
         .target(name: "QueuePlayerObjc", dependencies: []),
 
         .target(name: "BatchDownloader", dependencies: [
@@ -100,12 +115,14 @@ let package = Package(
             "Crashing",
             "WeakSet",
             "AsyncExtensions",
-        ]),
+        ],
+        swiftSettings: settings),
         .testTarget(name: "BatchDownloaderTests", dependencies: [
             "BatchDownloader",
             "TestUtilities",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-        ]),
+        ],
+        swiftSettings: settings),
 
         .target(name: "SQLitePersistence", dependencies: [
             "Utilities",
@@ -122,7 +139,8 @@ let package = Package(
             "PromiseKit",
             "AsyncExtensions",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-        ]),
+        ],
+        swiftSettings: settings),
 
         .target(name: "Timing", dependencies: [
             "Locking",

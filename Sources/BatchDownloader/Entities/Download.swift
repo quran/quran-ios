@@ -18,8 +18,8 @@
 //  GNU General Public License for more details.
 //
 
-public struct Download {
-    public enum Status: Int {
+public struct Download: Sendable {
+    public enum Status: Int, Sendable {
         case downloading = 0
         case completed = 1
         // case failed      = 2 // we shouldn't keep a failed download
@@ -40,7 +40,7 @@ public struct Download {
     }
 }
 
-public struct DownloadBatch {
+public struct DownloadBatch: Sendable {
     public let id: Int64
     public let downloads: [Download]
     public init(id: Int64, downloads: [Download]) {

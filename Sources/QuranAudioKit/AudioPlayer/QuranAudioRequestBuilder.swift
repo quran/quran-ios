@@ -9,7 +9,7 @@
 import QueuePlayer
 import QuranKit
 
-protocol QuranAudioRequest {
+protocol QuranAudioRequest: Sendable {
     func getRequest() -> AudioRequest
     func getAyahNumberFrom(fileIndex: Int, frameIndex: Int) -> AyahNumber
     func getPlayerInfo(for fileIndex: Int) -> PlayerItemInfo

@@ -27,14 +27,14 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
     private let dataController: DownloadBatchDataController
 
-    @MainActor var backgroundSessionCompletion: (() -> Void)?
+    @MainActor var backgroundSessionCompletion: (@MainActor () -> Void)?
 
     init(dataController: DownloadBatchDataController) {
         self.dataController = dataController
     }
 
     @MainActor
-    func setBackgroundSessionCompletion(_ backgroundSessionCompletion: (() -> Void)?) {
+    func setBackgroundSessionCompletion(_ backgroundSessionCompletion: @MainActor @escaping () -> Void) {
         self.backgroundSessionCompletion = backgroundSessionCompletion
     }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable {
+struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable, @unchecked Sendable {
     let quran: Quran
     let value: Int
     let keyPath: KeyPath<Quran, [T]>

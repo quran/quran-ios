@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SystemBundle {
+protocol SystemBundle: Sendable {
     func readArray(resource: String, withExtension: String) -> NSArray
 }
 

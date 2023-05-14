@@ -6,7 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-protocol QuranReadingInfoRawData {
+protocol QuranReadingInfoRawData: Sendable {
     var arabicBesmAllah: String { get }
 
     var startPageOfSura: [Int] { get }

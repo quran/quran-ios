@@ -12,7 +12,7 @@ struct ResourceValuesFake: ResourceValues {
     let fileSize: Int?
 }
 
-final class FileSystemFake: FileSystem {
+final class FileSystemFake: FileSystem, @unchecked Sendable {
     enum FileSystemError: Error {
         case noResourceValues
     }

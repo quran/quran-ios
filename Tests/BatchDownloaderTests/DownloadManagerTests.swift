@@ -10,7 +10,6 @@ import AsyncAlgorithms
 import TestUtilities
 import XCTest
 
-import AsyncExtensions
 final class DownloadManagerTests: XCTestCase {
     private let fileManager = FileManager.default
     private var downloader: DownloadManager!
@@ -32,12 +31,20 @@ final class DownloadManagerTests: XCTestCase {
         NetworkSessionFake.tearDown()
     }
 
+    @MainActor
     func testBackgroundSessionCompletionHandler() async {
         // assign a completion handler
-        var calls = 0
-        await downloader.setBackgroundSessionCompletion {
+        @MainActor
+        class Calls {
+            var calls = 0
+            func increment() {
+                calls += 1
+            }
+        }
+        let calls = Calls()
+        downloader.setBackgroundSessionCompletion { @Sendable @MainActor () -> Void in
             XCTAssertTrue(Thread.isMainThread)
-            calls += 1
+            calls.increment()
         }
 
         // finish background events
@@ -46,7 +53,7 @@ final class DownloadManagerTests: XCTestCase {
         await channel.next()
 
         // verify completion handler called
-        XCTAssertEqual(calls, 1)
+        XCTAssertEqual(calls.calls, 1)
     }
 
     func testLoadingOnGoingDownload() async throws {
@@ -88,7 +95,7 @@ final class DownloadManagerTests: XCTestCase {
         // verify progress and promise result
         try await verifyCompletedTask(task: task1)
         try await verifyCompletedTask(task: task2)
-        XCTAssertEqual(1.0, batchListener.values.last)
+        await AsyncAssertEqual(1.0, await batchListener.values.last)
 
         try await response.completion()
     }
@@ -168,8 +175,9 @@ final class DownloadManagerTests: XCTestCase {
         await AsyncAssertEqual(await response.responses[3].task == nil, true)
 
         // complete tasks
-        let tasks = try await (0 ..< NetworkSessionFake.maxSimultaneousDownloads).asyncMap {
-            try await completeTask(response, i: $0)
+        var tasks: [CompletedTask] = []
+        for i in 0 ..< NetworkSessionFake.maxSimultaneousDownloads {
+            tasks.append(try await completeTask(response, i: i))
         }
 
         // assert the batch not completed but the others finished
@@ -273,7 +281,7 @@ final class DownloadManagerTests: XCTestCase {
         for i in 0 ..< (task.progressLoops + 1) {
             progressValues.append(1 / Double(task.progressLoops) * Double(i))
         }
-        XCTAssertEqual(progressValues, task.listener.values, file: file, line: line)
+        await AsyncAssertEqual(progressValues, await task.listener.values, file: file, line: line)
         try await task.response.completion()
 
         // verify downloads saved

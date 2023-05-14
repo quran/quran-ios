@@ -8,7 +8,7 @@
 import Foundation
 
 @propertyWrapper
-final class LazyAtomic<Value> {
+final class LazyAtomic<Value>: @unchecked Sendable {
     private var initializer: (() -> Value)?
     private var value: Value?
     private let lock = NSLock()

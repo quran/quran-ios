@@ -10,7 +10,7 @@ import AVFoundation
 
 @MainActor
 final class Player {
-    var onRateChanged: (@MainActor (Float) -> Void)?
+    var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
 
     private let asset: AVURLAsset
     let playerItem: AVPlayerItem

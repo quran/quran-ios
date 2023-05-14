@@ -34,7 +34,7 @@ public final class NetworkManager {
         task.resume()
     }
 
-    private func completion(with resolver: Resolver<Data>) -> (Data?, URLResponse?, Error?) -> Void {
+    private func completion(with resolver: Resolver<Data>) -> @Sendable (Data?, URLResponse?, Error?) -> Void {
         { data, _, error in
             if let error {
                 resolver.reject(NetworkError(error: error))
@@ -63,3 +63,6 @@ public final class NetworkManager {
         return URLRequest(url: components.url!)
     }
 }
+
+// TODO: Remove PromiseKit
+extension Resolver: @unchecked Sendable { }

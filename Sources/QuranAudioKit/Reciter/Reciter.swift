@@ -21,12 +21,12 @@
 import Foundation
 import Localization
 
-public enum AudioType: Hashable {
+public enum AudioType: Hashable, Sendable {
     case gapless(databaseName: String)
     case gapped
 }
 
-public struct Reciter: Hashable {
+public struct Reciter: Hashable, Sendable {
     public let id: Int
     public let nameKey: String
     let directory: String
@@ -36,7 +36,7 @@ public struct Reciter: Hashable {
     public let category: Category
 
     // TODO: Add arabicTafseer
-    public enum Category: String {
+    public enum Category: String, Sendable {
         case arabic
         case english
         case arabicEnglish

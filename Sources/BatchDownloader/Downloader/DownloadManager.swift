@@ -76,7 +76,7 @@ public final class DownloadManager {
     }
 
     @MainActor
-    public func setBackgroundSessionCompletion(_ backgroundSessionCompletion: (() -> Void)?) {
+    public func setBackgroundSessionCompletion(_ backgroundSessionCompletion: @MainActor @escaping () -> Void) {
         handler.setBackgroundSessionCompletion(backgroundSessionCompletion)
     }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class Quran: Hashable {
+public final class Quran: Hashable, @unchecked Sendable {
     private let id = UUID()
     let raw: QuranReadingInfoRawData
     public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())

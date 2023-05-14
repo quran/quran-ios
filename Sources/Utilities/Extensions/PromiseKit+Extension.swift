@@ -60,7 +60,7 @@ public extension DispatchQueue {
         group: DispatchGroup? = nil,
         qos: DispatchQoS = .default,
         flags: DispatchWorkItemFlags = [],
-        execute body: @escaping () -> T
+        execute body: @Sendable @escaping () -> T
     ) -> Guarantee<T> {
         Guarantee<T> { resolver in
             self.async(group: group, qos: qos, flags: flags) {
@@ -72,7 +72,7 @@ public extension DispatchQueue {
     func asyncGuarantee<T>(group: DispatchGroup? = nil,
                            qos: DispatchQoS = .default,
                            flags: DispatchWorkItemFlags = [],
-                           execute body: @escaping () async -> T) -> Guarantee<T>
+                           execute body: @Sendable @escaping () async -> T) -> Guarantee<T>
     {
         Guarantee<T> { resolver in
             async(group: group, qos: qos, flags: flags) {
@@ -88,3 +88,6 @@ public extension DispatchQueue {
 public enum PMKGuaranteeNamespacer {
     case guarantee
 }
+
+// TODO: Remove PromiseKit
+extension Resolver: @unchecked Sendable { }

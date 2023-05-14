@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Navigatable: Comparable, Hashable, CustomStringConvertible {
+public protocol Navigatable: Comparable, Hashable, CustomStringConvertible, Sendable {
     var next: Self? { get }
     var previous: Self? { get }
 }

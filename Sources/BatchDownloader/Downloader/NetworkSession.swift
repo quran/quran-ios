@@ -8,18 +8,16 @@
 import Crashing
 import Foundation
 
-protocol NetworkSession {
+protocol NetworkSession: Sendable {
     var delegateQueue: OperationQueue { get }
-    func getTasksWithCompletionHandler(_ completionHandler: @escaping ([NetworkSessionDataTask],
-                                                                       [NetworkSessionUploadTask],
-                                                                       [NetworkSessionDownloadTask]) -> Void)
+    func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
+    func dataTask(with request: URLRequest, completionHandler: @Sendable @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
-protocol NetworkSessionTask: AnyObject {
+protocol NetworkSessionTask: AnyObject, Sendable {
     var taskIdentifier: Int { get }
     var originalRequest: URLRequest? { get }
     var currentRequest: URLRequest? { get }
@@ -37,7 +35,7 @@ protocol NetworkSessionUploadTask: NetworkSessionTask {
 protocol NetworkSessionDataTask: NetworkSessionTask {
 }
 
-protocol NetworkSessionDelegate {
+protocol NetworkSessionDelegate: Sendable {
     func networkSession(_ session: NetworkSession,
                         downloadTask: NetworkSessionDownloadTask,
                         didWriteData bytesWritten: Int64,
@@ -51,14 +49,8 @@ protocol NetworkSessionDelegate {
 }
 
 extension URLSession: NetworkSession {
-    func getTasksWithCompletionHandler(
-        _ completionHandler: @escaping ([NetworkSessionDataTask],
-                                        [NetworkSessionUploadTask],
-                                        [NetworkSessionDownloadTask]) -> Void)
-    {
-        getTasksWithCompletionHandler { (data: [URLSessionDataTask], uploads, downloads) in
-            completionHandler(data, uploads, downloads)
-        }
+    func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
+        await tasks
     }
 
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
@@ -69,7 +61,7 @@ extension URLSession: NetworkSession {
         downloadTask(withResumeData: resumeData) as URLSessionDownloadTask
     }
 
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
+    func dataTask(with request: URLRequest, completionHandler: @Sendable @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
         dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
     }
 }
@@ -86,7 +78,7 @@ extension URLSessionUploadTask: NetworkSessionUploadTask {
 extension URLSessionDataTask: NetworkSessionDataTask {
 }
 
-final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
+final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
     let networkSessionDelegate: NetworkSessionDelegate
     init(networkSessionDelegate: NetworkSessionDelegate) {
         self.networkSessionDelegate = networkSessionDelegate

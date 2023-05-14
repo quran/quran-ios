@@ -21,7 +21,7 @@
 import Foundation
 import QuranKit
 
-protocol ReciterAudioFileListRetrievalFactory {
+protocol ReciterAudioFileListRetrievalFactory: Sendable {
     func fileListRetrievalForReciter(_ reciter: Reciter) -> ReciterAudioFileListRetrieval
 }
 

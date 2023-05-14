@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AudioRequest: Equatable {
+public struct AudioRequest: Equatable, Sendable {
     public let files: [AudioFile]
     public let endTime: TimeInterval?
     public let frameRuns: Runs
@@ -21,7 +21,7 @@ public struct AudioRequest: Equatable {
     }
 }
 
-public struct AudioFile: Equatable {
+public struct AudioFile: Equatable, Sendable {
     public let url: URL
     public let frames: [AudioFrame]
     public init(url: URL, frames: [AudioFrame]) {
@@ -30,7 +30,7 @@ public struct AudioFile: Equatable {
     }
 }
 
-public struct AudioFrame: Equatable {
+public struct AudioFrame: Equatable, Sendable {
     public let startTime: TimeInterval
     public let endTime: TimeInterval?
     public init(startTime: TimeInterval, endTime: TimeInterval?) {

@@ -8,7 +8,7 @@
 import Foundation
 @testable import QuranAudioKit
 
-final class SystemBundleFake: SystemBundle {
+final class SystemBundleFake: SystemBundle, @unchecked Sendable {
     var arrays: [String: NSArray] = [:]
 
     func readArray(resource: String, withExtension: String) -> NSArray {

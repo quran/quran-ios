@@ -47,7 +47,7 @@ public final class AudioUpdater {
 
         // update if 7 days passed since last checked
         let lastChecked = preferences.lastChecked
-        if let lastChecked = lastChecked {
+        if let lastChecked {
             let today = time.now
             let difference = Calendar.current.dateComponents([.day], from: lastChecked, to: today)
             if let day = difference.day, day < 7 {
@@ -72,7 +72,7 @@ public final class AudioUpdater {
     }
 
     private func update(_ updates: AudioUpdates?) async {
-        guard let updates = updates else {
+        guard let updates else {
             logger.notice("No new audio updates")
             return
         }

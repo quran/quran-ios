@@ -41,7 +41,7 @@ public final class OnDemandResource {
                         return
                     }
                     self.kvoUnsubscribe()
-                    guard let error = error else {
+                    guard let error else {
                         logger.info("Resources \(self.request.tags) downloaded")
                         self.subject.send(completion: .finished)
                         return

@@ -103,7 +103,7 @@ public class QuranAudioPlayer {
     }
 
     private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
-        guard let audioRequest = audioRequest else {
+        guard let audioRequest else {
             return
         }
 

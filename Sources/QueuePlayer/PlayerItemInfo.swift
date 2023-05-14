@@ -26,7 +26,7 @@ public struct PlayerItemInfo {
     public init(title: String, artist: String, image: UIImage?) {
         self.title = title
         self.artist = artist
-        if #available(iOS 10.0, *), let image = image {
+        if #available(iOS 10.0, *), let image {
             artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
         } else {
             artwork = nil

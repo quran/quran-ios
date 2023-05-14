@@ -38,7 +38,7 @@ public func lFormat(_ key: String, table: Table = .localizable, language: Langua
 }
 
 public func l(_ key: String, table: Table = .localizable, language: Language? = nil) -> String {
-    if let language = language {
+    if let language {
         return localizedString(key, table: table, language: language)
     }
     let value = NSLocalizedString(key, tableName: table.rawValue, bundle: Bundle.fixedModule, comment: "")

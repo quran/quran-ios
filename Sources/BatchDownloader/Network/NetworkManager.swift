@@ -36,9 +36,9 @@ public final class NetworkManager {
 
     private func completion(with resolver: Resolver<Data>) -> (Data?, URLResponse?, Error?) -> Void {
         { data, _, error in
-            if let error = error {
+            if let error {
                 resolver.reject(NetworkError(error: error))
-            } else if let data = data {
+            } else if let data {
                 resolver.fulfill(data)
             } else {
                 fatalError("URL returned no data nor response")

@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-public struct ReciterAudioDownload {
+public struct ReciterAudioDownload: Equatable {
     public init(reciter: Reciter, downloadedSizeInBytes: UInt64, downloadedSuraCount: Int, surasCount: Int) {
         self.reciter = reciter
         self.downloadedSizeInBytes = downloadedSizeInBytes

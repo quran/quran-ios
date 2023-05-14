@@ -55,7 +55,7 @@ public final class Preference<T> {
             change: [NSKeyValueChangeKey: Any]?,
             context: UnsafeMutableRawPointer?
         ) {
-            guard let preference = preference else {
+            guard let preference else {
                 return
             }
             if context == &observerContext {

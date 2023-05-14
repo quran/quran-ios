@@ -41,7 +41,7 @@ extension QuranValueGroup {
     }
 
     public var lastVerse: AyahNumber {
-        if let next = next {
+        if let next {
             return next.firstVerse.previous!
         }
         return storage.quran.lastVerse

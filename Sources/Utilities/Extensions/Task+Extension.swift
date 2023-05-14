@@ -11,7 +11,7 @@ import Foundation
 public final class CancellableTask: Hashable {
     private let cancel: () -> Void
 
-    init<T, E>(task: Task<T, E>) {
+    init(task: Task<some Any, some Any>) {
         cancel = { task.cancel() }
     }
 

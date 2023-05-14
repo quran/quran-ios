@@ -80,7 +80,7 @@ public struct QuranAudioDownloader {
     }
 }
 
-extension Set where Element == DownloadBatchResponse {
+extension Set<DownloadBatchResponse> {
     public func firstMatches(_ reciter: Reciter) async -> DownloadBatchResponse? {
         for batch in self {
             let download = await batch.requests.first
@@ -92,7 +92,7 @@ extension Set where Element == DownloadBatchResponse {
     }
 }
 
-extension Array where Element == Reciter {
+extension [Reciter] {
     public func firstMatches(_ batch: DownloadBatchResponse) async -> Reciter? {
         if let download = await batch.requests.first {
             return first { $0.path == download.reciterPath }

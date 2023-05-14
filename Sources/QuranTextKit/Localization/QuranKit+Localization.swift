@@ -39,7 +39,7 @@ extension Page {
 
     public var localizedQuarterName: String {
         let juzDescription = startJuz.localizedName
-        if let quarter = quarter {
+        if let quarter {
             return [juzDescription, quarter.localizedName].joined(separator: ", ")
         } else {
             return juzDescription

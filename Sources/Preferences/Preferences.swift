@@ -19,7 +19,7 @@ public struct Preferences {
     }
 
     public func setValue<T>(_ value: T?, forKey key: PreferenceKey<T>) {
-        guard let value = value else {
+        guard let value else {
             userDefaults.removeObject(forKey: key.key)
             return
         }
@@ -41,7 +41,7 @@ public struct Preferences {
         }
     }
 
-    public func removeValueForKey<T>(_ key: PreferenceKey<T?>) {
+    public func removeValueForKey(_ key: PreferenceKey<(some Any)?>) {
         userDefaults.removeObject(forKey: key.key)
     }
 }

@@ -167,7 +167,7 @@ actor DownloadBatchDataController {
         }
 
         // if we have a session
-        guard let session = session else {
+        guard let session else {
             return
         }
         // and there are empty slots to use for downloading

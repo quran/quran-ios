@@ -44,7 +44,7 @@ extension ReadonlySQLitePersistence {
         do {
             // open the connection
             let connection: Connection
-            if let external = external {
+            if let external {
                 connection = external
             } else {
                 connection = try openConnection()

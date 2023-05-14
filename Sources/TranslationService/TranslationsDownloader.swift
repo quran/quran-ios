@@ -29,7 +29,7 @@ public struct TranslationsDownloader {
     }
 }
 
-extension Set where Element == DownloadBatchResponse {
+extension Set<DownloadBatchResponse> {
     public func firstMatches(_ translation: Translation) async -> DownloadBatchResponse? {
         for batch in self {
             if let request = await batch.requests.first {
@@ -42,7 +42,7 @@ extension Set where Element == DownloadBatchResponse {
     }
 }
 
-extension Array where Element == Translation {
+extension [Translation] {
     public func firstMatches(_ batch: DownloadBatchResponse) async -> Translation? {
         guard let request = await batch.requests.first else {
             return nil

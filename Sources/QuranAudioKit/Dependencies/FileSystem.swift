@@ -11,6 +11,7 @@ protocol FileSystem {
     func fileExists(at url: URL) -> Bool
     func removeItem(at url: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
+    func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
 }
 
 struct DefaultFileSystem: FileSystem {
@@ -25,4 +26,14 @@ struct DefaultFileSystem: FileSystem {
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
     }
+
+    func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
+        try url.resourceValues(forKeys: keys)
+    }
 }
+
+protocol ResourceValues {
+    var fileSize: Int? { get }
+}
+
+extension URLResourceValues: ResourceValues { }

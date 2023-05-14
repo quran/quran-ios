@@ -8,7 +8,15 @@
 import Foundation
 @testable import QuranAudioKit
 
+struct ResourceValuesFake: ResourceValues {
+    let fileSize: Int?
+}
+
 final class FileSystemFake: FileSystem {
+    enum FileSystemError: Error {
+        case noResourceValues
+    }
+
     var files: Set<URL> = []
     var checkedFiles: Set<URL> = []
 
@@ -25,5 +33,17 @@ final class FileSystemFake: FileSystem {
     var filesInDirectory: [URL: [URL]] = [:]
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         filesInDirectory[url] ?? []
+    }
+
+    var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
+    func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
+        if let values = resourceValuesByURL[url] {
+            return values
+        }
+        throw FileSystemError.noResourceValues
+    }
+
+    func setResourceValues(_ url: URL, fileSize: Int?) {
+        resourceValuesByURL[url] = ResourceValuesFake(fileSize: fileSize)
     }
 }

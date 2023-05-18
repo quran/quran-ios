@@ -10,6 +10,7 @@ import BatchDownloader
 import Crashing
 import Foundation
 import PromiseKit
+import SystemDependencies
 import VLogging
 
 public final class AudioUpdater {

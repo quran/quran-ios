@@ -8,6 +8,7 @@
 import Foundation
 import PromiseKit
 import QuranKit
+import SystemDependencies
 import VLogging
 
 private struct AudioFileLists {
@@ -29,7 +30,7 @@ public struct ReciterSizeInfoRetriever: Sendable {
     }
 
     public func getReciterAudioDownloads(for reciters: [Reciter], quran: Quran) async -> [Reciter: ReciterAudioDownload] {
-        return await withTaskGroup(of: ReciterAudioDownload.self) { group in
+        await withTaskGroup(of: ReciterAudioDownload.self) { group in
             for reciter in reciters {
                 group.addTask {
                     await getReciterAudioDownload(for: reciter, quran: quran)
@@ -59,7 +60,7 @@ public struct ReciterSizeInfoRetriever: Sendable {
         let sizeInBytes = sizeInBytes(of: fileURLs)
 
         // remove suras that we didn't find dowonloaded files for
-        let fileURLPaths = Set(fileURLs.map { $0.lastPathComponent })
+        let fileURLPaths = Set(fileURLs.map(\.lastPathComponent))
         let fileListsNotDownloaded = fileList.filter { !fileURLPaths.contains($0.local.lastPathComponent) }
         var suras = Set(quran.suras)
         for file in fileListsNotDownloaded {

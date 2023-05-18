@@ -34,6 +34,8 @@ let package = Package(
         .library(name: "Crashing", targets: ["Crashing"]),
         .library(name: "Preferences", targets: ["Preferences"]),
         .library(name: "Localization", targets: ["Localization"]),
+        .library(name: "SystemDependencies", targets: ["SystemDependencies"]),
+        .library(name: "SystemDependenciesFake", targets: ["SystemDependenciesFake"]),
 
         // Testing
 
@@ -78,12 +80,14 @@ let package = Package(
             "BatchDownloader",
             "QuranTextKit",
             "QueuePlayer",
+            "SystemDependencies",
             "Zip",
             .product(name: "OrderedCollections", package: "swift-collections"),
         ],
         swiftSettings: settings),
         .testTarget(name: "QuranAudioKitTests", dependencies: [
             "QuranAudioKit",
+            "SystemDependenciesFake",
             "TestUtilities",
             "SnapshotTesting",
         ],
@@ -161,6 +165,10 @@ let package = Package(
         .target(name: "Locking", dependencies: []),
         .target(name: "Preferences", dependencies: []),
         .target(name: "Localization", dependencies: []),
+        .target(name: "SystemDependencies", dependencies: []),
+        .target(name: "SystemDependenciesFake", dependencies: [
+            "SystemDependencies",
+        ]),
 
         // Testing helpers
         .target(name: "TestUtilities", dependencies: [

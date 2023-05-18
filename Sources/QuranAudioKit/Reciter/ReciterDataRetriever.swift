@@ -20,6 +20,7 @@
 
 import Foundation
 import PromiseKit
+import SystemDependencies
 import Utilities
 
 public struct ReciterDataRetriever: Sendable {

@@ -7,12 +7,14 @@
 
 import Foundation
 
-protocol SystemTime {
+public protocol SystemTime {
     var now: Date { get }
 }
 
-struct DefaultSystemTime: SystemTime {
-    var now: Date {
+public struct DefaultSystemTime: SystemTime {
+    public init() { }
+
+    public var now: Date {
         Date()
     }
 }

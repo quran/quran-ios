@@ -7,32 +7,34 @@
 
 import Foundation
 
-protocol FileSystem: Sendable {
+public protocol FileSystem: Sendable {
     func fileExists(at url: URL) -> Bool
     func removeItem(at url: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
     func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
 }
 
-struct DefaultFileSystem: FileSystem {
-    func fileExists(at url: URL) -> Bool {
-        url.isReachable
+public struct DefaultFileSystem: FileSystem {
+    public init() { }
+
+    public func fileExists(at url: URL) -> Bool {
+        (try? url.checkResourceIsReachable()) ?? false
     }
 
-    func removeItem(at url: URL) throws {
+    public func removeItem(at url: URL) throws {
         try FileManager.default.removeItem(at: url)
     }
 
-    func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
+    public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
     }
 
-    func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
+    public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         try url.resourceValues(forKeys: keys)
     }
 }
 
-protocol ResourceValues {
+public protocol ResourceValues {
     var fileSize: Int? { get }
 }
 

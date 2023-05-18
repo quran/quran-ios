@@ -21,6 +21,7 @@
 import BatchDownloader
 import Foundation
 import QuranKit
+import SystemDependencies
 
 public struct QuranAudioDownloader: Sendable {
     let downloader: DownloadManager

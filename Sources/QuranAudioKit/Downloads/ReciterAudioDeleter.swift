@@ -21,7 +21,7 @@
 import Foundation
 import PromiseKit
 
-public struct ReciterAudioDeleter {
+public struct ReciterAudioDeleter: Sendable {
     public init() {
     }
 

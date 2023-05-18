@@ -219,7 +219,7 @@ final class DownloadManagerTests: XCTestCase {
         let diskResponse = try XCTUnwrap(diskDownloads.first)
 
         // wait for the queue to finish so the session is initialized
-        wait(for: downloader.dispatchQueue)
+        wait(for: try XCTUnwrap(session?.delegateQueue.underlyingQueue))
 
         let task2 = try await completeTask(diskResponse, i: 1)
         let task3 = try await completeTask(diskResponse, i: 2)

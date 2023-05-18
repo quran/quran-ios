@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct Translation: Hashable {
+public struct Translation: Hashable, Sendable {
     public let id: Int
     public let displayName: String
     public let translator: String?

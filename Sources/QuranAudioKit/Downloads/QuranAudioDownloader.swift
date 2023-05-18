@@ -22,7 +22,7 @@ import BatchDownloader
 import Foundation
 import QuranKit
 
-public struct QuranAudioDownloader {
+public struct QuranAudioDownloader: Sendable {
     let downloader: DownloadManager
     let fileListFactory: ReciterAudioFileListRetrievalFactory
     private let fileSystem: FileSystem

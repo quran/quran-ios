@@ -22,20 +22,11 @@ import Crashing
 import Foundation
 import Utilities
 
-public final class DownloadManager {
+public final class DownloadManager: Sendable {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
     private let session: NetworkSession
     private let handler: DownloadSessionDelegate
     private let dataController: DownloadBatchDataController
-
-    let operationQueue: OperationQueue = {
-        let queue = OperationQueue()
-        queue.name = "com.quran.downloads"
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
-
-    let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
 
     public convenience init(
         maxSimultaneousDownloads: Int,
@@ -56,6 +47,11 @@ public final class DownloadManager {
         sessionFactory: @escaping SessionFactory,
         persistence: DownloadsPersistence
     ) async {
+        let operationQueue = OperationQueue()
+        operationQueue.name = "com.quran.downloads"
+        operationQueue.maxConcurrentOperationCount = 1
+
+        let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
         operationQueue.underlyingQueue = dispatchQueue
 
         let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)

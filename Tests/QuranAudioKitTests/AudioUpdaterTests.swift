@@ -8,6 +8,7 @@
 @testable import BatchDownloader
 import Foundation
 @testable import QuranAudioKit
+import SystemDependenciesFake
 import TestUtilities
 import XCTest
 

@@ -42,7 +42,7 @@ final class DownloadManagerTests: XCTestCase {
             }
         }
         let calls = Calls()
-        downloader.setBackgroundSessionCompletion { @Sendable @MainActor () -> Void in
+        downloader.setBackgroundSessionCompletion { @Sendable @MainActor () in
             XCTAssertTrue(Thread.isMainThread)
             calls.increment()
         }

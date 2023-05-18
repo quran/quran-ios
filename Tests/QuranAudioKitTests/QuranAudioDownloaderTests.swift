@@ -9,6 +9,7 @@
 @testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
+import SystemDependenciesFake
 import TestUtilities
 import XCTest
 

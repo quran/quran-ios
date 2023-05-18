@@ -1,12 +1,13 @@
 //
 //  ReciterSizeInfoRetrieverTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-14.
 //
 
 @testable import QuranAudioKit
 import QuranKit
+import SystemDependenciesFake
 import TestUtilities
 import XCTest
 
@@ -42,7 +43,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
     }
 
     private func runNoDownloadsTest(_ reciters: [Reciter],
-                                    file: StaticString = #filePath, line: UInt = #line) async throws {
+                                    file: StaticString = #filePath, line: UInt = #line) async throws
+    {
         let sizeInfo = await service.getReciterAudioDownloads(for: reciters, quran: quran)
 
         let expectedDownloads = reciters.map {
@@ -50,7 +52,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
                 reciter: $0,
                 downloadedSizeInBytes: 0,
                 downloadedSuraCount: 0,
-                surasCount: quran.suras.count)
+                surasCount: quran.suras.count
+            )
         }
         XCTAssertEqual(sizeInfo, expectedDownloads.toDictionary(), file: file, line: line)
     }
@@ -70,14 +73,15 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
     }
 
     private func runFullDownloadedTest(_ reciters: [Reciter],
-                                       file: StaticString = #filePath, line: UInt = #line) async throws {
+                                       file: StaticString = #filePath, line: UInt = #line) async throws
+    {
         let expectedDownloads = reciters.map { simulateAllFilesDownloaded($0) }
 
         let sizeInfo = await service.getReciterAudioDownloads(for: reciters, quran: quran)
         XCTAssertEqual(sizeInfo, expectedDownloads.toDictionary(), file: file, line: line)
     }
 
-    private func simulateAllFilesDownloaded(_ reciter: Reciter, fileSize: Int = 100) -> ReciterAudioDownload  {
+    private func simulateAllFilesDownloaded(_ reciter: Reciter, fileSize: Int = 100) -> ReciterAudioDownload {
         let retriever = factory.fileListRetrievalForReciter(reciter)
         let files = retriever.get(for: reciter, from: quran.firstVerse, to: quran.lastVerse)
 
@@ -90,7 +94,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
             reciter: reciter,
             downloadedSizeInBytes: UInt64(fileSize * files.count),
             downloadedSuraCount: quran.suras.count,
-            surasCount: quran.suras.count)
+            surasCount: quran.suras.count
+        )
     }
 
     // MARK: - Partial Downloaded Gapped
@@ -99,18 +104,20 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         let firstSuraAyahs = quran.suras[0].verses
         try await runPartialDownloadedGappedTest(
             ayahs: firstSuraAyahs,
-            downloadedSuraCount: 1)
+            downloadedSuraCount: 1
+        )
         try await runPartialDownloadedGappedTest(
             ayahs: firstSuraAyahs.dropLast(),
-            downloadedSuraCount: 0)
+            downloadedSuraCount: 0
+        )
     }
 
     private func runPartialDownloadedGappedTest(
         ayahs: [AyahNumber],
         fileSize: Int = 100,
         downloadedSuraCount: Int,
-        file: StaticString = #filePath, line: UInt = #line) async throws
-    {
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
         let reciter = gappedReciter
         let files = ayahs.map { ayah in
             reciter.path
@@ -127,7 +134,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
             reciter: reciter,
             downloadedSizeInBytes: UInt64(fileSize * files.count),
             downloadedSuraCount: downloadedSuraCount,
-            surasCount: quran.suras.count)
+            surasCount: quran.suras.count
+        )
 
         let sizeInfo = await service.getReciterAudioDownloads(for: [reciter], quran: quran)
         XCTAssertEqual(sizeInfo, [expectedDownload].toDictionary(), file: file, line: line)
@@ -139,19 +147,23 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         try await runPartialDownloadedGaplessTest(
             suras: [quran.suras[0]],
             dbDownloaded: true,
-            downloadedSuraCount: 1)
+            downloadedSuraCount: 1
+        )
         try await runPartialDownloadedGaplessTest(
             suras: [quran.suras[0]],
             dbDownloaded: false,
-            downloadedSuraCount: 1)
+            downloadedSuraCount: 1
+        )
         try await runPartialDownloadedGaplessTest(
             suras: [],
             dbDownloaded: true,
-            downloadedSuraCount: 0)
+            downloadedSuraCount: 0
+        )
         try await runPartialDownloadedGaplessTest(
             suras: quran.suras,
             dbDownloaded: true,
-            downloadedSuraCount: quran.suras.count)
+            downloadedSuraCount: quran.suras.count
+        )
     }
 
     private func runPartialDownloadedGaplessTest(
@@ -159,8 +171,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         dbDownloaded: Bool,
         fileSize: Int = 100,
         downloadedSuraCount: Int,
-        file: StaticString = #filePath, line: UInt = #line) async throws
-    {
+        file: StaticString = #filePath, line: UInt = #line
+    ) async throws {
         let reciter = gaplessReciter
         let dbFiles = dbDownloaded ? [reciter.path.stringByAppendingPath(reciter.gaplessDatabaseDB)] : []
         let files = suras.map { sura in
@@ -178,7 +190,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
             reciter: reciter,
             downloadedSizeInBytes: UInt64(fileSize * files.count),
             downloadedSuraCount: downloadedSuraCount,
-            surasCount: quran.suras.count)
+            surasCount: quran.suras.count
+        )
 
         let sizeInfo = await service.getReciterAudioDownloads(for: [reciter], quran: quran)
         XCTAssertEqual(sizeInfo, [expectedDownload].toDictionary(), file: file, line: line)

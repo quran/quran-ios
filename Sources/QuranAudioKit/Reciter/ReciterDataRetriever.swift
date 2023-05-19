@@ -19,7 +19,6 @@
 //
 
 import Foundation
-import PromiseKit
 import SystemDependencies
 import Utilities
 
@@ -32,12 +31,6 @@ public struct ReciterDataRetriever: Sendable {
 
     init(bundle: SystemBundle) {
         self.bundle = bundle
-    }
-
-    public func getReciters() -> Guarantee<[Reciter]> {
-        DispatchQueue.global().asyncGuarantee {
-            await getReciters()
-        }
     }
 
     public func getReciters() async -> [Reciter] {

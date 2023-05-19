@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PromiseKit
 import QuranKit
 import SystemDependencies
 import VLogging

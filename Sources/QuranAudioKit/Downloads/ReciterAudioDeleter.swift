@@ -19,15 +19,12 @@
 //
 
 import Foundation
-import PromiseKit
 
 public struct ReciterAudioDeleter: Sendable {
     public init() {
     }
 
-    public func deleteAudioFiles(for reciter: Reciter) -> Promise<Void> {
-        DispatchQueue.global().async(.promise) {
-            try FileManager.default.removeItem(at: reciter.localFolder())
-        }
+    public func deleteAudioFiles(for reciter: Reciter) async throws {
+        try FileManager.default.removeItem(at: reciter.localFolder())
     }
 }

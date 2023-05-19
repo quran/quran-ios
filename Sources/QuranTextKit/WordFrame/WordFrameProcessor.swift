@@ -18,7 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import PromiseKit
 import QuranKit
 import UIKit
 

@@ -68,6 +68,7 @@ let package = Package(
             "QuranTextKit",
             "SnapshotTesting",
             "TestUtilities",
+            "SystemDependenciesFake",
         ],
         exclude: [
             "__Snapshots__",

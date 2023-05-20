@@ -13,10 +13,9 @@ import TranslationService
 import XCTest
 
 final class ShareableVerseTextRetrieverTests: XCTestCase {
-    // swiftlint:disable implicitly_unwrapped_optional
     private var shareableTextRetriever: ShareableVerseTextRetriever!
     private var textService: QuranTextDataService!
-    private var mockTranslationsRetriever: LocalTranslationsRetrieverMock!
+    private var localTranslationsFake: LocalTranslationsFake!
     private let quran = Quran.hafsMadani1405
     private let statePreferences = QuranContentStatePreferences.shared
 
@@ -25,11 +24,13 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         TestData.sahihTranslation,
     ]
 
-    override func setUp() {
-        super.setUp()
-        mockTranslationsRetriever = LocalTranslationsRetrieverMock()
+    override func setUp() async throws {
+        try await super.setUp()
+
+        localTranslationsFake = LocalTranslationsFake()
+        let localtranslationsRetriever = localTranslationsFake.retriever
         let persistence = SQLiteQuranVerseTextPersistence(mode: .share, fileURL: TestData.quranTextURL)
-        textService = QuranTextDataService(localTranslationRetriever: mockTranslationsRetriever,
+        textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)
 
@@ -41,9 +42,12 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
-        mockTranslationsRetriever.getLocalTranslationsHandler = {
-            .value(self.translations)
-        }
+        try localTranslationsFake.setTranslations(translations)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        localTranslationsFake.tearDown()
     }
 
     func testShareArabicText() throws {
@@ -102,9 +106,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
     func testShareTranslationTextReferenceVerse() throws {
         statePreferences.quranMode = .translation
 
-        mockTranslationsRetriever.getLocalTranslationsHandler = {
-            .value([TestData.khanTranslation])
-        }
+        try localTranslationsFake.setTranslations([TestData.khanTranslation])
 
         let numberReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[49]]))
         XCTAssertEqual(numberReference, ["وَإِذۡ فَرَقۡنَا بِكُمُ ٱلۡبَحۡرَ فَأَنجَیۡنَـٰكُمۡ وَأَغۡرَقۡنَاۤ ءَالَ فِرۡعَوۡنَ وَأَنتُمۡ تَنظُرُونَ﴿ ٥٠ ﴾",

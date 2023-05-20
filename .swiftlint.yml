@@ -14,7 +14,6 @@ disabled_rules:
 
 opt_in_rules:
   #NOT NEEDED - anonymous_argument_in_multiline_closure
-  - anyobject_protocol
   - array_init
   #NOT NEEDED - attributes
   #NOT NEEDED - balanced_xctest_lifecycle

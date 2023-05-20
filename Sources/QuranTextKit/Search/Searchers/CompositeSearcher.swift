@@ -46,13 +46,13 @@ public struct CompositeSearcher: AsyncSearcher {
         logger.info("Autocompleting term: \(term)")
         return DispatchQueue.global()
             .async(.promise) {
-                try self.simpleSearchers.flatMap { try $0.autocomplete(term: term, quran: quran) }
+                try simpleSearchers.flatMap { try $0.autocomplete(term: term, quran: quran) }
             }
             .then { (results: [SearchAutocompletion]) -> Promise<[SearchAutocompletion]> in
                 if !results.isEmpty {
                     return .value(results)
                 }
-                return self.translationsSearcher.autocomplete(term: term, quran: quran)
+                return translationsSearcher.autocomplete(term: term, quran: quran)
             }
             .map { [SearchAutocompletion(text: term, term: term)] + $0 }
             .map { $0.orderedUnique() }
@@ -62,7 +62,7 @@ public struct CompositeSearcher: AsyncSearcher {
         logger.info("Search for: \(term)")
         return DispatchQueue.global()
             .async(.promise) {
-                try self.simpleSearchers.flatMap { try $0.search(for: term, quran: quran) }
+                try simpleSearchers.flatMap { try $0.search(for: term, quran: quran) }
             }
             .map {
                 $0.filter { !$0.items.isEmpty }
@@ -71,7 +71,7 @@ public struct CompositeSearcher: AsyncSearcher {
                 if !results.isEmpty {
                     return .value(results)
                 }
-                return self.translationsSearcher.search(for: term, quran: quran)
+                return translationsSearcher.search(for: term, quran: quran)
             }
             .map {
                 $0.filter { !$0.items.isEmpty }

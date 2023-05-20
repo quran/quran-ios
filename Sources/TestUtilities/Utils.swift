@@ -57,7 +57,8 @@ extension XCTestCase {
         var thrownError: Error?
 
         XCTAssertThrowsError(try expression(),
-                             file: file, line: line) {
+                             file: file, line: line)
+        {
             thrownError = $0
         }
 

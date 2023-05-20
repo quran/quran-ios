@@ -115,7 +115,7 @@ internal struct Lock {
     }
 }
 
-struct ManagedCriticalState<State> {
+public struct ManagedCriticalState<State> {
     private final class LockedBuffer: ManagedBuffer<State, Lock.Primitive> {
         deinit {
             withUnsafeMutablePointerToElements { Lock.deinitialize($0) }
@@ -124,14 +124,14 @@ struct ManagedCriticalState<State> {
 
     private let buffer: ManagedBuffer<State, Lock.Primitive>
 
-    init(_ initial: State) {
+    public init(_ initial: State) {
         buffer = LockedBuffer.create(minimumCapacity: 1) { buffer in
             buffer.withUnsafeMutablePointerToElements { Lock.initialize($0) }
             return initial
         }
     }
 
-    func withCriticalRegion<R>(_ critical: (inout State) throws -> R) rethrows -> R {
+    public func withCriticalRegion<R>(_ critical: (inout State) throws -> R) rethrows -> R {
         try buffer.withUnsafeMutablePointers { header, lock in
             Lock.lock(lock)
             defer { Lock.unlock(lock) }

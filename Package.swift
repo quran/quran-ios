@@ -169,6 +169,7 @@ let package = Package(
         .target(name: "SystemDependencies", dependencies: []),
         .target(name: "SystemDependenciesFake", dependencies: [
             "SystemDependencies",
+            "Utilities",
         ]),
 
         .target(name: "VersionUpdater", dependencies: [

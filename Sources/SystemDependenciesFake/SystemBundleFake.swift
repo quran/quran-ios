@@ -9,7 +9,6 @@ import Foundation
 import SystemDependencies
 
 public final class SystemBundleFake: SystemBundle, @unchecked Sendable {
-
     public init() {}
 
     public var arrays: [String: NSArray] = [:]

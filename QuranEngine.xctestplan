@@ -1,0 +1,52 @@
+{
+  "configurations" : [
+    {
+      "id" : "0C85B6B2-7E26-4D93-9804-2C741D039BD9",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranKitTests",
+        "name" : "QuranKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranTextKitTests",
+        "name" : "QuranTextKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "BatchDownloaderTests",
+        "name" : "BatchDownloaderTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranAudioKitTests",
+        "name" : "QuranAudioKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "VersionUpdaterTests",
+        "name" : "VersionUpdaterTests"
+      }
+    }
+  ],
+  "version" : 1
+}

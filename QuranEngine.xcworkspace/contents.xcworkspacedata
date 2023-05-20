@@ -8,4 +8,7 @@
          location = "group:">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:QuranEngine.xctestplan">
+   </FileRef>
 </Workspace>

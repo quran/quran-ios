@@ -34,6 +34,7 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
         get { state.withCriticalRegion { $0.files } }
         set { state.withCriticalRegion { $0.files = newValue } }
     }
+
     public var checkedFiles: Set<URL> {
         get { state.withCriticalRegion { $0.checkedFiles } }
         set { state.withCriticalRegion { $0.checkedFiles = newValue } }
@@ -48,6 +49,7 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
         get { state.withCriticalRegion { $0.removedItems } }
         set { state.withCriticalRegion { $0.removedItems = newValue } }
     }
+
     public func removeItem(at url: URL) throws {
         removedItems.append(url)
     }
@@ -56,6 +58,7 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
         get { state.withCriticalRegion { $0.filesInDirectory } }
         set { state.withCriticalRegion { $0.filesInDirectory = newValue } }
     }
+
     public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         filesInDirectory[url] ?? []
     }
@@ -64,6 +67,7 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
         get { state.withCriticalRegion { $0.resourceValuesByURL } }
         set { state.withCriticalRegion { $0.resourceValuesByURL = newValue } }
     }
+
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         if let values = resourceValuesByURL[url] {
             return values

@@ -1,13 +1,13 @@
 //
 //  LocalTranslationsFake.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-20.
 //
 
 import Foundation
-@testable import TranslationService
 import SystemDependenciesFake
+@testable import TranslationService
 
 struct LocalTranslationsFake {
     let databasesPath = FileManager.documentsPath.stringByAppendingPath("databases")
@@ -16,7 +16,6 @@ struct LocalTranslationsFake {
     let fileSystem = FileSystemFake()
     let retriever: LocalTranslationsRetriever
     let persistence: SQLiteActiveTranslationsPersistence
-
 
     init() {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)

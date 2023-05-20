@@ -8,9 +8,9 @@
 import PromiseKit
 import QuranKit
 @testable import QuranTextKit
+import SystemDependenciesFake
 @testable import TranslationService
 import XCTest
-import SystemDependenciesFake
 
 final class QuranTextDataServiceTests: XCTestCase {
     private var textService: QuranTextDataService!

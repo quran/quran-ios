@@ -25,6 +25,7 @@ let package = Package(
         .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Caching", targets: ["Caching"]),
+        .library(name: "VersionUpdater", targets: ["VersionUpdater"]),
 
         // Utilities packages
 
@@ -168,6 +169,16 @@ let package = Package(
         .target(name: "SystemDependencies", dependencies: []),
         .target(name: "SystemDependenciesFake", dependencies: [
             "SystemDependencies",
+        ]),
+
+        .target(name: "VersionUpdater", dependencies: [
+            "Preferences",
+            "VLogging",
+            "SystemDependencies",
+        ]),
+        .testTarget(name: "VersionUpdaterTests", dependencies: [
+            "VersionUpdater",
+            "SystemDependenciesFake",
         ]),
 
         // Testing helpers

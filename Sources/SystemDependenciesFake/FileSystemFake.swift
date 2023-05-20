@@ -7,6 +7,7 @@
 
 import Foundation
 import SystemDependencies
+import Utilities
 
 public struct ResourceValuesFake: ResourceValues {
     public let fileSize: Int?
@@ -17,27 +18,52 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
         case noResourceValues
     }
 
+    private struct State {
+        var files: Set<URL> = []
+        var checkedFiles: Set<URL> = []
+        var removedItems: [URL] = []
+        var filesInDirectory: [URL: [URL]] = [:]
+        var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
+    }
+
+    private let state = ManagedCriticalState(State())
+
     public init() {}
 
-    public var files: Set<URL> = []
-    public var checkedFiles: Set<URL> = []
+    public var files: Set<URL> {
+        get { state.withCriticalRegion { $0.files } }
+        set { state.withCriticalRegion { $0.files = newValue } }
+    }
+    public var checkedFiles: Set<URL> {
+        get { state.withCriticalRegion { $0.checkedFiles } }
+        set { state.withCriticalRegion { $0.checkedFiles = newValue } }
+    }
 
     public func fileExists(at url: URL) -> Bool {
         checkedFiles.insert(url)
         return files.contains(url)
     }
 
-    public var removedItems: [URL] = []
+    public var removedItems: [URL] {
+        get { state.withCriticalRegion { $0.removedItems } }
+        set { state.withCriticalRegion { $0.removedItems = newValue } }
+    }
     public func removeItem(at url: URL) throws {
         removedItems.append(url)
     }
 
-    public var filesInDirectory: [URL: [URL]] = [:]
+    public var filesInDirectory: [URL: [URL]] {
+        get { state.withCriticalRegion { $0.filesInDirectory } }
+        set { state.withCriticalRegion { $0.filesInDirectory = newValue } }
+    }
     public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         filesInDirectory[url] ?? []
     }
 
-    public var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
+    public var resourceValuesByURL: [URL: ResourceValuesFake] {
+        get { state.withCriticalRegion { $0.resourceValuesByURL } }
+        set { state.withCriticalRegion { $0.resourceValuesByURL = newValue } }
+    }
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         if let values = resourceValuesByURL[url] {
             return values

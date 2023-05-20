@@ -7,12 +7,13 @@
 
 import Foundation
 import PromiseKit
+import SystemDependencies
 
 public struct LocalTranslationsRetriever {
     let persistence: ActiveTranslationsPersistence
     let versionUpdater: TranslationsVersionUpdater
 
-    public init(databasesPath: String) {
+    public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
         let versionFactory = VersionPersistenceFactory { filePath in
             SQLiteDatabaseVersionPersistence(filePath: filePath)
@@ -20,7 +21,8 @@ public struct LocalTranslationsRetriever {
         versionUpdater = DefaultTranslationsVersionUpdater(
             persistence: persistence,
             versionPersistenceCreator: versionFactory,
-            unzipper: DefaultTranslationUnzipper()
+            unzipper: DefaultTranslationUnzipper(),
+            fileSystem: fileSystem
         )
     }
 

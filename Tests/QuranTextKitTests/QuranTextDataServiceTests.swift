@@ -8,13 +8,13 @@
 import PromiseKit
 import QuranKit
 @testable import QuranTextKit
-import TranslationService
+@testable import TranslationService
 import XCTest
+import SystemDependenciesFake
 
 final class QuranTextDataServiceTests: XCTestCase {
-    // swiftlint:disable implicitly_unwrapped_optional
     private var textService: QuranTextDataService!
-    private var mockTranslationsRetriever: LocalTranslationsRetrieverMock!
+    private var localTranslationsFake: LocalTranslationsFake!
     private let quran = Quran.hafsMadani1405
 
     private let translations = [
@@ -22,20 +22,25 @@ final class QuranTextDataServiceTests: XCTestCase {
         TestData.sahihTranslation,
     ]
 
-    override func setUp() {
-        super.setUp()
-        mockTranslationsRetriever = LocalTranslationsRetrieverMock()
+    override func setUp() async throws {
+        try await super.setUp()
+
+        localTranslationsFake = LocalTranslationsFake()
+        let localtranslationsRetriever = localTranslationsFake.retriever
         let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
-        textService = QuranTextDataService(localTranslationRetriever: mockTranslationsRetriever,
+        textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)
 
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
-        mockTranslationsRetriever.getLocalTranslationsHandler = {
-            .value(self.translations)
-        }
+        try localTranslationsFake.setTranslations(translations)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        localTranslationsFake.tearDown()
     }
 
     func testArabicNoTranslation() throws {
@@ -82,9 +87,8 @@ final class QuranTextDataServiceTests: XCTestCase {
 
     func testTranslationWithFooterAndVerses() throws {
         let translations = [TestData.khanTranslation]
-        mockTranslationsRetriever.getLocalTranslationsHandler = {
-            .value(translations)
-        }
+        try localTranslationsFake.setTranslations(translations)
+
         let verse = quran.suras[0].verses[5]
         let versesText = try wait(for: textService.textForVerses([verse]))
 

@@ -20,6 +20,7 @@
 
 import BatchDownloader
 import PromiseKit
+import SystemDependencies
 
 protocol TranslationsVersionUpdater {
     func updateInstalledVersion(for translation: Translation) throws -> Translation
@@ -34,6 +35,7 @@ struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
     let persistence: ActiveTranslationsPersistence
     let versionPersistenceCreator: VersionPersistenceFactory
     let unzipper: TranslationUnzipper
+    let fileSystem: FileSystem
 
     func updateInstalledVersion(for translation: Translation) throws -> Translation {
         try unzipper.unzipIfNeeded(translation) // unzip if needed
@@ -43,7 +45,7 @@ struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
     private func updateInstalledVersion(_ translation: Translation) throws -> Translation {
         var translation = translation
         let fileURL = translation.localURL
-        let isReachable = fileURL.isReachable
+        let isReachable = fileSystem.fileExists(at: fileURL)
         let previousInstalledVersion = translation.installedVersion
 
         // installed on the latest version & the db file exists

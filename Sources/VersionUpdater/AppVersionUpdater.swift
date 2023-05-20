@@ -63,7 +63,7 @@ struct AppVersionUpdater {
         let current = current
         let previous = preferences.appVersion
 
-        if let previous = previous {
+        if let previous {
             if previous == current {
                 return .sameVersion(version: current)
             } else {

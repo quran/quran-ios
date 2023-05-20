@@ -12,7 +12,7 @@ import XCTest
 
 class CompositeSearcherTests: XCTestCase {
     private var searcher: CompositeSearcher!
-    private var translationsRetriever: LocalTranslationsRetrieverMock!
+    private var localTranslationsFake: LocalTranslationsFake!
     private let quran = Quran.hafsMadani1405
 
     private let translations = [
@@ -23,10 +23,10 @@ class CompositeSearcherTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        translationsRetriever = LocalTranslationsRetrieverMock()
-        translationsRetriever.getLocalTranslationsHandler = {
-            .value(self.translations)
-        }
+        localTranslationsFake = LocalTranslationsFake()
+        let translationsRetriever = localTranslationsFake.retriever
+        try localTranslationsFake.setTranslations(translations)
+
         let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
 
         searcher = CompositeSearcher(
@@ -34,6 +34,11 @@ class CompositeSearcherTests: XCTestCase {
             localTranslationRetriever: translationsRetriever,
             versePersistenceBuilder: TestData.translationsPersistenceBuilder
         )
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        localTranslationsFake.tearDown()
     }
 
     func testAutocompleteNumbers() throws {

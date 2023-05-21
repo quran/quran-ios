@@ -8,6 +8,7 @@
 import QuranKit
 @testable import QuranTextKit
 import SnapshotTesting
+import TestUtilities
 import XCTest
 
 class ImageDataServiceTests: XCTestCase {
@@ -16,8 +17,8 @@ class ImageDataServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         service = ImageDataService(
-            ayahInfoDatabase: TestData.resourceURL("hafs_1405_ayahinfo.db"),
-            imagesURL: TestData.testDataURL.appendingPathComponent("images"),
+            ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
             cropInsets: UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
         )
     }
@@ -25,7 +26,7 @@ class ImageDataServiceTests: XCTestCase {
     func testPageMarkers() throws {
         let quran = Reading.hafs_1421.quran
         service = ImageDataService(
-            ayahInfoDatabase: TestData.resourceURL("hafs_1421_ayahinfo_1120.db"),
+            ayahInfoDatabase: TestResources.resourceURL("hafs_1421_ayahinfo_1120.db"),
             imagesURL: URL(string: "invalid")!,
             cropInsets: .zero
         )

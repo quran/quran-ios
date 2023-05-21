@@ -17,6 +17,12 @@ public class SelectedTranslationsPreferences {
     @Preference(selectedTranslations)
     public var selectedTranslations: [Int]
 
+    func reset() {
+        for key in [Self.selectedTranslations.key] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+    }
+
     public func isSelected(_ translationId: Int) -> Bool {
         selectedTranslations.contains(translationId)
     }

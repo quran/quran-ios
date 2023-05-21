@@ -8,44 +8,19 @@
 import Foundation
 import QuranKit
 @testable import QuranTextKit
+import TestUtilities
 @testable import TranslationService
 
 struct TestData {
-    static let khanTranslation = Translation(id: 1, displayName: "",
-                                             translator: "",
-                                             translatorForeign: "Khan & Hilai",
-                                             fileURL: URL(validURL: "a"),
-                                             fileName: "quran.en.khanhilali.db",
-                                             languageCode: "",
-                                             version: 1,
-                                             installedVersion: 1)
-
-    static let sahihTranslation = Translation(id: 2, displayName: "",
-                                              translator: "",
-                                              translatorForeign: "Sahih International",
-                                              fileURL: URL(validURL: "a"),
-                                              fileName: "quran.ensi.db",
-                                              languageCode: "",
-                                              version: 1,
-                                              installedVersion: 1)
+    static let khanTranslation = TranslationTestData.khanTranslation
+    static let sahihTranslation = TranslationTestData.sahihTranslation
 
     static let translationsPersistenceBuilder = { (translation: Translation) -> TranslationVerseTextPersistence in
-        let url = resourceURL(translation.fileName)
+        let url = TestResources.resourceURL(translation.fileName)
         return SQLiteTranslationVerseTextPersistence(fileURL: url)
     }
 
-    static let quranTextURL = TestData.resourceURL("quran.ar.uthmani.v2.db")
-
-    static func resourceURL(_ path: String) -> URL {
-        let components = path.components(separatedBy: ".")
-        let resource = components.dropLast().joined(separator: ".")
-        let ext = components.last!
-        return Bundle.module.url(forResource: "test_data/" + resource, withExtension: ext)!
-    }
-
-    static var testDataURL: URL {
-        Bundle.module.url(forResource: "test_data", withExtension: "")!
-    }
+    static let quranTextURL = TestResources.resourceURL("quran.ar.uthmani.v2.db")
 
     static func quranTextAt(_ verse: AyahNumber) -> String {
         quranText[verse] ?? "Not added to TestData.swift"

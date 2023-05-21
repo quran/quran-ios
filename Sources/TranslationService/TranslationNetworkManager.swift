@@ -13,7 +13,6 @@ protocol TranslationNetworkManager {
 }
 
 struct DefaultTranslationNetworkManager: TranslationNetworkManager {
-
     static let path = "/data/translations.php"
 
     let networkManager: NetworkManager

@@ -10,7 +10,7 @@ import SystemDependenciesFake
 @testable import TranslationService
 
 public struct LocalTranslationsFake {
-    let databasesPath = FileManager.documentsPath.stringByAppendingPath("databases")
+    public static let databasesPath = FileManager.documentsPath.stringByAppendingPath("databases")
 
     let preferences = SelectedTranslationsPreferences.shared
     public let fileSystem = FileSystemFake()
@@ -19,20 +19,20 @@ public struct LocalTranslationsFake {
     public let retriever: LocalTranslationsRetriever
 
     public init(useFactory: Bool = false) {
-        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
+        persistence = SQLiteActiveTranslationsPersistence(directory: Self.databasesPath)
         if useFactory {
             let persistenceFactory = { (translation: Translation) -> DatabaseVersionPersistence in
                 let url = TestResources.resourceURL(translation.fileName)
                 return SQLiteDatabaseVersionPersistence(filePath: url.path)
             }
-            retriever = LocalTranslationsRetriever(databasesPath: databasesPath, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
+            retriever = LocalTranslationsRetriever(databasesPath: Self.databasesPath, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
         } else {
-            retriever = LocalTranslationsRetriever(databasesPath: databasesPath, fileSystem: fileSystem)
+            retriever = LocalTranslationsRetriever(databasesPath: Self.databasesPath, fileSystem: fileSystem)
         }
     }
 
     public func tearDown() {
-        try? FileManager.default.removeItem(atPath: databasesPath)
+        try? FileManager.default.removeItem(atPath: Self.databasesPath)
     }
 
     public func setTranslations(_ translations: [Translation]) throws {

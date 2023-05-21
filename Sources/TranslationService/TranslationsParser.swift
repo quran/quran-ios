@@ -32,11 +32,11 @@ struct JSONTranslationsParser: TranslationsParser {
     }
 }
 
-private struct TranslationsResponse: Decodable {
+struct TranslationsResponse: Codable {
     let data: [TranslationResponse]
 }
 
-private struct TranslationResponse: Decodable {
+struct TranslationResponse: Codable {
     let id: Int
     let displayName: String
     let translator: String?

@@ -23,6 +23,12 @@ public class SelectedTranslationsPreferences {
         }
     }
 
+    public func remove(_ translationId: Int) {
+        if let index = selectedTranslations.firstIndex(of: translationId) {
+            selectedTranslations.remove(at: index)
+        }
+    }
+
     public func isSelected(_ translationId: Int) -> Bool {
         selectedTranslations.contains(translationId)
     }

@@ -1,6 +1,6 @@
 //
 //  TranslationsRepositoryTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-21.
 //
@@ -69,7 +69,8 @@ class TranslationsRepositoryTests: XCTestCase {
             fileURL: translation.fileURL,
             fileName: translation.fileName,
             languageCode: translation.languageCode,
-            version: 1000)
+            version: 1000
+        )
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
         let result = service.downloadAndSyncTranslations()
@@ -93,7 +94,8 @@ class TranslationsRepositoryTests: XCTestCase {
             fileURL: translation.fileURL,
             fileName: "updatedFileName.db",
             languageCode: translation.languageCode,
-            version: translation.version)
+            version: translation.version
+        )
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
         let result = service.downloadAndSyncTranslations()

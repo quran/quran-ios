@@ -22,7 +22,7 @@ public struct TranslationTestData {
     public static let sahihTranslation = Translation(id: 2, displayName: "",
                                                      translator: "",
                                                      translatorForeign: "Sahih International",
-                                                     fileURL: URL(validURL: "a"),
+                                                     fileURL: URL(validURL: "quran.ensi.zip"),
                                                      fileName: "quran.ensi.db",
                                                      languageCode: "",
                                                      version: 1,

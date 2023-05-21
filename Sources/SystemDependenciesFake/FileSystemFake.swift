@@ -52,6 +52,7 @@ public final class FileSystemFake: FileSystem, @unchecked Sendable {
 
     public func removeItem(at url: URL) throws {
         removedItems.append(url)
+        files.remove(url)
     }
 
     public var filesInDirectory: [URL: [URL]] {

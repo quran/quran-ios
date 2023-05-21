@@ -20,32 +20,28 @@
 
 import Foundation
 import PromiseKit
+import SystemDependencies
 
 public struct TranslationDeleter {
     let persistence: ActiveTranslationsPersistence
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
+    let fileSystem: FileSystem
 
-    public init(databasesPath: String) {
+    public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
+        self.fileSystem = fileSystem
     }
 
     public func deleteTranslation(_ translation: Translation) -> Promise<Translation> {
         // update the selected translations
-        let translations = selectedTranslationsPreferences.selectedTranslations
-        var updatedTranslations: [Int] = []
-        for id in translations where translation.id != id {
-            updatedTranslations.append(id)
-        }
-        if translations != updatedTranslations {
-            selectedTranslationsPreferences.selectedTranslations = updatedTranslations
-        }
+        selectedTranslationsPreferences.remove(translation.id)
 
         return DispatchQueue.global()
             .async(.promise) {
                 // delete from disk
                 translation.possibleFileNames.forEach { fileName in
                     let url = Translation.localTranslationsURL.appendingPathComponent(fileName)
-                    try? FileManager.default.removeItem(at: url)
+                    try? fileSystem.removeItem(at: url)
                 }
             }
             .map { () -> Translation in

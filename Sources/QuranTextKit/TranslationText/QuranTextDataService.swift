@@ -45,26 +45,36 @@ public struct QuranTextDataService {
     }
 
     public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {
-        textForVerses(verses, translations: localTranslations())
+        DispatchQueue.global().asyncPromise {
+            try await textForVerses(verses, translations: { try await localTranslations() })
+        }
     }
 
     public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) -> Promise<TranslatedVerses> {
-        textForVerses(verses, translations: .value(translations))
+        DispatchQueue.global().asyncPromise {
+            try await textForVerses(verses, translations: { translations })
+        }
     }
 
-    private func textForVerses(_ verses: [AyahNumber], translations: Promise<[Translation]>) -> Promise<TranslatedVerses> {
+    private func textForVerses(
+        _ verses: [AyahNumber],
+        translations: @escaping @Sendable () async throws -> [Translation]
+    ) async throws -> TranslatedVerses {
         // get Arabic text
         // get translations text
         // merge them
-        let arabicText = versesArabicText(verses: verses)
-        let translations = translations.then {
-            fetchTranslationsText(verses: verses, translations: $0)
-        }
-        return when(fulfilled: translations, arabicText)
-            .map { translations, arabic in
-                TranslatedVerses(translations: translations.map(\.0),
-                                 verses: merge(verses: verses, translations: translations, arabic: arabic))
-            }
+        async let asyncArabicText = retrieveArabicText(verses: verses)
+        async let asyncTranslationsText = Task {
+            let localTranslations = try await translations()
+            return await fetchTranslationsText(verses: verses, translations: localTranslations)
+        }.value
+
+        let (arabicText, translationsText) = try await (asyncArabicText, asyncTranslationsText)
+        let translatedVerse = TranslatedVerses(
+            translations: translationsText.map(\.0),
+            verses: merge(verses: verses, translations: translationsText, arabic: arabicText)
+        )
+        return translatedVerse
     }
 
     private func merge(verses: [AyahNumber], translations: [(Translation, [TranslationText])], arabic: [String]) -> [VerseText] {
@@ -83,9 +93,9 @@ public struct QuranTextDataService {
         return versesText
     }
 
-    private func localTranslations() -> Promise<[Translation]> {
-        localTranslationRetriever.getLocalTranslations()
-            .map { selectedTranslations(allTranslations: $0) }
+    private func localTranslations() async throws -> [Translation] {
+        let translations = try await localTranslationRetriever.getLocalTranslations()
+        return selectedTranslations(allTranslations: translations)
     }
 
     private func selectedTranslations(allTranslations: [Translation]) -> [Translation] {
@@ -94,13 +104,7 @@ public struct QuranTextDataService {
         return selected.compactMap { translationsById[$0] }
     }
 
-    private func versesArabicText(verses: [AyahNumber]) -> Promise<[String]> {
-        DispatchQueue.global().async(.promise) {
-            try retrieveArabicText(verses: verses)
-        }
-    }
-
-    private func retrieveArabicText(verses: [AyahNumber]) throws -> [String] {
+    private func retrieveArabicText(verses: [AyahNumber]) async throws -> [String] {
         let versesText = try arabicPersistence.textForVerses(verses)
         var verseTextList: [String] = []
         for verse in verses {
@@ -110,33 +114,55 @@ public struct QuranTextDataService {
         return verseTextList
     }
 
-    private func fetchTranslationsText(verses: [AyahNumber], translations: [Translation]) -> Promise<[(Translation, [TranslationText])]> {
-        when(fulfilled: translations.map { fetchTranslation(verses: verses, translation: $0) })
+    private func fetchTranslationsText(
+        verses: [AyahNumber],
+        translations: [Translation]
+    ) -> Guarantee<[(Translation, [TranslationText])]> {
+        DispatchQueue.global().asyncGuarantee {
+            await fetchTranslationsText(verses: verses, translations: translations)
+        }
     }
 
-    private func fetchTranslation(verses: [AyahNumber], translation: Translation) -> Promise<(Translation, [TranslationText])> {
-        DispatchQueue.global().async(.promise) {
-            let translationPersistence = translationsPersistenceBuilder(translation)
-
-            var verseTextList: [TranslationText] = []
-            do {
-                let versesText = try translationPersistence.textForVerses(verses)
-                for verse in verses {
-                    let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
-                    verseTextList.append(translationText(text))
-                }
-            } catch {
-                crasher.recordError(
-                    error,
-                    reason: "Issue getting verse \(verses), translation: \(translation.id)"
-                )
-                let errorText = l("errorInTranslationText")
-                for _ in verses {
-                    verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footerRanges: [])))
+    private func fetchTranslationsText(
+        verses: [AyahNumber],
+        translations: [Translation]
+    ) async -> [(Translation, [TranslationText])] {
+        await withTaskGroup(of: (Translation, [TranslationText]).self) { group in
+            for translation in translations {
+                group.addTask {
+                    await fetchTranslation(verses: verses, translation: translation)
                 }
             }
-            return (translation, verseTextList)
+            let indices = Dictionary(uniqueKeysWithValues: translations.enumerated().map { ($0.element, $0.offset) })
+
+            let result = await group.collect()
+            return result.sorted { lhs, rhs in
+                indices[lhs.0]! < indices[rhs.0]!
+            }
         }
+    }
+
+    private func fetchTranslation(verses: [AyahNumber], translation: Translation) async -> (Translation, [TranslationText]) {
+        let translationPersistence = translationsPersistenceBuilder(translation)
+
+        var verseTextList: [TranslationText] = []
+        do {
+            let versesText = try translationPersistence.textForVerses(verses)
+            for verse in verses {
+                let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
+                verseTextList.append(translationText(text))
+            }
+        } catch {
+            crasher.recordError(
+                error,
+                reason: "Issue getting verse \(verses), translation: \(translation.id)"
+            )
+            let errorText = l("errorInTranslationText")
+            for _ in verses {
+                verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footerRanges: [])))
+            }
+        }
+        return (translation, verseTextList)
     }
 
     private func translationText(_ from: RawTranslationText) -> TranslationText {

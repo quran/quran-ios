@@ -27,16 +27,25 @@ public struct LocalTranslationsRetriever {
     }
 
     public func getLocalTranslations() -> Promise<[Translation]> {
-        DispatchQueue.global()
-            .async(.promise) {
-                try persistence.retrieveAll()
+        DispatchQueue.global().asyncPromise {
+            try await getLocalTranslations()
+        }
+    }
+
+    public func getLocalTranslations() async throws -> [Translation] {
+        let translations = try persistence.retrieveAll()
+
+        return try await withThrowingTaskGroup(of: Translation.self) { group in
+            for translation in translations {
+                group.addTask {
+                    try await updateInstalledVersion(of: translation)
+                }
             }
-            .then { translations in
-                when(fulfilled: translations.map { translation in
-                    DispatchQueue.global().async(.promise) {
-                        try versionUpdater.updateInstalledVersion(for: translation)
-                    }
-                })
-            }
+            return try await group.collect()
+        }
+    }
+
+    private func updateInstalledVersion(of translation: Translation) async throws -> Translation {
+        try versionUpdater.updateInstalledVersion(for: translation)
     }
 }

@@ -82,6 +82,24 @@ public extension DispatchQueue {
             }
         }
     }
+
+    func asyncPromise<T>(group: DispatchGroup? = nil,
+                         qos: DispatchQoS = .default,
+                         flags: DispatchWorkItemFlags = [],
+                         execute body: @Sendable @escaping () async throws -> T) -> Promise<T>
+    {
+        Promise<T> { resolver in
+            async(group: group, qos: qos, flags: flags) {
+                Task {
+                    do {
+                        resolver.fulfill(try await body())
+                    } catch {
+                        resolver.reject(error)
+                    }
+                }
+            }
+        }
+    }
 }
 
 /// used by our extensions to provide unambiguous functions with the same name as the original function

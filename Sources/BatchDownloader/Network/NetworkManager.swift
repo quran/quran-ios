@@ -23,25 +23,13 @@ public final class NetworkManager {
 
     public func request(_ path: String, parameters: [(String, String)] = []) -> Promise<Data> {
         Promise { resolver in
-            dataTask(with: Self.request(baseURL: baseURL, path: path, parameters: parameters),
-                     resolver: resolver)
-        }
-    }
-
-    private func dataTask(with request: URLRequest, resolver: Resolver<Data>) {
-        let task = session.dataTask(with: request,
-                                    completionHandler: completion(with: resolver))
-        task.resume()
-    }
-
-    private func completion(with resolver: Resolver<Data>) -> @Sendable (Data?, URLResponse?, Error?) -> Void {
-        { data, _, error in
-            if let error {
-                resolver.reject(NetworkError(error: error))
-            } else if let data {
-                resolver.fulfill(data)
-            } else {
-                fatalError("URL returned no data nor response")
+            Task {
+                do {
+                    let data = try await request(path, parameters: parameters)
+                    resolver.fulfill(data)
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }

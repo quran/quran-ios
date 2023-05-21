@@ -13,11 +13,14 @@ protocol TranslationNetworkManager {
 }
 
 struct DefaultTranslationNetworkManager: TranslationNetworkManager {
+
+    static let path = "/data/translations.php"
+
     let networkManager: NetworkManager
     let parser: TranslationsParser
 
     func getTranslations() -> Promise<[Translation]> {
-        networkManager.request("/data/translations.php", parameters: [("v", "5")])
+        networkManager.request(Self.path, parameters: [("v", "5")])
             .map(parser.parse)
     }
 }

@@ -20,30 +20,28 @@ class NetworkManagerTests: XCTestCase {
     }
 
     func testRequestCompletedSuccessfully() throws {
-        let promise = networkManager.request("v1/products", parameters: [("sort", "newest")])
-
+        let path = "v1/products"
+        let parameters = [("sort", "newest")]
+        let request = NetworkManager.request(baseURL: baseURL, path: path, parameters: parameters)
         let body = "product1"
-        let response = URLResponse()
+        session.dataResults[request.url!] = .success(body.data(using: .utf8)!)
 
-        let task = try XCTUnwrap(session.dataTasks.first)
-        XCTAssertEqual(task.originalRequest?.url?.absoluteString, "http://example.com/v1/products?sort=newest")
-
-        session.dataTasks.first?.completionHandler?(body.data(using: .utf8), response, nil)
-
-        let result = try wait(for: promise)
+        let result = try wait(for: networkManager.request(path, parameters: parameters))
         XCTAssertEqual(String(data: result, encoding: .utf8), body)
     }
 
     func testRequestFailure() throws {
-        let promise = networkManager.request("v1/products", parameters: [("sort", "newest")])
-        let task = try XCTUnwrap(session.dataTasks.first)
-        XCTAssertEqual(task.originalRequest?.url?.absoluteString, "http://example.com/v1/products?sort=newest")
+        let path = "v1/products"
+        let parameters = [("sort", "newest")]
+        let request = NetworkManager.request(baseURL: baseURL, path: path, parameters: parameters)
+        let error = FileSystemError(error: CocoaError(.coderReadCorrupt))
+        session.dataResults[request.url!] = .failure(error)
 
-        session.dataTasks.first?.completionHandler?(nil, nil, FileSystemError(error: CocoaError(.coderReadCorrupt)))
+        let promise = networkManager.request(path, parameters: parameters)
 
         assert(
             try wait(for: promise),
-            throws: NetworkError.unknown(FileSystemError.unknown(CocoaError(.fileWriteOutOfSpace))) as NSError
+            throws: NetworkError.unknown(error) as NSError
         )
     }
 }

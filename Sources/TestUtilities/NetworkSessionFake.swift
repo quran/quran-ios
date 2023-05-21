@@ -49,14 +49,6 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         return task
     }
 
-    public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
-        let task = SessionTask(taskIdentifier: taskIdentifier)
-        task.originalRequest = request
-        task.completionHandler = completionHandler
-        dataTasks.append(task)
-        return task
-    }
-
     public func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         let result = dataResults[request.url!] ?? .success(Data())
         let data = try result.get()

@@ -13,7 +13,6 @@ protocol NetworkSession: Sendable {
     func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask
-    func dataTask(with request: URLRequest, completionHandler: @Sendable @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
@@ -59,10 +58,6 @@ extension URLSession: NetworkSession {
 
     func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
         downloadTask(withResumeData: resumeData) as URLSessionDownloadTask
-    }
-
-    func dataTask(with request: URLRequest, completionHandler: @Sendable @escaping (Data?, URLResponse?, Error?) -> Void) -> NetworkSessionDataTask {
-        dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
     }
 }
 

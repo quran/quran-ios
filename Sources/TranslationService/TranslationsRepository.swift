@@ -27,8 +27,11 @@ public struct TranslationsRepository {
     let persistence: ActiveTranslationsPersistence
 
     public init(databasesPath: String, baseURL: URL) {
-        let urlSession = BatchDownloader.NetworkManager(session: .shared, baseURL: baseURL)
-        networkManager = DefaultTranslationNetworkManager(networkManager: urlSession, parser: JSONTranslationsParser())
+        self.init(databasesPath: databasesPath, networkManager: NetworkManager(session: .shared, baseURL: baseURL))
+    }
+
+    init(databasesPath: String, networkManager: NetworkManager) {
+        self.networkManager = DefaultTranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
     }
 

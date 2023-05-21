@@ -46,6 +46,13 @@
         "identifier" : "VersionUpdaterTests",
         "name" : "VersionUpdaterTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TranslationServiceTests",
+        "name" : "TranslationServiceTests"
+      }
     }
   ],
   "version" : 1

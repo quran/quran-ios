@@ -9,6 +9,7 @@ import PromiseKit
 import QuranKit
 @testable import QuranTextKit
 import SystemDependenciesFake
+import TestUtilities
 @testable import TranslationService
 import XCTest
 

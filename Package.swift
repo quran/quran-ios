@@ -38,6 +38,8 @@ let package = Package(
         .library(name: "SystemDependencies", targets: ["SystemDependencies"]),
         .library(name: "SystemDependenciesFake", targets: ["SystemDependenciesFake"]),
 
+        .library(name: "TranslationService", targets: ["TranslationService"]),
+
         // Testing
 
         .library(name: "TestUtilities", targets: ["TestUtilities"]),
@@ -72,9 +74,6 @@ let package = Package(
         ],
         exclude: [
             "__Snapshots__",
-        ],
-        resources: [
-            .copy("test_data"),
         ]),
 
         .target(name: "QuranAudioKit", dependencies: [
@@ -107,6 +106,11 @@ let package = Package(
             "BatchDownloader",
             "Localization",
             "Preferences",
+            "SystemDependencies",
+        ]),
+        .testTarget(name: "TranslationServiceTests", dependencies: [
+            "TranslationService",
+            "TestUtilities",
         ]),
 
         .target(name: "QueuePlayer", dependencies: [
@@ -187,6 +191,12 @@ let package = Package(
         .target(name: "TestUtilities", dependencies: [
             "PromiseKit",
             "BatchDownloader",
+            "TranslationService",
+            "SystemDependenciesFake",
+            "Utilities",
+        ],
+        resources: [
+            .copy("test_data"),
         ]),
     ]
 )

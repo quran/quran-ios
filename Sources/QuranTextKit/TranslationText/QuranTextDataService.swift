@@ -133,12 +133,8 @@ public struct QuranTextDataService {
                     await fetchTranslation(verses: verses, translation: translation)
                 }
             }
-            let indices = Dictionary(uniqueKeysWithValues: translations.enumerated().map { ($0.element, $0.offset) })
-
             let result = await group.collect()
-            return result.sorted { lhs, rhs in
-                indices[lhs.0]! < indices[rhs.0]!
-            }
+            return result.sortedAs(other: translations) { $0.0 }
         }
     }
 

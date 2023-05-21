@@ -7,6 +7,7 @@
 
 import QuranKit
 @testable import QuranTextKit
+import TestUtilities
 import XCTest
 
 class WordTextServiceTests: XCTestCase {
@@ -15,7 +16,7 @@ class WordTextServiceTests: XCTestCase {
     private let preferences = QuranContentStatePreferences.shared
 
     override func setUpWithError() throws {
-        service = WordTextService(fileURL: TestData.resourceURL("words.db"))
+        service = WordTextService(fileURL: TestResources.resourceURL("words.db"))
     }
 
     func testWordEnglishTranslation() throws {

@@ -14,13 +14,21 @@ public struct LocalTranslationsRetriever {
     let versionUpdater: TranslationsVersionUpdater
 
     public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
-        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
-        let versionFactory = VersionPersistenceFactory { filePath in
-            SQLiteDatabaseVersionPersistence(filePath: filePath)
+        let versionPersistenceFactory = { (translation: Translation) in
+            SQLiteDatabaseVersionPersistence(filePath: translation.localURL.path)
         }
+
+        self.init(databasesPath: databasesPath, fileSystem: fileSystem,
+                  versionPersistenceFactory: versionPersistenceFactory)
+    }
+
+    init(databasesPath: String, fileSystem: FileSystem,
+         versionPersistenceFactory: @escaping VersionPersistenceFactory)
+    {
+        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
         versionUpdater = DefaultTranslationsVersionUpdater(
             persistence: persistence,
-            versionPersistenceCreator: versionFactory,
+            versionPersistenceFactory: versionPersistenceFactory,
             unzipper: DefaultTranslationUnzipper(),
             fileSystem: fileSystem
         )
@@ -41,7 +49,8 @@ public struct LocalTranslationsRetriever {
                     try await updateInstalledVersion(of: translation)
                 }
             }
-            return try await group.collect()
+            let result = try await group.collect()
+            return result.sortedAs(translations)
         }
     }
 

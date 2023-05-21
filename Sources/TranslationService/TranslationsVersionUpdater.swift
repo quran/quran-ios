@@ -26,14 +26,12 @@ protocol TranslationsVersionUpdater {
     func updateInstalledVersion(for translation: Translation) throws -> Translation
 }
 
-struct VersionPersistenceFactory {
-    let create: (String) -> DatabaseVersionPersistence
-}
+typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence
 
 struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     let persistence: ActiveTranslationsPersistence
-    let versionPersistenceCreator: VersionPersistenceFactory
+    let versionPersistenceFactory: VersionPersistenceFactory
     let unzipper: TranslationUnzipper
     let fileSystem: FileSystem
 
@@ -44,13 +42,12 @@ struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
 
     private func updateInstalledVersion(_ translation: Translation) throws -> Translation {
         var translation = translation
-        let fileURL = translation.localURL
-        let isReachable = fileSystem.fileExists(at: fileURL)
+        let isReachable = fileSystem.fileExists(at: translation.localURL)
         let previousInstalledVersion = translation.installedVersion
 
         // installed on the latest version & the db file exists
         if translation.version != translation.installedVersion, isReachable {
-            let versionPersistence = versionPersistenceCreator.create(fileURL.absoluteString)
+            let versionPersistence = versionPersistenceFactory(translation)
             do {
                 let version = try versionPersistence.getTextVersion()
                 translation.installedVersion = version

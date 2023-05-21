@@ -63,7 +63,7 @@ public struct QuranTextDataService {
         return when(fulfilled: translations, arabicText)
             .map { translations, arabic in
                 TranslatedVerses(translations: translations.map(\.0),
-                                 verses: self.merge(verses: verses, translations: translations, arabic: arabic))
+                                 verses: merge(verses: verses, translations: translations, arabic: arabic))
             }
     }
 
@@ -85,7 +85,7 @@ public struct QuranTextDataService {
 
     private func localTranslations() -> Promise<[Translation]> {
         localTranslationRetriever.getLocalTranslations()
-            .map { self.selectedTranslations(allTranslations: $0) }
+            .map { selectedTranslations(allTranslations: $0) }
     }
 
     private func selectedTranslations(allTranslations: [Translation]) -> [Translation] {
@@ -96,7 +96,7 @@ public struct QuranTextDataService {
 
     private func versesArabicText(verses: [AyahNumber]) -> Promise<[String]> {
         DispatchQueue.global().async(.promise) {
-            try self.retrieveArabicText(verses: verses)
+            try retrieveArabicText(verses: verses)
         }
     }
 
@@ -116,7 +116,7 @@ public struct QuranTextDataService {
 
     private func fetchTranslation(verses: [AyahNumber], translation: Translation) -> Promise<(Translation, [TranslationText])> {
         DispatchQueue.global().async(.promise) {
-            let translationPersistence = self.translationsPersistenceBuilder(translation)
+            let translationPersistence = translationsPersistenceBuilder(translation)
 
             var verseTextList: [TranslationText] = []
             do {

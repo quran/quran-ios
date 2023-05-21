@@ -51,7 +51,7 @@ public struct TranslationDeleter {
             .map { () -> Translation in
                 var translation = translation
                 translation.installedVersion = nil
-                try self.persistence.update(translation)
+                try persistence.update(translation)
                 return translation
             }
     }

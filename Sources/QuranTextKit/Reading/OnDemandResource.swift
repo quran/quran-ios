@@ -33,25 +33,25 @@ public final class OnDemandResource {
             guard let self else {
                 return
             }
-            logger.info("Resources \(self.request.tags) availability \(available)")
+            logger.info("Resources \(request.tags) availability \(available)")
             guard available else {
-                self.kvoSubscribe()
-                self.request.beginAccessingResources { [weak self] error in
+                kvoSubscribe()
+                request.beginAccessingResources { [weak self] error in
                     guard let self else {
                         return
                     }
-                    self.kvoUnsubscribe()
+                    kvoUnsubscribe()
                     guard let error else {
-                        logger.info("Resources \(self.request.tags) downloaded")
-                        self.subject.send(completion: .finished)
+                        logger.info("Resources \(request.tags) downloaded")
+                        subject.send(completion: .finished)
                         return
                     }
-                    logger.error("Resources \(self.request.tags) failed. Error: \(error)")
-                    self.subject.send(completion: .failure(error))
+                    logger.error("Resources \(request.tags) failed. Error: \(error)")
+                    subject.send(completion: .failure(error))
                 }
                 return
             }
-            self.subject.send(completion: .finished)
+            subject.send(completion: .finished)
         }
     }
 

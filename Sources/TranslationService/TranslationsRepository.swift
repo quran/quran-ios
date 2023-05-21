@@ -61,9 +61,9 @@ public struct TranslationsRepository {
     private func saveCombined(translations: [Translation], localMap: [String: Translation]) throws {
         try translations.forEach { translation in
             if localMap[translation.fileName] != nil {
-                try self.persistence.update(translation)
+                try persistence.update(translation)
             } else {
-                try self.persistence.insert(translation)
+                try persistence.insert(translation)
             }
         }
     }

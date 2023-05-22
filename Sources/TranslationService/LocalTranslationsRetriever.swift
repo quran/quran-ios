@@ -50,7 +50,7 @@ public struct LocalTranslationsRetriever {
                 }
             }
             let result = try await group.collect()
-            return result.sortedAs(translations)
+            return result.sortedAs(translations.map(\.id), by: \.id)
         }
     }
 

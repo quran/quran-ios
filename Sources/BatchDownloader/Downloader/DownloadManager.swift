@@ -39,7 +39,7 @@ public final class DownloadManager: Sendable {
                                        delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
                                        delegateQueue: $1)
                         },
-                        persistence: SqliteDownloadsPersistence(filePath: downloadsPath))
+                        persistence: GRDBDownloadsPersistence(filePath: downloadsPath))
     }
 
     init(

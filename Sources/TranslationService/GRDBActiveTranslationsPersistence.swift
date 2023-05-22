@@ -74,8 +74,9 @@ struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
     }
 }
 
-// Create a GRDB model for the database table
-struct GRDBTranslation: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
+// MARK: - Database Model
+
+private struct GRDBTranslation: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
     var id: Int
     var displayName: String
     var translator: String?

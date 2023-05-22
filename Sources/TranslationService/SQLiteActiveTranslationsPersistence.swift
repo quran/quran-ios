@@ -5,7 +5,6 @@
 //  Created by Ahmed El-Helw on 2/13/17.
 //
 
-
 import Foundation
 import SQLite
 import SQLitePersistence

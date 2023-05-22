@@ -1,13 +1,13 @@
 //
 //  GRDBActiveTranslationsPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
 import Foundation
-import SQLitePersistence
 import GRDB
+import SQLitePersistence
 import VLogging
 
 struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
@@ -101,33 +101,33 @@ private struct GRDBTranslation: Identifiable, Codable, FetchableRecord, MutableP
 
     // Define the database table
     static var databaseTableName: String {
-        return "translations"
+        "translations"
     }
 }
 
 // Mapping functions
 extension GRDBTranslation {
     init(_ translation: Translation) {
-        self.id = translation.id
-        self.displayName = translation.displayName
-        self.translator = translation.translator
-        self.translatorForeign = translation.translatorForeign
-        self.fileURL = translation.fileURL.absoluteString
-        self.fileName = translation.fileName
-        self.languageCode = translation.languageCode
-        self.version = translation.version
-        self.installedVersion = translation.installedVersion
+        id = translation.id
+        displayName = translation.displayName
+        translator = translation.translator
+        translatorForeign = translation.translatorForeign
+        fileURL = translation.fileURL.absoluteString
+        fileName = translation.fileName
+        languageCode = translation.languageCode
+        version = translation.version
+        installedVersion = translation.installedVersion
     }
 
     func toTranslation() -> Translation {
-        return Translation(id: id,
-                           displayName: displayName,
-                           translator: translator,
-                           translatorForeign: translatorForeign,
-                           fileURL: URL(string: fileURL)!,
-                           fileName: fileName,
-                           languageCode: languageCode,
-                           version: version,
-                           installedVersion: installedVersion)
+        Translation(id: id,
+                    displayName: displayName,
+                    translator: translator,
+                    translatorForeign: translatorForeign,
+                    fileURL: URL(string: fileURL)!,
+                    fileName: fileName,
+                    languageCode: languageCode,
+                    version: version,
+                    installedVersion: installedVersion)
     }
 }

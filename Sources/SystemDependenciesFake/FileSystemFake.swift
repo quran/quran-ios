@@ -9,16 +9,16 @@ import Foundation
 import SystemDependencies
 import Utilities
 
-public struct ResourceValuesFake: ResourceValues {
+public struct ResourceValuesFake: ResourceValues, Sendable {
     public let fileSize: Int?
 }
 
-public final class FileSystemFake: FileSystem, @unchecked Sendable {
+public final class FileSystemFake: FileSystem, Sendable {
     enum FileSystemError: Error {
         case noResourceValues
     }
 
-    private struct State {
+    private struct State: Sendable {
         var files: Set<URL> = []
         var checkedFiles: Set<URL> = []
         var removedItems: [URL] = []

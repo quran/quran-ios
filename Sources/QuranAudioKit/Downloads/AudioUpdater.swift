@@ -77,10 +77,10 @@ public final class AudioUpdater {
             return
         }
         let reciters = await recitersRetriever.getReciters()
-        update(reciters: reciters, updates: updates)
+        await update(reciters: reciters, updates: updates)
     }
 
-    private func update(reciters: [Reciter], updates: AudioUpdates) {
+    private func update(reciters: [Reciter], updates: AudioUpdates) async {
         let reciters = Dictionary(uniqueKeysWithValues: reciters.map { ($0.audioURL.absoluteString.removingLastSlash, $0) })
 
         for update in updates.updates {
@@ -94,7 +94,7 @@ public final class AudioUpdater {
                 continue
             }
 
-            deleteDatabaseIfNeeded(for: reciter, update: update)
+            await deleteDatabaseIfNeeded(for: reciter, update: update)
 
             for file in update.files {
                 deleteFileIfNeeded(for: reciter, file: file)
@@ -117,7 +117,7 @@ public final class AudioUpdater {
         delete(localFile)
     }
 
-    private func deleteDatabaseIfNeeded(for reciter: Reciter, update: AudioUpdates.Update) {
+    private func deleteDatabaseIfNeeded(for reciter: Reciter, update: AudioUpdates.Update) async {
         guard case .gapless(let databaseName) = reciter.audioType else {
             return
         }
@@ -131,15 +131,23 @@ public final class AudioUpdater {
             return
         }
 
-        let persistence = SQLiteAyahTimingPersistence(filePath: dbFile)
-        let version = try? persistence.getVersion()
-        if version == update.databaseVersion {
+        if await getDatabaseVersion(fileURL: dbFile) == update.databaseVersion {
             return
         }
 
         // delete the reciter timings database
         delete(dbFile)
         delete(zipFile)
+    }
+
+    private func getDatabaseVersion(fileURL: URL) async -> Int? {
+        do {
+            let persistence = try GRDBAyahTimingPersistence(fileURL: fileURL)
+            return try await persistence.getVersion()
+        } catch {
+            logger.error("Error accessing the timing database. Error: \(error)")
+            return nil
+        }
     }
 
     private func delete(_ file: URL) {

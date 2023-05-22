@@ -23,7 +23,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
     }
 
     init(filePath: String) {
-        self.init(db: DatabasePool.newInstance(filePath: filePath))
+        self.init(db: DatabasePool.unsafeNewInstance(filePath: filePath))
     }
 
     private var migrator: DatabaseMigrator {

@@ -134,7 +134,7 @@ public struct QuranTextDataService {
                 }
             }
             let result = await group.collect()
-            return result.sortedAs(other: translations) { $0.0 }
+            return result.sortedAs(translations.map(\.id), by: \.0.id)
         }
     }
 

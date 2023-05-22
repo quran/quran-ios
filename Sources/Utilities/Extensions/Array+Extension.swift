@@ -17,18 +17,14 @@ extension Array where Element: Hashable {
         }
         return uniqueList
     }
-
-    public func sortedAs(_ other: [Element]) -> [Element] {
-        sortedAs(other: other) { $0 }
-    }
 }
 
 extension Array {
-    public func sortedAs<T: Hashable>(other: [T], transform: (Element) -> T) -> [Element] {
+    public func sortedAs<T: Hashable>(_ other: [T], by keyPath: KeyPath<Element, T>) -> [Element] {
         let indices = [T: Int](
             uniqueKeysWithValues: other.enumerated().map { ($0.element, $0.offset) })
         return sorted { (lhs: Element, rhs: Element) in
-            indices[transform(lhs)]! < indices[transform(rhs)]!
+            indices[lhs[keyPath: keyPath]]! < indices[rhs[keyPath: keyPath]]!
         }
     }
 }

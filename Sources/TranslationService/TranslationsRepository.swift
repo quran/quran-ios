@@ -32,7 +32,7 @@ public struct TranslationsRepository {
 
     init(databasesPath: String, networkManager: NetworkManager) {
         self.networkManager = DefaultTranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
-        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
     }
 
     public func downloadAndSyncTranslations() -> Promise<Void> {

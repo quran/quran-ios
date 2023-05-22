@@ -18,17 +18,17 @@ public struct ImageDataService {
         self.imagesURL = imagesURL
         self.cropInsets = cropInsets
         processor = DefaultWordFrameProcessor()
-        persistence = WordFramePersistence(fileURL: ayahInfoDatabase)
+        persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
     }
 
-    public func pageMarkers(_ page: Page) throws -> PageMarkers {
-        PageMarkers(
+    public func pageMarkers(_ page: Page) async throws -> PageMarkers {
+        await PageMarkers(
             suraHeaders: try persistence.suraHeaders(page),
             ayahNumbers: try persistence.ayahNumbers(page)
         )
     }
 
-    public func imageForPage(_ page: Page) throws -> ImagePage {
+    public func imageForPage(_ page: Page) async throws -> ImagePage {
         let imageURL = imageURLForPage(page)
         guard let image = UIImage(contentsOfFile: imageURL.path) else {
             fatalError("No image found for page '\(page)'")
@@ -38,7 +38,7 @@ public struct ImageDataService {
         let unloadedImage: UIImage = image
         let preloadedImage = preloadImage(unloadedImage, cropInsets: cropInsets)
 
-        let plainWordFrames = try persistence.wordFrameCollectionForPage(page)
+        let plainWordFrames = try await persistence.wordFrameCollectionForPage(page)
         let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
     }

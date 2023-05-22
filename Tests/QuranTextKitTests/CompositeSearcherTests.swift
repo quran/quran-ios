@@ -21,12 +21,12 @@ class CompositeSearcherTests: XCTestCase {
         TestData.sahihTranslation,
     ]
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
 
         localTranslationsFake = LocalTranslationsFake()
         let translationsRetriever = localTranslationsFake.retriever
-        try localTranslationsFake.setTranslations(translations)
+        try await localTranslationsFake.setTranslations(translations)
 
         let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
 

@@ -22,25 +22,21 @@ import BatchDownloader
 import PromiseKit
 import SystemDependencies
 
-protocol TranslationsVersionUpdater {
-    func updateInstalledVersion(for translation: Translation) throws -> Translation
-}
-
 typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence
 
-struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
+struct TranslationsVersionUpdater {
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     let persistence: ActiveTranslationsPersistence
     let versionPersistenceFactory: VersionPersistenceFactory
     let unzipper: TranslationUnzipper
     let fileSystem: FileSystem
 
-    func updateInstalledVersion(for translation: Translation) throws -> Translation {
+    func updateInstalledVersion(for translation: Translation) async throws -> Translation {
         try unzipper.unzipIfNeeded(translation) // unzip if needed
-        return try updateInstalledVersion(translation) // update versions
+        return try await updateInstalledVersion(translation) // update versions
     }
 
-    private func updateInstalledVersion(_ translation: Translation) throws -> Translation {
+    private func updateInstalledVersion(_ translation: Translation) async throws -> Translation {
         var translation = translation
         let isReachable = fileSystem.fileExists(at: translation.localURL)
         let previousInstalledVersion = translation.installedVersion
@@ -61,7 +57,7 @@ struct DefaultTranslationsVersionUpdater: TranslationsVersionUpdater {
         }
 
         if previousInstalledVersion != translation.installedVersion {
-            try persistence.update(translation)
+            try await persistence.update(translation)
 
             // remove the translation from selected translations
             if translation.installedVersion == nil {

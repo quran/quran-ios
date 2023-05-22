@@ -36,7 +36,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
-        try localTranslationsFake.setTranslations(translations)
+        try await localTranslationsFake.setTranslations(translations)
     }
 
     override func tearDown() {
@@ -86,9 +86,9 @@ final class QuranTextDataServiceTests: XCTestCase {
         }
     }
 
-    func testTranslationWithFooterAndVerses() throws {
+    func testTranslationWithFooterAndVerses() async throws {
         let translations = [TestData.khanTranslation]
-        try localTranslationsFake.setTranslations(translations)
+        try await localTranslationsFake.setTranslations(translations)
 
         let verse = quran.suras[0].verses[5]
         let versesText = try wait(for: textService.textForVerses([verse]))

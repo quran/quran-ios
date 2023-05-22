@@ -36,12 +36,18 @@ public struct TranslationsRepository {
     }
 
     public func downloadAndSyncTranslations() -> Promise<Void> {
-        let local = DispatchQueue.global().async(.promise, execute: persistence.retrieveAll)
+        let local = DispatchQueue.global().asyncPromise {
+            try await persistence.retrieveAll()
+        }
         let remote = networkManager.getTranslations()
 
         return when(fulfilled: local, remote) // get local and remote
             .map(combine) // combine local and remote
-            .map(saveCombined) // save combined list
+            .then { translations, map in
+                DispatchQueue.global().asyncPromise {
+                    try await saveCombined(translations: translations, localMap: map)
+                }
+            }
     }
 
     private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {
@@ -61,12 +67,12 @@ public struct TranslationsRepository {
         return (combinedList, localMapConstant)
     }
 
-    private func saveCombined(translations: [Translation], localMap: [String: Translation]) throws {
-        try translations.forEach { translation in
+    private func saveCombined(translations: [Translation], localMap: [String: Translation]) async throws {
+        for translation in translations {
             if localMap[translation.fileName] != nil {
-                try persistence.update(translation)
+                try await persistence.update(translation)
             } else {
-                try persistence.insert(translation)
+                try await persistence.insert(translation)
             }
         }
     }

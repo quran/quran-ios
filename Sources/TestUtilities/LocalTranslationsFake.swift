@@ -14,7 +14,7 @@ public struct LocalTranslationsFake {
 
     let preferences = SelectedTranslationsPreferences.shared
     public let fileSystem = FileSystemFake()
-    public let persistence: SQLiteActiveTranslationsPersistence
+    public let persistence: ActiveTranslationsPersistence
 
     public let retriever: LocalTranslationsRetriever
 
@@ -35,22 +35,25 @@ public struct LocalTranslationsFake {
         try? FileManager.default.removeItem(atPath: Self.databasesPath)
     }
 
-    public func setTranslations(_ translations: [Translation]) throws {
-        let oldTranslations = try persistence.retrieveAll()
+    public func setTranslations(_ translations: [Translation]) async throws {
+        let oldTranslations = try await persistence.retrieveAll()
         for oldTranslation in oldTranslations {
-            try persistence.remove(oldTranslation)
+            try await persistence.remove(oldTranslation)
         }
         for translation in translations {
-            try persistence.insert(translation)
+            try await persistence.insert(translation)
         }
         preferences.selectedTranslations = translations.map(\.id)
         fileSystem.files = Set(translations.map(\.localURL))
     }
 
-    public func insertTranslation(_ translation: Translation, installedVersion: Int?, downloaded: Bool) throws {
+    public func insertTranslation(_ translation: Translation,
+                                  installedVersion: Int?,
+                                  downloaded: Bool) async throws
+    {
         var translation = translation
         translation.installedVersion = installedVersion
-        try persistence.insert(translation)
+        try await persistence.insert(translation)
 
         if installedVersion != nil {
             preferences.toggleSelection(translation.id)

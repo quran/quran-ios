@@ -44,11 +44,13 @@ public struct TranslationDeleter {
                     try? fileSystem.removeItem(at: url)
                 }
             }
-            .map { () -> Translation in
-                var translation = translation
-                translation.installedVersion = nil
-                try persistence.update(translation)
-                return translation
+            .then { () -> Promise<Translation> in
+                DispatchQueue.global().asyncPromise {
+                    var translation = translation
+                    translation.installedVersion = nil
+                    try await persistence.update(translation)
+                    return translation
+                }
             }
     }
 }

@@ -15,7 +15,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
         localTranslationsFake.retriever
     }
 
-    private var persistence: SQLiteActiveTranslationsPersistence {
+    private var persistence: ActiveTranslationsPersistence {
         localTranslationsFake.persistence
     }
 
@@ -45,7 +45,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
     func test_retrievingLocalTranslations_allDownloaded() async throws {
         for translation in translations {
             print("Afifi: translation", translation)
-            try localTranslationsFake.insertTranslation(
+            try await localTranslationsFake.insertTranslation(
                 translation, installedVersion: translation.version, downloaded: true
             )
         }
@@ -64,7 +64,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
         let translations = [downloadedTranslation, notDownloadedTranslation]
 
         for translation in translations {
-            try persistence.insert(translation)
+            try await persistence.insert(translation)
         }
 
         fileSystem.files = [downloadedTranslation.localURL]
@@ -74,7 +74,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
     }
 
     func test_retrievingLocalTranslations_deletedTranslation() async throws {
-        try localTranslationsFake.insertTranslation(
+        try await localTranslationsFake.insertTranslation(
             translations[0], installedVersion: translations[0].version, downloaded: false
         )
         let expectedTranslation = expectedTranslation(translations[0], installedVersion: nil)
@@ -84,7 +84,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
     }
 
     func test_retrievingLocalTranslations_initialDownload() async throws {
-        try localTranslationsFake.insertTranslation(
+        try await localTranslationsFake.insertTranslation(
             translations[0], installedVersion: nil, downloaded: true
         )
         let expectedTranslation = expectedTranslation(translations[0], installedVersion: 5)
@@ -94,7 +94,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
     }
 
     func test_retrievingLocalTranslations_upgradeDownloaded() async throws {
-        try localTranslationsFake.insertTranslation(
+        try await localTranslationsFake.insertTranslation(
             translations[0], installedVersion: 2, downloaded: true
         )
         let expectedTranslation = expectedTranslation(translations[0], installedVersion: 5)
@@ -105,7 +105,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
 
     func test_retrievingLocalTranslations_errorAfterDownload() async throws {
         localTranslationsFake = LocalTranslationsFake(useFactory: false)
-        try localTranslationsFake.insertTranslation(
+        try await localTranslationsFake.insertTranslation(
             translations[0], installedVersion: 2, downloaded: true
         )
 

@@ -1,14 +1,14 @@
 //
 //  TranslationsDownloaderTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
 @testable import BatchDownloader
-@testable import TranslationService
 import SystemDependenciesFake
 import TestUtilities
+@testable import TranslationService
 import XCTest
 
 class TranslationsDownloaderTests: XCTestCase {

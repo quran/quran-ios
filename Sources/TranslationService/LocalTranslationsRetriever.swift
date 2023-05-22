@@ -26,7 +26,7 @@ public struct LocalTranslationsRetriever {
          versionPersistenceFactory: @escaping VersionPersistenceFactory)
     {
         persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
-        versionUpdater = DefaultTranslationsVersionUpdater(
+        versionUpdater = TranslationsVersionUpdater(
             persistence: persistence,
             versionPersistenceFactory: versionPersistenceFactory,
             unzipper: DefaultTranslationUnzipper(),
@@ -41,7 +41,7 @@ public struct LocalTranslationsRetriever {
     }
 
     public func getLocalTranslations() async throws -> [Translation] {
-        let translations = try persistence.retrieveAll()
+        let translations = try await persistence.retrieveAll()
 
         return try await withThrowingTaskGroup(of: Translation.self) { group in
             for translation in translations {
@@ -55,6 +55,6 @@ public struct LocalTranslationsRetriever {
     }
 
     private func updateInstalledVersion(of translation: Translation) async throws -> Translation {
-        try versionUpdater.updateInstalledVersion(for: translation)
+        try await versionUpdater.updateInstalledVersion(for: translation)
     }
 }

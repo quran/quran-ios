@@ -23,10 +23,10 @@ import SQLite
 import SQLitePersistence
 
 protocol ActiveTranslationsPersistence {
-    func retrieveAll() throws -> [Translation]
-    func insert(_ translation: Translation) throws
-    func remove(_ translation: Translation) throws
-    func update(_ translation: Translation) throws
+    func retrieveAll() async throws -> [Translation]
+    func insert(_ translation: Translation) async throws
+    func remove(_ translation: Translation) async throws
+    func update(_ translation: Translation) async throws
 }
 
 struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLitePersistence {
@@ -65,7 +65,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         })
     }
 
-    func retrieveAll() throws -> [Translation] {
+    func retrieveAll() async throws -> [Translation] {
         try run { connection in
             let query = Translations.table.order(Translations.name.asc)
             let rows = try connection.prepare(query)
@@ -74,7 +74,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func insert(_ translation: Translation) throws {
+    func insert(_ translation: Translation) async throws {
         try run { connection in
             let insert = Translations.table.insert(
                 Translations.id <- translation.id,
@@ -91,7 +91,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func update(_ translation: Translation) throws {
+    func update(_ translation: Translation) async throws {
         try run { connection in
             let update = Translations.table
                 .where(Translations.fileName == translation.fileName)
@@ -108,7 +108,7 @@ struct SQLiteActiveTranslationsPersistence: ActiveTranslationsPersistence, SQLit
         }
     }
 
-    func remove(_ translation: Translation) throws {
+    func remove(_ translation: Translation) async throws {
         try run { connection in
             let filter = Translations.table.filter(Translations.id == translation.id)
             try connection.run(filter.delete())

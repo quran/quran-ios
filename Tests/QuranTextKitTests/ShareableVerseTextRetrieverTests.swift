@@ -42,7 +42,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
 
-        try localTranslationsFake.setTranslations(translations)
+        try await localTranslationsFake.setTranslations(translations)
     }
 
     override func tearDown() {
@@ -103,10 +103,10 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         }
     }
 
-    func testShareTranslationTextReferenceVerse() throws {
+    func testShareTranslationTextReferenceVerse() async throws {
         statePreferences.quranMode = .translation
 
-        try localTranslationsFake.setTranslations([TestData.khanTranslation])
+        try await localTranslationsFake.setTranslations([TestData.khanTranslation])
 
         let numberReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[49]]))
         XCTAssertEqual(numberReference, ["وَإِذۡ فَرَقۡنَا بِكُمُ ٱلۡبَحۡرَ فَأَنجَیۡنَـٰكُمۡ وَأَغۡرَقۡنَاۤ ءَالَ فِرۡعَوۡنَ وَأَنتُمۡ تَنظُرُونَ﴿ ٥٠ ﴾",

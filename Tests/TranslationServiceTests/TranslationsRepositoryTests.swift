@@ -12,7 +12,7 @@ import TestUtilities
 import XCTest
 
 class TranslationsRepositoryTests: XCTestCase {
-    private var persistence: SQLiteActiveTranslationsPersistence {
+    private var persistence: ActiveTranslationsPersistence {
         localTranslationsFake.persistence
     }
 

@@ -11,7 +11,7 @@ import TestUtilities
 import XCTest
 
 class TranslationDeleterTests: XCTestCase {
-    private var persistence: SQLiteActiveTranslationsPersistence {
+    private var persistence: ActiveTranslationsPersistence {
         localTranslationsFake.persistence
     }
 
@@ -48,7 +48,7 @@ class TranslationDeleterTests: XCTestCase {
     func test_deleteDownloadedTranslation() async throws {
         let translation = TranslationTestData.khanTranslation
         XCTAssertNotNil(translation.installedVersion)
-        try localTranslationsFake.setTranslations([translation])
+        try await localTranslationsFake.setTranslations([translation])
         XCTAssertEqual(preferences.selectedTranslations, [translation.id])
 
         let initialLocalTranslations = try await retriever.getLocalTranslations()
@@ -69,7 +69,7 @@ class TranslationDeleterTests: XCTestCase {
     func test_deleteDownloadedTranslationAndZip() async throws {
         let translation = TranslationTestData.sahihTranslation
         XCTAssertNotNil(translation.installedVersion)
-        try localTranslationsFake.setTranslations([translation])
+        try await localTranslationsFake.setTranslations([translation])
         XCTAssertEqual(preferences.selectedTranslations, [translation.id])
 
         let initialLocalTranslations = try await retriever.getLocalTranslations()
@@ -92,7 +92,7 @@ class TranslationDeleterTests: XCTestCase {
         var translation = TranslationTestData.khanTranslation
         translation.installedVersion = nil
 
-        try localTranslationsFake.insertTranslation(translation, installedVersion: nil, downloaded: false)
+        try await localTranslationsFake.insertTranslation(translation, installedVersion: nil, downloaded: false)
         XCTAssertEqual(preferences.selectedTranslations, [])
 
         let initialLocalTranslations = try await retriever.getLocalTranslations()

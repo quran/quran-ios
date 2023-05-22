@@ -1,6 +1,6 @@
 //
 //  GRDBDatabaseVersionPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-22.
 //
@@ -27,14 +27,15 @@ struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
                 .fetchOne(db)
             guard let property else {
                 throw RecordError.recordNotFound(
-                    databaseTableName: GRDBProperty.databaseTableName, key: [:])
+                    databaseTableName: GRDBProperty.databaseTableName, key: [:]
+                )
             }
             return Int(property.value)!
         }
     }
 }
 
-struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
+private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     var property: String
     var value: String
 

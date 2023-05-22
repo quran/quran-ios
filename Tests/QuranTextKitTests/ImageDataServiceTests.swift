@@ -23,7 +23,7 @@ class ImageDataServiceTests: XCTestCase {
         )
     }
 
-    func testPageMarkers() throws {
+    func testPageMarkers() async throws {
         let quran = Reading.hafs_1421.quran
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1421_ayahinfo_1120.db"),
@@ -33,16 +33,16 @@ class ImageDataServiceTests: XCTestCase {
 
         var surasHeaders = 0
         for page in quran.pages {
-            let markers = try service.pageMarkers(page)
+            let markers = try await service.pageMarkers(page)
             XCTAssertEqual(markers.ayahNumbers.count, page.verses.count, "Page \(page.pageNumber)")
             surasHeaders += markers.suraHeaders.count
         }
         XCTAssertEqual(surasHeaders, quran.suras.count)
     }
 
-    func testWordFrameCollection() throws {
+    func testWordFrameCollection() async throws {
         let page = quran.pages[0]
-        let image = try service.imageForPage(page)
+        let image = try await service.imageForPage(page)
         let wordFrames = image.wordFrames
 
         XCTAssertEqual(wordFrames.frames[page.firstVerse], wordFrames.wordFramesForVerse(page.firstVerse))
@@ -62,23 +62,23 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
     }
 
-    func testGettingImageAtPage1() throws {
+    func testGettingImageAtPage1() async throws {
         let page = quran.pages[0]
-        let image = try service.imageForPage(page)
+        let image = try await service.imageForPage(page)
         XCTAssertEqual(image.startAyah, page.firstVerse)
         try verifyImagePage(image)
     }
 
-    func testGettingImageAtPage3() throws {
+    func testGettingImageAtPage3() async throws {
         let page = quran.pages[2]
-        let image = try service.imageForPage(page)
+        let image = try await service.imageForPage(page)
         XCTAssertEqual(image.startAyah, page.firstVerse)
         try verifyImagePage(image)
     }
 
-    func testGettingImageAtPage604() throws {
+    func testGettingImageAtPage604() async throws {
         let page = quran.pages.last!
-        let image = try service.imageForPage(page)
+        let image = try await service.imageForPage(page)
         XCTAssertEqual(image.startAyah, page.firstVerse)
         try verifyImagePage(image)
     }

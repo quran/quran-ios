@@ -1,5 +1,5 @@
 //
-//  WordFramePersistence.swift
+//  SQLiteWordFramePersistence.swift
 //  Quran
 //
 //  Created by Ahmed El-Helw on 5/12/16.
@@ -23,7 +23,7 @@ import QuranKit
 import SQLite
 import SQLitePersistence
 
-struct WordFramePersistence: ReadonlySQLitePersistence {
+struct SQLiteWordFramePersistence: ReadonlySQLitePersistence, WordFramePersistence {
     private struct Columns {
         let id = Expression<Int>("glyph_id")
         let page = Expression<Int>("page_number")

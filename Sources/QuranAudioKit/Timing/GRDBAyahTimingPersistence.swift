@@ -72,7 +72,7 @@ private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
     }
 }
 
-struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
+private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     var property: String
     var value: String
 

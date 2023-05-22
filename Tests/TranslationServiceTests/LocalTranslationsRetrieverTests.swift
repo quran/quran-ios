@@ -44,7 +44,6 @@ class LocalTranslationsRetrieverTests: XCTestCase {
 
     func test_retrievingLocalTranslations_allDownloaded() async throws {
         for translation in translations {
-            print("Afifi: translation", translation)
             try await localTranslationsFake.insertTranslation(
                 translation, installedVersion: translation.version, downloaded: true
             )

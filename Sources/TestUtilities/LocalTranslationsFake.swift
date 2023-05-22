@@ -19,7 +19,7 @@ public struct LocalTranslationsFake {
     public let retriever: LocalTranslationsRetriever
 
     public init(useFactory: Bool = false) {
-        persistence = SQLiteActiveTranslationsPersistence(directory: Self.databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesPath)
         if useFactory {
             let persistenceFactory = { (translation: Translation) -> DatabaseVersionPersistence in
                 let url = TestResources.resourceURL(translation.fileName)

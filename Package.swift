@@ -50,6 +50,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
         .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.12.2"),
+        .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
         .package(url: "https://github.com/sideeffect-io/AsyncExtensions", from: "0.5.2"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
@@ -138,6 +139,7 @@ let package = Package(
             "Utilities",
             "VLogging",
             .product(name: "SQLite", package: "SQLite.swift"),
+            .product(name: "GRDB", package: "GRDB.swift"),
         ]),
 
         .target(name: "Caching", dependencies: [

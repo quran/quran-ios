@@ -28,7 +28,7 @@ public struct TranslationDeleter {
     let fileSystem: FileSystem
 
     public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
-        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
         self.fileSystem = fileSystem
     }
 

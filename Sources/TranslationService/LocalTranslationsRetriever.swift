@@ -25,7 +25,7 @@ public struct LocalTranslationsRetriever {
     init(databasesPath: String, fileSystem: FileSystem,
          versionPersistenceFactory: @escaping VersionPersistenceFactory)
     {
-        persistence = SQLiteActiveTranslationsPersistence(directory: databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
         versionUpdater = TranslationsVersionUpdater(
             persistence: persistence,
             versionPersistenceFactory: versionPersistenceFactory,

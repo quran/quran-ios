@@ -21,9 +21,9 @@ public struct LocalTranslationsFake {
     public init(useFactory: Bool = false) {
         persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesPath)
         if useFactory {
-            let persistenceFactory = { (translation: Translation) -> DatabaseVersionPersistence in
+            let persistenceFactory = { (translation: Translation) in
                 let url = TestResources.resourceURL(translation.fileName)
-                return SQLiteDatabaseVersionPersistence(filePath: url.path)
+                return try GRDBDatabaseVersionPersistence(fileURL: url)
             }
             retriever = LocalTranslationsRetriever(databasesPath: Self.databasesPath, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
         } else {

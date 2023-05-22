@@ -1,13 +1,13 @@
 //
 //  GRDBDownloadsPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-22.
 //
 
 import Foundation
-import SQLitePersistence
 import GRDB
+import SQLitePersistence
 import VLogging
 
 struct GRDBDownloadsPersistence: DownloadsPersistence {
@@ -52,7 +52,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
     }
 
     func retrieveAll() async throws -> [DownloadBatch] {
-        return try await db.read { db in
+        try await db.read { db in
             let downloads = try GRDBDownload.fetchAll(db)
             let batches = Dictionary(grouping: downloads, by: { $0.downloadBatchId })
             return batches.map { DownloadBatch(id: $0, downloads: $1.map { $0.toDownload() }) }
@@ -107,7 +107,7 @@ private struct GRDBDownloadBatch: Identifiable, Codable, FetchableRecord, Mutabl
 
 extension GRDBDownloadBatch {
     func toDownloadBatch(downloads: [Download]) -> DownloadBatch {
-        return DownloadBatch(id: id!, downloads: downloads)
+        DownloadBatch(id: id!, downloads: downloads)
     }
 
     enum Columns {
@@ -142,12 +142,12 @@ private struct GRDBDownload: Identifiable, Codable, FetchableRecord, MutablePers
 
 extension GRDBDownload {
     init(_ download: Download) {
-        self.downloadBatchId = download.batchId
-        self.url = download.request.url
-        self.resumePath = download.request.resumePath
-        self.destinationPath = download.request.destinationPath
-        self.status = download.status
-        self.taskId = download.taskId
+        downloadBatchId = download.batchId
+        url = download.request.url
+        resumePath = download.request.resumePath
+        destinationPath = download.request.destinationPath
+        status = download.status
+        taskId = download.taskId
     }
 
     func toDownload() -> Download {

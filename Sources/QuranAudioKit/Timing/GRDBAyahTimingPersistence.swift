@@ -1,14 +1,14 @@
 //
 //  GRDBAyahTimingPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-22.
 //
 
 import Foundation
-import SQLitePersistence
-import QuranKit
 import GRDB
+import QuranKit
+import SQLitePersistence
 import VLogging
 
 struct GRDBAyahTimingPersistence: AyahTimingPersistence {
@@ -35,7 +35,7 @@ struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     func getOrderedTimingForSura(startAyah: QuranKit.AyahNumber) async throws -> SuraTiming {
         try await db.read { db in
             let query = GRDBTiming.filter(GRDBTiming.Columns.sura == startAyah.sura.suraNumber
-                                          && GRDBTiming.Columns.ayah >= startAyah.ayah)
+                && GRDBTiming.Columns.ayah >= startAyah.ayah)
                 .order(GRDBTiming.Columns.ayah)
             var timings: [AyahTiming] = []
             var endTime: Timing?
@@ -56,7 +56,6 @@ struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     }
 }
 
-
 private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
     var sura: Int
     var ayah: Int
@@ -69,7 +68,7 @@ private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
     }
 
     static var databaseTableName: String {
-        return "timings"
+        "timings"
     }
 }
 
@@ -83,6 +82,6 @@ struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     }
 
     static var databaseTableName: String {
-        return "properties"
+        "properties"
     }
 }

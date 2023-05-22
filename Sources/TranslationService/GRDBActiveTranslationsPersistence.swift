@@ -24,7 +24,7 @@ struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
 
     init(directory: String) {
         let filePath = directory.stringByAppendingPath("translations.db")
-        self.init(db: DatabasePool.newInstance(filePath: filePath))
+        self.init(db: DatabasePool.unsafeNewInstance(filePath: filePath))
     }
 
     private var migrator: DatabaseMigrator {

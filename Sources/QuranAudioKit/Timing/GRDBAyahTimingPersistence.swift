@@ -77,8 +77,8 @@ private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     var value: String
 
     enum Columns {
-        static let property = Column("property")
-        static let value = Column("value")
+        static let property = Column(CodingKeys.property)
+        static let value = Column(CodingKeys.value)
     }
 
     static var databaseTableName: String {

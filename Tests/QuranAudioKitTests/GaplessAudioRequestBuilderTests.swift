@@ -18,7 +18,7 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
     override func setUpWithError() throws {
         try reciter.prepareGaplessReciterForTests(unZip: true)
 
-        let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
+        let timingRetriever = ReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
         audioRequestBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
     }
 

@@ -1,5 +1,5 @@
 //
-//  SQLiteReciterTimingRetriever.swift
+//  ReciterTimingRetriever.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/20/16.
@@ -21,11 +21,7 @@
 import Foundation
 import QuranKit
 
-protocol ReciterTimingRetriever {
-    func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming]
-}
-
-struct SQLiteReciterTimingRetriever: ReciterTimingRetriever {
+struct ReciterTimingRetriever {
     let persistenceFactory: AyahTimingPersistenceFactory
 
     func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {

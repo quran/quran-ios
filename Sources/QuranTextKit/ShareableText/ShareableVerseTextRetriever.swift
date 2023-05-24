@@ -24,7 +24,7 @@ import PromiseKit
 import QuranKit
 import TranslationService
 
-public class ShareableVerseTextRetriever {
+public struct ShareableVerseTextRetriever {
     private let preferences = QuranContentStatePreferences.shared
     private let textService: QuranTextDataService
     private let shareableVersePersistence: VerseTextPersistence
@@ -42,9 +42,13 @@ public class ShareableVerseTextRetriever {
     }
 
     public func textForVerses(_ verses: [AyahNumber]) -> Promise<[String]> {
-        when(fulfilled: arabicScript(for: verses), translations(for: verses))
-            .map { [$0, $1].flatMap { $0 } }
-            .map { $0 + ["", self.versesSummary(verses)] }
+        DispatchQueue.global().asyncPromise {
+            async let arabicText = arabicScript(for: verses)
+            async let translationText = translations(for: verses)
+
+            let result = try await [arabicText, translationText].flatMap { $0 }
+            return result + ["", versesSummary(verses)]
+        }
     }
 
     private func versesSummary(_ verses: [AyahNumber]) -> String {
@@ -54,29 +58,25 @@ public class ShareableVerseTextRetriever {
         return "\(verses[0].localizedName) - \(verses.last!.localizedName)"
     }
 
-    private func arabicText(for verse: AyahNumber) throws -> String {
+    private func arabicText(for verse: AyahNumber) async throws -> String {
         let verseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-        return try shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
+        return try await shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
     }
 
-    private func arabicScript(for verses: [AyahNumber]) -> Promise<[String]> {
-        DispatchQueue.global()
-            .async(.promise) {
-                // TODO: improve performance by loading
-                try verses.map { try self.arabicText(for: $0) }
-                    .joined(separator: " ")
-            }
-            .map { [$0] }
+    private func arabicScript(for verses: [AyahNumber]) async throws -> [String] {
+        // TODO: improve performance by parallize the loading
+        let arabicAyahsText = try await verses.asyncMap { try await self.arabicText(for: $0) }
+            .joined(separator: " ")
+        return [arabicAyahsText]
     }
 
-    private func translations(for verses: [AyahNumber]) -> Promise<[String]> {
+    private func translations(for verses: [AyahNumber]) async throws -> [String] {
         guard preferences.quranMode == .translation else {
-            return .value([])
+            return []
         }
 
-        return textService.textForVerses(verses).map { translatedVerses -> [String] in
-            self.versesTranslationsText(translatedVerses: translatedVerses)
-        }
+        let translatedVerses = try await textService.textForVerses(verses)
+        return versesTranslationsText(translatedVerses: translatedVerses)
     }
 
     private func versesTranslationsText(translatedVerses: TranslatedVerses) -> [String] {

@@ -1,6 +1,6 @@
 //
 //  WordTextPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-23.
 //

@@ -25,18 +25,20 @@ struct NumberSearcher: Searcher {
         return []
     }
 
-    func search(for term: String, quran: Quran) throws -> [SearchResults] {
-        let items: [SearchResult] = try search(for: term, quran: quran)
+    func search(for term: String, quran: Quran) async throws -> [SearchResults] {
+        let items: [SearchResult] = try await search(for: term, quran: quran)
         return [SearchResults(source: .quran, items: items)]
     }
 
-    private func search(for term: String, quran: Quran) throws -> [SearchResult] {
+    private func search(for term: String, quran: Quran) async throws -> [SearchResult] {
         let components = parseIntArray(term)
         guard !components.isEmpty else {
             return []
         }
         if components.count == 2 {
-            return [try parseVerseResult(sura: components[0], verse: components[1], quran: quran)].compactMap { $0 }
+            return [try await parseVerseResult(sura: components[0],
+                                               verse: components[1],
+                                               quran: quran)].compactMap { $0 }
         } else {
             return [
                 parseSuraResult(sura: components[0], quran: quran),
@@ -47,11 +49,11 @@ struct NumberSearcher: Searcher {
         }
     }
 
-    private func parseVerseResult(sura: Int, verse: Int, quran: Quran) throws -> SearchResult? {
+    private func parseVerseResult(sura: Int, verse: Int, quran: Quran) async throws -> SearchResult? {
         guard let verse = quran.verses.first(where: { $0.sura.suraNumber == sura && $0.ayah == verse }) else {
             return nil
         }
-        let ayahText = try quranVerseTextPersistence.textForVerse(verse)
+        let ayahText = try await quranVerseTextPersistence.textForVerse(verse)
         return SearchResult(text: ayahText, ayah: verse)
     }
 

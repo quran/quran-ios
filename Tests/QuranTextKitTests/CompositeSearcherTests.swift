@@ -42,75 +42,75 @@ class CompositeSearcherTests: XCTestCase {
         localTranslationsFake.tearDown()
     }
 
-    func testAutocompleteNumbers() throws {
-        try autocompleteNumber("4")
-        try autocompleteNumber("44")
-        try autocompleteNumber("444")
-        try autocompleteNumber("4444")
-        try autocompleteNumber("3:4")
+    func testAutocompleteNumbers() async throws {
+        try await autocompleteNumber("4")
+        try await autocompleteNumber("44")
+        try await autocompleteNumber("444")
+        try await autocompleteNumber("4444")
+        try await autocompleteNumber("3:4")
     }
 
-    private func autocompleteNumber(_ number: String) throws {
-        let result = try wait(for: searcher.autocomplete(term: number, quran: quran))
+    private func autocompleteNumber(_ number: String) async throws {
+        let result = try await searcher.autocomplete(term: number, quran: quran)
         XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
     }
 
-    func testSearchNumber1() throws {
-        let result = try wait(for: searcher.search(for: "1", quran: quran))
+    func testSearchNumber1() async throws {
+        let result = try await searcher.search(for: "1", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testSearchNumber33() throws {
-        let result = try wait(for: searcher.search(for: "33", quran: quran))
+    func testSearchNumber33() async throws {
+        let result = try await searcher.search(for: "33", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testSearchNumber605() throws {
-        let result = try wait(for: searcher.search(for: "605", quran: quran))
+    func testSearchNumber605() async throws {
+        let result = try await searcher.search(for: "605", quran: quran)
         XCTAssertEqual(result, [])
     }
 
-    func testSearchNumberVerse() throws {
-        let result = try wait(for: searcher.search(for: "68:1", quran: quran))
+    func testSearchNumberVerse() async throws {
+        let result = try await searcher.search(for: "68:1", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testAutocompleteSura() throws {
-        try testAutocomplete(term: "Yu")
+    func testAutocompleteSura() async throws {
+        try await testAutocomplete(term: "Yu")
     }
 
-    func testSearchOneSura() throws {
-        let result = try wait(for: searcher.search(for: "Al-Ahzab", quran: quran))
+    func testSearchOneSura() async throws {
+        let result = try await searcher.search(for: "Al-Ahzab", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testSearchMultipleSura() throws {
-        let result = try wait(for: searcher.search(for: "Yu", quran: quran))
+    func testSearchMultipleSura() async throws {
+        let result = try await searcher.search(for: "Yu", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testAutocompleteArabicQuran() throws {
+    func testAutocompleteArabicQuran() async throws {
         let term = "لكنا"
-        try testAutocomplete(term: term)
+        try await testAutocomplete(term: term)
     }
 
-    func testSearchArabicQuran() throws {
+    func testSearchArabicQuran() async throws {
         let term = "لكنا"
-        let result = try wait(for: searcher.search(for: term, quran: quran))
+        let result = try await searcher.search(for: term, quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    func testAutocompleteTranslation() throws {
-        try testAutocomplete(term: "All")
+    func testAutocompleteTranslation() async throws {
+        try await testAutocomplete(term: "All")
     }
 
-    func testSearchTranslation() throws {
-        let result = try wait(for: searcher.search(for: "All", quran: quran))
+    func testSearchTranslation() async throws {
+        let result = try await searcher.search(for: "All", quran: quran)
         assertSnapshot(matching: result, as: .json)
     }
 
-    private func testAutocomplete(term: String, testName: String = #function) throws {
-        let result = try wait(for: searcher.autocomplete(term: term, quran: quran))
+    private func testAutocomplete(term: String, testName: String = #function) async throws {
+        let result = try await searcher.autocomplete(term: term, quran: quran)
 
         // assert the range
         let ranges = Set(result.map(\.highlightedRange))

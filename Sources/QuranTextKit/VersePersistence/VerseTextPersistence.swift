@@ -22,13 +22,13 @@ import Foundation
 import QuranKit
 
 protocol SearchableTextPersistence {
-    func autocomplete(term: String) throws -> [String]
-    func search(for term: String, quran: Quran) throws -> [(verse: AyahNumber, text: String)]
+    func autocomplete(term: String) async throws -> [String]
+    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)]
 }
 
 protocol VerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) throws -> String
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: String]
+    func textForVerse(_ verse: AyahNumber) async throws -> String
+    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String]
 }
 
 enum RawTranslationText: Equatable {
@@ -37,6 +37,6 @@ enum RawTranslationText: Equatable {
 }
 
 protocol TranslationVerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) throws -> RawTranslationText
-    func textForVerses(_ verses: [AyahNumber]) throws -> [AyahNumber: RawTranslationText]
+    func textForVerse(_ verse: AyahNumber) async throws -> RawTranslationText
+    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: RawTranslationText]
 }

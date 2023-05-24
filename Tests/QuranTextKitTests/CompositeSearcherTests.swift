@@ -28,7 +28,7 @@ class CompositeSearcherTests: XCTestCase {
         let translationsRetriever = localTranslationsFake.retriever
         try await localTranslationsFake.setTranslations(translations)
 
-        let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
+        let persistence = GRDBQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
 
         searcher = CompositeSearcher(
             quranVerseTextPersistence: persistence,

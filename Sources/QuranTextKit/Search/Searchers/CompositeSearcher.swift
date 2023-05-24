@@ -33,7 +33,7 @@ public struct CompositeSearcher: Searcher {
     }
 
     public init(databasesPath: String, quranFileURL: URL) {
-        let persistence = SQLiteQuranVerseTextPersistence(fileURL: quranFileURL)
+        let persistence = GRDBQuranVerseTextPersistence(fileURL: quranFileURL)
         let localTranslationRetriever = TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath)
         self.init(quranVerseTextPersistence: persistence,
                   localTranslationRetriever: localTranslationRetriever,

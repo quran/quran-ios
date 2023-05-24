@@ -29,7 +29,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
 
         localTranslationsFake = LocalTranslationsFake()
         let localtranslationsRetriever = localTranslationsFake.retriever
-        let persistence = SQLiteQuranVerseTextPersistence(mode: .share, fileURL: TestData.quranTextURL)
+        let persistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: TestData.quranTextURL)
         textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)

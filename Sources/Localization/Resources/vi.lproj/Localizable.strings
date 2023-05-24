@@ -1,0 +1,174 @@
+/*
+ New Localizations in Quran for iOS
+ */
+
+// MARK: - General
+
+"button.done" = "Xong";
+"button.delete" = "Xóa";
+
+// MARK: - Errors
+
+"NetworkError_ConnectionLost" = "Mất kết nối mạng. Di chuyển đến nới có kết nối ổn định hơn hoặc đợi cho đến khi kết nối ổn định trở lại.";
+"NetworkError_InternationalRoamingOff" = "Chuyển vùng quốc tế không được phép. Thay đổi cài đặt chuyển vùng quốc tế hoặc bật Wi-Fi.";
+"NetworkError_NotConnectedToInternet" = "Không được kết nối với internet. Bật Wi-Fi hoặc cho phép kết nối dữ liệu di động.";
+"NetworkError_ServerNotReachable" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
+"unknown_error_message" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
+"NetworkError_Parsing" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
+
+"FileSystemError_Unknown" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
+"FileSystemError_NoDiskSpace" = "Không đủ dung lượng trống để lưu các bản tải xuống";
+
+// MARK: - Quran
+
+"ayah" = "Ayah";
+"surah" = "Surah";
+
+
+"translatorLabel: " = "Dịch giả: ";
+"upgradeTranslationButtonTitle" = "CẬP NHẬT";
+
+"translationsSelectionTitle" = "Chọn Bản dịch/Tafseer";
+"translationsSelectionPrompt" = "Chọn theo thứ tự bạn muốn xem";
+
+"errorInTranslationText" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
+"noAvailableTranslationText" = "Không có bản dịch nào cho Ayah này.";
+"referenceVerseTranslationText" = "Xem ayah %d.";
+
+// MARK: - Search
+
+"searchRecentsTitle" = "Tìm kiếm gần đây";
+"searchPopularTitle" = "Thử tìm kiếm với";
+"searchPlaceholder" = "Surah, câu kinh, bản dịch, tafseer và số";
+"searchResultTitle" = "%@ (%d)";
+
+"translationTextType" = "Bản dịch";
+"transliterationTextType" = "Phiên âm";
+
+"write_review" = "Đánh giá ứng dụng trên Appstore...";
+"contact_us" = "Liên hệ";
+"share_app" = "Chia sẻ ứng dụng...";
+"app_version" = "Phiên bản ứng dụng";
+
+"menu.arabic" = "Ả Rập";
+"menu.translation" = "Bản dịch/Tafseer";
+"menu.select_translation" = "Chọn bản dịch/tafseer";
+"menu.pointer" = "Con trỏ dịch từ";
+"menu.pointer.select_translation" = "Hiển thị con trỏ";
+"menu.fontSizeLetter" = "A";
+"menu.translationFontSize" = "Cỡ chữ Bản dịch";
+"menu.arabicFontSize" = "Cỡ chữ Quran";
+"menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
+"menu.verticalScrolling" = "Cuộn dọc";
+
+
+"tab.notes" = "Ghi chú";
+
+"shareMarketingSuffix" = "-\nQuran - bởi Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
+
+"repetitionExperimentalSuffix" = "   (Thử nghiệm)";
+
+"update.dark-theme.title" = "Chủ đề Tối";
+"update.dark-theme.desc" = "Chúng tôi mới thêm chủ đề Tối. Bạn có muốn bật nó lên không?";
+"update.dark-theme.turnOn" = "Bật";
+
+"update.filesystem.title" = "Nâng cấp cơ sở dữ liệu...";
+
+"theme.light" = "Sáng";
+"theme.dark" = "Tối";
+"theme.auto" = "Tự động";
+"theme.auto.message" = "Ứng dụng Kinh Quran sẽ tự theo cài đặt giao diện trên iPhone của bạn";
+
+"reciters.title" = "Chọn người xướng đọc để nghe";
+"reciters.recent" = "Gần đây";
+"reciters.downloaded" = "Đã tải";
+"reciters.all" = "Tất cả";
+
+// MARK: - Audio
+
+"audio.playing.action.modify" = "Sửa";
+"audio.playing.message" = "Phát âm thanh từ %@ đến %@";
+"audio.downloading.message" = "Đang tải âm thanh từ %@ đến %@";
+
+"audio.playing-verses.label" = "Câu đang Phát";
+"audio.adjust-end-verse-to-the-end.label" = "Điều chỉnh câu cuối thành kết thúc của";
+
+"audio.select-start-verse" = "Chọn Câu Đầu";
+"audio.select-end-verse" = "Chọn Câu Cuối";
+
+"audio.download-play-amount" = "Tải xuống/Phát đến";
+"audio.download-play-amount.description" = "Khi phát âm thanh, nó sẽ phát đến cuối của";
+
+// MARK: - Bookmarks
+
+"bookmarks.no-data.title" = "Thêm Đánh dấu...";
+"bookmarks.no-data.text" = "Khi bạn đang đọc Kinh Quran, hãy nhấn vào nút Đánh dấu trang để đánh dấu trang hiện tại.";
+
+// MARK: - Notes
+
+"notes.no-data.title" = "Thêm Tô sáng Ayah...";
+"notes.no-data.text" = "Chạm và giữ vào một Ayah. Bạn có thể mở rộng lựa chọn để bao gồm nhiều Ayat, sau đó chạm vào nút Đánh dấu.";
+"notes.verses-count" = "(+%d ayat)";
+"notes.delete.alert.title" = "Xóa Tô sáng";
+"notes.delete.alert.body" = "Ghi chú liên quan cũng sẽ bị xóa.";
+"notes.icloud.alert.title" = "Đồng bộ iCloud";
+"notes.icloud.alert.body" = "Ứng dụng sử dụng iCloud để đồng bộ hóa dấu trang và ghi chú trên các thiết bị của bạn. Bạn có thể tắt nó từ cài đặt iCloud của thiết bị.";
+
+// MARK: - Ayah Menu
+
+"ayah.menu.copy" = "Sao chép";
+"ayah.menu.share" = "Chia sẻ...";
+"ayah.menu.play-end-juz" = "đến cuối Juz'";
+"ayah.menu.play-end-surah" = "đến cuối Surah";
+"ayah.menu.play-end-page" = "đến cuối Trang";
+"ayah.menu.repeat" = "Lặp lại";
+"ayah.menu.selected-verse" = "câu đã chọn";
+"ayah.menu.selected-verses" = "bộ câu đã chọn";
+"ayah.menu.highlight" = "Tô sáng";
+"ayah.menu.highlight-select-color" = "chọn màu";
+"ayah.menu.add-note" = "Thêm Ghi chú";
+"ayah.menu.edit-note" = "Sửa Ghi chú";
+"ayah.menu.delete-note" = "Xóa Ghi chú";
+"ayah.menu.delete-highlight" = "Xóa Tô sáng";
+
+"ayah.text.read-more" = "Xem thêm";
+
+// MARK: - Reading Selector
+
+"reading.selector.selectMuhaf.short" = "Chọn";
+"reading.selector.selectMuhaf.long" = "Đặt làm Mushaf hiện tại";
+"reading.selector.title" = "Chọn Mushaf";
+"reading.selector.selection-description" = "Chạm vào Mushaf để biết thêm thông tin.";
+
+"reading.hafs-1405.title" = "Hafs, Madina cổ điển, 1405 AH";
+"reading.hafs-1405.description" = "Hafs cổ điển Muhaf ban hành ở Madina vào năm 1405 Hijri. Ứng dụng đã từng cung cấp phiên bản này trong một thời gian dài.\nTừ Tổ hợp In ấn Kinh Quran của Vua Fahd.";
+"reading.hafs-1405.properties" = "Hafs Mushaf\nBan hành năm 1405 Hijri\n604 trang\n15-dòng mỗi trang\nDịch Từng Từ";
+
+"reading.hafs-1421.title" = "Hafs, Madina, 1421 AH";
+"reading.hafs-1421.description" = "Hafs Muhaf ban hành ở Madina vào năm 1421 Hijri. Từ Tổ hợp in Kinh Quran King Fahd.";
+"reading.hafs-1421.properties" = "Hafs Mushaf\nBan hành năm 1421 Hijri\n604 trang\n15-dòng mỗi trang\n!Không có Dịch Từng Từ";
+
+"reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
+"reading.hafs-1440.description" = "Hafs Muhaf ban hành ở Madina vào năm 1440 Hijri. Từ Tổ hợp in Kinh Quran King Fahd.";
+"reading.hafs-1440.properties" = "Hafs Mushaf\nBan hành năm 1440 Hijri\n604 trang\n15-dòng mỗi trang\n!Không có Dịch Từng Từ";
+
+"reading.tajweed.title" = "Hafs, Tajweed";
+"reading.tajweed.description" = "Tajweed hafs Muhaf. Al-Quran Al-Kareem - Phiên bản Dar al-Marefa.";
+"reading.tajweed.properties" = "Hafs Mushaf\n604 trang\n15-dòng mỗi trang\nDịch Từng Từ";
+
+// MARK: - What's new
+
+"new.title" = "Có gì mới";
+"new.action" = "Tiếp";
+
+"new.reciters" = "Người đọc Mới";
+"new.reciters.details" = "* %%Người đọc:qari_muhammad_rashad_shereef_gapless%%\n* %%Người đọc:qari_wadee3_alyamani_gapless%%";
+
+"new.translations" = "Bản dịch & Tafseers";
+"new.translations.details" = "* Nhấn lâu vào một câu kinh để xem %%Localizable:menu.translation%% cho một Ayah duy nhất ở chế độ xem tiếng Ả Rập.";
+
+"new.quran-ui" = "Quran UI";
+"new.quran-ui.details" = "* Lặp lại mục menu Ayah để lặp lại ayah hoặc ayat đã chọn.\n* Hỗ trợ 2 trang ở chế độ xoay ngang dành cho thiết bị iPad, iPhone Max và iPhone Plus.\n* Đường viền trái và phải của trang.\n* Kích thước phông chữ bổ sung cho giao diện bản dịch.";
+
+"new.reciters-selection" = "Chọn Người đọc";
+"new.reciters-selection.details" = "* Phần hiển thị tới 3 người đọc gần đây nhất.\n* Phần dành cho những người đọc đã tải xuống.";

@@ -77,7 +77,7 @@
 "theme.light" = "Sáng";
 "theme.dark" = "Tối";
 "theme.auto" = "Tự động";
-"theme.auto.message" = "Ứng dụng Kinh Qur'an sẽ tự theo cài đặt giao diện trên iPhone của bạn";
+"theme.auto.message" = "Ứng dụng Kinh Quran sẽ tự theo cài đặt giao diện trên iPhone của bạn";
 
 "reciters.title" = "Chọn người xướng đọc để nghe";
 "reciters.recent" = "Gần đây";
@@ -145,15 +145,15 @@
 "reading.hafs-1405.properties" = "Hafs Mushaf\nBan hành năm 1405 Hijri\n604 trang\n15-dòng mỗi trang\nDịch Từng Từ";
 
 "reading.hafs-1421.title" = "Hafs, Madina, 1421 AH";
-"reading.hafs-1421.description" = "Hafs Muhaf ban hành ở Madina vào năm 1421 Hijri. Từ Tổ hợp in Kinh Qur'an King Fahd.";
+"reading.hafs-1421.description" = "Hafs Muhaf ban hành ở Madina vào năm 1421 Hijri. Từ Tổ hợp in Kinh Quran King Fahd.";
 "reading.hafs-1421.properties" = "Hafs Mushaf\nBan hành năm 1421 Hijri\n604 trang\n15-dòng mỗi trang\n!Không có Dịch Từng Từ";
 
 "reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
-"reading.hafs-1440.description" = "Hafs Muhaf ban hành ở Madina vào năm 1440 Hijri. Từ Tổ hợp in Kinh Qur'an King Fahd.";
+"reading.hafs-1440.description" = "Hafs Muhaf ban hành ở Madina vào năm 1440 Hijri. Từ Tổ hợp in Kinh Quran King Fahd.";
 "reading.hafs-1440.properties" = "Hafs Mushaf\nBan hành năm 1440 Hijri\n604 trang\n15-dòng mỗi trang\n!Không có Dịch Từng Từ";
 
 "reading.tajweed.title" = "Hafs, Tajweed";
-"reading.tajweed.description" = "Tajweed hafs Muhaf. Al-Qur'an Al-Kareem - Phiên bản Dar al-Marefa.";
+"reading.tajweed.description" = "Tajweed hafs Muhaf. Al-Quran Al-Kareem - Phiên bản Dar al-Marefa.";
 "reading.tajweed.properties" = "Hafs Mushaf\n604 trang\n15-dòng mỗi trang\nDịch Từng Từ";
 
 // MARK: - What's new

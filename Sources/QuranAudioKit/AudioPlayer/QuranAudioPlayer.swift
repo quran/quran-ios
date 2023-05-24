@@ -47,7 +47,7 @@ public class QuranAudioPlayer {
     private var audioRequest: QuranAudioRequest?
 
     nonisolated init(player: QueuingPlayer) {
-        let timingRetriever = SQLiteReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
+        let timingRetriever = ReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
         let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
         let gappedBuilder = GappedAudioRequestBuilder()
         self.player = player

@@ -13,17 +13,17 @@ public struct WordTextService {
     private let persistence: WordTextPersistence
 
     public init(fileURL: URL) {
-        persistence = SQLiteWordTextPersistence(fileURL: fileURL)
+        persistence = GRDBWordTextPersistence(fileURL: fileURL)
     }
 
-    public func textForWord(_ word: Word) throws -> String? {
+    public func textForWord(_ word: Word) async throws -> String? {
         let textType = preferences.wordTextType
         var text: String?
         switch textType {
         case .translation:
-            text = try persistence.translationForWord(word)
+            text = try await persistence.translationForWord(word)
         case .transliteration:
-            text = try persistence.transliterationForWord(word)
+            text = try await persistence.transliterationForWord(word)
         }
         return text
     }

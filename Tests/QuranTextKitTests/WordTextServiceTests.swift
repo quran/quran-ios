@@ -19,15 +19,15 @@ class WordTextServiceTests: XCTestCase {
         service = WordTextService(fileURL: TestResources.resourceURL("words.db"))
     }
 
-    func testWordEnglishTranslation() throws {
+    func testWordEnglishTranslation() async throws {
         preferences.wordTextType = .translation
-        let text = try service.textForWord(word)
+        let text = try await service.textForWord(word)
         XCTAssertEqual(text, "(of) your Lord")
     }
 
-    func testWordEnglishTransliteration() throws {
+    func testWordEnglishTransliteration() async throws {
         preferences.wordTextType = .transliteration
-        let text = try service.textForWord(word)
+        let text = try await service.textForWord(word)
         XCTAssertEqual(text, "rabbika")
     }
 }

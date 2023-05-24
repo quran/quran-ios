@@ -1,5 +1,5 @@
 //
-//  WordTextPersistence.swift
+//  SQLiteWordTextPersistence.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 6/19/17.
@@ -21,11 +21,6 @@
 import Foundation
 import SQLite
 import SQLitePersistence
-
-protocol WordTextPersistence {
-    func translationForWord(_ word: Word) throws -> String?
-    func transliterationForWord(_ word: Word) throws -> String?
-}
 
 class SQLiteWordTextPersistence: ReadonlySQLitePersistence, WordTextPersistence {
     private struct Database {

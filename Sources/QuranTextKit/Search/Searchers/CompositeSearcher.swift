@@ -11,9 +11,9 @@ import QuranKit
 import TranslationService
 import VLogging
 
-public struct CompositeSearcher: AsyncSearcher {
+public struct CompositeSearcher: Searcher {
     private let simpleSearchers: [Searcher]
-    private let translationsSearcher: AsyncSearcher
+    private let translationsSearcher: Searcher
 
     init(quranVerseTextPersistence: VerseTextPersistence,
          localTranslationRetriever: LocalTranslationsRetriever,
@@ -42,39 +42,32 @@ public struct CompositeSearcher: AsyncSearcher {
                   })
     }
 
-    public func autocomplete(term: String, quran: Quran) -> Promise<[SearchAutocompletion]> {
+    public func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
         logger.info("Autocompleting term: \(term)")
-        return DispatchQueue.global()
-            .async(.promise) {
-                try simpleSearchers.flatMap { try $0.autocomplete(term: term, quran: quran) }
-            }
-            .then { (results: [SearchAutocompletion]) -> Promise<[SearchAutocompletion]> in
-                if !results.isEmpty {
-                    return .value(results)
-                }
-                return translationsSearcher.autocomplete(term: term, quran: quran)
-            }
-            .map { [SearchAutocompletion(text: term, term: term)] + $0 }
-            .map { $0.orderedUnique() }
+
+        let autocompletions = try await simpleSearchers.asyncMap { searcher in
+            try await searcher.autocomplete(term: term, quran: quran)
+        }
+        var results = autocompletions.flatMap { $0 }
+
+        if results.isEmpty {
+            results = try await translationsSearcher.autocomplete(term: term, quran: quran)
+        }
+        let termResult = SearchAutocompletion(text: term, term: term)
+        results.insert(termResult, at: 0)
+        return results.orderedUnique()
     }
 
-    public func search(for term: String, quran: Quran) -> Promise<[SearchResults]> {
+    public func search(for term: String, quran: Quran) async throws -> [SearchResults] {
         logger.info("Search for: \(term)")
-        return DispatchQueue.global()
-            .async(.promise) {
-                try simpleSearchers.flatMap { try $0.search(for: term, quran: quran) }
-            }
-            .map {
-                $0.filter { !$0.items.isEmpty }
-            }
-            .then { results -> Promise<[SearchResults]> in
-                if !results.isEmpty {
-                    return .value(results)
-                }
-                return translationsSearcher.search(for: term, quran: quran)
-            }
-            .map {
-                $0.filter { !$0.items.isEmpty }
-            }
+        let searchResults = try await simpleSearchers.asyncMap { searcher in
+            try await searcher.search(for: term, quran: quran)
+        }
+        var results = searchResults.flatMap { $0 }
+        results = results.filter { !$0.items.isEmpty } // Remove empty search results
+        if results.isEmpty {
+            results = try await translationsSearcher.search(for: term, quran: quran)
+        }
+        return results.filter { !$0.items.isEmpty } // Remove empty search results
     }
 }

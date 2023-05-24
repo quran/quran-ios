@@ -15,21 +15,21 @@ struct PersistenceSearcher: Searcher {
     private let termProcessor = SearchTermProcessor()
     private let resultsProcessor = SearchResultsProcessor()
 
-    func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
         let processedTerm = termProcessor.prepareSearchTermForAutocompletion(term)
         if processedTerm.isEmpty {
             return []
         }
-        let matches = try versePersistence.autocomplete(term: processedTerm)
+        let matches = try await versePersistence.autocomplete(term: processedTerm)
         return resultsProcessor.buildAutocompletions(searchResults: matches, term: processedTerm)
     }
 
-    func search(for term: String, quran: Quran) throws -> [SearchResults] {
+    func search(for term: String, quran: Quran) async throws -> [SearchResults] {
         let processedTerm = termProcessor.prepareSearchTermForSearching(term)
         if processedTerm.searchTerm.isEmpty {
             return []
         }
-        let matches = try versePersistence.search(for: processedTerm.searchTerm, quran: quran)
+        let matches = try await versePersistence.search(for: processedTerm.searchTerm, quran: quran)
         let items = resultsProcessor.buildSearchResults(searchRegex: processedTerm.pattern, verses: matches)
         return [SearchResults(source: source, items: items)]
     }

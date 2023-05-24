@@ -1,13 +1,13 @@
 //
 //  GRDBWordTextPersistence.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-23.
 //
 
+import Foundation
 import GRDB
 import SQLitePersistence
-import Foundation
 
 struct GRDBWordTextPersistence: WordTextPersistence {
     let db: DatabaseWriter
@@ -31,8 +31,8 @@ struct GRDBWordTextPersistence: WordTextPersistence {
     private func wordText(at word: Word) async throws -> GRDBWord? {
         try await db.read { db in
             let query = GRDBWord.filter(GRDBWord.Columns.sura == word.verse.sura.suraNumber
-                                        && GRDBWord.Columns.ayah == word.verse.ayah
-                                        && GRDBWord.Columns.word == word.wordNumber)
+                && GRDBWord.Columns.ayah == word.verse.ayah
+                && GRDBWord.Columns.word == word.wordNumber)
 
             let words = try query.fetchAll(db)
 
@@ -43,7 +43,6 @@ struct GRDBWordTextPersistence: WordTextPersistence {
             return words[0]
         }
     }
-
 }
 
 private struct GRDBWord: Decodable, FetchableRecord, TableRecord {
@@ -62,12 +61,12 @@ private struct GRDBWord: Decodable, FetchableRecord, TableRecord {
     }
 
     enum Columns {
-            static let word = Column(CodingKeys.word)
-            static let translation = Column(CodingKeys.translation)
-            static let transliteration = Column(CodingKeys.transliteration)
-            static let sura = Column(CodingKeys.sura)
-            static let ayah = Column(CodingKeys.ayah)
-        }
+        static let word = Column(CodingKeys.word)
+        static let translation = Column(CodingKeys.translation)
+        static let transliteration = Column(CodingKeys.transliteration)
+        static let sura = Column(CodingKeys.sura)
+        static let ayah = Column(CodingKeys.ayah)
+    }
 
     static let databaseTableName: String = "words"
 }

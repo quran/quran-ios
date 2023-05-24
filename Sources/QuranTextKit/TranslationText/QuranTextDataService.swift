@@ -46,8 +46,12 @@ public struct QuranTextDataService {
 
     public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {
         DispatchQueue.global().asyncPromise {
-            try await textForVerses(verses, translations: { try await localTranslations() })
+            try await textForVerses(verses)
         }
+    }
+
+    public func textForVerses(_ verses: [AyahNumber]) async throws -> TranslatedVerses {
+        try await textForVerses(verses, translations: { try await localTranslations() })
     }
 
     public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) -> Promise<TranslatedVerses> {
@@ -105,7 +109,7 @@ public struct QuranTextDataService {
     }
 
     private func retrieveArabicText(verses: [AyahNumber]) async throws -> [String] {
-        let versesText = try arabicPersistence.textForVerses(verses)
+        let versesText = try await arabicPersistence.textForVerses(verses)
         var verseTextList: [String] = []
         for verse in verses {
             let text = versesText[verse]!
@@ -138,12 +142,15 @@ public struct QuranTextDataService {
         }
     }
 
-    private func fetchTranslation(verses: [AyahNumber], translation: Translation) async -> (Translation, [TranslationText]) {
+    private func fetchTranslation(
+        verses: [AyahNumber],
+        translation: Translation
+    ) async -> (Translation, [TranslationText]) {
         let translationPersistence = translationsPersistenceBuilder(translation)
 
         var verseTextList: [TranslationText] = []
         do {
-            let versesText = try translationPersistence.textForVerses(verses)
+            let versesText = try await translationPersistence.textForVerses(verses)
             for verse in verses {
                 let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
                 verseTextList.append(translationText(text))

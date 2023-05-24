@@ -56,8 +56,8 @@
 "menu.pointer" = "Con trỏ dịch từ";
 "menu.pointer.select_translation" = "Hiển thị con trỏ";
 "menu.fontSizeLetter" = "A";
-"menu.translationFontSize" = "Kích thước Bản dịch";
-"menu.arabicFontSize" = "Kích thước Quran";
+"menu.translationFontSize" = "Cỡ chữ Bản dịch";
+"menu.arabicFontSize" = "Cỡ chữ Quran";
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
 "menu.verticalScrolling" = "Cuộn dọc";
 

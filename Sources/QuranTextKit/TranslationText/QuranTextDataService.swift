@@ -24,7 +24,7 @@ public struct QuranTextDataService {
     private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
     public init(databasesPath: String, quranFileURL: URL) {
-        self.init(databasesPath: databasesPath, arabicPersistence: SQLiteQuranVerseTextPersistence(fileURL: quranFileURL))
+        self.init(databasesPath: databasesPath, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
     }
 
     init(databasesPath: String, arabicPersistence: VerseTextPersistence) {

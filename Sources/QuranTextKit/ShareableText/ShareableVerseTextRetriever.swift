@@ -31,7 +31,7 @@ public struct ShareableVerseTextRetriever {
 
     public init(databasesPath: String, quranFileURL: URL) {
         textService = QuranTextDataService(databasesPath: databasesPath, quranFileURL: quranFileURL)
-        shareableVersePersistence = SQLiteQuranVerseTextPersistence(mode: .share, fileURL: quranFileURL)
+        shareableVersePersistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: quranFileURL)
     }
 
     init(textService: QuranTextDataService,
@@ -65,7 +65,7 @@ public struct ShareableVerseTextRetriever {
 
     private func arabicScript(for verses: [AyahNumber]) async throws -> [String] {
         // TODO: improve performance by parallize the loading
-        let arabicAyahsText = try await verses.asyncMap { try await self.arabicText(for: $0) }
+        let arabicAyahsText = try await verses.asyncMap { try await arabicText(for: $0) }
             .joined(separator: " ")
         return [arabicAyahsText]
     }

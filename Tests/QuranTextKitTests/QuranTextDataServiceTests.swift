@@ -28,7 +28,7 @@ final class QuranTextDataServiceTests: XCTestCase {
 
         localTranslationsFake = LocalTranslationsFake()
         let localtranslationsRetriever = localTranslationsFake.retriever
-        let persistence = SQLiteQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
+        let persistence = GRDBQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
         textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
                                            arabicPersistence: persistence,
                                            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)

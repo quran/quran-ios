@@ -52,7 +52,7 @@ struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
     }
 
     private func textFromRow(_ row: Row, quran: Quran) -> String {
-        return row["text"]
+        row["text"]
     }
 }
 
@@ -67,19 +67,19 @@ struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
     }
 
     func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: RawTranslationText] {
-        return try await persistence.textForVerses(verses, transform: textFromRow)
+        try await persistence.textForVerses(verses, transform: textFromRow)
     }
 
     func textForVerse(_ verse: AyahNumber) async throws -> RawTranslationText {
-        return try await persistence.textForVerse(verse, transform: textFromRow)
+        try await persistence.textForVerse(verse, transform: textFromRow)
     }
 
     func autocomplete(term: String) async throws -> [String] {
-        return try await persistence.autocomplete(term: term)
+        try await persistence.autocomplete(term: term)
     }
 
     func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
-        return try await persistence.search(for: term, quran: quran)
+        try await persistence.search(for: term, quran: quran)
     }
 
     private func textFromRow(_ row: Row, quran: Quran) throws -> RawTranslationText {

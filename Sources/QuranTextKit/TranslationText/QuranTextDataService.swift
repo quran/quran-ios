@@ -31,7 +31,7 @@ public struct QuranTextDataService {
         self.init(localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
                   arabicPersistence: arabicPersistence,
                   translationsPersistenceBuilder: { translation in
-                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL)
+                      GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
                   })
     }
 

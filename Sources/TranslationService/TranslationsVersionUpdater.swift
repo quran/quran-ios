@@ -19,7 +19,6 @@
 //
 
 import BatchDownloader
-import PromiseKit
 import SystemDependencies
 
 typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence

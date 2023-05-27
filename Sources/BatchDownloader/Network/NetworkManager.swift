@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PromiseKit
 
 public final class NetworkManager {
     private let session: NetworkSession
@@ -19,19 +18,6 @@ public final class NetworkManager {
     init(session: NetworkSession, baseURL: URL) {
         self.session = session
         self.baseURL = baseURL
-    }
-
-    public func request(_ path: String, parameters: [(String, String)] = []) -> Promise<Data> {
-        Promise { resolver in
-            Task {
-                do {
-                    let data = try await request(path, parameters: parameters)
-                    resolver.fulfill(data)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
-        }
     }
 
     public func request(_ path: String, parameters: [(String, String)] = []) async throws -> Data {
@@ -51,6 +37,3 @@ public final class NetworkManager {
         return URLRequest(url: components.url!)
     }
 }
-
-// TODO: Remove PromiseKit
-extension Resolver: @unchecked Sendable { }

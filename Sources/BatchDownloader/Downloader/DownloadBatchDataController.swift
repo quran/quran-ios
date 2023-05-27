@@ -120,7 +120,7 @@ actor DownloadBatchDataController {
             guard let self else {
                 return
             }
-            await self.cleanUpForCompletedBatch(response)
+            await cleanUpForCompletedBatch(response)
         }
 
         return response

@@ -52,7 +52,7 @@ class TranslationsRepositoryTests: XCTestCase {
         try nextResponse(TranslationsResponse(
             data: translations.map { TranslationResponse($0) }))
 
-        try wait(for: service.downloadAndSyncTranslations())
+        try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
         let expectedTranslations = translations.map {
@@ -75,11 +75,10 @@ class TranslationsRepositoryTests: XCTestCase {
         )
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
-        let result = service.downloadAndSyncTranslations()
-        try wait(for: result)
+        try await service.downloadAndSyncTranslations()
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(updatedTranslation)]))
-        try wait(for: service.downloadAndSyncTranslations())
+        try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
         XCTAssertEqual(localResults, [updatedTranslation])
@@ -100,11 +99,10 @@ class TranslationsRepositoryTests: XCTestCase {
         )
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
-        let result = service.downloadAndSyncTranslations()
-        try wait(for: result)
+        try await service.downloadAndSyncTranslations()
 
         try nextResponse(TranslationsResponse(data: [TranslationResponse(updatedTranslation)]))
-        try wait(for: service.downloadAndSyncTranslations())
+        try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
         XCTAssertEqual(localResults, [updatedTranslation])
@@ -116,7 +114,7 @@ class TranslationsRepositoryTests: XCTestCase {
         let encoder = JSONEncoder()
         let parameters = [("v", "5")]
         let request = NetworkManager.request(baseURL: baseURL,
-                                             path: DefaultTranslationNetworkManager.path,
+                                             path: TranslationNetworkManager.path,
                                              parameters: parameters)
         session.dataResults[request.url!] = .success(try encoder.encode(response))
     }

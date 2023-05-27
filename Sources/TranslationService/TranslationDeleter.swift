@@ -19,7 +19,6 @@
 //
 
 import Foundation
-import PromiseKit
 import SystemDependencies
 
 public struct TranslationDeleter {
@@ -32,25 +31,19 @@ public struct TranslationDeleter {
         self.fileSystem = fileSystem
     }
 
-    public func deleteTranslation(_ translation: Translation) -> Promise<Translation> {
+    public func deleteTranslation(_ translation: Translation) async throws -> Translation {
         // update the selected translations
         selectedTranslationsPreferences.remove(translation.id)
 
-        return DispatchQueue.global()
-            .async(.promise) {
-                // delete from disk
-                translation.possibleFileNames.forEach { fileName in
-                    let url = Translation.localTranslationsURL.appendingPathComponent(fileName)
-                    try? fileSystem.removeItem(at: url)
-                }
-            }
-            .then { () -> Promise<Translation> in
-                DispatchQueue.global().asyncPromise {
-                    var translation = translation
-                    translation.installedVersion = nil
-                    try await persistence.update(translation)
-                    return translation
-                }
-            }
+        // delete from disk
+        translation.possibleFileNames.forEach { fileName in
+            let url = Translation.localTranslationsURL.appendingPathComponent(fileName)
+            try? fileSystem.removeItem(at: url)
+        }
+
+        var translation = translation
+        translation.installedVersion = nil
+        try await persistence.update(translation)
+        return translation
     }
 }

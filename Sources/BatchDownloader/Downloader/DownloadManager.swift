@@ -31,7 +31,7 @@ public final class DownloadManager: Sendable {
     public convenience init(
         maxSimultaneousDownloads: Int,
         configuration: URLSessionConfiguration,
-        downloadsPath: String
+        downloadsURL: URL
     ) async {
         await self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
                         sessionFactory: {
@@ -39,7 +39,7 @@ public final class DownloadManager: Sendable {
                                        delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
                                        delegateQueue: $1)
                         },
-                        persistence: GRDBDownloadsPersistence(filePath: downloadsPath))
+                        persistence: GRDBDownloadsPersistence(fileURL: downloadsURL))
     }
 
     init(

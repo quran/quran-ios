@@ -156,7 +156,7 @@ extension NetworkSessionFake {
         try? FileManager.default.createDirectory(at: NetworkSessionFake.downloadsURL, withIntermediateDirectories: true)
         let downloadsDBURL = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db")
 
-        let persistence = GRDBDownloadsPersistence(filePath: downloadsDBURL.path)
+        let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBURL)
         var session: NetworkSessionFake!
         let downloader = await DownloadManager(
             maxSimultaneousDownloads: maxSimultaneousDownloads,

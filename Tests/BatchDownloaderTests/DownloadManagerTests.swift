@@ -28,6 +28,8 @@ final class DownloadManagerTests: XCTestCase {
 
     override func tearDown() async throws {
         try await super.tearDown()
+        downloader = nil
+        session = nil
         NetworkSessionFake.tearDown()
     }
 

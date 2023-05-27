@@ -26,13 +26,13 @@ public struct TranslationsRepository {
     let networkManager: TranslationNetworkManager
     let persistence: ActiveTranslationsPersistence
 
-    public init(databasesPath: String, baseURL: URL) {
-        self.init(databasesPath: databasesPath, networkManager: NetworkManager(session: .shared, baseURL: baseURL))
+    public init(databasesURL: URL, baseURL: URL) {
+        self.init(databasesURL: databasesURL, networkManager: NetworkManager(session: .shared, baseURL: baseURL))
     }
 
-    init(databasesPath: String, networkManager: NetworkManager) {
+    init(databasesURL: URL, networkManager: NetworkManager) {
         self.networkManager = DefaultTranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
-        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
     }
 
     public func downloadAndSyncTranslations() -> Promise<Void> {

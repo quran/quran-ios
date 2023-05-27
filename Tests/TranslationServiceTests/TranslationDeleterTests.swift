@@ -34,7 +34,7 @@ class TranslationDeleterTests: XCTestCase {
         super.setUp()
         localTranslationsFake = LocalTranslationsFake(useFactory: true)
         service = TranslationDeleter(
-            databasesPath: LocalTranslationsFake.databasesPath,
+            databasesURL: LocalTranslationsFake.databasesURL,
             fileSystem: fileSystem
         )
     }
@@ -43,6 +43,8 @@ class TranslationDeleterTests: XCTestCase {
         super.tearDown()
         localTranslationsFake.tearDown()
         preferences.reset()
+        localTranslationsFake = nil
+        service = nil
     }
 
     func test_deleteDownloadedTranslation() async throws {

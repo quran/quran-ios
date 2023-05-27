@@ -141,6 +141,10 @@ let package = Package(
             .product(name: "SQLite", package: "SQLite.swift"),
             .product(name: "GRDB", package: "GRDB.swift"),
         ]),
+        .testTarget(name: "SQLitePersistenceTests", dependencies: [
+            "SQLitePersistence",
+            "TestUtilities",
+        ]),
 
         .target(name: "Caching", dependencies: [
             "Locking",

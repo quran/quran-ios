@@ -27,6 +27,9 @@ class TranslationsDownloaderTests: XCTestCase {
 
     override func tearDownWithError() throws {
         NetworkSessionFake.tearDown()
+        downloader = nil
+        batchDownloader = nil
+        session = nil
     }
 
     func test_download_newTranslation() async throws {

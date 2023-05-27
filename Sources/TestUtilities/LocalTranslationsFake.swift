@@ -10,7 +10,7 @@ import SystemDependenciesFake
 @testable import TranslationService
 
 public struct LocalTranslationsFake {
-    public static let databasesPath = FileManager.documentsPath.stringByAppendingPath("databases")
+    public static let databasesURL = FileManager.documentsURL.appendingPathComponent("databases", isDirectory: true)
 
     let preferences = SelectedTranslationsPreferences.shared
     public let fileSystem = FileSystemFake()
@@ -19,20 +19,20 @@ public struct LocalTranslationsFake {
     public let retriever: LocalTranslationsRetriever
 
     public init(useFactory: Bool = false) {
-        persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesURL)
         if useFactory {
             let persistenceFactory = { (translation: Translation) in
                 let url = TestResources.resourceURL(translation.fileName)
-                return try GRDBDatabaseVersionPersistence(fileURL: url)
+                return GRDBDatabaseVersionPersistence(fileURL: url)
             }
-            retriever = LocalTranslationsRetriever(databasesPath: Self.databasesPath, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
+            retriever = LocalTranslationsRetriever(databasesURL: Self.databasesURL, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
         } else {
-            retriever = LocalTranslationsRetriever(databasesPath: Self.databasesPath, fileSystem: fileSystem)
+            retriever = LocalTranslationsRetriever(databasesURL: Self.databasesURL, fileSystem: fileSystem)
         }
     }
 
     public func tearDown() {
-        try? FileManager.default.removeItem(atPath: Self.databasesPath)
+        try? FileManager.default.removeItem(at: Self.databasesURL)
     }
 
     public func setTranslations(_ translations: [Translation]) async throws {

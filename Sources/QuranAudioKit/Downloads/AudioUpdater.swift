@@ -142,7 +142,7 @@ public final class AudioUpdater {
 
     private func getDatabaseVersion(fileURL: URL) async -> Int? {
         do {
-            let persistence = try GRDBAyahTimingPersistence(fileURL: fileURL)
+            let persistence = GRDBAyahTimingPersistence(fileURL: fileURL)
             return try await persistence.getVersion()
         } catch {
             logger.error("Error accessing the timing database. Error: \(error)")

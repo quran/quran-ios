@@ -11,14 +11,14 @@ import QuranKit
 import SQLitePersistence
 
 struct GRDBWordFramePersistence: WordFramePersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
-    init(db: DatabaseWriter) {
+    init(db: DatabaseConnection) {
         self.db = db
     }
 
     init(fileURL: URL) {
-        self.init(db: DatabasePool.unsafeNewInstance(filePath: fileURL.path, readOnly: true))
+        self.init(db: DatabaseConnection(url: fileURL))
     }
 
     func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {

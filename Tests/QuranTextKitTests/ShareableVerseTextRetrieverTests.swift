@@ -48,6 +48,9 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         localTranslationsFake.tearDown()
+        localTranslationsFake = nil
+        textService = nil
+        shareableTextRetriever = nil
     }
 
     func testShareArabicText() throws {

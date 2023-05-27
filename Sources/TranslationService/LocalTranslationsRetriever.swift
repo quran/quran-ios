@@ -13,19 +13,19 @@ public struct LocalTranslationsRetriever {
     let persistence: ActiveTranslationsPersistence
     let versionUpdater: TranslationsVersionUpdater
 
-    public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
+    public init(databasesURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
         let versionPersistenceFactory = { (translation: Translation) in
-            try GRDBDatabaseVersionPersistence(fileURL: translation.localURL)
+            GRDBDatabaseVersionPersistence(fileURL: translation.localURL)
         }
 
-        self.init(databasesPath: databasesPath, fileSystem: fileSystem,
+        self.init(databasesURL: databasesURL, fileSystem: fileSystem,
                   versionPersistenceFactory: versionPersistenceFactory)
     }
 
-    init(databasesPath: String, fileSystem: FileSystem,
+    init(databasesURL: URL, fileSystem: FileSystem,
          versionPersistenceFactory: @escaping VersionPersistenceFactory)
     {
-        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
         versionUpdater = TranslationsVersionUpdater(
             persistence: persistence,
             versionPersistenceFactory: versionPersistenceFactory,

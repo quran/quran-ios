@@ -9,11 +9,11 @@
 import Foundation
 
 protocol AyahTimingPersistenceFactory {
-    func persistenceForURL(_ url: URL) throws -> AyahTimingPersistence
+    func persistenceForURL(_ url: URL) -> AyahTimingPersistence
 }
 
 struct DefaultAyahTimingPersistenceFactory: AyahTimingPersistenceFactory {
-    func persistenceForURL(_ url: URL) throws -> AyahTimingPersistence {
-        try GRDBAyahTimingPersistence(fileURL: url)
+    func persistenceForURL(_ url: URL) -> AyahTimingPersistence {
+        GRDBAyahTimingPersistence(fileURL: url)
     }
 }

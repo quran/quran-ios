@@ -29,7 +29,7 @@ struct ReciterTimingRetriever {
             fatalError("Gapped reciters are not supported.")
         }
         let fileURL = reciter.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-        let persistence = try persistenceFactory.persistenceForURL(fileURL)
+        let persistence = persistenceFactory.persistenceForURL(fileURL)
 
         var result: [Sura: SuraTiming] = [:]
         for sura in suras {

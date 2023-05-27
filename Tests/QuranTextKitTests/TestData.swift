@@ -17,7 +17,7 @@ struct TestData {
 
     static let translationsPersistenceBuilder = { (translation: Translation) -> TranslationVerseTextPersistence in
         let url = TestResources.resourceURL(translation.fileName)
-        return SQLiteTranslationVerseTextPersistence(fileURL: url)
+        return GRDBTranslationVerseTextPersistence(fileURL: url)
     }
 
     static let quranTextURL = TestResources.resourceURL("quran.ar.uthmani.v2.db")

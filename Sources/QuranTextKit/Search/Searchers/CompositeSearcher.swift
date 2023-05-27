@@ -38,7 +38,7 @@ public struct CompositeSearcher: Searcher {
         self.init(quranVerseTextPersistence: persistence,
                   localTranslationRetriever: localTranslationRetriever,
                   versePersistenceBuilder: { translation in
-                      SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL)
+                      GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
                   })
     }
 

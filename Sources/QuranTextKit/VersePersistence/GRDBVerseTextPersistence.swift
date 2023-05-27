@@ -91,8 +91,8 @@ struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
             } else {
                 return .string(stringText)
             }
-        } else if let verseId = value as? Int {
-            return referenceVerse(verseId, quran: quran)
+        } else if let verseId = value as? Int64 {
+            return referenceVerse(Int(verseId), quran: quran)
         }
         throw PersistenceError.general("Text for verse is neither Int nor String. File: \(fileURL.lastPathComponent)")
     }

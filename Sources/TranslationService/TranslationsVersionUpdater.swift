@@ -22,7 +22,7 @@ import BatchDownloader
 import PromiseKit
 import SystemDependencies
 
-typealias VersionPersistenceFactory = (Translation) throws -> DatabaseVersionPersistence
+typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence
 
 struct TranslationsVersionUpdater {
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
@@ -44,7 +44,7 @@ struct TranslationsVersionUpdater {
         // installed on the latest version & the db file exists
         if translation.version != translation.installedVersion, isReachable {
             do {
-                let versionPersistence = try versionPersistenceFactory(translation)
+                let versionPersistence = versionPersistenceFactory(translation)
                 let version = try await versionPersistence.getTextVersion()
                 translation.installedVersion = version
             } catch {

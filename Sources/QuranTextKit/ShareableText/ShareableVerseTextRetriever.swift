@@ -29,8 +29,8 @@ public struct ShareableVerseTextRetriever {
     private let textService: QuranTextDataService
     private let shareableVersePersistence: VerseTextPersistence
 
-    public init(databasesPath: String, quranFileURL: URL) {
-        textService = QuranTextDataService(databasesPath: databasesPath, quranFileURL: quranFileURL)
+    public init(databasesURL: URL, quranFileURL: URL) {
+        textService = QuranTextDataService(databasesURL: databasesURL, quranFileURL: quranFileURL)
         shareableVersePersistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: quranFileURL)
     }
 

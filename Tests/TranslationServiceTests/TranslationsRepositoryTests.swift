@@ -36,7 +36,7 @@ class TranslationsRepositoryTests: XCTestCase {
         session = NetworkSessionFake(queue: .main, delegate: nil)
         localTranslationsFake = LocalTranslationsFake(useFactory: true)
         service = TranslationsRepository(
-            databasesPath: LocalTranslationsFake.databasesPath,
+            databasesURL: LocalTranslationsFake.databasesURL,
             networkManager: NetworkManager(session: session, baseURL: baseURL)
         )
     }
@@ -44,6 +44,8 @@ class TranslationsRepositoryTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         localTranslationsFake.tearDown()
+        service = nil
+        localTranslationsFake = nil
     }
 
     func test_firstTimeDownload() async throws {

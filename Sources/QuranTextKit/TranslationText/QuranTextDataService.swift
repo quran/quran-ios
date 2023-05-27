@@ -23,12 +23,12 @@ public struct QuranTextDataService {
     // regex to detect footer notes in translation text
     private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
-    public init(databasesPath: String, quranFileURL: URL) {
-        self.init(databasesPath: databasesPath, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
+    public init(databasesURL: URL, quranFileURL: URL) {
+        self.init(databasesURL: databasesURL, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
     }
 
-    init(databasesPath: String, arabicPersistence: VerseTextPersistence) {
-        self.init(localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesPath: databasesPath),
+    init(databasesURL: URL, arabicPersistence: VerseTextPersistence) {
+        self.init(localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
                   arabicPersistence: arabicPersistence,
                   translationsPersistenceBuilder: { translation in
                       SQLiteTranslationVerseTextPersistence(fileURL: translation.localURL)

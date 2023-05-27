@@ -27,8 +27,8 @@ public struct TranslationDeleter {
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     let fileSystem: FileSystem
 
-    public init(databasesPath: String, fileSystem: FileSystem = DefaultFileSystem()) {
-        persistence = GRDBActiveTranslationsPersistence(directory: databasesPath)
+    public init(databasesURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
         self.fileSystem = fileSystem
     }
 

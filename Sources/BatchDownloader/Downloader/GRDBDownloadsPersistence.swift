@@ -11,9 +11,9 @@ import SQLitePersistence
 import VLogging
 
 struct GRDBDownloadsPersistence: DownloadsPersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
-    init(db: DatabaseWriter) {
+    init(db: DatabaseConnection) {
         self.db = db
         do {
             try migrator.migrate(db)
@@ -23,7 +23,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
     }
 
     init(fileURL: URL) {
-        self.init(db: DatabasePool.unsafeNewInstance(filePath: fileURL.path))
+        self.init(db: DatabaseConnection(url: fileURL))
     }
 
     private var migrator: DatabaseMigrator {

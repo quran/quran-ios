@@ -10,14 +10,14 @@ import GRDB
 import SQLitePersistence
 
 struct GRDBWordTextPersistence: WordTextPersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
-    init(db: DatabaseWriter) {
+    init(db: DatabaseConnection) {
         self.db = db
     }
 
     init(fileURL: URL) {
-        self.init(db: DatabasePool.unsafeNewInstance(filePath: fileURL.path, readOnly: true))
+        self.init(db: DatabaseConnection(url: fileURL))
     }
 
     func translationForWord(_ word: Word) async throws -> String? {

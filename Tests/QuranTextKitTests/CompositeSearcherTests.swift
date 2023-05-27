@@ -40,6 +40,8 @@ class CompositeSearcherTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         localTranslationsFake.tearDown()
+        localTranslationsFake = nil
+        searcher = nil
     }
 
     func testAutocompleteNumbers() async throws {

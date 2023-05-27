@@ -53,6 +53,13 @@
         "identifier" : "TranslationServiceTests",
         "name" : "TranslationServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SQLitePersistenceTests",
+        "name" : "SQLitePersistenceTests"
+      }
     }
   ],
   "version" : 1

@@ -10,14 +10,14 @@ import GRDB
 import SQLitePersistence
 
 struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
-    init(db: DatabaseWriter) {
+    init(db: DatabaseConnection) {
         self.db = db
     }
 
-    init(fileURL: URL) throws {
-        self.init(db: try DatabasePool.newInstance(filePath: fileURL.path, readOnly: true))
+    init(fileURL: URL) {
+        self.init(db: DatabaseConnection(url: fileURL))
     }
 
     func getTextVersion() async throws -> Int {

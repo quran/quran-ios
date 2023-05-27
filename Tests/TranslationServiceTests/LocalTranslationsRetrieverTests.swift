@@ -40,6 +40,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
         super.tearDown()
         localTranslationsFake.tearDown()
         preferences.reset()
+        localTranslationsFake = nil
     }
 
     func test_retrievingLocalTranslations_allDownloaded() async throws {

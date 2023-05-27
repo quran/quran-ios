@@ -42,6 +42,8 @@ final class QuranTextDataServiceTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         localTranslationsFake.tearDown()
+        localTranslationsFake = nil
+        textService = nil
     }
 
     func testArabicNoTranslation() throws {

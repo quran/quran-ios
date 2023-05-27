@@ -11,9 +11,9 @@ import SQLitePersistence
 import VLogging
 
 struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
-    init(db: DatabaseWriter) {
+    init(db: DatabaseConnection) {
         self.db = db
         do {
             try migrator.migrate(db)
@@ -22,9 +22,9 @@ struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
         }
     }
 
-    init(directory: String) {
-        let filePath = directory.stringByAppendingPath("translations.db")
-        self.init(db: DatabasePool.unsafeNewInstance(filePath: filePath))
+    init(directory: URL) {
+        let fileURL = directory.appendingPathComponent("translations.db", isDirectory: false)
+        self.init(db: DatabaseConnection(url: fileURL))
     }
 
     private var migrator: DatabaseMigrator {

@@ -107,18 +107,18 @@ struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
 // MARK: - Helper
 
 private struct GRDBVerseTextPersistence {
-    let db: DatabaseWriter
+    let db: DatabaseConnection
 
     private let textTable: String
     private let searchTable = "verses"
 
-    init(db: DatabaseWriter, textTable: String) {
+    init(db: DatabaseConnection, textTable: String) {
         self.db = db
         self.textTable = textTable
     }
 
     init(fileURL: URL, textTable: String) {
-        self.init(db: DatabasePool.unsafeNewInstance(filePath: fileURL.path, readOnly: true), textTable: textTable)
+        self.init(db: DatabaseConnection(url: fileURL), textTable: textTable)
     }
 
     func textForVerse<T>(_ verse: AyahNumber, transform: @escaping (Row, Quran) throws -> T) async throws -> T {

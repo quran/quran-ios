@@ -8,7 +8,7 @@
 import Crashing
 import Foundation
 
-protocol NetworkSession: Sendable {
+protocol NetworkSession: AnyObject, Sendable {
     var delegateQueue: OperationQueue { get }
     func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask

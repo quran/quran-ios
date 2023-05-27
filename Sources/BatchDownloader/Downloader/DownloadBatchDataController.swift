@@ -30,7 +30,7 @@ func describe(_ task: NetworkSessionTask) -> String {
 actor DownloadBatchDataController {
     private let maxSimultaneousDownloads: Int
     private let persistence: DownloadsPersistence
-    private var session: NetworkSession?
+    private weak var session: NetworkSession?
 
     private var runningDownloads: [Int: DownloadResponse] = [:]
     private var batches: Set<DownloadBatchResponse> = []
@@ -115,20 +115,26 @@ actor DownloadBatchDataController {
         let response = await DownloadBatchResponse(batchId: batch.id, responses: responses)
         batches.insert(response)
 
-        Task {
-            await completeBatch(response)
+        Task { [weak self] in
+            await Self.completeBatch(response)
+            guard let self else {
+                return
+            }
+            await self.cleanUpForCompletedBatch(response)
         }
 
         return response
     }
 
-    private func completeBatch(_ response: DownloadBatchResponse) async {
+    private static func completeBatch(_ response: DownloadBatchResponse) async {
         do {
             try await response.completion()
         } catch {
             logger.error("Batch failed to download with error: \(error)")
         }
+    }
 
+    private func cleanUpForCompletedBatch(_ response: DownloadBatchResponse) async {
         // delete the completed response
         batches.remove(response)
         await run("DeleteBatch") { try await $0.delete(batchIds: [response.batchId]) }

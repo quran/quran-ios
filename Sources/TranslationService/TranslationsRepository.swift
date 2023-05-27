@@ -20,7 +20,6 @@
 
 import BatchDownloader
 import Foundation
-import PromiseKit
 
 public struct TranslationsRepository {
     let networkManager: TranslationNetworkManager
@@ -31,23 +30,16 @@ public struct TranslationsRepository {
     }
 
     init(databasesURL: URL, networkManager: NetworkManager) {
-        self.networkManager = DefaultTranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
+        self.networkManager = TranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
         persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
     }
 
-    public func downloadAndSyncTranslations() -> Promise<Void> {
-        let local = DispatchQueue.global().asyncPromise {
-            try await persistence.retrieveAll()
-        }
-        let remote = networkManager.getTranslations()
+    public func downloadAndSyncTranslations() async throws {
+        async let local = persistence.retrieveAll()
+        async let remote = networkManager.getTranslations()
 
-        return when(fulfilled: local, remote) // get local and remote
-            .map(combine) // combine local and remote
-            .then { translations, map in
-                DispatchQueue.global().asyncPromise {
-                    try await saveCombined(translations: translations, localMap: map)
-                }
-            }
+        let (translations, map) = try await combine(local: local, remote: remote)
+        try await saveCombined(translations: translations, localMap: map)
     }
 
     private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {

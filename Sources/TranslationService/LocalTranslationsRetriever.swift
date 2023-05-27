@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PromiseKit
 import SystemDependencies
 
 public struct LocalTranslationsRetriever {
@@ -32,12 +31,6 @@ public struct LocalTranslationsRetriever {
             unzipper: DefaultTranslationUnzipper(),
             fileSystem: fileSystem
         )
-    }
-
-    public func getLocalTranslations() -> Promise<[Translation]> {
-        DispatchQueue.global().asyncPromise {
-            try await getLocalTranslations()
-        }
     }
 
     public func getLocalTranslations() async throws -> [Translation] {

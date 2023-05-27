@@ -56,7 +56,7 @@ class TranslationDeleterTests: XCTestCase {
         let initialLocalTranslations = try await retriever.getLocalTranslations()
         XCTAssertEqual(initialLocalTranslations, [translation])
 
-        let deletedTranslation = try wait(for: service.deleteTranslation(translation))
+        let deletedTranslation = try await service.deleteTranslation(translation)
 
         var expected = translation
         expected.installedVersion = nil
@@ -77,7 +77,7 @@ class TranslationDeleterTests: XCTestCase {
         let initialLocalTranslations = try await retriever.getLocalTranslations()
         XCTAssertEqual(initialLocalTranslations, [translation])
 
-        let deletedTranslation = try wait(for: service.deleteTranslation(translation))
+        let deletedTranslation = try await service.deleteTranslation(translation)
 
         var expected = translation
         expected.installedVersion = nil
@@ -100,7 +100,7 @@ class TranslationDeleterTests: XCTestCase {
         let initialLocalTranslations = try await retriever.getLocalTranslations()
         XCTAssertEqual(initialLocalTranslations, [translation])
 
-        let deletedTranslation = try wait(for: service.deleteTranslation(translation))
+        let deletedTranslation = try await service.deleteTranslation(translation)
 
         XCTAssertEqual(translation, deletedTranslation)
         XCTAssertEqual(fileSystem.removedItems, [translation.localURL])

@@ -19,28 +19,28 @@ class NetworkManagerTests: XCTestCase {
         networkManager = NetworkManager(session: session, baseURL: baseURL)
     }
 
-    func testRequestCompletedSuccessfully() throws {
+    func testRequestCompletedSuccessfully() async throws {
         let path = "v1/products"
         let parameters = [("sort", "newest")]
         let request = NetworkManager.request(baseURL: baseURL, path: path, parameters: parameters)
         let body = "product1"
         session.dataResults[request.url!] = .success(body.data(using: .utf8)!)
 
-        let result = try wait(for: networkManager.request(path, parameters: parameters))
+        let result = try await networkManager.request(path, parameters: parameters)
         XCTAssertEqual(String(data: result, encoding: .utf8), body)
     }
 
-    func testRequestFailure() throws {
+    func testRequestFailure() async throws {
         let path = "v1/products"
         let parameters = [("sort", "newest")]
         let request = NetworkManager.request(baseURL: baseURL, path: path, parameters: parameters)
         let error = FileSystemError(error: CocoaError(.coderReadCorrupt))
         session.dataResults[request.url!] = .failure(error)
 
-        let promise = networkManager.request(path, parameters: parameters)
+        let result = await Result { try await networkManager.request(path, parameters: parameters) }
 
         assert(
-            try wait(for: promise),
+            try result.get(),
             throws: NetworkError.unknown(error) as NSError
         )
     }

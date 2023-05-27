@@ -6,20 +6,15 @@
 //
 
 import BatchDownloader
-import PromiseKit
 
-protocol TranslationNetworkManager {
-    func getTranslations() -> Promise<[Translation]>
-}
-
-struct DefaultTranslationNetworkManager: TranslationNetworkManager {
+struct TranslationNetworkManager {
     static let path = "/data/translations.php"
 
     let networkManager: NetworkManager
     let parser: TranslationsParser
 
-    func getTranslations() -> Promise<[Translation]> {
-        networkManager.request(Self.path, parameters: [("v", "5")])
-            .map(parser.parse)
+    func getTranslations() async throws -> [Translation] {
+        let data = try await networkManager.request(Self.path, parameters: [("v", "5")])
+        return try parser.parse(data)
     }
 }

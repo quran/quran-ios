@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H15" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="MO_LastPage" representedClassName="MO_LastPage" syncable="YES" codeGenerationType="class">
+        <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="page" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="MO_Note" representedClassName="MO_Note" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <relationship name="verses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MO_Verse" inverseName="note" inverseEntity="MO_Verse"/>
+    </entity>
+    <entity name="MO_PageBookmark" representedClassName="MO_PageBookmark" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="page" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="MO_Verse" representedClassName="MO_Verse" syncable="YES" codeGenerationType="class">
+        <attribute name="ayah" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="sura" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <relationship name="note" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MO_Note" inverseName="verses" inverseEntity="MO_Note"/>
+    </entity>
+    <elements>
+        <element name="MO_LastPage" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="MO_Note" positionX="163.96484375" positionY="-12.609375" width="128" height="118"/>
+        <element name="MO_PageBookmark" positionX="-63.015625" positionY="135.2890625" width="128" height="103"/>
+        <element name="MO_Verse" positionX="145.265625" positionY="200.94921875" width="128" height="88"/>
+    </elements>
+</model>

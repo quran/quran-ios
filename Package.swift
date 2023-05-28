@@ -29,6 +29,8 @@ let package = Package(
 
         // Utilities packages
 
+        .library(name: "CoreDataPersistence", targets: ["CoreDataPersistence"]),
+
         .library(name: "Timing", targets: ["Timing"]),
         .library(name: "Utilities", targets: ["Utilities"]),
         .library(name: "VLogging", targets: ["VLogging"]),
@@ -140,6 +142,23 @@ let package = Package(
         .testTarget(name: "SQLitePersistenceTests", dependencies: [
             "SQLitePersistence",
             "TestUtilities",
+        ]),
+
+        .target(name: "CoreDataModel", dependencies: [
+            "CoreDataPersistence",
+        ]),
+
+        .target(name: "CoreDataPersistence", dependencies: [
+            "Utilities",
+            "VLogging",
+            "Crashing",
+            "PromiseKit",
+            "SystemDependencies",
+        ]),
+        .testTarget(name: "CoreDataPersistenceTests", dependencies: [
+            "CoreDataPersistence",
+            "TestUtilities",
+            "CoreDataModel",
         ]),
 
         .target(name: "Caching", dependencies: [

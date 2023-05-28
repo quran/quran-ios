@@ -78,6 +78,13 @@
         "identifier" : "UtilitiesTests",
         "name" : "UtilitiesTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CoreDataPersistenceTests",
+        "name" : "CoreDataPersistenceTests"
+      }
     }
   ],
   "version" : 1

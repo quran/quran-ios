@@ -51,7 +51,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
-        .package(url: "https://github.com/sideeffect-io/AsyncExtensions", from: "0.5.2"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ],
@@ -124,7 +123,6 @@ let package = Package(
             "SQLitePersistence",
             "Crashing",
             "WeakSet",
-            "AsyncExtensions",
         ],
         swiftSettings: settings),
         .testTarget(name: "BatchDownloaderTests", dependencies: [
@@ -155,10 +153,12 @@ let package = Package(
 
         .target(name: "Utilities", dependencies: [
             "PromiseKit",
-            "AsyncExtensions",
-            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ],
         swiftSettings: settings),
+        .testTarget(name: "UtilitiesTests", dependencies: [
+            "Utilities",
+            "TestUtilities",
+        ]),
 
         .target(name: "Timing", dependencies: [
             "Locking",
@@ -202,6 +202,7 @@ let package = Package(
             "TranslationService",
             "SystemDependenciesFake",
             "Utilities",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ],
         resources: [
             .copy("test_data"),

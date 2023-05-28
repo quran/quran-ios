@@ -67,6 +67,13 @@
         "identifier" : "CachingTests",
         "name" : "CachingTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UtilitiesTests",
+        "name" : "UtilitiesTests"
+      }
     }
   ],
   "version" : 1

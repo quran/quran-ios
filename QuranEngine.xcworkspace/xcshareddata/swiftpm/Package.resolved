@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "AsyncExtensions",
-        "repositoryURL": "https://github.com/sideeffect-io/AsyncExtensions",
-        "state": {
-          "branch": null,
-          "revision": "1f0729e4f1f6c7166acfac3cec43b3cbe83be0e6",
-          "version": "0.5.2"
-        }
-      },
-      {
         "package": "GRDB",
         "repositoryURL": "https://github.com/groue/GRDB.swift",
         "state": {

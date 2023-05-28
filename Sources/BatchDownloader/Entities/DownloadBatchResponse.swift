@@ -18,10 +18,12 @@
 //  GNU General Public License for more details.
 //
 
-import AsyncExtensions
+import Combine
 import Crashing
 import Foundation
 import Utilities
+
+public typealias AsyncPublisher = Utilities.AsyncPublisher
 
 actor DownloadResponse {
     private(set) var download: Download
@@ -37,9 +39,9 @@ actor DownloadResponse {
         self.download = download
     }
 
-    private let progressSubject = AsyncCurrentValueSubject(DownloadProgress(total: 1))
-    var progress: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>> {
-        progressSubject.eraseToOpaqueAsyncSequence()
+    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+    var progress: AsyncPublisher<DownloadProgress> {
+        progressSubject.values()
     }
 
     var currentProgress: DownloadProgress { progressSubject.value }
@@ -95,7 +97,7 @@ actor DownloadResponse {
             task = nil
             download.taskId = nil
             continuations.resume(returning: ())
-            progressSubject.send(.finished)
+            progressSubject.send(completion: .finished)
         }
     }
 
@@ -122,9 +124,9 @@ public actor DownloadBatchResponse {
     let batchId: Int64
     let responses: [DownloadResponse]
 
-    private let progressSubject = AsyncCurrentValueSubject(DownloadProgress(total: 1))
-    public var progress: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>> {
-        progressSubject.eraseToOpaqueAsyncSequence()
+    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+    public var progress: AsyncPublisher<DownloadProgress> {
+        progressSubject.values()
     }
 
     public var currentProgress: DownloadProgress {
@@ -159,7 +161,7 @@ public actor DownloadBatchResponse {
             try await withThrowingTaskGroup(of: Void.self) { taskGroup in
                 defer {
                     // Stop progress resporting, when task completes.
-                    progressSubject.send(.finished)
+                    progressSubject.send(completion: .finished)
                     progressTask.cancel()
                 }
 

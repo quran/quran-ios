@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2022-02-08.
 //
 
-import AsyncExtensions
 import BatchDownloader
 import Locking
 @testable import QuranAudioKit

@@ -6,7 +6,6 @@
 //
 
 import AsyncAlgorithms
-import AsyncExtensions
 import BatchDownloader
 import Utilities
 
@@ -14,7 +13,7 @@ actor HistoryProgressListener {
     var values: [Double] = []
     var cancellable: CancellableTask?
 
-    init(_ subject: OpaqueAsyncSequence<AsyncCurrentValueSubject<DownloadProgress>>) async {
+    init(_ subject: AsyncPublisher<DownloadProgress>) async {
         let taskStarted = AsyncChannel<Void>()
         cancellable = Task {
             await taskStarted.send(())

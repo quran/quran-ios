@@ -73,3 +73,14 @@ public struct Crasher {
         handler.setValue(value, forKey: key)
     }
 }
+
+extension Crasher {
+    public func recordError<T>(_ message: String, _ body: @Sendable () async throws -> T) async throws -> T {
+        do {
+            return try await body()
+        } catch {
+            crasher.recordError(error, reason: message)
+            throw error
+        }
+    }
+}

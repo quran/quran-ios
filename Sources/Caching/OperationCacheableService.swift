@@ -20,57 +20,73 @@
 
 import Foundation
 import Locking
-import PromiseKit
+import Utilities
 
-class OperationCacheableService<Input: Hashable, Output> {
-    private let cache: Cache<Input, Output>
+public typealias CacheableOperation<Input, Output> = @Sendable (Input) async throws -> Output
 
-    private var inProgressOperations: [Input: Promise<Output>] = [:]
-    private let lock = NSLock()
-    private let operation: (Input) -> Promise<Output>
+final class OperationCacheableService<Input: Hashable & Sendable, Output: Sendable>: Sendable {
+    private struct State: Sendable {
+        let cache: Cache<Input, Output>
+        var inProgressOperations: [Input: MulticastContinuation<Output, Error>] = [:]
+    }
 
-    init(cache: Cache<Input, Output>, operation: @escaping (Input) -> Promise<Output>) {
-        self.cache = cache
+    private let state: ManagedCriticalState<State>
+
+    private let operation: CacheableOperation<Input, Output>
+
+    init(cache: Cache<Input, Output>, operation: @escaping CacheableOperation<Input, Output>) {
+        state = ManagedCriticalState(State(cache: cache))
         self.operation = operation
     }
 
     func invalidate() {
-        lock.sync {
-            inProgressOperations.removeAll()
-            cache.removeAllObjects()
+        state.withCriticalRegion { state in
+            state.inProgressOperations.removeAll()
+            state.cache.removeAllObjects()
         }
     }
 
-    func get(_ input: Input) -> Promise<Output> {
-        lock.sync { () -> Promise<Output> in
+    func get(_ input: Input) async throws -> Output {
+        if let cachedValue = getCached(input) {
+            return cachedValue
+        }
 
-            if let result = cache.object(forKey: input) {
-                return Promise.value(result)
-            } else if let promise = inProgressOperations[input] {
-                return promise
-            } else {
-                // create the operation
-                let operationPromise = operation(input)
-                // add it to the in progress
-                inProgressOperations[input] = operationPromise
+        return try await withCheckedThrowingContinuation { continuation in
+            state.withCriticalRegion { state in
+                if let continuations = state.inProgressOperations[input] {
+                    continuations.addContinuation(continuation)
+                } else {
+                    let continuations = MulticastContinuation<Output, Error>()
+                    continuations.addContinuation(continuation)
+                    state.inProgressOperations[input] = continuations
 
-                // cache the result
-                let promise = operationPromise.map { result -> Output in
-                    self.lock.sync {
-                        self.cache.setObject(result, forKey: input)
-                        // remove from in progress
-                        self.inProgressOperations.removeValue(forKey: input)
-                    }
-                    return result
+                    startOperation(input: input, continuations: continuations)
                 }
-                return promise
+            }
+        }
+    }
+
+    private func startOperation(input: Input, continuations: MulticastContinuation<Output, Error>) {
+        Task {
+            // Execute.
+            let result = await Swift.Result { try await operation(input) }
+
+            state.withCriticalRegion { state in
+                // Cache the result.
+                if case let .success(value) = result {
+                    state.cache.setObject(value, forKey: input)
+                }
+                continuations.resume(with: result)
+
+                // remove from in progress
+                state.inProgressOperations.removeValue(forKey: input)
             }
         }
     }
 
     func getCached(_ input: Input) -> Output? {
-        lock.sync {
-            cache.object(forKey: input)
+        state.withCriticalRegion { state in
+            state.cache.object(forKey: input)
         }
     }
 }

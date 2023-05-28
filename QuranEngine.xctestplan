@@ -60,6 +60,13 @@
         "identifier" : "SQLitePersistenceTests",
         "name" : "SQLitePersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CachingTests",
+        "name" : "CachingTests"
+      }
     }
   ],
   "version" : 1

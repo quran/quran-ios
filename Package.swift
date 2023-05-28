@@ -146,7 +146,11 @@ let package = Package(
 
         .target(name: "Caching", dependencies: [
             "Locking",
-            "PromiseKit",
+            "Utilities",
+        ]),
+        .testTarget(name: "CachingTests", dependencies: [
+            "Caching",
+            "TestUtilities",
         ]),
 
         .target(name: "Utilities", dependencies: [

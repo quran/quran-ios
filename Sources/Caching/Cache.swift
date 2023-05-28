@@ -47,7 +47,7 @@ private class KeyWrapper<KeyType: Hashable>: NSObject {
     }
 }
 
-open class Cache<KeyType: Hashable, ObjectType> {
+public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
     private let cache: NSCache<KeyWrapper<KeyType>, ObjectWrapper> = NSCache()
 
     public init(lowMemoryAware: Bool = true) {
@@ -69,48 +69,36 @@ open class Cache<KeyType: Hashable, ObjectType> {
         removeAllObjects()
     }
 
-    open var name: String {
+    public var name: String {
         get { cache.name }
         set { cache.name = newValue }
     }
 
-    open weak var delegate: NSCacheDelegate? {
+    public weak var delegate: NSCacheDelegate? {
         get { cache.delegate }
         set { cache.delegate = newValue }
     }
 
-    open func object(forKey key: KeyType) -> ObjectType? {
+    public func object(forKey key: KeyType) -> ObjectType? {
         cache.object(forKey: KeyWrapper(key))?.value as? ObjectType
     }
 
-    open func setObject(_ obj: ObjectType, forKey key: KeyType) { // 0 cost
+    public func setObject(_ obj: ObjectType, forKey key: KeyType) { // 0 cost
         cache.setObject(ObjectWrapper(obj), forKey: KeyWrapper(key))
     }
 
-    open func setObject(_ obj: ObjectType, forKey key: KeyType, cost: Int) {
-        cache.setObject(ObjectWrapper(obj), forKey: KeyWrapper(key), cost: cost)
-    }
-
-    open func removeObject(forKey key: KeyType) {
+    public func removeObject(forKey key: KeyType) {
         cache.removeObject(forKey: KeyWrapper(key))
     }
 
-    open func removeAllObjects() {
+    public func removeAllObjects() {
         cache.removeAllObjects()
     }
 
-    open var totalCostLimit: Int {
-        get { cache.totalCostLimit }
-        set { cache.totalCostLimit = newValue }
-    }
-
-    open var countLimit: Int {
+    public var countLimit: Int {
         get { cache.countLimit }
         set { cache.countLimit = newValue }
     }
-
-    open var evictsObjectsWithDiscardedContent: Bool {
-        get { cache.evictsObjectsWithDiscardedContent }
-        set { cache.evictsObjectsWithDiscardedContent = newValue }
-    }
 }
+
+extension NSCache: @unchecked Sendable {}

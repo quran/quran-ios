@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MulticastContinuation<T, E: Error> {
+public struct MulticastContinuation<T, E: Error>: Sendable {
     private struct State {
         var continuations: [CheckedContinuation<T, E>] = []
         var result: Result<T, E>?

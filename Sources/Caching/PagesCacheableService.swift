@@ -19,13 +19,12 @@
 //
 
 import Foundation
-import PromiseKit
 
-public protocol Pageable: Hashable {
+public protocol Pageable: Hashable, Sendable {
     var pageNumber: Int { get }
 }
 
-public class PagesCacheableService<Input: Pageable, Output> {
+public final class PagesCacheableService<Input: Pageable, Output: Sendable>: Sendable {
     public typealias Page = Input
 
     private let previousPagesCount: Int
@@ -38,7 +37,7 @@ public class PagesCacheableService<Input: Pageable, Output> {
                 previousPagesCount: Int,
                 nextPagesCount: Int,
                 pages: [Page],
-                operation: @escaping (Input) -> Promise<Output>)
+                operation: @escaping CacheableOperation<Input, Output>)
     {
         service = OperationCacheableService(cache: cache, operation: operation)
         self.pages = pages
@@ -50,14 +49,14 @@ public class PagesCacheableService<Input: Pageable, Output> {
         service.invalidate()
     }
 
-    public func get(_ page: Page) -> Promise<Output> {
+    public func get(_ page: Page) async throws -> Output {
         defer {
             // schedule for closer pages
             cachePagesCloserToPage(page)
         }
 
         // preload requested page with very high priority and QoS
-        return preload(page)
+        return try await preload(page)
     }
 
     public func getCached(_ input: Page) -> Output? {
@@ -67,7 +66,9 @@ public class PagesCacheableService<Input: Pageable, Output> {
     private func cachePagesCloserToPage(_ page: Page) {
         func cacheCloser(_ pageNumber: Int) {
             if let page = pages.first(where: { $0.pageNumber == pageNumber }) {
-                _ = preload(page)
+                Task {
+                    _ = try? await preload(page)
+                }
             }
         }
 
@@ -82,7 +83,7 @@ public class PagesCacheableService<Input: Pageable, Output> {
         }
     }
 
-    private func preload(_ page: Page) -> Promise<Output> {
-        service.get(page)
+    private func preload(_ page: Page) async throws -> Output {
+        try await service.get(page)
     }
 }

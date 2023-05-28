@@ -120,13 +120,3 @@ public func AsyncUnwrap<T>(_ expression: @autoclosure () async throws -> T?,
     let value = try await expression()
     return try XCTUnwrap(value, message(), file: file, line: line)
 }
-
-extension Swift.Result where Failure == Error {
-    public init(_ body: () async throws -> Success) async {
-        do {
-            self = .success(try await body())
-        } catch {
-            self = .failure(error)
-        }
-    }
-}

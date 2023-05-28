@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-19.
 //
 
-import PromiseKit
 import QuranKit
 @testable import QuranTextKit
 import TestUtilities
@@ -53,7 +52,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         shareableTextRetriever = nil
     }
 
-    func testShareArabicText() throws {
+    func testShareArabicText() async throws {
         statePreferences.quranMode = .arabic
         let tests = [
             (verses: [quran.suras[0].verses[2]],
@@ -66,12 +65,12 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses))
+            let versesText = try await shareableTextRetriever.textForVerses(test.verses)
             XCTAssertEqual(test.result, versesText)
         }
     }
 
-    func testShareTranslationText() throws {
+    func testShareTranslationText() async throws {
         statePreferences.quranMode = .translation
 
         let tests = [
@@ -101,7 +100,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                       "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
         ]
         for test in tests {
-            let versesText = try wait(for: shareableTextRetriever.textForVerses(test.verses))
+            let versesText = try await shareableTextRetriever.textForVerses(test.verses)
             XCTAssertEqual(test.result, versesText)
         }
     }
@@ -111,7 +110,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
 
         try await localTranslationsFake.setTranslations([TestData.khanTranslation])
 
-        let numberReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[49]]))
+        let numberReference = try await shareableTextRetriever.textForVerses([quran.suras[1].verses[49]])
         XCTAssertEqual(numberReference, ["وَإِذۡ فَرَقۡنَا بِكُمُ ٱلۡبَحۡرَ فَأَنجَیۡنَـٰكُمۡ وَأَغۡرَقۡنَاۤ ءَالَ فِرۡعَوۡنَ وَأَنتُمۡ تَنظُرُونَ﴿ ٥٠ ﴾",
                                          "",
                                          "• Khan & Hilai:",
@@ -119,7 +118,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                                          "",
                                          "Al-Baqarah, Ayah 50"])
 
-        let verseSavedAsTextReference = try wait(for: shareableTextRetriever.textForVerses([quran.suras[1].verses[50]]))
+        let verseSavedAsTextReference = try await shareableTextRetriever.textForVerses([quran.suras[1].verses[50]])
         XCTAssertEqual(verseSavedAsTextReference, ["وَإِذۡ وَ ٰ⁠عَدۡنَا مُوسَىٰۤ أَرۡبَعِینَ لَیۡلَةࣰ ثُمَّ ٱتَّخَذۡتُمُ ٱلۡعِجۡلَ مِنۢ بَعۡدِهِۦ وَأَنتُمۡ ظَـٰلِمُونَ﴿ ٥١ ﴾",
                                                    "",
                                                    "• Khan & Hilai:",

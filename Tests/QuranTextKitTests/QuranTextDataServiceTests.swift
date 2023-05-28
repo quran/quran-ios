@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-18.
 //
 
-import PromiseKit
 import QuranKit
 @testable import QuranTextKit
 import SystemDependenciesFake
@@ -46,7 +45,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         textService = nil
     }
 
-    func testArabicNoTranslation() throws {
+    func testArabicNoTranslation() async throws {
         let tests = [
             [quran.suras[0].verses[0]],
             [quran.suras[0].verses[1]],
@@ -54,7 +53,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[1].verses[0]],
         ]
         for verses in tests {
-            let versesText = try wait(for: textService.textForVerses(verses, translations: []))
+            let versesText = try await textService.textForVerses(verses, translations: [])
 
             let expectedVerses = verses.map {
                 VerseText(arabicText: TestData.quranTextAt($0),
@@ -67,13 +66,13 @@ final class QuranTextDataServiceTests: XCTestCase {
         }
     }
 
-    func testWithTranslations() throws {
+    func testWithTranslations() async throws {
         let tests = [
             [quran.suras[0].verses[1]],
             [quran.suras[0].verses[1], quran.suras[0].verses[2]],
         ]
         for verses in tests {
-            let versesText = try wait(for: textService.textForVerses(verses))
+            let versesText = try await textService.textForVerses(verses)
 
             let expectedVerses = verses.map { verse in
                 VerseText(arabicText: TestData.quranTextAt(verse),
@@ -93,7 +92,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         try await localTranslationsFake.setTranslations(translations)
 
         let verse = quran.suras[0].verses[5]
-        let versesText = try wait(for: textService.textForVerses([verse]))
+        let versesText = try await textService.textForVerses([verse])
 
         let translationText = TestData.translationTextAt(translations[0], verse)
         let string = TranslationString(text: translationText,

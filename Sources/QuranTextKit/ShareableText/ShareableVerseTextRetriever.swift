@@ -20,7 +20,6 @@
 
 import Foundation
 import Localization
-import PromiseKit
 import QuranKit
 import TranslationService
 
@@ -41,14 +40,12 @@ public struct ShareableVerseTextRetriever {
         self.shareableVersePersistence = shareableVersePersistence
     }
 
-    public func textForVerses(_ verses: [AyahNumber]) -> Promise<[String]> {
-        DispatchQueue.global().asyncPromise {
-            async let arabicText = arabicScript(for: verses)
-            async let translationText = translations(for: verses)
+    public func textForVerses(_ verses: [AyahNumber]) async throws -> [String] {
+        async let arabicText = arabicScript(for: verses)
+        async let translationText = translations(for: verses)
 
-            let result = try await [arabicText, translationText].flatMap { $0 }
-            return result + ["", versesSummary(verses)]
-        }
+        let result = try await [arabicText, translationText].flatMap { $0 }
+        return result + ["", versesSummary(verses)]
     }
 
     private func versesSummary(_ verses: [AyahNumber]) -> String {

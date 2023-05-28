@@ -8,7 +8,6 @@
 import Crashing
 import Foundation
 import Localization
-import PromiseKit
 import QuranKit
 import TranslationService
 
@@ -44,20 +43,12 @@ public struct QuranTextDataService {
         self.translationsPersistenceBuilder = translationsPersistenceBuilder
     }
 
-    public func textForVerses(_ verses: [AyahNumber]) -> Promise<TranslatedVerses> {
-        DispatchQueue.global().asyncPromise {
-            try await textForVerses(verses)
-        }
-    }
-
     public func textForVerses(_ verses: [AyahNumber]) async throws -> TranslatedVerses {
         try await textForVerses(verses, translations: { try await localTranslations() })
     }
 
-    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) -> Promise<TranslatedVerses> {
-        DispatchQueue.global().asyncPromise {
-            try await textForVerses(verses, translations: { translations })
-        }
+    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> TranslatedVerses {
+        try await textForVerses(verses, translations: { translations })
     }
 
     private func textForVerses(
@@ -116,15 +107,6 @@ public struct QuranTextDataService {
             verseTextList.append(text)
         }
         return verseTextList
-    }
-
-    private func fetchTranslationsText(
-        verses: [AyahNumber],
-        translations: [Translation]
-    ) -> Guarantee<[(Translation, [TranslationText])]> {
-        DispatchQueue.global().asyncGuarantee {
-            await fetchTranslationsText(verses: verses, translations: translations)
-        }
     }
 
     private func fetchTranslationsText(

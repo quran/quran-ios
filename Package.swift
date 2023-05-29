@@ -30,6 +30,7 @@ let package = Package(
         // Utilities packages
 
         .library(name: "CoreDataPersistence", targets: ["CoreDataPersistence"]),
+        .library(name: "CoreDataModel", targets: ["CoreDataModel"]),
 
         .library(name: "Timing", targets: ["Timing"]),
         .library(name: "Utilities", targets: ["Utilities"]),

@@ -85,6 +85,13 @@
         "identifier" : "CoreDataPersistenceTests",
         "name" : "CoreDataPersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LastPagePersistenceTests",
+        "name" : "LastPagePersistenceTests"
+      }
     }
   ],
   "version" : 1

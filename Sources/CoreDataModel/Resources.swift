@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum Resources {
+public enum CoreDataModelResources {
     public static let quranModel = Bundle.module.url(forResource: "Quran", withExtension: "momd")!
 }

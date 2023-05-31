@@ -15,7 +15,7 @@ class CoreDataStackTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        stack = CoreDataStack(name: "TestApp", modelUrl: Resources.quranModel, lazyUniquifiers: { [] })
+        stack = CoreDataStack.testingStack()
     }
 
     override func tearDown() {

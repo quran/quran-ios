@@ -8,6 +8,7 @@
 import CoreData
 import CoreDataModel
 @testable import CoreDataPersistence
+import CoreDataPersistenceTestSupport
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest

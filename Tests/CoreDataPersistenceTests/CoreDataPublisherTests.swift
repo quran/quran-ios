@@ -5,12 +5,12 @@
 //  Created by Mohamed Afifi on 2023-05-28.
 //
 
-import XCTest
 import Combine
 import CoreData
-@testable import CoreDataPersistence
 import CoreDataModel
+@testable import CoreDataPersistence
 import TestUtilities
+import XCTest
 
 class CoreDataPublisherTests: XCTestCase {
     var coreDataStack: CoreDataStack!
@@ -48,7 +48,7 @@ class CoreDataPublisherTests: XCTestCase {
         try context.save()
 
         // Verify
-        XCTAssertEqual([[note.note]], try awaitPublisher(publisher, numberOfElements: 1).map { $0.map { $0.note } })
+        XCTAssertEqual([[note.note]], try awaitPublisher(publisher, numberOfElements: 1).map { $0.map(\.note) })
     }
 
     func test_valuesUpdateOverTime() throws {
@@ -73,7 +73,7 @@ class CoreDataPublisherTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         cancellable.cancel()
 
-        XCTAssertEqual([[], [note1.note, note2.note]], elements.map { $0.map { $0.note } })
+        XCTAssertEqual([[], [note1.note, note2.note]], elements.map { $0.map(\.note) })
     }
 
     // MARK: - Helpers

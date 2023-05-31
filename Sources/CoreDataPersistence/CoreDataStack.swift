@@ -120,3 +120,5 @@ public class CoreDataStack {
         FileManager.default.removeDirectoryContents(at: dataDirectory)
     }
 }
+
+extension NSManagedObjectContext: @unchecked Sendable {}

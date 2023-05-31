@@ -145,6 +145,11 @@ let package = Package(
             "TestUtilities",
         ]),
 
+        .target(name: "CoreDataPersistenceTestSupport", dependencies: [
+            "CoreDataPersistence",
+            "CoreDataModel",
+        ]),
+
         .target(name: "CoreDataModel", dependencies: [
             "CoreDataPersistence",
         ]),
@@ -160,6 +165,7 @@ let package = Package(
             "CoreDataPersistence",
             "TestUtilities",
             "CoreDataModel",
+            "CoreDataPersistenceTestSupport",
         ]),
 
         .target(name: "Caching", dependencies: [

@@ -21,7 +21,6 @@
 import Combine
 import Foundation
 import PromiseKit
-import QuranKit
 
 public protocol LastPagePersistence: Sendable {
     func lastPages() -> AnyPublisher<[LastPageDTO], Never>

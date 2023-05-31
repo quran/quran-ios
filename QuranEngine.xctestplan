@@ -92,6 +92,13 @@
         "identifier" : "LastPagePersistenceTests",
         "name" : "LastPagePersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PageBookmarkPersistenceTests",
+        "name" : "PageBookmarkPersistenceTests"
+      }
     }
   ],
   "version" : 1

@@ -31,6 +31,7 @@ let package = Package(
 
         .library(name: "CoreDataPersistence", targets: ["CoreDataPersistence"]),
         .library(name: "LastPagePersistence", targets: ["LastPagePersistence"]),
+        .library(name: "PageBookmarkPersistence", targets: ["PageBookmarkPersistence"]),
         .library(name: "CoreDataModel", targets: ["CoreDataModel"]),
 
         .library(name: "Timing", targets: ["Timing"]),
@@ -144,6 +145,16 @@ let package = Package(
         .testTarget(name: "SQLitePersistenceTests", dependencies: [
             "SQLitePersistence",
             "TestUtilities",
+        ]),
+
+        .target(name: "PageBookmarkPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ]),
+        .testTarget(name: "PageBookmarkPersistenceTests", dependencies: [
+            "PageBookmarkPersistence",
+            "TestUtilities",
+            "CoreDataPersistenceTestSupport",
         ]),
 
         .target(name: "LastPagePersistence", dependencies: [

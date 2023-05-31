@@ -84,4 +84,21 @@ extension XCTestCase {
 
         return elements
     }
+
+    public func awaitSingleItemPublisher<T: Publisher>(
+        _ publisher: T,
+        timeout: TimeInterval = 10,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws -> T.Output
+        where T.Failure == Never
+    {
+        let elements = try awaitPublisher(
+            publisher,
+            numberOfElements: 1,
+            timeout: timeout,
+            file: file, line: line
+        )
+        return elements[0]
+    }
 }

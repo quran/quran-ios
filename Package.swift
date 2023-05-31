@@ -30,6 +30,7 @@ let package = Package(
         // Utilities packages
 
         .library(name: "CoreDataPersistence", targets: ["CoreDataPersistence"]),
+        .library(name: "LastPagePersistence", targets: ["LastPagePersistence"]),
         .library(name: "CoreDataModel", targets: ["CoreDataModel"]),
 
         .library(name: "Timing", targets: ["Timing"]),
@@ -143,6 +144,16 @@ let package = Package(
         .testTarget(name: "SQLitePersistenceTests", dependencies: [
             "SQLitePersistence",
             "TestUtilities",
+        ]),
+
+        .target(name: "LastPagePersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ]),
+        .testTarget(name: "LastPagePersistenceTests", dependencies: [
+            "LastPagePersistence",
+            "TestUtilities",
+            "CoreDataPersistenceTestSupport",
         ]),
 
         .target(name: "CoreDataPersistenceTestSupport", dependencies: [

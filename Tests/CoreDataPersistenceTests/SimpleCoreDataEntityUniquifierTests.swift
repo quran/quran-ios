@@ -70,9 +70,6 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
 
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
 
-        let fetchRequest = MO_PageBookmark.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: Schema.PageBookmark.modifiedOn, ascending: true)]
-        let pages = try stack.newBackgroundContext().allPageBookmarks()
-        XCTAssertEqual([45, 500], pages.map(\.page))
+        XCTAssertEqual([45, 500], try stack.newBackgroundContext().allPageBookmarks().map(\.page))
     }
 }

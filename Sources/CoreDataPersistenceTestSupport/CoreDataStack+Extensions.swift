@@ -20,8 +20,4 @@ extension PersistentHistoryChangeFake {
     public init(object: NSManagedObject, changeType: NSPersistentHistoryChangeType) {
         self.init(changedObjectID: object.objectID, changeType: changeType)
     }
-
-    public init(entity: some TestingEntity, changeType: NSPersistentHistoryChangeType) {
-        self.init(object: entity.object, changeType: changeType)
-    }
 }

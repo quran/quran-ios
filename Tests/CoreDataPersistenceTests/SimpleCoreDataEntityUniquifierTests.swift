@@ -19,10 +19,10 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     var context: NSManagedObjectContext!
     var stack: CoreDataStack!
 
-    var existingEntity: PageBookmarkEntity!
-    var entity1: PageBookmarkEntity!
-    var entity2: PageBookmarkEntity!
-    var entity3: PageBookmarkEntity!
+    var existingEntity: MO_PageBookmark!
+    var entity1: MO_PageBookmark!
+    var entity2: MO_PageBookmark!
+    var entity3: MO_PageBookmark!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -30,19 +30,19 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
         stack = CoreDataStack.testingStack()
         context = stack.newBackgroundContext()
 
-        existingEntity = PageBookmarkEntity(context: context, page: 45, modifiedOn: 100)
-        entity1 = PageBookmarkEntity(context: context, page: 45, modifiedOn: 120)
-        entity2 = PageBookmarkEntity(context: context, page: 500, modifiedOn: 1945)
-        entity3 = PageBookmarkEntity(context: context, page: 100, modifiedOn: 5555)
+        existingEntity = context.newPageBookmark(page: 45, modifiedOn: 100)
+        entity1 = context.newPageBookmark(page: 45, modifiedOn: 120)
+        entity2 = context.newPageBookmark(page: 500, modifiedOn: 1945)
+        entity3 = context.newPageBookmark(page: 100, modifiedOn: 5555)
 
         // Delete the 3rd entity entity
-        context.delete(entity3.object)
+        context.delete(entity3)
         try context.save()
 
         // Create a list of changes, including insertions, modifications and deletions
-        let insertedChange = PersistentHistoryChangeFake(entity: entity1, changeType: .insert)
-        let updatedChange = PersistentHistoryChangeFake(entity: entity2, changeType: .update)
-        let deletedChange = PersistentHistoryChangeFake(entity: entity3, changeType: .delete)
+        let insertedChange = PersistentHistoryChangeFake(object: entity1, changeType: .insert)
+        let updatedChange = PersistentHistoryChangeFake(object: entity2, changeType: .update)
+        let deletedChange = PersistentHistoryChangeFake(object: entity3, changeType: .delete)
 
         // Create mock transactions
         let transaction1 = PersistentHistoryTransactionFake(historyChanges: [insertedChange, updatedChange])

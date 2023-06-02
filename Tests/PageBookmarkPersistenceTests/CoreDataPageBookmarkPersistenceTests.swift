@@ -1,16 +1,16 @@
 //
 //  CoreDataPageBookmarkPersistenceTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-05-31.
 //
 
 import Combine
 import CoreDataPersistence
+import CoreDataPersistenceTestSupport
 @testable import PageBookmarkPersistence
 import TestUtilities
 import XCTest
-import CoreDataPersistenceTestSupport
 
 final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     var persistence: CoreDataPageBookmarkPersistence!

@@ -19,11 +19,11 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     var context: NSManagedObjectContext!
     var stack: CoreDataStack!
 
-    var entity1: LastPageEntity!
-    var entity2: LastPageEntity!
-    var entity3: LastPageEntity!
-    var entity4: LastPageEntity!
-    var entity5: LastPageEntity!
+    var entity1: MO_LastPage!
+    var entity2: MO_LastPage!
+    var entity3: MO_LastPage!
+    var entity4: MO_LastPage!
+    var entity5: MO_LastPage!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -31,11 +31,11 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         stack = CoreDataStack.testingStack()
         context = stack.newBackgroundContext()
 
-        entity1 = LastPageEntity(context: context, page: 45, modifiedOn: 1)
-        entity2 = LastPageEntity(context: context, page: 500, modifiedOn: 2)
-        entity3 = LastPageEntity(context: context, page: 100, modifiedOn: 3)
-        entity4 = LastPageEntity(context: context, page: 250, modifiedOn: 4)
-        entity5 = LastPageEntity(context: context, page: 190, modifiedOn: 5)
+        entity1 = context.newLastPage(page: 45, modifiedOn: 1)
+        entity2 = context.newLastPage(page: 500, modifiedOn: 2)
+        entity3 = context.newLastPage(page: 100, modifiedOn: 3)
+        entity4 = context.newLastPage(page: 250, modifiedOn: 4)
+        entity5 = context.newLastPage(page: 190, modifiedOn: 5)
 
         try context.save()
 
@@ -56,9 +56,9 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         // Merge transactions
         let transactions = [
             PersistentHistoryTransactionFake(historyChanges: [
-                PersistentHistoryChangeFake(entity: entity1, changeType: .insert),
-                PersistentHistoryChangeFake(entity: entity4, changeType: .update),
-                PersistentHistoryChangeFake(entity: entity3, changeType: .insert),
+                PersistentHistoryChangeFake(object: entity1, changeType: .insert),
+                PersistentHistoryChangeFake(object: entity4, changeType: .update),
+                PersistentHistoryChangeFake(object: entity3, changeType: .insert),
             ]),
         ]
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
@@ -68,10 +68,10 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
 
     func test_merge_noLastPageTransaction() throws {
         // Merge page bookmark translations
-        let pageBookmark = PageBookmarkEntity(context: context, page: 1, modifiedOn: 1)
+        let pageBookmark = context.newPageBookmark(page: 1, modifiedOn: 1)
         let transactions = [
             PersistentHistoryTransactionFake(historyChanges: [
-                PersistentHistoryChangeFake(entity: pageBookmark, changeType: .insert),
+                PersistentHistoryChangeFake(object: pageBookmark, changeType: .insert),
             ]),
         ]
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
@@ -80,9 +80,9 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     }
 
     func test_merge_noOverflow() throws {
-        context.delete(entity1.object)
-        context.delete(entity2.object)
-        context.delete(entity3.object)
+        context.delete(entity1)
+        context.delete(entity2)
+        context.delete(entity3)
         try context.save()
 
         assertDatabaseContains([entity5, entity4])
@@ -90,7 +90,7 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         // Merge page bookmark translations
         let transactions = [
             PersistentHistoryTransactionFake(historyChanges: [
-                PersistentHistoryChangeFake(entity: entity5, changeType: .insert),
+                PersistentHistoryChangeFake(object: entity5, changeType: .insert),
             ]),
         ]
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
@@ -98,7 +98,7 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         assertDatabaseContains([entity5, entity4])
     }
 
-    private func assertDatabaseContains(_ entities: [LastPageEntity],
+    private func assertDatabaseContains(_ entities: [MO_LastPage],
                                         file: StaticString = #filePath, line: UInt = #line)
     {
         XCTAssertEqual(entities.map(\.page),

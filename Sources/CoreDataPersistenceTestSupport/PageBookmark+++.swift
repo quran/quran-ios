@@ -9,20 +9,14 @@ import CoreData
 import CoreDataModel
 import Foundation
 
-public struct PageBookmarkEntity: TestingEntity {
-    public let page: Int32
-    public let modifiedOn: Date
-    public let object: MO_PageBookmark
-    public init(context: NSManagedObjectContext, page: Int32, modifiedOn: TimeInterval) {
-        self.page = page
-        self.modifiedOn = Date(timeIntervalSince1970: modifiedOn)
-        object = MO_PageBookmark(context: context)
+extension NSManagedObjectContext {
+    public func newPageBookmark(page: Int32, modifiedOn: TimeInterval) -> MO_PageBookmark {
+        let object = MO_PageBookmark(context: self)
         object.page = page
         object.modifiedOn = Date(timeIntervalSince1970: modifiedOn)
+        return object
     }
-}
 
-extension NSManagedObjectContext {
     public func allPageBookmarks() throws -> [MO_PageBookmark] {
         let fetchRequest = MO_PageBookmark.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: Schema.PageBookmark.modifiedOn, ascending: true)]

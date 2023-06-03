@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.8
 
 import PackageDescription
 
@@ -56,7 +56,7 @@ let package = Package(
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
-        .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ],
     targets: [
         .target(name: "QuranKit", dependencies: [],
@@ -71,7 +71,7 @@ let package = Package(
         ]),
         .testTarget(name: "QuranTextKitTests", dependencies: [
             "QuranTextKit",
-            "SnapshotTesting",
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
             "TestUtilities",
             "SystemDependenciesFake",
         ],
@@ -93,7 +93,7 @@ let package = Package(
             "QuranAudioKit",
             "SystemDependenciesFake",
             "TestUtilities",
-            "SnapshotTesting",
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
         ],
         exclude: [
             "__Snapshots__",

@@ -8,23 +8,23 @@
 import Combine
 import CoreDataPersistence
 @testable import NotePersistence
+import SystemDependenciesFake
 import TestUtilities
 import XCTest
-import SystemDependenciesFake
 
 class CoreDataNotePersistenceTests: XCTestCase {
     var sut: CoreDataNotePersistence!
     var stack: CoreDataStack!
     var time: SystemTimeFake!
 
-    var verse1: VerseDTO!
-    var verse2: VerseDTO!
-    var verse3: VerseDTO!
-    var verse4: VerseDTO!
+    var verse1: VersePersistenceModel!
+    var verse2: VersePersistenceModel!
+    var verse3: VersePersistenceModel!
+    var verse4: VersePersistenceModel!
 
-    var note1: NoteDTO!
-    var note2: NoteDTO!
-    var note3: NoteDTO!
+    var note1: NotePersistenceModel!
+    var note2: NotePersistenceModel!
+    var note3: NotePersistenceModel!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -32,14 +32,14 @@ class CoreDataNotePersistenceTests: XCTestCase {
         stack = CoreDataStack.testingStack()
         time = SystemTimeFake()
 
-        verse1 = VerseDTO(ayah: 1, sura: 1)
-        verse2 = VerseDTO(ayah: 2, sura: 1)
-        verse3 = VerseDTO(ayah: 3, sura: 1)
-        verse4 = VerseDTO(ayah: 4, sura: 1)
+        verse1 = VersePersistenceModel(ayah: 1, sura: 1)
+        verse2 = VersePersistenceModel(ayah: 2, sura: 1)
+        verse3 = VersePersistenceModel(ayah: 3, sura: 1)
+        verse4 = VersePersistenceModel(ayah: 4, sura: 1)
 
-        note1 = NoteDTO("Note 1", color: 1, modifiedDate: Date(timeIntervalSince1970: 100))
-        note2 = NoteDTO("", color: 2, modifiedDate: Date(timeIntervalSince1970: 200))
-        note3 = NoteDTO("Note 3", color: 3, modifiedDate: Date(timeIntervalSince1970: 300))
+        note1 = NotePersistenceModel("Note 1", color: 1, modifiedDate: Date(timeIntervalSince1970: 100))
+        note2 = NotePersistenceModel("", color: 2, modifiedDate: Date(timeIntervalSince1970: 200))
+        note3 = NotePersistenceModel("Note 3", color: 3, modifiedDate: Date(timeIntervalSince1970: 300))
 
         sut = CoreDataNotePersistence(stack: stack, time: time)
     }
@@ -99,7 +99,7 @@ class CoreDataNotePersistenceTests: XCTestCase {
     }
 }
 
-extension NoteDTO {
+extension NotePersistenceModel {
     init(_ text: String?, color: Int, modifiedDate: Date) {
         self.init(verses: [], modifiedDate: modifiedDate, note: text, color: color)
     }

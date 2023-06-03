@@ -1,5 +1,5 @@
 //
-//  NoteDTO.swift
+//  NotePersistenceModel.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 2023-03-05.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct VerseDTO: Hashable {
+public struct VersePersistenceModel: Hashable {
     public let ayah: Int
     public let sura: Int
 
@@ -18,8 +18,8 @@ public struct VerseDTO: Hashable {
     }
 }
 
-public struct NoteDTO: Equatable {
-    public var verses: Set<VerseDTO>
+public struct NotePersistenceModel: Equatable {
+    public var verses: Set<VersePersistenceModel>
     public let modifiedDate: Date
     public let note: String?
     public let color: Int

@@ -11,7 +11,7 @@ import Foundation
 import PromiseKit
 
 public protocol PageBookmarkPersistence {
-    func pageBookmarks() -> AnyPublisher<[PageBookmarkDTO], Never>
+    func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never>
     func insertPageBookmark(_ page: Int) -> Promise<Void>
     func removePageBookmark(_ page: Int) -> Promise<Void>
 }

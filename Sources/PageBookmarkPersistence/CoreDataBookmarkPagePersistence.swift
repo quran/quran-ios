@@ -21,11 +21,11 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
         context = stack.newBackgroundContext()
     }
 
-    public func pageBookmarks() -> AnyPublisher<[PageBookmarkDTO], Never> {
+    public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: Schema.PageBookmark.createdOn, ascending: false)]
         return CoreDataPublisher(request: request, context: context)
-            .map { bookmarks in bookmarks.map { PageBookmarkDTO($0) } }
+            .map { bookmarks in bookmarks.map { PageBookmarkPersistenceModel($0) } }
             .eraseToAnyPublisher()
     }
 
@@ -58,7 +58,7 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
     }
 }
 
-private extension PageBookmarkDTO {
+private extension PageBookmarkPersistenceModel {
     init(_ other: MO_PageBookmark) {
         creationDate = other.createdOn ?? Date()
         page = Int(other.page)

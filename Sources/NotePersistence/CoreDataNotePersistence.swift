@@ -24,13 +24,13 @@ public struct CoreDataNotePersistence: NotePersistence {
         self.time = time
     }
 
-    public func notes() -> AnyPublisher<[NoteDTO], Never> {
+    public func notes() -> AnyPublisher<[NotePersistenceModel], Never> {
         let request: NSFetchRequest<MO_Note> = MO_Note.fetchRequest()
         request.relationshipKeyPathsForPrefetching = ["verses"]
         request.sortDescriptors = [NSSortDescriptor(key: Schema.Note.modifiedOn, ascending: false)]
 
         return CoreDataPublisher(request: request, context: context)
-            .map { notes in notes.map { NoteDTO($0) } }
+            .map { notes in notes.map { NotePersistenceModel($0) } }
             .eraseToAnyPublisher()
     }
 
@@ -40,16 +40,16 @@ public struct CoreDataNotePersistence: NotePersistence {
     /// If the selected verses are linked to different notes, and these notes contain verses not included in the selection,
     /// those verses will be incorporated into a unified note. This unified note represents the union of all verses
     /// associated with the notes containing any of the provided `selectedVerses`.
-    public func setNote(_ note: String?, verses: [VerseDTO], color: Int) -> Promise<NoteDTO> {
+    public func setNote(_ note: String?, verses: [VersePersistenceModel], color: Int) -> Promise<NotePersistenceModel> {
         context.perform { context in
             try createOrUpdateNoteHighlight(verses: verses, color: color, note: note, context: context)
         }
     }
 
-    private func createOrUpdateNoteHighlight(verses selectedVerses: [VerseDTO],
+    private func createOrUpdateNoteHighlight(verses selectedVerses: [VersePersistenceModel],
                                              color: Int,
                                              note: String?,
-                                             context: NSManagedObjectContext) throws -> NoteDTO
+                                             context: NSManagedObjectContext) throws -> NotePersistenceModel
     {
         // get existing notes touching new verses
         let existingNotes = try notes(with: selectedVerses, using: context)
@@ -62,7 +62,7 @@ public struct CoreDataNotePersistence: NotePersistence {
 
         // early break if no change
         if existingNotes.count == 1 {
-            let typedSelectedNote = NoteDTO(selectedNote)
+            let typedSelectedNote = NotePersistenceModel(selectedNote)
             if typedSelectedNote.verses.isSuperset(of: selectedVerses) &&
                 color == typedSelectedNote.color && (note == nil || note == typedSelectedNote.note)
             {
@@ -71,7 +71,7 @@ public struct CoreDataNotePersistence: NotePersistence {
         }
 
         // merge existing notes verses with new verses, this might expand the selected verses
-        let existingVerses = existingNotes.flatMap(\.typedVerses).map(VerseDTO.init)
+        let existingVerses = existingNotes.flatMap(\.typedVerses).map(VersePersistenceModel.init)
         let allVerses = Set(existingVerses).union(Set(selectedVerses))
 
         // delete old verses with selected note
@@ -103,14 +103,14 @@ public struct CoreDataNotePersistence: NotePersistence {
 
         // save
         try context.save(with: #function)
-        return NoteDTO(selectedNote)
+        return NotePersistenceModel(selectedNote)
     }
 
-    public func removeNotes(with verses: [VerseDTO]) -> Promise<[NoteDTO]> {
+    public func removeNotes(with verses: [VersePersistenceModel]) -> Promise<[NotePersistenceModel]> {
         context.perform { context in
             let notes = try notes(with: verses, using: context)
             // get the values before deletion
-            let notesToReturn = notes.map { NoteDTO($0) }
+            let notesToReturn = notes.map { NotePersistenceModel($0) }
 
             // delete all notes and associated verses
             for note in notes {
@@ -126,7 +126,7 @@ public struct CoreDataNotePersistence: NotePersistence {
 
     // MARK: - Helpers
 
-    private func notes(with verses: [VerseDTO], using context: NSManagedObjectContext) throws -> Set<MO_Note> {
+    private func notes(with verses: [VersePersistenceModel], using context: NSManagedObjectContext) throws -> Set<MO_Note> {
         let request = fetchRequestIntersecting(verses)
         request.relationshipKeyPathsForPrefetching = [Schema.Verse.note.rawValue]
         let verses = try context.fetch(request)
@@ -134,7 +134,7 @@ public struct CoreDataNotePersistence: NotePersistence {
         return Set(notes)
     }
 
-    private func fetchRequestIntersecting(_ verses: [VerseDTO]) -> NSFetchRequest<MO_Verse> {
+    private func fetchRequestIntersecting(_ verses: [VersePersistenceModel]) -> NSFetchRequest<MO_Verse> {
         let fetchRequest: NSFetchRequest<MO_Verse> = MO_Verse.fetchRequest()
         fetchRequest.relationshipKeyPathsForPrefetching = [Schema.Verse.note.rawValue]
         let predicates = verses.map { NSPredicate(equals: (Schema.Verse.sura, $0.sura), (Schema.Verse.ayah, $0.ayah)) }
@@ -143,9 +143,9 @@ public struct CoreDataNotePersistence: NotePersistence {
     }
 }
 
-private extension NoteDTO {
+private extension NotePersistenceModel {
     init(_ other: MO_Note) {
-        self.init(verses: Set(other.typedVerses.map { VerseDTO($0) }),
+        self.init(verses: Set(other.typedVerses.map { VersePersistenceModel($0) }),
                   modifiedDate: other.modifiedOn ?? Date(),
                   note: other.note,
                   color: Int(other.color))
@@ -158,7 +158,7 @@ extension MO_Note {
     }
 }
 
-extension VerseDTO {
+extension VersePersistenceModel {
     init(_ other: MO_Verse) {
         self.init(ayah: Int(other.ayah), sura: Int(other.sura))
     }

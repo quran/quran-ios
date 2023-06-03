@@ -1,5 +1,5 @@
 //
-//  PageBookmarkDTO.swift
+//  LastPagePersistenceModel.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 2023-03-05.
@@ -8,7 +8,8 @@
 
 import Foundation
 
-public struct PageBookmarkDTO {
+public struct LastPagePersistenceModel {
     public let page: Int
-    public let creationDate: Date
+    public let createdOn: Date
+    public let modifiedOn: Date
 }

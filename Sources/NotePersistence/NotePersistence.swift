@@ -12,7 +12,7 @@ import PromiseKit
 import QuranKit
 
 public protocol NotePersistence {
-    func notes() -> AnyPublisher<[NoteDTO], Never>
-    func setNote(_ note: String?, verses: [VerseDTO], color: Int) -> Promise<NoteDTO>
-    func removeNotes(with verses: [VerseDTO]) -> Promise<[NoteDTO]>
+    func notes() -> AnyPublisher<[NotePersistenceModel], Never>
+    func setNote(_ note: String?, verses: [VersePersistenceModel], color: Int) -> Promise<NotePersistenceModel>
+    func removeNotes(with verses: [VersePersistenceModel]) -> Promise<[NotePersistenceModel]>
 }

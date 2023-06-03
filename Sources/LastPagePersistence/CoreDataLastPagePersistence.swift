@@ -24,25 +24,25 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
         context = stack.newBackgroundContext()
     }
 
-    public func lastPages() -> AnyPublisher<[LastPageDTO], Never> {
+    public func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never> {
         let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: Schema.LastPage.modifiedOn, ascending: false)]
         return CoreDataPublisher(request: request, context: context)
-            .map { lastPages in lastPages.prefix(Self.maxNumberOfLastPages).map { LastPageDTO($0) } }
+            .map { lastPages in lastPages.prefix(Self.maxNumberOfLastPages).map { LastPagePersistenceModel($0) } }
             .eraseToAnyPublisher()
     }
 
-    public func retrieveAll() -> Promise<[LastPageDTO]> {
+    public func retrieveAll() -> Promise<[LastPagePersistenceModel]> {
         context.perform { context in
             let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: Schema.LastPage.modifiedOn, ascending: false)]
             let lastPages = try context.fetch(request)
-            return lastPages.prefix(Self.maxNumberOfLastPages).map { LastPageDTO($0) }
+            return lastPages.prefix(Self.maxNumberOfLastPages).map { LastPagePersistenceModel($0) }
         }
     }
 
     // TODO: Remove the following code
-    func add(_ lastPages: [LastPageDTO]) -> Promise<Void> {
+    func add(_ lastPages: [LastPagePersistenceModel]) -> Promise<Void> {
         guard !lastPages.isEmpty else {
             return .value(())
         }
@@ -58,13 +58,13 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
         }
     }
 
-    public func add(page: Int) -> Promise<LastPageDTO> {
+    public func add(page: Int) -> Promise<LastPagePersistenceModel> {
         context.perform { context in
             try self.add(page: page, using: context)
         }
     }
 
-    private func add(page: Int, using context: NSManagedObjectContext) throws -> LastPageDTO {
+    private func add(page: Int, using context: NSManagedObjectContext) throws -> LastPagePersistenceModel {
         try delete(page: page, using: context)
 
         // insert new page
@@ -77,10 +77,10 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
 
         // remove overflow
         try overflowHandler.removeOverflowIfneeded(using: context)
-        return LastPageDTO(newLastPage)
+        return LastPagePersistenceModel(newLastPage)
     }
 
-    public func update(page oldPage: Int, toPage newPage: Int) -> Promise<LastPageDTO> {
+    public func update(page oldPage: Int, toPage newPage: Int) -> Promise<LastPagePersistenceModel> {
         context.perform { context in
             // delete newPage, so we can replace it
             try self.delete(page: newPage, using: context)
@@ -99,7 +99,7 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
             existingPage.page = Int32(newPage)
             existingPage.modifiedOn = Date()
             try context.save(with: "Update LastPage")
-            return LastPageDTO(existingPage)
+            return LastPagePersistenceModel(existingPage)
         }
     }
 
@@ -113,7 +113,7 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
     }
 }
 
-private extension LastPageDTO {
+private extension LastPagePersistenceModel {
     init(_ other: MO_LastPage) {
         self.init(page: Int(other.page),
                   createdOn: other.createdOn ?? Date(),

@@ -23,8 +23,8 @@ import Foundation
 import PromiseKit
 
 public protocol LastPagePersistence: Sendable {
-    func lastPages() -> AnyPublisher<[LastPageDTO], Never>
-    func retrieveAll() -> Promise<[LastPageDTO]>
-    func add(page: Int) -> Promise<LastPageDTO>
-    func update(page: Int, toPage: Int) -> Promise<LastPageDTO>
+    func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never>
+    func retrieveAll() -> Promise<[LastPagePersistenceModel]>
+    func add(page: Int) -> Promise<LastPagePersistenceModel>
+    func update(page: Int, toPage: Int) -> Promise<LastPagePersistenceModel>
 }

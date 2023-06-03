@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.8
 
 import PackageDescription
 
@@ -56,205 +56,75 @@ let package = Package(
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
-        .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
-    ],
-    targets: [
-        .target(name: "QuranKit", dependencies: [],
-                swiftSettings: settings),
-        .testTarget(name: "QuranKitTests", dependencies: [
-            "QuranKit",
-        ]),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
+    ], targets: [
+        coreTargets(),
+        dataTargets(),
+        domainTargets(),
+    ]
+    .flatMap { $0 }
+    .flatMap { $0 }
+)
 
-        .target(name: "QuranTextKit", dependencies: [
-            "TranslationService",
-            "QuranKit",
-        ]),
-        .testTarget(name: "QuranTextKitTests", dependencies: [
-            "QuranTextKit",
-            "SnapshotTesting",
-            "TestUtilities",
-            "SystemDependenciesFake",
-        ],
-        exclude: [
-            "__Snapshots__",
-        ]),
-
-        .target(name: "QuranAudioKit", dependencies: [
-            "SQLitePersistence",
-            "BatchDownloader",
-            "QuranTextKit",
-            "QueuePlayer",
+private func coreTargets() -> [[Target]] {
+    [
+        target(.core, name: "SystemDependencies", hasTests: false, dependencies: []),
+        target(.core, name: "SystemDependenciesFake", hasTests: false, dependencies: [
             "SystemDependencies",
-            "Zip",
-            .product(name: "OrderedCollections", package: "swift-collections"),
-        ],
-        swiftSettings: settings),
-        .testTarget(name: "QuranAudioKitTests", dependencies: [
-            "QuranAudioKit",
-            "SystemDependenciesFake",
-            "TestUtilities",
-            "SnapshotTesting",
-        ],
-        exclude: [
-            "__Snapshots__",
-        ],
-        resources: [
-            .copy("test_data"),
-        ],
-        swiftSettings: settings),
-
-        .target(name: "TranslationService", dependencies: [
-            "Zip",
-            "SQLitePersistence",
-            "BatchDownloader",
-            "Localization",
-            "Preferences",
-            "SystemDependencies",
-        ]),
-        .testTarget(name: "TranslationServiceTests", dependencies: [
-            "TranslationService",
-            "TestUtilities",
-        ]),
-
-        .target(name: "QueuePlayer", dependencies: [
-            "Timing",
-            "QueuePlayerObjc",
-        ],
-        swiftSettings: settings),
-        .target(name: "QueuePlayerObjc", dependencies: []),
-
-        .target(name: "BatchDownloader", dependencies: [
-            "SQLitePersistence",
-            "Crashing",
-            "WeakSet",
-        ],
-        swiftSettings: settings),
-        .testTarget(name: "BatchDownloaderTests", dependencies: [
-            "BatchDownloader",
-            "TestUtilities",
-            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-        ],
-        swiftSettings: settings),
-
-        .target(name: "SQLitePersistence", dependencies: [
-            "Utilities",
-            "VLogging",
-            .product(name: "GRDB", package: "GRDB.swift"),
-        ]),
-        .testTarget(name: "SQLitePersistenceTests", dependencies: [
-            "SQLitePersistence",
-            "TestUtilities",
-        ]),
-
-        .target(name: "NotePersistence", dependencies: [
-            "CoreDataModel",
-            "CoreDataPersistence",
-            "SystemDependencies",
-        ]),
-        .testTarget(name: "NotePersistenceTests", dependencies: [
-            "NotePersistence",
-            "TestUtilities",
-            "CoreDataPersistenceTestSupport",
-        ]),
-
-        .target(name: "PageBookmarkPersistence", dependencies: [
-            "CoreDataModel",
-            "CoreDataPersistence",
-        ]),
-        .testTarget(name: "PageBookmarkPersistenceTests", dependencies: [
-            "PageBookmarkPersistence",
-            "TestUtilities",
-            "CoreDataPersistenceTestSupport",
-        ]),
-
-        .target(name: "LastPagePersistence", dependencies: [
-            "CoreDataModel",
-            "CoreDataPersistence",
-        ]),
-        .testTarget(name: "LastPagePersistenceTests", dependencies: [
-            "LastPagePersistence",
-            "TestUtilities",
-            "CoreDataPersistenceTestSupport",
-        ]),
-
-        .target(name: "CoreDataPersistenceTestSupport", dependencies: [
-            "CoreDataPersistence",
-            "CoreDataModel",
-        ]),
-
-        .target(name: "CoreDataModel", dependencies: [
-            "CoreDataPersistence",
-        ]),
-
-        .target(name: "CoreDataPersistence", dependencies: [
-            "Utilities",
-            "VLogging",
-            "Crashing",
-            "PromiseKit",
-            "SystemDependencies",
-        ]),
-        .testTarget(name: "CoreDataPersistenceTests", dependencies: [
-            "CoreDataPersistence",
-            "TestUtilities",
-            "CoreDataModel",
-            "CoreDataPersistenceTestSupport",
-        ]),
-
-        .target(name: "Caching", dependencies: [
-            "Locking",
             "Utilities",
         ]),
-        .testTarget(name: "CachingTests", dependencies: [
-            "Caching",
-            "TestUtilities",
-        ]),
 
-        .target(name: "Utilities", dependencies: [
-            "PromiseKit",
-        ],
-        swiftSettings: settings),
-        .testTarget(name: "UtilitiesTests", dependencies: [
-            "Utilities",
-            "TestUtilities",
-        ]),
+        target(.core, name: "Locking", hasTests: false, dependencies: []),
+        target(.core, name: "Preferences", hasTests: false, dependencies: []),
 
-        .target(name: "Timing", dependencies: [
-            "Locking",
-        ]),
-
-        .target(name: "WeakSet", dependencies: [
-            "Locking",
-        ]),
-
-        .target(name: "Crashing", dependencies: [
-            "Locking",
-        ]),
-
-        .target(name: "VLogging", dependencies: [
+        target(.core, name: "VLogging", hasTests: false, dependencies: [
             .product(name: "Logging", package: "swift-log"),
         ]),
 
-        .target(name: "Locking", dependencies: []),
-        .target(name: "Preferences", dependencies: []),
-        .target(name: "Localization", dependencies: []),
-        .target(name: "SystemDependencies", dependencies: []),
-        .target(name: "SystemDependenciesFake", dependencies: [
-            "SystemDependencies",
+        target(.core, name: "Caching", dependencies: [
+            "Locking",
             "Utilities",
+        ], testDependencies: [
+            "TestUtilities",
         ]),
 
-        .target(name: "VersionUpdater", dependencies: [
+        target(.core, name: "Timing", hasTests: false, dependencies: [
+            "Locking",
+        ]),
+
+        target(.core, name: "WeakSet", hasTests: false, dependencies: [
+            "Locking",
+        ]),
+
+        target(.core, name: "Crashing", hasTests: false, dependencies: [
+            "Locking",
+        ]),
+
+        target(.core, name: "Utilities", dependencies: [
+            "PromiseKit",
+        ], testDependencies: [
+            "TestUtilities",
+        ]),
+
+        target(.core, name: "VersionUpdater", dependencies: [
             "Preferences",
             "VLogging",
             "SystemDependencies",
-        ]),
-        .testTarget(name: "VersionUpdaterTests", dependencies: [
-            "VersionUpdater",
+        ], testDependencies: [
             "SystemDependenciesFake",
         ]),
 
-        // Testing helpers
-        .target(name: "TestUtilities", dependencies: [
+        target(.core, name: "Localization", hasTests: false, dependencies: []),
+
+        target(.core, name: "QueuePlayer", hasTests: false, dependencies: [
+            "Timing",
+            "QueuePlayerObjc",
+        ]),
+
+        target(.core, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
+
+        // TODO: Break up
+        target(.core, name: "TestUtilities", hasTests: false, dependencies: [
             "PromiseKit",
             "BatchDownloader",
             "TranslationService",
@@ -266,4 +136,164 @@ let package = Package(
             .copy("test_data"),
         ]),
     ]
-)
+}
+
+private func dataTargets() -> [[Target]] {
+    [
+        // MARK: - Core Data
+
+        target(.data, name: "LastPagePersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ], testDependencies: [
+            "TestUtilities",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(.data, name: "PageBookmarkPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ], testDependencies: [
+            "TestUtilities",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(.data, name: "NotePersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "SystemDependencies",
+        ], testDependencies: [
+            "TestUtilities",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(.data, name: "CoreDataPersistence", dependencies: [
+            "Utilities",
+            "VLogging",
+            "Crashing",
+            "PromiseKit",
+            "SystemDependencies",
+        ], testDependencies: [
+            "TestUtilities",
+            "CoreDataModel",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(.data, name: "CoreDataPersistenceTestSupport", hasTests: false, dependencies: [
+            "CoreDataPersistence",
+            "CoreDataModel",
+            "SystemDependenciesFake",
+        ]),
+
+        target(.data, name: "CoreDataModel", hasTests: false, dependencies: [
+            "CoreDataPersistence",
+        ]),
+
+        // MARK: - SQLite
+
+        target(.data, name: "SQLitePersistence", dependencies: [
+            "Utilities",
+            "VLogging",
+            .product(name: "GRDB", package: "GRDB.swift"),
+        ], testDependencies: [
+            "TestUtilities",
+        ]),
+
+        // MARK: - Networking
+
+        target(.data, name: "BatchDownloader", dependencies: [
+            "SQLitePersistence",
+            "Crashing",
+            "WeakSet",
+        ], testDependencies: [
+            "TestUtilities",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        ]),
+    ]
+}
+
+private func domainTargets() -> [[Target]] {
+    [
+        target(.domain, name: "QuranKit", dependencies: [],
+               testDependencies: []),
+
+        target(.domain, name: "QuranTextKit", dependencies: [
+            "TranslationService",
+            "QuranKit",
+        ], testDependencies: [
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+            "TestUtilities",
+            "SystemDependenciesFake",
+        ], testExclude: [
+            "__Snapshots__",
+        ]),
+
+        target(.domain, name: "QuranAudioKit", dependencies: [
+            "SQLitePersistence",
+            "BatchDownloader",
+            "QuranTextKit",
+            "QueuePlayer",
+            "SystemDependencies",
+            "Zip",
+            .product(name: "OrderedCollections", package: "swift-collections"),
+        ], testDependencies: [
+            "SystemDependenciesFake",
+            "TestUtilities",
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+        ], testExclude: [
+            "__Snapshots__",
+        ], testResources: [
+            .copy("test_data"),
+        ]),
+
+        target(.domain, name: "TranslationService", dependencies: [
+            "Zip",
+            "SQLitePersistence",
+            "BatchDownloader",
+            "Localization",
+            "Preferences",
+            "SystemDependencies",
+        ], testDependencies: [
+            "TestUtilities",
+        ]),
+    ]
+}
+
+// MARK: - Builders
+
+enum TargetType: String {
+    case core = "Core"
+    case domain = "Domain"
+    case data = "Data"
+}
+
+func target(
+    _ type: TargetType,
+    name: String,
+    hasTests: Bool = true,
+    dependencies: [Target.Dependency] = [],
+    resources: [Resource]? = nil,
+    testDependencies: [Target.Dependency] = [],
+    testExclude: [String] = [],
+    testResources: [Resource]? = nil
+) -> [Target] {
+    var targets: [Target] = [
+        .target(name: name,
+                dependencies: dependencies,
+                path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
+                resources: resources,
+                swiftSettings: settings),
+    ]
+    guard hasTests else {
+        return targets
+    }
+    targets.append(
+        .testTarget(name: name + "Tests",
+                    dependencies: [.init(stringLiteral: name)] + testDependencies,
+                    path: type.rawValue + "/" + name + "/Tests",
+                    exclude: testExclude,
+                    resources: testResources,
+                    swiftSettings: settings)
+    )
+    return targets
+}

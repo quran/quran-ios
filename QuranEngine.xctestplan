@@ -99,6 +99,13 @@
         "identifier" : "PageBookmarkPersistenceTests",
         "name" : "PageBookmarkPersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NotePersistenceTests",
+        "name" : "NotePersistenceTests"
+      }
     }
   ],
   "version" : 1

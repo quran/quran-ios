@@ -1,0 +1,106 @@
+//
+//  CoreDataNotePersistenceTests.swift
+//
+//
+//  Created by Mohamed Afifi on 2023-05-31.
+//
+
+import Combine
+import CoreDataPersistence
+@testable import NotePersistence
+import TestUtilities
+import XCTest
+import SystemDependenciesFake
+
+class CoreDataNotePersistenceTests: XCTestCase {
+    var sut: CoreDataNotePersistence!
+    var stack: CoreDataStack!
+    var time: SystemTimeFake!
+
+    var verse1: VerseDTO!
+    var verse2: VerseDTO!
+    var verse3: VerseDTO!
+    var verse4: VerseDTO!
+
+    var note1: NoteDTO!
+    var note2: NoteDTO!
+    var note3: NoteDTO!
+
+    override func setUp() async throws {
+        try await super.setUp()
+
+        stack = CoreDataStack.testingStack()
+        time = SystemTimeFake()
+
+        verse1 = VerseDTO(ayah: 1, sura: 1)
+        verse2 = VerseDTO(ayah: 2, sura: 1)
+        verse3 = VerseDTO(ayah: 3, sura: 1)
+        verse4 = VerseDTO(ayah: 4, sura: 1)
+
+        note1 = NoteDTO("Note 1", color: 1, modifiedDate: Date(timeIntervalSince1970: 100))
+        note2 = NoteDTO("", color: 2, modifiedDate: Date(timeIntervalSince1970: 200))
+        note3 = NoteDTO("Note 3", color: 3, modifiedDate: Date(timeIntervalSince1970: 300))
+
+        sut = CoreDataNotePersistence(stack: stack, time: time)
+    }
+
+    override func tearDown() {
+        CoreDataStack.removePersistentFiles()
+        sut = nil
+        stack = nil
+        super.tearDown()
+    }
+
+    func test_createAndRetrieveNotes() throws {
+        // 1. Initially empty.
+        let collector = PublisherCollector(sut.notes())
+        XCTAssertEqual(collector.items.count, 1)
+        XCTAssertEqual(collector.items.last, [])
+
+        // 2. Create a note
+        time.now = note1.modifiedDate
+        let returnedNote1 = try sut.setNote(note1.note, verses: [verse1, verse2], color: note1.color).wait()
+
+        // 3. Assert created note
+        note1.verses = [verse1, verse2]
+        XCTAssertEqual(returnedNote1, note1)
+        XCTAssertEqual(collector.items.last, [returnedNote1])
+
+        // 4. Create a nother note
+        time.now = note2.modifiedDate
+        let returnedNote2 = try sut.setNote(note2.note, verses: [verse3], color: note2.color).wait()
+
+        // 5. Assert created note
+        note2.verses = [verse3]
+        XCTAssertEqual(returnedNote2, note2)
+        XCTAssertEqual(collector.items.last, [returnedNote2, returnedNote1])
+
+        // 6. Create new note merging an existing one.
+        time.now = note3.modifiedDate
+        let returnedNote3 = try sut.setNote(note3.note, verses: [verse1, verse4], color: note3.color).wait()
+
+        // 7. Assert merged note
+        note3.verses = [verse1, verse2, verse4]
+        XCTAssertEqual(returnedNote3, note3)
+        XCTAssertEqual(collector.items.last, [returnedNote3, returnedNote2])
+
+        // 8. Delete a note
+        let deletedNotes1 = try sut.removeNotes(with: [verse1]).wait()
+        XCTAssertEqual(deletedNotes1, [returnedNote3])
+
+        // 9. Updating existing note with same data, won't modify it.
+        let numberOfUpdates = collector.items.count
+        time.now = Date()
+        let updatedNote2 = try sut.setNote(note2.note, verses: Array(note2.verses), color: note2.color).wait()
+
+        // 10. Assert no change to database
+        XCTAssertEqual(updatedNote2, returnedNote2)
+        XCTAssertEqual(numberOfUpdates, collector.items.count)
+    }
+}
+
+extension NoteDTO {
+    init(_ text: String?, color: Int, modifiedDate: Date) {
+        self.init(verses: [], modifiedDate: modifiedDate, note: text, color: color)
+    }
+}

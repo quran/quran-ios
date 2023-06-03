@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2021-11-28.
 //
 
-import BatchDownloader
 import Foundation
+import NetworkSupport
 
 struct AudioUpdatesNetworkManager {
     let networkManager: NetworkManager

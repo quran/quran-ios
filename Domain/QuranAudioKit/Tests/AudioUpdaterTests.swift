@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-05-07.
 //
 
-@testable import BatchDownloader
 import Foundation
+@testable import NetworkSupport
 @testable import QuranAudioKit
 import SystemDependenciesFake
 import TestUtilities

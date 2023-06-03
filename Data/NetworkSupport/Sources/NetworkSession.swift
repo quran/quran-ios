@@ -8,7 +8,7 @@
 import Crashing
 import Foundation
 
-protocol NetworkSession: AnyObject, Sendable {
+public protocol NetworkSession: AnyObject, Sendable {
     var delegateQueue: OperationQueue { get }
     func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask])
     func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask
@@ -16,7 +16,7 @@ protocol NetworkSession: AnyObject, Sendable {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
-protocol NetworkSessionTask: AnyObject, Sendable {
+public protocol NetworkSessionTask: AnyObject, Sendable {
     var taskIdentifier: Int { get }
     var originalRequest: URLRequest? { get }
     var currentRequest: URLRequest? { get }
@@ -25,16 +25,16 @@ protocol NetworkSessionTask: AnyObject, Sendable {
     func resume()
 }
 
-protocol NetworkSessionDownloadTask: NetworkSessionTask {
+public protocol NetworkSessionDownloadTask: NetworkSessionTask {
 }
 
-protocol NetworkSessionUploadTask: NetworkSessionTask {
+public protocol NetworkSessionUploadTask: NetworkSessionTask {
 }
 
-protocol NetworkSessionDataTask: NetworkSessionTask {
+public protocol NetworkSessionDataTask: NetworkSessionTask {
 }
 
-protocol NetworkSessionDelegate: Sendable {
+public protocol NetworkSessionDelegate: Sendable {
     func networkSession(_ session: NetworkSession,
                         downloadTask: NetworkSessionDownloadTask,
                         didWriteData bytesWritten: Int64,
@@ -48,15 +48,15 @@ protocol NetworkSessionDelegate: Sendable {
 }
 
 extension URLSession: NetworkSession {
-    func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
+    public func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
         await tasks
     }
 
-    func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
+    public func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
         downloadTask(with: request) as URLSessionDownloadTask
     }
 
-    func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
+    public func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
         downloadTask(withResumeData: resumeData) as URLSessionDownloadTask
     }
 }
@@ -73,17 +73,17 @@ extension URLSessionUploadTask: NetworkSessionUploadTask {
 extension URLSessionDataTask: NetworkSessionDataTask {
 }
 
-final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
+public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
     let networkSessionDelegate: NetworkSessionDelegate
-    init(networkSessionDelegate: NetworkSessionDelegate) {
+    public init(networkSessionDelegate: NetworkSessionDelegate) {
         self.networkSessionDelegate = networkSessionDelegate
     }
 
-    func urlSession(_ session: URLSession,
-                    downloadTask: URLSessionDownloadTask,
-                    didWriteData bytesWritten: Int64,
-                    totalBytesWritten: Int64,
-                    totalBytesExpectedToWrite: Int64)
+    public func urlSession(_ session: URLSession,
+                           downloadTask: URLSessionDownloadTask,
+                           didWriteData bytesWritten: Int64,
+                           totalBytesWritten: Int64,
+                           totalBytesExpectedToWrite: Int64)
     {
         Task {
             await networkSessionDelegate.networkSession(session,
@@ -94,7 +94,7 @@ final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDele
         }
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         let filePath = UUID().uuidString
         let temporaryFile = temporaryDirectory.appendingPathComponent(filePath)
@@ -113,13 +113,13 @@ final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDele
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
         Task {
             await networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: sessionError)
         }
     }
 
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         Task {
             await networkSessionDelegate.networkSessionDidFinishEvents(forBackgroundURLSession: session)
         }

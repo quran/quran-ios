@@ -201,10 +201,17 @@ private func dataTargets() -> [[Target]] {
 
         // MARK: - Networking
 
+        target(.data, name: "NetworkSupport", dependencies: [
+            "Crashing",
+        ], testDependencies: [
+            "TestUtilities",
+        ]),
+
         target(.data, name: "BatchDownloader", dependencies: [
             "SQLitePersistence",
             "Crashing",
             "WeakSet",
+            "NetworkSupport",
         ], testDependencies: [
             "TestUtilities",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),

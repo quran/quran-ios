@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2022-02-05.
 //
 
-@testable import BatchDownloader
+@testable import NetworkSupport
 import TestUtilities
 import XCTest
 
@@ -34,7 +34,7 @@ class NetworkManagerTests: XCTestCase {
         let path = "v1/products"
         let parameters = [("sort", "newest")]
         let request = NetworkManager.request(baseURL: baseURL, path: path, parameters: parameters)
-        let error = FileSystemError(error: CocoaError(.coderReadCorrupt))
+        let error = CocoaError(.coderReadCorrupt)
         session.dataResults[request.url!] = .failure(error)
 
         let result = await Result { try await networkManager.request(path, parameters: parameters) }

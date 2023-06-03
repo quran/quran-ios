@@ -5,7 +5,7 @@
 //  Created by Afifi, Mohamed on 10/30/21.
 //
 
-import BatchDownloader
+import NetworkSupport
 
 struct TranslationNetworkManager {
     static let path = "/data/translations.php"

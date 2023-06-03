@@ -18,15 +18,15 @@
 //  GNU General Public License for more details.
 //
 
-import BatchDownloader
 import Foundation
+import NetworkSupport
 
 public struct TranslationsRepository {
     let networkManager: TranslationNetworkManager
     let persistence: ActiveTranslationsPersistence
 
     public init(databasesURL: URL, baseURL: URL) {
-        self.init(databasesURL: databasesURL, networkManager: NetworkManager(session: .shared, baseURL: baseURL))
+        self.init(databasesURL: databasesURL, networkManager: NetworkManager(baseURL: baseURL))
     }
 
     init(databasesURL: URL, networkManager: NetworkManager) {

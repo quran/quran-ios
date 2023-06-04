@@ -18,10 +18,6 @@ final class UpdateHandlerTests: XCTestCase {
     private var worker2: VersionUpdaterTester!
     private var nonBlockingWorker: VersionUpdaterTester!
 
-    private var workers: [VersionUpdaterTester] {
-        [worker1, worker2, nonBlockingWorker]
-    }
-
     override func setUp() async throws {
         try await super.setUp()
         bundle = SystemBundleFake()

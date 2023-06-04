@@ -11,10 +11,6 @@ import TranslationServiceFake
 import XCTest
 
 class TranslationDeleterTests: XCTestCase {
-    private var persistence: ActiveTranslationsPersistence {
-        localTranslationsFake.persistence
-    }
-
     private var retriever: LocalTranslationsRetriever {
         localTranslationsFake.retriever
     }

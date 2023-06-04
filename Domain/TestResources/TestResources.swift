@@ -9,10 +9,7 @@ import Foundation
 
 public struct TestResources {
     public static func resourceURL(_ path: String) -> URL {
-        let components = path.components(separatedBy: ".")
-        let resource = components.dropLast().joined(separator: ".")
-        let ext = components.last!
-        return Bundle.module.url(forResource: "test_data/" + resource, withExtension: ext)!
+        Bundle.module.url(forResource: "test_data/" + path, withExtension: nil)!
     }
 
     public static var testDataURL: URL {

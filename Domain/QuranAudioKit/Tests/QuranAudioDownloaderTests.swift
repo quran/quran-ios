@@ -5,12 +5,14 @@
 //  Created by Mohamed Afifi on 2023-05-06.
 //
 
+import AsyncUtilitiesForTesting
 @testable import BatchDownloader
+import BatchDownloaderFake
+import NetworkSupportFake
 @testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
 import SystemDependenciesFake
-import TestUtilities
 import XCTest
 
 class QuranAudioDownloaderTests: XCTestCase {
@@ -31,7 +33,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
-        (batchDownloader, session) = await NetworkSessionFake.makeDownloader()
+        (batchDownloader, session) = await BatchDownloaderFake.makeDownloader()
         downloader = QuranAudioDownloader(
             downloader: batchDownloader,
             fileListFactory: DefaultReciterAudioFileListRetrievalFactory(baseURL: Self.baseURL),
@@ -40,7 +42,7 @@ class QuranAudioDownloaderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        NetworkSessionFake.tearDown()
+        BatchDownloaderFake.tearDown()
         Reciter.cleanUpAudio()
         batchDownloader = nil
         downloader = nil

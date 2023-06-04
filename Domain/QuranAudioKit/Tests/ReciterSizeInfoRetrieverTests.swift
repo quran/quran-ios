@@ -8,7 +8,6 @@
 @testable import QuranAudioKit
 import QuranKit
 import SystemDependenciesFake
-import TestUtilities
 import XCTest
 
 class ReciterSizeInfoRetrieverTests: XCTestCase {

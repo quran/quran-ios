@@ -5,9 +5,9 @@
 //  Created by Mohamed Afifi on 2023-05-27.
 //
 
+import AsyncUtilitiesForTesting
 import GRDB
 @testable import SQLitePersistence
-import TestUtilities
 import XCTest
 
 class DatabaseConnectionTests: XCTestCase {

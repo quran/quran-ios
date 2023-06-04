@@ -7,7 +7,7 @@
 
 import QuranKit
 @testable import QuranTextKit
-import TestUtilities
+import TestResources
 import XCTest
 
 class WordTextServiceTests: XCTestCase {

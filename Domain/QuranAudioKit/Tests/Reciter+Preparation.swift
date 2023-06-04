@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import QuranAudioKit
+import TestResources
 import Zip
 
 extension Reciter {
@@ -44,6 +45,6 @@ extension Reciter {
     }
 
     private func resource(_ path: String) -> URL {
-        Bundle.module.url(forResource: "test_data/" + path, withExtension: nil)!
+        TestResources.resourceURL(path)
     }
 }

@@ -8,8 +8,8 @@
 import QuranKit
 @testable import QuranTextKit
 import SystemDependenciesFake
-import TestUtilities
 @testable import TranslationService
+import TranslationServiceFake
 import XCTest
 
 final class QuranTextDataServiceTests: XCTestCase {

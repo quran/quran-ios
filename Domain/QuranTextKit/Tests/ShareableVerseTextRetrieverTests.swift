@@ -7,8 +7,8 @@
 
 import QuranKit
 @testable import QuranTextKit
-import TestUtilities
 import TranslationService
+import TranslationServiceFake
 import XCTest
 
 final class ShareableVerseTextRetrieverTests: XCTestCase {

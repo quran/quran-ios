@@ -6,7 +6,6 @@
 //
 
 @testable import Caching
-import TestUtilities
 import XCTest
 
 class OperationCacheableServiceTests: XCTestCase {

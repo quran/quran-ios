@@ -5,10 +5,10 @@
 //  Created by Mohamed Afifi on 2023-05-30.
 //
 
+import AsyncUtilitiesForTesting
 import Combine
 import CoreDataPersistence
 @testable import LastPagePersistence
-import TestUtilities
 import XCTest
 
 final class CoreDataLastPagePersistenceTests: XCTestCase {

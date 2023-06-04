@@ -5,8 +5,10 @@
 //  Created by Mohamed Afifi on 2022-02-05.
 //
 
+import AsyncUtilitiesForTesting
 @testable import NetworkSupport
-import TestUtilities
+import NetworkSupportFake
+import Utilities
 import XCTest
 
 class NetworkManagerTests: XCTestCase {

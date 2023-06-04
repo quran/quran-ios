@@ -6,9 +6,10 @@
 //
 
 @testable import NetworkSupport
+import NetworkSupportFake
 import SystemDependenciesFake
-import TestUtilities
 @testable import TranslationService
+import TranslationServiceFake
 import XCTest
 
 class TranslationsRepositoryTests: XCTestCase {

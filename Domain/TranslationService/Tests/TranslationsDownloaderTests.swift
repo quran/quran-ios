@@ -5,10 +5,13 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
+import AsyncUtilitiesForTesting
 @testable import BatchDownloader
+import BatchDownloaderFake
+import NetworkSupportFake
 import SystemDependenciesFake
-import TestUtilities
 @testable import TranslationService
+import TranslationServiceFake
 import XCTest
 
 class TranslationsDownloaderTests: XCTestCase {
@@ -21,12 +24,12 @@ class TranslationsDownloaderTests: XCTestCase {
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
-        (batchDownloader, session) = await NetworkSessionFake.makeDownloader()
+        (batchDownloader, session) = await BatchDownloaderFake.makeDownloader()
         downloader = TranslationsDownloader(downloader: batchDownloader)
     }
 
     override func tearDownWithError() throws {
-        NetworkSessionFake.tearDown()
+        BatchDownloaderFake.tearDown()
         downloader = nil
         batchDownloader = nil
         session = nil

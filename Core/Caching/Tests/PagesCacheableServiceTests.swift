@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-05-27.
 //
 
+import AsyncUtilitiesForTesting
 @testable import Caching
-import TestUtilities
 import XCTest
 
 struct TestPage: Pageable {

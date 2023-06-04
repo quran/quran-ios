@@ -6,8 +6,8 @@
 //
 
 import SystemDependenciesFake
-import TestUtilities
 @testable import TranslationService
+import TranslationServiceFake
 import XCTest
 
 class TranslationDeleterTests: XCTestCase {

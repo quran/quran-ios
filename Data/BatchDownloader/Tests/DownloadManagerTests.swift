@@ -6,9 +6,11 @@
 //
 
 import AsyncAlgorithms
+import AsyncUtilitiesForTesting
 @testable import BatchDownloader
+import BatchDownloaderFake
 import NetworkSupport
-import TestUtilities
+import NetworkSupportFake
 import XCTest
 
 final class DownloadManagerTests: XCTestCase {
@@ -16,22 +18,22 @@ final class DownloadManagerTests: XCTestCase {
     private var downloader: DownloadManager!
     private var session: NetworkSessionFake?
 
-    private let request1 = NetworkSessionFake.makeDownloadRequest("1")
-    private let request2 = NetworkSessionFake.makeDownloadRequest("2")
-    private let request3 = NetworkSessionFake.makeDownloadRequest("3")
-    private let request4 = NetworkSessionFake.makeDownloadRequest("4")
-    private let request5 = NetworkSessionFake.makeDownloadRequest("5")
+    private let request1 = BatchDownloaderFake.makeDownloadRequest("1")
+    private let request2 = BatchDownloaderFake.makeDownloadRequest("2")
+    private let request3 = BatchDownloaderFake.makeDownloadRequest("3")
+    private let request4 = BatchDownloaderFake.makeDownloadRequest("4")
+    private let request5 = BatchDownloaderFake.makeDownloadRequest("5")
 
     override func setUp() async throws {
         try await super.setUp()
-        (downloader, session) = await NetworkSessionFake.makeDownloader()
+        (downloader, session) = await BatchDownloaderFake.makeDownloader()
     }
 
     override func tearDown() async throws {
         try await super.tearDown()
         downloader = nil
         session = nil
-        NetworkSessionFake.tearDown()
+        BatchDownloaderFake.tearDown()
     }
 
     @MainActor
@@ -74,7 +76,7 @@ final class DownloadManagerTests: XCTestCase {
 
         // deallocate downloader & create new one
         downloader = nil
-        (downloader, session) = await NetworkSessionFake.makeDownloader(downloads: downloads)
+        (downloader, session) = await BatchDownloaderFake.makeDownloader(downloads: downloads)
 
         // loaded downlodas from disk
         let diskDownloads = await downloader.getOnGoingDownloads()
@@ -179,7 +181,7 @@ final class DownloadManagerTests: XCTestCase {
 
         // complete tasks
         var tasks: [CompletedTask] = []
-        for i in 0 ..< NetworkSessionFake.maxSimultaneousDownloads {
+        for i in 0 ..< BatchDownloaderFake.maxSimultaneousDownloads {
             tasks.append(try await completeTask(response, i: i))
         }
 
@@ -216,7 +218,7 @@ final class DownloadManagerTests: XCTestCase {
         // deallocate downloader & create new one
         downloader = nil
         session = nil
-        (downloader, session) = await NetworkSessionFake.makeDownloader(downloads: downloads)
+        (downloader, session) = await BatchDownloaderFake.makeDownloader(downloads: downloads)
 
         let diskDownloads = await downloader.getOnGoingDownloads()
         let diskResponse = try XCTUnwrap(diskDownloads.first)
@@ -265,7 +267,7 @@ final class DownloadManagerTests: XCTestCase {
         let response = await batch.responses[i]
         let task = try await AsyncUnwrap(await response.task as? SessionTask, file: file, line: line)
         let text = Int.random(in: 0 ..< Int.max).description
-        let source = try NetworkSessionFake.createTextFile(at: "loc-\(i).txt", content: text)
+        let source = try BatchDownloaderFake.createTextFile(at: "loc-\(i).txt", content: text)
         let destination = await destinationURL(response: response)
         XCTAssertTrue(source.isReachable, file: file, line: line)
         let listener = await HistoryProgressListener(await response.progress)

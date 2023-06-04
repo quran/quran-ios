@@ -8,7 +8,7 @@
 import QuranKit
 @testable import QuranTextKit
 import SnapshotTesting
-import TestUtilities
+import TestResources
 import XCTest
 
 class ImageDataServiceTests: XCTestCase {

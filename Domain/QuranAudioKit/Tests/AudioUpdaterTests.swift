@@ -7,9 +7,9 @@
 
 import Foundation
 @testable import NetworkSupport
+import NetworkSupportFake
 @testable import QuranAudioKit
 import SystemDependenciesFake
-import TestUtilities
 import XCTest
 
 class AudioUpdaterTests: XCTestCase {

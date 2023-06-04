@@ -5,11 +5,11 @@
 //  Created by Mohamed Afifi on 2023-05-28.
 //
 
+import AsyncUtilitiesForTesting
 import Combine
 import CoreData
 import CoreDataModel
 @testable import CoreDataPersistence
-import TestUtilities
 import XCTest
 
 class CoreDataPublisherTests: XCTestCase {

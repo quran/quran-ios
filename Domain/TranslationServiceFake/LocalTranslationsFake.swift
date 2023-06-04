@@ -7,6 +7,7 @@
 
 import Foundation
 import SystemDependenciesFake
+import TestResources
 @testable import TranslationService
 
 public struct LocalTranslationsFake {

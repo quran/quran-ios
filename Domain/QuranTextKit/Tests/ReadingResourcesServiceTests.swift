@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-02-20.
 //
 
+import AsyncUtilitiesForTesting
 @testable import QuranTextKit
-import TestUtilities
 import XCTest
 
 final class ReadingResourcesServiceTests: XCTestCase {

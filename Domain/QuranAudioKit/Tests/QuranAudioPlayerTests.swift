@@ -5,12 +5,12 @@
 //  Created by Mohamed Afifi on 2022-02-08.
 //
 
+import AsyncUtilitiesForTesting
 import AVFoundation
 @testable import QueuePlayer
 @testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
-import TestUtilities
 import XCTest
 
 class QuranAudioPlayerTests: XCTestCase {

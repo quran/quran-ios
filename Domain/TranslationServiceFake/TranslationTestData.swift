@@ -7,7 +7,6 @@
 
 import Foundation
 @testable import TranslationService
-import Utilities
 
 public struct TranslationTestData {
     public static let khanTranslation = Translation(id: 1, displayName: "",

@@ -43,11 +43,6 @@ let package = Package(
         .library(name: "SystemDependenciesFake", targets: ["SystemDependenciesFake"]),
 
         .library(name: "TranslationService", targets: ["TranslationService"]),
-
-        // Testing
-
-        .library(name: "TestUtilities", targets: ["TestUtilities"]),
-
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
@@ -85,7 +80,7 @@ private func coreTargets() -> [[Target]] {
             "Locking",
             "Utilities",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
         ]),
 
         target(.core, name: "Timing", hasTests: false, dependencies: [
@@ -103,7 +98,7 @@ private func coreTargets() -> [[Target]] {
         target(.core, name: "Utilities", dependencies: [
             "PromiseKit",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
         ]),
 
         target(.core, name: "VersionUpdater", dependencies: [
@@ -123,17 +118,9 @@ private func coreTargets() -> [[Target]] {
 
         target(.core, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
 
-        // TODO: Break up
-        target(.core, name: "TestUtilities", hasTests: false, dependencies: [
+        target(.core, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             "PromiseKit",
-            "BatchDownloader",
-            "TranslationService",
-            "SystemDependenciesFake",
-            "Utilities",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-        ],
-        resources: [
-            .copy("test_data"),
         ]),
     ]
 }
@@ -146,7 +133,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
         ]),
 
@@ -154,7 +141,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
         ]),
 
@@ -163,7 +150,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistence",
             "SystemDependencies",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
         ]),
 
@@ -174,7 +161,7 @@ private func dataTargets() -> [[Target]] {
             "PromiseKit",
             "SystemDependencies",
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
             "CoreDataModel",
             "CoreDataPersistenceTestSupport",
         ]),
@@ -196,7 +183,7 @@ private func dataTargets() -> [[Target]] {
             "VLogging",
             .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [
-            "TestUtilities",
+            "AsyncUtilitiesForTesting",
         ]),
 
         // MARK: - Networking
@@ -204,7 +191,15 @@ private func dataTargets() -> [[Target]] {
         target(.data, name: "NetworkSupport", dependencies: [
             "Crashing",
         ], testDependencies: [
-            "TestUtilities",
+            "Utilities",
+            "AsyncUtilitiesForTesting",
+            "NetworkSupportFake",
+        ]),
+
+        target(.data, name: "NetworkSupportFake", hasTests: false, dependencies: [
+            "NetworkSupport",
+            "AsyncUtilitiesForTesting",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
         target(.data, name: "BatchDownloader", dependencies: [
@@ -213,14 +208,23 @@ private func dataTargets() -> [[Target]] {
             "WeakSet",
             "NetworkSupport",
         ], testDependencies: [
-            "TestUtilities",
+            "BatchDownloaderFake",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        ]),
+
+        target(.data, name: "BatchDownloaderFake", hasTests: false, dependencies: [
+            "BatchDownloader",
+            "NetworkSupportFake",
         ]),
     ]
 }
 
 private func domainTargets() -> [[Target]] {
     [
+        target(.domain, name: "TestResources", hasTests: false, resources: [
+            .copy("test_data"),
+        ]),
+
         target(.domain, name: "QuranKit", dependencies: [],
                testDependencies: []),
 
@@ -229,8 +233,9 @@ private func domainTargets() -> [[Target]] {
             "QuranKit",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-            "TestUtilities",
+            "TranslationServiceFake",
             "SystemDependenciesFake",
+            "TestResources",
         ], testExclude: [
             "__Snapshots__",
         ]),
@@ -240,17 +245,17 @@ private func domainTargets() -> [[Target]] {
             "BatchDownloader",
             "QuranTextKit",
             "QueuePlayer",
+            "TestResources",
             "SystemDependencies",
             "Zip",
             .product(name: "OrderedCollections", package: "swift-collections"),
         ], testDependencies: [
             "SystemDependenciesFake",
-            "TestUtilities",
+            "TranslationServiceFake",
+            "BatchDownloaderFake",
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
         ], testExclude: [
             "__Snapshots__",
-        ], testResources: [
-            .copy("test_data"),
         ]),
 
         target(.domain, name: "TranslationService", dependencies: [
@@ -261,7 +266,16 @@ private func domainTargets() -> [[Target]] {
             "Preferences",
             "SystemDependencies",
         ], testDependencies: [
-            "TestUtilities",
+            "TranslationServiceFake",
+            "BatchDownloaderFake",
+        ]),
+
+        target(.domain, name: "TranslationServiceFake", hasTests: false, dependencies: [
+            "TranslationService",
+            "SystemDependenciesFake",
+            "Utilities",
+            "TestResources",
+            "AsyncUtilitiesForTesting",
         ]),
     ]
 }

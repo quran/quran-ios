@@ -5,11 +5,11 @@
 //  Created by Mohamed Afifi on 2023-05-31.
 //
 
+import AsyncUtilitiesForTesting
 import Combine
 import CoreDataPersistence
 @testable import NotePersistence
 import SystemDependenciesFake
-import TestUtilities
 import XCTest
 
 class CoreDataNotePersistenceTests: XCTestCase {

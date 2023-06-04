@@ -20,7 +20,7 @@
 
 import QuranKit
 
-protocol AyahTimingPersistence {
+public protocol AyahTimingPersistence {
     func getVersion() async throws -> Int
     func getOrderedTimingForSura(startAyah: AyahNumber) async throws -> SuraTiming
 }

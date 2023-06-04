@@ -11,18 +11,18 @@ import QuranKit
 import SQLitePersistence
 import VLogging
 
-struct GRDBAyahTimingPersistence: AyahTimingPersistence {
+public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
         self.db = db
     }
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    func getVersion() async throws -> Int {
+    public func getVersion() async throws -> Int {
         try await db.write { db in
             let property = try GRDBProperty
                 .filter(GRDBProperty.Columns.property == "version")
@@ -32,7 +32,7 @@ struct GRDBAyahTimingPersistence: AyahTimingPersistence {
         }
     }
 
-    func getOrderedTimingForSura(startAyah: QuranKit.AyahNumber) async throws -> SuraTiming {
+    public func getOrderedTimingForSura(startAyah: QuranKit.AyahNumber) async throws -> SuraTiming {
         try await db.read { db in
             let query = GRDBTiming.filter(GRDBTiming.Columns.sura == startAyah.sura.suraNumber
                 && GRDBTiming.Columns.ayah >= startAyah.ayah)

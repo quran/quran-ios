@@ -11,6 +11,7 @@ import QueuePlayer
 import QuranKit
 import Utilities
 import VLogging
+import AyahTimingPersistence
 
 public struct QuranAudioPlayerActions: Sendable {
     let playbackEnded: @Sendable @MainActor () -> Void
@@ -46,7 +47,7 @@ public class QuranAudioPlayer {
     private var audioRequest: QuranAudioRequest?
 
     nonisolated init(player: QueuingPlayer) {
-        let timingRetriever = ReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
+        let timingRetriever = ReciterTimingRetriever(persistenceFactory: GRDBAyahTimingPersistence.init)
         let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
         let gappedBuilder = GappedAudioRequestBuilder()
         self.player = player

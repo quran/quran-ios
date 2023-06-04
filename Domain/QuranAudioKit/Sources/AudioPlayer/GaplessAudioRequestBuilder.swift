@@ -11,6 +11,7 @@ import QueuePlayer
 import QuranKit
 import QuranTextKit
 import VLogging
+import AyahTimingPersistence
 
 struct GaplessAudioRequest: QuranAudioRequest {
     let request: AudioRequest

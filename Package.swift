@@ -186,6 +186,10 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
+        target(.data, name: "AyahTimingPersistence", hasTests: false, dependencies: [
+            "SQLitePersistence",
+        ]),
+
         // MARK: - Networking
 
         target(.data, name: "NetworkSupport", dependencies: [
@@ -243,6 +247,7 @@ private func domainTargets() -> [[Target]] {
         target(.domain, name: "QuranAudioKit", dependencies: [
             "SQLitePersistence",
             "BatchDownloader",
+            "AyahTimingPersistence",
             "QuranTextKit",
             "QueuePlayer",
             "TestResources",

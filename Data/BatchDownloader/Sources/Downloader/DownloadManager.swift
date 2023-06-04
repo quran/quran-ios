@@ -20,6 +20,7 @@
 
 import Crashing
 import Foundation
+import NetworkSupport
 import Utilities
 
 public final class DownloadManager: Sendable {

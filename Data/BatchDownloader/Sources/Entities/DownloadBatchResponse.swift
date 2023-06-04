@@ -21,6 +21,7 @@
 import Combine
 import Crashing
 import Foundation
+import NetworkSupport
 import Utilities
 
 public typealias AsyncPublisher = Utilities.AsyncPublisher

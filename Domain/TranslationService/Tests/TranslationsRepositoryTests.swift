@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
-@testable import BatchDownloader
+@testable import NetworkSupport
 import SystemDependenciesFake
 import TestUtilities
 @testable import TranslationService

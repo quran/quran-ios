@@ -10,12 +10,8 @@ import Foundation
 public final class NetworkManager {
     private let session: NetworkSession
     private let baseURL: URL
-    public init(session: URLSession = .shared, baseURL: URL) {
-        self.session = session
-        self.baseURL = baseURL
-    }
 
-    init(session: NetworkSession, baseURL: URL) {
+    public init(session: NetworkSession = URLSession.shared, baseURL: URL) {
         self.session = session
         self.baseURL = baseURL
     }

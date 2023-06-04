@@ -6,9 +6,9 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import BatchDownloader
 import Crashing
 import Foundation
+import NetworkSupport
 import SystemDependencies
 import VLogging
 
@@ -32,7 +32,7 @@ public final class AudioUpdater {
     }
 
     public init(baseURL: URL) {
-        let networkManager = NetworkManager(session: .shared, baseURL: baseURL)
+        let networkManager = NetworkManager(baseURL: baseURL)
         networkService = AudioUpdatesNetworkManager(networkManager: networkManager)
         recitersRetriever = ReciterDataRetriever()
         fileSystem = DefaultFileSystem()

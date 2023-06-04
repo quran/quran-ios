@@ -8,6 +8,7 @@
 import AsyncAlgorithms
 @testable import BatchDownloader
 import Foundation
+import NetworkSupport
 import XCTest
 
 public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {

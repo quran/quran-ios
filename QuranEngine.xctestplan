@@ -104,6 +104,13 @@
         "identifier" : "NotePersistenceTests",
         "name" : "NotePersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NetworkSupportTests",
+        "name" : "NetworkSupportTests"
+      }
     }
   ],
   "version" : 1

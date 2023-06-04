@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import NetworkSupport
 
 public struct DownloadRequest: Hashable, Sendable {
     public static let downloadResumeDataExtension = "resume"

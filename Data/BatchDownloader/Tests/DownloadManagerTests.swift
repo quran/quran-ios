@@ -7,6 +7,7 @@
 
 import AsyncAlgorithms
 @testable import BatchDownloader
+import NetworkSupport
 import TestUtilities
 import XCTest
 

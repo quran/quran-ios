@@ -20,6 +20,7 @@
 
 import Crashing
 import Foundation
+import NetworkSupport
 import VLogging
 
 actor DownloadSessionDelegate: NetworkSessionDelegate {

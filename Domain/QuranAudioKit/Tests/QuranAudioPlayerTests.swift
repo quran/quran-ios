@@ -13,6 +13,7 @@ import QuranKit
 import SnapshotTesting
 import XCTest
 
+@MainActor
 class QuranAudioPlayerTests: XCTestCase {
     private var player: QuranAudioPlayer!
     private var queuePlayer: QueuePlayerFake!
@@ -28,7 +29,7 @@ class QuranAudioPlayerTests: XCTestCase {
         delegate = QuranAudioPlayerDelegateClosures()
 
         player = QuranAudioPlayer(player: queuePlayer)
-        await player.setActions(delegate.makeActions())
+        player.setActions(delegate.makeActions())
     }
 
     override func tearDownWithError() throws {
@@ -139,32 +140,32 @@ class QuranAudioPlayerTests: XCTestCase {
             // play
             try await runDownloadedTestCase(gapless: i == 0)
 
-            await AsyncAssertEqual(await queuePlayer.location, 0)
+            XCTAssertEqual(queuePlayer.location, 0)
 
             // step forward
-            await player.stepForward()
-            await AsyncAssertEqual(await queuePlayer.state.isPlaying, true)
-            await AsyncAssertEqual(await queuePlayer.location, 1)
+            player.stepForward()
+            XCTAssertEqual(queuePlayer.state.isPlaying, true)
+            XCTAssertEqual(queuePlayer.location, 1)
 
             // pause
-            await player.pauseAudio()
-            await AsyncAssertEqual(await queuePlayer.state.isPaused, true)
-            await AsyncAssertEqual(await queuePlayer.location, 1)
+            player.pauseAudio()
+            XCTAssertEqual(queuePlayer.state.isPaused, true)
+            XCTAssertEqual(queuePlayer.location, 1)
 
             // resume
-            await player.resumeAudio()
-            await AsyncAssertEqual(await queuePlayer.state.isPlaying, true)
-            await AsyncAssertEqual(await queuePlayer.location, 1)
+            player.resumeAudio()
+            XCTAssertEqual(queuePlayer.state.isPlaying, true)
+            XCTAssertEqual(queuePlayer.location, 1)
 
             // step backward
-            await player.stepBackward()
-            await AsyncAssertEqual(await queuePlayer.state.isPlaying, true)
-            await AsyncAssertEqual(await queuePlayer.location, 0)
+            player.stepBackward()
+            XCTAssertEqual(queuePlayer.state.isPlaying, true)
+            XCTAssertEqual(queuePlayer.location, 0)
 
             // stop
-            await player.stopAudio()
-            await AsyncAssertEqual(await queuePlayer.state.isStopped, true)
-            await AsyncAssertEqual(await queuePlayer.location, 0)
+            player.stopAudio()
+            XCTAssertEqual(queuePlayer.state.isStopped, true)
+            XCTAssertEqual(queuePlayer.location, 0)
         }
     }
 
@@ -175,26 +176,26 @@ class QuranAudioPlayerTests: XCTestCase {
             try await runDownloadedTestCase(gapless: i == 0)
 
             // pause
-            await queuePlayer.actions?.playbackRateChanged(0)
-            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackPaused])
+            queuePlayer.actions?.playbackRateChanged(0)
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackPaused])
 
             // resume
-            await queuePlayer.actions?.playbackRateChanged(1)
-            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackResumed])
+            queuePlayer.actions?.playbackRateChanged(1)
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackResumed])
 
             // frame update
             let playerItem = AVPlayerItem(url: FileManager.documentsURL)
             let frameChange = frameChanges[i]
-            await queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem)
-            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
+            queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem)
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
-            await queuePlayer.actions?.playbackEnded()
-            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
+            queuePlayer.actions?.playbackEnded()
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
 
             // cannot end playback again or change frame
-            await queuePlayer.actions?.playbackEnded()
-            await AsyncAssertEqual(await delegate.eventsDiffSinceLastCalled, [])
+            queuePlayer.actions?.playbackEnded()
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [])
         }
     }
 
@@ -232,7 +233,7 @@ class QuranAudioPlayerTests: XCTestCase {
         try await player.play(reciter: reciter, from: from, to: to, verseRuns: .one, listRuns: .one)
 
         if snaphot {
-            let state = await queuePlayer.state
+            let state = queuePlayer.state
             assertSnapshot(matching: state, as: .json, testName: testName)
         }
     }
@@ -250,7 +251,7 @@ class QuranAudioPlayerTests: XCTestCase {
         try await player.play(reciter: reciter, from: from, to: to, verseRuns: .one, listRuns: .one)
 
         if snaphot {
-            let state = await queuePlayer.state
+            let state = queuePlayer.state
             assertSnapshot(matching: state, as: .json, testName: testName)
         }
     }

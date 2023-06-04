@@ -11,6 +11,7 @@ import SnapshotTesting
 import TranslationServiceFake
 import XCTest
 
+@MainActor
 class CompositeSearcherTests: XCTestCase {
     private var searcher: CompositeSearcher!
     private var localTranslationsFake: LocalTranslationsFake!

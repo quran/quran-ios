@@ -24,8 +24,13 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-# Swift Package Manager
+# Swift Package Manager. See: https://github.com/apple/swift-package-manager/blob/main/Sources/Workspace/InitPackage.swift#L381
 
-.build/
-Packages/
-.swiftpm
+ .DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc

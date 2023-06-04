@@ -13,10 +13,6 @@ import TranslationServiceFake
 import XCTest
 
 class TranslationsRepositoryTests: XCTestCase {
-    private var persistence: ActiveTranslationsPersistence {
-        localTranslationsFake.persistence
-    }
-
     private var retriever: LocalTranslationsRetriever {
         localTranslationsFake.retriever
     }

@@ -254,10 +254,4 @@ class QuranAudioPlayerTests: XCTestCase {
             assertSnapshot(matching: state, as: .json, testName: testName)
         }
     }
-
-    private func waitForDelegateMethod(timeout: TimeInterval = 1, block: (@escaping () -> Void) -> Void) {
-        let delegateExpectation = expectation(description: "delegate")
-        block(delegateExpectation.fulfill)
-        wait(for: [delegateExpectation], timeout: timeout)
-    }
 }

@@ -1,31 +1,17 @@
 {
   "configurations" : [
     {
-      "id" : "0C85B6B2-7E26-4D93-9804-2C741D039BD9",
-      "name" : "Configuration 1",
+      "id" : "E7574424-1A22-490F-ABFD-1131F1BEF026",
+      "name" : "Test Scheme Action",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
-    "language" : "en"
+
   },
   "testTargets" : [
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "QuranKitTests",
-        "name" : "QuranKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "QuranTextKitTests",
-        "name" : "QuranTextKitTests"
-      }
-    },
     {
       "target" : {
         "containerPath" : "container:",
@@ -43,6 +29,20 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranKitTests",
+        "name" : "QuranKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranTextKitTests",
+        "name" : "QuranTextKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "VersionUpdaterTests",
         "name" : "VersionUpdaterTests"
       }
@@ -50,31 +50,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "TranslationServiceTests",
-        "name" : "TranslationServiceTests"
-      }
-    },
-    {
-      "parallelizable" : true,
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "SQLitePersistenceTests",
-        "name" : "SQLitePersistenceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "CachingTests",
         "name" : "CachingTests"
-      }
-    },
-    {
-      "parallelizable" : true,
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "UtilitiesTests",
-        "name" : "UtilitiesTests"
       }
     },
     {
@@ -94,8 +71,8 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "PageBookmarkPersistenceTests",
-        "name" : "PageBookmarkPersistenceTests"
+        "identifier" : "NetworkSupportTests",
+        "name" : "NetworkSupportTests"
       }
     },
     {
@@ -108,8 +85,29 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "NetworkSupportTests",
-        "name" : "NetworkSupportTests"
+        "identifier" : "PageBookmarkPersistenceTests",
+        "name" : "PageBookmarkPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SQLitePersistenceTests",
+        "name" : "SQLitePersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TranslationServiceTests",
+        "name" : "TranslationServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UtilitiesTests",
+        "name" : "UtilitiesTests"
       }
     }
   ],

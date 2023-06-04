@@ -20,16 +20,17 @@
 
 import Foundation
 import QuranKit
+import AyahTimingPersistence
 
 struct ReciterTimingRetriever {
-    let persistenceFactory: AyahTimingPersistenceFactory
+    let persistenceFactory: (URL) -> AyahTimingPersistence
 
     func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
         guard case .gapless(let databaseName) = reciter.audioType else {
             fatalError("Gapped reciters are not supported.")
         }
         let fileURL = reciter.localFolder().appendingPathComponent(databaseName).appendingPathExtension(Files.databaseLocalFileExtension)
-        let persistence = persistenceFactory.persistenceForURL(fileURL)
+        let persistence = persistenceFactory(fileURL)
 
         var result: [Sura: SuraTiming] = [:]
         for sura in suras {

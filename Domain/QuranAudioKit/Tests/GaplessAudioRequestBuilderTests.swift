@@ -9,6 +9,7 @@ import Foundation
 @testable import QuranAudioKit
 import QuranKit
 import XCTest
+import AyahTimingPersistence
 
 class GaplessAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!
@@ -18,7 +19,7 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
     override func setUpWithError() throws {
         try reciter.prepareGaplessReciterForTests(unZip: true)
 
-        let timingRetriever = ReciterTimingRetriever(persistenceFactory: DefaultAyahTimingPersistenceFactory())
+        let timingRetriever = ReciterTimingRetriever(persistenceFactory: GRDBAyahTimingPersistence.init)
         audioRequestBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
     }
 

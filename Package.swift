@@ -23,6 +23,7 @@ let package = Package(
         .library(name: "QuranKit", targets: ["QuranKit"]),
         .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
         .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
+        .library(name: "AudioUpdater", targets: ["AudioUpdater"]),
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Caching", targets: ["Caching"]),
         .library(name: "VersionUpdater", targets: ["VersionUpdater"]),

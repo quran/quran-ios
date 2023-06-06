@@ -8,7 +8,9 @@
 
 import QueuePlayer
 import QuranKit
+import ReciterService
 
+// TODO: Convert to struct.
 protocol QuranAudioRequest: Sendable {
     func getRequest() -> AudioRequest
     func getAyahNumberFrom(fileIndex: Int, frameIndex: Int) -> AyahNumber

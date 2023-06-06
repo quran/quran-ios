@@ -25,11 +25,7 @@ import Utilities
 public struct ReciterDataRetriever: Sendable {
     private let bundle: SystemBundle
 
-    public init() {
-        bundle = DefaultSystemBundle()
-    }
-
-    init(bundle: SystemBundle) {
+    public init(bundle: SystemBundle = DefaultSystemBundle()) {
         self.bundle = bundle
     }
 
@@ -61,25 +57,5 @@ public struct ReciterDataRetriever: Sendable {
             return .gapped
         }
         return .gapless(databaseName: db)
-    }
-}
-
-extension Reciter {
-    public static var audioFiles: URL {
-        FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent, isDirectory: true)
-    }
-
-    var path: String {
-        Files.audioFilesPathComponent.stringByAppendingPath(directory)
-    }
-
-    // TODO: should be internal
-    public func localFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(path, isDirectory: true)
-    }
-
-    // TODO: should be internal
-    public func oldLocalFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(directory, isDirectory: true)
     }
 }

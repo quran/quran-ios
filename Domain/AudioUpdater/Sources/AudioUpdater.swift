@@ -10,6 +10,7 @@ import AyahTimingPersistence
 import Crashing
 import Foundation
 import NetworkSupport
+import ReciterService
 import SystemDependencies
 import VLogging
 
@@ -119,12 +120,9 @@ public final class AudioUpdater {
     }
 
     private func deleteDatabaseIfNeeded(for reciter: Reciter, update: AudioUpdates.Update) async {
-        guard case .gapless(let databaseName) = reciter.audioType else {
+        guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {
             return
         }
-        let baseFileName = reciter.localFolder().appendingPathComponent(databaseName)
-        let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
-        let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
         if !fileSystem.fileExists(at: dbFile) {
             // in case we failed to unzip the file, it could contain an old version

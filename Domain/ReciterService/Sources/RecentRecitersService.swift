@@ -10,7 +10,7 @@ import Foundation
 public class RecentRecitersService {
     private static let maxNumOfRecentReciters: Int = 3
 
-    private let preferences = AudioPreferences.shared
+    private let preferences = ReciterPreferences.shared
 
     public init() {
     }

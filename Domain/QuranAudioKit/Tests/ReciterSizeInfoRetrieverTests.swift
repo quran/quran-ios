@@ -7,13 +7,13 @@
 
 @testable import QuranAudioKit
 import QuranKit
+import ReciterService
 import SystemDependenciesFake
 import XCTest
 
 class ReciterSizeInfoRetrieverTests: XCTestCase {
     private var service: ReciterSizeInfoRetriever!
     private var fileSystem: FileSystemFake!
-    private var factory: DefaultReciterAudioFileListRetrievalFactory!
 
     private let baseURL = URL(validURL: "http://example.com")
 
@@ -23,7 +23,6 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
-        factory = DefaultReciterAudioFileListRetrievalFactory(baseURL: baseURL)
         service = ReciterSizeInfoRetriever(baseURL: baseURL, fileSystem: fileSystem)
     }
 
@@ -81,8 +80,7 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
     }
 
     private func simulateAllFilesDownloaded(_ reciter: Reciter, fileSize: Int = 100) -> ReciterAudioDownload {
-        let retriever = factory.fileListRetrievalForReciter(reciter)
-        let files = retriever.get(for: reciter, from: quran.firstVerse, to: quran.lastVerse)
+        let files = reciter.audioFiles(baseURL: baseURL, from: quran.firstVerse, to: quran.lastVerse)
 
         let directory = reciter.localFolder()
         let fileURLs = files.map { directory.appendingPathComponent($0.local) }
@@ -119,9 +117,9 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
     ) async throws {
         let reciter = gappedReciter
         let files = ayahs.map { ayah in
-            reciter.path
+            reciter.relativePath
                 .stringByAppendingPath(ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString())
-                .stringByAppendingExtension(Files.audioExtension)
+                .stringByAppendingExtension("mp3")
         }
 
         let directory = reciter.localFolder()
@@ -173,11 +171,11 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         let reciter = gaplessReciter
-        let dbFiles = dbDownloaded ? [reciter.path.stringByAppendingPath(reciter.gaplessDatabaseDB)] : []
+        let dbFiles = dbDownloaded ? [reciter.relativePath.stringByAppendingPath(reciter.gaplessDatabaseDB)] : []
         let files = suras.map { sura in
-            reciter.path
+            reciter.relativePath
                 .stringByAppendingPath(sura.suraNumber.as3DigitString())
-                .stringByAppendingExtension(Files.audioExtension)
+                .stringByAppendingExtension("mp3")
         } + dbFiles
 
         let directory = reciter.localFolder()

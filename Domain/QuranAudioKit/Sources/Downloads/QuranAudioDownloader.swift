@@ -21,26 +21,18 @@
 import BatchDownloader
 import Foundation
 import QuranKit
+import ReciterService
 import SystemDependencies
 
 public struct QuranAudioDownloader: Sendable {
     let downloader: DownloadManager
-    let fileListFactory: ReciterAudioFileListRetrievalFactory
     private let fileSystem: FileSystem
+    private let baseURL: URL
 
-    init(downloader: DownloadManager,
-         fileListFactory: ReciterAudioFileListRetrievalFactory,
-         fileSystem: FileSystem)
-    {
+    public init(baseURL: URL, downloader: DownloadManager, fileSystem: FileSystem = DefaultFileSystem()) {
+        self.baseURL = baseURL
         self.downloader = downloader
-        self.fileListFactory = fileListFactory
         self.fileSystem = fileSystem
-    }
-
-    public init(baseURL: URL, downloader: DownloadManager) {
-        self.downloader = downloader
-        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(baseURL: baseURL)
-        fileSystem = DefaultFileSystem()
     }
 
     public func downloaded(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) async -> Bool {
@@ -49,11 +41,9 @@ public struct QuranAudioDownloader: Sendable {
     }
 
     public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) async throws -> DownloadBatchResponse {
-        let retriever = fileListFactory.fileListRetrievalForReciter(reciter)
-
         // get downloads
-        let files = retriever
-            .get(for: reciter, from: start, to: end)
+        let files = reciter
+            .audioFiles(baseURL: baseURL, from: start, to: end)
             .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
             .map { DownloadRequest(url: $0.remote, destinationPath: $0.local) }
         let request = DownloadBatchRequest(requests: files)
@@ -74,10 +64,10 @@ public struct QuranAudioDownloader: Sendable {
     }
 
     private func filesForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [DownloadRequest] {
-        let audioFileList = fileListFactory.fileListRetrievalForReciter(reciter)
-        return audioFileList.get(for: reciter, from: start, to: end).map {
-            DownloadRequest(url: $0.remote, destinationPath: $0.local)
-        }
+        reciter.audioFiles(baseURL: baseURL, from: start, to: end)
+            .map {
+                DownloadRequest(url: $0.remote, destinationPath: $0.local)
+            }
     }
 }
 
@@ -85,7 +75,7 @@ extension Set<DownloadBatchResponse> {
     public func firstMatches(_ reciter: Reciter) async -> DownloadBatchResponse? {
         for batch in self {
             let download = await batch.requests.first
-            if download?.reciterPath == reciter.path {
+            if download?.reciterPath == reciter.relativePath {
                 return batch
             }
         }
@@ -96,7 +86,7 @@ extension Set<DownloadBatchResponse> {
 extension [Reciter] {
     public func firstMatches(_ batch: DownloadBatchResponse) async -> Reciter? {
         if let download = await batch.requests.first {
-            return first { $0.path == download.reciterPath }
+            return first { $0.relativePath == download.reciterPath }
         }
         return nil
     }

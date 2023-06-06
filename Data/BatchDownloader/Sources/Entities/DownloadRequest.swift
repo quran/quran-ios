@@ -25,6 +25,7 @@ public struct DownloadRequest: Hashable, Sendable {
     public static let downloadResumeDataExtension = "resume"
 
     public let url: URL
+    // TODO: Use URL instead of String
     public let resumePath: String
     public let destinationPath: String
 

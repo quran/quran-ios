@@ -9,6 +9,7 @@
 import MediaPlayer
 import QueuePlayer
 
+// TODO: Use MainActor
 class NowPlayingUpdater {
     private let center: MPNowPlayingInfoCenter
     private var nowPlayingInfo: [String: Any]? {

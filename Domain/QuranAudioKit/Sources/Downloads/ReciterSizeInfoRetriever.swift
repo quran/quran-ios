@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import ReciterService
 import SystemDependencies
 import VLogging
 
@@ -16,16 +17,16 @@ private struct AudioFileLists {
 }
 
 public struct ReciterSizeInfoRetriever: Sendable {
-    let fileListFactory: ReciterAudioFileListRetrievalFactory
+    let baseURL: URL
     let fileSystem: FileSystem
 
     public init(baseURL: URL) {
         self.init(baseURL: baseURL, fileSystem: DefaultFileSystem())
     }
 
-    init(baseURL: URL, fileSystem: FileSystem) {
+    public init(baseURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
+        self.baseURL = baseURL
         self.fileSystem = fileSystem
-        fileListFactory = DefaultReciterAudioFileListRetrievalFactory(baseURL: baseURL)
     }
 
     public func getReciterAudioDownloads(for reciters: [Reciter], quran: Quran) async -> [Reciter: ReciterAudioDownload] {
@@ -45,8 +46,7 @@ public struct ReciterSizeInfoRetriever: Sendable {
     }
 
     public func getReciterAudioDownload(for reciter: Reciter, quran: Quran) async -> ReciterAudioDownload {
-        let retriever = fileListFactory.fileListRetrievalForReciter(reciter)
-        let fileList = retriever.get(for: reciter, from: quran.firstVerse, to: quran.lastVerse)
+        let fileList = reciter.audioFiles(baseURL: baseURL, from: quran.firstVerse, to: quran.lastVerse)
 
         guard let fileURLs = try? fileSystem.contentsOfDirectory(at: reciter.localFolder(), includingPropertiesForKeys: [.fileSizeKey]) else {
             return ReciterAudioDownload(reciter: reciter,
@@ -66,8 +66,8 @@ public struct ReciterSizeInfoRetriever: Sendable {
             // remove the suras from being downloaded.
             // For gapless, that's enough.
             // for gapped, we consider if one ayah is not downloaded that the entire sura is not downloaded.
-            if let file = file as? ReciterSuraAudioFile {
-                suras.remove(file.sura)
+            if let sura = file.sura {
+                suras.remove(sura)
             }
         }
 

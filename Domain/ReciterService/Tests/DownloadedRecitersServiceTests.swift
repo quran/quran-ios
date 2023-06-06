@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import QuranAudioKit
+@testable import ReciterService
 import XCTest
 
 class DownloadedRecitersServiceTests: XCTestCase {

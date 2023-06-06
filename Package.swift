@@ -244,20 +244,51 @@ private func domainTargets() -> [[Target]] {
             "__Snapshots__",
         ]),
 
+        target(.domain, name: "ReciterService", dependencies: [
+            "Localization",
+            "SystemDependencies",
+            "Utilities",
+            "QuranKit",
+            "Preferences",
+            .product(name: "OrderedCollections", package: "swift-collections"),
+        ]),
+
+        target(.domain, name: "ReciterServiceFake", hasTests: false, dependencies: [
+            "ReciterService",
+            "Zip",
+            "SystemDependenciesFake",
+            "TestResources",
+        ]),
+
+        target(.domain, name: "AudioUpdater", dependencies: [
+            "NetworkSupport",
+            "Preferences",
+            "AyahTimingPersistence",
+            "SystemDependencies",
+            "VLogging",
+            "Crashing",
+            "ReciterService",
+        ], testDependencies: [
+            "NetworkSupportFake",
+            "ReciterServiceFake",
+            "SystemDependenciesFake",
+        ]),
+
         target(.domain, name: "QuranAudioKit", dependencies: [
             "SQLitePersistence",
             "BatchDownloader",
             "AyahTimingPersistence",
+            "ReciterService",
             "QuranTextKit",
             "QueuePlayer",
             "TestResources",
             "SystemDependencies",
             "Zip",
-            .product(name: "OrderedCollections", package: "swift-collections"),
         ], testDependencies: [
             "SystemDependenciesFake",
             "TranslationServiceFake",
             "BatchDownloaderFake",
+            "ReciterServiceFake",
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
         ], testExclude: [
             "__Snapshots__",

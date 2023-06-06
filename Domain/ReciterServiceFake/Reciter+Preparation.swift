@@ -6,30 +6,30 @@
 //
 
 import Foundation
-@testable import QuranAudioKit
+@testable import ReciterService
 import TestResources
 import Zip
 
 extension Reciter {
-    var gaplessDatabaseZip: String {
+    public var gaplessDatabaseZip: String {
         guard case .gapless(databaseName: let databaseName) = audioType else { fatalError() }
         return databaseName + ".zip"
     }
 
-    var gaplessDatabaseDB: String {
+    public var gaplessDatabaseDB: String {
         guard case .gapless(databaseName: let databaseName) = audioType else { fatalError() }
         return databaseName + ".db"
     }
 
-    var gaplessDatabaseZipURL: URL {
+    public var gaplessDatabaseZipURL: URL {
         localFolder().appendingPathComponent(gaplessDatabaseZip)
     }
 
-    var gaplessDatabaseURL: URL {
+    public var gaplessDatabaseURL: URL {
         localFolder().appendingPathComponent(gaplessDatabaseDB)
     }
 
-    func prepareGaplessReciterForTests(unZip: Bool = false) throws {
+    public func prepareGaplessReciterForTests(unZip: Bool = false) throws {
         let directory = localFolder()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let dbSource = resource(gaplessDatabaseZip)
@@ -40,7 +40,7 @@ extension Reciter {
         }
     }
 
-    static func cleanUpAudio() {
+    public static func cleanUpAudio() {
         try? FileManager.default.removeItem(at: audioFiles)
     }
 

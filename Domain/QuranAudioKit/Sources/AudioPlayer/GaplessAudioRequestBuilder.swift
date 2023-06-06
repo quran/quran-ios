@@ -6,12 +6,13 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AyahTimingPersistence
 import Foundation
 import QueuePlayer
 import QuranKit
 import QuranTextKit
+import ReciterService
 import VLogging
-import AyahTimingPersistence
 
 struct GaplessAudioRequest: QuranAudioRequest {
     let request: AudioRequest
@@ -127,8 +128,7 @@ final class GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
         // loop over the files
         var files: [(URL, Sura)] = []
         for sura in start.sura.array(to: end.sura) {
-            let fileName = sura.suraNumber.as3DigitString()
-            let localURL = reciter.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
+            let localURL = reciter.localURL(sura: sura)
             files.append((localURL, sura))
         }
         return files

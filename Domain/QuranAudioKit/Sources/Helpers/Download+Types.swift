@@ -19,10 +19,11 @@
 //
 
 import BatchDownloader
+import ReciterService
 
 extension DownloadRequest {
     var isAudio: Bool {
-        destinationPath.hasPrefix(Files.audioFilesPathComponent)
+        destinationPath.hasPrefix(Reciter.relativeAudioFilesPath)
     }
 }
 

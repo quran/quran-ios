@@ -10,6 +10,7 @@ import AVFoundation
 @testable import QueuePlayer
 @testable import QuranAudioKit
 import QuranKit
+import ReciterService
 import SnapshotTesting
 import XCTest
 

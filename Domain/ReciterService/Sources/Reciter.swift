@@ -1,8 +1,8 @@
 //
-//  ReciterAudioFileListRetrievalFactory.swift
+//  Reciter.swift
 //  Quran
 //
-//  Created by Mohamed Afifi on 4/17/17.
+//  Created by Mohamed Afifi on 4/27/16.
 //
 //  Quran for iOS is a Quran reading application for iOS.
 //  Copyright (C) 2017  Quran.com
@@ -19,19 +19,25 @@
 //
 
 import Foundation
-import QuranKit
 
-protocol ReciterAudioFileListRetrievalFactory: Sendable {
-    func fileListRetrievalForReciter(_ reciter: Reciter) -> ReciterAudioFileListRetrieval
+public enum AudioType: Hashable, Sendable {
+    case gapless(databaseName: String)
+    case gapped
 }
 
-struct DefaultReciterAudioFileListRetrievalFactory: ReciterAudioFileListRetrievalFactory {
-    let baseURL: URL
+public struct Reciter: Hashable, Sendable {
+    public let id: Int
+    public let nameKey: String
+    let directory: String
+    public let audioURL: URL
+    public let audioType: AudioType
+    let hasGaplessAlternative: Bool
+    public let category: Category
 
-    func fileListRetrievalForReciter(_ reciter: Reciter) -> ReciterAudioFileListRetrieval {
-        switch reciter.audioType {
-        case .gapped: return GappedReciterAudioFileListRetrieval()
-        case .gapless: return GaplessReciterAudioFileListRetrieval(baseURL: baseURL)
-        }
+    // TODO: Add arabicTafseer
+    public enum Category: String, Sendable {
+        case arabic
+        case english
+        case arabicEnglish
     }
 }

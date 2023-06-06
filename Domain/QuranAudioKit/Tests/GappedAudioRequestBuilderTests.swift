@@ -8,6 +8,7 @@
 import Foundation
 @testable import QuranAudioKit
 import QuranKit
+import ReciterService
 import XCTest
 
 class GappedAudioRequestBuilderTests: XCTestCase {

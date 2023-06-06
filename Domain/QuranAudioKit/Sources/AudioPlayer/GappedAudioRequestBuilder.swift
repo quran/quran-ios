@@ -9,6 +9,7 @@
 import Foundation
 import QueuePlayer
 import QuranKit
+import ReciterService
 
 struct GappedAudioRequest: QuranAudioRequest {
     let request: AudioRequest
@@ -62,19 +63,14 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
             if (requestRuns == .one || !ayahs.isEmpty) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
-                urls.append(createRequestInfo(reciter: reciter, verse: start.quran.firstVerse))
+                urls.append(reciter.localURL(ayah: start.quran.firstVerse))
                 ayahs.append(verses[0])
             }
             for verse in verses {
-                urls.append(createRequestInfo(reciter: reciter, verse: verse))
+                urls.append(reciter.localURL(ayah: verse))
                 ayahs.append(verse)
             }
         }
         return (urls, ayahs)
-    }
-
-    private func createRequestInfo(reciter: Reciter, verse: AyahNumber) -> URL {
-        let fileName = verse.sura.suraNumber.as3DigitString() + verse.ayah.as3DigitString()
-        return reciter.localFolder().appendingPathComponent(fileName).appendingPathExtension(Files.audioExtension)
     }
 }

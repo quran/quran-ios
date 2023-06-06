@@ -8,17 +8,15 @@
 
 import Crashing
 import Foundation
+import ReciterService
 import VLogging
 import Zip
 
 struct AudioUnzipper {
     func unzip(reciter: Reciter) async throws {
-        guard case .gapless(let databaseName) = reciter.audioType else {
+        guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {
             return
         }
-        let baseFileName = reciter.localFolder().appendingPathComponent(databaseName)
-        let dbFile = baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
-        let zipFile = baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
 
         guard !dbFile.isReachable else {
             return

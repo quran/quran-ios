@@ -5,11 +5,13 @@
 //  Created by Mohammad Abdurraafay on 2023-02-12.
 //
 
+import AyahTimingPersistence
 import Foundation
 @testable import QuranAudioKit
 import QuranKit
+import ReciterService
+import ReciterServiceFake
 import XCTest
-import AyahTimingPersistence
 
 class GaplessAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!

@@ -109,6 +109,20 @@
         "identifier" : "UtilitiesTests",
         "name" : "UtilitiesTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AudioUpdaterTests",
+        "name" : "AudioUpdaterTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReciterServiceTests",
+        "name" : "ReciterServiceTests"
+      }
     }
   ],
   "version" : 1

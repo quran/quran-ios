@@ -11,6 +11,7 @@ import BatchDownloaderFake
 import NetworkSupportFake
 @testable import QuranAudioKit
 import QuranKit
+import ReciterService
 import SnapshotTesting
 import SystemDependenciesFake
 import XCTest
@@ -35,8 +36,8 @@ class QuranAudioDownloaderTests: XCTestCase {
         fileSystem = FileSystemFake()
         (batchDownloader, session) = await BatchDownloaderFake.makeDownloader()
         downloader = QuranAudioDownloader(
+            baseURL: Self.baseURL,
             downloader: batchDownloader,
-            fileListFactory: DefaultReciterAudioFileListRetrievalFactory(baseURL: Self.baseURL),
             fileSystem: fileSystem
         )
     }
@@ -58,7 +59,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
         let response = try await downloader.download(from: start, to: end, reciter: reciter)
         let suraPaths = start.sura.array(to: end.sura).map { suraRemoteURL($0, reciter: reciter) }
-        await AsyncAssertEqual(Set(await response.urls), Set([databaseRemoteURL(reciter)] + suraPaths))
+        try await AsyncAssertEqual(Set(await response.urls), Set([try databaseRemoteURL(reciter)] + suraPaths))
     }
 
     func testDownloadGaplessReciter_allSuras_noZip() async throws {
@@ -192,8 +193,8 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func databaseRemoteURL(_ reciter: Reciter) -> URL {
-        Self.baseURL.appendingPathComponent(GaplessReciterAudioFileListRetrieval.path + reciter.gaplessDatabaseZip)
+    private func databaseRemoteURL(_ reciter: Reciter) throws -> URL {
+        try XCTUnwrap(reciter.databaseRemoteURL(baseURL: Self.baseURL))
     }
 
     private func suraRemoteURL(_ sura: Sura, reciter: Reciter) -> URL {

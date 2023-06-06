@@ -6,13 +6,13 @@
 //
 
 import Foundation
-@testable import QuranAudioKit
+@testable import ReciterService
 
 extension Reciter {
-    static let baseURL = URL(validURL: "http://example.com")
-    static let gaplessDatabaseName = "mishari_alafasy"
+    private static let baseURL = URL(validURL: "http://example.com")
+    private static let gaplessDatabaseName = "mishari_alafasy"
 
-    static var gappedReciter: Reciter {
+    public static var gappedReciter: Reciter {
         Reciter(id: 11,
                 nameKey: "reciter1",
                 directory: "reciter1",
@@ -22,7 +22,7 @@ extension Reciter {
                 category: .arabic)
     }
 
-    static var gaplessReciter: Reciter {
+    public static var gaplessReciter: Reciter {
         Reciter(id: 22,
                 nameKey: "qari_afasy_gapless",
                 directory: "mishari_alafasy",
@@ -32,7 +32,7 @@ extension Reciter {
                 category: .arabic)
     }
 
-    func toPlistDictionary() -> [String: Any] {
+    public func toPlistDictionary() -> [String: Any] {
         let databaseName: String
         switch audioType {
         case .gapless(let db): databaseName = db

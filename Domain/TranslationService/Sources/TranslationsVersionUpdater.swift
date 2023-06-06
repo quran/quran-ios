@@ -73,7 +73,7 @@ struct TranslationsVersionUpdater {
 
 extension DownloadRequest {
     var isTranslation: Bool {
-        destinationPath.hasPrefix(Translation.translationsPathComponent)
+        Translation.localTranslationsURL.isParent(of: destinationURL)
     }
 }
 

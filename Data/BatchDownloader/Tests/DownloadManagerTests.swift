@@ -307,11 +307,11 @@ final class DownloadManagerTests: XCTestCase {
     }
 
     private func resumeURL(response: DownloadResponse) async -> URL {
-        FileManager.documentsURL.appendingPathComponent(await response.download.request.resumePath)
+        await response.download.request.resumeURL
     }
 
     private func destinationURL(response: DownloadResponse) async -> URL {
-        FileManager.documentsURL.appendingPathComponent(await response.download.request.destinationPath)
+        await response.download.request.destinationURL
     }
 
     private struct CompletedTask {

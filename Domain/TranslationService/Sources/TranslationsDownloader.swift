@@ -16,8 +16,7 @@ public struct TranslationsDownloader {
 
     public func download(_ translation: Translation) async throws -> DownloadBatchResponse {
         // download the translation
-        let destinationPath = Translation.translationsPathComponent.stringByAppendingPath(translation.rawFileName)
-        let download = DownloadRequest(url: translation.fileURL, destinationPath: destinationPath)
+        let download = DownloadRequest(url: translation.fileURL, destinationURL: translation.destinationURL)
         let response = try await downloader.download(DownloadBatchRequest(requests: [download]))
         return response
     }
@@ -54,7 +53,12 @@ extension [Translation] {
 
 private extension Translation {
     func matches(_ request: DownloadRequest) -> Bool {
-        possibleFileNames.map { Translation.translationsPathComponent.stringByAppendingPath($0.stringByDeletingPathExtension) }
-            .contains(request.destinationPath.stringByDeletingPathExtension)
+        request.destinationURL == destinationURL
+    }
+
+    var destinationURL: URL {
+        FileManager.documentsURL
+            .appendingPathComponent(Translation.translationsPathComponent)
+            .appendingPathComponent(rawFileName)
     }
 }

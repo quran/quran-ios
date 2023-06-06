@@ -23,7 +23,7 @@ import ReciterService
 
 extension DownloadRequest {
     var isAudio: Bool {
-        destinationPath.hasPrefix(Reciter.relativeAudioFilesPath)
+        Reciter.audioFiles.isParent(of: destinationURL)
     }
 }
 

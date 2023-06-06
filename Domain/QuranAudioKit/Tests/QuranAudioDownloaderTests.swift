@@ -26,8 +26,11 @@ class QuranAudioDownloaderTests: XCTestCase {
     private let quran = Quran.hafsMadani1405
     private let suras = Quran.hafsMadani1405.suras
 
-    private let request = DownloadRequest(url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
-                                          destinationPath: "audio_files/mishari_alafasy/001.mp3")
+    private let request = DownloadRequest(
+        url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
+        destinationURL: FileManager.documentsURL
+            .appendingPathComponent("audio_files/mishari_alafasy/001.mp3",
+                                    isDirectory: false))
 
     private let gappedReciter: Reciter = .gappedReciter
     private let gaplessReciter: Reciter = .gaplessReciter

@@ -28,4 +28,8 @@ extension URL {
     public var isReachable: Bool {
         (try? checkResourceIsReachable()) ?? false
     }
+
+    public func isParent(of child: URL) -> Bool {
+        return child.path.hasPrefix(path)
+    }
 }

@@ -7,6 +7,7 @@
 
 import QuranKit
 @testable import QuranTextKit
+import ReadingService
 import SnapshotTesting
 import TestResources
 import XCTest

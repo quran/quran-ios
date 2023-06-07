@@ -27,6 +27,7 @@ let package = Package(
         .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
         .library(name: "Caching", targets: ["Caching"]),
         .library(name: "VersionUpdater", targets: ["VersionUpdater"]),
+        .library(name: "ReadingService", targets: ["ReadingService"]),
 
         // Utilities packages
 
@@ -233,18 +234,6 @@ private func domainTargets() -> [[Target]] {
         target(.domain, name: "QuranKit", dependencies: [],
                testDependencies: []),
 
-        target(.domain, name: "QuranTextKit", dependencies: [
-            "TranslationService",
-            "QuranKit",
-        ], testDependencies: [
-            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-            "TranslationServiceFake",
-            "SystemDependenciesFake",
-            "TestResources",
-        ], testExclude: [
-            "__Snapshots__",
-        ]),
-
         target(.domain, name: "ReciterService", dependencies: [
             "Localization",
             "SystemDependencies",
@@ -295,6 +284,19 @@ private func domainTargets() -> [[Target]] {
             "__Snapshots__",
         ]),
 
+        target(.domain, name: "QuranTextKit", dependencies: [
+            "TranslationService",
+            "QuranKit",
+        ], testDependencies: [
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+            "ReadingService",
+            "TranslationServiceFake",
+            "SystemDependenciesFake",
+            "TestResources",
+        ], testExclude: [
+            "__Snapshots__",
+        ]),
+
         target(.domain, name: "TranslationService", dependencies: [
             "Zip",
             "SQLitePersistence",
@@ -312,6 +314,14 @@ private func domainTargets() -> [[Target]] {
             "SystemDependenciesFake",
             "Utilities",
             "TestResources",
+            "AsyncUtilitiesForTesting",
+        ]),
+
+        target(.domain, name: "ReadingService", dependencies: [
+            "QuranKit",
+            "VLogging",
+            "Preferences",
+        ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
     ]

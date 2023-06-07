@@ -30,7 +30,8 @@ class QuranAudioDownloaderTests: XCTestCase {
         url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
         destinationURL: FileManager.documentsURL
             .appendingPathComponent("audio_files/mishari_alafasy/001.mp3",
-                                    isDirectory: false))
+                                    isDirectory: false)
+    )
 
     private let gappedReciter: Reciter = .gappedReciter
     private let gaplessReciter: Reciter = .gaplessReciter

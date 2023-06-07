@@ -321,8 +321,10 @@ private func domainTargets() -> [[Target]] {
             "QuranKit",
             "VLogging",
             "Preferences",
+            "SystemDependencies",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
+            "SystemDependenciesFake",
         ]),
     ]
 }

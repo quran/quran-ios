@@ -25,14 +25,13 @@ public struct DownloadRequest: Hashable, Sendable {
     public static let downloadResumeDataExtension = "resume"
 
     public let url: URL
-    // TODO: Use URL instead of String
-    public let resumePath: String
-    public let destinationPath: String
+    public let resumeURL: URL
+    public let destinationURL: URL
 
-    public init(url: URL, destinationPath: String) {
+    public init(url: URL, destinationURL: URL) {
         self.url = url
-        resumePath = destinationPath.stringByAppendingExtension(Self.downloadResumeDataExtension)
-        self.destinationPath = destinationPath
+        resumeURL = destinationURL.appendingPathExtension(Self.downloadResumeDataExtension)
+        self.destinationURL = destinationURL
     }
 
     public var request: URLRequest {
@@ -49,8 +48,7 @@ public struct DownloadBatchRequest: Hashable, Sendable {
 
 extension NetworkSession {
     func downloadTask(with request: DownloadRequest) -> NetworkSessionDownloadTask {
-        let resumeURL = FileManager.documentsURL.appendingPathComponent(request.resumePath)
-        if let data = try? Data(contentsOf: resumeURL) {
+        if let data = try? Data(contentsOf: request.resumeURL) {
             return downloadTask(withResumeData: data)
         } else {
             return downloadTask(with: URLRequest(url: request.url))

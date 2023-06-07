@@ -37,15 +37,15 @@ public struct QuranAudioDownloader: Sendable {
 
     public func downloaded(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) async -> Bool {
         let files = filesForReciter(reciter, from: start, to: end)
-        return files.allSatisfy { fileSystem.fileExists(at: FileManager.documentsURL.appendingPathComponent($0.destinationPath)) }
+        return files.allSatisfy { fileSystem.fileExists(at: $0.destinationURL) }
     }
 
     public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) async throws -> DownloadBatchResponse {
         // get downloads
         let files = reciter
             .audioFiles(baseURL: baseURL, from: start, to: end)
-            .filter { !FileManager.documentsURL.appendingPathComponent($0.local).isReachable }
-            .map { DownloadRequest(url: $0.remote, destinationPath: $0.local) }
+            .filter { !$0.local.isReachable }
+            .map { DownloadRequest(url: $0.remote, destinationURL: $0.local) }
         let request = DownloadBatchRequest(requests: files)
         // create downloads
         return try await downloader.download(request)
@@ -66,7 +66,7 @@ public struct QuranAudioDownloader: Sendable {
     private func filesForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [DownloadRequest] {
         reciter.audioFiles(baseURL: baseURL, from: start, to: end)
             .map {
-                DownloadRequest(url: $0.remote, destinationPath: $0.local)
+                DownloadRequest(url: $0.remote, destinationURL: $0.local)
             }
     }
 }
@@ -74,9 +74,10 @@ public struct QuranAudioDownloader: Sendable {
 extension Set<DownloadBatchResponse> {
     public func firstMatches(_ reciter: Reciter) async -> DownloadBatchResponse? {
         for batch in self {
-            let download = await batch.requests.first
-            if download?.reciterPath == reciter.relativePath {
-                return batch
+            if let download = await batch.requests.first {
+                if reciter.matches(download) {
+                    return batch
+                }
             }
         }
         return nil
@@ -86,14 +87,20 @@ extension Set<DownloadBatchResponse> {
 extension [Reciter] {
     public func firstMatches(_ batch: DownloadBatchResponse) async -> Reciter? {
         if let download = await batch.requests.first {
-            return first { $0.relativePath == download.reciterPath }
+            return first { $0.matches(download) }
         }
         return nil
     }
 }
 
+extension Reciter {
+    func matches(_ request: DownloadRequest) -> Bool {
+        localFolder() == request.reciterURL
+    }
+}
+
 private extension DownloadRequest {
-    var reciterPath: String {
-        destinationPath.stringByDeletingLastPathComponent
+    var reciterURL: URL {
+        destinationURL.deletingLastPathComponent()
     }
 }

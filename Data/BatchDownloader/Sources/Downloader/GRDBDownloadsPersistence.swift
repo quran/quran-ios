@@ -42,8 +42,8 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
                 table.column("url", .text)
                     .notNull()
                     .indexed()
-                table.column("resumePath", .text).notNull()
-                table.column("destinationPath", .text).notNull()
+                table.column("resumeURL", .text).notNull()
+                table.column("destinationURL", .text).notNull()
                 table.column("status", .integer).notNull()
                 table.column("taskId", .integer)
             }
@@ -121,8 +121,8 @@ private struct GRDBDownload: Identifiable, Codable, FetchableRecord, MutablePers
     var id: Int64?
     var downloadBatchId: Int64
     var url: URL
-    var resumePath: String
-    var destinationPath: String
+    var resumeURL: URL
+    var destinationURL: URL
     var status: Download.Status
     var taskId: Int?
 
@@ -144,15 +144,15 @@ extension GRDBDownload {
     init(_ download: Download) {
         downloadBatchId = download.batchId
         url = download.request.url
-        resumePath = download.request.resumePath
-        destinationPath = download.request.destinationPath
+        resumeURL = download.request.resumeURL
+        destinationURL = download.request.destinationURL
         status = download.status
         taskId = download.taskId
     }
 
     func toDownload() -> Download {
         Download(taskId: taskId,
-                 request: DownloadRequest(url: url, destinationPath: destinationPath),
+                 request: DownloadRequest(url: url, destinationURL: destinationURL),
                  status: status,
                  batchId: downloadBatchId)
     }

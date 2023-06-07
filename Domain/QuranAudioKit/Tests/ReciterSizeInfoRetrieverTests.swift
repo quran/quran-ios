@@ -83,7 +83,7 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         let files = reciter.audioFiles(baseURL: baseURL, from: quran.firstVerse, to: quran.lastVerse)
 
         let directory = reciter.localFolder()
-        let fileURLs = files.map { directory.appendingPathComponent($0.local) }
+        let fileURLs = files.map { $0.local }
         fileSystem.filesInDirectory[directory] = fileURLs
         fileURLs.forEach { fileSystem.setResourceValues($0, fileSize: fileSize) }
 

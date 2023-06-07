@@ -65,8 +65,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         }
         let fileManager = FileManager.default
 
-        let resumeURL = FileManager.documentsURL.appendingPathComponent(await response.download.request.resumePath)
-        let destinationURL = FileManager.documentsURL.appendingPathComponent(await response.download.request.destinationPath)
+        let resumeURL = await response.download.request.resumeURL
+        let destinationURL = await response.download.request.destinationURL
 
         // remove the resume data
         try? fileManager.removeItem(at: resumeURL)
@@ -108,16 +108,15 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        let finalError = wrap(error: error, resumePath: await response.download.request.resumePath)
+        let finalError = wrap(error: error, resumeURL: await response.download.request.resumeURL)
         await dataController.downloadFailed(response, with: finalError)
     }
 
-    private func wrap(error theError: Error, resumePath: String) -> Error {
+    private func wrap(error theError: Error, resumeURL: URL) -> Error {
         var error = theError
 
         // save resume data, if found
         if let resumeData = error.resumeData {
-            let resumeURL = FileManager.documentsURL.appendingPathComponent(resumePath)
             do {
                 try resumeData.write(to: resumeURL, options: [.atomic])
             } catch {

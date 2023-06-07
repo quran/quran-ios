@@ -40,7 +40,7 @@ class TranslationsDownloaderTests: XCTestCase {
 
         let response = try await downloader.download(translation)
         await AsyncAssertEqual(await response.urls, [translation.fileURL])
-        await AsyncAssertEqual(await response.destinations, [Translation.translationsPathComponent.stringByAppendingPath(translation.fileName)])
+        await AsyncAssertEqual(await response.destinations, [translation.localURL])
     }
 
     func test_runningDownloads_empty() async throws {
@@ -65,9 +65,9 @@ private extension DownloadBatchResponse {
         }
     }
 
-    var destinations: [String] {
+    var destinations: [URL] {
         get async {
-            await responses.asyncMap { await $0.download.request.destinationPath }
+            await responses.asyncMap { await $0.download.request.destinationURL }
         }
     }
 }

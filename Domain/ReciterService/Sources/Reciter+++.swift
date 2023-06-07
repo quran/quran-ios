@@ -18,14 +18,6 @@ extension Reciter {
 extension Reciter {
     static let audioRemotePath = "hafs/databases/audio/"
 
-    var localDatabasePath: String? {
-        guard case AudioType.gapless(let databaseFileName) = audioType else {
-            return nil
-        }
-        return relativePath.stringByAppendingPath(databaseFileName)
-            .stringByAppendingExtension(Files.databaseRemoteFileExtension)
-    }
-
     public var localDatabaseURL: URL? {
         guard case .gapless(let databaseName) = audioType else {
             return nil
@@ -44,10 +36,6 @@ extension Reciter {
 
     public static var audioFiles: URL {
         FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent, isDirectory: true)
-    }
-
-    public static var relativeAudioFilesPath: String {
-        Files.audioFilesPathComponent
     }
 
     // TODO: should be private/internal
@@ -87,12 +75,6 @@ extension Reciter {
             .appendingPathExtension(Files.audioExtension)
     }
 
-    func localPath(sura: Sura) -> String {
-        let fileName = sura.suraNumber.as3DigitString()
-        return relativePath.stringByAppendingPath(fileName)
-            .stringByAppendingExtension(Files.audioExtension)
-    }
-
     func remoteURL(ayah: AyahNumber) -> URL {
         let fileName = ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString()
         return audioURL.appendingPathComponent(fileName)
@@ -103,12 +85,6 @@ extension Reciter {
         let fileName = ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString()
         return localFolder().appendingPathComponent(fileName)
             .appendingPathExtension(Files.audioExtension)
-    }
-
-    func localPath(ayah: AyahNumber) -> String {
-        let fileName = ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString()
-        return relativePath.stringByAppendingPath(fileName)
-            .stringByAppendingExtension(Files.audioExtension)
     }
 }
 

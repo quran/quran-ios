@@ -123,6 +123,13 @@
         "identifier" : "ReciterServiceTests",
         "name" : "ReciterServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ReadingServiceTests",
+        "name" : "ReadingServiceTests"
+      }
     }
   ],
   "version" : 1

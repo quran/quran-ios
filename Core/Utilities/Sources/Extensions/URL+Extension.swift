@@ -30,6 +30,6 @@ extension URL {
     }
 
     public func isParent(of child: URL) -> Bool {
-        return child.path.hasPrefix(path)
+        child.path.hasPrefix(path)
     }
 }

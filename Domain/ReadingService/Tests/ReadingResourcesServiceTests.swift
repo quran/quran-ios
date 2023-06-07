@@ -6,7 +6,7 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import QuranTextKit
+@testable import ReadingService
 import XCTest
 
 final class ReadingResourcesServiceTests: XCTestCase {

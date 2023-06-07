@@ -9,8 +9,8 @@
 import MediaPlayer
 import QueuePlayer
 
-// TODO: Use MainActor
-class NowPlayingUpdater {
+@MainActor
+public class NowPlayingUpdater {
     private let center: MPNowPlayingInfoCenter
     private var nowPlayingInfo: [String: Any]? {
         didSet {
@@ -18,23 +18,23 @@ class NowPlayingUpdater {
         }
     }
 
-    init(center: MPNowPlayingInfoCenter) {
+    public init(center: MPNowPlayingInfoCenter) {
         self.center = center
     }
 
-    func clear() {
+    public func clear() {
         nowPlayingInfo = nil
     }
 
-    func update(duration: TimeInterval) {
+    public func update(duration: TimeInterval) {
         update([MPMediaItemPropertyPlaybackDuration: duration])
     }
 
-    func update(elapsedTime: TimeInterval) {
+    public func update(elapsedTime: TimeInterval) {
         update([MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsedTime])
     }
 
-    func update(info: PlayerItemInfo) {
+    public func update(info: PlayerItemInfo) {
         update([MPMediaItemPropertyTitle: info.title,
                 MPMediaItemPropertyArtist: info.artist])
         if let artwork = info.artwork {
@@ -42,15 +42,15 @@ class NowPlayingUpdater {
         }
     }
 
-    func update(rate: Float) {
+    public func update(rate: Float) {
         update([MPNowPlayingInfoPropertyPlaybackRate: rate])
     }
 
-    func update(count: Int) {
+    public func update(count: Int) {
         update([MPNowPlayingInfoPropertyPlaybackQueueCount: count])
     }
 
-    func update(playingIndex: Int) {
+    public func update(playingIndex: Int) {
         update([MPNowPlayingInfoPropertyPlaybackQueueIndex: playingIndex])
     }
 

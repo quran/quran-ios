@@ -14,11 +14,11 @@ public struct ReciterAudioFile: Sendable, Hashable {
     public var sura: Sura? = nil
 }
 
-protocol AudioFileListRetriever {
+private protocol AudioFileListRetriever {
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile]
 }
 
-struct GaplessAudioFileListRetriever: AudioFileListRetriever {
+private struct GaplessAudioFileListRetriever: AudioFileListRetriever {
     let baseURL: URL
 
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
@@ -42,7 +42,7 @@ struct GaplessAudioFileListRetriever: AudioFileListRetriever {
     }
 }
 
-struct GappedAudioFileListRetriever: AudioFileListRetriever {
+private struct GappedAudioFileListRetriever: AudioFileListRetriever {
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")

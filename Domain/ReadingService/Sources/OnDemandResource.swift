@@ -8,66 +8,41 @@
 import Combine
 import Foundation
 import VLogging
+import SystemDependencies
 
-// Inspired by: https://github.com/RxSwiftCommunity/RxOnDemandResources/blob/master/RxOnDemandResources/ODRFetcher.swift
+@globalActor public actor ResourcesActor {
+    public actor Actor { }
+    public static var shared = Actor()
+}
 
-public final class OnDemandResource {
-    static var requestInitializer: (Set<String>) -> NSBundleResourceRequest = NSBundleResourceRequest.init
-    private let request: NSBundleResourceRequest
-    private let subject = CurrentValueSubject<Double?, Error>(nil)
-    public var publisher: AnyPublisher<Double, Error> {
-        subject
-            .compactMap { $0 }
-            .eraseToAnyPublisher()
-    }
+@ResourcesActor
+struct OnDemandResource {
+    private let request: BundleResourceRequest
 
-    public init(tags: Set<String>) {
-        request = Self.requestInitializer(tags)
+    public init(request: BundleResourceRequest) {
+        self.request = request
         request.loadingPriority = NSBundleResourceRequestLoadingPriorityUrgent
-        fetch()
     }
 
-    private func fetch() {
+    func fetch(onProgressChange: @ResourcesActor @Sendable @escaping (Double) -> Void) async throws {
         logger.info("Fetching resources \(request.tags)")
-        request.conditionallyBeginAccessingResources { [weak self] available in
-            guard let self else {
-                return
-            }
-            logger.info("Resources \(request.tags) availability \(available)")
-            guard available else {
-                kvoSubscribe()
-                request.beginAccessingResources { [weak self] error in
-                    guard let self else {
-                        return
-                    }
-                    kvoUnsubscribe()
-                    guard let error else {
-                        logger.info("Resources \(request.tags) downloaded")
-                        subject.send(completion: .finished)
-                        return
-                    }
-                    logger.error("Resources \(request.tags) failed. Error: \(error)")
-                    subject.send(completion: .failure(error))
-                }
-                return
-            }
-            subject.send(completion: .finished)
+        let available  = await request.conditionallyBeginAccessingResources()
+        logger.info("Resources \(request.tags) availability \(available)")
+        if available {
+            return
         }
-    }
-
-    // MARK: - KVO
-
-    private var progressCancellable: AnyCancellable?
-
-    private func kvoSubscribe() {
-        progressCancellable = request.progress.publisher(for: \.fractionCompleted)
-            .sink { [weak self] progress in
-                self?.subject.send(progress)
-            }
-    }
-
-    private func kvoUnsubscribe() {
-        progressCancellable?.cancel()
-        progressCancellable = nil
+        let cancellable = request.progress
+            .publisher(for: \.fractionCompleted)
+            .sink(receiveValue: onProgressChange)
+        defer {
+            cancellable.cancel()
+        }
+        do {
+            try await request.beginAccessingResources()
+            logger.info("Resources \(request.tags) downloaded")
+        } catch {
+            logger.error("Resources \(request.tags) failed. Error: \(error)")
+            throw error
+        }
     }
 }

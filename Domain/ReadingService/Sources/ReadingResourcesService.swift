@@ -7,54 +7,59 @@
 
 import Combine
 import Foundation
+import SystemDependencies
+import Utilities
 
-public class ReadingResourcesService {
+@ResourcesActor
+public final class ReadingResourcesService {
     public enum ResourceStatus: Equatable {
         case downloading(progress: Double)
         case ready
         case error(NSError)
     }
 
-    public static let shared = ReadingResourcesService()
-
     private let preferences = ReadingPreferences.shared
     private var preferencesCancellable: AnyCancellable?
 
-    private var resource: OnDemandResource?
+    private var readingTask: CancellableTask?
 
-    private var resourceCancellable: AnyCancellable?
-    private let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
-    public var publisher: AnyPublisher<ResourceStatus, Never> {
+    private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
+    public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
         subject
             .compactMap { $0 }
             .eraseToAnyPublisher()
     }
+    private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
-    init() {
-        loadResource(of: preferences.reading)
-
-        preferencesCancellable = preferences.$reading.sink { [weak self] reading in
-            self?.loadResource(of: reading)
-        }
+    public nonisolated init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
+        self.resourceRequestFactory = resourceRequestFactory
     }
 
-    public func retry() {
-        loadResource(of: preferences.reading)
-    }
+    func startLoadingResources() async {
+        await loadResource(of: preferences.reading)
 
-    private func loadResource(of reading: Reading) {
-        let tag = reading.resourcesTag
-        resource = OnDemandResource(tags: [tag])
-        resourceCancellable = resource?.publisher.sink(
-            receiveCompletion: { [weak self] completion in
-                switch completion {
-                case .finished: self?.send(.ready, from: reading)
-                case .failure(let error): self?.send(.error(error as NSError), from: reading)
-                }
-            }, receiveValue: { [weak self] progress in
-                self?.send(.downloading(progress: progress), from: reading)
+        readingTask = Task {
+            for await reading in preferences.$reading.values() {
+                await loadResource(of: reading)
             }
-        )
+        }.asCancellableTask()
+    }
+
+    public func retry() async {
+        await loadResource(of: preferences.reading)
+    }
+
+    private func loadResource(of reading: Reading) async {
+        let tag = reading.resourcesTag
+        let resource = OnDemandResource(request: resourceRequestFactory([tag]))
+        do {
+            try await resource.fetch(onProgressChange: { progress in
+                self.send(.downloading(progress: progress), from: reading)
+            })
+            send(.ready, from: reading)
+        } catch {
+            send(.error(error as NSError), from: reading)
+        }
     }
 
     private func send(_ status: ResourceStatus, from reading: Reading) {

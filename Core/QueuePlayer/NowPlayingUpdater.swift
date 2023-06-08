@@ -7,7 +7,6 @@
 //
 
 import MediaPlayer
-import QueuePlayer
 
 @MainActor
 public class NowPlayingUpdater {

@@ -7,6 +7,7 @@
 
 import QuranKit
 @testable import QuranTextKit
+import WordFramePersistence
 
 extension AyahNumber: Encodable {
     enum CodingKeys: String, CodingKey {

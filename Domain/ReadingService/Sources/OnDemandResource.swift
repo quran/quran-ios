@@ -7,8 +7,8 @@
 
 import Combine
 import Foundation
-import VLogging
 import SystemDependencies
+import VLogging
 
 @globalActor public actor ResourcesActor {
     public actor Actor { }
@@ -26,7 +26,7 @@ struct OnDemandResource {
 
     func fetch(onProgressChange: @ResourcesActor @Sendable @escaping (Double) -> Void) async throws {
         logger.info("Fetching resources \(request.tags)")
-        let available  = await request.conditionallyBeginAccessingResources()
+        let available = await request.conditionallyBeginAccessingResources()
         logger.info("Resources \(request.tags) availability \(available)")
         if available {
             return

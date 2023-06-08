@@ -192,6 +192,11 @@ private func dataTargets() -> [[Target]] {
             "SQLitePersistence",
         ]),
 
+        target(.data, name: "WordFramePersistence", hasTests: false, dependencies: [
+            "SQLitePersistence",
+            "QuranKit",
+        ]),
+
         // MARK: - Networking
 
         target(.data, name: "NetworkSupport", dependencies: [
@@ -286,6 +291,7 @@ private func domainTargets() -> [[Target]] {
 
         target(.domain, name: "QuranTextKit", dependencies: [
             "TranslationService",
+            "WordFrameService",
             "QuranKit",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
@@ -315,6 +321,10 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
             "TestResources",
             "AsyncUtilitiesForTesting",
+        ]),
+
+        target(.domain, name: "WordFrameService", hasTests: false, dependencies: [
+            "WordFramePersistence",
         ]),
 
         target(.domain, name: "ReadingService", dependencies: [

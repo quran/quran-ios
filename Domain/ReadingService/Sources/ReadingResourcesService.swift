@@ -29,6 +29,7 @@ public final class ReadingResourcesService {
             .compactMap { $0 }
             .eraseToAnyPublisher()
     }
+
     private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
     public nonisolated init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {

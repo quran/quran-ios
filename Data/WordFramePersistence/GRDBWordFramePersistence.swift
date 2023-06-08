@@ -10,18 +10,18 @@ import GRDB
 import QuranKit
 import SQLitePersistence
 
-struct GRDBWordFramePersistence: WordFramePersistence {
+public struct GRDBWordFramePersistence: WordFramePersistence {
     let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
         self.db = db
     }
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {
+    public func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {
         try await db.write { db in
             let query = GRDBGlyph.filter(GRDBGlyph.Columns.page == page.pageNumber)
 
@@ -37,7 +37,7 @@ struct GRDBWordFramePersistence: WordFramePersistence {
         }
     }
 
-    func suraHeaders(_ page: Page) async throws -> [SuraHeaderLocation] {
+    public func suraHeaders(_ page: Page) async throws -> [SuraHeaderLocation] {
         try await db.write { db in
             let query = GRDBSuraHeader.filter(GRDBSuraHeader.Columns.page == page.pageNumber)
             let suraHeaders = try GRDBSuraHeader.fetchAll(db, query)
@@ -45,7 +45,7 @@ struct GRDBWordFramePersistence: WordFramePersistence {
         }
     }
 
-    func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
+    public func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
         try await db.write { db in
             let query = GRDBAyahMarker.filter(GRDBAyahMarker.Columns.page == page.pageNumber)
             let ayahMarkers = try GRDBAyahMarker.fetchAll(db, query)

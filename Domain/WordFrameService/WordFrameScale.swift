@@ -1,58 +1,57 @@
 //
-//  WordFrame.swift
-//  Quran
+//  WordFrameScale.swift
 //
-//  Created by Mohamed Afifi on 4/22/16.
 //
-//  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2017  Quran.com
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  Created by Mohamed Afifi on 2021-12-26.
 //
 
 import QuranKit
 import UIKit
+import WordFramePersistence
 
-public struct WordFrame: Equatable {
-    let line: Int
-    public let word: Word
+public struct WordFrameScale {
+    let scale: CGFloat
+    let xOffset: CGFloat
+    let yOffset: CGFloat
 
-    private var minX: Int
-    private var maxX: Int
-    private var minY: Int
-    private var maxY: Int
-    private var cropInsets: UIEdgeInsets = .zero
+    public static let zero = WordFrameScale(scale: 0, xOffset: 0, yOffset: 0)
 
-    init(line: Int, word: Word, minX: Int, maxX: Int, minY: Int, maxY: Int) {
-        self.line = line
-        self.word = word
-        self.minX = minX
-        self.maxX = maxX
-        self.minY = minY
-        self.maxY = maxY
+    public static func scaling(imageSize: CGSize, into imageViewSize: CGSize) -> WordFrameScale {
+        let scale: CGFloat
+        if imageSize.width / imageSize.height < imageViewSize.width / imageViewSize.height {
+            scale = imageViewSize.height / imageSize.height
+        } else {
+            scale = imageViewSize.width / imageSize.width
+        }
+        let xOffset = (imageViewSize.width - (scale * imageSize.width)) / 2
+        let yOffset = (imageViewSize.height - (scale * imageSize.height)) / 2
+        return WordFrameScale(scale: scale, xOffset: xOffset, yOffset: yOffset)
     }
+}
 
-    func withCropInsets(_ cropInsets: UIEdgeInsets) -> Self {
-        var mutable = self
-        mutable.cropInsets = cropInsets
-        return mutable
+extension CGRect {
+    public func scaled(by scale: WordFrameScale) -> CGRect {
+        CGRect(x: minX * scale.scale + scale.xOffset,
+               y: minY * scale.scale + scale.yOffset,
+               width: width * scale.scale,
+               height: height * scale.scale)
     }
+}
 
-    public var rect: CGRect {
-        CGRect(x: minX - Int(cropInsets.left),
-               y: minY - Int(cropInsets.top),
-               width: maxX - minX,
-               height: maxY - minY)
+extension WordFrameCollection {
+    public func wordAtLocation(_ location: CGPoint, imageScale: WordFrameScale) -> Word? {
+        let flattenFrames = frames.values.flatMap { $0 }
+        for frame in flattenFrames {
+            let rectangle = frame.rect.scaled(by: imageScale)
+            if rectangle.contains(location) {
+                return frame.word
+            }
+        }
+        return nil
     }
+}
 
+extension WordFrame {
     static func alignedVertically(_ list: [WordFrame]) -> [WordFrame] {
         let minY = list.map(\.minY).min()!
         let maxY = list.map(\.maxY).max()!

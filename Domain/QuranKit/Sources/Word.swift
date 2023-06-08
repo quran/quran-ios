@@ -5,12 +5,14 @@
 //  Created by Mohamed Afifi on 2021-12-17.
 //
 
-import QuranKit
-import UIKit
-
 public struct Word: Equatable, Comparable {
     public let verse: AyahNumber
-    let wordNumber: Int
+    public let wordNumber: Int
+
+    public init(verse: AyahNumber, wordNumber: Int) {
+        self.verse = verse
+        self.wordNumber = wordNumber
+    }
 
     public static func < (lhs: Word, rhs: Word) -> Bool {
         if lhs.verse == rhs.verse {

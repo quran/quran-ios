@@ -7,7 +7,7 @@
 
 import QuranKit
 
-protocol WordTextPersistence {
+public protocol WordTextPersistence {
     func translationForWord(_ word: Word) async throws -> String?
     func transliterationForWord(_ word: Word) async throws -> String?
 }

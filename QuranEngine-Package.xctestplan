@@ -130,6 +130,13 @@
         "identifier" : "ReadingServiceTests",
         "name" : "ReadingServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "WordTextServiceTests",
+        "name" : "WordTextServiceTests"
+      }
     }
   ],
   "version" : 1

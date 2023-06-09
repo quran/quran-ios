@@ -10,22 +10,22 @@ import GRDB
 import QuranKit
 import SQLitePersistence
 
-struct GRDBWordTextPersistence: WordTextPersistence {
+public struct GRDBWordTextPersistence: WordTextPersistence {
     let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
         self.db = db
     }
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    func translationForWord(_ word: Word) async throws -> String? {
+    public func translationForWord(_ word: Word) async throws -> String? {
         try await wordText(at: word)?.translation
     }
 
-    func transliterationForWord(_ word: Word) async throws -> String? {
+    public func transliterationForWord(_ word: Word) async throws -> String? {
         try await wordText(at: word)?.transliteration
     }
 

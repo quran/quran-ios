@@ -8,9 +8,10 @@
 import Crashing
 import Foundation
 import QuranKit
+import WordTextPersistence
 
 public struct WordTextService {
-    private let preferences = QuranContentStatePreferences.shared
+    private let preferences = WordTextPreferences.shared
     private let persistence: WordTextPersistence
 
     public init(fileURL: URL) {

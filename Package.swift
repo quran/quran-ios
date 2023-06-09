@@ -197,6 +197,11 @@ private func dataTargets() -> [[Target]] {
             "QuranKit",
         ]),
 
+        target(.data, name: "WordTextPersistence", hasTests: false, dependencies: [
+            "SQLitePersistence",
+            "QuranKit",
+        ]),
+
         // MARK: - Networking
 
         target(.data, name: "NetworkSupport", dependencies: [
@@ -325,6 +330,13 @@ private func domainTargets() -> [[Target]] {
 
         target(.domain, name: "WordFrameService", hasTests: false, dependencies: [
             "WordFramePersistence",
+        ]),
+
+        target(.domain, name: "WordTextService", dependencies: [
+            "WordTextPersistence",
+            "Preferences",
+        ], testDependencies: [
+            "TestResources",
         ]),
 
         target(.domain, name: "ReadingService", dependencies: [

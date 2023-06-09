@@ -12,8 +12,6 @@ public struct QuranContentStatePreferences {
     public static let shared = QuranContentStatePreferences()
     private init() {}
 
-    private static let defaultWordTextType = WordTextType.translation
-    private static let wordTextType = PreferenceKey<Int>(key: "wordTranslationType", defaultValue: defaultWordTextType.rawValue)
     private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
     private static let twoPagesEnabled = PreferenceKey<Bool>(key: "twoPagesEnabled", defaultValue: TwoPagesUtils.settingDefaultValue)
     private static let verticalScrollingEnabled = PreferenceKey<Bool>(key: "verticalScrollingEnabled", defaultValue: false)
@@ -25,9 +23,6 @@ public struct QuranContentStatePreferences {
 
     @TransformedPreference(showQuranTranslationView, transformer: quranModeTransfomer)
     public var quranMode: QuranMode
-
-    @TransformedPreference(wordTextType, transformer: .rawRepresentable(defaultValue: defaultWordTextType))
-    public var wordTextType: WordTextType
 
     @Preference(twoPagesEnabled)
     public var twoPagesEnabled: Bool

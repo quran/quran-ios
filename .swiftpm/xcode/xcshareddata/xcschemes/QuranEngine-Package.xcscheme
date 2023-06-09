@@ -790,6 +790,34 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WordTextPersistence"
+               BuildableName = "WordTextPersistence"
+               BlueprintName = "WordTextPersistence"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WordTextService"
+               BuildableName = "WordTextService"
+               BlueprintName = "WordTextService"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -961,6 +989,16 @@
                BlueprintIdentifier = "ReadingServiceTests"
                BuildableName = "ReadingServiceTests"
                BlueprintName = "ReadingServiceTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WordTextServiceTests"
+               BuildableName = "WordTextServiceTests"
+               BlueprintName = "WordTextServiceTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

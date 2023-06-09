@@ -1,6 +1,6 @@
 //
 //  BundleResourceRequestFake.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-06-06.
 //
@@ -19,15 +19,14 @@ public final class BundleResourceRequestFake: BundleResourceRequest {
 
     public static var resourceAvailable = true
     public func conditionallyBeginAccessingResources() async -> Bool {
-
-        return Self.resourceAvailable
+        Self.resourceAvailable
     }
 
     public static var downloadResult: Result<Void, Error> = .success(())
     public func beginAccessingResources() async throws {
         switch Self.downloadResult {
         case .success:
-            self.progress.completedUnitCount = self.progress.totalUnitCount
+            progress.completedUnitCount = progress.totalUnitCount
         case .failure(let error):
             throw error
         }

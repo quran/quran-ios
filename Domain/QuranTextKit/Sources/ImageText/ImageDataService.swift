@@ -7,9 +7,11 @@
 
 import QuranKit
 import UIKit
+import WordFramePersistence
+import WordFrameService
 
 public struct ImageDataService {
-    private let processor: WordFrameProcessor
+    private let processor = WordFrameProcessor()
     private let persistence: WordFramePersistence
     private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
@@ -17,7 +19,6 @@ public struct ImageDataService {
     public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets) {
         self.imagesURL = imagesURL
         self.cropInsets = cropInsets
-        processor = DefaultWordFrameProcessor()
         persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
     }
 

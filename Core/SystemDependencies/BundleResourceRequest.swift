@@ -1,6 +1,6 @@
 //
 //  BundleResourceRequest.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-06-06.
 //
@@ -17,5 +17,4 @@ public protocol BundleResourceRequest: AnyObject {
 }
 
 extension NSBundleResourceRequest: BundleResourceRequest {
-
 }

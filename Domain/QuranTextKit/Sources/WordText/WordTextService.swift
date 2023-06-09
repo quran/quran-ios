@@ -7,6 +7,7 @@
 
 import Crashing
 import Foundation
+import QuranKit
 
 public struct WordTextService {
     private let preferences = QuranContentStatePreferences.shared

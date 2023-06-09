@@ -8,6 +8,7 @@
 
 import QuranKit
 import UIKit
+import WordFramePersistence
 
 public struct ImagePage: Equatable {
     public let image: UIImage

@@ -4,29 +4,19 @@
 //
 //  Created by Mohamed Afifi on 4/22/16.
 //
-//  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2017  Quran.com
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
 
 import QuranKit
 import UIKit
+import WordFramePersistence
 
-protocol WordFrameProcessor {
-    func processWordFrames(_ wordFrames: WordFrameCollection, cropInsets: UIEdgeInsets) -> WordFrameCollection
-}
+public struct WordFrameProcessor {
+    public init() {
+    }
 
-struct DefaultWordFrameProcessor: WordFrameProcessor {
-    func processWordFrames(_ wordFrames: WordFrameCollection, cropInsets: UIEdgeInsets) -> WordFrameCollection {
+    public func processWordFrames(
+        _ wordFrames: WordFrameCollection,
+        cropInsets: UIEdgeInsets
+    ) -> WordFrameCollection {
         let frames = wordFrames.frames.flatMap(\.value).map { $0.withCropInsets(cropInsets) }
 
         // group by line

@@ -10,6 +10,8 @@ import QuranKit
 import ReadingService
 import SnapshotTesting
 import TestResources
+import WordFramePersistence
+import WordFrameService
 import XCTest
 
 class ImageDataServiceTests: XCTestCase {

@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import QuranKit
 import SQLitePersistence
 
 struct GRDBWordTextPersistence: WordTextPersistence {

@@ -8,7 +8,7 @@
 import Foundation
 import QuranKit
 
-protocol WordFramePersistence {
+public protocol WordFramePersistence {
     func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection
     func suraHeaders(_ page: Page) async throws -> [SuraHeaderLocation]
     func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation]

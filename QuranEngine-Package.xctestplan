@@ -137,6 +137,13 @@
         "identifier" : "WordTextServiceTests",
         "name" : "WordTextServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ImageServiceTests",
+        "name" : "ImageServiceTests"
+      }
     }
   ],
   "version" : 1

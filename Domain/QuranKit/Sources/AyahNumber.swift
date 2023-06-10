@@ -73,3 +73,16 @@ public struct AyahNumber: Navigatable {
         quran.pages.binarySearchFirst { self >= $0.firstVerse }
     }
 }
+
+extension AyahNumber: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case sura
+        case ayah
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sura.suraNumber, forKey: .sura)
+        try container.encode(ayah, forKey: .ayah)
+    }
+}

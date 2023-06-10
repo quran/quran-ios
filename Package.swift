@@ -28,6 +28,7 @@ let package = Package(
         .library(name: "Caching", targets: ["Caching"]),
         .library(name: "VersionUpdater", targets: ["VersionUpdater"]),
         .library(name: "ReadingService", targets: ["ReadingService"]),
+        .library(name: "ImageService", targets: ["ImageService"]),
 
         // Utilities packages
 
@@ -338,6 +339,16 @@ private func domainTargets() -> [[Target]] {
             "Crashing",
         ], testDependencies: [
             "TestResources",
+        ]),
+
+        target(.domain, name: "ImageService", dependencies: [
+            "WordFrameService",
+        ], testDependencies: [
+            "ReadingService",
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+            "TestResources",
+        ], testExclude: [
+            "__Snapshots__",
         ]),
 
         target(.domain, name: "ReadingService", dependencies: [

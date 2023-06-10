@@ -53,3 +53,16 @@ public struct WordFrame: Equatable {
                height: maxY - minY)
     }
 }
+
+extension WordFrame: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case word
+        case frame
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(word, forKey: .word)
+        try container.encode(rect, forKey: .frame)
+    }
+}

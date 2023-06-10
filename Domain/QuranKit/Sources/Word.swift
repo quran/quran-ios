@@ -21,3 +21,16 @@ public struct Word: Equatable, Comparable {
         return lhs.verse < rhs.verse
     }
 }
+
+extension Word: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case verse
+        case word
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(verse, forKey: .verse)
+        try container.encode(wordNumber, forKey: .word)
+    }
+}

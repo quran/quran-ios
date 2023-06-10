@@ -21,6 +21,7 @@ public actor ReadingResourcesService {
     private var preferencesCancellable: AnyCancellable?
 
     private var readingTask: CancellableTask?
+    private var resource: OnDemandResource?
 
     private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
     public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
@@ -52,6 +53,7 @@ public actor ReadingResourcesService {
     private func loadResource(of reading: Reading) async {
         let tag = reading.resourcesTag
         let resource = OnDemandResource(request: resourceRequestFactory([tag]))
+        self.resource = resource
         do {
             try await resource.fetch(onProgressChange: { progress in
                 self.send(.downloading(progress: progress), from: reading)

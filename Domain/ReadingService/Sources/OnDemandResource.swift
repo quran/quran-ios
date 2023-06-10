@@ -10,12 +10,6 @@ import Foundation
 import SystemDependencies
 import VLogging
 
-@globalActor public actor ResourcesActor {
-    public actor Actor { }
-    public static var shared = Actor()
-}
-
-@ResourcesActor
 struct OnDemandResource {
     private let request: BundleResourceRequest
 
@@ -24,7 +18,7 @@ struct OnDemandResource {
         request.loadingPriority = NSBundleResourceRequestLoadingPriorityUrgent
     }
 
-    func fetch(onProgressChange: @ResourcesActor @Sendable @escaping (Double) -> Void) async throws {
+    func fetch(onProgressChange: @Sendable @escaping (Double) -> Void) async throws {
         logger.info("Fetching resources \(request.tags)")
         let available = await request.conditionallyBeginAccessingResources()
         logger.info("Resources \(request.tags) availability \(available)")

@@ -10,8 +10,7 @@ import Foundation
 import SystemDependencies
 import Utilities
 
-@ResourcesActor
-public final class ReadingResourcesService {
+public actor ReadingResourcesService {
     public enum ResourceStatus: Equatable {
         case downloading(progress: Double)
         case ready
@@ -32,11 +31,11 @@ public final class ReadingResourcesService {
 
     private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
-    public nonisolated init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
+    public init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
         self.resourceRequestFactory = resourceRequestFactory
     }
 
-    func startLoadingResources() async {
+    public func startLoadingResources() async {
         await loadResource(of: preferences.reading)
 
         readingTask = Task {
@@ -63,7 +62,7 @@ public final class ReadingResourcesService {
         }
     }
 
-    private func send(_ status: ResourceStatus, from reading: Reading) {
+    private nonisolated func send(_ status: ResourceStatus, from reading: Reading) {
         if preferences.reading != reading {
             return
         }

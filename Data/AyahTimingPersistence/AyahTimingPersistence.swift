@@ -19,6 +19,7 @@
 //
 
 import QuranKit
+import AudioTiming
 
 public protocol AyahTimingPersistence {
     func getVersion() async throws -> Int

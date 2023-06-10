@@ -137,6 +137,9 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "QuranGeometry", hasTests: false, dependencies: [
             "QuranKit",
         ]),
+        target(type, name: "AudioTiming", hasTests: false, dependencies: [
+            "QuranKit",
+        ]),
     ]
 }
 
@@ -204,6 +207,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "AyahTimingPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
+            "AudioTiming",
         ]),
 
         target(type, name: "WordFramePersistence", hasTests: false, dependencies: [

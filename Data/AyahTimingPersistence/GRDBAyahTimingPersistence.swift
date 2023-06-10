@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import QuranKit
+import AudioTiming
 import SQLitePersistence
 import VLogging
 

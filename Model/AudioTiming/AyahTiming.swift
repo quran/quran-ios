@@ -23,6 +23,10 @@ import QuranKit
 public struct Timing {
     let time: Int
 
+    public init(time: Int) {
+        self.time = time
+    }
+
     public var seconds: Double {
         Double(time) / 1000
     }
@@ -31,6 +35,11 @@ public struct Timing {
 public struct AyahTiming {
     public let ayah: AyahNumber
     public let time: Timing
+
+    public init(ayah: AyahNumber, time: Timing) {
+        self.ayah = ayah
+        self.time = time
+    }
 }
 
 public struct SuraTiming {

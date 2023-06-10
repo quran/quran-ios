@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranGeometry
 import QuranKit
 
 public protocol WordFramePersistence {

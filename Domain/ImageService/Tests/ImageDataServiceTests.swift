@@ -6,11 +6,11 @@
 //
 
 @testable import ImageService
+import QuranGeometry
 import QuranKit
 import ReadingService
 import SnapshotTesting
 import TestResources
-import WordFramePersistence
 import WordFrameService
 import XCTest
 

@@ -31,7 +31,7 @@ public struct WordFrame: Equatable {
     public var maxY: Int
     public var cropInsets: UIEdgeInsets = .zero
 
-    init(line: Int, word: Word, minX: Int, maxX: Int, minY: Int, maxY: Int) {
+    public init(line: Int, word: Word, minX: Int, maxX: Int, minY: Int, maxY: Int) {
         self.line = line
         self.word = word
         self.minX = minX

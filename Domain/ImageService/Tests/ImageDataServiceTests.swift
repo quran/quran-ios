@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2022-01-09.
 //
 
+@testable import ImageService
 import QuranKit
-@testable import QuranTextKit
 import ReadingService
 import SnapshotTesting
 import TestResources
@@ -14,6 +14,7 @@ import WordFramePersistence
 import WordFrameService
 import XCTest
 
+@MainActor
 class ImageDataServiceTests: XCTestCase {
     var service: ImageDataService!
     let quran = Quran.hafsMadani1405

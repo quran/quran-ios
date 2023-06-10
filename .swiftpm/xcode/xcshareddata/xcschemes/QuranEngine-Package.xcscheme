@@ -818,6 +818,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ImageService"
+               BuildableName = "ImageService"
+               BlueprintName = "ImageService"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -999,6 +1013,16 @@
                BlueprintIdentifier = "WordTextServiceTests"
                BuildableName = "WordTextServiceTests"
                BlueprintName = "WordTextServiceTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ImageServiceTests"
+               BuildableName = "ImageServiceTests"
+               BlueprintName = "ImageServiceTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

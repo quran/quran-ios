@@ -9,45 +9,6 @@ import QuranKit
 @testable import QuranTextKit
 import WordFramePersistence
 
-extension AyahNumber: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case sura
-        case ayah
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(sura.suraNumber, forKey: .sura)
-        try container.encode(ayah, forKey: .ayah)
-    }
-}
-
-extension Word: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case verse
-        case word
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(verse, forKey: .verse)
-        try container.encode(wordNumber, forKey: .word)
-    }
-}
-
-extension WordFrame: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case word
-        case frame
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(word, forKey: .word)
-        try container.encode(rect, forKey: .frame)
-    }
-}
-
 extension SearchResults: Encodable {
     enum CodingKeys: String, CodingKey {
         case source

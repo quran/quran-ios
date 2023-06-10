@@ -6,11 +6,12 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AudioTiming
+import AudioTimingService
 import Foundation
 import QueuePlayer
 import QuranKit
 import QuranTextKit
-import AudioTiming
 import ReciterService
 import VLogging
 
@@ -43,20 +44,14 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
                       frameRuns: Runs,
                       requestRuns: Runs) async throws -> QuranAudioRequest
     {
-        let urls = urlsToPlay(reciter: reciter, from: start, to: end)
-        let timings = try await timingRetriever.retrieveTiming(for: reciter, suras: urls.map(\.sura))
-
-        // determine end time
-        let endTime = getEndTime(timings: timings, from: start, to: end)
-
-        // filter out uneeded timings
-        let filteredTimings = filteredTimings(timings: timings, from: start, to: end)
+        let range = try await timingRetriever.timing(for: reciter, from: start, to: end)
+        let urls = urlsToPlay(reciter: reciter, suras: range.timings.keys)
 
         var files: [AudioFile] = []
         var ayahs: [[AyahNumber]] = []
 
         for (url, sura) in urls {
-            let suraTimings = filteredTimings[sura]!
+            let suraTimings = range.timings[sura]!
 
             var frames: [AudioFrame] = []
             var fileAyahs: [AyahNumber] = []
@@ -79,51 +74,19 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
             files.append(AudioFile(url: url, frames: frames))
             ayahs.append(fileAyahs)
         }
-        let request = AudioRequest(files: files, endTime: endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
+        let request = AudioRequest(files: files, endTime: range.endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
         let quranRequest = GaplessAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
         return quranRequest
     }
 
-    private func filteredTimings(timings: [Sura: SuraTiming],
-                                 from start: AyahNumber,
-                                 to end: AyahNumber) -> [Sura: SuraTiming]
-    {
-        // filter out uneeded timings
-        var mutableTimings: [Sura: SuraTiming] = [:]
-        let ayahSet = Set(start.array(to: end))
-        for (sura, suraTimings) in timings {
-            var endTime: Timing?
-            if let suraEndTime = suraTimings.endTime {
-                if ayahSet.contains(suraTimings.verses.last!.ayah) {
-                    endTime = suraEndTime
-                }
-            }
-            mutableTimings[sura] = SuraTiming(verses: suraTimings.verses.filter { ayahSet.contains($0.ayah) }, endTime: endTime)
-        }
-        return mutableTimings
-    }
-
-    private func getEndTime(timings: [Sura: SuraTiming], from start: AyahNumber, to end: AyahNumber) -> Timing? {
-        let lastSuraTimings = timings[end.sura]!
-        // end is the last verse in the sura
-        if lastSuraTimings.verses.last?.ayah == end {
-            return lastSuraTimings.endTime
-        }
-        if let endIndex = lastSuraTimings.verses.firstIndex(where: { $0.ayah == end }) {
-            return lastSuraTimings.verses[endIndex + 1].time
-        }
-        logger.error("lastSuraTimings doesn't have the end verse")
-        return nil
-    }
-
-    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [(url: URL, sura: Sura)] {
+    private func urlsToPlay(reciter: Reciter, suras: some Collection<Sura>) -> [(url: URL, sura: Sura)] {
         guard case AudioType.gapless = reciter.audioType else {
             fatalError("Unsupported reciter type gapped. Only gapless reciters can be played here.")
         }
 
         // loop over the files
         var files: [(URL, Sura)] = []
-        for sura in start.sura.array(to: end.sura) {
+        for sura in suras.sorted() {
             let localURL = reciter.localURL(sura: sura)
             files.append((localURL, sura))
         }

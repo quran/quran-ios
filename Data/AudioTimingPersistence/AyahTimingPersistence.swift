@@ -18,8 +18,8 @@
 //  GNU General Public License for more details.
 //
 
-import QuranKit
 import AudioTiming
+import QuranKit
 
 public protocol AyahTimingPersistence {
     func getVersion() async throws -> Int

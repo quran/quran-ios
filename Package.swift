@@ -290,10 +290,14 @@ private func domainTargets() -> [[Target]] {
             "SystemDependenciesFake",
         ]),
 
+        target(type, name: "AudioTimingService", hasTests: false, dependencies: [
+            "AudioTimingPersistence",
+        ]),
+
         target(type, name: "QuranAudioKit", dependencies: [
             "SQLitePersistence",
             "BatchDownloader",
-            "AudioTimingPersistence",
+            "AudioTimingService",
             "ReciterService",
             "QuranTextKit",
             "QueuePlayer",

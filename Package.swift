@@ -57,6 +57,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
     ], targets: [
         coreTargets(),
+        modelTargets(),
         dataTargets(),
         domainTargets(),
     ]
@@ -126,6 +127,13 @@ private func coreTargets() -> [[Target]] {
             "PromiseKit",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
+    ]
+}
+
+private func modelTargets() -> [[Target]] {
+    let type = TargetType.model
+    return [
+        target(type, name: "QuranKit"),
     ]
 }
 
@@ -244,9 +252,6 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "TestResources", hasTests: false, resources: [
             .copy("test_data"),
         ]),
-
-        target(type, name: "QuranKit", dependencies: [],
-               testDependencies: []),
 
         target(type, name: "ReciterService", dependencies: [
             "Localization",
@@ -372,6 +377,7 @@ enum TargetType: String {
     case core = "Core"
     case data = "Data"
     case domain = "Domain"
+    case model = "Model"
 }
 
 func target(

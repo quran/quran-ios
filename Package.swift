@@ -20,32 +20,32 @@ let package = Package(
         .iOS(.v13),
     ],
     products: [
-        .library(name: "QuranKit", targets: ["QuranKit"]),
-        .library(name: "QuranTextKit", targets: ["QuranTextKit"]),
-        .library(name: "QuranAudioKit", targets: ["QuranAudioKit"]),
-        .library(name: "AudioUpdater", targets: ["AudioUpdater"]),
-        .library(name: "BatchDownloader", targets: ["BatchDownloader"]),
-        .library(name: "Caching", targets: ["Caching"]),
-        .library(name: "VersionUpdater", targets: ["VersionUpdater"]),
-        .library(name: "ReadingService", targets: ["ReadingService"]),
-        .library(name: "ImageService", targets: ["ImageService"]),
-        .library(name: "WordTextService", targets: ["WordTextService"]),
-        .library(name: "TranslationService", targets: ["TranslationService"]),
+        library("QuranKit"),
+        library("QuranTextKit"),
+        library("QuranAudioKit"),
+        library("AudioUpdater"),
+        library("BatchDownloader"),
+        library("Caching"),
+        library("VersionUpdater"),
+        library("ReadingService"),
+        library("ImageService"),
+        library("WordTextService"),
+        library("TranslationService"),
 
         // Utilities packages
 
-        .library(name: "NotePersistence", targets: ["NotePersistence"]),
-        .library(name: "LastPagePersistence", targets: ["LastPagePersistence"]),
-        .library(name: "PageBookmarkPersistence", targets: ["PageBookmarkPersistence"]),
+        library("NotePersistence"),
+        library("LastPagePersistence"),
+        library("PageBookmarkPersistence"),
 
-        .library(name: "Timing", targets: ["Timing"]),
-        .library(name: "Utilities", targets: ["Utilities"]),
-        .library(name: "VLogging", targets: ["VLogging"]),
-        .library(name: "Crashing", targets: ["Crashing"]),
-        .library(name: "Preferences", targets: ["Preferences"]),
-        .library(name: "Localization", targets: ["Localization"]),
-        .library(name: "SystemDependencies", targets: ["SystemDependencies"]),
-        .library(name: "SystemDependenciesFake", targets: ["SystemDependenciesFake"]),
+        library("Timing"),
+        library("Utilities"),
+        library("VLogging"),
+        library("Crashing"),
+        library("Preferences"),
+        library("Localization"),
+        library("SystemDependencies"),
+        library("SystemDependenciesFake"),
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
@@ -65,46 +65,47 @@ let package = Package(
 )
 
 private func coreTargets() -> [[Target]] {
-    [
-        target(.core, name: "SystemDependencies", hasTests: false, dependencies: []),
-        target(.core, name: "SystemDependenciesFake", hasTests: false, dependencies: [
+    let type = TargetType.core
+    return [
+        target(type, name: "SystemDependencies", hasTests: false, dependencies: []),
+        target(type, name: "SystemDependenciesFake", hasTests: false, dependencies: [
             "SystemDependencies",
             "Utilities",
         ]),
 
-        target(.core, name: "Locking", hasTests: false, dependencies: []),
-        target(.core, name: "Preferences", hasTests: false, dependencies: []),
+        target(type, name: "Locking", hasTests: false, dependencies: []),
+        target(type, name: "Preferences", hasTests: false, dependencies: []),
 
-        target(.core, name: "VLogging", hasTests: false, dependencies: [
+        target(type, name: "VLogging", hasTests: false, dependencies: [
             .product(name: "Logging", package: "swift-log"),
         ]),
 
-        target(.core, name: "Caching", dependencies: [
+        target(type, name: "Caching", dependencies: [
             "Locking",
             "Utilities",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(.core, name: "Timing", hasTests: false, dependencies: [
+        target(type, name: "Timing", hasTests: false, dependencies: [
             "Locking",
         ]),
 
-        target(.core, name: "WeakSet", hasTests: false, dependencies: [
+        target(type, name: "WeakSet", hasTests: false, dependencies: [
             "Locking",
         ]),
 
-        target(.core, name: "Crashing", hasTests: false, dependencies: [
+        target(type, name: "Crashing", hasTests: false, dependencies: [
             "Locking",
         ]),
 
-        target(.core, name: "Utilities", dependencies: [
+        target(type, name: "Utilities", dependencies: [
             "PromiseKit",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(.core, name: "VersionUpdater", dependencies: [
+        target(type, name: "VersionUpdater", dependencies: [
             "Preferences",
             "VLogging",
             "SystemDependencies",
@@ -112,16 +113,16 @@ private func coreTargets() -> [[Target]] {
             "SystemDependenciesFake",
         ]),
 
-        target(.core, name: "Localization", hasTests: false, dependencies: []),
+        target(type, name: "Localization", hasTests: false, dependencies: []),
 
-        target(.core, name: "QueuePlayer", hasTests: false, dependencies: [
+        target(type, name: "QueuePlayer", hasTests: false, dependencies: [
             "Timing",
             "QueuePlayerObjc",
         ]),
 
-        target(.core, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
+        target(type, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
 
-        target(.core, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
+        target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             "PromiseKit",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
@@ -129,10 +130,11 @@ private func coreTargets() -> [[Target]] {
 }
 
 private func dataTargets() -> [[Target]] {
-    [
+    let type = TargetType.data
+    return [
         // MARK: - Core Data
 
-        target(.data, name: "LastPagePersistence", dependencies: [
+        target(type, name: "LastPagePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
         ], testDependencies: [
@@ -140,7 +142,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
-        target(.data, name: "PageBookmarkPersistence", dependencies: [
+        target(type, name: "PageBookmarkPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
         ], testDependencies: [
@@ -148,7 +150,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
-        target(.data, name: "NotePersistence", dependencies: [
+        target(type, name: "NotePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
             "SystemDependencies",
@@ -157,7 +159,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
-        target(.data, name: "CoreDataPersistence", dependencies: [
+        target(type, name: "CoreDataPersistence", dependencies: [
             "Utilities",
             "VLogging",
             "Crashing",
@@ -169,19 +171,19 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
-        target(.data, name: "CoreDataPersistenceTestSupport", hasTests: false, dependencies: [
+        target(type, name: "CoreDataPersistenceTestSupport", hasTests: false, dependencies: [
             "CoreDataPersistence",
             "CoreDataModel",
             "SystemDependenciesFake",
         ]),
 
-        target(.data, name: "CoreDataModel", hasTests: false, dependencies: [
+        target(type, name: "CoreDataModel", hasTests: false, dependencies: [
             "CoreDataPersistence",
         ]),
 
         // MARK: - SQLite
 
-        target(.data, name: "SQLitePersistence", dependencies: [
+        target(type, name: "SQLitePersistence", dependencies: [
             "Utilities",
             "VLogging",
             .product(name: "GRDB", package: "GRDB.swift"),
@@ -189,23 +191,23 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(.data, name: "AyahTimingPersistence", hasTests: false, dependencies: [
+        target(type, name: "AyahTimingPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
         ]),
 
-        target(.data, name: "WordFramePersistence", hasTests: false, dependencies: [
+        target(type, name: "WordFramePersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",
         ]),
 
-        target(.data, name: "WordTextPersistence", hasTests: false, dependencies: [
+        target(type, name: "WordTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",
         ]),
 
         // MARK: - Networking
 
-        target(.data, name: "NetworkSupport", dependencies: [
+        target(type, name: "NetworkSupport", dependencies: [
             "Crashing",
         ], testDependencies: [
             "Utilities",
@@ -213,13 +215,13 @@ private func dataTargets() -> [[Target]] {
             "NetworkSupportFake",
         ]),
 
-        target(.data, name: "NetworkSupportFake", hasTests: false, dependencies: [
+        target(type, name: "NetworkSupportFake", hasTests: false, dependencies: [
             "NetworkSupport",
             "AsyncUtilitiesForTesting",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
-        target(.data, name: "BatchDownloader", dependencies: [
+        target(type, name: "BatchDownloader", dependencies: [
             "SQLitePersistence",
             "Crashing",
             "WeakSet",
@@ -229,7 +231,7 @@ private func dataTargets() -> [[Target]] {
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
-        target(.data, name: "BatchDownloaderFake", hasTests: false, dependencies: [
+        target(type, name: "BatchDownloaderFake", hasTests: false, dependencies: [
             "BatchDownloader",
             "NetworkSupportFake",
         ]),
@@ -237,15 +239,16 @@ private func dataTargets() -> [[Target]] {
 }
 
 private func domainTargets() -> [[Target]] {
-    [
-        target(.domain, name: "TestResources", hasTests: false, resources: [
+    let type = TargetType.domain
+    return [
+        target(type, name: "TestResources", hasTests: false, resources: [
             .copy("test_data"),
         ]),
 
-        target(.domain, name: "QuranKit", dependencies: [],
+        target(type, name: "QuranKit", dependencies: [],
                testDependencies: []),
 
-        target(.domain, name: "ReciterService", dependencies: [
+        target(type, name: "ReciterService", dependencies: [
             "Localization",
             "SystemDependencies",
             "Utilities",
@@ -254,14 +257,14 @@ private func domainTargets() -> [[Target]] {
             .product(name: "OrderedCollections", package: "swift-collections"),
         ]),
 
-        target(.domain, name: "ReciterServiceFake", hasTests: false, dependencies: [
+        target(type, name: "ReciterServiceFake", hasTests: false, dependencies: [
             "ReciterService",
             "Zip",
             "SystemDependenciesFake",
             "TestResources",
         ]),
 
-        target(.domain, name: "AudioUpdater", dependencies: [
+        target(type, name: "AudioUpdater", dependencies: [
             "NetworkSupport",
             "Preferences",
             "AyahTimingPersistence",
@@ -275,7 +278,7 @@ private func domainTargets() -> [[Target]] {
             "SystemDependenciesFake",
         ]),
 
-        target(.domain, name: "QuranAudioKit", dependencies: [
+        target(type, name: "QuranAudioKit", dependencies: [
             "SQLitePersistence",
             "BatchDownloader",
             "AyahTimingPersistence",
@@ -295,7 +298,7 @@ private func domainTargets() -> [[Target]] {
             "__Snapshots__",
         ]),
 
-        target(.domain, name: "QuranTextKit", dependencies: [
+        target(type, name: "QuranTextKit", dependencies: [
             "TranslationService",
             "WordFrameService",
             "QuranKit",
@@ -309,7 +312,7 @@ private func domainTargets() -> [[Target]] {
             "__Snapshots__",
         ]),
 
-        target(.domain, name: "TranslationService", dependencies: [
+        target(type, name: "TranslationService", dependencies: [
             "Zip",
             "SQLitePersistence",
             "BatchDownloader",
@@ -321,7 +324,7 @@ private func domainTargets() -> [[Target]] {
             "BatchDownloaderFake",
         ]),
 
-        target(.domain, name: "TranslationServiceFake", hasTests: false, dependencies: [
+        target(type, name: "TranslationServiceFake", hasTests: false, dependencies: [
             "TranslationService",
             "SystemDependenciesFake",
             "Utilities",
@@ -329,11 +332,11 @@ private func domainTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(.domain, name: "WordFrameService", hasTests: false, dependencies: [
+        target(type, name: "WordFrameService", hasTests: false, dependencies: [
             "WordFramePersistence",
         ]),
 
-        target(.domain, name: "WordTextService", dependencies: [
+        target(type, name: "WordTextService", dependencies: [
             "WordTextPersistence",
             "Preferences",
             "Crashing",
@@ -341,7 +344,7 @@ private func domainTargets() -> [[Target]] {
             "TestResources",
         ]),
 
-        target(.domain, name: "ImageService", dependencies: [
+        target(type, name: "ImageService", dependencies: [
             "WordFrameService",
         ], testDependencies: [
             "ReadingService",
@@ -351,7 +354,7 @@ private func domainTargets() -> [[Target]] {
             "__Snapshots__",
         ]),
 
-        target(.domain, name: "ReadingService", dependencies: [
+        target(type, name: "ReadingService", dependencies: [
             "QuranKit",
             "VLogging",
             "Preferences",
@@ -367,8 +370,8 @@ private func domainTargets() -> [[Target]] {
 
 enum TargetType: String {
     case core = "Core"
-    case domain = "Domain"
     case data = "Data"
+    case domain = "Domain"
 }
 
 func target(
@@ -400,4 +403,8 @@ func target(
                     swiftSettings: settings)
     )
     return targets
+}
+
+func library(_ name: String) -> PackageDescription.Product {
+    .library(name: name, targets: [name])
 }

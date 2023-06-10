@@ -29,6 +29,8 @@ let package = Package(
         .library(name: "VersionUpdater", targets: ["VersionUpdater"]),
         .library(name: "ReadingService", targets: ["ReadingService"]),
         .library(name: "ImageService", targets: ["ImageService"]),
+        .library(name: "WordTextService", targets: ["WordTextService"]),
+        .library(name: "TranslationService", targets: ["TranslationService"]),
 
         // Utilities packages
 
@@ -44,8 +46,6 @@ let package = Package(
         .library(name: "Localization", targets: ["Localization"]),
         .library(name: "SystemDependencies", targets: ["SystemDependencies"]),
         .library(name: "SystemDependenciesFake", targets: ["SystemDependenciesFake"]),
-
-        .library(name: "TranslationService", targets: ["TranslationService"]),
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-15.
 //
 
+import QuranGeometry
 import QuranKit
 import UIKit
 import WordFramePersistence

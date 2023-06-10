@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import QuranGeometry
 import QuranKit
 import SQLitePersistence
 

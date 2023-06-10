@@ -5,9 +5,9 @@
 //  Created by Mohamed Afifi on 4/22/16.
 //
 
+import QuranGeometry
 import QuranKit
 import UIKit
-import WordFramePersistence
 
 public struct WordFrameProcessor {
     public init() {

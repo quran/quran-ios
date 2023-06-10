@@ -5,10 +5,10 @@
 //  Created by Mohamed Afifi on 2023-05-22.
 //
 
+import AudioTiming
 import Foundation
 import GRDB
 import QuranKit
-import AudioTiming
 import SQLitePersistence
 import VLogging
 

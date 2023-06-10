@@ -6,8 +6,8 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import AVFoundation
 import AudioTimingPersistence
+import AVFoundation
 import QueuePlayer
 import QuranKit
 import ReciterService

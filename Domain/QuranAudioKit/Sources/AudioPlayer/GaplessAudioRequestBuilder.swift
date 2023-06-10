@@ -6,11 +6,11 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import AyahTimingPersistence
 import Foundation
 import QueuePlayer
 import QuranKit
 import QuranTextKit
+import AudioTiming
 import ReciterService
 import VLogging
 

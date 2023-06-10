@@ -21,6 +21,7 @@
 import AyahTimingPersistence
 import Foundation
 import QuranKit
+import AudioTiming
 import ReciterService
 
 struct ReciterTimingRetriever {

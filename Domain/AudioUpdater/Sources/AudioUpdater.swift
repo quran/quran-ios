@@ -6,7 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import AyahTimingPersistence
+import AudioTimingPersistence
 import Crashing
 import Foundation
 import NetworkSupport

@@ -5,7 +5,7 @@
 //  Created by Mohammad Abdurraafay on 2023-02-12.
 //
 
-import AyahTimingPersistence
+import AudioTimingPersistence
 import Foundation
 @testable import QuranAudioKit
 import QuranKit
@@ -21,8 +21,7 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
     override func setUpWithError() throws {
         try reciter.prepareGaplessReciterForTests(unZip: true)
 
-        let timingRetriever = ReciterTimingRetriever(persistenceFactory: GRDBAyahTimingPersistence.init)
-        audioRequestBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
+        audioRequestBuilder = GaplessAudioRequestBuilder()
     }
 
     override func tearDown() async throws {

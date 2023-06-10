@@ -7,7 +7,7 @@
 //
 
 import AVFoundation
-import AyahTimingPersistence
+import AudioTimingPersistence
 import QueuePlayer
 import QuranKit
 import ReciterService
@@ -41,21 +41,15 @@ public class QuranAudioPlayer {
 
     private let player: QueuingPlayer
     private let unzipper: AudioUnzipper
-    private let nowPlaying: NowPlayingUpdater
+    private let nowPlaying = NowPlayingUpdater(center: .default())
 
-    private let gappedAudioRequestBuilder: QuranAudioRequestBuilder
-    private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder
+    private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
+    private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
 
     init(player: QueuingPlayer) {
-        let timingRetriever = ReciterTimingRetriever(persistenceFactory: GRDBAyahTimingPersistence.init)
-        let gaplessBuilder = GaplessAudioRequestBuilder(timingRetriever: timingRetriever)
-        let gappedBuilder = GappedAudioRequestBuilder()
         self.player = player
         unzipper = AudioUnzipper()
-        gappedAudioRequestBuilder = gappedBuilder
-        gaplessAudioRequestBuilder = gaplessBuilder
-        nowPlaying = NowPlayingUpdater(center: .default())
     }
 
     public convenience init() {

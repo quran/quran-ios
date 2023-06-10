@@ -18,14 +18,14 @@
 //  GNU General Public License for more details.
 //
 
-import AyahTimingPersistence
+import AudioTimingPersistence
 import Foundation
 import QuranKit
 import AudioTiming
 import ReciterService
 
 struct ReciterTimingRetriever {
-    let persistenceFactory: (URL) -> AyahTimingPersistence
+    let persistenceFactory: (URL) -> AyahTimingPersistence = GRDBAyahTimingPersistence.init
 
     func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
         guard let fileURL = reciter.localDatabaseURL else {

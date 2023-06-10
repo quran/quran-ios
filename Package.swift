@@ -205,7 +205,7 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(type, name: "AyahTimingPersistence", hasTests: false, dependencies: [
+        target(type, name: "AudioTimingPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "AudioTiming",
         ]),
@@ -279,7 +279,7 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "AudioUpdater", dependencies: [
             "NetworkSupport",
             "Preferences",
-            "AyahTimingPersistence",
+            "AudioTimingPersistence",
             "SystemDependencies",
             "VLogging",
             "Crashing",
@@ -293,7 +293,7 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "QuranAudioKit", dependencies: [
             "SQLitePersistence",
             "BatchDownloader",
-            "AyahTimingPersistence",
+            "AudioTimingPersistence",
             "ReciterService",
             "QuranTextKit",
             "QueuePlayer",

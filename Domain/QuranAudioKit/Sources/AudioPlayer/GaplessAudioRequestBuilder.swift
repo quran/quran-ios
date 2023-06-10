@@ -34,12 +34,8 @@ struct GaplessAudioRequest: QuranAudioRequest {
     }
 }
 
-final class GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
-    private let timingRetriever: ReciterTimingRetriever
-
-    init(timingRetriever: ReciterTimingRetriever) {
-        self.timingRetriever = timingRetriever
-    }
+struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
+    let timingRetriever = ReciterTimingRetriever()
 
     func buildRequest(with reciter: Reciter,
                       from start: AyahNumber,

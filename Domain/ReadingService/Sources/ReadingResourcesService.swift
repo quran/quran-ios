@@ -19,7 +19,6 @@ public actor ReadingResourcesService {
     }
 
     private let preferences = ReadingPreferences.shared
-    private var preferencesCancellable: AnyCancellable?
 
     private var readingTask: CancellableTask?
     private var resource: OnDemandResource?

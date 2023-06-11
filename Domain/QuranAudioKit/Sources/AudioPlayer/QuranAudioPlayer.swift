@@ -10,7 +10,7 @@ import AudioTimingPersistence
 import AVFoundation
 import QueuePlayer
 import QuranKit
-import ReciterService
+import Reciter
 import Utilities
 import VLogging
 

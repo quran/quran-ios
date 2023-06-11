@@ -8,7 +8,7 @@
 
 import Crashing
 import Foundation
-import ReciterService
+import Reciter
 import VLogging
 import Zip
 

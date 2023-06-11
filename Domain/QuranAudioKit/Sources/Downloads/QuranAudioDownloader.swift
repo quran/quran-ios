@@ -21,7 +21,7 @@
 import BatchDownloader
 import Foundation
 import QuranKit
-import ReciterService
+import Reciter
 import SystemDependencies
 
 public struct QuranAudioDownloader: Sendable {

@@ -143,6 +143,10 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "Reading", hasTests: false, dependencies: [
             "QuranKit",
         ]),
+        target(type, name: "Reciter", hasTests: false, dependencies: [
+            "Utilities",
+            "QuranKit",
+        ]),
     ]
 }
 
@@ -269,6 +273,7 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
             "QuranKit",
             "Preferences",
+            "Reciter",
             .product(name: "OrderedCollections", package: "swift-collections"),
         ]),
 

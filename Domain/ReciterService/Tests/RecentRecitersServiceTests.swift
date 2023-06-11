@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Reciter
 @testable import ReciterService
 import XCTest
 

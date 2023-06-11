@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import ReciterService
+import Reciter
 import TestResources
 import Zip
 

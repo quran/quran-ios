@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Reciter
 
 public class RecentRecitersService {
     private static let maxNumOfRecentReciters: Int = 3

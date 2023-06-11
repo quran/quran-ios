@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import ReciterService
+@testable import Reciter
 
 extension Reciter {
     private static let baseURL = URL(validURL: "http://example.com")

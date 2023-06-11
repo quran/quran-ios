@@ -9,7 +9,7 @@
 import Foundation
 import QueuePlayer
 import QuranKit
-import ReciterService
+import Reciter
 
 struct GappedAudioRequest: QuranAudioRequest {
     let request: AudioRequest

@@ -12,7 +12,7 @@ import Foundation
 import QueuePlayer
 import QuranKit
 import QuranTextKit
-import ReciterService
+import Reciter
 import VLogging
 
 struct GaplessAudioRequest: QuranAudioRequest {

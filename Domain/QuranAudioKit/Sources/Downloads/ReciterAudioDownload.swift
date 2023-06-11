@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import ReciterService
+import Reciter
 
 public struct ReciterAudioDownload: Equatable, Sendable {
     public init(reciter: Reciter, downloadedSizeInBytes: UInt64, downloadedSuraCount: Int, surasCount: Int) {

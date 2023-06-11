@@ -9,7 +9,7 @@ import AudioTiming
 import AudioTimingPersistence
 import Foundation
 import QuranKit
-import ReciterService
+import Reciter
 import VLogging
 
 public struct ReciterTimingRetriever {

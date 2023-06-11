@@ -7,7 +7,7 @@
 
 @testable import QuranAudioKit
 import QuranKit
-import ReciterService
+@testable import Reciter
 import SystemDependenciesFake
 import XCTest
 

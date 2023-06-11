@@ -9,6 +9,7 @@
 import Foundation
 @testable import NetworkSupport
 import NetworkSupportFake
+@testable import Reciter
 @testable import ReciterService
 import ReciterServiceFake
 import SystemDependenciesFake

@@ -19,7 +19,7 @@
 //
 
 import Foundation
-import ReciterService
+import Reciter
 
 public struct ReciterAudioDeleter: Sendable {
     public init() {

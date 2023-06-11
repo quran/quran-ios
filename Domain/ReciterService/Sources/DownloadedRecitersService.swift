@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import Reciter
 
 public class DownloadedRecitersService {
     public init() {
     }
 
     public func downloadedReciters(_ allReciters: [Reciter]) -> [Reciter] {
-        guard let downloadedRecitersPaths = try? FileManager.default.contentsOfDirectory(
+        guard let downloadedRecitersURLs = try? FileManager.default.contentsOfDirectory(
             at: Reciter.audioFiles,
             includingPropertiesForKeys: nil
         ) else {
@@ -21,8 +22,8 @@ public class DownloadedRecitersService {
 
         var downloadedReciters: [Reciter] = []
         for reciter in allReciters {
-            for downloadedReciterPath in downloadedRecitersPaths {
-                if isDownloadedReciter(reciter, downloadedReciterPath) {
+            for downloadedReciterURL in downloadedRecitersURLs {
+                if isDownloadedReciter(reciter, at: downloadedReciterURL) {
                     downloadedReciters.append(reciter)
                 }
             }
@@ -30,13 +31,11 @@ public class DownloadedRecitersService {
         return downloadedReciters
     }
 
-    private func isDownloadedReciter(_ reciter: Reciter, _ downloadedReciterPath: URL) -> Bool {
-        let downloadedReciterDir = downloadedReciterPath.lastPathComponent
-
-        if reciter.directory == downloadedReciterDir {
+    private func isDownloadedReciter(_ reciter: Reciter, at downloadedReciterURL: URL) -> Bool {
+        if reciter.isReciterDirectory(downloadedReciterURL) {
             // ensure the reciter's directory is not empty and has some downloads
             if let reciterDirContents = try? FileManager.default.contentsOfDirectory(
-                at: downloadedReciterPath,
+                at: downloadedReciterURL,
                 includingPropertiesForKeys: nil
             ) {
                 if !reciterDirContents.isEmpty {

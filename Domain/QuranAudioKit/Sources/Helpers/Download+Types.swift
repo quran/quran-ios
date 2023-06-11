@@ -19,7 +19,7 @@
 //
 
 import BatchDownloader
-import ReciterService
+import Reciter
 
 extension DownloadRequest {
     var isAudio: Bool {

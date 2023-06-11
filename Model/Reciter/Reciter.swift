@@ -31,8 +31,18 @@ public struct Reciter: Hashable, Sendable {
     let directory: String
     public let audioURL: URL
     public let audioType: AudioType
-    let hasGaplessAlternative: Bool
+    public let hasGaplessAlternative: Bool
     public let category: Category
+
+    public init(id: Int, nameKey: String, directory: String, audioURL: URL, audioType: AudioType, hasGaplessAlternative: Bool, category: Category) {
+        self.id = id
+        self.nameKey = nameKey
+        self.directory = directory
+        self.audioURL = audioURL
+        self.audioType = audioType
+        self.hasGaplessAlternative = hasGaplessAlternative
+        self.category = category
+    }
 
     // TODO: Add arabicTafseer
     public enum Category: String, Sendable {

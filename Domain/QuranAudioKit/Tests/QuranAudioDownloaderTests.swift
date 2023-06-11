@@ -11,7 +11,7 @@ import BatchDownloaderFake
 import NetworkSupportFake
 @testable import QuranAudioKit
 import QuranKit
-import ReciterService
+import Reciter
 import SnapshotTesting
 import SystemDependenciesFake
 import XCTest

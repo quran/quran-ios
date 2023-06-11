@@ -8,7 +8,7 @@
 @testable import ImageService
 import QuranGeometry
 import QuranKit
-import ReadingService
+import Reading
 import SnapshotTesting
 import TestResources
 import WordFrameService

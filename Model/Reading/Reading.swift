@@ -18,7 +18,7 @@ public enum Reading: Int {
         .hafs_1405, .tajweed, .hafs_1421, .hafs_1440,
     ]
 
-    var resourcesTag: String {
+    public var resourcesTag: String {
         switch self {
         case .hafs_1405: return "hafs_1405"
         case .hafs_1440: return "hafs_1440"

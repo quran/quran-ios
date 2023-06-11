@@ -9,9 +9,9 @@ import AsyncUtilitiesForTesting
 @testable import BatchDownloader
 import BatchDownloaderFake
 import NetworkSupportFake
+import QuranAudio
 @testable import QuranAudioKit
 import QuranKit
-import Reciter
 import SnapshotTesting
 import SystemDependenciesFake
 import XCTest

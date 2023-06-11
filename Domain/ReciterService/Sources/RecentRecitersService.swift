@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Reciter
+import QuranAudio
 
 public class RecentRecitersService {
     private static let maxNumOfRecentReciters: Int = 3

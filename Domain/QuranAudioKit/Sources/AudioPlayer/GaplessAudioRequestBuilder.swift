@@ -6,13 +6,12 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import AudioTiming
 import AudioTimingService
 import Foundation
 import QueuePlayer
+import QuranAudio
 import QuranKit
 import QuranTextKit
-import Reciter
 import VLogging
 
 struct GaplessAudioRequest: QuranAudioRequest {

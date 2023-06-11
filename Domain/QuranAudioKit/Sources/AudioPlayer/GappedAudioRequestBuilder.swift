@@ -8,8 +8,8 @@
 
 import Foundation
 import QueuePlayer
+import QuranAudio
 import QuranKit
-import Reciter
 
 struct GappedAudioRequest: QuranAudioRequest {
     let request: AudioRequest

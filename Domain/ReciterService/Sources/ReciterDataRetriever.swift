@@ -19,7 +19,7 @@
 //
 
 import Foundation
-import Reciter
+import QuranAudio
 import SystemDependencies
 import Utilities
 

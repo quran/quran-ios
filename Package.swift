@@ -137,13 +137,10 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "QuranGeometry", hasTests: false, dependencies: [
             "QuranKit",
         ]),
-        target(type, name: "AudioTiming", hasTests: false, dependencies: [
-            "QuranKit",
-        ]),
         target(type, name: "Reading", hasTests: false, dependencies: [
             "QuranKit",
         ]),
-        target(type, name: "Reciter", hasTests: false, dependencies: [
+        target(type, name: "QuranAudio", hasTests: false, dependencies: [
             "Utilities",
             "QuranKit",
         ]),
@@ -214,7 +211,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "AudioTimingPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
-            "AudioTiming",
+            "QuranAudio",
         ]),
 
         target(type, name: "WordFramePersistence", hasTests: false, dependencies: [
@@ -273,13 +270,18 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
             "QuranKit",
             "Preferences",
-            "Reciter",
+            "QuranAudio",
+            "VLogging",
+            "Crashing",
+            "Zip",
             .product(name: "OrderedCollections", package: "swift-collections"),
+        ], testDependencies: [
+            "ReciterServiceFake",
+            "SystemDependenciesFake",
         ]),
 
         target(type, name: "ReciterServiceFake", hasTests: false, dependencies: [
             "ReciterService",
-            "Zip",
             "SystemDependenciesFake",
             "TestResources",
         ]),

@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import AudioTiming
+import QuranAudio
 import QuranKit
 
 public protocol AyahTimingPersistence {

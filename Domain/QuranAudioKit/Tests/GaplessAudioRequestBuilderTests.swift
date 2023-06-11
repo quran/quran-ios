@@ -7,9 +7,9 @@
 
 import AudioTimingPersistence
 import Foundation
+import QuranAudio
 @testable import QuranAudioKit
 import QuranKit
-import Reciter
 import ReciterServiceFake
 import XCTest
 

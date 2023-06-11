@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Reciter
+import QuranAudio
 import TestResources
 import Zip
 

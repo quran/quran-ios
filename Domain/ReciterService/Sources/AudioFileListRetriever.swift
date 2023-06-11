@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import QuranAudio
 import QuranKit
-import Reciter
 
 public struct ReciterAudioFile: Sendable, Hashable {
     public var remote: URL

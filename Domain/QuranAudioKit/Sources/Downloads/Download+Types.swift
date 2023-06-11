@@ -19,7 +19,7 @@
 //
 
 import BatchDownloader
-import Reciter
+import QuranAudio
 
 extension DownloadRequest {
     var isAudio: Bool {

@@ -1,18 +1,12 @@
 //
-//  AudioEnd.swift
+//  AudioEnd+Localization.swift
+//  
 //
-//
-//  Created by Mohamed Afifi on 2022-04-16.
+//  Created by Mohamed Afifi on 2023-06-11.
 //
 
-import Foundation
+import QuranAudio
 import Localization
-
-public enum AudioEnd: Int {
-    case sura
-    case juz
-    case page
-}
 
 extension AudioEnd {
     public var name: String {
@@ -26,3 +20,4 @@ extension AudioEnd {
         }
     }
 }
+

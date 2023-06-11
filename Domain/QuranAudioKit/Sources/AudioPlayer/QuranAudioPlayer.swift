@@ -9,8 +9,9 @@
 import AudioTimingPersistence
 import AVFoundation
 import QueuePlayer
+import QuranAudio
 import QuranKit
-import Reciter
+import ReciterService
 import Utilities
 import VLogging
 

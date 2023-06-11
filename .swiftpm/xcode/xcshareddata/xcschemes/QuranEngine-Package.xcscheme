@@ -854,20 +854,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AudioTiming"
-               BuildableName = "AudioTiming"
-               BlueprintName = "AudioTiming"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AudioTimingPersistence"
                BuildableName = "AudioTimingPersistence"
                BlueprintName = "AudioTimingPersistence"
@@ -910,9 +896,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Reciter"
-               BuildableName = "Reciter"
-               BlueprintName = "Reciter"
+               BlueprintIdentifier = "QuranAudio"
+               BuildableName = "QuranAudio"
+               BlueprintName = "QuranAudio"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>

@@ -8,12 +8,15 @@
 
 import Crashing
 import Foundation
-import Reciter
+import QuranAudio
 import VLogging
 import Zip
 
-struct AudioUnzipper {
-    func unzip(reciter: Reciter) async throws {
+public struct AudioUnzipper {
+    public init() {
+    }
+
+    public func unzip(reciter: Reciter) async throws {
         guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {
             return
         }

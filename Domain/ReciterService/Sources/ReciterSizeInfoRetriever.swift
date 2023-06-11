@@ -6,9 +6,8 @@
 //
 
 import Foundation
+import QuranAudio
 import QuranKit
-import Reciter
-import ReciterService
 import SystemDependencies
 import VLogging
 

@@ -8,9 +8,9 @@
 import AsyncUtilitiesForTesting
 import AVFoundation
 @testable import QueuePlayer
+import QuranAudio
 @testable import QuranAudioKit
 import QuranKit
-import Reciter
 import SnapshotTesting
 import XCTest
 

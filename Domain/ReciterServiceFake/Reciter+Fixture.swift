@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import Reciter
+@testable import QuranAudio
 
 extension Reciter {
     private static let baseURL = URL(validURL: "http://example.com")

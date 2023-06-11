@@ -5,9 +5,10 @@
 //  Created by Mohamed Afifi on 2023-05-14.
 //
 
-@testable import QuranAudioKit
+@testable import QuranAudio
 import QuranKit
-@testable import Reciter
+@testable import ReciterService
+import ReciterServiceFake
 import SystemDependenciesFake
 import XCTest
 

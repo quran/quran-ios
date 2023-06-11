@@ -10,7 +10,7 @@ import AudioTimingPersistence
 import Crashing
 import Foundation
 import NetworkSupport
-import Reciter
+import QuranAudio
 import ReciterService
 import SystemDependencies
 import VLogging

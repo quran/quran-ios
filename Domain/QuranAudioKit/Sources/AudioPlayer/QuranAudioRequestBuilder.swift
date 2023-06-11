@@ -7,8 +7,8 @@
 //
 
 import QueuePlayer
+import QuranAudio
 import QuranKit
-import Reciter
 
 // TODO: Convert to struct.
 protocol QuranAudioRequest: Sendable {

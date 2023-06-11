@@ -5,11 +5,10 @@
 //  Created by Mohamed Afifi on 5/20/16.
 //
 
-import AudioTiming
 import AudioTimingPersistence
 import Foundation
+import QuranAudio
 import QuranKit
-import Reciter
 import VLogging
 
 public struct ReciterTimingRetriever {

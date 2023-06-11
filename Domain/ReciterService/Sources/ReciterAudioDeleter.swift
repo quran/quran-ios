@@ -19,7 +19,7 @@
 //
 
 import Foundation
-import Reciter
+import QuranAudio
 
 public struct ReciterAudioDeleter: Sendable {
     public init() {

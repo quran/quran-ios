@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Reciter
+import QuranAudio
 
 public struct ReciterAudioDownload: Equatable, Sendable {
     public init(reciter: Reciter, downloadedSizeInBytes: UInt64, downloadedSuraCount: Int, surasCount: Int) {

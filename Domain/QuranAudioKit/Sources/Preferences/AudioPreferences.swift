@@ -6,9 +6,8 @@
 //
 
 import Combine
-import Foundation
-import OrderedCollections
 import Preferences
+import QuranAudio
 
 public class AudioPreferences {
     public static let shared = AudioPreferences()

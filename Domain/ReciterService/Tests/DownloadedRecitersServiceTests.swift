@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Reciter
+import QuranAudio
 @testable import ReciterService
 import XCTest
 

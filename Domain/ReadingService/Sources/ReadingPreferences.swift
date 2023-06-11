@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-02-14.
 //
 
-import Foundation
 import Preferences
+import Reading
 
 public struct ReadingPreferences {
     public static let shared = ReadingPreferences()

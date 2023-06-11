@@ -140,6 +140,9 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "AudioTiming", hasTests: false, dependencies: [
             "QuranKit",
         ]),
+        target(type, name: "Reading", hasTests: false, dependencies: [
+            "QuranKit",
+        ]),
     ]
 }
 
@@ -371,7 +374,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "ReadingService", dependencies: [
-            "QuranKit",
+            "Reading",
             "VLogging",
             "Preferences",
             "SystemDependencies",

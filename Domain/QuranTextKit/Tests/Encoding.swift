@@ -7,7 +7,6 @@
 
 import QuranKit
 @testable import QuranTextKit
-import WordFramePersistence
 
 extension SearchResults: Encodable {
     enum CodingKeys: String, CodingKey {

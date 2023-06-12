@@ -6,7 +6,7 @@
 //
 
 import Preferences
-import Reading
+import QuranKit
 
 public struct ReadingPreferences {
     public static let shared = ReadingPreferences()

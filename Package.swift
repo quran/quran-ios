@@ -140,9 +140,6 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "QuranGeometry", hasTests: false, dependencies: [
             "QuranKit",
         ]),
-        target(type, name: "Reading", hasTests: false, dependencies: [
-            "QuranKit",
-        ]),
         target(type, name: "QuranAudio", hasTests: false, dependencies: [
             "Utilities",
             "QuranKit",
@@ -384,7 +381,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "ReadingService", dependencies: [
-            "Reading",
+            "QuranKit",
             "VLogging",
             "Preferences",
             "SystemDependencies",

@@ -20,6 +20,7 @@
 
 import Foundation
 import NetworkSupport
+import QuranText
 
 public struct TranslationsRepository {
     let networkManager: TranslationNetworkManager

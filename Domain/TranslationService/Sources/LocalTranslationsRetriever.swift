@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranText
 import SystemDependencies
 
 public struct LocalTranslationsRetriever {

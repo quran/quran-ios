@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranText
 import Utilities
 import Zip
 
@@ -32,10 +33,8 @@ struct DefaultTranslationUnzipper: TranslationUnzipper {
          */
 
         // unzip if needed
-        let raw = translation.rawFileName
-        let isZip = raw.hasSuffix(Translation.compressedFileExtension)
-        if isZip {
-            let zipFile = Translation.localTranslationsURL.appendingPathComponent(raw)
+        if translation.isUnprocessedFileZip {
+            let zipFile = translation.unprocessedLocalURL
             if zipFile.isReachable {
                 // delete the zip in both cases (success or failure)
                 // success: to save space
@@ -44,7 +43,7 @@ struct DefaultTranslationUnzipper: TranslationUnzipper {
                     try? FileManager.default.removeItem(at: zipFile)
                 }
                 try attempt(times: 3) {
-                    try Zip.unzipFile(zipFile, destination: Translation.localTranslationsURL, overwrite: true, password: nil, progress: nil)
+                    try Zip.unzipFile(zipFile, destination: zipFile.deletingLastPathComponent(), overwrite: true, password: nil, progress: nil)
                 }
             }
         }

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
+import QuranText
 import SystemDependenciesFake
 @testable import TranslationService
 import TranslationServiceFake

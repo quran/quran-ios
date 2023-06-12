@@ -6,6 +6,7 @@
 //
 
 import QuranKit
+import QuranText
 @testable import QuranTextKit
 import SnapshotTesting
 import TranslationServiceFake

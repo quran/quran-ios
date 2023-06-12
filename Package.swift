@@ -144,6 +144,10 @@ private func modelTargets() -> [[Target]] {
             "Utilities",
             "QuranKit",
         ]),
+        target(type, name: "QuranText", hasTests: false, dependencies: [
+            "Utilities",
+            "QuranKit",
+        ]),
     ]
 }
 
@@ -339,12 +343,13 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "TranslationService", dependencies: [
-            "Zip",
+            "QuranText",
             "SQLitePersistence",
             "BatchDownloader",
             "Localization",
             "Preferences",
             "SystemDependencies",
+            "Zip",
         ], testDependencies: [
             "TranslationServiceFake",
             "BatchDownloaderFake",

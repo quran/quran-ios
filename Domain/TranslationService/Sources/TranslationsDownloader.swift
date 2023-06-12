@@ -7,6 +7,7 @@
 
 import BatchDownloader
 import Foundation
+import QuranText
 
 public struct TranslationsDownloader {
     let downloader: DownloadManager
@@ -16,7 +17,7 @@ public struct TranslationsDownloader {
 
     public func download(_ translation: Translation) async throws -> DownloadBatchResponse {
         // download the translation
-        let download = DownloadRequest(url: translation.fileURL, destinationURL: translation.destinationURL)
+        let download = DownloadRequest(url: translation.fileURL, destinationURL: translation.unprocessedLocalURL)
         let response = try await downloader.download(DownloadBatchRequest(requests: [download]))
         return response
     }
@@ -53,12 +54,6 @@ extension [Translation] {
 
 private extension Translation {
     func matches(_ request: DownloadRequest) -> Bool {
-        request.destinationURL == destinationURL
-    }
-
-    var destinationURL: URL {
-        FileManager.documentsURL
-            .appendingPathComponent(Translation.translationsPathComponent)
-            .appendingPathComponent(rawFileName)
+        request.destinationURL == unprocessedLocalURL
     }
 }

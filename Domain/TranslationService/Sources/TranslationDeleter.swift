@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import QuranText
 import SystemDependencies
 
 public struct TranslationDeleter {
@@ -36,8 +37,7 @@ public struct TranslationDeleter {
         selectedTranslationsPreferences.remove(translation.id)
 
         // delete from disk
-        translation.possibleFileNames.forEach { fileName in
-            let url = Translation.localTranslationsURL.appendingPathComponent(fileName)
+        translation.localFiles.forEach { url in
             try? fileSystem.removeItem(at: url)
         }
 

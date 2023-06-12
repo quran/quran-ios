@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranText
 
 struct NumberSearcher: Searcher {
     private static let numberParser: NumberFormatter = {

@@ -11,7 +11,7 @@ public struct SearchAutocompletion: Hashable {
     public let text: String
     public let highlightedRange: NSRange?
 
-    init(text: String, term: String) {
+    public init(text: String, term: String) {
         self.text = text
         highlightedRange = (text as NSString).range(of: term)
     }

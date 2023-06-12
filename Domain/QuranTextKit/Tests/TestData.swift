@@ -7,9 +7,9 @@
 
 import Foundation
 import QuranKit
+import QuranText
 @testable import QuranTextKit
 import TestResources
-@testable import TranslationService
 import TranslationServiceFake
 
 struct TestData {

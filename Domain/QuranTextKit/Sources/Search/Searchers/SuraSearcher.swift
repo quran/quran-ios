@@ -6,6 +6,7 @@
 //
 
 import QuranKit
+import QuranText
 
 struct SuraSearcher: Searcher {
     private let resultsProcessor = SearchResultsProcessor()

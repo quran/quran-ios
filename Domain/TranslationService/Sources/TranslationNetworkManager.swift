@@ -6,6 +6,7 @@
 //
 
 import NetworkSupport
+import QuranText
 
 struct TranslationNetworkManager {
     static let path = "/data/translations.php"

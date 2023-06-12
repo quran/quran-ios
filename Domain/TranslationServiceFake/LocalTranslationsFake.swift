@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranText
 import SystemDependenciesFake
 import TestResources
 @testable import TranslationService

@@ -7,10 +7,11 @@
 
 import Foundation
 import QuranKit
+import QuranText
 
 struct PersistenceSearcher: Searcher {
     let versePersistence: SearchableTextPersistence
-    let source: SearchResult.Source
+    let source: SearchResults.Source
 
     private let termProcessor = SearchTermProcessor()
     private let resultsProcessor = SearchResultsProcessor()

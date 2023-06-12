@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
+import QuranText
 
 protocol ActiveTranslationsPersistence {
     func retrieveAll() async throws -> [Translation]

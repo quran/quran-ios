@@ -7,6 +7,7 @@
 
 @testable import NetworkSupport
 import NetworkSupportFake
+import QuranText
 import SystemDependenciesFake
 @testable import TranslationService
 import TranslationServiceFake

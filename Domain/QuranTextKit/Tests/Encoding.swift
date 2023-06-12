@@ -6,7 +6,7 @@
 //
 
 import QuranKit
-@testable import QuranTextKit
+import QuranText
 
 extension SearchResults: Encodable {
     enum CodingKeys: String, CodingKey {
@@ -21,7 +21,7 @@ extension SearchResults: Encodable {
     }
 }
 
-extension SearchResult.Source: Encodable {
+extension SearchResults.Source: Encodable {
     enum CodingKeys: String, CodingKey {
         case rawKey
     }

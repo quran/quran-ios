@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranText
 import TranslationService
 
 struct TranslationSearcher: Searcher {

@@ -7,6 +7,7 @@
 
 import Foundation
 import Preferences
+import QuranText
 
 public struct QuranContentStatePreferences {
     public static let shared = QuranContentStatePreferences()

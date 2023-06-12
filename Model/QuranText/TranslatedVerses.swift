@@ -20,7 +20,6 @@
 
 import Foundation
 import QuranKit
-import TranslationService
 
 public struct TranslationString: Equatable {
     public init(text: String, quranRanges: [NSRange], footerRanges: [NSRange]) {
@@ -44,9 +43,21 @@ public struct VerseText: Equatable {
     public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
     public let arabicPrefix: [String]
     public let arabicSuffix: [String]
+
+    public init(arabicText: String, translations: [TranslationText], arabicPrefix: [String], arabicSuffix: [String]) {
+        self.arabicText = arabicText
+        self.translations = translations
+        self.arabicPrefix = arabicPrefix
+        self.arabicSuffix = arabicSuffix
+    }
 }
 
 public struct TranslatedVerses: Equatable {
     public let translations: [Translation]
     public let verses: [VerseText]
+
+    public init(translations: [Translation], verses: [VerseText]) {
+        self.translations = translations
+        self.verses = verses
+    }
 }

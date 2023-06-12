@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import QuranText
 import SQLitePersistence
 import VLogging
 

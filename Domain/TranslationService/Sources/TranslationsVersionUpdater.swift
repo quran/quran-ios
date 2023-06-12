@@ -19,6 +19,7 @@
 //
 
 import BatchDownloader
+import QuranText
 import SystemDependencies
 
 typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence
@@ -73,7 +74,7 @@ struct TranslationsVersionUpdater {
 
 extension DownloadRequest {
     var isTranslation: Bool {
-        Translation.localTranslationsURL.isParent(of: destinationURL)
+        Translation.isLocalTranslationURL(destinationURL)
     }
 }
 

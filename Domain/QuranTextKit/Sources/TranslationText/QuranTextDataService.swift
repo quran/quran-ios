@@ -9,6 +9,7 @@ import Crashing
 import Foundation
 import Localization
 import QuranKit
+import QuranText
 import TranslationService
 
 public struct QuranTextDataService {

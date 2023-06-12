@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranText
 
 struct SearchResultsProcessor {
     func buildAutocompletions(searchResults: [String], term: String) -> [SearchAutocompletion] {

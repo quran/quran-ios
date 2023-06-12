@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import Utilities
 
 public struct Translation: Hashable, Sendable {
     public let id: Int
@@ -28,36 +29,25 @@ public struct Translation: Hashable, Sendable {
     public let fileURL: URL
     public let fileName: String
     public let languageCode: String
-    let version: Int
-    var installedVersion: Int?
+    public let version: Int
+    public var installedVersion: Int?
 
     public var isDownloaded: Bool { installedVersion != nil }
     public var needsUpgrade: Bool { installedVersion != version }
 
-    public var localURL: URL {
-        Self.localTranslationsURL.appendingPathComponent(fileName)
-    }
-}
-
-extension Translation {
-    static let compressedFileExtension = "zip"
-
-    var possibleFileNames: [String] {
-        let raw = rawFileName
-        if raw != fileName {
-            return [fileName, raw]
-        }
-        return [fileName]
-    }
-
-    var rawFileName: String {
-        if fileURL.absoluteString.hasSuffix(Self.compressedFileExtension) {
-            return fileName.stringByDeletingPathExtension.stringByAppendingExtension(Self.compressedFileExtension)
-        }
-        return fileName
-    }
-
     public var translationName: String {
         translatorForeign ?? translator ?? displayName
+    }
+
+    public init(id: Int, displayName: String, translator: String?, translatorForeign: String?, fileURL: URL, fileName: String, languageCode: String, version: Int, installedVersion: Int? = nil) {
+        self.id = id
+        self.displayName = displayName
+        self.translator = translator
+        self.translatorForeign = translatorForeign
+        self.fileURL = fileURL
+        self.fileName = fileName
+        self.languageCode = languageCode
+        self.version = version
+        self.installedVersion = installedVersion
     }
 }

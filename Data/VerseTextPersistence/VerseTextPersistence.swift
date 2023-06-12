@@ -21,22 +21,22 @@
 import Foundation
 import QuranKit
 
-protocol SearchableTextPersistence {
+public protocol SearchableTextPersistence {
     func autocomplete(term: String) async throws -> [String]
     func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)]
 }
 
-protocol VerseTextPersistence: SearchableTextPersistence {
+public protocol VerseTextPersistence: SearchableTextPersistence {
     func textForVerse(_ verse: AyahNumber) async throws -> String
     func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String]
 }
 
-enum RawTranslationText: Equatable {
+public enum TranslationTextPersistenceModel: Equatable {
     case string(String)
     case reference(AyahNumber)
 }
 
-protocol TranslationVerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) async throws -> RawTranslationText
-    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: RawTranslationText]
+public protocol TranslationVerseTextPersistence: SearchableTextPersistence {
+    func textForVerse(_ verse: AyahNumber) async throws -> TranslationTextPersistenceModel
+    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: TranslationTextPersistenceModel]
 }

@@ -8,9 +8,9 @@
 import Foundation
 import QuranKit
 import QuranText
-@testable import QuranTextKit
 import TestResources
 import TranslationServiceFake
+import VerseTextPersistence
 
 struct TestData {
     static let khanTranslation = TranslationTestData.khanTranslation

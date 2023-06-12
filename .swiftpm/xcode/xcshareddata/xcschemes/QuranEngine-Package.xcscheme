@@ -882,20 +882,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Reading"
-               BuildableName = "Reading"
-               BlueprintName = "Reading"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "QuranAudio"
                BuildableName = "QuranAudio"
                BlueprintName = "QuranAudio"
@@ -913,6 +899,20 @@
                BlueprintIdentifier = "QuranText"
                BuildableName = "QuranText"
                BlueprintName = "QuranText"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "VerseTextPersistence"
+               BuildableName = "VerseTextPersistence"
+               BlueprintName = "VerseTextPersistence"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>

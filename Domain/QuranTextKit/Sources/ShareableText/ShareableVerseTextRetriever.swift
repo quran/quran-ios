@@ -23,6 +23,7 @@ import Localization
 import QuranKit
 import QuranText
 import TranslationService
+import VerseTextPersistence
 
 public struct ShareableVerseTextRetriever {
     private let preferences = QuranContentStatePreferences.shared

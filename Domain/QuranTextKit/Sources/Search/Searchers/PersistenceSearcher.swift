@@ -8,6 +8,7 @@
 import Foundation
 import QuranKit
 import QuranText
+import VerseTextPersistence
 
 struct PersistenceSearcher: Searcher {
     let versePersistence: SearchableTextPersistence

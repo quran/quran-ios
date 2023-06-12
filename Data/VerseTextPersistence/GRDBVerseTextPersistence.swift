@@ -10,8 +10,8 @@ import GRDB
 import QuranKit
 import SQLitePersistence
 
-struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
-    enum Mode {
+public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
+    public enum Mode {
         case arabic
         case share
 
@@ -27,27 +27,27 @@ struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
 
     private let persistence: GRDBVerseTextPersistence
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.init(mode: .arabic, fileURL: fileURL)
     }
 
-    init(mode: Mode, fileURL: URL) {
+    public init(mode: Mode, fileURL: URL) {
         persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: mode.tabelName)
     }
 
-    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
+    public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
         try await persistence.textForVerses(verses, transform: textFromRow)
     }
 
-    func textForVerse(_ verse: AyahNumber) async throws -> String {
+    public func textForVerse(_ verse: AyahNumber) async throws -> String {
         try await persistence.textForVerse(verse, transform: textFromRow)
     }
 
-    func autocomplete(term: String) async throws -> [String] {
+    public func autocomplete(term: String) async throws -> [String] {
         try await persistence.autocomplete(term: term)
     }
 
-    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+    public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
         try await persistence.search(for: term, quran: quran)
     }
 
@@ -56,33 +56,32 @@ struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
     }
 }
 
-struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
+public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
     private let fileURL: URL
     private let persistence: GRDBVerseTextPersistence
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.fileURL = fileURL
-        // TODO: shouldn't crash if file doesn't exist
         persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: "verses")
     }
 
-    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: RawTranslationText] {
+    public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: TranslationTextPersistenceModel] {
         try await persistence.textForVerses(verses, transform: textFromRow)
     }
 
-    func textForVerse(_ verse: AyahNumber) async throws -> RawTranslationText {
+    public func textForVerse(_ verse: AyahNumber) async throws -> TranslationTextPersistenceModel {
         try await persistence.textForVerse(verse, transform: textFromRow)
     }
 
-    func autocomplete(term: String) async throws -> [String] {
+    public func autocomplete(term: String) async throws -> [String] {
         try await persistence.autocomplete(term: term)
     }
 
-    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+    public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
         try await persistence.search(for: term, quran: quran)
     }
 
-    private func textFromRow(_ row: Row, quran: Quran) throws -> RawTranslationText {
+    private func textFromRow(_ row: Row, quran: Quran) throws -> TranslationTextPersistenceModel {
         let value = row["text"]
         if let stringText = value as? String {
             // if the data is an Integer but saved as String, try to see if it's a valid verseId
@@ -97,7 +96,7 @@ struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
         throw PersistenceError.general("Text for verse is neither Int nor String. File: \(fileURL.lastPathComponent)")
     }
 
-    private func referenceVerse(_ verseId: Int, quran: Quran) -> RawTranslationText {
+    private func referenceVerse(_ verseId: Int, quran: Quran) -> TranslationTextPersistenceModel {
         // VerseId saved is an index in the quran.verses starts with 1
         let verse = quran.verses[verseId - 1]
         return .reference(verse)

@@ -1,6 +1,6 @@
 //
 //  AsyncThrowingPublisher.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-06-11.
 //
@@ -71,7 +71,7 @@ public struct AsyncThrowingPublisher<Element>: AsyncSequence {
 public extension Publisher {
     func values(
         bufferingPolicy: AsyncThrowingPublisher<Output>.BufferingPolicy = .unbounded)
-    -> AsyncThrowingPublisher<Output>
+        -> AsyncThrowingPublisher<Output>
     {
         AsyncThrowingPublisher(bufferingPolicy: bufferingPolicy,
                                publisher: mapError { $0 }.eraseToAnyPublisher())

@@ -1,6 +1,6 @@
 //
 //  AsyncThrowingPublisherTests.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-06-11.
 //
@@ -12,7 +12,6 @@ import Utilities
 import XCTest
 
 class AsyncThrowingPublisherTests: XCTestCase {
-
     enum PublishingError: Error {
         case invalid
     }

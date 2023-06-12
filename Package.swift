@@ -1,5 +1,6 @@
 // swift-tools-version:5.8
 
+import Foundation
 import PackageDescription
 
 // Disable before commit, see https://forums.swift.org/t/concurrency-checking-in-swift-packages-unsafeflags/61135
@@ -12,6 +13,15 @@ let swiftConcurrencySettings: [SwiftSetting] = [
 ]
 
 let settings = enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []
+
+let targets = [
+    coreTargets(),
+    modelTargets(),
+    dataTargets(),
+    domainTargets(),
+]
+.flatMap { $0 }
+.flatMap { $0 }
 
 let package = Package(
     name: "QuranEngine",
@@ -55,14 +65,7 @@ let package = Package(
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
-    ], targets: [
-        coreTargets(),
-        modelTargets(),
-        dataTargets(),
-        domainTargets(),
-    ]
-    .flatMap { $0 }
-    .flatMap { $0 }
+    ], targets: validated(targets)
 )
 
 private func coreTargets() -> [[Target]] {
@@ -399,6 +402,13 @@ enum TargetType: String {
     case data = "Data"
     case domain = "Domain"
     case model = "Model"
+
+    static let validDependencies: [TargetType: Set<TargetType>] = [
+        .core: [.core],
+        .model: [.model, .core],
+        .data: [.data, .core, .model],
+        .domain: [.domain, .core, .model, .data],
+    ]
 }
 
 func target(
@@ -434,4 +444,41 @@ func target(
 
 func library(_ name: String) -> PackageDescription.Product {
     .library(name: name, targets: [name])
+}
+
+func validated(_ targets: [Target]) -> [Target] {
+    var targetTypes: [String: TargetType] = [:]
+    for target in targets {
+        let url = URL(fileURLWithPath: target.path!)
+        let parentDirectory = target.path!.components(separatedBy: "/")[0]
+        targetTypes[target.name] = TargetType(rawValue: parentDirectory)!
+    }
+
+    for target in targets {
+        let targetType = targetTypes[target.name]!
+        let validDependencyTypes = TargetType.validDependencies[targetType]!
+        for dependency in target.dependencies {
+            let dependencyName = dependencyName(of: dependency)
+            guard let dependencyType = targetTypes[dependencyName] else {
+                continue
+            }
+            if !validDependencyTypes.contains(dependencyType) {
+                fatalError("""
+
+                Incorrect dependency.
+                Target \(targetType.rawValue)\\\(target.name) shouldn't depend on \(dependencyType.rawValue)\\\(dependencyName).
+
+                """)
+            }
+        }
+    }
+
+    return targets
+}
+
+func dependencyName(of dependency: Target.Dependency) -> String {
+    if case .byNameItem(name: let name, condition: _) = dependency {
+        return name
+    }
+    return ""
 }

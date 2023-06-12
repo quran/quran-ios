@@ -1,12 +1,12 @@
 //
 //  AudioEnd+Localization.swift
-//  
+//
 //
 //  Created by Mohamed Afifi on 2023-06-11.
 //
 
-import QuranAudio
 import Localization
+import QuranAudio
 
 extension AudioEnd {
     public var name: String {
@@ -20,4 +20,3 @@ extension AudioEnd {
         }
     }
 }
-

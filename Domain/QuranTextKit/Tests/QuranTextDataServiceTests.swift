@@ -11,6 +11,7 @@ import QuranText
 import SystemDependenciesFake
 @testable import TranslationService
 import TranslationServiceFake
+import VerseTextPersistence
 import XCTest
 
 final class QuranTextDataServiceTests: XCTestCase {

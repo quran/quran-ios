@@ -9,6 +9,7 @@ import Foundation
 import QuranKit
 import QuranText
 import TranslationService
+import VerseTextPersistence
 import VLogging
 
 public struct CompositeSearcher: Searcher {

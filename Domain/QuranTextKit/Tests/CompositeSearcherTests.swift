@@ -10,6 +10,7 @@ import QuranText
 @testable import QuranTextKit
 import SnapshotTesting
 import TranslationServiceFake
+import VerseTextPersistence
 import XCTest
 
 @MainActor

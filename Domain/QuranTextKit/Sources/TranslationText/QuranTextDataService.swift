@@ -11,6 +11,7 @@ import Localization
 import QuranKit
 import QuranText
 import TranslationService
+import VerseTextPersistence
 
 public struct QuranTextDataService {
     let localTranslationRetriever: LocalTranslationsRetriever
@@ -151,7 +152,7 @@ public struct QuranTextDataService {
         return (translation, verseTextList)
     }
 
-    private func translationText(_ from: RawTranslationText) -> TranslationText {
+    private func translationText(_ from: TranslationTextPersistenceModel) -> TranslationText {
         switch from {
         case .string(let string):
             return .string(translationString(string))

@@ -7,7 +7,7 @@
 
 import Combine
 import Foundation
-import Reading
+import QuranKit
 import SystemDependencies
 import Utilities
 
@@ -69,5 +69,16 @@ public actor ReadingResourcesService {
             return
         }
         subject.send(status)
+    }
+}
+
+private extension Reading {
+    var resourcesTag: String {
+        switch self {
+        case .hafs_1405: return "hafs_1405"
+        case .hafs_1440: return "hafs_1440"
+        case .hafs_1421: return "hafs_1421"
+        case .tajweed: return "tajweed"
+        }
     }
 }

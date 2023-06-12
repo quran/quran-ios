@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import QuranKit
 
 public enum Reading: Int {
     case hafs_1405 = 0
@@ -17,15 +16,6 @@ public enum Reading: Int {
     public static let sortedReadings: [Reading] = [
         .hafs_1405, .tajweed, .hafs_1421, .hafs_1440,
     ]
-
-    public var resourcesTag: String {
-        switch self {
-        case .hafs_1405: return "hafs_1405"
-        case .hafs_1440: return "hafs_1440"
-        case .hafs_1421: return "hafs_1421"
-        case .tajweed: return "tajweed"
-        }
-    }
 
     public var quran: Quran {
         switch self {

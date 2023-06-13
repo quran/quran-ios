@@ -144,6 +144,13 @@
         "identifier" : "ImageServiceTests",
         "name" : "ImageServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AnnotationsServiceTests",
+        "name" : "AnnotationsServiceTests"
+      }
     }
   ],
   "version" : 1

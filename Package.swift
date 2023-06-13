@@ -41,13 +41,9 @@ let package = Package(
         library("ImageService"),
         library("WordTextService"),
         library("TranslationService"),
-        library("QuranAnnotations"),
+        library("AnnotationsService"),
 
         // Utilities packages
-
-        library("NotePersistence"),
-        library("LastPagePersistence"),
-        library("PageBookmarkPersistence"),
 
         library("Timing"),
         library("Utilities"),
@@ -83,6 +79,10 @@ private func coreTargets() -> [[Target]] {
 
         target(type, name: "VLogging", hasTests: false, dependencies: [
             .product(name: "Logging", package: "swift-log"),
+        ]),
+
+        target(type, name: "Analytics", hasTests: false, dependencies: [
+            "VLogging",
         ]),
 
         target(type, name: "Caching", dependencies: [
@@ -408,6 +408,18 @@ private func domainTargets() -> [[Target]] {
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "SystemDependenciesFake",
+        ]),
+
+        target(type, name: "AnnotationsService", dependencies: [
+            "QuranAnnotations",
+            "LastPagePersistence",
+            "NotePersistence",
+            "PageBookmarkPersistence",
+            "Preferences",
+            "QuranTextKit",
+            "Localization",
+            "Analytics",
+        ], testDependencies: [
         ]),
     ]
 }

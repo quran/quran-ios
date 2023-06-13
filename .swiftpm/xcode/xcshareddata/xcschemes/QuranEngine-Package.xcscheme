@@ -700,20 +700,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AyahTimingPersistence"
-               BuildableName = "AyahTimingPersistence"
-               BlueprintName = "AyahTimingPersistence"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AudioUpdater"
                BuildableName = "AudioUpdater"
                BlueprintName = "AudioUpdater"
@@ -944,6 +930,34 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AnnotationsService"
+               BuildableName = "AnnotationsService"
+               BlueprintName = "AnnotationsService"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Analytics"
+               BuildableName = "Analytics"
+               BlueprintName = "Analytics"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -1135,6 +1149,16 @@
                BlueprintIdentifier = "ImageServiceTests"
                BuildableName = "ImageServiceTests"
                BlueprintName = "ImageServiceTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AnnotationsServiceTests"
+               BuildableName = "AnnotationsServiceTests"
+               BlueprintName = "AnnotationsServiceTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

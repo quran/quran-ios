@@ -11,7 +11,7 @@ import QuranText
 import SQLitePersistence
 import VLogging
 
-struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
+public struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
     let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
@@ -23,7 +23,7 @@ struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
         }
     }
 
-    init(directory: URL) {
+    public init(directory: URL) {
         let fileURL = directory.appendingPathComponent("translations.db", isDirectory: false)
         self.init(db: DatabaseConnection(url: fileURL))
     }
@@ -46,28 +46,28 @@ struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
         return migrator
     }
 
-    func retrieveAll() async throws -> [Translation] {
+    public func retrieveAll() async throws -> [Translation] {
         try await db.read { db in
             let grdbTranslations = try GRDBTranslation.fetchAll(db)
             return grdbTranslations.map { $0.toTranslation() }
         }
     }
 
-    func insert(_ translation: Translation) async throws {
+    public func insert(_ translation: Translation) async throws {
         try await db.write { db in
             var grdbTranslation = GRDBTranslation(translation)
             try grdbTranslation.insert(db)
         }
     }
 
-    func remove(_ translation: Translation) async throws {
+    public func remove(_ translation: Translation) async throws {
         try await db.write { db in
             let grdbTranslation = GRDBTranslation(translation)
             try grdbTranslation.delete(db)
         }
     }
 
-    func update(_ translation: Translation) async throws {
+    public func update(_ translation: Translation) async throws {
         try await db.write { db in
             let grdbTranslation = GRDBTranslation(translation)
             try grdbTranslation.update(db)

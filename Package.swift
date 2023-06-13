@@ -41,6 +41,7 @@ let package = Package(
         library("ImageService"),
         library("WordTextService"),
         library("TranslationService"),
+        library("QuranAnnotations"),
 
         // Utilities packages
 
@@ -146,6 +147,9 @@ private func modelTargets() -> [[Target]] {
         ]),
         target(type, name: "QuranText", hasTests: false, dependencies: [
             "Utilities",
+            "QuranKit",
+        ]),
+        target(type, name: "QuranAnnotations", hasTests: false, dependencies: [
             "QuranKit",
         ]),
     ]

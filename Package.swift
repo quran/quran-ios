@@ -233,6 +233,11 @@ private func dataTargets() -> [[Target]] {
             "QuranKit",
         ]),
 
+        target(type, name: "TranslationPersistence", hasTests: false, dependencies: [
+            "SQLitePersistence",
+            "QuranText",
+        ]),
+
         // MARK: - Networking
 
         target(type, name: "NetworkSupport", dependencies: [
@@ -314,7 +319,6 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranAudioKit", dependencies: [
-            "SQLitePersistence",
             "BatchDownloader",
             "AudioTimingService",
             "ReciterService",
@@ -350,6 +354,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "TranslationService", dependencies: [
             "QuranText",
+            "TranslationPersistence",
             "VerseTextPersistence",
             "BatchDownloader",
             "Localization",

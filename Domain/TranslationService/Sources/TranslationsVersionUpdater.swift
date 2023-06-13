@@ -21,6 +21,7 @@
 import BatchDownloader
 import QuranText
 import SystemDependencies
+import TranslationPersistence
 import VerseTextPersistence
 
 typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence

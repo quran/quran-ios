@@ -8,6 +8,7 @@
 import Foundation
 import QuranText
 import SystemDependencies
+import TranslationPersistence
 import VerseTextPersistence
 
 public struct LocalTranslationsRetriever {

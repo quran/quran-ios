@@ -21,6 +21,7 @@
 import Foundation
 import QuranText
 import SystemDependencies
+import TranslationPersistence
 
 public struct TranslationDeleter {
     let persistence: ActiveTranslationsPersistence

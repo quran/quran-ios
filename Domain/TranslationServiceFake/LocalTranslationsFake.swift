@@ -9,6 +9,7 @@ import Foundation
 import QuranText
 import SystemDependenciesFake
 import TestResources
+import TranslationPersistence
 @testable import TranslationService
 import VerseTextPersistence
 

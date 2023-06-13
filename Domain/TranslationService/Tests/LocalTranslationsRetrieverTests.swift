@@ -7,6 +7,7 @@
 
 import QuranText
 import SystemDependenciesFake
+import TranslationPersistence
 @testable import TranslationService
 import TranslationServiceFake
 import XCTest

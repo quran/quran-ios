@@ -20,7 +20,7 @@
 
 import QuranText
 
-protocol ActiveTranslationsPersistence {
+public protocol ActiveTranslationsPersistence {
     func retrieveAll() async throws -> [Translation]
     func insert(_ translation: Translation) async throws
     func remove(_ translation: Translation) async throws

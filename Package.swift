@@ -32,6 +32,7 @@ let package = Package(
     products: [
         library("QuranKit"),
         library("QuranTextKit"),
+        library("QuranText"),
         library("QuranAudioKit"),
         library("AudioUpdater"),
         library("BatchDownloader"),

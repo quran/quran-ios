@@ -18,6 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-protocol DatabaseVersionPersistence {
+public protocol DatabaseVersionPersistence {
     func getTextVersion() async throws -> Int
 }

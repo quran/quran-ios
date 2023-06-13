@@ -8,6 +8,7 @@
 import Foundation
 import QuranText
 import SystemDependencies
+import VerseTextPersistence
 
 public struct LocalTranslationsRetriever {
     let persistence: ActiveTranslationsPersistence

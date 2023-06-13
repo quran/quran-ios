@@ -9,18 +9,18 @@ import Foundation
 import GRDB
 import SQLitePersistence
 
-struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
+public struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
     let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
         self.db = db
     }
 
-    init(fileURL: URL) {
+    public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    func getTextVersion() async throws -> Int {
+    public func getTextVersion() async throws -> Int {
         try await db.write { db in
             let property = try GRDBProperty
                 .filter(GRDBProperty.Columns.property == "text_version")

@@ -350,7 +350,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "TranslationService", dependencies: [
             "QuranText",
-            "SQLitePersistence",
+            "VerseTextPersistence",
             "BatchDownloader",
             "Localization",
             "Preferences",

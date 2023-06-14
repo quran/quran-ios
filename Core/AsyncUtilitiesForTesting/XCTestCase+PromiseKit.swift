@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-19.
 //
 
-import PromiseKit
 import XCTest
 
 extension XCTestCase {

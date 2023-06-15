@@ -28,7 +28,7 @@ let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v13),
+        .iOS(.v14),
     ],
     products: [
         library("QuranKit"),
@@ -44,7 +44,7 @@ let package = Package(
         library("WordTextService"),
         library("TranslationService"),
         library("AnnotationsService"),
-        library("UIx"),
+        library("NoorUI"),
 
         // Utilities packages
 
@@ -58,13 +58,28 @@ let package = Package(
         library("SystemDependenciesFake"),
     ],
     dependencies: [
-        .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
+        // Logging
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
+
+        // Helpers
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
-        .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
+
+        // Zip
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
+
+        // Database
+        .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
+
+        // Async
+        .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
+
+        // UI
+        .package(url: "https://github.com/mohamede1945/DownloadButton", branch: "master"),
+
+        // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
+
     ], targets: validated(targets)
 )
 
@@ -164,6 +179,12 @@ private func uiTargets() -> [[Target]] {
         target(type, name: "ViewConstrainer", hasTests: false),
         target(type, name: "UIx", hasTests: false, dependencies: [
             "ViewConstrainer",
+        ]),
+        target(type, name: "NoorUI", hasTests: false, dependencies: [
+            "UIx",
+            "Localization",
+            "QuranText",
+            "DownloadButton",
         ]),
     ]
 }
@@ -452,7 +473,7 @@ enum TargetType: String {
         .model:  [.core, .model],
         .data:   [.core, .model, .data],
         .domain: [.core, .model, .data, .domain],
-        .ui:     [.core, .ui],
+        .ui:     [.core, .model, .ui],
     ]
     // swiftformat:enable consecutiveSpaces
 }
@@ -495,7 +516,6 @@ func library(_ name: String) -> PackageDescription.Product {
 func validated(_ targets: [Target]) -> [Target] {
     var targetTypes: [String: TargetType] = [:]
     for target in targets {
-        let url = URL(fileURLWithPath: target.path!)
         let parentDirectory = target.path!.components(separatedBy: "/")[0]
         targetTypes[target.name] = TargetType(rawValue: parentDirectory)!
     }

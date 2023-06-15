@@ -17,6 +17,7 @@ let settings = enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []
 let targets = [
     coreTargets(),
     modelTargets(),
+    uiTargets(),
     dataTargets(),
     domainTargets(),
 ]
@@ -43,6 +44,7 @@ let package = Package(
         library("WordTextService"),
         library("TranslationService"),
         library("AnnotationsService"),
+        library("UIx"),
 
         // Utilities packages
 
@@ -152,6 +154,16 @@ private func modelTargets() -> [[Target]] {
         ]),
         target(type, name: "QuranAnnotations", hasTests: false, dependencies: [
             "QuranKit",
+        ]),
+    ]
+}
+
+private func uiTargets() -> [[Target]] {
+    let type = TargetType.ui
+    return [
+        target(type, name: "ViewConstrainer", hasTests: false),
+        target(type, name: "UIx", hasTests: false, dependencies: [
+            "ViewConstrainer",
         ]),
     ]
 }
@@ -432,13 +444,17 @@ enum TargetType: String {
     case data = "Data"
     case domain = "Domain"
     case model = "Model"
+    case ui = "UI"
 
+    // swiftformat:disable consecutiveSpaces
     static let validDependencies: [TargetType: Set<TargetType>] = [
-        .core: [.core],
-        .model: [.model, .core],
-        .data: [.data, .core, .model],
-        .domain: [.domain, .core, .model, .data],
+        .core:   [.core],
+        .model:  [.core, .model],
+        .data:   [.core, .model, .data],
+        .domain: [.core, .model, .data, .domain],
+        .ui:     [.core, .ui],
     ]
+    // swiftformat:enable consecutiveSpaces
 }
 
 func target(

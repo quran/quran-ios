@@ -60,7 +60,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
 
     private var setCurrentMushafBarButton: some View {
         Button(action: useAction) {
-            Text(l("reading.selector.selectMuhaf.short"))
+            Text(l("reading.selector.selectMushaf.short"))
         }
     }
 
@@ -75,7 +75,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
         Button(action: useAction) {
             HStack {
                 Spacer()
-                Text(l("reading.selector.selectMuhaf.long"))
+                Text(l("reading.selector.selectMushaf.long"))
                     .foregroundColor(.white)
                 Spacer()
             }

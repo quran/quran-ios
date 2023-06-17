@@ -173,7 +173,8 @@ private class ElementController<Content: View>: UIHostingController<Content> {
         viewIfLoaded?.backgroundColor = configuration.backgroundColor
     }
 
-    @available(*, unavailable) @MainActor required init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable) @MainActor
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

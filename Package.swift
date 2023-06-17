@@ -80,7 +80,7 @@ let package = Package(
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
 
-    ], targets: validated(targets)
+    ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
 
 private func coreTargets() -> [[Target]] {
@@ -547,4 +547,14 @@ func dependencyName(of dependency: Target.Dependency) -> String {
         return name
     }
     return ""
+}
+
+func testTargetLinkingAllPackageTargets(_ targets: [Target]) -> Target {
+    let nonTestTargets = targets.filter { !$0.isTest }
+    return .testTarget(
+        name: "AllTargetsTests",
+        dependencies: nonTestTargets.map { .init(stringLiteral: $0.name) },
+        path: "AllTargetsTests",
+        swiftSettings: settings
+    )
 }

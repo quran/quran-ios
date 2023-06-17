@@ -150,8 +150,8 @@
 
 // MARK: - Reading Selector
 
-"reading.selector.selectMuhaf.short" = "اختر";
-"reading.selector.selectMuhaf.long" = "اختر هذا المصحف";
+"reading.selector.selectMushaf.short" = "اختر";
+"reading.selector.selectMushaf.long" = "اختر هذا المصحف";
 "reading.selector.title" = "اختر المصحف";
 "reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
 

@@ -46,11 +46,12 @@ public struct CoreDataNotePersistence: NotePersistence {
         }
     }
 
-    private func createOrUpdateNoteHighlight(verses selectedVerses: [VersePersistenceModel],
-                                             color: Int,
-                                             note: String?,
-                                             context: NSManagedObjectContext) throws -> NotePersistenceModel
-    {
+    private func createOrUpdateNoteHighlight(
+        verses selectedVerses: [VersePersistenceModel],
+        color: Int,
+        note: String?,
+        context: NSManagedObjectContext
+    ) throws -> NotePersistenceModel {
         // get existing notes touching new verses
         let existingNotes = try notes(with: selectedVerses, using: context)
 
@@ -145,10 +146,12 @@ public struct CoreDataNotePersistence: NotePersistence {
 
 private extension NotePersistenceModel {
     init(_ other: MO_Note) {
-        self.init(verses: Set(other.typedVerses.map { VersePersistenceModel($0) }),
-                  modifiedDate: other.modifiedOn ?? Date(),
-                  note: other.note,
-                  color: Int(other.color))
+        self.init(
+            verses: Set(other.typedVerses.map { VersePersistenceModel($0) }),
+            modifiedDate: other.modifiedOn ?? Date(),
+            note: other.note,
+            color: Int(other.color)
+        )
     }
 }
 

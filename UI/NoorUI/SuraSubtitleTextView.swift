@@ -32,10 +32,12 @@ struct SuraSubtitleTextView_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            SuraSubtitleTextView(localizedSura: "Sura 1",
-                                 arabicSuraName: suraName,
-                                 subtitle: "Makki - 7 verses")
-                .padding()
+            SuraSubtitleTextView(
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                subtitle: "Makki - 7 verses"
+            )
+            .padding()
             Divider()
         }
     }

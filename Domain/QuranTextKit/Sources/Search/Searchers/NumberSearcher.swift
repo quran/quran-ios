@@ -38,9 +38,11 @@ struct NumberSearcher: Searcher {
             return []
         }
         if components.count == 2 {
-            return [try await parseVerseResult(sura: components[0],
-                                               verse: components[1],
-                                               quran: quran)].compactMap { $0 }
+            return [try await parseVerseResult(
+                sura: components[0],
+                verse: components[1],
+                quran: quran
+            )].compactMap { $0 }
         } else {
             return [
                 parseSuraResult(sura: components[0], quran: quran),

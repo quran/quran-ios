@@ -121,11 +121,15 @@ extension UIImage {
     public static func filledImage(fillColor: UIColor, radius: CGFloat, lineColor: UIColor, lineWidth: CGFloat) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: radius * 2, height: radius * 2), false, 0)
 
-        let bezierPath = UIBezierPath(roundedRect: CGRect(x: lineWidth,
-                                                          y: lineWidth,
-                                                          width: (radius - lineWidth) * 2,
-                                                          height: (radius - lineWidth) * 2),
-                                      cornerRadius: radius)
+        let bezierPath = UIBezierPath(
+            roundedRect: CGRect(
+                x: lineWidth,
+                y: lineWidth,
+                width: (radius - lineWidth) * 2,
+                height: (radius - lineWidth) * 2
+            ),
+            cornerRadius: radius
+        )
         bezierPath.lineWidth = lineWidth
 
         lineColor.setStroke()

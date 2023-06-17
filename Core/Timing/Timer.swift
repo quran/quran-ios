@@ -34,12 +34,13 @@ open class Timer {
 
     private var eventHandler: (() -> Void)?
 
-    public init(interval: TimeInterval,
-                repeated: Bool = false,
-                startNow: Bool = false,
-                queue: DispatchQueue = .main,
-                handler: @escaping () -> Void)
-    {
+    public init(
+        interval: TimeInterval,
+        repeated: Bool = false,
+        startNow: Bool = false,
+        queue: DispatchQueue = .main,
+        handler: @escaping () -> Void
+    ) {
         self.repeated = repeated
 
         timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: UInt(0)), queue: queue)

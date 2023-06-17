@@ -44,10 +44,18 @@ extension UIView {
         }
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
-                                                      options: [], metrics: nil, views: ["view": contentView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
-                                                      options: [], metrics: nil, views: ["view": contentView]))
+        addConstraints(NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|[view]|",
+            options: [],
+            metrics: nil,
+            views: ["view": contentView]
+        ))
+        addConstraints(NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|[view]|",
+            options: [],
+            metrics: nil,
+            views: ["view": contentView]
+        ))
         return contentView
     }
 
@@ -100,9 +108,11 @@ extension UIView {
     @available(iOS 11.0, *)
     public var readableContentInsets: NSDirectionalEdgeInsets {
         let readbleContentFrame = readableContentGuide.layoutFrame
-        return NSDirectionalEdgeInsets(top: readbleContentFrame.minY,
-                                       leading: readbleContentFrame.minX,
-                                       bottom: bounds.height - readbleContentFrame.maxY,
-                                       trailing: bounds.width - readbleContentFrame.maxX)
+        return NSDirectionalEdgeInsets(
+            top: readbleContentFrame.minY,
+            leading: readbleContentFrame.minX,
+            bottom: bounds.height - readbleContentFrame.maxY,
+            trailing: bounds.width - readbleContentFrame.maxX
+        )
     }
 }

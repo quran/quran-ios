@@ -49,10 +49,12 @@ public struct ReciterSizeInfoRetriever: Sendable {
         let fileList = reciter.audioFiles(baseURL: baseURL, from: quran.firstVerse, to: quran.lastVerse)
 
         guard let fileURLs = try? fileSystem.contentsOfDirectory(at: reciter.localFolder(), includingPropertiesForKeys: [.fileSizeKey]) else {
-            return ReciterAudioDownload(reciter: reciter,
-                                        downloadedSizeInBytes: 0,
-                                        downloadedSuraCount: 0,
-                                        surasCount: quran.suras.count)
+            return ReciterAudioDownload(
+                reciter: reciter,
+                downloadedSizeInBytes: 0,
+                downloadedSuraCount: 0,
+                surasCount: quran.suras.count
+            )
         }
 
         // sum the sizes of downloaded files
@@ -71,10 +73,12 @@ public struct ReciterSizeInfoRetriever: Sendable {
             }
         }
 
-        return ReciterAudioDownload(reciter: reciter,
-                                    downloadedSizeInBytes: sizeInBytes,
-                                    downloadedSuraCount: suras.count,
-                                    surasCount: quran.suras.count)
+        return ReciterAudioDownload(
+            reciter: reciter,
+            downloadedSizeInBytes: sizeInBytes,
+            downloadedSuraCount: suras.count,
+            surasCount: quran.suras.count
+        )
     }
 
     private func sizeInBytes(of fileURLs: [URL]) -> UInt64 {

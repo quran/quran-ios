@@ -20,13 +20,18 @@ public struct LocalTranslationsRetriever {
             GRDBDatabaseVersionPersistence(fileURL: translation.localURL)
         }
 
-        self.init(databasesURL: databasesURL, fileSystem: fileSystem,
-                  versionPersistenceFactory: versionPersistenceFactory)
+        self.init(
+            databasesURL: databasesURL,
+            fileSystem: fileSystem,
+            versionPersistenceFactory: versionPersistenceFactory
+        )
     }
 
-    init(databasesURL: URL, fileSystem: FileSystem,
-         versionPersistenceFactory: @escaping VersionPersistenceFactory)
-    {
+    init(
+        databasesURL: URL,
+        fileSystem: FileSystem,
+        versionPersistenceFactory: @escaping VersionPersistenceFactory
+    ) {
         persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
         versionUpdater = TranslationsVersionUpdater(
             persistence: persistence,

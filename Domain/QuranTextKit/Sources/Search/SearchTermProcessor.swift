@@ -41,9 +41,11 @@ struct SearchTermProcessor {
 
     func prepareSearchTermForSearching(_ searchTerm: String) -> (searchTerm: String, pattern: String) {
         let searchTerm = prepareSearchTermForAutocompletion(searchTerm)
-        let arabicSearchTerm = searchTerm.replacingOccurrences(of: regex,
-                                                               with: "_",
-                                                               options: .regularExpression)
+        let arabicSearchTerm = searchTerm.replacingOccurrences(
+            of: regex,
+            with: "_",
+            options: .regularExpression
+        )
         let pattern = generateRegexPattern(term: searchTerm)
         return (searchTerm: arabicSearchTerm, pattern: pattern)
     }

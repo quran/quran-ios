@@ -47,10 +47,12 @@ public struct WordFrame: Equatable {
     }
 
     public var rect: CGRect {
-        CGRect(x: minX - Int(cropInsets.left),
-               y: minY - Int(cropInsets.top),
-               width: maxX - minX,
-               height: maxY - minY)
+        CGRect(
+            x: minX - Int(cropInsets.left),
+            y: minY - Int(cropInsets.top),
+            width: maxX - minX,
+            height: maxY - minY
+        )
     }
 }
 

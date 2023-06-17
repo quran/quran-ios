@@ -31,9 +31,11 @@ private struct DatabaseConnectionPool: Sendable {
             }
 
             // Create the database folder if needed.
-            try? FileManager.default.createDirectory(atPath: url.path.stringByDeletingLastPathComponent,
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
+            try? FileManager.default.createDirectory(
+                atPath: url.path.stringByDeletingLastPathComponent,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
 
             var configuration = Configuration()
             // TODO: Remove and use singletons instead.

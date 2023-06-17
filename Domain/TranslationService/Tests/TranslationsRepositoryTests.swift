@@ -111,9 +111,11 @@ class TranslationsRepositoryTests: XCTestCase {
     private func nextResponse(_ response: TranslationsResponse) throws {
         let encoder = JSONEncoder()
         let parameters = [("v", "5")]
-        let request = NetworkManager.request(baseURL: baseURL,
-                                             path: TranslationNetworkManager.path,
-                                             parameters: parameters)
+        let request = NetworkManager.request(
+            baseURL: baseURL,
+            path: TranslationNetworkManager.path,
+            parameters: parameters
+        )
         session.dataResults[request.url!] = .success(try encoder.encode(response))
     }
 
@@ -126,13 +128,15 @@ class TranslationsRepositoryTests: XCTestCase {
 
 private extension TranslationResponse {
     init(_ translation: Translation) {
-        self.init(id: translation.id,
-                  displayName: translation.displayName,
-                  translator: translation.translator,
-                  translatorForeign: translation.translatorForeign,
-                  fileUrl: translation.fileURL,
-                  fileName: translation.fileName,
-                  languageCode: translation.languageCode,
-                  currentVersion: translation.version)
+        self.init(
+            id: translation.id,
+            displayName: translation.displayName,
+            translator: translation.translator,
+            translatorForeign: translation.translatorForeign,
+            fileUrl: translation.fileURL,
+            fileName: translation.fileName,
+            languageCode: translation.languageCode,
+            currentVersion: translation.version
+        )
     }
 }

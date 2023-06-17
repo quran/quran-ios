@@ -107,10 +107,11 @@ private struct MoreMenuRootView: View {
         }
     }
 
-    @ViewBuilder private func viewBasedOn(_ state: ConfigState,
-                                          customCondition: Bool = true,
-                                          @ViewBuilder content: () -> some View) -> some View
-    {
+    @ViewBuilder private func viewBasedOn(
+        _ state: ConfigState,
+        customCondition: Bool = true,
+        @ViewBuilder content: () -> some View
+    ) -> some View {
         switch state {
         case .alwaysOff:
             EmptyView()

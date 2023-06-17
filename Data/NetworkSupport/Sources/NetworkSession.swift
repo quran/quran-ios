@@ -35,11 +35,13 @@ public protocol NetworkSessionDataTask: NetworkSessionTask {
 }
 
 public protocol NetworkSessionDelegate: Sendable {
-    func networkSession(_ session: NetworkSession,
-                        downloadTask: NetworkSessionDownloadTask,
-                        didWriteData bytesWritten: Int64,
-                        totalBytesWritten: Int64,
-                        totalBytesExpectedToWrite: Int64) async
+    func networkSession(
+        _ session: NetworkSession,
+        downloadTask: NetworkSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) async
 
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async
@@ -79,18 +81,21 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
         self.networkSessionDelegate = networkSessionDelegate
     }
 
-    public func urlSession(_ session: URLSession,
-                           downloadTask: URLSessionDownloadTask,
-                           didWriteData bytesWritten: Int64,
-                           totalBytesWritten: Int64,
-                           totalBytesExpectedToWrite: Int64)
-    {
+    public func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
         Task {
-            await networkSessionDelegate.networkSession(session,
-                                                        downloadTask: downloadTask,
-                                                        didWriteData: bytesWritten,
-                                                        totalBytesWritten: totalBytesWritten,
-                                                        totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+            await networkSessionDelegate.networkSession(
+                session,
+                downloadTask: downloadTask,
+                didWriteData: bytesWritten,
+                totalBytesWritten: totalBytesWritten,
+                totalBytesExpectedToWrite: totalBytesExpectedToWrite
+            )
         }
     }
 

@@ -33,12 +33,13 @@ public final class PagesCacheableService<Input: Pageable, Output: Sendable>: Sen
 
     private let service: OperationCacheableService<Input, Output>
 
-    public init(cache: Cache<Input, Output>,
-                previousPagesCount: Int,
-                nextPagesCount: Int,
-                pages: [Page],
-                operation: @escaping CacheableOperation<Input, Output>)
-    {
+    public init(
+        cache: Cache<Input, Output>,
+        previousPagesCount: Int,
+        nextPagesCount: Int,
+        pages: [Page],
+        operation: @escaping CacheableOperation<Input, Output>
+    ) {
         service = OperationCacheableService(cache: cache, operation: operation)
         self.pages = pages
         self.nextPagesCount = nextPagesCount

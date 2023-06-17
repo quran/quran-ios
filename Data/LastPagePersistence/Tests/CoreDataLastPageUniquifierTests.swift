@@ -98,11 +98,16 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         assertDatabaseContains([entity5, entity4])
     }
 
-    private func assertDatabaseContains(_ entities: [MO_LastPage],
-                                        file: StaticString = #filePath, line: UInt = #line)
-    {
-        XCTAssertEqual(entities.map(\.page),
-                       try context.allLastPages().map(\.page),
-                       file: file, line: line)
+    private func assertDatabaseContains(
+        _ entities: [MO_LastPage],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        XCTAssertEqual(
+            entities.map(\.page),
+            try context.allLastPages().map(\.page),
+            file: file,
+            line: line
+        )
     }
 }

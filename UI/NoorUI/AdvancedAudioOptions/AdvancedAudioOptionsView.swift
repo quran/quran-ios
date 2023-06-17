@@ -175,19 +175,27 @@ struct AdvancedAudioOptionsView_Previews: PreviewProvider {
     }
 
     struct Container: View {
-        static let actions = AdvancedAudioUI.Actions(reciterTapped: {},
-                                                     lastPageTapped: {},
-                                                     lastSuraTapped: {},
-                                                     lastJuzTapped: {},
-                                                     fromVerseTapped: {},
-                                                     toVerseTapped: {})
+        static let actions = AdvancedAudioUI.Actions(
+            reciterTapped: {},
+            lastPageTapped: {},
+            lastSuraTapped: {},
+            lastJuzTapped: {},
+            fromVerseTapped: {},
+            toVerseTapped: {}
+        )
         @ObservedObject var dataObject = AdvancedAudioUI.DataObject(
-            suras: [PreviewSura(localizedName: "Sura-1",
-                                verses: [PreviewVerse(localizedName: "1-1", localizedNameWithSuraNumber: "1-2")])],
-            fromVerse: PreviewVerse(localizedName: "An-Nas, Ayah 1",
-                                    localizedNameWithSuraNumber: "114. An-Nas, Ayah 1"),
-            toVerse: PreviewVerse(localizedName: "An-Nas, Ayah 3",
-                                  localizedNameWithSuraNumber: "114. An-Nas, Ayah 3"),
+            suras: [PreviewSura(
+                localizedName: "Sura-1",
+                verses: [PreviewVerse(localizedName: "1-1", localizedNameWithSuraNumber: "1-2")]
+            )],
+            fromVerse: PreviewVerse(
+                localizedName: "An-Nas, Ayah 1",
+                localizedNameWithSuraNumber: "114. An-Nas, Ayah 1"
+            ),
+            toVerse: PreviewVerse(
+                localizedName: "An-Nas, Ayah 3",
+                localizedNameWithSuraNumber: "114. An-Nas, Ayah 3"
+            ),
             verseRepeat: .none,
             listRepeat: .twice,
             reciterName: "Mishary"

@@ -73,13 +73,15 @@ public struct ImageDataService {
         let height = cgimg.height
 
         let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let imageContext = CGContext(data: nil,
-                                     width: width,
-                                     height: height,
-                                     bitsPerComponent: 8,
-                                     bytesPerRow: width * 4,
-                                     space: colourSpace,
-                                     bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        let imageContext = CGContext(
+            data: nil,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width * 4,
+            space: colourSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+        )
 
         // draw the image to the context, release it
         imageContext?.draw(cgimg, in: CGRect(x: 0, y: 0, width: width, height: height))

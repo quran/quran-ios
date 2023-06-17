@@ -10,11 +10,12 @@ import SwiftUI
 import UIx
 
 public struct PageBookmarkCell: View {
-    public init(page: Int,
-                localizedSura: String,
-                arabicSuraName: String,
-                createdSince: String)
-    {
+    public init(
+        page: Int,
+        localizedSura: String,
+        arabicSuraName: String,
+        createdSince: String
+    ) {
         self.page = page
         self.localizedSura = localizedSura
         self.arabicSuraName = arabicSuraName
@@ -43,16 +44,20 @@ struct PageBookmarkCell_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            PageBookmarkCell(page: 1,
-                             localizedSura: "Sura 1",
-                             arabicSuraName: suraName,
-                             createdSince: "Just now")
+            PageBookmarkCell(
+                page: 1,
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                createdSince: "Just now"
+            )
             Divider()
 
-            PageBookmarkCell(page: 44,
-                             localizedSura: "Sura 1",
-                             arabicSuraName: suraName,
-                             createdSince: "Just now")
+            PageBookmarkCell(
+                page: 44,
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                createdSince: "Just now"
+            )
             Divider()
         }
     }

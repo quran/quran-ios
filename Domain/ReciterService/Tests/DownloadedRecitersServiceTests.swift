@@ -62,12 +62,14 @@ class DownloadedRecitersServiceTests: XCTestCase {
 
     private func createReciter(id: Int) -> Reciter {
         let name = "reciter" + String(id)
-        return Reciter(id: id,
-                       nameKey: name,
-                       directory: String(id),
-                       audioURL: URL(validURL: "http://example.com"),
-                       audioType: .gapless(databaseName: name),
-                       hasGaplessAlternative: false,
-                       category: .arabic)
+        return Reciter(
+            id: id,
+            nameKey: name,
+            directory: String(id),
+            audioURL: URL(validURL: "http://example.com"),
+            audioType: .gapless(databaseName: name),
+            hasGaplessAlternative: false,
+            category: .arabic
+        )
     }
 }

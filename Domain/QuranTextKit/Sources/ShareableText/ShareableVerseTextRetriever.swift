@@ -35,9 +35,10 @@ public struct ShareableVerseTextRetriever {
         shareableVersePersistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: quranFileURL)
     }
 
-    init(textService: QuranTextDataService,
-         shareableVersePersistence: VerseTextPersistence)
-    {
+    init(
+        textService: QuranTextDataService,
+        shareableVersePersistence: VerseTextPersistence
+    ) {
         self.textService = textService
         self.shareableVersePersistence = shareableVersePersistence
     }

@@ -10,11 +10,12 @@ import SwiftUI
 import UIx
 
 public struct LastPageCell: View {
-    public init(page: Int,
-                localizedSura: String,
-                arabicSuraName: String,
-                createdSince: String)
-    {
+    public init(
+        page: Int,
+        localizedSura: String,
+        arabicSuraName: String,
+        createdSince: String
+    ) {
         self.page = page
         self.localizedSura = localizedSura
         self.arabicSuraName = arabicSuraName
@@ -43,16 +44,20 @@ struct LastPageCell_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            LastPageCell(page: 1,
-                         localizedSura: "Sura 1",
-                         arabicSuraName: suraName,
-                         createdSince: "Just now")
+            LastPageCell(
+                page: 1,
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                createdSince: "Just now"
+            )
             Divider()
 
-            LastPageCell(page: 44,
-                         localizedSura: "Sura 2",
-                         arabicSuraName: suraName,
-                         createdSince: "Just now")
+            LastPageCell(
+                page: 44,
+                localizedSura: "Sura 2",
+                arabicSuraName: suraName,
+                createdSince: "Just now"
+            )
             Divider()
         }
     }

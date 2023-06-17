@@ -18,23 +18,25 @@ extension Task where Success == Failure, Failure == Never {
     }
 }
 
-public func AsyncAssertEqual<T>(_ expression1: @autoclosure () async throws -> T,
-                                _ expression2: @autoclosure () async throws -> T,
-                                _ message: @autoclosure () -> String = "",
-                                file: StaticString = #filePath,
-                                line: UInt = #line) async rethrows where T: Equatable
-{
+public func AsyncAssertEqual<T>(
+    _ expression1: @autoclosure () async throws -> T,
+    _ expression2: @autoclosure () async throws -> T,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async rethrows where T: Equatable {
     let e1 = try await expression1()
     let e2 = try await expression2()
     XCTAssertEqual(e1, e2, message(), file: file, line: line)
 }
 
-public func AsyncAssertThrows(_ expression: @autoclosure () async throws -> Void,
-                              _ expectedError: NSError?,
-                              _ message: @autoclosure () -> String = "Didn't throw",
-                              file: StaticString = #filePath,
-                              line: UInt = #line) async
-{
+public func AsyncAssertThrows(
+    _ expression: @autoclosure () async throws -> Void,
+    _ expectedError: NSError?,
+    _ message: @autoclosure () -> String = "Didn't throw",
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async {
     do {
         try await expression()
         XCTFail(message(), file: file, line: line)
@@ -45,11 +47,12 @@ public func AsyncAssertThrows(_ expression: @autoclosure () async throws -> Void
     }
 }
 
-public func AsyncUnwrap<T>(_ expression: @autoclosure () async throws -> T?,
-                           _ message: @autoclosure () -> String = "",
-                           file: StaticString = #filePath,
-                           line: UInt = #line) async throws -> T
-{
+public func AsyncUnwrap<T>(
+    _ expression: @autoclosure () async throws -> T?,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async throws -> T {
     let value = try await expression()
     return try XCTUnwrap(value, message(), file: file, line: line)
 }

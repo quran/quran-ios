@@ -38,14 +38,16 @@ struct TranslationResponse: Codable {
 
 private extension Translation {
     init(_ response: TranslationResponse) {
-        self.init(id: response.id,
-                  displayName: response.displayName,
-                  translator: response.translator,
-                  translatorForeign: response.translatorForeign,
-                  fileURL: response.fileUrl,
-                  fileName: response.fileName,
-                  languageCode: response.languageCode,
-                  version: response.currentVersion,
-                  installedVersion: nil)
+        self.init(
+            id: response.id,
+            displayName: response.displayName,
+            translator: response.translator,
+            translatorForeign: response.translatorForeign,
+            fileURL: response.fileUrl,
+            fileName: response.fileName,
+            languageCode: response.languageCode,
+            version: response.currentVersion,
+            installedVersion: nil
+        )
     }
 }

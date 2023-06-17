@@ -30,10 +30,11 @@ public struct Previewing {
         }
     }
 
-    public static func screen(schemes: [ColorScheme] = [.light, .dark],
-                              sizes: [ContentSizeCategory] = [.large, .extraExtraLarge],
-                              @ViewBuilder content: @escaping () -> some View) -> some View
-    {
+    public static func screen(
+        schemes: [ColorScheme] = [.light, .dark],
+        sizes: [ContentSizeCategory] = [.large, .extraExtraLarge],
+        @ViewBuilder content: @escaping () -> some View
+    ) -> some View {
         Group {
             ForEach(schemes, id: \.self) { scheme in
                 ForEach(sizes, id: \.self) { size in

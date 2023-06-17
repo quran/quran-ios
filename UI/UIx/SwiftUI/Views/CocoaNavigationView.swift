@@ -28,10 +28,11 @@ public struct CocoaNavigationView<Root: View>: View {
 public struct Navigator {
     let navigationController: UINavigationController
 
-    public func push(configuration: NavigationConfiguration = NavigationConfiguration(),
-                     animated: Bool = true,
-                     @ViewBuilder _ view: () -> some View)
-    {
+    public func push(
+        configuration: NavigationConfiguration = NavigationConfiguration(),
+        animated: Bool = true,
+        @ViewBuilder _ view: () -> some View
+    ) {
         let view = view()
             .environment(\.navigator, Navigator(navigationController: navigationController))
         let viewController = ElementController(rootView: view, configuration: configuration)

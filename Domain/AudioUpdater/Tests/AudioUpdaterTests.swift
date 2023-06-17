@@ -42,10 +42,12 @@ class AudioUpdaterTests: XCTestCase {
         bundle = SystemBundleFake()
 
         let networkManager = NetworkManager(session: session, baseURL: baseURL)
-        updater = AudioUpdater(networkManager: networkManager,
-                               recitersRetriever: ReciterDataRetriever(bundle: bundle),
-                               fileSystem: fileSystem,
-                               time: time)
+        updater = AudioUpdater(
+            networkManager: networkManager,
+            recitersRetriever: ReciterDataRetriever(bundle: bundle),
+            fileSystem: fileSystem,
+            time: time
+        )
 
         // Prepare data
         setUpReciters()
@@ -195,18 +197,22 @@ class AudioUpdaterTests: XCTestCase {
     }
 
     private func makeUpdate(reciter: Reciter, databaseVersion: Int? = nil, files: [String]) -> AudioUpdates.Update {
-        AudioUpdates.Update(path: reciter.audioURL.absoluteString,
-                            databaseVersion: databaseVersion,
-                            files: files.map { AudioUpdates.Update.File(filename: $0, md5: "") })
+        AudioUpdates.Update(
+            path: reciter.audioURL.absoluteString,
+            databaseVersion: databaseVersion,
+            files: files.map { AudioUpdates.Update.File(filename: $0, md5: "") }
+        )
     }
 
     private func nextUpdates(_ updates: AudioUpdates) throws {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         let parameters = [(AudioUpdatesNetworkManager.revision, preferences.lastRevision.description)]
-        let request = NetworkManager.request(baseURL: baseURL,
-                                             path: AudioUpdatesNetworkManager.path,
-                                             parameters: parameters)
+        let request = NetworkManager.request(
+            baseURL: baseURL,
+            path: AudioUpdatesNetworkManager.path,
+            parameters: parameters
+        )
         session.dataResults[request.url!] = .success(try encoder.encode(updates))
     }
 }

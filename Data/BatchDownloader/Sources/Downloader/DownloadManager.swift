@@ -34,13 +34,17 @@ public final class DownloadManager: Sendable {
         configuration: URLSessionConfiguration,
         downloadsURL: URL
     ) async {
-        await self.init(maxSimultaneousDownloads: maxSimultaneousDownloads,
-                        sessionFactory: {
-                            URLSession(configuration: configuration,
-                                       delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
-                                       delegateQueue: $1)
-                        },
-                        persistence: GRDBDownloadsPersistence(fileURL: downloadsURL))
+        await self.init(
+            maxSimultaneousDownloads: maxSimultaneousDownloads,
+            sessionFactory: {
+                URLSession(
+                    configuration: configuration,
+                    delegate: NetworkSessionToURLSessionDelegate(networkSessionDelegate: $0),
+                    delegateQueue: $1
+                )
+            },
+            persistence: GRDBDownloadsPersistence(fileURL: downloadsURL)
+        )
     }
 
     init(

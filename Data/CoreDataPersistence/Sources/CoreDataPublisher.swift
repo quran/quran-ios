@@ -45,10 +45,11 @@ final class FetchedResultsSubscription<SubscriberType, ResultType>: NSObject, Su
     SubscriberType.Failure == Never,
     ResultType: NSFetchRequestResult
 {
-    init(subscriber: SubscriberType,
-         request: NSFetchRequest<ResultType>,
-         context: NSManagedObjectContext)
-    {
+    init(
+        subscriber: SubscriberType,
+        request: NSFetchRequest<ResultType>,
+        context: NSManagedObjectContext
+    ) {
         self.subscriber = subscriber
         self.request = request
         self.context = context

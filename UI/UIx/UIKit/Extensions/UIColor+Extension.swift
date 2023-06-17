@@ -30,9 +30,11 @@ extension UIColor {
     }
 
     public convenience init(rgb: Int) {
-        self.init(r: CGFloat((rgb >> 16) & 0xFF),
-                  g: CGFloat((rgb >> 08) & 0xFF),
-                  b: CGFloat((rgb >> 00) & 0xFF))
+        self.init(
+            r: CGFloat((rgb >> 16) & 0xFF),
+            g: CGFloat((rgb >> 08) & 0xFF),
+            b: CGFloat((rgb >> 00) & 0xFF)
+        )
     }
 
     public func toHexString() -> String {

@@ -91,9 +91,10 @@ public struct WordFrameProcessor {
         return unionFrames
     }
 
-    private func alignLineEdges(_ sortedLines: [Dictionary<Int, [WordFrame]>.Keys.Element],
-                                _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]]
-    {
+    private func alignLineEdges(
+        _ sortedLines: [Dictionary<Int, [WordFrame]>.Keys.Element],
+        _ framesByLines: [Int: [WordFrame]]
+    ) -> [Int: [WordFrame]] {
         // align the edges
         var firstEdge = sortedLines.map { framesByLines[$0]!.first! }
         var lastEdge = sortedLines.map { framesByLines[$0]!.last! }

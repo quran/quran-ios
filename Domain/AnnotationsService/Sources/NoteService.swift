@@ -91,10 +91,12 @@ public struct NoteService {
 
 private extension Note {
     init(quran: Quran, _ note: NotePersistenceModel) {
-        self.init(verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
-                  modifiedDate: note.modifiedDate,
-                  note: note.note,
-                  color: Note.Color(rawValue: note.color) ?? .red)
+        self.init(
+            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+            modifiedDate: note.modifiedDate,
+            note: note.note,
+            color: Note.Color(rawValue: note.color) ?? .red
+        )
     }
 }
 

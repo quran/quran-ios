@@ -11,9 +11,10 @@ public struct PreferenceTransformer<Raw, T> {
     public let rawToValue: (Raw) -> T
     public let valueToRaw: (T) -> Raw
 
-    public init(rawToValue: @escaping (Raw) -> T,
-                valueToRaw: @escaping (T) -> Raw)
-    {
+    public init(
+        rawToValue: @escaping (Raw) -> T,
+        valueToRaw: @escaping (T) -> Raw
+    ) {
         self.rawToValue = rawToValue
         self.valueToRaw = valueToRaw
     }

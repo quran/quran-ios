@@ -30,12 +30,13 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
         String(describing: Cell.self)
     }
 
-    public init(style: UITableView.Style,
-                sections: [SingleChoiceSection<Item>],
-                selected: Item?,
-                configure: @escaping (Item, Item?) -> Content,
-                onSelection: @escaping (Item) -> Void)
-    {
+    public init(
+        style: UITableView.Style,
+        sections: [SingleChoiceSection<Item>],
+        selected: Item?,
+        configure: @escaping (Item, Item?) -> Content,
+        onSelection: @escaping (Item) -> Void
+    ) {
         self.sections = sections
         self.selected = selected
         self.configure = configure

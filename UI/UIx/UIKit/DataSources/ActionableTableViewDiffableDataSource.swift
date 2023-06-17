@@ -16,18 +16,20 @@ open class ActionableTableViewDiffableDataSource<SectionId: Hashable, ItemId: Ha
 
     public var actions = Actions()
 
-    override public func tableView(_ tableView: UITableView,
-                                   commit editingStyle: UITableViewCell.EditingStyle,
-                                   forRowAt indexPath: IndexPath)
-    {
+    override public func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         if let item = itemIdentifier(for: indexPath) {
             actions.commitEditing(editingStyle, item)
         }
     }
 
-    override public func tableView(_ tableView: UITableView,
-                                   canEditRowAt indexPath: IndexPath) -> Bool
-    {
+    override public func tableView(
+        _ tableView: UITableView,
+        canEditRowAt indexPath: IndexPath
+    ) -> Bool {
         if let item = itemIdentifier(for: indexPath) {
             return actions.canEditRow(item)
         }

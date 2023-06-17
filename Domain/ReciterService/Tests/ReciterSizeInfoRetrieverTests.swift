@@ -41,9 +41,11 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         try await runNoDownloadsTest([gaplessReciter])
     }
 
-    private func runNoDownloadsTest(_ reciters: [Reciter],
-                                    file: StaticString = #filePath, line: UInt = #line) async throws
-    {
+    private func runNoDownloadsTest(
+        _ reciters: [Reciter],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws {
         let sizeInfo = await service.getReciterAudioDownloads(for: reciters, quran: quran)
 
         let expectedDownloads = reciters.map {
@@ -71,9 +73,11 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         try await runFullDownloadedTest([gaplessReciter, gappedReciter])
     }
 
-    private func runFullDownloadedTest(_ reciters: [Reciter],
-                                       file: StaticString = #filePath, line: UInt = #line) async throws
-    {
+    private func runFullDownloadedTest(
+        _ reciters: [Reciter],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws {
         let expectedDownloads = reciters.map { simulateAllFilesDownloaded($0) }
 
         let sizeInfo = await service.getReciterAudioDownloads(for: reciters, quran: quran)

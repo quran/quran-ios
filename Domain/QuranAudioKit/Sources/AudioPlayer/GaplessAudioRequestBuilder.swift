@@ -28,21 +28,24 @@ struct GaplessAudioRequest: QuranAudioRequest {
     }
 
     func getPlayerInfo(for fileIndex: Int) -> PlayerItemInfo {
-        PlayerItemInfo(title: ayahs[fileIndex][0].sura.localizedName(),
-                       artist: reciter.localizedName,
-                       image: nil)
+        PlayerItemInfo(
+            title: ayahs[fileIndex][0].sura.localizedName(),
+            artist: reciter.localizedName,
+            image: nil
+        )
     }
 }
 
 struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
     let timingRetriever = ReciterTimingRetriever()
 
-    func buildRequest(with reciter: Reciter,
-                      from start: AyahNumber,
-                      to end: AyahNumber,
-                      frameRuns: Runs,
-                      requestRuns: Runs) async throws -> QuranAudioRequest
-    {
+    func buildRequest(
+        with reciter: Reciter,
+        from start: AyahNumber,
+        to end: AyahNumber,
+        frameRuns: Runs,
+        requestRuns: Runs
+    ) async throws -> QuranAudioRequest {
         let range = try await timingRetriever.timing(for: reciter, from: start, to: end)
         let urls = urlsToPlay(reciter: reciter, suras: range.timings.keys)
 

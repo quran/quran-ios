@@ -86,11 +86,12 @@ extension ViewConstrainer {
         return GroupConstrainer(view: view, constraints: constraints, chain: constraints)
     }
 
-    private func constraintToSuperview(on attribute: NSLayoutConstraint.Attribute,
-                                       by value: CGFloat,
-                                       superviewFirst: Bool,
-                                       usesMargins: Bool) -> SingleConstrainer
-    {
+    private func constraintToSuperview(
+        on attribute: NSLayoutConstraint.Attribute,
+        by value: CGFloat,
+        superviewFirst: Bool,
+        usesMargins: Bool
+    ) -> SingleConstrainer {
         let marginalAttribute: NSLayoutConstraint.Attribute
         if usesMargins {
             switch attribute {
@@ -119,11 +120,12 @@ extension ViewConstrainer {
         return SingleConstrainer(view: view, constraint: constraint, chain: [constraint])
     }
 
-    private func makeLine(views: [UIView],
-                          by value: CGFloat,
-                          on firstAttribute: NSLayoutConstraint.Attribute,
-                          and secondAttribute: NSLayoutConstraint.Attribute) -> GroupConstrainer
-    {
+    private func makeLine(
+        views: [UIView],
+        by value: CGFloat,
+        on firstAttribute: NSLayoutConstraint.Attribute,
+        and secondAttribute: NSLayoutConstraint.Attribute
+    ) -> GroupConstrainer {
         assert(!views.isEmpty, "should have at least 1 view")
 
         let ancestor = commonAncestor(views: views)
@@ -322,12 +324,13 @@ extension ViewConstrainer {
     }
 
     @discardableResult
-    public func edges(leading: CGFloat = 0,
-                      trailing: CGFloat = 0,
-                      top: CGFloat = 0,
-                      bottom: CGFloat = 0,
-                      usesMargins: Bool = false) -> GroupConstrainer
-    {
+    public func edges(
+        leading: CGFloat = 0,
+        trailing: CGFloat = 0,
+        top: CGFloat = 0,
+        bottom: CGFloat = 0,
+        usesMargins: Bool = false
+    ) -> GroupConstrainer {
         let group = [horizontalEdges(leading: leading, trailing: trailing, usesMargins: usesMargins),
                      verticalEdges(top: top, bottom: bottom, usesMargins: usesMargins)]
         return GroupConstrainer(constrainer: self, group: group)

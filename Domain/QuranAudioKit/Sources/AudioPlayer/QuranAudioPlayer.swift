@@ -21,11 +21,12 @@ public struct QuranAudioPlayerActions: Sendable {
     let playbackResumed: @Sendable @MainActor () -> Void
     let playing: @Sendable @MainActor (AyahNumber) -> Void
 
-    public init(playbackEnded: @Sendable @MainActor @escaping () -> Void,
-                playbackPaused: @Sendable @MainActor @escaping () -> Void,
-                playbackResumed: @Sendable @MainActor @escaping () -> Void,
-                playing: @Sendable @MainActor @escaping (AyahNumber) -> Void)
-    {
+    public init(
+        playbackEnded: @Sendable @MainActor @escaping () -> Void,
+        playbackPaused: @Sendable @MainActor @escaping () -> Void,
+        playbackResumed: @Sendable @MainActor @escaping () -> Void,
+        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void
+    ) {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused
         self.playbackResumed = playbackResumed
@@ -115,12 +116,13 @@ public class QuranAudioPlayer {
 
     // MARK: - Play
 
-    public func play(reciter: Reciter,
-                     from start: AyahNumber,
-                     to end: AyahNumber,
-                     verseRuns: Runs,
-                     listRuns: Runs) async throws
-    {
+    public func play(
+        reciter: Reciter,
+        from start: AyahNumber,
+        to end: AyahNumber,
+        verseRuns: Runs,
+        listRuns: Runs
+    ) async throws {
         let details: [String: Any] = [
             "startAyah": start,
             "to": end,

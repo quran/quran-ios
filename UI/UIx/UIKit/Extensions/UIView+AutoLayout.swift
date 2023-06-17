@@ -163,12 +163,13 @@ extension UIView {
     }
 
     @discardableResult
-    public func pinParentAllDirections(_ view: UIView,
-                                       leadingValue: CGFloat = 0,
-                                       trailingValue: CGFloat = 0,
-                                       topValue: CGFloat = 0,
-                                       bottomValue: CGFloat = 0) -> [NSLayoutConstraint]
-    {
+    public func pinParentAllDirections(
+        _ view: UIView,
+        leadingValue: CGFloat = 0,
+        trailingValue: CGFloat = 0,
+        topValue: CGFloat = 0,
+        bottomValue: CGFloat = 0
+    ) -> [NSLayoutConstraint] {
         var array: [NSLayoutConstraint] = []
         array += pinParentHorizontal(view, leadingValue: leadingValue, trailingValue: trailingValue)
         array += pinParentVertical(view, topValue: topValue, bottomValue: bottomValue)

@@ -25,10 +25,12 @@ extension WordFrameScale {
 
 extension CGRect {
     public func scaled(by scale: WordFrameScale) -> CGRect {
-        CGRect(x: minX * scale.scale + scale.xOffset,
-               y: minY * scale.scale + scale.yOffset,
-               width: width * scale.scale,
-               height: height * scale.scale)
+        CGRect(
+            x: minX * scale.scale + scale.xOffset,
+            y: minY * scale.scale + scale.yOffset,
+            width: width * scale.scale,
+            height: height * scale.scale
+        )
     }
 }
 
@@ -87,10 +89,11 @@ extension WordFrame {
         }
     }
 
-    private static func unionEdge(_ list: inout [WordFrame],
-                                  keyPath: WritableKeyPath<WordFrame, Int>,
-                                  isMin: Bool)
-    {
+    private static func unionEdge(
+        _ list: inout [WordFrame],
+        keyPath: WritableKeyPath<WordFrame, Int>,
+        isMin: Bool
+    ) {
         var longest: [Int] = []
         for i in 0 ..< list.count - 1 {
             let pivot = list[i]

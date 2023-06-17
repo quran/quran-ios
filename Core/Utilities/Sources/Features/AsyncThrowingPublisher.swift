@@ -73,7 +73,9 @@ public extension Publisher {
         bufferingPolicy: AsyncThrowingPublisher<Output>.BufferingPolicy = .unbounded)
         -> AsyncThrowingPublisher<Output>
     {
-        AsyncThrowingPublisher(bufferingPolicy: bufferingPolicy,
-                               publisher: mapError { $0 }.eraseToAnyPublisher())
+        AsyncThrowingPublisher(
+            bufferingPolicy: bufferingPolicy,
+            publisher: mapError { $0 }.eraseToAnyPublisher()
+        )
     }
 }

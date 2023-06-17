@@ -69,12 +69,14 @@ class RecentRecitersServiceTests: XCTestCase {
 
     private func createReciter(id: Int) -> Reciter {
         let name: String = "reciter" + String(id)
-        return Reciter(id: id,
-                       nameKey: name,
-                       directory: "dir",
-                       audioURL: URL(validURL: "http://example.com"),
-                       audioType: .gapless(databaseName: name),
-                       hasGaplessAlternative: false,
-                       category: .arabic)
+        return Reciter(
+            id: id,
+            nameKey: name,
+            directory: "dir",
+            audioURL: URL(validURL: "http://example.com"),
+            audioType: .gapless(databaseName: name),
+            hasGaplessAlternative: false,
+            category: .arabic
+        )
     }
 }

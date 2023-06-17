@@ -29,7 +29,9 @@ public class AutoSizingHostingController<Content: View>: UIHostingController<Con
 
     private func updatePreferredContentSize() {
         let newSize = sizeThatFits(in: .zero)
-        setPreferredContentSize(CGSize(width: min(maxPreferredContentSize.width, newSize.width),
-                                       height: min(maxPreferredContentSize.height, newSize.height)))
+        setPreferredContentSize(CGSize(
+            width: min(maxPreferredContentSize.width, newSize.width),
+            height: min(maxPreferredContentSize.height, newSize.height)
+        ))
     }
 }

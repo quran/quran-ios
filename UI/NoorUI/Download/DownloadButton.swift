@@ -81,14 +81,18 @@ public final class DownloadButton: UIView {
     let upgrade: UIButton = {
         let button = UIButton(type: .custom)
 
-        let backgroundImage = UIImage.borderedImage(withFill: .clear,
-                                                    radius: 4.0,
-                                                    lineColor: .appIdentity,
-                                                    lineWidth: 1.0)
-        let highlightedBackgroundImage = UIImage.filledImage(fillColor: .appIdentity,
-                                                             radius: 4.0,
-                                                             lineColor: .appIdentity,
-                                                             lineWidth: 1.0)
+        let backgroundImage = UIImage.borderedImage(
+            withFill: .clear,
+            radius: 4.0,
+            lineColor: .appIdentity,
+            lineWidth: 1.0
+        )
+        let highlightedBackgroundImage = UIImage.filledImage(
+            fillColor: .appIdentity,
+            radius: 4.0,
+            lineColor: .appIdentity,
+            lineWidth: 1.0
+        )
         button.setBackgroundImage(backgroundImage, for: .normal)
         button.setBackgroundImage(highlightedBackgroundImage, for: .highlighted)
 

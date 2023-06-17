@@ -34,8 +34,10 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
             }
             .navigationTitle(reading.title)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: setCurrentMushafBarButton,
-                                trailing: closeButton)
+            .navigationBarItems(
+                leading: setCurrentMushafBarButton,
+                trailing: closeButton
+            )
         }
     }
 
@@ -83,10 +85,12 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(
-                        LinearGradient(gradient: Gradient(
-                            colors: [Color.appIdentity, Color.appIdentity.opacity(0.7)]),
-                        startPoint: .leading,
-                        endPoint: .trailing)
+                        LinearGradient(
+                            gradient: Gradient(
+                                colors: [Color.appIdentity, Color.appIdentity.opacity(0.7)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                     )
             )
         }
@@ -99,10 +103,12 @@ struct ReadingDetails_Previews: PreviewProvider {
         let reading: ReadingInfo = ReadingInfoTestData.readings[0]
 
         var body: some View {
-            ReadingDetails(reading: ReadingInfoTestData.readings[0],
-                           imageView: imageView,
-                           useAction: {},
-                           closeAction: {})
+            ReadingDetails(
+                reading: ReadingInfoTestData.readings[0],
+                imageView: imageView,
+                useAction: {},
+                closeAction: {}
+            )
         }
 
         private var imageView: some View {

@@ -151,6 +151,13 @@
         "identifier" : "AnnotationsServiceTests",
         "name" : "AnnotationsServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AllTargetsTests",
+        "name" : "AllTargetsTests"
+      }
     }
   ],
   "version" : 1

@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct TwoPagesUtils {
+public enum TwoPagesUtils {
     public static var settingDefaultValue: Bool {
         // Enable by default, if not an iPhone
         UIDevice.current.userInterfaceIdiom != .phone

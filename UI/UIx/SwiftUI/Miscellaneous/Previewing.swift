@@ -9,7 +9,7 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct Previewing {
+public enum Previewing {
     public static func list(@ViewBuilder content: @escaping () -> some View) -> some View {
         Group {
             ForEach([ColorScheme.light, ColorScheme.dark], id: \.self) { scheme in

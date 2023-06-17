@@ -7,12 +7,12 @@
 
 import AsyncUtilitiesForTesting
 import AVFoundation
-@testable import QueuePlayer
 import QuranAudio
-@testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
 import XCTest
+@testable import QueuePlayer
+@testable import QuranAudioKit
 
 @MainActor
 class QuranAudioPlayerTests: XCTestCase {

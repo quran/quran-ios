@@ -6,10 +6,10 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import NetworkSupport
 import NetworkSupportFake
 import Utilities
 import XCTest
+@testable import NetworkSupport
 
 class NetworkManagerTests: XCTestCase {
     private var networkManager: NetworkManager!

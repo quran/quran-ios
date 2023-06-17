@@ -9,10 +9,10 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
-@testable import LastPagePersistence
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
+@testable import LastPagePersistence
 
 class CoreDataLastPageUniquifierTests: XCTestCase {
     var sut: CoreDataLastPageUniquifier!

@@ -5,8 +5,8 @@
 //  Created by Zubair Khan on 2022-11-12.
 //
 
-@testable import QuranTextKit
 import XCTest
+@testable import QuranTextKit
 
 class TwoPagesUtilsTests: XCTestCase {
     func testHasEnoughHorizontalSpace() throws {

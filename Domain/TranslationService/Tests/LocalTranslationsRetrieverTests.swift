@@ -8,9 +8,9 @@
 import QuranText
 import SystemDependenciesFake
 import TranslationPersistence
-@testable import TranslationService
 import TranslationServiceFake
 import XCTest
+@testable import TranslationService
 
 class LocalTranslationsRetrieverTests: XCTestCase {
     private var service: LocalTranslationsRetriever {

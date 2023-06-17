@@ -7,11 +7,11 @@
 
 import AsyncAlgorithms
 import AsyncUtilitiesForTesting
-@testable import BatchDownloader
 import BatchDownloaderFake
 import NetworkSupport
 import NetworkSupportFake
 import XCTest
+@testable import BatchDownloader
 
 final class DownloadManagerTests: XCTestCase {
     private let fileManager = FileManager.default

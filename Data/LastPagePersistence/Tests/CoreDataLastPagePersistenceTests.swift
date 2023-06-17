@@ -8,8 +8,8 @@
 import AsyncUtilitiesForTesting
 import Combine
 import CoreDataPersistence
-@testable import LastPagePersistence
 import XCTest
+@testable import LastPagePersistence
 
 final class CoreDataLastPagePersistenceTests: XCTestCase {
     var persistence: CoreDataLastPagePersistence!

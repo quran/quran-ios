@@ -6,11 +6,11 @@
 //
 
 import QuranKit
-@testable import QuranTextKit
 import TranslationService
 import TranslationServiceFake
 import VerseTextPersistence
 import XCTest
+@testable import QuranTextKit
 
 final class ShareableVerseTextRetrieverTests: XCTestCase {
     private var shareableTextRetriever: ShareableVerseTextRetriever!

@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-05-27.
 //
 
-@testable import Caching
 import XCTest
+@testable import Caching
 
 class CacheTests: XCTestCase {
     let key1 = "TestKey1"

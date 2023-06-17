@@ -6,8 +6,8 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import Caching
 import XCTest
+@testable import Caching
 
 struct TestPage: Pageable {
     var pageNumber: Int

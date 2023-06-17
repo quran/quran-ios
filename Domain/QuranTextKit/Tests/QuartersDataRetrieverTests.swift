@@ -6,8 +6,8 @@
 //
 
 import QuranKit
-@testable import QuranTextKit
 import XCTest
+@testable import QuranTextKit
 
 final class QuartersDataRetrieverTests: XCTestCase {
     private let quran = Quran.hafsMadani1405

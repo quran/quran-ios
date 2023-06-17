@@ -8,9 +8,9 @@
 import AsyncUtilitiesForTesting
 import Combine
 import CoreDataPersistence
-@testable import NotePersistence
 import SystemDependenciesFake
 import XCTest
+@testable import NotePersistence
 
 class CoreDataNotePersistenceTests: XCTestCase {
     var sut: CoreDataNotePersistence!

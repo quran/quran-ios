@@ -5,9 +5,9 @@
 //  Created by Mohamed Afifi on 2022-01-18.
 //
 
-@testable import QuranTextKit
 import SnapshotTesting
 import XCTest
+@testable import QuranTextKit
 
 class SearchRecentsServiceTests: XCTestCase {
     private var service: SearchRecentsService!

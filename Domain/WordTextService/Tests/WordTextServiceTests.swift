@@ -7,8 +7,8 @@
 
 import QuranKit
 import TestResources
-@testable import WordTextService
 import XCTest
+@testable import WordTextService
 
 class WordTextServiceTests: XCTestCase {
     private var service: WordTextService!

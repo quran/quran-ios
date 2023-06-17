@@ -7,8 +7,8 @@
 
 import AsyncUtilitiesForTesting
 import GRDB
-@testable import SQLitePersistence
 import XCTest
+@testable import SQLitePersistence
 
 class DatabaseConnectionTests: XCTestCase {
     private var testURL: URL!

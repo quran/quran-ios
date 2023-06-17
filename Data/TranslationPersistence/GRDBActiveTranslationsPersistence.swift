@@ -121,14 +121,16 @@ extension GRDBTranslation {
     }
 
     func toTranslation() -> Translation {
-        Translation(id: id,
-                    displayName: displayName,
-                    translator: translator,
-                    translatorForeign: translatorForeign,
-                    fileURL: URL(string: fileURL)!,
-                    fileName: fileName,
-                    languageCode: languageCode,
-                    version: version,
-                    installedVersion: installedVersion)
+        Translation(
+            id: id,
+            displayName: displayName,
+            translator: translator,
+            translatorForeign: translatorForeign,
+            fileURL: URL(string: fileURL)!,
+            fileName: fileName,
+            languageCode: languageCode,
+            version: version,
+            installedVersion: installedVersion
+        )
     }
 }

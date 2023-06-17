@@ -11,14 +11,15 @@ import SwiftUI
 import UIx
 
 public struct HomeQuarterCell: View {
-    public init(page: Int,
-                maxPage: Int,
-                text: String,
-                localizedVerse: String,
-                arabicSuraName: String,
-                localizedQuarter: String,
-                maxLocalizedQuarter: String)
-    {
+    public init(
+        page: Int,
+        maxPage: Int,
+        text: String,
+        localizedVerse: String,
+        arabicSuraName: String,
+        localizedQuarter: String,
+        maxLocalizedQuarter: String
+    ) {
         self.page = page
         self.maxPage = maxPage
         self.text = text
@@ -79,40 +80,48 @@ struct HomeQuarterCell_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            HomeQuarterCell(page: 1,
-                            maxPage: 600,
-                            text: " عَمَّ يَتَسَاءَلُونَ",
-                            localizedVerse: "Sura 30, ayah: 22",
-                            arabicSuraName: suraName,
-                            localizedQuarter: "Hizb 1",
-                            maxLocalizedQuarter: "¾ Hizb 59")
+            HomeQuarterCell(
+                page: 1,
+                maxPage: 600,
+                text: " عَمَّ يَتَسَاءَلُونَ",
+                localizedVerse: "Sura 30, ayah: 22",
+                arabicSuraName: suraName,
+                localizedQuarter: "Hizb 1",
+                maxLocalizedQuarter: "¾ Hizb 59"
+            )
             Divider()
 
-            HomeQuarterCell(page: 599,
-                            maxPage: 600,
-                            text: " تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ",
-                            localizedVerse: "Sura 30, ayah: 22",
-                            arabicSuraName: suraName,
-                            localizedQuarter: "¼ Hizb 3",
-                            maxLocalizedQuarter: "¾ Hizb 59")
+            HomeQuarterCell(
+                page: 599,
+                maxPage: 600,
+                text: " تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْك تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ",
+                localizedVerse: "Sura 30, ayah: 22",
+                arabicSuraName: suraName,
+                localizedQuarter: "¼ Hizb 3",
+                maxLocalizedQuarter: "¾ Hizb 59"
+            )
             Divider()
 
-            HomeQuarterCell(page: 1,
-                            maxPage: 20,
-                            text: " عَمَّ يَتَسَاءَلُونَ",
-                            localizedVerse: "Sura 30, ayah: 22",
-                            arabicSuraName: suraName,
-                            localizedQuarter: "½ Hizb 117",
-                            maxLocalizedQuarter: "¾ Hizb 59")
+            HomeQuarterCell(
+                page: 1,
+                maxPage: 20,
+                text: " عَمَّ يَتَسَاءَلُونَ",
+                localizedVerse: "Sura 30, ayah: 22",
+                arabicSuraName: suraName,
+                localizedQuarter: "½ Hizb 117",
+                maxLocalizedQuarter: "¾ Hizb 59"
+            )
             Divider()
 
-            HomeQuarterCell(page: 1,
-                            maxPage: 600,
-                            text: " تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ",
-                            localizedVerse: "Sura 30, ayah: 22",
-                            arabicSuraName: suraName,
-                            localizedQuarter: "¾ Hizb 117",
-                            maxLocalizedQuarter: "¾ Hizb 59")
+            HomeQuarterCell(
+                page: 1,
+                maxPage: 600,
+                text: " تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ",
+                localizedVerse: "Sura 30, ayah: 22",
+                arabicSuraName: suraName,
+                localizedQuarter: "¾ Hizb 117",
+                maxLocalizedQuarter: "¾ Hizb 59"
+            )
             Divider()
         }
     }

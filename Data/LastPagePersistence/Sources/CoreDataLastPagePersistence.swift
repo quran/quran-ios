@@ -115,8 +115,10 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
 
 private extension LastPagePersistenceModel {
     init(_ other: MO_LastPage) {
-        self.init(page: Int(other.page),
-                  createdOn: other.createdOn ?? Date(),
-                  modifiedOn: other.modifiedOn ?? Date())
+        self.init(
+            page: Int(other.page),
+            createdOn: other.createdOn ?? Date(),
+            modifiedOn: other.modifiedOn ?? Date()
+        )
     }
 }

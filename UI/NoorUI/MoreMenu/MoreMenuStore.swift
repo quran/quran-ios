@@ -74,15 +74,16 @@ public class MoreMenuStore: ObservableObject {
 
     public var state = MoreMenuControlsState()
 
-    public init(mode: MoreMenu.Mode,
-                wordPointerEnabled: Bool,
-                wordPointerType: MoreMenu.TranslationPointerType,
-                translationFontSize: FontSize,
-                arabicFontSize: FontSize,
-                twoPagesEnabled: Bool,
-                verticalScrollingEnabled: Bool,
-                theme: MoreMenu.Theme)
-    {
+    public init(
+        mode: MoreMenu.Mode,
+        wordPointerEnabled: Bool,
+        wordPointerType: MoreMenu.TranslationPointerType,
+        translationFontSize: FontSize,
+        arabicFontSize: FontSize,
+        twoPagesEnabled: Bool,
+        verticalScrollingEnabled: Bool,
+        theme: MoreMenu.Theme
+    ) {
         self.mode = mode
         self.wordPointerEnabled = wordPointerEnabled
         self.wordPointerType = wordPointerType

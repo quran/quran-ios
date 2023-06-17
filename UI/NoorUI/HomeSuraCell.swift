@@ -10,13 +10,14 @@ import SwiftUI
 import UIx
 
 public struct HomeSuraCell: View {
-    public init(page: Int,
-                localizedSuraNumber: String,
-                maxLocalizedSuraNumber: String,
-                localizedSura: String,
-                arabicSuraName: String,
-                subtitle: String)
-    {
+    public init(
+        page: Int,
+        localizedSuraNumber: String,
+        maxLocalizedSuraNumber: String,
+        localizedSura: String,
+        arabicSuraName: String,
+        subtitle: String
+    ) {
         self.page = page
         self.localizedSuraNumber = localizedSuraNumber
         self.maxLocalizedSuraNumber = maxLocalizedSuraNumber
@@ -60,20 +61,24 @@ struct HomeSuraCell_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            HomeSuraCell(page: 1,
-                         localizedSuraNumber: "1",
-                         maxLocalizedSuraNumber: "200",
-                         localizedSura: "Sura 1",
-                         arabicSuraName: suraName,
-                         subtitle: "Makki - 7 verses")
+            HomeSuraCell(
+                page: 1,
+                localizedSuraNumber: "1",
+                maxLocalizedSuraNumber: "200",
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                subtitle: "Makki - 7 verses"
+            )
             Divider()
 
-            HomeSuraCell(page: 1,
-                         localizedSuraNumber: "1",
-                         maxLocalizedSuraNumber: "200",
-                         localizedSura: "Sura 1",
-                         arabicSuraName: suraName,
-                         subtitle: "Madani - 200 verses")
+            HomeSuraCell(
+                page: 1,
+                localizedSuraNumber: "1",
+                maxLocalizedSuraNumber: "200",
+                localizedSura: "Sura 1",
+                arabicSuraName: suraName,
+                subtitle: "Madani - 200 verses"
+            )
             Divider()
         }
     }

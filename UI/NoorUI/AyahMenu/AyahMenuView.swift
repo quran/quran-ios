@@ -105,17 +105,19 @@ private struct AyahMenuViewList: View {
     var body: some View {
         VStack(alignment: .leading) {
             MenuGroup {
-                Row(title: lAndroid("play"),
+                Row(
+                    title: lAndroid("play"),
                     subtitle: dataObject.playSubtitle,
-                    action: dataObject.actions.play)
-                {
+                    action: dataObject.actions.play
+                ) {
                     Image(systemName: "play.fill")
                 }
                 Divider()
-                Row(title: l("ayah.menu.repeat"),
+                Row(
+                    title: l("ayah.menu.repeat"),
                     subtitle: dataObject.repeatSubtitle,
-                    action: dataObject.actions.repeatVerses)
-                {
+                    action: dataObject.actions.repeatVerses
+                ) {
                     Image(systemName: "repeat")
                 }
                 Divider()
@@ -125,17 +127,20 @@ private struct AyahMenuViewList: View {
                 Divider()
 
                 if dataObject.state == .noHighlight {
-                    Row(title: l("ayah.menu.highlight"),
-                        action: { dataObject.actions.highlight(dataObject.highlightingColor) })
-                    {
+                    Row(
+                        title: l("ayah.menu.highlight"),
+                        action: { dataObject.actions.highlight(dataObject.highlightingColor) }
+                    ) {
                         IconCircle(color: dataObject.highlightingColor)
                     }
                     Divider()
                         .padding(.leading)
                 }
-                Row(title: l("ayah.menu.highlight"),
-                    subtitle: l("ayah.menu.highlight-select-color"), action: showHighlights)
-                {
+                Row(
+                    title: l("ayah.menu.highlight"),
+                    subtitle: l("ayah.menu.highlight-select-color"),
+                    action: showHighlights
+                ) {
                     IconCircles()
                 }
                 Divider()
@@ -189,11 +194,12 @@ private struct Row<Symbol: View>: View {
     let action: () -> Void
     @ScaledMetric var verticalPadding = 12
 
-    init(title: String,
-         subtitle: String? = nil,
-         action: @escaping () -> Void,
-         @ViewBuilder symbol: () -> Symbol)
-    {
+    init(
+        title: String,
+        subtitle: String? = nil,
+        action: @escaping () -> Void,
+        @ViewBuilder symbol: () -> Symbol
+    ) {
         self.symbol = symbol()
         self.title = title
         self.subtitle = subtitle
@@ -284,9 +290,11 @@ private struct NoteCircles: View {
     var body: some View {
         HStack {
             ForEach(NoteColor.sortedColors, id: \.self) { color in
-                Button(action: { tapped(color) },
-                       label: { NoteCircle(color: color.color, selected: color == selectedColor) })
-                    .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)
+                Button(
+                    action: { tapped(color) },
+                    label: { NoteCircle(color: color.color, selected: color == selectedColor) }
+                )
+                .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)
             }
         }
         .padding()
@@ -294,36 +302,42 @@ private struct NoteCircles: View {
 }
 
 struct AyahMenuView_Previews: PreviewProvider {
-    static let actions = AyahMenuUI.Actions(play: {},
-                                            repeatVerses: {},
-                                            highlight: { _ in },
-                                            addNote: {},
-                                            deleteNote: {},
-                                            showTranslation: {},
-                                            copy: {},
-                                            share: {})
+    static let actions = AyahMenuUI.Actions(
+        play: {},
+        repeatVerses: {},
+        highlight: { _ in },
+        addNote: {},
+        deleteNote: {},
+        showTranslation: {},
+        copy: {},
+        share: {}
+    )
     static var previews: some View {
         Group {
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(highlightingColor: .green,
-                                                               state: .noted,
-                                                               playSubtitle: "To the end of Juz'",
-                                                               repeatSubtitle: "selected verses",
-                                                               actions: actions,
-                                                               isTranslationView: true))
+                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                    highlightingColor: .green,
+                    state: .noted,
+                    playSubtitle: "To the end of Juz'",
+                    repeatSubtitle: "selected verses",
+                    actions: actions,
+                    isTranslationView: true
+                ))
                 Spacer()
             }
             .background(Color.systemGroupedBackground)
 
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(highlightingColor: .red,
-                                                               state: .highlighted,
-                                                               playSubtitle: "To the end of Juz'",
-                                                               repeatSubtitle: "selected verses",
-                                                               actions: actions,
-                                                               isTranslationView: true))
+                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                    highlightingColor: .red,
+                    state: .highlighted,
+                    playSubtitle: "To the end of Juz'",
+                    repeatSubtitle: "selected verses",
+                    actions: actions,
+                    isTranslationView: true
+                ))
                 Spacer()
             }
             .background(Color.systemGroupedBackground)
@@ -331,12 +345,14 @@ struct AyahMenuView_Previews: PreviewProvider {
 
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(highlightingColor: .green,
-                                                               state: .noHighlight,
-                                                               playSubtitle: "To the end of Juz'",
-                                                               repeatSubtitle: "selected verses",
-                                                               actions: actions,
-                                                               isTranslationView: true))
+                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                    highlightingColor: .green,
+                    state: .noHighlight,
+                    playSubtitle: "To the end of Juz'",
+                    repeatSubtitle: "selected verses",
+                    actions: actions,
+                    isTranslationView: true
+                ))
                 Spacer()
             }
             .background(Color.systemGroupedBackground)

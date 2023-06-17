@@ -187,8 +187,10 @@ actor DownloadBatchDataController {
             return
         }
 
-        await startDownloadTasks(session: session,
-                                 maxNumberOfDownloads: maxSimultaneousDownloads - runningTasks.count)
+        await startDownloadTasks(
+            session: session,
+            maxNumberOfDownloads: maxSimultaneousDownloads - runningTasks.count
+        )
     }
 
     private func startDownloadTasks(session: NetworkSession, maxNumberOfDownloads: Int) async {

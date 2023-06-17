@@ -23,10 +23,11 @@ public struct SingleAxisGeometryReader<Content: View>: View {
     private let alignment: Alignment
     private let content: (CGFloat) -> Content
 
-    public init(axis: Axis = .horizontal,
-                alignment: Alignment = .center,
-                content: @escaping (CGFloat) -> Content)
-    {
+    public init(
+        axis: Axis = .horizontal,
+        alignment: Alignment = .center,
+        content: @escaping (CGFloat) -> Content
+    ) {
         self.axis = axis
         self.alignment = alignment
         self.content = content
@@ -34,9 +35,11 @@ public struct SingleAxisGeometryReader<Content: View>: View {
 
     public var body: some View {
         content(size)
-            .frame(maxWidth: axis == .horizontal ? .infinity : nil,
-                   maxHeight: axis == .vertical ? .infinity : nil,
-                   alignment: alignment)
+            .frame(
+                maxWidth: axis == .horizontal ? .infinity : nil,
+                maxHeight: axis == .vertical ? .infinity : nil,
+                alignment: alignment
+            )
             .background(GeometryReader { proxy in
                 Color.clear.preference(key: SizeKey.self, value: axis == .horizontal ? proxy.size.width : proxy.size.height)
             })

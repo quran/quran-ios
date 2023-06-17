@@ -60,11 +60,13 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         let step = Int64(1 / Double(progressLoops) * Double(totalBytes))
         for i in 0 ... progressLoops {
             let written = Int64(Double(i) / Double(progressLoops) * Double(totalBytes))
-            await delegate?.networkSession(self,
-                                           downloadTask: task,
-                                           didWriteData: step,
-                                           totalBytesWritten: written,
-                                           totalBytesExpectedToWrite: Int64(totalBytes))
+            await delegate?.networkSession(
+                self,
+                downloadTask: task,
+                didWriteData: step,
+                totalBytesWritten: written,
+                totalBytesExpectedToWrite: Int64(totalBytes)
+            )
             await Task.megaYield()
         }
 

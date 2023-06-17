@@ -30,9 +30,11 @@ final class QuranTextDataServiceTests: XCTestCase {
         localTranslationsFake = LocalTranslationsFake()
         let localtranslationsRetriever = localTranslationsFake.retriever
         let persistence = GRDBQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
-        textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
-                                           arabicPersistence: persistence,
-                                           translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)
+        textService = QuranTextDataService(
+            localTranslationRetriever: localtranslationsRetriever,
+            arabicPersistence: persistence,
+            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder
+        )
 
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
         selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
@@ -58,10 +60,12 @@ final class QuranTextDataServiceTests: XCTestCase {
             let versesText = try await textService.textForVerses(verses, translations: [])
 
             let expectedVerses = verses.map {
-                VerseText(arabicText: TestData.quranTextAt($0),
-                          translations: [],
-                          arabicPrefix: $0 == quran.suras[1].verses[0] ? [TestData.quranTextAt(quran.firstVerse)] : [],
-                          arabicSuffix: [])
+                VerseText(
+                    arabicText: TestData.quranTextAt($0),
+                    translations: [],
+                    arabicPrefix: $0 == quran.suras[1].verses[0] ? [TestData.quranTextAt(quran.firstVerse)] : [],
+                    arabicSuffix: []
+                )
             }
             let expected = TranslatedVerses(translations: [], verses: expectedVerses)
             XCTAssertEqual(expected, versesText)
@@ -77,12 +81,14 @@ final class QuranTextDataServiceTests: XCTestCase {
             let versesText = try await textService.textForVerses(verses)
 
             let expectedVerses = verses.map { verse in
-                VerseText(arabicText: TestData.quranTextAt(verse),
-                          translations: translations.map {
-                              .string(TranslationString(text: TestData.translationTextAt($0, verse), quranRanges: [], footerRanges: []))
-                          },
-                          arabicPrefix: [],
-                          arabicSuffix: [])
+                VerseText(
+                    arabicText: TestData.quranTextAt(verse),
+                    translations: translations.map {
+                        .string(TranslationString(text: TestData.translationTextAt($0, verse), quranRanges: [], footerRanges: []))
+                    },
+                    arabicPrefix: [],
+                    arabicSuffix: []
+                )
             }
             let expected = TranslatedVerses(translations: translations, verses: expectedVerses)
             XCTAssertEqual(expected, versesText)
@@ -97,13 +103,17 @@ final class QuranTextDataServiceTests: XCTestCase {
         let versesText = try await textService.textForVerses([verse])
 
         let translationText = TestData.translationTextAt(translations[0], verse)
-        let string = TranslationString(text: translationText,
-                                       quranRanges: [translationText.nsRange(of: "{ABC}"), translationText.nsRange(of: "{DE}")],
-                                       footerRanges: [translationText.nsRange(of: "[[Footer1]]"), translationText.nsRange(of: "[[Footer2]]")])
-        let expectedVerse = VerseText(arabicText: TestData.quranTextAt(verse),
-                                      translations: [.string(string)],
-                                      arabicPrefix: [],
-                                      arabicSuffix: [])
+        let string = TranslationString(
+            text: translationText,
+            quranRanges: [translationText.nsRange(of: "{ABC}"), translationText.nsRange(of: "{DE}")],
+            footerRanges: [translationText.nsRange(of: "[[Footer1]]"), translationText.nsRange(of: "[[Footer2]]")]
+        )
+        let expectedVerse = VerseText(
+            arabicText: TestData.quranTextAt(verse),
+            translations: [.string(string)],
+            arabicPrefix: [],
+            arabicSuffix: []
+        )
         let expected = TranslatedVerses(translations: translations, verses: [expectedVerse])
         XCTAssertEqual(expected, versesText)
     }

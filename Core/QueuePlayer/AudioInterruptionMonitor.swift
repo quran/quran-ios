@@ -20,10 +20,12 @@ final class AudioInterruptionMonitor {
 
     init() {
         let center = NotificationCenter.default
-        center.addObserver(self,
-                           selector: #selector(onInterruption(_:)),
-                           name: AVAudioSession.interruptionNotification,
-                           object: nil)
+        center.addObserver(
+            self,
+            selector: #selector(onInterruption(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: nil
+        )
     }
 
     @objc

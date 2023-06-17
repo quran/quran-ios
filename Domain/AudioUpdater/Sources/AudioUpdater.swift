@@ -23,11 +23,12 @@ public final class AudioUpdater {
     private let fileSystem: FileSystem
     private let time: SystemTime
 
-    init(networkManager: NetworkManager,
-         recitersRetriever: ReciterDataRetriever,
-         fileSystem: FileSystem,
-         time: SystemTime)
-    {
+    init(
+        networkManager: NetworkManager,
+        recitersRetriever: ReciterDataRetriever,
+        fileSystem: FileSystem,
+        time: SystemTime
+    ) {
         networkService = AudioUpdatesNetworkManager(networkManager: networkManager)
         self.recitersRetriever = recitersRetriever
         self.fileSystem = fileSystem

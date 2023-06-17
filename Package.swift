@@ -489,22 +489,26 @@ func target(
     testResources: [Resource]? = nil
 ) -> [Target] {
     var targets: [Target] = [
-        .target(name: name,
-                dependencies: dependencies,
-                path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
-                resources: resources,
-                swiftSettings: settings),
+        .target(
+            name: name,
+            dependencies: dependencies,
+            path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
+            resources: resources,
+            swiftSettings: settings
+        ),
     ]
     guard hasTests else {
         return targets
     }
     targets.append(
-        .testTarget(name: name + "Tests",
-                    dependencies: [.init(stringLiteral: name)] + testDependencies,
-                    path: type.rawValue + "/" + name + "/Tests",
-                    exclude: testExclude,
-                    resources: testResources,
-                    swiftSettings: settings)
+        .testTarget(
+            name: name + "Tests",
+            dependencies: [.init(stringLiteral: name)] + testDependencies,
+            path: type.rawValue + "/" + name + "/Tests",
+            exclude: testExclude,
+            resources: testResources,
+            swiftSettings: settings
+        )
     )
     return targets
 }

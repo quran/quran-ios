@@ -20,15 +20,16 @@ public enum AyahMenuUI {
         let copy: () -> Void
         let share: () -> Void
 
-        public init(play: @escaping () -> Void,
-                    repeatVerses: @escaping () -> Void,
-                    highlight: @escaping (NoteColor) -> Void,
-                    addNote: @escaping () -> Void,
-                    deleteNote: @escaping () -> Void,
-                    showTranslation: @escaping () -> Void,
-                    copy: @escaping () -> Void,
-                    share: @escaping () -> Void)
-        {
+        public init(
+            play: @escaping () -> Void,
+            repeatVerses: @escaping () -> Void,
+            highlight: @escaping (NoteColor) -> Void,
+            addNote: @escaping () -> Void,
+            deleteNote: @escaping () -> Void,
+            showTranslation: @escaping () -> Void,
+            copy: @escaping () -> Void,
+            share: @escaping () -> Void
+        ) {
             self.play = play
             self.repeatVerses = repeatVerses
             self.highlight = highlight
@@ -54,13 +55,14 @@ public enum AyahMenuUI {
         let repeatSubtitle: String
         let isTranslationView: Bool
 
-        public init(highlightingColor: NoteColor,
-                    state: NoteState,
-                    playSubtitle: String,
-                    repeatSubtitle: String,
-                    actions: Actions,
-                    isTranslationView: Bool)
-        {
+        public init(
+            highlightingColor: NoteColor,
+            state: NoteState,
+            playSubtitle: String,
+            repeatSubtitle: String,
+            actions: Actions,
+            isTranslationView: Bool
+        ) {
             self.highlightingColor = highlightingColor
             self.state = state
             self.playSubtitle = playSubtitle

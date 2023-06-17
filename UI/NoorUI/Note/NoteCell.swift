@@ -11,15 +11,16 @@ import SwiftUI
 import UIx
 
 public struct NoteCell: View {
-    public init(page: Int,
-                localizedVerse: String,
-                arabicSuraName: String,
-                versesCount: Int,
-                ayahText: String,
-                note: String,
-                createdSince: String,
-                color: NoteColor)
-    {
+    public init(
+        page: Int,
+        localizedVerse: String,
+        arabicSuraName: String,
+        versesCount: Int,
+        ayahText: String,
+        note: String,
+        createdSince: String,
+        color: NoteColor
+    ) {
         self.page = page
         self.localizedVerse = localizedVerse
         self.arabicSuraName = arabicSuraName
@@ -90,24 +91,28 @@ struct NoteCellCell_Previews: PreviewProvider {
     private static let suraName = String(UnicodeScalar(0xE907)!)
     static var previews: some View {
         Previewing.list {
-            NoteCell(page: 1,
-                     localizedVerse: "Sura 1, Verse: 2",
-                     arabicSuraName: suraName,
-                     versesCount: 1,
-                     ayahText: "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
-                     note: "Some note1 Some note1 Some note1 Some note1 Some note1 Some note1 Some note1",
-                     createdSince: "Just now",
-                     color: .red)
+            NoteCell(
+                page: 1,
+                localizedVerse: "Sura 1, Verse: 2",
+                arabicSuraName: suraName,
+                versesCount: 1,
+                ayahText: "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+                note: "Some note1 Some note1 Some note1 Some note1 Some note1 Some note1 Some note1",
+                createdSince: "Just now",
+                color: .red
+            )
             Divider()
 
-            NoteCell(page: 44,
-                     localizedVerse: "Sura 1, Verse: 2",
-                     arabicSuraName: suraName,
-                     versesCount: 4,
-                     ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ",
-                     note: "A single line note",
-                     createdSince: "Just now",
-                     color: .purple)
+            NoteCell(
+                page: 44,
+                localizedVerse: "Sura 1, Verse: 2",
+                arabicSuraName: suraName,
+                versesCount: 4,
+                ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ",
+                note: "A single line note",
+                createdSince: "Just now",
+                color: .purple
+            )
             Divider()
         }
     }

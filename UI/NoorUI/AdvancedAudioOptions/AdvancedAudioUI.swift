@@ -38,13 +38,14 @@ public enum AdvancedAudioUI {
         let lastJuzTapped: () -> Void
         let fromVerseTapped: () -> Void
         let toVerseTapped: () -> Void
-        public init(reciterTapped: @escaping () -> Void,
-                    lastPageTapped: @escaping () -> Void,
-                    lastSuraTapped: @escaping () -> Void,
-                    lastJuzTapped: @escaping () -> Void,
-                    fromVerseTapped: @escaping () -> Void,
-                    toVerseTapped: @escaping () -> Void)
-        {
+        public init(
+            reciterTapped: @escaping () -> Void,
+            lastPageTapped: @escaping () -> Void,
+            lastSuraTapped: @escaping () -> Void,
+            lastJuzTapped: @escaping () -> Void,
+            fromVerseTapped: @escaping () -> Void,
+            toVerseTapped: @escaping () -> Void
+        ) {
             self.reciterTapped = reciterTapped
             self.lastPageTapped = lastPageTapped
             self.lastSuraTapped = lastSuraTapped
@@ -55,13 +56,14 @@ public enum AdvancedAudioUI {
     }
 
     public class DataObject<Sura: AdvancedAudioUISura>: ObservableObject {
-        public init(suras: [Sura],
-                    fromVerse: Sura.Verse,
-                    toVerse: Sura.Verse,
-                    verseRepeat: AdvancedAudioUI.AudioRepeat,
-                    listRepeat: AdvancedAudioUI.AudioRepeat,
-                    reciterName: String)
-        {
+        public init(
+            suras: [Sura],
+            fromVerse: Sura.Verse,
+            toVerse: Sura.Verse,
+            verseRepeat: AdvancedAudioUI.AudioRepeat,
+            listRepeat: AdvancedAudioUI.AudioRepeat,
+            reciterName: String
+        ) {
             self.suras = suras
             _fromVerse = Published(initialValue: fromVerse)
             _toVerse = Published(initialValue: toVerse)

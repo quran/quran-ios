@@ -35,13 +35,15 @@ public struct ReciterDataRetriever: Sendable {
         // swiftlint:disable force_cast
         let recitersArray = array as! [NSDictionary]
         let reciters: [Reciter] = recitersArray.map { item in
-            Reciter(id: item["id"] as! Int,
-                    nameKey: item["name"] as! String,
-                    directory: item["path"] as! String,
-                    audioURL: URL(validURL: item["url"] as! String),
-                    audioType: Self.audioType(item["databaseName"] as! String),
-                    hasGaplessAlternative: item["hasGaplessAlternative"] as! Bool,
-                    category: Reciter.Category(rawValue: item["category"] as! String)!)
+            Reciter(
+                id: item["id"] as! Int,
+                nameKey: item["name"] as! String,
+                directory: item["path"] as! String,
+                audioURL: URL(validURL: item["url"] as! String),
+                audioType: Self.audioType(item["databaseName"] as! String),
+                hasGaplessAlternative: item["hasGaplessAlternative"] as! Bool,
+                category: Reciter.Category(rawValue: item["category"] as! String)!
+            )
         }
         // swiftlint:enable force_cast
 

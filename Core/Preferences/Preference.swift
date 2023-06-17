@@ -43,10 +43,12 @@ public final class Preference<T> {
             userDefaults = preference.preferences.userDefaults
             self.preference = preference
             super.init()
-            preference.preferences.userDefaults.addObserver(self,
-                                                            forKeyPath: preference.key.key,
-                                                            options: .new,
-                                                            context: &observerContext)
+            preference.preferences.userDefaults.addObserver(
+                self,
+                forKeyPath: preference.key.key,
+                options: .new,
+                context: &observerContext
+            )
         }
 
         override public func observeValue(
@@ -66,9 +68,11 @@ public final class Preference<T> {
         }
 
         deinit {
-            userDefaults.removeObserver(self,
-                                        forKeyPath: key.key,
-                                        context: &observerContext)
+            userDefaults.removeObserver(
+                self,
+                forKeyPath: key.key,
+                context: &observerContext
+            )
         }
     }
 }
@@ -90,10 +94,11 @@ public final class TransformedPreference<Raw, T> {
     private let preference: Preference<Raw>
     private let transformer: PreferenceTransformer<Raw, T>
 
-    public init(_ key: PreferenceKey<Raw>,
-                preferences: Preferences = Preferences(userDefaults: .standard),
-                transformer: PreferenceTransformer<Raw, T>)
-    {
+    public init(
+        _ key: PreferenceKey<Raw>,
+        preferences: Preferences = Preferences(userDefaults: .standard),
+        transformer: PreferenceTransformer<Raw, T>
+    ) {
         preference = Preference(key, preferences: preferences)
         self.transformer = transformer
     }

@@ -29,17 +29,20 @@ public struct QuranTextDataService {
     }
 
     init(databasesURL: URL, arabicPersistence: VerseTextPersistence) {
-        self.init(localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
-                  arabicPersistence: arabicPersistence,
-                  translationsPersistenceBuilder: { translation in
-                      GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
-                  })
+        self.init(
+            localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
+            arabicPersistence: arabicPersistence,
+            translationsPersistenceBuilder: { translation in
+                GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
+            }
+        )
     }
 
-    init(localTranslationRetriever: LocalTranslationsRetriever,
-         arabicPersistence: VerseTextPersistence,
-         translationsPersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence)
-    {
+    init(
+        localTranslationRetriever: LocalTranslationsRetriever,
+        arabicPersistence: VerseTextPersistence,
+        translationsPersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
+    ) {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
         self.translationsPersistenceBuilder = translationsPersistenceBuilder

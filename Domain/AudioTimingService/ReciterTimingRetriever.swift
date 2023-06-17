@@ -61,10 +61,11 @@ public struct ReciterTimingRetriever {
         return nil
     }
 
-    private func filteredTimings(timings: [Sura: SuraTiming],
-                                 from start: AyahNumber,
-                                 to end: AyahNumber) -> [Sura: SuraTiming]
-    {
+    private func filteredTimings(
+        timings: [Sura: SuraTiming],
+        from start: AyahNumber,
+        to end: AyahNumber
+    ) -> [Sura: SuraTiming] {
         // filter out uneeded timings
         var mutableTimings: [Sura: SuraTiming] = [:]
         let ayahSet = Set(start.array(to: end))

@@ -16,10 +16,11 @@ public struct CompositeSearcher: Searcher {
     private let simpleSearchers: [Searcher]
     private let translationsSearcher: Searcher
 
-    init(quranVerseTextPersistence: VerseTextPersistence,
-         localTranslationRetriever: LocalTranslationsRetriever,
-         versePersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence)
-    {
+    init(
+        quranVerseTextPersistence: VerseTextPersistence,
+        localTranslationRetriever: LocalTranslationsRetriever,
+        versePersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
+    ) {
         let numberSearcher = NumberSearcher(quranVerseTextPersistence: quranVerseTextPersistence)
         let quranSearcher = PersistenceSearcher(versePersistence: quranVerseTextPersistence, source: .quran)
         let suraSearcher = SuraSearcher()
@@ -36,11 +37,13 @@ public struct CompositeSearcher: Searcher {
     public init(databasesURL: URL, quranFileURL: URL) {
         let persistence = GRDBQuranVerseTextPersistence(fileURL: quranFileURL)
         let localTranslationRetriever = TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL)
-        self.init(quranVerseTextPersistence: persistence,
-                  localTranslationRetriever: localTranslationRetriever,
-                  versePersistenceBuilder: { translation in
-                      GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
-                  })
+        self.init(
+            quranVerseTextPersistence: persistence,
+            localTranslationRetriever: localTranslationRetriever,
+            versePersistenceBuilder: { translation in
+                GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
+            }
+        )
     }
 
     public func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {

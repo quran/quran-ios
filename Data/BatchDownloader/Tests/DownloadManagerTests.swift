@@ -257,13 +257,14 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
-    private func completeTask(_ batch: DownloadBatchResponse,
-                              i: Int,
-                              totalBytes: Int = 100,
-                              progressLoops: Int = 4,
-                              file: StaticString = #filePath,
-                              line: UInt = #line) async throws -> CompletedTask
-    {
+    private func completeTask(
+        _ batch: DownloadBatchResponse,
+        i: Int,
+        totalBytes: Int = 100,
+        progressLoops: Int = 4,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws -> CompletedTask {
         let response = await batch.responses[i]
         let task = try await AsyncUnwrap(await response.task as? SessionTask, file: file, line: line)
         let text = Int.random(in: 0 ..< Int.max).description
@@ -272,13 +273,15 @@ final class DownloadManagerTests: XCTestCase {
         XCTAssertTrue(source.isReachable, file: file, line: line)
         let listener = await HistoryProgressListener(await response.progress)
         await session?.completeDownloadTask(task, location: source, totalBytes: totalBytes, progressLoops: progressLoops)
-        return CompletedTask(task: task,
-                             text: text,
-                             source: source,
-                             destination: destination,
-                             progressLoops: progressLoops,
-                             listener: listener,
-                             response: response)
+        return CompletedTask(
+            task: task,
+            text: text,
+            source: source,
+            destination: destination,
+            progressLoops: progressLoops,
+            listener: listener,
+            response: response
+        )
     }
 
     private func verifyCompletedTask(task: CompletedTask, file: StaticString = #filePath, line: UInt = #line) async throws {

@@ -37,8 +37,10 @@ public enum BatchDownloaderFake {
     }
 
     public static func makeDownloadRequest(_ id: String) -> DownloadRequest {
-        DownloadRequest(url: URL(validURL: "http://request/\(id)"),
-                        destinationURL: downloadsURL.appendingPathComponent("/\(id).txt", isDirectory: false))
+        DownloadRequest(
+            url: URL(validURL: "http://request/\(id)"),
+            destinationURL: downloadsURL.appendingPathComponent("/\(id).txt", isDirectory: false)
+        )
     }
 
     public static func createTextFile(at path: String, content: String) throws -> URL {

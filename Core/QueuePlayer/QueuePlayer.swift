@@ -14,10 +14,11 @@ public struct QueuePlayerActions: Sendable {
     let playbackRateChanged: @Sendable @MainActor (Float) -> Void
     let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem) -> Void
 
-    public init(playbackEnded: @Sendable @MainActor @escaping () -> Void,
-                playbackRateChanged: @Sendable @MainActor @escaping (Float) -> Void,
-                audioFrameChanged: @Sendable @MainActor @escaping (Int, Int, AVPlayerItem) -> Void)
-    {
+    public init(
+        playbackEnded: @Sendable @MainActor @escaping () -> Void,
+        playbackRateChanged: @Sendable @MainActor @escaping (Float) -> Void,
+        audioFrameChanged: @Sendable @MainActor @escaping (Int, Int, AVPlayerItem) -> Void
+    ) {
         self.playbackEnded = playbackEnded
         self.playbackRateChanged = playbackRateChanged
         self.audioFrameChanged = audioFrameChanged

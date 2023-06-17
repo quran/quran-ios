@@ -38,102 +38,122 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     func testPlayingDownloadedGaplessReciter1FullSura() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[0].firstVerse,
-                                               to: suras[0].lastVerse,
-                                               files: ["001.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[0].firstVerse,
+            to: suras[0].lastVerse,
+            files: ["001.mp3"]
+        )
     }
 
     func testPlayingDownloadedGaplessReciter1SuraEndsEarly() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[0].verses[1],
-                                               to: suras[0].verses[4],
-                                               files: ["001.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[0].verses[1],
+            to: suras[0].verses[4],
+            files: ["001.mp3"]
+        )
     }
 
     func testPlayingDownloadedGaplessReciter3FullSura() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[111].firstVerse,
-                                               to: suras[113].lastVerse,
-                                               files: ["112.mp3",
-                                                       "113.mp3",
-                                                       "114.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[111].firstVerse,
+            to: suras[113].lastVerse,
+            files: ["112.mp3",
+                    "113.mp3",
+                    "114.mp3"]
+        )
     }
 
     func testPlayingDownloadedGaplessReciter2Suras1stSuraHasEndTimestamp() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[76].verses[48],
-                                               to: suras[77].verses[2],
-                                               files: ["077.mp3",
-                                                       "078.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[76].verses[48],
+            to: suras[77].verses[2],
+            files: ["077.mp3",
+                    "078.mp3"]
+        )
     }
 
     func testPlayingDownloadedGaplessReciter1SurasHasEndTimestamp() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[76].verses[48],
-                                               to: suras[76].lastVerse,
-                                               files: ["077.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[76].verses[48],
+            to: suras[76].lastVerse,
+            files: ["077.mp3"]
+        )
     }
 
     func testPlayingDownloadedGaplessReciter1SurasHasEndTimestampStopBeforeEnd() async throws {
-        try await runDownloadedGaplessTestCase(from: suras[76].verses[48],
-                                               to: suras[76].verses[48],
-                                               files: ["077.mp3"])
+        try await runDownloadedGaplessTestCase(
+            from: suras[76].verses[48],
+            to: suras[76].verses[48],
+            files: ["077.mp3"]
+        )
     }
 
     func testPlayingDownloadedGappedReciter1FullSura() async throws {
-        try await runDownloadedGappedTestCase(from: suras[0].firstVerse,
-                                              to: suras[0].lastVerse,
-                                              files: [
-                                                  "001001.mp3",
-                                                  "001002.mp3",
-                                                  "001003.mp3",
-                                                  "001004.mp3",
-                                                  "001005.mp3",
-                                                  "001006.mp3",
-                                                  "001007.mp3",
-                                              ])
+        try await runDownloadedGappedTestCase(
+            from: suras[0].firstVerse,
+            to: suras[0].lastVerse,
+            files: [
+                "001001.mp3",
+                "001002.mp3",
+                "001003.mp3",
+                "001004.mp3",
+                "001005.mp3",
+                "001006.mp3",
+                "001007.mp3",
+            ]
+        )
     }
 
     func testPlayingDownloadedGappedReciter1SuraEndsEarly() async throws {
-        try await runDownloadedGappedTestCase(from: suras[0].verses[1],
-                                              to: suras[0].verses[4],
-                                              files: [
-                                                  "001001.mp3", // always downloads besmAllah
-                                                  "001002.mp3",
-                                                  "001003.mp3",
-                                                  "001004.mp3",
-                                                  "001005.mp3",
-                                              ])
+        try await runDownloadedGappedTestCase(
+            from: suras[0].verses[1],
+            to: suras[0].verses[4],
+            files: [
+                "001001.mp3", // always downloads besmAllah
+                "001002.mp3",
+                "001003.mp3",
+                "001004.mp3",
+                "001005.mp3",
+            ]
+        )
     }
 
     func testPlayingDownloadedGappedReciter3FullSura() async throws {
-        try await runDownloadedGappedTestCase(from: suras[111].firstVerse,
-                                              to: suras[113].lastVerse,
-                                              files: [
-                                                  "001001.mp3", // always downloads besmAllah
-                                                  "112001.mp3",
-                                                  "112002.mp3",
-                                                  "112003.mp3",
-                                                  "112004.mp3",
-                                                  "113001.mp3",
-                                                  "113002.mp3",
-                                                  "113003.mp3",
-                                                  "113004.mp3",
-                                                  "113005.mp3",
-                                                  "114001.mp3",
-                                                  "114002.mp3",
-                                                  "114003.mp3",
-                                                  "114004.mp3",
-                                                  "114005.mp3",
-                                                  "114006.mp3",
-                                              ])
+        try await runDownloadedGappedTestCase(
+            from: suras[111].firstVerse,
+            to: suras[113].lastVerse,
+            files: [
+                "001001.mp3", // always downloads besmAllah
+                "112001.mp3",
+                "112002.mp3",
+                "112003.mp3",
+                "112004.mp3",
+                "113001.mp3",
+                "113002.mp3",
+                "113003.mp3",
+                "113004.mp3",
+                "113005.mp3",
+                "114001.mp3",
+                "114002.mp3",
+                "114003.mp3",
+                "114004.mp3",
+                "114005.mp3",
+                "114006.mp3",
+            ]
+        )
     }
 
     func testPlayingDownloadedGappedReciterAtTawbah() async throws {
-        try await runDownloadedGappedTestCase(from: suras[8].verses[0],
-                                              to: suras[8].verses[2],
-                                              files: [
-                                                  "001001.mp3", // always downloads besmAllah
-                                                  "009001.mp3",
-                                                  "009002.mp3",
-                                                  "009003.mp3",
-                                              ])
+        try await runDownloadedGappedTestCase(
+            from: suras[8].verses[0],
+            to: suras[8].verses[2],
+            files: [
+                "001001.mp3", // always downloads besmAllah
+                "009001.mp3",
+                "009002.mp3",
+                "009003.mp3",
+            ]
+        )
     }
 
     func testAudioPlaybackControls() async throws {
@@ -202,32 +222,37 @@ class QuranAudioPlayerTests: XCTestCase {
 
     private func runDownloadedTestCase(gapless: Bool) async throws {
         if gapless {
-            try await runDownloadedGaplessTestCase(from: suras[0].firstVerse,
-                                                   to: suras[0].lastVerse,
-                                                   files: ["001.mp3"],
-                                                   snaphot: false)
+            try await runDownloadedGaplessTestCase(
+                from: suras[0].firstVerse,
+                to: suras[0].lastVerse,
+                files: ["001.mp3"],
+                snaphot: false
+            )
         } else {
-            try await runDownloadedGappedTestCase(from: suras[0].firstVerse,
-                                                  to: suras[0].lastVerse,
-                                                  files: [
-                                                      "001001.mp3",
-                                                      "001002.mp3",
-                                                      "001003.mp3",
-                                                      "001004.mp3",
-                                                      "001005.mp3",
-                                                      "001006.mp3",
-                                                      "001007.mp3",
-                                                  ],
-                                                  snaphot: false)
+            try await runDownloadedGappedTestCase(
+                from: suras[0].firstVerse,
+                to: suras[0].lastVerse,
+                files: [
+                    "001001.mp3",
+                    "001002.mp3",
+                    "001003.mp3",
+                    "001004.mp3",
+                    "001005.mp3",
+                    "001006.mp3",
+                    "001007.mp3",
+                ],
+                snaphot: false
+            )
         }
     }
 
-    private func runDownloadedGappedTestCase(from: AyahNumber,
-                                             to: AyahNumber,
-                                             files: [String],
-                                             snaphot: Bool = true,
-                                             testName: String = #function) async throws
-    {
+    private func runDownloadedGappedTestCase(
+        from: AyahNumber,
+        to: AyahNumber,
+        files: [String],
+        snaphot: Bool = true,
+        testName: String = #function
+    ) async throws {
         let reciter = gappedReciter
 
         // test playing audio for downloaded gapped reciter
@@ -239,12 +264,13 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
-    private func runDownloadedGaplessTestCase(from: AyahNumber,
-                                              to: AyahNumber,
-                                              files: [String],
-                                              snaphot: Bool = true,
-                                              testName: String = #function) async throws
-    {
+    private func runDownloadedGaplessTestCase(
+        from: AyahNumber,
+        to: AyahNumber,
+        files: [String],
+        snaphot: Bool = true,
+        testName: String = #function
+    ) async throws {
         let reciter = gaplessReciter
         try reciter.prepareGaplessReciterForTests()
 

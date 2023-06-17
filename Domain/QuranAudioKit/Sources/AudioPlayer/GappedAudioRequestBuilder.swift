@@ -26,19 +26,22 @@ struct GappedAudioRequest: QuranAudioRequest {
 
     func getPlayerInfo(for fileIndex: Int) -> PlayerItemInfo {
         let ayah = ayahs[fileIndex]
-        return PlayerItemInfo(title: ayah.localizedName,
-                              artist: reciter.localizedName,
-                              image: nil)
+        return PlayerItemInfo(
+            title: ayah.localizedName,
+            artist: reciter.localizedName,
+            image: nil
+        )
     }
 }
 
 final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
-    func buildRequest(with reciter: Reciter,
-                      from start: AyahNumber,
-                      to end: AyahNumber,
-                      frameRuns: Runs,
-                      requestRuns: Runs) async throws -> QuranAudioRequest
-    {
+    func buildRequest(
+        with reciter: Reciter,
+        from start: AyahNumber,
+        to end: AyahNumber,
+        frameRuns: Runs,
+        requestRuns: Runs
+    ) async throws -> QuranAudioRequest {
         let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns)
         let files = urls.map {
             AudioFile(url: $0, frames: [AudioFrame(startTime: 0, endTime: nil)])

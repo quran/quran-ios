@@ -106,9 +106,11 @@ class AudioPlayer {
         } else {
             // repeat frame
             audioPlaying.incrementFramePlays()
-            play(fileIndex: audioPlaying.filePlaying.fileIndex,
-                 frameIndex: audioPlaying.framePlaying.frameIndex,
-                 forceSeek: true)
+            play(
+                fileIndex: audioPlaying.filePlaying.fileIndex,
+                frameIndex: audioPlaying.framePlaying.frameIndex,
+                forceSeek: true
+            )
         }
     }
 

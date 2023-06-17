@@ -39,12 +39,13 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         self.backgroundSessionCompletion = backgroundSessionCompletion
     }
 
-    func networkSession(_ session: NetworkSession,
-                        downloadTask: NetworkSessionDownloadTask,
-                        didWriteData bytesWritten: Int64,
-                        totalBytesWritten: Int64,
-                        totalBytesExpectedToWrite: Int64) async
-    {
+    func networkSession(
+        _ session: NetworkSession,
+        downloadTask: NetworkSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) async {
         guard let response = await dataController.downloadResponse(for: downloadTask) else {
             logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return

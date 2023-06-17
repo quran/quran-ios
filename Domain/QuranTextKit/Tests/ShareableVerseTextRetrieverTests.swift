@@ -30,9 +30,11 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         localTranslationsFake = LocalTranslationsFake()
         let localtranslationsRetriever = localTranslationsFake.retriever
         let persistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: TestData.quranTextURL)
-        textService = QuranTextDataService(localTranslationRetriever: localtranslationsRetriever,
-                                           arabicPersistence: persistence,
-                                           translationsPersistenceBuilder: TestData.translationsPersistenceBuilder)
+        textService = QuranTextDataService(
+            localTranslationRetriever: localtranslationsRetriever,
+            arabicPersistence: persistence,
+            translationsPersistenceBuilder: TestData.translationsPersistenceBuilder
+        )
 
         shareableTextRetriever = ShareableVerseTextRetriever(
             textService: textService,
@@ -56,14 +58,18 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
     func testShareArabicText() async throws {
         statePreferences.quranMode = .arabic
         let tests = [
-            (verses: [quran.suras[0].verses[2]],
-             result: ["ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
-                      "",
-                      "Al-Fatihah, Ayah 3"]),
-            (verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
-             result: ["بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾ ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
-                      "",
-                      "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
+            (
+                verses: [quran.suras[0].verses[2]],
+                result: ["ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
+                         "",
+                         "Al-Fatihah, Ayah 3"]
+            ),
+            (
+                verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
+                result: ["بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾ ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
+                         "",
+                         "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]
+            ),
         ]
         for test in tests {
             let versesText = try await shareableTextRetriever.textForVerses(test.verses)
@@ -75,30 +81,34 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         statePreferences.quranMode = .translation
 
         let tests = [
-            (verses: [quran.suras[0].verses[2]],
-             result: ["ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
-                      "",
-                      "• Khan & Hilai:",
-                      TestData.translationTextAt(translations[0], quran.suras[0].verses[2]),
-                      "",
-                      "• Sahih International:",
-                      TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
-                      "",
-                      "Al-Fatihah, Ayah 3"]),
-            (verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
-             result: ["بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾ ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
-                      "",
-                      "• Khan & Hilai:",
-                      TestData.translationTextAt(translations[0], quran.suras[0].verses[0]),
-                      TestData.translationTextAt(translations[0], quran.suras[0].verses[1]),
-                      TestData.translationTextAt(translations[0], quran.suras[0].verses[2]),
-                      "",
-                      "• Sahih International:",
-                      TestData.translationTextAt(translations[1], quran.suras[0].verses[0]),
-                      TestData.translationTextAt(translations[1], quran.suras[0].verses[1]),
-                      TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
-                      "",
-                      "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]),
+            (
+                verses: [quran.suras[0].verses[2]],
+                result: ["ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
+                         "",
+                         "• Khan & Hilai:",
+                         TestData.translationTextAt(translations[0], quran.suras[0].verses[2]),
+                         "",
+                         "• Sahih International:",
+                         TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
+                         "",
+                         "Al-Fatihah, Ayah 3"]
+            ),
+            (
+                verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
+                result: ["بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾ ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
+                         "",
+                         "• Khan & Hilai:",
+                         TestData.translationTextAt(translations[0], quran.suras[0].verses[0]),
+                         TestData.translationTextAt(translations[0], quran.suras[0].verses[1]),
+                         TestData.translationTextAt(translations[0], quran.suras[0].verses[2]),
+                         "",
+                         "• Sahih International:",
+                         TestData.translationTextAt(translations[1], quran.suras[0].verses[0]),
+                         TestData.translationTextAt(translations[1], quran.suras[0].verses[1]),
+                         TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
+                         "",
+                         "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]
+            ),
         ]
         for test in tests {
             let versesText = try await shareableTextRetriever.textForVerses(test.verses)

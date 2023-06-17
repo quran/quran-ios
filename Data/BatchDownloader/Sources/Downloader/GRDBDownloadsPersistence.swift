@@ -76,9 +76,11 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
         try await db.write { db in
             for download in downloads {
                 let rows = GRDBDownload.filter(GRDBDownload.Columns.url == download.request.url)
-                try rows.updateAll(db,
-                                   GRDBDownload.Columns.status.set(to: download.status.rawValue),
-                                   GRDBDownload.Columns.taskId.set(to: download.taskId))
+                try rows.updateAll(
+                    db,
+                    GRDBDownload.Columns.status.set(to: download.status.rawValue),
+                    GRDBDownload.Columns.taskId.set(to: download.taskId)
+                )
             }
         }
     }
@@ -151,9 +153,11 @@ extension GRDBDownload {
     }
 
     func toDownload() -> Download {
-        Download(taskId: taskId,
-                 request: DownloadRequest(url: url, destinationURL: destinationURL),
-                 status: status,
-                 batchId: downloadBatchId)
+        Download(
+            taskId: taskId,
+            request: DownloadRequest(url: url, destinationURL: destinationURL),
+            status: status,
+            batchId: downloadBatchId
+        )
     }
 }

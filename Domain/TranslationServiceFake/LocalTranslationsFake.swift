@@ -51,10 +51,11 @@ public struct LocalTranslationsFake {
         fileSystem.files = Set(translations.map(\.localURL))
     }
 
-    public func insertTranslation(_ translation: Translation,
-                                  installedVersion: Int?,
-                                  downloaded: Bool) async throws
-    {
+    public func insertTranslation(
+        _ translation: Translation,
+        installedVersion: Int?,
+        downloaded: Bool
+    ) async throws {
         var translation = translation
         translation.installedVersion = installedVersion
         try await persistence.insert(translation)

@@ -15,11 +15,13 @@ import PromiseKit
 import QuranKit
 
 public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
-    private let context: NSManagedObjectContext
+    // MARK: Lifecycle
 
     public init(stack: CoreDataStack) {
         context = stack.newBackgroundContext()
     }
+
+    // MARK: Public
 
     public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()
@@ -50,6 +52,10 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
             try context.save(with: "removePageBookmark")
         }
     }
+
+    // MARK: Private
+
+    private let context: NSManagedObjectContext
 
     private func fetchRequest(forPage page: Int) -> NSFetchRequest<MO_PageBookmark> {
         let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()

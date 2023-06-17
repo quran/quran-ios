@@ -9,12 +9,7 @@ import SwiftUI
 import UIx
 
 public struct ReadingSelector<Value: Hashable, ImageView: View>: View {
-    let selectedValue: Value?
-    let readings: [ReadingInfo<Value>]
-    let imageView: (ReadingInfo<Value>) -> ImageView
-    let action: (Value) -> Void
-
-    @State private var readingInfoDetails: ReadingInfo<Value>?
+    // MARK: Lifecycle
 
     public init(
         selectedValue: Value?,
@@ -27,6 +22,8 @@ public struct ReadingSelector<Value: Hashable, ImageView: View>: View {
         self.imageView = imageView
         self.action = action
     }
+
+    // MARK: Public
 
     public var body: some View {
         ScrollView {
@@ -54,10 +51,23 @@ public struct ReadingSelector<Value: Hashable, ImageView: View>: View {
             )
         }
     }
+
+    // MARK: Internal
+
+    let selectedValue: Value?
+    let readings: [ReadingInfo<Value>]
+    let imageView: (ReadingInfo<Value>) -> ImageView
+    let action: (Value) -> Void
+
+    // MARK: Private
+
+    @State private var readingInfoDetails: ReadingInfo<Value>?
 }
 
 struct ReadingSelector_Previews: PreviewProvider {
     private struct Container: View {
+        // MARK: Internal
+
         @State var selectedValue = ReadingInfoTestData.Reading.b
 
         var body: some View {
@@ -70,12 +80,16 @@ struct ReadingSelector_Previews: PreviewProvider {
             }
         }
 
+        // MARK: Private
+
         private func imageView(reading: ReadingInfo<ReadingInfoTestData.Reading>) -> some View {
             Image("logo-lg-w")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Container()

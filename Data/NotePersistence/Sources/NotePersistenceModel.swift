@@ -9,13 +9,17 @@
 import Foundation
 
 public struct VersePersistenceModel: Hashable {
-    public let ayah: Int
-    public let sura: Int
+    // MARK: Lifecycle
 
     public init(ayah: Int, sura: Int) {
         self.ayah = ayah
         self.sura = sura
     }
+
+    // MARK: Public
+
+    public let ayah: Int
+    public let sura: Int
 }
 
 public struct NotePersistenceModel: Equatable {

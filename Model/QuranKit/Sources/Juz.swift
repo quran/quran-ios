@@ -21,12 +21,7 @@
 import Foundation
 
 public struct Juz: QuranValueGroup {
-    public var juzNumber: Int { storage.value }
-    let storage: QuranValueStorage<Self>
-
-    public var quran: Quran {
-        storage.quran
-    }
+    // MARK: Lifecycle
 
     init(quran: Quran, juzNumber: Int) {
         storage = QuranValueStorage(quran: quran, value: juzNumber, keyPath: \.juzs)
@@ -34,6 +29,13 @@ public struct Juz: QuranValueGroup {
 
     init(_ storage: QuranValueStorage<Self>) {
         self.storage = storage
+    }
+
+    // MARK: Public
+
+    public var juzNumber: Int { storage.value }
+    public var quran: Quran {
+        storage.quran
     }
 
     public var firstVerse: AyahNumber {
@@ -52,4 +54,8 @@ public struct Juz: QuranValueGroup {
     public var quarter: Quarter {
         hizb.quarter
     }
+
+    // MARK: Internal
+
+    let storage: QuranValueStorage<Self>
 }

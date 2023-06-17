@@ -37,6 +37,8 @@ struct GaplessAudioRequest: QuranAudioRequest {
 }
 
 struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
+    // MARK: Internal
+
     let timingRetriever = ReciterTimingRetriever()
 
     func buildRequest(
@@ -80,6 +82,8 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
         let quranRequest = GaplessAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
         return quranRequest
     }
+
+    // MARK: Private
 
     private func urlsToPlay(reciter: Reciter, suras: some Collection<Sura>) -> [(url: URL, sura: Sura)] {
         guard case AudioType.gapless = reciter.audioType else {

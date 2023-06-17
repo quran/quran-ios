@@ -21,10 +21,7 @@
 import UIKit
 
 public struct DirectionalEdgeInsets {
-    public var top: CGFloat
-    public var bottom: CGFloat
-    public var leading: CGFloat
-    public var trailing: CGFloat
+    // MARK: Lifecycle
 
     public init(top: CGFloat, bottom: CGFloat, leading: CGFloat, trailing: CGFloat) {
         self.top = top
@@ -55,6 +52,13 @@ public struct DirectionalEdgeInsets {
         leading = insets.leading
         trailing = insets.trailing
     }
+
+    // MARK: Public
+
+    public var top: CGFloat
+    public var bottom: CGFloat
+    public var leading: CGFloat
+    public var trailing: CGFloat
 }
 
 extension DirectionalEdgeInsets {

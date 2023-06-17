@@ -14,7 +14,7 @@ private class ContentSizeUpdatableNavigationController: UINavigationController {
 }
 
 public class PopoverNavigationController: UIViewController, UINavigationControllerDelegate {
-    public let wrapped: UINavigationController
+    // MARK: Lifecycle
 
     public init(rootViewController: UIViewController) {
         wrapped = ContentSizeUpdatableNavigationController(rootViewController: rootViewController)
@@ -26,6 +26,10 @@ public class PopoverNavigationController: UIViewController, UINavigationControll
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Public
+
+    public let wrapped: UINavigationController
 
     override public func viewDidLoad() {
         super.viewDidLoad()

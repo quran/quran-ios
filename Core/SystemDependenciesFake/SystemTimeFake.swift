@@ -9,7 +9,11 @@ import Foundation
 import SystemDependencies
 
 public final class SystemTimeFake: SystemTime {
-    public var now = Date(timeIntervalSinceReferenceDate: 0)
+    // MARK: Lifecycle
 
     public init() {}
+
+    // MARK: Public
+
+    public var now = Date(timeIntervalSinceReferenceDate: 0)
 }

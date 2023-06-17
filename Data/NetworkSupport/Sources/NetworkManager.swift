@@ -8,13 +8,14 @@
 import Foundation
 
 public final class NetworkManager {
-    private let session: NetworkSession
-    private let baseURL: URL
+    // MARK: Lifecycle
 
     public init(session: NetworkSession = URLSession.shared, baseURL: URL) {
         self.session = session
         self.baseURL = baseURL
     }
+
+    // MARK: Public
 
     public func request(_ path: String, parameters: [(String, String)] = []) async throws -> Data {
         do {
@@ -26,10 +27,17 @@ public final class NetworkManager {
         }
     }
 
+    // MARK: Internal
+
     static func request(baseURL: URL, path: String, parameters: [(String, String)] = []) -> URLRequest {
         let url = baseURL.appendingPathComponent(path)
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = parameters.map { URLQueryItem(name: $0, value: $1) }
         return URLRequest(url: components.url!)
     }
+
+    // MARK: Private
+
+    private let session: NetworkSession
+    private let baseURL: URL
 }

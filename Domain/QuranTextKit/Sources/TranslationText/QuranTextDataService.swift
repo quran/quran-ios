@@ -14,15 +14,7 @@ import TranslationService
 import VerseTextPersistence
 
 public struct QuranTextDataService {
-    let localTranslationRetriever: LocalTranslationsRetriever
-    let arabicPersistence: VerseTextPersistence
-    let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
-    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-
-    // regex to detect quran text in translation text
-    private static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
-    // regex to detect footer notes in translation text
-    private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
+    // MARK: Lifecycle
 
     public init(databasesURL: URL, quranFileURL: URL) {
         self.init(databasesURL: databasesURL, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
@@ -48,6 +40,8 @@ public struct QuranTextDataService {
         self.translationsPersistenceBuilder = translationsPersistenceBuilder
     }
 
+    // MARK: Public
+
     public func textForVerses(_ verses: [AyahNumber]) async throws -> TranslatedVerses {
         try await textForVerses(verses, translations: { try await localTranslations() })
     }
@@ -55,6 +49,20 @@ public struct QuranTextDataService {
     public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> TranslatedVerses {
         try await textForVerses(verses, translations: { translations })
     }
+
+    // MARK: Internal
+
+    let localTranslationRetriever: LocalTranslationsRetriever
+    let arabicPersistence: VerseTextPersistence
+    let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
+    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
+
+    // MARK: Private
+
+    // regex to detect quran text in translation text
+    private static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
+    // regex to detect footer notes in translation text
+    private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
     private func textForVerses(
         _ verses: [AyahNumber],

@@ -11,25 +11,30 @@ import UIKit
 import UIx
 
 public struct MoreMenuView: View {
-    @ObservedObject private var store: MoreMenuStore
+    // MARK: Lifecycle
 
     public init(store: MoreMenuStore) {
         self.store = store
     }
+
+    // MARK: Public
 
     public var body: some View {
         CocoaNavigationView(rootConfiguration: .init(navigationBarHidden: true)) {
             MoreMenuRootView(store: store)
         }
     }
+
+    // MARK: Private
+
+    @ObservedObject private var store: MoreMenuStore
 }
 
 private struct MoreMenuRootView: View {
+    // MARK: Internal
+
     @ObservedObject var store: MoreMenuStore
     @Environment(\.navigator) var navigator: Navigator?
-    private var state: MoreMenuControlsState {
-        store.state
-    }
 
     var body: some View {
         PreferredContentSizeMatchesScrollView {
@@ -107,6 +112,23 @@ private struct MoreMenuRootView: View {
         }
     }
 
+    // MARK: Private
+
+    private var state: MoreMenuControlsState {
+        store.state
+    }
+
+    private var empty: some View {
+        VStack {
+            MoreMenuEmpty()
+        }
+    }
+
+    private var divider: some View {
+        Divider()
+            .padding(.leading)
+    }
+
     @ViewBuilder
     private func viewBasedOn(
         _ state: ConfigState,
@@ -125,17 +147,6 @@ private struct MoreMenuRootView: View {
         }
     }
 
-    private var empty: some View {
-        VStack {
-            MoreMenuEmpty()
-        }
-    }
-
-    private var divider: some View {
-        Divider()
-            .padding(.leading)
-    }
-
     private func showWordPointerSelection() {
         navigator?.push(configuration: .init(backgroundColor: .systemBackground)) {
             WordPointerSelection(store: store)
@@ -144,6 +155,8 @@ private struct MoreMenuRootView: View {
 }
 
 private struct WordPointerSelection: View {
+    // MARK: Internal
+
     @ObservedObject var store: MoreMenuStore
     @Environment(\.navigator) var navigator: Navigator?
 
@@ -155,14 +168,7 @@ private struct WordPointerSelection: View {
         )
     }
 
-    private func itemText(of item: MoreMenu.TranslationPointerType) -> String {
-        switch item {
-        case .translation:
-            return l("translationTextType")
-        case .transliteration:
-            return l("transliterationTextType")
-        }
-    }
+    // MARK: Private
 
     private var selected: Binding<MoreMenu.TranslationPointerType?> {
         Binding(get: {
@@ -173,5 +179,14 @@ private struct WordPointerSelection: View {
                 navigator?.pop()
             }
         })
+    }
+
+    private func itemText(of item: MoreMenu.TranslationPointerType) -> String {
+        switch item {
+        case .translation:
+            return l("translationTextType")
+        case .transliteration:
+            return l("transliterationTextType")
+        }
     }
 }

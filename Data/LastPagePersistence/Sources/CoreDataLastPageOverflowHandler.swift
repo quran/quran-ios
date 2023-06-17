@@ -10,7 +10,7 @@ import CoreData
 import CoreDataModel
 
 struct CoreDataLastPageOverflowHandler {
-    private static let maxNumberOfLastPages = 3
+    // MARK: Internal
 
     func removeOverflowIfneeded(using context: NSManagedObjectContext) throws {
         let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
@@ -25,4 +25,8 @@ struct CoreDataLastPageOverflowHandler {
         }
         try context.save(with: "Deleting overflow LastPages")
     }
+
+    // MARK: Private
+
+    private static let maxNumberOfLastPages = 3
 }

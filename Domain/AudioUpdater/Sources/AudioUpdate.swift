@@ -7,17 +7,21 @@
 //
 
 struct AudioUpdates: Codable {
-    let currentRevision: Int
-    let updates: [Update]
-
     struct Update: Codable {
-        let path: String
-        let databaseVersion: Int?
-        let files: [File]
-
         struct File: Codable {
             let filename: String
             let md5: String
         }
+
+        // MARK: Internal
+
+        let path: String
+        let databaseVersion: Int?
+        let files: [File]
     }
+
+    // MARK: Internal
+
+    let currentRevision: Int
+    let updates: [Update]
 }

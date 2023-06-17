@@ -11,22 +11,28 @@ import SwiftUI
 // but can size itself inside a popover.
 
 public struct CocoaNavigationView<Root: View>: View {
-    private let root: Root
-    private var rootConfiguration: NavigationConfiguration
+    // MARK: Lifecycle
 
     public init(rootConfiguration: NavigationConfiguration = NavigationConfiguration(), @ViewBuilder root: () -> Root) {
         self.root = root()
         self.rootConfiguration = rootConfiguration
     }
 
+    // MARK: Public
+
     public var body: some View {
         NavigationViewBody(root: root, rootConfiguration: rootConfiguration)
             .edgesIgnoringSafeArea(.all)
     }
+
+    // MARK: Private
+
+    private let root: Root
+    private var rootConfiguration: NavigationConfiguration
 }
 
 public struct Navigator {
-    let navigationController: UINavigationController
+    // MARK: Public
 
     public func push(
         configuration: NavigationConfiguration = NavigationConfiguration(),
@@ -46,6 +52,10 @@ public struct Navigator {
     public func popToRoot(animated: Bool = true) {
         navigationController.popToRootViewController(animated: animated)
     }
+
+    // MARK: Internal
+
+    let navigationController: UINavigationController
 }
 
 extension EnvironmentValues {
@@ -60,17 +70,28 @@ extension EnvironmentValues {
 }
 
 public struct NavigationConfiguration {
-    public var navigationBarHidden: Bool
-    public var title: String?
-    public var backgroundColor: UIColor?
+    // MARK: Lifecycle
+
     public init(navigationBarHidden: Bool = false, title: String? = nil, backgroundColor: UIColor? = nil) {
         self.navigationBarHidden = navigationBarHidden
         self.title = title
         self.backgroundColor = backgroundColor
     }
+
+    // MARK: Public
+
+    public var navigationBarHidden: Bool
+    public var title: String?
+    public var backgroundColor: UIColor?
 }
 
 private struct NavigationViewBody<Root: View>: UIViewControllerRepresentable {
+    class Coordinator: NSObject, UINavigationControllerDelegate {
+        func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+            navigationController.preferredContentSize = viewController.preferredContentSize
+        }
+    }
+
     let root: Root
     let rootConfiguration: NavigationConfiguration
 
@@ -95,19 +116,9 @@ private struct NavigationViewBody<Root: View>: UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
-
-    class Coordinator: NSObject, UINavigationControllerDelegate {
-        func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-            navigationController.preferredContentSize = viewController.preferredContentSize
-        }
-    }
 }
 
 private class CocoaNavigationController: UINavigationController {
-    override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
-        preferredContentSize = container.preferredContentSize
-    }
-
     var configuration = NavigationConfiguration(navigationBarHidden: false, title: "") {
         didSet {
             if configuration.navigationBarHidden != oldValue.navigationBarHidden {
@@ -133,6 +144,10 @@ private class CocoaNavigationController: UINavigationController {
         }
     }
 
+    override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+        preferredContentSize = container.preferredContentSize
+    }
+
     override func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
         guard hidden != isNavigationBarHidden else {
             return
@@ -151,16 +166,7 @@ private class CocoaNavigationController: UINavigationController {
 }
 
 private class ElementController<Content: View>: UIHostingController<Content> {
-    private var cocoaNavigation: CocoaNavigationController? {
-        navigationController as? CocoaNavigationController
-    }
-
-    var configuration: NavigationConfiguration {
-        didSet {
-            cocoaNavigation?.configuration = configuration
-            configure()
-        }
-    }
+    // MARK: Lifecycle
 
     init(rootView: Content, configuration: NavigationConfiguration) {
         self.configuration = configuration
@@ -168,14 +174,18 @@ private class ElementController<Content: View>: UIHostingController<Content> {
         configure()
     }
 
-    private func configure() {
-        title = configuration.title
-        viewIfLoaded?.backgroundColor = configuration.backgroundColor
-    }
-
     @available(*, unavailable) @MainActor
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Internal
+
+    var configuration: NavigationConfiguration {
+        didSet {
+            cocoaNavigation?.configuration = configuration
+            configure()
+        }
     }
 
     override func viewDidLoad() {
@@ -190,5 +200,16 @@ private class ElementController<Content: View>: UIHostingController<Content> {
 
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         preferredContentSize = container.preferredContentSize
+    }
+
+    // MARK: Private
+
+    private var cocoaNavigation: CocoaNavigationController? {
+        navigationController as? CocoaNavigationController
+    }
+
+    private func configure() {
+        title = configuration.title
+        viewIfLoaded?.backgroundColor = configuration.backgroundColor
     }
 }

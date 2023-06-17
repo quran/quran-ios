@@ -21,6 +21,20 @@
 import UIKit
 
 open class CircleView: UIView {
+    // MARK: Lifecycle
+
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setUp()
+    }
+
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        setUp()
+    }
+
+    // MARK: Open
+
     @IBInspectable open var progress: CGFloat = 0.8 {
         didSet {
             updateLayers()
@@ -39,29 +53,21 @@ open class CircleView: UIView {
         }
     }
 
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        updateLayers()
+    }
+
+    // MARK: Private
+
     private let emptyCircle = CAShapeLayer()
     private let fillCircle = CAShapeLayer()
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setUp()
-    }
-
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        setUp()
-    }
 
     private func setUp() {
         layer.addSublayer(emptyCircle)
         layer.addSublayer(fillCircle)
         fillCircle.fillColor = nil
         fillCircle.transform = CATransform3DMakeRotation(-.pi / 2, 0, 0, 1)
-    }
-
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        updateLayers()
     }
 
     private func updateLayers() {

@@ -9,11 +9,15 @@ import Foundation
 import QuranKit
 
 public struct PageBookmark: Equatable {
-    public let page: Page
-    public let creationDate: Date
+    // MARK: Lifecycle
 
     public init(page: Page, creationDate: Date) {
         self.page = page
         self.creationDate = creationDate
     }
+
+    // MARK: Public
+
+    public let page: Page
+    public let creationDate: Date
 }

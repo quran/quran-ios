@@ -10,7 +10,11 @@ import CoreData
 import SystemDependencies
 
 public struct CoreDataInsertedEntitiesRetriever<T: NSManagedObject> {
+    // MARK: Lifecycle
+
     public init() { }
+
+    // MARK: Public
 
     public func insertedEntities(transactions: [PersistentHistoryTransaction]) -> [NSManagedObjectID] {
         var newEntityObjectIDs = [NSManagedObjectID]()

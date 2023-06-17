@@ -14,6 +14,8 @@ public enum FontSize: Int, CaseIterable, CustomStringConvertible {
     case xSmall = 4
     case xxSmall = 5
 
+    // MARK: Public
+
     public var description: String {
         switch self {
         case .xxLarge: return "xxLarge"

@@ -26,6 +26,8 @@ public enum NetworkError: Error {
 
     case serverError(String)
 
+    // MARK: Lifecycle
+
     public init(error: Error) {
         if let error = error as? NetworkError {
             self = error

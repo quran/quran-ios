@@ -10,16 +10,13 @@ import MediaPlayer
 
 @MainActor
 public class NowPlayingUpdater {
-    private let center: MPNowPlayingInfoCenter
-    private var nowPlayingInfo: [String: Any]? {
-        didSet {
-            center.nowPlayingInfo = nowPlayingInfo
-        }
-    }
+    // MARK: Lifecycle
 
     public init(center: MPNowPlayingInfoCenter) {
         self.center = center
     }
+
+    // MARK: Public
 
     public func clear() {
         nowPlayingInfo = nil
@@ -51,6 +48,16 @@ public class NowPlayingUpdater {
 
     public func update(playingIndex: Int) {
         update([MPNowPlayingInfoPropertyPlaybackQueueIndex: playingIndex])
+    }
+
+    // MARK: Private
+
+    private let center: MPNowPlayingInfoCenter
+
+    private var nowPlayingInfo: [String: Any]? {
+        didSet {
+            center.nowPlayingInfo = nowPlayingInfo
+        }
     }
 
     private func update(_ values: [String: Any]) {

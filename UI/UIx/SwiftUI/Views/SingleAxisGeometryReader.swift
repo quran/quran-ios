@@ -12,16 +12,13 @@ import SwiftUI
 public struct SingleAxisGeometryReader<Content: View>: View {
     private struct SizeKey: PreferenceKey {
         static var defaultValue: CGFloat { 10 }
+
         static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
             value = max(value, nextValue())
         }
     }
 
-    @State private var size: CGFloat = SizeKey.defaultValue
-
-    private let axis: Axis
-    private let alignment: Alignment
-    private let content: (CGFloat) -> Content
+    // MARK: Lifecycle
 
     public init(
         axis: Axis = .horizontal,
@@ -32,6 +29,8 @@ public struct SingleAxisGeometryReader<Content: View>: View {
         self.alignment = alignment
         self.content = content
     }
+
+    // MARK: Public
 
     public var body: some View {
         content(size)
@@ -45,4 +44,12 @@ public struct SingleAxisGeometryReader<Content: View>: View {
             })
             .onPreferenceChange(SizeKey.self) { size = $0 }
     }
+
+    // MARK: Private
+
+    @State private var size: CGFloat = SizeKey.defaultValue
+
+    private let axis: Axis
+    private let alignment: Alignment
+    private let content: (CGFloat) -> Content
 }

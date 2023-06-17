@@ -12,25 +12,21 @@ import NetworkSupport
 import XCTest
 
 public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
-    public let delegateQueue: OperationQueue
-    let delegate: NetworkSessionDelegate?
-    public var downloads: [SessionTask] = []
-    public var dataTasks: [SessionTask] = []
-
-    public var dataResults: [URL: Result<Data, Error>] = [:]
-
-    private var taskIdentifierCounter = 0
-    private var taskIdentifier: Int {
-        let temp = taskIdentifierCounter
-        taskIdentifierCounter += 1
-        return temp
-    }
+    // MARK: Lifecycle
 
     public init(queue: OperationQueue, delegate: NetworkSessionDelegate? = nil, downloads: [SessionTask] = []) {
         delegateQueue = queue
         self.delegate = delegate
         self.downloads = downloads
     }
+
+    // MARK: Public
+
+    public let delegateQueue: OperationQueue
+    public var downloads: [SessionTask] = []
+    public var dataTasks: [SessionTask] = []
+
+    public var dataResults: [URL: Result<Data, Error>] = [:]
 
     public func tasks() async -> ([NetworkSessionDataTask], [NetworkSessionUploadTask], [NetworkSessionDownloadTask]) {
         ([], [], downloads)
@@ -84,14 +80,6 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         }
     }
 
-    func cancelTask(_ task: SessionTask) {
-        delegateQueue.addOperation {
-            Task {
-                await self.delegate?.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
-            }
-        }
-    }
-
     public func finishBackgroundEvents(channel: AsyncChannel<Void>) {
         delegateQueue.addOperation {
             Task {
@@ -113,24 +101,48 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
 //            await completeDownloadTask(task, location: source, totalBytes: 10, progressLoops: 1)
 //        }
 //    }
+
+    // MARK: Internal
+
+    let delegate: NetworkSessionDelegate?
+
+    func cancelTask(_ task: SessionTask) {
+        delegateQueue.addOperation {
+            Task {
+                await self.delegate?.networkSession(self, task: task, didCompleteWithError: URLError(.cancelled))
+            }
+        }
+    }
+
+    // MARK: Private
+
+    private var taskIdentifierCounter = 0
+
+    private var taskIdentifier: Int {
+        let temp = taskIdentifierCounter
+        taskIdentifierCounter += 1
+        return temp
+    }
 }
 
 public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTask, Hashable, @unchecked Sendable {
-    public let taskIdentifier: Int
-    public var originalRequest: URLRequest?
-    public var currentRequest: URLRequest?
-    public var response: URLResponse?
-    var resumeData: Data?
-
-    public var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
-
-    weak var session: NetworkSessionFake?
+    // MARK: Lifecycle
 
     init(taskIdentifier: Int) {
         self.taskIdentifier = taskIdentifier
     }
 
-    var isCancelled = false
+    // MARK: Public
+
+    public let taskIdentifier: Int
+    public var originalRequest: URLRequest?
+    public var currentRequest: URLRequest?
+    public var response: URLResponse?
+    public var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
+
+    public static func == (lhs: SessionTask, rhs: SessionTask) -> Bool {
+        lhs.taskIdentifier == rhs.taskIdentifier
+    }
 
     public func cancel() {
         isCancelled = true
@@ -141,11 +153,15 @@ public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTa
         isCancelled = false
     }
 
-    public static func == (lhs: SessionTask, rhs: SessionTask) -> Bool {
-        lhs.taskIdentifier == rhs.taskIdentifier
-    }
-
     public func hash(into hasher: inout Hasher) {
         hasher.combine(taskIdentifier)
     }
+
+    // MARK: Internal
+
+    var resumeData: Data?
+
+    weak var session: NetworkSessionFake?
+
+    var isCancelled = false
 }

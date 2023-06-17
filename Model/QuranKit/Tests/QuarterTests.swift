@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranKit
 
 final class QuarterTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testQuarters() throws {
         let quarters = quran.quarters
@@ -64,4 +64,8 @@ final class QuarterTests: XCTestCase {
             _ = Dictionary(grouping: quarters, by: \.juz)
         }
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

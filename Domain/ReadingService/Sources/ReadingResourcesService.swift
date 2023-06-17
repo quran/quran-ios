@@ -12,28 +12,24 @@ import SystemDependencies
 import Utilities
 
 public actor ReadingResourcesService {
+    // MARK: Lifecycle
+
+    public init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
+        self.resourceRequestFactory = resourceRequestFactory
+    }
+
+    // MARK: Public
+
     public enum ResourceStatus: Equatable {
         case downloading(progress: Double)
         case ready
         case error(NSError)
     }
 
-    private let preferences = ReadingPreferences.shared
-
-    private var readingTask: CancellableTask?
-    private var resource: OnDemandResource?
-
-    private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
     public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
         subject
             .compactMap { $0 }
             .eraseToAnyPublisher()
-    }
-
-    private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
-
-    public init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
-        self.resourceRequestFactory = resourceRequestFactory
     }
 
     public func startLoadingResources() async {
@@ -49,6 +45,16 @@ public actor ReadingResourcesService {
     public func retry() async {
         await loadResource(of: preferences.reading)
     }
+
+    // MARK: Private
+
+    private let preferences = ReadingPreferences.shared
+
+    private var readingTask: CancellableTask?
+    private var resource: OnDemandResource?
+
+    private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
+    private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
     private func loadResource(of reading: Reading) async {
         let tag = reading.resourcesTag

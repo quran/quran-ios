@@ -8,11 +8,15 @@
 import QuranKit
 
 public struct AyahTiming {
-    public let ayah: AyahNumber
-    public let time: Timing
+    // MARK: Lifecycle
 
     public init(ayah: AyahNumber, time: Timing) {
         self.ayah = ayah
         self.time = time
     }
+
+    // MARK: Public
+
+    public let ayah: AyahNumber
+    public let time: Timing
 }

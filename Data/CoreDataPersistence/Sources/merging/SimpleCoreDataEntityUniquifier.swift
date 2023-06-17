@@ -11,8 +11,7 @@ import SystemDependencies
 import VLogging
 
 public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntityUniquifier {
-    private let sortDescriptors: [NSSortDescriptor]
-    private let predicate: (T) -> NSPredicate
+    // MARK: Lifecycle
 
     public init<Key: CoreDataKey>(sortBy: Key, ascending: Bool, key: Key) {
         sortDescriptors = [NSSortDescriptor(key: sortBy, ascending: ascending)]
@@ -23,6 +22,8 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
         self.sortDescriptors = sortDescriptors
         self.predicate = predicate
     }
+
+    // MARK: Public
 
     public func merge(
         transactions: [PersistentHistoryTransaction],
@@ -40,6 +41,11 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
         // Save the background context to trigger a notification and merge the result into the viewContext.
         try taskContext.save(with: "Deduplicating \(T.entity().name ?? "")")
     }
+
+    // MARK: Private
+
+    private let sortDescriptors: [NSSortDescriptor]
+    private let predicate: (T) -> NSPredicate
 
     private func findDuplicates(of objectID: NSManagedObjectID, using context: NSManagedObjectContext) throws -> [NSManagedObject]? {
         guard let managedObject = context.object(with: objectID) as? T else {

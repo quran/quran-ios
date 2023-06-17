@@ -22,8 +22,12 @@ import Foundation
 import QuranAudio
 
 public struct ReciterAudioDeleter: Sendable {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func deleteAudioFiles(for reciter: Reciter) async throws {
         try FileManager.default.removeItem(at: reciter.localFolder())

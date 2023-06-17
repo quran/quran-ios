@@ -9,12 +9,19 @@ import Foundation
 import Preferences
 
 public struct WordTextPreferences {
-    public static let shared = WordTextPreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let defaultWordTextType = WordTextType.translation
-    private static let wordTextType = PreferenceKey<Int>(key: "wordTranslationType", defaultValue: defaultWordTextType.rawValue)
+    // MARK: Public
+
+    public static let shared = WordTextPreferences()
 
     @TransformedPreference(wordTextType, transformer: .rawRepresentable(defaultValue: defaultWordTextType))
     public var wordTextType: WordTextType
+
+    // MARK: Private
+
+    private static let defaultWordTextType = WordTextType.translation
+    private static let wordTextType = PreferenceKey<Int>(key: "wordTranslationType", defaultValue: defaultWordTextType.rawValue)
 }

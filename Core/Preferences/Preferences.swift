@@ -8,10 +8,15 @@
 import Foundation
 
 public struct Preferences {
-    public let userDefaults: UserDefaults
+    // MARK: Lifecycle
+
     public init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
+
+    // MARK: Public
+
+    public let userDefaults: UserDefaults
 
     public func valueForKey<T>(_ key: PreferenceKey<T>) -> T {
         let value = userDefaults.object(forKey: key.key)

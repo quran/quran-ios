@@ -19,8 +19,12 @@
 //
 
 public struct PageBasedLastAyahFinder: LastAyahFinder {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
         startAyah.page.lastVerse

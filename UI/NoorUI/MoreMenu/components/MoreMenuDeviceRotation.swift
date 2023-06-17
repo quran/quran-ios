@@ -56,10 +56,13 @@ private struct DeviceRotation: View {
 struct MoreMenuDeviceRotation_Previews: PreviewProvider {
     struct Container: View {
         @State var orientation: UIInterfaceOrientation
+
         var body: some View {
             MoreMenuDeviceRotation()
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Previewing.screen {
@@ -74,14 +77,8 @@ struct MoreMenuDeviceRotation_Previews: PreviewProvider {
 }
 
 private struct DeviceOrientationResolver: UIViewControllerRepresentable {
-    let orientationChanged: (UIInterfaceOrientation) -> Void
-
     class DeviceOrientationResolverController: UIViewController {
-        var orientation: UIInterfaceOrientation {
-            view.window?.windowScene?.interfaceOrientation ?? .unknown
-        }
-
-        var orientationChanged: ((UIInterfaceOrientation) -> Void)?
+        // MARK: Public
 
         override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             super.viewWillTransition(to: size, with: coordinator)
@@ -89,7 +86,17 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
                 self.orientationChanged?(self.orientation)
             }
         }
+
+        // MARK: Internal
+
+        var orientationChanged: ((UIInterfaceOrientation) -> Void)?
+
+        var orientation: UIInterfaceOrientation {
+            view.window?.windowScene?.interfaceOrientation ?? .unknown
+        }
     }
+
+    let orientationChanged: (UIInterfaceOrientation) -> Void
 
     func makeUIViewController(context: Context) -> DeviceOrientationResolverController {
         let controller = DeviceOrientationResolverController()

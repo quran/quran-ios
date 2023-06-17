@@ -13,8 +13,7 @@ import VerseTextPersistence
 import VLogging
 
 public struct CompositeSearcher: Searcher {
-    private let simpleSearchers: [Searcher]
-    private let translationsSearcher: Searcher
+    // MARK: Lifecycle
 
     init(
         quranVerseTextPersistence: VerseTextPersistence,
@@ -46,6 +45,8 @@ public struct CompositeSearcher: Searcher {
         )
     }
 
+    // MARK: Public
+
     public func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
         logger.info("Autocompleting term: \(term)")
 
@@ -74,4 +75,9 @@ public struct CompositeSearcher: Searcher {
         }
         return results.filter { !$0.items.isEmpty } // Remove empty search results
     }
+
+    // MARK: Private
+
+    private let simpleSearchers: [Searcher]
+    private let translationsSearcher: Searcher
 }

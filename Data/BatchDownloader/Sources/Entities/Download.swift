@@ -19,6 +19,17 @@
 //
 
 public struct Download: Sendable {
+    // MARK: Lifecycle
+
+    public init(taskId: Int? = nil, request: DownloadRequest, status: Status = .downloading, batchId: Int64) {
+        self.taskId = taskId
+        self.request = request
+        self.status = status
+        self.batchId = batchId
+    }
+
+    // MARK: Public
+
     public enum Status: Int, Sendable {
         case downloading = 0
         case completed = 1
@@ -31,20 +42,18 @@ public struct Download: Sendable {
 
     public var status: Status
     public var taskId: Int?
-
-    public init(taskId: Int? = nil, request: DownloadRequest, status: Status = .downloading, batchId: Int64) {
-        self.taskId = taskId
-        self.request = request
-        self.status = status
-        self.batchId = batchId
-    }
 }
 
 public struct DownloadBatch: Sendable {
-    public let id: Int64
-    public let downloads: [Download]
+    // MARK: Lifecycle
+
     public init(id: Int64, downloads: [Download]) {
         self.id = id
         self.downloads = downloads
     }
+
+    // MARK: Public
+
+    public let id: Int64
+    public let downloads: [Download]
 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 public struct SingleChoiceRow: View {
-    let text: String
-    let selected: Bool
+    // MARK: Public
+
     public var body: some View {
         HStack {
             Text(text)
@@ -21,6 +21,11 @@ public struct SingleChoiceRow: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let text: String
+    let selected: Bool
 }
 
 struct SingleChoiceRow_Previews: PreviewProvider {

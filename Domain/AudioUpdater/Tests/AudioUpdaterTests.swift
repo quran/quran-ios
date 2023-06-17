@@ -16,22 +16,7 @@ import XCTest
 @testable import ReciterService
 
 class AudioUpdaterTests: XCTestCase {
-    private var updater: AudioUpdater!
-    private var session: NetworkSessionFake!
-    private var fileSystem: FileSystemFake!
-    private var time: SystemTimeFake!
-    private var bundle: SystemBundleFake!
-    private var preferences = AudioUpdatePreferences.shared
-
-    private let now = Date(timeIntervalSince1970: 0)
-
-    private let reciters: [Reciter] = [.gaplessReciter, .gappedReciter]
-    private let gappedReciter: Reciter = .gappedReciter
-    private let gaplessReciter: Reciter = .gaplessReciter
-
-    private let baseURL = URL(validURL: "http://example.com")
-    private let file1 = "1.mp3"
-    private let file2 = "2.mp3"
+    // MARK: Internal
 
     override func setUp() async throws {
         preferences.reset()
@@ -57,23 +42,6 @@ class AudioUpdaterTests: XCTestCase {
 
     override func tearDown() async throws {
         Reciter.cleanUpAudio()
-    }
-
-    private func setUpReciters() {
-        let recitersPlist = "reciters.plist"
-        bundle.arrays = [recitersPlist: reciters.map { $0.toPlistDictionary() } as NSArray]
-    }
-
-    private func setUpFileSystem() {
-        fileSystem.filesInDirectory[Reciter.audioFiles] = reciters.map { URL(fileURLWithPath: $0.directory) }
-        fileSystem.files = Set(reciters.flatMap { reciter in
-            [
-                reciter.localFolder(),
-                reciter.localFolder().appendingPathComponent(file1),
-                reciter.localFolder().appendingPathComponent(file1),
-                reciter.localFolder().appendingPathComponent(file2),
-            ]
-        })
     }
 
     func test_updateAudioIfNeeded_noDownloads() async {
@@ -194,6 +162,42 @@ class AudioUpdaterTests: XCTestCase {
         XCTAssertEqual(Set(fileSystem.removedItems), [])
         XCTAssertEqual(preferences.lastRevision, updates.currentRevision)
         XCTAssertEqual(preferences.lastChecked, time.now)
+    }
+
+    // MARK: Private
+
+    private var updater: AudioUpdater!
+    private var session: NetworkSessionFake!
+    private var fileSystem: FileSystemFake!
+    private var time: SystemTimeFake!
+    private var bundle: SystemBundleFake!
+    private var preferences = AudioUpdatePreferences.shared
+
+    private let now = Date(timeIntervalSince1970: 0)
+
+    private let reciters: [Reciter] = [.gaplessReciter, .gappedReciter]
+    private let gappedReciter: Reciter = .gappedReciter
+    private let gaplessReciter: Reciter = .gaplessReciter
+
+    private let baseURL = URL(validURL: "http://example.com")
+    private let file1 = "1.mp3"
+    private let file2 = "2.mp3"
+
+    private func setUpReciters() {
+        let recitersPlist = "reciters.plist"
+        bundle.arrays = [recitersPlist: reciters.map { $0.toPlistDictionary() } as NSArray]
+    }
+
+    private func setUpFileSystem() {
+        fileSystem.filesInDirectory[Reciter.audioFiles] = reciters.map { URL(fileURLWithPath: $0.directory) }
+        fileSystem.files = Set(reciters.flatMap { reciter in
+            [
+                reciter.localFolder(),
+                reciter.localFolder().appendingPathComponent(file1),
+                reciter.localFolder().appendingPathComponent(file1),
+                reciter.localFolder().appendingPathComponent(file2),
+            ]
+        })
     }
 
     private func makeUpdate(reciter: Reciter, databaseVersion: Int? = nil, files: [String]) -> AudioUpdates.Update {

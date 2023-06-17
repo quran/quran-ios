@@ -8,9 +8,7 @@
 import Foundation
 
 public struct WordFrameScale {
-    public let scale: CGFloat
-    public let xOffset: CGFloat
-    public let yOffset: CGFloat
+    // MARK: Lifecycle
 
     public init(scale: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
         self.scale = scale
@@ -18,5 +16,11 @@ public struct WordFrameScale {
         self.yOffset = yOffset
     }
 
+    // MARK: Public
+
     public static let zero = WordFrameScale(scale: 0, xOffset: 0, yOffset: 0)
+
+    public let scale: CGFloat
+    public let xOffset: CGFloat
+    public let yOffset: CGFloat
 }

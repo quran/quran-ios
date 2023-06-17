@@ -9,20 +9,26 @@ import Foundation
 import SystemDependencies
 
 public final class BundleResourceRequestFake: BundleResourceRequest {
-    public var progress = Progress()
-    public var loadingPriority: Double = 0
-    public let tags: Set<String>
+    // MARK: Lifecycle
+
     public init(tags: Set<String>) {
         self.tags = tags
         progress.totalUnitCount = 100
     }
 
+    // MARK: Public
+
     public static var resourceAvailable = true
+    public static var downloadResult: Result<Void, Error> = .success(())
+
+    public var progress = Progress()
+    public var loadingPriority: Double = 0
+    public let tags: Set<String>
+
     public func conditionallyBeginAccessingResources() async -> Bool {
         Self.resourceAvailable
     }
 
-    public static var downloadResult: Result<Void, Error> = .success(())
     public func beginAccessingResources() async throws {
         switch Self.downloadResult {
         case .success:

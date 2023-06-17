@@ -27,9 +27,13 @@ open class SearchBarWithNoCancelButton: UISearchBar {
 }
 
 open class SearchControllerWithNoCancelButton: UISearchController {
-    private lazy var _searchBar: SearchBarWithNoCancelButton = SearchBarWithNoCancelButton()
+    // MARK: Open
 
     override open var searchBar: UISearchBar {
         _searchBar
     }
+
+    // MARK: Private
+
+    private lazy var _searchBar: SearchBarWithNoCancelButton = SearchBarWithNoCancelButton()
 }

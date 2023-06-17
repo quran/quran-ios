@@ -11,10 +11,23 @@ import SwiftUI
 import UIx
 
 struct SuraTextView: View {
+    // MARK: Lifecycle
+
+    init(style: Style = .subheading, title: String, arabicSuraName: String, withSpacer: Bool = true) {
+        self.style = style
+        self.title = title
+        self.arabicSuraName = arabicSuraName
+        self.withSpacer = withSpacer
+    }
+
+    // MARK: Internal
+
     enum Style {
         case subheading
         case footnote
         case caption
+
+        // MARK: Internal
 
         var font: Font {
             switch self {
@@ -45,13 +58,6 @@ struct SuraTextView: View {
     let title: String
     let arabicSuraName: String
 
-    init(style: Style = .subheading, title: String, arabicSuraName: String, withSpacer: Bool = true) {
-        self.style = style
-        self.title = title
-        self.arabicSuraName = arabicSuraName
-        self.withSpacer = withSpacer
-    }
-
     var body: some View {
         HStack {
             Text(title)
@@ -71,7 +77,8 @@ struct SuraTextView: View {
 
 @available(iOS 13.0, *)
 struct SuraTextView_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             SuraTextView(title: "Sura 1", arabicSuraName: suraName)
@@ -92,4 +99,8 @@ struct SuraTextView_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }

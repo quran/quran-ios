@@ -9,11 +9,15 @@ import CoreGraphics
 import QuranKit
 
 public struct PageMarkers {
-    public let suraHeaders: [SuraHeaderLocation]
-    public let ayahNumbers: [AyahNumberLocation]
+    // MARK: Lifecycle
 
     public init(suraHeaders: [SuraHeaderLocation], ayahNumbers: [AyahNumberLocation]) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
     }
+
+    // MARK: Public
+
+    public let suraHeaders: [SuraHeaderLocation]
+    public let ayahNumbers: [AyahNumberLocation]
 }

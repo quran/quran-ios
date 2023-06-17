@@ -22,11 +22,7 @@ import Foundation
 import NetworkSupport
 
 public struct DownloadRequest: Hashable, Sendable {
-    public static let downloadResumeDataExtension = "resume"
-
-    public let url: URL
-    public let resumeURL: URL
-    public let destinationURL: URL
+    // MARK: Lifecycle
 
     public init(url: URL, destinationURL: URL) {
         self.url = url
@@ -34,16 +30,29 @@ public struct DownloadRequest: Hashable, Sendable {
         self.destinationURL = destinationURL
     }
 
+    // MARK: Public
+
+    public static let downloadResumeDataExtension = "resume"
+
+    public let url: URL
+    public let resumeURL: URL
+    public let destinationURL: URL
+
     public var request: URLRequest {
         URLRequest(url: url)
     }
 }
 
 public struct DownloadBatchRequest: Hashable, Sendable {
-    public let requests: [DownloadRequest]
+    // MARK: Lifecycle
+
     public init(requests: [DownloadRequest]) {
         self.requests = requests
     }
+
+    // MARK: Public
+
+    public let requests: [DownloadRequest]
 }
 
 extension NetworkSession {

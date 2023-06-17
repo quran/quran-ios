@@ -14,10 +14,6 @@ public struct ResourceValuesFake: ResourceValues, Sendable {
 }
 
 public final class FileSystemFake: FileSystem, Sendable {
-    enum FileSystemError: Error {
-        case noResourceValues
-    }
-
     private struct State: Sendable {
         var files: Set<URL> = []
         var checkedFiles: Set<URL> = []
@@ -26,9 +22,11 @@ public final class FileSystemFake: FileSystem, Sendable {
         var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
     }
 
-    private let state = ManagedCriticalState(State())
+    // MARK: Lifecycle
 
     public init() {}
+
+    // MARK: Public
 
     public var files: Set<URL> {
         get { state.withCriticalRegion { $0.files } }
@@ -40,19 +38,9 @@ public final class FileSystemFake: FileSystem, Sendable {
         set { state.withCriticalRegion { $0.checkedFiles = newValue } }
     }
 
-    public func fileExists(at url: URL) -> Bool {
-        checkedFiles.insert(url)
-        return files.contains(url)
-    }
-
     public var removedItems: [URL] {
         get { state.withCriticalRegion { $0.removedItems } }
         set { state.withCriticalRegion { $0.removedItems = newValue } }
-    }
-
-    public func removeItem(at url: URL) throws {
-        removedItems.append(url)
-        files.remove(url)
     }
 
     public var filesInDirectory: [URL: [URL]] {
@@ -60,13 +48,23 @@ public final class FileSystemFake: FileSystem, Sendable {
         set { state.withCriticalRegion { $0.filesInDirectory = newValue } }
     }
 
-    public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
-        filesInDirectory[url] ?? []
-    }
-
     public var resourceValuesByURL: [URL: ResourceValuesFake] {
         get { state.withCriticalRegion { $0.resourceValuesByURL } }
         set { state.withCriticalRegion { $0.resourceValuesByURL = newValue } }
+    }
+
+    public func fileExists(at url: URL) -> Bool {
+        checkedFiles.insert(url)
+        return files.contains(url)
+    }
+
+    public func removeItem(at url: URL) throws {
+        removedItems.append(url)
+        files.remove(url)
+    }
+
+    public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
+        filesInDirectory[url] ?? []
     }
 
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
@@ -79,4 +77,14 @@ public final class FileSystemFake: FileSystem, Sendable {
     public func setResourceValues(_ url: URL, fileSize: Int?) {
         resourceValuesByURL[url] = ResourceValuesFake(fileSize: fileSize)
     }
+
+    // MARK: Internal
+
+    enum FileSystemError: Error {
+        case noResourceValues
+    }
+
+    // MARK: Private
+
+    private let state = ManagedCriticalState(State())
 }

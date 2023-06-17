@@ -39,6 +39,12 @@ public enum ConfigState {
 }
 
 public struct MoreMenuControlsState {
+    // MARK: Lifecycle
+
+    public init() { }
+
+    // MARK: Public
+
     public var mode = ConfigState.custom
     public var translationsSelection = ConfigState.custom
     public var wordPointer = ConfigState.custom
@@ -47,32 +53,10 @@ public struct MoreMenuControlsState {
     public var twoPages = ConfigState.custom
     public var verticalScrolling = ConfigState.custom
     public var theme = ConfigState.custom
-    public init() { }
 }
 
 public class MoreMenuStore: ObservableObject {
-    @Published public var mode: MoreMenu.Mode {
-        didSet {
-            if mode == .translation {
-                wordPointerEnabled = false
-            }
-        }
-    }
-
-    public var selectTranslation: (() -> Void)?
-
-    @Published public var wordPointerEnabled: Bool
-    @Published public var wordPointerType: MoreMenu.TranslationPointerType
-
-    @Published public var translationFontSize: FontSize
-    @Published public var arabicFontSize: FontSize
-
-    @Published public var twoPagesEnabled: Bool
-    @Published public var verticalScrollingEnabled: Bool
-
-    @Published public var theme: MoreMenu.Theme
-
-    public var state = MoreMenuControlsState()
+    // MARK: Lifecycle
 
     public init(
         mode: MoreMenu.Mode,
@@ -92,5 +76,30 @@ public class MoreMenuStore: ObservableObject {
         self.twoPagesEnabled = twoPagesEnabled
         self.verticalScrollingEnabled = verticalScrollingEnabled
         self.theme = theme
+    }
+
+    // MARK: Public
+
+    public var selectTranslation: (() -> Void)?
+
+    @Published public var wordPointerEnabled: Bool
+    @Published public var wordPointerType: MoreMenu.TranslationPointerType
+
+    @Published public var translationFontSize: FontSize
+    @Published public var arabicFontSize: FontSize
+
+    @Published public var twoPagesEnabled: Bool
+    @Published public var verticalScrollingEnabled: Bool
+
+    @Published public var theme: MoreMenu.Theme
+
+    public var state = MoreMenuControlsState()
+
+    @Published public var mode: MoreMenu.Mode {
+        didSet {
+            if mode == .translation {
+                wordPointerEnabled = false
+            }
+        }
     }
 }

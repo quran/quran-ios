@@ -13,7 +13,11 @@ public protocol SystemBundle: Sendable {
 }
 
 public struct DefaultSystemBundle: SystemBundle {
+    // MARK: Lifecycle
+
     public init() { }
+
+    // MARK: Public
 
     public func readArray(resource: String, withExtension: String) -> NSArray {
         let url = Bundle.main.url(forResource: resource, withExtension: withExtension)!

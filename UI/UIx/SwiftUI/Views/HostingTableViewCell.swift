@@ -17,10 +17,7 @@ private class NoNavigationHostingController<C: View>: UIHostingController<C> {
 
 @available(iOS 13.0, *)
 private final class ViewHostingController<Content: View> {
-    private let hostingController = NoNavigationHostingController<Content?>(rootView: nil)
-
-    private weak var view: UIView?
-    private weak var contentView: UIView?
+    // MARK: Lifecycle
 
     init(view: UIView, contentView: UIView?) {
         self.view = view
@@ -32,6 +29,8 @@ private final class ViewHostingController<Content: View> {
         // remove parent
         hostingController.parent?.removeChild(hostingController)
     }
+
+    // MARK: Internal
 
     func set(rootView: Content, parentController: UIViewController) {
         guard let contentView else {
@@ -56,20 +55,37 @@ private final class ViewHostingController<Content: View> {
             hostingController.didMove(toParent: parentController)
         }
     }
+
+    // MARK: Private
+
+    private let hostingController = NoNavigationHostingController<Content?>(rootView: nil)
+
+    private weak var view: UIView?
+    private weak var contentView: UIView?
 }
 
 @available(iOS 13.0, *)
 public final class HostingTableViewCell<Content: View>: UITableViewCell {
-    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
+    // MARK: Public
+
     public func set(rootView: Content, parentController: UIViewController) {
         hostingController.set(rootView: rootView, parentController: parentController)
     }
+
+    // MARK: Private
+
+    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
 }
 
 @available(iOS 13.0, *)
 public final class HostingTableViewHeaderFooterView<Content: View>: UITableViewHeaderFooterView {
-    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
+    // MARK: Public
+
     public func set(rootView: Content, parentController: UIViewController) {
         hostingController.set(rootView: rootView, parentController: parentController)
     }
+
+    // MARK: Private
+
+    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
 }

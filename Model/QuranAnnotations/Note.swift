@@ -9,10 +9,8 @@ import Foundation
 import QuranKit
 
 public struct Note: Equatable {
-    public let verses: Set<AyahNumber>
-    public let modifiedDate: Date
-    public let color: Color
-    public let note: String?
+    // MARK: Lifecycle
+
     public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: Color) {
         self.verses = verses
         self.modifiedDate = modifiedDate
@@ -20,9 +18,7 @@ public struct Note: Equatable {
         self.note = note
     }
 
-    public var firstVerse: AyahNumber {
-        verses.sorted()[0]
-    }
+    // MARK: Public
 
     public enum Color: Int {
         case red
@@ -30,5 +26,14 @@ public struct Note: Equatable {
         case blue
         case yellow
         case purple
+    }
+
+    public let verses: Set<AyahNumber>
+    public let modifiedDate: Date
+    public let color: Color
+    public let note: String?
+
+    public var firstVerse: AyahNumber {
+        verses.sorted()[0]
     }
 }

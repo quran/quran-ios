@@ -10,10 +10,13 @@ import Foundation
 import QuranText
 
 public struct TranslationsDownloader {
-    let downloader: DownloadManager
+    // MARK: Lifecycle
+
     public init(downloader: DownloadManager) {
         self.downloader = downloader
     }
+
+    // MARK: Public
 
     public func download(_ translation: Translation) async throws -> DownloadBatchResponse {
         // download the translation
@@ -27,6 +30,10 @@ public struct TranslationsDownloader {
         let downloads = await allDownloads.asyncFilter { await $0.isTranslation }
         return downloads
     }
+
+    // MARK: Internal
+
+    let downloader: DownloadManager
 }
 
 extension Set<DownloadBatchResponse> {

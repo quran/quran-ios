@@ -8,8 +8,7 @@
 import UIKit
 
 public class ScrollViewController: UIViewController {
-    private let content: UIViewController
-    public private(set) lazy var scrollView: UIScrollView = UIScrollView()
+    // MARK: Lifecycle
 
     public init(content: UIViewController) {
         self.content = content
@@ -20,6 +19,10 @@ public class ScrollViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Public
+
+    public private(set) lazy var scrollView: UIScrollView = UIScrollView()
 
     override public func loadView() {
         scrollView.backgroundColor = .clear
@@ -39,4 +42,8 @@ public class ScrollViewController: UIViewController {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         preferredContentSize = container.preferredContentSize
     }
+
+    // MARK: Private
+
+    private let content: UIViewController
 }

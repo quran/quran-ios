@@ -12,8 +12,7 @@ import TranslationPersistence
 import VerseTextPersistence
 
 public struct LocalTranslationsRetriever {
-    let persistence: ActiveTranslationsPersistence
-    let versionUpdater: TranslationsVersionUpdater
+    // MARK: Lifecycle
 
     public init(databasesURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
         let versionPersistenceFactory = { (translation: Translation) in
@@ -41,6 +40,8 @@ public struct LocalTranslationsRetriever {
         )
     }
 
+    // MARK: Public
+
     public func getLocalTranslations() async throws -> [Translation] {
         let translations = try await persistence.retrieveAll()
 
@@ -54,6 +55,13 @@ public struct LocalTranslationsRetriever {
             return result.sortedAs(translations.map(\.id), by: \.id)
         }
     }
+
+    // MARK: Internal
+
+    let persistence: ActiveTranslationsPersistence
+    let versionUpdater: TranslationsVersionUpdater
+
+    // MARK: Private
 
     private func updateInstalledVersion(of translation: Translation) async throws -> Translation {
         try await versionUpdater.updateInstalledVersion(for: translation)

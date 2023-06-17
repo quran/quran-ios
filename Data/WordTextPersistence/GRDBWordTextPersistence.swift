@@ -11,7 +11,7 @@ import QuranKit
 import SQLitePersistence
 
 public struct GRDBWordTextPersistence: WordTextPersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -21,6 +21,8 @@ public struct GRDBWordTextPersistence: WordTextPersistence {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
+    // MARK: Public
+
     public func translationForWord(_ word: Word) async throws -> String? {
         try await wordText(at: word)?.translation
     }
@@ -28,6 +30,12 @@ public struct GRDBWordTextPersistence: WordTextPersistence {
     public func transliterationForWord(_ word: Word) async throws -> String? {
         try await wordText(at: word)?.transliteration
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
+
+    // MARK: Private
 
     private func wordText(at word: Word) async throws -> GRDBWord? {
         try await db.read { db in
@@ -47,12 +55,6 @@ public struct GRDBWordTextPersistence: WordTextPersistence {
 }
 
 private struct GRDBWord: Decodable, FetchableRecord, TableRecord {
-    var word: Int
-    var translation: String?
-    var transliteration: String?
-    var sura: Int
-    var ayah: Int
-
     enum CodingKeys: String, CodingKey {
         case word = "word_position"
         case translation
@@ -70,4 +72,10 @@ private struct GRDBWord: Decodable, FetchableRecord, TableRecord {
     }
 
     static let databaseTableName: String = "words"
+
+    var word: Int
+    var translation: String?
+    var transliteration: String?
+    var sura: Int
+    var ayah: Int
 }

@@ -12,6 +12,7 @@ struct NoteCircle: View {
 
     var color: Color
     var selected: Bool
+
     var body: some View {
         ColoredCircle(color: color, selected: selected, minLength: minLength)
     }

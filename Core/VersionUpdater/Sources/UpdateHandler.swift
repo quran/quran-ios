@@ -35,8 +35,7 @@ public enum UpgradeStatus: Equatable {
 }
 
 public final class UpdateHandler {
-    private var updaters: [(AppVersion, VersionUpdater)] = []
-    private let updater: AppVersionUpdater
+    // MARK: Lifecycle
 
     public convenience init() {
         self.init(bundle: DefaultSystemBundle())
@@ -46,11 +45,13 @@ public final class UpdateHandler {
         updater = AppVersionUpdater(bundle: bundle)
     }
 
+    // MARK: Public
+
+    public var launchVersion: LaunchVersionUpdate { updater.launchVersion() }
+
     public func register(updater: VersionUpdater, for version: AppVersion) {
         updaters.append((version, updater))
     }
-
-    public var launchVersion: LaunchVersionUpdate { updater.launchVersion() }
 
     public func shouldUpgrade() -> UpgradeStatus {
         let updaters = versionUpdaters()
@@ -76,6 +77,11 @@ public final class UpdateHandler {
             }
         }
     }
+
+    // MARK: Private
+
+    private var updaters: [(AppVersion, VersionUpdater)] = []
+    private let updater: AppVersionUpdater
 
     private func versionUpdaters() -> [VersionUpdater] {
         switch launchVersion {

@@ -11,8 +11,9 @@ import XCTest
 @testable import BatchDownloader
 
 public enum BatchDownloaderFake {
+    // MARK: Public
+
     public static let maxSimultaneousDownloads = 3
-    private static let downloads = "downloads"
     public static let downloadsURL = FileManager.documentsURL.appendingPathComponent(downloads)
 
     public static func makeDownloader(downloads: [SessionTask] = []) async -> (DownloadManager, NetworkSessionFake) {
@@ -51,4 +52,8 @@ public enum BatchDownloaderFake {
         try data.write(to: url)
         return url
     }
+
+    // MARK: Private
+
+    private static let downloads = "downloads"
 }

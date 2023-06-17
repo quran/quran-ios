@@ -44,6 +44,8 @@ private struct GaplessAudioFileListRetriever: AudioFileListRetriever {
 }
 
 private struct GappedAudioFileListRetriever: AudioFileListRetriever {
+    // MARK: Internal
+
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")
@@ -59,6 +61,8 @@ private struct GappedAudioFileListRetriever: AudioFileListRetriever {
         }
         return Array(files)
     }
+
+    // MARK: Private
 
     private func createRequestInfo(reciter: Reciter, ayah: AyahNumber) -> ReciterAudioFile {
         let remoteURL = reciter.remoteURL(ayah: ayah)

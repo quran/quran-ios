@@ -14,15 +14,17 @@ import XCTest
 @testable import BatchDownloader
 
 final class DownloadManagerTests: XCTestCase {
-    private let fileManager = FileManager.default
-    private var downloader: DownloadManager!
-    private var session: NetworkSessionFake?
+    private struct CompletedTask {
+        let task: SessionTask
+        let text: String
+        let source: URL
+        let destination: URL
+        let progressLoops: Int
+        let listener: HistoryProgressListener
+        let response: DownloadResponse
+    }
 
-    private let request1 = BatchDownloaderFake.makeDownloadRequest("1")
-    private let request2 = BatchDownloaderFake.makeDownloadRequest("2")
-    private let request3 = BatchDownloaderFake.makeDownloadRequest("3")
-    private let request4 = BatchDownloaderFake.makeDownloadRequest("4")
-    private let request5 = BatchDownloaderFake.makeDownloadRequest("5")
+    // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -257,6 +259,18 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
+    // MARK: Private
+
+    private let fileManager = FileManager.default
+    private var downloader: DownloadManager!
+    private var session: NetworkSessionFake?
+
+    private let request1 = BatchDownloaderFake.makeDownloadRequest("1")
+    private let request2 = BatchDownloaderFake.makeDownloadRequest("2")
+    private let request3 = BatchDownloaderFake.makeDownloadRequest("3")
+    private let request4 = BatchDownloaderFake.makeDownloadRequest("4")
+    private let request5 = BatchDownloaderFake.makeDownloadRequest("5")
+
     private func completeTask(
         _ batch: DownloadBatchResponse,
         i: Int,
@@ -315,15 +329,5 @@ final class DownloadManagerTests: XCTestCase {
 
     private func destinationURL(response: DownloadResponse) async -> URL {
         await response.download.request.destinationURL
-    }
-
-    private struct CompletedTask {
-        let task: SessionTask
-        let text: String
-        let source: URL
-        let destination: URL
-        let progressLoops: Int
-        let listener: HistoryProgressListener
-        let response: DownloadResponse
     }
 }

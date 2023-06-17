@@ -8,10 +8,7 @@
 import Foundation
 
 public final class Quran: Hashable, @unchecked Sendable {
-    private let id = UUID()
-    let raw: QuranReadingInfoRawData
-    public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())
-    public static let hafsMadani1440 = Quran(raw: Madani1440QuranReadingInfoRawData())
+    // MARK: Lifecycle
 
     init(raw: QuranReadingInfoRawData) {
         self.raw = raw
@@ -23,47 +20,60 @@ public final class Quran: Hashable, @unchecked Sendable {
         lazyVerses = { self.suras.flatMap(\.verses) }
     }
 
+    // MARK: Public
+
+    public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())
+    public static let hafsMadani1440 = Quran(raw: Madani1440QuranReadingInfoRawData())
+
     public var arabicBesmAllah: String {
         raw.arabicBesmAllah
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+    public var suras: [Sura] {
+        lazySuras()
+    }
+
+    public var pages: [Page] {
+        lazyPages()
+    }
+
+    public var juzs: [Juz] {
+        lazyJuzs()
+    }
+
+    public var quarters: [Quarter] {
+        lazyQuarters()
+    }
+
+    public var hizbs: [Hizb] {
+        lazyHizbs()
+    }
+
+    public var verses: [AyahNumber] {
+        lazyVerses()
     }
 
     public static func == (lhs: Quran, rhs: Quran) -> Bool {
         lhs.id == rhs.id
     }
 
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    // MARK: Internal
+
+    let raw: QuranReadingInfoRawData
+
+    // MARK: Private
+
+    private let id = UUID()
     @LazyAtomic private var lazySuras: () -> [Sura]
-    public var suras: [Sura] {
-        lazySuras()
-    }
-
     @LazyAtomic private var lazyPages: () -> [Page]
-    public var pages: [Page] {
-        lazyPages()
-    }
-
     @LazyAtomic private var lazyJuzs: () -> [Juz]
-    public var juzs: [Juz] {
-        lazyJuzs()
-    }
-
     @LazyAtomic private var lazyQuarters: () -> [Quarter]
-    public var quarters: [Quarter] {
-        lazyQuarters()
-    }
-
     @LazyAtomic private var lazyHizbs: () -> [Hizb]
-    public var hizbs: [Hizb] {
-        lazyHizbs()
-    }
-
     @LazyAtomic private var lazyVerses: () -> [AyahNumber]
-    public var verses: [AyahNumber] {
-        lazyVerses()
-    }
 }
 
 extension Quran {

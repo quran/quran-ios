@@ -22,18 +22,27 @@ import Foundation
 import UIKit
 
 private class ObjectWrapper {
-    let value: Any
+    // MARK: Lifecycle
 
     init(_ value: Any) {
         self.value = value
     }
+
+    // MARK: Internal
+
+    let value: Any
 }
 
 private class KeyWrapper<KeyType: Hashable>: NSObject {
-    let key: KeyType
+    // MARK: Lifecycle
+
     init(_ key: KeyType) {
         self.key = key
     }
+
+    // MARK: Internal
+
+    let key: KeyType
 
     override var hash: Int {
         key.hashValue
@@ -48,7 +57,7 @@ private class KeyWrapper<KeyType: Hashable>: NSObject {
 }
 
 public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
-    private let cache: NSCache<KeyWrapper<KeyType>, ObjectWrapper> = NSCache()
+    // MARK: Lifecycle
 
     public init(lowMemoryAware: Bool = true) {
         guard lowMemoryAware else { return }
@@ -64,10 +73,7 @@ public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc
-    private func onLowMemory() {
-        removeAllObjects()
-    }
+    // MARK: Public
 
     public var name: String {
         get { cache.name }
@@ -77,6 +83,11 @@ public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
     public weak var delegate: NSCacheDelegate? {
         get { cache.delegate }
         set { cache.delegate = newValue }
+    }
+
+    public var countLimit: Int {
+        get { cache.countLimit }
+        set { cache.countLimit = newValue }
     }
 
     public func object(forKey key: KeyType) -> ObjectType? {
@@ -95,9 +106,13 @@ public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
         cache.removeAllObjects()
     }
 
-    public var countLimit: Int {
-        get { cache.countLimit }
-        set { cache.countLimit = newValue }
+    // MARK: Private
+
+    private let cache: NSCache<KeyWrapper<KeyType>, ObjectWrapper> = NSCache()
+
+    @objc
+    private func onLowMemory() {
+        removeAllObjects()
     }
 }
 

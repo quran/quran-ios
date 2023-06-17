@@ -24,6 +24,22 @@ import UIKit
 import UIx
 
 public final class DownloadButton: UIView {
+    // MARK: Lifecycle
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setUp()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUp()
+    }
+
+    // MARK: Public
+
+    public var onButtonTapped: ((DownloadButton) -> Void)?
+
     public var state: DownloadState = .notDownloaded {
         didSet {
             stateViews.forEach { $0.isHidden = true }
@@ -51,7 +67,15 @@ public final class DownloadButton: UIView {
         }
     }
 
-    public var onButtonTapped: ((DownloadButton) -> Void)?
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let result = super.hitTest(point, with: event)
+        if result == self {
+            return super.hitTest(CGPoint(x: bounds.maxX - 10, y: bounds.midY), with: event)
+        }
+        return result
+    }
+
+    // MARK: Internal
 
     var downloadConstraints: [NSLayoutConstraint] = []
     var pendingConstraints: [NSLayoutConstraint] = []
@@ -105,22 +129,14 @@ public final class DownloadButton: UIView {
         return button
     }()
 
+    // MARK: Private
+
     private var stateViews: [UIView] {
         [download, pending, downloading, upgrade]
     }
 
     private var stateConstraints: [NSLayoutConstraint] {
         [downloadConstraints, pendingConstraints, downloadingConstraints, downloadedConstraints, upgradeConstraints].flatMap { $0 }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setUp()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUp()
     }
 
     private func setUp() {
@@ -159,13 +175,5 @@ public final class DownloadButton: UIView {
     @objc
     private func onAnyButtonTapped() {
         onButtonTapped?(self)
-    }
-
-    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let result = super.hitTest(point, with: event)
-        if result == self {
-            return super.hitTest(CGPoint(x: bounds.maxX - 10, y: bounds.midY), with: event)
-        }
-        return result
     }
 }

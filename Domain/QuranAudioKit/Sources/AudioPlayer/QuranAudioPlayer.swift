@@ -16,10 +16,7 @@ import Utilities
 import VLogging
 
 public struct QuranAudioPlayerActions: Sendable {
-    let playbackEnded: @Sendable @MainActor () -> Void
-    let playbackPaused: @Sendable @MainActor () -> Void
-    let playbackResumed: @Sendable @MainActor () -> Void
-    let playing: @Sendable @MainActor (AyahNumber) -> Void
+    // MARK: Lifecycle
 
     public init(
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
@@ -32,22 +29,18 @@ public struct QuranAudioPlayerActions: Sendable {
         self.playbackResumed = playbackResumed
         self.playing = playing
     }
+
+    // MARK: Internal
+
+    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackPaused: @Sendable @MainActor () -> Void
+    let playbackResumed: @Sendable @MainActor () -> Void
+    let playing: @Sendable @MainActor (AyahNumber) -> Void
 }
 
 @MainActor
 public class QuranAudioPlayer {
-    public var actions: QuranAudioPlayerActions?
-    public func setActions(_ actions: QuranAudioPlayerActions) {
-        self.actions = actions
-    }
-
-    private let player: QueuingPlayer
-    private let unzipper: AudioUnzipper
-    private let nowPlaying = NowPlayingUpdater(center: .default())
-
-    private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
-    private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
-    private var audioRequest: QuranAudioRequest?
+    // MARK: Lifecycle
 
     init(player: QueuingPlayer) {
         self.player = player
@@ -56,6 +49,14 @@ public class QuranAudioPlayer {
 
     public convenience init() {
         self.init(player: QueuePlayer())
+    }
+
+    // MARK: Public
+
+    public var actions: QuranAudioPlayerActions?
+
+    public func setActions(_ actions: QuranAudioPlayerActions) {
+        self.actions = actions
     }
 
     // MARK: - Playback Controls
@@ -79,6 +80,44 @@ public class QuranAudioPlayer {
     public func stepBackward() {
         player.stepBackward()
     }
+
+    // MARK: - Play
+
+    public func play(
+        reciter: Reciter,
+        from start: AyahNumber,
+        to end: AyahNumber,
+        verseRuns: Runs,
+        listRuns: Runs
+    ) async throws {
+        let details: [String: Any] = [
+            "startAyah": start,
+            "to": end,
+            "reciter": reciter,
+            "verseRuns": verseRuns,
+            "listRuns": listRuns,
+        ]
+        logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
+        try await unzipper.unzip(reciter: reciter)
+
+        let builder = getAudioRequestBuilder(for: reciter)
+        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
+        let request = audioRequest.getRequest()
+        willPlay(request)
+        self.audioRequest = audioRequest
+        player.actions = newPlayerActions()
+        player.play(request: request)
+    }
+
+    // MARK: Private
+
+    private let player: QueuingPlayer
+    private let unzipper: AudioUnzipper
+    private let nowPlaying = NowPlayingUpdater(center: .default())
+
+    private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
+    private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
+    private var audioRequest: QuranAudioRequest?
 
     // MARK: - AudioPlayerActions
 
@@ -112,34 +151,6 @@ public class QuranAudioPlayer {
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
         actions?.playing(ayah)
-    }
-
-    // MARK: - Play
-
-    public func play(
-        reciter: Reciter,
-        from start: AyahNumber,
-        to end: AyahNumber,
-        verseRuns: Runs,
-        listRuns: Runs
-    ) async throws {
-        let details: [String: Any] = [
-            "startAyah": start,
-            "to": end,
-            "reciter": reciter,
-            "verseRuns": verseRuns,
-            "listRuns": listRuns,
-        ]
-        logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
-        try await unzipper.unzip(reciter: reciter)
-
-        let builder = getAudioRequestBuilder(for: reciter)
-        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
-        let request = audioRequest.getRequest()
-        willPlay(request)
-        self.audioRequest = audioRequest
-        player.actions = newPlayerActions()
-        player.play(request: request)
     }
 
     private func willPlay(_ request: AudioRequest) {

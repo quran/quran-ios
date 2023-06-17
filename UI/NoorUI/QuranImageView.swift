@@ -8,14 +8,7 @@
 import UIKit
 
 public class QuranImageView: UIView {
-    private let content = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 0)))
-    private let topView: UIView
-    private let bottomView: UIView
-
-    public let mainImageView = UIImageView()
-    public let scrollView = UIScrollView()
-
-    private let fullWindowView: Bool
+    // MARK: Lifecycle
 
     public init(topView: UIView, bottomView: UIView, fullWindowView: Bool) {
         self.topView = topView
@@ -45,12 +38,25 @@ public class QuranImageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Public
+
+    public let mainImageView = UIImageView()
+    public let scrollView = UIScrollView()
+
     override public func layoutSubviews() {
         super.layoutSubviews()
         topView.layoutIfNeeded()
         bottomView.layoutIfNeeded()
         updateViewsLayout()
     }
+
+    // MARK: Private
+
+    private let content = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 0)))
+    private let topView: UIView
+    private let bottomView: UIView
+
+    private let fullWindowView: Bool
 
     private func updateViewsLayout() {
         let margin = fullWindowView ? ContentDimension.insets(of: self) : .zero

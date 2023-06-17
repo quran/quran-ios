@@ -6,7 +6,7 @@
 //
 
 struct Madani1440QuranReadingInfoRawData: QuranReadingInfoRawData {
-    private let classic = Madani1405QuranReadingInfoRawData()
+    // MARK: Internal
 
     var arabicBesmAllah: String { classic.arabicBesmAllah }
 
@@ -98,4 +98,8 @@ struct Madani1440QuranReadingInfoRawData: QuranReadingInfoRawData {
     var quarters: [(sura: Int, ayah: Int)] {
         classic.quarters
     }
+
+    // MARK: Private
+
+    private let classic = Madani1405QuranReadingInfoRawData()
 }

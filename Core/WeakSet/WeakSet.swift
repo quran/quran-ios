@@ -27,11 +27,13 @@ import Locking
 open class WeakSet<Element>: Sequence {
     public typealias Iterator = AnyIterator<Element>
 
-    open var count: Int { storage.value.count }
-
-    private var storage = Protected<NSHashTable<AnyObject>>(.weakObjects())
+    // MARK: Lifecycle
 
     public init() {}
+
+    // MARK: Open
+
+    open var count: Int { storage.value.count }
 
     open func insert(_ object: Element) {
         storage.sync { (s: inout NSHashTable<AnyObject>) in
@@ -65,4 +67,8 @@ open class WeakSet<Element>: Sequence {
             }
         }
     }
+
+    // MARK: Private
+
+    private var storage = Protected<NSHashTable<AnyObject>>(.weakObjects())
 }

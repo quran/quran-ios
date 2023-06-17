@@ -30,22 +30,9 @@ extension UITableViewCell: ReusableCell {
 
 @available(iOS 13.0, *)
 public class CompositeDiffableDataSource<Section: Hashable, Item: Hashable & Identifiable> {
-    private var ds: UITableViewDiffableDataSource<Section, Item>! // swiftlint:disable:this implicitly_unwrapped_optional
-
-    public var dataSource: UITableViewDiffableDataSource<Section, Item> {
-        ds
-    }
-
-    public var delegate: UITableViewDelegate {
-        _delegate
-    }
-
-    public var deselectAutomatically = false
-
-    private let _delegate = TableViewDelegate()
+    public typealias CellSelectionHandler = (IndexPath, Item) -> Void
 
     typealias CellConfigurator = (UITableViewCell, Item) -> Void
-    public typealias CellSelectionHandler = (IndexPath, Item) -> Void
 
     private struct RegistryItem {
         let cell: UITableViewCell.Type
@@ -53,10 +40,7 @@ public class CompositeDiffableDataSource<Section: Hashable, Item: Hashable & Ide
         let onSelected: CellSelectionHandler?
     }
 
-    private var registry: [Item.ID: RegistryItem] = [:]
-
-    private weak var tableView: UITableView?
-    private weak var viewController: UIViewController?
+    // MARK: Lifecycle
 
     public init(tableView: UITableView, viewController: UIViewController) {
         self.tableView = tableView
@@ -73,16 +57,16 @@ public class CompositeDiffableDataSource<Section: Hashable, Item: Hashable & Ide
         }
     }
 
-    // MARK: - Configuration
+    // MARK: Public
 
-    private func provideCell(tableView: UITableView, indexPath: IndexPath, item: Item) -> UITableViewCell {
-        guard let registryItem = registry[item.id] else {
-            fatalError("Unregistered item '\(item)'")
-        }
+    public var deselectAutomatically = false
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: registryItem.cell.reuseId, for: indexPath)
-        registryItem.configure(cell, item)
-        return cell
+    public var dataSource: UITableViewDiffableDataSource<Section, Item> {
+        ds
+    }
+
+    public var delegate: UITableViewDelegate {
+        _delegate
     }
 
     // MARK: - Registration
@@ -122,6 +106,29 @@ public class CompositeDiffableDataSource<Section: Hashable, Item: Hashable & Ide
             },
             onSelected: onSelected
         )
+    }
+
+    // MARK: Private
+
+    private var ds: UITableViewDiffableDataSource<Section, Item>! // swiftlint:disable:this implicitly_unwrapped_optional
+
+    private let _delegate = TableViewDelegate()
+
+    private var registry: [Item.ID: RegistryItem] = [:]
+
+    private weak var tableView: UITableView?
+    private weak var viewController: UIViewController?
+
+    // MARK: - Configuration
+
+    private func provideCell(tableView: UITableView, indexPath: IndexPath, item: Item) -> UITableViewCell {
+        guard let registryItem = registry[item.id] else {
+            fatalError("Unregistered item '\(item)'")
+        }
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: registryItem.cell.reuseId, for: indexPath)
+        registryItem.configure(cell, item)
+        return cell
     }
 
     // MARK: - Selection

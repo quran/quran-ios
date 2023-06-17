@@ -10,6 +10,8 @@ import SwiftUI
 import UIx
 
 public struct LastPageCell: View {
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         localizedSura: String,
@@ -22,10 +24,7 @@ public struct LastPageCell: View {
         self.createdSince = createdSince
     }
 
-    let page: Int
-    let localizedSura: String
-    let arabicSuraName: String
-    let createdSince: String
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -38,10 +37,18 @@ public struct LastPageCell: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let page: Int
+    let localizedSura: String
+    let arabicSuraName: String
+    let createdSince: String
 }
 
 struct LastPageCell_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             LastPageCell(
@@ -61,4 +68,8 @@ struct LastPageCell_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }

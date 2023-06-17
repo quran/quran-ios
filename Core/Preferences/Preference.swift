@@ -11,6 +11,16 @@ import Foundation
 @available(iOS 13.0, *)
 @propertyWrapper
 public final class Preference<T> {
+    // MARK: Lifecycle
+
+    public init(_ key: PreferenceKey<T>, preferences: Preferences = Preferences(userDefaults: .standard)) {
+        self.key = key
+        self.preferences = preferences
+        observer = PreferenceObserver(self)
+    }
+
+    // MARK: Public
+
     public var wrappedValue: T {
         get { preferences.valueForKey(key) }
         set { preferences.setValue(newValue, forKey: key) }
@@ -20,23 +30,10 @@ public final class Preference<T> {
         subject.eraseToAnyPublisher()
     }
 
-    private let key: PreferenceKey<T>
-    private let preferences: Preferences
-    private var observer: PreferenceObserver<T>?
-    private let subject = PassthroughSubject<T, Never>()
-
-    public init(_ key: PreferenceKey<T>, preferences: Preferences = Preferences(userDefaults: .standard)) {
-        self.key = key
-        self.preferences = preferences
-        observer = PreferenceObserver(self)
-    }
+    // MARK: Private
 
     private final class PreferenceObserver<T>: NSObject {
-        private var observerContext = 0
-
-        weak var preference: Preference<T>?
-        private let key: PreferenceKey<T>
-        private let userDefaults: UserDefaults
+        // MARK: Lifecycle
 
         init(_ preference: Preference<T>) {
             key = preference.key
@@ -50,6 +47,16 @@ public final class Preference<T> {
                 context: &observerContext
             )
         }
+
+        deinit {
+            userDefaults.removeObserver(
+                self,
+                forKeyPath: key.key,
+                context: &observerContext
+            )
+        }
+
+        // MARK: Public
 
         override public func observeValue(
             forKeyPath keyPath: String?,
@@ -67,19 +74,40 @@ public final class Preference<T> {
             }
         }
 
-        deinit {
-            userDefaults.removeObserver(
-                self,
-                forKeyPath: key.key,
-                context: &observerContext
-            )
-        }
+        // MARK: Internal
+
+        weak var preference: Preference<T>?
+
+        // MARK: Private
+
+        private var observerContext = 0
+
+        private let key: PreferenceKey<T>
+        private let userDefaults: UserDefaults
     }
+
+    private let key: PreferenceKey<T>
+    private let preferences: Preferences
+    private var observer: PreferenceObserver<T>?
+    private let subject = PassthroughSubject<T, Never>()
 }
 
 @available(iOS 13.0, *)
 @propertyWrapper
 public final class TransformedPreference<Raw, T> {
+    // MARK: Lifecycle
+
+    public init(
+        _ key: PreferenceKey<Raw>,
+        preferences: Preferences = Preferences(userDefaults: .standard),
+        transformer: PreferenceTransformer<Raw, T>
+    ) {
+        preference = Preference(key, preferences: preferences)
+        self.transformer = transformer
+    }
+
+    // MARK: Public
+
     public var wrappedValue: T {
         get { transformer.rawToValue(preference.wrappedValue) }
         set { preference.wrappedValue = transformer.valueToRaw(newValue) }
@@ -91,15 +119,8 @@ public final class TransformedPreference<Raw, T> {
             .eraseToAnyPublisher()
     }
 
+    // MARK: Private
+
     private let preference: Preference<Raw>
     private let transformer: PreferenceTransformer<Raw, T>
-
-    public init(
-        _ key: PreferenceKey<Raw>,
-        preferences: Preferences = Preferences(userDefaults: .standard),
-        transformer: PreferenceTransformer<Raw, T>
-    ) {
-        preference = Preference(key, preferences: preferences)
-        self.transformer = transformer
-    }
 }

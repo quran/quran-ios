@@ -9,6 +9,24 @@
 import UIKit
 
 public class GradientView: UIView {
+    // MARK: Lifecycle
+
+    public init(type: CAGradientLayerType) {
+        super.init(frame: .zero)
+        setUp(type: type)
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Public
+
+    override public class var layerClass: AnyClass {
+        CAGradientLayer.self
+    }
+
     public var colors: [UIColor] = [] {
         didSet {
             updateColors()
@@ -35,22 +53,22 @@ public class GradientView: UIView {
         set { gradientLayer.endPoint = newValue }
     }
 
-    override public class var layerClass: AnyClass {
-        CAGradientLayer.self
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        if type == .radial {
+            layer.cornerRadius = min(bounds.width, bounds.height) / 2
+        }
     }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateColors()
+    }
+
+    // MARK: Private
 
     private var gradientLayer: CAGradientLayer {
         layer as! CAGradientLayer // swiftlint:disable:this force_cast
-    }
-
-    public init(type: CAGradientLayerType) {
-        super.init(frame: .zero)
-        setUp(type: type)
-    }
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("init(coder:) has not been implemented")
     }
 
     private func setUp(type: CAGradientLayerType) {
@@ -64,18 +82,6 @@ public class GradientView: UIView {
         gradientLayer.type = type
         layer.masksToBounds = true
         colors = [.green, .purple]
-    }
-
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        if type == .radial {
-            layer.cornerRadius = min(bounds.width, bounds.height) / 2
-        }
-    }
-
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        updateColors()
     }
 
     private func updateColors() {

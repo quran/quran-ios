@@ -8,13 +8,19 @@
 import Foundation
 
 public struct Timing {
-    let time: Int
+    // MARK: Lifecycle
 
     public init(time: Int) {
         self.time = time
     }
 
+    // MARK: Public
+
     public var seconds: Double {
         Double(time) / 1000
     }
+
+    // MARK: Internal
+
+    let time: Int
 }

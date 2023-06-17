@@ -13,6 +13,13 @@ import Utilities
 
 @MainActor
 class QuranAudioPlayerDelegateClosures {
+    // MARK: Lifecycle
+
+    nonisolated init() {
+    }
+
+    // MARK: Internal
+
     enum Event: Equatable {
         case onPlaybackPaused
         case onPlaybackResumed
@@ -20,7 +27,18 @@ class QuranAudioPlayerDelegateClosures {
         case onPlaybackEnded
     }
 
-    nonisolated init() {
+    var onPlaybackPausedBlock: (() -> Void)?
+    var onPlaybackResumedBlock: (() -> Void)?
+    var onPlayingBlock: (() -> Void)?
+    var onPlaybackEndedBlock: (() -> Void)?
+
+    var eventsDiffSinceLastCalled: [Event] {
+        events.sync { value in
+            let lastValue = value
+            // clear the value
+            value = []
+            return lastValue
+        }
     }
 
     func makeActions() -> QuranAudioPlayerActions {
@@ -32,38 +50,27 @@ class QuranAudioPlayerDelegateClosures {
         )
     }
 
-    private var events: Protected<[Event]> = Protected([])
-
-    var eventsDiffSinceLastCalled: [Event] {
-        events.sync { value in
-            let lastValue = value
-            // clear the value
-            value = []
-            return lastValue
-        }
-    }
-
-    var onPlaybackPausedBlock: (() -> Void)?
     func onPlaybackPaused() {
         events.sync { $0.append(.onPlaybackPaused) }
         onPlaybackPausedBlock?()
     }
 
-    var onPlaybackResumedBlock: (() -> Void)?
     func onPlaybackResumed() {
         events.sync { $0.append(.onPlaybackResumed) }
         onPlaybackResumedBlock?()
     }
 
-    var onPlayingBlock: (() -> Void)?
     func onPlaying(ayah: AyahNumber) {
         events.sync { $0.append(.onPlaying(ayah)) }
         onPlayingBlock?()
     }
 
-    var onPlaybackEndedBlock: (() -> Void)?
     func onPlaybackEnded() {
         events.sync { $0.append(.onPlaybackEnded) }
         onPlaybackEndedBlock?()
     }
+
+    // MARK: Private
+
+    private var events: Protected<[Event]> = Protected([])
 }

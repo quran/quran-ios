@@ -13,15 +13,17 @@ public struct MulticastContinuation<T, E: Error>: Sendable {
         var result: Result<T, E>?
     }
 
-    private let state = ManagedCriticalState(State())
+    // MARK: Lifecycle
+
+    public init() { }
+
+    // MARK: Public
 
     public var isPending: Bool {
         state.withCriticalRegion { state in
             state.result == nil
         }
     }
-
-    public init() { }
 
     public func addContinuation(_ continuation: CheckedContinuation<T, E>) {
         state.withCriticalRegion { state in
@@ -50,4 +52,8 @@ public struct MulticastContinuation<T, E: Error>: Sendable {
     public func resume(throwing error: E) {
         resume(with: .failure(error))
     }
+
+    // MARK: Private
+
+    private let state = ManagedCriticalState(State())
 }

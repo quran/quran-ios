@@ -19,8 +19,12 @@
 //
 
 public struct JuzBasedLastAyahFinder: LastAyahFinder {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
         startAyah.page.startJuz.lastVerse

@@ -9,6 +9,8 @@ import Localization
 import SwiftUI
 
 struct ReadingDetails<Value: Hashable, ImageView: View>: View {
+    // MARK: Internal
+
     let reading: ReadingInfo<Value>
     let imageView: ImageView
     let useAction: () -> Void
@@ -40,6 +42,8 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
             )
         }
     }
+
+    // MARK: Private
 
     private var propertiesList: some View {
         VStack {
@@ -100,6 +104,8 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
 
 struct ReadingDetails_Previews: PreviewProvider {
     struct Preview: View {
+        // MARK: Internal
+
         let reading: ReadingInfo = ReadingInfoTestData.readings[0]
 
         var body: some View {
@@ -111,12 +117,16 @@ struct ReadingDetails_Previews: PreviewProvider {
             )
         }
 
+        // MARK: Private
+
         private var imageView: some View {
             Image("logo-lg-w")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Preview()

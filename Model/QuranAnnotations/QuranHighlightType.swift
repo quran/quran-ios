@@ -39,6 +39,18 @@ public enum QuranHighlightType {
     case search
     case word
 
+    // MARK: Public
+
+    public enum Name: Hashable {
+        case reading
+        case share
+        case note
+        case search
+        case word
+    }
+
+    // MARK: Internal
+
     var raw: Name {
         switch self {
         case .reading: return .reading
@@ -47,14 +59,6 @@ public enum QuranHighlightType {
         case .search: return .search
         case .word: return .word
         }
-    }
-
-    public enum Name: Hashable {
-        case reading
-        case share
-        case note
-        case search
-        case word
     }
 }
 

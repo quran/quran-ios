@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranKit
 
 final class AyahNumberTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testVerses() throws {
         let verses = quran.verses
@@ -54,4 +54,8 @@ final class AyahNumberTests: XCTestCase {
         XCTAssertEqual(verses[4].array(to: verses[10]), Array(verses[4 ... 10]))
         XCTAssertEqual(verses[0].array(to: verses[6235]), verses)
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

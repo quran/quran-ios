@@ -15,8 +15,12 @@ import Utilities
 import VLogging
 
 public struct CoreDataNoteUniquifier: CoreDataEntityUniquifier {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func merge(transactions: [PersistentHistoryTransaction], using taskContext: NSManagedObjectContext) throws {
         // Ensure there is at least one note change in the transactions
@@ -36,6 +40,8 @@ public struct CoreDataNoteUniquifier: CoreDataEntityUniquifier {
         // Save the background context to trigger a notification and merge the result into the viewContext.
         try taskContext.save(with: "Deduplicating \(String(describing: MO_Note.entity().name))")
     }
+
+    // MARK: Private
 
     private func findNotesWithNoVerses(using context: NSManagedObjectContext) throws -> [MO_Note] {
         let fetchRequest = MO_Note.fetchRequest()

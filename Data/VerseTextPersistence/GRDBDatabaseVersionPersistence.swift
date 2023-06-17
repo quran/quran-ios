@@ -10,7 +10,7 @@ import GRDB
 import SQLitePersistence
 
 public struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -19,6 +19,8 @@ public struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
     public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
+
+    // MARK: Public
 
     public func getTextVersion() async throws -> Int {
         try await db.write { db in
@@ -33,12 +35,13 @@ public struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
             return Int(property.value)!
         }
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
 }
 
 private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
-    var property: String
-    var value: String
-
     enum Columns {
         static let property = Column(CodingKeys.property)
         static let value = Column(CodingKeys.value)
@@ -47,4 +50,7 @@ private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "properties"
     }
+
+    var property: String
+    var value: String
 }

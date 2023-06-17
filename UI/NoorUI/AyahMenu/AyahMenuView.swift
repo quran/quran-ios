@@ -16,21 +16,13 @@ private enum MenuState {
 }
 
 public struct AyahMenuView: View {
-    @State private var state: MenuState = .list
-    let dataObject: AyahMenuUI.DataObject
+    // MARK: Lifecycle
 
     public init(dataObject: AyahMenuUI.DataObject) {
         self.dataObject = dataObject
     }
 
-    private var existingHighlightedColor: NoteColor? {
-        switch dataObject.state {
-        case .highlighted, .noted:
-            return dataObject.highlightingColor
-        case .noHighlight:
-            return nil
-        }
-    }
+    // MARK: Public
 
     public var body: some View {
         switch state {
@@ -50,6 +42,23 @@ public struct AyahMenuView: View {
             }
             .preferredContentSizeMatchesScrollView()
             .transition(AnyTransition.scale(scale: 2.0).combined(with: .opacity))
+        }
+    }
+
+    // MARK: Internal
+
+    let dataObject: AyahMenuUI.DataObject
+
+    // MARK: Private
+
+    @State private var state: MenuState = .list
+
+    private var existingHighlightedColor: NoteColor? {
+        switch dataObject.state {
+        case .highlighted, .noted:
+            return dataObject.highlightingColor
+        case .noHighlight:
+            return nil
         }
     }
 }
@@ -188,11 +197,7 @@ private struct AyahMenuViewList: View {
 }
 
 private struct Row<Symbol: View>: View {
-    let symbol: Symbol
-    let title: String
-    let subtitle: String?
-    let action: () -> Void
-    @ScaledMetric var verticalPadding = 12
+    // MARK: Lifecycle
 
     init(
         title: String,
@@ -205,6 +210,14 @@ private struct Row<Symbol: View>: View {
         self.subtitle = subtitle
         self.action = action
     }
+
+    // MARK: Internal
+
+    let symbol: Symbol
+    let title: String
+    let subtitle: String?
+    let action: () -> Void
+    @ScaledMetric var verticalPadding = 12
 
     var body: some View {
         Button {
@@ -241,10 +254,15 @@ private struct Row<Symbol: View>: View {
 }
 
 private struct MenuGroup<Content: View>: View {
-    let content: Content
+    // MARK: Lifecycle
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
+
+    // MARK: Internal
+
+    let content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -278,6 +296,7 @@ private struct IconCircle: View {
     @ScaledMetric var minLength = 20
 
     var color: NoteColor
+
     var body: some View {
         ColoredCircle(color: color.color, selected: false, minLength: minLength)
     }
@@ -312,6 +331,7 @@ struct AyahMenuView_Previews: PreviewProvider {
         copy: {},
         share: {}
     )
+
     static var previews: some View {
         Group {
             VStack {

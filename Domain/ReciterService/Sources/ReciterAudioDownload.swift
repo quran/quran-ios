@@ -21,12 +21,16 @@
 import QuranAudio
 
 public struct ReciterAudioDownload: Equatable, Sendable {
+    // MARK: Lifecycle
+
     public init(reciter: Reciter, downloadedSizeInBytes: UInt64, downloadedSuraCount: Int, surasCount: Int) {
         self.reciter = reciter
         self.downloadedSizeInBytes = downloadedSizeInBytes
         self.downloadedSuraCount = downloadedSuraCount
         self.surasCount = surasCount
     }
+
+    // MARK: Public
 
     public let reciter: Reciter
     public let downloadedSizeInBytes: UInt64

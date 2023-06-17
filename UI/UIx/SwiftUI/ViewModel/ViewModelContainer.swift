@@ -11,8 +11,7 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct ViewModelContainer<ViewModel: ObservableObject, Content: View>: View {
-    @ObservedObject var viewModel: ViewModel
-    let content: (ObservedObject<ViewModel>.Wrapper, ViewModel) -> Content
+    // MARK: Lifecycle
 
     public init(_ viewModel: ViewModel, content: @escaping (ObservedObject<ViewModel>.Wrapper) -> Content) {
         self.viewModel = viewModel
@@ -24,7 +23,14 @@ public struct ViewModelContainer<ViewModel: ObservableObject, Content: View>: Vi
         self.content = { _, vm in content(vm) }
     }
 
+    // MARK: Public
+
     public var body: some View {
         content($viewModel, viewModel)
     }
+
+    // MARK: Internal
+
+    @ObservedObject var viewModel: ViewModel
+    let content: (ObservedObject<ViewModel>.Wrapper, ViewModel) -> Content
 }

@@ -10,9 +10,7 @@ import XCTest
 @testable import QuranTextKit
 
 class SearchRecentsServiceTests: XCTestCase {
-    private var service: SearchRecentsService!
-    private let preferences = RecentSearchPreferences.shared
-    private let userDefaults = UserDefaults.standard
+    // MARK: Internal
 
     override func setUpWithError() throws {
         service = SearchRecentsService()
@@ -52,4 +50,10 @@ class SearchRecentsServiceTests: XCTestCase {
         service.addToRecents("7")
         XCTAssertEqual(service.getRecents(), ["7", "6", "5", "1", "3"])
     }
+
+    // MARK: Private
+
+    private var service: SearchRecentsService!
+    private let preferences = RecentSearchPreferences.shared
+    private let userDefaults = UserDefaults.standard
 }

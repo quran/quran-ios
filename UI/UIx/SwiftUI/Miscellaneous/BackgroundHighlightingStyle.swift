@@ -9,14 +9,21 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct BackgroundHighlightingStyle: ButtonStyle {
-    let highlightingColor: Color
+    // MARK: Lifecycle
+
     public init(highlightingColor: Color = .systemFill) {
         self.highlightingColor = highlightingColor
     }
+
+    // MARK: Public
 
     public func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
             .background(configuration.isPressed ? highlightingColor : Color.clear)
     }
+
+    // MARK: Internal
+
+    let highlightingColor: Color
 }

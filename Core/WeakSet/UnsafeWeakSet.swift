@@ -10,11 +10,13 @@ import Foundation
 open class UnsafeWeakSet<Element>: Sequence {
     public typealias Iterator = AnyIterator<Element>
 
-    open var count: Int { storage.count }
-
-    private var storage = NSHashTable<AnyObject>.weakObjects()
+    // MARK: Lifecycle
 
     public init() {}
+
+    // MARK: Open
+
+    open var count: Int { storage.count }
 
     open func insert(_ object: Element) {
         storage.add(object as AnyObject)
@@ -38,4 +40,8 @@ open class UnsafeWeakSet<Element>: Sequence {
             arrayIterator.next() as? Element
         }
     }
+
+    // MARK: Private
+
+    private var storage = NSHashTable<AnyObject>.weakObjects()
 }

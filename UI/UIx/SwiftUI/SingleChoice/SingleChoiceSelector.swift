@@ -9,26 +9,24 @@ import SwiftUI
 import UIKit
 
 public struct SingleChoiceSection<Item: Equatable> {
-    let header: String?
-    let items: [Item]
+    // MARK: Lifecycle
 
     public init(header: String? = nil, items: [Item]) {
         self.header = header
         self.items = items
     }
+
+    // MARK: Internal
+
+    let header: String?
+    let items: [Item]
 }
 
 @available(iOS 13.0, *)
 public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewController {
-    private let sections: [SingleChoiceSection<Item>]
-    private let selected: Item?
-    private let onSelection: (Item) -> Void
-    private let configure: (Item, Item?) -> Content
-
     private typealias Cell = HostingTableViewCell<Content>
-    private var cellReuseId: String {
-        String(describing: Cell.self)
-    }
+
+    // MARK: Lifecycle
 
     public init(
         style: UITableView.Style,
@@ -48,6 +46,8 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Public
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -84,6 +84,17 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
     override public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         sections[section].header
     }
+
+    // MARK: Private
+
+    private let sections: [SingleChoiceSection<Item>]
+    private let selected: Item?
+    private let onSelection: (Item) -> Void
+    private let configure: (Item, Item?) -> Content
+
+    private var cellReuseId: String {
+        String(describing: Cell.self)
+    }
 }
 
 // Adding default factory method
@@ -106,15 +117,15 @@ public func singleChoiceSelector<Item: Hashable>(
 }
 
 public struct SingleChoiceSelectorView<Item: Hashable>: View {
-    private let sections: [SingleChoiceSection<Item>]
-    @Binding private var selected: Item?
-    private let itemText: (Item) -> String
+    // MARK: Lifecycle
 
     public init(sections: [SingleChoiceSection<Item>], selected: Binding<Item?>, itemText: @escaping (Item) -> String) {
         self.sections = sections
         _selected = selected
         self.itemText = itemText
     }
+
+    // MARK: Public
 
     public var body: some View {
         PreferredContentSizeMatchesScrollView {
@@ -132,6 +143,12 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
             .listStyle(.plain)
         }
     }
+
+    // MARK: Private
+
+    private let sections: [SingleChoiceSection<Item>]
+    @Binding private var selected: Item?
+    private let itemText: (Item) -> String
 
     private func itemsView(_ items: [Item]) -> some View {
         ForEach(items, id: \.self) { item in

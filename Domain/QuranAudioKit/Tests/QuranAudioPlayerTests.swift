@@ -16,14 +16,7 @@ import XCTest
 
 @MainActor
 class QuranAudioPlayerTests: XCTestCase {
-    private var player: QuranAudioPlayer!
-    private var queuePlayer: QueuePlayerFake!
-    private var delegate: QuranAudioPlayerDelegateClosures!
-
-    private let quran = Quran.hafsMadani1405
-    private let suras = Quran.hafsMadani1405.suras
-    private let gappedReciter: Reciter = .gappedReciter
-    private let gaplessReciter: Reciter = .gaplessReciter
+    // MARK: Internal
 
     override func setUp() async throws {
         queuePlayer = QueuePlayerFake()
@@ -219,6 +212,17 @@ class QuranAudioPlayerTests: XCTestCase {
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [])
         }
     }
+
+    // MARK: Private
+
+    private var player: QuranAudioPlayer!
+    private var queuePlayer: QueuePlayerFake!
+    private var delegate: QuranAudioPlayerDelegateClosures!
+
+    private let quran = Quran.hafsMadani1405
+    private let suras = Quran.hafsMadani1405.suras
+    private let gappedReciter: Reciter = .gappedReciter
+    private let gaplessReciter: Reciter = .gaplessReciter
 
     private func runDownloadedTestCase(gapless: Bool) async throws {
         if gapless {

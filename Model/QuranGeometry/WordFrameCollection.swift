@@ -8,11 +8,15 @@
 import QuranKit
 
 public struct WordFrameCollection: Equatable {
-    public let frames: [AyahNumber: [WordFrame]]
+    // MARK: Lifecycle
 
     public init(frames: [AyahNumber: [WordFrame]]) {
         self.frames = frames
     }
+
+    // MARK: Public
+
+    public let frames: [AyahNumber: [WordFrame]]
 
     public func wordFramesForVerse(_ verse: AyahNumber) -> [WordFrame]? {
         frames[verse]

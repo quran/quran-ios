@@ -10,9 +10,7 @@ import AVFoundation
 import QueuePlayerObjc
 
 public struct QueuePlayerActions: Sendable {
-    let playbackEnded: @Sendable @MainActor () -> Void
-    let playbackRateChanged: @Sendable @MainActor (Float) -> Void
-    let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem) -> Void
+    // MARK: Lifecycle
 
     public init(
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
@@ -23,11 +21,17 @@ public struct QueuePlayerActions: Sendable {
         self.playbackRateChanged = playbackRateChanged
         self.audioFrameChanged = audioFrameChanged
     }
+
+    // MARK: Internal
+
+    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackRateChanged: @Sendable @MainActor (Float) -> Void
+    let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem) -> Void
 }
 
 @MainActor
 public class QueuePlayer {
-    public var actions: QueuePlayerActions?
+    // MARK: Lifecycle
 
     public init() {
         if #available(iOS 10.0, *) {
@@ -37,17 +41,17 @@ public class QueuePlayer {
         }
     }
 
-    private var player: AudioPlayer? {
-        didSet {
-            oldValue?.actions = nil
-        }
-    }
+    // MARK: Open
 
     open func play(request: AudioRequest) {
         player = AudioPlayer(request: request)
         player?.actions = newPlayerActions()
         player?.startPlaying()
     }
+
+    // MARK: Public
+
+    public var actions: QueuePlayerActions?
 
     public func pause() {
         player?.pause()
@@ -67,6 +71,14 @@ public class QueuePlayer {
 
     public func stepBackward() {
         player?.stepBackgward()
+    }
+
+    // MARK: Private
+
+    private var player: AudioPlayer? {
+        didSet {
+            oldValue?.actions = nil
+        }
     }
 
     private func playbackEnded() {

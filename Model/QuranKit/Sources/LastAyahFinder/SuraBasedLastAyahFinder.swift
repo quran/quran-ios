@@ -19,8 +19,12 @@
 //
 
 public struct SuraBasedLastAyahFinder: LastAyahFinder {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
         startAyah.sura.lastVerse

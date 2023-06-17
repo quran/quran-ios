@@ -17,26 +17,7 @@ import XCTest
 @testable import QuranAudioKit
 
 class QuranAudioDownloaderTests: XCTestCase {
-    private var downloader: QuranAudioDownloader!
-    private var batchDownloader: DownloadManager!
-    private var session: NetworkSessionFake!
-    private var fileSystem: FileSystemFake!
-
-    private static let baseURL = URL(validURL: "http://example.com")
-    private let quran = Quran.hafsMadani1405
-    private let suras = Quran.hafsMadani1405.suras
-
-    private let request = DownloadRequest(
-        url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
-        destinationURL: FileManager.documentsURL
-            .appendingPathComponent(
-                "audio_files/mishari_alafasy/001.mp3",
-                isDirectory: false
-            )
-    )
-
-    private let gappedReciter: Reciter = .gappedReciter
-    private let gaplessReciter: Reciter = .gaplessReciter
+    // MARK: Internal
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
@@ -196,6 +177,30 @@ class QuranAudioDownloaderTests: XCTestCase {
         let downloads = await downloader.runningAudioDownloads()
         XCTAssertEqual(downloads, [])
     }
+
+    // MARK: Private
+
+    private static let baseURL = URL(validURL: "http://example.com")
+
+    private var downloader: QuranAudioDownloader!
+    private var batchDownloader: DownloadManager!
+    private var session: NetworkSessionFake!
+    private var fileSystem: FileSystemFake!
+
+    private let quran = Quran.hafsMadani1405
+    private let suras = Quran.hafsMadani1405.suras
+
+    private let request = DownloadRequest(
+        url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
+        destinationURL: FileManager.documentsURL
+            .appendingPathComponent(
+                "audio_files/mishari_alafasy/001.mp3",
+                isDirectory: false
+            )
+    )
+
+    private let gappedReciter: Reciter = .gappedReciter
+    private let gaplessReciter: Reciter = .gaplessReciter
 
     // MARK: - Helpers
 

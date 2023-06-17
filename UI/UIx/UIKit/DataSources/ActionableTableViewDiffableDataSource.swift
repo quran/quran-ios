@@ -14,6 +14,8 @@ open class ActionableTableViewDiffableDataSource<SectionId: Hashable, ItemId: Ha
         public var commitEditing: (UITableViewCell.EditingStyle, ItemId) -> Void = { _, _ in }
     }
 
+    // MARK: Public
+
     public var actions = Actions()
 
     override public func tableView(

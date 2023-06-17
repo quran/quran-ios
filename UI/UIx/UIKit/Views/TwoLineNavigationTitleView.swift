@@ -8,22 +8,7 @@
 import UIKit
 
 public class TwoLineNavigationTitleView: UIView {
-    private let label = UILabel()
-
-    public var firstLine: String = "" {
-        didSet { updateAttributedText() }
-    }
-
-    public var secondLine: String = "" {
-        didSet { updateAttributedText() }
-    }
-
-    private var isCompressed = false {
-        didSet { updateAttributedText() }
-    }
-
-    private let firstLineFont: UIFont
-    private let secondLineFont: UIFont
+    // MARK: Lifecycle
 
     public init(firstLineFont: UIFont, secondLineFont: UIFont) {
         self.firstLineFont = firstLineFont
@@ -37,6 +22,36 @@ public class TwoLineNavigationTitleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Public
+
+    public var firstLine: String = "" {
+        didSet { updateAttributedText() }
+    }
+
+    public var secondLine: String = "" {
+        didSet { updateAttributedText() }
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        label.attributedText?.size() ?? .zero
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateIsCompressed()
+    }
+
+    // MARK: Private
+
+    private let label = UILabel()
+
+    private let firstLineFont: UIFont
+    private let secondLineFont: UIFont
+
+    private var isCompressed = false {
+        didSet { updateAttributedText() }
+    }
+
     private func setUp() {
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -44,11 +59,6 @@ public class TwoLineNavigationTitleView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         addAutoLayoutSubview(label)
         label.vc.center()
-    }
-
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        updateIsCompressed()
     }
 
     private func updateIsCompressed(_ size: CGSize? = nil) {
@@ -70,10 +80,6 @@ public class TwoLineNavigationTitleView: UIView {
             .font: secondLineFont,
         ]))
         label.attributedText = string
-    }
-
-    override public var intrinsicContentSize: CGSize {
-        label.attributedText?.size() ?? .zero
     }
 }
 

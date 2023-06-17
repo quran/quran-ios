@@ -12,10 +12,12 @@ import QuranKit
 import VLogging
 
 public struct ReciterTimingRetriever {
-    let persistenceFactory: (URL) -> AyahTimingPersistence = GRDBAyahTimingPersistence.init
+    // MARK: Lifecycle
 
     public init() {
     }
+
+    // MARK: Public
 
     public func timing(
         for reciter: Reciter,
@@ -33,6 +35,12 @@ public struct ReciterTimingRetriever {
 
         return RangeTiming(timings: filteredTimings, endTime: endTime)
     }
+
+    // MARK: Internal
+
+    let persistenceFactory: (URL) -> AyahTimingPersistence = GRDBAyahTimingPersistence.init
+
+    // MARK: Private
 
     private func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
         guard let fileURL = reciter.localDatabaseURL else {

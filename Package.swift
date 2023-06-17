@@ -467,6 +467,8 @@ enum TargetType: String {
     case model = "Model"
     case ui = "UI"
 
+    // MARK: Internal
+
     // swiftformat:disable consecutiveSpaces
     static let validDependencies: [TargetType: Set<TargetType>] = [
         .core:   [.core],

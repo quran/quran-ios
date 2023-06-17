@@ -11,7 +11,7 @@ import XCTest
 @testable import SQLitePersistence
 
 class DatabaseConnectionTests: XCTestCase {
-    private var testURL: URL!
+    // MARK: Internal
 
     override func setUp() {
         super.setUp()
@@ -68,6 +68,10 @@ class DatabaseConnectionTests: XCTestCase {
         // Database should be deleted because the error is SQLITE_NOTADB.
         XCTAssertFalse(testURL.isReachable)
     }
+
+    // MARK: Private
+
+    private var testURL: URL!
 }
 
 private extension DatabaseConnection {

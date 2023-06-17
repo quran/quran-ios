@@ -12,7 +12,11 @@ public protocol SystemTime {
 }
 
 public struct DefaultSystemTime: SystemTime {
+    // MARK: Lifecycle
+
     public init() { }
+
+    // MARK: Public
 
     public var now: Date {
         Date()

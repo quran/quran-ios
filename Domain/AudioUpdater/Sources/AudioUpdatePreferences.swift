@@ -9,11 +9,13 @@ import Foundation
 import Preferences
 
 final class AudioUpdatePreferences {
-    static let shared = AudioUpdatePreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let lastRevision = PreferenceKey<Int>(key: "audio-update.last-revision", defaultValue: 0)
-    private static let lastChecked = PreferenceKey<Date?>(key: "audio-update.last-checked", defaultValue: nil)
+    // MARK: Internal
+
+    static let shared = AudioUpdatePreferences()
 
     @Preference(lastRevision) var lastRevision: Int
     @Preference(lastChecked) var lastChecked: Date?
@@ -23,4 +25,9 @@ final class AudioUpdatePreferences {
             UserDefaults.standard.removeObject(forKey: key)
         }
     }
+
+    // MARK: Private
+
+    private static let lastRevision = PreferenceKey<Int>(key: "audio-update.last-revision", defaultValue: 0)
+    private static let lastChecked = PreferenceKey<Date?>(key: "audio-update.last-checked", defaultValue: nil)
 }

@@ -14,11 +14,13 @@ import QuranAnnotations
 import QuranKit
 
 public struct PageBookmarkService {
-    let persistence: PageBookmarkPersistence
+    // MARK: Lifecycle
 
     public init(persistence: PageBookmarkPersistence) {
         self.persistence = persistence
     }
+
+    // MARK: Public
 
     public func pageBookmarks(quran: Quran) -> AnyPublisher<[PageBookmark], Never> {
         persistence.pageBookmarks()
@@ -33,6 +35,10 @@ public struct PageBookmarkService {
     public func removePageBookmark(_ page: Page) -> Promise<Void> {
         persistence.removePageBookmark(page.pageNumber)
     }
+
+    // MARK: Internal
+
+    let persistence: PageBookmarkPersistence
 }
 
 private extension PageBookmark {

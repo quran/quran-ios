@@ -16,23 +16,24 @@ class AsyncThrowingPublisherTests: XCTestCase {
         case invalid
     }
 
+    actor Values {
+        var error: Error?
+        var results: [Int] = []
+
+        func setError(_ error: Error) {
+            self.error = error
+        }
+
+        func append(_ number: Int) {
+            results.append(number)
+        }
+    }
+
     let numbers = [1, 2, 3]
     let numbersPublisher = [1, 2, 3].publisher.setFailureType(to: PublishingError.self)
     var subject: PassthroughSubject<Int, PublishingError>!
     var channel: AsyncChannel<Void>!
     var values: Values!
-
-    actor Values {
-        var error: Error?
-        func setError(_ error: Error) {
-            self.error = error
-        }
-
-        var results: [Int] = []
-        func append(_ number: Int) {
-            results.append(number)
-        }
-    }
 
     override func setUp() {
         subject = PassthroughSubject()

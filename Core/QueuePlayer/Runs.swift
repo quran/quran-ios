@@ -24,6 +24,8 @@ public enum Runs: Equatable, Sendable {
     case four
     case indefinite
 
+    // MARK: Internal
+
     var maxRuns: Int {
         switch self {
         case .one: return 1

@@ -11,14 +11,7 @@ import UIKit
 
 public enum AyahMenuUI {
     public struct Actions {
-        let play: () -> Void
-        let repeatVerses: () -> Void
-        let highlight: (NoteColor) -> Void
-        let addNote: () -> Void
-        let deleteNote: () -> Void
-        let showTranslation: () -> Void
-        let copy: () -> Void
-        let share: () -> Void
+        // MARK: Lifecycle
 
         public init(
             play: @escaping () -> Void,
@@ -39,21 +32,21 @@ public enum AyahMenuUI {
             self.copy = copy
             self.share = share
         }
-    }
 
-    public enum NoteState {
-        case noHighlight
-        case highlighted
-        case noted
+        // MARK: Internal
+
+        let play: () -> Void
+        let repeatVerses: () -> Void
+        let highlight: (NoteColor) -> Void
+        let addNote: () -> Void
+        let deleteNote: () -> Void
+        let showTranslation: () -> Void
+        let copy: () -> Void
+        let share: () -> Void
     }
 
     public struct DataObject {
-        let highlightingColor: NoteColor
-        let state: NoteState
-        let actions: Actions
-        let playSubtitle: String
-        let repeatSubtitle: String
-        let isTranslationView: Bool
+        // MARK: Lifecycle
 
         public init(
             highlightingColor: NoteColor,
@@ -70,5 +63,22 @@ public enum AyahMenuUI {
             self.actions = actions
             self.isTranslationView = isTranslationView
         }
+
+        // MARK: Internal
+
+        let highlightingColor: NoteColor
+        let state: NoteState
+        let actions: Actions
+        let playSubtitle: String
+        let repeatSubtitle: String
+        let isTranslationView: Bool
+    }
+
+    // MARK: Public
+
+    public enum NoteState {
+        case noHighlight
+        case highlighted
+        case noted
     }
 }

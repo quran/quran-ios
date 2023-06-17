@@ -24,10 +24,15 @@ import Locking
 public class CrasherKeyBase {}
 
 public final class CrasherKey<Type>: CrasherKeyBase {
-    public let key: String
+    // MARK: Lifecycle
+
     public init(key: String) {
         self.key = key
     }
+
+    // MARK: Public
+
+    public let key: String
 }
 
 public protocol CrashInfoHandler {
@@ -46,9 +51,7 @@ private struct NoOpCrashInfoHandler: CrashInfoHandler {
 }
 
 public enum CrashInfoSystem {
-    private static let lock = NSLock()
-    private(set) static var factory: (() -> CrashInfoHandler) = NoOpCrashInfoHandler.init
-    private static var initialized = false
+    // MARK: Public
 
     public static func bootstrap(_ factory: @escaping () -> CrashInfoHandler) {
         lock.sync {
@@ -57,13 +60,27 @@ public enum CrashInfoSystem {
             initialized = true
         }
     }
+
+    // MARK: Internal
+
+    private(set) static var factory: (() -> CrashInfoHandler) = NoOpCrashInfoHandler.init
+
+    // MARK: Private
+
+    private static let lock = NSLock()
+    private static var initialized = false
 }
 
 public struct Crasher {
-    public let handler: CrashInfoHandler
+    // MARK: Lifecycle
+
     public init() {
         handler = CrashInfoSystem.factory()
     }
+
+    // MARK: Public
+
+    public let handler: CrashInfoHandler
 
     public func recordError(_ error: Error, reason: String, file: StaticString = #file, line: UInt = #line) {
         handler.recordError(error, reason: reason, file: file, line: line)

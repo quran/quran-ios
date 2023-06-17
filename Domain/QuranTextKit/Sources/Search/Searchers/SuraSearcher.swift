@@ -9,7 +9,7 @@ import QuranKit
 import QuranText
 
 struct SuraSearcher: Searcher {
-    private let resultsProcessor = SearchResultsProcessor()
+    // MARK: Internal
 
     func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
         let defaultSuraNames = quran.suras.map { $0.localizedName(withPrefix: true) }
@@ -39,6 +39,10 @@ struct SuraSearcher: Searcher {
         }
         return [SearchResults(source: .quran, items: items)]
     }
+
+    // MARK: Private
+
+    private let resultsProcessor = SearchResultsProcessor()
 }
 
 private extension String {

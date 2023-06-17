@@ -27,20 +27,21 @@ import Utilities
 public typealias AsyncPublisher = Utilities.AsyncPublisher
 
 actor DownloadResponse {
-    private(set) var download: Download
-    private(set) var task: NetworkSessionTask?
-
-    private let continuations = MulticastContinuation<Void, Error>()
-
-    var isPending: Bool {
-        continuations.isPending
-    }
+    // MARK: Lifecycle
 
     init(download: Download) {
         self.download = download
     }
 
-    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+    // MARK: Internal
+
+    private(set) var download: Download
+    private(set) var task: NetworkSessionTask?
+
+    var isPending: Bool {
+        continuations.isPending
+    }
+
     var progress: AsyncPublisher<DownloadProgress> {
         progressSubject.values()
     }
@@ -119,28 +120,16 @@ actor DownloadResponse {
             reject(CancellationError())
         }
     }
+
+    // MARK: Private
+
+    private let continuations = MulticastContinuation<Void, Error>()
+
+    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
 }
 
 public actor DownloadBatchResponse {
-    let batchId: Int64
-    let responses: [DownloadResponse]
-
-    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
-    public var progress: AsyncPublisher<DownloadProgress> {
-        progressSubject.values()
-    }
-
-    public var currentProgress: DownloadProgress {
-        progressSubject.value
-    }
-
-    private var completionTask: Task<Void, Error>?
-
-    public var requests: [DownloadRequest] {
-        get async {
-            await responses.asyncMap { await $0.download.request }
-        }
-    }
+    // MARK: Lifecycle
 
     init(batchId: Int64, responses: [DownloadResponse]) async {
         self.batchId = batchId
@@ -189,19 +178,20 @@ public actor DownloadBatchResponse {
         }
     }
 
-    private func updateResponsesProgress() async {
-        var accumulated: Double = 0
-        for response in responses {
-            accumulated += await response.currentProgress.progress
-        }
-        updateProgress(completed: accumulated / Double(responses.count))
+    // MARK: Public
+
+    public var progress: AsyncPublisher<DownloadProgress> {
+        progressSubject.values()
     }
 
-    func updateProgress(total: Double? = nil, completed: Double? = nil) {
-        var value = progressSubject.value
-        value.total = total ?? value.total
-        value.completed = completed ?? value.completed
-        progressSubject.send(value)
+    public var currentProgress: DownloadProgress {
+        progressSubject.value
+    }
+
+    public var requests: [DownloadRequest] {
+        get async {
+            await responses.asyncMap { await $0.download.request }
+        }
     }
 
     public func cancel() async {
@@ -217,6 +207,31 @@ public actor DownloadBatchResponse {
 
     public func completion() async throws {
         try await completionTask?.value
+    }
+
+    // MARK: Internal
+
+    let batchId: Int64
+    let responses: [DownloadResponse]
+
+    func updateProgress(total: Double? = nil, completed: Double? = nil) {
+        var value = progressSubject.value
+        value.total = total ?? value.total
+        value.completed = completed ?? value.completed
+        progressSubject.send(value)
+    }
+
+    // MARK: Private
+
+    private let progressSubject = CurrentValueSubject<DownloadProgress, Never>(DownloadProgress(total: 1))
+    private var completionTask: Task<Void, Error>?
+
+    private func updateResponsesProgress() async {
+        var accumulated: Double = 0
+        for response in responses {
+            accumulated += await response.currentProgress.progress
+        }
+        updateProgress(completed: accumulated / Double(responses.count))
     }
 }
 

@@ -22,11 +22,15 @@ import Foundation
 import QuranKit
 
 public struct TranslationString: Equatable {
+    // MARK: Lifecycle
+
     public init(text: String, quranRanges: [NSRange], footerRanges: [NSRange]) {
         self.text = text
         self.footerRanges = footerRanges
         self.quranRanges = quranRanges
     }
+
+    // MARK: Public
 
     public let text: String
     public let quranRanges: [NSRange]
@@ -39,10 +43,7 @@ public enum TranslationText: Equatable {
 }
 
 public struct VerseText: Equatable {
-    public let arabicText: String
-    public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
-    public let arabicPrefix: [String]
-    public let arabicSuffix: [String]
+    // MARK: Lifecycle
 
     public init(arabicText: String, translations: [TranslationText], arabicPrefix: [String], arabicSuffix: [String]) {
         self.arabicText = arabicText
@@ -50,14 +51,25 @@ public struct VerseText: Equatable {
         self.arabicPrefix = arabicPrefix
         self.arabicSuffix = arabicSuffix
     }
+
+    // MARK: Public
+
+    public let arabicText: String
+    public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
+    public let arabicPrefix: [String]
+    public let arabicSuffix: [String]
 }
 
 public struct TranslatedVerses: Equatable {
-    public let translations: [Translation]
-    public let verses: [VerseText]
+    // MARK: Lifecycle
 
     public init(translations: [Translation], verses: [VerseText]) {
         self.translations = translations
         self.verses = verses
     }
+
+    // MARK: Public
+
+    public let translations: [Translation]
+    public let verses: [VerseText]
 }

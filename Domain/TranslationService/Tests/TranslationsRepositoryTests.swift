@@ -14,20 +14,7 @@ import XCTest
 @testable import TranslationService
 
 class TranslationsRepositoryTests: XCTestCase {
-    private var retriever: LocalTranslationsRetriever {
-        localTranslationsFake.retriever
-    }
-
-    private var session: NetworkSessionFake!
-    private var service: TranslationsRepository!
-    private var localTranslationsFake: LocalTranslationsFake!
-
-    private let baseURL = URL(validURL: "http://example.com")
-
-    private let translations = [
-        TranslationTestData.khanTranslation,
-        TranslationTestData.sahihTranslation,
-    ]
+    // MARK: Internal
 
     override func setUp() {
         super.setUp()
@@ -104,6 +91,23 @@ class TranslationsRepositoryTests: XCTestCase {
 
         let localResults = try await retriever.getLocalTranslations()
         XCTAssertEqual(localResults, [updatedTranslation])
+    }
+
+    // MARK: Private
+
+    private var session: NetworkSessionFake!
+    private var service: TranslationsRepository!
+    private var localTranslationsFake: LocalTranslationsFake!
+
+    private let baseURL = URL(validURL: "http://example.com")
+
+    private let translations = [
+        TranslationTestData.khanTranslation,
+        TranslationTestData.sahihTranslation,
+    ]
+
+    private var retriever: LocalTranslationsRetriever {
+        localTranslationsFake.retriever
     }
 
     // MARK: - Helpers

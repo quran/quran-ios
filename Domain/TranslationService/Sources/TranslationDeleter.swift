@@ -24,14 +24,14 @@ import SystemDependencies
 import TranslationPersistence
 
 public struct TranslationDeleter {
-    let persistence: ActiveTranslationsPersistence
-    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-    let fileSystem: FileSystem
+    // MARK: Lifecycle
 
     public init(databasesURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
         persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
         self.fileSystem = fileSystem
     }
+
+    // MARK: Public
 
     public func deleteTranslation(_ translation: Translation) async throws -> Translation {
         // update the selected translations
@@ -47,4 +47,10 @@ public struct TranslationDeleter {
         try await persistence.update(translation)
         return translation
     }
+
+    // MARK: Internal
+
+    let persistence: ActiveTranslationsPersistence
+    let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
+    let fileSystem: FileSystem
 }

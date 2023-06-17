@@ -30,6 +30,8 @@ public enum DownloadState: Hashable, Sendable {
     case pendingUpgrading
     case downloadingUpgrade(progress: Float)
 
+    // MARK: Public
+
     public func isUpgrade() -> Bool {
         switch self {
         case .needsUpgrade, .pendingUpgrading, .downloadingUpgrade:
@@ -38,6 +40,8 @@ public enum DownloadState: Hashable, Sendable {
             return false
         }
     }
+
+    // MARK: Internal
 
     var progress: Float {
         switch self {

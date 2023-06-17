@@ -9,10 +9,39 @@ import SwiftUI
 import UIx
 
 struct ReadingItem<Value: Hashable, ImageView: View>: View {
+    // MARK: Internal
+
     let reading: ReadingInfo<Value>
     let imageView: ImageView
     let selected: Bool
     let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ZStack(alignment: .topTrailing) {
+                SingleAxisGeometryReader { width in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            titleView
+                            descriptionView
+                        }
+                        .frame(width: width * 0.65)
+
+                        ReadingImage(imageView: imageView)
+                    }
+                }
+                .padding()
+                .background(background)
+                .padding()
+
+                checkmarkView
+            }
+            .padding(.horizontal)
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: Private
 
     private var titleView: some View {
         Text(reading.title)
@@ -49,30 +78,5 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
                         .shadow(radius: 3)
                 )
         }
-    }
-
-    var body: some View {
-        Button(action: action) {
-            ZStack(alignment: .topTrailing) {
-                SingleAxisGeometryReader { width in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            titleView
-                            descriptionView
-                        }
-                        .frame(width: width * 0.65)
-
-                        ReadingImage(imageView: imageView)
-                    }
-                }
-                .padding()
-                .background(background)
-                .padding()
-
-                checkmarkView
-            }
-            .padding(.horizontal)
-        }
-        .buttonStyle(.plain)
     }
 }

@@ -6,12 +6,7 @@
 //
 
 public struct Hizb: QuranValueGroup {
-    public var hizbNumber: Int { storage.value }
-    let storage: QuranValueStorage<Self>
-
-    public var quran: Quran {
-        storage.quran
-    }
+    // MARK: Lifecycle
 
     init(quran: Quran, hizbNumber: Int) {
         storage = QuranValueStorage(quran: quran, value: hizbNumber, keyPath: \.hizbs)
@@ -19,6 +14,13 @@ public struct Hizb: QuranValueGroup {
 
     init(_ storage: QuranValueStorage<Self>) {
         self.storage = storage
+    }
+
+    // MARK: Public
+
+    public var hizbNumber: Int { storage.value }
+    public var quran: Quran {
+        storage.quran
     }
 
     public var firstVerse: AyahNumber {
@@ -33,4 +35,8 @@ public struct Hizb: QuranValueGroup {
     public var juz: Juz {
         quarter.juz
     }
+
+    // MARK: Internal
+
+    let storage: QuranValueStorage<Self>
 }

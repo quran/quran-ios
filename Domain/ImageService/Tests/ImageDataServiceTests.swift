@@ -15,6 +15,8 @@ import XCTest
 
 @MainActor
 class ImageDataServiceTests: XCTestCase {
+    // MARK: Internal
+
     var service: ImageDataService!
     let quran = Quran.hafsMadani1405
 
@@ -91,6 +93,8 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertEqual(image.startAyah, page.firstVerse)
         try verifyImagePage(image)
     }
+
+    // MARK: Private
 
     private func verifyImagePage(_ imagePage: ImagePage, testName: String = #function) throws {
         // assert the image

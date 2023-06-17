@@ -27,10 +27,13 @@ struct MoreMenuModeSelector: View {
 struct MoreMenuModeSelector_Previews: PreviewProvider {
     struct Container: View {
         @State var mode: MoreMenu.Mode
+
         var body: some View {
             MoreMenuModeSelector(mode: $mode)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Previewing.screen {

@@ -27,11 +27,7 @@ public protocol Pageable: Hashable, Sendable {
 public final class PagesCacheableService<Input: Pageable, Output: Sendable>: Sendable {
     public typealias Page = Input
 
-    private let previousPagesCount: Int
-    private let nextPagesCount: Int
-    private let pages: [Page]
-
-    private let service: OperationCacheableService<Input, Output>
+    // MARK: Lifecycle
 
     public init(
         cache: Cache<Input, Output>,
@@ -45,6 +41,8 @@ public final class PagesCacheableService<Input: Pageable, Output: Sendable>: Sen
         self.nextPagesCount = nextPagesCount
         self.previousPagesCount = previousPagesCount
     }
+
+    // MARK: Public
 
     public func invalidate() {
         service.invalidate()
@@ -63,6 +61,14 @@ public final class PagesCacheableService<Input: Pageable, Output: Sendable>: Sen
     public func getCached(_ input: Page) -> Output? {
         service.getCached(input)
     }
+
+    // MARK: Private
+
+    private let previousPagesCount: Int
+    private let nextPagesCount: Int
+    private let pages: [Page]
+
+    private let service: OperationCacheableService<Input, Output>
 
     private func cachePagesCloserToPage(_ page: Page) {
         func cacheCloser(_ pageNumber: Int) {

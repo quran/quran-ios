@@ -21,13 +21,14 @@
 import Foundation
 
 public class Protected<T> {
-    private var _data: T
-    private let lock: NSLocking
+    // MARK: Lifecycle
 
     public init(_ data: T, using lock: NSLocking = NSLock()) {
         _data = data
         self.lock = lock
     }
+
+    // MARK: Public
 
     public var value: T {
         get {
@@ -58,4 +59,9 @@ public class Protected<T> {
             _data = d
         }
     }
+
+    // MARK: Private
+
+    private var _data: T
+    private let lock: NSLocking
 }

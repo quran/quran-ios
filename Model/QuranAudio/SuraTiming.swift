@@ -6,11 +6,15 @@
 //
 
 public struct SuraTiming {
-    public let verses: [AyahTiming]
-    public let endTime: Timing?
+    // MARK: Lifecycle
 
     public init(verses: [AyahTiming], endTime: Timing?) {
         self.verses = verses
         self.endTime = endTime
     }
+
+    // MARK: Public
+
+    public let verses: [AyahTiming]
+    public let endTime: Timing?
 }

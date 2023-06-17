@@ -13,25 +13,7 @@ import XCTest
 @testable import TranslationService
 
 class LocalTranslationsRetrieverTests: XCTestCase {
-    private var service: LocalTranslationsRetriever {
-        localTranslationsFake.retriever
-    }
-
-    private var persistence: ActiveTranslationsPersistence {
-        localTranslationsFake.persistence
-    }
-
-    private var fileSystem: FileSystemFake {
-        localTranslationsFake.fileSystem
-    }
-
-    private var localTranslationsFake: LocalTranslationsFake!
-    private let preferences = SelectedTranslationsPreferences.shared
-
-    private let translations = [
-        TranslationTestData.khanTranslation,
-        TranslationTestData.sahihTranslation,
-    ]
+    // MARK: Internal
 
     override func setUp() {
         super.setUp()
@@ -117,6 +99,28 @@ class LocalTranslationsRetrieverTests: XCTestCase {
         let localTranslations = try await service.getLocalTranslations()
         XCTAssertEqual(Set(localTranslations), [expectedTranslation])
         XCTAssertFalse(preferences.isSelected(expectedTranslation.id))
+    }
+
+    // MARK: Private
+
+    private var localTranslationsFake: LocalTranslationsFake!
+    private let preferences = SelectedTranslationsPreferences.shared
+
+    private let translations = [
+        TranslationTestData.khanTranslation,
+        TranslationTestData.sahihTranslation,
+    ]
+
+    private var service: LocalTranslationsRetriever {
+        localTranslationsFake.retriever
+    }
+
+    private var persistence: ActiveTranslationsPersistence {
+        localTranslationsFake.persistence
+    }
+
+    private var fileSystem: FileSystemFake {
+        localTranslationsFake.fileSystem
     }
 
     // MARK: - Helpers

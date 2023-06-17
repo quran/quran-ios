@@ -10,17 +10,7 @@ import UIKit
 import ViewConstrainer
 
 public class MagnifyingGlass: UIView {
-    private let magnifyingArea: MagnifyingAreaView
-
-    public var touchPoint: CGPoint {
-        get { magnifyingArea.touchPoint }
-        set { magnifyingArea.touchPoint = newValue }
-    }
-
-    public var viewToMagnify: UIView? {
-        get { magnifyingArea.viewToMagnify }
-        set { magnifyingArea.viewToMagnify = newValue }
-    }
+    // MARK: Lifecycle
 
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
@@ -51,10 +41,26 @@ public class MagnifyingGlass: UIView {
         gradient.vc.edges()
     }
 
+    // MARK: Public
+
+    public var touchPoint: CGPoint {
+        get { magnifyingArea.touchPoint }
+        set { magnifyingArea.touchPoint = newValue }
+    }
+
+    public var viewToMagnify: UIView? {
+        get { magnifyingArea.viewToMagnify }
+        set { magnifyingArea.viewToMagnify = newValue }
+    }
+
     override public func layoutSubviews() {
         super.layoutSubviews()
         magnifyingArea.layer.cornerRadius = min(bounds.width, bounds.height) / 2
     }
+
+    // MARK: Private
+
+    private let magnifyingArea: MagnifyingAreaView
 }
 
 private class MagnifyingAreaView: UIView {

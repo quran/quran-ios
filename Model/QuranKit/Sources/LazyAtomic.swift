@@ -9,11 +9,12 @@ import Foundation
 
 @propertyWrapper
 final class LazyAtomic<Value>: @unchecked Sendable {
-    private var initializer: (() -> Value)?
-    private var value: Value?
-    private let lock = NSLock()
+    // MARK: Lifecycle
+
     init() {
     }
+
+    // MARK: Internal
 
     var wrappedValue: () -> Value {
         get {
@@ -37,4 +38,10 @@ final class LazyAtomic<Value>: @unchecked Sendable {
             initializer = newValue
         }
     }
+
+    // MARK: Private
+
+    private var initializer: (() -> Value)?
+    private var value: Value?
+    private let lock = NSLock()
 }

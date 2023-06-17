@@ -10,17 +10,24 @@ import QuranKit
 
 @available(iOS 13.0, *)
 public struct PreferencesLastAyahFinder: LastAyahFinder {
-    public static let shared = PreferencesLastAyahFinder()
+    // MARK: Lifecycle
+
     private init() {
     }
 
-    private let preferences = AudioPreferences.shared
+    // MARK: Public
+
+    public static let shared = PreferencesLastAyahFinder()
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
         let pageLastVerse = pageFinder.findLastAyah(startAyah: startAyah)
         let lastVerse = finder.findLastAyah(startAyah: startAyah)
         return max(lastVerse, pageLastVerse)
     }
+
+    // MARK: Private
+
+    private let preferences = AudioPreferences.shared
 
     private var finder: LastAyahFinder {
         switch preferences.audioEnd {

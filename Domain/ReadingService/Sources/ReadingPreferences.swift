@@ -9,12 +9,19 @@ import Preferences
 import QuranKit
 
 public struct ReadingPreferences {
-    public static let shared = ReadingPreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let defaultQuranReading = Reading.hafs_1405
-    private static let reading = PreferenceKey<Int>(key: "quranReading", defaultValue: defaultQuranReading.rawValue)
+    // MARK: Public
+
+    public static let shared = ReadingPreferences()
 
     @TransformedPreference(reading, transformer: .rawRepresentable(defaultValue: defaultQuranReading))
     public var reading: Reading
+
+    // MARK: Private
+
+    private static let defaultQuranReading = Reading.hafs_1405
+    private static let reading = PreferenceKey<Int>(key: "quranReading", defaultValue: defaultQuranReading.rawValue)
 }

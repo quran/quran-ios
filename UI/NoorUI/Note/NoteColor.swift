@@ -15,9 +15,7 @@ public enum NoteColor {
     case yellow
     case purple
 
-    var color: SwiftUI.Color {
-        SwiftUI.Color(uiColor)
-    }
+    // MARK: Public
 
     public var uiColor: UIColor {
         switch self {
@@ -29,7 +27,13 @@ public enum NoteColor {
         }
     }
 
+    // MARK: Internal
+
     static var sortedColors: [NoteColor] {
         [.yellow, .green, .blue, .red, .purple]
+    }
+
+    var color: SwiftUI.Color {
+        SwiftUI.Color(uiColor)
     }
 }

@@ -6,13 +6,17 @@
 //
 
 public struct Word: Equatable, Comparable {
-    public let verse: AyahNumber
-    public let wordNumber: Int
+    // MARK: Lifecycle
 
     public init(verse: AyahNumber, wordNumber: Int) {
         self.verse = verse
         self.wordNumber = wordNumber
     }
+
+    // MARK: Public
+
+    public let verse: AyahNumber
+    public let wordNumber: Int
 
     public static func < (lhs: Word, rhs: Word) -> Bool {
         if lhs.verse == rhs.verse {

@@ -15,14 +15,13 @@ import PromiseKit
 import Utilities
 
 public final class CoreDataLastPagePersistence: LastPagePersistence {
-    private static let maxNumberOfLastPages = 3
-
-    private let context: NSManagedObjectContext
-    private let overflowHandler = CoreDataLastPageOverflowHandler()
+    // MARK: Lifecycle
 
     public init(stack: CoreDataStack) {
         context = stack.newBackgroundContext()
     }
+
+    // MARK: Public
 
     public func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never> {
         let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
@@ -41,43 +40,10 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
         }
     }
 
-    // TODO: Remove the following code
-    func add(_ lastPages: [LastPagePersistenceModel]) -> Promise<Void> {
-        guard !lastPages.isEmpty else {
-            return .value(())
-        }
-        return context.perform { context in
-            for lastPage in lastPages {
-                // insert new page
-                let newLastPage = MO_LastPage(context: context)
-                newLastPage.createdOn = lastPage.createdOn
-                newLastPage.modifiedOn = lastPage.modifiedOn
-                newLastPage.page = Int32(lastPage.page)
-            }
-            try context.save(with: "Add Multiple LastPage")
-        }
-    }
-
     public func add(page: Int) -> Promise<LastPagePersistenceModel> {
         context.perform { context in
             try self.add(page: page, using: context)
         }
-    }
-
-    private func add(page: Int, using context: NSManagedObjectContext) throws -> LastPagePersistenceModel {
-        try delete(page: page, using: context)
-
-        // insert new page
-        let newLastPage = MO_LastPage(context: context)
-        newLastPage.createdOn = Date()
-        newLastPage.modifiedOn = Date()
-        newLastPage.page = Int32(page)
-
-        try context.save(with: "Add LastPage")
-
-        // remove overflow
-        try overflowHandler.removeOverflowIfneeded(using: context)
-        return LastPagePersistenceModel(newLastPage)
     }
 
     public func update(page oldPage: Int, toPage newPage: Int) -> Promise<LastPagePersistenceModel> {
@@ -101,6 +67,48 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
             try context.save(with: "Update LastPage")
             return LastPagePersistenceModel(existingPage)
         }
+    }
+
+    // MARK: Internal
+
+    // TODO: Remove the following code
+    func add(_ lastPages: [LastPagePersistenceModel]) -> Promise<Void> {
+        guard !lastPages.isEmpty else {
+            return .value(())
+        }
+        return context.perform { context in
+            for lastPage in lastPages {
+                // insert new page
+                let newLastPage = MO_LastPage(context: context)
+                newLastPage.createdOn = lastPage.createdOn
+                newLastPage.modifiedOn = lastPage.modifiedOn
+                newLastPage.page = Int32(lastPage.page)
+            }
+            try context.save(with: "Add Multiple LastPage")
+        }
+    }
+
+    // MARK: Private
+
+    private static let maxNumberOfLastPages = 3
+
+    private let context: NSManagedObjectContext
+    private let overflowHandler = CoreDataLastPageOverflowHandler()
+
+    private func add(page: Int, using context: NSManagedObjectContext) throws -> LastPagePersistenceModel {
+        try delete(page: page, using: context)
+
+        // insert new page
+        let newLastPage = MO_LastPage(context: context)
+        newLastPage.createdOn = Date()
+        newLastPage.modifiedOn = Date()
+        newLastPage.page = Int32(page)
+
+        try context.save(with: "Add LastPage")
+
+        // remove overflow
+        try overflowHandler.removeOverflowIfneeded(using: context)
+        return LastPagePersistenceModel(newLastPage)
     }
 
     private func delete(page: Int, using context: NSManagedObjectContext) throws {

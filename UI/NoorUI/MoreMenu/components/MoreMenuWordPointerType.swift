@@ -11,6 +11,7 @@ import UIx
 
 struct MoreMenuWordPointerType: View {
     let type: MoreMenu.TranslationPointerType
+
     var body: some View {
         HStack {
             Text(l("menu.pointer.select_translation"))

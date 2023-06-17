@@ -24,6 +24,8 @@ public enum FileSystemError: Error {
     case noDiskSpace
     case unknown(Error)
 
+    // MARK: Lifecycle
+
     public init(error: Error) {
         if let error = error as? CocoaError {
             if error.code == .fileWriteOutOfSpace {

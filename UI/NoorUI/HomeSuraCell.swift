@@ -10,6 +10,8 @@ import SwiftUI
 import UIx
 
 public struct HomeSuraCell: View {
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         localizedSuraNumber: String,
@@ -26,12 +28,7 @@ public struct HomeSuraCell: View {
         self.subtitle = subtitle
     }
 
-    let page: Int
-    let localizedSuraNumber: String
-    let maxLocalizedSuraNumber: String
-    let localizedSura: String
-    let arabicSuraName: String
-    let subtitle: String
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -55,10 +52,20 @@ public struct HomeSuraCell: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let page: Int
+    let localizedSuraNumber: String
+    let maxLocalizedSuraNumber: String
+    let localizedSura: String
+    let arabicSuraName: String
+    let subtitle: String
 }
 
 struct HomeSuraCell_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             HomeSuraCell(
@@ -82,4 +89,8 @@ struct HomeSuraCell_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }

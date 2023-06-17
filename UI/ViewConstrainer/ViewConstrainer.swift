@@ -21,14 +21,20 @@
 import UIKit
 
 public class ViewConstrainer {
-    let view: UIView
-
-    public internal(set) var chain: [NSLayoutConstraint]
+    // MARK: Lifecycle
 
     init(view: UIView, chain: [NSLayoutConstraint]) {
         self.view = view
         self.chain = chain
     }
+
+    // MARK: Public
+
+    public internal(set) var chain: [NSLayoutConstraint]
+
+    // MARK: Internal
+
+    let view: UIView
 }
 
 extension ViewConstrainer {

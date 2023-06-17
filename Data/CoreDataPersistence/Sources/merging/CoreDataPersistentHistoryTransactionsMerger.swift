@@ -11,10 +11,13 @@ import SystemDependencies
 import VLogging
 
 struct CoreDataPersistentHistoryTransactionsMerger {
-    private let uniquifiers: [CoreDataEntityUniquifier]
+    // MARK: Lifecycle
+
     init(uniquifiers: [CoreDataEntityUniquifier]) {
         self.uniquifiers = uniquifiers
     }
+
+    // MARK: Internal
 
     func merge(transactions: [PersistentHistoryTransaction], using taskContext: NSManagedObjectContext) {
         for uniquifier in uniquifiers {
@@ -26,4 +29,8 @@ struct CoreDataPersistentHistoryTransactionsMerger {
             }
         }
     }
+
+    // MARK: Private
+
+    private let uniquifiers: [CoreDataEntityUniquifier]
 }

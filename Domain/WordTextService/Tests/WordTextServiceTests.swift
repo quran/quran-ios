@@ -11,9 +11,7 @@ import XCTest
 @testable import WordTextService
 
 class WordTextServiceTests: XCTestCase {
-    private var service: WordTextService!
-    private let word = Word(verse: AyahNumber(quran: Quran.hafsMadani1405, sura: 110, ayah: 3)!, wordNumber: 3)
-    private let preferences = WordTextPreferences.shared
+    // MARK: Internal
 
     override func setUpWithError() throws {
         service = WordTextService(fileURL: TestResources.resourceURL("words.db"))
@@ -30,4 +28,10 @@ class WordTextServiceTests: XCTestCase {
         let text = try await service.textForWord(word)
         XCTAssertEqual(text, "rabbika")
     }
+
+    // MARK: Private
+
+    private var service: WordTextService!
+    private let word = Word(verse: AyahNumber(quran: Quran.hafsMadani1405, sura: 110, ayah: 3)!, wordNumber: 3)
+    private let preferences = WordTextPreferences.shared
 }

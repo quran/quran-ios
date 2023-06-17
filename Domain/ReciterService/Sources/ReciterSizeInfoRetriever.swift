@@ -17,8 +17,7 @@ private struct AudioFileLists {
 }
 
 public struct ReciterSizeInfoRetriever: Sendable {
-    let baseURL: URL
-    let fileSystem: FileSystem
+    // MARK: Lifecycle
 
     public init(baseURL: URL) {
         self.init(baseURL: baseURL, fileSystem: DefaultFileSystem())
@@ -28,6 +27,8 @@ public struct ReciterSizeInfoRetriever: Sendable {
         self.baseURL = baseURL
         self.fileSystem = fileSystem
     }
+
+    // MARK: Public
 
     public func getReciterAudioDownloads(for reciters: [Reciter], quran: Quran) async -> [Reciter: ReciterAudioDownload] {
         await withTaskGroup(of: ReciterAudioDownload.self) { group in
@@ -80,6 +81,13 @@ public struct ReciterSizeInfoRetriever: Sendable {
             surasCount: quran.suras.count
         )
     }
+
+    // MARK: Internal
+
+    let baseURL: URL
+    let fileSystem: FileSystem
+
+    // MARK: Private
 
     private func sizeInBytes(of fileURLs: [URL]) -> UInt64 {
         var sizeInBytes: UInt64 = 0

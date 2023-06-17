@@ -9,9 +9,7 @@ import Localization
 import UIKit
 
 public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITableViewController {
-    private let onSelection: (Sura.Verse) -> Void
-    private let suras: [Sura]
-    private let selected: Sura.Verse
+    // MARK: Lifecycle
 
     public init(suras: [Sura], selected: Sura.Verse, onSelection: @escaping (Sura.Verse) -> Void) {
         self.suras = suras
@@ -24,6 +22,8 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Public
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -46,21 +46,6 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
         suras[section].verses.count
     }
 
-    private func selectedIndexPath() -> IndexPath? {
-        for (section, sura) in suras.enumerated() {
-            for (item, verse) in sura.verses.enumerated() {
-                if verse == selected {
-                    return IndexPath(item: item, section: section)
-                }
-            }
-        }
-        return nil
-    }
-
-    private func verseAtIndexPath(_ indexPath: IndexPath) -> Sura.Verse {
-        suras[indexPath.section].verses[indexPath.item]
-    }
-
     override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let verse = verseAtIndexPath(indexPath)
@@ -76,5 +61,26 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
 
     override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         onSelection(verseAtIndexPath(indexPath))
+    }
+
+    // MARK: Private
+
+    private let onSelection: (Sura.Verse) -> Void
+    private let suras: [Sura]
+    private let selected: Sura.Verse
+
+    private func selectedIndexPath() -> IndexPath? {
+        for (section, sura) in suras.enumerated() {
+            for (item, verse) in sura.verses.enumerated() {
+                if verse == selected {
+                    return IndexPath(item: item, section: section)
+                }
+            }
+        }
+        return nil
+    }
+
+    private func verseAtIndexPath(_ indexPath: IndexPath) -> Sura.Verse {
+        suras[indexPath.section].verses[indexPath.item]
     }
 }

@@ -35,6 +35,8 @@ struct GappedAudioRequest: QuranAudioRequest {
 }
 
 final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
+    // MARK: Internal
+
     func buildRequest(
         with reciter: Reciter,
         from start: AyahNumber,
@@ -50,6 +52,8 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
         let quranRequest = GappedAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
         return quranRequest
     }
+
+    // MARK: Private
 
     private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [URL], ayahs: [AyahNumber]) {
         guard case AudioType.gapped = reciter.audioType else {

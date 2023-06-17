@@ -12,7 +12,7 @@ import QuranKit
 import SQLitePersistence
 
 public struct GRDBWordFramePersistence: WordFramePersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -21,6 +21,8 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
     public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
+
+    // MARK: Public
 
     public func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {
         try await db.write { db in
@@ -53,20 +55,13 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
             return ayahMarkers.map { $0.toAyahNumberLocation(quran: page.quran) }
         }
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
 }
 
 private struct GRDBGlyph: Decodable, FetchableRecord, TableRecord {
-    var id: Int
-    var page: Int
-    var sura: Int
-    var ayah: Int
-    var line: Int
-    var position: Int
-    var minX: Int
-    var maxX: Int
-    var minY: Int
-    var maxY: Int
-
     enum CodingKeys: String, CodingKey {
         case id = "glyph_id"
         case page = "page_number"
@@ -96,6 +91,17 @@ private struct GRDBGlyph: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "glyphs"
     }
+
+    var id: Int
+    var page: Int
+    var sura: Int
+    var ayah: Int
+    var line: Int
+    var position: Int
+    var minX: Int
+    var maxX: Int
+    var minY: Int
+    var maxY: Int
 }
 
 extension GRDBGlyph {
@@ -113,13 +119,6 @@ extension GRDBGlyph {
 }
 
 private struct GRDBSuraHeader: Decodable, FetchableRecord, TableRecord {
-    var suraNumber: Int
-    var x: Int
-    var y: Int
-    var width: Int
-    var height: Int
-    var page: Int
-
     enum CodingKeys: String, CodingKey {
         case suraNumber = "sura_number"
         case x
@@ -141,6 +140,13 @@ private struct GRDBSuraHeader: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "sura_headers"
     }
+
+    var suraNumber: Int
+    var x: Int
+    var y: Int
+    var width: Int
+    var height: Int
+    var page: Int
 }
 
 extension GRDBSuraHeader {
@@ -153,12 +159,6 @@ extension GRDBSuraHeader {
 }
 
 private struct GRDBAyahMarker: Decodable, FetchableRecord, TableRecord {
-    var suraNumber: Int
-    var ayahNumber: Int
-    var x: Int
-    var y: Int
-    var page: Int
-
     enum CodingKeys: String, CodingKey {
         case suraNumber = "sura_number"
         case ayahNumber = "ayah_number"
@@ -178,6 +178,12 @@ private struct GRDBAyahMarker: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "ayah_markers"
     }
+
+    var suraNumber: Int
+    var ayahNumber: Int
+    var x: Int
+    var y: Int
+    var page: Int
 }
 
 extension GRDBAyahMarker {

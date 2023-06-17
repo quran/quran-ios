@@ -10,11 +10,14 @@ import SwiftUI
 import UIx
 
 public struct TableHeaderView: View {
+    // MARK: Lifecycle
+
     public init(title: String) {
         self.title = title
     }
 
-    let title: String
+    // MARK: Public
+
     public var body: some View {
         HStack {
             Text(title)
@@ -25,6 +28,10 @@ public struct TableHeaderView: View {
         }
         .background(Color.systemGray5)
     }
+
+    // MARK: Internal
+
+    let title: String
 }
 
 struct TableHeaderView_Previews: PreviewProvider {

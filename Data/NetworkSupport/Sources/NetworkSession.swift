@@ -76,10 +76,13 @@ extension URLSessionDataTask: NetworkSessionDataTask {
 }
 
 public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
-    let networkSessionDelegate: NetworkSessionDelegate
+    // MARK: Lifecycle
+
     public init(networkSessionDelegate: NetworkSessionDelegate) {
         self.networkSessionDelegate = networkSessionDelegate
     }
+
+    // MARK: Public
 
     public func urlSession(
         _ session: URLSession,
@@ -129,4 +132,8 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
             await networkSessionDelegate.networkSessionDidFinishEvents(forBackgroundURLSession: session)
         }
     }
+
+    // MARK: Internal
+
+    let networkSessionDelegate: NetworkSessionDelegate
 }

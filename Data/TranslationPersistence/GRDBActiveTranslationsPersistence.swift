@@ -12,7 +12,7 @@ import SQLitePersistence
 import VLogging
 
 public struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -28,23 +28,7 @@ public struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    private var migrator: DatabaseMigrator {
-        var migrator = DatabaseMigrator()
-        migrator.registerMigration("createTranslations") { db in
-            try db.create(table: "translations", options: .ifNotExists) { table in
-                table.primaryKey("_ID", .integer)
-                table.column("name", .text).notNull()
-                table.column("translator", .text)
-                table.column("translator_foreign", .text)
-                table.column("fileURL", .text).notNull()
-                table.column("filename", .text).notNull()
-                table.column("languageCode", .text).notNull()
-                table.column("version", .integer).notNull()
-                table.column("installedVersion", .integer)
-            }
-        }
-        return migrator
-    }
+    // MARK: Public
 
     public func retrieveAll() async throws -> [Translation] {
         try await db.read { db in
@@ -73,21 +57,35 @@ public struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
             try grdbTranslation.update(db)
         }
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
+
+    // MARK: Private
+
+    private var migrator: DatabaseMigrator {
+        var migrator = DatabaseMigrator()
+        migrator.registerMigration("createTranslations") { db in
+            try db.create(table: "translations", options: .ifNotExists) { table in
+                table.primaryKey("_ID", .integer)
+                table.column("name", .text).notNull()
+                table.column("translator", .text)
+                table.column("translator_foreign", .text)
+                table.column("fileURL", .text).notNull()
+                table.column("filename", .text).notNull()
+                table.column("languageCode", .text).notNull()
+                table.column("version", .integer).notNull()
+                table.column("installedVersion", .integer)
+            }
+        }
+        return migrator
+    }
 }
 
 // MARK: - Database Model
 
 private struct GRDBTranslation: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
-    var id: Int
-    var displayName: String
-    var translator: String?
-    var translatorForeign: String?
-    var fileURL: String
-    var fileName: String
-    var languageCode: String
-    var version: Int
-    var installedVersion: Int?
-
     enum CodingKeys: String, CodingKey {
         case id = "_ID"
         case displayName = "name"
@@ -104,6 +102,16 @@ private struct GRDBTranslation: Identifiable, Codable, FetchableRecord, MutableP
     static var databaseTableName: String {
         "translations"
     }
+
+    var id: Int
+    var displayName: String
+    var translator: String?
+    var translatorForeign: String?
+    var fileURL: String
+    var fileName: String
+    var languageCode: String
+    var version: Int
+    var installedVersion: Int?
 }
 
 // Mapping functions

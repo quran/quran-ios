@@ -11,9 +11,7 @@ import Foundation
 import Utilities
 import VLogging
 
-/**
- Core Data stack setup including history processing.
- */
+/// Core Data stack setup including history processing.
 public class CoreDataStack {
     private let appTransactionAuthorName = "app"
 
@@ -41,9 +39,7 @@ public class CoreDataStack {
         return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
     }
 
-    /**
-     A persistent container that can load cloud-backed and non-cloud stores.
-     */
+    /// A persistent container that can load cloud-backed and non-cloud stores.
     lazy var persistentContainer: NSPersistentContainer = {
         let container = newPersistenceContainer()
 
@@ -79,9 +75,7 @@ public class CoreDataStack {
         return container
     }()
 
-    /**
-     An operation queue for handling history processing tasks: watching changes, deduplicating entities, and triggering UI updates if needed.
-     */
+    /// An operation queue for handling history processing tasks: watching changes, deduplicating entities, and triggering UI updates if needed.
     private lazy var historyQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
@@ -98,9 +92,7 @@ public class CoreDataStack {
         return context
     }
 
-    /**
-     Handle remote store change notifications (.NSPersistentStoreRemoteChange).
-     */
+    /// Handle remote store change notifications (.NSPersistentStoreRemoteChange).
     @objc
     @available(iOS 13.0, *)
     private func storeRemoteChange(_ notification: Notification) {

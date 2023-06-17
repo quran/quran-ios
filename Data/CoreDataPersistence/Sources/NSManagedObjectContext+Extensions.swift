@@ -11,9 +11,7 @@ import Crashing
 import PromiseKit
 
 public extension NSManagedObjectContext {
-    /**
-     Save a context, or handle the save error (for example, when there data inconsistency or low memory).
-     */
+    /// Save a context, or handle the save error (for example, when there data inconsistency or low memory).
     func save(with context: String) throws {
         guard hasChanges else { return }
         do {

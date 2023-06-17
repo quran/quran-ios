@@ -21,16 +21,15 @@ struct DefaultTranslationUnzipper: TranslationUnzipper {
             return
         }
 
-        /* states:
-
-         Is Zip, zip exists  , db exists
-         false,  x           , false     // Not Downloaded
-         false,  x           , true      // need to check version (might be download/updgrade)
-         true,   false       , false     // Not Downloaded
-         true,   false       , true      // need to check version (might be download/updgrade)
-         true,   true        , false     // Unzip, delete zip, check version
-         true,   true        , true      // Unzip, delete zip, check version | Probably upgrade
-         */
+        // states:
+        //
+        // Is Zip, zip exists  , db exists
+        // false,  x           , false     // Not Downloaded
+        // false,  x           , true      // need to check version (might be download/updgrade)
+        // true,   false       , false     // Not Downloaded
+        // true,   false       , true      // need to check version (might be download/updgrade)
+        // true,   true        , false     // Unzip, delete zip, check version
+        // true,   true        , true      // Unzip, delete zip, check version | Probably upgrade
 
         // unzip if needed
         if translation.isUnprocessedFileZip {

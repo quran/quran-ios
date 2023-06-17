@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIBezierPath {
-    /** Returns an image of the path drawn using a stroke */
+    /// Returns an image of the path drawn using a stroke
     public func image(strokeColor: UIColor?, fillColor: UIColor?) -> UIImage? {
         let size = CGSize(
             width: bounds.size.width + lineWidth,

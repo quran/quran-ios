@@ -107,7 +107,8 @@ private struct MoreMenuRootView: View {
         }
     }
 
-    @ViewBuilder private func viewBasedOn(
+    @ViewBuilder
+    private func viewBasedOn(
         _ state: ConfigState,
         customCondition: Bool = true,
         @ViewBuilder content: () -> some View

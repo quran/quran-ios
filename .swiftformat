@@ -3,6 +3,8 @@
 --importgrouping testable-bottom # sortedImports
 --wraparguments before-first # wrapArguments
 --wrapparameters before-first # wrapArguments
+--funcattributes prev-line # wrapAttributes
+--typeattributes prev-line # wrapAttributes
 
 # rules
 

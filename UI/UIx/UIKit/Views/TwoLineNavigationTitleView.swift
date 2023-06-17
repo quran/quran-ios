@@ -32,7 +32,8 @@ public class TwoLineNavigationTitleView: UIView {
         setUp()
     }
 
-    @available(*, unavailable) required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

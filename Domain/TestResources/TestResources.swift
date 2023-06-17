@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TestResources {
+public enum TestResources {
     public static var testDataURL: URL {
         Bundle.module.url(forResource: "test_data", withExtension: "")!
     }

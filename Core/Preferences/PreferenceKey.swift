@@ -8,7 +8,7 @@
 import Foundation
 
 #if DEBUG
-    private struct Statics {
+    private enum Statics {
         static var registeredKeys = Set<String>()
     }
 #endif

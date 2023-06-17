@@ -84,7 +84,7 @@ extension Reciter {
     }
 }
 
-private struct Files {
+private enum Files {
     static let audioExtension = "mp3"
     static let databaseRemoteFileExtension = "zip"
     static let databaseLocalFileExtension = "db"

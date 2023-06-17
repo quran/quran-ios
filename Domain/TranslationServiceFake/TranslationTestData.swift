@@ -8,7 +8,7 @@
 import Foundation
 import QuranText
 
-public struct TranslationTestData {
+public enum TranslationTestData {
     public static let khanTranslation = Translation(
         id: 1,
         displayName: "",

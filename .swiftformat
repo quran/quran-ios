@@ -9,7 +9,7 @@
 --wrapparameters before-first # wrapArguments
 --funcattributes prev-line # wrapAttributes
 --typeattributes prev-line # wrapAttributes
-
+--beforemarks typealias,struct  # organizeDeclarations
 
 # Disabled
 
@@ -28,3 +28,5 @@
 --enable blankLineAfterImports
 --enable blankLinesBetweenImports
 --enable blockComments
+--enable isEmpty
+--enable organizeDeclarations

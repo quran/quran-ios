@@ -14,13 +14,7 @@ import VerseTextPersistence
 @testable import TranslationService
 
 public struct LocalTranslationsFake {
-    public static let databasesURL = FileManager.documentsURL.appendingPathComponent("databases", isDirectory: true)
-
-    let preferences = SelectedTranslationsPreferences.shared
-    public let fileSystem = FileSystemFake()
-    public let persistence: ActiveTranslationsPersistence
-
-    public let retriever: LocalTranslationsRetriever
+    // MARK: Lifecycle
 
     public init(useFactory: Bool = false) {
         persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesURL)
@@ -34,6 +28,15 @@ public struct LocalTranslationsFake {
             retriever = LocalTranslationsRetriever(databasesURL: Self.databasesURL, fileSystem: fileSystem)
         }
     }
+
+    // MARK: Public
+
+    public static let databasesURL = FileManager.documentsURL.appendingPathComponent("databases", isDirectory: true)
+
+    public let fileSystem = FileSystemFake()
+    public let persistence: ActiveTranslationsPersistence
+
+    public let retriever: LocalTranslationsRetriever
 
     public func tearDown() {
         try? FileManager.default.removeItem(at: Self.databasesURL)
@@ -68,4 +71,8 @@ public struct LocalTranslationsFake {
             fileSystem.files.insert(translation.localURL)
         }
     }
+
+    // MARK: Internal
+
+    let preferences = SelectedTranslationsPreferences.shared
 }

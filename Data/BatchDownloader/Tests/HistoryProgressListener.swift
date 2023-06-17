@@ -10,8 +10,7 @@ import BatchDownloader
 import Utilities
 
 actor HistoryProgressListener {
-    var values: [Double] = []
-    var cancellable: CancellableTask?
+    // MARK: Lifecycle
 
     init(_ subject: AsyncPublisher<DownloadProgress>) async {
         let taskStarted = AsyncChannel<Void>()
@@ -26,4 +25,9 @@ actor HistoryProgressListener {
         .asCancellableTask()
         await taskStarted.next()
     }
+
+    // MARK: Internal
+
+    var values: [Double] = []
+    var cancellable: CancellableTask?
 }

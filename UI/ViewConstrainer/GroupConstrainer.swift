@@ -21,7 +21,7 @@
 import UIKit
 
 public class GroupConstrainer: ViewConstrainer {
-    public let constraints: [NSLayoutConstraint]
+    // MARK: Lifecycle
 
     init(view: UIView, constraints: [NSLayoutConstraint], chain: [NSLayoutConstraint]) {
         self.constraints = constraints
@@ -37,4 +37,8 @@ public class GroupConstrainer: ViewConstrainer {
         let chain = constrainer.chain + group.flatMap(\.chain)
         self.init(view: constrainer.view, constraints: group.flatMap(\.constraints), chain: chain)
     }
+
+    // MARK: Public
+
+    public let constraints: [NSLayoutConstraint]
 }

@@ -14,18 +14,19 @@ struct FramePlaying {
 }
 
 struct FilePlaying {
-    let fileIndex: Int
+    // MARK: Lifecycle
 
     init(fileIndex: Int) {
         self.fileIndex = fileIndex
     }
+
+    // MARK: Internal
+
+    let fileIndex: Int
 }
 
 struct AudioPlaying {
-    let request: AudioRequest
-    private(set) var filePlaying: FilePlaying
-    private(set) var framePlaying: FramePlaying
-    var requestPlays: Int
+    // MARK: Lifecycle
 
     init(request: AudioRequest, fileIndex: Int, frameIndex: Int) {
         self.request = request
@@ -34,10 +35,12 @@ struct AudioPlaying {
         requestPlays = 0
     }
 
-    mutating func setPlaying(fileIndex: Int, frameIndex: Int) {
-        filePlaying = FilePlaying(fileIndex: fileIndex)
-        framePlaying.frameIndex = frameIndex
-    }
+    // MARK: Internal
+
+    let request: AudioRequest
+    private(set) var filePlaying: FilePlaying
+    private(set) var framePlaying: FramePlaying
+    var requestPlays: Int
 
     var file: AudioFile {
         request.files[filePlaying.fileIndex]
@@ -45,6 +48,28 @@ struct AudioPlaying {
 
     var frame: AudioFrame {
         file.frames[framePlaying.frameIndex]
+    }
+
+    var frameEndTime: TimeInterval? {
+        if let frameEndTime = request.files[filePlaying.fileIndex].frames[framePlaying.frameIndex].endTime {
+            return frameEndTime
+        }
+
+        guard let nextFrame = nextFrame() else {
+            // last frame
+            return request.endTime
+        }
+        if nextFrame.fileIndex == filePlaying.fileIndex {
+            // same file
+            return request.files[nextFrame.fileIndex].frames[nextFrame.frameIndex].startTime
+        }
+        // different file
+        return nil
+    }
+
+    mutating func setPlaying(fileIndex: Int, frameIndex: Int) {
+        filePlaying = FilePlaying(fileIndex: fileIndex)
+        framePlaying.frameIndex = frameIndex
     }
 
     func isLastPlayForCurrentFrame() -> Bool {
@@ -97,23 +122,6 @@ struct AudioPlaying {
             return (filePlaying.fileIndex + 1, 0)
         }
         // last frame
-        return nil
-    }
-
-    var frameEndTime: TimeInterval? {
-        if let frameEndTime = request.files[filePlaying.fileIndex].frames[framePlaying.frameIndex].endTime {
-            return frameEndTime
-        }
-
-        guard let nextFrame = nextFrame() else {
-            // last frame
-            return request.endTime
-        }
-        if nextFrame.fileIndex == filePlaying.fileIndex {
-            // same file
-            return request.files[nextFrame.fileIndex].frames[nextFrame.frameIndex].startTime
-        }
-        // different file
         return nil
     }
 }

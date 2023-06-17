@@ -11,20 +11,7 @@ import XCTest
 @testable import TranslationService
 
 class TranslationDeleterTests: XCTestCase {
-    private var retriever: LocalTranslationsRetriever {
-        localTranslationsFake.retriever
-    }
-
-    private var fileSystem: FileSystemFake {
-        localTranslationsFake.fileSystem
-    }
-
-    private var service: TranslationDeleter!
-    private var localTranslationsFake: LocalTranslationsFake!
-
-    private let preferences = SelectedTranslationsPreferences.shared
-
-    private let baseURL = URL(validURL: "http://example.com")
+    // MARK: Internal
 
     override func setUp() {
         super.setUp()
@@ -104,5 +91,22 @@ class TranslationDeleterTests: XCTestCase {
 
         let localTranslations = try await retriever.getLocalTranslations()
         XCTAssertEqual(localTranslations, [translation])
+    }
+
+    // MARK: Private
+
+    private var service: TranslationDeleter!
+    private var localTranslationsFake: LocalTranslationsFake!
+
+    private let preferences = SelectedTranslationsPreferences.shared
+
+    private let baseURL = URL(validURL: "http://example.com")
+
+    private var retriever: LocalTranslationsRetriever {
+        localTranslationsFake.retriever
+    }
+
+    private var fileSystem: FileSystemFake {
+        localTranslationsFake.fileSystem
     }
 }

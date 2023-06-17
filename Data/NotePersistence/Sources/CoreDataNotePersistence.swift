@@ -16,13 +16,14 @@ import QuranKit
 import SystemDependencies
 
 public struct CoreDataNotePersistence: NotePersistence {
-    private let context: NSManagedObjectContext
-    private let time: SystemTime
+    // MARK: Lifecycle
 
     public init(stack: CoreDataStack, time: SystemTime = DefaultSystemTime()) {
         context = stack.newBackgroundContext()
         self.time = time
     }
+
+    // MARK: Public
 
     public func notes() -> AnyPublisher<[NotePersistenceModel], Never> {
         let request: NSFetchRequest<MO_Note> = MO_Note.fetchRequest()
@@ -45,6 +46,29 @@ public struct CoreDataNotePersistence: NotePersistence {
             try createOrUpdateNoteHighlight(verses: verses, color: color, note: note, context: context)
         }
     }
+
+    public func removeNotes(with verses: [VersePersistenceModel]) -> Promise<[NotePersistenceModel]> {
+        context.perform { context in
+            let notes = try notes(with: verses, using: context)
+            // get the values before deletion
+            let notesToReturn = notes.map { NotePersistenceModel($0) }
+
+            // delete all notes and associated verses
+            for note in notes {
+                context.delete(note)
+                for verse in note.typedVerses {
+                    context.delete(verse)
+                }
+            }
+            try context.save(with: #function)
+            return notesToReturn
+        }
+    }
+
+    // MARK: Private
+
+    private let context: NSManagedObjectContext
+    private let time: SystemTime
 
     private func createOrUpdateNoteHighlight(
         verses selectedVerses: [VersePersistenceModel],
@@ -105,24 +129,6 @@ public struct CoreDataNotePersistence: NotePersistence {
         // save
         try context.save(with: #function)
         return NotePersistenceModel(selectedNote)
-    }
-
-    public func removeNotes(with verses: [VersePersistenceModel]) -> Promise<[NotePersistenceModel]> {
-        context.perform { context in
-            let notes = try notes(with: verses, using: context)
-            // get the values before deletion
-            let notesToReturn = notes.map { NotePersistenceModel($0) }
-
-            // delete all notes and associated verses
-            for note in notes {
-                context.delete(note)
-                for verse in note.typedVerses {
-                    context.delete(verse)
-                }
-            }
-            try context.save(with: #function)
-            return notesToReturn
-        }
     }
 
     // MARK: - Helpers

@@ -10,11 +10,13 @@ import SwiftUI
 import UIx
 
 public struct PageNumberListItemView: View {
+    // MARK: Lifecycle
+
     public init(page: Int) {
         self.page = page
     }
 
-    let page: Int
+    // MARK: Public
 
     public var body: some View {
         Text(NumberFormatter.shared.format(page))
@@ -22,6 +24,10 @@ public struct PageNumberListItemView: View {
             .font(.callout)
             .fontWeight(.light)
     }
+
+    // MARK: Internal
+
+    let page: Int
 }
 
 struct PageNumberListItemView_Previews: PreviewProvider {

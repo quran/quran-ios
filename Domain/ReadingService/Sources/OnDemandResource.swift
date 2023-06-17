@@ -11,12 +11,14 @@ import SystemDependencies
 import VLogging
 
 struct OnDemandResource {
-    private let request: BundleResourceRequest
+    // MARK: Lifecycle
 
     public init(request: BundleResourceRequest) {
         self.request = request
         request.loadingPriority = NSBundleResourceRequestLoadingPriorityUrgent
     }
+
+    // MARK: Internal
 
     func fetch(onProgressChange: @Sendable @escaping (Double) -> Void) async throws {
         logger.info("Fetching resources \(request.tags)")
@@ -39,4 +41,8 @@ struct OnDemandResource {
             throw error
         }
     }
+
+    // MARK: Private
+
+    private let request: BundleResourceRequest
 }

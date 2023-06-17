@@ -12,9 +12,7 @@ import XCTest
 @testable import NetworkSupport
 
 class NetworkManagerTests: XCTestCase {
-    private var networkManager: NetworkManager!
-    private var session: NetworkSessionFake!
-    private let baseURL = URL(validURL: "http://example.com")
+    // MARK: Internal
 
     override func setUpWithError() throws {
         session = NetworkSessionFake(queue: .main, delegate: nil)
@@ -46,4 +44,10 @@ class NetworkManagerTests: XCTestCase {
             throws: NetworkError.unknown(error) as NSError
         )
     }
+
+    // MARK: Private
+
+    private var networkManager: NetworkManager!
+    private var session: NetworkSessionFake!
+    private let baseURL = URL(validURL: "http://example.com")
 }

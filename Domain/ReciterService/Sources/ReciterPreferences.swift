@@ -11,9 +11,21 @@ import OrderedCollections
 import Preferences
 
 public class ReciterPreferences {
-    public static let shared = ReciterPreferences()
+    // MARK: Lifecycle
 
     private init() {}
+
+    // MARK: Public
+
+    public static let shared = ReciterPreferences()
+
+    @Preference(lastSelectedReciterId)
+    public var lastSelectedReciterId: Int
+
+    @TransformedPreference(recentReciterIds, transformer: recentReciterIdsTransfomer)
+    public var recentReciterIds: OrderedSet<Int>
+
+    // MARK: Private
 
     private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)
     private static let recentReciterIds = PreferenceKey<[Int]>(key: "recentRecitersIdsKey", defaultValue: [])
@@ -21,10 +33,4 @@ public class ReciterPreferences {
         rawToValue: { OrderedSet($0) },
         valueToRaw: { Array($0) }
     )
-
-    @Preference(lastSelectedReciterId)
-    public var lastSelectedReciterId: Int
-
-    @TransformedPreference(recentReciterIds, transformer: recentReciterIdsTransfomer)
-    public var recentReciterIds: OrderedSet<Int>
 }

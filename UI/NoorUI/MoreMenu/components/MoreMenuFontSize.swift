@@ -11,16 +11,10 @@ import SwiftUI
 import UIx
 
 struct MoreMenuFontSize: View {
+    // MARK: Internal
+
     let label: String
     @Binding var fontSize: FontSize
-
-    private let fonts = Array(FontSize.allCases.sorted().reversed())
-    private var fontIndex: Binding<Int> {
-        Binding(
-            get: { fonts.firstIndex(of: fontSize)! },
-            set: { fontSize = fonts[$0] }
-        )
-    }
 
     var body: some View {
         Stepper(value: fontIndex, in: 0 ... fonts.count - 1) {
@@ -37,6 +31,17 @@ struct MoreMenuFontSize: View {
             }
         }
         .padding()
+    }
+
+    // MARK: Private
+
+    private let fonts = Array(FontSize.allCases.sorted().reversed())
+
+    private var fontIndex: Binding<Int> {
+        Binding(
+            get: { fonts.firstIndex(of: fontSize)! },
+            set: { fontSize = fonts[$0] }
+        )
     }
 
     private var fontSizeInPoints: CGFloat {
@@ -62,10 +67,13 @@ struct MoreMenuFontSize: View {
 struct MoreMenuFontSize_Previews: PreviewProvider {
     struct Container: View {
         @State var fontSize: FontSize
+
         var body: some View {
             MoreMenuFontSize(label: "Font Size", fontSize: $fontSize)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Previewing.screen {

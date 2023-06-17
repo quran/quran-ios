@@ -11,7 +11,7 @@ import SQLitePersistence
 import VLogging
 
 struct GRDBDownloadsPersistence: DownloadsPersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -26,30 +26,9 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
         self.init(db: DatabaseConnection(url: fileURL))
     }
 
-    private var migrator: DatabaseMigrator {
-        var migrator = DatabaseMigrator()
-        migrator.registerMigration("Download and DownloadBatches") { db in
-            try db.create(table: "grdbDownloadBatch", options: .ifNotExists) { table in
-                table.autoIncrementedPrimaryKey("id")
-            }
+    // MARK: Internal
 
-            try db.create(table: "grdbDownload", options: .ifNotExists) { table in
-                table.autoIncrementedPrimaryKey("id")
-                table.column("downloadBatchId", .integer)
-                    .notNull()
-                    .indexed()
-                    .references("grdbDownloadBatch", onDelete: .cascade)
-                table.column("url", .text)
-                    .notNull()
-                    .indexed()
-                table.column("resumeURL", .text).notNull()
-                table.column("destinationURL", .text).notNull()
-                table.column("status", .integer).notNull()
-                table.column("taskId", .integer)
-            }
-        }
-        return migrator
-    }
+    let db: DatabaseConnection
 
     func retrieveAll() async throws -> [DownloadBatch] {
         try await db.read { db in
@@ -92,19 +71,46 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
             }
         }
     }
+
+    // MARK: Private
+
+    private var migrator: DatabaseMigrator {
+        var migrator = DatabaseMigrator()
+        migrator.registerMigration("Download and DownloadBatches") { db in
+            try db.create(table: "grdbDownloadBatch", options: .ifNotExists) { table in
+                table.autoIncrementedPrimaryKey("id")
+            }
+
+            try db.create(table: "grdbDownload", options: .ifNotExists) { table in
+                table.autoIncrementedPrimaryKey("id")
+                table.column("downloadBatchId", .integer)
+                    .notNull()
+                    .indexed()
+                    .references("grdbDownloadBatch", onDelete: .cascade)
+                table.column("url", .text)
+                    .notNull()
+                    .indexed()
+                table.column("resumeURL", .text).notNull()
+                table.column("destinationURL", .text).notNull()
+                table.column("status", .integer).notNull()
+                table.column("taskId", .integer)
+            }
+        }
+        return migrator
+    }
 }
 
 // MARK: - Database Model
 
 private struct GRDBDownloadBatch: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
+    static let downloads = hasMany(GRDBDownload.self)
+
     var id: Int64?
 
     /// Updates the id after it has been inserted in the database.
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
     }
-
-    static let downloads = hasMany(GRDBDownload.self)
 }
 
 extension GRDBDownloadBatch {
@@ -120,6 +126,14 @@ extension GRDBDownloadBatch {
 extension Download.Status: Codable, DatabaseValueConvertible { }
 
 private struct GRDBDownload: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
+    enum Columns {
+        static let url = Column(CodingKeys.url)
+        static let status = Column(CodingKeys.status)
+        static let taskId = Column(CodingKeys.taskId)
+    }
+
+    static let downloadBatch = belongsTo(GRDBDownloadBatch.self)
+
     var id: Int64?
     var downloadBatchId: Int64
     var url: URL
@@ -131,14 +145,6 @@ private struct GRDBDownload: Identifiable, Codable, FetchableRecord, MutablePers
     /// Updates the id after it has been inserted in the database.
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
-    }
-
-    static let downloadBatch = belongsTo(GRDBDownloadBatch.self)
-
-    enum Columns {
-        static let url = Column(CodingKeys.url)
-        static let status = Column(CodingKeys.status)
-        static let taskId = Column(CodingKeys.taskId)
     }
 }
 

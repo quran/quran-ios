@@ -11,16 +11,19 @@ import QueuePlayer
 
 @MainActor
 class QueuePlayerFake: QueuingPlayer {
-    var actions: QueuePlayerActions?
+    // MARK: Lifecycle
 
     nonisolated init() {
     }
 
-    var state: PlayingState = .stopped
+    // MARK: Internal
+
     enum PlayingState: Equatable, Encodable {
         case playing(AudioRequest)
         case paused(AudioRequest)
         case stopped
+
+        // MARK: Internal
 
         var isPaused: Bool {
             switch self {
@@ -44,6 +47,9 @@ class QueuePlayerFake: QueuingPlayer {
         }
     }
 
+    var actions: QueuePlayerActions?
+
+    var state: PlayingState = .stopped
     var location = 0
 
     func play(request: AudioRequest) {

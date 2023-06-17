@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 public final class CancellableTask: Hashable {
-    private let cancel: () -> Void
+    // MARK: Lifecycle
 
     init(task: Task<some Any, some Any>) {
         cancel = { task.cancel() }
@@ -19,6 +19,8 @@ public final class CancellableTask: Hashable {
         cancel()
     }
 
+    // MARK: Public
+
     public static func == (lhs: CancellableTask, rhs: CancellableTask) -> Bool {
         lhs === rhs
     }
@@ -26,6 +28,10 @@ public final class CancellableTask: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }
+
+    // MARK: Private
+
+    private let cancel: () -> Void
 }
 
 extension Task {

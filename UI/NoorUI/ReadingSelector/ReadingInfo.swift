@@ -10,13 +10,7 @@ import Localization
 
 public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
     struct Property: Hashable {
-        enum PropertType {
-            case supports
-            case lacks
-        }
-
-        let type: PropertType
-        let property: String
+        // MARK: Lifecycle
 
         init(property: String) {
             if property.hasPrefix("!") {
@@ -27,14 +21,19 @@ public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
                 self.property = property
             }
         }
+
+        // MARK: Internal
+
+        enum PropertType {
+            case supports
+            case lacks
+        }
+
+        let type: PropertType
+        let property: String
     }
 
-    public let value: Value
-    public let title: String
-    public let description: String
-    let properties: [Property]
-
-    public var id: Value { value }
+    // MARK: Lifecycle
 
     public init(value: Value, title: String, description: String, properties: String) {
         self.value = value
@@ -42,6 +41,18 @@ public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
         self.description = description
         self.properties = properties.components(separatedBy: "\n").map(Property.init)
     }
+
+    // MARK: Public
+
+    public let value: Value
+    public let title: String
+    public let description: String
+
+    public var id: Value { value }
+
+    // MARK: Internal
+
+    let properties: [Property]
 }
 
 // Test data

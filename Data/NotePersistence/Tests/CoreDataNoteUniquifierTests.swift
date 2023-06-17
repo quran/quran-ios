@@ -15,6 +15,8 @@ import SystemDependenciesFake
 import XCTest
 
 class CoreDataNoteUniquifierTests: XCTestCase {
+    // MARK: Internal
+
     var sut: CoreDataNoteUniquifier!
     var context: NSManagedObjectContext!
     var stack: CoreDataStack!
@@ -95,6 +97,8 @@ class CoreDataNoteUniquifierTests: XCTestCase {
         let notes = try context.allNotes()
         XCTAssertEqual(notes.map(\.note), ["Note 3", "Note 2", "Note 1"])
     }
+
+    // MARK: Private
 
     // MARK: - Helpers
 

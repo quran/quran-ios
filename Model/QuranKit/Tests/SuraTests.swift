@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranKit
 
 final class SuraTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testSuras() throws {
         let suras = quran.suras
@@ -98,4 +98,8 @@ final class SuraTests: XCTestCase {
             _ = Dictionary(grouping: suras, by: { $0.page.startJuz })
         }
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

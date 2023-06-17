@@ -8,8 +8,7 @@
 import Foundation
 
 public struct PreferenceTransformer<Raw, T> {
-    public let rawToValue: (Raw) -> T
-    public let valueToRaw: (T) -> Raw
+    // MARK: Lifecycle
 
     public init(
         rawToValue: @escaping (Raw) -> T,
@@ -18,6 +17,11 @@ public struct PreferenceTransformer<Raw, T> {
         self.rawToValue = rawToValue
         self.valueToRaw = valueToRaw
     }
+
+    // MARK: Public
+
+    public let rawToValue: (Raw) -> T
+    public let valueToRaw: (T) -> Raw
 }
 
 extension PreferenceTransformer where T: RawRepresentable, T.RawValue == Raw {

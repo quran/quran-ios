@@ -15,14 +15,7 @@ import XCTest
 @testable import TranslationService
 
 final class QuranTextDataServiceTests: XCTestCase {
-    private var textService: QuranTextDataService!
-    private var localTranslationsFake: LocalTranslationsFake!
-    private let quran = Quran.hafsMadani1405
-
-    private let translations = [
-        TestData.khanTranslation,
-        TestData.sahihTranslation,
-    ]
+    // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -117,6 +110,17 @@ final class QuranTextDataServiceTests: XCTestCase {
         let expected = TranslatedVerses(translations: translations, verses: [expectedVerse])
         XCTAssertEqual(expected, versesText)
     }
+
+    // MARK: Private
+
+    private var textService: QuranTextDataService!
+    private var localTranslationsFake: LocalTranslationsFake!
+    private let quran = Quran.hafsMadani1405
+
+    private let translations = [
+        TestData.khanTranslation,
+        TestData.sahihTranslation,
+    ]
 }
 
 extension String {

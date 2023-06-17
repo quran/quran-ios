@@ -30,14 +30,14 @@ final class OperationCacheableService<Input: Hashable & Sendable, Output: Sendab
         var inProgressOperations: [Input: MulticastContinuation<Output, Error>] = [:]
     }
 
-    private let state: ManagedCriticalState<State>
-
-    private let operation: CacheableOperation<Input, Output>
+    // MARK: Lifecycle
 
     init(cache: Cache<Input, Output>, operation: @escaping CacheableOperation<Input, Output>) {
         state = ManagedCriticalState(State(cache: cache))
         self.operation = operation
     }
+
+    // MARK: Internal
 
     func invalidate() {
         state.withCriticalRegion { state in
@@ -66,6 +66,18 @@ final class OperationCacheableService<Input: Hashable & Sendable, Output: Sendab
         }
     }
 
+    func getCached(_ input: Input) -> Output? {
+        state.withCriticalRegion { state in
+            state.cache.object(forKey: input)
+        }
+    }
+
+    // MARK: Private
+
+    private let state: ManagedCriticalState<State>
+
+    private let operation: CacheableOperation<Input, Output>
+
     private func startOperation(input: Input, continuations: MulticastContinuation<Output, Error>) {
         Task {
             // Execute.
@@ -81,12 +93,6 @@ final class OperationCacheableService<Input: Hashable & Sendable, Output: Sendab
                 // remove from in progress
                 state.inProgressOperations.removeValue(forKey: input)
             }
-        }
-    }
-
-    func getCached(_ input: Input) -> Output? {
-        state.withCriticalRegion { state in
-            state.cache.object(forKey: input)
         }
     }
 }

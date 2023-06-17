@@ -11,16 +11,15 @@ import SwiftUI
 import UIx
 
 public struct NoteEditorView: View {
+    // MARK: Lifecycle
+
     public init(note: EditableNote, done: @escaping () -> Void, delete: @escaping () -> Void) {
         _note = ObservedObject(initialValue: note)
         self.done = done
         self.delete = delete
     }
 
-    @ObservedObject var note: EditableNote
-
-    let done: () -> Void
-    let delete: () -> Void
+    // MARK: Public
 
     public var body: some View {
         VStack {
@@ -77,6 +76,13 @@ public struct NoteEditorView: View {
             note.editing = note.note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
     }
+
+    // MARK: Internal
+
+    @ObservedObject var note: EditableNote
+
+    let done: () -> Void
+    let delete: () -> Void
 }
 
 // swiftlint:disable line_length

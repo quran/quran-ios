@@ -11,11 +11,10 @@ import QuranText
 import VerseTextPersistence
 
 struct PersistenceSearcher: Searcher {
+    // MARK: Internal
+
     let versePersistence: SearchableTextPersistence
     let source: SearchResults.Source
-
-    private let termProcessor = SearchTermProcessor()
-    private let resultsProcessor = SearchResultsProcessor()
 
     func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
         let processedTerm = termProcessor.prepareSearchTermForAutocompletion(term)
@@ -35,4 +34,9 @@ struct PersistenceSearcher: Searcher {
         let items = resultsProcessor.buildSearchResults(searchRegex: processedTerm.pattern, verses: matches)
         return [SearchResults(source: source, items: items)]
     }
+
+    // MARK: Private
+
+    private let termProcessor = SearchTermProcessor()
+    private let resultsProcessor = SearchResultsProcessor()
 }

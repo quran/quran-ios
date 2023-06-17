@@ -11,6 +11,8 @@ import SwiftUI
 import UIx
 
 public struct NoteCell: View {
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         localizedVerse: String,
@@ -31,14 +33,7 @@ public struct NoteCell: View {
         self.color = color
     }
 
-    let page: Int
-    let localizedVerse: String
-    let arabicSuraName: String
-    let versesCount: Int
-    let ayahText: String
-    let note: String
-    let createdSince: String
-    let color: NoteColor
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -84,11 +79,23 @@ public struct NoteCell: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let page: Int
+    let localizedVerse: String
+    let arabicSuraName: String
+    let versesCount: Int
+    let ayahText: String
+    let note: String
+    let createdSince: String
+    let color: NoteColor
 }
 
 // swiftlint:disable line_length
 struct NoteCellCell_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             NoteCell(
@@ -116,6 +123,10 @@ struct NoteCellCell_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }
 
 // swiftlint:enable line_length

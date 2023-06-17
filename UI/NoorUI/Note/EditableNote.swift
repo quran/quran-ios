@@ -8,11 +8,7 @@
 import Combine
 
 public class EditableNote: ObservableObject {
-    public let ayahText: String
-    public let modifiedSince: String
-    @Published public internal(set) var selectedColor: NoteColor
-    @Published public internal(set) var note: String
-    @Published var editing: Bool
+    // MARK: Lifecycle
 
     public init(ayahText: String, modifiedSince: String, selectedColor: NoteColor, note: String) {
         self.ayahText = ayahText
@@ -21,4 +17,15 @@ public class EditableNote: ObservableObject {
         self.note = note
         editing = false
     }
+
+    // MARK: Public
+
+    public let ayahText: String
+    public let modifiedSince: String
+    @Published public internal(set) var selectedColor: NoteColor
+    @Published public internal(set) var note: String
+
+    // MARK: Internal
+
+    @Published var editing: Bool
 }

@@ -18,9 +18,7 @@ import QuranKit
 import QuranTextKit
 
 public struct NoteService {
-    let persistence: NotePersistence
-    let textService: QuranTextDataService
-    let analytics: AnalyticsLibrary
+    // MARK: Lifecycle
 
     public init(persistence: NotePersistence, textService: QuranTextDataService, analytics: AnalyticsLibrary) {
         self.persistence = persistence
@@ -28,14 +26,7 @@ public struct NoteService {
         self.analytics = analytics
     }
 
-    private static let defaultLastUsedNoteHighlightColor = Note.Color.red
-    private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
-        key: "lastUsedNoteHighlightColor",
-        defaultValue: defaultLastUsedNoteHighlightColor.rawValue
-    )
-
-    @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
-    private var lastUsedHighlightColor: Note.Color
+    // MARK: Public
 
     public func color(from notes: [Note]) -> Note.Color {
         notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
@@ -74,11 +65,6 @@ public struct NoteService {
             .eraseToAnyPublisher()
     }
 
-    private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
-        let translatedVerses = try await textService.textForVerses(verses, translations: [])
-        return Dictionary(zip(verses, translatedVerses.verses).map { ($0, $1.arabicText) }, uniquingKeysWith: { x, _ in x })
-    }
-
     public func textForVerses(_ verses: [AyahNumber]) async throws -> String {
         let versesWithText = try await textDictionaryForVerses(verses)
         let sortedVerses = verses.sorted()
@@ -86,6 +72,28 @@ public struct NoteService {
         let combinedVersesText = versesText.map { $0.1 + " \(NumberFormatter.arabicNumberFormatter.format($0.0.ayah))" }
             .joined(separator: " ")
         return combinedVersesText
+    }
+
+    // MARK: Internal
+
+    let persistence: NotePersistence
+    let textService: QuranTextDataService
+    let analytics: AnalyticsLibrary
+
+    // MARK: Private
+
+    private static let defaultLastUsedNoteHighlightColor = Note.Color.red
+    private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
+        key: "lastUsedNoteHighlightColor",
+        defaultValue: defaultLastUsedNoteHighlightColor.rawValue
+    )
+
+    @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
+    private var lastUsedHighlightColor: Note.Color
+
+    private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
+        let translatedVerses = try await textService.textForVerses(verses, translations: [])
+        return Dictionary(zip(verses, translatedVerses.verses).map { ($0, $1.arabicText) }, uniquingKeysWith: { x, _ in x })
     }
 }
 

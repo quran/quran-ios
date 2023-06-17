@@ -9,14 +9,17 @@ import Localization
 import SwiftUI
 
 public struct ContentStatusView: View {
+    // MARK: Lifecycle
+
+    public init(state: State) {
+        self.state = state
+    }
+
+    // MARK: Public
+
     public enum State {
         case downloading(progress: Double)
         case error(_ error: Error, retry: () -> Void)
-    }
-
-    private let state: State
-    public init(state: State) {
-        self.state = state
     }
 
     public var body: some View {
@@ -33,6 +36,10 @@ public struct ContentStatusView: View {
         }
         .padding()
     }
+
+    // MARK: Private
+
+    private let state: State
 
     private func downloadingView(_ progress: Double) -> some View {
         VStack {

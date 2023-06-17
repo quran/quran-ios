@@ -10,17 +10,13 @@ import Preferences
 import QuranText
 
 public struct QuranContentStatePreferences {
-    public static let shared = QuranContentStatePreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
-    private static let twoPagesEnabled = PreferenceKey<Bool>(key: "twoPagesEnabled", defaultValue: TwoPagesUtils.settingDefaultValue)
-    private static let verticalScrollingEnabled = PreferenceKey<Bool>(key: "verticalScrollingEnabled", defaultValue: false)
+    // MARK: Public
 
-    private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
-        rawToValue: { $0 ? .translation : .arabic },
-        valueToRaw: { $0 == .translation }
-    )
+    public static let shared = QuranContentStatePreferences()
 
     @TransformedPreference(showQuranTranslationView, transformer: quranModeTransfomer)
     public var quranMode: QuranMode
@@ -30,4 +26,15 @@ public struct QuranContentStatePreferences {
 
     @Preference(verticalScrollingEnabled)
     public var verticalScrollingEnabled: Bool
+
+    // MARK: Private
+
+    private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
+    private static let twoPagesEnabled = PreferenceKey<Bool>(key: "twoPagesEnabled", defaultValue: TwoPagesUtils.settingDefaultValue)
+    private static let verticalScrollingEnabled = PreferenceKey<Bool>(key: "verticalScrollingEnabled", defaultValue: false)
+
+    private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
+        rawToValue: { $0 ? .translation : .arabic },
+        valueToRaw: { $0 == .translation }
+    )
 }

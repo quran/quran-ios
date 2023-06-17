@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranKit
 
 final class HizbTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testHizbs() throws {
         let hizbs = quran.hizbs
@@ -51,4 +51,8 @@ final class HizbTests: XCTestCase {
         XCTAssertEqual(hizbs[5].firstVerse.sura.suraNumber, 3)
         XCTAssertEqual(hizbs[5].firstVerse.ayah, 15)
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

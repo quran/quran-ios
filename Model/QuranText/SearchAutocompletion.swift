@@ -8,11 +8,15 @@
 import Foundation
 
 public struct SearchAutocompletion: Hashable {
-    public let text: String
-    public let highlightedRange: NSRange?
+    // MARK: Lifecycle
 
     public init(text: String, term: String) {
         self.text = text
         highlightedRange = (text as NSString).range(of: term)
     }
+
+    // MARK: Public
+
+    public let text: String
+    public let highlightedRange: NSRange?
 }

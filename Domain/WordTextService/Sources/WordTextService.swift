@@ -11,12 +11,13 @@ import QuranKit
 import WordTextPersistence
 
 public struct WordTextService {
-    private let preferences = WordTextPreferences.shared
-    private let persistence: WordTextPersistence
+    // MARK: Lifecycle
 
     public init(fileURL: URL) {
         persistence = GRDBWordTextPersistence(fileURL: fileURL)
     }
+
+    // MARK: Public
 
     public func textForWord(_ word: Word) async throws -> String? {
         let textType = preferences.wordTextType
@@ -29,4 +30,9 @@ public struct WordTextService {
         }
         return text
     }
+
+    // MARK: Private
+
+    private let preferences = WordTextPreferences.shared
+    private let persistence: WordTextPersistence
 }

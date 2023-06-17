@@ -10,8 +10,12 @@ import QuranKit
 import UIKit
 
 public struct WordFrameProcessor {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func processWordFrames(
         _ wordFrames: WordFrameCollection,
@@ -32,6 +36,8 @@ public struct WordFrameProcessor {
         let framesDictionary = Dictionary(grouping: framesByLines.flatMap(\.value), by: { $0.word.verse })
         return WordFrameCollection(frames: framesDictionary)
     }
+
+    // MARK: Private
 
     private func sortFramesInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
         // sort each line from left to right

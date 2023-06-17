@@ -10,7 +10,7 @@ import XCTest
 @testable import QuranTextKit
 
 final class QuartersDataRetrieverTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testQuarterLocalization() {
         XCTAssertEqual("Hizb 1", quran.quarters[0].localizedName)
@@ -36,4 +36,8 @@ final class QuartersDataRetrieverTests: XCTestCase {
         XCTAssertEqual("Juz' 30, ¾ Hizb 60", quran.pages[598].localizedQuarterName)
         XCTAssertEqual("Juz' 30", quran.pages[599].localizedQuarterName)
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

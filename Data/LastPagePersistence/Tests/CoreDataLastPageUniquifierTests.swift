@@ -15,6 +15,8 @@ import XCTest
 @testable import LastPagePersistence
 
 class CoreDataLastPageUniquifierTests: XCTestCase {
+    // MARK: Internal
+
     var sut: CoreDataLastPageUniquifier!
     var context: NSManagedObjectContext!
     var stack: CoreDataStack!
@@ -97,6 +99,8 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
 
         assertDatabaseContains([entity5, entity4])
     }
+
+    // MARK: Private
 
     private func assertDatabaseContains(
         _ entities: [MO_LastPage],

@@ -12,6 +12,13 @@ import Crashing
 // Inspired by: https://gist.github.com/darrarski/28d2f5a28ef2c5669d199069c30d3d52
 
 public final class CoreDataPublisher<Result>: Publisher where Result: NSFetchRequestResult {
+    // MARK: - Publisher
+
+    public typealias Output = [Result]
+    public typealias Failure = Never
+
+    // MARK: Lifecycle
+
     public init(request: NSFetchRequest<Result>, context: NSManagedObjectContext) {
         self.request = request
         self.context = context
@@ -21,13 +28,7 @@ public final class CoreDataPublisher<Result>: Publisher where Result: NSFetchReq
         self.init(request: request, context: stack.viewContext)
     }
 
-    let request: NSFetchRequest<Result>
-    let context: NSManagedObjectContext
-
-    // MARK: - Publisher
-
-    public typealias Output = [Result]
-    public typealias Failure = Never
+    // MARK: Public
 
     public func receive<S>(subscriber: S) where S: Subscriber, S.Failure == Failure, S.Input == Output {
         subscriber.receive(subscription: FetchedResultsSubscription(
@@ -36,6 +37,11 @@ public final class CoreDataPublisher<Result>: Publisher where Result: NSFetchReq
             context: context
         ))
     }
+
+    // MARK: Internal
+
+    let request: NSFetchRequest<Result>
+    let context: NSManagedObjectContext
 }
 
 final class FetchedResultsSubscription<SubscriberType, ResultType>: NSObject, Subscription, NSFetchedResultsControllerDelegate
@@ -45,6 +51,8 @@ final class FetchedResultsSubscription<SubscriberType, ResultType>: NSObject, Su
     SubscriberType.Failure == Never,
     ResultType: NSFetchRequestResult
 {
+    // MARK: Lifecycle
+
     init(
         subscriber: SubscriberType,
         request: NSFetchRequest<ResultType>,
@@ -54,6 +62,8 @@ final class FetchedResultsSubscription<SubscriberType, ResultType>: NSObject, Su
         self.request = request
         self.context = context
     }
+
+    // MARK: Internal
 
     private(set) var subscriber: SubscriberType?
     private(set) var request: NSFetchRequest<ResultType>?

@@ -13,7 +13,7 @@ import SQLitePersistence
 import VLogging
 
 public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
-    let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -22,6 +22,8 @@ public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     public init(fileURL: URL) {
         self.init(db: DatabaseConnection(url: fileURL))
     }
+
+    // MARK: Public
 
     public func getVersion() async throws -> Int {
         try await db.write { db in
@@ -55,13 +57,13 @@ public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
             return SuraTiming(verses: timings, endTime: endTime)
         }
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
 }
 
 private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
-    var sura: Int
-    var ayah: Int
-    var time: Int
-
     enum Columns {
         static let sura = Column(CodingKeys.sura)
         static let ayah = Column(CodingKeys.ayah)
@@ -71,12 +73,13 @@ private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "timings"
     }
+
+    var sura: Int
+    var ayah: Int
+    var time: Int
 }
 
 private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
-    var property: String
-    var value: String
-
     enum Columns {
         static let property = Column(CodingKeys.property)
         static let value = Column(CodingKeys.value)
@@ -85,4 +88,7 @@ private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {
     static var databaseTableName: String {
         "properties"
     }
+
+    var property: String
+    var value: String
 }

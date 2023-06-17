@@ -25,6 +25,8 @@ public enum PersistenceError: Error {
     case unknown(Error)
     case badFile(Error?)
 
+    // MARK: Public
+
     public static func generalError(_ error: Error, info: String) -> PersistenceError {
         .general("error: \(error), info: \(info)")
     }

@@ -20,9 +20,8 @@
 import MediaPlayer
 
 public struct PlayerItemInfo {
-    public let title: String
-    public let artist: String
-    public let artwork: MPMediaItemArtwork?
+    // MARK: Lifecycle
+
     public init(title: String, artist: String, image: UIImage?) {
         self.title = title
         self.artist = artist
@@ -32,4 +31,10 @@ public struct PlayerItemInfo {
             artwork = nil
         }
     }
+
+    // MARK: Public
+
+    public let title: String
+    public let artist: String
+    public let artwork: MPMediaItemArtwork?
 }

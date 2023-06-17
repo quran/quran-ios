@@ -24,8 +24,7 @@ import QuranText
 import TranslationPersistence
 
 public struct TranslationsRepository {
-    let networkManager: TranslationNetworkManager
-    let persistence: ActiveTranslationsPersistence
+    // MARK: Lifecycle
 
     public init(databasesURL: URL, baseURL: URL) {
         self.init(databasesURL: databasesURL, networkManager: NetworkManager(baseURL: baseURL))
@@ -36,6 +35,8 @@ public struct TranslationsRepository {
         persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
     }
 
+    // MARK: Public
+
     public func downloadAndSyncTranslations() async throws {
         async let local = persistence.retrieveAll()
         async let remote = networkManager.getTranslations()
@@ -43,6 +44,13 @@ public struct TranslationsRepository {
         let (translations, map) = try await combine(local: local, remote: remote)
         try await saveCombined(translations: translations, localMap: map)
     }
+
+    // MARK: Internal
+
+    let networkManager: TranslationNetworkManager
+    let persistence: ActiveTranslationsPersistence
+
+    // MARK: Private
 
     private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {
         let localMapConstant = local.flatGroup { $0.fileName }

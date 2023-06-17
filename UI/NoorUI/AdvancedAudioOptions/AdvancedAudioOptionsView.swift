@@ -11,13 +11,14 @@ import SwiftUI
 import UIx
 
 public struct AdvancedAudioOptionsView<Sura: AdvancedAudioUISura>: View {
-    @ObservedObject var dataObject: AdvancedAudioUI.DataObject<Sura>
-    private let actions: AdvancedAudioUI.Actions
+    // MARK: Lifecycle
 
     public init(dataObject: AdvancedAudioUI.DataObject<Sura>, actions: AdvancedAudioUI.Actions) {
         _dataObject = ObservedObject(initialValue: dataObject)
         self.actions = actions
     }
+
+    // MARK: Public
 
     public var body: some View {
         Form {
@@ -51,11 +52,20 @@ public struct AdvancedAudioOptionsView<Sura: AdvancedAudioUISura>: View {
             }
         }
     }
+
+    // MARK: Internal
+
+    @ObservedObject var dataObject: AdvancedAudioUI.DataObject<Sura>
+
+    // MARK: Private
+
+    private let actions: AdvancedAudioUI.Actions
 }
 
 private struct LastVerseButton: View {
     let label: String
     let action: () -> Void
+
     var body: some View {
         Button(action: action) {
             Text(label)
@@ -72,6 +82,7 @@ private struct LastVerseButton: View {
 
 private struct RoundedActiveBackground: View {
     let cornerRadius: CGFloat
+
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
             .fill(Color.appIdentity.opacity(0.8))
@@ -82,6 +93,7 @@ private struct RoundedActiveBackground: View {
 private struct RepeatView: View {
     let items: [AdvancedAudioUI.AudioRepeat]
     @Binding var selection: AdvancedAudioUI.AudioRepeat
+
     var body: some View {
         Picker("", selection: $selection) {
             ForEach(items, id: \.self) { item in
@@ -183,6 +195,7 @@ struct AdvancedAudioOptionsView_Previews: PreviewProvider {
             fromVerseTapped: {},
             toVerseTapped: {}
         )
+
         @ObservedObject var dataObject = AdvancedAudioUI.DataObject(
             suras: [PreviewSura(
                 localizedName: "Sura-1",
@@ -205,6 +218,8 @@ struct AdvancedAudioOptionsView_Previews: PreviewProvider {
             AdvancedAudioOptionsView(dataObject: dataObject, actions: Self.actions)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Previewing.screen(sizes: [ContentSizeCategory.large]) {

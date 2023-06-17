@@ -14,9 +14,7 @@ import XCTest
 @testable import QuranAudioKit
 
 class GaplessAudioRequestBuilderTests: XCTestCase {
-    private var audioRequestBuilder: QuranAudioRequestBuilder!
-    private var reciter = Reciter.gaplessReciter
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     override func setUpWithError() throws {
         try reciter.prepareGaplessReciterForTests(unZip: true)
@@ -57,4 +55,10 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
         let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
         XCTAssertNotEqual(firstFrame.startTime, .zero)
     }
+
+    // MARK: Private
+
+    private var audioRequestBuilder: QuranAudioRequestBuilder!
+    private var reciter = Reciter.gaplessReciter
+    private let quran = Quran.hafsMadani1405
 }

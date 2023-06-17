@@ -11,6 +11,8 @@ import SwiftUI
 import UIx
 
 public struct HomeQuarterCell: View {
+    // MARK: Lifecycle
+
     public init(
         page: Int,
         maxPage: Int,
@@ -29,13 +31,7 @@ public struct HomeQuarterCell: View {
         self.maxLocalizedQuarter = maxLocalizedQuarter
     }
 
-    let page: Int
-    let maxPage: Int
-    let text: String
-    let localizedVerse: String
-    let arabicSuraName: String
-    let localizedQuarter: String
-    let maxLocalizedQuarter: String
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -73,11 +69,22 @@ public struct HomeQuarterCell: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let page: Int
+    let maxPage: Int
+    let text: String
+    let localizedVerse: String
+    let arabicSuraName: String
+    let localizedQuarter: String
+    let maxLocalizedQuarter: String
 }
 
 // swiftlint:disable line_length
 struct HomeQuarterCell_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             HomeQuarterCell(
@@ -125,6 +132,10 @@ struct HomeQuarterCell_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }
 
 // swiftlint:enable line_length

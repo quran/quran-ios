@@ -15,12 +15,7 @@ import XCTest
 @testable import TranslationService
 
 class TranslationsDownloaderTests: XCTestCase {
-    private var downloader: TranslationsDownloader!
-    private var batchDownloader: DownloadManager!
-    private var session: NetworkSessionFake!
-    private var fileSystem: FileSystemFake!
-
-    private static let baseURL = URL(validURL: "http://example.com")
+    // MARK: Internal
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
@@ -56,6 +51,15 @@ class TranslationsDownloaderTests: XCTestCase {
         let downloads = await downloader.runningTranslationDownloads()
         XCTAssertEqual(downloads, [response])
     }
+
+    // MARK: Private
+
+    private static let baseURL = URL(validURL: "http://example.com")
+
+    private var downloader: TranslationsDownloader!
+    private var batchDownloader: DownloadManager!
+    private var session: NetworkSessionFake!
+    private var fileSystem: FileSystemFake!
 }
 
 private extension DownloadBatchResponse {

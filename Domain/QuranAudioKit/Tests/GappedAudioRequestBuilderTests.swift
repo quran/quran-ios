@@ -12,9 +12,7 @@ import XCTest
 @testable import QuranAudioKit
 
 class GappedAudioRequestBuilderTests: XCTestCase {
-    private var audioRequestBuilder: QuranAudioRequestBuilder!
-    private var reciter: Reciter!
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     override func setUpWithError() throws {
         reciter = .gappedReciter
@@ -79,4 +77,10 @@ class GappedAudioRequestBuilderTests: XCTestCase {
         }
         XCTAssertNotNil(bismillahFile)
     }
+
+    // MARK: Private
+
+    private var audioRequestBuilder: QuranAudioRequestBuilder!
+    private var reciter: Reciter!
+    private let quran = Quran.hafsMadani1405
 }

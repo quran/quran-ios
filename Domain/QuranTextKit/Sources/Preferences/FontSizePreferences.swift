@@ -9,16 +9,23 @@ import Preferences
 import QuranText
 
 public struct FontSizePreferences {
-    public static let shared = FontSizePreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let defaultValue = FontSize.medium
-    private static let translationFontSizeKey = PreferenceKey<Int>(key: "translationFontSize", defaultValue: defaultValue.rawValue)
-    private static let arabicFontSizeKey = PreferenceKey<Int>(key: "arabicFont", defaultValue: defaultValue.rawValue)
+    // MARK: Public
+
+    public static let shared = FontSizePreferences()
 
     @TransformedPreference(translationFontSizeKey, transformer: .rawRepresentable(defaultValue: defaultValue))
     public var translationFontSize: FontSize
 
     @TransformedPreference(arabicFontSizeKey, transformer: .rawRepresentable(defaultValue: defaultValue))
     public var arabicFontSize: FontSize
+
+    // MARK: Private
+
+    private static let defaultValue = FontSize.medium
+    private static let translationFontSizeKey = PreferenceKey<Int>(key: "translationFontSize", defaultValue: defaultValue.rawValue)
+    private static let arabicFontSizeKey = PreferenceKey<Int>(key: "arabicFont", defaultValue: defaultValue.rawValue)
 }

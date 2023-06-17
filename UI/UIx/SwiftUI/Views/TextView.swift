@@ -4,14 +4,14 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct TextView: View {
-    @Binding var text: String
-    @Binding var editing: Bool
-    private var font: UIFont = UIFont.preferredFont(forTextStyle: .body)
+    // MARK: Lifecycle
 
     public init(_ text: Binding<String>, editing: Binding<Bool>) {
         _text = text
         _editing = editing
     }
+
+    // MARK: Public
 
     public var body: some View {
         SwiftUITextView(
@@ -20,6 +20,15 @@ public struct TextView: View {
             font: font
         )
     }
+
+    // MARK: Internal
+
+    @Binding var text: String
+    @Binding var editing: Bool
+
+    // MARK: Private
+
+    private var font: UIFont = UIFont.preferredFont(forTextStyle: .body)
 }
 
 @available(iOS 13.0, *)
@@ -37,6 +46,30 @@ extension TextView {
 
 @available(iOS 13.0, *)
 private struct SwiftUITextView: UIViewRepresentable {
+    class Coordinator: NSObject, UITextViewDelegate {
+        // MARK: Lifecycle
+
+        init(_ textView: SwiftUITextView) {
+            parent = textView
+        }
+
+        // MARK: Internal
+
+        var parent: SwiftUITextView
+
+        func textViewDidChange(_ textView: UITextView) {
+            parent.text = textView.text
+        }
+
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            parent.editing = true
+        }
+
+        func textViewDidEndEditing(_ textView: UITextView) {
+            parent.editing = false
+        }
+    }
+
     @Binding var text: String
     @Binding var editing: Bool
     let font: UIFont
@@ -63,26 +96,6 @@ private struct SwiftUITextView: UIViewRepresentable {
             } else {
                 textView.resignFirstResponder()
             }
-        }
-    }
-
-    class Coordinator: NSObject, UITextViewDelegate {
-        var parent: SwiftUITextView
-
-        init(_ textView: SwiftUITextView) {
-            parent = textView
-        }
-
-        func textViewDidChange(_ textView: UITextView) {
-            parent.text = textView.text
-        }
-
-        func textViewDidBeginEditing(_ textView: UITextView) {
-            parent.editing = true
-        }
-
-        func textViewDidEndEditing(_ textView: UITextView) {
-            parent.editing = false
         }
     }
 }

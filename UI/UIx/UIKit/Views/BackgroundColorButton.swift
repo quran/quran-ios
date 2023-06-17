@@ -21,6 +21,8 @@
 import UIKit
 
 open class BackgroundColorButton: UIButton {
+    // MARK: Lifecycle
+
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setUp()
@@ -31,9 +33,7 @@ open class BackgroundColorButton: UIButton {
         setUp()
     }
 
-    private func setUp() {
-        updateBackgroundColor()
-    }
+    // MARK: Open
 
     @IBInspectable open var normalBackground: UIColor = UIColor.lightGray {
         didSet {
@@ -75,6 +75,12 @@ open class BackgroundColorButton: UIButton {
         didSet {
             updateBackgroundColor()
         }
+    }
+
+    // MARK: Private
+
+    private func setUp() {
+        updateBackgroundColor()
     }
 
     private func updateBackgroundColor() {

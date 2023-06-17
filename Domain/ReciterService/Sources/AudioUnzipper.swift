@@ -13,8 +13,12 @@ import VLogging
 import Zip
 
 public struct AudioUnzipper {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func unzip(reciter: Reciter) async throws {
         guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {

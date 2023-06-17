@@ -26,9 +26,7 @@ import TranslationService
 import VerseTextPersistence
 
 public struct ShareableVerseTextRetriever {
-    private let preferences = QuranContentStatePreferences.shared
-    private let textService: QuranTextDataService
-    private let shareableVersePersistence: VerseTextPersistence
+    // MARK: Lifecycle
 
     public init(databasesURL: URL, quranFileURL: URL) {
         textService = QuranTextDataService(databasesURL: databasesURL, quranFileURL: quranFileURL)
@@ -43,6 +41,8 @@ public struct ShareableVerseTextRetriever {
         self.shareableVersePersistence = shareableVersePersistence
     }
 
+    // MARK: Public
+
     public func textForVerses(_ verses: [AyahNumber]) async throws -> [String] {
         async let arabicText = arabicScript(for: verses)
         async let translationText = translations(for: verses)
@@ -50,6 +50,12 @@ public struct ShareableVerseTextRetriever {
         let result = try await [arabicText, translationText].flatMap { $0 }
         return result + ["", versesSummary(verses)]
     }
+
+    // MARK: Private
+
+    private let preferences = QuranContentStatePreferences.shared
+    private let textService: QuranTextDataService
+    private let shareableVersePersistence: VerseTextPersistence
 
     private func versesSummary(_ verses: [AyahNumber]) -> String {
         if verses.count == 1 {

@@ -21,9 +21,7 @@
 import Foundation
 
 public struct AyahNumber: Navigatable {
-    public var quran: Quran { sura.quran }
-    public let sura: Sura
-    public let ayah: Int
+    // MARK: Lifecycle
 
     public init?(quran: Quran, sura: Int, ayah: Int) {
         guard let sura = Sura(quran: quran, suraNumber: sura) else {
@@ -40,15 +38,14 @@ public struct AyahNumber: Navigatable {
         self.ayah = ayah
     }
 
+    // MARK: Public
+
+    public let sura: Sura
+    public let ayah: Int
+
+    public var quran: Quran { sura.quran }
     public var description: String {
         "<AyahNumber sura=\(sura.suraNumber) ayah=\(ayah)>"
-    }
-
-    public static func < (lhs: AyahNumber, rhs: AyahNumber) -> Bool {
-        if lhs.sura == rhs.sura {
-            return lhs.ayah < rhs.ayah
-        }
-        return lhs.sura < rhs.sura
     }
 
     public var previous: AyahNumber? {
@@ -71,6 +68,13 @@ public struct AyahNumber: Navigatable {
 
     public var page: Page {
         quran.pages.binarySearchFirst { self >= $0.firstVerse }
+    }
+
+    public static func < (lhs: AyahNumber, rhs: AyahNumber) -> Bool {
+        if lhs.sura == rhs.sura {
+            return lhs.ayah < rhs.ayah
+        }
+        return lhs.sura < rhs.sura
     }
 }
 

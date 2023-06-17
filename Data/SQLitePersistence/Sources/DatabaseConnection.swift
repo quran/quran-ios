@@ -20,7 +20,7 @@ private struct DatabaseConnectionPool: Sendable {
         var connections: [URL: Connection] = [:]
     }
 
-    private let state = ManagedCriticalState(State())
+    // MARK: Internal
 
     func database(for url: URL) throws -> DatabaseWriter {
         try state.withCriticalRegion { state in
@@ -48,6 +48,23 @@ private struct DatabaseConnectionPool: Sendable {
         }
     }
 
+    func releaseDatabase(for url: URL) {
+        state.withCriticalRegion { state in
+            if var connection = state.connections[url] {
+                connection.references -= 1
+                if connection.references == 0 {
+                    state.connections[url] = nil
+                } else {
+                    state.connections[url] = connection
+                }
+            }
+        }
+    }
+
+    // MARK: Private
+
+    private let state = ManagedCriticalState(State())
+
     private func newDatabase(url: URL) throws -> DatabaseWriter {
         do {
             return try attempt(times: 3) {
@@ -61,45 +78,17 @@ private struct DatabaseConnectionPool: Sendable {
             throw PersistenceError(error, databaseURL: url)
         }
     }
-
-    func releaseDatabase(for url: URL) {
-        state.withCriticalRegion { state in
-            if var connection = state.connections[url] {
-                connection.references -= 1
-                if connection.references == 0 {
-                    state.connections[url] = nil
-                } else {
-                    state.connections[url] = connection
-                }
-            }
-        }
-    }
 }
 
 public final class DatabaseConnection: Sendable {
-    private static let connectionPool = DatabaseConnectionPool()
-
     private struct State {
         var database: DatabaseWriter?
     }
 
-    let databaseURL: URL
-    private let state = ManagedCriticalState(State())
+    // MARK: Lifecycle
 
     public init(url: URL) {
         databaseURL = url
-    }
-
-    func getDatabase() throws -> DatabaseWriter {
-        try state.withCriticalRegion { state in
-            if let database = state.database {
-                return database
-            }
-
-            let database = try Self.connectionPool.database(for: databaseURL)
-            state.database = database
-            return database
-        }
     }
 
     deinit {
@@ -109,6 +98,8 @@ public final class DatabaseConnection: Sendable {
             }
         }
     }
+
+    // MARK: Public
 
     public func read<T>(_ block: @Sendable @escaping (Database) throws -> T) async throws -> T {
         let database = try getDatabase()
@@ -129,6 +120,28 @@ public final class DatabaseConnection: Sendable {
             throw PersistenceError(error, databaseURL: databaseURL)
         }
     }
+
+    // MARK: Internal
+
+    let databaseURL: URL
+
+    func getDatabase() throws -> DatabaseWriter {
+        try state.withCriticalRegion { state in
+            if let database = state.database {
+                return database
+            }
+
+            let database = try Self.connectionPool.database(for: databaseURL)
+            state.database = database
+            return database
+        }
+    }
+
+    // MARK: Private
+
+    private static let connectionPool = DatabaseConnectionPool()
+
+    private let state = ManagedCriticalState(State())
 }
 
 private extension PersistenceError {

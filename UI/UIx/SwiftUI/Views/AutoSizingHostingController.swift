@@ -9,12 +9,16 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public class AutoSizingHostingController<Content: View>: UIHostingController<Content> {
+    // MARK: Public
+
     public var maxPreferredContentSize = CGSize(width: .max, height: .max)
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updatePreferredContentSize()
     }
+
+    // MARK: Private
 
     private func setPreferredContentSize(_ newSize: CGSize) {
         // animate the transition only if it is an update to a non-zero size

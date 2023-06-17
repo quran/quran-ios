@@ -21,12 +21,7 @@
 import Foundation
 
 public struct Sura: QuranValueGroup, Sendable {
-    public var suraNumber: Int { storage.value }
-    let storage: QuranValueStorage<Self>
-
-    public var quran: Quran {
-        storage.quran
-    }
+    // MARK: Lifecycle
 
     public init?(quran: Quran, suraNumber: Int) {
         if !quran.surasRange.contains(suraNumber) {
@@ -37,6 +32,13 @@ public struct Sura: QuranValueGroup, Sendable {
 
     init(_ storage: QuranValueStorage<Self>) {
         self.storage = storage
+    }
+
+    // MARK: Public
+
+    public var suraNumber: Int { storage.value }
+    public var quran: Quran {
+        storage.quran
     }
 
     public var startsWithBesmAllah: Bool {
@@ -52,15 +54,19 @@ public struct Sura: QuranValueGroup, Sendable {
         Page(quran: quran, pageNumber: quran.raw.startPageOfSura[suraNumber - 1])!
     }
 
-    var numberOfVerses: Int {
-        quran.raw.numberOfAyahsInSura[suraNumber - 1]
-    }
-
     public var firstVerse: AyahNumber {
         AyahNumber(sura: self, ayah: 1)!
     }
 
     public var lastVerse: AyahNumber {
         AyahNumber(sura: self, ayah: numberOfVerses)!
+    }
+
+    // MARK: Internal
+
+    let storage: QuranValueStorage<Self>
+
+    var numberOfVerses: Int {
+        quran.raw.numberOfAyahsInSura[suraNumber - 1]
     }
 }

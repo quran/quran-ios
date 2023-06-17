@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranKit
 
 final class PageTests: XCTestCase {
-    private let quran = Quran.hafsMadani1405
+    // MARK: Internal
 
     func testPages() throws {
         let pages = quran.pages
@@ -68,4 +68,8 @@ final class PageTests: XCTestCase {
         XCTAssertEqual(pages[395].lastVerse.sura.suraNumber, 29)
         XCTAssertEqual(pages[395].lastVerse.ayah, 6)
     }
+
+    // MARK: Private
+
+    private let quran = Quran.hafsMadani1405
 }

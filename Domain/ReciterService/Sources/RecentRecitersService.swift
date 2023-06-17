@@ -9,12 +9,12 @@ import Foundation
 import QuranAudio
 
 public class RecentRecitersService {
-    private static let maxNumOfRecentReciters: Int = 3
-
-    private let preferences = ReciterPreferences.shared
+    // MARK: Lifecycle
 
     public init() {
     }
+
+    // MARK: Public
 
     public func recentReciters(_ allReciters: [Reciter]) -> [Reciter] {
         var recentReciters: [Reciter] = []
@@ -41,4 +41,10 @@ public class RecentRecitersService {
 
         preferences.recentReciterIds = recentReciterIds
     }
+
+    // MARK: Private
+
+    private static let maxNumOfRecentReciters: Int = 3
+
+    private let preferences = ReciterPreferences.shared
 }

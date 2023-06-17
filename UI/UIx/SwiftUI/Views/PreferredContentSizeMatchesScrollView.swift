@@ -8,15 +8,21 @@
 import SwiftUI
 
 public struct PreferredContentSizeMatchesScrollView<ScrollViewContent: View>: View {
-    private let content: ScrollViewContent
+    // MARK: Lifecycle
 
     public init(@ViewBuilder content: () -> ScrollViewContent) {
         self.content = content()
     }
 
+    // MARK: Public
+
     public var body: some View {
         PreferredContentSizeMatchesScrollViewBody(content: content)
     }
+
+    // MARK: Private
+
+    private let content: ScrollViewContent
 }
 
 public extension ScrollView {
@@ -28,16 +34,6 @@ public extension ScrollView {
 }
 
 private struct PreferredContentSizeMatchesScrollViewBody<ScrollViewContent: View>: UIViewControllerRepresentable {
-    let content: ScrollViewContent
-
-    func makeUIViewController(context: Context) -> PreferredContentSizeMatchesScrollViewController<ScrollViewContent> {
-        PreferredContentSizeMatchesScrollViewController(rootView: content)
-    }
-
-    func updateUIViewController(_ view: PreferredContentSizeMatchesScrollViewController<ScrollViewContent>, context: Context) {
-        view.rootView = content
-    }
-
     class PreferredContentSizeMatchesScrollViewController<ScrollViewContent: View>: UIHostingController<ScrollViewContent> {
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
@@ -56,6 +52,16 @@ private struct PreferredContentSizeMatchesScrollViewBody<ScrollViewContent: View
                 }
             }
         }
+    }
+
+    let content: ScrollViewContent
+
+    func makeUIViewController(context: Context) -> PreferredContentSizeMatchesScrollViewController<ScrollViewContent> {
+        PreferredContentSizeMatchesScrollViewController(rootView: content)
+    }
+
+    func updateUIViewController(_ view: PreferredContentSizeMatchesScrollViewController<ScrollViewContent>, context: Context) {
+        view.rootView = content
     }
 }
 

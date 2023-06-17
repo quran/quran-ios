@@ -27,6 +27,8 @@ import VerseTextPersistence
 typealias VersionPersistenceFactory = (Translation) -> DatabaseVersionPersistence
 
 struct TranslationsVersionUpdater {
+    // MARK: Internal
+
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     let persistence: ActiveTranslationsPersistence
     let versionPersistenceFactory: VersionPersistenceFactory
@@ -37,6 +39,8 @@ struct TranslationsVersionUpdater {
         try unzipper.unzipIfNeeded(translation) // unzip if needed
         return try await updateInstalledVersion(translation) // update versions
     }
+
+    // MARK: Private
 
     private func updateInstalledVersion(_ translation: Translation) async throws -> Translation {
         var translation = translation

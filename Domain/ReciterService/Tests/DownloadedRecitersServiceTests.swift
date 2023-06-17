@@ -11,8 +11,7 @@ import XCTest
 @testable import ReciterService
 
 class DownloadedRecitersServiceTests: XCTestCase {
-    private var service: DownloadedRecitersService!
-    private var fileManager = FileManager.default
+    // MARK: Internal
 
     override func setUpWithError() throws {
         service = DownloadedRecitersService()
@@ -44,6 +43,11 @@ class DownloadedRecitersServiceTests: XCTestCase {
         downloadedReciters = service.downloadedReciters(allReciters)
         XCTAssertEqual(downloadedReciters, [reciter4, reciter5])
     }
+
+    // MARK: Private
+
+    private var service: DownloadedRecitersService!
+    private var fileManager = FileManager.default
 
     private func deleteReciterDirs(_ reciters: [Reciter]) {
         reciters.forEach { reciter in

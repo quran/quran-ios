@@ -9,17 +9,23 @@ import UIKit
 
 public class PresentationsMonitor {
     public struct Actions {
-        public var didDismiss: (UIPresentationController) -> Void
+        // MARK: Lifecycle
 
         public init(didDismiss: @escaping (UIPresentationController) -> Void) {
             self.didDismiss = didDismiss
         }
+
+        // MARK: Public
+
+        public var didDismiss: (UIPresentationController) -> Void
     }
 
-    private var presentations: [UIViewController: Presentation] = [:]
+    // MARK: Lifecycle
 
     public init() {
     }
+
+    // MARK: Public
 
     public func monitor(_ viewControllerToPresent: UIViewController, actions: Actions) {
         var updatedActions = actions
@@ -38,18 +44,26 @@ public class PresentationsMonitor {
         }
     }
 
+    // MARK: Private
+
+    private var presentations: [UIViewController: Presentation] = [:]
+
     private func cleanup(_ viewController: UIViewController) {
         presentations[viewController] = nil
     }
 }
 
 private class Presentation: NSObject, UIAdaptivePresentationControllerDelegate {
-    let actions: PresentationsMonitor.Actions
+    // MARK: Lifecycle
 
     init(actions: PresentationsMonitor.Actions) {
         self.actions = actions
         super.init()
     }
+
+    // MARK: Internal
+
+    let actions: PresentationsMonitor.Actions
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         actions.didDismiss(presentationController)

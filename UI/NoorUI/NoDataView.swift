@@ -10,15 +10,15 @@ import SwiftUI
 import UIx
 
 public struct NoDataView: View {
+    // MARK: Lifecycle
+
     public init(title: String, text: String, image: String) {
         self.title = title
         self.text = text
         self.image = image
     }
 
-    let title: String
-    let text: String
-    let image: String
+    // MARK: Public
 
     public var body: some View {
         VStack {
@@ -35,6 +35,12 @@ public struct NoDataView: View {
         }
         .padding()
     }
+
+    // MARK: Internal
+
+    let title: String
+    let text: String
+    let image: String
 }
 
 struct NoDataView_Previews: PreviewProvider {

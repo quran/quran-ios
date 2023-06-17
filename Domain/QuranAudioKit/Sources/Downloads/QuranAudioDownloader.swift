@@ -25,15 +25,15 @@ import QuranKit
 import SystemDependencies
 
 public struct QuranAudioDownloader: Sendable {
-    let downloader: DownloadManager
-    private let fileSystem: FileSystem
-    private let baseURL: URL
+    // MARK: Lifecycle
 
     public init(baseURL: URL, downloader: DownloadManager, fileSystem: FileSystem = DefaultFileSystem()) {
         self.baseURL = baseURL
         self.downloader = downloader
         self.fileSystem = fileSystem
     }
+
+    // MARK: Public
 
     public func downloaded(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) async -> Bool {
         let files = filesForReciter(reciter, from: start, to: end)
@@ -62,6 +62,15 @@ public struct QuranAudioDownloader: Sendable {
         let responses = await batches.asyncFilter { await $0.isAudio }
         return responses
     }
+
+    // MARK: Internal
+
+    let downloader: DownloadManager
+
+    // MARK: Private
+
+    private let fileSystem: FileSystem
+    private let baseURL: URL
 
     private func filesForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [DownloadRequest] {
         reciter.audioFiles(baseURL: baseURL, from: start, to: end)

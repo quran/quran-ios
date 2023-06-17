@@ -12,17 +12,18 @@ import Utilities
 import XCTest
 
 class AsyncPublisherTests: XCTestCase {
-    let numbers = [1, 2, 3]
-    var subject: PassthroughSubject<Int, Never>!
-    var channel: AsyncChannel<Void>!
-    var values: Values!
-
     actor Values {
         var results: [Int] = []
+
         func append(_ number: Int) {
             results.append(number)
         }
     }
+
+    let numbers = [1, 2, 3]
+    var subject: PassthroughSubject<Int, Never>!
+    var channel: AsyncChannel<Void>!
+    var values: Values!
 
     override func setUp() {
         subject = PassthroughSubject()

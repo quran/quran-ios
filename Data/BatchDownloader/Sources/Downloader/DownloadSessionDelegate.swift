@@ -24,15 +24,15 @@ import NetworkSupport
 import VLogging
 
 actor DownloadSessionDelegate: NetworkSessionDelegate {
-    private let acceptableStatusCodes = 200 ..< 300
-
-    private let dataController: DownloadBatchDataController
-
-    @MainActor var backgroundSessionCompletion: (@MainActor () -> Void)?
+    // MARK: Lifecycle
 
     init(dataController: DownloadBatchDataController) {
         self.dataController = dataController
     }
+
+    // MARK: Internal
+
+    @MainActor var backgroundSessionCompletion: (@MainActor () -> Void)?
 
     @MainActor
     func setBackgroundSessionCompletion(_ backgroundSessionCompletion: @MainActor @escaping () -> Void) {
@@ -113,6 +113,18 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         await dataController.downloadFailed(response, with: finalError)
     }
 
+    @MainActor
+    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
+        backgroundSessionCompletion?()
+        backgroundSessionCompletion = nil
+    }
+
+    // MARK: Private
+
+    private let acceptableStatusCodes = 200 ..< 300
+
+    private let dataController: DownloadBatchDataController
+
     private func wrap(error theError: Error, resumeURL: URL) -> Error {
         var error = theError
 
@@ -141,12 +153,6 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             finalError = NetworkError(error: error)
         }
         return finalError
-    }
-
-    @MainActor
-    func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) {
-        backgroundSessionCompletion?()
-        backgroundSessionCompletion = nil
     }
 
     private func validate(task: NetworkSessionTask) -> Error? {

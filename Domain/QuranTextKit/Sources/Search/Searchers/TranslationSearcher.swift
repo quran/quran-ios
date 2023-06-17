@@ -12,13 +12,10 @@ import TranslationService
 import VerseTextPersistence
 
 struct TranslationSearcher: Searcher {
+    // MARK: Internal
+
     let localTranslationRetriever: LocalTranslationsRetriever
     let versePersistenceBuilder: (Translation) -> SearchableTextPersistence
-
-    private func getDownloadedTranslations() async throws -> [Translation] {
-        let translations = try await localTranslationRetriever.getLocalTranslations()
-        return translations.filter(\.isDownloaded)
-    }
 
     func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
         let translations = try await getDownloadedTranslations()
@@ -42,5 +39,12 @@ struct TranslationSearcher: Searcher {
             return results
         }
         return results.flatMap { $0 }
+    }
+
+    // MARK: Private
+
+    private func getDownloadedTranslations() async throws -> [Translation] {
+        let translations = try await localTranslationRetriever.getLocalTranslations()
+        return translations.filter(\.isDownloaded)
     }
 }

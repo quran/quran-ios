@@ -15,7 +15,11 @@ public protocol FileSystem: Sendable {
 }
 
 public struct DefaultFileSystem: FileSystem {
+    // MARK: Lifecycle
+
     public init() { }
+
+    // MARK: Public
 
     public func fileExists(at url: URL) -> Bool {
         (try? url.checkResourceIsReachable()) ?? false

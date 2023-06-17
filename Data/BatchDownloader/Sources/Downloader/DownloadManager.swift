@@ -25,9 +25,8 @@ import Utilities
 
 public final class DownloadManager: Sendable {
     typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
-    private let session: NetworkSession
-    private let handler: DownloadSessionDelegate
-    private let dataController: DownloadBatchDataController
+
+    // MARK: Lifecycle
 
     public convenience init(
         maxSimultaneousDownloads: Int,
@@ -76,6 +75,8 @@ public final class DownloadManager: Sendable {
         await populateRunningTasks()
     }
 
+    // MARK: Public
+
     @MainActor
     public func setBackgroundSessionCompletion(_ backgroundSessionCompletion: @MainActor @escaping () -> Void) {
         handler.setBackgroundSessionCompletion(backgroundSessionCompletion)
@@ -88,6 +89,12 @@ public final class DownloadManager: Sendable {
     public func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
         try await dataController.download(batch)
     }
+
+    // MARK: Private
+
+    private let session: NetworkSession
+    private let handler: DownloadSessionDelegate
+    private let dataController: DownloadBatchDataController
 
     private func populateRunningTasks() async {
         let (_, _, downloadTasks) = await session.tasks()

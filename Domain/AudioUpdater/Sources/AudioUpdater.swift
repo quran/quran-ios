@@ -16,12 +16,7 @@ import SystemDependencies
 import VLogging
 
 public final class AudioUpdater {
-    private let recitersRetriever: ReciterDataRetriever
-    private let networkService: AudioUpdatesNetworkManager
-    private let preferences = AudioUpdatePreferences.shared
-    private let md5Calculator = MD5Calculator()
-    private let fileSystem: FileSystem
-    private let time: SystemTime
+    // MARK: Lifecycle
 
     init(
         networkManager: NetworkManager,
@@ -42,6 +37,8 @@ public final class AudioUpdater {
         fileSystem = DefaultFileSystem()
         time = DefaultSystemTime()
     }
+
+    // MARK: Public
 
     public func updateAudioIfNeeded() async {
         let downloadedReciters = try? fileSystem.contentsOfDirectory(at: Reciter.audioFiles, includingPropertiesForKeys: nil)
@@ -70,6 +67,15 @@ public final class AudioUpdater {
             crasher.recordError(error, reason: "Audio Update request failed.")
         }
     }
+
+    // MARK: Private
+
+    private let recitersRetriever: ReciterDataRetriever
+    private let networkService: AudioUpdatesNetworkManager
+    private let preferences = AudioUpdatePreferences.shared
+    private let md5Calculator = MD5Calculator()
+    private let fileSystem: FileSystem
+    private let time: SystemTime
 
     private func updateLastChecked() {
         preferences.lastChecked = time.now

@@ -14,8 +14,7 @@ import Foundation
 #endif
 
 public final class PreferenceKey<Type> {
-    public let key: String
-    public let defaultValue: Type
+    // MARK: Lifecycle
 
     public init(key: String, defaultValue: Type) {
         self.key = key
@@ -33,4 +32,9 @@ public final class PreferenceKey<Type> {
         self.key = key
         self.defaultValue = defaultValue
     }
+
+    // MARK: Public
+
+    public let key: String
+    public let defaultValue: Type
 }

@@ -11,9 +11,23 @@ import QuranKit
 import SQLitePersistence
 
 public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
+    // MARK: Lifecycle
+
+    public init(fileURL: URL) {
+        self.init(mode: .arabic, fileURL: fileURL)
+    }
+
+    public init(mode: Mode, fileURL: URL) {
+        persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: mode.tabelName)
+    }
+
+    // MARK: Public
+
     public enum Mode {
         case arabic
         case share
+
+        // MARK: Internal
 
         var tabelName: String {
             switch self {
@@ -23,16 +37,6 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
                 return "share_text"
             }
         }
-    }
-
-    private let persistence: GRDBVerseTextPersistence
-
-    public init(fileURL: URL) {
-        self.init(mode: .arabic, fileURL: fileURL)
-    }
-
-    public init(mode: Mode, fileURL: URL) {
-        persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: mode.tabelName)
     }
 
     public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
@@ -51,19 +55,24 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
         try await persistence.search(for: term, quran: quran)
     }
 
+    // MARK: Private
+
+    private let persistence: GRDBVerseTextPersistence
+
     private func textFromRow(_ row: Row, quran: Quran) -> String {
         row["text"]
     }
 }
 
 public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersistence {
-    private let fileURL: URL
-    private let persistence: GRDBVerseTextPersistence
+    // MARK: Lifecycle
 
     public init(fileURL: URL) {
         self.fileURL = fileURL
         persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: "verses")
     }
+
+    // MARK: Public
 
     public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: TranslationTextPersistenceModel] {
         try await persistence.textForVerses(verses, transform: textFromRow)
@@ -80,6 +89,11 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
     public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
         try await persistence.search(for: term, quran: quran)
     }
+
+    // MARK: Private
+
+    private let fileURL: URL
+    private let persistence: GRDBVerseTextPersistence
 
     private func textFromRow(_ row: Row, quran: Quran) throws -> TranslationTextPersistenceModel {
         let value = row["text"]
@@ -106,10 +120,7 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
 // MARK: - Helper
 
 private struct GRDBVerseTextPersistence {
-    let db: DatabaseConnection
-
-    private let textTable: String
-    private let searchTable = "verses"
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection, textTable: String) {
         self.db = db
@@ -119,6 +130,10 @@ private struct GRDBVerseTextPersistence {
     init(fileURL: URL, textTable: String) {
         self.init(db: DatabaseConnection(url: fileURL), textTable: textTable)
     }
+
+    // MARK: Internal
+
+    let db: DatabaseConnection
 
     func textForVerse<T>(_ verse: AyahNumber, transform: @escaping (Row, Quran) throws -> T) async throws -> T {
         try await db.read { db in
@@ -140,27 +155,6 @@ private struct GRDBVerseTextPersistence {
             }
             return dictionary
         }
-    }
-
-    private func textForVerse<T>(
-        using db: Database,
-        verse: AyahNumber,
-        transform: @escaping (Row, Quran) throws -> T
-    ) throws -> T? {
-        // Try to search using integer and string ayah/sura.
-        // Needed by some translation sqlite files.
-        let request = SQLRequest<Row>("""
-        SELECT text
-        FROM \(sql: textTable)
-        WHERE (ayah = \(verse.ayah) OR ayah = \(verse.ayah.description))
-          AND (sura = \(verse.sura.suraNumber) OR sura = \(verse.sura.suraNumber.description))
-        """)
-
-        guard let row = try request.fetchOne(db) else {
-            return nil
-        }
-
-        return try transform(row, verse.quran)
     }
 
     // MARK: - Search
@@ -189,6 +183,32 @@ private struct GRDBVerseTextPersistence {
             let rows = try request.fetchAll(db)
             return rowsToResults(rows, quran: quran)
         }
+    }
+
+    // MARK: Private
+
+    private let textTable: String
+    private let searchTable = "verses"
+
+    private func textForVerse<T>(
+        using db: Database,
+        verse: AyahNumber,
+        transform: @escaping (Row, Quran) throws -> T
+    ) throws -> T? {
+        // Try to search using integer and string ayah/sura.
+        // Needed by some translation sqlite files.
+        let request = SQLRequest<Row>("""
+        SELECT text
+        FROM \(sql: textTable)
+        WHERE (ayah = \(verse.ayah) OR ayah = \(verse.ayah.description))
+          AND (sura = \(verse.sura.suraNumber) OR sura = \(verse.sura.suraNumber.description))
+        """)
+
+        guard let row = try request.fetchOne(db) else {
+            return nil
+        }
+
+        return try transform(row, verse.quran)
     }
 
     private func rowsToResults(_ rows: [Row], quran: Quran) -> [(verse: AyahNumber, text: String)] {

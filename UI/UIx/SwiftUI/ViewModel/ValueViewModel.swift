@@ -10,8 +10,13 @@ import Foundation
 
 @MainActor
 public final class ValueViewModel<V>: ObservableObject {
-    @Published public var value: V
+    // MARK: Lifecycle
+
     public init(_ value: V) {
         self.value = value
     }
+
+    // MARK: Public
+
+    @Published public var value: V
 }

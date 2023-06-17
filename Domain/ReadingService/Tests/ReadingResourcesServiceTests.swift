@@ -11,8 +11,7 @@ import XCTest
 @testable import ReadingService
 
 final class ReadingResourcesServiceTests: XCTestCase {
-    private var service: ReadingResourcesService!
-    private var collector: PublisherCollector<ReadingResourcesService.ResourceStatus>!
+    // MARK: Internal
 
     override func setUp() {
         ReadingPreferences.shared.reading = .hafs_1405
@@ -66,4 +65,9 @@ final class ReadingResourcesServiceTests: XCTestCase {
                                          .downloading(progress: 1),
                                          .ready])
     }
+
+    // MARK: Private
+
+    private var service: ReadingResourcesService!
+    private var collector: PublisherCollector<ReadingResourcesService.ResourceStatus>!
 }

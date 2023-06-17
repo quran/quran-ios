@@ -10,13 +10,7 @@ import XCTest
 @testable import VersionUpdater
 
 final class UpdateHandlerTests: XCTestCase {
-    private var service: UpdateHandler!
-    private let preferences = AppVersionPreferences.shared
-    private var bundle: SystemBundleFake!
-
-    private var worker1: VersionUpdaterTester!
-    private var worker2: VersionUpdaterTester!
-    private var nonBlockingWorker: VersionUpdaterTester!
+    // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -102,6 +96,16 @@ final class UpdateHandlerTests: XCTestCase {
         XCTAssertNotNil(nonBlockingWorker.update)
     }
 
+    // MARK: Private
+
+    private var service: UpdateHandler!
+    private let preferences = AppVersionPreferences.shared
+    private var bundle: SystemBundleFake!
+
+    private var worker1: VersionUpdaterTester!
+    private var worker2: VersionUpdaterTester!
+    private var nonBlockingWorker: VersionUpdaterTester!
+
     // MARK: - Helpers
 
     private func verifyNoUpgrade(file: StaticString = #filePath, line: UInt = #line) async {
@@ -117,15 +121,20 @@ final class UpdateHandlerTests: XCTestCase {
 }
 
 private final class VersionUpdaterTester: VersionUpdater {
-    let blocksUI: Bool
-    let uiTitle: String?
+    // MARK: Lifecycle
 
     init(blocksUI: Bool, uiTitle: String?) {
         self.blocksUI = blocksUI
         self.uiTitle = uiTitle
     }
 
+    // MARK: Internal
+
+    let blocksUI: Bool
+    let uiTitle: String?
+
     var update: LaunchVersionUpdate?
+
     func execute(update: LaunchVersionUpdate) async {
         self.update = update
     }

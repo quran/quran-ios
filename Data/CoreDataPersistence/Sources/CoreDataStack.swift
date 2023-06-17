@@ -13,13 +13,7 @@ import VLogging
 
 /// Core Data stack setup including history processing.
 public class CoreDataStack {
-    private let appTransactionAuthorName = "app"
-
-    private let name: String
-    private let modelUrl: URL
-
-    private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
-    private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
+    // MARK: Lifecycle
 
     public init(name: String, modelUrl: URL, lazyUniquifiers: @escaping () -> [CoreDataEntityUniquifier]) {
         self.name = name
@@ -27,17 +21,24 @@ public class CoreDataStack {
         self.lazyUniquifiers = lazyUniquifiers
     }
 
-    @available(iOS 13.0, *)
-    private lazy var historyProcessor: CoreDataPersistentHistoryProcessor = CoreDataPersistentHistoryProcessor(name: name, uniquifiers: uniquifiers)
+    // MARK: Public
 
-    private func newPersistenceContainer() -> NSPersistentContainer {
-        guard let model = NSManagedObjectModel(contentsOf: modelUrl) else {
-            fatalError("Cannot find \(modelUrl)")
-        }
-
-        // Create a container that can load CloudKit-backed stores
-        return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
+    public var viewContext: NSManagedObjectContext {
+        persistentContainer.viewContext
     }
+
+    public class func removePersistentFiles() {
+        let dataDirectory = NSPersistentContainer.defaultDirectoryURL()
+        FileManager.default.removeDirectoryContents(at: dataDirectory)
+    }
+
+    public func newBackgroundContext() -> NSManagedObjectContext {
+        let context = persistentContainer.newBackgroundContext()
+        context.transactionAuthor = appTransactionAuthorName
+        return context
+    }
+
+    // MARK: Internal
 
     /// A persistent container that can load cloud-backed and non-cloud stores.
     lazy var persistentContainer: NSPersistentContainer = {
@@ -75,6 +76,19 @@ public class CoreDataStack {
         return container
     }()
 
+    // MARK: Private
+
+    private let appTransactionAuthorName = "app"
+
+    private let name: String
+    private let modelUrl: URL
+
+    private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
+    private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
+
+    @available(iOS 13.0, *)
+    private lazy var historyProcessor: CoreDataPersistentHistoryProcessor = CoreDataPersistentHistoryProcessor(name: name, uniquifiers: uniquifiers)
+
     /// An operation queue for handling history processing tasks: watching changes, deduplicating entities, and triggering UI updates if needed.
     private lazy var historyQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -82,14 +96,13 @@ public class CoreDataStack {
         return queue
     }()
 
-    public var viewContext: NSManagedObjectContext {
-        persistentContainer.viewContext
-    }
+    private func newPersistenceContainer() -> NSPersistentContainer {
+        guard let model = NSManagedObjectModel(contentsOf: modelUrl) else {
+            fatalError("Cannot find \(modelUrl)")
+        }
 
-    public func newBackgroundContext() -> NSManagedObjectContext {
-        let context = persistentContainer.newBackgroundContext()
-        context.transactionAuthor = appTransactionAuthorName
-        return context
+        // Create a container that can load CloudKit-backed stores
+        return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
     }
 
     /// Handle remote store change notifications (.NSPersistentStoreRemoteChange).
@@ -105,11 +118,6 @@ public class CoreDataStack {
                 self.historyProcessor.processNewHistory(using: taskContext)
             }
         }
-    }
-
-    public class func removePersistentFiles() {
-        let dataDirectory = NSPersistentContainer.defaultDirectoryURL()
-        FileManager.default.removeDirectoryContents(at: dataDirectory)
     }
 }
 

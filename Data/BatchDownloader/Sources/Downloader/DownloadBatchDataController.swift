@@ -29,37 +29,17 @@ func describe(_ task: NetworkSessionTask) -> String {
 }
 
 actor DownloadBatchDataController {
-    private let maxSimultaneousDownloads: Int
-    private let persistence: DownloadsPersistence
-    private weak var session: NetworkSession?
-
-    private var runningDownloads: [Int: DownloadResponse] = [:]
-    private var batches: Set<DownloadBatchResponse> = []
+    // MARK: Lifecycle
 
     init(maxSimultaneousDownloads: Int, persistence: DownloadsPersistence) {
         self.maxSimultaneousDownloads = maxSimultaneousDownloads
         self.persistence = persistence
     }
 
+    // MARK: Internal
+
     func update(session: NetworkSession) {
         self.session = session
-    }
-
-    private var runningTasks: [DownloadResponse] {
-        get async {
-            await batches.flatMap(\.responses).asyncFilter { await $0.download.taskId != nil }
-        }
-    }
-
-    private func searchForResponse(of task: NetworkSessionTask) async -> DownloadResponse? {
-        for batch in batches {
-            for response in batch.responses {
-                if await response.download.taskId == task.taskIdentifier {
-                    return response
-                }
-            }
-        }
-        return nil
     }
 
     func getOnGoingDownloads() -> [DownloadBatchResponse] {
@@ -100,6 +80,79 @@ actor DownloadBatchDataController {
         }
     }
 
+    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async {
+        let tasksById = Dictionary(uniqueKeysWithValues: tasks.map { ($0.taskIdentifier, $0) })
+        for batch in batches {
+            for response in batch.responses {
+                if let savedTaskId = await response.download.taskId {
+                    if let task = tasksById[savedTaskId] {
+                        logger.info("Associating download with a task: \(describe(task))")
+                        await response.setDownloading(task: task)
+                    } else {
+                        await response.setPending()
+                        logger.info("Couldn't find task with id \(savedTaskId)")
+                    }
+                }
+            }
+        }
+
+        loadedInitialRunningTasks = true
+
+        // start pending tasks if needed
+        await startPendingTasksIfNeeded()
+    }
+
+    func downloadCompleted(_ response: DownloadResponse) async {
+        await response.fulfill()
+        await updateDownloadPersistence(response)
+
+        // start pending tasks if needed
+        await startPendingTasksIfNeeded()
+    }
+
+    func downloadFailed(_ response: DownloadResponse, with error: Error) async {
+        await response.reject(error)
+
+        // start pending tasks if needed
+        await startPendingTasksIfNeeded()
+    }
+
+    // MARK: Private
+
+    private let maxSimultaneousDownloads: Int
+    private let persistence: DownloadsPersistence
+    private weak var session: NetworkSession?
+
+    private var runningDownloads: [Int: DownloadResponse] = [:]
+    private var batches: Set<DownloadBatchResponse> = []
+
+    private var loadedInitialRunningTasks = false
+
+    private var runningTasks: [DownloadResponse] {
+        get async {
+            await batches.flatMap(\.responses).asyncFilter { await $0.download.taskId != nil }
+        }
+    }
+
+    private static func completeBatch(_ response: DownloadBatchResponse) async {
+        do {
+            try await response.completion()
+        } catch {
+            logger.error("Batch failed to download with error: \(error)")
+        }
+    }
+
+    private func searchForResponse(of task: NetworkSessionTask) async -> DownloadResponse? {
+        for batch in batches {
+            for response in batch.responses {
+                if await response.download.taskId == task.taskIdentifier {
+                    return response
+                }
+            }
+        }
+        return nil
+    }
+
     private func createResponse(forBatch batch: DownloadBatch) async -> DownloadBatchResponse {
         var responses: [DownloadResponse] = []
         for download in batch.downloads {
@@ -127,44 +180,12 @@ actor DownloadBatchDataController {
         return response
     }
 
-    private static func completeBatch(_ response: DownloadBatchResponse) async {
-        do {
-            try await response.completion()
-        } catch {
-            logger.error("Batch failed to download with error: \(error)")
-        }
-    }
-
     private func cleanUpForCompletedBatch(_ response: DownloadBatchResponse) async {
         // delete the completed response
         batches.remove(response)
         await run("DeleteBatch") { try await $0.delete(batchIds: [response.batchId]) }
 
         // Start pending tasks
-        await startPendingTasksIfNeeded()
-    }
-
-    private var loadedInitialRunningTasks = false
-
-    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async {
-        let tasksById = Dictionary(uniqueKeysWithValues: tasks.map { ($0.taskIdentifier, $0) })
-        for batch in batches {
-            for response in batch.responses {
-                if let savedTaskId = await response.download.taskId {
-                    if let task = tasksById[savedTaskId] {
-                        logger.info("Associating download with a task: \(describe(task))")
-                        await response.setDownloading(task: task)
-                    } else {
-                        await response.setPending()
-                        logger.info("Couldn't find task with id \(savedTaskId)")
-                    }
-                }
-            }
-        }
-
-        loadedInitialRunningTasks = true
-
-        // start pending tasks if needed
         await startPendingTasksIfNeeded()
     }
 
@@ -226,21 +247,6 @@ actor DownloadBatchDataController {
         for download in downloadTasks {
             download.task.resume()
         }
-    }
-
-    func downloadCompleted(_ response: DownloadResponse) async {
-        await response.fulfill()
-        await updateDownloadPersistence(response)
-
-        // start pending tasks if needed
-        await startPendingTasksIfNeeded()
-    }
-
-    func downloadFailed(_ response: DownloadResponse, with error: Error) async {
-        await response.reject(error)
-
-        // start pending tasks if needed
-        await startPendingTasksIfNeeded()
     }
 
     private func updateDownloadPersistence(_ response: DownloadResponse) async {

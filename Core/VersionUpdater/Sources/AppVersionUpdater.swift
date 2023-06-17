@@ -31,10 +31,13 @@ public enum LaunchVersionUpdate {
 }
 
 struct AppVersionPreferences {
-    static let shared = AppVersionPreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let appVersion = PreferenceKey<String?>(key: "appVersion", defaultValue: nil)
+    // MARK: Internal
+
+    static let shared = AppVersionPreferences()
 
     @Preference(appVersion)
     var appVersion: String?
@@ -42,22 +45,20 @@ struct AppVersionPreferences {
     static func reset() {
         UserDefaults.standard.removeObject(forKey: appVersion.key)
     }
+
+    // MARK: Private
+
+    private static let appVersion = PreferenceKey<String?>(key: "appVersion", defaultValue: nil)
 }
 
 struct AppVersionUpdater {
-    private let bundle: SystemBundle
-    private let preferences = AppVersionPreferences.shared
+    // MARK: Lifecycle
 
     init(bundle: SystemBundle) {
         self.bundle = bundle
     }
 
-    private var current: String {
-        guard let version = bundle.infoValue(forKey: "CFBundleShortVersionString") as? String else {
-            fatalError("CFBundleShortVersionString should be set in your main bundle.")
-        }
-        return version
-    }
+    // MARK: Internal
 
     func launchVersion() -> LaunchVersionUpdate {
         let current = current
@@ -77,5 +78,17 @@ struct AppVersionUpdater {
     /// eventually we should update the app version
     func commitUpdates() {
         preferences.appVersion = current
+    }
+
+    // MARK: Private
+
+    private let bundle: SystemBundle
+    private let preferences = AppVersionPreferences.shared
+
+    private var current: String {
+        guard let version = bundle.infoValue(forKey: "CFBundleShortVersionString") as? String else {
+            fatalError("CFBundleShortVersionString should be set in your main bundle.")
+        }
+        return version
     }
 }

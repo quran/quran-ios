@@ -15,14 +15,7 @@ import XCTest
 
 @MainActor
 class CompositeSearcherTests: XCTestCase {
-    private var searcher: CompositeSearcher!
-    private var localTranslationsFake: LocalTranslationsFake!
-    private let quran = Quran.hafsMadani1405
-
-    private let translations = [
-        TestData.khanTranslation,
-        TestData.sahihTranslation,
-    ]
+    // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -53,11 +46,6 @@ class CompositeSearcherTests: XCTestCase {
         try await autocompleteNumber("444")
         try await autocompleteNumber("4444")
         try await autocompleteNumber("3:4")
-    }
-
-    private func autocompleteNumber(_ number: String) async throws {
-        let result = try await searcher.autocomplete(term: number, quran: quran)
-        XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
     }
 
     func testSearchNumber1() async throws {
@@ -112,6 +100,22 @@ class CompositeSearcherTests: XCTestCase {
     func testSearchTranslation() async throws {
         let result = try await searcher.search(for: "All", quran: quran)
         assertSnapshot(matching: result, as: .json)
+    }
+
+    // MARK: Private
+
+    private var searcher: CompositeSearcher!
+    private var localTranslationsFake: LocalTranslationsFake!
+    private let quran = Quran.hafsMadani1405
+
+    private let translations = [
+        TestData.khanTranslation,
+        TestData.sahihTranslation,
+    ]
+
+    private func autocompleteNumber(_ number: String) async throws {
+        let result = try await searcher.autocomplete(term: number, quran: quran)
+        XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
     }
 
     private func testAutocomplete(term: String, testName: String = #function) async throws {

@@ -10,27 +10,34 @@ import SwiftUI
 import UIx
 
 public struct DateSinceTextView: View {
+    // MARK: Lifecycle
+
     public init(since: String) {
         self.since = since
     }
 
-    let since: String
+    // MARK: Public
 
     public var body: some View {
         Text(since)
             .foregroundColor(.secondaryLabel)
             .font(.footnote)
     }
+
+    // MARK: Internal
+
+    let since: String
 }
 
 private struct DateSinceView<Image: View>: View {
+    // MARK: Lifecycle
+
     public init(since: String, image: @escaping () -> Image) {
         self.since = since
         self.image = image
     }
 
-    let since: String
-    let image: () -> Image
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -40,14 +47,21 @@ private struct DateSinceView<Image: View>: View {
             Spacer()
         }
     }
+
+    // MARK: Internal
+
+    let since: String
+    let image: () -> Image
 }
 
 public struct BookmarkDateSinceView: View {
+    // MARK: Lifecycle
+
     public init(since: String) {
         self.since = since
     }
 
-    let since: String
+    // MARK: Public
 
     public var body: some View {
         DateSinceView(since: since) {
@@ -55,14 +69,20 @@ public struct BookmarkDateSinceView: View {
                 .foregroundColor(.red)
         }
     }
+
+    // MARK: Internal
+
+    let since: String
 }
 
 public struct RecentDateSinceView: View {
+    // MARK: Lifecycle
+
     public init(since: String) {
         self.since = since
     }
 
-    let since: String
+    // MARK: Public
 
     public var body: some View {
         DateSinceView(since: since) {
@@ -70,6 +90,10 @@ public struct RecentDateSinceView: View {
                 .foregroundColor(.secondaryLabel)
         }
     }
+
+    // MARK: Internal
+
+    let since: String
 }
 
 struct DateSinceView_Previews: PreviewProvider {

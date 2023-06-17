@@ -24,12 +24,15 @@ import QuranAnnotations
 import QuranKit
 
 public class LastPageUpdater {
-    private let service: LastPageService
-    public private(set) var lastPage: LastPage?
+    // MARK: Lifecycle
 
     public init(service: LastPageService) {
         self.service = service
     }
+
+    // MARK: Public
+
+    public private(set) var lastPage: LastPage?
 
     public func configure(initialPage: Page, lastPage: LastPage?) {
         self.lastPage = lastPage
@@ -50,6 +53,10 @@ public class LastPageUpdater {
 
         updateTo(page: page, lastPage: lastPage)
     }
+
+    // MARK: Private
+
+    private let service: LastPageService
 
     private func updateTo(page: Page, lastPage: LastPage) {
         service.update(page: lastPage, toPage: page)

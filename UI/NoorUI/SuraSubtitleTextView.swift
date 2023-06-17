@@ -29,7 +29,8 @@ struct SuraSubtitleTextView: View {
 }
 
 struct SuraSubtitleTextView_Previews: PreviewProvider {
-    private static let suraName = String(UnicodeScalar(0xE907)!)
+    // MARK: Internal
+
     static var previews: some View {
         Previewing.list {
             SuraSubtitleTextView(
@@ -41,4 +42,8 @@ struct SuraSubtitleTextView_Previews: PreviewProvider {
             Divider()
         }
     }
+
+    // MARK: Private
+
+    private static let suraName = String(UnicodeScalar(0xE907)!)
 }

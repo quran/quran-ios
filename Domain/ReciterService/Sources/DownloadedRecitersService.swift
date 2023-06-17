@@ -9,8 +9,12 @@ import Foundation
 import QuranAudio
 
 public class DownloadedRecitersService {
+    // MARK: Lifecycle
+
     public init() {
     }
+
+    // MARK: Public
 
     public func downloadedReciters(_ allReciters: [Reciter]) -> [Reciter] {
         guard let downloadedRecitersURLs = try? FileManager.default.contentsOfDirectory(
@@ -30,6 +34,8 @@ public class DownloadedRecitersService {
         }
         return downloadedReciters
     }
+
+    // MARK: Private
 
     private func isDownloadedReciter(_ reciter: Reciter, at downloadedReciterURL: URL) -> Bool {
         if reciter.isReciterDirectory(downloadedReciterURL) {

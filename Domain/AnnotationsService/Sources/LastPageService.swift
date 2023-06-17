@@ -14,17 +14,23 @@ import QuranAnnotations
 import QuranKit
 
 public struct LastPageService {
-    let persistence: LastPagePersistence
+    // MARK: Lifecycle
 
     public init(persistence: LastPagePersistence) {
         self.persistence = persistence
     }
+
+    // MARK: Public
 
     public func lastPages(quran: Quran) -> AnyPublisher<[LastPage], Never> {
         persistence.lastPages()
             .map { lastPages in lastPages.map { LastPage(quran: quran, $0) } }
             .eraseToAnyPublisher()
     }
+
+    // MARK: Internal
+
+    let persistence: LastPagePersistence
 
     func add(page: Page) -> Promise<LastPage> {
         persistence.add(page: page.pageNumber)

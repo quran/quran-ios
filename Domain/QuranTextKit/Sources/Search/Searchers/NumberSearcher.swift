@@ -11,14 +11,9 @@ import QuranText
 import VerseTextPersistence
 
 struct NumberSearcher: Searcher {
-    private static let numberParser: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en")
-        return formatter
-    }()
+    // MARK: Internal
 
     let quranVerseTextPersistence: VerseTextPersistence
-    private let resultsProcessor = SearchResultsProcessor()
 
     func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
         if Int(term) != nil {
@@ -31,6 +26,16 @@ struct NumberSearcher: Searcher {
         let items: [SearchResult] = try await search(for: term, quran: quran)
         return [SearchResults(source: .quran, items: items)]
     }
+
+    // MARK: Private
+
+    private static let numberParser: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en")
+        return formatter
+    }()
+
+    private let resultsProcessor = SearchResultsProcessor()
 
     private func search(for term: String, quran: Quran) async throws -> [SearchResult] {
         let components = parseIntArray(term)

@@ -10,12 +10,18 @@ import Preferences
 import QuranAudio
 
 public class AudioPreferences {
-    public static let shared = AudioPreferences()
+    // MARK: Lifecycle
 
     private init() {}
 
-    private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
+    // MARK: Public
+
+    public static let shared = AudioPreferences()
 
     @TransformedPreference(audioEndKey, transformer: .rawRepresentable(defaultValue: .juz))
     public var audioEnd: AudioEnd
+
+    // MARK: Private
+
+    private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
 }

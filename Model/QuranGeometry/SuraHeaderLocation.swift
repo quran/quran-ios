@@ -9,11 +9,7 @@ import CoreGraphics
 import QuranKit
 
 public struct SuraHeaderLocation {
-    let sura: Sura
-    let x: Int
-    let y: Int
-    let width: Int
-    let height: Int
+    // MARK: Lifecycle
 
     public init(sura: Sura, x: Int, y: Int, width: Int, height: Int) {
         self.sura = sura
@@ -23,7 +19,17 @@ public struct SuraHeaderLocation {
         self.height = height
     }
 
+    // MARK: Public
+
     public var rect: CGRect {
         CGRect(x: x, y: y - height / 2, width: width, height: height)
     }
+
+    // MARK: Internal
+
+    let sura: Sura
+    let x: Int
+    let y: Int
+    let width: Int
+    let height: Int
 }

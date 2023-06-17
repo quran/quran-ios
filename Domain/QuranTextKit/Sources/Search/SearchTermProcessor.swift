@@ -8,6 +8,30 @@
 import Foundation
 
 struct SearchTermProcessor {
+    // MARK: Internal
+
+    func prepareSearchTermForSearching(_ searchTerm: String) -> (searchTerm: String, pattern: String) {
+        let searchTerm = prepareSearchTermForAutocompletion(searchTerm)
+        let arabicSearchTerm = searchTerm.replacingOccurrences(
+            of: regex,
+            with: "_",
+            options: .regularExpression
+        )
+        let pattern = generateRegexPattern(term: searchTerm)
+        return (searchTerm: arabicSearchTerm, pattern: pattern)
+    }
+
+    func prepareSearchTermForAutocompletion(_ searchTerm: String) -> String {
+        let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
+        var cleanedTerm = searchTerm.trimmedWords().components(separatedBy: legalTokens.inverted).joined(separator: "")
+        if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1000, limitedBy: cleanedTerm.endIndex) {
+            cleanedTerm = String(cleanedTerm[..<upTo])
+        }
+        return cleanedTerm.lowercased()
+    }
+
+    // MARK: Private
+
     private let regex = "[\u{0627}\u{0623}\u{0621}\u{062a}\u{0629}\u{0647}\u{0649}]"
     private let replacements: [Character: String] = [
         // given: ا
@@ -38,26 +62,6 @@ struct SearchTermProcessor {
         // match: ﻯي
         "\u{0649}": "\u{0649}\u{064a}",
     ]
-
-    func prepareSearchTermForSearching(_ searchTerm: String) -> (searchTerm: String, pattern: String) {
-        let searchTerm = prepareSearchTermForAutocompletion(searchTerm)
-        let arabicSearchTerm = searchTerm.replacingOccurrences(
-            of: regex,
-            with: "_",
-            options: .regularExpression
-        )
-        let pattern = generateRegexPattern(term: searchTerm)
-        return (searchTerm: arabicSearchTerm, pattern: pattern)
-    }
-
-    func prepareSearchTermForAutocompletion(_ searchTerm: String) -> String {
-        let legalTokens = CharacterSet.whitespaces.union(.alphanumerics)
-        var cleanedTerm = searchTerm.trimmedWords().components(separatedBy: legalTokens.inverted).joined(separator: "")
-        if let upTo = cleanedTerm.index(cleanedTerm.startIndex, offsetBy: 1000, limitedBy: cleanedTerm.endIndex) {
-            cleanedTerm = String(cleanedTerm[..<upTo])
-        }
-        return cleanedTerm.lowercased()
-    }
 
     private func generateRegexPattern(term: String) -> String {
         var regex = "("

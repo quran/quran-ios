@@ -10,15 +10,7 @@ import AVFoundation
 
 @MainActor
 final class Player {
-    var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
-
-    private let asset: AVURLAsset
-    let playerItem: AVPlayerItem
-    private let player: AVPlayer
-
-    private var rateObservation: NSKeyValueObservation? {
-        didSet { oldValue?.invalidate() }
-    }
+    // MARK: Lifecycle
 
     deinit {
         rateObservation?.invalidate()
@@ -38,6 +30,12 @@ final class Player {
             }
         }
     }
+
+    // MARK: Internal
+
+    var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
+
+    let playerItem: AVPlayerItem
 
     var currentTime: TimeInterval {
         player.currentTime().seconds
@@ -67,6 +65,15 @@ final class Player {
         pause()
         player.seek(to: timeInSeconds)
         play()
+    }
+
+    // MARK: Private
+
+    private let asset: AVURLAsset
+    private let player: AVPlayer
+
+    private var rateObservation: NSKeyValueObservation? {
+        didSet { oldValue?.invalidate() }
     }
 }
 

@@ -13,16 +13,7 @@ import XCTest
 @testable import QuranTextKit
 
 final class ShareableVerseTextRetrieverTests: XCTestCase {
-    private var shareableTextRetriever: ShareableVerseTextRetriever!
-    private var textService: QuranTextDataService!
-    private var localTranslationsFake: LocalTranslationsFake!
-    private let quran = Quran.hafsMadani1405
-    private let statePreferences = QuranContentStatePreferences.shared
-
-    private let translations = [
-        TestData.khanTranslation,
-        TestData.sahihTranslation,
-    ]
+    // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
@@ -137,4 +128,17 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                                                    "",
                                                    "Al-Baqarah, Ayah 51"])
     }
+
+    // MARK: Private
+
+    private var shareableTextRetriever: ShareableVerseTextRetriever!
+    private var textService: QuranTextDataService!
+    private var localTranslationsFake: LocalTranslationsFake!
+    private let quran = Quran.hafsMadani1405
+    private let statePreferences = QuranContentStatePreferences.shared
+
+    private let translations = [
+        TestData.khanTranslation,
+        TestData.sahihTranslation,
+    ]
 }

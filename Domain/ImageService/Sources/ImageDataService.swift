@@ -12,16 +12,15 @@ import WordFramePersistence
 import WordFrameService
 
 public struct ImageDataService {
-    private let processor = WordFrameProcessor()
-    private let persistence: WordFramePersistence
-    private let cropInsets: UIEdgeInsets
-    private let imagesURL: URL
+    // MARK: Lifecycle
 
     public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets) {
         self.imagesURL = imagesURL
         self.cropInsets = cropInsets
         persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
     }
+
+    // MARK: Public
 
     public func pageMarkers(_ page: Page) async throws -> PageMarkers {
         await PageMarkers(
@@ -44,6 +43,13 @@ public struct ImageDataService {
         let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
     }
+
+    // MARK: Private
+
+    private let processor = WordFrameProcessor()
+    private let persistence: WordFramePersistence
+    private let cropInsets: UIEdgeInsets
+    private let imagesURL: URL
 
     private func imageURLForPage(_ page: Page) -> URL {
         imagesURL.appendingPathComponent("page\(page.pageNumber.as3DigitString()).png")

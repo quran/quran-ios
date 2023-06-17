@@ -22,6 +22,22 @@ import Foundation
 import Utilities
 
 public struct Translation: Hashable, Sendable {
+    // MARK: Lifecycle
+
+    public init(id: Int, displayName: String, translator: String?, translatorForeign: String?, fileURL: URL, fileName: String, languageCode: String, version: Int, installedVersion: Int? = nil) {
+        self.id = id
+        self.displayName = displayName
+        self.translator = translator
+        self.translatorForeign = translatorForeign
+        self.fileURL = fileURL
+        self.fileName = fileName
+        self.languageCode = languageCode
+        self.version = version
+        self.installedVersion = installedVersion
+    }
+
+    // MARK: Public
+
     public let id: Int
     public let displayName: String
     public let translator: String?
@@ -37,17 +53,5 @@ public struct Translation: Hashable, Sendable {
 
     public var translationName: String {
         translatorForeign ?? translator ?? displayName
-    }
-
-    public init(id: Int, displayName: String, translator: String?, translatorForeign: String?, fileURL: URL, fileName: String, languageCode: String, version: Int, installedVersion: Int? = nil) {
-        self.id = id
-        self.displayName = displayName
-        self.translator = translator
-        self.translatorForeign = translatorForeign
-        self.fileURL = fileURL
-        self.fileName = fileName
-        self.languageCode = languageCode
-        self.version = version
-        self.installedVersion = installedVersion
     }
 }

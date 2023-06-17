@@ -11,11 +11,79 @@ import Timing
 
 @MainActor
 class AudioPlayer {
+    // MARK: Lifecycle
+
+    init(request: AudioRequest) {
+        self.request = request
+        audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
+        player = Player(url: request.files[0].url)
+        interruptionMonitor.onAudioInterruption = { [weak self] in
+            self?.onAudioInterruption(type: $0)
+        }
+    }
+
+    // MARK: Internal
+
     var actions: QueuePlayerActions?
+
+    // MARK: - Interruption
+
+    func onAudioInterruption(type: AudioInterruptionType) {
+        switch type {
+        case .began: pause()
+        case .endedShouldResume: resume()
+        case .endedShouldNotResume: break
+        }
+    }
+
+    // MARK: - Player Controls
+
+    func startPlaying() {
+        play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+    }
+
+    func resume() {
+        timer?.resume()
+        player.play()
+    }
+
+    func pause() {
+        timer?.pause()
+        player.pause()
+    }
+
+    func stop() {
+        timer?.cancel()
+        player.stop()
+        actions?.playbackEnded()
+    }
+
+    func stepForward() {
+        if let next = audioPlaying.nextFrame() {
+            audioPlaying.resetFramePlays()
+            play(fileIndex: next.fileIndex, frameIndex: next.frameIndex, forceSeek: true)
+        } else {
+            // stop playback if last frame
+            stop()
+        }
+    }
+
+    func stepBackgward() {
+        if let previous = audioPlaying.previousFrame() {
+            audioPlaying.resetFramePlays()
+            play(fileIndex: previous.fileIndex, frameIndex: previous.frameIndex, forceSeek: true)
+        } else {
+            // stop playback if first frame
+            stop()
+        }
+    }
+
+    // MARK: Private
 
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
+
     private var player: Player {
         didSet {
             player.onRateChanged = { [weak self] in
@@ -26,15 +94,6 @@ class AudioPlayer {
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
-    }
-
-    init(request: AudioRequest) {
-        self.request = request
-        audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
-        player = Player(url: request.files[0].url)
-        interruptionMonitor.onAudioInterruption = { [weak self] in
-            self?.onAudioInterruption(type: $0)
-        }
     }
 
     // MARK: - Repeat Logic
@@ -129,60 +188,8 @@ class AudioPlayer {
         actions?.playbackRateChanged(rate)
     }
 
-    // MARK: - Interruption
-
-    func onAudioInterruption(type: AudioInterruptionType) {
-        switch type {
-        case .began: pause()
-        case .endedShouldResume: resume()
-        case .endedShouldNotResume: break
-        }
-    }
-
-    // MARK: - Player Controls
-
-    func startPlaying() {
-        play(fileIndex: 0, frameIndex: 0, forceSeek: true)
-    }
-
-    func resume() {
-        timer?.resume()
-        player.play()
-    }
-
-    func pause() {
-        timer?.pause()
-        player.pause()
-    }
-
     private func isPaused(rate: Float) -> Bool {
         rate < 0.1
-    }
-
-    func stop() {
-        timer?.cancel()
-        player.stop()
-        actions?.playbackEnded()
-    }
-
-    func stepForward() {
-        if let next = audioPlaying.nextFrame() {
-            audioPlaying.resetFramePlays()
-            play(fileIndex: next.fileIndex, frameIndex: next.frameIndex, forceSeek: true)
-        } else {
-            // stop playback if last frame
-            stop()
-        }
-    }
-
-    func stepBackgward() {
-        if let previous = audioPlaying.previousFrame() {
-            audioPlaying.resetFramePlays()
-            play(fileIndex: previous.fileIndex, frameIndex: previous.frameIndex, forceSeek: true)
-        } else {
-            // stop playback if first frame
-            stop()
-        }
     }
 
     private func seek(to frame: AudioFrame) {

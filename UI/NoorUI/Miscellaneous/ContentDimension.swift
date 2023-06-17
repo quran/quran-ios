@@ -9,7 +9,7 @@
 import UIKit
 
 public enum ContentDimension {
-    static let spacing: CGFloat = 8
+    // MARK: Public
 
     public static let interSpacing: CGFloat = 8
 
@@ -25,4 +25,8 @@ public enum ContentDimension {
             trailing: readableInsets.right + spacing
         )
     }
+
+    // MARK: Internal
+
+    static let spacing: CGFloat = 8
 }

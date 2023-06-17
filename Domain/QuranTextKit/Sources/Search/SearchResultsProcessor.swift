@@ -10,6 +10,8 @@ import QuranKit
 import QuranText
 
 struct SearchResultsProcessor {
+    // MARK: Internal
+
     func buildAutocompletions(searchResults: [String], term: String) -> [SearchAutocompletion] {
         var result: [SearchAutocompletion] = []
         var added: Set<String> = []
@@ -46,6 +48,8 @@ struct SearchResultsProcessor {
         }
         return results
     }
+
+    // MARK: Private
 
     private func highlightResult(text: String, regexPattern: String) -> String {
         let ranges = text.regexRanges(of: regexPattern)

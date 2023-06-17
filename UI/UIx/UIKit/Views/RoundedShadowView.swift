@@ -9,6 +9,20 @@
 import UIKit
 
 public class RoundedShadowView: UIView {
+    // MARK: Lifecycle
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpLayer()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Public
+
     public var fillColor: UIColor? = .red {
         didSet {
             updateLayerUI()
@@ -45,18 +59,6 @@ public class RoundedShadowView: UIView {
         }
     }
 
-    private let shadowLayer = CAShapeLayer()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpLayer()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override public func layoutSubviews() {
         super.layoutSubviews()
         if shadowLayer.frame != bounds {
@@ -68,6 +70,10 @@ public class RoundedShadowView: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         updateLayerUI()
     }
+
+    // MARK: Private
+
+    private let shadowLayer = CAShapeLayer()
 
     private func setUpLayer() {
         layer.insertSublayer(shadowLayer, at: 0)

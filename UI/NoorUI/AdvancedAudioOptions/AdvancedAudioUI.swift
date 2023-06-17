@@ -20,24 +20,9 @@ public protocol AdvancedAudioUIVerse: Equatable {
 }
 
 public enum AdvancedAudioUI {
-    public enum AudioRepeat: Int {
-        case none
-        case once
-        case twice
-        case indefinite
-
-        static var sorted: [AudioRepeat] {
-            [.none, .once, .twice, .indefinite]
-        }
-    }
-
     public struct Actions {
-        let reciterTapped: () -> Void
-        let lastPageTapped: () -> Void
-        let lastSuraTapped: () -> Void
-        let lastJuzTapped: () -> Void
-        let fromVerseTapped: () -> Void
-        let toVerseTapped: () -> Void
+        // MARK: Lifecycle
+
         public init(
             reciterTapped: @escaping () -> Void,
             lastPageTapped: @escaping () -> Void,
@@ -53,9 +38,35 @@ public enum AdvancedAudioUI {
             self.fromVerseTapped = fromVerseTapped
             self.toVerseTapped = toVerseTapped
         }
+
+        // MARK: Internal
+
+        let reciterTapped: () -> Void
+        let lastPageTapped: () -> Void
+        let lastSuraTapped: () -> Void
+        let lastJuzTapped: () -> Void
+        let fromVerseTapped: () -> Void
+        let toVerseTapped: () -> Void
+    }
+
+    // MARK: Public
+
+    public enum AudioRepeat: Int {
+        case none
+        case once
+        case twice
+        case indefinite
+
+        // MARK: Internal
+
+        static var sorted: [AudioRepeat] {
+            [.none, .once, .twice, .indefinite]
+        }
     }
 
     public class DataObject<Sura: AdvancedAudioUISura>: ObservableObject {
+        // MARK: Lifecycle
+
         public init(
             suras: [Sura],
             fromVerse: Sura.Verse,
@@ -71,6 +82,8 @@ public enum AdvancedAudioUI {
             _listRepeat = Published(initialValue: listRepeat)
             _reciterName = Published(initialValue: reciterName)
         }
+
+        // MARK: Public
 
         public let suras: [Sura]
         @Published public var fromVerse: Sura.Verse

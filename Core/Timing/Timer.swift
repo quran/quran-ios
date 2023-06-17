@@ -22,17 +22,7 @@ import Foundation
 import Locking
 
 open class Timer {
-    open var isCancelled: Bool {
-        cancelled.value
-    }
-
-    private let repeated: Bool
-
-    private let timer: DispatchSourceTimer
-
-    private var cancelled = Protected(false)
-
-    private var eventHandler: (() -> Void)?
+    // MARK: Lifecycle
 
     public init(
         interval: TimeInterval,
@@ -55,22 +45,6 @@ open class Timer {
         timer.resume()
     }
 
-    private func fired() {
-        if !cancelled.value {
-            eventHandler?()
-        }
-
-        // cancel next ones if not repeated
-        if !repeated {
-            cancel()
-        }
-    }
-
-    public func cancel() {
-        cancelled.value = true
-        timer.cancel()
-    }
-
     deinit {
         timer.setEventHandler {}
         timer.cancel()
@@ -80,14 +54,18 @@ open class Timer {
         eventHandler = nil
     }
 
-    // MARK: - Pause/Resume
+    // MARK: Open
 
-    private enum State {
-        case paused
-        case resumed
+    open var isCancelled: Bool {
+        cancelled.value
     }
 
-    private var state = Protected(State.resumed)
+    // MARK: Public
+
+    public func cancel() {
+        cancelled.value = true
+        timer.cancel()
+    }
 
     public func pause() {
         state.sync { state in
@@ -106,6 +84,36 @@ open class Timer {
             }
             state = .resumed
             timer.resume()
+        }
+    }
+
+    // MARK: Private
+
+    // MARK: - Pause/Resume
+
+    private enum State {
+        case paused
+        case resumed
+    }
+
+    private let repeated: Bool
+
+    private let timer: DispatchSourceTimer
+
+    private var cancelled = Protected(false)
+
+    private var eventHandler: (() -> Void)?
+
+    private var state = Protected(State.resumed)
+
+    private func fired() {
+        if !cancelled.value {
+            eventHandler?()
+        }
+
+        // cancel next ones if not repeated
+        if !repeated {
+            cancel()
         }
     }
 }

@@ -21,7 +21,7 @@
 import UIKit
 
 public class SingleConstrainer: ViewConstrainer {
-    public let constraint: NSLayoutConstraint
+    // MARK: Lifecycle
 
     init(view: UIView, constraint: NSLayoutConstraint, chain: [NSLayoutConstraint]) {
         self.constraint = constraint
@@ -32,4 +32,8 @@ public class SingleConstrainer: ViewConstrainer {
         let chain = constrainer.chain + group.chain
         self.init(view: constrainer.view, constraint: group.constraints[0], chain: chain)
     }
+
+    // MARK: Public
+
+    public let constraint: NSLayoutConstraint
 }

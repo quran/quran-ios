@@ -24,11 +24,13 @@ import SystemDependencies
 import Utilities
 
 public struct ReciterDataRetriever: Sendable {
-    private let bundle: SystemBundle
+    // MARK: Lifecycle
 
     public init(bundle: SystemBundle = DefaultSystemBundle()) {
         self.bundle = bundle
     }
+
+    // MARK: Public
 
     public func getReciters() async -> [Reciter] {
         let array = bundle.readArray(resource: "reciters", withExtension: "plist")
@@ -54,6 +56,10 @@ public struct ReciterDataRetriever: Sendable {
             $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
         }
     }
+
+    // MARK: Private
+
+    private let bundle: SystemBundle
 
     private static func audioType(_ db: String) -> AudioType {
         if db.isEmpty {

@@ -13,8 +13,20 @@ public struct AsyncThrowingPublisher<Element>: AsyncSequence {
     public typealias BufferingPolicy = AsyncThrowingStream<Element, Error>.Continuation.BufferingPolicy
     public typealias AsyncIterator = Iterator
 
-    var bufferingPolicy: BufferingPolicy
-    var publisher: AnyPublisher<Element, Error>
+    public struct Iterator: AsyncIteratorProtocol {
+        // MARK: Public
+
+        public mutating func next() async throws -> Element? {
+            try await iterator.next()
+        }
+
+        // MARK: Internal
+
+        var iterator: AsyncThrowingStream<Element, Error>.AsyncIterator
+        let cancellable: AnyCancellable
+    }
+
+    // MARK: Public
 
     public func makeAsyncIterator() -> Iterator {
         // This cancellable will be retained by the Iterator, which itself will
@@ -58,14 +70,10 @@ public struct AsyncThrowingPublisher<Element>: AsyncSequence {
         }
     }
 
-    public struct Iterator: AsyncIteratorProtocol {
-        var iterator: AsyncThrowingStream<Element, Error>.AsyncIterator
-        let cancellable: AnyCancellable
+    // MARK: Internal
 
-        public mutating func next() async throws -> Element? {
-            try await iterator.next()
-        }
-    }
+    var bufferingPolicy: BufferingPolicy
+    var publisher: AnyPublisher<Element, Error>
 }
 
 public extension Publisher {

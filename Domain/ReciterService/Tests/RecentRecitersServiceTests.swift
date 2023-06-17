@@ -11,8 +11,7 @@ import XCTest
 @testable import ReciterService
 
 class RecentRecitersServiceTests: XCTestCase {
-    private var service: RecentRecitersService!
-    private let userDefaults = UserDefaults.standard
+    // MARK: Internal
 
     override func setUpWithError() throws {
         service = RecentRecitersService()
@@ -62,6 +61,11 @@ class RecentRecitersServiceTests: XCTestCase {
         service.updateRecentRecitersList(reciter4)
         XCTAssertEqual(getRecentRecitersIds(allReciters), [4, 3, 2])
     }
+
+    // MARK: Private
+
+    private var service: RecentRecitersService!
+    private let userDefaults = UserDefaults.standard
 
     private func getRecentRecitersIds(_ allReciters: [Reciter]) -> [Int] {
         service.recentReciters(allReciters).map(\.id)

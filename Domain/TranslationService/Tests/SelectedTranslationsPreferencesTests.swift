@@ -9,7 +9,7 @@ import XCTest
 @testable import TranslationService
 
 class SelectedTranslationsPreferencesTests: XCTestCase {
-    private let preferences = SelectedTranslationsPreferences.shared
+    // MARK: Internal
 
     override func tearDown() {
         super.tearDown()
@@ -29,4 +29,8 @@ class SelectedTranslationsPreferencesTests: XCTestCase {
         XCTAssertEqual(preferences.selectedTranslations, [45, 20])
         XCTAssertFalse(preferences.isSelected(10))
     }
+
+    // MARK: Private
+
+    private let preferences = SelectedTranslationsPreferences.shared
 }

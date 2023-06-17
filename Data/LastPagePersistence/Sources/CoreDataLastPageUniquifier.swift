@@ -12,16 +12,12 @@ import CoreDataPersistence
 import SystemDependencies
 
 public struct CoreDataLastPageUniquifier: CoreDataEntityUniquifier {
-    private let overflowHandler = CoreDataLastPageOverflowHandler()
-
-    private let simpleUniquifier = SimpleCoreDataEntityUniquifier<MO_LastPage>(
-        sortBy: Schema.LastPage.modifiedOn,
-        ascending: false,
-        key: .page
-    )
+    // MARK: Lifecycle
 
     public init() {
     }
+
+    // MARK: Public
 
     public func merge(transactions: [PersistentHistoryTransaction], using taskContext: NSManagedObjectContext) throws {
         // merge with existing ones
@@ -32,6 +28,16 @@ public struct CoreDataLastPageUniquifier: CoreDataEntityUniquifier {
             try overflowHandler.removeOverflowIfneeded(using: taskContext)
         }
     }
+
+    // MARK: Private
+
+    private let overflowHandler = CoreDataLastPageOverflowHandler()
+
+    private let simpleUniquifier = SimpleCoreDataEntityUniquifier<MO_LastPage>(
+        sortBy: Schema.LastPage.modifiedOn,
+        ascending: false,
+        key: .page
+    )
 
     private func hasLastPageChanges(_ transactions: [PersistentHistoryTransaction]) -> Bool {
         let entityName = MO_LastPage.entity().name

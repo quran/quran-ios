@@ -10,10 +10,13 @@ import SwiftUI
 import UIx
 
 public struct MoreMenuTheme: View {
-    @Binding var theme: MoreMenu.Theme
+    // MARK: Lifecycle
+
     public init(theme: Binding<MoreMenu.Theme>) {
         _theme = theme
     }
+
+    // MARK: Public
 
     public var body: some View {
         HStack {
@@ -30,12 +33,17 @@ public struct MoreMenuTheme: View {
             Spacer()
         }
     }
+
+    // MARK: Internal
+
+    @Binding var theme: MoreMenu.Theme
 }
 
 private struct ThemeSelection: View {
     let label: String
     let selected: Bool
     var action: () -> Void
+
     var body: some View {
         Button {
             if !selected {
@@ -64,10 +72,13 @@ private struct ThemeSelection: View {
 struct MoreMenuTheme_Previews: PreviewProvider {
     struct Container: View {
         @State var theme: MoreMenu.Theme
+
         var body: some View {
             MoreMenuTheme(theme: $theme)
         }
     }
+
+    // MARK: Internal
 
     static var previews: some View {
         Previewing.screen {

@@ -9,19 +9,16 @@ import Foundation
 import Preferences
 
 public class SelectedTranslationsPreferences {
-    public static let shared = SelectedTranslationsPreferences()
+    // MARK: Lifecycle
+
     private init() {}
 
-    private static let selectedTranslations = PreferenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
+    // MARK: Public
+
+    public static let shared = SelectedTranslationsPreferences()
 
     @Preference(selectedTranslations)
     public var selectedTranslations: [Int]
-
-    func reset() {
-        for key in [Self.selectedTranslations.key] {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
-    }
 
     public func remove(_ translationId: Int) {
         if let index = selectedTranslations.firstIndex(of: translationId) {
@@ -40,4 +37,16 @@ public class SelectedTranslationsPreferences {
             selectedTranslations.append(translationId)
         }
     }
+
+    // MARK: Internal
+
+    func reset() {
+        for key in [Self.selectedTranslations.key] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+    }
+
+    // MARK: Private
+
+    private static let selectedTranslations = PreferenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
 }

@@ -21,12 +21,7 @@
 import Foundation
 
 public struct Page: QuranValueGroup {
-    public var pageNumber: Int { storage.value }
-    let storage: QuranValueStorage<Self>
-
-    public var quran: Quran {
-        storage.quran
-    }
+    // MARK: Lifecycle
 
     public init?(quran: Quran, pageNumber: Int) {
         if !quran.pagesRange.contains(pageNumber) {
@@ -37,6 +32,13 @@ public struct Page: QuranValueGroup {
 
     init(_ storage: QuranValueStorage<Self>) {
         self.storage = storage
+    }
+
+    // MARK: Public
+
+    public var pageNumber: Int { storage.value }
+    public var quran: Quran {
+        storage.quran
     }
 
     public var firstVerse: AyahNumber {
@@ -54,4 +56,8 @@ public struct Page: QuranValueGroup {
     public var quarter: Quarter? {
         quran.quarters.first { $0.page == self }
     }
+
+    // MARK: Internal
+
+    let storage: QuranValueStorage<Self>
 }

@@ -20,12 +20,6 @@ public enum MoreMenu {
         case portrait
     }
 
-    public enum Theme {
-        case light
-        case dark
-        case auto
-    }
-
     public enum TranslationPointerType {
         case translation
         case transliteration
@@ -66,7 +60,7 @@ public class MoreMenuStore: ObservableObject {
         arabicFontSize: FontSize,
         twoPagesEnabled: Bool,
         verticalScrollingEnabled: Bool,
-        theme: MoreMenu.Theme
+        theme: Theme
     ) {
         self.mode = mode
         self.wordPointerEnabled = wordPointerEnabled
@@ -91,7 +85,7 @@ public class MoreMenuStore: ObservableObject {
     @Published public var twoPagesEnabled: Bool
     @Published public var verticalScrollingEnabled: Bool
 
-    @Published public var theme: MoreMenu.Theme
+    @Published public var theme: Theme
 
     public var state = MoreMenuControlsState()
 

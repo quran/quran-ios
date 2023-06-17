@@ -7,6 +7,7 @@
 //
 
 import Localization
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -53,7 +54,7 @@ public struct AyahMenuView: View {
 
     @State private var state: MenuState = .list
 
-    private var existingHighlightedColor: NoteColor? {
+    private var existingHighlightedColor: Note.Color? {
         switch dataObject.state {
         case .highlighted, .noted:
             return dataObject.highlightingColor
@@ -295,7 +296,7 @@ private struct IconCircles: View {
 private struct IconCircle: View {
     @ScaledMetric var minLength = 20
 
-    var color: NoteColor
+    var color: Note.Color
 
     var body: some View {
         ColoredCircle(color: color.color, selected: false, minLength: minLength)
@@ -303,12 +304,12 @@ private struct IconCircle: View {
 }
 
 private struct NoteCircles: View {
-    let selectedColor: NoteColor?
-    let tapped: (NoteColor) -> Void
+    let selectedColor: Note.Color?
+    let tapped: (Note.Color) -> Void
 
     var body: some View {
         HStack {
-            ForEach(NoteColor.sortedColors, id: \.self) { color in
+            ForEach(Note.Color.sortedColors, id: \.self) { color in
                 Button(
                     action: { tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }

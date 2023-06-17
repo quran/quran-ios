@@ -7,6 +7,7 @@
 //
 
 import Localization
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -21,7 +22,7 @@ public struct NoteCell: View {
         ayahText: String,
         note: String,
         createdSince: String,
-        color: NoteColor
+        color: Note.Color
     ) {
         self.page = page
         self.localizedVerse = localizedVerse
@@ -89,7 +90,7 @@ public struct NoteCell: View {
     let ayahText: String
     let note: String
     let createdSince: String
-    let color: NoteColor
+    let color: Note.Color
 }
 
 // swiftlint:disable line_length

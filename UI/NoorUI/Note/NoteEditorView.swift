@@ -7,6 +7,7 @@
 //
 
 import Localization
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -26,7 +27,7 @@ public struct NoteEditorView: View {
             ZStack(alignment: .leading) {
                 HStack {
                     Spacer()
-                    ForEach(NoteColor.sortedColors, id: \.self) { color in
+                    ForEach(Note.Color.sortedColors, id: \.self) { color in
                         Button(
                             action: { note.selectedColor = color },
                             label: { NoteCircle(color: color.color, selected: color == note.selectedColor) }

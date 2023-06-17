@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "genericdatasource",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GenericDataSource/GenericDataSource",
+      "state" : {
+        "revision" : "b301a090c9fb1aa664e80f3960f0930f224ee217",
+        "version" : "3.1.2"
+      }
+    },
+    {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift",

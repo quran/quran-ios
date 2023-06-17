@@ -76,6 +76,7 @@ let package = Package(
 
         // UI
         .package(url: "https://github.com/mohamede1945/DownloadButton", branch: "master"),
+        .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
@@ -185,6 +186,7 @@ private func uiTargets() -> [[Target]] {
             "Localization",
             "QuranText",
             "DownloadButton",
+            .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),
     ]
 }

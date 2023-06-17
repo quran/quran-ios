@@ -12,7 +12,7 @@ import UIx
 public struct MoreMenuTheme: View {
     // MARK: Lifecycle
 
-    public init(theme: Binding<MoreMenu.Theme>) {
+    public init(theme: Binding<Theme>) {
         _theme = theme
     }
 
@@ -36,7 +36,7 @@ public struct MoreMenuTheme: View {
 
     // MARK: Internal
 
-    @Binding var theme: MoreMenu.Theme
+    @Binding var theme: Theme
 }
 
 private struct ThemeSelection: View {
@@ -71,7 +71,7 @@ private struct ThemeSelection: View {
 
 struct MoreMenuTheme_Previews: PreviewProvider {
     struct Container: View {
-        @State var theme: MoreMenu.Theme
+        @State var theme: Theme
 
         var body: some View {
             MoreMenuTheme(theme: $theme)

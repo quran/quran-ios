@@ -74,10 +74,8 @@ open class Timer {
     deinit {
         timer.setEventHandler {}
         timer.cancel()
-        /*
-         If the timer is suspended, calling cancel without resuming
-         triggers a crash. This is documented here https://forums.developer.apple.com/thread/15902
-         */
+        // If the timer is suspended, calling cancel without resuming
+        // triggers a crash. This is documented here https://forums.developer.apple.com/thread/15902
         resume()
         eventHandler = nil
     }

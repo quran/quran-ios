@@ -1,12 +1,30 @@
 
-# options
+# Don't format
+--exclude .build
+
+# Options
+
 --importgrouping testable-bottom # sortedImports
 --wraparguments before-first # wrapArguments
 --wrapparameters before-first # wrapArguments
 --funcattributes prev-line # wrapAttributes
 --typeattributes prev-line # wrapAttributes
 
-# rules
 
---exclude .build
---disable unusedArguments,emptyBraces,extensionAccessControl,hoistPatternLet,enumNamespaces,redundantType,andOperator,hoistAwait,hoistTry
+# Disabled
+
+--disable andOperator
+--disable emptyBraces
+--disable enumNamespaces
+--disable extensionAccessControl
+--disable hoistAwait
+--disable hoistPatternLet
+--disable hoistTry
+--disable redundantType
+--disable unusedArguments
+
+# Enabled
+
+--enable blankLineAfterImports
+--enable blankLinesBetweenImports
+--enable blockComments

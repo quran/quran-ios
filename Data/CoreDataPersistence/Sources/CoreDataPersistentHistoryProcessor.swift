@@ -14,11 +14,9 @@ class CoreDataPersistentHistoryProcessor {
     private let name: String
     private let trasactionsMerger: CoreDataPersistentHistoryTransactionsMerger
 
-    /**
-     Track the last history token processed for a store, and write its value to file.
-
-     The historyQueue reads the token when executing operations, and updates it after processing is complete.
-     */
+    /// Track the last history token processed for a store, and write its value to file.
+    ///
+    /// The historyQueue reads the token when executing operations, and updates it after processing is complete.
     private lazy var lastHistoryToken: NSPersistentHistoryToken? = initialLastHistoryToken() {
         didSet {
             guard let token = lastHistoryToken,
@@ -44,9 +42,7 @@ class CoreDataPersistentHistoryProcessor {
         return nil
     }
 
-    /**
-      The file URL for persisting the persistent history token.
-     */
+    /// The file URL for persisting the persistent history token.
     private lazy var tokenFile: URL = {
         let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent(name, isDirectory: true)
         if !FileManager.default.fileExists(atPath: url.path) {
@@ -64,9 +60,7 @@ class CoreDataPersistentHistoryProcessor {
         trasactionsMerger = CoreDataPersistentHistoryTransactionsMerger(uniquifiers: uniquifiers)
     }
 
-    /**
-     Process persistent history, posting any relevant transactions to the current view.
-     */
+    /// Process persistent history, posting any relevant transactions to the current view.
     func processNewHistory(using taskContext: NSManagedObjectContext) {
         // Fetch history received from outside the app since the last token
         let historyFetchRequest = NSPersistentHistoryTransaction.fetchRequest!

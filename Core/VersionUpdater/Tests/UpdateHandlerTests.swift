@@ -6,8 +6,8 @@
 //
 
 import SystemDependenciesFake
-@testable import VersionUpdater
 import XCTest
+@testable import VersionUpdater
 
 final class UpdateHandlerTests: XCTestCase {
     private var service: UpdateHandler!

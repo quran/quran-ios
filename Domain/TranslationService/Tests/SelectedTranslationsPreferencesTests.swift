@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
-@testable import TranslationService
 import XCTest
+@testable import TranslationService
 
 class SelectedTranslationsPreferencesTests: XCTestCase {
     private let preferences = SelectedTranslationsPreferences.shared

@@ -7,8 +7,8 @@
 
 import CoreData
 import CoreDataModel
-@testable import CoreDataPersistence
 import XCTest
+@testable import CoreDataPersistence
 
 class CoreDataStackTests: XCTestCase {
     var stack: CoreDataStack!

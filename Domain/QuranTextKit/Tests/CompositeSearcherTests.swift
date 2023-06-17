@@ -7,11 +7,11 @@
 
 import QuranKit
 import QuranText
-@testable import QuranTextKit
 import SnapshotTesting
 import TranslationServiceFake
 import VerseTextPersistence
 import XCTest
+@testable import QuranTextKit
 
 @MainActor
 class CompositeSearcherTests: XCTestCase {

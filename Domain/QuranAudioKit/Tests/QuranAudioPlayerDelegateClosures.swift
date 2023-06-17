@@ -7,9 +7,9 @@
 
 import BatchDownloader
 import Locking
-@testable import QuranAudioKit
 import QuranKit
 import Utilities
+@testable import QuranAudioKit
 
 @MainActor
 class QuranAudioPlayerDelegateClosures {

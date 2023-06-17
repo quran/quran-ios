@@ -5,10 +5,10 @@
 //  Created by Mohamed Afifi on 2023-06-03.
 //
 
-@testable import BatchDownloader
 import Foundation
 import NetworkSupportFake
 import XCTest
+@testable import BatchDownloader
 
 public enum BatchDownloaderFake {
     public static let maxSimultaneousDownloads = 3

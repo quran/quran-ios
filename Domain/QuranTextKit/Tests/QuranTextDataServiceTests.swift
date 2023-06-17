@@ -7,12 +7,12 @@
 
 import QuranKit
 import QuranText
-@testable import QuranTextKit
 import SystemDependenciesFake
-@testable import TranslationService
 import TranslationServiceFake
 import VerseTextPersistence
 import XCTest
+@testable import QuranTextKit
+@testable import TranslationService
 
 final class QuranTextDataServiceTests: XCTestCase {
     private var textService: QuranTextDataService!

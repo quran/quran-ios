@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 2021-12-11.
 //
 
-@testable import QuranKit
 import XCTest
+@testable import QuranKit
 
 final class SuraTests: XCTestCase {
     private let quran = Quran.hafsMadani1405

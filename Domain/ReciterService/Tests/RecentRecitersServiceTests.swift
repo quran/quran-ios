@@ -7,8 +7,8 @@
 
 import Foundation
 import QuranAudio
-@testable import ReciterService
 import XCTest
+@testable import ReciterService
 
 class RecentRecitersServiceTests: XCTestCase {
     private var service: RecentRecitersService!

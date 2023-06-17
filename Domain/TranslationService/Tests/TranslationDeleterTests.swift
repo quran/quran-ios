@@ -6,9 +6,9 @@
 //
 
 import SystemDependenciesFake
-@testable import TranslationService
 import TranslationServiceFake
 import XCTest
+@testable import TranslationService
 
 class TranslationDeleterTests: XCTestCase {
     private var retriever: LocalTranslationsRetriever {

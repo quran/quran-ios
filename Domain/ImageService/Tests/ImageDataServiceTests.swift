@@ -5,13 +5,13 @@
 //  Created by Mohamed Afifi on 2022-01-09.
 //
 
-@testable import ImageService
 import QuranGeometry
 import QuranKit
 import SnapshotTesting
 import TestResources
 import WordFrameService
 import XCTest
+@testable import ImageService
 
 @MainActor
 class ImageDataServiceTests: XCTestCase {

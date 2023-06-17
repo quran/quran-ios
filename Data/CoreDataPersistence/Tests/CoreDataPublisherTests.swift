@@ -9,8 +9,8 @@ import AsyncUtilitiesForTesting
 import Combine
 import CoreData
 import CoreDataModel
-@testable import CoreDataPersistence
 import XCTest
+@testable import CoreDataPersistence
 
 class CoreDataPublisherTests: XCTestCase {
     var coreDataStack: CoreDataStack!

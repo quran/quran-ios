@@ -7,10 +7,10 @@
 
 import CoreData
 import CoreDataModel
-@testable import CoreDataPersistence
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
+@testable import CoreDataPersistence
 
 class CoreDataInsertedEntitiesRetrieverTests: XCTestCase {
     var sut: CoreDataInsertedEntitiesRetriever<MO_LastPage>!

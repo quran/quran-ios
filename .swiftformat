@@ -1,2 +1,8 @@
---exclude .build,Tests/QuranTextKitTests/Mocks.swift
+
+# options
+--importgrouping testable-bottom # sortedImports
+
+# rules
+
+--exclude .build
 --disable unusedArguments,emptyBraces,extensionAccessControl,hoistPatternLet,enumNamespaces,redundantType,andOperator,hoistAwait,hoistTry

@@ -7,9 +7,9 @@
 
 import Foundation
 import QuranAudio
-@testable import QuranAudioKit
 import QuranKit
 import XCTest
+@testable import QuranAudioKit
 
 class GappedAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!

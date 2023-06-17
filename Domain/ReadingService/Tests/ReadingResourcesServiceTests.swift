@@ -6,9 +6,9 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import ReadingService
 import SystemDependenciesFake
 import XCTest
+@testable import ReadingService
 
 final class ReadingResourcesServiceTests: XCTestCase {
     private var service: ReadingResourcesService!

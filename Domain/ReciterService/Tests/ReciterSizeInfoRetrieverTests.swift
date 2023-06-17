@@ -5,12 +5,12 @@
 //  Created by Mohamed Afifi on 2023-05-14.
 //
 
-@testable import QuranAudio
 import QuranKit
-@testable import ReciterService
 import ReciterServiceFake
 import SystemDependenciesFake
 import XCTest
+@testable import QuranAudio
+@testable import ReciterService
 
 class ReciterSizeInfoRetrieverTests: XCTestCase {
     private var service: ReciterSizeInfoRetriever!

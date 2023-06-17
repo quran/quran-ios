@@ -8,10 +8,10 @@
 import AudioTimingPersistence
 import Foundation
 import QuranAudio
-@testable import QuranAudioKit
 import QuranKit
 import ReciterServiceFake
 import XCTest
+@testable import QuranAudioKit
 
 class GaplessAudioRequestBuilderTests: XCTestCase {
     private var audioRequestBuilder: QuranAudioRequestBuilder!

@@ -10,8 +10,8 @@ import QuranText
 import SystemDependenciesFake
 import TestResources
 import TranslationPersistence
-@testable import TranslationService
 import VerseTextPersistence
+@testable import TranslationService
 
 public struct LocalTranslationsFake {
     public static let databasesURL = FileManager.documentsURL.appendingPathComponent("databases", isDirectory: true)

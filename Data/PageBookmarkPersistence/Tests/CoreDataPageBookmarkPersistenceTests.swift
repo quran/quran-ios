@@ -9,8 +9,8 @@ import AsyncUtilitiesForTesting
 import Combine
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
-@testable import PageBookmarkPersistence
 import XCTest
+@testable import PageBookmarkPersistence
 
 final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     var persistence: CoreDataPageBookmarkPersistence!

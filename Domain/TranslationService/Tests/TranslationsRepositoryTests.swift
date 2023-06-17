@@ -5,13 +5,13 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
-@testable import NetworkSupport
 import NetworkSupportFake
 import QuranText
 import SystemDependenciesFake
-@testable import TranslationService
 import TranslationServiceFake
 import XCTest
+@testable import NetworkSupport
+@testable import TranslationService
 
 class TranslationsRepositoryTests: XCTestCase {
     private var retriever: LocalTranslationsRetriever {

@@ -7,11 +7,11 @@
 
 import CoreData
 import CoreDataModel
-@testable import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
+@testable import CoreDataPersistence
 
 class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     var sut: SimpleCoreDataEntityUniquifier<MO_PageBookmark>!

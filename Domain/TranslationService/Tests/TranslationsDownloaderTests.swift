@@ -6,13 +6,13 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import BatchDownloader
 import BatchDownloaderFake
 import NetworkSupportFake
 import SystemDependenciesFake
-@testable import TranslationService
 import TranslationServiceFake
 import XCTest
+@testable import BatchDownloader
+@testable import TranslationService
 
 class TranslationsDownloaderTests: XCTestCase {
     private var downloader: TranslationsDownloader!

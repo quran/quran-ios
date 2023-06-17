@@ -6,15 +6,15 @@
 //
 
 import AsyncUtilitiesForTesting
-@testable import BatchDownloader
 import BatchDownloaderFake
 import NetworkSupportFake
 import QuranAudio
-@testable import QuranAudioKit
 import QuranKit
 import SnapshotTesting
 import SystemDependenciesFake
 import XCTest
+@testable import BatchDownloader
+@testable import QuranAudioKit
 
 class QuranAudioDownloaderTests: XCTestCase {
     private var downloader: QuranAudioDownloader!

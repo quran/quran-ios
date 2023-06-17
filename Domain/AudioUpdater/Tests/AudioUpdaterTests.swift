@@ -5,15 +5,15 @@
 //  Created by Mohamed Afifi on 2023-05-07.
 //
 
-@testable import AudioUpdater
 import Foundation
-@testable import NetworkSupport
 import NetworkSupportFake
-@testable import QuranAudio
-@testable import ReciterService
 import ReciterServiceFake
 import SystemDependenciesFake
 import XCTest
+@testable import AudioUpdater
+@testable import NetworkSupport
+@testable import QuranAudio
+@testable import ReciterService
 
 class AudioUpdaterTests: XCTestCase {
     private var updater: AudioUpdater!

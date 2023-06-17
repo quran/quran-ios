@@ -22,9 +22,6 @@ jobs:
     - name: Run tests
       run: set -o pipefail && xcrun xcodebuild test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 14 Pro,OS=16.4" | xcpretty
 
-    - uses: sersoft-gmbh/swift-coverage-action@v2
-      id: coverage-files
-
-    - uses: codecov/codecov-action@v2
+    - uses: codecov/codecov-action@v3
       with:
-        files: ${{join(fromJSON(steps.coverage-files.outputs.files), ',')}}
+        swift: true

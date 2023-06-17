@@ -1,20 +1,15 @@
 //
-//  NoteColor.swift
+//  Note.Color++.swift
 //
 //
 //  Created by Afifi, Mohamed on 10/25/21.
 //
 
+import QuranAnnotations
 import SwiftUI
 import UIKit
 
-public enum NoteColor {
-    case red
-    case green
-    case blue
-    case yellow
-    case purple
-
+extension Note.Color {
     // MARK: Public
 
     public var uiColor: UIColor {
@@ -29,7 +24,7 @@ public enum NoteColor {
 
     // MARK: Internal
 
-    static var sortedColors: [NoteColor] {
+    static var sortedColors: [Self] {
         [.yellow, .green, .blue, .red, .purple]
     }
 

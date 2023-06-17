@@ -6,6 +6,7 @@
 //
 
 import Combine
+import QuranAnnotations
 import SwiftUI
 import UIKit
 
@@ -16,7 +17,7 @@ public enum AyahMenuUI {
         public init(
             play: @escaping () -> Void,
             repeatVerses: @escaping () -> Void,
-            highlight: @escaping (NoteColor) -> Void,
+            highlight: @escaping (Note.Color) -> Void,
             addNote: @escaping () -> Void,
             deleteNote: @escaping () -> Void,
             showTranslation: @escaping () -> Void,
@@ -37,7 +38,7 @@ public enum AyahMenuUI {
 
         let play: () -> Void
         let repeatVerses: () -> Void
-        let highlight: (NoteColor) -> Void
+        let highlight: (Note.Color) -> Void
         let addNote: () -> Void
         let deleteNote: () -> Void
         let showTranslation: () -> Void
@@ -49,7 +50,7 @@ public enum AyahMenuUI {
         // MARK: Lifecycle
 
         public init(
-            highlightingColor: NoteColor,
+            highlightingColor: Note.Color,
             state: NoteState,
             playSubtitle: String,
             repeatSubtitle: String,
@@ -66,7 +67,7 @@ public enum AyahMenuUI {
 
         // MARK: Internal
 
-        let highlightingColor: NoteColor
+        let highlightingColor: Note.Color
         let state: NoteState
         let actions: Actions
         let playSubtitle: String

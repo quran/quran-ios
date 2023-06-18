@@ -14,6 +14,7 @@ import QuranTextKit
 public protocol AppDependencies {
     var databasesURL: URL { get }
     var quranUthmaniV2Database: URL { get }
+    var wordsDatabase: URL { get }
 
     var analytics: AnalyticsLibrary { get }
     var notePersistence: NotePersistence { get }

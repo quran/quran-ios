@@ -36,6 +36,7 @@ let package = Package(
         library("ReciterList"),
         library("AyahMenu"),
         library("WhatsNew"),
+        library("WordPointer"),
 
         // Domain
         library("QuranKit"),
@@ -85,6 +86,7 @@ let package = Package(
         .package(url: "https://github.com/mohamede1945/DownloadButton", branch: "master"),
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
         .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.7"),
+        .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
@@ -494,8 +496,13 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "WhatsNew", hasTests: false, dependencies: [
             "WhatsNewKit",
             "NoorUI",
-            "WhatsNewKit",
             "Analytics",
+        ]),
+
+        target(type, name: "WordPointer", hasTests: false, dependencies: [
+            "AppDependencies",
+            "WordTextService",
+            .product(name: "Popover_OC", package: "Popover"),
         ]),
     ]
 }

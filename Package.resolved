@@ -73,6 +73,15 @@
       }
     },
     {
+      "identity" : "whatsnewkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SvenTiigi/WhatsNewKit.git",
+      "state" : {
+        "revision" : "92a9d6f5f6754aba0df972514fd7686f1de03bcc",
+        "version" : "1.3.7"
+      }
+    },
+    {
       "identity" : "zip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/Zip",

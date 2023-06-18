@@ -35,6 +35,7 @@ let package = Package(
         // Features
         library("ReciterList"),
         library("AyahMenu"),
+        library("WhatsNew"),
 
         // Domain
         library("QuranKit"),
@@ -83,6 +84,7 @@ let package = Package(
         // UI
         .package(url: "https://github.com/mohamede1945/DownloadButton", branch: "master"),
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
+        .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.7"),
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
@@ -487,6 +489,13 @@ private func featuresTargets() -> [[Target]] {
             "QuranAudioKit",
             "AnnotationsService",
             "NoorUI",
+        ]),
+
+        target(type, name: "WhatsNew", hasTests: false, dependencies: [
+            "WhatsNewKit",
+            "NoorUI",
+            "WhatsNewKit",
+            "Analytics",
         ]),
     ]
 }

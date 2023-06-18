@@ -20,6 +20,7 @@ let targets = [
     uiTargets(),
     dataTargets(),
     domainTargets(),
+    featuresTargets(),
 ]
 .flatMap { $0 }
 .flatMap { $0 }
@@ -31,13 +32,15 @@ let package = Package(
         .iOS(.v14),
     ],
     products: [
+        // Features
+        library("ReciterList"),
+
+        // Domain
         library("QuranKit"),
         library("QuranTextKit"),
         library("QuranText"),
         library("QuranAudioKit"),
         library("AudioUpdater"),
-        library("BatchDownloader"),
-        library("Caching"),
         library("VersionUpdater"),
         library("ReadingService"),
         library("ImageService"),
@@ -48,6 +51,8 @@ let package = Package(
 
         // Utilities packages
 
+        library("BatchDownloader"),
+        library("Caching"),
         library("Timing"),
         library("Utilities"),
         library("VLogging"),
@@ -460,6 +465,17 @@ private func domainTargets() -> [[Target]] {
     ]
 }
 
+private func featuresTargets() -> [[Target]] {
+    let type = TargetType.features
+    return [
+        target(type, name: "ReciterList", hasTests: false, dependencies: [
+            "QuranAudio",
+            "NoorUI",
+            "ReciterService",
+        ]),
+    ]
+}
+
 // MARK: - Builders
 
 enum TargetType: String {
@@ -468,16 +484,18 @@ enum TargetType: String {
     case domain = "Domain"
     case model = "Model"
     case ui = "UI"
+    case features = "Features"
 
     // MARK: Internal
 
     // swiftformat:disable consecutiveSpaces
     static let validDependencies: [TargetType: Set<TargetType>] = [
-        .core:   [.core],
-        .model:  [.core, .model],
-        .data:   [.core, .model, .data],
-        .domain: [.core, .model, .data, .domain],
-        .ui:     [.core, .model, .ui],
+        .core:     [.core],
+        .model:    [.core, .model],
+        .ui:       [.core, .model, .ui],
+        .data:     [.core, .model, .data],
+        .domain:   [.core, .model, .data, .domain],
+        .features: [.core, .model, .data, .domain, .ui, .features],
     ]
     // swiftformat:enable consecutiveSpaces
 }

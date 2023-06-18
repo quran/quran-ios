@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Localization
 
 public enum AudioEnd: Int {
     case sura

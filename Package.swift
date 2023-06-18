@@ -34,6 +34,7 @@ let package = Package(
     products: [
         // Features
         library("ReciterList"),
+        library("AyahMenu"),
 
         // Domain
         library("QuranKit"),
@@ -468,10 +469,24 @@ private func domainTargets() -> [[Target]] {
 private func featuresTargets() -> [[Target]] {
     let type = TargetType.features
     return [
+        target(type, name: "AppDependencies", hasTests: false, dependencies: [
+            "NotePersistence",
+            "QuranTextKit",
+            "Analytics",
+            "AnnotationsService",
+        ]),
+
         target(type, name: "ReciterList", hasTests: false, dependencies: [
             "QuranAudio",
             "NoorUI",
             "ReciterService",
+        ]),
+
+        target(type, name: "AyahMenu", hasTests: false, dependencies: [
+            "AppDependencies",
+            "QuranAudioKit",
+            "AnnotationsService",
+            "NoorUI",
         ]),
     ]
 }

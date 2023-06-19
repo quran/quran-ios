@@ -508,6 +508,12 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
             "WordTextService",
         ]),
+
+        target(type, name: "NoteEditorFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "AnnotationsService",
+            "NoorUI",
+        ]),
     ]
 }
 

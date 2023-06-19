@@ -44,7 +44,7 @@ let package = Package(
         library("QuranText"),
         library("QuranAudioKit"),
         library("AudioUpdater"),
-        library("VersionUpdater"),
+        library("AppMigrator"),
         library("ReadingService"),
         library("ImageService"),
         library("WordTextService"),
@@ -139,7 +139,7 @@ private func coreTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(type, name: "VersionUpdater", dependencies: [
+        target(type, name: "AppMigrator", dependencies: [
             "Preferences",
             "VLogging",
             "SystemDependencies",

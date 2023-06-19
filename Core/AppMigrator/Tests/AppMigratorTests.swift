@@ -1,5 +1,5 @@
 //
-//  UpdateHandlerTests.swift
+//  AppMigratorTests.swift
 //
 //
 //  Created by Mohamed Afifi on 2023-05-17.
@@ -7,23 +7,23 @@
 
 import SystemDependenciesFake
 import XCTest
-@testable import VersionUpdater
+@testable import AppMigrator
 
-final class UpdateHandlerTests: XCTestCase {
+final class AppMigratorTests: XCTestCase {
     // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
         bundle = SystemBundleFake()
-        service = UpdateHandler(bundle: bundle)
+        service = AppMigrator(bundle: bundle)
 
-        worker1 = VersionUpdaterTester(blocksUI: true, uiTitle: "Worker 1")
-        worker2 = VersionUpdaterTester(blocksUI: true, uiTitle: "Worker 2")
-        nonBlockingWorker = VersionUpdaterTester(blocksUI: false, uiTitle: nil)
+        worker1 = MigratorTester(blocksUI: true, uiTitle: "Worker 1")
+        worker2 = MigratorTester(blocksUI: true, uiTitle: "Worker 2")
+        nonBlockingWorker = MigratorTester(blocksUI: false, uiTitle: nil)
 
-        service.register(updater: worker1, for: "1.16.0")
-        service.register(updater: worker2, for: "1.17.0")
-        service.register(updater: nonBlockingWorker, for: "1.18.0")
+        service.register(migrator: worker1, for: "1.16.0")
+        service.register(migrator: worker2, for: "1.17.0")
+        service.register(migrator: nonBlockingWorker, for: "1.18.0")
 
         bundle.info["CFBundleShortVersionString"] = "1.18.0"
     }
@@ -34,36 +34,36 @@ final class UpdateHandlerTests: XCTestCase {
     }
 
     func test_futureNewInstallation() async {
-        await verifyNoUpgrade()
+        await verifyNoMigration()
     }
 
     func test_currentNewInstallation() async {
         bundle.info["CFBundleShortVersionString"] = "1.18.0"
 
-        await verifyNoUpgrade()
+        await verifyNoMigration()
     }
 
     func test_sameVersion() async {
         preferences.appVersion = "1.18.0"
         bundle.info["CFBundleShortVersionString"] = preferences.appVersion
 
-        await verifyNoUpgrade()
+        await verifyNoMigration()
     }
 
     func test_upgrade_noUpdater() async {
         preferences.appVersion = "1.18.0"
         bundle.info["CFBundleShortVersionString"] = "1.19.0"
 
-        await verifyNoUpgrade()
+        await verifyNoMigration()
     }
 
     func test_upgrade_runLastUpdater() async {
         preferences.appVersion = "1.17.0"
 
-        let status = service.shouldUpgrade()
-        XCTAssertEqual(status, .upgrade(blocksUI: false, titles: []))
+        let status = service.migrationStatus()
+        XCTAssertEqual(status, .migrate(blocksUI: false, titles: []))
 
-        await service.upgrade()
+        await service.migrate()
 
         XCTAssertNil(worker1.update)
         XCTAssertNil(worker2.update)
@@ -73,10 +73,10 @@ final class UpdateHandlerTests: XCTestCase {
     func test_upgrade_runLastTwoUpdaters() async {
         preferences.appVersion = "1.16.0"
 
-        let status = service.shouldUpgrade()
-        XCTAssertEqual(status, .upgrade(blocksUI: true, titles: ["Worker 2"]))
+        let status = service.migrationStatus()
+        XCTAssertEqual(status, .migrate(blocksUI: true, titles: ["Worker 2"]))
 
-        await service.upgrade()
+        await service.migrate()
 
         XCTAssertNil(worker1.update)
         XCTAssertNotNil(worker2.update)
@@ -86,10 +86,10 @@ final class UpdateHandlerTests: XCTestCase {
     func test_upgrade_runAllUpdaters() async {
         preferences.appVersion = "1.15.0"
 
-        let status = service.shouldUpgrade()
-        XCTAssertEqual(status, .upgrade(blocksUI: true, titles: ["Worker 1", "Worker 2"]))
+        let status = service.migrationStatus()
+        XCTAssertEqual(status, .migrate(blocksUI: true, titles: ["Worker 1", "Worker 2"]))
 
-        await service.upgrade()
+        await service.migrate()
 
         XCTAssertNotNil(worker1.update)
         XCTAssertNotNil(worker2.update)
@@ -98,21 +98,21 @@ final class UpdateHandlerTests: XCTestCase {
 
     // MARK: Private
 
-    private var service: UpdateHandler!
+    private var service: AppMigrator!
     private let preferences = AppVersionPreferences.shared
     private var bundle: SystemBundleFake!
 
-    private var worker1: VersionUpdaterTester!
-    private var worker2: VersionUpdaterTester!
-    private var nonBlockingWorker: VersionUpdaterTester!
+    private var worker1: MigratorTester!
+    private var worker2: MigratorTester!
+    private var nonBlockingWorker: MigratorTester!
 
     // MARK: - Helpers
 
-    private func verifyNoUpgrade(file: StaticString = #filePath, line: UInt = #line) async {
-        let status = service.shouldUpgrade()
-        XCTAssertEqual(status, .noUpgrade)
+    private func verifyNoMigration(file: StaticString = #filePath, line: UInt = #line) async {
+        let status = service.migrationStatus()
+        XCTAssertEqual(status, .noMigration)
 
-        await service.upgrade()
+        await service.migrate()
 
         XCTAssertNil(worker1.update, file: file, line: line)
         XCTAssertNil(worker2.update, file: file, line: line)
@@ -120,7 +120,7 @@ final class UpdateHandlerTests: XCTestCase {
     }
 }
 
-private final class VersionUpdaterTester: VersionUpdater {
+private final class MigratorTester: Migrator {
     // MARK: Lifecycle
 
     init(blocksUI: Bool, uiTitle: String?) {

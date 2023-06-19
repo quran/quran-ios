@@ -43,13 +43,6 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "VersionUpdaterTests",
-        "name" : "VersionUpdaterTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
         "identifier" : "CachingTests",
         "name" : "CachingTests"
       }
@@ -157,6 +150,13 @@
         "containerPath" : "container:",
         "identifier" : "AllTargetsTests",
         "name" : "AllTargetsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AppMigratorTests",
+        "name" : "AppMigratorTests"
       }
     }
   ],

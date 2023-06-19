@@ -7,6 +7,7 @@
 
 import Analytics
 import AnnotationsService
+import BatchDownloader
 import Foundation
 import NotePersistence
 import QuranTextKit
@@ -15,6 +16,9 @@ public protocol AppDependencies {
     var databasesURL: URL { get }
     var quranUthmaniV2Database: URL { get }
     var wordsDatabase: URL { get }
+    var filesAppHost: URL { get }
+
+    func downloadManager() async -> DownloadManager
 
     var analytics: AnalyticsLibrary { get }
     var notePersistence: NotePersistence { get }

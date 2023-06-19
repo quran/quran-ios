@@ -448,6 +448,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
             "Analytics",
             "AnnotationsService",
+            "BatchDownloader",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
@@ -486,6 +487,13 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "AdvancedAudioOptionsFeature", hasTests: false, dependencies: [
             "ReciterListFeature",
             "QuranAudioKit",
+        ]),
+
+        target(type, name: "AudioBannerFeature", hasTests: false, dependencies: [
+            "Caching",
+            "AppDependencies",
+            "ReciterListFeature",
+            "AdvancedAudioOptionsFeature",
         ]),
     ]
 }

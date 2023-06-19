@@ -1,0 +1,53 @@
+//
+//  AudioBannerBuilder.swift
+//  Quran
+//
+//  Created by Afifi, Mohamed on 4/7/19.
+//  Copyright © 2019 Quran.com. All rights reserved.
+//
+
+import AdvancedAudioOptionsFeature
+import AppDependencies
+import Caching
+import Foundation
+import QuranAudioKit
+import QuranKit
+import ReciterListFeature
+import ReciterService
+import UIKit
+
+public struct AudioBannerBuilder {
+    // MARK: Lifecycle
+
+    public init(container: AppDependencies) {
+        self.container = container
+    }
+
+    // MARK: Public
+
+    @MainActor
+    public func build(withListener listener: AudioBannerListener) async -> (UIViewController, AudioBannerViewModel) {
+        let viewModel = await AudioBannerViewModel(
+            analytics: container.analytics,
+            reciterRetreiver: ReciterDataRetriever(),
+            recentRecitersService: RecentRecitersService(),
+            audioPlayer: QuranAudioPlayer(),
+            downloader: QuranAudioDownloader(
+                baseURL: container.filesAppHost,
+                downloader: container.downloadManager()
+            ),
+            remoteCommandsHandler: RemoteCommandsHandler(center: .shared())
+        )
+        let viewController = AudioBannerViewController(
+            viewModel: viewModel,
+            reciterListBuilder: ReciterListBuilder(),
+            advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
+        )
+        viewModel.listener = listener
+        return (viewController, viewModel)
+    }
+
+    // MARK: Internal
+
+    let container: AppDependencies
+}

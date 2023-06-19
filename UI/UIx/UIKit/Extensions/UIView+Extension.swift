@@ -37,8 +37,8 @@ extension UIView {
     }
 
     @discardableResult
-    public func loadViewFrom(nibName: String) -> UIView {
-        let nib = UINib(nibName: nibName, bundle: nil)
+    public func loadViewFrom(nibName: String, bundle: Bundle? = nil) -> UIView {
+        let nib = UINib(nibName: nibName, bundle: bundle)
         guard let contentView = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
             fatalError("Couldn't load '\(nibName).xib' as the first item should be a UIView subclass.")
         }

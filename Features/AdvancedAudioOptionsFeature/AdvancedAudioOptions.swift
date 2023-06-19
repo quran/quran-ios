@@ -21,11 +21,11 @@ public struct AdvancedAudioOptions {
         self.listRuns = listRuns
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    var reciter: Reciter
-    var start: AyahNumber
-    var end: AyahNumber
-    var verseRuns: Runs
-    var listRuns: Runs
+    public var reciter: Reciter
+    public var start: AyahNumber
+    public var end: AyahNumber
+    public var verseRuns: Runs
+    public var listRuns: Runs
 }

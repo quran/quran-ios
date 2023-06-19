@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AudioDownloadingBarView" customModule="AudioBannerFeature">
+            <connections>
+                <outlet property="cancelButton" destination="kiN-SB-KmU" id="Ezl-C9-0hF"/>
+                <outlet property="infoLabel" destination="WkY-v4-Krl" id="hAq-P3-erd"/>
+                <outlet property="progressView" destination="KPy-Gi-1lQ" id="VF9-GQ-sPu"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kiN-SB-KmU">
+                    <rect key="frame" x="20" y="0.0" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="Aec-Eq-9TL"/>
+                    </constraints>
+                    <inset key="contentEdgeInsets" minX="10" minY="4" maxX="10" maxY="4"/>
+                    <state key="normal">
+                        <imageReference key="image" image="xmark" catalog="system" symbolScale="large"/>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="bold"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8er-08-huE">
+                    <rect key="frame" x="64" y="0.0" width="1" height="44"/>
+                    <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="1" id="6Zd-Ow-Z5B"/>
+                    </constraints>
+                </view>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KPy-Gi-1lQ">
+                    <rect key="frame" x="85" y="10" width="495" height="4"/>
+                </progressView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WkY-v4-Krl">
+                    <rect key="frame" x="85" y="24" width="102" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="kiN-SB-KmU" secondAttribute="bottom" id="0GY-Mc-roc"/>
+                <constraint firstItem="WkY-v4-Krl" firstAttribute="top" secondItem="KPy-Gi-1lQ" secondAttribute="bottom" constant="10" id="7Dv-jB-PLR"/>
+                <constraint firstItem="kiN-SB-KmU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="B0D-cw-CS3"/>
+                <constraint firstItem="kiN-SB-KmU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="QaW-CH-c5j"/>
+                <constraint firstItem="8er-08-huE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="WW4-RA-lFN"/>
+                <constraint firstItem="KPy-Gi-1lQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="amP-6f-64f"/>
+                <constraint firstItem="KPy-Gi-1lQ" firstAttribute="leading" secondItem="8er-08-huE" secondAttribute="trailing" constant="20" id="bcH-Xu-5NC"/>
+                <constraint firstItem="8er-08-huE" firstAttribute="leading" secondItem="kiN-SB-KmU" secondAttribute="trailing" id="emg-e0-4sF"/>
+                <constraint firstAttribute="bottom" secondItem="8er-08-huE" secondAttribute="bottom" id="hd2-XT-zMH"/>
+                <constraint firstItem="WkY-v4-Krl" firstAttribute="leading" secondItem="KPy-Gi-1lQ" secondAttribute="leading" id="muh-aD-4SI"/>
+                <constraint firstItem="KPy-Gi-1lQ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="pxZ-bj-eBJ"/>
+                <constraint firstAttribute="trailing" secondItem="KPy-Gi-1lQ" secondAttribute="trailing" constant="20" id="tU7-x1-VMp"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="amP-6f-64f"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="141" y="145"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="xmark" catalog="system" width="128" height="113"/>
+    </resources>
+</document>

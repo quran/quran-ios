@@ -54,6 +54,7 @@ let package = Package(
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
         .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.7"),
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
+        .package(url: "https://github.com/ninjaprox/NVActivityIndicatorView", from: "5.0.0"),
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
@@ -160,6 +161,7 @@ private func uiTargets() -> [[Target]] {
         ]),
         target(type, name: "NoorUI", hasTests: false, dependencies: [
             "UIx",
+            "Crashing",
             "Localization",
             "QuranText",
             "DownloadButton",
@@ -470,6 +472,14 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "WordTextService",
             .product(name: "Popover_OC", package: "Popover"),
+        ]),
+
+        target(type, name: "AppMigrationFeature", hasTests: false, dependencies: [
+            "AppMigrator",
+            "ReciterService",
+            "Utilities",
+            "NVActivityIndicatorView",
+            "NoorUI",
         ]),
     ]
 }

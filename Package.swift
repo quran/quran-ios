@@ -31,40 +31,7 @@ let package = Package(
     platforms: [
         .iOS(.v14),
     ],
-    products: [
-        // Features
-        library("ReciterListFeature"),
-        library("AyahMenuFeature"),
-        library("WhatsNewFeature"),
-        library("WordPointerFeature"),
-
-        // Domain
-        library("QuranKit"),
-        library("QuranTextKit"),
-        library("QuranText"),
-        library("QuranAudioKit"),
-        library("AudioUpdater"),
-        library("AppMigrator"),
-        library("ReadingService"),
-        library("ImageService"),
-        library("WordTextService"),
-        library("TranslationService"),
-        library("AnnotationsService"),
-        library("NoorUI"),
-
-        // Utilities packages
-
-        library("BatchDownloader"),
-        library("Caching"),
-        library("Timing"),
-        library("Utilities"),
-        library("VLogging"),
-        library("Crashing"),
-        library("Preferences"),
-        library("Localization"),
-        library("SystemDependencies"),
-        library("SystemDependenciesFake"),
-    ],
+    products: libraries(from: targets),
     dependencies: [
         // Logging
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
@@ -614,4 +581,11 @@ func testTargetLinkingAllPackageTargets(_ targets: [Target]) -> Target {
         path: "AllTargetsTests",
         swiftSettings: settings
     )
+}
+
+func libraries(from targets: [Target]) -> [PackageDescription.Product] {
+    let nonTestTargets = targets.filter { !$0.isTest }
+    return nonTestTargets.map {
+        library($0.name)
+    }
 }

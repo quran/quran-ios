@@ -1022,48 +1022,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "QuranEngine_ReciterList"
-               BuildableName = "QuranEngine_ReciterList"
-               BlueprintName = "QuranEngine_ReciterList"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ReciterList"
-               BuildableName = "ReciterList"
-               BlueprintName = "ReciterList"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AyahMenu"
-               BuildableName = "AyahMenu"
-               BlueprintName = "AyahMenu"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AppDependencies"
                BuildableName = "AppDependencies"
                BlueprintName = "AppDependencies"
@@ -1078,9 +1036,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "WhatsNew"
-               BuildableName = "WhatsNew"
-               BlueprintName = "WhatsNew"
+               BlueprintIdentifier = "QuranEngine_ReciterListFeature"
+               BuildableName = "QuranEngine_ReciterListFeature"
+               BlueprintName = "QuranEngine_ReciterListFeature"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -1092,9 +1050,51 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "WordPointer"
-               BuildableName = "WordPointer"
-               BlueprintName = "WordPointer"
+               BlueprintIdentifier = "AyahMenuFeature"
+               BuildableName = "AyahMenuFeature"
+               BlueprintName = "AyahMenuFeature"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReciterListFeature"
+               BuildableName = "ReciterListFeature"
+               BlueprintName = "ReciterListFeature"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WhatsNewFeature"
+               BuildableName = "WhatsNewFeature"
+               BlueprintName = "WhatsNewFeature"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WordPointerFeature"
+               BuildableName = "WordPointerFeature"
+               BlueprintName = "WordPointerFeature"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>

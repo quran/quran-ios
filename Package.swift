@@ -33,10 +33,10 @@ let package = Package(
     ],
     products: [
         // Features
-        library("ReciterList"),
-        library("AyahMenu"),
-        library("WhatsNew"),
-        library("WordPointer"),
+        library("ReciterListFeature"),
+        library("AyahMenuFeature"),
+        library("WhatsNewFeature"),
+        library("WordPointerFeature"),
 
         // Domain
         library("QuranKit"),
@@ -480,26 +480,26 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
         ]),
 
-        target(type, name: "ReciterList", hasTests: false, dependencies: [
+        target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
             "QuranAudio",
             "NoorUI",
             "ReciterService",
         ]),
 
-        target(type, name: "AyahMenu", hasTests: false, dependencies: [
+        target(type, name: "AyahMenuFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
             "NoorUI",
         ]),
 
-        target(type, name: "WhatsNew", hasTests: false, dependencies: [
+        target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
             "WhatsNewKit",
             "NoorUI",
             "Analytics",
         ]),
 
-        target(type, name: "WordPointer", hasTests: false, dependencies: [
+        target(type, name: "WordPointerFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "WordTextService",
             .product(name: "Popover_OC", package: "Popover"),

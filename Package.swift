@@ -164,6 +164,7 @@ private func uiTargets() -> [[Target]] {
             "Crashing",
             "Localization",
             "QuranText",
+            "QuranAnnotations",
             "DownloadButton",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),
@@ -480,6 +481,11 @@ private func featuresTargets() -> [[Target]] {
             "Utilities",
             "NVActivityIndicatorView",
             "NoorUI",
+        ]),
+
+        target(type, name: "AdvancedAudioOptionsFeature", hasTests: false, dependencies: [
+            "ReciterListFeature",
+            "QuranAudioKit",
         ]),
     ]
 }

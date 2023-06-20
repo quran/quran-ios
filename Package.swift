@@ -451,6 +451,11 @@ private func featuresTargets() -> [[Target]] {
             "BatchDownloader",
         ]),
 
+        target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
+            "Analytics",
+            "QuranAnnotations",
+        ]),
+
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
             "QuranAudio",
             "NoorUI",
@@ -513,6 +518,14 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "AnnotationsService",
             "NoorUI",
+        ]),
+
+        target(type, name: "BookmarksFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "FeaturesSupport",
+            "AnnotationsService",
+            "NoorUI",
+            "ReadingService",
         ]),
     ]
 }

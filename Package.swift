@@ -542,6 +542,12 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
             "Caching",
         ]),
+
+        target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
+            "ReadingService",
+            "NoorUI",
+            "QuranImageFeature",
+        ]),
     ]
 }
 

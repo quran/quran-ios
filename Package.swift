@@ -527,6 +527,11 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "ReadingService",
         ]),
+
+        target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
+            "NoorUI",
+            "WeakSet",
+        ]),
     ]
 }
 

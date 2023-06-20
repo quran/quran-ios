@@ -48,23 +48,23 @@ public class PageDataSource {
         self.viewBuilder = viewBuilder
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    var items: [Page] = [] {
+    public var items: [Page] = [] {
         didSet {
             updatePageControllerData()
         }
     }
 
-    var quranUITraits: QuranUITraits = QuranUITraits() {
+    public var quranUITraits: QuranUITraits = QuranUITraits() {
         didSet {
             loadedViews.forEach { $0.quranUITraits = quranUITraits }
         }
     }
 
-    var visiblePages: [Page] { pageController?.visibleIndices.map { items[$0] } ?? [] }
+    public var visiblePages: [Page] { pageController?.visibleIndices.map { items[$0] } ?? [] }
 
-    func usePageViewController(_ pageController: PageController) {
+    public func usePageViewController(_ pageController: PageController) {
         self.pageController = pageController
         pageController.actions = PageController.Actions(
             viewControllerAtIndex: { [weak self] in self?.pageView(at: $0) ?? UIViewController() },
@@ -83,7 +83,7 @@ public class PageDataSource {
         )
     }
 
-    func scrollToPage(_ page: Page, animated: Bool, forceReload: Bool) {
+    public func scrollToPage(_ page: Page, animated: Bool, forceReload: Bool) {
         // Don't scroll if page is visible
         if !forceReload, visiblePages.contains(page) {
             return
@@ -97,12 +97,12 @@ public class PageDataSource {
 
     // MARK: - Word & Verse position
 
-    func word(at point: CGPoint, in view: UIView) -> Word? {
+    public func word(at point: CGPoint, in view: UIView) -> Word? {
         convert(point, from: view)
             .flatMap { $0.word(at: $1) }
     }
 
-    func verse(at point: CGPoint, in view: UIView) -> AyahNumber? {
+    public func verse(at point: CGPoint, in view: UIView) -> AyahNumber? {
         convert(point, from: view)
             .flatMap { $0.verse(at: $1) }
     }

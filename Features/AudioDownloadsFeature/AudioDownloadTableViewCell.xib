@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="109"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="nTv-cG-tKb" customClass="DownloadButton" customModule="QuranUI">
+                    <view contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="nTv-cG-tKb" customClass="DownloadButton" customModule="NoorUI">
                         <rect key="frame" x="255" y="29.5" width="50" height="50"/>
                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
@@ -27,7 +27,7 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gLx-4v-ijf">
                         <rect key="frame" x="12" y="10" width="233" height="89"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Abdurrahman As-Sudais" translatesAutoresizingMaskIntoConstraints="NO" id="AA3-iC-0Mc">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AA3-iC-0Mc">
                                 <rect key="frame" x="0.0" y="19.5" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="AjT-9W-Jog"/>
@@ -73,7 +73,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Abdurrahman As-Sudais" width="300" height="250"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

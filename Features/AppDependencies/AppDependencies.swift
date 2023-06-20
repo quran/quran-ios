@@ -10,6 +10,7 @@ import AnnotationsService
 import BatchDownloader
 import Foundation
 import NotePersistence
+import PageBookmarkPersistence
 import QuranTextKit
 
 public protocol AppDependencies {
@@ -22,6 +23,7 @@ public protocol AppDependencies {
 
     var analytics: AnalyticsLibrary { get }
     var notePersistence: NotePersistence { get }
+    var pageBookmarkPersistence: PageBookmarkPersistence { get }
 }
 
 extension AppDependencies {

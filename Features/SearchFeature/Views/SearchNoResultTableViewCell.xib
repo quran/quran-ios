@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="354" id="KGk-i7-Jjw" customClass="SearchNoResultTableViewCell" customModule="SearchFeature">
+            <rect key="frame" x="0.0" y="0.0" width="489" height="354"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="489" height="354"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUY-DB-cbX">
+                        <rect key="frame" x="16" y="102.5" width="457" height="149"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search-128" translatesAutoresizingMaskIntoConstraints="NO" id="fQh-vh-CJS">
+                                <rect key="frame" x="164.5" y="0.0" width="128" height="128"/>
+                                <color key="tintColor" systemColor="systemGrayColor"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results for &quot;What are you doing&quot;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3m-ca-dCA">
+                                <rect key="frame" x="0.0" y="128" width="457" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="fQh-vh-CJS" firstAttribute="top" secondItem="YUY-DB-cbX" secondAttribute="top" id="HqC-3f-GHP"/>
+                            <constraint firstAttribute="bottom" secondItem="B3m-ca-dCA" secondAttribute="bottom" id="NYP-Fa-ZYS"/>
+                            <constraint firstItem="B3m-ca-dCA" firstAttribute="top" secondItem="fQh-vh-CJS" secondAttribute="bottom" id="O9G-8I-Yac"/>
+                            <constraint firstItem="fQh-vh-CJS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YUY-DB-cbX" secondAttribute="leading" id="dLj-uq-4vf"/>
+                            <constraint firstItem="fQh-vh-CJS" firstAttribute="centerX" secondItem="YUY-DB-cbX" secondAttribute="centerX" id="fa2-Um-335"/>
+                            <constraint firstAttribute="trailing" secondItem="B3m-ca-dCA" secondAttribute="trailing" id="hEv-kx-NMm"/>
+                            <constraint firstItem="B3m-ca-dCA" firstAttribute="leading" secondItem="YUY-DB-cbX" secondAttribute="leading" id="oHt-eY-lbz"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="YUY-DB-cbX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="1Go-qh-dSI"/>
+                    <constraint firstItem="YUY-DB-cbX" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Vhj-zA-H3v"/>
+                    <constraint firstItem="YUY-DB-cbX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zqw-dl-Ux8"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="descriptionLabel" destination="B3m-ca-dCA" id="CuO-St-P8g"/>
+                <outlet property="searchImage" destination="fQh-vh-CJS" id="L2j-Jh-OgZ"/>
+            </connections>
+            <point key="canvasLocation" x="15.5" y="-40"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="search-128" width="128" height="128"/>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

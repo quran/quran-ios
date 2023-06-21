@@ -9,6 +9,6 @@
 import UIKit
 
 @MainActor
-protocol TabBuildable {
+public protocol TabBuildable {
     func build() -> UIViewController
 }

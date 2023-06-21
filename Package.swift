@@ -465,6 +465,7 @@ private func featuresTargets() -> [[Target]] {
             "Localization",
             "Analytics",
             "QuranAnnotations",
+            "NoorUI",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
@@ -631,6 +632,15 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "VLogging",
             "AudioDownloadsFeature",
+        ]),
+
+        target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
+            "HomeFeature",
+            "BookmarksFeature",
+            "NotesFeature",
+            "SearchFeature",
+            "SettingsFeature",
+            "QuranViewFeature",
         ]),
     ]
 }

@@ -535,6 +535,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "WeakSet",
             "QuranTextKit",
+            "Caching",
         ]),
 
         target(type, name: "QuranImageFeature", hasTests: false, dependencies: [
@@ -587,6 +588,14 @@ private func featuresTargets() -> [[Target]] {
             "QuranTranslationFeature",
             "QuranTextKit",
             "Caching",
+        ]),
+
+        target(type, name: "SearchFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "QuranTextKit",
+            "FeaturesSupport",
+            "ReadingService",
+            "NoorUI",
         ]),
     ]
 }

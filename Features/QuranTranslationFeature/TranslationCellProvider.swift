@@ -13,25 +13,23 @@ import QuranText
 import UIKit
 
 @MainActor
-class TranslationCellProvider<Section: Hashable & Sendable> {
-    typealias ItemId = QuranTranslationDiffableDataSource.ItemId
+public class TranslationCellProvider<Section: Hashable & Sendable> {
+    public typealias ItemId = QuranTranslationDiffableDataSource.ItemId
     typealias TranslationId = QuranTranslationDiffableDataSource.TranslationId
 
     // MARK: Lifecycle
 
-    init(collapsedNumberOfLines: UInt = 10) {
+    public init(collapsedNumberOfLines: UInt = 10) {
         self.collapsedNumberOfLines = collapsedNumberOfLines
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    var translatedVerses: [TranslatedVerse] = []
-    var quranUITraits: QuranUITraits = QuranUITraits()
-    var expansionHandler: TranslationExpansionHandler<Section>! // swiftlint:disable:this implicitly_unwrapped_optional
+    public var translatedVerses: [TranslatedVerse] = []
+    public var quranUITraits: QuranUITraits = QuranUITraits()
+    public var expansionHandler: TranslationExpansionHandler<Section>!
 
-    let collapsedNumberOfLines: UInt
-
-    func provideCell(collectionView: UICollectionView, indexPath: IndexPath, itemId: ItemId) -> UICollectionViewCell {
+    public func provideCell(collectionView: UICollectionView, indexPath: IndexPath, itemId: ItemId) -> UICollectionViewCell {
         let baseCell: QuranTranslationBaseCollectionViewCell
         switch itemId {
         case .header(let verse):
@@ -66,7 +64,10 @@ class TranslationCellProvider<Section: Hashable & Sendable> {
         return baseCell
     }
 
-    func add(_ translatedVerse: TranslatedVerse, to snapshot: inout NSDiffableDataSourceSnapshot<Section, ItemId>) {
+    public func add(
+        _ translatedVerse: TranslatedVerse,
+        to snapshot: inout NSDiffableDataSourceSnapshot<Section, ItemId>
+    ) {
         let verse = translatedVerse.verse
         let verseText = translatedVerse.text
 
@@ -90,7 +91,10 @@ class TranslationCellProvider<Section: Hashable & Sendable> {
         snapshot.appendItems(verseText.arabicSuffix.map { .arabic(verse, text: $0, alignment: .center) })
     }
 
-    func updateQuranUITraits(dataSource: UICollectionViewDiffableDataSource<Section, ItemId>, collectionView: UICollectionView?) {
+    public func updateQuranUITraits(
+        dataSource: UICollectionViewDiffableDataSource<Section, ItemId>,
+        collectionView: UICollectionView?
+    ) {
         if #available(iOS 15.0, *) {
             var snapshot = dataSource.snapshot()
             // reconfigure all items
@@ -101,6 +105,10 @@ class TranslationCellProvider<Section: Hashable & Sendable> {
             collectionView?.reloadData()
         }
     }
+
+    // MARK: Internal
+
+    let collapsedNumberOfLines: UInt
 
     // MARK: Private
 

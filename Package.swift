@@ -453,6 +453,8 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
+            "BatchDownloader",
+            "Localization",
             "Analytics",
             "QuranAnnotations",
         ]),

@@ -642,6 +642,8 @@ private func featuresTargets() -> [[Target]] {
             "SettingsFeature",
             "QuranViewFeature",
             "WhatsNewFeature",
+            "AudioUpdater",
+            "AppMigrationFeature",
         ]),
     ]
 }

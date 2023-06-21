@@ -18,6 +18,7 @@ public protocol AppDependencies {
     var databasesURL: URL { get }
     var quranUthmaniV2Database: URL { get }
     var wordsDatabase: URL { get }
+    var appHost: URL { get }
     var filesAppHost: URL { get }
 
     func downloadManager() async -> DownloadManager

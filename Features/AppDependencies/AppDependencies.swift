@@ -13,6 +13,7 @@ import LastPagePersistence
 import NotePersistence
 import PageBookmarkPersistence
 import QuranTextKit
+import ReadingService
 
 public protocol AppDependencies {
     var databasesURL: URL { get }
@@ -22,8 +23,8 @@ public protocol AppDependencies {
     var filesAppHost: URL { get }
 
     func downloadManager() async -> DownloadManager
-
     var analytics: AnalyticsLibrary { get }
+    var readingResources: ReadingResourcesService { get }
 
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }

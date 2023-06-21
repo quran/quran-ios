@@ -9,6 +9,7 @@ import Analytics
 import AnnotationsService
 import BatchDownloader
 import Foundation
+import LastPagePersistence
 import NotePersistence
 import PageBookmarkPersistence
 import QuranTextKit
@@ -22,6 +23,8 @@ public protocol AppDependencies {
     func downloadManager() async -> DownloadManager
 
     var analytics: AnalyticsLibrary { get }
+
+    var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
 }

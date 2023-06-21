@@ -449,6 +449,7 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnnotationsService",
             "BatchDownloader",
+            "LastPagePersistence",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
@@ -555,6 +556,11 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranPagesFeature",
             "QuranTextKit",
+        ]),
+
+        target(type, name: "QuranContentFeature", hasTests: false, dependencies: [
+            "QuranImageFeature",
+            "QuranTranslationFeature",
         ]),
     ]
 }

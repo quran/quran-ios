@@ -579,6 +579,15 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "NoorUI",
         ]),
+
+        target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "MoreMenuFeature",
+            "TranslationsFeature",
+            "QuranTranslationFeature",
+            "QuranTextKit",
+            "Caching",
+        ]),
     ]
 }
 

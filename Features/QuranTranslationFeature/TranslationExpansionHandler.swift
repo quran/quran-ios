@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 import VLogging
 
-class TranslationExpansionHandler<Section: Hashable & Sendable> {
-    typealias ItemId = QuranTranslationDiffableDataSource.ItemId
+public class TranslationExpansionHandler<Section: Hashable & Sendable> {
+    public typealias ItemId = QuranTranslationDiffableDataSource.ItemId
     typealias TranslationId = QuranTranslationDiffableDataSource.TranslationId
 
     // MARK: Lifecycle
 
-    init(dataSource: UICollectionViewDiffableDataSource<Section, ItemId>) {
+    public init(dataSource: UICollectionViewDiffableDataSource<Section, ItemId>) {
         self.dataSource = dataSource
     }
 

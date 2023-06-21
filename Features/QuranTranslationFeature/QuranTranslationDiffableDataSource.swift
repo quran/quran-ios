@@ -17,8 +17,8 @@ import UIx
 import VLogging
 
 @MainActor
-class QuranTranslationDiffableDataSource {
-    struct TranslationId: Hashable, CustomStringConvertible, Sendable {
+public class QuranTranslationDiffableDataSource {
+    public struct TranslationId: Hashable, CustomStringConvertible, Sendable {
         // MARK: Public
 
         public var description: String {
@@ -43,9 +43,9 @@ class QuranTranslationDiffableDataSource {
         cellProvider.expansionHandler = TranslationExpansionHandler(dataSource: dataSource)
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    enum ItemId: Hashable, Sendable {
+    public enum ItemId: Hashable, Sendable {
         case header(AyahNumber)
         case footer(AyahNumber)
         case separator(AyahNumber)
@@ -54,29 +54,9 @@ class QuranTranslationDiffableDataSource {
         case translation(TranslationId)
     }
 
-    // MARK: - APIs
-
-    var quranUITraits: QuranUITraits {
-        get { cellProvider.quranUITraits }
-        set {
-            cellProvider.quranUITraits = newValue
-            cellProvider.updateQuranUITraits(dataSource: dataSource, collectionView: collectionView)
-        }
-    }
-
-    var translatedPage: TranslatedPage? {
-        didSet {
-            guard let translatedPage else {
-                fatalError("Can't set translatedPage to be nil")
-            }
-            cellProvider.translatedVerses = translatedPage.translatedVerses
-            updateItems(with: translatedPage)
-        }
-    }
-
     // MARK: - Collection View
 
-    static func translationCollectionView() -> UICollectionView {
+    public static func translationCollectionView() -> UICollectionView {
         let size = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
             heightDimension: NSCollectionLayoutDimension.estimated(99)
@@ -105,6 +85,26 @@ class QuranTranslationDiffableDataSource {
         collectionView.ds_register(cellClass: QuranTranslationFooterCollectionViewCell.self)
 
         return collectionView
+    }
+
+    // MARK: Internal
+
+    var quranUITraits: QuranUITraits {
+        get { cellProvider.quranUITraits }
+        set {
+            cellProvider.quranUITraits = newValue
+            cellProvider.updateQuranUITraits(dataSource: dataSource, collectionView: collectionView)
+        }
+    }
+
+    var translatedPage: TranslatedPage? {
+        didSet {
+            guard let translatedPage else {
+                fatalError("Can't set translatedPage to be nil")
+            }
+            cellProvider.translatedVerses = translatedPage.translatedVerses
+            updateItems(with: translatedPage)
+        }
     }
 
     func firstIndexPath(forAyah ayah: AyahNumber) -> IndexPath? {

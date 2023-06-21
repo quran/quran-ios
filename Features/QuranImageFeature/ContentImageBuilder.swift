@@ -90,5 +90,3 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
         return dataService
     }
 }
-
-extension Page: Pageable { }

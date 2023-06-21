@@ -597,6 +597,13 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "NoorUI",
         ]),
+
+        target(type, name: "HomeFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "ReadingSelectorFeature",
+            "AnnotationsService",
+            "FeaturesSupport",
+        ]),
     ]
 }
 

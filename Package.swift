@@ -165,6 +165,7 @@ private func uiTargets() -> [[Target]] {
             "Localization",
             "QuranText",
             "QuranAnnotations",
+            "QuranGeometry",
             "DownloadButton",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),
@@ -437,6 +438,13 @@ private func domainTargets() -> [[Target]] {
             "Analytics",
         ], testDependencies: [
         ]),
+
+        target(type, name: "SettingsService", hasTests: false, dependencies: [
+            "Analytics",
+            "Preferences",
+            "Utilities",
+
+        ]),
     ]
 }
 
@@ -615,6 +623,14 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",
+        ]),
+
+        target(type, name: "SettingsFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "SettingsService",
+            "NoorUI",
+            "VLogging",
+            "AudioDownloadsFeature",
         ]),
     ]
 }

@@ -18,14 +18,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUY-DB-cbX">
-                        <rect key="frame" x="16" y="102.5" width="457" height="149"/>
+                        <rect key="frame" x="16" y="156.5" width="457" height="41"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search-128" translatesAutoresizingMaskIntoConstraints="NO" id="fQh-vh-CJS">
-                                <rect key="frame" x="164.5" y="0.0" width="128" height="128"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fQh-vh-CJS">
+                                <rect key="frame" x="219" y="-1" width="19.5" height="20.5"/>
                                 <color key="tintColor" systemColor="systemGrayColor"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results for &quot;What are you doing&quot;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B3m-ca-dCA">
-                                <rect key="frame" x="0.0" y="128" width="457" height="21"/>
+                                <rect key="frame" x="0.0" y="20" width="457" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -57,7 +57,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="search-128" width="128" height="128"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

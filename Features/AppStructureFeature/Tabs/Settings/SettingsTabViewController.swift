@@ -8,6 +8,7 @@
 
 import Localization
 import MessageUI
+import NoorUI
 import SafariServices
 import UIKit
 
@@ -17,8 +18,8 @@ class SettingsTabViewController: TabViewController, SettingsTabPresentable {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_settings"),
-            image: #imageLiteral(resourceName: "settings-25"),
-            selectedImage: #imageLiteral(resourceName: "settings_filled-25")
+            image: NoorImage.settings.uiImage,
+            selectedImage: NoorImage.settingsFilled.uiImage
         )
     }
 

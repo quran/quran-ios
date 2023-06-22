@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import NoorUI
 import Popover_OC
 import UIKit
 import UIx
@@ -27,7 +28,7 @@ public final class WordPointerViewController: UIViewController {
 
     override public func loadView() {
         let imageView = UIImageView()
-        imageView.image = #imageLiteral(resourceName: "pointer-25").withRenderingMode(.alwaysTemplate)
+        imageView.image = NoorImage.pointer.uiImage.withRenderingMode(.alwaysTemplate)
 
         imageView.layer.shadowColor = UIColor.systemGray.cgColor
         imageView.layer.shadowOpacity = 0.6

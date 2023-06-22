@@ -72,9 +72,9 @@ class TranslationTableViewCell: UITableViewCell {
     func setSelection(_ selected: Bool) {
         let image: UIImage
         if selected {
-            image = #imageLiteral(resourceName: "checkbox-selected").withRenderingMode(.alwaysTemplate)
+            image = NoorImage.checkboxSelected.uiImage.withRenderingMode(.alwaysTemplate)
         } else {
-            image = #imageLiteral(resourceName: "checkbox-unselected").withRenderingMode(.alwaysOriginal)
+            image = NoorImage.checkboxUnselected.uiImage.withRenderingMode(.alwaysOriginal)
         }
         checkbox.image = image
     }

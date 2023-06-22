@@ -1,0 +1,24 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "sura-decoration-right.png",
+      "language-direction" : "left-to-right",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x",
+      "language-direction" : "left-to-right"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x",
+      "language-direction" : "left-to-right"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

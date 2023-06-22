@@ -85,7 +85,7 @@ public final class DownloadButton: UIView {
 
     let download: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(#imageLiteral(resourceName: "download-30").tintedImage(withColor: .appIdentity), for: .normal)
+        button.setImage(NoorImage.download.uiImage.tintedImage(withColor: .appIdentity), for: .normal)
         return button
     }()
 

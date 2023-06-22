@@ -83,7 +83,7 @@ struct ReadingSelector_Previews: PreviewProvider {
         // MARK: Private
 
         private func imageView(reading: ReadingInfo<ReadingInfoTestData.Reading>) -> some View {
-            Image("logo-lg-w")
+            NoorImage.logo.image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }

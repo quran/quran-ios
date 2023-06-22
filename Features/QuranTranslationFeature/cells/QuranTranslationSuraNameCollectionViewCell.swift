@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 
+import NoorUI
 import UIKit
 
 class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollectionViewCell {
@@ -28,9 +29,9 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
     override func setUp() {
         let contentView = UIView()
 
-        let leftImage = decorationSideImage(themedImage(#imageLiteral(resourceName: "sura-decoration-left.png")))
-        let rightImage = decorationSideImage(themedImage(#imageLiteral(resourceName: "sura-decoration-right.png")))
-        let middleImage = UIImageView(image: themedImage(#imageLiteral(resourceName: "sura-decoration-middle.png")))
+        let leftImage = decorationSideImage(themedImage(NoorImage.suraDecorationLeft.uiImage))
+        let rightImage = decorationSideImage(themedImage(NoorImage.suraDecorationRight.uiImage))
+        let middleImage = UIImageView(image: themedImage(NoorImage.suraDecorationMiddle.uiImage))
 
         contentView.addAutoLayoutSubview(leftImage)
         leftImage.vc.verticalEdges()
@@ -73,9 +74,9 @@ class QuranTranslationSuraNameCollectionViewCell: QuranTranslationBaseCollection
         guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else {
             return
         }
-        leftImageView?.image = themedImage(#imageLiteral(resourceName: "sura-decoration-left.png"))
-        rightImageView?.image = themedImage(#imageLiteral(resourceName: "sura-decoration-right.png"))
-        middleImageView?.image = themedImage(#imageLiteral(resourceName: "sura-decoration-middle.png"))
+        leftImageView?.image = themedImage(NoorImage.suraDecorationLeft.uiImage)
+        rightImageView?.image = themedImage(NoorImage.suraDecorationRight.uiImage)
+        middleImageView?.image = themedImage(NoorImage.suraDecorationMiddle.uiImage)
     }
 
     func configure(with text: String) {

@@ -6,6 +6,7 @@
 //  Copyright © 2023 Quran.com. All rights reserved.
 //
 
+import NoorUI
 import QuranGeometry
 import QuranKit
 import UIKit
@@ -53,7 +54,7 @@ class PageMarkersView: UIView {
     private func createViews(pageMarkers: PageMarkers) {
         let imageScale = imageScale
         for suraHeader in pageMarkers.suraHeaders {
-            let view = UIImageView(image: #imageLiteral(resourceName: "sura_header"))
+            let view = UIImageView(image: NoorImage.suraHeader.uiImage)
             view.tintColor = .pageMarkerTint
             view.frame = suraHeader.rect.scaled(by: imageScale)
             addSubview(view)
@@ -90,7 +91,7 @@ private class AyahNumberView: UIView {
         super.init(frame: .zero)
         clipsToBounds = false
 
-        decoration.tintColor = .pageMarkerTint
+        decoration.tintColor = UIColor.pageMarkerTint
         addAutoLayoutSubview(decoration)
         decoration.vc.edges()
 
@@ -122,7 +123,7 @@ private class AyahNumberView: UIView {
     private static let fontScale: CGFloat = 0.0375
     private static let largeFontScale: CGFloat = 0.03
 
-    private let decoration = UIImageView(image: #imageLiteral(resourceName: "ayah-end"))
+    private let decoration = UIImageView(image: NoorImage.ayahEnd.uiImage)
     private let label = UILabel()
     private let ayah: AyahNumber
 

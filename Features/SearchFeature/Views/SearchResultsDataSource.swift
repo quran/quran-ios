@@ -141,7 +141,7 @@ private class SearchAutocompletionDataSource: BasicDataSource<NSAttributedString
 
     // MARK: Private
 
-    private let image = #imageLiteral(resourceName: "search-128").scaled(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
+    private let image = NoorImage.search.uiImage.scaled(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
 }
 
 private class SectionedSearchResultDataSource: CompositeDataSource {

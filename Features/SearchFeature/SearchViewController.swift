@@ -27,7 +27,7 @@ final class SearchViewController: BaseViewController, UISearchResultsUpdating, U
 
     init(presenter: SearchPresenter) {
         self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: .module)
         presenter.viewController = self
     }
 

@@ -120,7 +120,7 @@ struct ReadingDetails_Previews: PreviewProvider {
         // MARK: Private
 
         private var imageView: some View {
-            Image("logo-lg-w")
+            NoorImage.logo.image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }

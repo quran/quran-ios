@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "rotate_to_portrait-25.png",
+      "filename" : "sura_header2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "rotate_to_portrait-50.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "rotate_to_portrait-75.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

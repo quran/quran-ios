@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="c6P-2R-1yp" customClass="DownloadButton" customModule="QuranUI">
+                    <view contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="c6P-2R-1yp" customClass="DownloadButton" customModule="NoorUI">
                         <rect key="frame" x="255" y="52" width="50" height="50"/>
                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
@@ -27,8 +27,8 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="bx8-tS-JKx">
                         <rect key="frame" x="12" y="10" width="233" height="134"/>
                         <subviews>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox-selected" translatesAutoresizingMaskIntoConstraints="NO" id="LZn-ci-uco">
-                                <rect key="frame" x="0.0" y="56" width="0.0" height="22"/>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LZn-ci-uco">
+                                <rect key="frame" x="0.0" y="42" width="0.0" height="50"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aBd-0m-pyV">
                                 <rect key="frame" x="0.0" y="16.5" width="233" height="101"/>
@@ -103,7 +103,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="checkbox-selected" width="22" height="22"/>
         <namedColor name="appTint">
             <color red="0.10588235294117647" green="0.41960784313725491" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

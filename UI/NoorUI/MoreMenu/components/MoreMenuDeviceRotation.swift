@@ -14,12 +14,12 @@ struct MoreMenuDeviceRotation: View {
 
     var body: some View {
         HStack {
-            DeviceRotation(image: "rotate_to_landscape-25") {
+            DeviceRotation(image: NoorImage.rotateToLandscape.image) {
                 updateOrientationTo(.landscapeLeft)
             }
             .disabled(orientation.isLandscape)
 
-            DeviceRotation(image: "rotate_to_portrait-25") {
+            DeviceRotation(image: NoorImage.rotateToPortrait.image) {
                 updateOrientationTo(.portrait)
             }
             .disabled(orientation.isPortrait)
@@ -39,13 +39,13 @@ struct MoreMenuDeviceRotation: View {
 }
 
 private struct DeviceRotation: View {
-    let image: String
+    let image: Image
     let action: () -> Void
     @Environment(\.isEnabled) var isEnabled
 
     var body: some View {
         Button(action: action) {
-            Image(image, bundle: Bundle.module)
+            image
                 .foregroundColor(isEnabled ? .label : .gray)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)

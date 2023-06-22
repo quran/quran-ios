@@ -18,13 +18,14 @@
 //  GNU General Public License for more details.
 //
 
+import NoorUI
 import UIKit
 
 class QuranTranslationVerseSeparatorCollectionViewCell: QuranTranslationBaseCollectionViewCell {
     // MARK: Internal
 
     let fillColor = UIView()
-    let shadowImage = UIImageView(image: #imageLiteral(resourceName: "inner-shadow"))
+    let shadowImage = UIImageView(image: NoorImage.innerShadow.uiImage)
 
     override var backgroundColor: UIColor? {
         didSet {

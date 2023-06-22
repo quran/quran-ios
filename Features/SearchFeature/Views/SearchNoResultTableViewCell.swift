@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 
+import NoorUI
 import UIKit
 
 class SearchNoResultTableViewCell: UITableViewCell {
@@ -26,6 +27,6 @@ class SearchNoResultTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        searchImage.image = searchImage.image?.withRenderingMode(.alwaysTemplate)
+        searchImage.image = NoorImage.search.uiImage.withRenderingMode(.alwaysTemplate)
     }
 }

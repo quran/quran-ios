@@ -490,6 +490,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "WordPointerFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "WordTextService",
+            "NoorUI",
             .product(name: "Popover_OC", package: "Popover"),
         ]),
 

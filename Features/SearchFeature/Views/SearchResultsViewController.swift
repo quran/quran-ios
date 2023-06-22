@@ -29,10 +29,10 @@ class SearchResultsViewController: BaseTableViewController {
         super.viewDidLoad()
 
         tableView.estimatedSectionHeaderHeight = 44
-        tableView.ds_register(cellNib: SearchAutocompleteTableViewCell.self)
+        tableView.ds_register(cellNib: SearchAutocompleteTableViewCell.self, in: .module)
         tableView.ds_register(cellClass: FullScreenLoadingTableViewCell.self)
-        tableView.ds_register(cellNib: SearchResultTableViewCell.self)
-        tableView.ds_register(cellNib: SearchNoResultTableViewCell.self)
+        tableView.ds_register(cellNib: SearchResultTableViewCell.self, in: .module)
+        tableView.ds_register(cellNib: SearchNoResultTableViewCell.self, in: .module)
         tableView.ds_register(headerFooterClass: HostingTableViewHeaderFooterView<TableHeaderView>.self)
         dataSource.controller = self
         tableView.ds_useDataSource(dataSource)

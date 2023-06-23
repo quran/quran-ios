@@ -36,8 +36,8 @@ class BookmarksTableViewController: ModernSingleSectionTableViewController<PageB
             selectItem: { [weak self] in
                 self?.interactor.selectItem($0)
             },
-            deleteItem: { [weak self] in
-                self?.interactor.deleteItem($0)
+            deleteItem: { [weak self] item in
+                await self?.interactor.deleteItem(item)
             }
         )
     }

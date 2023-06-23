@@ -16,7 +16,6 @@ import FeaturesSupport
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
-import PromiseKit
 import QueuePlayer
 import QuranAnnotations
 import QuranContentFeature
@@ -28,6 +27,7 @@ import TranslationService
 import TranslationsFeature
 import TranslationVerseFeature
 import UIKit
+import UIx
 import Utilities
 import VLogging
 import WordPointerFeature
@@ -44,7 +44,7 @@ protocol QuranPresentable: UIViewController {
     func updateBookmark(_ isBookmarked: Bool)
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint, completion: @escaping () -> Void)
-    func confirmNoteDelete(delete: @escaping () -> Void, cancel: @escaping () -> Void)
+    func confirmNoteDelete(delete: @escaping AsyncAction, cancel: @escaping () -> Void)
 
     func presentMoreMenu(_ viewController: UIViewController)
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
@@ -183,19 +183,19 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    func deleteNotes(_ notes: [Note], verses: [AyahNumber]) {
+    func deleteNotes(_ notes: [Note], verses: [AyahNumber]) async {
         let containsText = notes.contains { note in
             !(note.note ?? "").isEmpty
         }
         if containsText {
             // confirm deletion first if there is text
             presenter?.confirmNoteDelete(
-                delete: { self.forceDeleteNotes(notes, verses: verses) },
+                delete: { await self.forceDeleteNotes(notes, verses: verses) },
                 cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
             )
         } else {
             // delete highlight
-            forceDeleteNotes(notes, verses: verses)
+            await forceDeleteNotes(notes, verses: verses)
         }
     }
 
@@ -291,23 +291,31 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.hideBars()
     }
 
-    func onBookmarkBarButtonTapped() {
+    func toogleBookmark() async {
         logger.info("Quran: onBookmarkBarButtonTapped")
         let pages = visiblePages
         let wasBookmarked = bookmarked(pages)
 
-        func catchError(_ promise: Promise<Void>) {
-            promise.catch { error in
-                crasher.recordError(error, reason: "Failed to toggle page bookmark")
+        do {
+            let analytics = deps.analytics
+            let service = deps.pageBookmarkService
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for page in pages {
+                    group.addTask {
+                        if !wasBookmarked {
+                            analytics.bookmarkPage(page)
+                            try await service.insertPageBookmark(page)
+                        } else {
+                            analytics.removeBookmarkPage(page)
+                            try await service.removePageBookmark(page)
+                        }
+                    }
+                    try await group.waitForAll()
+                }
             }
-        }
 
-        if !wasBookmarked {
-            pages.forEach { deps.analytics.bookmarkPage($0) }
-            catchError(when(fulfilled: pages.map { self.deps.pageBookmarkService.insertPageBookmark($0) }))
-        } else {
-            pages.forEach { deps.analytics.removeBookmarkPage($0) }
-            catchError(when(fulfilled: pages.map { self.deps.pageBookmarkService.removePageBookmark($0) }))
+        } catch {
+            crasher.recordError(error, reason: "Failed to toggle page bookmark")
         }
     }
 
@@ -358,12 +366,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    private func forceDeleteNotes(_ notes: [Note], verses: [AyahNumber]) {
+    private func forceDeleteNotes(_ notes: [Note], verses: [AyahNumber]) async {
         contentViewModel?.removeAyahMenuHighlight()
-        deps.noteService.removeNotes(with: verses)
-            .catch { error in
-                crasher.recordError(error, reason: "Failed to remove notes")
-            }
+        do {
+            try await deps.noteService.removeNotes(with: verses)
+        } catch {
+            crasher.recordError(error, reason: "Failed to remove notes")
+        }
     }
 
     private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {

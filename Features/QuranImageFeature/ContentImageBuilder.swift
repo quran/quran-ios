@@ -9,7 +9,6 @@
 import Caching
 import ImageService
 import NoorUI
-import PromiseKit
 import QuranGeometry
 import QuranKit
 import QuranPagesFeature

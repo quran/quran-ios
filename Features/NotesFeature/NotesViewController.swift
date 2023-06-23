@@ -35,7 +35,7 @@ final class NotesViewController: ModernSingleSectionTableViewController<NoteUI, 
                 self?.interactor.selectItem($0)
             },
             deleteItem: { [weak self] in
-                self?.interactor.deleteItem($0)
+                await self?.interactor.deleteItem($0)
             }
         )
     }

@@ -12,7 +12,6 @@ import Foundation
 import Localization
 import NotePersistence
 import Preferences
-import PromiseKit
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -32,31 +31,29 @@ public struct NoteService {
         notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
     }
 
-    public func updateHighlight(verses: [AyahNumber], color: Note.Color, quran: Quran) -> Promise<Note> {
+    public func updateHighlight(verses: [AyahNumber], color: Note.Color, quran: Quran) async throws -> Note {
         // update last used highlight color
         lastUsedHighlightColor = color
 
         analytics.highlight(verses: verses)
         let verses = verses.map(VersePersistenceModel.init)
-        return persistence.setNote(nil, verses: verses, color: color.rawValue)
-            .map { Note(quran: quran, $0) }
+        let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
+        return Note(quran: quran, persistenceModel)
     }
 
-    public func setNote(_ note: String, verses: Set<AyahNumber>, color: Note.Color) -> Promise<Void> {
+    public func setNote(_ note: String, verses: Set<AyahNumber>, color: Note.Color) async throws {
         // update last used highlight color
         lastUsedHighlightColor = color
 
         analytics.updateNote(verses: verses)
         let verses = verses.map(VersePersistenceModel.init)
-        return persistence.setNote(note, verses: Array(verses), color: color.rawValue)
-            .map { _ in () }
+        _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
     }
 
-    public func removeNotes(with verses: [AyahNumber]) -> Promise<Void> {
+    public func removeNotes(with verses: [AyahNumber]) async throws {
         analytics.unhighlight(verses: verses)
         let verses = verses.map(VersePersistenceModel.init)
-        return persistence.removeNotes(with: verses)
-            .map { _ in () }
+        _ = try await persistence.removeNotes(with: verses)
     }
 
     public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {

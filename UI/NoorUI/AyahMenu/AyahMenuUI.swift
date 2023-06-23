@@ -9,20 +9,21 @@ import Combine
 import QuranAnnotations
 import SwiftUI
 import UIKit
+import UIx
 
 public enum AyahMenuUI {
     public struct Actions {
         // MARK: Lifecycle
 
         public init(
-            play: @escaping () -> Void,
-            repeatVerses: @escaping () -> Void,
-            highlight: @escaping (Note.Color) -> Void,
-            addNote: @escaping () -> Void,
-            deleteNote: @escaping () -> Void,
-            showTranslation: @escaping () -> Void,
-            copy: @escaping () -> Void,
-            share: @escaping () -> Void
+            play: @escaping AsyncAction,
+            repeatVerses: @escaping AsyncAction,
+            highlight: @Sendable @escaping (Note.Color) async -> Void,
+            addNote: @escaping AsyncAction,
+            deleteNote: @escaping AsyncAction,
+            showTranslation: @escaping AsyncAction,
+            copy: @escaping AsyncAction,
+            share: @escaping AsyncAction
         ) {
             self.play = play
             self.repeatVerses = repeatVerses
@@ -36,14 +37,14 @@ public enum AyahMenuUI {
 
         // MARK: Internal
 
-        let play: () -> Void
-        let repeatVerses: () -> Void
-        let highlight: (Note.Color) -> Void
-        let addNote: () -> Void
-        let deleteNote: () -> Void
-        let showTranslation: () -> Void
-        let copy: () -> Void
-        let share: () -> Void
+        let play: AsyncAction
+        let repeatVerses: AsyncAction
+        let highlight: @Sendable (Note.Color) async -> Void
+        let addNote: AsyncAction
+        let deleteNote: AsyncAction
+        let showTranslation: AsyncAction
+        let copy: AsyncAction
+        let share: AsyncAction
     }
 
     public struct DataObject {

@@ -68,14 +68,15 @@ final class AppInteractor {
                 analytics.cloudkitLastPagesMatch(.error)
             } else {
                 let ckLastPages = Set((records ?? []).compactMap { $0["CD_page"] as? Int })
-                self.lastPagePersistence.retrieveAll()
-                    .done { cdLastPages in
+                Task {
+                    do {
+                        let cdLastPages = try await self.lastPagePersistence.retrieveAll()
                         let inSync = Set(cdLastPages.map(\.page)).isSubset(of: ckLastPages)
                         analytics.cloudkitLastPagesMatch(inSync ? .ok : .fail)
-                    }
-                    .catch { error in
+                    } catch {
                         crasher.recordError(error, reason: "Failed to retrieve last pages from persistence.")
                     }
+                }
             }
         }
     }

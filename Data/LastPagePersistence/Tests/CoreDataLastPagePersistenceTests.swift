@@ -32,11 +32,11 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
         subscriptions.removeAll()
     }
 
-    func testAddAndRetrieveLastPages() throws {
+    func testAddAndRetrieveLastPages() async throws {
         // 1. Add some pages to the persistence
         let pages = [1, 2, 3]
         for page in pages {
-            _ = try persistence.add(page: page).wait()
+            _ = try await persistence.add(page: page)
         }
 
         // 2. Fetch the last pages using lastPages()
@@ -47,30 +47,30 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
         XCTAssertEqual(collector.items.last?.map(\.page), [3, 2, 1])
 
         // 4. Update this page with a new number
-        _ = try persistence.update(page: 1, toPage: 2).wait()
+        _ = try await persistence.update(page: 1, toPage: 2)
 
         XCTAssertEqual(collector.items.count, 3)
         XCTAssertEqual(collector.items.last?.map(\.page), [2, 3])
 
         // 5. Update this page with the same number
-        _ = try persistence.update(page: 3, toPage: 3).wait()
+        _ = try await persistence.update(page: 3, toPage: 3)
         XCTAssertEqual(collector.items.last?.map(\.page), [3, 2])
 
         // 6. Add more pages.
-        _ = try persistence.add(page: 5).wait()
-        _ = try persistence.add(page: 6).wait()
+        _ = try await persistence.add(page: 5)
+        _ = try await persistence.add(page: 6)
         XCTAssertEqual(collector.items.last?.map(\.page), [6, 5, 3])
     }
 
-    func testRetrieveAll() throws {
+    func testRetrieveAll() async throws {
         // 1. Add some pages to the persistence
         let pages = [1, 2, 3]
         for page in pages {
-            _ = try persistence.add(page: page).wait()
+            _ = try await persistence.add(page: page)
         }
 
         // 2. Fetch all pages using retrieveAll()
-        let lastPages = try persistence.retrieveAll().wait()
+        let lastPages = try await persistence.retrieveAll()
 
         // 3. Verify that the returned pages match what you expect
         XCTAssertEqual(lastPages.map(\.page), pages.reversed())

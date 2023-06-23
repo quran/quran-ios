@@ -11,7 +11,6 @@ import Caching
 import Foundation
 import MoreMenuFeature
 import NoorUI
-import PromiseKit
 import QuranKit
 import QuranTextKit
 import TranslationsFeature

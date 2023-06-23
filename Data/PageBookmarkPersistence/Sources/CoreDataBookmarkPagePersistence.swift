@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import PromiseKit
 import QuranKit
 
 public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
@@ -31,8 +30,8 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
             .eraseToAnyPublisher()
     }
 
-    public func insertPageBookmark(_ page: Int) -> Promise<Void> {
-        context.perform { context in
+    public func insertPageBookmark(_ page: Int) async throws {
+        try await context.perform { context in
             let newBookmark = MO_PageBookmark(context: context)
             newBookmark.createdOn = Date()
             newBookmark.modifiedOn = Date()
@@ -42,8 +41,8 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
         }
     }
 
-    public func removePageBookmark(_ page: Int) -> Promise<Void> {
-        context.perform { context in
+    public func removePageBookmark(_ page: Int) async throws {
+        try await context.perform { context in
             let request = fetchRequest(forPage: page)
             let bookmarks = try context.fetch(request)
             for bookmark in bookmarks {

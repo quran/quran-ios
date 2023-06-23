@@ -14,7 +14,7 @@ import UIx
 public struct NoteEditorView: View {
     // MARK: Lifecycle
 
-    public init(note: EditableNote, done: @escaping () -> Void, delete: @escaping () -> Void) {
+    public init(note: EditableNote, done: @escaping () -> Void, delete: @Sendable @escaping () async -> Void) {
         _note = ObservedObject(initialValue: note)
         self.done = done
         self.delete = delete
@@ -36,7 +36,11 @@ public struct NoteEditorView: View {
                     Spacer()
                 }
 
-                Button(action: delete, label: {
+                Button(action: {
+                    Task {
+                        await delete()
+                    }
+                }, label: {
                     Image(systemName: "trash")
                         .foregroundColor(Color.red)
                         .padding()
@@ -83,7 +87,7 @@ public struct NoteEditorView: View {
     @ObservedObject var note: EditableNote
 
     let done: () -> Void
-    let delete: () -> Void
+    let delete: @Sendable () async -> Void
 }
 
 // swiftlint:disable line_length

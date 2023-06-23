@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import PromiseKit
 import Utilities
 
 public final class CoreDataLastPagePersistence: LastPagePersistence {
@@ -31,8 +30,8 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
             .eraseToAnyPublisher()
     }
 
-    public func retrieveAll() -> Promise<[LastPagePersistenceModel]> {
-        context.perform { context in
+    public func retrieveAll() async throws -> [LastPagePersistenceModel] {
+        try await context.perform { context in
             let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: Schema.LastPage.modifiedOn, ascending: false)]
             let lastPages = try context.fetch(request)
@@ -40,14 +39,14 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
         }
     }
 
-    public func add(page: Int) -> Promise<LastPagePersistenceModel> {
-        context.perform { context in
+    public func add(page: Int) async throws -> LastPagePersistenceModel {
+        try await context.perform { context in
             try self.add(page: page, using: context)
         }
     }
 
-    public func update(page oldPage: Int, toPage newPage: Int) -> Promise<LastPagePersistenceModel> {
-        context.perform { context in
+    public func update(page oldPage: Int, toPage newPage: Int) async throws -> LastPagePersistenceModel {
+        try await context.perform { context in
             // delete newPage, so we can replace it
             try self.delete(page: newPage, using: context)
 
@@ -66,25 +65,6 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
             existingPage.modifiedOn = Date()
             try context.save(with: "Update LastPage")
             return LastPagePersistenceModel(existingPage)
-        }
-    }
-
-    // MARK: Internal
-
-    // TODO: Remove the following code
-    func add(_ lastPages: [LastPagePersistenceModel]) -> Promise<Void> {
-        guard !lastPages.isEmpty else {
-            return .value(())
-        }
-        return context.perform { context in
-            for lastPage in lastPages {
-                // insert new page
-                let newLastPage = MO_LastPage(context: context)
-                newLastPage.createdOn = lastPage.createdOn
-                newLastPage.modifiedOn = lastPage.modifiedOn
-                newLastPage.page = Int32(lastPage.page)
-            }
-            try context.save(with: "Add Multiple LastPage")
         }
     }
 

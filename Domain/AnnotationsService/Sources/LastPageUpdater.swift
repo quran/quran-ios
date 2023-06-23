@@ -23,7 +23,8 @@ import Foundation
 import QuranAnnotations
 import QuranKit
 
-public class LastPageUpdater {
+@MainActor
+public final class LastPageUpdater {
     // MARK: Lifecycle
 
     public init(service: LastPageService) {
@@ -34,43 +35,43 @@ public class LastPageUpdater {
 
     public private(set) var lastPage: LastPage?
 
-    public func configure(initialPage: Page, lastPage: LastPage?) {
+    public func configure(initialPage: Page, lastPage: LastPage?) async {
         self.lastPage = lastPage
 
         if let lastPage {
-            updateTo(page: initialPage, lastPage: lastPage)
+            await updateTo(page: initialPage, lastPage: lastPage)
         } else {
-            create(page: initialPage)
+            await create(page: initialPage)
         }
     }
 
-    public func updateTo(pages: [Page]) {
+    public func updateTo(pages: [Page]) async {
         guard let page = pages.min() else {
             return
         }
         // don't update if it's the same page
         guard let lastPage, page != lastPage.page else { return }
 
-        updateTo(page: page, lastPage: lastPage)
+        await updateTo(page: page, lastPage: lastPage)
     }
 
     // MARK: Private
 
     private let service: LastPageService
 
-    private func updateTo(page: Page, lastPage: LastPage) {
-        service.update(page: lastPage, toPage: page)
-            .done(on: .main) { self.lastPage = $0 }
-            .catch { error in
-                crasher.recordError(error, reason: "Failed to update last page")
-            }
+    private func updateTo(page: Page, lastPage: LastPage) async {
+        do {
+            self.lastPage = try await service.update(page: lastPage, toPage: page)
+        } catch {
+            crasher.recordError(error, reason: "Failed to update last page")
+        }
     }
 
-    private func create(page: Page) {
-        service.add(page: page)
-            .done(on: .main) { self.lastPage = $0 }
-            .catch { error in
-                crasher.recordError(error, reason: "Failed to create a last page")
-            }
+    private func create(page: Page) async {
+        do {
+            lastPage = try await service.add(page: page)
+        } catch {
+            crasher.recordError(error, reason: "Failed to create a last page")
+        }
     }
 }

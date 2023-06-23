@@ -89,40 +89,44 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
     private func setUpQuranUITraitsListener() {
         viewModel.$quranUITraits
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.quranUITraitsUpdatedTo($0) }
+            .sink { [weak self] newTraits in
+                Task {
+                    await self?.quranUITraitsUpdatedTo(newTraits)
+                }
+            }
             .store(in: &cancellables)
     }
 
-    private func quranUITraitsUpdatedTo(_ quranUITraits: QuranUITraits) {
+    private func quranUITraitsUpdatedTo(_ quranUITraits: QuranUITraits) async {
         guard let dataSource = viewModel.dataSource else {
             return
         }
         let oldValue = dataSource.quranUITraits
         dataSource.quranUITraits = quranUITraits
 
-        func scrollToPageIfChanged(_ keyPath: KeyPath<QuranUITraits, [AyahNumber]>) -> Bool {
+        func scrollToPageIfChanged(_ keyPath: KeyPath<QuranUITraits, [AyahNumber]>) async -> Bool {
             let ayahToScrollTo = quranUITraits[keyPath: keyPath].last
             if quranUITraits[keyPath: keyPath] != oldValue[keyPath: keyPath] {
                 if let ayah = ayahToScrollTo {
-                    scrollTo(page: ayah.page, animated: true, forceReload: false)
+                    await scrollTo(page: ayah.page, animated: true, forceReload: false)
                 }
             }
             return ayahToScrollTo != nil
         }
 
-        if !scrollToPageIfChanged(\.shareHighlights) {
-            _ = scrollToPageIfChanged(\.readingHighlights)
+        if await !scrollToPageIfChanged(\.shareHighlights) {
+            _ = await scrollToPageIfChanged(\.readingHighlights)
         }
     }
 
-    private func scrollTo(page: Page, animated: Bool, forceReload: Bool) {
+    private func scrollTo(page: Page, animated: Bool, forceReload: Bool) async {
         if UIApplication.shared.applicationState != .background {
             // update the UI only when the app is in foreground
             viewModel.dataSource?.scrollToPage(page, animated: animated, forceReload: forceReload)
-            viewModel.visiblePagesUpdated()
+            await viewModel.visiblePagesUpdated()
         } else {
             // Only update last page while in background
-            viewModel.updateLastPageTo([page])
+            await viewModel.updateLastPageTo([page])
         }
     }
 
@@ -147,7 +151,11 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
     private func setUpDataSourceChanges() {
         viewModel.$dataSource
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.install($0) }
+            .sink { [weak self] dataSource in
+                Task {
+                    await self?.install(dataSource)
+                }
+            }
             .store(in: &cancellables)
     }
 
@@ -172,7 +180,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         return pageController
     }
 
-    private func install(_ dataSource: PageDataSource?) {
+    private func install(_ dataSource: PageDataSource?) async {
         guard let dataSource else {
             return
         }
@@ -183,7 +191,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         dataSource.usePageViewController(pageController)
 
         dataSource.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: true)
-        viewModel.visiblePagesLoaded()
+        await viewModel.visiblePagesLoaded()
     }
 
     // MARK: - Gestures

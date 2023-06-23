@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import PromiseKit
 import QuranKit
 import SystemDependencies
 
@@ -41,14 +40,18 @@ public struct CoreDataNotePersistence: NotePersistence {
     /// If the selected verses are linked to different notes, and these notes contain verses not included in the selection,
     /// those verses will be incorporated into a unified note. This unified note represents the union of all verses
     /// associated with the notes containing any of the provided `selectedVerses`.
-    public func setNote(_ note: String?, verses: [VersePersistenceModel], color: Int) -> Promise<NotePersistenceModel> {
-        context.perform { context in
+    public func setNote(
+        _ note: String?,
+        verses: [VersePersistenceModel],
+        color: Int
+    ) async throws -> NotePersistenceModel {
+        try await context.perform { context in
             try createOrUpdateNoteHighlight(verses: verses, color: color, note: note, context: context)
         }
     }
 
-    public func removeNotes(with verses: [VersePersistenceModel]) -> Promise<[NotePersistenceModel]> {
-        context.perform { context in
+    public func removeNotes(with verses: [VersePersistenceModel]) async throws -> [NotePersistenceModel] {
+        try await context.perform { context in
             let notes = try notes(with: verses, using: context)
             // get the values before deletion
             let notesToReturn = notes.map { NotePersistenceModel($0) }

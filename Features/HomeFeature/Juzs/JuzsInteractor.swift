@@ -10,7 +10,6 @@ import Combine
 import Crashing
 import FeaturesSupport
 import Foundation
-import PromiseKit
 import QuranAnnotations
 import QuranKit
 import QuranText

@@ -33,12 +33,12 @@ final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
         subscriptions.removeAll()
     }
 
-    func testInsertAndRetrievePageBookmarks() throws {
+    func testInsertAndRetrievePageBookmarks() async throws {
         // 1. Insert some page bookmarks to the persistence
         let pages = [1, 2, 300]
 
         for page in pages {
-            _ = try persistence.insertPageBookmark(page).wait()
+            try await persistence.insertPageBookmark(page)
         }
 
         // 2. Fetch the page bookmarks using pageBookmarks()
@@ -49,15 +49,15 @@ final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
         XCTAssertEqual(collector.items.last?.map(\.page), [300, 2, 1])
 
         // 4. Insert more
-        _ = try persistence.insertPageBookmark(45).wait()
+        try await persistence.insertPageBookmark(45)
         XCTAssertEqual(collector.items.last?.map(\.page), [45, 300, 2, 1])
 
         // 5. Remove a page bookmark
-        _ = try persistence.removePageBookmark(2).wait()
+        try await persistence.removePageBookmark(2)
         XCTAssertEqual(collector.items.last?.map(\.page), [45, 300, 1])
 
         // 6. Remove another page bookmark
-        _ = try persistence.removePageBookmark(45).wait()
+        try await persistence.removePageBookmark(45)
         XCTAssertEqual(collector.items.last?.map(\.page), [300, 1])
 
         // 7. Verify new collectors return same result

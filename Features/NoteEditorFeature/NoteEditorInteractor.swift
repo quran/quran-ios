@@ -10,7 +10,6 @@ import AnnotationsService
 import Crashing
 import Foundation
 import NoorUI
-import PromiseKit
 import QuranAnnotations
 import QuranTextKit
 import Utilities
@@ -57,35 +56,33 @@ final class NoteEditorInteractor {
         }
     }
 
-    func done() {
+    func commitEditsAndExist() async {
         logger.info("NoteEditor: done tapped")
         let editorColor = editbleNote?.selectedColor
-        noteService.setNote(
-            editbleNote?.note ?? note.note ?? "",
-            verses: note.verses,
-            color: editorColor ?? note.color
-        )
-        .done(on: .main) {
+        do {
+            try await noteService.setNote(
+                editbleNote?.note ?? note.note ?? "",
+                verses: note.verses,
+                color: editorColor ?? note.color
+            )
             logger.info("NoteEditor: note saved")
-            self.listener?.dismissNoteEditor()
-        }
-        .catch { error in
+            listener?.dismissNoteEditor()
+        } catch {
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to set note")
         }
     }
 
-    func forceDelete() {
+    func forceDelete() async {
         logger.info("NoteEditor: force delete note")
-        noteService.removeNotes(with: Array(note.verses))
-            .done(on: .main) {
-                logger.info("NoteEditor: notes removed")
-                self.listener?.dismissNoteEditor()
-            }
-            .catch { error in
-                // TODO: should show error to the user
-                crasher.recordError(error, reason: "Failed to delete note")
-            }
+        do {
+            try await noteService.removeNotes(with: Array(note.verses))
+            logger.info("NoteEditor: notes removed")
+            listener?.dismissNoteEditor()
+        } catch {
+            // TODO: should show error to the user
+            crasher.recordError(error, reason: "Failed to delete note")
+        }
     }
 
     // MARK: Private

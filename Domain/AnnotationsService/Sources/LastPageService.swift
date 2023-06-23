@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 import LastPagePersistence
-import PromiseKit
 import QuranAnnotations
 import QuranKit
 
@@ -32,14 +31,17 @@ public struct LastPageService {
 
     let persistence: LastPagePersistence
 
-    func add(page: Page) -> Promise<LastPage> {
-        persistence.add(page: page.pageNumber)
-            .map { LastPage(quran: page.quran, $0) }
+    func add(page: Page) async throws -> LastPage {
+        let persistenceModel = try await persistence.add(page: page.pageNumber)
+        return LastPage(quran: page.quran, persistenceModel)
     }
 
-    func update(page: LastPage, toPage: Page) -> Promise<LastPage> {
-        persistence.update(page: page.page.pageNumber, toPage: toPage.pageNumber)
-            .map { LastPage(quran: toPage.quran, $0) }
+    func update(page: LastPage, toPage: Page) async throws -> LastPage {
+        let persistenceModel = try await persistence.update(
+            page: page.page.pageNumber,
+            toPage: toPage.pageNumber
+        )
+        return LastPage(quran: toPage.quran, persistenceModel)
     }
 }
 

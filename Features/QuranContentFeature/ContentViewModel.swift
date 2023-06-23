@@ -11,7 +11,6 @@ import AnnotationsService
 import Combine
 import Crashing
 import NoorUI
-import PromiseKit
 import QuranKit
 import QuranPagesFeature
 import QuranText
@@ -86,7 +85,9 @@ public final class ContentViewModel {
 
         loadNotes()
 
-        configureAsInitialPage()
+        Task {
+            await configureAsInitialPage()
+        }
     }
 
     // MARK: Public
@@ -135,7 +136,7 @@ public final class ContentViewModel {
         listener?.userWillBeginDragScroll()
     }
 
-    func visiblePagesLoaded() {
+    func visiblePagesLoaded() async {
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
         crasher.setValue(pages.map(\.pageNumber), forKey: .pages)
@@ -151,17 +152,17 @@ public final class ContentViewModel {
         }
 
         listener?.setVisiblePages(pages)
-        updateLastPageTo(pages)
+        await updateLastPageTo(pages)
     }
 
-    func visiblePagesUpdated() {
+    func visiblePagesUpdated() async {
         // remove search highlight when page changes
         quranUITraits.searchHighlights = []
-        visiblePagesLoaded()
+        await visiblePagesLoaded()
     }
 
-    func updateLastPageTo(_ pages: [Page]) {
-        deps.lastPageUpdater.updateTo(pages: pages)
+    func updateLastPageTo(_ pages: [Page]) async {
+        await deps.lastPageUpdater.updateTo(pages: pages)
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView) {
@@ -246,8 +247,8 @@ public final class ContentViewModel {
         return dict
     }
 
-    private func configureAsInitialPage() {
-        deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
+    private func configureAsInitialPage() async {
+        await deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
         loadNewElementModule()
         quranUITraits.searchHighlights = [input.highlightingSearchAyah].compactMap { $0 }
     }
@@ -255,7 +256,7 @@ public final class ContentViewModel {
     private func loadNewElementModule() {
         let dataSource = dataSourceBuilder.build(
             actions: .init(
-                visiblePagesUpdated: { [weak self] in self?.visiblePagesUpdated() }
+                visiblePagesUpdated: { [weak self] in await self?.visiblePagesUpdated() }
             ),
             pages: pages
         )

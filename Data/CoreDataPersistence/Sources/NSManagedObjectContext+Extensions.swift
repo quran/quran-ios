@@ -8,7 +8,6 @@
 
 import CoreData
 import Crashing
-import PromiseKit
 
 public extension NSManagedObjectContext {
     /// Save a context, or handle the save error (for example, when there data inconsistency or low memory).
@@ -22,14 +21,14 @@ public extension NSManagedObjectContext {
         }
     }
 
-    func perform<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) -> Promise<T> {
-        Promise { resolver in
-            self.perform {
+    func perform<T>(_ operation: @Sendable @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            perform {
                 do {
-                    let value = try block(self)
-                    resolver.fulfill(value)
+                    let result = try operation(self)
+                    continuation.resume(returning: result)
                 } catch {
-                    resolver.reject(error)
+                    continuation.resume(throwing: error)
                 }
             }
         }

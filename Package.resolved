@@ -46,15 +46,6 @@
       }
     },
     {
-      "identity" : "promisekit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mxcl/PromiseKit",
-      "state" : {
-        "revision" : "93c8d41ce96ed78f36c3948be396d76f3ca3de1b",
-        "version" : "6.16.2"
-      }
-    },
-    {
       "identity" : "swift-async-algorithms",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",

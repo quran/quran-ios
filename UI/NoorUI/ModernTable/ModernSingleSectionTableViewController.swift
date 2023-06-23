@@ -13,7 +13,7 @@ import UIx
 public struct ModernSingleSectionTableListener<Item> {
     // MARK: Lifecycle
 
-    public init(viewDidLoad: @escaping () -> Void, viewWillAppear: @escaping () -> Void, selectItem: @escaping (Item) -> Void, deleteItem: @escaping (Item) -> Void) {
+    public init(viewDidLoad: @escaping () -> Void, viewWillAppear: @escaping () -> Void, selectItem: @escaping (Item) -> Void, deleteItem: @Sendable @escaping (Item) async -> Void) {
         self.viewDidLoad = viewDidLoad
         self.viewWillAppear = viewWillAppear
         self.selectItem = selectItem
@@ -25,7 +25,7 @@ public struct ModernSingleSectionTableListener<Item> {
     let viewDidLoad: () -> Void
     let viewWillAppear: () -> Void
     let selectItem: (Item) -> Void
-    let deleteItem: (Item) -> Void
+    let deleteItem: @Sendable (Item) async -> Void
 }
 
 open class ModernSingleSectionTableViewController<ItemType, CellType>: ModernTableViewController
@@ -86,7 +86,10 @@ open class ModernSingleSectionTableViewController<ItemType, CellType>: ModernTab
             self?.listener?.selectItem(item)
         }
         dataSource.deleteItem = { [weak self] item, _ in
-            self?.listener?.deleteItem(item)
+            guard let self else { return }
+            Task {
+                await self.listener?.deleteItem(item)
+            }
         }
         dataSource.onItemsUpdated = { [weak self] _ in
             self?.showNoDataViewIfNeeded()

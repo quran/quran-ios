@@ -11,7 +11,6 @@ import BatchDownloader
 import Combine
 import Crashing
 import NoorUI
-import PromiseKit
 import QuranText
 import TranslationService
 import Utilities

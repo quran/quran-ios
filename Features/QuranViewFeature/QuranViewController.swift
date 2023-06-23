@@ -373,7 +373,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     @objc
     private func onBookmarkButtonTapped() {
-        interactor.onBookmarkBarButtonTapped()
+        Task {
+            await interactor.toogleBookmark()
+        }
     }
 
     @objc

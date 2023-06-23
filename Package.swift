@@ -46,7 +46,6 @@ let package = Package(
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.13.0"),
 
         // Async
-        .package(url: "https://github.com/mxcl/PromiseKit", from: "6.13.1"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
 
         // UI
@@ -102,7 +101,6 @@ private func coreTargets() -> [[Target]] {
         ]),
 
         target(type, name: "Utilities", dependencies: [
-            "PromiseKit",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
@@ -125,7 +123,6 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
 
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
-            "PromiseKit",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
     ]
@@ -188,6 +185,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "PageBookmarkPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
+            "QuranKit",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -206,7 +204,6 @@ private func dataTargets() -> [[Target]] {
             "Utilities",
             "VLogging",
             "Crashing",
-            "PromiseKit",
             "SystemDependencies",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",

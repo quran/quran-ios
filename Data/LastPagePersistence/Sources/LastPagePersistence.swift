@@ -20,11 +20,10 @@
 
 import Combine
 import Foundation
-import PromiseKit
 
 public protocol LastPagePersistence: Sendable {
     func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never>
-    func retrieveAll() -> Promise<[LastPagePersistenceModel]>
-    func add(page: Int) -> Promise<LastPagePersistenceModel>
-    func update(page: Int, toPage: Int) -> Promise<LastPagePersistenceModel>
+    func retrieveAll() async throws -> [LastPagePersistenceModel]
+    func add(page: Int) async throws -> LastPagePersistenceModel
+    func update(page: Int, toPage: Int) async throws -> LastPagePersistenceModel
 }

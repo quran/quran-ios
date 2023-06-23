@@ -9,7 +9,6 @@
 import AppDependencies
 import Caching
 import Foundation
-import PromiseKit
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit

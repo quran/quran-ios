@@ -12,7 +12,6 @@ import Combine
 import Crashing
 import FeaturesSupport
 import Foundation
-import PromiseKit
 import QuranAnnotations
 import QuranKit
 import ReadingService
@@ -55,12 +54,13 @@ final class NotesInteractor {
         navigateTo(page: page)
     }
 
-    func deleteItem(_ item: NoteUI) {
+    func deleteItem(_ item: NoteUI) async {
         logger.info("Notes: delete note at \(item.note.firstVerse)")
-        deps.noteService.removeNotes(with: Array(item.note.verses))
-            .catch(on: .main) { error in
-                self.presenter?.showErrorAlert(error: error)
-            }
+        do {
+            try await deps.noteService.removeNotes(with: Array(item.note.verses))
+        } catch {
+            presenter?.showErrorAlert(error: error)
+        }
     }
 
     // MARK: Private

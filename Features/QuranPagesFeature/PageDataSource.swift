@@ -30,13 +30,13 @@ public protocol PageView: UIViewController {
 public struct PageDataSourceActions {
     // MARK: Lifecycle
 
-    public init(visiblePagesUpdated: @escaping () -> Void) {
+    public init(visiblePagesUpdated: @Sendable @escaping () async -> Void) {
         self.visiblePagesUpdated = visiblePagesUpdated
     }
 
     // MARK: Public
 
-    public let visiblePagesUpdated: () -> Void
+    public let visiblePagesUpdated: @Sendable () async -> Void
 }
 
 @MainActor
@@ -71,7 +71,10 @@ public class PageDataSource {
             indexOfViewController: { [weak self] in self?.indexOfViewController($0) },
             transitionCompleted: { [weak self] in
                 logger.info("User manually scrolled UIPageViewController")
-                self?.actions.visiblePagesUpdated()
+                guard let self else { return }
+                Task {
+                    await self.actions.visiblePagesUpdated()
+                }
             },
             singlePageContainer: { [weak self] in
                 guard let self else {

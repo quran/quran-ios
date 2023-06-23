@@ -47,13 +47,14 @@ final class BookmarksInteractor {
         navigateTo(page: item.page)
     }
 
-    func deleteItem(_ pageBookmark: PageBookmark) {
+    func deleteItem(_ pageBookmark: PageBookmark) async {
         logger.info("Bookmarks: delete bookmark at \(pageBookmark.page)")
         analytics.removeBookmarkPage(pageBookmark.page)
-        service.removePageBookmark(pageBookmark.page)
-            .catch(on: .main) { error in
-                self.presenter?.showErrorAlert(error: error)
-            }
+        do {
+            try await service.removePageBookmark(pageBookmark.page)
+        } catch {
+            presenter?.showErrorAlert(error: error)
+        }
     }
 
     // MARK: Private

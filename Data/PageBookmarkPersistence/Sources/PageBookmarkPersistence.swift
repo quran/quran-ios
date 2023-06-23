@@ -8,10 +8,9 @@
 
 import Combine
 import Foundation
-import PromiseKit
 
 public protocol PageBookmarkPersistence {
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never>
-    func insertPageBookmark(_ page: Int) -> Promise<Void>
-    func removePageBookmark(_ page: Int) -> Promise<Void>
+    func insertPageBookmark(_ page: Int) async throws
+    func removePageBookmark(_ page: Int) async throws
 }

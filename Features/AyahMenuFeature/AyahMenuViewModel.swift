@@ -11,7 +11,6 @@ import Crashing
 import Foundation
 import Localization
 import NoorUI
-import PromiseKit
 import QuranAnnotations
 import QuranAudioKit
 import QuranKit
@@ -28,7 +27,7 @@ public protocol AyahMenuListener: AnyObject {
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool)
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
-    func deleteNotes(_ notes: [Note], verses: [AyahNumber])
+    func deleteNotes(_ notes: [Note], verses: [AyahNumber]) async
     func showTranslation(_ verses: [AyahNumber])
 
     func editNote(_ note: Note)
@@ -110,25 +109,25 @@ final class AyahMenuViewModel {
         listener?.playAudio(verses[0], to: verses.last, repeatVerses: true)
     }
 
-    func deleteNotes() {
+    func deleteNotes() async {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
-        listener?.deleteNotes(deps.notes, verses: deps.verses)
+        await listener?.deleteNotes(deps.notes, verses: deps.verses)
     }
 
-    func editNote() {
+    func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
         let notes = deps.notes
         let color = deps.noteService.color(from: notes)
-        updateHighlight(color: color) { note in
-            self.listener?.editNote(note)
+        if let note = await _updateHighlight(color: color) {
+            listener?.editNote(note)
         }
     }
 
-    func updateHighlight(color: Note.Color) {
+    func updateHighlight(color: Note.Color) async {
         logger.info("AyahMenu: update verse highlights. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
-        updateHighlight(color: color, completion: nil)
+        _ = await _updateHighlight(color: color)
     }
 
     func showTranslation() {
@@ -170,16 +169,18 @@ final class AyahMenuViewModel {
         }
     }
 
-    private func updateHighlight(color: Note.Color, completion: ((Note) -> Void)?) {
+    private func _updateHighlight(color: Note.Color) async -> Note? {
         let quran = ReadingPreferences.shared.reading.quran
-        deps.noteService.updateHighlight(verses: deps.verses, color: color, quran: quran)
-            .done(on: .main) { updatedNote in
-                logger.info("AyahMenu: notes updated")
-                completion?(updatedNote)
-            }
-            .catch { error in
-                crasher.recordError(error, reason: "Failed to update highlights")
-            }
+        do {
+            let updatedNote = try await deps.noteService.updateHighlight(
+                verses: deps.verses, color: color, quran: quran
+            )
+            logger.info("AyahMenu: notes updated")
+            return updatedNote
+        } catch {
+            crasher.recordError(error, reason: "Failed to update highlights")
+            return nil
+        }
     }
 
     private func retrieveSelectedAyahText() async throws -> [String] {

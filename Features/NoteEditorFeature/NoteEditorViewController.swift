@@ -57,7 +57,7 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
         let noteEditor = NoteEditorView(
             note: note,
             done: { [weak self] in self?.done() },
-            delete: { [weak self] in self?.delete() }
+            delete: { [weak self] in await self?.delete() }
         )
         let viewController = UIHostingController(rootView: noteEditor)
         let navigationController = buildNavigationController(rootViewController: viewController, note: note)
@@ -83,20 +83,22 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     private func done() {
-        viewModel.done()
+        Task {
+            await viewModel.commitEditsAndExist()
+        }
     }
 
-    private func delete() {
+    private func delete() async {
         logger.info("NoteEditor: delete note")
         if viewModel.isEditedNote {
             logger.info("NoteEditor: confirm note deletion")
             confirmNoteDelete(
-                delete: { self.viewModel.forceDelete() },
+                delete: { await self.viewModel.forceDelete() },
                 cancel: { }
             )
         } else {
             // delete highlight
-            viewModel.forceDelete()
+            await viewModel.forceDelete()
         }
     }
 }

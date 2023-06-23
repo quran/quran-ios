@@ -66,7 +66,7 @@ public struct AyahMenuView: View {
 
 private struct AyahMenuViewList: View {
     let dataObject: AyahMenuUI.DataObject
-    let showHighlights: () -> Void
+    let showHighlights: AsyncAction
 
     var noteEditText: String {
         switch dataObject.state {
@@ -139,7 +139,11 @@ private struct AyahMenuViewList: View {
                 if dataObject.state == .noHighlight {
                     Row(
                         title: l("ayah.menu.highlight"),
-                        action: { dataObject.actions.highlight(dataObject.highlightingColor) }
+                        action: {
+                            Task {
+                                await dataObject.actions.highlight(dataObject.highlightingColor)
+                            }
+                        }
                     ) {
                         IconCircle(color: dataObject.highlightingColor)
                     }
@@ -203,7 +207,7 @@ private struct Row<Symbol: View>: View {
     init(
         title: String,
         subtitle: String? = nil,
-        action: @escaping () -> Void,
+        action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol
     ) {
         self.symbol = symbol()
@@ -217,12 +221,12 @@ private struct Row<Symbol: View>: View {
     let symbol: Symbol
     let title: String
     let subtitle: String?
-    let action: () -> Void
+    let action: @Sendable () async -> Void
     @ScaledMetric var verticalPadding = 12
 
     var body: some View {
         Button {
-            action()
+            await action()
         }
         label: {
             HStack {
@@ -305,13 +309,13 @@ private struct IconCircle: View {
 
 private struct NoteCircles: View {
     let selectedColor: Note.Color?
-    let tapped: (Note.Color) -> Void
+    let tapped: @Sendable (Note.Color) async -> Void
 
     var body: some View {
         HStack {
             ForEach(Note.Color.sortedColors, id: \.self) { color in
                 Button(
-                    action: { tapped(color) },
+                    action: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }
                 )
                 .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)

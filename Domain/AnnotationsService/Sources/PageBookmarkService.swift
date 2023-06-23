@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 import PageBookmarkPersistence
-import PromiseKit
 import QuranAnnotations
 import QuranKit
 
@@ -28,12 +27,12 @@ public struct PageBookmarkService {
             .eraseToAnyPublisher()
     }
 
-    public func insertPageBookmark(_ page: Page) -> Promise<Void> {
-        persistence.insertPageBookmark(page.pageNumber)
+    public func insertPageBookmark(_ page: Page) async throws {
+        try await persistence.insertPageBookmark(page.pageNumber)
     }
 
-    public func removePageBookmark(_ page: Page) -> Promise<Void> {
-        persistence.removePageBookmark(page.pageNumber)
+    public func removePageBookmark(_ page: Page) async throws {
+        try await persistence.removePageBookmark(page.pageNumber)
     }
 
     // MARK: Internal

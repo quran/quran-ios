@@ -14,7 +14,6 @@ public enum NoorImage: String {
     case checkboxUnselected = "checkbox-unselected"
     case download = "download-30"
     case innerShadow = "inner-shadow"
-    case logo = "logo-lg-w"
     case pointer = "pointer-25"
     case rotateToLandscape = "rotate_to_landscape-25"
     case rotateToPortrait = "rotate_to_portrait-25"

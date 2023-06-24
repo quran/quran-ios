@@ -120,7 +120,7 @@ struct ReadingDetails_Previews: PreviewProvider {
         // MARK: Private
 
         private var imageView: some View {
-            NoorImage.logo.image
+            Image(uiImage: UIImage(contentsOfFile: testResourceURL("images/page604.png").absoluteString)!)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }
@@ -131,6 +131,5 @@ struct ReadingDetails_Previews: PreviewProvider {
     static var previews: some View {
         Preview()
             .accentColor(.appIdentity)
-            .preferredColorScheme(.light)
     }
 }

@@ -45,12 +45,10 @@ public struct NoDataView: View {
 
 struct NoDataView_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            NoDataView(
-                title: "Adding Bookmarks...",
-                text: "When you're reading a book, tap the Bookmark button to mark the current page.",
-                image: "bookmark.fill"
-            )
-        }
+        NoDataView(
+            title: "Adding Bookmarks...",
+            text: "When you're reading a book, tap the Bookmark button to mark the current page.",
+            image: "bookmark.fill"
+        )
     }
 }

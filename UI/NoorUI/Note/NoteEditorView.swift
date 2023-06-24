@@ -90,34 +90,29 @@ public struct NoteEditorView: View {
     let delete: @Sendable () async -> Void
 }
 
-// swiftlint:disable line_length
 struct NoteEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            Group {
-                NoteEditorView(
-                    note: EditableNote(
-                        ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ",
-                        modifiedSince: "3 hours ago",
-                        selectedColor: .blue,
-                        note: "A good note! What about a very very very long note where it will reach today is Sunday 1st of Jan today"
-                    ),
-                    done: {},
-                    delete: {}
-                )
-                NoteEditorView(
-                    note: EditableNote(
-                        ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ",
-                        modifiedSince: "10 seconds ago",
-                        selectedColor: .blue,
-                        note: "A good note!"
-                    ),
-                    done: {},
-                    delete: {}
-                )
-            }
+        Group {
+            NoteEditorView(
+                note: EditableNote(
+                    ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ",
+                    modifiedSince: "3 hours ago",
+                    selectedColor: .blue,
+                    note: "A good note! What about a very very very long note where it will reach today is Sunday 1st of Jan today"
+                ),
+                done: {},
+                delete: {}
+            )
+            NoteEditorView(
+                note: EditableNote(
+                    ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ",
+                    modifiedSince: "10 seconds ago",
+                    selectedColor: .blue,
+                    note: "A good note!"
+                ),
+                done: {},
+                delete: {}
+            )
         }
     }
 }
-
-// swiftlint:enable line_length

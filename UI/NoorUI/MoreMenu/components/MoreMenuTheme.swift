@@ -81,11 +81,8 @@ struct MoreMenuTheme_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                Container(theme: .auto)
-            }
+        VStack {
+            Container(theme: .auto)
         }
-        .previewLayout(.fixed(width: 320, height: 300))
     }
 }

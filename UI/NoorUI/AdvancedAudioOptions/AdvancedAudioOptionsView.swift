@@ -222,8 +222,6 @@ struct AdvancedAudioOptionsView_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        Previewing.screen(sizes: [ContentSizeCategory.large]) {
-            Container()
-        }
+        Container()
     }
 }

@@ -20,13 +20,10 @@ struct MoreMenuWordPointer: View {
 
 struct MoreMenuWordPointer_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                MoreMenuWordPointer(enabled: .constant(true))
-                Divider()
-                MoreMenuWordPointer(enabled: .constant(false))
-            }
+        VStack {
+            MoreMenuWordPointer(enabled: .constant(true))
+            Divider()
+            MoreMenuWordPointer(enabled: .constant(false))
         }
-        .previewLayout(.fixed(width: 320, height: 120))
     }
 }

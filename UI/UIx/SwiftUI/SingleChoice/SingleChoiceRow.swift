@@ -30,12 +30,9 @@ public struct SingleChoiceRow: View {
 
 struct SingleChoiceRow_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            List {
-                SingleChoiceRow(text: "translation", selected: false)
-                SingleChoiceRow(text: "transliteration", selected: true)
-            }
+        List {
+            SingleChoiceRow(text: "translation", selected: false)
+            SingleChoiceRow(text: "transliteration", selected: true)
         }
-        .previewLayout(.fixed(width: 320, height: 200))
     }
 }

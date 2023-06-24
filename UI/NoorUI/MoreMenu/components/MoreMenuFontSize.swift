@@ -76,15 +76,12 @@ struct MoreMenuFontSize_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                Container(fontSize: .xSmall)
-                Divider()
-                Container(fontSize: .medium)
-                Divider()
-                Container(fontSize: .xLarge)
-            }
+        VStack {
+            Container(fontSize: .xSmall)
+            Divider()
+            Container(fontSize: .medium)
+            Divider()
+            Container(fontSize: .xLarge)
         }
-        .previewLayout(.fixed(width: 320, height: 300))
     }
 }

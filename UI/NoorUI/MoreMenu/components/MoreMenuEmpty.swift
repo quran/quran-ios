@@ -21,13 +21,10 @@ struct MoreMenuEmpty: View {
 
 struct MoreMenuEmpty_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                Text("Something")
-                MoreMenuEmpty()
-                Text("Something")
-            }
+        VStack {
+            Text("Something")
+            MoreMenuEmpty()
+            Text("Something")
         }
-        .previewLayout(.fixed(width: 320, height: 140))
     }
 }

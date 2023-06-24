@@ -52,16 +52,16 @@ public struct TranslationsRepository {
 
     // MARK: Private
 
-    private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {
-        let localMapConstant = local.flatGroup { $0.fileName }
+    private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [Int: Translation]) {
+        let localMapConstant = local.flatGroup { $0.id }
         var localMap = localMapConstant
 
         var combinedList: [Translation] = []
         remote.forEach { remote in
             var combined = remote
-            if let local = localMap[remote.fileName] {
+            if let local = localMap[remote.id] {
                 combined.installedVersion = local.installedVersion
-                localMap[remote.fileName] = nil
+                localMap[remote.id] = nil
             }
             combinedList.append(combined)
         }
@@ -69,9 +69,9 @@ public struct TranslationsRepository {
         return (combinedList, localMapConstant)
     }
 
-    private func saveCombined(translations: [Translation], localMap: [String: Translation]) async throws {
+    private func saveCombined(translations: [Translation], localMap: [Int: Translation]) async throws {
         for translation in translations {
-            if localMap[translation.fileName] != nil {
+            if localMap[translation.id] != nil {
                 try await persistence.update(translation)
             } else {
                 try await persistence.insert(translation)

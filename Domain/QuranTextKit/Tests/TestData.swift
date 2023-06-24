@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranResources
 import QuranText
 import TestResources
 import TranslationServiceFake
@@ -21,7 +22,7 @@ struct TestData {
         return GRDBTranslationVerseTextPersistence(fileURL: url)
     }
 
-    static let quranTextURL = TestResources.resourceURL("quran.ar.uthmani.v2.db")
+    static let quranTextURL = QuranResources.quranUthmaniV2Database
 
     static func quranTextAt(_ verse: AyahNumber) -> String {
         quranText[verse] ?? "Not added to TestData.swift"

@@ -12,6 +12,7 @@ import Foundation
 import LastPagePersistence
 import NotePersistence
 import PageBookmarkPersistence
+import QuranResources
 import QuranTextKit
 import ReadingService
 
@@ -32,6 +33,8 @@ public protocol AppDependencies {
 }
 
 extension AppDependencies {
+    public var quranUthmaniV2Database: URL { QuranResources.quranUthmaniV2Database }
+
     public func textDataService() -> QuranTextDataService {
         QuranTextDataService(
             databasesURL: databasesURL,

@@ -347,7 +347,6 @@ private func domainTargets() -> [[Target]] {
             "ReciterService",
             "QuranTextKit",
             "QueuePlayer",
-            "TestResources",
             "SystemDependencies",
             "Zip",
         ], testDependencies: [
@@ -715,6 +714,33 @@ func library(_ name: String) -> PackageDescription.Product {
 }
 
 func validated(_ targets: [Target]) -> [Target] {
+    validateDependenciesStructure(targets)
+    validateNoTestDependenciesInAppTargets(targets)
+    return targets
+}
+
+func validateNoTestDependenciesInAppTargets(_ targets: [Target]) {
+    func isTestRelatedTargetName(_ name: String) -> Bool {
+        ["fake", "test"].contains { testName in name.lowercased().contains(testName) }
+    }
+
+    let targets = targets.filter { target in !target.isTest && !isTestRelatedTargetName(target.name) }
+    for target in targets {
+        for dependency in target.dependencies {
+            let dependencyName = dependencyName(of: dependency)
+            if isTestRelatedTargetName(dependencyName) {
+                fatalError("""
+
+                Incorrect dependency.
+                Target \(target.name) shouldn't depend on \(dependencyName) as it's a test dependency.
+
+                """)
+            }
+        }
+    }
+}
+
+func validateDependenciesStructure(_ targets: [Target]) {
     var targetTypes: [String: TargetType] = [:]
     for target in targets {
         let parentDirectory = target.path!.components(separatedBy: "/")[0]
@@ -739,8 +765,6 @@ func validated(_ targets: [Target]) -> [Target] {
             }
         }
     }
-
-    return targets
 }
 
 func dependencyName(of dependency: Target.Dependency) -> String {

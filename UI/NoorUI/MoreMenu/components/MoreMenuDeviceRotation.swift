@@ -65,14 +65,11 @@ struct MoreMenuDeviceRotation_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                Container(orientation: .landscapeLeft)
-                Divider()
-                Container(orientation: .portrait)
-            }
+        VStack {
+            Container(orientation: .landscapeLeft)
+            Divider()
+            Container(orientation: .portrait)
         }
-        .previewLayout(.fixed(width: 320, height: 140))
     }
 }
 

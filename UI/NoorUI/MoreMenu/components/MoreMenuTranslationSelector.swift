@@ -23,11 +23,8 @@ struct MoreMenuTranslationSelector: View {
 
 struct MoreMenuTranslationSelector_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                MoreMenuTranslationSelector()
-            }
+        VStack {
+            MoreMenuTranslationSelector()
         }
-        .previewLayout(.fixed(width: 320, height: 300))
     }
 }

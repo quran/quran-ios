@@ -37,13 +37,10 @@ struct MoreMenuWordPointerType: View {
 
 struct MoreMenuWordPointerType_Previews: PreviewProvider {
     static var previews: some View {
-        Previewing.screen {
-            VStack {
-                MoreMenuWordPointerType(type: .translation)
-                Divider()
-                MoreMenuWordPointerType(type: .transliteration)
-            }
+        VStack {
+            MoreMenuWordPointerType(type: .translation)
+            Divider()
+            MoreMenuWordPointerType(type: .transliteration)
         }
-        .previewLayout(.fixed(width: 320, height: 200))
     }
 }

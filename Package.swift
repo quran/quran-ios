@@ -160,6 +160,7 @@ private func uiTargets() -> [[Target]] {
             "UIx",
             "Crashing",
             "Localization",
+            "Preferences",
             "QuranText",
             "QuranAnnotations",
             "QuranGeometry",

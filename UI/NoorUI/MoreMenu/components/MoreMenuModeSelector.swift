@@ -36,13 +36,10 @@ struct MoreMenuModeSelector_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        Previewing.screen {
-            VStack(spacing: 0) {
-                Container(mode: .arabic)
-                Divider()
-                Container(mode: .translation)
-            }
+        VStack(spacing: 0) {
+            Container(mode: .arabic)
+            Divider()
+            Container(mode: .translation)
         }
-        .previewLayout(.fixed(width: 320, height: 100))
     }
 }

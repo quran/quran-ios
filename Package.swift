@@ -297,6 +297,10 @@ private func dataTargets() -> [[Target]] {
 private func domainTargets() -> [[Target]] {
     let type = TargetType.domain
     return [
+        target(type, name: "QuranResources", hasTests: false, resources: [
+            .copy("Databases"),
+        ]),
+
         target(type, name: "TestResources", hasTests: false, resources: [
             .copy("test_data"),
         ]),
@@ -370,6 +374,7 @@ private func domainTargets() -> [[Target]] {
             "TranslationServiceFake",
             "SystemDependenciesFake",
             "TestResources",
+            "QuranResources",
         ], testExclude: [
             "__Snapshots__",
         ]),
@@ -459,6 +464,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "BatchDownloader",
             "LastPagePersistence",
+            "QuranResources",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [

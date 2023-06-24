@@ -23,6 +23,8 @@ public protocol AppDependencies {
     var appHost: URL { get }
     var filesAppHost: URL { get }
 
+    var supportsCloudKit: Bool { get }
+
     func downloadManager() async -> DownloadManager
     var analytics: AnalyticsLibrary { get }
     var readingResources: ReadingResourcesService { get }

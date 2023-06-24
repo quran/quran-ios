@@ -18,10 +18,11 @@ import VLogging
 final class AppInteractor {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, lastPagePersistence: LastPagePersistence, tabs: [TabBuildable]) {
+    init(supportsCloudKit: Bool, analytics: AnalyticsLibrary, lastPagePersistence: LastPagePersistence, tabs: [TabBuildable]) {
         self.analytics = analytics
         self.lastPagePersistence = lastPagePersistence
         self.tabs = tabs
+        self.supportsCloudKit = supportsCloudKit
     }
 
     // MARK: Internal
@@ -32,6 +33,10 @@ final class AppInteractor {
         let viewControllers = tabs.map { $0.build() }
         presenter?.setViewControllers(viewControllers, animated: false)
 
+        guard supportsCloudKit else {
+            return
+        }
+
         // log cloud kit logged in status
         DispatchQueue.global().asyncAfter(deadline: .now() + 10) {
             self.logIsLoggedIntoCloudKit()
@@ -40,6 +45,7 @@ final class AppInteractor {
 
     // MARK: Private
 
+    private let supportsCloudKit: Bool
     private let analytics: AnalyticsLibrary
     private let tabs: [TabBuildable]
     private let lastPagePersistence: LastPagePersistence

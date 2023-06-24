@@ -492,6 +492,8 @@ private func featuresTargets() -> [[Target]] {
             "WhatsNewKit",
             "NoorUI",
             "Analytics",
+        ], resources: [
+            .copy("whats-new.plist"),
         ]),
 
         target(type, name: "WordPointerFeature", hasTests: false, dependencies: [

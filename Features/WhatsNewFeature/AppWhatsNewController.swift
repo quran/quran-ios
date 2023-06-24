@@ -90,7 +90,7 @@ public class AppWhatsNewController {
     }
 
     private nonisolated func whatsNew() -> AppWhatsNew {
-        let url = Bundle.main.url(forResource: "whats-new", withExtension: "plist")!
+        let url = Bundle.module.url(forResource: "whats-new.plist", withExtension: "")!
 
         let data = try! Data(contentsOf: url) // swiftlint:disable:this force_try
         let decoder = PropertyListDecoder()

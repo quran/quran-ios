@@ -156,6 +156,9 @@ private func uiTargets() -> [[Target]] {
         target(type, name: "UIx", hasTests: false, dependencies: [
             "ViewConstrainer",
         ]),
+        target(type, name: "NoorFont", hasTests: false, resources: [
+            .process("Resources"),
+        ]),
         target(type, name: "NoorUI", hasTests: false, dependencies: [
             "UIx",
             "Crashing",
@@ -165,6 +168,7 @@ private func uiTargets() -> [[Target]] {
             "QuranAnnotations",
             "QuranGeometry",
             "DownloadButton",
+            "NoorFont",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),
     ]

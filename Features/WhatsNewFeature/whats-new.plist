@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>versions</key>
+	<array>
+		<dict>
+			<key>version</key>
+			<string>1.20.3</string>
+			<key>items</key>
+			<array>
+				<dict>
+					<key>title</key>
+					<string>new.reciters-selection</string>
+					<key>subtitle</key>
+					<string>new.reciters-selection.details</string>
+					<key>image</key>
+					<string>headphones</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.quran-ui</string>
+					<key>subtitle</key>
+					<string>new.quran-ui.details</string>
+					<key>image</key>
+					<string>book</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.translations</string>
+					<key>subtitle</key>
+					<string>new.translations.details</string>
+					<key>image</key>
+					<string>globe</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.reciters</string>
+					<key>subtitle</key>
+					<string>new.reciters.details</string>
+					<key>image</key>
+					<string>headphones</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

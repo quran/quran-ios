@@ -15,6 +15,7 @@ struct AppBuilder {
 
     func build() -> UIViewController {
         let interactor = AppInteractor(
+            supportsCloudKit: container.supportsCloudKit,
             analytics: container.analytics,
             lastPagePersistence: container.lastPagePersistence,
             tabs: [

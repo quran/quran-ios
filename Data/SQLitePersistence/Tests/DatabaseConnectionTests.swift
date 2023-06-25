@@ -32,7 +32,7 @@ class DatabaseConnectionTests: XCTestCase {
     }
 
     func test_readAndWrite() async throws {
-        let connection = DatabaseConnection(url: testURL)
+        let connection = DatabaseConnection(url: testURL, readonly: false)
         try await connection.insertNames()
 
         XCTAssertTrue(testURL.isReachable)
@@ -42,7 +42,7 @@ class DatabaseConnectionTests: XCTestCase {
     }
 
     func test_sharing() async throws {
-        let connection1 = DatabaseConnection(url: testURL)
+        let connection1 = DatabaseConnection(url: testURL, readonly: false)
         let connection2 = DatabaseConnection(url: testURL)
         try await connection1.insertNames()
         let names = try await connection2.readNames()

@@ -25,7 +25,7 @@ public struct GRDBActiveTranslationsPersistence: ActiveTranslationsPersistence {
 
     public init(directory: URL) {
         let fileURL = directory.appendingPathComponent("translations.db", isDirectory: false)
-        self.init(db: DatabaseConnection(url: fileURL))
+        self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
 
     // MARK: Public

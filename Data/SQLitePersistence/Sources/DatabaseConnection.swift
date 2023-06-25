@@ -22,7 +22,7 @@ private struct DatabaseConnectionPool: Sendable {
 
     // MARK: Internal
 
-    func database(for url: URL) throws -> DatabaseWriter {
+    func database(for url: URL, readonly: Bool) throws -> DatabaseWriter {
         try state.withCriticalRegion { state in
             if var connection = state.connections[url] {
                 connection.references += 1
@@ -37,11 +37,7 @@ private struct DatabaseConnectionPool: Sendable {
                 attributes: nil
             )
 
-            var configuration = Configuration()
-            // TODO: Remove and use singletons instead.
-            configuration.busyMode = .timeout(5)
-
-            let database = try newDatabase(url: url)
+            let database = try newDatabase(url: url, readonly: readonly)
             let newConnection = Connection(database: database, references: 1)
             state.connections[url] = newConnection
             return newConnection.database
@@ -65,10 +61,11 @@ private struct DatabaseConnectionPool: Sendable {
 
     private let state = ManagedCriticalState(State())
 
-    private func newDatabase(url: URL) throws -> DatabaseWriter {
+    private func newDatabase(url: URL, readonly: Bool) throws -> DatabaseWriter {
         do {
             return try attempt(times: 3) {
                 var configuration = Configuration()
+                configuration.readonly = readonly
                 // TODO: Remove and use singletons instead.
                 configuration.busyMode = .timeout(5)
                 return try DatabasePool(path: url.path, configuration: configuration)
@@ -87,8 +84,9 @@ public final class DatabaseConnection: Sendable {
 
     // MARK: Lifecycle
 
-    public init(url: URL) {
+    public init(url: URL, readonly: Bool = true) {
         databaseURL = url
+        self.readonly = readonly
     }
 
     deinit {
@@ -124,6 +122,7 @@ public final class DatabaseConnection: Sendable {
     // MARK: Internal
 
     let databaseURL: URL
+    let readonly: Bool
 
     func getDatabase() throws -> DatabaseWriter {
         try state.withCriticalRegion { state in
@@ -131,7 +130,7 @@ public final class DatabaseConnection: Sendable {
                 return database
             }
 
-            let database = try Self.connectionPool.database(for: databaseURL)
+            let database = try Self.connectionPool.database(for: databaseURL, readonly: readonly)
             state.database = database
             return database
         }

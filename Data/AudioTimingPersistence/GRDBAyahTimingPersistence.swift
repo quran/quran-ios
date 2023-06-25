@@ -26,7 +26,7 @@ public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     // MARK: Public
 
     public func getVersion() async throws -> Int {
-        try await db.write { db in
+        try await db.read { db in
             let property = try GRDBProperty
                 .filter(GRDBProperty.Columns.property == "version")
                 .fetchOne(db)

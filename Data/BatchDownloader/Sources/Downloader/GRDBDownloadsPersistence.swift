@@ -23,7 +23,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
     }
 
     init(fileURL: URL) {
-        self.init(db: DatabaseConnection(url: fileURL))
+        self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
 
     // MARK: Internal

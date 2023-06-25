@@ -23,7 +23,7 @@ public struct GRDBDatabaseVersionPersistence: DatabaseVersionPersistence {
     // MARK: Public
 
     public func getTextVersion() async throws -> Int {
-        try await db.write { db in
+        try await db.read { db in
             let property = try GRDBProperty
                 .filter(GRDBProperty.Columns.property == "text_version")
                 .fetchOne(db)

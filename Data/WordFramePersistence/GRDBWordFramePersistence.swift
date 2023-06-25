@@ -25,7 +25,7 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
     // MARK: Public
 
     public func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {
-        try await db.write { db in
+        try await db.read { db in
             let query = GRDBGlyph.filter(GRDBGlyph.Columns.page == page.pageNumber)
 
             var result = [AyahNumber: [WordFrame]]()
@@ -41,7 +41,7 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
     }
 
     public func suraHeaders(_ page: Page) async throws -> [SuraHeaderLocation] {
-        try await db.write { db in
+        try await db.read { db in
             let query = GRDBSuraHeader.filter(GRDBSuraHeader.Columns.page == page.pageNumber)
             let suraHeaders = try GRDBSuraHeader.fetchAll(db, query)
             return suraHeaders.map { $0.toSuraHeaderLocation(quran: page.quran) }
@@ -49,7 +49,7 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
     }
 
     public func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
-        try await db.write { db in
+        try await db.read { db in
             let query = GRDBAyahMarker.filter(GRDBAyahMarker.Columns.page == page.pageNumber)
             let ayahMarkers = try GRDBAyahMarker.fetchAll(db, query)
             return ayahMarkers.map { $0.toAyahNumberLocation(quran: page.quran) }

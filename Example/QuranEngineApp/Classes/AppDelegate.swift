@@ -8,6 +8,7 @@
 import AppStructureFeature
 import Logging
 import NoorFont
+import NoorUI
 import UIKit
 
 @main
@@ -17,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FontName.registerFonts()
         LoggingSystem.bootstrap(StreamLogHandler.standardError)
+        AsyncTextLabelSystem.bootstrap(FixedTextNode.init)
 
         // Eagerly load download manager to handle any background downloads.
         Task { _ = await downloadManagerContainer.downloadManager() }

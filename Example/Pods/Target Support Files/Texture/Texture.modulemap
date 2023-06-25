@@ -1,0 +1,6 @@
+framework module AsyncDisplayKit {
+  umbrella header "Texture-umbrella.h"
+
+  export *
+  module * { export * }
+}

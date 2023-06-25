@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  xcode:
+  Package:
     runs-on: macos-13
 
     steps:
@@ -16,12 +16,21 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_14.3.app"
 
-    - name: Build QuranEngine.xcworkspace
-      run: set -o pipefail && xcrun xcodebuild build -scheme QuranEngine-Package -sdk "iphonesimulator" -destination 'generic/platform=iOS' | xcpretty
-
     - name: Run tests
-      run: set -o pipefail && xcrun xcodebuild test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 14 Pro,OS=16.4" | xcpretty
+      run: set -o pipefail && xcrun xcodebuild build test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 14 Pro,OS=16.4" | xcpretty
 
     - uses: codecov/codecov-action@v3
       with:
         swift: true
+
+  ExampleApp:
+    runs-on: macos-13
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_14.3.app"
+      
+      - name: Build
+        run: set -o pipefail &&  xcrun xcodebuild build -workspace Example/QuranEngineApp.xcworkspace -scheme QuranEngineApp -sdk "iphonesimulator" -destination 'generic/platform=iOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty

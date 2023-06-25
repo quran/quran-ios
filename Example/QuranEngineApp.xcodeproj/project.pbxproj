@@ -104,21 +104,13 @@
 		D975EDDA2A479204009DE942 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D975EDED2A47C842009DE942 /* Readings */,
-				D98543DB2A49095800F477A2 /* Databases */,
-				D975EDE82A479965009DE942 /* plists */,
-				D975EDDB2A47924D009DE942 /* UI */,
+				D975EDCE2A4791D7009DE942 /* Assets.xcassets */,
+				D98543D22A47C88700F477A2 /* hafs_1405 */,
+				D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */,
+				D975EDE92A4799A2009DE942 /* reciters.plist */,
+				D98543DC2A49095800F477A2 /* words.db */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		D975EDDB2A47924D009DE942 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */,
-				D975EDCE2A4791D7009DE942 /* Assets.xcassets */,
-			);
-			path = UI;
 			sourceTree = "<group>";
 		};
 		D975EDDC2A479335009DE942 /* Packages */ = {
@@ -135,30 +127,6 @@
 				DBF39BBA3A9CEE4575039527 /* Pods_QuranEngineApp.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D975EDE82A479965009DE942 /* plists */ = {
-			isa = PBXGroup;
-			children = (
-				D975EDE92A4799A2009DE942 /* reciters.plist */,
-			);
-			path = plists;
-			sourceTree = "<group>";
-		};
-		D975EDED2A47C842009DE942 /* Readings */ = {
-			isa = PBXGroup;
-			children = (
-				D98543D22A47C88700F477A2 /* hafs_1405 */,
-			);
-			path = Readings;
-			sourceTree = "<group>";
-		};
-		D98543DB2A49095800F477A2 /* Databases */ = {
-			isa = PBXGroup;
-			children = (
-				D98543DC2A49095800F477A2 /* words.db */,
-			);
-			path = Databases;
 			sourceTree = "<group>";
 		};
 		F21FCED1DC6D36311F7D44C0 /* Pods */ = {

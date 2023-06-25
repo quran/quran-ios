@@ -19,6 +19,7 @@
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; settings = {ASSET_TAGS = (hafs_1405, ); }; };
 		D98543D72A47E14200F477A2 /* FixedTextNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D98543D62A47E14200F477A2 /* FixedTextNode.m */; };
 		D98543D92A47E17800F477A2 /* AsyncTextLabelImplmentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98543D82A47E17800F477A2 /* AsyncTextLabelImplmentation.swift */; };
+		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		D98543D52A47E14200F477A2 /* FixedTextNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FixedTextNode.h; sourceTree = "<group>"; };
 		D98543D62A47E14200F477A2 /* FixedTextNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FixedTextNode.m; sourceTree = "<group>"; };
 		D98543D82A47E17800F477A2 /* AsyncTextLabelImplmentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncTextLabelImplmentation.swift; sourceTree = "<group>"; };
+		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
 		DBF39BBA3A9CEE4575039527 /* Pods_QuranEngineApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuranEngineApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				D975EDED2A47C842009DE942 /* Readings */,
+				D98543DB2A49095800F477A2 /* Databases */,
 				D975EDE82A479965009DE942 /* plists */,
 				D975EDDB2A47924D009DE942 /* UI */,
 			);
@@ -148,6 +151,14 @@
 				D98543D22A47C88700F477A2 /* hafs_1405 */,
 			);
 			path = Readings;
+			sourceTree = "<group>";
+		};
+		D98543DB2A49095800F477A2 /* Databases */ = {
+			isa = PBXGroup;
+			children = (
+				D98543DC2A49095800F477A2 /* words.db */,
+			);
+			path = Databases;
 			sourceTree = "<group>";
 		};
 		F21FCED1DC6D36311F7D44C0 /* Pods */ = {
@@ -228,6 +239,7 @@
 			files = (
 				D98543D32A47C88700F477A2 /* hafs_1405 in Resources */,
 				D975EDD22A4791D7009DE942 /* LaunchScreen.storyboard in Resources */,
+				D98543DD2A49095800F477A2 /* words.db in Resources */,
 				D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */,
 				D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */,
 			);

@@ -45,11 +45,7 @@ public struct GRDBWordTextPersistence: WordTextPersistence {
 
             let words = try query.fetchAll(db)
 
-            guard words.count == 1 else {
-                fatalError("Expected 1 word but found \(words.count) querying:\(word)")
-            }
-
-            return words[0]
+            return words.first
         }
     }
 }

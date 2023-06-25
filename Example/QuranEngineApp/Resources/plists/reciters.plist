@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>category</key>
+		<string>arabic</string>
+		<key>databaseName</key>
+		<string>abdul_basit_mujawwad</string>
+		<key>hasGaplessAlternative</key>
+		<false/>
+		<key>id</key>
+		<integer>23</integer>
+		<key>name</key>
+		<string>qari_abdulbaset_mujawwad_gapless</string>
+		<key>path</key>
+		<string>abdulbaset_mujawwad</string>
+		<key>url</key>
+		<string>https://download.quranicaudio.com/quran/abdulbaset_mujawwad/</string>
+	</dict>
+	<dict>
+		<key>category</key>
+		<string>arabic</string>
+		<key>databaseName</key>
+		<string>mishari_alafasy</string>
+		<key>hasGaplessAlternative</key>
+		<false/>
+		<key>id</key>
+		<integer>41</integer>
+		<key>name</key>
+		<string>qari_afasy_gapless</string>
+		<key>path</key>
+		<string>mishari_alafasy</string>
+		<key>url</key>
+		<string>https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/</string>
+	</dict>
+	<dict>
+		<key>category</key>
+		<string>arabic</string>
+		<key>databaseName</key>
+		<string></string>
+		<key>hasGaplessAlternative</key>
+		<false/>
+		<key>id</key>
+		<integer>16</integer>
+		<key>name</key>
+		<string>qari_minshawi_mujawwad</string>
+		<key>path</key>
+		<string>13</string>
+		<key>url</key>
+		<string>https://mirrors.quranicaudio.com/everyayah/Minshawy_Mujawwad_192kbps/</string>
+	</dict>
+</array>
+</plist>

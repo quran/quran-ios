@@ -18,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="quran-engine2" translatesAutoresizingMaskIntoConstraints="NO" id="nnX-PI-GYt">
-                                <rect key="frame" x="20" y="-40" width="353" height="732"/>
+                                <rect key="frame" x="20" y="-406" width="353" height="1464"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="QuranEngine Example!  Repo: https://github.com/quran/quran-ios" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OBk-7F-jBS">
-                                <rect key="frame" x="20" y="573" width="353" height="61"/>
+                                <rect key="frame" x="20" y="939" width="353" height="61"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -45,7 +45,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="quran-engine2" width="732" height="732"/>
+        <image name="quran-engine2" width="1464" height="1464"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

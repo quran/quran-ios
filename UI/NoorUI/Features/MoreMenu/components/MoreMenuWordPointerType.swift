@@ -13,15 +13,11 @@ struct MoreMenuWordPointerType: View {
     let type: MoreMenu.TranslationPointerType
 
     var body: some View {
-        HStack {
-            Text(l("menu.pointer.select_translation"))
-            Spacer()
-            Text(typeText)
-                .font(.footnote)
-                .foregroundColor(.secondaryLabel)
-            Image(systemName: "chevron.right")
-                .flipsForRightToLeftLayoutDirection(true)
-        }
+        SimpleListItem(
+            title: l("menu.pointer.select_translation"),
+            subtitle: typeText,
+            showDisclosureIndicator: true
+        )
         .padding()
     }
 

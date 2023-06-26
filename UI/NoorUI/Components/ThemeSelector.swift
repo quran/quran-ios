@@ -1,5 +1,5 @@
 //
-//  MoreMenuTheme.swift
+//  ThemeSelector.swift
 //
 //
 //  Created by Afifi, Mohamed on 9/5/21.
@@ -9,7 +9,7 @@ import Localization
 import SwiftUI
 import UIx
 
-public struct MoreMenuTheme: View {
+public struct ThemeSelector: View {
     // MARK: Lifecycle
 
     public init(theme: Binding<Theme>) {
@@ -66,15 +66,16 @@ private struct ThemeSelection: View {
             }
             .padding()
         }
+        .buttonStyle(.borderless)
     }
 }
 
-struct MoreMenuTheme_Previews: PreviewProvider {
+struct ThemeSelector_Previews: PreviewProvider {
     struct Container: View {
         @State var theme: Theme
 
         var body: some View {
-            MoreMenuTheme(theme: $theme)
+            ThemeSelector(theme: $theme)
         }
     }
 

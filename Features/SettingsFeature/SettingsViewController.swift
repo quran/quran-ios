@@ -120,9 +120,9 @@ class SettingsViewController: BaseViewController {
     }
 
     private func registerTheme() {
-        compositeDS?.registerViewForItemKind(.theme) { item, _ -> ViewModelContainer<ValueViewModel<Theme>, MoreMenuTheme> in
+        compositeDS?.registerViewForItemKind(.theme) { item, _ -> ViewModelContainer<ValueViewModel<Theme>, ThemeSelector> in
             let setting = item.data as! ThemeSetting // swiftlint:disable:this force_cast
-            return ViewModelContainer(setting.theme, content: { MoreMenuTheme(theme: $0.value) })
+            return ViewModelContainer(setting.theme, content: { ThemeSelector(theme: $0.value) })
         }
     }
 

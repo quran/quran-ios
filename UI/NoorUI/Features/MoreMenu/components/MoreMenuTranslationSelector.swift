@@ -11,12 +11,10 @@ import UIx
 
 struct MoreMenuTranslationSelector: View {
     var body: some View {
-        HStack {
-            Text(l("menu.select_translation"))
-            Spacer()
-            Image(systemName: "chevron.right")
-                .flipsForRightToLeftLayoutDirection(true)
-        }
+        SimpleListItem(
+            title: l("menu.select_translation"),
+            showDisclosureIndicator: true
+        )
         .padding()
     }
 }

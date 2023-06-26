@@ -64,10 +64,10 @@ public struct AdvancedAudioOptionsView<Sura: AdvancedAudioUISura>: View {
 
 private struct LastVerseButton: View {
     let label: String
-    let action: () -> Void
+    let action: AsyncAction
 
     var body: some View {
-        Button(action: action) {
+        Button(asyncAction: action) {
             Text(label)
                 .foregroundColor(.white)
                 .padding(.vertical, 5)
@@ -76,7 +76,7 @@ private struct LastVerseButton: View {
                     RoundedActiveBackground(cornerRadius: 100)
                 )
         }
-        .buttonStyle(BorderlessButtonStyle())
+        .buttonStyle(.borderless)
     }
 }
 
@@ -107,60 +107,29 @@ private struct RepeatView: View {
 private struct VerseStaticView<Verse: AdvancedAudioUIVerse>: View {
     let label: String
     let verse: Verse
-    let action: () -> Void
+    let action: AsyncAction
 
     var body: some View {
-        Button(action: action) {
-            HStack {
-                Text(label)
-                    .foregroundColor(.primary)
-
-                Spacer()
-
-                HStack {
-                    Text(verse.localizedNameWithSuraNumber)
-                    Image(systemName: "chevron.right")
-                        .flipsForRightToLeftLayoutDirection(true)
-                        .foregroundColor(.secondary)
-                }
-                .foregroundColor(.secondary)
-            }
-        }
+        SimpleListItem(
+            title: label,
+            subtitle: verse.localizedNameWithSuraNumber,
+            showDisclosureIndicator: true,
+            action: action
+        )
     }
 }
 
 private struct ReciterView: View {
     let name: String
     let image: String?
-    let action: () -> Void
+    let action: AsyncAction
 
     var body: some View {
-        Button(action: action) {
-            HStack {
-                if let image {
-                    Image(image)
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 32)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(Color.systemGray, lineWidth: 0.5)
-                        )
-                }
-
-                Text(name)
-                    .layoutPriority(1)
-                    .foregroundColor(.primary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .flipsForRightToLeftLayoutDirection(true)
-                    .foregroundColor(.secondary)
-            }
-        }
+        SimpleListItem(
+            title: name,
+            showDisclosureIndicator: true,
+            action: action
+        )
     }
 }
 

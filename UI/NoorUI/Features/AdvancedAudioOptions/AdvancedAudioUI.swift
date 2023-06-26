@@ -7,6 +7,7 @@
 //
 
 import Combine
+import UIx
 
 public protocol AdvancedAudioUISura {
     associatedtype Verse: AdvancedAudioUIVerse
@@ -24,12 +25,12 @@ public enum AdvancedAudioUI {
         // MARK: Lifecycle
 
         public init(
-            reciterTapped: @escaping () -> Void,
-            lastPageTapped: @escaping () -> Void,
-            lastSuraTapped: @escaping () -> Void,
-            lastJuzTapped: @escaping () -> Void,
-            fromVerseTapped: @escaping () -> Void,
-            toVerseTapped: @escaping () -> Void
+            reciterTapped: @escaping AsyncAction,
+            lastPageTapped: @escaping AsyncAction,
+            lastSuraTapped: @escaping AsyncAction,
+            lastJuzTapped: @escaping AsyncAction,
+            fromVerseTapped: @escaping AsyncAction,
+            toVerseTapped: @escaping AsyncAction
         ) {
             self.reciterTapped = reciterTapped
             self.lastPageTapped = lastPageTapped
@@ -41,12 +42,12 @@ public enum AdvancedAudioUI {
 
         // MARK: Internal
 
-        let reciterTapped: () -> Void
-        let lastPageTapped: () -> Void
-        let lastSuraTapped: () -> Void
-        let lastJuzTapped: () -> Void
-        let fromVerseTapped: () -> Void
-        let toVerseTapped: () -> Void
+        let reciterTapped: AsyncAction
+        let lastPageTapped: AsyncAction
+        let lastSuraTapped: AsyncAction
+        let lastJuzTapped: AsyncAction
+        let fromVerseTapped: AsyncAction
+        let toVerseTapped: AsyncAction
     }
 
     // MARK: Public

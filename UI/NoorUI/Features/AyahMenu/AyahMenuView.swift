@@ -315,7 +315,7 @@ private struct NoteCircles: View {
         HStack {
             ForEach(Note.Color.sortedColors, id: \.self) { color in
                 Button(
-                    action: { await tapped(color) },
+                    asyncAction: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }
                 )
                 .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)

@@ -13,7 +13,7 @@ struct MoreMenuTranslationSelector: View {
     var body: some View {
         SimpleListItem(
             title: l("menu.select_translation"),
-            showDisclosureIndicator: true
+            accessory: .disclosureIndicator
         )
         .padding()
     }

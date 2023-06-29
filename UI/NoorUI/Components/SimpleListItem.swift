@@ -9,19 +9,42 @@ import SwiftUI
 import UIx
 
 public struct SimpleListItem: View {
+    public struct Subtitle {
+        // MARK: Lifecycle
+
+        public init(text: String, location: SubtitleLocation) {
+            self.text = text
+            self.location = location
+        }
+
+        // MARK: Internal
+
+        let text: String
+        let location: SubtitleLocation
+    }
+
+    public enum SubtitleLocation {
+        case trailing
+        case bottom
+    }
+
+    public enum Accessory {
+        case disclosureIndicator
+    }
+
     // MARK: Lifecycle
 
     public init(
         image: Image? = nil,
         title: String,
-        subtitle: String? = nil,
-        showDisclosureIndicator: Bool,
+        subtitle: Subtitle? = nil,
+        accessory: Accessory? = nil,
         action: AsyncAction? = nil
     ) {
         self.image = image
         self.title = title
         self.subtitle = subtitle
-        self.showDisclosureIndicator = showDisclosureIndicator
+        self.accessory = accessory
         self.action = action
     }
 
@@ -41,8 +64,8 @@ public struct SimpleListItem: View {
 
     let image: Image?
     let title: String
-    let subtitle: String?
-    let showDisclosureIndicator: Bool
+    let subtitle: Subtitle?
+    let accessory: Accessory?
     let action: AsyncAction?
 
     // MARK: Private
@@ -52,18 +75,29 @@ public struct SimpleListItem: View {
             if let image {
                 image
             }
-            Text(title)
 
-            if subtitle != nil || showDisclosureIndicator {
+            VStack(alignment: .leading) {
+                Text(title)
+                if let subtitle, subtitle.location == .bottom {
+                    Text(subtitle.text)
+                        .foregroundColor(.secondaryLabel)
+                        .font(.footnote)
+                }
+            }
+
+            if subtitle?.location == .trailing || accessory != nil {
                 Spacer()
 
-                if let subtitle {
-                    Text(subtitle)
+                if let subtitle, subtitle.location == .trailing {
+                    Text(subtitle.text)
                         .foregroundColor(.secondaryLabel)
                 }
 
-                if showDisclosureIndicator {
-                    DisclosureIndicator()
+                if let accessory {
+                    switch accessory {
+                    case .disclosureIndicator:
+                        DisclosureIndicator()
+                    }
                 }
             }
         }
@@ -79,22 +113,28 @@ struct SimpleListItem_Previews: PreviewProvider {
                     SimpleListItem(
                         image: NoorSystemImage.audio.image,
                         title: "Title",
-                        showDisclosureIndicator: false
-                    ) {
-                    }
+                        accessory: .none
+                    )
 
                     SimpleListItem(
                         image: NoorSystemImage.share.image,
                         title: "Title",
-                        showDisclosureIndicator: true
+                        accessory: .disclosureIndicator
                     ) {
                     }
 
                     SimpleListItem(
                         image: NoorSystemImage.mail.image,
                         title: "Title",
-                        subtitle: "Subtitle",
-                        showDisclosureIndicator: true
+                        subtitle: .init(text: "Subtitle", location: .trailing),
+                        accessory: .disclosureIndicator
+                    ) {
+                    }
+
+                    SimpleListItem(
+                        title: "Reciter name",
+                        subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
+                        accessory: .none
                     ) {
                     }
                 } header: {

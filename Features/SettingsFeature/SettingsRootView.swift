@@ -50,15 +50,15 @@ private struct SettingsRootViewUI: View {
                 SimpleListItem(
                     image: NoorSystemImage.audio.image,
                     title: l("audio.download-play-amount"),
-                    subtitle: audioEnd,
-                    showDisclosureIndicator: true,
+                    subtitle: .init(text: audioEnd, location: .trailing),
+                    accessory: .disclosureIndicator,
                     action: navigateToAudioEndSelector
                 )
 
                 SimpleListItem(
                     image: NoorSystemImage.download.image,
                     title: lAndroid("audio_manager"),
-                    showDisclosureIndicator: true,
+                    accessory: .disclosureIndicator,
                     action: navigateToAudioManager
                 )
             }
@@ -67,7 +67,7 @@ private struct SettingsRootViewUI: View {
                 SimpleListItem(
                     image: NoorSystemImage.translation.image,
                     title: lAndroid("prefs_translations"),
-                    showDisclosureIndicator: true,
+                    accessory: .disclosureIndicator,
                     action: navigateToTranslationsList
                 )
             }
@@ -76,21 +76,21 @@ private struct SettingsRootViewUI: View {
                 SimpleListItem(
                     image: NoorSystemImage.share.image,
                     title: l("share_app"),
-                    showDisclosureIndicator: true,
+                    accessory: .disclosureIndicator,
                     action: shareApp
                 )
 
                 SimpleListItem(
                     image: NoorSystemImage.star.image,
                     title: l("write_review"),
-                    showDisclosureIndicator: true,
+                    accessory: .disclosureIndicator,
                     action: writeReview
                 )
 
                 SimpleListItem(
                     image: NoorSystemImage.mail.image,
                     title: l("contact_us"),
-                    showDisclosureIndicator: true,
+                    accessory: .disclosureIndicator,
                     action: contactUs
                 )
             }

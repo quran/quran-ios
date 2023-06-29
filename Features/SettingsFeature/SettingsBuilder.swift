@@ -8,6 +8,7 @@
 
 import AppDependencies
 import AudioDownloadsFeature
+import Localization
 import SettingsService
 import SwiftUI
 import TranslationsFeature
@@ -33,6 +34,7 @@ public struct SettingsBuilder {
         )
         let view = SettingsRootView(viewModel: viewModel)
         let viewController = UIHostingController(rootView: view)
+        viewController.title = lAndroid("menu_settings")
         return viewController
     }
 

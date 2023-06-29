@@ -1,0 +1,126 @@
+//
+//  SettingsRootView.swift
+//
+//
+//  Created by Mohamed Afifi on 2023-06-25.
+//
+//
+
+import Localization
+import NoorUI
+import SwiftUI
+import UIx
+
+struct SettingsRootView: View {
+    @StateObject var viewModel: SettingsRootViewModel
+
+    var body: some View {
+        SettingsRootViewUI(
+            theme: $viewModel.theme,
+            audioEnd: viewModel.audioEnd.name,
+            navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
+            navigateToAudioManager: { await viewModel.navigateToAudioManager() },
+            navigateToTranslationsList: { await viewModel.navigateToTranslationsList() },
+            shareApp: { viewModel.shareApp() },
+            writeReview: { viewModel.writeReview() },
+            contactUs: { viewModel.contactUs() }
+        )
+    }
+}
+
+private struct SettingsRootViewUI: View {
+    @Binding var theme: Theme
+    let audioEnd: String
+    let navigateToAudioEndSelector: AsyncAction
+    let navigateToAudioManager: AsyncAction
+    let navigateToTranslationsList: AsyncAction
+    let shareApp: AsyncAction
+    let writeReview: AsyncAction
+    let contactUs: AsyncAction
+
+    var body: some View {
+        List {
+            Section {
+                VStack {
+                    ThemeSelector(theme: $theme)
+                }
+            }
+
+            Section {
+                SimpleListItem(
+                    image: NoorSystemImage.audio.image,
+                    title: l("audio.download-play-amount"),
+                    subtitle: audioEnd,
+                    showDisclosureIndicator: true,
+                    action: navigateToAudioEndSelector
+                )
+
+                SimpleListItem(
+                    image: NoorSystemImage.download.image,
+                    title: lAndroid("audio_manager"),
+                    showDisclosureIndicator: true,
+                    action: navigateToAudioManager
+                )
+            }
+
+            Section {
+                SimpleListItem(
+                    image: NoorSystemImage.translation.image,
+                    title: lAndroid("prefs_translations"),
+                    showDisclosureIndicator: true,
+                    action: navigateToTranslationsList
+                )
+            }
+
+            Section {
+                SimpleListItem(
+                    image: NoorSystemImage.share.image,
+                    title: l("share_app"),
+                    showDisclosureIndicator: true,
+                    action: shareApp
+                )
+
+                SimpleListItem(
+                    image: NoorSystemImage.star.image,
+                    title: l("write_review"),
+                    showDisclosureIndicator: true,
+                    action: writeReview
+                )
+
+                SimpleListItem(
+                    image: NoorSystemImage.mail.image,
+                    title: l("contact_us"),
+                    showDisclosureIndicator: true,
+                    action: contactUs
+                )
+            }
+        }
+    }
+}
+
+struct SettingsRootView_Previews: PreviewProvider {
+    struct Container: View {
+        @State var theme: Theme
+
+        var body: some View {
+            SettingsRootViewUI(
+                theme: $theme,
+                audioEnd: "Surah",
+                navigateToAudioEndSelector: {},
+                navigateToAudioManager: {},
+                navigateToTranslationsList: {},
+                shareApp: {},
+                writeReview: {},
+                contactUs: {}
+            )
+        }
+    }
+
+    // MARK: Internal
+
+    static var previews: some View {
+        VStack {
+            Container(theme: .auto)
+        }
+    }
+}

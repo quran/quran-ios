@@ -642,6 +642,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "VLogging",
             "AudioDownloadsFeature",
+            "TranslationsFeature",
         ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [

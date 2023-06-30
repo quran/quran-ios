@@ -30,6 +30,7 @@ public struct SimpleListItem: View {
 
     public enum Accessory {
         case disclosureIndicator
+        case download(DownloadType, action: AsyncAction)
     }
 
     // MARK: Lifecycle
@@ -97,6 +98,8 @@ public struct SimpleListItem: View {
                     switch accessory {
                     case .disclosureIndicator:
                         DisclosureIndicator()
+                    case let .download(type, action):
+                        AppStoreDownloadButton(type: type, action: action)
                     }
                 }
             }
@@ -137,6 +140,20 @@ struct SimpleListItem_Previews: PreviewProvider {
                         accessory: .none
                     ) {
                     }
+
+                    SimpleListItem(
+                        title: "Reciter name",
+                        subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
+                        accessory: .download(.downloading(progress: 0.9), action: {})
+                    ) {
+                    }
+
+                    SimpleListItem(
+                        title: "Reciter name",
+                        subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
+                        accessory: .download(.download, action: {})
+                    )
+
                 } header: {
                     Text("Section \(section + 1)")
                 }

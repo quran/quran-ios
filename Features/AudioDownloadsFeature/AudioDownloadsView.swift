@@ -1,0 +1,196 @@
+//
+//  AudioDownloadsView.swift
+//
+//
+//  Created by Mohamed Afifi on 2023-06-29.
+//
+
+import Localization
+import NoorUI
+import QuranAudio
+import SwiftUI
+
+struct DownloadItem {
+    let title: String
+    let subtitle: String
+    let downloadType: DownloadType?
+    let editable: Bool
+}
+
+struct AudioDownloadsView: View {
+    @StateObject var viewModel: AudioDownloadsViewModel
+
+    var body: some View {
+        AudioDownloadsViewUI(
+            editMode: $viewModel.editMode,
+            items: viewModel.items.sorted(),
+            downloadAction: { await viewModel.startDownloading($0.reciter) },
+            cancelAction: { await viewModel.cancelDownloading($0.reciter) },
+            deleteAction: { items in
+                for item in items {
+                    await viewModel.deleteReciterFiles(item.reciter)
+                }
+            }
+        )
+    }
+}
+
+private struct AudioDownloadsViewUI: View {
+    @Binding var editMode: EditMode
+    let items: [AudioDownloadItem]
+    let downloadAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
+    let cancelAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
+    let deleteAction: @MainActor @Sendable ([AudioDownloadItem]) async -> Void
+
+    var body: some View {
+        List {
+            AudioDownloadsSection(
+                title: l("reciters.downloaded"),
+                items: items.filter(\.canDelete),
+                listItem: { item in
+                    SimpleListItem(
+                        title: item.reciter.localizedName,
+                        subtitle: .init(text: item.size.formattedString(), location: .bottom),
+                        accessory: accessory(item)
+                    )
+                },
+                onDelete: { indexSet in
+                    Task {
+                        let itemsToDelete = indexSet.map { items[$0] }
+                        await deleteAction(itemsToDelete)
+                    }
+                }
+            )
+
+            AudioDownloadsSection(
+                title: l("reciters.all"),
+                items: items.filter { !$0.canDelete },
+                listItem: { item in
+                    SimpleListItem(
+                        title: item.reciter.localizedName,
+                        accessory: accessory(item)
+                    )
+                },
+                onDelete: nil
+            )
+        }
+        .listStyle(.insetGrouped)
+        .environment(\.editMode, $editMode)
+    }
+
+    func accessory(_ item: AudioDownloadItem) -> SimpleListItem.Accessory? {
+        if editMode == .active {
+            return nil
+        }
+
+        switch item.progress {
+        case .notDownloading:
+            if item.isDownloaded {
+                return nil
+            } else {
+                return .download(.download) { await downloadAction(item) }
+            }
+        case .downloading(let progress):
+            let type = progress < 0.001 ? DownloadType.pending : .downloading(progress: progress)
+            return .download(type) { await cancelAction(item) }
+        }
+    }
+}
+
+private struct AudioDownloadsSection<ListItem: View>: View {
+    let title: String
+    let items: [AudioDownloadItem]
+    let listItem: (AudioDownloadItem) -> ListItem
+    let onDelete: ((IndexSet) -> Void)?
+
+    var body: some View {
+        if !items.isEmpty {
+            Section {
+                ForEach(items) { item in
+                    listItem(item)
+                }
+                .onDelete(perform: onDelete)
+            } header: {
+                Text(title)
+            }
+        }
+    }
+}
+
+struct AudioDownloadsView_Previews: PreviewProvider {
+    struct Container: View {
+        @State var editMode: EditMode = .inactive
+
+        @State var items: [AudioDownloadItem] = [
+            AudioDownloadItem(
+                reciter: reciter(1),
+                size: nil,
+                progress: .downloading(0.0001)
+            ),
+            AudioDownloadItem(
+                reciter: reciter(2),
+                size: .init(downloadedSizeInBytes: 1024, downloadedSuraCount: 10, surasCount: 114),
+                progress: .notDownloading
+            ),
+            AudioDownloadItem(
+                reciter: reciter(3),
+                size: .init(downloadedSizeInBytes: 0, downloadedSuraCount: 10, surasCount: 114),
+                progress: .notDownloading
+            ),
+            AudioDownloadItem(
+                reciter: reciter(4),
+                size: .init(downloadedSizeInBytes: 2000, downloadedSuraCount: 114, surasCount: 114),
+                progress: .notDownloading
+            ),
+            AudioDownloadItem(
+                reciter: reciter(5),
+                size: .init(downloadedSizeInBytes: 1024, downloadedSuraCount: 114, surasCount: 114),
+                progress: .downloading(0.5)
+            ),
+        ]
+
+        var body: some View {
+            VStack {
+                Button {
+                    withAnimation {
+                        if editMode == .inactive {
+                            editMode = .active
+                        } else {
+                            editMode = .inactive
+                        }
+                    }
+                } label: {
+                    Text(editMode == .inactive ? "Edit" : "Done")
+                }
+
+                AudioDownloadsViewUI(
+                    editMode: $editMode,
+                    items: items,
+                    downloadAction: { _ in },
+                    cancelAction: { _ in },
+                    deleteAction: { _ in }
+                )
+            }
+        }
+
+        static func reciter(_ id: Int) -> Reciter {
+            Reciter(
+                id: id,
+                nameKey: "Reciter \(id)",
+                directory: "",
+                audioURL: URL(validURL: "quran.com"),
+                audioType: .gapped,
+                hasGaplessAlternative: false,
+                category: .arabic
+            )
+        }
+    }
+
+    // MARK: Internal
+
+    static var previews: some View {
+        VStack {
+            Container()
+        }
+    }
+}

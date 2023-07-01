@@ -7,51 +7,80 @@
 //
 
 import Foundation
+import Localization
 import NoorUI
 import QuranAudio
 
-struct AudioDownloadItem: Hashable, Comparable {
-    struct Size: Hashable {
-        let downloadedSizeInBytes: UInt64
-        let downloadedSuraCount: Int
-        let surasCount: Int
+struct AudioDownloadItem: Hashable, Comparable, Identifiable {
+    enum DownloadingProgress: Hashable {
+        case notDownloading
+        case downloading(Double)
     }
 
     // MARK: Internal
 
-    enum DownloadingProgress: Hashable {
-        case loading
-        case notDownloading
-        case downloading(Float)
-    }
-
     let reciter: Reciter
-    let name: String
-    let size: Size?
-    let downloading: DownloadingProgress
+    let size: AudioDownloadedSize?
+    let progress: DownloadingProgress
 
+    var id: Int { reciter.id }
+
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        guard let lhsSize = lhs.size, let rhsSize = rhs.size else {
+            return lhs.reciter.localizedName < rhs.reciter.localizedName
+        }
+        if lhsSize.downloadedSizeInBytes != rhsSize.downloadedSizeInBytes {
+            return lhsSize.downloadedSizeInBytes > rhsSize.downloadedSizeInBytes
+        }
+        return lhs.reciter.localizedName < rhs.reciter.localizedName
+    }
+}
+
+extension AudioDownloadItem {
     var isDownloaded: Bool {
         size?.downloadedSuraCount == size?.surasCount
     }
 
     var downloadState: DownloadState {
-        switch downloading {
-        case .loading:
-            return .downloaded // hide the button
+        switch progress {
         case .downloading(let progress):
-            return progress < 0.001 ? .pendingDownloading : .downloading(progress: progress)
+            return progress < 0.001 ? .pendingDownloading : .downloading(progress: Float(progress))
         case .notDownloading:
             return isDownloaded ? .downloaded : .notDownloaded
         }
     }
 
-    static func < (lhs: Self, rhs: Self) -> Bool {
-        guard let lhsSize = lhs.size, let rhsSize = rhs.size else {
-            return lhs.name < rhs.name
+    var canDelete: Bool {
+        guard let size else {
+            return false
         }
-        if lhsSize.downloadedSizeInBytes != rhsSize.downloadedSizeInBytes {
-            return lhsSize.downloadedSizeInBytes > rhsSize.downloadedSizeInBytes
+        return size.downloadedSizeInBytes != 0
+    }
+}
+
+extension AudioDownloadedSize? {
+    private static let formatter: MeasurementFormatter = {
+        let units: [UnitInformationStorage] = [.bytes, .kilobytes, .megabytes, .gigabytes, .terabytes, .petabytes, .zettabytes, .yottabytes]
+        let formatter = MeasurementFormatter()
+        formatter.unitStyle = .short
+        formatter.unitOptions = .naturalScale
+        formatter.locale = formatter.locale.fixedLocaleNumbers()
+        formatter.numberFormatter.maximumFractionDigits = 2
+        return formatter
+    }()
+
+    func formattedString() -> String {
+        guard let self else {
+            return " "
         }
-        return lhs.name < rhs.name
+        let suraCount = self.downloadedSuraCount
+        let size = Double(self.downloadedSizeInBytes)
+        let filesDownloaded = lFormat("files_downloaded", table: .android, suraCount)
+        let measurement = Measurement<UnitInformationStorage>(value: size, unit: .bytes)
+        if suraCount == 0 {
+            return filesDownloaded
+        } else {
+            return "\(Self.formatter.string(from: measurement)) - \(filesDownloaded)"
+        }
     }
 }

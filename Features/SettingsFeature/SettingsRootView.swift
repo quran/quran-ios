@@ -95,6 +95,7 @@ private struct SettingsRootViewUI: View {
                 )
             }
         }
+        .listStyle(.insetGrouped)
     }
 }
 

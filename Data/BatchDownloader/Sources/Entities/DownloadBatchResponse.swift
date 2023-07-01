@@ -43,7 +43,7 @@ actor DownloadResponse {
     }
 
     var progress: AsyncPublisher<DownloadProgress> {
-        progressSubject.values()
+        progressSubject.values(bufferingPolicy: .bufferingNewest(1))
     }
 
     var currentProgress: DownloadProgress { progressSubject.value }
@@ -181,7 +181,7 @@ public actor DownloadBatchResponse {
     // MARK: Public
 
     public var progress: AsyncPublisher<DownloadProgress> {
-        progressSubject.values()
+        progressSubject.values(bufferingPolicy: .bufferingNewest(1))
     }
 
     public var currentProgress: DownloadProgress {

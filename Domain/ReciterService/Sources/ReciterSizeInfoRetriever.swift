@@ -30,32 +30,27 @@ public struct ReciterSizeInfoRetriever: Sendable {
 
     // MARK: Public
 
-    public func getReciterAudioDownloads(for reciters: [Reciter], quran: Quran) async -> [Reciter: ReciterAudioDownload] {
-        await withTaskGroup(of: ReciterAudioDownload.self) { group in
+    public func getDownloadedSizes(for reciters: [Reciter], quran: Quran) async -> [Reciter: AudioDownloadedSize] {
+        await withTaskGroup(of: (Reciter, AudioDownloadedSize).self) { group in
             for reciter in reciters {
                 group.addTask {
-                    await getReciterAudioDownload(for: reciter, quran: quran)
+                    (reciter, await getDownloadedSize(for: reciter, quran: quran))
                 }
             }
 
-            var downloads: [Reciter: ReciterAudioDownload] = [:]
+            var downloads: [Reciter: AudioDownloadedSize] = [:]
             for await download in group {
-                downloads[download.reciter] = download
+                downloads[download.0] = download.1
             }
             return downloads
         }
     }
 
-    public func getReciterAudioDownload(for reciter: Reciter, quran: Quran) async -> ReciterAudioDownload {
+    public func getDownloadedSize(for reciter: Reciter, quran: Quran) async -> AudioDownloadedSize {
         let fileList = reciter.audioFiles(baseURL: baseURL, from: quran.firstVerse, to: quran.lastVerse)
 
         guard let fileURLs = try? fileSystem.contentsOfDirectory(at: reciter.localFolder(), includingPropertiesForKeys: [.fileSizeKey]) else {
-            return ReciterAudioDownload(
-                reciter: reciter,
-                downloadedSizeInBytes: 0,
-                downloadedSuraCount: 0,
-                surasCount: quran.suras.count
-            )
+            return .zero(quran: quran)
         }
 
         // sum the sizes of downloaded files
@@ -74,8 +69,7 @@ public struct ReciterSizeInfoRetriever: Sendable {
             }
         }
 
-        return ReciterAudioDownload(
-            reciter: reciter,
+        return AudioDownloadedSize(
             downloadedSizeInBytes: sizeInBytes,
             downloadedSuraCount: suras.count,
             surasCount: quran.suras.count

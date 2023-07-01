@@ -247,7 +247,11 @@ final class DownloadManagerTests: XCTestCase {
 
         // wait until response is cancelled
         try? await response.completion()
-        await Task.megaYield()
+
+        // TODO: Use deterministic solution.
+        for _ in 0 ..< 10 {
+            await Task.megaYield()
+        }
 
         // verify response is cancelled
         let downloads = await downloader.getOnGoingDownloads()

@@ -129,8 +129,11 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         if runningDownloads.isEmpty {
             playingState = .stopped
         } else {
-            await observeProgress(runningDownloads)
-            await observeCompletion(runningDownloads)
+            cancellableTasks.insert(
+                Task {
+                    await observe(runningDownloads)
+                }.asCancellableTask()
+            )
         }
     }
 
@@ -275,22 +278,34 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
 
         recentRecitersService.updateRecentRecitersList(selectedReciter)
 
-        Task {
-            do {
-                if await !downloader.downloaded(reciter: selectedReciter, from: from, to: end) {
-                    startDownloading()
-                    let download = try await downloader.download(from: from, to: end, reciter: selectedReciter)
-                    await observeProgress([download])
+        cancellableTasks.insert(
+            Task { [weak self] in
 
-                    try await download.completion()
+                do {
+                    let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
+                    if !downloaded {
+                        self?.startDownloading()
+                        let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
+                        guard let download else {
+                            return
+                        }
+
+                        await self?.observe([download])
+
+                        for try await _ in download.progress { }
+                    }
+
+                    try await self?.audioPlayer.play(
+                        reciter: selectedReciter,
+                        from: from, to: end,
+                        verseRuns: verseRuns, listRuns: listRuns
+                    )
+                    self?.playingStarted()
+                } catch {
+                    self?.playbackFailed(error)
                 }
-
-                try await audioPlayer.play(reciter: selectedReciter, from: from, to: end, verseRuns: verseRuns, listRuns: listRuns)
-                playingStarted()
-            } catch {
-                playbackFailed(error)
-            }
-        }
+            }.asCancellableTask()
+        )
     }
 
     private func togglePlayPause() {
@@ -327,32 +342,24 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
 
     // MARK: - Downloading
 
-    private func observeProgress(_ downloads: [DownloadBatchResponse]) async {
-        for response in downloads {
-            cancellableTasks.insert(
-                Task { [weak self] in
-                    for await _ in await response.progress {
-                        await self?.updateDownloadProgress()
-                    }
-                }.asCancellableTask()
-            )
-        }
+    private func observe(_ downloads: [DownloadBatchResponse]) async {
         await updateDownloadProgress()
-    }
-
-    private func observeCompletion(_ downloads: [DownloadBatchResponse]) async {
-        cancellableTasks.insert(
-            Task { [weak self] in
-                await withTaskGroup(of: Void.self) { group in
-                    for download in downloads {
-                        group.addTask {
-                            try? await download.completion()
+        await withTaskGroup(of: Void.self) { group in
+            for download in downloads {
+                group.addTask { [weak self] in
+                    do {
+                        for try await _ in download.progress {
+                            if let self {
+                                await updateDownloadProgress()
+                            }
                         }
+                    } catch {
+                        // Ignore errors
                     }
                 }
-                self?.playbackEnded()
-            }.asCancellableTask()
-        )
+            }
+        }
+        playbackEnded()
     }
 
     // MARK: - Audio Interactor Delegate
@@ -396,7 +403,7 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
 
     private func updateDownloadProgress() async {
         let downloads = await downloader.runningAudioDownloads()
-        let progress = await downloads.asyncMap { await $0.currentProgress.progress }.reduce(0, +)
+        let progress = downloads.map(\.currentProgress.progress).reduce(0, +)
         playingState = .downloading(progress: Float(progress) / Float(downloads.count))
     }
 

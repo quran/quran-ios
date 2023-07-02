@@ -34,8 +34,8 @@ class TranslationsDownloaderTests: XCTestCase {
         let translation = TranslationTestData.khanTranslation
 
         let response = try await downloader.download(translation)
-        await AsyncAssertEqual(await response.urls, [translation.fileURL])
-        await AsyncAssertEqual(await response.destinations, [translation.localURL])
+        XCTAssertEqual(response.urls, [translation.fileURL])
+        XCTAssertEqual(response.destinations, [translation.localURL])
     }
 
     func test_runningDownloads_empty() async throws {
@@ -63,15 +63,11 @@ class TranslationsDownloaderTests: XCTestCase {
 }
 
 private extension DownloadBatchResponse {
-    var urls: [URL?] {
-        get async {
-            await responses.asyncMap { await $0.download.request.request.url }
-        }
+    nonisolated var urls: [URL?] {
+        requests.map(\.request.url)
     }
 
-    var destinations: [URL] {
-        get async {
-            await responses.asyncMap { await $0.download.request.destinationURL }
-        }
+    nonisolated var destinations: [URL] {
+        requests.map(\.destinationURL)
     }
 }

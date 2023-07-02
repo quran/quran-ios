@@ -85,10 +85,7 @@ extension DownloadRequest {
 }
 
 extension DownloadBatchResponse {
-    var isTranslation: Bool {
-        get async {
-            let requests = await requests
-            return requests.count == 1 && requests.contains(where: \.isTranslation)
-        }
+    nonisolated var isTranslation: Bool {
+        requests.count == 1 && requests.contains(where: \.isTranslation)
     }
 }

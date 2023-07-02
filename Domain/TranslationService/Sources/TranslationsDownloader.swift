@@ -27,7 +27,7 @@ public struct TranslationsDownloader {
 
     public func runningTranslationDownloads() async -> [DownloadBatchResponse] {
         let allDownloads = await downloader.getOnGoingDownloads()
-        let downloads = await allDownloads.asyncFilter { await $0.isTranslation }
+        let downloads = allDownloads.filter(\.isTranslation)
         return downloads
     }
 
@@ -37,9 +37,9 @@ public struct TranslationsDownloader {
 }
 
 extension Set<DownloadBatchResponse> {
-    public func firstMatches(_ translation: Translation) async -> DownloadBatchResponse? {
+    public nonisolated func firstMatches(_ translation: Translation) -> DownloadBatchResponse? {
         for batch in self {
-            if let request = await batch.requests.first {
+            if let request = batch.requests.first {
                 if translation.matches(request) {
                     return batch
                 }
@@ -50,8 +50,8 @@ extension Set<DownloadBatchResponse> {
 }
 
 extension [Translation] {
-    public func firstMatches(_ batch: DownloadBatchResponse) async -> Translation? {
-        guard let request = await batch.requests.first else {
+    public func firstMatches(_ batch: DownloadBatchResponse) -> Translation? {
+        guard let request = batch.requests.first else {
             return nil
         }
 

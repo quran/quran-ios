@@ -46,11 +46,12 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64
     ) async {
-        guard let response = await dataController.downloadResponse(for: downloadTask) else {
+        guard let response = await dataController.downloadRequestResponse(for: downloadTask) else {
             logger.warning("[networkSession:didWriteData] Cannot find onGoingDownloads for task \(describe(downloadTask))")
             return
         }
-        await response.updateProgress(DownloadProgress(total: Double(totalBytesExpectedToWrite), completed: Double(totalBytesWritten)))
+        let progress = DownloadProgress(total: Double(totalBytesExpectedToWrite), completed: Double(totalBytesWritten))
+        await response.response.updateProgress(of: response.request, progress)
     }
 
     func networkSession(_ session: NetworkSession, downloadTask: NetworkSessionDownloadTask, didFinishDownloadingTo location: URL) async {
@@ -60,14 +61,14 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        guard let response = await dataController.downloadResponse(for: downloadTask) else {
+        guard let response = await dataController.downloadRequestResponse(for: downloadTask) else {
             logger.warning("Missed saving task \(describe(downloadTask))")
             return
         }
         let fileManager = FileManager.default
 
-        let resumeURL = await response.download.request.resumeURL
-        let destinationURL = await response.download.request.destinationURL
+        let resumeURL = response.request.resumeURL
+        let destinationURL = response.request.destinationURL
 
         // remove the resume data
         try? fileManager.removeItem(at: resumeURL)
@@ -93,7 +94,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async {
-        guard let response = await dataController.downloadResponse(for: task) else {
+        guard let response = await dataController.downloadRequestResponse(for: task) else {
             if let sessionError, !sessionError.isCancelled {
                 logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
             }
@@ -109,7 +110,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        let finalError = wrap(error: error, resumeURL: await response.download.request.resumeURL)
+        let finalError = wrap(error: error, resumeURL: response.request.resumeURL)
         await dataController.downloadFailed(response, with: finalError)
     }
 

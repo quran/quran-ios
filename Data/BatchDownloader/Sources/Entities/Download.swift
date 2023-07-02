@@ -19,6 +19,11 @@
 //
 
 public struct Download: Sendable {
+    public enum Status: Int, Sendable {
+        case downloading = 0 // Downloading or not started
+        case completed = 1
+    }
+
     // MARK: Lifecycle
 
     public init(taskId: Int? = nil, request: DownloadRequest, status: Status = .downloading, batchId: Int64) {
@@ -29,13 +34,6 @@ public struct Download: Sendable {
     }
 
     // MARK: Public
-
-    public enum Status: Int, Sendable {
-        case downloading = 0
-        case completed = 1
-        // case failed      = 2 // we shouldn't keep a failed download
-        case pending = 3
-    }
 
     public let batchId: Int64
     public let request: DownloadRequest

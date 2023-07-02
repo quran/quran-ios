@@ -34,6 +34,16 @@ public final class CancellableTask: Hashable {
     private let cancel: () -> Void
 }
 
+extension Set<CancellableTask> {
+    public mutating func task(_ operation: @escaping () async -> Void) {
+        insert(
+            Task {
+                await operation()
+            }.asCancellableTask()
+        )
+    }
+}
+
 extension Task {
     public func asCancellableTask() -> CancellableTask {
         CancellableTask(task: self)

@@ -230,19 +230,17 @@ final class TranslationsListInteractor {
         runningDownloads.formUnion(downloads)
 
         for download in downloads {
-            cancellableTasks.insert(
-                Task { [weak self] in
-                    do {
-                        for try await _ in download.progress {
-                            await self?.progressUpdated(of: download)
-                        }
-                        await self?.syncLocally()
-                    } catch {
-                        self?.showError(error)
+            cancellableTasks.task { [weak self] in
+                do {
+                    for try await _ in download.progress {
+                        await self?.progressUpdated(of: download)
                     }
-                    self?.runningDownloads.remove(download)
-                }.asCancellableTask()
-            )
+                    await self?.syncLocally()
+                } catch {
+                    self?.showError(error)
+                }
+                self?.runningDownloads.remove(download)
+            }
         }
     }
 

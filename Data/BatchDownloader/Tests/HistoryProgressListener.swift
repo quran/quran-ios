@@ -12,11 +12,11 @@ import Utilities
 actor HistoryProgressListener {
     // MARK: Lifecycle
 
-    init(_ subject: AsyncPublisher<DownloadProgress>) async {
+    init(_ subject: AsyncThrowingPublisher<DownloadProgress>) async {
         let taskStarted = AsyncChannel<Void>()
         cancellable = Task {
             await taskStarted.send(())
-            for await progress in subject {
+            for try await progress in subject {
                 if progress.progress != values.last {
                     values.append(progress.progress)
                 }

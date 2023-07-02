@@ -24,7 +24,7 @@ struct AudioDownloadsView: View {
         AudioDownloadsViewUI(
             editMode: $viewModel.editMode,
             items: viewModel.items.sorted(),
-            downloadAction: { await viewModel.startDownloading($0.reciter) },
+            downloadAction: { viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
             deleteAction: { items in
                 for item in items {

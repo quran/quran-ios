@@ -46,7 +46,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
         let response = try await downloader.download(from: start, to: end, reciter: reciter)
         let suraPaths = start.sura.array(to: end.sura).map { suraRemoteURL($0, reciter: reciter) }
-        try await AsyncAssertEqual(Set(await response.urls), Set([try databaseRemoteURL(reciter)] + suraPaths))
+        XCTAssertEqual(Set(response.urls), Set([try databaseRemoteURL(reciter)] + suraPaths))
     }
 
     func testDownloadGaplessReciter_allSuras_noZip() async throws {
@@ -58,7 +58,7 @@ class QuranAudioDownloaderTests: XCTestCase {
         let response = try await downloader.download(from: start, to: end, reciter: reciter)
 
         let suraPaths = start.sura.array(to: end.sura).map { suraRemoteURL($0, reciter: reciter) }
-        await AsyncAssertEqual(Set(await response.urls), Set(suraPaths))
+        XCTAssertEqual(Set(response.urls), Set(suraPaths))
     }
 
     func test_download_gappedReciter_firstSura() async throws {
@@ -69,7 +69,7 @@ class QuranAudioDownloaderTests: XCTestCase {
         let response = try await downloader.download(from: start, to: end, reciter: reciter)
 
         let ayahPaths = start.array(to: end).map { ayahRemoteURL($0, reciter: reciter) }
-        await AsyncAssertEqual(Set(await response.urls), Set(ayahPaths))
+        XCTAssertEqual(Set(response.urls), Set(ayahPaths))
     }
 
     func test_download_gappedReciter_allVerses() async throws {
@@ -80,7 +80,7 @@ class QuranAudioDownloaderTests: XCTestCase {
         let response = try await downloader.download(from: start, to: end, reciter: reciter)
 
         let ayahPaths = start.array(to: end).map { ayahRemoteURL($0, reciter: reciter) }
-        await AsyncAssertEqual(Set(await response.urls), Set(ayahPaths))
+        XCTAssertEqual(Set(response.urls), Set(ayahPaths))
     }
 
     func test_download_gappedReciter_fewMiddleVerses() async throws {
@@ -92,7 +92,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
         let ayahPaths = start.array(to: end).map { ayahRemoteURL($0, reciter: reciter) }
         let firstVersePath = ayahRemoteURL(quran.firstVerse, reciter: reciter)
-        await AsyncAssertEqual(Set(await response.urls), Set(ayahPaths + [firstVersePath]))
+        XCTAssertEqual(Set(response.urls), Set(ayahPaths + [firstVersePath]))
     }
 
     // MARK: - downloaded
@@ -156,10 +156,10 @@ class QuranAudioDownloaderTests: XCTestCase {
         let downloads = Set(await downloader.runningAudioDownloads())
         let reciters = [gappedReciter, gaplessReciter]
 
-        await AsyncAssertEqual(await downloads.firstMatches(gappedReciter), gappedResponse)
-        await AsyncAssertEqual(await downloads.firstMatches(gaplessReciter), gaplessResponse)
-        await AsyncAssertEqual(await reciters.firstMatches(gappedResponse), gappedReciter)
-        await AsyncAssertEqual(await reciters.firstMatches(gaplessResponse), gaplessReciter)
+        XCTAssertEqual(downloads.firstMatches(gappedReciter), gappedResponse)
+        XCTAssertEqual(downloads.firstMatches(gaplessReciter), gaplessResponse)
+        XCTAssertEqual(reciters.firstMatches(gappedResponse), gappedReciter)
+        XCTAssertEqual(reciters.firstMatches(gaplessResponse), gaplessReciter)
     }
 
     // MARK: - cancelAllAudioDownloads
@@ -226,9 +226,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 }
 
 private extension DownloadBatchResponse {
-    var urls: [URL?] {
-        get async {
-            await responses.asyncMap { await $0.download.request.request.url }
-        }
+    nonisolated var urls: [URL?] {
+        requests.map(\.request.url)
     }
 }

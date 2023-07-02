@@ -59,7 +59,7 @@ public struct QuranAudioDownloader: Sendable {
 
     public func runningAudioDownloads() async -> [DownloadBatchResponse] {
         let batches = await downloader.getOnGoingDownloads()
-        let responses = await batches.asyncFilter { await $0.isAudio }
+        let responses = batches.filter(\.isAudio)
         return responses
     }
 
@@ -81,9 +81,9 @@ public struct QuranAudioDownloader: Sendable {
 }
 
 extension Set<DownloadBatchResponse> {
-    public func firstMatches(_ reciter: Reciter) async -> DownloadBatchResponse? {
+    public func firstMatches(_ reciter: Reciter) -> DownloadBatchResponse? {
         for batch in self {
-            if let download = await batch.requests.first {
+            if let download = batch.requests.first {
                 if reciter.matches(download) {
                     return batch
                 }
@@ -94,8 +94,8 @@ extension Set<DownloadBatchResponse> {
 }
 
 extension [Reciter] {
-    public func firstMatches(_ batch: DownloadBatchResponse) async -> Reciter? {
-        if let download = await batch.requests.first {
+    public func firstMatches(_ batch: DownloadBatchResponse) -> Reciter? {
+        if let download = batch.requests.first {
             return first { $0.matches(download) }
         }
         return nil

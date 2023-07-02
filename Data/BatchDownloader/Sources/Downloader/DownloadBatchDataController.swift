@@ -28,6 +28,11 @@ func describe(_ task: NetworkSessionTask) -> String {
     "\(type(of: task))(\(task.taskIdentifier): " + ((task.originalRequest?.url?.absoluteString ?? task.currentRequest?.url?.absoluteString) ?? "") + ")"
 }
 
+struct SingleTaskResponse {
+    let request: DownloadRequest
+    let response: DownloadBatchResponse
+}
+
 actor DownloadBatchDataController {
     // MARK: Lifecycle
 
@@ -46,16 +51,13 @@ actor DownloadBatchDataController {
         Array(batches)
     }
 
-    func downloadResponse(for task: NetworkSessionTask) async -> DownloadResponse? {
-        if let response = await searchForResponse(of: task) {
-            if await response.task == nil {
-                logger.info("Associating task \(task.taskIdentifier) with DownloadResponse")
-                await response.setDownloading(task: task)
+    func downloadRequestResponse(for task: NetworkSessionTask) async -> SingleTaskResponse? {
+        for batch in batches {
+            if let request = await batch.downloadRequest(for: task) {
+                return SingleTaskResponse(request: request, response: batch)
             }
-            return response
-        } else {
-            return nil
         }
+        return nil
     }
 
     func download(_ batchRequest: DownloadBatchRequest) async throws -> DownloadBatchResponse {
@@ -81,19 +83,8 @@ actor DownloadBatchDataController {
     }
 
     func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async {
-        let tasksById = Dictionary(uniqueKeysWithValues: tasks.map { ($0.taskIdentifier, $0) })
         for batch in batches {
-            for response in batch.responses {
-                if let savedTaskId = await response.download.taskId {
-                    if let task = tasksById[savedTaskId] {
-                        logger.info("Associating download with a task: \(describe(task))")
-                        await response.setDownloading(task: task)
-                    } else {
-                        await response.setPending()
-                        logger.info("Couldn't find task with id \(savedTaskId)")
-                    }
-                }
-            }
+            await batch.associateTasks(tasks)
         }
 
         loadedInitialRunningTasks = true
@@ -102,16 +93,16 @@ actor DownloadBatchDataController {
         await startPendingTasksIfNeeded()
     }
 
-    func downloadCompleted(_ response: DownloadResponse) async {
-        await response.fulfill()
+    func downloadCompleted(_ response: SingleTaskResponse) async {
+        await response.response.complete(response.request, result: .success(()))
         await updateDownloadPersistence(response)
 
         // start pending tasks if needed
         await startPendingTasksIfNeeded()
     }
 
-    func downloadFailed(_ response: DownloadResponse, with error: Error) async {
-        await response.reject(error)
+    func downloadFailed(_ response: SingleTaskResponse, with error: Error) async {
+        await response.response.complete(response.request, result: .failure(error))
 
         // start pending tasks if needed
         await startPendingTasksIfNeeded()
@@ -123,50 +114,31 @@ actor DownloadBatchDataController {
     private let persistence: DownloadsPersistence
     private weak var session: NetworkSession?
 
-    private var runningDownloads: [Int: DownloadResponse] = [:]
     private var batches: Set<DownloadBatchResponse> = []
 
     private var loadedInitialRunningTasks = false
 
-    private var runningTasks: [DownloadResponse] {
+    private var runningTasks: Int {
         get async {
-            await batches.flatMap(\.responses).asyncFilter { await $0.download.taskId != nil }
+            var count = 0
+            for batch in batches {
+                count += await batch.runningTasks
+            }
+            return count
         }
     }
 
     private static func completeBatch(_ response: DownloadBatchResponse) async {
         do {
-            try await response.completion()
+            // Wait until sequence completes
+            for try await _ in response.progress { }
         } catch {
             logger.error("Batch failed to download with error: \(error)")
         }
     }
 
-    private func searchForResponse(of task: NetworkSessionTask) async -> DownloadResponse? {
-        for batch in batches {
-            for response in batch.responses {
-                if await response.download.taskId == task.taskIdentifier {
-                    return response
-                }
-            }
-        }
-        return nil
-    }
-
     private func createResponse(forBatch batch: DownloadBatch) async -> DownloadBatchResponse {
-        var responses: [DownloadResponse] = []
-        for download in batch.downloads {
-            let response = DownloadResponse(download: download)
-
-            // if it was saved as completed, then fulfill it
-            if download.status == .completed {
-                await response.fulfill()
-            }
-            responses.append(response)
-        }
-
-        // create batch response
-        let response = await DownloadBatchResponse(batchId: batch.id, responses: responses)
+        let response = await DownloadBatchResponse(batch: batch)
         batches.insert(response)
 
         Task { [weak self] in
@@ -200,7 +172,7 @@ actor DownloadBatchDataController {
         }
         // and there are empty slots to use for downloading
         let runningTasks = await runningTasks
-        guard runningTasks.count < maxSimultaneousDownloads else {
+        guard runningTasks < maxSimultaneousDownloads else {
             return
         }
         // and there are things to download
@@ -210,7 +182,7 @@ actor DownloadBatchDataController {
 
         await startDownloadTasks(
             session: session,
-            maxNumberOfDownloads: maxSimultaneousDownloads - runningTasks.count
+            maxNumberOfDownloads: maxSimultaneousDownloads - runningTasks
         )
     }
 
@@ -218,17 +190,16 @@ actor DownloadBatchDataController {
         // Sort the batches by id.
         let batches = batches.sorted { $0.batchId < $1.batchId }
 
-        var downloadTasks: [(task: NetworkSessionDownloadTask, response: DownloadResponse)] = []
+        var downloadTasks: [(task: NetworkSessionDownloadTask, response: SingleTaskResponse)] = []
         for batch in batches {
-            for response in batch.responses {
-                if downloadTasks.count >= maxNumberOfDownloads { // Max download channels?
+            while downloadTasks.count < maxNumberOfDownloads { // Max download channels?
+                guard let (request, task) = await batch.startDownloadIfNeeded(session: session) else {
                     break
                 }
-                if let task = await response.downloadIfPending(session: session) {
-                    await updateDownloadPersistence(response)
-                    task.resume()
-                    downloadTasks.append((task, response))
-                }
+
+                let response = SingleTaskResponse(request: request, response: batch)
+                await updateDownloadPersistence(response)
+                downloadTasks.append((task, response))
             }
         }
 
@@ -238,20 +209,15 @@ actor DownloadBatchDataController {
 
         logger.info("Enqueuing \(downloadTasks.count) to download on empty channels.")
 
-        // Update the newly downloading tasks.
-        await run("UpdateDownloads") {
-            try await $0.update(downloads: downloadTasks.asyncMap { await $0.response.download })
-        }
-
         // start the tasks
         for download in downloadTasks {
             download.task.resume()
         }
     }
 
-    private func updateDownloadPersistence(_ response: DownloadResponse) async {
+    private func updateDownloadPersistence(_ response: SingleTaskResponse) async {
         await run("UpdateDownload") {
-            try await $0.update(downloads: [await response.download])
+            try await $0.update(downloads: [await response.response.download(of: response.request)])
         }
     }
 

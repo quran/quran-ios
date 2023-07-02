@@ -109,7 +109,7 @@ final class TranslationsListInteractor {
     func cancelDownloading(_ translationId: TranslationInfo.ID) async {
         logger.info("Translations: cancel downloading \(translationId)")
         if let translation = translations.first(where: { $0.id == translationId }) {
-            let download = await runningDownload(of: translation)
+            let download = runningDownload(of: translation)
             await download?.cancel()
         }
     }
@@ -175,9 +175,9 @@ final class TranslationsListInteractor {
 
     // MARK: - Updates
 
-    private func downloadState(_ translation: Translation, response: DownloadBatchResponse?) async -> DownloadState {
-        if let response = await runningDownload(of: translation) {
-            let progress = await Float(response.currentProgress.progress)
+    private func downloadState(_ translation: Translation, response: DownloadBatchResponse?) -> DownloadState {
+        if let response = runningDownload(of: translation) {
+            let progress = Float(response.currentProgress.progress)
             if translation.isDownloaded {
                 return progress < 0.001 ? .pendingUpgrading : .downloadingUpgrade(progress: progress)
             } else {
@@ -192,9 +192,9 @@ final class TranslationsListInteractor {
         }
     }
 
-    private func translationUI(_ translation: Translation) async -> TranslationItem {
-        let response = await runningDownload(of: translation)
-        return await TranslationItem(
+    private func translationUI(_ translation: Translation) -> TranslationItem {
+        let response = runningDownload(of: translation)
+        return TranslationItem(
             info: TranslationInfo(
                 id: translation.id,
                 displayName: translation.displayName,
@@ -232,15 +232,10 @@ final class TranslationsListInteractor {
         for download in downloads {
             cancellableTasks.insert(
                 Task { [weak self] in
-                    for await _ in await download.progress {
-                        await self?.progressUpdated(of: download)
-                    }
-                }.asCancellableTask()
-            )
-            cancellableTasks.insert(
-                Task { [weak self] in
                     do {
-                        try await download.completion()
+                        for try await _ in download.progress {
+                            await self?.progressUpdated(of: download)
+                        }
                         await self?.syncLocally()
                     } catch {
                         self?.showError(error)
@@ -251,12 +246,12 @@ final class TranslationsListInteractor {
         }
     }
 
-    private func runningDownload(of translation: Translation) async -> DownloadBatchResponse? {
-        await runningDownloads.firstMatches(translation)
+    private func runningDownload(of translation: Translation) -> DownloadBatchResponse? {
+        runningDownloads.firstMatches(translation)
     }
 
     private func translation(of batch: DownloadBatchResponse) async -> Translation? {
-        await translations.firstMatches(batch)
+        translations.firstMatches(batch)
     }
 }
 

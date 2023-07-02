@@ -70,24 +70,27 @@ final class AudioDownloadsViewModel: ObservableObject {
         }
     }
 
-    func startDownloading(_ reciter: Reciter) async {
+    func startDownloading(_ reciter: Reciter) {
         logger.info("Downloads: start downloading reciter \(reciter.id)")
         analytics.downloadingQuran(reciter: reciter)
-        do {
-            progress[reciter] = 0
-            // download the audio
-            let response = try await ayahsDownloader.download(from: quran.firstVerse, to: quran.lastVerse, reciter: reciter)
-            await observe([response])
-        } catch {
-            progress.removeValue(forKey: reciter)
-            crasher.recordError(error, reason: "Failed to start the reciter download")
-            showError(error)
+        progress[reciter] = 0
+
+        Task {
+            do {
+                // download the audio
+                let response = try await ayahsDownloader.download(from: quran.firstVerse, to: quran.lastVerse, reciter: reciter)
+                await observe([response])
+            } catch {
+                progress.removeValue(forKey: reciter)
+                crasher.recordError(error, reason: "Failed to start the reciter download")
+                showError(error)
+            }
         }
     }
 
     func cancelDownloading(_ reciter: Reciter) async {
         logger.info("Downloads: cancel downloading reciter \(reciter.id)")
-        let download = await runningDownload(of: reciter)
+        let download = runningDownloads.firstMatches(reciter)
         await download?.cancel()
     }
 
@@ -130,23 +133,22 @@ final class AudioDownloadsViewModel: ObservableObject {
 
     // MARK: - Progress
 
-    private func downloadingProgress(_ response: DownloadBatchResponse?) async -> Double? {
-        await response?.currentProgress.progress
+    private func downloadingProgress(_ response: DownloadBatchResponse?) -> Double? {
+        response?.currentProgress.progress
     }
 
-    private func progressUpdated(of batch: DownloadBatchResponse) async {
+    private func progressUpdated(of batch: DownloadBatchResponse, progress newProgress: Double) async {
         // Ignore if it's not running (e.g. cancelled).
         guard runningDownloads.contains(batch) else {
             return
         }
 
-        guard let reciter = await reciter(of: batch) else {
+        guard let reciter = reciters.firstMatches(batch) else {
             logger.debug("Cannot find reciter for download \(batch)")
             return
         }
 
         let oldProgress = progress[reciter]
-        let newProgress = await downloadingProgress(batch)
         progress[reciter] = newProgress
 
         // Reload size info if enough progress passed.
@@ -180,39 +182,24 @@ final class AudioDownloadsViewModel: ObservableObject {
     private func observe(_ downloads: Set<DownloadBatchResponse>) async {
         runningDownloads.formUnion(downloads)
 
-        // Update progress initially
         for download in downloads {
-            await progressUpdated(of: download)
-        }
-
-        for download in downloads {
-            cancellableTask { [weak self] in
-                for await _ in await download.progress {
-                    await self?.progressUpdated(of: download)
-                }
-            }
             cancellableTask { [weak self] in
                 do {
-                    try await download.completion()
+                    for try await progress in download.progress {
+                        await self?.progressUpdated(of: download, progress: progress.progress)
+                    }
                 } catch {
                     self?.showError(error)
                 }
+
                 guard let self else { return }
                 runningDownloads.remove(download)
-                if let reciter = await reciter(of: download) {
+                if let reciter = reciters.firstMatches(download) {
                     progress.removeValue(forKey: reciter)
                     await reloadDownloadedSize(of: reciter)
                 }
             }
         }
-    }
-
-    private func runningDownload(of reciter: Reciter) async -> DownloadBatchResponse? {
-        await runningDownloads.firstMatches(reciter)
-    }
-
-    private func reciter(of batch: DownloadBatchResponse) async -> Reciter? {
-        await reciters.firstMatches(batch)
     }
 
     private func cancellableTask(_ operation: @escaping @MainActor @Sendable () async -> Void) {

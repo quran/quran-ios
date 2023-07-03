@@ -278,34 +278,31 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
 
         recentRecitersService.updateRecentRecitersList(selectedReciter)
 
-        cancellableTasks.insert(
-            Task { [weak self] in
-
-                do {
-                    let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
-                    if !downloaded {
-                        self?.startDownloading()
-                        let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
-                        guard let download else {
-                            return
-                        }
-
-                        await self?.observe([download])
-
-                        for try await _ in download.progress { }
+        cancellableTasks.task { [weak self] in
+            do {
+                let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
+                if !downloaded {
+                    self?.startDownloading()
+                    let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
+                    guard let download else {
+                        return
                     }
 
-                    try await self?.audioPlayer.play(
-                        reciter: selectedReciter,
-                        from: from, to: end,
-                        verseRuns: verseRuns, listRuns: listRuns
-                    )
-                    self?.playingStarted()
-                } catch {
-                    self?.playbackFailed(error)
+                    await self?.observe([download])
+
+                    for try await _ in download.progress { }
                 }
-            }.asCancellableTask()
-        )
+
+                try await self?.audioPlayer.play(
+                    reciter: selectedReciter,
+                    from: from, to: end,
+                    verseRuns: verseRuns, listRuns: listRuns
+                )
+                self?.playingStarted()
+            } catch {
+                self?.playbackFailed(error)
+            }
+        }
     }
 
     private func togglePlayPause() {

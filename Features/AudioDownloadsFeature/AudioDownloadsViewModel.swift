@@ -39,6 +39,17 @@ final class AudioDownloadsViewModel: ObservableObject {
         self.recitersRetriever = recitersRetriever
         self.showError = showError
 
+        let downloadsObserver = DownloadsObserver(
+            extractKey: { [weak self] in self?.reciters.firstMatches($0) },
+            showError: showError
+        )
+        self.downloadsObserver = downloadsObserver
+
+        downloadsObserver.$progress
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.progress = $0 }
+            .store(in: &cancellables)
+
         Task {
             await start()
         }
@@ -79,7 +90,7 @@ final class AudioDownloadsViewModel: ObservableObject {
             do {
                 // download the audio
                 let response = try await ayahsDownloader.download(from: quran.firstVerse, to: quran.lastVerse, reciter: reciter)
-                await observe([response])
+                await downloadsObserver?.observe([response])
             } catch {
                 progress.removeValue(forKey: reciter)
                 crasher.recordError(error, reason: "Failed to start the reciter download")
@@ -90,7 +101,7 @@ final class AudioDownloadsViewModel: ObservableObject {
 
     func cancelDownloading(_ reciter: Reciter) async {
         logger.info("Downloads: cancel downloading reciter \(reciter.id)")
-        let download = runningDownloads.firstMatches(reciter)
+        let download = downloadsObserver?.runningDownloads.firstMatches(reciter)
         await download?.cancel()
     }
 
@@ -104,19 +115,43 @@ final class AudioDownloadsViewModel: ObservableObject {
     private let sizeInfoRetriever: ReciterSizeInfoRetriever
     private let recitersRetriever: ReciterDataRetriever
     private let showError: @MainActor (Error) -> Void
-
+    private var downloadsObserver: DownloadsObserver<Reciter>?
     private var cancellableTasks = Set<CancellableTask>()
-    private var runningDownloads: Set<DownloadBatchResponse> = []
+    private var cancellables = Set<AnyCancellable>()
 
     @Published private var reciters: [Reciter] = []
     @Published private var sizes: [Reciter: AudioDownloadedSize] = [:]
-    @Published private var progress: [Reciter: Double] = [:]
+
+    @Published private var progress: [Reciter: Double] = [:] {
+        didSet {
+            Task {
+                let newKeys = Set(progress.keys)
+                let oldKeys = Set(oldValue.keys)
+                let diff = oldKeys.subtracting(newKeys).union(newKeys.subtracting(oldKeys))
+                let intersection = oldKeys.intersection(newKeys)
+
+                for reciter in diff {
+                    await reloadDownloadedSize(of: reciter)
+                }
+
+                for reciter in intersection {
+                    let oldProgress = oldValue[reciter]
+                    let newProgress = progress[reciter]
+
+                    // Reload size info if enough progress passed.
+                    if enoughProgressPassedForReloadSizeInfo(oldProgress: oldProgress, newProgress: newProgress) {
+                        await reloadDownloadedSize(of: reciter)
+                    }
+                }
+            }
+        }
+    }
 
     private func start() async {
         let responses = await ayahsDownloader.runningAudioDownloads()
-        await observe(Set(responses))
+        await downloadsObserver?.observe(Set(responses))
 
-        cancellableTask {
+        cancellableTasks.task {
             await self.observeReadingChanges()
         }
     }
@@ -129,32 +164,6 @@ final class AudioDownloadsViewModel: ObservableObject {
         // get new data
         reciters = await recitersRetriever.getReciters()
         sizes = await sizeInfoRetriever.getDownloadedSizes(for: reciters, quran: quran)
-    }
-
-    // MARK: - Progress
-
-    private func downloadingProgress(_ response: DownloadBatchResponse?) -> Double? {
-        response?.currentProgress.progress
-    }
-
-    private func progressUpdated(of batch: DownloadBatchResponse, progress newProgress: Double) async {
-        // Ignore if it's not running (e.g. cancelled).
-        guard runningDownloads.contains(batch) else {
-            return
-        }
-
-        guard let reciter = reciters.firstMatches(batch) else {
-            logger.debug("Cannot find reciter for download \(batch)")
-            return
-        }
-
-        let oldProgress = progress[reciter]
-        progress[reciter] = newProgress
-
-        // Reload size info if enough progress passed.
-        if enoughProgressPassedForReloadSizeInfo(oldProgress: oldProgress, newProgress: newProgress) {
-            await reloadDownloadedSize(of: reciter)
-        }
     }
 
     private func enoughProgressPassedForReloadSizeInfo(oldProgress: Double?, newProgress: Double?) -> Bool {
@@ -177,37 +186,6 @@ final class AudioDownloadsViewModel: ObservableObject {
         for await reading in readingPreferences.$reading.prepend(readingPreferences.reading).values() {
             await update(with: reading.quran)
         }
-    }
-
-    private func observe(_ downloads: Set<DownloadBatchResponse>) async {
-        runningDownloads.formUnion(downloads)
-
-        for download in downloads {
-            cancellableTask { [weak self] in
-                do {
-                    for try await progress in download.progress {
-                        await self?.progressUpdated(of: download, progress: progress.progress)
-                    }
-                } catch {
-                    self?.showError(error)
-                }
-
-                guard let self else { return }
-                runningDownloads.remove(download)
-                if let reciter = reciters.firstMatches(download) {
-                    progress.removeValue(forKey: reciter)
-                    await reloadDownloadedSize(of: reciter)
-                }
-            }
-        }
-    }
-
-    private func cancellableTask(_ operation: @escaping @MainActor @Sendable () async -> Void) {
-        cancellableTasks.insert(
-            Task {
-                await operation()
-            }.asCancellableTask()
-        )
     }
 }
 

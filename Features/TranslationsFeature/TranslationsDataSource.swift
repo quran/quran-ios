@@ -21,14 +21,20 @@
 import Foundation
 import Localization
 import NoorUI
+import QuranText
 import UIKit
 import UIx
 
 @MainActor
 class TranslationsDataSource {
     struct Actions {
-        let cancelDownloading: (TranslationInfo.ID) -> Void
-        let startDownloading: (TranslationInfo.ID) -> Void
+        let cancelDownloading: (Translation.ID) -> Void
+        let startDownloading: (Translation.ID) -> Void
+    }
+
+    public enum Section {
+        case downloaded
+        case available
     }
 
     // MARK: Lifecycle
@@ -43,17 +49,10 @@ class TranslationsDataSource {
         }
     }
 
-    // MARK: Public
-
-    public enum Section {
-        case downloaded
-        case available
-    }
-
     // MARK: Internal
 
-    class TranslationsDiffableDataSource: ActionableTableViewDiffableDataSource<Section, TranslationInfo.ID> {
-        override func tableView(_ tableView: UITableView, titleForHeaderInSection section: TranslationInfo.ID) -> String? {
+    class TranslationsDiffableDataSource: ActionableTableViewDiffableDataSource<Section, Translation.ID> {
+        override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Translation.ID) -> String? {
             let headers = [
                 lAndroid("downloaded_translations"),
                 lAndroid("available_translations"),
@@ -64,7 +63,7 @@ class TranslationsDataSource {
 
     var ds: TranslationsDiffableDataSource! // swiftlint:disable:this implicitly_unwrapped_optional
 
-    var translations: [TranslationInfo.ID: TranslationItem] = [:] {
+    var translations: [Translation.ID: TranslationItem] = [:] {
         didSet {
             let ids = translations.values.map(\.info.id)
             updateSnapshot(ids, oldTranslations: oldValue, newTranslations: translations)
@@ -77,7 +76,7 @@ class TranslationsDataSource {
 
     private weak var tableView: UITableView?
 
-    private func configure(_ cell: UITableViewCell?, id: TranslationInfo.ID) {
+    private func configure(_ cell: UITableViewCell?, id: Translation.ID) {
         guard let cell = cell as? TranslationTableViewCell else {
             return
         }
@@ -101,7 +100,7 @@ class TranslationsDataSource {
         cell.firstLabel.text = translation.displayName
         cell.languageLabel.text = Locale(identifier: translation.languageCode).localizedString(forLanguageCode: translation.languageCode)
 
-        if let translatorName = translation.translator, !translatorName.isEmpty {
+        if let translatorName = translation.translatorDisplayName, !translatorName.isEmpty {
             cell.secondLabel.attributedText = attributedTranslatorNameString(translatorName, translation: translation)
         } else {
             cell.secondLabel.attributedText = NSAttributedString()
@@ -124,9 +123,9 @@ class TranslationsDataSource {
     }
 
     private func updateSnapshot(
-        _ ids: [TranslationInfo.ID],
-        oldTranslations: [TranslationInfo.ID: TranslationItem],
-        newTranslations: [TranslationInfo.ID: TranslationItem]
+        _ ids: [Translation.ID],
+        oldTranslations: [Translation.ID: TranslationItem],
+        newTranslations: [Translation.ID: TranslationItem]
     ) {
         if oldTranslations == newTranslations {
             return
@@ -136,7 +135,7 @@ class TranslationsDataSource {
         let downloadedTranslations = sortedTranslations.filter(\.isDownloaded).map(\.id)
         let availableTranslations = sortedTranslations.filter { !$0.isDownloaded }.map(\.id)
 
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TranslationInfo.ID>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Translation.ID>()
         snapshot.appendSections(.downloaded)
         snapshot.appendItems(downloadedTranslations)
 
@@ -155,7 +154,7 @@ class TranslationsDataSource {
         }
     }
 
-    private func reloadVisibleTranslations(_ translations: Set<TranslationInfo.ID>) {
+    private func reloadVisibleTranslations(_ translations: Set<Translation.ID>) {
         guard let tableView else {
             return
         }
@@ -186,8 +185,8 @@ class TranslationsDataSource {
         }
 
         if lhs.displayName == rhs.displayName {
-            if let lhsTranslator = lhs.translator {
-                if let rhsTranslator = rhs.translator {
+            if let lhsTranslator = lhs.translatorDisplayName {
+                if let rhsTranslator = rhs.translatorDisplayName {
                     return lhsTranslator.localizedStandardCompare(rhsTranslator) == .orderedAscending
                 } else {
                     return true

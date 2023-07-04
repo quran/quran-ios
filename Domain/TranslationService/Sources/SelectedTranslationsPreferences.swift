@@ -7,6 +7,7 @@
 
 import Foundation
 import Preferences
+import QuranText
 
 public class SelectedTranslationsPreferences {
     // MARK: Lifecycle
@@ -18,7 +19,7 @@ public class SelectedTranslationsPreferences {
     public static let shared = SelectedTranslationsPreferences()
 
     @Preference(selectedTranslations)
-    public var selectedTranslations: [Int]
+    public var selectedTranslations: [Translation.ID]
 
     public func remove(_ translationId: Int) {
         if let index = selectedTranslations.firstIndex(of: translationId) {
@@ -26,11 +27,11 @@ public class SelectedTranslationsPreferences {
         }
     }
 
-    public func isSelected(_ translationId: Int) -> Bool {
+    public func isSelected(_ translationId: Translation.ID) -> Bool {
         selectedTranslations.contains(translationId)
     }
 
-    public func toggleSelection(_ translationId: Int) {
+    public func toggleSelection(_ translationId: Translation.ID) {
         if let index = selectedTranslations.firstIndex(of: translationId) {
             selectedTranslations.remove(at: index)
         } else {
@@ -48,5 +49,5 @@ public class SelectedTranslationsPreferences {
 
     // MARK: Private
 
-    private static let selectedTranslations = PreferenceKey<[Int]>(key: "selectedTranslations", defaultValue: [])
+    private static let selectedTranslations = PreferenceKey<[Translation.ID]>(key: "selectedTranslations", defaultValue: [])
 }

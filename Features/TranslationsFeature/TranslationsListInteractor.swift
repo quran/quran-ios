@@ -18,7 +18,7 @@ import VLogging
 
 @MainActor
 protocol TranslationsListPresentable: AnyObject {
-    var translations: [TranslationInfo.ID: TranslationItem] { get set }
+    var translations: [Translation.ID: TranslationItem] { get set }
 
     func showErrorAlert(error: Error)
     func showActivityIndicator()
@@ -85,13 +85,13 @@ final class TranslationsListInteractor {
 
     // MARK: - Actions
 
-    func selectTranslation(_ translationId: TranslationInfo.ID) async {
+    func selectTranslation(_ translationId: Translation.ID) async {
         selectedTranslationsPreferences.toggleSelection(translationId)
         let selectionText = selectedTranslationsPreferences.isSelected(translationId) ? "selected" : "not selected"
         logger.info("Translations: translation \(translationId) \(selectionText)")
     }
 
-    func startDownloading(_ id: TranslationInfo.ID) async {
+    func startDownloading(_ id: Translation.ID) async {
         guard let translation = translations.first(where: { $0.id == id }) else {
             return
         }
@@ -106,7 +106,7 @@ final class TranslationsListInteractor {
         }
     }
 
-    func cancelDownloading(_ translationId: TranslationInfo.ID) async {
+    func cancelDownloading(_ translationId: Translation.ID) async {
         logger.info("Translations: cancel downloading \(translationId)")
         if let translation = translations.first(where: { $0.id == translationId }) {
             let download = runningDownload(of: translation)
@@ -114,7 +114,7 @@ final class TranslationsListInteractor {
         }
     }
 
-    func deleteTranslation(_ id: TranslationInfo.ID) async {
+    func deleteTranslation(_ id: Translation.ID) async {
         guard let translation = translations.first(where: { $0.id == id }) else {
             return
         }
@@ -195,14 +195,10 @@ final class TranslationsListInteractor {
     private func translationUI(_ translation: Translation) -> TranslationItem {
         let response = runningDownload(of: translation)
         return TranslationItem(
-            info: TranslationInfo(
-                id: translation.id,
-                displayName: translation.displayName,
-                languageCode: translation.languageCode,
-                translator: translation.translatorForeign ?? translation.translator
-            ),
+            info: translation,
             isDownloaded: translation.isDownloaded,
             downloadState: downloadState(translation, response: response),
+            progress: .notDownloading, // TODO: fix
             isSelected: selectedTranslationsPreferences.isSelected(translation.id)
         )
     }

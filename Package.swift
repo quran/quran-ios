@@ -464,6 +464,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "BatchDownloader",
             "LastPagePersistence",
+            "ReadingService",
             "QuranResources",
         ]),
 

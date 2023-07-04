@@ -21,6 +21,7 @@
 import BatchDownloader
 import Localization
 import NoorUI
+import QuranText
 import TranslationService
 import UIKit
 import Utilities
@@ -47,7 +48,7 @@ class TranslationsViewController: BaseTableViewController, EditControllerDelegat
 
     let editController = EditController(usesRightBarButton: true)
 
-    var translations: [TranslationInfo.ID: TranslationItem] {
+    var translations: [Translation.ID: TranslationItem] {
         get { dataSource?.translations ?? [:] }
         set {
             dataSource?.translations = newValue
@@ -164,11 +165,11 @@ class TranslationsViewController: BaseTableViewController, EditControllerDelegat
         }
     }
 
-    private func canEditRow(_ id: TranslationInfo.ID) -> Bool {
+    private func canEditRow(_ id: Translation.ID) -> Bool {
         translations[id]?.isDownloaded ?? false
     }
 
-    private func commitEditing(_ editingStyle: UITableViewCell.EditingStyle, item: TranslationInfo.ID) {
+    private func commitEditing(_ editingStyle: UITableViewCell.EditingStyle, item: Translation.ID) {
         if editingStyle == .delete {
             Task {
                 await interactor.deleteTranslation(item)

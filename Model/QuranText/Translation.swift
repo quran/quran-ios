@@ -22,9 +22,11 @@ import Foundation
 import Utilities
 
 public struct Translation: Hashable, Sendable {
+    public typealias ID = Int
+
     // MARK: Lifecycle
 
-    public init(id: Int, displayName: String, translator: String?, translatorForeign: String?, fileURL: URL, fileName: String, languageCode: String, version: Int, installedVersion: Int? = nil) {
+    public init(id: ID, displayName: String, translator: String?, translatorForeign: String?, fileURL: URL, fileName: String, languageCode: String, version: Int, installedVersion: Int? = nil) {
         self.id = id
         self.displayName = displayName
         self.translator = translator
@@ -38,7 +40,7 @@ public struct Translation: Hashable, Sendable {
 
     // MARK: Public
 
-    public let id: Int
+    public let id: ID
     public let displayName: String
     public let translator: String?
     public let translatorForeign: String?

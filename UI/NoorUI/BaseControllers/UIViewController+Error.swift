@@ -24,7 +24,7 @@ import UIKit
 
 extension UIViewController {
     public func showErrorAlert(error: Error) {
-        if error.isCancelled || error is CancellationError {
+        if error.isCancelled {
             return
         }
         if Thread.current.isMainThread {
@@ -39,21 +39,25 @@ extension UIViewController {
     private func _showErrorAlert(error: Error) {
         crasher.recordError(error, reason: "showErrorAlert")
         let message = error.getErrorDescription()
-        let controller = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let controller = UIAlertController(title: l("error.title"), message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         present(controller, animated: true)
     }
 }
 
-private extension Error {
+extension Error {
     func getErrorDescription() -> String {
         let description = (self as? LocalizedError)?.errorDescription
         return description ?? l("unknown_error_message")
     }
 }
 
-private extension Error {
+extension Error {
     var isCancelled: Bool {
+        if self is CancellationError {
+            return true
+        }
+
         do {
             throw self
         } catch URLError.cancelled {

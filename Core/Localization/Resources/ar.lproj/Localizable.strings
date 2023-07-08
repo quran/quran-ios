@@ -9,6 +9,7 @@
 
 // MARK: - Errors
 
+"error.title" = "خطأ";
 "NetworkError_ConnectionLost" = "فقد الإتصال بشبكة الإنترنت. من فضلك تحرك إلى مكان به إشارة أفضل.";
 "NetworkError_InternationalRoamingOff" = "لا يسمح باستخدام التجوال الدولي. من فضلك قم بتغيير إعدادات خدمة التجوال الدولي، أو إتصل بالإنترنت عن طريق Wi-Fi.";
 "NetworkError_NotConnectedToInternet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";

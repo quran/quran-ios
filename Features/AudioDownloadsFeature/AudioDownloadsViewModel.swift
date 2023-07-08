@@ -7,7 +7,6 @@
 
 import Analytics
 import BatchDownloader
-import Combine
 import Crashing
 import Foundation
 import QuranAudio
@@ -42,15 +41,6 @@ final class AudioDownloadsViewModel: ObservableObject {
             showError: { [weak self] error in self?.error = error }
         )
         self.downloadsObserver = downloadsObserver
-
-        downloadsObserver.$progress
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.progress = $0 }
-            .store(in: &cancellables)
-
-        Task {
-            await start()
-        }
     }
 
     // MARK: Internal
@@ -68,6 +58,13 @@ final class AudioDownloadsViewModel: ObservableObject {
         }
     }
 
+    func start() async {
+        async let downloads: () = observeRunningDownloads()
+        async let reading: () = observeReadingChanges()
+        async let progress: () = observeProgressChanges()
+        _ = await [downloads, reading, progress]
+    }
+
     func deleteReciterFiles(_ reciter: Reciter) async {
         logger.info("Downloads: deleting reciter \(reciter.id)")
         analytics.deletingQuran(reciter: reciter)
@@ -80,21 +77,19 @@ final class AudioDownloadsViewModel: ObservableObject {
         }
     }
 
-    func startDownloading(_ reciter: Reciter) {
+    func startDownloading(_ reciter: Reciter) async {
         logger.info("Downloads: start downloading reciter \(reciter.id)")
         analytics.downloadingQuran(reciter: reciter)
         progress[reciter] = 0
 
-        Task {
-            do {
-                // download the audio
-                let response = try await ayahsDownloader.download(from: quran.firstVerse, to: quran.lastVerse, reciter: reciter)
-                await downloadsObserver?.observe([response])
-            } catch {
-                progress.removeValue(forKey: reciter)
-                crasher.recordError(error, reason: "Failed to start the reciter download")
-                self.error = error
-            }
+        do {
+            // download the audio
+            let response = try await ayahsDownloader.download(from: quran.firstVerse, to: quran.lastVerse, reciter: reciter)
+            await downloadsObserver?.observe([response])
+        } catch {
+            progress.removeValue(forKey: reciter)
+            crasher.recordError(error, reason: "Failed to start the reciter download")
+            self.error = error
         }
     }
 
@@ -114,45 +109,10 @@ final class AudioDownloadsViewModel: ObservableObject {
     private let sizeInfoRetriever: ReciterSizeInfoRetriever
     private let recitersRetriever: ReciterDataRetriever
     private var downloadsObserver: DownloadsObserver<Reciter>?
-    private var cancellableTasks = Set<CancellableTask>()
-    private var cancellables = Set<AnyCancellable>()
 
     @Published private var reciters: [Reciter] = []
     @Published private var sizes: [Reciter: AudioDownloadedSize] = [:]
-
-    @Published private var progress: [Reciter: Double] = [:] {
-        didSet {
-            Task {
-                let newKeys = Set(progress.keys)
-                let oldKeys = Set(oldValue.keys)
-                let diff = oldKeys.subtracting(newKeys).union(newKeys.subtracting(oldKeys))
-                let intersection = oldKeys.intersection(newKeys)
-
-                for reciter in diff {
-                    await reloadDownloadedSize(of: reciter)
-                }
-
-                for reciter in intersection {
-                    let oldProgress = oldValue[reciter]
-                    let newProgress = progress[reciter]
-
-                    // Reload size info if enough progress passed.
-                    if enoughProgressPassedForReloadSizeInfo(oldProgress: oldProgress, newProgress: newProgress) {
-                        await reloadDownloadedSize(of: reciter)
-                    }
-                }
-            }
-        }
-    }
-
-    private func start() async {
-        let responses = await ayahsDownloader.runningAudioDownloads()
-        await downloadsObserver?.observe(Set(responses))
-
-        cancellableTasks.task {
-            await self.observeReadingChanges()
-        }
-    }
+    @Published private var progress: [Reciter: Double] = [:]
 
     private func update(with quran: Quran) async {
         self.quran = quran
@@ -180,9 +140,44 @@ final class AudioDownloadsViewModel: ObservableObject {
 
     // MARK: - Observers
 
+    private func observeRunningDownloads() async {
+        let responses = await ayahsDownloader.runningAudioDownloads()
+        await downloadsObserver?.observe(Set(responses))
+    }
+
     private func observeReadingChanges() async {
         for await reading in readingPreferences.$reading.prepend(readingPreferences.reading).values() {
             await update(with: reading.quran)
+        }
+    }
+
+    private func observeProgressChanges() async {
+        guard let downloadsObserver else {
+            return
+        }
+        for await newValue in downloadsObserver.progressPublisher.values() {
+            let oldValue = progress
+
+            let newKeys = Set(newValue.keys)
+            let oldKeys = Set(oldValue.keys)
+            let diff = oldKeys.subtracting(newKeys).union(newKeys.subtracting(oldKeys))
+            let intersection = oldKeys.intersection(newKeys)
+
+            for reciter in diff {
+                await reloadDownloadedSize(of: reciter)
+            }
+
+            for reciter in intersection {
+                let oldProgress = oldValue[reciter]
+                let newProgress = newValue[reciter]
+
+                // Reload size info if enough progress passed.
+                if enoughProgressPassedForReloadSizeInfo(oldProgress: oldProgress, newProgress: newProgress) {
+                    await reloadDownloadedSize(of: reciter)
+                }
+            }
+
+            progress = newValue
         }
     }
 }

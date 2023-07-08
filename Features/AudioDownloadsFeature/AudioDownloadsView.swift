@@ -25,7 +25,8 @@ struct AudioDownloadsView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             items: viewModel.items.sorted(),
-            downloadAction: { viewModel.startDownloading($0.reciter) },
+            start: { await viewModel.start() },
+            downloadAction: { await viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
             deleteAction: { await viewModel.deleteReciterFiles($0.reciter) }
         )
@@ -36,6 +37,7 @@ private struct AudioDownloadsViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
     let items: [AudioDownloadItem]
+    let start: @Sendable () async -> Void
     let downloadAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
     let cancelAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
     let deleteAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
@@ -67,6 +69,7 @@ private struct AudioDownloadsViewUI: View {
                 onDelete: nil
             )
         }
+        .task(start)
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -155,6 +158,7 @@ struct AudioDownloadsView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     items: items,
+                    start: { },
                     downloadAction: { _ in },
                     cancelAction: { _ in },
                     deleteAction: { _ in }

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-02.
 //
 
+import Combine
 import Foundation
 import Utilities
 import VLogging
@@ -13,15 +14,20 @@ import VLogging
 public final class DownloadsObserver<Key: Hashable> {
     // MARK: Lifecycle
 
-    public init(extractKey: @escaping (DownloadBatchResponse) -> Key?, showError: @escaping (Error) -> Void) {
+    public init(extractKey: @escaping (DownloadBatchResponse) -> Key?, showError: @escaping @MainActor (Error) -> Void) {
         self.extractKey = extractKey
         self.showError = showError
     }
 
     // MARK: Public
 
-    @Published public private(set) var progress: [Key: Double] = [:]
     public private(set) var runningDownloads: Set<DownloadBatchResponse> = []
+
+    public var progressPublisher: AnyPublisher<[Key: Double], Never> {
+        progress
+            .throttle(for: .seconds(0.1), scheduler: DispatchQueue.main, latest: true)
+            .eraseToAnyPublisher()
+    }
 
     public func observe(_ downloads: Set<DownloadBatchResponse>) async {
         runningDownloads.formUnion(downloads)
@@ -35,12 +41,7 @@ public final class DownloadsObserver<Key: Hashable> {
                 } catch {
                     self?.showError(error)
                 }
-
-                guard let self else { return }
-                runningDownloads.remove(download)
-                if let key = extractKey(download) {
-                    progress.removeValue(forKey: key)
-                }
+                self?.finish(download)
             }
         }
     }
@@ -48,11 +49,19 @@ public final class DownloadsObserver<Key: Hashable> {
     // MARK: Internal
 
     let extractKey: (DownloadBatchResponse) -> Key?
-    let showError: (Error) -> Void
+    let showError: @MainActor (Error) -> Void
 
     // MARK: Private
 
+    private let progress = CurrentValueSubject<[Key: Double], Never>([:])
     private var cancellableTasks = Set<CancellableTask>()
+
+    private func finish(_ download: DownloadBatchResponse) {
+        runningDownloads.remove(download)
+        if let key = extractKey(download) {
+            progress.value.removeValue(forKey: key)
+        }
+    }
 
     private func progressUpdated(of batch: DownloadBatchResponse, progress newProgress: Double) async {
         // Ignore if it's not running (e.g. cancelled).
@@ -64,6 +73,6 @@ public final class DownloadsObserver<Key: Hashable> {
             logger.debug("Cannot find key \(Key.self) for download \(batch)")
             return
         }
-        progress[key] = newProgress
+        progress.value[key] = newProgress
     }
 }

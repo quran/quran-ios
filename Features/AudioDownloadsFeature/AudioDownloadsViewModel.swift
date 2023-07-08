@@ -28,8 +28,7 @@ final class AudioDownloadsViewModel: ObservableObject {
         deleter: ReciterAudioDeleter,
         ayahsDownloader: QuranAudioDownloader,
         sizeInfoRetriever: ReciterSizeInfoRetriever,
-        recitersRetriever: ReciterDataRetriever,
-        showError: @MainActor @escaping (Error) -> Void
+        recitersRetriever: ReciterDataRetriever
     ) {
         quran = readingPreferences.reading.quran
         self.analytics = analytics
@@ -37,11 +36,10 @@ final class AudioDownloadsViewModel: ObservableObject {
         self.ayahsDownloader = ayahsDownloader
         self.sizeInfoRetriever = sizeInfoRetriever
         self.recitersRetriever = recitersRetriever
-        self.showError = showError
 
         let downloadsObserver = DownloadsObserver(
             extractKey: { [weak self] in self?.reciters.firstMatches($0) },
-            showError: showError
+            showError: { [weak self] error in self?.error = error }
         )
         self.downloadsObserver = downloadsObserver
 
@@ -58,6 +56,7 @@ final class AudioDownloadsViewModel: ObservableObject {
     // MARK: Internal
 
     @Published var editMode: EditMode = .inactive
+    @Published var error: Error?
 
     var items: [AudioDownloadItem] {
         reciters.map { reciter in
@@ -77,7 +76,7 @@ final class AudioDownloadsViewModel: ObservableObject {
             try await deleter.deleteAudioFiles(for: reciter)
             sizes[reciter] = .zero(quran: quran)
         } catch {
-            showError(error)
+            self.error = error
         }
     }
 
@@ -94,7 +93,7 @@ final class AudioDownloadsViewModel: ObservableObject {
             } catch {
                 progress.removeValue(forKey: reciter)
                 crasher.recordError(error, reason: "Failed to start the reciter download")
-                showError(error)
+                self.error = error
             }
         }
     }
@@ -114,7 +113,6 @@ final class AudioDownloadsViewModel: ObservableObject {
     private let ayahsDownloader: QuranAudioDownloader
     private let sizeInfoRetriever: ReciterSizeInfoRetriever
     private let recitersRetriever: ReciterDataRetriever
-    private let showError: @MainActor (Error) -> Void
     private var downloadsObserver: DownloadsObserver<Reciter>?
     private var cancellableTasks = Set<CancellableTask>()
     private var cancellables = Set<AnyCancellable>()

@@ -22,7 +22,7 @@ public struct AudioDownloadsBuilder {
 
     // MARK: Public
 
-    public func build(parent: UIViewController) async -> UIViewController {
+    public func build() async -> UIViewController {
         let downloader = await QuranAudioDownloader(
             baseURL: container.filesAppHost,
             downloader: container.downloadManager()
@@ -33,8 +33,7 @@ public struct AudioDownloadsBuilder {
             deleter: ReciterAudioDeleter(),
             ayahsDownloader: downloader,
             sizeInfoRetriever: sizeInfoRetriever,
-            recitersRetriever: ReciterDataRetriever(),
-            showError: parent.showErrorAlert
+            recitersRetriever: ReciterDataRetriever()
         )
         let viewController = AudioDownloadsViewController(viewModel: viewModel)
         return viewController

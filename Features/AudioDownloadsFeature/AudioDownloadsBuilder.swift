@@ -12,6 +12,7 @@ import QuranKit
 import ReciterService
 import UIKit
 
+@MainActor
 public struct AudioDownloadsBuilder {
     // MARK: Lifecycle
 
@@ -27,7 +28,7 @@ public struct AudioDownloadsBuilder {
             downloader: container.downloadManager()
         )
         let sizeInfoRetriever = ReciterSizeInfoRetriever(baseURL: container.filesAppHost)
-        let viewModel = await AudioDownloadsViewModel(
+        let viewModel = AudioDownloadsViewModel(
             analytics: container.analytics,
             deleter: ReciterAudioDeleter(),
             ayahsDownloader: downloader,
@@ -35,7 +36,7 @@ public struct AudioDownloadsBuilder {
             recitersRetriever: ReciterDataRetriever(),
             showError: parent.showErrorAlert
         )
-        let viewController = await AudioDownloadsViewController(viewModel: viewModel)
+        let viewController = AudioDownloadsViewController(viewModel: viewModel)
         return viewController
     }
 

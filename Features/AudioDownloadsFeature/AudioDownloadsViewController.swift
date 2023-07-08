@@ -8,14 +8,9 @@
 import Combine
 import Localization
 import SwiftUI
+import UIx
 
 final class AudioDownloadsViewController: UIHostingController<AudioDownloadsView> {
-    private enum EditButtonState {
-        case none
-        case edit
-        case done
-    }
-
     // MARK: Lifecycle
 
     init(viewModel: AudioDownloadsViewModel) {
@@ -33,66 +28,26 @@ final class AudioDownloadsViewController: UIHostingController<AudioDownloadsView
 
     // MARK: Private
 
+    private var editController: EditController?
     private let viewModel: AudioDownloadsViewModel
-    private var cancellables: Set<AnyCancellable> = []
 
-    private var editButtonState = EditButtonState.none {
-        didSet {
-            if oldValue != editButtonState {
-                updateEditButton()
-            }
-        }
-    }
-
-    private var editButton: UIBarButtonItem? {
-        switch editButtonState {
-        case .none:
+    private var currentEditMode: EditMode? {
+        if viewModel.items.allSatisfy({ !$0.canDelete }) {
             return nil
-        case .edit:
-            return UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(startEditing))
-        case .done:
-            return UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(endEditing))
         }
+        return viewModel.editMode
     }
 
     private func initialize() {
         title = lAndroid("audio_manager")
 
-        viewModel.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                // Getting viewModel values after the change since we used recieve in the pipeline.
-                self?.updateEditButtonIfNeeded()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func updateEditButtonIfNeeded() {
-        editButtonState = calculateEditButtonState()
-    }
-
-    private func updateEditButton() {
-        navigationItem.setRightBarButton(editButton, animated: true)
-    }
-
-    private func calculateEditButtonState() -> EditButtonState {
-        if viewModel.items.allSatisfy({ !$0.canDelete }) {
-            return .none
-        }
-        return viewModel.editMode == .active ? .done : .edit
-    }
-
-    @objc
-    private func startEditing() {
-        withAnimation {
-            viewModel.editMode = .active
-        }
-    }
-
-    @objc
-    private func endEditing() {
-        withAnimation {
-            viewModel.editMode = .inactive
-        }
+        editController = EditController(
+            navigationItem: navigationItem,
+            reload: viewModel.objectWillChange.eraseToAnyPublisher(),
+            editMode: Binding(
+                get: { [weak self] in self?.currentEditMode },
+                set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
+            )
+        )
     }
 }

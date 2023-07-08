@@ -25,7 +25,7 @@ public protocol EditControllerDelegate: AnyObject {
 }
 
 @MainActor
-public class EditController {
+public class LegacyEditController {
     // MARK: Lifecycle
 
     public init(usesRightBarButton: Bool) {

@@ -84,7 +84,7 @@ open class EditableBasicDataSource<ItemType: Equatable, CellType: ReusableCell>:
 
     // MARK: Private
 
-    private lazy var editController = EditController(usesRightBarButton: true)
+    private lazy var editController = LegacyEditController(usesRightBarButton: true)
 
     private func editingChanged() {
         editController.onEditingStateChanged()

@@ -26,11 +26,7 @@ struct AudioDownloadsView: View {
             items: viewModel.items.sorted(),
             downloadAction: { viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
-            deleteAction: { items in
-                for item in items {
-                    await viewModel.deleteReciterFiles(item.reciter)
-                }
-            }
+            deleteAction: { await viewModel.deleteReciterFiles($0.reciter) }
         )
     }
 }
@@ -40,10 +36,10 @@ private struct AudioDownloadsViewUI: View {
     let items: [AudioDownloadItem]
     let downloadAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
     let cancelAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
-    let deleteAction: @MainActor @Sendable ([AudioDownloadItem]) async -> Void
+    let deleteAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
 
     var body: some View {
-        List {
+        NoorList {
             AudioDownloadsSection(
                 title: l("reciters.downloaded"),
                 items: items.filter(\.canDelete),
@@ -54,12 +50,7 @@ private struct AudioDownloadsViewUI: View {
                         accessory: accessory(item)
                     )
                 },
-                onDelete: { indexSet in
-                    Task {
-                        let itemsToDelete = indexSet.map { items[$0] }
-                        await deleteAction(itemsToDelete)
-                    }
-                }
+                onDelete: deleteAction
             )
 
             AudioDownloadsSection(
@@ -74,7 +65,6 @@ private struct AudioDownloadsViewUI: View {
                 onDelete: nil
             )
         }
-        .listStyle(.insetGrouped)
         .environment(\.editMode, $editMode)
     }
 
@@ -101,19 +91,13 @@ private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
     let items: [AudioDownloadItem]
     let listItem: (AudioDownloadItem) -> ListItem
-    let onDelete: ((IndexSet) -> Void)?
+    let onDelete: (@MainActor (AudioDownloadItem) async -> Void)?
 
     var body: some View {
-        if !items.isEmpty {
-            Section {
-                ForEach(items) { item in
-                    listItem(item)
-                }
-                .onDelete(perform: onDelete)
-            } header: {
-                Text(title)
-            }
+        NoorSection(title: title, items) { item in
+            listItem(item)
         }
+        .onDelete(action: onDelete)
     }
 }
 

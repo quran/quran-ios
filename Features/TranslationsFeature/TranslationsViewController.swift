@@ -46,7 +46,7 @@ class TranslationsViewController: BaseTableViewController, EditControllerDelegat
 
     // MARK: Internal
 
-    let editController = EditController(usesRightBarButton: true)
+    let editController = LegacyEditController(usesRightBarButton: true)
 
     var translations: [Translation.ID: TranslationItem] {
         get { dataSource?.translations ?? [:] }

@@ -12,13 +12,15 @@ public struct SimpleListItem: View {
     public struct Subtitle {
         // MARK: Lifecycle
 
-        public init(text: String, location: SubtitleLocation) {
+        public init(label: String? = nil, text: String, location: SubtitleLocation) {
+            self.label = label
             self.text = text
             self.location = location
         }
 
         // MARK: Internal
 
+        let label: String?
         let text: String
         let location: SubtitleLocation
     }
@@ -31,18 +33,29 @@ public struct SimpleListItem: View {
     public enum Accessory {
         case disclosureIndicator
         case download(DownloadType, action: AsyncAction)
+
+        // MARK: Internal
+
+        var actionable: Bool {
+            switch self {
+            case .download: return true
+            case .disclosureIndicator: return false
+            }
+        }
     }
 
     // MARK: Lifecycle
 
     public init(
         image: Image? = nil,
+        heading: String? = nil,
         title: String,
         subtitle: Subtitle? = nil,
         accessory: Accessory? = nil,
         action: AsyncAction? = nil
     ) {
         self.image = image
+        self.heading = heading
         self.title = title
         self.subtitle = subtitle
         self.accessory = accessory
@@ -53,8 +66,17 @@ public struct SimpleListItem: View {
 
     public var body: some View {
         if let action {
-            Button(asyncAction: action) {
-                content
+            if let accessory, accessory.actionable {
+                // Use Tap gesture since tapping accessory button will also trigger the whole cell selection.
+                content.onTapGesture {
+                    Task {
+                        await action()
+                    }
+                }
+            } else {
+                Button(asyncAction: action) {
+                    content
+                }
             }
         } else {
             content
@@ -64,6 +86,7 @@ public struct SimpleListItem: View {
     // MARK: Internal
 
     let image: Image?
+    let heading: String?
     let title: String
     let subtitle: Subtitle?
     let accessory: Accessory?
@@ -78,11 +101,14 @@ public struct SimpleListItem: View {
             }
 
             VStack(alignment: .leading) {
+                if let heading {
+                    Text(heading)
+                        .foregroundColor(.accentColor)
+                }
+
                 Text(title)
                 if let subtitle, subtitle.location == .bottom {
-                    Text(subtitle.text)
-                        .foregroundColor(.secondaryLabel)
-                        .font(.footnote)
+                    subtitleView(subtitle, textFont: .footnote)
                 }
             }
 
@@ -90,8 +116,7 @@ public struct SimpleListItem: View {
                 Spacer()
 
                 if let subtitle, subtitle.location == .trailing {
-                    Text(subtitle.text)
-                        .foregroundColor(.secondaryLabel)
+                    subtitleView(subtitle, textFont: .body)
                 }
 
                 if let accessory {
@@ -105,6 +130,26 @@ public struct SimpleListItem: View {
             }
         }
         .foregroundColor(.primary)
+        .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private func subtitleText(_ subtitle: Subtitle, textFont: Font) -> Text {
+        Text(subtitle.text)
+            .foregroundColor(.secondaryLabel)
+            .font(textFont)
+    }
+
+    @ViewBuilder
+    private func subtitleView(_ subtitle: Subtitle, textFont: Font) -> some View {
+        if let label = subtitle.label {
+            Text(label)
+                .foregroundColor(.secondaryLabel)
+                .font(textFont.bold()) +
+                subtitleText(subtitle, textFont: textFont)
+        } else {
+            subtitleText(subtitle, textFont: textFont)
+        }
     }
 }
 
@@ -121,8 +166,9 @@ struct SimpleListItem_Previews: PreviewProvider {
 
                     SimpleListItem(
                         image: NoorSystemImage.share.image,
-                        title: "Title",
-                        accessory: .disclosureIndicator
+                        heading: "English",
+                        title: "An English title",
+                        subtitle: .init(label: "Translator: ", text: "An English subtitle", location: .bottom)
                     ) {
                     }
 

@@ -39,14 +39,14 @@ private struct SettingsRootViewUI: View {
     let contactUs: AsyncAction
 
     var body: some View {
-        List {
-            Section {
+        NoorList {
+            NoorBasicSection {
                 VStack {
                     ThemeSelector(theme: $theme)
                 }
             }
 
-            Section {
+            NoorBasicSection {
                 SimpleListItem(
                     image: NoorSystemImage.audio.image,
                     title: l("audio.download-play-amount"),
@@ -63,7 +63,7 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
-            Section {
+            NoorBasicSection {
                 SimpleListItem(
                     image: NoorSystemImage.translation.image,
                     title: lAndroid("prefs_translations"),
@@ -72,7 +72,7 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
-            Section {
+            NoorBasicSection {
                 SimpleListItem(
                     image: NoorSystemImage.share.image,
                     title: l("share_app"),
@@ -95,7 +95,6 @@ private struct SettingsRootViewUI: View {
                 )
             }
         }
-        .listStyle(.insetGrouped)
     }
 }
 

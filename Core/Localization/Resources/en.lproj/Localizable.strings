@@ -26,11 +26,10 @@
 "surah" = "Surah";
 
 
+"translations.selectedTranslations" = "Selected";
+
 "translatorLabel: " = "Translator: ";
 "upgradeTranslationButtonTitle" = "UPDATE";
-
-"translationsSelectionTitle" = "Select Translations/Tafseer";
-"translationsSelectionPrompt" = "Select in the order you want to see them";
 
 "errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
 "noAvailableTranslationText" = "No translation available for this Ayah.";

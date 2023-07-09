@@ -25,6 +25,7 @@ public protocol AppDependencies {
 
     var supportsCloudKit: Bool { get }
 
+    // TODO: Remove async
     func downloadManager() async -> DownloadManager
     var analytics: AnalyticsLibrary { get }
     var readingResources: ReadingResourcesService { get }

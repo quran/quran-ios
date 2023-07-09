@@ -56,7 +56,7 @@ private struct SettingsRootViewUI: View {
                 )
 
                 SimpleListItem(
-                    image: NoorSystemImage.download.image,
+                    image: NoorSystemImage.downloads.image,
                     title: lAndroid("audio_manager"),
                     accessory: .disclosureIndicator,
                     action: navigateToAudioManager

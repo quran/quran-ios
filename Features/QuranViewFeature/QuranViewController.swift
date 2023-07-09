@@ -180,8 +180,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     func presentTranslationsSelection(_ viewController: UIViewController) {
         let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController)
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "x.circle"),
+            style: .done,
             target: self,
             action: #selector(onTranslationsSelectionDoneTapped)
         )

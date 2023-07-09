@@ -49,7 +49,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
 
         // UI
-        .package(url: "https://github.com/mohamede1945/DownloadButton", branch: "master"),
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
         .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.7"),
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
@@ -167,7 +166,6 @@ private func uiTargets() -> [[Target]] {
             "QuranText",
             "QuranAnnotations",
             "QuranGeometry",
-            "DownloadButton",
             "NoorFont",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),

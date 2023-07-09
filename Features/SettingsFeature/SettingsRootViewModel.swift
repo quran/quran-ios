@@ -86,7 +86,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     func navigateToTranslationsList() async {
         logger.info("Settings: presentTranslationsList")
-        let viewController = await translationsListBuilder.build(showEditButton: true)
+        let viewController = await translationsListBuilder.build()
         navigationController?.pushViewController(viewController, animated: true)
     }
 

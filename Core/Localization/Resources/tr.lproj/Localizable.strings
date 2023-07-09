@@ -28,9 +28,6 @@
 "translatorLabel: " = "Çevirmen: ";
 "upgradeTranslationButtonTitle" = "GÜNCELLE";
 
-"translationsSelectionTitle" = "Meal/Tefsir Seç";
-"translationsSelectionPrompt" = "Görmek istediğiniz sırada seçin";
-
 "errorInTranslationText" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
 "noAvailableTranslationText" = "Bu Ayetin meali bulunmamaktadır.";
 

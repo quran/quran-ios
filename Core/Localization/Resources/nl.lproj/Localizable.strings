@@ -28,9 +28,6 @@
 "translatorLabel: " = "Vertaler: ";
 "upgradeTranslationButtonTitle" = "BIJWERKEN";
 
-"translationsSelectionTitle" = "Selecteer Vertalingen/Tafseer";
-"translationsSelectionPrompt" = "Selecteer in de volgorde waarin u ze wilt zien";
-
 "errorInTranslationText" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
 "noAvailableTranslationText" = "Er is geen vertaling beschikbaar voor deze ayah.";
 "referenceVerseTranslationText" = "Zie ayah %d.";

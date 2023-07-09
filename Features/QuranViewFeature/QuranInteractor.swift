@@ -360,7 +360,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func presentTranslationsSelection() {
         presenter?.dismissPresentedViewController {
             Task { @MainActor in
-                let controller = await self.deps.translationsSelectionBuilder.build(showEditButton: false)
+                let controller = await self.deps.translationsSelectionBuilder.build()
                 self.presenter?.presentTranslationsSelection(controller)
             }
         }

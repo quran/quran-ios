@@ -39,6 +39,18 @@ public class SelectedTranslationsPreferences {
         }
     }
 
+    public func select(_ id: Translation.ID) {
+        if !selectedTranslations.contains(id) {
+            selectedTranslations.append(id)
+        }
+    }
+
+    public func deselect(_ id: Translation.ID) {
+        if let index = selectedTranslations.firstIndex(of: id) {
+            selectedTranslations.remove(at: index)
+        }
+    }
+
     // MARK: Internal
 
     func reset() {

@@ -28,9 +28,6 @@
 "translatorLabel: " = "Dịch giả: ";
 "upgradeTranslationButtonTitle" = "CẬP NHẬT";
 
-"translationsSelectionTitle" = "Chọn Bản dịch/Tafseer";
-"translationsSelectionPrompt" = "Chọn theo thứ tự bạn muốn xem";
-
 "errorInTranslationText" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
 "noAvailableTranslationText" = "Không có bản dịch nào cho Ayah này.";
 "referenceVerseTranslationText" = "Xem ayah %d.";

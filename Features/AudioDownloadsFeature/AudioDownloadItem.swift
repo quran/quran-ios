@@ -41,15 +41,6 @@ extension AudioDownloadItem {
         size?.downloadedSuraCount == size?.surasCount
     }
 
-    var downloadState: DownloadState {
-        switch progress {
-        case .downloading(let progress):
-            return progress < 0.001 ? .pendingDownloading : .downloading(progress: Float(progress))
-        case .notDownloading:
-            return isDownloaded ? .downloaded : .notDownloaded
-        }
-    }
-
     var canDelete: Bool {
         guard let size else {
             return false

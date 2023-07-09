@@ -3,25 +3,19 @@ import QuranText
 import UIKit
 
 @dynamicMemberLookup
-struct TranslationItem: Equatable, Sendable {
+struct TranslationItem: Equatable, Sendable, Identifiable {
     enum DownloadingProgress: Hashable {
         case notDownloading
         case downloading(Double)
+        case needsUpgrade
     }
 
     // MARK: Internal
 
     let info: Translation
-
-    let isDownloaded: Bool
-
-    // TODO: Remove
-    let downloadState: DownloadState
-
     let progress: DownloadingProgress
 
-    // TODO: Remove
-    let isSelected: Bool
+    var id: Translation.ID { info.id }
 
     subscript<T>(dynamicMember keyPath: KeyPath<Translation, T>) -> T {
         info[keyPath: keyPath]
@@ -29,8 +23,8 @@ struct TranslationItem: Equatable, Sendable {
 }
 
 extension Translation {
-    var translatorDisplayName: String? {
-        translatorForeign ?? translator
+    var localizedLanguage: String? {
+        Locale.localizedLanguage(forCode: languageCode)
     }
 
     // TODO: Reuse in QuranTranslationTranslatorNameCollectionViewCell
@@ -42,5 +36,16 @@ extension Translation {
         } else {
             return .translatorNameEnglish(ofSize: size)
         }
+    }
+}
+
+extension Locale {
+    static var currentLocalizedLanguage: String? {
+        let langaugeCode = Locale.current.languageCode
+        return langaugeCode.flatMap { localizedLanguage(forCode: $0) }
+    }
+
+    static func localizedLanguage(forCode code: String) -> String? {
+        Locale(identifier: code).localizedString(forLanguageCode: code)
     }
 }

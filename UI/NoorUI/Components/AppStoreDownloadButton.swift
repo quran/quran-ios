@@ -29,7 +29,7 @@ struct AppStoreDownloadButton: View {
                 case .downloading(let progress):
                     CircularDownloadingView(progress: progress)
                 case .download:
-                    NoorImage.download.image
+                    NoorSystemImage.download.image
                         .renderingMode(.template)
                         .foregroundColor(.accentColor)
                 }

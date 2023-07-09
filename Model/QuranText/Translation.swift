@@ -54,6 +54,20 @@ public struct Translation: Hashable, Sendable {
     public var needsUpgrade: Bool { installedVersion != version }
 
     public var translationName: String {
-        translatorForeign ?? translator ?? displayName
+        translatorDisplayName ?? displayName
+    }
+
+    public var translatorDisplayName: String? {
+        translatorForeign ?? translator
+    }
+}
+
+extension Translation: Comparable {
+    public static func < (lhs: Translation, rhs: Translation) -> Bool {
+        let comparer = MultiPredicateComparer<Translation>(increasingOrderPredicates: [
+            { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending },
+            { $0.translationName.localizedStandardCompare($1.translationName) == .orderedAscending },
+        ])
+        return comparer.areInIncreasingOrder(lhs: lhs, rhs: rhs)
     }
 }

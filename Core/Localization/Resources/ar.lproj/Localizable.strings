@@ -25,11 +25,10 @@
 "ayah" = "آية";
 "surah" = "سورة";
 
+"translations.selectedTranslations" = "المختار";
+
 "translatorLabel: " = "المفسر: ";
 "upgradeTranslationButtonTitle" = "تحديث";
-
-"translationsSelectionTitle" = "اختر التفاسير والتراجم";
-"translationsSelectionPrompt" = "اختر بالترتيب المرغوب فيه";
 
 "errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";

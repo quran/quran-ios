@@ -20,16 +20,18 @@ public struct TranslationsListBuilder {
 
     // MARK: Public
 
-    public func build(showEditButton: Bool) async -> UIViewController {
-        let repository = TranslationService.TranslationsRepository(databasesURL: container.databasesURL, baseURL: container.appHost)
-        let interactor = await TranslationsListInteractor(
+    public func build() async -> UIViewController {
+        let repository = TranslationsRepository(databasesURL: container.databasesURL, baseURL: container.appHost)
+        let downloader = await container.downloadManager()
+        let viewModel = TranslationsListViewModel(
             analytics: container.analytics,
             translationsRepository: repository,
-            localTranslationsRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: container.databasesURL),
-            deleter: TranslationService.TranslationDeleter(databasesURL: container.databasesURL),
-            downloader: TranslationService.TranslationsDownloader(downloader: container.downloadManager())
+            localTranslationsRetriever: LocalTranslationsRetriever(databasesURL: container.databasesURL),
+            deleter: TranslationDeleter(databasesURL: container.databasesURL),
+            downloader: TranslationsDownloader(downloader: downloader)
         )
-        let viewController = TranslationsViewController(showEditButton: showEditButton, interactor: interactor)
+
+        let viewController = TranslationsViewController(viewModel: viewModel)
         return viewController
     }
 

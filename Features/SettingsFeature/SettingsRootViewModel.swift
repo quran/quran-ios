@@ -78,15 +78,15 @@ final class SettingsRootViewModel: ObservableObject {
         )
     }
 
-    func navigateToAudioManager() async {
+    func navigateToAudioManager() {
         logger.info("Settings: presentAudioDownloads")
-        let viewController = await audioDownloadsBuilder.build()
+        let viewController = audioDownloadsBuilder.build()
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func navigateToTranslationsList() async {
+    func navigateToTranslationsList() {
         logger.info("Settings: presentTranslationsList")
-        let viewController = await translationsListBuilder.build()
+        let viewController = translationsListBuilder.build()
         navigationController?.pushViewController(viewController, animated: true)
     }
 

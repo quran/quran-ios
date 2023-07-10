@@ -77,7 +77,7 @@ public actor DownloadBatchResponse {
             case .downloading:
                 state = .inProgress
             }
-            responses[request] = ResponseData(request: request, state: state, taskId: nil, task: nil)
+            responses[request] = ResponseData(request: request, state: state, taskId: download.taskId, task: nil)
         }
 
         for download in batch.downloads {
@@ -129,7 +129,9 @@ public actor DownloadBatchResponse {
                         response.task = task
                     } else {
                         response.taskId = nil
-                        logger.info("Couldn't find task with id \(savedTaskId)")
+                        if !response.finished {
+                            logger.error("Couldn't find task with id \(savedTaskId)")
+                        }
                     }
                 }
             }

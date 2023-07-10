@@ -20,11 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         LoggingSystem.bootstrap(StreamLogHandler.standardError)
         AsyncTextLabelSystem.bootstrap(FixedTextNode.init)
 
-        // Eagerly load download manager to handle any background downloads.
-        Task { _ = await downloadManagerContainer.downloadManager() }
+        Task {
+            // Eagerly load download manager to handle any background downloads.
+            async let download: () = container.downloadManager.start()
 
-        // Begin fetching resources immediately upon the application's start-up.
-        Task { await container.readingResources.startLoadingResources() }
+            // Begin fetching resources immediately upon the application's start-up.
+            async let readingResources: () = container.readingResources.startLoadingResources()
+            _ = await [download, readingResources]
+        }
 
         return true
     }
@@ -43,14 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         handleEventsForBackgroundURLSession identifier: String,
         completionHandler: @escaping () -> Void
     ) {
-        Task { @MainActor in
-            let downloadManager = await downloadManagerContainer.downloadManager()
-            downloadManager.setBackgroundSessionCompletion(completionHandler)
-        }
+        let downloadManager = container.downloadManager
+        downloadManager.setBackgroundSessionCompletion(completionHandler)
     }
 
     // MARK: Private
 
     private let container = Container.shared
-    private let downloadManagerContainer = DownloadManagerContainer.shared
 }

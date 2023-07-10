@@ -347,22 +347,18 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func loadContent() {
-        Task { @MainActor in
-            let (viewController, viewModel) = await deps.audioBannerBuilder.build(withListener: self)
-            audioBanner = viewModel
-            presenter?.presentAudioBanner(viewController)
+        let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
+        audioBanner = viewModel
+        presenter?.presentAudioBanner(viewController)
 
-            contentViewModel = presentQuranContent(with: input)
-            presenter?.startHiddenBarsTimer()
-        }
+        contentViewModel = presentQuranContent(with: input)
+        presenter?.startHiddenBarsTimer()
     }
 
     private func presentTranslationsSelection() {
         presenter?.dismissPresentedViewController {
-            Task { @MainActor in
-                let controller = await self.deps.translationsSelectionBuilder.build()
-                self.presenter?.presentTranslationsSelection(controller)
-            }
+            let controller = self.deps.translationsSelectionBuilder.build()
+            self.presenter?.presentTranslationsSelection(controller)
         }
     }
 

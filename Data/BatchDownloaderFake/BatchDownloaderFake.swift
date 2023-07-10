@@ -22,7 +22,7 @@ public enum BatchDownloaderFake {
 
         let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBURL)
         var session: NetworkSessionFake!
-        let downloader = await DownloadManager(
+        let downloader = DownloadManager(
             maxSimultaneousDownloads: maxSimultaneousDownloads,
             sessionFactory: { delegate, queue in
                 session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
@@ -30,6 +30,7 @@ public enum BatchDownloaderFake {
             },
             persistence: persistence
         )
+        await downloader.start()
         return (downloader, session)
     }
 

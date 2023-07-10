@@ -19,8 +19,8 @@ struct SettingsRootView: View {
             theme: $viewModel.theme,
             audioEnd: viewModel.audioEnd.name,
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
-            navigateToAudioManager: { await viewModel.navigateToAudioManager() },
-            navigateToTranslationsList: { await viewModel.navigateToTranslationsList() },
+            navigateToAudioManager: { viewModel.navigateToAudioManager() },
+            navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() }

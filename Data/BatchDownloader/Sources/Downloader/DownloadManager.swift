@@ -22,9 +22,10 @@ import Crashing
 import Foundation
 import NetworkSupport
 import Utilities
+import VLogging
 
 public final class DownloadManager: Sendable {
-    typealias SessionFactory = (NetworkSessionDelegate, OperationQueue) -> NetworkSession
+    typealias SessionFactory = @Sendable (NetworkSessionDelegate, OperationQueue) -> NetworkSession
 
     // MARK: Lifecycle
 
@@ -32,8 +33,8 @@ public final class DownloadManager: Sendable {
         maxSimultaneousDownloads: Int,
         configuration: URLSessionConfiguration,
         downloadsURL: URL
-    ) async {
-        await self.init(
+    ) {
+        self.init(
             maxSimultaneousDownloads: maxSimultaneousDownloads,
             sessionFactory: {
                 URLSession(
@@ -50,7 +51,20 @@ public final class DownloadManager: Sendable {
         maxSimultaneousDownloads: Int,
         sessionFactory: @escaping SessionFactory,
         persistence: DownloadsPersistence
-    ) async {
+    ) {
+        let dataController = DownloadBatchDataController(
+            maxSimultaneousDownloads: maxSimultaneousDownloads,
+            persistence: persistence
+        )
+        self.dataController = dataController
+        self.sessionFactory = sessionFactory
+        handler = DownloadSessionDelegate(dataController: dataController)
+    }
+
+    // MARK: Public
+
+    public func start() async {
+        logger.info("Starting download manager")
         let operationQueue = OperationQueue()
         operationQueue.name = "com.quran.downloads"
         operationQueue.maxConcurrentOperationCount = 1
@@ -58,24 +72,13 @@ public final class DownloadManager: Sendable {
         let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
         operationQueue.underlyingQueue = dispatchQueue
 
-        let dataController = DownloadBatchDataController(maxSimultaneousDownloads: maxSimultaneousDownloads, persistence: persistence)
-        do {
-            try await attempt(times: 3) {
-                try await dataController.loadBatchesFromPersistence()
-            }
-        } catch {
-            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
-        }
+        await dataController.bootstrapPersistence()
 
-        self.dataController = dataController
-        handler = DownloadSessionDelegate(dataController: dataController)
-        session = sessionFactory(handler, operationQueue)
-
-        await dataController.update(session: session)
-        await populateRunningTasks()
+        let session = sessionFactory(handler, operationQueue)
+        self.session = session
+        await dataController.start(with: session)
+        logger.info("Download manager start completed")
     }
-
-    // MARK: Public
 
     @MainActor
     public func setBackgroundSessionCompletion(_ backgroundSessionCompletion: @MainActor @escaping () -> Void) {
@@ -92,12 +95,8 @@ public final class DownloadManager: Sendable {
 
     // MARK: Private
 
-    private let session: NetworkSession
+    private let sessionFactory: SessionFactory
+    private var session: NetworkSession?
     private let handler: DownloadSessionDelegate
     private let dataController: DownloadBatchDataController
-
-    private func populateRunningTasks() async {
-        let (_, _, downloadTasks) = await session.tasks()
-        await dataController.setRunningTasks(downloadTasks)
-    }
 }

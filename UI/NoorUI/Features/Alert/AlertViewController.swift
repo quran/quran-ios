@@ -84,7 +84,7 @@ public class AlertViewController: UIViewController {
     private let message: String
 
     private var rootViewController: UIViewController {
-        UIApplication.shared.delegate!.window!!.rootViewController!
+        UIApplication.shared.keyWindow!.rootViewController!
     }
 }
 

@@ -22,10 +22,10 @@ public struct AudioDownloadsBuilder {
 
     // MARK: Public
 
-    public func build() async -> UIViewController {
-        let downloader = await QuranAudioDownloader(
+    public func build() -> UIViewController {
+        let downloader = QuranAudioDownloader(
             baseURL: container.filesAppHost,
-            downloader: container.downloadManager()
+            downloader: container.downloadManager
         )
         let sizeInfoRetriever = ReciterSizeInfoRetriever(baseURL: container.filesAppHost)
         let viewModel = AudioDownloadsViewModel(

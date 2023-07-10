@@ -16,6 +16,7 @@ import ReciterListFeature
 import ReciterService
 import UIKit
 
+@MainActor
 public struct AudioBannerBuilder {
     // MARK: Lifecycle
 
@@ -25,16 +26,15 @@ public struct AudioBannerBuilder {
 
     // MARK: Public
 
-    @MainActor
-    public func build(withListener listener: AudioBannerListener) async -> (UIViewController, AudioBannerViewModel) {
-        let viewModel = await AudioBannerViewModel(
+    public func build(withListener listener: AudioBannerListener) -> (UIViewController, AudioBannerViewModel) {
+        let viewModel = AudioBannerViewModel(
             analytics: container.analytics,
             reciterRetreiver: ReciterDataRetriever(),
             recentRecitersService: RecentRecitersService(),
             audioPlayer: QuranAudioPlayer(),
             downloader: QuranAudioDownloader(
                 baseURL: container.filesAppHost,
-                downloader: container.downloadManager()
+                downloader: container.downloadManager
             ),
             remoteCommandsHandler: RemoteCommandsHandler(center: .shared())
         )

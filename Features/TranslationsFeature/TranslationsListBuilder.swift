@@ -20,9 +20,9 @@ public struct TranslationsListBuilder {
 
     // MARK: Public
 
-    public func build() async -> UIViewController {
+    public func build() -> UIViewController {
         let repository = TranslationsRepository(databasesURL: container.databasesURL, baseURL: container.appHost)
-        let downloader = await container.downloadManager()
+        let downloader = container.downloadManager
         let viewModel = TranslationsListViewModel(
             analytics: container.analytics,
             translationsRepository: repository,

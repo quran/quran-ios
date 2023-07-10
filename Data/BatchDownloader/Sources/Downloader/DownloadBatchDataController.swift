@@ -43,12 +43,32 @@ actor DownloadBatchDataController {
 
     // MARK: Internal
 
-    func update(session: NetworkSession) {
+    func bootstrapPersistence() async {
+        do {
+            try await attempt(times: 3) {
+                try await loadBatchesFromPersistence()
+            }
+        } catch {
+            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
+        }
+    }
+
+    func start(with session: NetworkSession) async {
         self.session = session
+        let (_, _, downloadTasks) = await session.tasks()
+        for batch in batches {
+            await batch.associateTasks(downloadTasks)
+        }
+
+        loadedInitialRunningTasks = true
+
+        // start pending tasks if needed
+        await startPendingTasksIfNeeded()
     }
 
     func getOnGoingDownloads() -> [DownloadBatchResponse] {
-        Array(batches)
+        precondition(loadedInitialRunningTasks)
+        return Array(batches)
     }
 
     func downloadRequestResponse(for task: NetworkSessionTask) async -> SingleTaskResponse? {
@@ -72,25 +92,6 @@ actor DownloadBatchDataController {
         await startPendingTasksIfNeeded()
 
         return response
-    }
-
-    func loadBatchesFromPersistence() async throws {
-        let batches = try await persistence.retrieveAll()
-        logger.info("Loading \(batches.count) from persistence")
-        for batch in batches {
-            _ = await createResponse(forBatch: batch)
-        }
-    }
-
-    func setRunningTasks(_ tasks: [NetworkSessionDownloadTask]) async {
-        for batch in batches {
-            await batch.associateTasks(tasks)
-        }
-
-        loadedInitialRunningTasks = true
-
-        // start pending tasks if needed
-        await startPendingTasksIfNeeded()
     }
 
     func downloadCompleted(_ response: SingleTaskResponse) async {
@@ -134,6 +135,14 @@ actor DownloadBatchDataController {
             for try await _ in response.progress { }
         } catch {
             logger.error("Batch failed to download with error: \(error)")
+        }
+    }
+
+    private func loadBatchesFromPersistence() async throws {
+        let batches = try await persistence.retrieveAll()
+        logger.info("Loading \(batches.count) from persistence")
+        for batch in batches {
+            _ = await createResponse(forBatch: batch)
         }
     }
 

@@ -222,17 +222,15 @@ extension TranslationVerseViewController: MoreMenuListener {
     }
 
     private func presentTranslationsSelection() {
-        Task { @MainActor in
-            let controller = await translationsSelectionBuilder.build()
-            let navigationController = TranslationsSelectionNavigationController(rootViewController: controller)
-            controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "x.circle"),
-                style: .done,
-                target: self,
-                action: #selector(onTranslationsSelectionDoneTapped)
-            )
-            present(navigationController, animated: true, completion: nil)
-        }
+        let controller = translationsSelectionBuilder.build()
+        let navigationController = TranslationsSelectionNavigationController(rootViewController: controller)
+        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "x.circle"),
+            style: .done,
+            target: self,
+            action: #selector(onTranslationsSelectionDoneTapped)
+        )
+        present(navigationController, animated: true, completion: nil)
     }
 
     @objc

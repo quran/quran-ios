@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 public protocol FileSystem: Sendable {
     func fileExists(at url: URL) -> Bool
@@ -43,3 +44,17 @@ public protocol ResourceValues {
 }
 
 extension URLResourceValues: ResourceValues { }
+
+public extension FileSystem {
+    func contentsOfDirectory(at path: RelativeFilePath, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
+        try contentsOfDirectory(at: path.url, includingPropertiesForKeys: keys)
+    }
+
+    func fileExists(at path: RelativeFilePath) -> Bool {
+        fileExists(at: path.url)
+    }
+
+    func removeItem(at path: RelativeFilePath) throws {
+        try removeItem(at: path.url)
+    }
+}

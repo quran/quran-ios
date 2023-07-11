@@ -16,7 +16,7 @@ public struct LocalTranslationsRetriever {
 
     public init(databasesURL: URL, fileSystem: FileSystem = DefaultFileSystem()) {
         let versionPersistenceFactory = { (translation: Translation) in
-            GRDBDatabaseVersionPersistence(fileURL: translation.localURL)
+            GRDBDatabaseVersionPersistence(fileURL: translation.localPath.url)
         }
 
         self.init(

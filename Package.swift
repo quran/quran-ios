@@ -63,7 +63,9 @@ let package = Package(
 private func coreTargets() -> [[Target]] {
     let type = TargetType.core
     return [
-        target(type, name: "SystemDependencies", hasTests: false, dependencies: []),
+        target(type, name: "SystemDependencies", hasTests: false, dependencies: [
+            "Utilities",
+        ]),
         target(type, name: "SystemDependenciesFake", hasTests: false, dependencies: [
             "SystemDependencies",
             "Utilities",

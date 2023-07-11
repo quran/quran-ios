@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import SQLitePersistence
+import Utilities
 import VLogging
 
 struct GRDBDownloadsPersistence: DownloadsPersistence {
@@ -90,8 +91,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
                 table.column("url", .text)
                     .notNull()
                     .indexed()
-                table.column("resumeURL", .text).notNull()
-                table.column("destinationURL", .text).notNull()
+                table.column("destination", .text).notNull()
                 table.column("status", .integer).notNull()
                 table.column("taskId", .integer)
             }
@@ -132,13 +132,14 @@ private struct GRDBDownload: Identifiable, Codable, FetchableRecord, MutablePers
         static let taskId = Column(CodingKeys.taskId)
     }
 
+    // MARK: Internal
+
     static let downloadBatch = belongsTo(GRDBDownloadBatch.self)
 
     var id: Int64?
     var downloadBatchId: Int64
     var url: URL
-    var resumeURL: URL
-    var destinationURL: URL
+    var destination: String
     var status: Download.Status
     var taskId: Int?
 
@@ -152,8 +153,7 @@ extension GRDBDownload {
     init(_ download: Download) {
         downloadBatchId = download.batchId
         url = download.request.url
-        resumeURL = download.request.resumeURL
-        destinationURL = download.request.destinationURL
+        destination = download.request.destination.path
         status = download.status
         taskId = download.taskId
     }
@@ -161,7 +161,7 @@ extension GRDBDownload {
     func toDownload() -> Download {
         Download(
             taskId: taskId,
-            request: DownloadRequest(url: url, destinationURL: destinationURL),
+            request: DownloadRequest(url: url, destination: RelativeFilePath(destination, isDirectory: false)),
             status: status,
             batchId: downloadBatchId
         )

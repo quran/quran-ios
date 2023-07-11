@@ -13,6 +13,7 @@ import NetworkSupport
 import QuranAudio
 import ReciterService
 import SystemDependencies
+import Utilities
 import VLogging
 
 public final class AudioUpdater {
@@ -116,11 +117,11 @@ public final class AudioUpdater {
 
     private func deleteFileIfNeeded(for reciter: Reciter, file: AudioUpdates.Update.File) {
         let directory = reciter.localFolder()
-        let localFile = directory.appendingPathComponent(file.filename)
+        let localFile = directory.appendingPathComponent(file.filename, isDirectory: false)
         if !fileSystem.fileExists(at: localFile) {
             return
         }
-        let localMD5 = try? md5Calculator.stringMD5(for: localFile)
+        let localMD5 = try? md5Calculator.stringMD5(for: localFile.url)
         if localMD5 == file.md5 {
             return
         }
@@ -128,7 +129,7 @@ public final class AudioUpdater {
     }
 
     private func deleteDatabaseIfNeeded(for reciter: Reciter, update: AudioUpdates.Update) async {
-        guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {
+        guard let dbFile = reciter.localDatabasePath, let zipFile = reciter.localZipPath else {
             return
         }
 
@@ -138,7 +139,7 @@ public final class AudioUpdater {
             return
         }
 
-        if await getDatabaseVersion(fileURL: dbFile) == update.databaseVersion {
+        if await getDatabaseVersion(fileURL: dbFile.url) == update.databaseVersion {
             return
         }
 
@@ -157,8 +158,8 @@ public final class AudioUpdater {
         }
     }
 
-    private func delete(_ file: URL) {
-        logger.notice("About to delete old audio file: \(file.absoluteString)")
+    private func delete(_ file: RelativeFilePath) {
+        logger.notice("About to delete old audio file: \(file.path)")
         try? fileSystem.removeItem(at: file)
     }
 }

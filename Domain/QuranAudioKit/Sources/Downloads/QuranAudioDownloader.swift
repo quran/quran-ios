@@ -23,6 +23,7 @@ import Foundation
 import QuranAudio
 import QuranKit
 import SystemDependencies
+import Utilities
 
 public struct QuranAudioDownloader: Sendable {
     // MARK: Lifecycle
@@ -37,7 +38,7 @@ public struct QuranAudioDownloader: Sendable {
 
     public func downloaded(reciter: Reciter, from start: AyahNumber, to end: AyahNumber) async -> Bool {
         let files = filesForReciter(reciter, from: start, to: end)
-        return files.allSatisfy { fileSystem.fileExists(at: $0.destinationURL) }
+        return files.allSatisfy { fileSystem.fileExists(at: $0.destination) }
     }
 
     public func download(from start: AyahNumber, to end: AyahNumber, reciter: Reciter) async throws -> DownloadBatchResponse {
@@ -45,7 +46,7 @@ public struct QuranAudioDownloader: Sendable {
         let files = reciter
             .audioFiles(baseURL: baseURL, from: start, to: end)
             .filter { !$0.local.isReachable }
-            .map { DownloadRequest(url: $0.remote, destinationURL: $0.local) }
+            .map { DownloadRequest(url: $0.remote, destination: $0.local) }
         let request = DownloadBatchRequest(requests: files)
         // create downloads
         return try await downloader.download(request)
@@ -75,7 +76,7 @@ public struct QuranAudioDownloader: Sendable {
     private func filesForReciter(_ reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [DownloadRequest] {
         reciter.audioFiles(baseURL: baseURL, from: start, to: end)
             .map {
-                DownloadRequest(url: $0.remote, destinationURL: $0.local)
+                DownloadRequest(url: $0.remote, destination: $0.local)
             }
     }
 }
@@ -104,12 +105,12 @@ extension [Reciter] {
 
 extension Reciter {
     func matches(_ request: DownloadRequest) -> Bool {
-        localFolder() == request.reciterURL
+        localFolder() == request.reciterPath
     }
 }
 
 private extension DownloadRequest {
-    var reciterURL: URL {
-        destinationURL.deletingLastPathComponent()
+    var reciterPath: RelativeFilePath {
+        destination.deletingLastPathComponent()
     }
 }

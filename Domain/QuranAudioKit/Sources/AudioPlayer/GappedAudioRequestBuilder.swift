@@ -10,6 +10,7 @@ import Foundation
 import QueuePlayer
 import QuranAudio
 import QuranKit
+import Utilities
 
 struct GappedAudioRequest: QuranAudioRequest {
     let request: AudioRequest
@@ -46,7 +47,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
     ) async throws -> QuranAudioRequest {
         let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns)
         let files = urls.map {
-            AudioFile(url: $0, frames: [AudioFrame(startTime: 0, endTime: nil)])
+            AudioFile(url: $0.url, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
         let request = AudioRequest(files: files, endTime: nil, frameRuns: frameRuns, requestRuns: requestRuns)
         let quranRequest = GappedAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
@@ -55,12 +56,12 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
 
     // MARK: Private
 
-    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [URL], ayahs: [AyahNumber]) {
+    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [RelativeFilePath], ayahs: [AyahNumber]) {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")
         }
 
-        var urls: [URL] = []
+        var urls: [RelativeFilePath] = []
         var ayahs: [AyahNumber] = []
         let verses = start.array(to: end)
         let surasDictionary = Dictionary(grouping: verses, by: { $0.sura })

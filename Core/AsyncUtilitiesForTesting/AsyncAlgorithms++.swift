@@ -13,3 +13,9 @@ extension AsyncChannel {
         return await iterator.next()
     }
 }
+
+extension AsyncChannel where Element == Void {
+    public func send() async {
+        await send(())
+    }
+}

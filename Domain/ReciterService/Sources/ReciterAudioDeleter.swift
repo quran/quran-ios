@@ -30,6 +30,6 @@ public struct ReciterAudioDeleter: Sendable {
     // MARK: Public
 
     public func deleteAudioFiles(for reciter: Reciter) async throws {
-        try FileManager.default.removeItem(at: reciter.localFolder())
+        try FileManager.default.removeItem(at: reciter.localFolder().url)
     }
 }

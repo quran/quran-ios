@@ -41,7 +41,7 @@ public struct FileSystemMigrator: Migrator {
         // move audio files
         let reciters = await recitersRetreiver.getReciters()
         for reciter in reciters {
-            move(reciter.oldLocalFolder(), to: reciter.localFolder())
+            move(reciter.oldLocalFolder().url, to: reciter.localFolder().url)
         }
     }
 

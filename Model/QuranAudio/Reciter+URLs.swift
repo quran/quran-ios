@@ -12,37 +12,30 @@ import Utilities
 extension Reciter {
     static let audioRemotePath = "hafs/databases/audio/"
 
-    public var localDatabaseURL: URL? {
+    public var localDatabasePath: RelativeFilePath? {
         guard case .gapless(let databaseName) = audioType else {
             return nil
         }
-        let baseFileName = localFolder().appendingPathComponent(databaseName)
+        let baseFileName = localFolder().appendingPathComponent(databaseName, isDirectory: true)
         return baseFileName.appendingPathExtension(Files.databaseLocalFileExtension)
     }
 
-    public var localZipURL: URL? {
-        guard case .gapless(let databaseName) = audioType else {
-            return nil
-        }
-        let baseFileName = localFolder().appendingPathComponent(databaseName)
-        return baseFileName.appendingPathExtension(Files.databaseRemoteFileExtension)
+    public var localZipPath: RelativeFilePath? {
+        localDatabasePath?.deletingPathExtension()
+            .appendingPathExtension(Files.databaseRemoteFileExtension)
     }
 
-    public static var audioFiles: URL {
-        FileManager.documentsURL.appendingPathComponent(Files.audioFilesPathComponent, isDirectory: true)
+    public static var audioFiles: RelativeFilePath {
+        RelativeFilePath(Files.audioFilesPathComponent, isDirectory: true)
     }
 
-    var relativePath: String {
-        Files.audioFilesPathComponent.stringByAppendingPath(directory)
-    }
-
-    public func localFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(relativePath, isDirectory: true)
+    public func localFolder() -> RelativeFilePath {
+        Self.audioFiles.appendingPathComponent(directory, isDirectory: true)
     }
 
     // TODO: should be internal
-    public func oldLocalFolder() -> URL {
-        FileManager.documentsURL.appendingPathComponent(directory, isDirectory: true)
+    public func oldLocalFolder() -> RelativeFilePath {
+        RelativeFilePath(directory, isDirectory: true)
     }
 
     public func databaseRemoteURL(baseURL: URL) -> URL? {
@@ -61,9 +54,9 @@ extension Reciter {
             .appendingPathExtension(Files.audioExtension)
     }
 
-    public func localURL(sura: Sura) -> URL {
+    public func localURL(sura: Sura) -> RelativeFilePath {
         let fileName = sura.suraNumber.as3DigitString()
-        return localFolder().appendingPathComponent(fileName)
+        return localFolder().appendingPathComponent(fileName, isDirectory: true)
             .appendingPathExtension(Files.audioExtension)
     }
 
@@ -73,9 +66,9 @@ extension Reciter {
             .appendingPathExtension(Files.audioExtension)
     }
 
-    public func localURL(ayah: AyahNumber) -> URL {
+    public func localURL(ayah: AyahNumber) -> RelativeFilePath {
         let fileName = ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString()
-        return localFolder().appendingPathComponent(fileName)
+        return localFolder().appendingPathComponent(fileName, isDirectory: true)
             .appendingPathExtension(Files.audioExtension)
     }
 

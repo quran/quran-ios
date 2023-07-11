@@ -25,7 +25,7 @@ public struct QuranTextDataService {
             localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
             arabicPersistence: arabicPersistence,
             translationsPersistenceBuilder: { translation in
-                GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
+                GRDBTranslationVerseTextPersistence(fileURL: translation.localPath.url)
             }
         )
     }

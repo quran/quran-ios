@@ -9,6 +9,7 @@ import AudioTimingPersistence
 import Foundation
 import QuranAudio
 import QuranKit
+import Utilities
 import VLogging
 
 public struct ReciterTimingRetriever {
@@ -43,10 +44,10 @@ public struct ReciterTimingRetriever {
     // MARK: Private
 
     private func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
-        guard let fileURL = reciter.localDatabaseURL else {
+        guard let filePath = reciter.localDatabasePath else {
             fatalError("Gapped reciters are not supported.")
         }
-        let persistence = persistenceFactory(fileURL)
+        let persistence = persistenceFactory(filePath.url)
 
         var result: [Sura: SuraTiming] = [:]
         for sura in suras {

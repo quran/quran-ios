@@ -51,7 +51,7 @@ public struct LocalTranslationsFake {
             try await persistence.insert(translation)
         }
         preferences.selectedTranslations = translations.map(\.id)
-        fileSystem.files = Set(translations.map(\.localURL))
+        fileSystem.files = Set(translations.map(\.localPath.url))
     }
 
     public func insertTranslation(
@@ -68,7 +68,7 @@ public struct LocalTranslationsFake {
         }
 
         if downloaded {
-            fileSystem.files.insert(translation.localURL)
+            fileSystem.files.insert(translation.localPath.url)
         }
     }
 

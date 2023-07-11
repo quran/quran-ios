@@ -18,7 +18,7 @@ public class DownloadedRecitersService {
 
     public func downloadedReciters(_ allReciters: [Reciter]) -> [Reciter] {
         guard let downloadedRecitersURLs = try? FileManager.default.contentsOfDirectory(
-            at: Reciter.audioFiles,
+            at: Reciter.audioFiles.url,
             includingPropertiesForKeys: nil
         ) else {
             return []

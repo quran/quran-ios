@@ -74,8 +74,8 @@ class AudioUpdaterTests: XCTestCase {
         await updater.updateAudioIfNeeded()
 
         XCTAssertEqual(Set(fileSystem.removedItems), [
-            gappedReciter.localFolder().appendingPathComponent(file1),
-            gappedReciter.localFolder().appendingPathComponent(file2),
+            gappedReciter.localFolder().appendingPathComponent(file1, isDirectory: false).url,
+            gappedReciter.localFolder().appendingPathComponent(file2, isDirectory: false).url,
         ])
         XCTAssertEqual(preferences.lastRevision, updates.currentRevision)
         XCTAssertEqual(preferences.lastChecked, time.now)
@@ -106,8 +106,8 @@ class AudioUpdaterTests: XCTestCase {
         await updater.updateAudioIfNeeded()
 
         XCTAssertEqual(Set(fileSystem.removedItems), [
-            gaplessReciter.gaplessDatabaseZipURL,
-            gaplessReciter.localFolder().appendingPathComponent(file1),
+            gaplessReciter.gaplessDatabaseZipPath.url,
+            gaplessReciter.localFolder().appendingPathComponent(file1, isDirectory: false).url,
         ])
         XCTAssertEqual(preferences.lastRevision, updates.currentRevision)
         XCTAssertEqual(preferences.lastChecked, time.now)
@@ -133,7 +133,7 @@ class AudioUpdaterTests: XCTestCase {
     func test_updateAudioIfNeeded_gapless_removeDatabase() async throws {
         try gaplessReciter.prepareGaplessReciterForTests(unZip: true)
 
-        fileSystem.files.insert(gaplessReciter.gaplessDatabaseURL)
+        fileSystem.files.insert(gaplessReciter.gaplessDatabasePath.url)
 
         let update = makeUpdate(reciter: gaplessReciter, databaseVersion: 100, files: [])
         let updates = AudioUpdates(currentRevision: 19, updates: [update])
@@ -142,8 +142,8 @@ class AudioUpdaterTests: XCTestCase {
         await updater.updateAudioIfNeeded()
 
         XCTAssertEqual(Set(fileSystem.removedItems), [
-            gaplessReciter.gaplessDatabaseZipURL,
-            gaplessReciter.gaplessDatabaseURL,
+            gaplessReciter.gaplessDatabaseZipPath.url,
+            gaplessReciter.gaplessDatabasePath.url,
         ])
         XCTAssertEqual(preferences.lastRevision, updates.currentRevision)
         XCTAssertEqual(preferences.lastChecked, time.now)
@@ -151,7 +151,7 @@ class AudioUpdaterTests: XCTestCase {
 
     func test_updateAudioIfNeeded_gapless_upToDateDatabase() async throws {
         try gaplessReciter.prepareGaplessReciterForTests(unZip: true)
-        fileSystem.files.insert(gaplessReciter.gaplessDatabaseURL)
+        fileSystem.files.insert(gaplessReciter.gaplessDatabasePath.url)
 
         let update = makeUpdate(reciter: gaplessReciter, databaseVersion: 6, files: [])
         let updates = AudioUpdates(currentRevision: 19, updates: [update])
@@ -189,13 +189,13 @@ class AudioUpdaterTests: XCTestCase {
     }
 
     private func setUpFileSystem() {
-        fileSystem.filesInDirectory[Reciter.audioFiles] = reciters.map { URL(fileURLWithPath: $0.directory) }
+        fileSystem.filesInDirectory[Reciter.audioFiles.url] = reciters.map { URL(fileURLWithPath: $0.directory) }
         fileSystem.files = Set(reciters.flatMap { reciter in
             [
-                reciter.localFolder(),
-                reciter.localFolder().appendingPathComponent(file1),
-                reciter.localFolder().appendingPathComponent(file1),
-                reciter.localFolder().appendingPathComponent(file2),
+                reciter.localFolder().url,
+                reciter.localFolder().appendingPathComponent(file1, isDirectory: false).url,
+                reciter.localFolder().appendingPathComponent(file1, isDirectory: false).url,
+                reciter.localFolder().appendingPathComponent(file2, isDirectory: false).url,
             ]
         })
     }

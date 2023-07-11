@@ -20,27 +20,30 @@
 
 import Foundation
 import NetworkSupport
+import Utilities
 
 public struct DownloadRequest: Hashable, Sendable {
     // MARK: Lifecycle
 
-    public init(url: URL, destinationURL: URL) {
+    public init(url: URL, destination: RelativeFilePath) {
         self.url = url
-        resumeURL = destinationURL.appendingPathExtension(Self.downloadResumeDataExtension)
-        self.destinationURL = destinationURL
+        self.destination = destination
     }
 
     // MARK: Public
 
-    public static let downloadResumeDataExtension = "resume"
-
     public let url: URL
-    public let resumeURL: URL
-    public let destinationURL: URL
+    public let destination: RelativeFilePath
+
+    public var resumePath: RelativeFilePath { destination.appendingPathExtension(Self.downloadResumeDataExtension) }
 
     public var request: URLRequest {
         URLRequest(url: url)
     }
+
+    // MARK: Private
+
+    private static let downloadResumeDataExtension = ".resume"
 }
 
 public struct DownloadBatchRequest: Hashable, Sendable {
@@ -57,7 +60,7 @@ public struct DownloadBatchRequest: Hashable, Sendable {
 
 extension NetworkSession {
     func downloadTask(with request: DownloadRequest) -> NetworkSessionDownloadTask {
-        if let data = try? Data(contentsOf: request.resumeURL) {
+        if let data = try? Data(contentsOf: request.resumePath) {
             return downloadTask(withResumeData: data)
         } else {
             return downloadTask(with: URLRequest(url: request.url))

@@ -8,10 +8,11 @@
 import Foundation
 import QuranAudio
 import QuranKit
+import Utilities
 
 public struct ReciterAudioFile: Sendable, Hashable {
     public var remote: URL
-    public var local: URL
+    public var local: RelativeFilePath
     public var sura: Sura? = nil
 }
 
@@ -24,12 +25,12 @@ private struct GaplessAudioFileListRetriever: AudioFileListRetriever {
 
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
         guard let databaseRemoteURL = reciter.databaseRemoteURL(baseURL: baseURL),
-              let localDatabaseURL = reciter.localZipURL
+              let localDatabasePath = reciter.localZipPath
         else {
             fatalError("Unsupported reciter type gapped. Only gapless reciters can be downloaded here.")
         }
 
-        let dbFile = ReciterAudioFile(remote: databaseRemoteURL, local: localDatabaseURL)
+        let dbFile = ReciterAudioFile(remote: databaseRemoteURL, local: localDatabasePath)
 
         // loop over the files
         var files = Set<ReciterAudioFile>()

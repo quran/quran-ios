@@ -40,7 +40,7 @@ public struct CompositeSearcher: Searcher {
             quranVerseTextPersistence: persistence,
             localTranslationRetriever: localTranslationRetriever,
             versePersistenceBuilder: { translation in
-                GRDBTranslationVerseTextPersistence(fileURL: translation.localURL)
+                GRDBTranslationVerseTextPersistence(fileURL: translation.localPath.url)
             }
         )
     }

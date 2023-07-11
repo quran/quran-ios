@@ -20,7 +20,7 @@ public struct TranslationsDownloader {
 
     public func download(_ translation: Translation) async throws -> DownloadBatchResponse {
         // download the translation
-        let download = DownloadRequest(url: translation.fileURL, destinationURL: translation.unprocessedLocalURL)
+        let download = DownloadRequest(url: translation.fileURL, destination: translation.unprocessedLocalPath)
         let response = try await downloader.download(DownloadBatchRequest(requests: [download]))
         return response
     }
@@ -61,6 +61,6 @@ extension [Translation] {
 
 private extension Translation {
     func matches(_ request: DownloadRequest) -> Bool {
-        request.destinationURL == unprocessedLocalURL
+        request.destination == unprocessedLocalPath
     }
 }

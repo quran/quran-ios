@@ -21,6 +21,7 @@
 import Crashing
 import Foundation
 import NetworkSupport
+import Utilities
 import VLogging
 
 actor DownloadSessionDelegate: NetworkSessionDelegate {
@@ -67,11 +68,11 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         }
         let fileManager = FileManager.default
 
-        let resumeURL = response.request.resumeURL
-        let destinationURL = response.request.destinationURL
+        let resumePath = response.request.resumePath
+        let destinationURL = response.request.destination
 
         // remove the resume data
-        try? fileManager.removeItem(at: resumeURL)
+        try? fileManager.removeItem(at: resumePath)
         // remove the existing file if exist.
         try? fileManager.removeItem(at: destinationURL)
 
@@ -94,6 +95,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async {
+        logger.info("Finished downloading \(describe(task)). Error: \(String(describing: sessionError))")
         guard let response = await dataController.downloadRequestResponse(for: task) else {
             if let sessionError, !sessionError.isCancelled {
                 logger.warning("[networkSession:didCompleteWithError] Cannot find onGoingDownloads for task \(describe(task))")
@@ -110,7 +112,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        let finalError = wrap(error: error, resumeURL: response.request.resumeURL)
+        let finalError = wrap(error: error, resumePath: response.request.resumePath)
         await dataController.downloadFailed(response, with: finalError)
     }
 
@@ -126,13 +128,13 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
     private let dataController: DownloadBatchDataController
 
-    private func wrap(error theError: Error, resumeURL: URL) -> Error {
+    private func wrap(error theError: Error, resumePath: RelativeFilePath) -> Error {
         var error = theError
 
         // save resume data, if found
         if let resumeData = error.resumeData {
             do {
-                try resumeData.write(to: resumeURL, options: [.atomic])
+                try resumeData.write(to: resumePath, options: [.atomic])
             } catch {
                 crasher.recordError(error, reason: "Error while saving resume data.")
             }

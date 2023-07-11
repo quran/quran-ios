@@ -23,7 +23,7 @@ import QuranAudio
 
 extension DownloadRequest {
     var isAudio: Bool {
-        Reciter.audioFiles.isParent(of: destinationURL)
+        Reciter.audioFiles.isParent(of: destination)
     }
 }
 

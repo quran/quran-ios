@@ -51,7 +51,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
             try await persistence.insert(translation)
         }
 
-        fileSystem.files = [downloadedTranslation.localURL]
+        fileSystem.files = [downloadedTranslation.localPath.url]
 
         let localTranslations = try await service.getLocalTranslations()
         XCTAssertEqual(Set(localTranslations), Set(translations))

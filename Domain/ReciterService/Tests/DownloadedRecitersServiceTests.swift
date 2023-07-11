@@ -60,7 +60,7 @@ class DownloadedRecitersServiceTests: XCTestCase {
     }
 
     private func createReciterFile(_ reciter: Reciter) {
-        let fileURL = reciter.localFolder().appendingPathComponent("surah1")
+        let fileURL = reciter.localFolder().appendingPathComponent("surah1", isDirectory: false)
         try? "testing123".write(to: fileURL, atomically: true, encoding: .utf8)
     }
 

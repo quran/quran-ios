@@ -10,6 +10,7 @@ import BatchDownloaderFake
 import NetworkSupportFake
 import SystemDependenciesFake
 import TranslationServiceFake
+import Utilities
 import XCTest
 @testable import BatchDownloader
 @testable import TranslationService
@@ -35,7 +36,7 @@ class TranslationsDownloaderTests: XCTestCase {
 
         let response = try await downloader.download(translation)
         XCTAssertEqual(response.urls, [translation.fileURL])
-        XCTAssertEqual(response.destinations, [translation.localURL])
+        XCTAssertEqual(response.destinations, [translation.localPath])
     }
 
     func test_runningDownloads_empty() async throws {
@@ -67,7 +68,7 @@ private extension DownloadBatchResponse {
         requests.map(\.request.url)
     }
 
-    nonisolated var destinations: [URL] {
-        requests.map(\.destinationURL)
+    nonisolated var destinations: [RelativeFilePath] {
+        requests.map(\.destination)
     }
 }

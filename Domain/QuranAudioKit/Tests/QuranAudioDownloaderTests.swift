@@ -12,6 +12,7 @@ import QuranAudio
 import QuranKit
 import SnapshotTesting
 import SystemDependenciesFake
+import Utilities
 import XCTest
 @testable import BatchDownloader
 @testable import QuranAudioKit
@@ -102,7 +103,7 @@ class QuranAudioDownloaderTests: XCTestCase {
         let start = suras[0].firstVerse
         let end = suras[3].lastVerse
         let suraPaths = start.sura.array(to: end.sura).map { suraLocalURL($0, reciter: reciter) }
-        fileSystem.files = Set([reciter.gaplessDatabaseZipURL] + suraPaths)
+        fileSystem.files = Set([reciter.gaplessDatabaseZipPath.url] + suraPaths)
 
         let downloaded = await downloader.downloaded(reciter: reciter, from: start, to: end)
         XCTAssertTrue(downloaded)
@@ -192,11 +193,7 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     private let request = DownloadRequest(
         url: baseURL.appendingPathComponent("mishari_alafasy/001.mp3"),
-        destinationURL: FileManager.documentsURL
-            .appendingPathComponent(
-                "audio_files/mishari_alafasy/001.mp3",
-                isDirectory: false
-            )
+        destination: RelativeFilePath("audio_files/mishari_alafasy/001.mp3", isDirectory: false)
     )
 
     private let gappedReciter: Reciter = .gappedReciter
@@ -213,7 +210,7 @@ class QuranAudioDownloaderTests: XCTestCase {
     }
 
     private func suraLocalURL(_ sura: Sura, reciter: Reciter) -> URL {
-        reciter.localFolder().appendingPathComponent(sura.suraNumber.as3DigitString() + ".mp3")
+        reciter.localFolder().appendingPathComponent(sura.suraNumber.as3DigitString() + ".mp3", isDirectory: false).url
     }
 
     private func ayahRemoteURL(_ ayah: AyahNumber, reciter: Reciter) -> URL {
@@ -221,7 +218,7 @@ class QuranAudioDownloaderTests: XCTestCase {
     }
 
     private func ayahLocalURL(_ ayah: AyahNumber, reciter: Reciter) -> URL {
-        reciter.localFolder().appendingPathComponent(ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString() + ".mp3")
+        reciter.localFolder().appendingPathComponent(ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString() + ".mp3", isDirectory: false).url
     }
 }
 

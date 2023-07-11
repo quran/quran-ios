@@ -6,30 +6,31 @@
 //
 
 import Foundation
+import Utilities
 
 private extension Translation {
     static let compressedFileExtension = "zip"
     static let translationsPathComponent = "translations"
-    static let localTranslationsURL = FileManager.documentsURL.appendingPathComponent(translationsPathComponent)
+    static let localTranslationsPath = RelativeFilePath(translationsPathComponent, isDirectory: true)
 }
 
 extension Translation {
-    public static func isLocalTranslationURL(_ url: URL) -> Bool {
-        localTranslationsURL.isParent(of: url)
+    public static func isLocalTranslationPath(_ path: RelativeFilePath) -> Bool {
+        localTranslationsPath.isParent(of: path)
     }
 
-    public var localURL: URL {
-        Self.localTranslationsURL.appendingPathComponent(fileName)
+    public var localPath: RelativeFilePath {
+        Self.localTranslationsPath.appendingPathComponent(fileName, isDirectory: false)
     }
 
-    public var localFiles: [URL] {
+    public var localFiles: [RelativeFilePath] {
         possibleFileNames.map {
-            Translation.localTranslationsURL.appendingPathComponent($0)
+            Translation.localTranslationsPath.appendingPathComponent($0, isDirectory: false)
         }
     }
 
-    public var unprocessedLocalURL: URL {
-        Translation.localTranslationsURL.appendingPathComponent(unprocessedFileName)
+    public var unprocessedLocalPath: RelativeFilePath {
+        Translation.localTranslationsPath.appendingPathComponent(unprocessedFileName, isDirectory: false)
     }
 
     public var isUnprocessedFileZip: Bool {

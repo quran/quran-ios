@@ -44,7 +44,7 @@ struct TranslationsVersionUpdater {
 
     private func updateInstalledVersion(_ translation: Translation) async throws -> Translation {
         var translation = translation
-        let isReachable = fileSystem.fileExists(at: translation.localURL)
+        let isReachable = fileSystem.fileExists(at: translation.localPath)
         let previousInstalledVersion = translation.installedVersion
 
         // installed on the latest version & the db file exists
@@ -80,7 +80,7 @@ struct TranslationsVersionUpdater {
 
 extension DownloadRequest {
     var isTranslation: Bool {
-        Translation.isLocalTranslationURL(destinationURL)
+        Translation.isLocalTranslationPath(destination)
     }
 }
 

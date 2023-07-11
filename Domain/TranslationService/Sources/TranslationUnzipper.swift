@@ -33,7 +33,7 @@ struct DefaultTranslationUnzipper: TranslationUnzipper {
 
         // unzip if needed
         if translation.isUnprocessedFileZip {
-            let zipFile = translation.unprocessedLocalURL
+            let zipFile = translation.unprocessedLocalPath.url
             if zipFile.isReachable {
                 // delete the zip in both cases (success or failure)
                 // success: to save space

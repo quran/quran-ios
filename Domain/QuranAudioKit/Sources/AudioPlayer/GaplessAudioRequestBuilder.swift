@@ -12,6 +12,7 @@ import QueuePlayer
 import QuranAudio
 import QuranKit
 import QuranTextKit
+import Utilities
 import VLogging
 
 struct GaplessAudioRequest: QuranAudioRequest {
@@ -49,12 +50,12 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
         requestRuns: Runs
     ) async throws -> QuranAudioRequest {
         let range = try await timingRetriever.timing(for: reciter, from: start, to: end)
-        let urls = urlsToPlay(reciter: reciter, suras: range.timings.keys)
+        let surasPaths = urlsToPlay(reciter: reciter, suras: range.timings.keys)
 
         var files: [AudioFile] = []
         var ayahs: [[AyahNumber]] = []
 
-        for (url, sura) in urls {
+        for (path, sura) in surasPaths {
             let suraTimings = range.timings[sura]!
 
             var frames: [AudioFrame] = []
@@ -75,7 +76,7 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
                 frames.append(frame)
                 fileAyahs.append(verse.ayah)
             }
-            files.append(AudioFile(url: url, frames: frames))
+            files.append(AudioFile(url: path.url, frames: frames))
             ayahs.append(fileAyahs)
         }
         let request = AudioRequest(files: files, endTime: range.endTime?.seconds, frameRuns: frameRuns, requestRuns: requestRuns)
@@ -85,13 +86,13 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
 
     // MARK: Private
 
-    private func urlsToPlay(reciter: Reciter, suras: some Collection<Sura>) -> [(url: URL, sura: Sura)] {
+    private func urlsToPlay(reciter: Reciter, suras: some Collection<Sura>) -> [(path: RelativeFilePath, sura: Sura)] {
         guard case AudioType.gapless = reciter.audioType else {
             fatalError("Unsupported reciter type gapped. Only gapless reciters can be played here.")
         }
 
         // loop over the files
-        var files: [(URL, Sura)] = []
+        var files: [(RelativeFilePath, Sura)] = []
         for sura in suras.sorted() {
             let localURL = reciter.localURL(sura: sura)
             files.append((localURL, sura))

@@ -8,6 +8,7 @@
 import Foundation
 import QuranAudio
 import TestResources
+import Utilities
 import Zip
 
 extension Reciter {
@@ -21,22 +22,22 @@ extension Reciter {
         return databaseName + ".db"
     }
 
-    public var gaplessDatabaseZipURL: URL {
-        localFolder().appendingPathComponent(gaplessDatabaseZip)
+    public var gaplessDatabaseZipPath: RelativeFilePath {
+        localFolder().appendingPathComponent(gaplessDatabaseZip, isDirectory: false)
     }
 
-    public var gaplessDatabaseURL: URL {
-        localFolder().appendingPathComponent(gaplessDatabaseDB)
+    public var gaplessDatabasePath: RelativeFilePath {
+        localFolder().appendingPathComponent(gaplessDatabaseDB, isDirectory: false)
     }
 
     public func prepareGaplessReciterForTests(unZip: Bool = false) throws {
         let directory = localFolder()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let dbSource = resource(gaplessDatabaseZip)
-        let zipDestination = gaplessDatabaseZipURL
-        try FileManager.default.copyItem(at: dbSource, to: gaplessDatabaseZipURL)
+        let zipDestination = gaplessDatabaseZipPath
+        try FileManager.default.copyItem(at: dbSource, to: gaplessDatabaseZipPath)
         if unZip {
-            try Zip.unzipFile(zipDestination, destination: directory, overwrite: true, password: nil, progress: nil)
+            try Zip.unzipFile(zipDestination.url, destination: directory.url, overwrite: true, password: nil, progress: nil)
         }
     }
 

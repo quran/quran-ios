@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Internal
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        print("Documents directory: ", FileManager.documentsURL)
+
         FontName.registerFonts()
         LoggingSystem.bootstrap(StreamLogHandler.standardError)
         AsyncTextLabelSystem.bootstrap(FixedTextNode.init)

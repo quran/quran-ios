@@ -89,19 +89,6 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         }
     }
 
-//    public func completeResponse(_ batch: DownloadBatchResponse,
-//                                 file: StaticString = #filePath,
-//                                 line: UInt = #line) async throws
-//    {
-//        for (i, response) in await batch.responses.enumerated() {
-//            let task = try await AsyncUnwrap(await response.task as? SessionTask, file: file, line: line)
-//            let text = Int.random(in: 0 ..< Int.max).description
-//            let source = try Self.createTextFile(at: "loc-\(i).txt", content: text)
-//            XCTAssertTrue(source.isReachable, file: file, line: line)
-//            await completeDownloadTask(task, location: source, totalBytes: 10, progressLoops: 1)
-//        }
-//    }
-
     // MARK: Internal
 
     let delegate: NetworkSessionDelegate?

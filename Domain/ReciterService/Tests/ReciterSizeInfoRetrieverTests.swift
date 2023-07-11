@@ -127,8 +127,8 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
 
         let directory = reciter.localFolder()
         let fileURLs = files.map(\.local)
-        fileSystem.filesInDirectory[directory] = fileURLs
-        fileURLs.forEach { fileSystem.setResourceValues($0, fileSize: fileSize) }
+        fileSystem.filesInDirectory[directory.url] = fileURLs.map(\.url)
+        fileURLs.forEach { fileSystem.setResourceValues($0.url, fileSize: fileSize) }
 
         return AudioDownloadedSize(
             downloadedSizeInBytes: UInt64(fileSize * files.count),
@@ -145,14 +145,14 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
     ) async throws {
         let reciter = gappedReciter
         let files = ayahs.map { ayah in
-            reciter.relativePath
-                .stringByAppendingPath(ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString())
-                .stringByAppendingExtension("mp3")
+            reciter.localFolder()
+                .appendingPathComponent(ayah.sura.suraNumber.as3DigitString() + ayah.ayah.as3DigitString(), isDirectory: true)
+                .appendingPathExtension("mp3")
         }
 
         let directory = reciter.localFolder()
-        let fileURLs = files.map { directory.appendingPathComponent($0) }
-        fileSystem.filesInDirectory[directory] = fileURLs
+        let fileURLs = files.map(\.url)
+        fileSystem.filesInDirectory[directory.url] = fileURLs
         fileURLs.forEach { fileSystem.setResourceValues($0, fileSize: fileSize) }
 
         let expectedDownload = AudioDownloadedSize(
@@ -173,16 +173,16 @@ class ReciterSizeInfoRetrieverTests: XCTestCase {
         file: StaticString = #filePath, line: UInt = #line
     ) async throws {
         let reciter = gaplessReciter
-        let dbFiles = dbDownloaded ? [reciter.relativePath.stringByAppendingPath(reciter.gaplessDatabaseDB)] : []
+        let dbFiles = dbDownloaded ? [reciter.localFolder().appendingPathComponent(reciter.gaplessDatabaseDB, isDirectory: false)] : []
         let files = suras.map { sura in
-            reciter.relativePath
-                .stringByAppendingPath(sura.suraNumber.as3DigitString())
-                .stringByAppendingExtension("mp3")
+            reciter.localFolder()
+                .appendingPathComponent(sura.suraNumber.as3DigitString(), isDirectory: true)
+                .appendingPathExtension("mp3")
         } + dbFiles
 
         let directory = reciter.localFolder()
-        let fileURLs = files.map { directory.appendingPathComponent($0) }
-        fileSystem.filesInDirectory[directory] = fileURLs
+        let fileURLs = files.map(\.url)
+        fileSystem.filesInDirectory[directory.url] = fileURLs
         fileURLs.forEach { fileSystem.setResourceValues($0, fileSize: fileSize) }
 
         let expectedDownload = AudioDownloadedSize(

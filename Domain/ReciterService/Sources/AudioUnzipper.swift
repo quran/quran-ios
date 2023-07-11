@@ -21,7 +21,7 @@ public struct AudioUnzipper {
     // MARK: Public
 
     public func unzip(reciter: Reciter) async throws {
-        guard let dbFile = reciter.localDatabaseURL, let zipFile = reciter.localZipURL else {
+        guard let dbFile = reciter.localDatabasePath?.url, let zipFile = reciter.localZipPath?.url else {
             return
         }
 
@@ -31,7 +31,7 @@ public struct AudioUnzipper {
 
         logger.info("Unzipping audio file. Reciter=\(reciter.nameKey) file=\(zipFile).")
         do {
-            try Zip.unzipFile(zipFile, destination: reciter.localFolder(), overwrite: true, password: nil, progress: nil)
+            try Zip.unzipFile(zipFile, destination: reciter.localFolder().url, overwrite: true, password: nil, progress: nil)
         } catch {
             crasher.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(reciter.localFolder())'")
             // delete the zip and try to re-download it again, next time.

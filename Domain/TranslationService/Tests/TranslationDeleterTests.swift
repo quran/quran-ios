@@ -44,7 +44,7 @@ class TranslationDeleterTests: XCTestCase {
         var expected = translation
         expected.installedVersion = nil
         XCTAssertEqual(expected, deletedTranslation)
-        XCTAssertEqual(fileSystem.removedItems, [expected.localURL])
+        XCTAssertEqual(fileSystem.removedItems, [expected.localPath.url])
         XCTAssertEqual(preferences.selectedTranslations, [])
 
         let localTranslations = try await retriever.getLocalTranslations()
@@ -65,8 +65,8 @@ class TranslationDeleterTests: XCTestCase {
         var expected = translation
         expected.installedVersion = nil
         XCTAssertEqual(expected, deletedTranslation)
-        let zipURL = expected.localURL.deletingPathExtension().appendingPathExtension("zip")
-        XCTAssertEqual(fileSystem.removedItems, [expected.localURL, zipURL])
+        let zipURL = expected.localPath.deletingPathExtension().appendingPathExtension("zip")
+        XCTAssertEqual(fileSystem.removedItems, [expected.localPath, zipURL].map(\.url))
         XCTAssertEqual(preferences.selectedTranslations, [])
 
         let localTranslations = try await retriever.getLocalTranslations()
@@ -86,7 +86,7 @@ class TranslationDeleterTests: XCTestCase {
         let deletedTranslation = try await service.deleteTranslation(translation)
 
         XCTAssertEqual(translation, deletedTranslation)
-        XCTAssertEqual(fileSystem.removedItems, [translation.localURL])
+        XCTAssertEqual(fileSystem.removedItems, [translation.localPath.url])
         XCTAssertEqual(preferences.selectedTranslations, [])
 
         let localTranslations = try await retriever.getLocalTranslations()

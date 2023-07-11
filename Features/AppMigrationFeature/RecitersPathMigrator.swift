@@ -36,13 +36,13 @@ public struct RecitersPathMigrator: Migrator {
     }
 
     private func move(_ sourcePath: String, to destinationPath: String) {
-        let source = Reciter.audioFiles.appendingPathComponent(sourcePath)
-        let destination = Reciter.audioFiles.appendingPathComponent(destinationPath)
+        let source = Reciter.audioFiles.appendingPathComponent(sourcePath, isDirectory: true)
+        let destination = Reciter.audioFiles.appendingPathComponent(destinationPath, isDirectory: true)
 
         let fileManager = FileManager.default
 
         let destinationDir = destination.deletingLastPathComponent()
-        try? fileManager.createDirectory(at: destinationDir, withIntermediateDirectories: true)
-        try? fileManager.moveItem(at: source, to: destination)
+        try? fileManager.createDirectory(at: destinationDir.url, withIntermediateDirectories: true)
+        try? fileManager.moveItem(at: source.url, to: destination.url)
     }
 }

@@ -22,7 +22,7 @@ final class DownloadManagerTests: XCTestCase {
         let task: SessionTask
         let text: String
         let source: URL
-        let destination: URL
+        let destination: RelativeFilePath
         let progressLoops: Int
         let listener: HistoryProgressListener
         let progress: CurrentValueSubject<DownloadProgress, Error>
@@ -136,8 +136,8 @@ final class DownloadManagerTests: XCTestCase {
 
         // 2nd task
         await assertThrows(responseToFail.progress.values(), NetworkError.serverNotReachable)
-        await AsyncAssertEqual(requestToFail.resumeURL.isReachable, false)
-        await AsyncAssertEqual(requestToFail.destinationURL.isReachable, false)
+        await AsyncAssertEqual(requestToFail.resumePath.isReachable, false)
+        await AsyncAssertEqual(requestToFail.destination.isReachable, false)
 
         // other tasks should be cancelled
         for request in batch.requests.filter({ !startedRequests.contains($0) }) {
@@ -165,7 +165,7 @@ final class DownloadManagerTests: XCTestCase {
 
         // verify task
         await assertThrows(details.progress.values(), NetworkError.connectionLost)
-        try await AsyncAssertEqual(try String(contentsOf: request1.resumeURL), resumeText)
+        try await AsyncAssertEqual(try String(contentsOf: request1.resumePath), resumeText)
     }
 
     func testDownloadBatchAfterEnquingThem() async throws {
@@ -333,7 +333,7 @@ final class DownloadManagerTests: XCTestCase {
             task: task,
             text: text,
             source: source,
-            destination: request.destinationURL,
+            destination: request.destination,
             progressLoops: progressLoops,
             listener: listener,
             progress: details.progress

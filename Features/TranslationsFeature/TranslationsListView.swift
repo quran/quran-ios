@@ -18,8 +18,8 @@ struct TranslationsListView: View {
     var body: some View {
         TranslationsListViewUI(
             editMode: $viewModel.editMode,
-            loading: $viewModel.loading,
             error: $viewModel.error,
+            loading: viewModel.loading,
             selectedTranslations: viewModel.selectedTranslations,
             downloadedTranslations: viewModel.downloadedTranslations,
             availableTranslations: viewModel.availableTranslations,
@@ -37,8 +37,8 @@ struct TranslationsListView: View {
 
 private struct TranslationsListViewUI: View {
     @Binding var editMode: EditMode
-    @Binding var loading: Bool
     @Binding var error: Error?
+    let loading: Bool
 
     let selectedTranslations: [TranslationItem]
     let downloadedTranslations: [TranslationItem]
@@ -99,11 +99,7 @@ private struct TranslationsListViewUI: View {
             }
         }
         .refreshableIfAvailable(action: refresh)
-        .task {
-            loading = true
-            await start()
-            withAnimation { loading = false }
-        }
+        .task(start)
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -236,8 +232,8 @@ struct TranslationsListView_Previews: PreviewProvider {
 
                 TranslationsListViewUI(
                     editMode: $editMode,
-                    loading: $loading,
                     error: $error,
+                    loading: loading,
                     selectedTranslations: selected,
                     downloadedTranslations: downloaded,
                     availableTranslations: available,

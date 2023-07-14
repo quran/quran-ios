@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIx
 
 public struct NoorBasicSection<Content: View>: View {
     // MARK: Lifecycle
@@ -44,7 +45,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         title: String? = nil,
         _ items: [Item],
         @ViewBuilder listItem: @escaping (Item) -> ListItem,
-        onDelete: ((Item) -> Void)? = nil,
+        onDelete: AsyncItemAction<Item>? = nil,
         onMove: ((IndexSet, Int) -> Void)? = nil
     ) {
         self.title = title
@@ -82,12 +83,12 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     let title: String?
     let items: [Item]
     let listItem: (Item) -> ListItem
-    var onDelete: (@MainActor (Item) async -> Void)?
+    var onDelete: AsyncItemAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
 }
 
 extension NoorSection {
-    public func onDelete(action: (@MainActor (Item) async -> Void)?) -> Self {
+    public func onDelete(action: AsyncItemAction<Item>?) -> Self {
         var mutableSelf = self
         mutableSelf.onDelete = action
         return mutableSelf

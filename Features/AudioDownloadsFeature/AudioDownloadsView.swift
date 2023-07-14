@@ -9,6 +9,7 @@ import Localization
 import NoorUI
 import QuranAudio
 import SwiftUI
+import UIx
 
 struct DownloadItem {
     let title: String
@@ -37,10 +38,10 @@ private struct AudioDownloadsViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
     let items: [AudioDownloadItem]
-    let start: @Sendable () async -> Void
-    let downloadAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
-    let cancelAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
-    let deleteAction: @MainActor @Sendable (AudioDownloadItem) async -> Void
+    let start: AsyncAction
+    let downloadAction: AsyncItemAction<AudioDownloadItem>
+    let cancelAction: AsyncItemAction<AudioDownloadItem>
+    let deleteAction: AsyncItemAction<AudioDownloadItem>
 
     var body: some View {
         NoorList {
@@ -97,7 +98,7 @@ private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
     let items: [AudioDownloadItem]
     let listItem: (AudioDownloadItem) -> ListItem
-    let onDelete: (@MainActor (AudioDownloadItem) async -> Void)?
+    let onDelete: AsyncItemAction<AudioDownloadItem>?
 
     var body: some View {
         NoorSection(title: title, items) { item in

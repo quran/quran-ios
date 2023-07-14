@@ -8,6 +8,7 @@
 import SwiftUI
 
 public typealias AsyncAction = @MainActor @Sendable () async -> Void
+public typealias AsyncItemAction<Item> = @MainActor @Sendable (Item) async -> Void
 
 extension Button {
     public init(asyncAction: @escaping AsyncAction, @ViewBuilder label: () -> Label) {

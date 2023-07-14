@@ -23,12 +23,14 @@ public struct BookmarksBuilder {
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let interactor = BookmarksInteractor(
+        let viewModel = BookmarksViewModel(
             analytics: container.analytics,
-            service: service
+            service: service,
+            navigateTo: { [weak listener] page in
+                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+            }
         )
-        interactor.listener = listener
-        let viewController = BookmarksTableViewController(interactor: interactor)
+        let viewController = BookmarksViewController(viewModel: viewModel)
         return viewController
     }
 

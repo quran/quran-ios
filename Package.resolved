@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "downloadbutton",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mohamede1945/DownloadButton",
-      "state" : {
-        "branch" : "master",
-        "revision" : "5ccde65b5395a3ee48203f5d490afac7da525ba5"
-      }
-    },
-    {
       "identity" : "genericdatasource",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GenericDataSource/GenericDataSource",

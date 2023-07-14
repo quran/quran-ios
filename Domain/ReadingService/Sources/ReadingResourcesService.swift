@@ -12,6 +12,12 @@ import SystemDependencies
 import Utilities
 
 public actor ReadingResourcesService {
+    public enum ResourceStatus: Equatable {
+        case downloading(progress: Double)
+        case ready
+        case error(NSError)
+    }
+
     // MARK: Lifecycle
 
     public init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
@@ -19,12 +25,6 @@ public actor ReadingResourcesService {
     }
 
     // MARK: Public
-
-    public enum ResourceStatus: Equatable {
-        case downloading(progress: Double)
-        case ready
-        case error(NSError)
-    }
 
     public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
         subject

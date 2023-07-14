@@ -159,9 +159,9 @@ private struct TranslationsListViewUI: View {
         let image = editMode == .active ? nil : image
         let action = editMode == .active ? nil : action
         return SimpleListItem(
-            image: image?.image,
+            image: image.map { .init($0) },
             heading: downloaded ? item.localizedLanguage : nil,
-            title: item.displayName,
+            title: .text(item.displayName),
             subtitle: subtitle(of: item.info),
             accessory: accessory(item, downloaded: downloaded),
             action: action

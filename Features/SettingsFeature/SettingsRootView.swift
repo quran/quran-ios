@@ -48,16 +48,16 @@ private struct SettingsRootViewUI: View {
 
             NoorBasicSection {
                 SimpleListItem(
-                    image: NoorSystemImage.audio.image,
-                    title: l("audio.download-play-amount"),
+                    image: .init(.audio),
+                    title: .text(l("audio.download-play-amount")),
                     subtitle: .init(text: audioEnd, location: .trailing),
                     accessory: .disclosureIndicator,
                     action: navigateToAudioEndSelector
                 )
 
                 SimpleListItem(
-                    image: NoorSystemImage.downloads.image,
-                    title: lAndroid("audio_manager"),
+                    image: .init(.downloads),
+                    title: .text(lAndroid("audio_manager")),
                     accessory: .disclosureIndicator,
                     action: navigateToAudioManager
                 )
@@ -65,8 +65,8 @@ private struct SettingsRootViewUI: View {
 
             NoorBasicSection {
                 SimpleListItem(
-                    image: NoorSystemImage.translation.image,
-                    title: lAndroid("prefs_translations"),
+                    image: .init(.translation),
+                    title: .text(lAndroid("prefs_translations")),
                     accessory: .disclosureIndicator,
                     action: navigateToTranslationsList
                 )
@@ -74,22 +74,22 @@ private struct SettingsRootViewUI: View {
 
             NoorBasicSection {
                 SimpleListItem(
-                    image: NoorSystemImage.share.image,
-                    title: l("share_app"),
+                    image: .init(.share),
+                    title: .text(l("share_app")),
                     accessory: .disclosureIndicator,
                     action: shareApp
                 )
 
                 SimpleListItem(
-                    image: NoorSystemImage.star.image,
-                    title: l("write_review"),
+                    image: .init(.star),
+                    title: .text(l("write_review")),
                     accessory: .disclosureIndicator,
                     action: writeReview
                 )
 
                 SimpleListItem(
-                    image: NoorSystemImage.mail.image,
-                    title: l("contact_us"),
+                    image: .init(.mail),
+                    title: .text(l("contact_us")),
                     accessory: .disclosureIndicator,
                     action: contactUs
                 )

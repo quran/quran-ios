@@ -12,7 +12,7 @@ import UIx
 struct MoreMenuTranslationSelector: View {
     var body: some View {
         SimpleListItem(
-            title: l("menu.select_translation"),
+            title: .text(l("menu.select_translation")),
             accessory: .disclosureIndicator
         )
         .padding()

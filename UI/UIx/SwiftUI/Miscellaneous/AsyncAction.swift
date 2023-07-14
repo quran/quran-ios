@@ -18,3 +18,13 @@ extension Button {
         }, label: label)
     }
 }
+
+extension View {
+    public func onTapGesture(count: Int = 1, asyncAction action: @escaping AsyncAction) -> some View {
+        onTapGesture(count: count, perform: {
+            Task {
+                await action()
+            }
+        })
+    }
+}

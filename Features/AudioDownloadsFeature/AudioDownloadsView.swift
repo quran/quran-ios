@@ -49,7 +49,7 @@ private struct AudioDownloadsViewUI: View {
                 items: items.filter(\.canDelete),
                 listItem: { item in
                     SimpleListItem(
-                        title: item.reciter.localizedName,
+                        title: .text(item.reciter.localizedName),
                         subtitle: .init(text: item.size.formattedString(), location: .bottom),
                         accessory: accessory(item)
                     )
@@ -62,7 +62,7 @@ private struct AudioDownloadsViewUI: View {
                 items: items.filter { !$0.canDelete },
                 listItem: { item in
                     SimpleListItem(
-                        title: item.reciter.localizedName,
+                        title: .text(item.reciter.localizedName),
                         accessory: accessory(item)
                     )
                 },

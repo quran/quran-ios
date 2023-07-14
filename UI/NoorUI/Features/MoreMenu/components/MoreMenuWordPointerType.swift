@@ -14,7 +14,7 @@ struct MoreMenuWordPointerType: View {
 
     var body: some View {
         SimpleListItem(
-            title: l("menu.pointer.select_translation"),
+            title: .text(l("menu.pointer.select_translation")),
             subtitle: .init(text: typeText, location: .trailing),
             accessory: .disclosureIndicator
         )

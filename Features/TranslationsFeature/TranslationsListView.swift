@@ -23,11 +23,11 @@ struct TranslationsListView: View {
             selectedTranslations: viewModel.selectedTranslations,
             downloadedTranslations: viewModel.downloadedTranslations,
             availableTranslations: viewModel.availableTranslations,
-            selectAction: viewModel.selectTranslation,
-            deselectAction: viewModel.deselectTranslation,
-            downloadAction: viewModel.startDownloading,
-            cancelAction: viewModel.cancelDownloading,
-            deleteAction: viewModel.deleteTranslation,
+            selectAction: { await viewModel.selectTranslation($0) },
+            deselectAction: { await viewModel.deselectTranslation($0) },
+            downloadAction: { await viewModel.startDownloading($0) },
+            cancelAction: { await viewModel.cancelDownloading($0) },
+            deleteAction: { await viewModel.deleteTranslation($0) },
             moveSelectedItemsAction: viewModel.moveSelectedTranslations,
             start: { await viewModel.start() },
             refresh: { await viewModel.refresh() }
@@ -44,13 +44,13 @@ private struct TranslationsListViewUI: View {
     let downloadedTranslations: [TranslationItem]
     let availableTranslations: [TranslationItem]
 
-    let selectAction: @MainActor (TranslationItem) async -> Void
-    let deselectAction: @MainActor (TranslationItem) async -> Void
+    let selectAction: AsyncItemAction<TranslationItem>
+    let deselectAction: AsyncItemAction<TranslationItem>
 
-    let downloadAction: @MainActor (TranslationItem) async -> Void
-    let cancelAction: @MainActor (TranslationItem) async -> Void
+    let downloadAction: AsyncItemAction<TranslationItem>
+    let cancelAction: AsyncItemAction<TranslationItem>
 
-    let deleteAction: @MainActor (TranslationItem) async -> Void
+    let deleteAction: AsyncItemAction<TranslationItem>
     let moveSelectedItemsAction: (IndexSet, Int) -> Void
 
     let start: @Sendable () async -> Void
@@ -104,6 +104,7 @@ private struct TranslationsListViewUI: View {
             await start()
             withAnimation { loading = false }
         }
+        .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
 
@@ -185,7 +186,7 @@ private struct TranslationsListSection<ListItem: View>: View {
     let title: String?
     let items: [TranslationItem]
     let listItem: (TranslationItem) -> ListItem
-    let onDelete: (@MainActor (TranslationItem) async -> Void)?
+    let onDelete: AsyncItemAction<TranslationItem>?
     let onMove: ((IndexSet, Int) -> Void)?
 
     var body: some View {

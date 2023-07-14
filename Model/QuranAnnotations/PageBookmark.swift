@@ -8,7 +8,7 @@
 import Foundation
 import QuranKit
 
-public struct PageBookmark: Equatable {
+public struct PageBookmark: Equatable, Identifiable {
     // MARK: Lifecycle
 
     public init(page: Page, creationDate: Date) {
@@ -20,4 +20,6 @@ public struct PageBookmark: Equatable {
 
     public let page: Page
     public let creationDate: Date
+
+    public var id: Page { page }
 }

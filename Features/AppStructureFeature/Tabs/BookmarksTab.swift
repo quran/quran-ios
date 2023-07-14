@@ -21,6 +21,7 @@ struct BookmarksTabBuilder: TabBuildable {
             bookmarksBuilder: BookmarksBuilder(container: container)
         )
         let viewController = BookmarksTabViewController(interactor: interactor)
+        viewController.navigationBar.prefersLargeTitles = true
         return viewController
     }
 }

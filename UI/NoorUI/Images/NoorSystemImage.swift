@@ -17,6 +17,7 @@ public enum NoorSystemImage: String {
     case mail = "envelope"
     case checkmark_checked = "checkmark.circle.fill"
     case checkmark_unchecked = "circle"
+    case bookmark = "bookmark.fill"
 
     // MARK: Public
 

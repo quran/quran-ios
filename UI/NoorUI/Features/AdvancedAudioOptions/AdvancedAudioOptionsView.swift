@@ -111,7 +111,7 @@ private struct VerseStaticView<Verse: AdvancedAudioUIVerse>: View {
 
     var body: some View {
         SimpleListItem(
-            title: label,
+            title: .text(label),
             subtitle: .init(text: verse.localizedNameWithSuraNumber, location: .trailing),
             accessory: .disclosureIndicator,
             action: action
@@ -126,7 +126,7 @@ private struct ReciterView: View {
 
     var body: some View {
         SimpleListItem(
-            title: name,
+            title: .text(name),
             accessory: .disclosureIndicator,
             action: action
         )

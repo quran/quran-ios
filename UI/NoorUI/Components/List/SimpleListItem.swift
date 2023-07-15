@@ -9,11 +9,6 @@ import SwiftUI
 import UIx
 
 public struct SimpleListItem: View {
-    public enum Title {
-        case text(String)
-        case sura(name: String, arabic: String)
-    }
-
     public struct Subtitle {
         // MARK: Lifecycle
 
@@ -68,15 +63,21 @@ public struct SimpleListItem: View {
     // MARK: Lifecycle
 
     public init(
+        leadingEdgeLineColor: Color? = nil,
         image: ItemImage? = nil,
         heading: String? = nil,
-        title: Title,
+        subheading: MultipartText? = nil,
+        rightPretitle: MultipartText? = nil,
+        title: MultipartText,
         subtitle: Subtitle? = nil,
         accessory: Accessory? = nil,
         action: AsyncAction? = nil
     ) {
+        self.leadingEdgeLineColor = leadingEdgeLineColor
         self.image = image
         self.heading = heading
+        self.subheading = subheading
+        self.rightPretitle = rightPretitle
         self.title = title
         self.subtitle = subtitle
         self.accessory = accessory
@@ -103,9 +104,12 @@ public struct SimpleListItem: View {
 
     // MARK: Internal
 
+    let leadingEdgeLineColor: Color?
     let image: ItemImage?
     let heading: String?
-    let title: Title
+    let subheading: MultipartText?
+    let rightPretitle: MultipartText?
+    let title: MultipartText
     let subtitle: Subtitle?
     let accessory: Accessory?
     let action: AsyncAction?
@@ -114,6 +118,11 @@ public struct SimpleListItem: View {
 
     private var content: some View {
         HStack {
+            if let leadingEdgeLineColor {
+                leadingEdgeLineColor
+                    .frame(width: 4)
+            }
+
             if let image {
                 if let color = image.color {
                     image.image.image
@@ -129,7 +138,21 @@ public struct SimpleListItem: View {
                         .foregroundColor(.accentColor)
                 }
 
-                titleView
+                if let subheading {
+                    subheading.view(ofSize: .caption)
+                        .foregroundColor(Color.secondaryLabel)
+                }
+
+                if let rightPretitle {
+                    HStack {
+                        rightPretitle.view(ofSize: .body)
+                        Spacer()
+                    }
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .padding(.vertical)
+                }
+
+                title.view(ofSize: .body)
 
                 if let subtitle, subtitle.location == .bottom {
                     subtitleView(subtitle, textFont: .footnote)
@@ -162,24 +185,6 @@ public struct SimpleListItem: View {
     }
 
     @ViewBuilder
-    private var titleView: some View {
-        switch title {
-        case .text(let text):
-            Text(text)
-        case .sura(let name, let arabic):
-            HStack {
-                Text(name)
-                if NSLocale.preferredLanguages.first != "ar" {
-                    Text(arabic)
-                        .padding(.top, 5)
-                        .frame(alignment: .center)
-                        .font(.custom(.suraNames, size: 20))
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
     private func subtitleText(_ subtitle: Subtitle, textFont: Font) -> Text {
         Text(subtitle.text)
             .foregroundColor(.secondaryLabel)
@@ -200,34 +205,45 @@ public struct SimpleListItem: View {
 }
 
 struct SimpleListItem_Previews: PreviewProvider {
+    static let ayahText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
+
     static var previews: some View {
         List {
             ForEach(0 ..< 100) { section in
                 Section {
                     SimpleListItem(
                         image: .init(.audio),
-                        title: .text("Title"),
+                        title: "Title",
                         accessory: .none
                     )
 
                     SimpleListItem(
                         image: .init(.share),
                         heading: "English",
-                        title: .text("An English title"),
+                        title: "An English title",
                         subtitle: .init(label: "Translator: ", text: "An English subtitle", location: .bottom)
                     ) {
                     }
 
                     SimpleListItem(
+                        leadingEdgeLineColor: .purple,
+                        subheading: "Sura 1, verse 2 \(sura: String(UnicodeScalar(0xE907)!))",
+                        rightPretitle: "\(verse: ayahText, lineLimit: 2)",
+                        title: "An English title",
+                        subtitle: .init(text: "6 days ago", location: .bottom)
+                    ) {
+                    }
+
+                    SimpleListItem(
                         image: .init(.mail),
-                        title: .text("Title"),
+                        title: "Title",
                         subtitle: .init(text: "Subtitle", location: .trailing),
                         accessory: .disclosureIndicator
                     ) {
                     }
 
                     SimpleListItem(
-                        title: .text("Reciter name"),
+                        title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .none
                     ) {
@@ -235,21 +251,21 @@ struct SimpleListItem_Previews: PreviewProvider {
 
                     SimpleListItem(
                         image: .init(.bookmark, color: .red),
-                        title: .sura(name: "Sura 1", arabic: String(UnicodeScalar(0xE907)!)),
+                        title: "Sura 1 \(sura: String(UnicodeScalar(0xE907)!))",
                         subtitle: .init(text: "Just now", location: .bottom),
                         accessory: .text("44")
                     ) {
                     }
 
                     SimpleListItem(
-                        title: .text("Reciter name"),
+                        title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .download(.downloading(progress: 0.9), action: {})
                     ) {
                     }
 
                     SimpleListItem(
-                        title: .text("Reciter name"),
+                        title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .download(.download, action: {})
                     )

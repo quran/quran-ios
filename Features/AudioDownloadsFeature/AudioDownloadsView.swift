@@ -49,7 +49,7 @@ private struct AudioDownloadsViewUI: View {
                 title: l("reciters.downloaded"),
                 items: items.filter(\.canDelete),
                 listItem: { item in
-                    SimpleListItem(
+                    NoorListItem(
                         title: .text(item.reciter.localizedName),
                         subtitle: .init(text: item.size.formattedString(), location: .bottom),
                         accessory: accessory(item)
@@ -62,7 +62,7 @@ private struct AudioDownloadsViewUI: View {
                 title: l("reciters.all"),
                 items: items.filter { !$0.canDelete },
                 listItem: { item in
-                    SimpleListItem(
+                    NoorListItem(
                         title: .text(item.reciter.localizedName),
                         accessory: accessory(item)
                     )
@@ -75,7 +75,7 @@ private struct AudioDownloadsViewUI: View {
         .environment(\.editMode, $editMode)
     }
 
-    func accessory(_ item: AudioDownloadItem) -> SimpleListItem.Accessory? {
+    func accessory(_ item: AudioDownloadItem) -> NoorListItem.Accessory? {
         if editMode == .active {
             return nil
         }

@@ -13,7 +13,7 @@ struct MoreMenuWordPointerType: View {
     let type: MoreMenu.TranslationPointerType
 
     var body: some View {
-        SimpleListItem(
+        NoorListItem(
             title: .text(l("menu.pointer.select_translation")),
             subtitle: .init(text: typeText, location: .trailing),
             accessory: .disclosureIndicator

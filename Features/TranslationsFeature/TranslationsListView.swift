@@ -127,7 +127,7 @@ private struct TranslationsListViewUI: View {
         }
     }
 
-    func accessory(_ item: TranslationItem, downloaded: Bool) -> SimpleListItem.Accessory? {
+    func accessory(_ item: TranslationItem, downloaded: Bool) -> NoorListItem.Accessory? {
         if editMode == .active {
             return nil
         }
@@ -152,10 +152,10 @@ private struct TranslationsListViewUI: View {
         downloaded: Bool,
         image: NoorSystemImage? = nil,
         action: AsyncAction? = nil
-    ) -> SimpleListItem {
+    ) -> NoorListItem {
         let image = editMode == .active ? nil : image
         let action = editMode == .active ? nil : action
-        return SimpleListItem(
+        return NoorListItem(
             image: image.map { .init($0) },
             heading: downloaded ? item.localizedLanguage : nil,
             title: .text(item.displayName),
@@ -165,7 +165,7 @@ private struct TranslationsListViewUI: View {
         )
     }
 
-    func subtitle(of translation: Translation) -> SimpleListItem.Subtitle? {
+    func subtitle(of translation: Translation) -> NoorListItem.Subtitle? {
         if let translatorDisplayName = translation.translatorDisplayName, !translatorDisplayName.isEmpty {
             return .init(
                 label: l("translatorLabel: "),

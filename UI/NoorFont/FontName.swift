@@ -68,6 +68,10 @@ public extension Font {
     static func custom(_ name: FontName, size: CGFloat) -> Font {
         custom(name.details.name, size: size)
     }
+
+    static func custom(_ name: FontName, size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
+        custom(name.details.name, size: size, relativeTo: textStyle)
+    }
 }
 
 public extension UIFont {

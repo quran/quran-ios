@@ -11,7 +11,7 @@ import UIx
 
 struct MoreMenuTranslationSelector: View {
     var body: some View {
-        SimpleListItem(
+        NoorListItem(
             title: .text(l("menu.select_translation")),
             accessory: .disclosureIndicator
         )

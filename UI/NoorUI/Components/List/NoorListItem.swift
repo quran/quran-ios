@@ -1,5 +1,5 @@
 //
-//  SimpleListItem.swift
+//  NoorListItem.swift
 //
 //
 //  Created by Mohamed Afifi on 2023-06-25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIx
 
-public struct SimpleListItem: View {
+public struct NoorListItem: View {
     public struct Subtitle {
         // MARK: Lifecycle
 
@@ -204,20 +204,20 @@ public struct SimpleListItem: View {
     }
 }
 
-struct SimpleListItem_Previews: PreviewProvider {
+struct NoorListItem_Previews: PreviewProvider {
     static let ayahText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
 
     static var previews: some View {
         List {
             ForEach(0 ..< 100) { section in
                 Section {
-                    SimpleListItem(
+                    NoorListItem(
                         image: .init(.audio),
                         title: "Title",
                         accessory: .none
                     )
 
-                    SimpleListItem(
+                    NoorListItem(
                         image: .init(.share),
                         heading: "English",
                         title: "An English title",
@@ -225,7 +225,7 @@ struct SimpleListItem_Previews: PreviewProvider {
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         leadingEdgeLineColor: .purple,
                         subheading: "Sura 1, verse 2 \(sura: String(UnicodeScalar(0xE907)!))",
                         rightPretitle: "\(verse: ayahText, lineLimit: 2)",
@@ -234,7 +234,7 @@ struct SimpleListItem_Previews: PreviewProvider {
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         image: .init(.mail),
                         title: "Title",
                         subtitle: .init(text: "Subtitle", location: .trailing),
@@ -242,14 +242,14 @@ struct SimpleListItem_Previews: PreviewProvider {
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .none
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         image: .init(.bookmark, color: .red),
                         title: "Sura 1 \(sura: String(UnicodeScalar(0xE907)!))",
                         subtitle: .init(text: "Just now", location: .bottom),
@@ -257,14 +257,14 @@ struct SimpleListItem_Previews: PreviewProvider {
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .download(.downloading(progress: 0.9), action: {})
                     ) {
                     }
 
-                    SimpleListItem(
+                    NoorListItem(
                         title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
                         accessory: .download(.download, action: {})

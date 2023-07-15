@@ -47,7 +47,7 @@ private struct SettingsRootViewUI: View {
             }
 
             NoorBasicSection {
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.audio),
                     title: .text(l("audio.download-play-amount")),
                     subtitle: .init(text: audioEnd, location: .trailing),
@@ -55,7 +55,7 @@ private struct SettingsRootViewUI: View {
                     action: navigateToAudioEndSelector
                 )
 
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.downloads),
                     title: .text(lAndroid("audio_manager")),
                     accessory: .disclosureIndicator,
@@ -64,7 +64,7 @@ private struct SettingsRootViewUI: View {
             }
 
             NoorBasicSection {
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.translation),
                     title: .text(lAndroid("prefs_translations")),
                     accessory: .disclosureIndicator,
@@ -73,21 +73,21 @@ private struct SettingsRootViewUI: View {
             }
 
             NoorBasicSection {
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.share),
                     title: .text(l("share_app")),
                     accessory: .disclosureIndicator,
                     action: shareApp
                 )
 
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.star),
                     title: .text(l("write_review")),
                     accessory: .disclosureIndicator,
                     action: writeReview
                 )
 
-                SimpleListItem(
+                NoorListItem(
                     image: .init(.mail),
                     title: .text(l("contact_us")),
                     accessory: .disclosureIndicator,

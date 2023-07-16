@@ -21,6 +21,7 @@ struct SettingsTabBuilder: TabBuildable {
             settingsBuilder: SettingsBuilder(container: container)
         )
         let viewController = SettingsTabViewController(interactor: interactor)
+        viewController.navigationBar.prefersLargeTitles = true
         return viewController
     }
 }

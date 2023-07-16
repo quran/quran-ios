@@ -149,7 +149,6 @@ public struct NoorListItem: View {
                         Spacer()
                     }
                     .environment(\.layoutDirection, .rightToLeft)
-                    .padding(.vertical)
                 }
 
                 title.view(ofSize: .body)
@@ -228,7 +227,7 @@ struct NoorListItem_Previews: PreviewProvider {
                     NoorListItem(
                         leadingEdgeLineColor: .purple,
                         subheading: "Sura 1, verse 2 \(sura: String(UnicodeScalar(0xE907)!))",
-                        rightPretitle: "\(verse: ayahText, lineLimit: 2)",
+                        rightPretitle: "\(verse: ayahText, color: .purple, lineLimit: 2)",
                         title: "An English title",
                         subtitle: .init(text: "6 days ago", location: .bottom)
                     ) {

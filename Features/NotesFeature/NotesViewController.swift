@@ -1,70 +1,53 @@
 //
 //  NotesViewController.swift
-//  Quran
 //
-//  Created by Afifi, Mohamed on 11/14/20.
-//  Copyright © 2020 Quran.com. All rights reserved.
+//
+//  Created by Mohamed Afifi on 2023-07-16.
 //
 
 import Localization
-import NoorUI
-import QuranKit
-import UIKit
+import SwiftUI
 import UIx
 
-final class NotesViewController: ModernSingleSectionTableViewController<NoteUI, NoteCell>, NotesPresentable {
+final class NotesViewController: UIHostingController<NotesView> {
     // MARK: Lifecycle
 
-    init(interactor: NotesInteractor) {
-        self.interactor = interactor
-        let notesDS = NoteDataSource()
-        super.init(dataSource: notesDS, noDataView: {
-            NoDataView(
-                title: l("notes.no-data.title"),
-                text: l("notes.no-data.text"),
-                image: "text.badge.star"
-            )
-        })
-        interactor.presenter = self
-        listener = ModernSingleSectionTableListener(
-            viewDidLoad: { [weak self] in
-                self?.interactor.viewDidLoad()
-            },
-            viewWillAppear: {},
-            selectItem: { [weak self] in
-                self?.interactor.selectItem($0)
-            },
-            deleteItem: { [weak self] in
-                await self?.interactor.deleteItem($0)
-            }
-        )
+    init(viewModel: NotesViewModel) {
+        self.viewModel = viewModel
+        super.init(rootView: NotesView(viewModel: viewModel))
+
+        initialize()
     }
 
-    // MARK: Internal
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = l("tab.notes")
-        addCloudSyncInfo()
+    @available(*, unavailable)
+    @MainActor
+    dynamic required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: Private
 
-    private let interactor: NotesInteractor
-}
+    private var editController: EditController?
+    private let viewModel: NotesViewModel
 
-private class NoteDataSource: ModernEditableBasicDataSource<NoteUI, NoteCell> {
-    override func view(with item: NoteUI, at indexPath: IndexPath) -> NoteCell {
-        let page = item.note.firstVerse.page
-        return NoteCell(
-            page: page.pageNumber,
-            localizedVerse: item.note.firstVerse.localizedName,
-            arabicSuraName: item.note.firstVerse.sura.arabicSuraName,
-            versesCount: item.note.verses.count,
-            ayahText: item.verseText,
-            note: item.note.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
-            createdSince: item.note.modifiedDate.timeAgo(),
-            color: item.note.color
+    private var currentEditMode: EditMode? {
+        if viewModel.notes.isEmpty {
+            return nil
+        }
+        return viewModel.editMode
+    }
+
+    private func initialize() {
+        title = l("tab.notes")
+        addCloudSyncInfo()
+
+        editController = EditController(
+            navigationItem: navigationItem,
+            reload: viewModel.objectWillChange.eraseToAnyPublisher(),
+            editMode: Binding(
+                get: { [weak self] in self?.currentEditMode },
+                set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
+            )
         )
     }
 }

@@ -22,13 +22,15 @@ import QuranAnnotations
 import UIKit
 
 extension QuranHighlightType {
+    public static let opacity = 0.3
+
     public var color: UIColor {
         switch self {
-        case .reading: return UIColor.appIdentity.withAlphaComponent(0.3)
-        case .share: return UIColor.systemBlue.withAlphaComponent(0.3)
-        case .note(let color): return color.uiColor.withAlphaComponent(0.5)
-        case .search: return UIColor.systemGray.withAlphaComponent(0.5)
-        case .word: return UIColor.appIdentity.withAlphaComponent(0.3)
+        case .reading: return UIColor.appIdentity.withAlphaComponent(Self.opacity)
+        case .share: return UIColor.systemBlue.withAlphaComponent(Self.opacity)
+        case .note(let color): return color.uiColor.withAlphaComponent(Self.opacity)
+        case .search: return UIColor.systemGray.withAlphaComponent(Self.opacity)
+        case .word: return UIColor.appIdentity.withAlphaComponent(Self.opacity)
         }
     }
 }

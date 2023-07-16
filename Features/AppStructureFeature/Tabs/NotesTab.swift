@@ -21,6 +21,7 @@ struct NotesTabBuilder: TabBuildable {
             notesBuilder: NotesBuilder(container: container)
         )
         let viewController = NotesTabViewController(interactor: interactor)
+        viewController.navigationBar.prefersLargeTitles = true
         return viewController
     }
 }

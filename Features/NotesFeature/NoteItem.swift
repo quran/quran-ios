@@ -1,5 +1,5 @@
 //
-//  NoteUI.swift
+//  NoteItem.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 11/22/20.
@@ -7,8 +7,11 @@
 //
 
 import QuranAnnotations
+import QuranKit
 
-struct NoteUI: Equatable {
+struct NoteItem: Equatable, Identifiable {
     let note: Note
     let verseText: String
+
+    var id: Set<AyahNumber> { note.verses }
 }

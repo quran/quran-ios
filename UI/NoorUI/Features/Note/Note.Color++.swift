@@ -28,7 +28,7 @@ extension Note.Color {
         [.yellow, .green, .blue, .red, .purple]
     }
 
-    var color: SwiftUI.Color {
+    public var color: SwiftUI.Color {
         SwiftUI.Color(uiColor)
     }
 }

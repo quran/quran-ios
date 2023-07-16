@@ -24,15 +24,14 @@ public struct NotesBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let interactorDeps = NotesInteractor.Deps(
+        let viewModel = NotesViewModel(
             analytics: container.analytics,
             noteService: container.noteService(),
-            pageBookmarkService: pageBookmarkService
+            navigateTo: { [weak listener] verse in
+                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
+            }
         )
-        let interactor = NotesInteractor(deps: interactorDeps)
-        interactor.listener = listener
-        let viewController = NotesViewController(interactor: interactor)
+        let viewController = NotesViewController(viewModel: viewModel)
         return viewController
     }
 

@@ -7,37 +7,49 @@
 
 import SwiftUI
 
+private struct TextPartView: View {
+    // MARK: Internal
+
+    let part: TextPart
+    let size: MultipartText.FontSize
+
+    var body: some View {
+        switch part.kind {
+        case .plain:
+            Text(part.text)
+                .font(size.plainFont)
+        case .sura:
+            if NSLocale.preferredLanguages.first != "ar" {
+                Text(part.text)
+                    .padding(.top, 5)
+                    .frame(alignment: .center)
+                    .font(size.suraFont)
+            }
+        case .verse(let color, let lineLimit):
+            Text(part.text)
+                .lineLimit(lineLimit)
+                .font(size.verseFont)
+                .padding(versePadding)
+                .background(color)
+        }
+    }
+
+    // MARK: Private
+
+    @ScaledMetric private var versePadding = 5
+}
+
 private struct TextPart {
     enum Kind {
         case plain
         case sura
-        case verse(lineLimit: Int?)
+        case verse(color: Color, lineLimit: Int?)
     }
 
     // MARK: Internal
 
     let kind: Kind
     let text: String
-
-    @ViewBuilder
-    func view(ofSize size: MultipartText.FontSize) -> some View {
-        switch kind {
-        case .plain:
-            Text(text)
-                .font(size.plainFont)
-        case .sura:
-            if NSLocale.preferredLanguages.first != "ar" {
-                Text(text)
-                    .padding(.top, 5)
-                    .frame(alignment: .center)
-                    .font(size.suraFont)
-            }
-        case .verse(let lineLimit):
-            Text(text)
-                .lineLimit(lineLimit)
-                .font(size.verseFont)
-        }
-    }
 }
 
 public struct MultipartText: ExpressibleByStringInterpolation {
@@ -84,8 +96,8 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.init(kind: .sura, text: sura))
         }
 
-        public mutating func appendInterpolation(verse: String, lineLimit: Int? = nil) {
-            parts.append(.init(kind: .verse(lineLimit: lineLimit), text: verse))
+        public mutating func appendInterpolation(verse: String, color: Color, lineLimit: Int? = nil) {
+            parts.append(.init(kind: .verse(color: color, lineLimit: lineLimit), text: verse))
         }
 
         public mutating func appendInterpolation(_ plain: String) {
@@ -113,7 +125,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
     func view(ofSize size: FontSize) -> some View {
         HStack(spacing: 0) {
             ForEach(0 ..< parts.count, id: \.self) { i in
-                parts[i].view(ofSize: size)
+                TextPartView(part: parts[i], size: size)
             }
         }
     }

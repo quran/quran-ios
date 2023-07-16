@@ -42,6 +42,7 @@ final class BookmarksViewModel: ObservableObject {
 
         for await bookmarks in bookmarksSequence {
             self.bookmarks = bookmarks
+                .sorted { $0.creationDate > $1.creationDate }
         }
     }
 

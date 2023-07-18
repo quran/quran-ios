@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct Juz: QuranValueGroup {
+public struct Juz: QuranValueGroup, Identifiable {
     // MARK: Lifecycle
 
     init(quran: Quran, juzNumber: Int) {
@@ -32,6 +32,8 @@ public struct Juz: QuranValueGroup {
     }
 
     // MARK: Public
+
+    public var id: Juz { self }
 
     public var juzNumber: Int { storage.value }
     public var quran: Quran {

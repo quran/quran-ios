@@ -8,7 +8,7 @@
 import Foundation
 import QuranKit
 
-public struct LastPage: Equatable {
+public struct LastPage: Equatable, Identifiable {
     // MARK: Lifecycle
 
     public init(page: Page, createdOn: Date, modifiedOn: Date) {
@@ -22,4 +22,6 @@ public struct LastPage: Equatable {
     public var page: Page
     public var createdOn: Date
     public var modifiedOn: Date
+
+    public var id: Page { page }
 }

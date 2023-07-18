@@ -21,6 +21,7 @@ struct HomeTabBuilder: TabBuildable {
             homeBuilder: HomeBuilder(container: container)
         )
         let viewController = HomeTabViewController(interactor: interactor)
+        viewController.navigationBar.prefersLargeTitles = true
         return viewController
     }
 }

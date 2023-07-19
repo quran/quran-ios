@@ -20,7 +20,7 @@
 
 import Foundation
 
-public struct Sura: QuranValueGroup, Sendable {
+public struct Sura: QuranValueGroup, Sendable, Identifiable {
     // MARK: Lifecycle
 
     public init?(quran: Quran, suraNumber: Int) {
@@ -35,6 +35,8 @@ public struct Sura: QuranValueGroup, Sendable {
     }
 
     // MARK: Public
+
+    public var id: Sura { self }
 
     public var suraNumber: Int { storage.value }
     public var quran: Quran {

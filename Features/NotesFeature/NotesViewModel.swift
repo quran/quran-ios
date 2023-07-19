@@ -45,7 +45,6 @@ final class NotesViewModel: ObservableObject {
                 noteService.notes(quran: reading.quran)
             }
             .switchToLatest()
-            .receive(on: DispatchQueue.main)
             .values()
 
         for await notes in notesSequence {

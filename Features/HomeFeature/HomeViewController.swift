@@ -1,48 +1,53 @@
 //
 //  HomeViewController.swift
-//  Quran
 //
-//  Created by Afifi, Mohamed on 11/14/20.
-//  Copyright © 2020 Quran.com. All rights reserved.
+//
+//  Created by Mohamed Afifi on 2023-07-16.
 //
 
 import Localization
 import ReadingSelectorFeature
-import UIKit
-import VLogging
+import SwiftUI
+import UIx
 
-final class HomeViewController: UIViewController, HomePresentable {
+final class HomeViewController: UIHostingController<HomeView> {
     // MARK: Lifecycle
 
-    init(interactor: HomeInteractor, readingSelectorBuilder: ReadingSelectorBuilder) {
-        self.interactor = interactor
+    init(viewModel: HomeViewModel, readingSelectorBuilder: ReadingSelectorBuilder) {
+        self.viewModel = viewModel
         self.readingSelectorBuilder = readingSelectorBuilder
-        super.init(nibName: nil, bundle: nil)
-        interactor.presenter = self
-        interactor.start()
+        super.init(rootView: HomeView(viewModel: viewModel))
+
+        initialize()
     }
 
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    @MainActor
+    dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Internal
+    // MARK: Private
 
-    let interactor: HomeInteractor
-    let readingSelectorBuilder: ReadingSelectorBuilder
-    lazy var segmentedControl = UISegmentedControl(frame: .zero)
+    private let viewModel: HomeViewModel
+    private let readingSelectorBuilder: ReadingSelectorBuilder
+    private lazy var segmentedControl = UISegmentedControl(frame: .zero)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func initialize() {
+        configureSegmentedControl()
+        configureNavigationBarButtons()
+    }
 
+    private func configureSegmentedControl() {
         segmentedControl.insertSegment(withTitle: lAndroid("quran_sura"), at: 0, animated: false)
         segmentedControl.insertSegment(withTitle: lAndroid("quran_juz2"), at: 1, animated: false)
-        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentIndex = viewModel.type.rawValue
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
-
         navigationItem.titleView = segmentedControl
+        segmentChanged()
+    }
 
+    private func configureNavigationBarButtons() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage.symbol("books.vertical.fill"),
             style: .plain,
@@ -50,20 +55,6 @@ final class HomeViewController: UIViewController, HomePresentable {
             action: #selector(openReadingSelectors)
         )
     }
-
-    func selectSuras() {
-        loadViewIfNeeded()
-        segmentedControl.selectedSegmentIndex = 0
-        segmentChanged()
-    }
-
-    func selectJuzs() {
-        loadViewIfNeeded()
-        segmentedControl.selectedSegmentIndex = 1
-        segmentChanged()
-    }
-
-    // MARK: Private
 
     @objc
     private func openReadingSelectors() {
@@ -73,15 +64,13 @@ final class HomeViewController: UIViewController, HomePresentable {
 
     @objc
     private func segmentChanged() {
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            logger.info("Home: Suras tapped")
+        let type = HomeViewType(rawValue: segmentedControl.selectedSegmentIndex) ?? .suras
+        switch type {
+        case .suras:
             navigationItem.title = lAndroid("quran_sura")
-            interactor.surasSelected()
-        default:
-            logger.info("Home: Juzs tapped")
+        case .juzs:
             navigationItem.title = lAndroid("quran_juz2")
-            interactor.juzsSelected()
         }
+        viewModel.type = type
     }
 }

@@ -69,6 +69,7 @@ public struct NoorListItem: View {
         subheading: MultipartText? = nil,
         rightPretitle: MultipartText? = nil,
         title: MultipartText,
+        rightSubtitle: MultipartText? = nil,
         subtitle: Subtitle? = nil,
         accessory: Accessory? = nil,
         action: AsyncAction? = nil
@@ -79,6 +80,7 @@ public struct NoorListItem: View {
         self.subheading = subheading
         self.rightPretitle = rightPretitle
         self.title = title
+        self.rightSubtitle = rightSubtitle
         self.subtitle = subtitle
         self.accessory = accessory
         self.action = action
@@ -110,6 +112,7 @@ public struct NoorListItem: View {
     let subheading: MultipartText?
     let rightPretitle: MultipartText?
     let title: MultipartText
+    let rightSubtitle: MultipartText?
     let subtitle: Subtitle?
     let accessory: Accessory?
     let action: AsyncAction?
@@ -152,6 +155,15 @@ public struct NoorListItem: View {
                 }
 
                 title.view(ofSize: .body)
+
+                if let rightSubtitle {
+                    HStack {
+                        rightSubtitle.view(ofSize: .caption)
+                            .foregroundColor(.secondaryLabel)
+                        Spacer()
+                    }
+                    .environment(\.layoutDirection, .rightToLeft)
+                }
 
                 if let subtitle, subtitle.location == .bottom {
                     subtitleView(subtitle, textFont: .footnote)

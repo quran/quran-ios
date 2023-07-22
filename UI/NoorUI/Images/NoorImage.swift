@@ -14,7 +14,6 @@ public enum NoorImage: String {
     case pointer = "pointer-25"
     case rotateToLandscape = "rotate_to_landscape-25"
     case rotateToPortrait = "rotate_to_portrait-25"
-    case search = "search-128"
     case settings = "settings-25"
     case settingsFilled = "settings_filled-25"
     case suraHeader = "sura_header"

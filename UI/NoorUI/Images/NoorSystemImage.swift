@@ -20,6 +20,7 @@ public enum NoorSystemImage: String {
     case bookmark = "bookmark.fill"
     case note = "text.badge.star"
     case lastPage = "clock"
+    case search = "magnifyingglass"
 
     // MARK: Public
 

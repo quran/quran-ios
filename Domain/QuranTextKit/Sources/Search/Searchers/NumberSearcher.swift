@@ -15,7 +15,7 @@ struct NumberSearcher: Searcher {
 
     let quranVerseTextPersistence: VerseTextPersistence
 
-    func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) throws -> [String] {
         if Int(term) != nil {
             return resultsProcessor.buildAutocompletions(searchResults: [term], term: term)
         }
@@ -63,35 +63,35 @@ struct NumberSearcher: Searcher {
             return nil
         }
         let ayahText = try await quranVerseTextPersistence.textForVerse(verse)
-        return SearchResult(text: ayahText, ayah: verse)
+        return SearchResult(text: ayahText, ranges: [], ayah: verse)
     }
 
     private func parseSuraResult(sura: Int, quran: Quran) -> SearchResult? {
         guard let sura = quran.suras.first(where: { $0.suraNumber == sura }) else {
             return nil
         }
-        return SearchResult(text: sura.localizedName(withPrefix: true), ayah: sura.firstVerse)
+        return SearchResult(text: sura.localizedName(withPrefix: true), ranges: [], ayah: sura.firstVerse)
     }
 
     private func parsePageResult(page: Int, quran: Quran) -> SearchResult? {
         guard let page = quran.pages.first(where: { $0.pageNumber == page }) else {
             return nil
         }
-        return SearchResult(text: page.localizedName, ayah: page.firstVerse)
+        return SearchResult(text: page.localizedName, ranges: [], ayah: page.firstVerse)
     }
 
     private func parseJuzResult(juz: Int, quran: Quran) -> SearchResult? {
         guard let juz = quran.juzs.first(where: { $0.juzNumber == juz }) else {
             return nil
         }
-        return SearchResult(text: juz.localizedName, ayah: juz.firstVerse)
+        return SearchResult(text: juz.localizedName, ranges: [], ayah: juz.firstVerse)
     }
 
     private func parseHizbResult(hizb: Int, quran: Quran) -> SearchResult? {
         guard let hizb = quran.hizbs.first(where: { $0.hizbNumber == hizb }) else {
             return nil
         }
-        return SearchResult(text: hizb.localizedName, ayah: hizb.firstVerse)
+        return SearchResult(text: hizb.localizedName, ranges: [], ayah: hizb.firstVerse)
     }
 
     private func parseIntArray(_ term: String) -> [Int] {

@@ -1,61 +1,30 @@
 //
 //  SearchViewController.swift
-//  Quran
 //
-//  Created by Mohamed Afifi on 4/19/16.
 //
-//  Quran for iOS is a Quran reading application for iOS.
-//  Copyright (C) 2017  Quran.com
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  Created by Mohamed Afifi on 2023-07-20.
 //
 
+import Combine
+import Foundation
 import Localization
-import NoorUI
-import UIKit
+import SwiftUI
 
-final class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchBarDelegate {
+final class SearchViewController: UIHostingController<SearchView>, UISearchResultsUpdating, UISearchBarDelegate {
     // MARK: Lifecycle
 
-    init(presenter: SearchPresenter) {
-        self.presenter = presenter
-        super.init(nibName: nil, bundle: .module)
-        presenter.viewController = self
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+        super.init(rootView: SearchView(viewModel: viewModel))
     }
 
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    @MainActor
+    dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: Internal
-
-    lazy var searchController: UISearchController = UISearchController(searchResultsController: searchResults)
-    lazy var searchResults: SearchResultsViewController = {
-        let controller = SearchResultsViewController()
-        controller.dataSource.onAutocompletionSelected = { [weak self] index in
-            self?.searchController.searchBar.resignFirstResponder()
-            self?.presenter.onSelected(autocompletionAt: index)
-        }
-        controller.dataSource.onResultSelected = { [weak self] index in
-            self?.searchController.searchBar.resignFirstResponder() // defensive
-            self?.presenter.onSelected(searchResultAt: index)
-        }
-        return controller
-    }()
-
-    @IBOutlet var recents: UIStackView!
-    @IBOutlet var recentsTitle: UILabel!
-    @IBOutlet var popular: UIStackView!
-    @IBOutlet var popularTitle: UILabel!
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -68,103 +37,52 @@ final class SearchViewController: BaseViewController, UISearchResultsUpdating, U
     override func viewDidLoad() {
         super.viewDidLoad()
         title = lAndroid("menu_search")
-        navigationItem.largeTitleDisplayMode = .never
 
-        recentsTitle.text = l("searchRecentsTitle")
-        popularTitle.text = l("searchPopularTitle")
-
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchBar.placeholder = l("searchPlaceholder")
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
 
-        presenter.onViewLoaded()
+        viewModel.$searchTerm
+            .map(\.term)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] searchTerm in
+                if searchTerm != self?.searchController.searchBar.text {
+                    self?.searchController.searchBar.text = searchTerm
+                }
+            }
+            .store(in: &cancellables)
+
+        viewModel.resignSearchBar
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.searchController.searchBar.endEditing(true)
+            }
+            .store(in: &cancellables)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        if let indexPath = searchResults.tableView?.indexPathForSelectedRow {
-            searchResults.tableView?.deselectRow(at: indexPath, animated: animated)
-        }
-    }
+    // MARK: - Search delegate methods
 
     func updateSearchResults(for searchController: UISearchController) {
-        presenter.onSearchTextUpdated(to: searchController.searchBar.text ?? "", isActive: searchController.isActive)
+        let term = searchController.searchBar.text ?? ""
+        if viewModel.searchTerm.term != term {
+            viewModel.searchTerm = .autocomple(term)
+        }
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        presenter.onSearchButtonTapped()
-    }
-
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchResults.switchToAutocompletes()
-    }
-
-    // MARK: - SearchView
-
-    func show(autocompletions: [NSAttributedString]) {
-        searchResults.setAutocompletes(autocompletions)
-        if searchController.searchBar.isFirstResponder {
-            searchResults.switchToAutocompletes()
+        Task {
+            await viewModel.search()
         }
-    }
-
-    func show(results: [SearchResultSectionUI]) {
-        searchResults.show(results: results)
-    }
-
-    func show(recents: [String], popular: [String]) {
-        updateList(stack: self.recents, title: recentsTitle, values: recents, tapSelector: #selector(onRecentOrPopularTapped(button:)))
-        updateList(stack: self.popular, title: popularTitle, values: popular, tapSelector: #selector(onRecentOrPopularTapped(button:)))
-    }
-
-    func showLoading() {
-        searchResults.showLoading()
-    }
-
-    func showError(_ error: Error) {
-        showErrorAlert(error: error)
-    }
-
-    func showNoResult(_ message: String) {
-        searchResults.showNoResult(message)
-    }
-
-    func updateSearchBarText(to text: String) {
-        searchController.searchBar.text = text
-    }
-
-    func setSearchBarActive(_ isActive: Bool) {
-        searchController.isActive = isActive
-    }
-
-    @objc
-    func onRecentOrPopularTapped(button: UIButton) {
-        presenter.onSearchTermSelected(button.title(for: .normal) ?? "")
     }
 
     // MARK: Private
 
-    private let presenter: SearchPresenter
-
-    private func updateList(stack: UIStackView, title: UIView, values: [String], tapSelector: Selector) {
-        title.isHidden = values.isEmpty
-
-        for view in stack.arrangedSubviews {
-            stack.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
-
-        stack.addArrangedSubview(title)
-        for value in values {
-            let button = UIButton(type: .system)
-            button.vc.height(by: 44)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-            button.setTitle(value, for: .normal)
-            button.addTarget(self, action: tapSelector, for: .touchUpInside)
-            stack.addArrangedSubview(button)
-        }
-    }
+    private var cancellables: Set<AnyCancellable> = []
+    private let viewModel: SearchViewModel
+    private let searchController = UISearchController(searchResultsController: nil)
 }

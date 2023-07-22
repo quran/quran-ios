@@ -77,6 +77,11 @@ class CompositeSearcherTests: XCTestCase {
         assertSnapshot(matching: result, as: .json)
     }
 
+    func testSearchArabicSuraName() async throws {
+        let result = try await searcher.search(for: "النحل", quran: quran)
+        assertSnapshot(matching: result, as: .json)
+    }
+
     func testSearchMultipleSura() async throws {
         let result = try await searcher.search(for: "Yu", quran: quran)
         assertSnapshot(matching: result, as: .json)
@@ -115,17 +120,13 @@ class CompositeSearcherTests: XCTestCase {
 
     private func autocompleteNumber(_ number: String) async throws {
         let result = try await searcher.autocomplete(term: number, quran: quran)
-        XCTAssertEqual(result, [SearchAutocompletion(text: number, term: number)])
+        XCTAssertEqual(result, [number])
     }
 
     private func testAutocomplete(term: String, testName: String = #function) async throws {
         let result = try await searcher.autocomplete(term: term, quran: quran)
 
-        // assert the range
-        let ranges = Set(result.map(\.highlightedRange))
-        XCTAssertEqual(ranges, [NSRange(location: 0, length: (term as NSString).length)])
-
         // assert the text
-        assertSnapshot(matching: result.map(\.text).sorted(), as: .json, testName: testName)
+        assertSnapshot(matching: result.sorted(), as: .json, testName: testName)
     }
 }

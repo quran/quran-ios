@@ -8,24 +8,62 @@
 import SwiftUI
 
 public struct NoorList<Content: View>: View {
+    public enum ListType {
+        case app
+        case searching
+
+        // MARK: Internal
+
+        var listStyle: any ListStyle {
+            switch self {
+            case .app:
+                return InsetGroupedListStyle()
+            case .searching:
+                return PlainListStyle()
+            }
+        }
+    }
+
     // MARK: Lifecycle
 
-    public init(@ViewBuilder content: () -> Content) {
+    public init(listType: ListType = .app, @ViewBuilder content: () -> Content) {
         self.content = content()
+        self.listType = listType
     }
 
     // MARK: Public
 
     public var body: some View {
-        List {
-            content
+        configureList {
+            List {
+                content
+            }
         }
+
         .listStyle(.insetGrouped)
     }
 
     // MARK: Private
 
+    private let listType: ListType
     private let content: Content
+
+    private var list: some View {
+        List {
+            content
+        }
+    }
+
+    @ViewBuilder
+    private func configureList(@ViewBuilder list: () -> some View) -> some View {
+        let list = list()
+        switch listType {
+        case .app:
+            list.listStyle(.insetGrouped)
+        case .searching:
+            list.listStyle(.plain)
+        }
+    }
 }
 
 extension NoorList {

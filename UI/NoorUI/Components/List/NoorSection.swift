@@ -38,6 +38,20 @@ public struct NoorBasicSection<Content: View>: View {
     let content: Content
 }
 
+public struct SelfIdentifiable<T: Hashable>: Identifiable {
+    // MARK: Lifecycle
+
+    public init(value: T) {
+        self.value = value
+    }
+
+    // MARK: Public
+
+    public let value: T
+
+    public var id: T { value }
+}
+
 public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     // MARK: Lifecycle
 

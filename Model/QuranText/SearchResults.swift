@@ -7,31 +7,26 @@
 
 import QuranKit
 
-public struct SearchResult: Equatable {
+public struct SearchResult: Hashable, Identifiable {
     // MARK: Lifecycle
 
-    public init(text: String, ayah: AyahNumber) {
+    public init(text: String, ranges: [Range<String.Index>], ayah: AyahNumber) {
         self.text = text
+        self.ranges = ranges
         self.ayah = ayah
     }
 
     // MARK: Public
 
     public let text: String
+    public let ranges: [Range<String.Index>]
     public let ayah: AyahNumber
+
+    public var id: Self { self }
 }
 
-public struct SearchResults: Equatable {
-    // MARK: Lifecycle
-
-    public init(source: Source, items: [SearchResult]) {
-        self.source = source
-        self.items = items
-    }
-
-    // MARK: Public
-
-    public enum Source: Equatable {
+public struct SearchResults: Equatable, Identifiable {
+    public enum Source: Hashable, Comparable {
         case quran
         case translation(Translation)
 
@@ -45,6 +40,17 @@ public struct SearchResults: Equatable {
         }
     }
 
+    // MARK: Lifecycle
+
+    public init(source: Source, items: [SearchResult]) {
+        self.source = source
+        self.items = items
+    }
+
+    // MARK: Public
+
     public let source: Source
     public let items: [SearchResult]
+
+    public var id: Source { source }
 }

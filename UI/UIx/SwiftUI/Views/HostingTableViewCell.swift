@@ -76,16 +76,3 @@ public final class HostingTableViewCell<Content: View>: UITableViewCell {
 
     private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
 }
-
-@available(iOS 13.0, *)
-public final class HostingTableViewHeaderFooterView<Content: View>: UITableViewHeaderFooterView {
-    // MARK: Public
-
-    public func set(rootView: Content, parentController: UIViewController) {
-        hostingController.set(rootView: rootView, parentController: parentController)
-    }
-
-    // MARK: Private
-
-    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
-}

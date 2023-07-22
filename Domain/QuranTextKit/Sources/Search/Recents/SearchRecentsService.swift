@@ -19,29 +19,34 @@
 //
 
 import Foundation
+import Preferences
+import Utilities
 
 public class SearchRecentsService {
     // MARK: Lifecycle
 
-    public init() {
-    }
+    private init() {}
 
     // MARK: Public
 
-    public func getPopularTerms() -> [String] {
-        let recentsCount = preferences.recentSearchItems.count
-        guard recentsCount < removePopularWhenRecentsCount else {
-            return []
-        }
-        return Array(popularTerms.dropLast(recentsCount))
-    }
+    public static let shared = SearchRecentsService()
 
-    public func getRecents() -> [String] {
-        preferences.recentSearchItems
-    }
+    public let popularTerms: [String] = [
+        "الرحمن",
+        "الحي القيوم",
+        "يس",
+        "7",
+        "5:88",
+        "تبارك",
+        "عم",
+        "أعوذ",
+    ]
+
+    @TransformedPreference(searchRecentItems, transformer: searchRecentItemsTransfomer)
+    public var recentSearchItems: [String]
 
     public func addToRecents(_ term: String) {
-        var recents = preferences.recentSearchItems
+        var recents = recentSearchItems
         if let index = recents.firstIndex(of: term) {
             recents.remove(at: index)
         }
@@ -49,15 +54,16 @@ public class SearchRecentsService {
         if recents.count > maxCount {
             recents = recents.dropLast(recents.count - maxCount)
         }
-        preferences.recentSearchItems = recents
+        recentSearchItems = recents
     }
 
     // MARK: Private
 
+    private static let searchRecentItems = PreferenceKey<[String]>(key: "com.quran.searchRecentItems", defaultValue: [])
+    private static let searchRecentItemsTransfomer = PreferenceTransformer<[String], [String]>(
+        rawToValue: { $0.orderedUnique() },
+        valueToRaw: { $0 }
+    )
+
     private let maxCount: Int = 5
-    private let removePopularWhenRecentsCount = 3
-
-    private let preferences = RecentSearchPreferences.shared
-
-    private let popularTerms: [String] = ["الرحمن الرحيم", "الحي القيوم", "يس", "تبارك"]
 }

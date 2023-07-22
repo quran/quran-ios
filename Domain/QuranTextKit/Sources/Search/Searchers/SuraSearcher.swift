@@ -11,7 +11,7 @@ import QuranText
 struct SuraSearcher: Searcher {
     // MARK: Internal
 
-    func autocomplete(term: String, quran: Quran) throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) throws -> [String] {
         let defaultSuraNames = quran.suras.map { $0.localizedName(withPrefix: true) }
         let arabicSuraNames = quran.suras.map { $0.localizedName(withPrefix: true, language: .arabic) }
         var suraNames = Set(defaultSuraNames)
@@ -31,10 +31,7 @@ struct SuraSearcher: Searcher {
                     return nil
                 }
                 let ayah = sura.firstVerse
-                var highlightedSuraName = suraName
-                highlightedSuraName.insert(contentsOf: "<b>", at: range.upperBound)
-                highlightedSuraName.insert(contentsOf: "<b>", at: range.lowerBound)
-                return SearchResult(text: highlightedSuraName, ayah: ayah)
+                return SearchResult(text: suraName, ranges: [range], ayah: ayah)
             }
         }
         return [SearchResults(source: .quran, items: items)]

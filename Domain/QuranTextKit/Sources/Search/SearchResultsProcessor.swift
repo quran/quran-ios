@@ -10,10 +10,8 @@ import QuranKit
 import QuranText
 
 struct SearchResultsProcessor {
-    // MARK: Internal
-
-    func buildAutocompletions(searchResults: [String], term: String) -> [SearchAutocompletion] {
-        var result: [SearchAutocompletion] = []
+    func buildAutocompletions(searchResults: [String], term: String) -> [String] {
+        var result: [String] = []
         var added: Set<String> = []
         for text in searchResults {
             let suffixes = text.caseInsensitiveComponents(separatedBy: term)
@@ -27,8 +25,7 @@ struct SearchResultsProcessor {
                 let subrow = term + trimmedSuffix
                 if !added.contains(subrow) {
                     added.insert(subrow)
-                    let autocompletion = SearchAutocompletion(text: subrow, term: term)
-                    result.append(autocompletion)
+                    result.append(subrow)
                 }
             }
         }
@@ -42,24 +39,11 @@ struct SearchResultsProcessor {
             if verse.text.range(of: searchRegex, options: [.regularExpression, .caseInsensitive]) == nil {
                 continue
             }
-            let highlightedText = highlightResult(text: verse.text, regexPattern: searchRegex)
-            let result = SearchResult(text: highlightedText, ayah: verse.verse)
+            let ranges = verse.text.regexRanges(of: searchRegex)
+            let result = SearchResult(text: verse.text, ranges: ranges, ayah: verse.verse)
             results.append(result)
         }
         return results
-    }
-
-    // MARK: Private
-
-    private func highlightResult(text: String, regexPattern: String) -> String {
-        let ranges = text.regexRanges(of: regexPattern)
-
-        var textCopy = text
-        for range in ranges {
-            let snippet = String(textCopy[range.lowerBound ..< range.upperBound])
-            textCopy = textCopy.replacingOccurrences(of: snippet, with: "<b>\(snippet)<b>")
-        }
-        return textCopy
     }
 }
 

@@ -20,6 +20,7 @@ struct SearchTabBuilder: TabBuildable {
             searchBuilder: SearchBuilder(container: container)
         )
         let viewController = SearchTabViewController(interactor: interactor)
+        viewController.navigationBar.prefersLargeTitles = true
         return viewController
     }
 }

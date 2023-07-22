@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+public struct HighlightingRange {
+    // MARK: Lifecycle
+
+    public init(_ range: Range<String.Index>, foregroundColor: Color? = nil, fontWeight: Font.Weight? = nil) {
+        self.range = range
+        self.foregroundColor = foregroundColor
+        self.fontWeight = fontWeight
+    }
+
+    // MARK: Internal
+
+    let range: Range<String.Index>
+    let foregroundColor: Color?
+    let fontWeight: Font.Weight?
+}
+
 private struct TextPartView: View {
     // MARK: Internal
 
@@ -14,19 +30,23 @@ private struct TextPartView: View {
     let size: MultipartText.FontSize
 
     var body: some View {
-        switch part.kind {
-        case .plain:
-            Text(part.text)
+        switch part {
+        case .plain(let text):
+            Text(text)
                 .font(size.plainFont)
-        case .sura:
+        case .highlighting(let text, let ranges, let lineLimit):
+            highlighting(text: text, ranges: ranges)
+                .lineLimit(lineLimit)
+                .font(size.plainFont)
+        case .sura(let text):
             if NSLocale.preferredLanguages.first != "ar" {
-                Text(part.text)
+                Text(text)
                     .padding(.top, 5)
                     .frame(alignment: .center)
                     .font(size.suraFont)
             }
-        case .verse(let color, let lineLimit):
-            Text(part.text)
+        case .verse(let text, let color, let lineLimit):
+            Text(text)
                 .lineLimit(lineLimit)
                 .font(size.verseFont)
                 .padding(versePadding)
@@ -37,19 +57,34 @@ private struct TextPartView: View {
     // MARK: Private
 
     @ScaledMetric private var versePadding = 5
+
+    private func highlighting(text: String, ranges: [HighlightingRange]) -> Text {
+        if #available(iOS 15, *) {
+            var attributedString = AttributedString(text)
+            for highlight in ranges {
+                if let start = AttributedString.Index(highlight.range.lowerBound, within: attributedString),
+                   let end = AttributedString.Index(highlight.range.upperBound, within: attributedString)
+                {
+                    if let foregroundColor = highlight.foregroundColor {
+                        attributedString[start ..< end].foregroundColor = foregroundColor
+                    }
+                    if let fontWeight = highlight.fontWeight {
+                        attributedString[start ..< end].font = size.plainFont.weight(fontWeight)
+                    }
+                }
+            }
+            return Text(attributedString)
+        } else {
+            return Text(text)
+        }
+    }
 }
 
-private struct TextPart {
-    enum Kind {
-        case plain
-        case sura
-        case verse(color: Color, lineLimit: Int?)
-    }
-
-    // MARK: Internal
-
-    let kind: Kind
-    let text: String
+private enum TextPart {
+    case plain(text: String)
+    case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
+    case sura(text: String)
+    case verse(text: String, color: Color, lineLimit: Int?)
 }
 
 public struct MultipartText: ExpressibleByStringInterpolation {
@@ -89,19 +124,23 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         // MARK: Public
 
         public mutating func appendLiteral(_ literal: String) {
-            parts.append(.init(kind: .plain, text: literal))
+            parts.append(.plain(text: literal))
         }
 
         public mutating func appendInterpolation(sura: String) {
-            parts.append(.init(kind: .sura, text: sura))
+            parts.append(.sura(text: sura))
         }
 
         public mutating func appendInterpolation(verse: String, color: Color, lineLimit: Int? = nil) {
-            parts.append(.init(kind: .verse(color: color, lineLimit: lineLimit), text: verse))
+            parts.append(.verse(text: verse, color: color, lineLimit: lineLimit))
+        }
+
+        public mutating func appendInterpolation(_ text: String, lineLimit: Int? = nil, highlighting: [HighlightingRange]) {
+            parts.append(.highlighting(text: text, ranges: highlighting, lineLimit: lineLimit))
         }
 
         public mutating func appendInterpolation(_ plain: String) {
-            parts.append(.init(kind: .plain, text: plain))
+            parts.append(.plain(text: plain))
         }
 
         // MARK: Fileprivate
@@ -116,7 +155,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
     }
 
     public init(stringLiteral value: StringLiteralType) {
-        parts = [.init(kind: .plain, text: value)]
+        parts = [.plain(text: value)]
     }
 
     // MARK: Internal

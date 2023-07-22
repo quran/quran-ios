@@ -16,7 +16,7 @@ struct PersistenceSearcher: Searcher {
     let versePersistence: SearchableTextPersistence
     let source: SearchResults.Source
 
-    func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) async throws -> [String] {
         let processedTerm = termProcessor.prepareSearchTermForAutocompletion(term)
         if processedTerm.isEmpty {
             return []

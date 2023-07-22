@@ -25,17 +25,17 @@ public struct SearchBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let interactor = SearchInteractor(
+        let viewModel = SearchViewModel(
             analytics: container.analytics,
             searchService: CompositeSearcher(
                 databasesURL: container.databasesURL,
                 quranFileURL: container.quranUthmaniV2Database
             ),
-            recentsService: SearchRecentsService()
+            navigateTo: { [weak listener] verse in
+                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: verse)
+            }
         )
-        interactor.listener = listener
-        let presenter = SearchPresenter(interactor: interactor)
-        let viewController = SearchViewController(presenter: presenter)
+        let viewController = SearchViewController(viewModel: viewModel)
         return viewController
     }
 

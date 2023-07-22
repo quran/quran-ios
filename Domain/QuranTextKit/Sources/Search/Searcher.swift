@@ -9,6 +9,6 @@ import QuranKit
 import QuranText
 
 public protocol Searcher {
-    func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion]
+    func autocomplete(term: String, quran: Quran) async throws -> [String]
     func search(for term: String, quran: Quran) async throws -> [SearchResults]
 }

@@ -17,7 +17,7 @@ struct TranslationSearcher: Searcher {
     let localTranslationRetriever: LocalTranslationsRetriever
     let versePersistenceBuilder: (Translation) -> SearchableTextPersistence
 
-    func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
+    func autocomplete(term: String, quran: Quran) async throws -> [String] {
         let translations = try await getDownloadedTranslations()
         for translation in translations {
             let persistence = versePersistenceBuilder(translation)

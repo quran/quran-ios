@@ -47,7 +47,7 @@ public struct CompositeSearcher: Searcher {
 
     // MARK: Public
 
-    public func autocomplete(term: String, quran: Quran) async throws -> [SearchAutocompletion] {
+    public func autocomplete(term: String, quran: Quran) async throws -> [String] {
         logger.info("Autocompleting term: \(term)")
 
         let autocompletions = try await simpleSearchers.asyncMap { searcher in
@@ -58,8 +58,9 @@ public struct CompositeSearcher: Searcher {
         if results.isEmpty {
             results = try await translationsSearcher.autocomplete(term: term, quran: quran)
         }
-        let termResult = SearchAutocompletion(text: term, term: term)
-        results.insert(termResult, at: 0)
+        if !results.contains(term) {
+            results.insert(term, at: 0)
+        }
         return results.orderedUnique()
     }
 
@@ -68,16 +69,31 @@ public struct CompositeSearcher: Searcher {
         let searchResults = try await simpleSearchers.asyncMap { searcher in
             try await searcher.search(for: term, quran: quran)
         }
-        var results = searchResults.flatMap { $0 }
-        results = results.filter { !$0.items.isEmpty } // Remove empty search results
+        var results = searchResults
+            .flatMap { $0 }
+            .filter { !$0.items.isEmpty } // Remove empty search results
         if results.isEmpty {
             results = try await translationsSearcher.search(for: term, quran: quran)
+                .filter { !$0.items.isEmpty } // Remove empty search results
         }
-        return results.filter { !$0.items.isEmpty } // Remove empty search results
+
+        return groupedResults(results)
     }
 
     // MARK: Private
 
     private let simpleSearchers: [Searcher]
     private let translationsSearcher: Searcher
+
+    private func groupedResults(_ results: [SearchResults]) -> [SearchResults] {
+        var resultsPerSource: [SearchResults.Source: [SearchResult]] = [:]
+        for result in results {
+            var list = resultsPerSource[result.source] ?? []
+            list.append(contentsOf: result.items)
+            resultsPerSource[result.source] = list
+        }
+        return resultsPerSource
+            .map { source, items in SearchResults(source: source, items: items) }
+            .sorted { $0.source < $1.source }
+    }
 }

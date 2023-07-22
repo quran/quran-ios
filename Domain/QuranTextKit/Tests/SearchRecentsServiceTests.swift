@@ -13,7 +13,7 @@ class SearchRecentsServiceTests: XCTestCase {
     // MARK: Internal
 
     override func setUpWithError() throws {
-        service = SearchRecentsService()
+        service = SearchRecentsService.shared
         let keys = userDefaults.dictionaryRepresentation().keys
         for key in keys {
             userDefaults.removeObject(forKey: key)
@@ -21,39 +21,33 @@ class SearchRecentsServiceTests: XCTestCase {
     }
 
     func testPopularTerms() {
-        assertSnapshot(matching: service.getPopularTerms(), as: .json)
+        assertSnapshot(matching: service.popularTerms, as: .json)
 
-        preferences.recentSearchItems = ["1", "2"]
-        assertSnapshot(matching: service.getPopularTerms(), as: .json)
-
-        // popular items are removed when there are 3 recents
-        preferences.recentSearchItems = ["1", "2", "3"]
-        XCTAssertEqual(service.getPopularTerms(), [])
+        service.recentSearchItems = ["1", "2"]
+        assertSnapshot(matching: service.popularTerms, as: .json)
     }
 
     func testRecents() {
-        XCTAssertEqual(service.getRecents(), [])
+        XCTAssertEqual(service.recentSearchItems, [])
 
         // adding elements in sorted way
         service.addToRecents("1")
         service.addToRecents("4")
-        XCTAssertEqual(service.getRecents(), ["4", "1"])
+        XCTAssertEqual(service.recentSearchItems, ["4", "1"])
 
         // repeated elements are moved to the front
         service.addToRecents("3")
         service.addToRecents("1")
         service.addToRecents("5")
-        XCTAssertEqual(service.getRecents(), ["5", "1", "3", "4"])
+        XCTAssertEqual(service.recentSearchItems, ["5", "1", "3", "4"])
 
-        //
         service.addToRecents("6")
         service.addToRecents("7")
-        XCTAssertEqual(service.getRecents(), ["7", "6", "5", "1", "3"])
+        XCTAssertEqual(service.recentSearchItems, ["7", "6", "5", "1", "3"])
     }
 
     // MARK: Private
 
     private var service: SearchRecentsService!
-    private let preferences = RecentSearchPreferences.shared
     private let userDefaults = UserDefaults.standard
 }

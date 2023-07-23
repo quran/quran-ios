@@ -11,22 +11,32 @@ import NoorUI
 import QuranKit
 import ReadingService
 
+@MainActor
 class ReadingSelectorViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init() {
-        preferences.$reading
-            .prepend(preferences.reading)
-            .map { $0 as Reading? }
-            .assign(to: &$selectedReading)
+    init(resources: ReadingResourcesService) {
+        self.resources = resources
     }
 
     // MARK: Internal
 
     @Published var selectedReading: Reading?
+    @Published var progress: Double?
+    @Published var error: Error?
 
     var readings: [ReadingInfo<Reading>] {
         Reading.sortedReadings.map { ReadingInfo($0) }
+    }
+
+    func start() async {
+        async let reading: () = listenToReadingChanges()
+        async let resources: () = listenToResourcesEvents()
+        _ = await (reading, resources)
+    }
+
+    func retry() async {
+        await resources.retry()
     }
 
     func showReading(_ reading: Reading) {
@@ -36,6 +46,33 @@ class ReadingSelectorViewModel: ObservableObject {
     // MARK: Private
 
     private let preferences = ReadingPreferences.shared
+    private let resources: ReadingResourcesService
+
+    private func listenToReadingChanges() async {
+        let readingsSequence = preferences.$reading
+            .prepend(preferences.reading)
+            .values()
+        for await reading in readingsSequence {
+            selectedReading = reading
+        }
+    }
+
+    private func listenToResourcesEvents() async {
+        let resourceStatuses = resources.publisher.values()
+        for await status in resourceStatuses {
+            switch status {
+            case .downloading(let progress):
+                self.progress = progress
+                error = nil
+            case .error(let error):
+                progress = nil
+                self.error = error
+            case .ready:
+                progress = nil
+                error = nil
+            }
+        }
+    }
 }
 
 private extension ReadingInfo where Value == Reading {

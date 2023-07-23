@@ -12,8 +12,8 @@ import QuranKit
 import SwiftUI
 
 final class ReadingSelectorViewController: UIHostingController<ReadingSelector> {
-    init() {
-        super.init(rootView: ReadingSelector(viewModel: ReadingSelectorViewModel()))
+    init(viewModel: ReadingSelectorViewModel) {
+        super.init(rootView: ReadingSelector(viewModel: viewModel))
 
         navigationItem.title = l("reading.selector.title")
         navigationItem.prompt = l("reading.selector.selection-description")

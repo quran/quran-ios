@@ -568,6 +568,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
+            "AppDependencies",
             "ReadingService",
             "NoorUI",
             "QuranImageFeature",

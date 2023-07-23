@@ -45,7 +45,7 @@ public struct HomeBuilder {
         )
         let viewController = HomeViewController(
             viewModel: viewModel,
-            readingSelectorBuilder: ReadingSelectorBuilder()
+            readingSelectorBuilder: ReadingSelectorBuilder(container: container)
         )
         return viewController
     }

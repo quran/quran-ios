@@ -82,7 +82,6 @@ public class ContentImageContentView: UIView {
     }
 
     private func loadImage() {
-        logger.info("Quran Image: load image")
         setImage(image)
         guard traitCollection.userInterfaceStyle == .dark else {
             return
@@ -90,6 +89,7 @@ public class ContentImageContentView: UIView {
         let oldImage = image
         // TODO: Use async/await
         DispatchQueue.global(qos: .userInteractive).async {
+            logger.info("Quran Image: load image async")
             let inverted = oldImage?.inverted()
             DispatchQueue.main.async {
                 if self.image == oldImage && self.traitCollection.userInterfaceStyle == .dark {

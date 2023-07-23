@@ -432,6 +432,23 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 }
 
+private extension Reading {
+    var supportsWordPositions: Bool {
+        switch self {
+        case .hafs_1405:
+            return true
+        case .hafs_1421:
+            return false
+        case .hafs_1440:
+            return false
+        case .tajweed:
+            // TODO: Enable word-by-word translation.
+            // Tajweed ayah info contains words dimensions, but they don't match the word-by-word database.
+            return false
+        }
+    }
+}
+
 private extension AnalyticsLibrary {
     func bookmarkPage(_ page: Page) {
         logEvent("BookmarkPage", value: page.pageNumber.description)

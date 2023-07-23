@@ -10,6 +10,11 @@ import Localization
 
 public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
     struct Property: Hashable {
+        enum PropertType {
+            case supports
+            case lacks
+        }
+
         // MARK: Lifecycle
 
         init(property: String) {
@@ -23,11 +28,6 @@ public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
         }
 
         // MARK: Internal
-
-        enum PropertType {
-            case supports
-            case lacks
-        }
 
         let type: PropertType
         let property: String
@@ -60,6 +60,8 @@ enum ReadingInfoTestData {
     enum Reading: CaseIterable {
         case a, b, c, d, e
     }
+
+    // MARK: Internal
 
     static var readings: [ReadingInfo<Reading>] {
         Reading.allCases.map {

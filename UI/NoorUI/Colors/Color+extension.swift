@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    static var appIdentity: Color {
+    public static var appIdentity: Color {
         Color("appTint", bundle: .module)
     }
 }

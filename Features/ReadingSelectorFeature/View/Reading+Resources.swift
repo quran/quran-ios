@@ -12,7 +12,7 @@ import QuranGeometry
 import QuranKit
 import UIKit
 
-public extension Reading {
+extension Reading {
     var ayahInfoDatabase: URL {
         switch self {
         case .hafs_1405:
@@ -88,34 +88,6 @@ public extension Reading {
             return "hafs_1440"
         case .tajweed:
             return "tajweed"
-        }
-    }
-
-    var supportsWordPositions: Bool {
-        switch self {
-        case .hafs_1405:
-            return true
-        case .hafs_1421:
-            return false
-        case .hafs_1440:
-            return false
-        case .tajweed:
-            // TODO: Enable word-by-word translation.
-            // Tajweed ayah info contains words dimensions, but they don't match the word-by-word database.
-            return false
-        }
-    }
-
-    var cropInsets: UIEdgeInsets {
-        switch self {
-        case .hafs_1405:
-            return UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
-        case .hafs_1421:
-            return .zero
-        case .hafs_1440:
-            return .zero
-        case .tajweed:
-            return .zero
         }
     }
 

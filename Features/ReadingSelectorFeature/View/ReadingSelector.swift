@@ -5,27 +5,45 @@
 //  Created by Mohamed Afifi on 2023-02-12.
 //
 
+import NoorUI
+import QuranKit
 import SwiftUI
 import UIx
 
-public struct ReadingSelector<Value: Hashable, ImageView: View>: View {
-    // MARK: Lifecycle
+struct ReadingSelector: View {
+    // MARK: Internal
 
-    public init(
-        selectedValue: Value?,
-        readings: [ReadingInfo<Value>],
-        imageView: @escaping (ReadingInfo<Value>) -> ImageView,
-        action: @escaping (Value) -> Void
-    ) {
-        self.selectedValue = selectedValue
-        self.readings = readings
-        self.imageView = imageView
-        self.action = action
+    @StateObject var viewModel: ReadingSelectorViewModel
+
+    var body: some View {
+        ReadingSelectorUI(
+            selectedValue: viewModel.selectedReading,
+            readings: viewModel.readings,
+            imageView: imageView
+        ) {
+            viewModel.showReading($0)
+        }
     }
 
-    // MARK: Public
+    // MARK: Private
 
-    public var body: some View {
+    private func imageView(reading: ReadingInfo<Reading>) -> some View {
+        ReadingImageView(
+            image: UIImage(named: reading.value.imageName)!,
+            pageMarkers: reading.value.pageMarkers
+        )
+    }
+}
+
+private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
+    // MARK: Internal
+
+    let selectedValue: Value?
+    let readings: [ReadingInfo<Value>]
+    let imageView: (ReadingInfo<Value>) -> ImageView
+    let action: (Value) -> Void
+
+    var body: some View {
         ScrollView {
             VStack {
                 ForEach(readings) { reading in
@@ -50,14 +68,11 @@ public struct ReadingSelector<Value: Hashable, ImageView: View>: View {
                 closeAction: { readingInfoDetails = nil }
             )
         }
+        .background(
+            Color.systemGroupedBackground
+                .edgesIgnoringSafeArea(.all)
+        )
     }
-
-    // MARK: Internal
-
-    let selectedValue: Value?
-    let readings: [ReadingInfo<Value>]
-    let imageView: (ReadingInfo<Value>) -> ImageView
-    let action: (Value) -> Void
 
     // MARK: Private
 
@@ -71,12 +86,15 @@ struct ReadingSelector_Previews: PreviewProvider {
         @State var selectedValue = ReadingInfoTestData.Reading.b
 
         var body: some View {
-            ReadingSelector(
-                selectedValue: selectedValue,
-                readings: ReadingInfoTestData.readings,
-                imageView: imageView
-            ) {
-                selectedValue = $0
+            NavigationView {
+                ReadingSelectorUI(
+                    selectedValue: selectedValue,
+                    readings: ReadingInfoTestData.readings,
+                    imageView: imageView
+                ) {
+                    selectedValue = $0
+                }
+                .navigationTitle("Title")
             }
         }
 

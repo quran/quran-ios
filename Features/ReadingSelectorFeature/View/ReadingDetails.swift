@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import SwiftUI
 
 struct ReadingDetails<Value: Hashable, ImageView: View>: View {

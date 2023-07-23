@@ -11,9 +11,9 @@ import NoorUI
 import QuranKit
 import SwiftUI
 
-class ReadingSelectorViewController: UIHostingController<ReadingSelectorContainer> {
+final class ReadingSelectorViewController: UIHostingController<ReadingSelector> {
     init() {
-        super.init(rootView: ReadingSelectorContainer(viewModel: ReadingSelectorViewModel()))
+        super.init(rootView: ReadingSelector(viewModel: ReadingSelectorViewModel()))
 
         navigationItem.title = l("reading.selector.title")
         navigationItem.prompt = l("reading.selector.selection-description")
@@ -22,30 +22,5 @@ class ReadingSelectorViewController: UIHostingController<ReadingSelectorContaine
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-struct ReadingSelectorContainer: View {
-    // MARK: Internal
-
-    @StateObject var viewModel: ReadingSelectorViewModel
-
-    var body: some View {
-        ReadingSelector(
-            selectedValue: viewModel.selectedReading,
-            readings: viewModel.readings,
-            imageView: imageView
-        ) {
-            viewModel.showReading($0)
-        }
-    }
-
-    // MARK: Private
-
-    private func imageView(reading: ReadingInfo<Reading>) -> some View {
-        ReadingImageView(
-            image: UIImage(named: reading.value.imageName)!,
-            pageMarkers: reading.value.pageMarkers
-        )
     }
 }

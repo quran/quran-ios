@@ -35,11 +35,15 @@ public actor ReadingResourcesService {
     public func startLoadingResources() async {
         await loadResource(of: preferences.reading)
 
-        readingTask = Task {
+        readingsTask = Task {
             for await reading in preferences.$reading.values() {
-                await loadResource(of: reading)
+                readingTask = Task {
+                    await loadResource(of: reading)
+                }
+                .asCancellableTask()
             }
-        }.asCancellableTask()
+        }
+        .asCancellableTask()
     }
 
     public func retry() async {
@@ -51,6 +55,7 @@ public actor ReadingResourcesService {
     private let preferences = ReadingPreferences.shared
 
     private var readingTask: CancellableTask?
+    private var readingsTask: CancellableTask?
     private var resource: OnDemandResource?
 
     private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)

@@ -6,17 +6,27 @@
 //  Copyright © 2023 Quran.com. All rights reserved.
 //
 
+import AppDependencies
 import UIKit
 
 @MainActor
 public struct ReadingSelectorBuilder {
     // MARK: Lifecycle
 
-    public init() { }
+    public init(container: AppDependencies) {
+        self.container = container
+    }
 
     // MARK: Public
 
     public func build() -> UIViewController {
-        ReadingSelectorViewController()
+        let viewModel = ReadingSelectorViewModel(
+            resources: container.readingResources
+        )
+        return ReadingSelectorViewController(viewModel: viewModel)
     }
+
+    // MARK: Private
+
+    private let container: AppDependencies
 }

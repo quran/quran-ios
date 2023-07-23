@@ -14,6 +14,7 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     let reading: ReadingInfo<Value>
     let imageView: ImageView
     let selected: Bool
+    let progress: Double?
     let action: () -> Void
 
     var body: some View {
@@ -22,6 +23,9 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
                 SingleAxisGeometryReader { width in
                     HStack {
                         VStack(alignment: .leading) {
+                            if let progress {
+                                ProgressView(value: progress, total: 1)
+                            }
                             titleView
                             descriptionView
                         }

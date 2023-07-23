@@ -8,15 +8,17 @@
 import Crashing
 import Localization
 import SwiftUI
+import UIx
 
 extension View {
-    public func errorAlert(error: Binding<Error?>) -> some View {
-        modifier(ErrorAlertModifier(error: error))
+    public func errorAlert(error: Binding<Error?>, retry: AsyncAction? = nil) -> some View {
+        modifier(ErrorAlertModifier(error: error, retry: retry))
     }
 }
 
 struct ErrorAlertModifier: ViewModifier {
     @Binding var error: Error?
+    let retry: AsyncAction?
 
     var showError: Binding<Bool> {
         Binding(
@@ -41,10 +43,23 @@ struct ErrorAlertModifier: ViewModifier {
         content.alert(isPresented: showError) {
             if let error {
                 crasher.recordError(error, reason: "ErrorModifier")
-                return Alert(
-                    title: Text(l("error.title")),
-                    message: Text(error.getErrorDescription())
-                )
+                if let retry {
+                    return Alert(
+                        title: Text(l("error.title")),
+                        message: Text(error.getErrorDescription()),
+                        primaryButton: .default(Text(lAndroid("download_retry"))) {
+                            Task {
+                                await retry()
+                            }
+                        },
+                        secondaryButton: .cancel()
+                    )
+                } else {
+                    return Alert(
+                        title: Text(l("error.title")),
+                        message: Text(error.getErrorDescription())
+                    )
+                }
             } else {
                 return Alert(
                     title: Text(l("error.title")),

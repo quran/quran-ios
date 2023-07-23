@@ -17,12 +17,15 @@ struct ReadingSelector: View {
 
     var body: some View {
         ReadingSelectorUI(
+            error: $viewModel.error,
+            progress: viewModel.progress,
             selectedValue: viewModel.selectedReading,
             readings: viewModel.readings,
-            imageView: imageView
-        ) {
-            viewModel.showReading($0)
-        }
+            imageView: imageView,
+            selectItem: { viewModel.showReading($0) },
+            start: { await viewModel.start() },
+            retry: { }
+        )
     }
 
     // MARK: Private
@@ -38,19 +41,26 @@ struct ReadingSelector: View {
 private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
     // MARK: Internal
 
+    @Binding var error: Error?
+
+    let progress: Double?
     let selectedValue: Value?
     let readings: [ReadingInfo<Value>]
     let imageView: (ReadingInfo<Value>) -> ImageView
-    let action: (Value) -> Void
+    let selectItem: (Value) -> Void
+    let start: AsyncAction
+    let retry: AsyncAction
 
     var body: some View {
         ScrollView {
             VStack {
                 ForEach(readings) { reading in
+                    let selected = selectedValue == reading.value
                     ReadingItem(
                         reading: reading,
                         imageView: imageView(reading),
-                        selected: selectedValue == reading.value
+                        selected: selected,
+                        progress: selected ? progress : nil
                     ) {
                         readingInfoDetails = reading
                     }
@@ -63,7 +73,7 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
                 imageView: imageView(reading),
                 useAction: {
                     readingInfoDetails = nil
-                    action(reading.value)
+                    selectItem(reading.value)
                 },
                 closeAction: { readingInfoDetails = nil }
             )
@@ -72,6 +82,8 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
             Color.systemGroupedBackground
                 .edgesIgnoringSafeArea(.all)
         )
+        .task(start)
+        .errorAlert(error: $error, retry: retry)
     }
 
     // MARK: Private
@@ -84,17 +96,26 @@ struct ReadingSelector_Previews: PreviewProvider {
         // MARK: Internal
 
         @State var selectedValue = ReadingInfoTestData.Reading.b
+        @State var error: Error?
 
         var body: some View {
             NavigationView {
                 ReadingSelectorUI(
+                    error: $error,
+                    progress: 0.3,
                     selectedValue: selectedValue,
                     readings: ReadingInfoTestData.readings,
-                    imageView: imageView
-                ) {
-                    selectedValue = $0
+                    imageView: imageView,
+                    selectItem: { selectedValue = $0 },
+                    start: { },
+                    retry: { }
+                )
+                .navigationTitle("Reading Selector")
+                .toolbar {
+                    if error == nil {
+                        Button("Error") { error = URLError(.notConnectedToInternet) }
+                    }
                 }
-                .navigationTitle("Title")
             }
         }
 

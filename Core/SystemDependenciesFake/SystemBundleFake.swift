@@ -17,6 +17,7 @@ public final class SystemBundleFake: SystemBundle, @unchecked Sendable {
 
     public var arrays: [String: NSArray] = [:]
     public var info: [String: Any] = [:]
+    public var urls: [String: URL] = [:]
 
     public func readArray(resource: String, withExtension: String) -> NSArray {
         arrays[resource + "." + withExtension]!
@@ -24,5 +25,9 @@ public final class SystemBundleFake: SystemBundle, @unchecked Sendable {
 
     public func infoValue(forKey key: String) -> Any? {
         info[key]
+    }
+
+    public func url(forResource name: String?, withExtension ext: String?) -> URL? {
+        urls[[name, ext].compactMap { $0 }.joined(separator: ".")]
     }
 }

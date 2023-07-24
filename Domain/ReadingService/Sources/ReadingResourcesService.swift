@@ -10,6 +10,7 @@ import Foundation
 import QuranKit
 import SystemDependencies
 import Utilities
+import VLogging
 
 public actor ReadingResourcesService {
     public enum ResourceStatus: Equatable {
@@ -20,7 +21,13 @@ public actor ReadingResourcesService {
 
     // MARK: Lifecycle
 
-    public init(resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init) {
+    public init(
+        bundle: SystemBundle = DefaultSystemBundle(),
+        fileManager: FileSystem = DefaultFileSystem(),
+        resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init
+    ) {
+        self.bundle = bundle
+        self.fileManager = fileManager
         self.resourceRequestFactory = resourceRequestFactory
     }
 
@@ -56,22 +63,50 @@ public actor ReadingResourcesService {
 
     private var readingTask: CancellableTask?
     private var readingsTask: CancellableTask?
-    private var resource: OnDemandResource?
 
     private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
+    private let bundle: SystemBundle
+    private let fileManager: FileSystem
     private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
     private func loadResource(of reading: Reading) async {
         let tag = reading.resourcesTag
         let resource = OnDemandResource(request: resourceRequestFactory([tag]))
-        self.resource = resource
         do {
             try await resource.fetch(onProgressChange: { progress in
                 self.send(.downloading(progress: progress), from: reading)
             })
+
+            copyFiles(reading: reading)
             send(.ready, from: reading)
         } catch {
             send(.error(error as NSError), from: reading)
+        }
+    }
+
+    private func copyFiles(reading: Reading) {
+        if preferences.reading != reading {
+            return
+        }
+        if reading.directory.isReachable {
+            return
+        }
+
+        try? fileManager.createDirectory(at: Reading.resourcesDirectory, withIntermediateDirectories: true)
+
+        do {
+            let downloadedResources = try fileManager.contentsOfDirectory(at: Reading.resourcesDirectory, includingPropertiesForKeys: nil)
+            for resource in downloadedResources {
+                try? fileManager.removeItem(at: resource)
+            }
+        } catch {
+            logger.error("Resources failed to list files. Error: \(error)")
+        }
+        do {
+            let bundleURL = reading.url(inBundle: bundle)
+            try fileManager.copyItem(at: bundleURL, to: reading.directory)
+        } catch {
+            logger.error("Resources \(reading.resourcesTag) failed to copy. Error: \(error)")
         }
     }
 
@@ -83,7 +118,7 @@ public actor ReadingResourcesService {
     }
 }
 
-private extension Reading {
+extension Reading {
     var resourcesTag: String {
         switch self {
         case .hafs_1405: return "hafs_1405"
@@ -91,5 +126,17 @@ private extension Reading {
         case .hafs_1421: return "hafs_1421"
         case .tajweed: return "tajweed"
         }
+    }
+
+    func url(inBundle bundle: SystemBundle) -> URL {
+        bundle.url(forResource: resourcesTag, withExtension: nil)!
+    }
+
+    static var resourcesDirectory: URL {
+        FileManager.applicationSupport.appendingPathComponent("ReadingResources", isDirectory: true)
+    }
+
+    public var directory: URL {
+        Self.resourcesDirectory.appendingPathComponent(resourcesTag, isDirectory: true)
     }
 }

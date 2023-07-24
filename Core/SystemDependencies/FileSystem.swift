@@ -10,6 +10,8 @@ import Utilities
 
 public protocol FileSystem: Sendable {
     func fileExists(at url: URL) -> Bool
+    func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool) throws
+    func copyItem(at srcURL: URL, to dstURL: URL) throws
     func removeItem(at url: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
     func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
@@ -36,6 +38,14 @@ public struct DefaultFileSystem: FileSystem {
 
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         try url.resourceValues(forKeys: keys)
+    }
+
+    public func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool) throws {
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: createIntermediates)
+    }
+
+    public func copyItem(at srcURL: URL, to dstURL: URL) throws {
+        try FileManager.default.copyItem(at: srcURL, to: dstURL)
     }
 }
 

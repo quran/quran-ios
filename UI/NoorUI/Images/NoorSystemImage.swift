@@ -21,6 +21,7 @@ public enum NoorSystemImage: String {
     case note = "text.badge.star"
     case lastPage = "clock"
     case search = "magnifyingglass"
+    case mushafs = "books.vertical.fill"
 
     // MARK: Public
 

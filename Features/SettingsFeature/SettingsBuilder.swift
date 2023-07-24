@@ -9,6 +9,7 @@
 import AppDependencies
 import AudioDownloadsFeature
 import Localization
+import ReadingSelectorFeature
 import SettingsService
 import SwiftUI
 import TranslationsFeature
@@ -30,6 +31,7 @@ public struct SettingsBuilder {
             reviewService: ReviewService(analytics: container.analytics),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
+            readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             navigationController: navigationController
         )
         let view = SettingsRootView(viewModel: viewModel)

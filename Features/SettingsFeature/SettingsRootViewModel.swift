@@ -12,6 +12,7 @@ import Localization
 import NoorUI
 import QuranAudio
 import QuranAudioKit
+import ReadingSelectorFeature
 import SettingsService
 import TranslationsFeature
 import UIKit
@@ -27,6 +28,7 @@ final class SettingsRootViewModel: ObservableObject {
         reviewService: ReviewService,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
+        readingSelectorBuilder: ReadingSelectorBuilder,
         navigationController: UINavigationController
     ) {
         theme = themeService.theme
@@ -35,6 +37,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.reviewService = reviewService
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
+        self.readingSelectorBuilder = readingSelectorBuilder
         self.navigationController = navigationController
 
         themeService.themePublisher.assign(to: &$theme)
@@ -47,6 +50,7 @@ final class SettingsRootViewModel: ObservableObject {
     let reviewService: ReviewService
     let audioDownloadsBuilder: AudioDownloadsBuilder
     let translationsListBuilder: TranslationsListBuilder
+    let readingSelectorBuilder: ReadingSelectorBuilder
 
     let contactUsService = ContactUsService()
     let themeService = ThemeService.shared
@@ -87,6 +91,12 @@ final class SettingsRootViewModel: ObservableObject {
     func navigateToTranslationsList() {
         logger.info("Settings: presentTranslationsList")
         let viewController = translationsListBuilder.build()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func navigateToReadingSelectors() {
+        logger.info("Settings: navigateToReadingSelectors")
+        let viewController = readingSelectorBuilder.build()
         navigationController?.pushViewController(viewController, animated: true)
     }
 

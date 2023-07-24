@@ -21,6 +21,7 @@ struct SettingsRootView: View {
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
+            navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() }
@@ -34,6 +35,7 @@ private struct SettingsRootViewUI: View {
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
     let navigateToTranslationsList: AsyncAction
+    let navigateToReadingSelector: AsyncAction
     let shareApp: AsyncAction
     let writeReview: AsyncAction
     let contactUs: AsyncAction
@@ -44,6 +46,15 @@ private struct SettingsRootViewUI: View {
                 VStack {
                     ThemeSelector(theme: $theme)
                 }
+            }
+
+            NoorBasicSection {
+                NoorListItem(
+                    image: .init(.mushafs),
+                    title: .text(l("reading.selector.title")),
+                    accessory: .disclosureIndicator,
+                    action: navigateToReadingSelector
+                )
             }
 
             NoorBasicSection {
@@ -109,6 +120,7 @@ struct SettingsRootView_Previews: PreviewProvider {
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
+                navigateToReadingSelector: {},
                 shareApp: {},
                 writeReview: {},
                 contactUs: {}

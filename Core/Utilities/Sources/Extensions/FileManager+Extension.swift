@@ -23,6 +23,7 @@ import Foundation
 extension FileManager {
     public static let documentsPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     public static let documentsURL: URL = `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    public static let applicationSupport = `default`.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
 
     public func removeDirectoryContents(at directory: URL) {
         let files = (try? contentsOfDirectory(atPath: directory.path)) ?? []

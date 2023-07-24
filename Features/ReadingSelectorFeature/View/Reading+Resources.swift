@@ -13,32 +13,6 @@ import QuranKit
 import UIKit
 
 extension Reading {
-    var ayahInfoDatabase: URL {
-        switch self {
-        case .hafs_1405:
-            return Bundle.main.url(forResource: "hafs_1405/images_1920/databases/ayahinfo_1920", withExtension: "db")!
-        case .hafs_1421:
-            return Bundle.main.url(forResource: "hafs_1421/images_1120/databases/ayahinfo_1120", withExtension: "db")!
-        case .hafs_1440:
-            return Bundle.main.url(forResource: "hafs_1440/images_1352/databases/ayahinfo_1352", withExtension: "db")!
-        case .tajweed:
-            return Bundle.main.url(forResource: "tajweed/images_1280/databases/ayahinfo_1280", withExtension: "db")!
-        }
-    }
-
-    var images: URL {
-        switch self {
-        case .hafs_1405:
-            return Bundle.main.url(forResource: "hafs_1405/images_1920/width_1920", withExtension: nil)!
-        case .hafs_1421:
-            return Bundle.main.url(forResource: "hafs_1421/images_1120/width_1120", withExtension: nil)!
-        case .hafs_1440:
-            return Bundle.main.url(forResource: "hafs_1440/images_1352/width_1352", withExtension: nil)!
-        case .tajweed:
-            return Bundle.main.url(forResource: "tajweed/images_1280/width_1280", withExtension: nil)!
-        }
-    }
-
     var title: String {
         switch self {
         case .hafs_1405:

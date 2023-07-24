@@ -96,26 +96,26 @@ private extension Reading {
     var ayahInfoDatabase: URL {
         switch self {
         case .hafs_1405:
-            return Bundle.main.url(forResource: "hafs_1405/images_1920/databases/ayahinfo_1920", withExtension: "db")!
+            return directory.appendingPathComponent("images_1920/databases/ayahinfo_1920.db")
         case .hafs_1421:
-            return Bundle.main.url(forResource: "hafs_1421/images_1120/databases/ayahinfo_1120", withExtension: "db")!
+            return directory.appendingPathComponent("images_1120/databases/ayahinfo_1120.db")
         case .hafs_1440:
-            return Bundle.main.url(forResource: "hafs_1440/images_1352/databases/ayahinfo_1352", withExtension: "db")!
+            return directory.appendingPathComponent("images_1352/databases/ayahinfo_1352.db")
         case .tajweed:
-            return Bundle.main.url(forResource: "tajweed/images_1280/databases/ayahinfo_1280", withExtension: "db")!
+            return directory.appendingPathComponent("images_1280/databases/ayahinfo_1280.db")
         }
     }
 
     var images: URL {
         switch self {
         case .hafs_1405:
-            return Bundle.main.url(forResource: "hafs_1405/images_1920/width_1920", withExtension: nil)!
+            return directory.appendingPathComponent("images_1920/width_1920")
         case .hafs_1421:
-            return Bundle.main.url(forResource: "hafs_1421/images_1120/width_1120", withExtension: nil)!
+            return directory.appendingPathComponent("images_1120/width_1120")
         case .hafs_1440:
-            return Bundle.main.url(forResource: "hafs_1440/images_1352/width_1352", withExtension: nil)!
+            return directory.appendingPathComponent("images_1352/width_1352")
         case .tajweed:
-            return Bundle.main.url(forResource: "tajweed/images_1280/width_1280", withExtension: nil)!
+            return directory.appendingPathComponent("images_1280/width_1280")
         }
     }
 

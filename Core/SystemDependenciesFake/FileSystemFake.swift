@@ -22,6 +22,10 @@ public final class FileSystemFake: FileSystem, Sendable {
         var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
     }
 
+    enum FileSystemError: Error {
+        case noResourceValues
+    }
+
     // MARK: Lifecycle
 
     public init() {}
@@ -67,6 +71,18 @@ public final class FileSystemFake: FileSystem, Sendable {
         filesInDirectory[url] ?? []
     }
 
+    public func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool) throws {
+        files.insert(url)
+    }
+
+    public func copyItem(at srcURL: URL, to dstURL: URL) throws {
+        files.insert(dstURL)
+        let parent = dstURL.deletingLastPathComponent()
+        var contents = filesInDirectory[parent] ?? []
+        contents.append(dstURL)
+        filesInDirectory[parent] = contents
+    }
+
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         if let values = resourceValuesByURL[url] {
             return values
@@ -76,12 +92,6 @@ public final class FileSystemFake: FileSystem, Sendable {
 
     public func setResourceValues(_ url: URL, fileSize: Int?) {
         resourceValuesByURL[url] = ResourceValuesFake(fileSize: fileSize)
-    }
-
-    // MARK: Internal
-
-    enum FileSystemError: Error {
-        case noResourceValues
     }
 
     // MARK: Private

@@ -6,6 +6,7 @@
 //
 
 import AsyncUtilitiesForTesting
+import QuranKit
 import SystemDependenciesFake
 import XCTest
 @testable import ReadingService
@@ -15,7 +16,16 @@ final class ReadingResourcesServiceTests: XCTestCase {
 
     override func setUp() {
         ReadingPreferences.shared.reading = .hafs_1405
-        service = ReadingResourcesService(resourceRequestFactory: BundleResourceRequestFake.init)
+        bundle = SystemBundleFake()
+        Reading.sortedReadings.forEach { reading in
+            bundle.urls[reading.resourcesTag] = URL(fileURLWithPath: reading.resourcesTag)
+        }
+        fileManager = FileSystemFake()
+        service = ReadingResourcesService(
+            bundle: bundle,
+            fileManager: fileManager,
+            resourceRequestFactory: BundleResourceRequestFake.init
+        )
         collector = PublisherCollector(service.publisher)
     }
 
@@ -24,6 +34,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         await service.startLoadingResources()
 
         XCTAssertEqual(collector.items, [.ready])
+        XCTAssertTrue(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
     func testResourceDownloading() async throws {
@@ -35,6 +46,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertEqual(collector.items, [.downloading(progress: 0),
                                          .downloading(progress: 1),
                                          .ready])
+        XCTAssertTrue(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
     func testResourceDownloadFailure() async throws {
@@ -46,12 +58,14 @@ final class ReadingResourcesServiceTests: XCTestCase {
 
         XCTAssertEqual(collector.items, [.downloading(progress: 0),
                                          .error(error as NSError)])
+        XCTAssertFalse(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
     func testResourceSwitching() async throws {
         BundleResourceRequestFake.resourceAvailable = true
         await service.startLoadingResources()
         XCTAssertEqual(collector.items, [.ready])
+        XCTAssertTrue(fileManager.files.contains(Reading.hafs_1405.directory))
 
         // Switch preference
         BundleResourceRequestFake.resourceAvailable = false
@@ -64,10 +78,14 @@ final class ReadingResourcesServiceTests: XCTestCase {
                                          .downloading(progress: 0),
                                          .downloading(progress: 1),
                                          .ready])
+        XCTAssertTrue(fileManager.files.contains(Reading.hafs_1440.directory))
+        XCTAssertFalse(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
     // MARK: Private
 
     private var service: ReadingResourcesService!
     private var collector: PublisherCollector<ReadingResourcesService.ResourceStatus>!
+    private var bundle: SystemBundleFake!
+    private var fileManager: FileSystemFake!
 }

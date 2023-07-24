@@ -10,6 +10,7 @@ import Foundation
 public protocol SystemBundle: Sendable {
     func readArray(resource: String, withExtension: String) -> NSArray
     func infoValue(forKey key: String) -> Any?
+    func url(forResource name: String?, withExtension ext: String?) -> URL?
 }
 
 public struct DefaultSystemBundle: SystemBundle {
@@ -26,5 +27,9 @@ public struct DefaultSystemBundle: SystemBundle {
 
     public func infoValue(forKey key: String) -> Any? {
         Bundle.main.object(forInfoDictionaryKey: key)
+    }
+
+    public func url(forResource name: String?, withExtension ext: String?) -> URL? {
+        Bundle.main.url(forResource: name, withExtension: ext)
     }
 }

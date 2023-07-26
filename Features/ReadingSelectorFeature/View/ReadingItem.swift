@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-02-18.
 //
 
+import NoorUI
 import SwiftUI
 import UIx
 
@@ -73,7 +74,7 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
 
     @ViewBuilder private var checkmarkView: some View {
         if selected {
-            Image(systemName: "checkmark")
+            NoorSystemImage.checkmark.image
                 .foregroundColor(.white)
                 .padding()
                 .background(

@@ -48,6 +48,7 @@ public struct NoorListItem: View {
         case text(String)
         case disclosureIndicator
         case download(DownloadType, action: AsyncAction)
+        case image(NoorSystemImage, color: Color? = nil)
 
         // MARK: Internal
 
@@ -56,6 +57,7 @@ public struct NoorListItem: View {
             case .text: return false
             case .download: return true
             case .disclosureIndicator: return false
+            case .image: return false
             }
         }
     }
@@ -187,6 +189,13 @@ public struct NoorListItem: View {
                         DisclosureIndicator()
                     case let .download(type, action):
                         AppStoreDownloadButton(type: type, action: action)
+                    case let .image(image, color):
+                        if let color {
+                            image.image
+                                .foregroundColor(color)
+                        } else {
+                            image.image
+                        }
                     }
                 }
             }

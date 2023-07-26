@@ -1,9 +1,8 @@
 //
 //  ReciterListViewModel.swift
-//  Quran
 //
-//  Created by Afifi, Mohamed on 4/6/19.
-//  Copyright © 2019 Quran.com. All rights reserved.
+//
+//  Created by Mohamed Afifi on 2023-07-25.
 //
 
 import Combine
@@ -19,7 +18,7 @@ public protocol ReciterListListener: AnyObject {
 }
 
 @MainActor
-final class ReciterListViewModel {
+final class ReciterListViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
@@ -29,30 +28,37 @@ final class ReciterListViewModel {
 
     weak var listener: ReciterListListener?
 
+    @Published var recentReciters: [Reciter] = []
+    @Published var downloadedReciters: [Reciter] = []
+    @Published var englishReciters: [Reciter] = []
+    @Published var arabicReciters: [Reciter] = []
+
     @Published var reciters: [[Reciter]] = []
-    @Published var selectedReciterId: Int?
+    @Published var selectedReciter: Reciter?
 
     func start() async {
         logger.info("Reciters: loading reciters")
 
         let allReciters = await reciterRetreiver.getReciters()
         logger.info("Reciters: reciters loaded")
-        let recentReciters = recentRecitersService.recentReciters(allReciters)
-        let allDownloadedReciters = downloadedRecitersService.downloadedReciters(allReciters)
-        let downloadedReciters = allDownloadedReciters.filter { !recentReciters.contains($0) }
-        let englishReciters = allReciters.filter { $0.category != .arabic }
-        let arabicReciters = allReciters.filter { $0.category == .arabic }
-        reciters = [recentReciters, downloadedReciters, englishReciters, arabicReciters]
-        selectedReciterId = preferences.lastSelectedReciterId
+
+        recentReciters = recentRecitersService.recentReciters(allReciters)
+        downloadedReciters = downloadedRecitersService.downloadedReciters(allReciters)
+
+        englishReciters = allReciters.filter { $0.category != .arabic }
+        arabicReciters = allReciters.filter { $0.category == .arabic }
+
+        let selectedReciterId = preferences.lastSelectedReciterId
+        selectedReciter = allReciters.first { $0.id == selectedReciterId }
     }
 
-    func onReciterItemTapped(_ reciter: Reciter) {
+    func selectReciter(_ reciter: Reciter) {
         logger.info("Reciters: reciter selected \(reciter.id)")
         listener?.onSelectedReciterChanged(to: reciter)
         listener?.dismissReciterList()
     }
 
-    func onCancelButtonTapped() {
+    func dismissRecitersList() {
         logger.info("Reciters: dismiss reciters list tapped")
         listener?.dismissReciterList()
     }

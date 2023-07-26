@@ -18,7 +18,7 @@ public struct ReciterListBuilder {
     @MainActor
     public func build(withListener listener: ReciterListListener) -> UIViewController {
         let viewModel = ReciterListViewModel()
-        let viewController = ReciterTableViewController(viewModel: viewModel)
+        let viewController = ReciterListViewController(viewModel: viewModel)
         viewModel.listener = listener
         return viewController
     }

@@ -270,7 +270,7 @@ public final class ContentViewModel {
         deps.noteService.notes(quran: deps.quran)
             .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
             .receive(on: DispatchQueue.main)
-            .sink { self.quranUITraits.notesHighlights = Self.dictionaryFrom($0) }
+            .sink { [weak self] in self?.quranUITraits.notesHighlights = Self.dictionaryFrom($0) }
             .store(in: &cancellables)
     }
 }

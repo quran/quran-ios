@@ -88,6 +88,8 @@ private struct GRDBGlyph: Decodable, FetchableRecord, TableRecord {
         static let maxY = Column(CodingKeys.maxY)
     }
 
+    // MARK: Internal
+
     static var databaseTableName: String {
         "glyphs"
     }
@@ -137,6 +139,8 @@ private struct GRDBSuraHeader: Decodable, FetchableRecord, TableRecord {
         static let page = Column(CodingKeys.page)
     }
 
+    // MARK: Internal
+
     static var databaseTableName: String {
         "sura_headers"
     }
@@ -174,6 +178,8 @@ private struct GRDBAyahMarker: Decodable, FetchableRecord, TableRecord {
         static let y = Column(CodingKeys.y)
         static let page = Column(CodingKeys.page)
     }
+
+    // MARK: Internal
 
     static var databaseTableName: String {
         "ayah_markers"

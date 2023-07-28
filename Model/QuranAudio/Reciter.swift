@@ -25,7 +25,14 @@ public enum AudioType: Hashable, Sendable {
     case gapped
 }
 
-public struct Reciter: Hashable, Sendable {
+public struct Reciter: Hashable, Identifiable, Sendable {
+    // TODO: Add arabicTafseer
+    public enum Category: String, Sendable {
+        case arabic
+        case english
+        case arabicEnglish
+    }
+
     // MARK: Lifecycle
 
     public init(id: Int, nameKey: String, directory: String, audioURL: URL, audioType: AudioType, hasGaplessAlternative: Bool, category: Category) {
@@ -39,13 +46,6 @@ public struct Reciter: Hashable, Sendable {
     }
 
     // MARK: Public
-
-    // TODO: Add arabicTafseer
-    public enum Category: String, Sendable {
-        case arabic
-        case english
-        case arabicEnglish
-    }
 
     public let id: Int
     public let nameKey: String

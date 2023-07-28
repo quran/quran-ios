@@ -192,6 +192,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
 
         dataSource.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: true)
         await viewModel.visiblePagesLoaded()
+        await quranUITraitsUpdatedTo(viewModel.quranUITraits)
     }
 
     // MARK: - Gestures

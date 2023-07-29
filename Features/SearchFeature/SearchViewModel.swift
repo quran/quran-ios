@@ -152,7 +152,6 @@ final class SearchViewModel: ObservableObject {
             .filter(\.autocomplete)
             .map(\.term)
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
-            .removeDuplicates()
             .values()
         for await term in searchTermSequence {
             if searchType == .loading {

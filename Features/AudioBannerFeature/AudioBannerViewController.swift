@@ -167,6 +167,7 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     private func setUpReciterView() {
         reciterView.playButton.addTarget(self, action: #selector(reciterPlayTapped), for: .touchUpInside)
         reciterView.backgroundButton.addTarget(self, action: #selector(reciterTapped), for: .touchUpInside)
+        reciterView.moreButton?.addTarget(self, action: #selector(showAdvancedAudioOptionsNotPlaying), for: .touchUpInside)
         reciterView.backgroundButton.accessibilityLabel = "Reciter banner"
     }
 
@@ -277,6 +278,16 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     private func showAdvancedAudioOptions() {
         logger.info("AudioBanner: more button tapped. State: \(viewModel.playingState)")
         guard let options = viewModel.advancedAudioOptions else {
+            return
+        }
+        let viewController = advancedAudioOptionsBuilder.build(withListener: self, options: options)
+        present(viewController, animated: true)
+    }
+
+    @objc
+    private func showAdvancedAudioOptionsNotPlaying() {
+        logger.info("AudioBanner: more button tapped. State: \(viewModel.playingState)")
+        guard let options = viewModel.advancedAudioOptionsNotPlaying else {
             return
         }
         let viewController = advancedAudioOptionsBuilder.build(withListener: self, options: options)

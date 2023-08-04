@@ -13,6 +13,7 @@
                 <outlet property="backgroundButton" destination="VB4-iz-Fjs" id="lop-5B-pCU"/>
                 <outlet property="imageView" destination="dTH-Zk-EFD" id="t7O-4g-8tS"/>
                 <outlet property="playButton" destination="sZU-5A-szn" id="8mv-3G-2gd"/>
+                <outlet property="moreButton" destination="cc9-iX-UuJ" id="mZT-Sl-flO"/>
                 <outlet property="titleLabel" destination="mwa-kP-uKG" id="C4O-P4-UVz"/>
             </connections>
         </placeholder>
@@ -68,20 +69,34 @@
                     <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                     <state key="normal" image="play.fill" catalog="system"/>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cc9-iX-UuJ">
+                    <rect key="frame" x="536" y="0.0" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="7P3-j1-Frt"/>
+                    </constraints>
+                    <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
+                    <state key="normal" image="ellipsis.circle" catalog="system">
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="VB4-iz-Fjs" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="1sw-so-q9C"/>
+                <constraint firstItem="iN0-l3-epB" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="cc9-iX-UuJ" secondAttribute="leading" constant="5" id="4Sh-hl-lme"/>
                 <constraint firstItem="iN0-l3-epB" firstAttribute="centerX" secondItem="To9-r8-ZrW" secondAttribute="centerX" id="Ai9-5S-J7O"/>
                 <constraint firstItem="iN0-l3-epB" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="E7m-cK-JGi"/>
                 <constraint firstAttribute="bottom" secondItem="VB4-iz-Fjs" secondAttribute="bottom" id="F1u-zd-t6X"/>
                 <constraint firstAttribute="trailing" secondItem="VB4-iz-Fjs" secondAttribute="trailing" id="GDa-vB-b5v"/>
                 <constraint firstAttribute="bottomMargin" secondItem="iN0-l3-epB" secondAttribute="bottom" id="Nap-ZR-aQy"/>
                 <constraint firstItem="iN0-l3-epB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sZU-5A-szn" secondAttribute="trailing" constant="5" id="Pep-e7-dah"/>
+                <constraint firstAttribute="bottomMargin" secondItem="cc9-iX-UuJ" secondAttribute="bottom" id="aFy-bF-NaQ"/>
                 <constraint firstItem="sZU-5A-szn" firstAttribute="leading" secondItem="To9-r8-ZrW" secondAttribute="leadingMargin" id="dKI-iY-cxG"/>
                 <constraint firstItem="sZU-5A-szn" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="eqZ-Na-FhW"/>
+                <constraint firstItem="cc9-iX-UuJ" firstAttribute="top" secondItem="To9-r8-ZrW" secondAttribute="top" id="hl9-zY-59U"/>
                 <constraint firstItem="VB4-iz-Fjs" firstAttribute="leading" secondItem="To9-r8-ZrW" secondAttribute="leading" id="nse-7O-nlO"/>
                 <constraint firstAttribute="bottomMargin" secondItem="sZU-5A-szn" secondAttribute="bottom" id="s0f-rK-lE3"/>
+                <constraint firstItem="cc9-iX-UuJ" firstAttribute="trailing" secondItem="To9-r8-ZrW" secondAttribute="trailingMargin" id="w5H-7B-4be"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -89,6 +104,7 @@
         </view>
     </objects>
     <resources>
+        <image name="ellipsis.circle" catalog="system" width="128" height="123"/>
         <image name="play.fill" catalog="system" width="117" height="128"/>
         <systemColor name="systemGray4Color">
             <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -94,6 +94,11 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
 
     @Published var playingState: PlaybackState = .stopped
 
+    var advancedAudioOptionsNotPlaying: AdvancedAudioOptions? {
+        setAudioRangeForCurrentPage()
+        return advancedAudioOptions
+    }
+
     var advancedAudioOptions: AdvancedAudioOptions? {
         guard let audioRange, let selectedReciter else {
             return nil
@@ -264,6 +269,13 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         // start downloading & playing
         analytics.playFrom(menu: false)
         play(from: currentPage.firstVerse, to: nil, verseRuns: .one, listRuns: .one)
+    }
+
+    private func setAudioRangeForCurrentPage() {
+        guard let currentPage = listener?.visiblePages.min() else { return }
+        let from = currentPage.firstVerse
+        let end = lastAyahFinder.findLastAyah(startAyah: from)
+        audioRange = (start: from, end: end)
     }
 
     private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs) {

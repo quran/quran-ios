@@ -29,6 +29,7 @@ class AudioReciterBarView: UIView {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var playButton: UIButton!
+    @IBOutlet var moreButton: UIButton!
     @IBOutlet var backgroundButton: BackgroundColorButton!
 
     // MARK: Private

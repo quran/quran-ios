@@ -41,15 +41,11 @@ class ContentTranslationView: UIView {
         get { dataSource.quranUITraits }
         set {
             logger.info("Quran Translation: set quranUITraits")
-            let oldHighlights = dataSource.quranUITraits.versesHighlights
-            let newHighlights = newValue.versesHighlights
+            let oldTraits = dataSource.quranUITraits
             dataSource.quranUITraits = newValue
 
-            for type in QuranHighlightType.scrollingTypes {
-                if oldHighlights[type]?.map(\.verse) != newHighlights[type]?.map(\.verse) {
-                    scrollToVerseIfNeeded()
-                    break
-                }
+            if newValue.highlights.needsScrolling(comparingTo: oldTraits.highlights) {
+                scrollToVerseIfNeeded()
             }
         }
     }
@@ -104,7 +100,7 @@ class ContentTranslationView: UIView {
         // layout views if needed
         layoutIfNeeded()
 
-        guard let ayah = quranUITraits.versesHighlights.firstScrollingToVerse() else {
+        guard let ayah = dataSource.quranUITraits.highlights.firstScrollingVerse() else {
             return
         }
         guard let indexPath = dataSource.firstIndexPath(forAyah: ayah) else {

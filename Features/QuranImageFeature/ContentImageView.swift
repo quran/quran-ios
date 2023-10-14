@@ -48,17 +48,11 @@ class ContentImageView: UIView {
     var quranUITraits = QuranUITraits() {
         didSet {
             logger.info("Quran Image: quranUITraits changed")
-            let newHighlights = quranUITraits.versesHighlights
-            let oldHighlights = oldValue.versesHighlights
 
-            highlightingView.highlightedWord = quranUITraits.highlightedWord
-            highlightingView.highlights = newHighlights
+            highlightingView.highlights = quranUITraits.highlights
 
-            for type in QuranHighlightType.scrollingTypes {
-                if oldHighlights[type]?.map(\.verse) != newHighlights[type]?.map(\..verse) {
-                    scrollToVerseIfNeeded()
-                    break
-                }
+            if quranUITraits.highlights.needsScrolling(comparingTo: oldValue.highlights) {
+                scrollToVerseIfNeeded()
             }
         }
     }
@@ -137,7 +131,7 @@ class ContentImageView: UIView {
     }
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = highlightingView.highlights.firstScrollingToVerse() else {
+        guard let ayah = quranUITraits.highlights.firstScrollingVerse() else {
             return
         }
 

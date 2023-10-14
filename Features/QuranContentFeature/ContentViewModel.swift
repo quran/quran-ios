@@ -10,7 +10,7 @@ import Analytics
 import AnnotationsService
 import Combine
 import Crashing
-import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
 import QuranText
@@ -106,7 +106,7 @@ public final class ContentViewModel {
     }
 
     public func highlightWord(_ word: Word?) {
-        quranUITraits.highlightedWord = word
+        quranUITraits.highlights.pointedWord = word
     }
 
     public func word(at point: CGPoint, in view: UIView) -> Word? {
@@ -114,7 +114,7 @@ public final class ContentViewModel {
     }
 
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
-        quranUITraits.readingHighlights = [ayah].compactMap { $0 }
+        quranUITraits.highlights.readingVerses = [ayah].compactMap { $0 }
     }
 
     // MARK: Internal
@@ -157,7 +157,7 @@ public final class ContentViewModel {
 
     func visiblePagesUpdated() async {
         // remove search highlight when page changes
-        quranUITraits.searchHighlights = []
+        quranUITraits.highlights.searchVerses = []
         await visiblePagesLoaded()
     }
 
@@ -214,7 +214,7 @@ public final class ContentViewModel {
 
     private var longPressData: LongPressData? {
         didSet {
-            quranUITraits.shareHighlights = selectedVerses ?? []
+            quranUITraits.highlights.shareVerses = selectedVerses ?? []
         }
     }
 
@@ -250,7 +250,7 @@ public final class ContentViewModel {
     private func configureAsInitialPage() async {
         await deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
         loadNewElementModule()
-        quranUITraits.searchHighlights = [input.highlightingSearchAyah].compactMap { $0 }
+        quranUITraits.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
     }
 
     private func loadNewElementModule() {
@@ -270,7 +270,7 @@ public final class ContentViewModel {
         deps.noteService.notes(quran: deps.quran)
             .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.quranUITraits.notesHighlights = Self.dictionaryFrom($0) }
+            .sink { [weak self] in self?.quranUITraits.highlights.noteVerses = Self.dictionaryFrom($0) }
             .store(in: &cancellables)
     }
 }

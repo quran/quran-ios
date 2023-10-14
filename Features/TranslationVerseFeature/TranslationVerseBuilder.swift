@@ -10,7 +10,7 @@ import AppDependencies
 import Caching
 import Foundation
 import MoreMenuFeature
-import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import TranslationsFeature

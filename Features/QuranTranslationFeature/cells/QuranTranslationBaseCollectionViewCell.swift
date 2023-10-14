@@ -19,6 +19,7 @@
 //
 
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import UIKit
 
@@ -41,9 +42,8 @@ class QuranTranslationBaseCollectionViewCell: UICollectionViewCell {
 
     var quranUITraits = QuranUITraits() {
         didSet {
-            let versesByHighlights = quranUITraits.versesHighlights.versesByHighlights()
-            let type = ayah.flatMap { versesByHighlights[$0] }
-            backgroundColor = type?.color
+            let versesByHighlights = quranUITraits.highlights.versesByHighlights()
+            backgroundColor = ayah.flatMap { versesByHighlights[$0] }
         }
     }
 

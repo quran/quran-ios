@@ -6,7 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import NoorUI
+import QuranAnnotations
 import QuranKit
 import UIKit
 import VLogging

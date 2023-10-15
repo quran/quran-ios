@@ -349,6 +349,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     private func updateTitle(_ pages: [Page]) {
+        if pages.isEmpty {
+            titleView?.firstLine = ""
+            titleView?.secondLine = ""
+            return
+        }
         let suras = pages.map(\.startSura)
         let juzs = pages.map(\.startJuz)
         let pageNumbers = pages.map(\.pageNumber).map(NumberFormatter.shared.format).joined(separator: " - ")

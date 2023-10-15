@@ -36,9 +36,9 @@ public struct LastPageService {
         return LastPage(quran: page.quran, persistenceModel)
     }
 
-    func update(page: LastPage, toPage: Page) async throws -> LastPage {
+    func update(page: Page, toPage: Page) async throws -> LastPage {
         let persistenceModel = try await persistence.update(
-            page: page.page.pageNumber,
+            page: page.pageNumber,
             toPage: toPage.pageNumber
         )
         return LastPage(quran: toPage.quran, persistenceModel)

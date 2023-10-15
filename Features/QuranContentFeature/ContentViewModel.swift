@@ -84,10 +84,7 @@ public final class ContentViewModel {
             .store(in: &cancellables)
 
         loadNotes()
-
-        Task {
-            await configureAsInitialPage()
-        }
+        configureAsInitialPage()
     }
 
     // MARK: Public
@@ -129,14 +126,14 @@ public final class ContentViewModel {
     }
 
     var lastViewedPage: Page {
-        deps.lastPageUpdater.lastPage?.page ?? input.initialPage
+        deps.lastPageUpdater.lastPage ?? input.initialPage
     }
 
     func userWillBeginDragScroll() {
         listener?.userWillBeginDragScroll()
     }
 
-    func visiblePagesLoaded() async {
+    func visiblePagesLoaded() {
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
         crasher.setValue(pages.map(\.pageNumber), forKey: .pages)
@@ -152,17 +149,17 @@ public final class ContentViewModel {
         }
 
         listener?.setVisiblePages(pages)
-        await updateLastPageTo(pages)
+        updateLastPageTo(pages)
     }
 
-    func visiblePagesUpdated() async {
+    func visiblePagesUpdated() {
         // remove search highlight when page changes
         quranUITraits.highlights.searchVerses = []
-        await visiblePagesLoaded()
+        visiblePagesLoaded()
     }
 
-    func updateLastPageTo(_ pages: [Page]) async {
-        await deps.lastPageUpdater.updateTo(pages: pages)
+    func updateLastPageTo(_ pages: [Page]) {
+        deps.lastPageUpdater.updateTo(pages: pages)
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView) {
@@ -247,8 +244,8 @@ public final class ContentViewModel {
         return dict
     }
 
-    private func configureAsInitialPage() async {
-        await deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
+    private func configureAsInitialPage() {
+        deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
         loadNewElementModule()
         quranUITraits.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
     }

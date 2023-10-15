@@ -27,7 +27,7 @@ final class HomeViewModel: ObservableObject {
     init(
         lastPageService: LastPageService,
         textRetriever: QuranTextDataService,
-        navigateToPage: @escaping (LastPage) -> Void,
+        navigateToPage: @escaping (Page) -> Void,
         navigateToSura: @escaping (Sura) -> Void,
         navigateToQuarter: @escaping (Quarter) -> Void
     ) {
@@ -57,7 +57,7 @@ final class HomeViewModel: ObservableObject {
         _ = await [lastPages, suras, quarters]
     }
 
-    func navigateTo(_ lastPage: LastPage) {
+    func navigateTo(_ lastPage: Page) {
         navigateToPage(lastPage)
     }
 
@@ -73,7 +73,7 @@ final class HomeViewModel: ObservableObject {
 
     private let lastPageService: LastPageService
     private let textRetriever: QuranTextDataService
-    private let navigateToPage: (LastPage) -> Void
+    private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
 

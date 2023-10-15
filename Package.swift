@@ -787,6 +787,7 @@ func dependencyName(of dependency: Target.Dependency) -> String {
     return ""
 }
 
+/// Creates an empty test target that links all targets to produce an accurate code coverage.
 func testTargetLinkingAllPackageTargets(_ targets: [Target]) -> Target {
     let nonTestTargets = targets.filter { !$0.isTest }
     return .testTarget(

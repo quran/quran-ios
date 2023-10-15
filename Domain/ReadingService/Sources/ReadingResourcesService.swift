@@ -94,6 +94,12 @@ public actor ReadingResourcesService {
 
         try? fileManager.createDirectory(at: Reading.resourcesDirectory, withIntermediateDirectories: true)
 
+        removePreviouslyDownloadedResources()
+
+        copyNewlyDownloadedResource(reading: reading)
+    }
+
+    private func removePreviouslyDownloadedResources() {
         do {
             let downloadedResources = try fileManager.contentsOfDirectory(at: Reading.resourcesDirectory, includingPropertiesForKeys: nil)
             for resource in downloadedResources {
@@ -102,6 +108,9 @@ public actor ReadingResourcesService {
         } catch {
             logger.error("Resources failed to list files. Error: \(error)")
         }
+    }
+
+    private func copyNewlyDownloadedResource(reading: Reading) {
         do {
             let bundleURL = reading.url(inBundle: bundle)
             try fileManager.copyItem(at: bundleURL, to: reading.directory)

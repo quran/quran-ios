@@ -41,7 +41,7 @@
 "qari_mostafa_ismaeel_gapless" = "Mostafa Ismaeel";
 "qari_husary_iza3a_gapless" = "Husary Broadcast";
 "qari_abdulaziz_zahrani_gapless" = "Abdulaziz Az-Zahrani";
-"qari_ayman_suwaid" = "Ayman Suwaid (pausas)";
+"qari_ayman_suwaid_gapped" = "Ayman Suwaid (pausas)";
 "qari_afasy_gapless" = "Mishary Al-Afasy";
 "qari_hani_rifai_gapless" = "Hani Ar-Rifai";
 "qari_ayyoub_gapless" = "Muhammad Ayyoub";
@@ -72,3 +72,9 @@
 "qari_alzain_ahmad_gapless" = "Alzain Muhammad Ahmad";
 "qari_muhammad_rashad_shereef_gapless" = "Muhammad Rashad Al-Sherif";
 "qari_wadee3_alyamani_gapless" = "Wadee\' Al-Yamani";
+"qari_ayman_suwaid_gapless" = "Ayman Suwaid";
+"qari_hady_toure_gapless" = "Hady Toure";
+"qari_khalid_jalil_gapless" = "Khalid Al-Jalil";
+"qari_nabil_rifa3i_gapless" = "Nabil Ar-Rifai";
+"qari_noreen_siddiq_gapless" = "Noreen Siddiq";
+"qari_tawfeeq_as_sawaigh_gapless" = "Tawfeeq as-Sawaigh";

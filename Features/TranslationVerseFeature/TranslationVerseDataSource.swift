@@ -8,7 +8,7 @@
 
 import Foundation
 import Localization
-import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import QuranTranslationFeature

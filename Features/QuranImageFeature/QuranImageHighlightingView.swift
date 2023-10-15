@@ -26,21 +26,17 @@ import UIKit
 // This class is expected to be implemented using CoreAnimation with CAShapeLayers.
 // It's also expected to reuse layers instead of dropping & creating new ones.
 class QuranImageHighlightingView: UIView {
-    private typealias RectangleHighlights = [(type: QuranHighlightType, rects: [CGRect])]
+    private typealias RectangleHighlights = [(color: UIColor, rects: [CGRect])]
 
     // MARK: Internal
 
     weak var layoutController: ContentImageLayoutController?
 
-    var highlights: VerseHighlights = [:] {
+    var highlights = QuranHighlights() {
         didSet { updateRectangleBounds() }
     }
 
     var wordFrames: WordFrameCollection? {
-        didSet { updateRectangleBounds() }
-    }
-
-    var highlightedWord: Word? {
         didSet { updateRectangleBounds() }
     }
 
@@ -77,17 +73,17 @@ class QuranImageHighlightingView: UIView {
         let versesByHighlights = highlights.versesByHighlights()
 
         var highlightingRectangles: RectangleHighlights = []
-        for (ayah, type) in versesByHighlights {
+        for (ayah, color) in versesByHighlights {
             var rectangles: [CGRect] = []
             guard let ayahInfo = wordFrames?.wordFramesForVerse(ayah) else { continue }
             for piece in ayahInfo {
                 rectangles.append(piece.rect)
             }
-            highlightingRectangles.append((type, rectangles))
+            highlightingRectangles.append((color, rectangles))
         }
 
-        if let word = highlightedWord, let frame = wordFrames?.wordFrameForWord(word) {
-            highlightingRectangles.append((.word, [frame.rect]))
+        if let word = highlights.pointedWord, let frame = wordFrames?.wordFrameForWord(word) {
+            highlightingRectangles.append((QuranHighlights.wordHighlightColor, [frame.rect]))
         }
 
         createViews(highlightingRectangles: highlightingRectangles)
@@ -101,10 +97,10 @@ class QuranImageHighlightingView: UIView {
     private func createViews(highlightingRectangles: RectangleHighlights) {
         let imageScale = imageScale
         removeViews()
-        for (highlightType, rectangles) in highlightingRectangles {
+        for (color, rectangles) in highlightingRectangles {
             for rect in rectangles {
                 let rectView = UIView()
-                rectView.backgroundColor = highlightType.color
+                rectView.backgroundColor = color
                 rectView.frame = rect.scaled(by: imageScale)
                 addSubview(rectView)
                 childrenViews.append((rectView, rect))

@@ -9,7 +9,7 @@
 import Foundation
 import GenericDataSources
 import Localization
-import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranText
 import TranslationService

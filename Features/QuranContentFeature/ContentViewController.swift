@@ -8,6 +8,7 @@
 
 import Combine
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit
@@ -104,18 +105,8 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         let oldValue = dataSource.quranUITraits
         dataSource.quranUITraits = quranUITraits
 
-        func scrollToPageIfChanged(_ keyPath: KeyPath<QuranUITraits, [AyahNumber]>) async -> Bool {
-            let ayahToScrollTo = quranUITraits[keyPath: keyPath].last
-            if quranUITraits[keyPath: keyPath] != oldValue[keyPath: keyPath] {
-                if let ayah = ayahToScrollTo {
-                    await scrollTo(page: ayah.page, animated: true, forceReload: false)
-                }
-            }
-            return ayahToScrollTo != nil
-        }
-
-        if await !scrollToPageIfChanged(\.shareHighlights) {
-            _ = await scrollToPageIfChanged(\.readingHighlights)
+        if let ayah = quranUITraits.highlights.verseToScrollTo(comparingTo: oldValue.highlights) {
+            await scrollTo(page: ayah.page, animated: true, forceReload: false)
         }
     }
 

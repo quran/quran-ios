@@ -75,7 +75,7 @@ private struct NotesViewUI: View {
         let arabicSuraName = note.firstVerse.sura.arabicSuraName
         let ayahCount = note.verses.count
         let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
-        let color = note.color.color.opacity(QuranHighlightType.opacity)
+        let color = note.color.color.opacity(QuranHighlights.opacity)
         return NoorListItem(
             subheading: "\(localizedVerse) \(sura: arabicSuraName) \(numberOfAyahs)",
             rightPretitle: "\(verse: item.verseText, color: color, lineLimit: 2)",

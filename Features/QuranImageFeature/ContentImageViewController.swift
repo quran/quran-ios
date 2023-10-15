@@ -9,7 +9,7 @@
 import Caching
 import Crashing
 import ImageService
-import NoorUI
+import QuranAnnotations
 import QuranGeometry
 import QuranKit
 import QuranPagesFeature

@@ -33,45 +33,51 @@ public final class LastPageUpdater {
 
     // MARK: Public
 
-    public private(set) var lastPage: LastPage?
+    public private(set) var lastPage: Page?
 
-    public func configure(initialPage: Page, lastPage: LastPage?) async {
+    public func configure(initialPage: Page, lastPage: Page?) {
         self.lastPage = lastPage
 
         if let lastPage {
-            await updateTo(page: initialPage, lastPage: lastPage)
+            updateTo(page: initialPage, lastPage: lastPage)
         } else {
-            await create(page: initialPage)
+            create(page: initialPage)
         }
     }
 
-    public func updateTo(pages: [Page]) async {
+    public func updateTo(pages: [Page]) {
         guard let page = pages.min() else {
             return
         }
         // don't update if it's the same page
-        guard let lastPage, page != lastPage.page else { return }
+        guard let lastPage, page != lastPage else { return }
 
-        await updateTo(page: page, lastPage: lastPage)
+        updateTo(page: page, lastPage: lastPage)
     }
 
     // MARK: Private
 
     private let service: LastPageService
 
-    private func updateTo(page: Page, lastPage: LastPage) async {
-        do {
-            self.lastPage = try await service.update(page: lastPage, toPage: page)
-        } catch {
-            crasher.recordError(error, reason: "Failed to update last page")
+    private func updateTo(page: Page, lastPage: Page) {
+        self.lastPage = page
+        Task {
+            do {
+                _ = try await service.update(page: lastPage, toPage: page)
+            } catch {
+                crasher.recordError(error, reason: "Failed to update last page")
+            }
         }
     }
 
-    private func create(page: Page) async {
-        do {
-            lastPage = try await service.add(page: page)
-        } catch {
-            crasher.recordError(error, reason: "Failed to create a last page")
+    private func create(page: Page) {
+        lastPage = page
+        Task {
+            do {
+                _ = try await service.add(page: page)
+            } catch {
+                crasher.recordError(error, reason: "Failed to create a last page")
+            }
         }
     }
 }

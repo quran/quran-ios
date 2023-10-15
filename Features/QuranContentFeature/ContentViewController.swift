@@ -91,14 +91,12 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         viewModel.$quranUITraits
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newTraits in
-                Task {
-                    await self?.quranUITraitsUpdatedTo(newTraits)
-                }
+                self?.quranUITraitsUpdatedTo(newTraits)
             }
             .store(in: &cancellables)
     }
 
-    private func quranUITraitsUpdatedTo(_ quranUITraits: QuranUITraits) async {
+    private func quranUITraitsUpdatedTo(_ quranUITraits: QuranUITraits) {
         guard let dataSource = viewModel.dataSource else {
             return
         }
@@ -106,18 +104,18 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         dataSource.quranUITraits = quranUITraits
 
         if let ayah = quranUITraits.highlights.verseToScrollTo(comparingTo: oldValue.highlights) {
-            await scrollTo(page: ayah.page, animated: true, forceReload: false)
+            scrollTo(page: ayah.page, animated: true, forceReload: false)
         }
     }
 
-    private func scrollTo(page: Page, animated: Bool, forceReload: Bool) async {
+    private func scrollTo(page: Page, animated: Bool, forceReload: Bool) {
         if UIApplication.shared.applicationState != .background {
             // update the UI only when the app is in foreground
             viewModel.dataSource?.scrollToPage(page, animated: animated, forceReload: forceReload)
-            await viewModel.visiblePagesUpdated()
+            viewModel.visiblePagesUpdated()
         } else {
             // Only update last page while in background
-            await viewModel.updateLastPageTo([page])
+            viewModel.updateLastPageTo([page])
         }
     }
 
@@ -143,9 +141,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         viewModel.$dataSource
             .receive(on: DispatchQueue.main)
             .sink { [weak self] dataSource in
-                Task {
-                    await self?.install(dataSource)
-                }
+                self?.install(dataSource)
             }
             .store(in: &cancellables)
     }
@@ -171,7 +167,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         return pageController
     }
 
-    private func install(_ dataSource: PageDataSource?) async {
+    private func install(_ dataSource: PageDataSource?) {
         guard let dataSource else {
             return
         }
@@ -182,8 +178,8 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         dataSource.usePageViewController(pageController)
 
         dataSource.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: true)
-        await viewModel.visiblePagesLoaded()
-        await quranUITraitsUpdatedTo(viewModel.quranUITraits)
+        viewModel.visiblePagesLoaded()
+        quranUITraitsUpdatedTo(viewModel.quranUITraits)
     }
 
     // MARK: - Gestures

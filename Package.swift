@@ -50,12 +50,12 @@ let package = Package(
 
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.1"),
-        .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.7"),
+        .package(url: "https://github.com/SvenTiigi/WhatsNewKit", from: "1.3.7"),
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
         .package(url: "https://github.com/ninjaprox/NVActivityIndicatorView", from: "5.0.0"),
 
         // Testing
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.9.0"),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )

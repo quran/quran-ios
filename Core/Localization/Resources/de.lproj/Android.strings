@@ -1,42 +1,76 @@
 "app_name" = "Quran";
-"downloadPrompt_title" = "Möchten Sie die benötigten Dateien herunterladen?";
+"audio_manager" = "Audioverwaltung";
+"available_translations" = "Zum Download verfügbar";
+"ayah_copied_popup" = "Vers kopiert";
+"bookmarks_list_empty" = "Keine Lesezeichen";
+"cancel" = "Abbrechen";
+"canceling" = "Abbrechen…";
+"delete_tag" = "Schlagwort löschen";
+"dialog_ok" = "Ok";
+"downloadImportantPrompt" = "Es ist eine kleine, aber wichtige Aktualisierung der\
+Quran-Abbildungen auf ihrem Gerät vorhanden. Wollen Sie diese Aktualisierung jetzt\
+herunterladen?\
+";
 "downloadPrompt" = "Für die optimale Leistung müssen einige Dateien\
 heruntergeladen werden. Wenn Sie sich dagegen entscheiden, wird das\
 Laden jeder Seite spürbar länger dauern. Wollen Sie die benötigten\
 Dateien herunterladen?\
 ";
+"downloadPrompt_no" = "Nein";
+"downloadPrompt_ok" = "Ja";
+"downloadPrompt_title" = "Möchten Sie die benötigten Dateien herunterladen?";
 "downloadTabletPrompt" = "Wir haben kürzlich verbesserte Bilder für Tablets hinzugefügt.\
 Wollen Sie diese Bilder jetzt herunterladen?\
 ";
-"downloadImportantPrompt" = "Es ist eine kleine, aber wichtige Aktualisierung der\
-Quran-Abbildungen auf ihrem Gerät vorhanden. Wollen Sie diese Aktualisierung jetzt\
+"download_cancel" = "Abbrechen";
+"download_error_disk" = "Sie verfügen nicht über genug Speicherplatz um die Dateien\
+herunterzuladen.\
+";
+"download_error_general" = "Download fehlgeschlagen";
+"download_error_invalid_download" = "Die heruntergeladene Datei war fehlerhaft.";
+"download_error_invalid_download_retry" = "Fehlerhafte Datei, es wird versucht die Datei\
+erneut herunterzuladen.\
+";
+"download_error_network" = "Die Datei konnte wegen eines Netzwerk-Fehlers nicht\
+heruntergeladen werden.\
+";
+"download_error_network_retry" = "Netzwerk-Fehler, es wird versucht eine Verbindung\
+aufzubauen…";
+"download_error_perms" = "Die Datei konnte mangels Berechtigungen nicht heruntergeladen\
+werden.\
+";
+"download_extra_data" = "Wir müssen einige kleine Dateien herunterladen, um von der\
+Teilen- und Übersetzungs-Funktion Gebrauch machen zu können. Möchten Sie die Dateien jetzt\
 herunterladen?\
 ";
-"downloadPrompt_ok" = "Ja";
-"downloadPrompt_no" = "Nein";
-"downloading_title" = "Dateien werden heruntergeladen…";
+"download_non_wifi_prompt" = "Sie sind nicht mit einem W-LAN verbunden. Möchten Sie die\
+Dateien trotzdem herunterladen?\
+";
+"download_processing" = "Download wird durchgeführt…";
+"download_progress" = "Heruntergeladen %1$@ / %2$@";
+"download_retry" = "Nochmals versuchen";
+"download_successful" = "Download erfolgreich";
+"download_sura_ayah_progress" = "Herunterladen von Sure %1$d Vers %2$d";
+"download_sura_progress" = "Heruntergeladen %1$@ / %2$@ von Sure %3$d";
+"downloaded_translations" = "Heruntergeladen";
 "downloading_message" = "Bitte warten Sie bis die Dateien heruntergeladen wurden.\
 Sie dürfen den Vorgang unterbrechen, falls es nötig sein sollte.\
 ";
+"downloading_title" = "Dateien werden heruntergeladen…";
+"edit_tag" = "Schlagwort bearbeiten";
+"email_us" = "Wenn Ihre Frage oben nicht beantwortet werden konnte und Sie\
+Unterstützung benötigen, dann können Sie uns eine E-Mail an quranandroid@gmail.com senden.\
+Bitte haben Sie Verständnis dafür, dass wir sehr viele E-Mails bekommen und wir möglicherweise\
+nicht im Stande sein werden alle zu beantworten.\
+";
+"error_getting_translation_list" = "Es ist zurzeit nicht möglich die Liste\
+mit den Übersetzungen herunterzuladen. Versuchen Sie es später erneut.\
+";
 "extracting_title" = "Dateien werden verarbeitet…";
-"menu_about" = "Über uns";
-"menu_settings" = "Einstellungen";
-"menu_jump_last_page" = "Letzte Seite";
-"menu_bookmarks" = "Lesezeichen";
-"menu_bookmarks_page" = "Seiten-Lesezeichen";
-"menu_bookmarks_ayah" = "Vers-Lesezeichen";
-"menu_sort" = "Sortieren";
-"menu_sort_date" = "Hinzufügedatum";
-"menu_sort_location" = "Position im Quran";
-"menu_translation" = "Übersetzung anzeigen";
-"menu_back_to_page" = "Quran anzeigen";
-"menu_help" = "Hilfe";
-"menu_search" = "Suche";
-"menu_get_translations" = "Lade die Übersetzungen";
-"menu_jump" = "Springe zu";
+"found_in_sura" = "Gefunden in Sure %1$@: %2$d (Seite %3$d)";
+"get_arabic_search_db" = "Lade die arabische Such-Datenbank herunter";
+"get_translations" = "Übersetzungen herunterladen";
 "gotoPage" = "Gehe zur Seite";
-"cancel" = "Abbrechen";
-"help_title" = "Häufig gestellte Fragen";
 "help" = "\
 <b>Wie starte ich die Wiedergabe der Audio-Dateien?</b>\
 <br/>Öffnen Sie eine beliebige Seite im Quran. Berühren Sie nun den Bildschirm einmal.\
@@ -85,185 +119,151 @@ erscheint. In diesem Menu können Sie nun ein Lesezeichen hinzufügen, den Vers 
 <br/>Leider unterstützen Android Versionen vor 4.0 diese Schriften nicht, da können\
 wir Ihnen leider auch nicht weiterhelfen.\
 ";
-"search_hint" = "Durchsuche den Quran";
-"quranSearchType" = "Quranverse";
-"found_in_sura" = "Gefunden in Sure %1$@: %2$d (Seite %3$d)";
-"no_results" = "Es wurden keine Resultate für \"%@\" gefunden.";
-"no_arabic_search_available" = "Sie haben das arabische Such-Paket noch nicht\
-heruntergeladen. Bitte laden Sie dieses herunter und versuchen Sie es danach erneut.\
-";
-"get_arabic_search_db" = "Lade die arabische Such-Datenbank herunter";
-"prefs_volume_key_navigation_title" = "Navigation mittels Lautstärketasten";
-"prefs_volume_key_navigation_summary" = "Wechseln Sie zwischen verschiedenen Seiten\
-mittels der Lautstärketasten.\
-";
-"prefs_category_reading" = "Lese Optionen";
-"prefs_category_translation" = "Übersetzungsoptionen";
-"prefs_category_display_settings" = "Bildschirmoptionen";
-"prefs_use_arabic_title" = "Arabischer Modus (الوضع العربي)";
-"prefs_use_arabic_summary_on" = "Das Programm wird ins Arabische umgestellt";
-"prefs_new_background_title" = "Neuen Hintergrund verwenden";
-"prefs_lock_orientation_title" = "Bildschirmausrichtung sperren";
-"prefs_lock_orientation_summary_on" = "Die Quranseiten werden immer in einer bestimmten\
-Bildschirmausrichtung angezeigt.\
-";
-"prefs_lock_orientation_summary_off" = "Verwendet für die Bildschirmausrichtung die\
-aktuellen System-Einstellungen.\
-";
-"prefs_landscape_orientation_title" = "Querformat";
-"prefs_landscape_orientation_summary_on" = "Querformat wird genutzt.";
-"prefs_landscape_orientation_summary_off" = "Hochformat wird genutzt.";
-"prefs_night_mode_title" = "Nachtmodus";
-"prefs_night_mode_summary" = "Es werden ein dunkler Hintergrund und eine helle Schrift\
-benutzt.\
-";
-"prefs_night_mode_text_brightness_title" = "Helligkeit des Textes";
-"prefs_night_mode_text_brightness_summary" = "Die Helligkeit des Textes im Nachtmodus.\
-";
-"prefs_overlay_page_info_title" = "Seiteninfo anzeigen";
-"prefs_overlay_page_info_summary" = "Blendet die Seitennummer, den Namen der Sure und\
-die Juz\' Nummer während dem Lesen ein.\
-";
-"prefs_display_marker_title" = "Meilenstein-Fenster anzeigen";
-"prefs_display_marker_summary" = "Ein Fenster anzeigen beim Erreichen eines neuen Juz\',\
-einer neuen Hizb, etc.\
-";
-"prefs_translation_text_title" = "Schrittgröße der Übersetzungen";
-"prefs_translations" = "Übersetzungen";
-"prefs_translations_summary" = "Verwalte und lade Übersetzungen herunter.";
-"prefs_ayah_before_translation_title" = "Original vor dem Vers";
-"prefs_ayah_before_translation_summary" = "Das arabische Original vor jedem übersetzten\
-Vers anzeigen.\
-";
-"prefs_category_download" = "Downloadoptionen";
-"prefs_streaming_title" = "Streaming";
-"prefs_streaming_summary" = "Wenn möglich, Audio streamen";
-"prefs_download_amount_title" = "Downloadgröße";
-"prefs_download_amount_summary" = "Bevorzugte Downloadgröße für nicht\
-unterbrechungsfreie Wiedergabe.\
-";
-"prefs_audio_manager_summary" = "Verwalten Sie Ihre Audiodateien.";
-"downloaded_translations" = "Heruntergeladen";
-"available_translations" = "Zum Download verfügbar";
-"remove_button" = "Entfernen";
-"dialog_ok" = "Ok";
-"prefs_app_location_title" = "Speicherort";
-"prefs_app_location_summary" = "Wählen Sie den Speicherort der Dateien aus.";
-"prefs_sdcard_internal" = "Interner Speicher";
-"prefs_sdcard_external" = "Externe SD-Karte %1$d";
-"prefs_app_size" = "Der vom Programm verwendete Speicherplatz ist";
-"prefs_calculating_app_size" = "Die Größe des Programms wird berechnet";
-"prefs_copying_app_files" = "Programmdateien werden kopiert";
-"prefs_err_moving_app_files" = "Die Programmdateien konnten nicht verschoben werden.\
-";
-"prefs_no_enough_space_to_move_files" = "Sie haben nicht genug Speicherplatz um die\
-Dateien zu verschieben.\
-";
-"prefs_megabytes_int" = "%1$d MB";
-"prefs_dual_page_mode_title" = "Tablet-Modus";
-"prefs_dual_page_mode_enabled" = "Im Querformat werden zwei Seiten nebeneinander\
-dargestellt.\
-";
-"prefs_dual_page_mode_disabled" = "Im Querformat wird nur eine Seite dargestellt.";
-"warning" = "Achtung";
+"help_title" = "Häufig gestellte Fragen";
+"highlighting_database" = "Benötigte Dateien";
+"index_loading" = "Lade…";
+"juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Aufgrund von Systemeinschränkungen durch Android, werden im\
 Falle der Speicherung der Daten auf einer externen SD-Karte, diese Daten nach einer\
 Deinstallation oder einer Löschung der Applikationsdaten dauerhaft gelöscht und es ist ein\
 erneutes Herunterladen erforderlich. Sind Sie sicher, dass Sie die externe SD-Karte benutzen\
 wollen?\
 ";
-"update_available" = "Update vorhanden";
-"translation_updates_available" = "Es ist ein Update für eine Ihrer Übersetzungen\
-vorhanden. Wollen Sie die Übersetzung jetzt aktualisieren?\
-";
-"translation_dialog_yes" = "Ja";
-"translation_dialog_later" = "Später";
-"quran_rob3" = "¼";
-"quran_nos" = "½";
-"quran_talt_arb3" = "¾";
-"quran_hizb" = "Hizb";
-"quran_juz2" = "Juz\'";
-"quran_page" = "Seite";
-"quran_sura" = "Sūrah";
-"quran_ayah" = "Vers %1$d";
-"quran_sura_title" = "Sure %1$@";
-"sura_ayah_notification_str" = "Sure %1$@, Vers %2$d";
-"sura_ayah_sharing_str" = "Sure %1$@: %2$d";
-"index_loading" = "Lade…";
-"canceling" = "Abbrechen…";
-"juz2_description" = "Juz\' %1$@";
-"page_description" = "Seite %1$@, Juz\' %2$@";
-"highlighting_database" = "Benötigte Dateien";
-"timing_database" = "Benötigte Dateien";
-"sdcard_error" = "Die SD-Karte konnte nicht gefunden werden. Bitte setzen Sie die Karte\
-erneut ein und versuchen Sie es nochmals.\
-";
-"download_successful" = "Download erfolgreich";
-"download_processing" = "Download wird durchgeführt…";
-"download_error_general" = "Download fehlgeschlagen";
-"download_error_disk" = "Sie verfügen nicht über genug Speicherplatz um die Dateien\
-herunterzuladen.\
-";
-"download_error_network" = "Die Datei konnte wegen eines Netzwerk-Fehlers nicht\
-heruntergeladen werden.\
-";
-"download_error_perms" = "Die Datei konnte mangels Berechtigungen nicht heruntergeladen\
-werden.\
-";
-"download_error_invalid_download" = "Die heruntergeladene Datei war fehlerhaft.";
-"download_error_invalid_download_retry" = "Fehlerhafte Datei, es wird versucht die Datei\
-erneut herunterzuladen.\
-";
-"download_error_network_retry" = "Netzwerk-Fehler, es wird versucht eine Verbindung\
-aufzubauen…";
-"notification_download_canceled" = "Download abgebrochen";
-"download_non_wifi_prompt" = "Sie sind nicht mit einem W-LAN verbunden. Möchten Sie die\
-Dateien trotzdem herunterladen?\
-";
-"download_progress" = "Heruntergeladen %1$@ / %2$@";
-"download_sura_progress" = "Heruntergeladen %1$@ / %2$@ von Sure %3$d";
-"download_sura_ayah_progress" = "Herunterladen von Sure %1$d Vers %2$d";
-"process_progress" = "Datei wird verarbeitet %1$d / %2$d";
-"download_retry" = "Nochmals versuchen";
-"download_cancel" = "Abbrechen";
-"download_extra_data" = "Wir müssen einige kleine Dateien herunterladen, um von der\
-Teilen- und Übersetzungs-Funktion Gebrauch machen zu können. Möchten Sie die Dateien jetzt\
-herunterladen?\
-";
-"remove_dlg_title" = "Übersetzung entfernen?";
-"remove_dlg_msg" = "Sind Sie sicher, dass Sie die %1$@ entfernen wollen?";
-"error_getting_translation_list" = "Es ist zurzeit nicht möglich die Liste\
-mit den Übersetzungen herunterzuladen. Versuchen Sie es später erneut.\
-";
-"search_data" = "Suche Dateien";
+"madani" = "Medinensisch";
+"makki" = "Mekkanisch";
+"menu_about" = "Über uns";
+"menu_back_to_page" = "Quran anzeigen";
+"menu_bookmarks" = "Lesezeichen";
+"menu_bookmarks_ayah" = "Vers-Lesezeichen";
+"menu_bookmarks_page" = "Seiten-Lesezeichen";
+"menu_get_translations" = "Lade die Übersetzungen";
+"menu_help" = "Hilfe";
+"menu_jump" = "Springe zu";
+"menu_jump_last_page" = "Letzte Seite";
+"menu_search" = "Suche";
+"menu_settings" = "Einstellungen";
+"menu_sort" = "Sortieren";
+"menu_sort_date" = "Hinzufügedatum";
+"menu_sort_location" = "Position im Quran";
+"menu_translation" = "Übersetzung anzeigen";
 "need_translation" = "Sie haben noch keine Übersetzung/Koranexegese heruntergeladen.\
 ";
-"get_translations" = "Übersetzungen herunterladen";
-"email_us" = "Wenn Ihre Frage oben nicht beantwortet werden konnte und Sie\
-Unterstützung benötigen, dann können Sie uns eine E-Mail an quranandroid@gmail.com senden.\
-Bitte haben Sie Verständnis dafür, dass wir sehr viele E-Mails bekommen und wir möglicherweise\
-nicht im Stande sein werden alle zu beantworten.\
+"new_tag" = "Neues Schlagwort";
+"no_arabic_search_available" = "Sie haben das arabische Such-Paket noch nicht\
+heruntergeladen. Bitte laden Sie dieses herunter und versuchen Sie es danach erneut.\
 ";
-"makki" = "Mekkanisch";
-"madani" = "Medinensisch";
-"play_from" = "Von";
-"play_to" = "Bis";
-"play_restrict_range" = "Nur die oben genannten Verse abspielen";
+"no_results" = "Es wurden keine Resultate für \"%@\" gefunden.";
+"not_tagged" = "Noch kein Schlagwort hinzugefügt";
+"notification_download_canceled" = "Download abgebrochen";
+"page_description" = "Seite %1$@, Juz\' %2$@";
+"play" = "Abspielen";
 "play_apply" = "Anwenden";
 "play_apply_and_play" = "Anwenden und Abspielen";
-"play" = "Abspielen";
-"stop" = "Stoppen";
-"ayah_copied_popup" = "Vers kopiert";
-"tag_bookmark" = "Ein Schlagwort zum Lesezeichen hinzufügen";
-"delete_tag" = "Schlagwort löschen";
-"edit_tag" = "Schlagwort bearbeiten";
-"new_tag" = "Neues Schlagwort";
-"not_tagged" = "Noch kein Schlagwort hinzugefügt";
-"tag_dlg_title" = "Schlagwort";
-"tag_name" = "Name";
-"bookmarks_list_empty" = "Keine Lesezeichen";
-"audio_manager" = "Audioverwaltung";
+"play_from" = "Von";
+"play_restrict_range" = "Nur die oben genannten Verse abspielen";
+"play_to" = "Bis";
+"prefs_app_location_summary" = "Wählen Sie den Speicherort der Dateien aus.";
+"prefs_app_location_title" = "Speicherort";
+"prefs_app_size" = "Der vom Programm verwendete Speicherplatz ist";
+"prefs_audio_manager_summary" = "Verwalten Sie Ihre Audiodateien.";
+"prefs_ayah_before_translation_summary" = "Das arabische Original vor jedem übersetzten\
+Vers anzeigen.\
+";
+"prefs_ayah_before_translation_title" = "Original vor dem Vers";
+"prefs_calculating_app_size" = "Die Größe des Programms wird berechnet";
+"prefs_category_display_settings" = "Bildschirmoptionen";
+"prefs_category_download" = "Downloadoptionen";
+"prefs_category_reading" = "Lese Optionen";
+"prefs_category_translation" = "Übersetzungsoptionen";
+"prefs_copying_app_files" = "Programmdateien werden kopiert";
+"prefs_display_marker_summary" = "Ein Fenster anzeigen beim Erreichen eines neuen Juz\',\
+einer neuen Hizb, etc.\
+";
+"prefs_display_marker_title" = "Meilenstein-Fenster anzeigen";
+"prefs_download_amount_summary" = "Bevorzugte Downloadgröße für nicht\
+unterbrechungsfreie Wiedergabe.\
+";
+"prefs_download_amount_title" = "Downloadgröße";
+"prefs_dual_page_mode_disabled" = "Im Querformat wird nur eine Seite dargestellt.";
+"prefs_dual_page_mode_enabled" = "Im Querformat werden zwei Seiten nebeneinander\
+dargestellt.\
+";
+"prefs_dual_page_mode_title" = "Tablet-Modus";
+"prefs_err_moving_app_files" = "Die Programmdateien konnten nicht verschoben werden.\
+";
+"prefs_landscape_orientation_summary_off" = "Hochformat wird genutzt.";
+"prefs_landscape_orientation_summary_on" = "Querformat wird genutzt.";
+"prefs_landscape_orientation_title" = "Querformat";
+"prefs_lock_orientation_summary_off" = "Verwendet für die Bildschirmausrichtung die\
+aktuellen System-Einstellungen.\
+";
+"prefs_lock_orientation_summary_on" = "Die Quranseiten werden immer in einer bestimmten\
+Bildschirmausrichtung angezeigt.\
+";
+"prefs_lock_orientation_title" = "Bildschirmausrichtung sperren";
+"prefs_megabytes_int" = "%1$d MB";
+"prefs_new_background_title" = "Neuen Hintergrund verwenden";
+"prefs_night_mode_summary" = "Es werden ein dunkler Hintergrund und eine helle Schrift\
+benutzt.\
+";
+"prefs_night_mode_text_brightness_summary" = "Die Helligkeit des Textes im Nachtmodus.\
+";
+"prefs_night_mode_text_brightness_title" = "Helligkeit des Textes";
+"prefs_night_mode_title" = "Nachtmodus";
+"prefs_no_enough_space_to_move_files" = "Sie haben nicht genug Speicherplatz um die\
+Dateien zu verschieben.\
+";
+"prefs_overlay_page_info_summary" = "Blendet die Seitennummer, den Namen der Sure und\
+die Juz\' Nummer während dem Lesen ein.\
+";
+"prefs_overlay_page_info_title" = "Seiteninfo anzeigen";
+"prefs_sdcard_external" = "Externe SD-Karte %1$d";
+"prefs_sdcard_internal" = "Interner Speicher";
+"prefs_streaming_summary" = "Wenn möglich, Audio streamen";
+"prefs_streaming_title" = "Streaming";
+"prefs_translation_text_title" = "Schrittgröße der Übersetzungen";
+"prefs_translations" = "Übersetzungen";
+"prefs_translations_summary" = "Verwalte und lade Übersetzungen herunter.";
+"prefs_use_arabic_summary_on" = "Das Programm wird ins Arabische umgestellt";
+"prefs_use_arabic_title" = "Arabischer Modus (الوضع العربي)";
+"prefs_volume_key_navigation_summary" = "Wechseln Sie zwischen verschiedenen Seiten\
+mittels der Lautstärketasten.\
+";
+"prefs_volume_key_navigation_title" = "Navigation mittels Lautstärketasten";
+"process_progress" = "Datei wird verarbeitet %1$d / %2$d";
+"quranSearchType" = "Quranverse";
+"quran_ayah" = "Vers %1$d";
+"quran_hizb" = "Hizb";
+"quran_juz2" = "Juz\'";
+"quran_nos" = "½";
+"quran_page" = "Seite";
+"quran_rob3" = "¼";
+"quran_sura" = "Sūrah";
+"quran_sura_title" = "Sure %1$@";
+"quran_talt_arb3" = "¾";
+"remove_button" = "Entfernen";
+"remove_dlg_msg" = "Sind Sie sicher, dass Sie die %1$@ entfernen wollen?";
+"remove_dlg_title" = "Übersetzung entfernen?";
 "repeatValues1" = "einmal";
 "repeatValues2" = "zweimal";
 "repeatValues3" = "dreimal";
 "repeatValues4" = "unendlich";
+"sdcard_error" = "Die SD-Karte konnte nicht gefunden werden. Bitte setzen Sie die Karte\
+erneut ein und versuchen Sie es nochmals.\
+";
+"search_data" = "Suche Dateien";
+"search_hint" = "Durchsuche den Quran";
+"stop" = "Stoppen";
+"sura_ayah_notification_str" = "Sure %1$@, Vers %2$d";
+"sura_ayah_sharing_str" = "Sure %1$@: %2$d";
+"tag_bookmark" = "Ein Schlagwort zum Lesezeichen hinzufügen";
+"tag_dlg_title" = "Schlagwort";
+"tag_name" = "Name";
+"timing_database" = "Benötigte Dateien";
+"translation_dialog_later" = "Später";
+"translation_dialog_yes" = "Ja";
+"translation_updates_available" = "Es ist ein Update für eine Ihrer Übersetzungen\
+vorhanden. Wollen Sie die Übersetzung jetzt aktualisieren?\
+";
+"update_available" = "Update vorhanden";
+"warning" = "Achtung";

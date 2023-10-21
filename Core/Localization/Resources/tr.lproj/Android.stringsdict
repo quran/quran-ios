@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <key>audio_manager_delete_surah_error</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_error@</string>
+            <key>audio_manager_delete_surah_error</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Sure silinirken bir hata oluştu</string>
+                <key>other</key>
+                <string>%1$d sure silinirken bir hata oluştu</string>
+            </dict>
+        </dict>
+        <key>audio_manager_delete_surah_success</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_delete_surah_success@</string>
+            <key>audio_manager_delete_surah_success</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Sure silindi</string>
+                <key>other</key>
+                <string>%1$d sure silindi</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>Bir etiket silindi</string>
+                <key>other</key>
+                <string>%d etiket silindi</string>
+            </dict>
+        </dict>
         <key>files_downloaded</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -47,54 +95,6 @@
                 <string>1 âyet</string>
                 <key>other</key>
                 <string>%d âyet</string>
-            </dict>
-        </dict>
-        <key>bookmark_tag_deleted</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@bookmark_tag_deleted@</string>
-            <key>bookmark_tag_deleted</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Bir etiket silindi</string>
-                <key>other</key>
-                <string>%d etiket silindi</string>
-            </dict>
-        </dict>
-        <key>audio_manager_delete_surah_success</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@audio_manager_delete_surah_success@</string>
-            <key>audio_manager_delete_surah_success</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Sure silindi</string>
-                <key>other</key>
-                <string>%1$d sure silindi</string>
-            </dict>
-        </dict>
-        <key>audio_manager_delete_surah_error</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@audio_manager_delete_surah_error@</string>
-            <key>audio_manager_delete_surah_error</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Sure silinirken bir hata oluştu</string>
-                <key>other</key>
-                <string>%1$d sure silinirken bir hata oluştu</string>
             </dict>
         </dict>
     </dict>

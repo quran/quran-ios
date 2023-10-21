@@ -1,47 +1,12 @@
-"app_name" = "Коран";
-"downloadPrompt_title" = "Загрузить необходимые файлы?";
-"downloadPrompt" = "Для правильной работы приложения необходимо скачать некоторые\
-файлы. Если не сделать это сейчас, загрузка каждой страницы будет занимать значительно\
-большее время. Вы хотите загрузить требуемые файлы сейчас?\
+"about_contributors" = "Разработчики";
+"about_contributors_summary" = "Список людей, которые внесли свой вклад в развитие\
+Quran for Android\
 ";
-"downloadTabletPrompt" = "Недавно мы добавили улучшенные изображения текста Корана для\
-планшетов. Хотите ли Вы загрузить эти изображения сейчас?\
-";
-"downloadImportantPrompt" = "Для Вашего устройства имеется небольшое, но важное\
-обновление изображений текста Корана. Хотите ли Вы загрузить это обновление сейчас?\
-";
-"downloadPrompt_ok" = "Да";
-"downloadPrompt_no" = "Нет";
-"downloading_title" = "Загрузка …";
-"downloading_message" = "Пожалуйста, дождитесь загрузки файлов (имеется возможность\
-возобновить).\
-";
-"extracting_title" = "Извлечение…";
-"menu_about" = "О нас";
-"menu_other_apps" = "Другие приложения";
-"menu_settings" = "Настройки";
-"menu_jump_last_page" = "Последняя страница";
-"menu_bookmarks" = "Закладки";
-"menu_bookmarks_page" = "Закладки страниц";
-"menu_bookmarks_ayah" = "Закладки аятов";
-"menu_sort" = "Сортировать";
-"menu_sort_date" = "По дате добавления";
-"menu_sort_location" = "По расположению в Коране";
-"menu_sort_group_by_tags" = "Группировать по тегам";
-"menu_show_date" = "Показать даты";
-"menu_translation" = "Показать перевод";
-"menu_back_to_page" = "Показать Коран";
-"menu_help" = "Помощь";
-"menu_search" = "Поиск";
-"menu_get_translations" = "Скачать перевод";
-"menu_jump" = "Перейти";
-"gotoPage" = "Перейти на страницу";
-"cancel" = "Отмена";
-"please_wait" = "Подождите пожалуйста…";
+"about_data_sources" = "Источники данных";
 "about_description" = "Quran for Android - это бесплатное приложение Корана.\
 Пожалуйста, не забывайте разработчиков и вкладчиков в ваших молитвах.\
 ";
-"about_data_sources" = "Источники данных";
+"about_furqan_summary" = "Текст на Османи и тафсиры на арабском";
 "about_images" = "Изображений";
 "about_madani_images" = "Изображения Корана основаны на шрифтах от King Fahd Quran\
 Printing Complex\
@@ -49,25 +14,85 @@ Printing Complex\
 "about_naskh_images" = "Изображения Коран для приложения Naskh были взяты\
 (с разрешения) от SHL Info Systems\
 ";
+"about_noorhidayat_summary" = "Шрифт Noorehira и перевод муфтия Мухаммада Таки Усмани";
+"about_open_source" = "Проекты с открытыми исходниками";
+"about_others" = "Другие";
 "about_qaloon_images" = "Изображения Qaloon используются с разрешением Nous Memes\
 Editions Et Diffusion (Тунис)\
 ";
-"about_quranicaudio_summary" = "Безинтервальное рецитация Корана";
+"about_quran_enc_summary" = "Переводы для многих языков";
 "about_quran_ksu" = "Проект Электронный Мусхаф";
 "about_quran_ksu_summary" = "Проект Электронный Мусхаф Университета Короля Сауда\
 служил источником арабского тафсира и переводов на нескольких языков\
 ";
-"about_furqan_summary" = "Текст на Османи и тафсиры на арабском";
-"about_quran_enc_summary" = "Переводы для многих языков";
+"about_quranicaudio_summary" = "Безинтервальное рецитация Корана";
 "about_tanzil_summary" = "Переводы для несколько языков";
-"about_noorhidayat_summary" = "Шрифт Noorehira и перевод муфтия Мухаммада Таки Усмани";
-"about_open_source" = "Проекты с открытыми исходниками";
-"about_others" = "Другие";
-"about_contributors" = "Разработчики";
-"about_contributors_summary" = "Список людей, которые внесли свой вклад в развитие\
-Quran for Android\
+"app_name" = "Коран";
+"audio_manager" = "Аудио менеджер";
+"audio_manager_delete_selection" = "Удалить выбранные";
+"audio_manager_download_all" = "Скачать все";
+"audio_manager_download_selection" = "Скачать выбранные";
+"audio_manager_remove_audio_msg" = "Вы уверены, что хотите удалить %1$@?";
+"audio_manager_remove_audio_title" = "Удалить суру?";
+"audio_manager_surah_delete" = "Удалить суру";
+"audio_manager_surah_download" = "Скачать суру";
+"audio_updated_text" = "Несколько аудио файлов были обновлены. Ваша копия этих файлов\
+была удалена, новые версии будут загружены при следующем воспроизведении.\
 ";
-"help_title" = "Часто задаваемые вопросы (FAQ)";
+"audio_updated_title" = "Обновление аудио файлов";
+"available_translations" = "Доступные для загрузки";
+"ayah_copied_popup" = "Аят скопирован";
+"bookmarks_list_empty" = "Закладки отсутствуют";
+"cancel" = "Отмена";
+"canceling" = "Отмена…";
+"delete_tag" = "Удалить тег";
+"delete_translation" = "Удалить перевод";
+"dialog_ok" = "OK";
+"downloadImportantPrompt" = "Для Вашего устройства имеется небольшое, но важное\
+обновление изображений текста Корана. Хотите ли Вы загрузить это обновление сейчас?\
+";
+"downloadPrompt" = "Для правильной работы приложения необходимо скачать некоторые\
+файлы. Если не сделать это сейчас, загрузка каждой страницы будет занимать значительно\
+большее время. Вы хотите загрузить требуемые файлы сейчас?\
+";
+"downloadPrompt_no" = "Нет";
+"downloadPrompt_ok" = "Да";
+"downloadPrompt_title" = "Загрузить необходимые файлы?";
+"downloadTabletPrompt" = "Недавно мы добавили улучшенные изображения текста Корана для\
+планшетов. Хотите ли Вы загрузить эти изображения сейчас?\
+";
+"download_cancel" = "Отмена";
+"download_error_disk" = "Для загрузки недостаточно места на диске";
+"download_error_general" = "Загрузка оборвалась";
+"download_error_invalid_download" = "Загруженный файл был поврежден";
+"download_error_invalid_download_retry" = "Поврежденный файл, попытка загрузить заново";
+"download_error_network" = "Не удалось загрузить из-за ошибки соединения";
+"download_error_network_retry" = "Ошибка соединения, попытка возобновить…";
+"download_error_perms" = "Не удалось загрузить из-за ошибки разрешений";
+"download_extra_data" = "Для поддержки перевода и обмена аятами необходимо скачать один или два маленьких файла. Загрузить сейчас?";
+"download_non_wifi_prompt" = "Вы не подключены к Wi-Fi. Все равно продолжить загрузку?";
+"download_processing" = "Загрузка…";
+"download_progress" = "Загружено %1$@ / %2$@";
+"download_retry" = "Повторить";
+"download_successful" = "Загрузка завершена";
+"download_sura_ayah_progress" = "Загружается сура %1$d аят %2$d";
+"download_sura_progress" = "Загружено %1$@ / %2$@ суры %3$d";
+"downloaded_translations" = "Загруженные переводы";
+"downloading_message" = "Пожалуйста, дождитесь загрузки файлов (имеется возможность\
+возобновить).\
+";
+"downloading_title" = "Загрузка …";
+"edit_tag" = "Редактировать тег";
+"email_us" = "Если Вы не нашли нужного ответа, то можете написать на email quranandroid@gmail.com . Пожалуйста, имейте ввиду, что\
+мы получаем множество писем, поэтому оперативно отвечать на все просто невозможно.";
+"error_getting_translation_list" = "Нет возможности скачать лист переводов. Пожалуйста, попробуйте позже.";
+"export_data_error" = "Ошибка экспорта данных";
+"exported_data" = "Данные экспортированы в %1$@";
+"extracting_title" = "Извлечение…";
+"found_in_sura" = "Найдено в суре %1$@: %2$d (Страница %3$d)";
+"get_arabic_search_db" = "Скачать данные для арабского поиска";
+"get_translations" = "Скачать перевод";
+"gotoPage" = "Перейти на страницу";
 "help" = "\
 <b>Как мне воспроизвести аудио?</b>\
 <br/>Откройте страницу Корана. Один раз дотроньтесь до экрана. Внизу Вы заметите кнопку воспроизведения\
@@ -101,208 +126,183 @@ Quran for Android\
 <br/>К сожалению, Android версии до 4.0 не поддерживают эти шрифты, и мы ничего не можем сделать,\
 чтобы как-то помочь Вам в этом вопросе.\
 ";
-"search_hint" = "Поиск по Корану";
+"help_title" = "Часто задаваемые вопросы (FAQ)";
+"highlighting_database" = "Необходимые файлы";
+"import_data" = "Импорт данных";
+"import_data_and_override" = "Если вы будете импортировать этот файл, все ваши закладки будут заменены\
+с %1$d закладки и %2$d тегов. Импортировать?";
+"import_data_error" = "Неверный файл резервной копии (или не удалось открыть файл с резервной копией).";
+"import_data_permissions_error" = "Не удается прочитать файл резервной копии из-за ошибки разрешения.";
+"import_successful" = "Данные успешно импортированы";
+"index_loading" = "Загрузка…";
+"juz2_description" = "джуз %1$@";
+"kitkat_external_message" = "Из-за ограничений Android, если Вы сейчас разместите исходные данные\
+приложения Quran for Android на Вашей внешней SD карте, а затем очистите или деинсталлируете приложение,\
+все страницы и аудио приложения Quran for Android будут удалены. Все эти данные нужно будет скачать снова. Вы уверены,\
+что хотите использовать внешнюю SD карту?";
+"madani" = "Медина";
+"makki" = "Мекка";
+"menu_about" = "О нас";
+"menu_back_to_page" = "Показать Коран";
+"menu_bookmarks" = "Закладки";
+"menu_bookmarks_ayah" = "Закладки аятов";
+"menu_bookmarks_page" = "Закладки страниц";
+"menu_get_translations" = "Скачать перевод";
+"menu_help" = "Помощь";
+"menu_jump" = "Перейти";
+"menu_jump_last_page" = "Последняя страница";
+"menu_other_apps" = "Другие приложения";
+"menu_search" = "Поиск";
+"menu_settings" = "Настройки";
+"menu_show_date" = "Показать даты";
+"menu_sort" = "Сортировать";
+"menu_sort_date" = "По дате добавления";
+"menu_sort_group_by_tags" = "Группировать по тегам";
+"menu_sort_location" = "По расположению в Коране";
+"menu_translation" = "Показать перевод";
+"more_translations" = "Ещё переводов";
+"move_down" = "Вниз";
+"move_up" = "Вверх";
+"need_translation" = "У Вас еще нет ни одного скачанного перевода/тафсира.";
+"new_tag" = "Новый тег";
+"next" = "Следующий";
+"no_arabic_search_available" = "Вы не скачали пакет данных для арабского поиска.\
+Пожалуйста, сначала скачайте его и воспользуйтесь поиском снова.\
+";
+"no_results" = "Результатов для \"%@\" не найдено";
+"not_tagged" = "Без тега";
+"notification_channel_audio" = "Рецитация Корана";
+"notification_channel_download" = "Загрузки Корана";
+"notification_download_canceled" = "Загрузка отменена";
+"page_description" = "стр. %1$@, джуз %2$@";
+"pause" = "Пауза";
+"play" = "Воспроизвести";
+"play_apply" = "Применить";
+"play_apply_and_play" = "Применить и воспроизвести";
+"play_each_verse" = "Вос-ти каждый аят:";
+"play_from" = "От";
+"play_restrict_range" = "Воспроизвести только вышестоящие аяты";
+"play_to" = "До";
+"play_verses_range" = "Вос-ти набор аятов:";
+"playback_prompt_title" = "Начать воспроизведение с:";
+"please_grant_permissions" = "Пожалуйста, предоставляйте разрешения в настройках приложения";
+"please_wait" = "Подождите пожалуйста…";
+"prefs_app_location_summary" = "Выберите место хранения файлов";
+"prefs_app_location_title" = "Расположение приложения";
+"prefs_app_size" = "Размер приложения";
+"prefs_audio_manager_summary" = "Управлять и скачать аудио рецитация Корана";
+"prefs_ayah_before_translation_summary" = "Показывать аят на арабском раньше перевода";
+"prefs_ayah_before_translation_title" = "Аят до перевода";
+"prefs_calculating_app_size" = "Расчет размера приложения";
+"prefs_category_advanced" = "Расширенные настройки";
+"prefs_category_advanced_summary" = "Импорт/экспорт закладок, выбрать место хранения файлов и т.д.";
+"prefs_category_display_settings" = "Настройки экрана";
+"prefs_category_download" = "Настройки загрузки";
+"prefs_category_dual_screen" = "Настройки двойной страницы";
+"prefs_category_reading" = "Настройки чтения";
+"prefs_category_translation" = "Настройки перевода";
+"prefs_copying_app_files" = "Копирование файлов приложения";
+"prefs_display_marker_summary" = "Показывать всплывающие сообщения по достижении джуза, хизба и т.д.";
+"prefs_display_marker_title" = "Всплывающие сообщения";
+"prefs_download_amount_summary" = "Предпочтительный объем загрузки для прерывистого аудио";
+"prefs_download_amount_title" = "Объем скачивания";
+"prefs_dual_page_mode_disabled" = "В альбомном режиме будет отображена только одна страницы";
+"prefs_dual_page_mode_enabled" = "В альбомном режиме две страницы будут отображаться рядом друг с другом";
+"prefs_dual_page_mode_title" = "Режим планшета";
+"prefs_err_moving_app_files" = "Ошибка перемещения файлов приложения";
+"prefs_export_summary" = "Экспорт копию закладок и тегов";
+"prefs_export_title" = "Экспорт";
+"prefs_highlight_bookmarks_summary" = "Выделять при чтении аяты из закладок";
+"prefs_highlight_bookmarks_title" = "Выделять закладки";
+"prefs_import_summary" = "Импорт закладок и тегов";
+"prefs_import_title" = "Импорт";
+"prefs_landscape_orientation_summary_off" = "Использовать портретный режим";
+"prefs_landscape_orientation_summary_on" = "Использовать альбомный режим";
+"prefs_landscape_orientation_title" = "Альбомный режим";
+"prefs_lock_orientation_summary_off" = "Адаптировать под текущую ориентацию";
+"prefs_lock_orientation_summary_on" = "Страницы Корана будут удерживаться в выбранном режиме";
+"prefs_lock_orientation_title" = "Удерживать ориентацию экрана";
+"prefs_megabytes_int" = "%1$d Mб";
+"prefs_megabytes_str" = "%@ Mб";
+"prefs_new_background_title" = "Новый фон";
+"prefs_night_mode_summary" = "Будет использован темный фон и светлый шрифт";
+"prefs_night_mode_text_brightness_summary" = "Яркость текста при включенном ночном режиме";
+"prefs_night_mode_text_brightness_title" = "Яркость текста";
+"prefs_night_mode_title" = "Ночной режим";
+"prefs_no_enough_space_to_move_files" = "Недостаточно свободного места для перемещения файлов приложения";
+"prefs_overlay_page_info_summary" = "При чтении использовать наложение поверх экрана номера страницы, название суры и номера джуза";
+"prefs_overlay_page_info_title" = "Показать инфо страницы";
+"prefs_page_type_summary" = "Выберите тип страниц";
+"prefs_page_type_title" = "Тип страниц (экспериментальный)";
+"prefs_preview" = "Предварительный просмотр";
+"prefs_sdcard_external" = "Внешняя память %1$d";
+"prefs_sdcard_internal" = "Внутренняя память";
+"prefs_send_logs_summary" = "Отправить журналы отладки разработчику";
+"prefs_send_logs_title" = "Отправить журналы";
+"prefs_split_page_and_translation_summary" = "В двухстраничном режиме отображаются страница Корана и перевод";
+"prefs_split_page_and_translation_title" = "Коран и перевод в двойном режиме";
+"prefs_streaming_summary" = "При возможности потоковое аудио";
+"prefs_streaming_title" = "Потоковое";
+"prefs_sura_translated_name_summary" = "Показать перевод названия суры";
+"prefs_sura_translated_name_title" = "Перевод названия суры";
+"prefs_translation_text_title" = "Размер текста перевода";
+"prefs_translations" = "Переводы";
+"prefs_translations_summary" = "Загрузка и управление переводами";
+"prefs_use_arabic_summary_on" = "Приложение будет локализовано под арабский язык";
+"prefs_use_arabic_title" = "Режим арабского (الوضع العربي)";
+"prefs_volume_key_navigation_summary" = "Листать страницы с помощью кнопок громкости звука";
+"prefs_volume_key_navigation_title" = "Переход клавишами громкости";
+"previous" = "Предыдущий";
+"process_progress" = "Загрузка файла %1$d / %2$d";
 "quranSearchType" = "Стихи Корана";
-"search_full_results" = "Полные результаты";
+"quran_ayah" = "Аят %1$d";
+"quran_ayah_details" = "%1$@ - аят %2$@, джуз %3$@";
+"quran_hizb" = "Хизб";
+"quran_juz2" = "Джуз";
+"quran_nos" = "½";
+"quran_page" = "Страница";
+"quran_rob3" = "¼";
+"quran_sura" = "Сура";
+"quran_sura_title" = "Сура %1$@";
+"quran_talt_arb3" = "¾";
+"recent_pages" = "Недавние страницы";
+"remove_button" = "Удалить";
+"remove_dlg_msg" = "Вы уверены, что хотите удалить %1$@?";
+"remove_dlg_title" = "Удалить перевод?";
+"repeatValues1" = "1 раз";
+"repeatValues2" = "2 раза";
+"repeatValues3" = "3 раза";
+"repeatValues4" = "непрерывно";
+"scoped_storage_message" = "Из-за изменений в системе Android, направленных на повышение конфиденциальности\
+пользователей, копирование файлов за пределами папок приложений может предотвратить приложению Корана получить доступ\
+к своим данным в будущих версиях Android. Вы уверены, что хотите использовать этот путь?";
+"sdcard_error" = "SD карта не найдена. Пожалуйста, вставьте карту и попробуйте снова.";
+"search_data" = "Поиск данных";
 "search_entire_mushaf" = "Обыскать весь мусхаф";
+"search_full_results" = "Полные результаты";
+"search_hint" = "Поиск по Корану";
+"see_tafseer_of_verse" = "Тафсир этого аята включено в тафсире аят %d (нажмите, чтобы развернуть).";
+"starting_page_label" = "Начало страницы";
+"stop" = "Приостановить";
+"storage_permission_please_restart" = "Пожалуйста, перезапустите приложение, чтобы\
+изменения вступили в силу.\
+";
 "storage_permission_rationale" = "Коран хочет вашего разрешения, чтобы сохранить свои\
 данные на внешнем хранилище. Коран будет работать без этого разрешения, но если вы будете\
 стереть данные или удалить приложение, то все загруженные страницы, аудио и другие данные\
 будут удалены. Дать Корану разрешение?\
 ";
-"storage_permission_please_restart" = "Пожалуйста, перезапустите приложение, чтобы\
-изменения вступили в силу.\
-";
-"found_in_sura" = "Найдено в суре %1$@: %2$d (Страница %3$d)";
-"no_results" = "Результатов для \"%@\" не найдено";
-"no_arabic_search_available" = "Вы не скачали пакет данных для арабского поиска.\
-Пожалуйста, сначала скачайте его и воспользуйтесь поиском снова.\
-";
-"get_arabic_search_db" = "Скачать данные для арабского поиска";
-"prefs_volume_key_navigation_title" = "Переход клавишами громкости";
-"prefs_volume_key_navigation_summary" = "Листать страницы с помощью кнопок громкости звука";
-"prefs_category_reading" = "Настройки чтения";
-"prefs_category_translation" = "Настройки перевода";
-"prefs_category_display_settings" = "Настройки экрана";
-"prefs_use_arabic_title" = "Режим арабского (الوضع العربي)";
-"prefs_use_arabic_summary_on" = "Приложение будет локализовано под арабский язык";
-"prefs_new_background_title" = "Новый фон";
-"prefs_lock_orientation_title" = "Удерживать ориентацию экрана";
-"prefs_lock_orientation_summary_on" = "Страницы Корана будут удерживаться в выбранном режиме";
-"prefs_lock_orientation_summary_off" = "Адаптировать под текущую ориентацию";
-"prefs_landscape_orientation_title" = "Альбомный режим";
-"prefs_landscape_orientation_summary_on" = "Использовать альбомный режим";
-"prefs_landscape_orientation_summary_off" = "Использовать портретный режим";
-"prefs_night_mode_title" = "Ночной режим";
-"prefs_night_mode_summary" = "Будет использован темный фон и светлый шрифт";
-"prefs_night_mode_text_brightness_title" = "Яркость текста";
-"prefs_night_mode_text_brightness_summary" = "Яркость текста при включенном ночном режиме";
-"prefs_overlay_page_info_title" = "Показать инфо страницы";
-"prefs_overlay_page_info_summary" = "При чтении использовать наложение поверх экрана номера страницы, название суры и номера джуза";
-"prefs_display_marker_title" = "Всплывающие сообщения";
-"prefs_display_marker_summary" = "Показывать всплывающие сообщения по достижении джуза, хизба и т.д.";
-"prefs_highlight_bookmarks_title" = "Выделять закладки";
-"prefs_highlight_bookmarks_summary" = "Выделять при чтении аяты из закладок";
-"prefs_translation_text_title" = "Размер текста перевода";
-"prefs_translations" = "Переводы";
-"prefs_translations_summary" = "Загрузка и управление переводами";
-"prefs_ayah_before_translation_title" = "Аят до перевода";
-"prefs_ayah_before_translation_summary" = "Показывать аят на арабском раньше перевода";
-"prefs_category_download" = "Настройки загрузки";
-"prefs_streaming_title" = "Потоковое";
-"prefs_streaming_summary" = "При возможности потоковое аудио";
-"prefs_download_amount_title" = "Объем скачивания";
-"prefs_download_amount_summary" = "Предпочтительный объем загрузки для прерывистого аудио";
-"prefs_audio_manager_summary" = "Управлять и скачать аудио рецитация Корана";
-"downloaded_translations" = "Загруженные переводы";
-"available_translations" = "Доступные для загрузки";
-"remove_button" = "Удалить";
-"dialog_ok" = "OK";
-"prefs_app_location_title" = "Расположение приложения";
-"prefs_app_location_summary" = "Выберите место хранения файлов";
-"prefs_send_logs_title" = "Отправить журналы";
-"prefs_send_logs_summary" = "Отправить журналы отладки разработчику";
-"prefs_sdcard_internal" = "Внутренняя память";
-"prefs_sdcard_external" = "Внешняя память %1$d";
-"prefs_app_size" = "Размер приложения";
-"prefs_calculating_app_size" = "Расчет размера приложения";
-"prefs_copying_app_files" = "Копирование файлов приложения";
-"prefs_err_moving_app_files" = "Ошибка перемещения файлов приложения";
-"prefs_no_enough_space_to_move_files" = "Недостаточно свободного места для перемещения файлов приложения";
-"prefs_megabytes_int" = "%1$d Mб";
-"prefs_megabytes_str" = "%@ Mб";
-"prefs_dual_page_mode_title" = "Режим планшета";
-"prefs_dual_page_mode_enabled" = "В альбомном режиме две страницы будут отображаться рядом друг с другом";
-"prefs_dual_page_mode_disabled" = "В альбомном режиме будет отображена только одна страницы";
-"prefs_category_advanced" = "Расширенные настройки";
-"prefs_category_advanced_summary" = "Импорт/экспорт закладок, выбрать место хранения файлов и т.д.";
-"prefs_import_title" = "Импорт";
-"prefs_import_summary" = "Импорт закладок и тегов";
-"prefs_export_title" = "Экспорт";
-"prefs_export_summary" = "Экспорт копию закладок и тегов";
-"prefs_page_type_title" = "Тип страниц (экспериментальный)";
-"prefs_page_type_summary" = "Выберите тип страниц";
-"prefs_sura_translated_name_summary" = "Показать перевод названия суры";
-"prefs_sura_translated_name_title" = "Перевод названия суры";
-"prefs_preview" = "Предварительный просмотр";
-"more_translations" = "Ещё переводов";
-"import_data_permissions_error" = "Не удается прочитать файл резервной копии из-за ошибки разрешения.";
-"import_data_error" = "Неверный файл резервной копии (или не удалось открыть файл с резервной копией).";
-"import_data" = "Импорт данных";
-"import_data_and_override" = "Если вы будете импортировать этот файл, все ваши закладки будут заменены\
-с %1$d закладки и %2$d тегов. Импортировать?";
-"import_successful" = "Данные успешно импортированы";
-"export_data_error" = "Ошибка экспорта данных";
-"exported_data" = "Данные экспортированы в %1$@";
-"move_up" = "Вверх";
-"move_down" = "Вниз";
-"delete_translation" = "Удалить перевод";
-"warning" = "Внимание";
-"kitkat_external_message" = "Из-за ограничений Android, если Вы сейчас разместите исходные данные\
-приложения Quran for Android на Вашей внешней SD карте, а затем очистите или деинсталлируете приложение,\
-все страницы и аудио приложения Quran for Android будут удалены. Все эти данные нужно будет скачать снова. Вы уверены,\
-что хотите использовать внешнюю SD карту?";
-"scoped_storage_message" = "Из-за изменений в системе Android, направленных на повышение конфиденциальности\
-пользователей, копирование файлов за пределами папок приложений может предотвратить приложению Корана получить доступ\
-к своим данным в будущих версиях Android. Вы уверены, что хотите использовать этот путь?";
-"please_grant_permissions" = "Пожалуйста, предоставляйте разрешения в настройках приложения";
-"see_tafseer_of_verse" = "Тафсир этого аята включено в тафсире аят %d (нажмите, чтобы развернуть).";
-"update_available" = "Доступно обновление";
-"translation_updates_available" = "Для Ваших переводов доступны обновления. Перейти на экран переводов?";
-"translation_dialog_yes" = "Да";
-"translation_dialog_later" = "Позже";
-"quran_rob3" = "¼";
-"quran_nos" = "½";
-"quran_talt_arb3" = "¾";
-"quran_hizb" = "Хизб";
-"quran_juz2" = "Джуз";
-"quran_page" = "Страница";
-"quran_sura" = "Сура";
-"quran_ayah" = "Аят %1$d";
-"quran_ayah_details" = "%1$@ - аят %2$@, джуз %3$@";
-"quran_sura_title" = "Сура %1$@";
 "sura_ayah_notification_str" = "Сура %1$@, аят %2$d";
 "sura_ayah_sharing_str" = "Сура %1$@: %2$d";
-"index_loading" = "Загрузка…";
-"canceling" = "Отмена…";
-"juz2_description" = "джуз %1$@";
-"page_description" = "стр. %1$@, джуз %2$@";
-"highlighting_database" = "Необходимые файлы";
-"timing_database" = "Необходимые файлы";
-"sdcard_error" = "SD карта не найдена. Пожалуйста, вставьте карту и попробуйте снова.";
-"download_successful" = "Загрузка завершена";
-"download_processing" = "Загрузка…";
-"download_error_general" = "Загрузка оборвалась";
-"download_error_disk" = "Для загрузки недостаточно места на диске";
-"download_error_network" = "Не удалось загрузить из-за ошибки соединения";
-"download_error_perms" = "Не удалось загрузить из-за ошибки разрешений";
-"download_error_invalid_download" = "Загруженный файл был поврежден";
-"download_error_invalid_download_retry" = "Поврежденный файл, попытка загрузить заново";
-"download_error_network_retry" = "Ошибка соединения, попытка возобновить…";
-"notification_download_canceled" = "Загрузка отменена";
-"download_non_wifi_prompt" = "Вы не подключены к Wi-Fi. Все равно продолжить загрузку?";
-"download_progress" = "Загружено %1$@ / %2$@";
-"download_sura_progress" = "Загружено %1$@ / %2$@ суры %3$d";
-"download_sura_ayah_progress" = "Загружается сура %1$d аят %2$d";
-"process_progress" = "Загрузка файла %1$d / %2$d";
-"download_retry" = "Повторить";
-"download_cancel" = "Отмена";
-"download_extra_data" = "Для поддержки перевода и обмена аятами необходимо скачать один или два маленьких файла. Загрузить сейчас?";
-"remove_dlg_title" = "Удалить перевод?";
-"remove_dlg_msg" = "Вы уверены, что хотите удалить %1$@?";
-"error_getting_translation_list" = "Нет возможности скачать лист переводов. Пожалуйста, попробуйте позже.";
-"search_data" = "Поиск данных";
-"need_translation" = "У Вас еще нет ни одного скачанного перевода/тафсира.";
-"get_translations" = "Скачать перевод";
-"email_us" = "Если Вы не нашли нужного ответа, то можете написать на email quranandroid@gmail.com . Пожалуйста, имейте ввиду, что\
-мы получаем множество писем, поэтому оперативно отвечать на все просто невозможно.";
-"makki" = "Мекка";
-"madani" = "Медина";
-"play_from" = "От";
-"play_to" = "До";
-"play_restrict_range" = "Воспроизвести только вышестоящие аяты";
-"play_verses_range" = "Вос-ти набор аятов:";
-"play_each_verse" = "Вос-ти каждый аят:";
-"play_apply" = "Применить";
-"play_apply_and_play" = "Применить и воспроизвести";
-"previous" = "Предыдущий";
-"play" = "Воспроизвести";
-"pause" = "Пауза";
-"stop" = "Приостановить";
-"next" = "Следующий";
-"playback_prompt_title" = "Начать воспроизведение с:";
-"starting_page_label" = "Начало страницы";
-"ayah_copied_popup" = "Аят скопирован";
-"tag_bookmark" = "Отметить закладку";
-"delete_tag" = "Удалить тег";
-"edit_tag" = "Редактировать тег";
-"new_tag" = "Новый тег";
-"not_tagged" = "Без тега";
-"undo" = "Отмена";
-"recent_pages" = "Недавние страницы";
-"tag_dlg_title" = "Тег";
-"tag_name" = "Название";
 "tag_blank_tag_error" = "Имена тегов не могут быть пустыми!";
+"tag_bookmark" = "Отметить закладку";
+"tag_dlg_title" = "Тег";
 "tag_duplicate_tag_error" = "Имя тега уже существует!";
-"bookmarks_list_empty" = "Закладки отсутствуют";
-"audio_manager" = "Аудио менеджер";
-"audio_manager_remove_audio_title" = "Удалить суру?";
-"audio_manager_remove_audio_msg" = "Вы уверены, что хотите удалить %1$@?";
-"audio_manager_surah_download" = "Скачать суру";
-"audio_manager_surah_delete" = "Удалить суру";
-"audio_manager_download_all" = "Скачать все";
-"audio_manager_download_selection" = "Скачать выбранные";
-"audio_manager_delete_selection" = "Удалить выбранные";
-"audio_updated_title" = "Обновление аудио файлов";
-"audio_updated_text" = "Несколько аудио файлов были обновлены. Ваша копия этих файлов\
-была удалена, новые версии будут загружены при следующем воспроизведении.\
-";
-"prefs_category_dual_screen" = "Настройки двойной страницы";
-"prefs_split_page_and_translation_title" = "Коран и перевод в двойном режиме";
-"prefs_split_page_and_translation_summary" = "В двухстраничном режиме отображаются страница Корана и перевод";
-"notification_channel_audio" = "Рецитация Корана";
-"notification_channel_download" = "Загрузки Корана";
-"repeatValues1" = "1 раз";
-"repeatValues2" = "2 раза";
-"repeatValues3" = "3 раза";
-"repeatValues4" = "непрерывно";
+"tag_name" = "Название";
+"timing_database" = "Необходимые файлы";
+"translation_dialog_later" = "Позже";
+"translation_dialog_yes" = "Да";
+"translation_updates_available" = "Для Ваших переводов доступны обновления. Перейти на экран переводов?";
+"undo" = "Отмена";
+"update_available" = "Доступно обновление";
+"warning" = "Внимание";

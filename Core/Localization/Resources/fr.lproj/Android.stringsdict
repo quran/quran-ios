@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
-        <key>verses</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@verses@</string>
-            <key>verses</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>%d Aya</string>
-                <key>many</key>
-                <string>%d Ayāt</string>
-                <key>other</key>
-                <string>%d Ayāt</string>
-            </dict>
-        </dict>
         <key>search_results</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -35,6 +17,24 @@
                 <string>%2$d résultats pour \&quot;%1$d\&quot;:</string>
                 <key>other</key>
                 <string>%2$d résultats pour \&quot;%1$d\&quot;:</string>
+            </dict>
+        </dict>
+        <key>verses</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@verses@</string>
+            <key>verses</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>%d Aya</string>
+                <key>many</key>
+                <string>%d Ayāt</string>
+                <key>other</key>
+                <string>%d Ayāt</string>
             </dict>
         </dict>
     </dict>

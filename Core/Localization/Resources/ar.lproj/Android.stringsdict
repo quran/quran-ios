@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>zero</key>
+                <string>لم يتم حذف عناصر</string>
+                <key>one</key>
+                <string>تم حذف عنصر واحد</string>
+                <key>two</key>
+                <string>تم حذف عنصران</string>
+                <key>few</key>
+                <string>تم حذف %d عناصر</string>
+                <key>many</key>
+                <string>تم حذف %d عنصر</string>
+            </dict>
+        </dict>
         <key>files_downloaded</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -71,28 +93,6 @@
                 <string>%d آية</string>
                 <key>other</key>
                 <string>%d آية</string>
-            </dict>
-        </dict>
-        <key>bookmark_tag_deleted</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@bookmark_tag_deleted@</string>
-            <key>bookmark_tag_deleted</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>zero</key>
-                <string>لم يتم حذف عناصر</string>
-                <key>one</key>
-                <string>تم حذف عنصر واحد</string>
-                <key>two</key>
-                <string>تم حذف عنصران</string>
-                <key>few</key>
-                <string>تم حذف %d عناصر</string>
-                <key>many</key>
-                <string>تم حذف %d عنصر</string>
             </dict>
         </dict>
     </dict>

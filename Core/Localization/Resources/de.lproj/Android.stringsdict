@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
-        <key>files_downloaded</key>
+        <key>audio_manager_files_downloaded</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
-            <string>%#@files_downloaded@</string>
-            <key>files_downloaded</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
             <dict>
                 <key>NSStringFormatSpecTypeKey</key>
                 <string>NSStringPluralRuleType</string>

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <key>audio_manager_files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 сүре жазылды</string>
+                <key>other</key>
+                <string>%1$d сүре жазылды</string>
+            </dict>
+        </dict>
         <key>bookmark_tag_deleted</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -15,22 +31,6 @@
                 <string>1 элемент өшірілді</string>
                 <key>other</key>
                 <string>%d элемент өшірілді</string>
-            </dict>
-        </dict>
-        <key>files_downloaded</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@files_downloaded@</string>
-            <key>files_downloaded</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>1 сүре жазылды</string>
-                <key>other</key>
-                <string>%1$d сүре жазылды</string>
             </dict>
         </dict>
         <key>search_results</key>

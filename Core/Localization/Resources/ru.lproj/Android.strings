@@ -34,6 +34,7 @@ Editions Et Diffusion (Тунис)\
 "audio_manager_download_selection" = "Скачать выбранные";
 "audio_manager_remove_audio_msg" = "Вы уверены, что хотите удалить %1$@?";
 "audio_manager_remove_audio_title" = "Удалить суру?";
+"audio_manager_remove_multiple_audio_msg" = "Вы уверены, что хотите удалить?";
 "audio_manager_surah_delete" = "Удалить суру";
 "audio_manager_surah_download" = "Скачать суру";
 "audio_updated_text" = "Несколько аудио файлов были обновлены. Ваша копия этих файлов\
@@ -42,9 +43,11 @@ Editions Et Diffusion (Тунис)\
 "audio_updated_title" = "Обновление аудио файлов";
 "available_translations" = "Доступные для загрузки";
 "ayah_copied_popup" = "Аят скопирован";
+"bookmark_ayah" = "Создать закладку этого аята";
 "bookmarks_list_empty" = "Закладки отсутствуют";
 "cancel" = "Отмена";
 "canceling" = "Отмена…";
+"copy_ayah" = "Скопировать аят";
 "delete_tag" = "Удалить тег";
 "delete_translation" = "Удалить перевод";
 "dialog_ok" = "OK";
@@ -61,6 +64,7 @@ Editions Et Diffusion (Тунис)\
 "downloadTabletPrompt" = "Недавно мы добавили улучшенные изображения текста Корана для\
 планшетов. Хотите ли Вы загрузить эти изображения сейчас?\
 ";
+"download_amount_in_megabytes" = "%@ Mб";
 "download_cancel" = "Отмена";
 "download_error_disk" = "Для загрузки недостаточно места на диске";
 "download_error_general" = "Загрузка оборвалась";
@@ -90,6 +94,7 @@ Editions Et Diffusion (Тунис)\
 "exported_data" = "Данные экспортированы в %1$@";
 "extracting_title" = "Извлечение…";
 "found_in_sura" = "Найдено в суре %1$@: %2$d (Страница %3$d)";
+"from" = "От";
 "get_arabic_search_db" = "Скачать данные для арабского поиска";
 "get_translations" = "Скачать перевод";
 "gotoPage" = "Перейти на страницу";
@@ -180,9 +185,8 @@ Editions Et Diffusion (Тунис)\
 "play_apply" = "Применить";
 "play_apply_and_play" = "Применить и воспроизвести";
 "play_each_verse" = "Вос-ти каждый аят:";
-"play_from" = "От";
+"play_from_here" = "Воспроизвести отсюда";
 "play_restrict_range" = "Воспроизвести только вышестоящие аяты";
-"play_to" = "До";
 "play_verses_range" = "Вос-ти набор аятов:";
 "playback_prompt_title" = "Начать воспроизведение с:";
 "please_grant_permissions" = "Пожалуйста, предоставляйте разрешения в настройках приложения";
@@ -223,8 +227,9 @@ Editions Et Diffusion (Тунис)\
 "prefs_lock_orientation_summary_on" = "Страницы Корана будут удерживаться в выбранном режиме";
 "prefs_lock_orientation_title" = "Удерживать ориентацию экрана";
 "prefs_megabytes_int" = "%1$d Mб";
-"prefs_megabytes_str" = "%@ Mб";
 "prefs_new_background_title" = "Новый фон";
+"prefs_night_mode_background_brightness_summary" = "Яркость страницы при активном ночном режиме";
+"prefs_night_mode_background_brightness_title" = "Яркость фона";
 "prefs_night_mode_summary" = "Будет использован темный фон и светлый шрифт";
 "prefs_night_mode_text_brightness_summary" = "Яркость текста при включенном ночном режиме";
 "prefs_night_mode_text_brightness_title" = "Яркость текста";
@@ -250,10 +255,19 @@ Editions Et Diffusion (Тунис)\
 "prefs_translations_summary" = "Загрузка и управление переводами";
 "prefs_use_arabic_summary_on" = "Приложение будет локализовано под арабский язык";
 "prefs_use_arabic_title" = "Режим арабского (الوضع العربي)";
+"prefs_use_dyslexic_font_summary" = "Display translations in dyslexia friendly font";
+"prefs_use_dyslexic_font_title" = "Dyslexia friendly font";
 "prefs_volume_key_navigation_summary" = "Листать страницы с помощью кнопок громкости звука";
 "prefs_volume_key_navigation_title" = "Переход клавишами громкости";
 "previous" = "Предыдущий";
 "process_progress" = "Загрузка файла %1$d / %2$d";
+"qarilist_dismiss" = "Отклонить";
+"qarilist_gapless" = "Непрерывный";
+"qarilist_gapped" = "неконтинуальный";
+"qarilist_qaris_with_downloads" = "Чтецы с загрузками";
+"qarilist_ready_to_play" = "Готовность к прослушиванию";
+"qarilist_select_qari" = "Выберите Кари";
+"qarilist_selected" = "Избранное";
 "quranSearchType" = "Стихи Корана";
 "quran_ayah" = "Аят %1$d";
 "quran_ayah_details" = "%1$@ - аят %2$@, джуз %3$@";
@@ -266,6 +280,7 @@ Editions Et Diffusion (Тунис)\
 "quran_sura_title" = "Сура %1$@";
 "quran_talt_arb3" = "¾";
 "recent_pages" = "Недавние страницы";
+"recite_from_here" = "Читать отсюда";
 "remove_button" = "Удалить";
 "remove_dlg_msg" = "Вы уверены, что хотите удалить %1$@?";
 "remove_dlg_title" = "Удалить перевод?";
@@ -281,7 +296,10 @@ Editions Et Diffusion (Тунис)\
 "search_entire_mushaf" = "Обыскать весь мусхаф";
 "search_full_results" = "Полные результаты";
 "search_hint" = "Поиск по Корану";
+"search_key" = "Нажмите кнопку поиска, чтобы найти стих";
 "see_tafseer_of_verse" = "Тафсир этого аята включено в тафсире аят %d (нажмите, чтобы развернуть).";
+"share_ayah" = "Поделиться аятом";
+"share_ayah_text" = "Поделиться текстом аята";
 "starting_page_label" = "Начало страницы";
 "stop" = "Приостановить";
 "storage_permission_please_restart" = "Пожалуйста, перезапустите приложение, чтобы\
@@ -294,12 +312,15 @@ Editions Et Diffusion (Тунис)\
 ";
 "sura_ayah_notification_str" = "Сура %1$@, аят %2$d";
 "sura_ayah_sharing_str" = "Сура %1$@: %2$d";
+"tag_ayah" = "Создать тег для этого аята";
 "tag_blank_tag_error" = "Имена тегов не могут быть пустыми!";
 "tag_bookmark" = "Отметить закладку";
 "tag_dlg_title" = "Тег";
 "tag_duplicate_tag_error" = "Имя тега уже существует!";
 "tag_name" = "Название";
 "timing_database" = "Необходимые файлы";
+"to" = "До";
+"translation_ayah" = "Перевод/тафсир аята";
 "translation_dialog_later" = "Позже";
 "translation_dialog_yes" = "Да";
 "translation_updates_available" = "Для Ваших переводов доступны обновления. Перейти на экран переводов?";

@@ -1,0 +1,314 @@
+"about_contributors" = "Những người đóng góp";
+"about_contributors_summary" = "Danh sách những người đã đóng góp vào sự phát triển của Kinh Quran cho Android";
+"about_data_sources" = "Nguồn Dữ liệu";
+"about_description" = "Kinh Quran cho Android là một ứng dụng Kinh Quran miễn phí. Xin đừng quên những người đóng góp trong lời cầu nguyện của bạn.";
+"about_furqan_summary" = "Văn bản Uthmani and Tafaseer Ả Rập";
+"about_images" = "Ảnh";
+"about_madani_images" = "Các hình ảnh Kinh Quran dựa trên các phông chữ từ King Fahd Quran Printing Complex";
+"about_naskh_images" = "Hình ảnh Kinh Quran cho ứng dụng Naskh được lấy (với sự cho phép) từ SHL Info Systems";
+"about_noorhidayat_summary" = "Phông chữ Noorehira và Bản dịch Mufti Taqi";
+"about_open_source" = "Dự án Mã nguồn Mở";
+"about_others" = "Khác";
+"about_qaloon_images" = "Hình ảnh Qaloon được sử dụng với sự cho phép của Nous Memes Editions Et Diffusion (Tunisia)";
+"about_quran_enc_summary" = "Bản dịch cho nhiều ngôn ngữ";
+"about_quran_ksu" = "Electronic Moshaf Project";
+"about_quran_ksu_summary" = "King Saud University Electronic Moshaf Project là nguồn Tafaseer Ả Rập cho app và các bản dịch cho nhiều ngôn ngữ khác nhau. Nó cũng là nguồn cho bản đọc của Tiến sĩ Ayman Suwaid.";
+"about_quranicaudio_summary" = "Các bản xướng đọc gapless mp3 Quran";
+"about_tanzil_summary" = "Bản dịch cho một vài ngôn ngữ";
+"app_name" = "Kinh Quran";
+"audio_manager" = "Quản lý Âm thanh";
+"audio_manager_delete_selection" = "Xóa lựa chọn";
+"audio_manager_download_all" = "Tải tất cả";
+"audio_manager_download_selection" = "Tải xuống lựa chọn";
+"audio_manager_remove_audio_msg" = "Bạn có muốn xóa %1$@?";
+"audio_manager_remove_audio_title" = "Xóa Surah?";
+"audio_manager_remove_multiple_audio_msg" = "Bạn có chắc là muốn xóa?";
+"audio_manager_surah_delete" = "Xóa surah";
+"audio_manager_surah_download" = "Tải surah";
+"audio_updated_text" = "Một số tệp âm thanh Kinh Quran đã được cập nhật. Kinh Quran đã loại bỏ\
+bản sao của các tệp này để có thể tải xuống các phiên bản mới nhất khi bạn phát lần sau.\
+";
+"audio_updated_title" = "Cập nhật tệp âm thanh Kinh Quran";
+"available_translations" = "Có sẵn để tải xuống";
+"ayah_copied_popup" = "Đã sao chép Ayah";
+"bookmark_ayah" = "Đánh dấu Ayah này";
+"bookmarks_list_empty" = "Không có Đánh dấu";
+"cancel" = "Hủy";
+"canceling" = "Đang hủy…";
+"copy_ayah" = "Sao chép Ayah";
+"delete_tag" = "Xóa Thẻ";
+"delete_translation" = "Xóa Bản dịch";
+"dialog_ok" = "OK";
+"downloadImportantPrompt" = "Có một cập nhật nhỏ nhưng quan trọng\
+cho những hình ảnh Kinh Quran bạn có trên thiết bị của mình. Bạn có muốn tải bản vá này\
+bây giờ không?\
+";
+"downloadPrompt" = "Để Kinh Quran Android hoạt động bình thường,\
+chúng tôi cần tải xuống một số tệp. Nếu bạn không làm điều này bây giờ, ứng dụng\
+có thể không hoạt động đáng tin cậy và sẽ yêu cầu kết nối Internet để đọc.\
+Bạn có muốn tải xuống các tệp cần thiết ngay bây giờ không?\
+";
+"downloadPrompt_no" = "Không";
+"downloadPrompt_ok" = "Có";
+"downloadPrompt_title" = "Tải xuống tệp cần thiết?";
+"downloadTabletPrompt" = "Gần đây chúng tôi đã thêm hình ảnh cải tiến cho\
+máy tính bảng. Bạn có muốn tải xuống những hình ảnh này ngay bây giờ không?";
+"download_amount_in_megabytes" = "%@ MB";
+"download_cancel" = "Hủy";
+"download_error_disk" = "Không đủ dung lượng đĩa để tải xuống";
+"download_error_general" = "Không tải xuống được";
+"download_error_invalid_download" = "Tệp đã tải bị hỏng";
+"download_error_invalid_download_retry" = "Tệp bị hỏng, đang cố tải lại";
+"download_error_network" = "Không tải được do lỗi mạng";
+"download_error_network_retry" = "Lỗi mạng, đang cố gắng tải tiếp…";
+"download_error_perms" = "Không thể tải xuống do lỗi quyền";
+"download_extra_data" = "Chúng tôi cần tải xuống một hoặc hai tệp nhỏ để hỗ trợ chia sẻ và dịch thuật. Tải ngay?";
+"download_non_wifi_prompt" = "Bạn đang không dùng Wi-Fi. Vẫn tải xuống dữ liệu?";
+"download_processing" = "Xử lý tải xuống…";
+"download_progress" = "Đã tải xuống %1$@ / %2$@";
+"download_retry" = "Thử lại";
+"download_successful" = "Tải xuống thành công";
+"download_sura_ayah_progress" = "Đang tải xuống surah %1$d ayah %2$d";
+"download_sura_progress" = "Đã tải xuống %1$@ / %2$@ of surah %3$d";
+"downloaded_translations" = "Đã tải";
+"downloading_message" = "Vui lòng đợi tệp tải xuống (hỗ trợ tạm dừng).";
+"downloading_title" = "Đang tải…";
+"downloading_title" = "Đang tải xuống…";
+"edit_tag" = "Sửa Thẻ";
+"email_us" = "Nếu câu hỏi của bạn không được trả lời ở trên, bạn có thể gửi email quranandroid@gmail.com để được hỗ trợ.\
+Xin lưu ý rằng chúng tôi nhận được rất nhiều email, vì vậy chúng tôi không thể trả lời tất cả chúng.";
+"error_getting_translation_list" = "Không thể tải xuống danh sách các bản dịch. Vui lòng thử lại sau.";
+"export_data_error" = "Lỗi xuất dữ liệu";
+"exported_data" = "Dữ liệu được xuất sang %1$@";
+"extracting_title" = "Đang xử lý…";
+"found_in_sura" = "Tìm thấy ở Surah %1$@: %2$d (page %3$d)";
+"from" = "Từ";
+"get_arabic_search_db" = "Tải Gói dữ liệu Tìm kiếm tiếng Ả Rập";
+"get_translations" = "Tải Bản dịch";
+"gotoPage" = "Đến trang";
+"help" = "\
+<b>Làm cách nào để nghe Quran?</b>\
+<br/>Mở bất kỳ trang Kinh Quran nào. Chạm vào màn hình một lần. Ở phía dưới, bạn sẽ nhận thấy\
+một nút phát và một danh sách tên các qari. Nhấp vào tên của qari để\
+chọn một qari khác. Nhấp vào phát để tải xuống và phát trang hoặc sura hiện tại.\
+<br/>\
+<br/><b>Làm cách nào để xem bản dịch?</b>\
+<br/>Mở bất kỳ trang Kinh Quran nào. Chạm vào màn hình một lần. Ở trên cùng, bạn sẽ thấy một\
+biểu tượng quả địa cầu (hoặc, nếu bạn không nhìn thấy nó, hãy nhấp vào biểu tượng có ba chấm tròn) - nhấn\
+nó và chọn bản dịch để xem bản dịch.\
+<br/>\
+Nếu bạn không có bất kỳ bản dịch nào được tải xuống, nó sẽ đưa\
+bạn đến một màn hình nơi bạn có thể tải xuống các bản dịch. Chọn và tải xuống bản dịch,\
+sau đó quay lại và nhấn lại vào biểu tượng quả địa cầu để xem bản dịch.\
+<br/>\
+<br/><b>Làm cách nào để đánh dấu trang?</b>\
+<br/>Mở bất kỳ trang Kinh Quran nào. Chạm vào màn hình một lần. Ở trên cùng bên phải, bạn sẽ thấy một\
+biểu tượng dấu trang. Nhấn vào biểu tượng dấu trang để đánh dấu trang (màu sẽ chuyển sang màu trắng đặc). Nhấn vào biểu tượng dấu trang\
+một lần nữa để xóa dấu trang.\
+<br/>\
+<br/><b>Làm cách nào để làm cho văn bản lớn hơn?</b>\
+<br/>Đối với các trang tiếng Ả Rập, hãy giữ điện thoại của bạn ở chế độ nằm ngang. Điều này làm cho văn bản lớn hơn.\
+Đối với bản dịch, hãy đi tới cài đặt và tăng cỡ chữ văn bản dịch.\
+<br/>\
+<br/><b>Làm cách nào để chia sẻ ayah?</b>\
+<br/>Khi đang ở bất kỳ trang tiếng Ả Rập nào, hãy nhấn và giữ bất kỳ ayah nào để có menu nơi bạn có thể\
+chọn đánh dấu, gắn thẻ, chia sẻ hoặc sao chép ayah đó vào khay nhớ tạm, xem bản dịch,\
+hoặc nghe bản đọc của nó.<br/>\
+<br/><b>Phông Malayalam/Tamil/Bengali/Urdu không dùng được!</b>\
+<br/>Rất tiếc, các phiên bản Android trước 4.0 không hỗ trợ các phông chữ này và\
+chúng tôi không giúp được gì nhiều.\
+";
+"help_title" = "(FAQ) Câu hỏi thường gặp";
+"highlighting_database" = "Tệp cần thiết";
+"import_data" = "Nhập Data";
+"import_data_and_override" = "Nếu bạn nhập tệp này, nó sẽ thay thế tất cả đánh dấu của bạn bằng %1$d đánh dấu và %2$d thẻ. Nhập?";
+"import_data_error" = "Tệp sao lưu không hợp lệ (hoặc không thể đọc tệp sao lưu).";
+"import_data_permissions_error" = "Không thể đọc tệp sao lưu do lỗi quyền.";
+"import_successful" = "Nhập thành công";
+"index_loading" = "Đang tải…";
+"juz2_description" = "Juz\' %1$@";
+"kitkat_external_message" = "Do những hạn chế của Android, nếu bạn chọn đặt dữ liệu Kinh Quran\
+trên thẻ nhớ SD ngoài và sau đó gỡ cài đặt hoặc xóa dữ liệu của Kinh Quran Android, tất cả các trang và âm thanh\
+của Kinh Quran Android sẽ bị xóa và bạn sẽ phải tải xuống lại. Bạn có\
+chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
+"madani" = "Madani";
+"madani_description" = "Bản kinh Madani cổ điển.";
+"madani_title" = "Madani Mushaf cổ điển";
+"makki" = "Makki";
+"menu_about" = "Về Chúng tôi";
+"menu_back_to_page" = "Hiện Quran";
+"menu_bookmarks" = "Đánh dấu";
+"menu_bookmarks_ayah" = "Dấu Ayah";
+"menu_bookmarks_page" = "Dấu Trang";
+"menu_get_translations" = "Tải Bản dịch";
+"menu_help" = "Trợ giúp";
+"menu_jump" = "Đến trang";
+"menu_jump_last_page" = "Trang cuối";
+"menu_other_apps" = "Ứng dụng khác";
+"menu_search" = "Tìm kiếm";
+"menu_settings" = "Cài đặt";
+"menu_show_date" = "Hiện Ngày";
+"menu_sort" = "Sắp xếp";
+"menu_sort_date" = "Ngày Thêm";
+"menu_sort_group_by_tags" = "Nhóm theo Thẻ";
+"menu_sort_location" = "Vị trí ở Quran";
+"menu_translation" = "Hiện Bản dịch";
+"more_translations" = "Bản dịch khác";
+"move_down" = "Di Xuống";
+"move_up" = "Di Lên";
+"need_translation" = "Bạn chưa tải xuống bản dịch/tafaseer nào.";
+"new_tag" = "Thẻ Mới";
+"next" = "Tiếp";
+"no_arabic_search_available" = "Bạn chưa tải xuống gói tìm kiếm tiếng Ả Rập. Vui lòng tải xuống và thử tìm kiếm lại.";
+"no_results" = "Không kết quả cho \"%@\"";
+"not_tagged" = "Chưa được gắn thẻ";
+"notification_channel_audio" = "Quran Xướng đọc";
+"notification_channel_download" = "Quran Tải xuống";
+"notification_download_canceled" = "Đã hủy tải xuống";
+"page_description" = "Trang %1$@, Juz\' %2$@";
+"pause" = "Nghỉ";
+"play" = "Phát";
+"play_apply" = "Áp dụng";
+"play_apply_and_play" = "Áp dụng và Phát";
+"play_each_verse" = "Lần phát từng câu:";
+"play_from_here" = "Phát từ Đây";
+"play_restrict_range" = "Chỉ phát những câu trên";
+"play_verses_range" = "Lần phát cả bộ câu:";
+"playback_prompt_title" = "Bắt đầu phát từ:";
+"please_grant_permissions" = "Vui lòng cấp quyền trong cài đặt ứng dụng";
+"please_wait" = "Xin đợi…";
+"prefs_app_location_summary" = "Chọn nơi lưu trữ các tệp Kinh Quran";
+"prefs_app_location_title" = "Nơi Kinh Quran lưu dữ liệu";
+"prefs_app_size" = "Kích cỡ dữ liệu hiện tại là";
+"prefs_audio_manager_summary" = "Quản lý và tải xuống bản đọc Kinh Quran";
+"prefs_ayah_before_translation_summary" = "Hiển thị ayah tiếng Ả Rập phía trên bản dịch";
+"prefs_ayah_before_translation_title" = "Ayah trước bản dịch";
+"prefs_calculating_app_size" = "Tính Kích thước App";
+"prefs_category_advanced" = "Tùy chọn Nâng cao";
+"prefs_category_advanced_summary" = "Nhập/xuất đánh dấu, đặt thư mục dữ liệu Kinh Quran, v.v.";
+"prefs_category_display_settings" = "Cài đặt Hiển thị";
+"prefs_category_download" = "Tùy chọn Tải xuống";
+"prefs_category_dual_screen" = "Tùy chọn Trang Kép";
+"prefs_category_reading" = "Tùy chọn Đọc";
+"prefs_category_translation" = "Tùy chọn Bản dịch";
+"prefs_copying_app_files" = "Sao chép tệp App";
+"prefs_display_marker_summary" = "Hiển thị hộp thoại khi tới juz\', hizb, v.v kế tiếp";
+"prefs_display_marker_title" = "Hiện hộp thoại";
+"prefs_download_amount_summary" = "Số lượng tải xuống ưu tiên cho âm thanh non-gapless";
+"prefs_download_amount_title" = "Số lượng tải xuống";
+"prefs_dual_page_mode_disabled" = "Ở chế độ ngang, chỉ một trang sẽ xuất hiện";
+"prefs_dual_page_mode_enabled" = "Ở chế độ ngang, hai trang sẽ xuất hiện cạnh nhau";
+"prefs_dual_page_mode_title" = "Chế độ Trang Kép";
+"prefs_err_moving_app_files" = "Lỗi di chuyển tệp của app";
+"prefs_export_csv_summary" = "Xuất bản sao của đánh dấu và thẻ dạng CSV";
+"prefs_export_csv_title" = "Xuất CSV";
+"prefs_export_summary" = "Xuất bản sao của đánh dấu và thẻ";
+"prefs_export_title" = "Xuất";
+"prefs_highlight_bookmarks_summary" = "Tô sáng ayahs đã được đánh dấu trong khi đọc";
+"prefs_highlight_bookmarks_title" = "Tô sáng các đánh dấu";
+"prefs_import_summary" = "Nhập đánh dấu và thẻ";
+"prefs_import_title" = "Nhập";
+"prefs_landscape_orientation_summary_off" = "Luôn dùng chế độ nằm dọc";
+"prefs_landscape_orientation_summary_on" = "Luôn dùng chế độ nằm ngang";
+"prefs_landscape_orientation_title" = "Hướng ngang";
+"prefs_lock_orientation_summary_off" = "Tự chuyển hướng cùng thiết bị";
+"prefs_lock_orientation_summary_on" = "Khóa một hướng cố định";
+"prefs_lock_orientation_title" = "Khóa hướng màn hình";
+"prefs_megabytes_int" = "%1$d MB";
+"prefs_new_background_title" = "Màu nền mới";
+"prefs_night_mode_background_brightness_summary" = "Độ sáng của trang khi chế độ tối được kích hoạt";
+"prefs_night_mode_background_brightness_title" = "Độ sáng nền";
+"prefs_night_mode_summary" = "Dùng nền tối và phông chữ sáng";
+"prefs_night_mode_text_brightness_summary" = "Độ sáng của chữ khi chế độ tối được kích hoạt";
+"prefs_night_mode_text_brightness_title" = "Độ sáng của chữ";
+"prefs_night_mode_title" = "Chế độ Tối";
+"prefs_no_enough_space_to_move_files" = "Không đủ dung lượng để di chuyển tệp app";
+"prefs_overlay_page_info_summary" = "Hiện số trang, tên surah và số juz\' trong khi đọc";
+"prefs_overlay_page_info_title" = "Hiển thị thông tin trang";
+"prefs_page_type_summary" = "Chọn loại trang đọc";
+"prefs_page_type_title" = "Loại Trang (thử nghiệm)";
+"prefs_preview" = "Xem trước";
+"prefs_sdcard_external" = "Bộ nhớ ngoài %1$d";
+"prefs_sdcard_internal" = "Bộ nhớ trong";
+"prefs_send_logs_summary" = "Gửi debug logs cho lập trình viên";
+"prefs_send_logs_title" = "Gửi logs";
+"prefs_split_page_and_translation_summary" = "Ở chế độ trang kép có bản dịch, cả trang Kinh Quran và bản dịch được hiển thị";
+"prefs_split_page_and_translation_title" = "Kinh Quran và bản dịch ở chế độ kép";
+"prefs_streaming_summary" = "Phát âm thanh trực tuyến thay vì tải xuống";
+"prefs_streaming_title" = "Phát trực tuyến";
+"prefs_sura_translated_name_summary" = "Hiển thị bản dịch tên của các surah";
+"prefs_sura_translated_name_title" = "Dịch tên Surah";
+"prefs_translation_text_title" = "Cỡ chữ bản dịch";
+"prefs_translations" = "Bản dịch";
+"prefs_translations_summary" = "Tải xuống và quản lý bản dịch";
+"prefs_use_arabic_summary_on" = "Dùng tiếng Ả Rập cho giao diện ứng dụng";
+"prefs_use_arabic_title" = "Chế độ Ả Rập (الوضع العربي)";
+"prefs_use_dyslexic_font_summary" = "Hiển thị bản dịch bằng phông chữ thân thiện với người mắc chứng khó đọc";
+"prefs_use_dyslexic_font_title" = "Phông chữ cho chứng khó đọc";
+"prefs_volume_key_navigation_summary" = "Điều hướng giữa các trang bằng phím âm lượng";
+"prefs_volume_key_navigation_title" = "Điều hướng phím âm lượng";
+"previous" = "Trước";
+"process_progress" = "Đang xử lý tập tin %1$d / %2$d";
+"qarilist_dismiss" = "Bỏ qua";
+"qarilist_gapless" = "Gapless (Liền mạch)";
+"qarilist_gapped" = "Gapped (Ngắt quãng)";
+"qarilist_qaris_with_downloads" = "Qaris với Tải xuống";
+"qarilist_ready_to_play" = "Có sẵn để Phát";
+"qarilist_select_qari" = "Chọn một Qari";
+"qarilist_selected" = "Đã chọn";
+"quranSearchType" = "Những câu Kinh Quran";
+"quran_ayah" = "Ayah %1$d";
+"quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
+"quran_hizb" = "Hizb";
+"quran_juz2" = "Juz\'";
+"quran_nos" = "½";
+"quran_page" = "Trang";
+"quran_rob3" = "¼";
+"quran_sura" = "Surahs";
+"quran_sura_title" = "Surah %1$@";
+"quran_talt_arb3" = "¾";
+"recent_pages" = "Vừa Đọc";
+"recite_from_here" = "Đọc từ đây";
+"remove_button" = "Xóa";
+"remove_dlg_msg" = "Bạn có chắc chắn muốn xóa %1$@?";
+"remove_dlg_title" = "Xóa Bản dịch?";
+"repeatValues1" = "1 lần";
+"repeatValues2" = "2 lần";
+"repeatValues3" = "3 lần";
+"repeatValues4" = "lặp";
+"scoped_storage_message" = "Do những thay đổi của Android để tăng quyền riêng tư của người dùng, việc sao chép\
+các tệp bên ngoài thư mục của ứng dụng có thể sẽ ngăn Kinh Quran truy cập dữ liệu của nó trong các phiên bản sau\
+của Android. Bạn có chắc chắn muốn sử dụng đường dẫn này không?";
+"sdcard_error" = "Không tìm thấy thẻ SD. Vui lòng gắn nó và thử lại.";
+"search_data" = "Dữ liệu Tìm kiếm";
+"search_entire_mushaf" = "Tìm kiếm cả mushaf";
+"search_full_results" = "Kết quả đầy đủ";
+"search_hint" = "Tìm trong Quran";
+"search_key" = "Ấn nút tìm để tìm một câu kinh";
+"see_tafseer_of_verse" = "Tafseer của ayah này đã có trong tafseer của ayah %d (Nhấp để mở rộng).";
+"share_ayah" = "Chia sẻ Link Ayah";
+"share_ayah_text" = "Chia sẻ văn bản Ayah";
+"starting_page_label" = "Đầu Trang";
+"stop" = "Dừng";
+"storage_permission_please_restart" = "Vui lòng khởi động lại ứng dụng để điều này có hiệu lực.";
+"storage_permission_rationale" = "Kinh Quran muốn bạn cho phép lưu trữ dữ liệu của nó trên\
+lưu trữ ngoài. Kinh Quran sẽ vẫn hoạt động mà không cần quyền này, nhưng nếu bạn xóa dữ liệu hoặc\
+gỡ cài đặt ứng dụng, tất cả các trang, âm thanh và dữ liệu đã tải xuống sẽ bị xóa. Cấp quyền\
+cho kinh Quran?";
+"sura_ayah_notification_str" = "Surah %1$@, Ayah %2$d";
+"sura_ayah_sharing_str" = "Surah %1$@: %2$d";
+"tag_ayah" = "Gắn thẻ Ayah này";
+"tag_blank_tag_error" = "Tên thẻ không được để trống!";
+"tag_bookmark" = "Đánh dấu Thẻ";
+"tag_dlg_title" = "Thẻ";
+"tag_duplicate_tag_error" = "Tên thẻ đã tồn tại!";
+"tag_name" = "Tên";
+"timing_database" = "Tệp cần thiết";
+"to" = "Đến";
+"translation_ayah" = "Bản dịch/Tafseer của Ayah";
+"translation_dialog_later" = "Để sau";
+"translation_dialog_yes" = "Có";
+"translation_updates_available" = "Một bản cập nhật có sẵn cho một số bản dịch của bạn. Truy cập trang bản dịch ngay bây giờ?";
+"undo" = "Hoàn tác";
+"update_available" = "Có cập nhật mới";
+"warning" = "Cảnh báo";

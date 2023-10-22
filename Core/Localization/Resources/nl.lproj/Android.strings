@@ -1,105 +1,197 @@
+"about_androidx" = "AndroidX";
+"about_androidx_url" = "\
+https://developer.android.com/jetpack/androidx";
 "about_contributors" = "Bijdragers";
-"about_contributors_summary" = "Een lijst van personen die hebben bijgedragen aan de ontwikkeling van Koran voor Android";
-"about_data_sources" = "Gegevens bronnen";
-"about_description" = "Koran voor Android is een gratis Koran Applicatie. Vergeet a.u.b. de ontwikkelaars niet in uw gebeden.";
+"about_contributors_summary" = "Een lijst met mensen die hebben bijgedragen aan de\
+ontwikkeling van Koran voor Android";
+"about_contributors_url" = "\
+https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md";
+"about_dagger2" = "Dagger 2";
+"about_dagger2_url" = "https://google.github.io/dagger";
+"about_data_sources" = "Data bronnen";
+"about_description" = "Koran voor Android is een gratis Koran-applicatie. Vergeet de bijdragers niet in uw gebeden.";
+"about_dnsjava" = "dnsjava";
+"about_dnsjava_url" = "http://dnsjava.org";
+"about_furqan" = "Al-Bāḥith al-Qur’ānī (tafsir.app)";
+"about_furqan_summary" = "Uthmani-tekst en Arabische Tafseer";
+"about_furqan_url" = "https://tafsir.app";
 "about_images" = "Afbeeldingen";
-"about_madani_images" = "De Koran Afbeeldingen zijn gebaseerd op de lettertypen van de Koning Fahd Koran Printing Complex";
-"about_naskh_images" = "De koran beelden voor het Naskh app werden genomen (met toestemming) van SHL Info Systems";
-"about_noorhidayat_summary" = "Noorehira lettertype en Mufti Taqi Vertaling";
-"about_open_source" = "Open Source Projecten";
+"about_kotlin" = "Kotlin";
+"about_kotlin_url" = "https://kotlinlang.org";
+"about_madani_images" = "De koranafbeeldingen zijn gebaseerd op de lettertypen van het\
+King Fahd Quran Printing Complex";
+"about_madani_images_url" = "\
+https://github.com/quran/quran.com-images";
+"about_material_components" = "Material Components for Android";
+"about_material_components_url" = "\
+https://github.com/material-components/material-components-android";
+"about_moshi" = "Moshi";
+"about_moshi_url" = "https://github.com/square/moshi";
+"about_naskh_images" = "De koranafbeeldingen voor de Naskh-app zijn (met toestemming)\
+afkomstig van SHL Info Systems";
+"about_naskh_images_url" = "http://www.shlinfosystems.com";
+"about_noorhidayat" = "Noorhidayat";
+"about_noorhidayat_summary" = "Noorehira-lettertype en Mufti Taqi-vertaling";
+"about_noorhidayat_url" = "http://www.noorehidayat.org";
+"about_numberPicker" = "Number Picker";
+"about_numberPicker_url" = "\
+https://github.com/ShawnLin013/NumberPicker";
+"about_okhttp" = "OkHttp";
+"about_okhttp_url" = "https://github.com/square/okhttp";
+"about_open_source" = "Open Source Projects";
 "about_others" = "Andere";
-"about_qaloon_images" = "Qaloon afbeeldingen gebruikt met toestemming van Nous Memes Editions Et Diffusion (Tunisia)";
+"about_qaloon_images" = "Qaloon-afbeeldingen worden gebruikt met toestemming van Nous\
+Memes Editions Et Diffusion (Tunesië)";
+"about_quran_enc" = "Noble Quran Encyclopedia (QuranEnc)";
+"about_quran_enc_summary" = "Vertalingen voor vele talen";
+"about_quran_enc_url" = "https://quranenc.com";
 "about_quran_ksu" = "Electronic Moshaf Project";
-"about_quran_ksu_summary" = "The King Saud University Electronic Moshaf Project was the app\'s source of Arabic Tafaseer and translations for various languages";
-"about_quranicaudio_summary" = "Gapless mp3 Quran recitations";
-"about_tanzil_summary" = "Vertalingen van vele talen";
+"about_quran_ksu_summary" = "Het King Saud University Electronic Moshaf Project is de\
+app\'s bron van Arabische Tafaseer en vertalingen voor verschillende talen. Het is ook de bron\
+voor de recitatie van Dr. Ayman Suwaid.";
+"about_quran_ksu_url" = "https://quran.ksu.edu.sa";
+"about_quranicaudio" = "QuranicAudio";
+"about_quranicaudio_summary" = "Gapless mp3 koranrecitaties";
+"about_quranicaudio_url" = "https://quranicaudio.com";
+"about_rxandroid" = "RxAndroid";
+"about_rxandroid_url" = "https://github.com/ReactiveX/RxAndroid";
+"about_rxjava" = "RxJava";
+"about_rxjava_url" = "https://github.com/ReactiveX/RxJava";
+"about_sliding_panel" = "AndroidSlidingUpPanel";
+"about_sliding_panel_url" = "\
+https://github.com/umano/AndroidSlidingUpPanel";
+"about_tanzil" = "Tanzil";
+"about_tanzil_summary" = "Vertalingen voor enkele talen";
+"about_tanzil_url" = "http://tanzil.net";
+"about_timber" = "Timber";
+"about_timber_url" = "https://github.com/JakeWharton/timber";
 "app_name" = "Koran";
 "audio_manager" = "Geluid Manager";
+"audio_manager_delete_selection" = "Selectie verwijderen";
+"audio_manager_download_all" = "Alles downloaden";
+"audio_manager_download_selection" = "Selectie downloaden";
+"audio_manager_remove_audio_msg" = "Weet u zeker dat u %1$@ wilt verwijderen?";
+"audio_manager_remove_audio_title" = "Surah verwijderen?";
+"audio_manager_remove_multiple_audio_msg" = "Weet u zeker dat wilt verwijderen?";
+"audio_manager_surah_delete" = "Verwijderen audiobestand";
+"audio_manager_surah_download" = "Soera downloaden";
+"audio_updated_text" = "Verschillende koran-audiobestanden zijn bijgewerkt. Koran heeft\
+uw exemplaar van deze bestanden verwijderd, zodat de nieuwste versies kunnen worden gedownload\
+de volgende keer dat u ze afspeelt.";
+"audio_updated_title" = "Koran Audiobestanden Update";
 "available_translations" = "Beschikbaar om te downloaden";
 "ayah_copied_popup" = "Ayah Gekopieerd";
-"bookmarks_list_empty" = "Geen Favorieten";
+"bookmark_ayah" = "Bladwijzer deze Ayah";
+"bookmarks_list_empty" = "Geen bladwijzers";
 "cancel" = "Annuleer";
-"canceling" = "annuleren…";
-"delete_tag" = "Label Verwijderen";
+"canceling" = "Annuleren…";
+"copy_ayah" = "Kopieer Ayah";
+"delete_tag" = "Verwijder Tag";
+"delete_translation" = "Vertaling verwijderen";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Er is een kleine maar belangrijke update voor Koran afbeeldingen die je op je apparaat hebt staat. Wil je deze patch nu downloaden?\
+"downloadImportantPrompt" = "Er is een kleine maar belangrijke update voor de\
+koranafbeeldingen die je op je apparaat hebt staan. Wilt u deze patch nu downloaden?\
 ";
 "downloadPrompt" = "Om Koran Android goed te laten werken,\
-moeten we een aantal bestanden downloaden. Als u dit niet doet, werkt de app\
-mogelijk niet betrouwbaar en zal een internetverbinding vereist zijn voor het lezen.\
+moeten we enkele bestanden downloaden. Doe je dit nu niet, dan is de app\
+werkt mogelijk niet betrouwbaar en vereist een internetverbinding om te lezen.\
 Wilt u de benodigde bestanden nu downloaden?\
 ";
 "downloadPrompt_no" = "Nee";
 "downloadPrompt_ok" = "Ja";
-"downloadPrompt_title" = "Download vereiste bestanden?";
-"downloadTabletPrompt" = "We hebben onlangs betere afbeeldingen toegevoegd voor Tablets. Wil je deze afbeeldingen nu toevoegen?";
+"downloadPrompt_title" = "Benodigde bestanden downloaden?";
+"downloadTabletPrompt" = "We hebben onlangs verbeterde afbeeldingen voor tablets\
+toegevoegd. Wilt u deze afbeeldingen nu downloaden?";
+"download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "Annuleren";
-"download_error_disk" = "Er is onvoeldoende schijfruimte om te downloaden";
-"download_error_general" = "Download mislukt";
-"download_error_invalid_download" = "Downloaded file was corrupted";
-"download_error_invalid_download_retry" = "Corrupted file, attempting to re-download";
-"download_error_network" = "Er is een netwerk fout opgetreden tijdens het downloaden";
-"download_error_network_retry" = "Network error, trying to resume…";
-"download_error_perms" = "Er is een toestemming fout opgetreden tijdens het downloaden";
-"download_extra_data" = "We moeten één of twee kleine bestanden downloaden om het delen en vertaling te ondersteunen. Download nu?";
-"download_non_wifi_prompt" = "Je maak geen gebruik van Wifi. Toch gegevens downloaden?";
-"download_processing" = "Download Verwerken…";
+"download_error_disk" = "Niet genoeg schijfruimte om te downloaden";
+"download_error_general" = "Downloaden mislukt";
+"download_error_invalid_download" = "Gedownloade bestand was beschadigd";
+"download_error_invalid_download_retry" = "Beschadigd bestand, opnieuw downloaden wordt\
+geprobeerd";
+"download_error_network" = "Downloaden mislukt vanwege netwerkfout";
+"download_error_network_retry" = "Netwerkfout, proberen te hervatten…";
+"download_error_perms" = "Downloaden mislukt vanwege machtigingsfout";
+"download_extra_data" = "We moeten een of twee kleine bestanden downloaden om delen en\
+vertalen te ondersteunen. Download nu?";
+"download_non_wifi_prompt" = "U bent niet verbonden met Wi-Fi. Data toch downloaden?";
+"download_processing" = "Download verwerken…";
 "download_progress" = "%1$@ Gedowload van %2$@";
-"download_retry" = "Probeer opnieuw";
-"download_successful" = "Download Succesvol";
+"download_retry" = "Opnieuw Proberen";
+"download_successful" = "Download succesvol";
 "download_sura_ayah_progress" = "Downloaden van Soera %1$d ayah %2$d";
 "download_sura_progress" = "%1$@ Gedowload van %2$@ van soera %3$d";
 "downloaded_translations" = "Gedownload";
-"downloading_message" = "Wacht tot de bestanden zijn gedownload (CV ondersteund).";
+"downloading_message" = "Wacht tot de bestanden zijn gedownload (hervatting wordt\
+ondersteund).";
 "downloading_title" = "Downloaden…";
-"edit_tag" = "Label Bewerken";
-"email_us" = "Als uw vraag hierboven niet wordt beantwoord, kunt u een e-mail sturen naar quranandroid@gmail.com voor ondersteuning.\
-Houd er rekening mee dat we veel e-mails ontvangen. Wij zijn daarom niet instaat om deze allemaal te beantwoorden.\
-";
-"error_getting_translation_list" = "Kan geen lijst met vertalingen downloaden. Probeer het later opnieuw.";
-"export_data_error" = "Fout bij het exporteren van gegevens.";
-"exported_data" = "Gegevens geëxporteerd naar %1$@.";
+"downloading_title" = "Downloaden…";
+"edit_tag" = "Bewerk Tag";
+"email_us" = "Als uw vraag hierboven niet wordt beantwoord, kunt u een e-mail sturen\
+naar quranandroid@gmail.com voor ondersteuning. Houd er rekening mee dat we veel e-mails\
+ontvangen, dus we kunnen ze mogelijk niet allemaal beantwoorden.";
+"error_getting_translation_list" = "Kan de lijst met vertalingen niet downloaden.\
+Probeer het later opnieuw.";
+"export_data_error" = "Fout bij exporteren van gegevens";
+"exported_data" = "Gegevens geëxporteerd naar %1$@";
 "extracting_title" = "Verwerken…";
-"found_in_sura" = "Gevonden in Soera %1$@: %2$d (Pagina %3$d)";
-"get_arabic_search_db" = "Verkrijg \"Arabisch Zoeken\" Database";
-"get_translations" = "Ontvang Vertalingen";
+"found_in_sura" = "Gevonden in Soera %1$@: %2$d (pagina %3$d)";
+"from" = "Van";
+"get_arabic_search_db" = "Arabische zoekdatabase verkrijgen";
+"get_translations" = "Vertalingen Ophalen";
 "gotoPage" = "Ga naar pagina";
 "help" = "\
-<b>Hoe kan ik de audio afspelen?</b>\
-<br/>Open even welke Koran pagina. Tik op het scherm eenmaal. Aan de onderkant, zult u\
-een afspeelknop zien en wat tekst met de naam van de Qari. Klik op de naam van de qari\
-om een andere qari te selecteren. Klik op afspelen om te downloaden en de soera van de huidige pagina af te spelen.\
+<b>Hoe speel ik audio af?</b>\
+<br/>Open een willekeurige pagina van de Koran. Tik eenmaal op het scherm. Onderaan zie je\
+een afspeelknop en wat tekst met de naam van een qari. Klik op de naam van de qari om een andere\
+qari te kiezen. Klik op afspelen om de huidige pagina of sura te downloaden en af te spelen.\
 <br/>\
-<br/><b>Hoe kan ik vertalingen tonen?</b>\
-<br/>Open even welke Koran pagina. Tik op het scherm eenmaal. Aan de bovenkant, zal je een aardbol zien. Klik hier op en maak een keuze van vertaling.\
+<br/><b>Hoe bekijk ik de vertaling?</b>\
+<br/>Open een willekeurige pagina van de Koran. Tik eenmaal op het scherm. Bovenaan zie je\
+een wereldbolpictogram (of, als je het niet ziet, klik op een pictogram met drie vierkante\
+stippen) - klik hierop en kies vertaling om de vertaling te bekijken.\
 <br/>\
-Als je/u over geen enkele vertaling beschikt, wordt u naar een venster geleid waar u vertalingen kunt downloaden.\
-Kies en download een vertaling. Keer dan terug en raak het aardbolicoontje opnieuw aan om de vertaling te bekijken.\
+Als je geen vertalingen hebt gedownload, brengt het je naar een scherm waar je vertalingen kunt\
+downloaden. Kies en download een vertaling, keer dan terug en tik opnieuw op het\
+wereldbolpictogram om de vertaling te bekijken.\
 <br/>\
-<br/><b>Hoe voeg ik een pagina toe als bladwijzer?</b>\
-<br/>Open eender welke Koran-pagina. Raak het scherm één keer aan. Rechtsboven zal je nu een bladwijzer-icoontje zien. Raak het icoontje aan om de pagina toe te voegen als bladwijzer. (het icoontje wordt dan strak wit). Raak het icoontje opnieuw aan om de bladwijzer te verwijderen.\
+<br/><b>Hoe maak ik een bladwijzer van een pagina?</b>\
+<br/>Open een willekeurige pagina van de Koran. Tik eenmaal op het scherm. Rechtsboven zie je\
+een bladwijzerpictogram. Tik op het bladwijzerpictogram om de pagina als bladwijzer toe te\
+voegen (de kleur wordt wit). Tik opnieuw op het bladwijzerpictogram om de bladwijzer te\
+verwijderen.\
 <br/>\
-<br/><b>Hoe vergroot ik de tekst (/ Hoe zoom ik in?)</b>\
-<br/>Voor de Arabischtalige pagina\'s: Hou je smartphone horizontaal (/in landscape?). De tekst zal dan vanzelf groter worden.\
-Voor de vertaalde pagina\'s (/voor vertalingen): Ga naar instellingen en wijzig de tekstgrootte naar uw voorkeur.\
+<br/><b>Hoe maak ik de tekst groter?</b>\
+<br/>Houd je telefoon in landschapsmodus voor de Arabische pagina\'s. Dit maakt de tekst\
+groter. Voor vertalingen ga je naar de instellingen en stel je de grootte van de vertalingstekst\
+in.\
 <br/>\
-<br/><b>Hoe deel ik een aya?</b>\
-<br/>Als je op een Arabischtalige pagina bent: Hou de (/het?) gewenste aya (/vers?) ingedrukt totdat er een menu verschijnt waarop je kan kiezen om als bladwijzer toe te voegen, te taggen, de aya (/het vers?) te kopiëren of delen naar het clipboard, de vertaling te bekijken, of te luisteren naar de recitatie van de aya (/het vers?)<br/>\
-<br/><b>De lettertypes: Malayam, Tamil, Bengali en Urdu werken niet!</b>\
-<br/>Helaas ondersteunen Android versies ouder dan 4.0 deze lettertypes niet en is er weinig dat wij hieraan kunnen doen.\
+<br/><b>Hoe deel ik een ayah?</b>\
+<br/>Terwijl je op een willekeurige Arabische pagina bent, druk en houd je op een ayah om een\
+menu te krijgen waar je kunt kiezen om de ayah als bladwijzer te markeren, taggen, delen of\
+kopiëren naar het klembord, de vertaling te bekijken, of naar de recitatie te luisteren.\
+<br/>\
+<br/><b>Malayalam/Tamil/Bengali/Urdu-lettertypen werken niet!</b>\
+<br/>Helaas ondersteunen Android-versies vóór 4.0 deze lettertypen niet en er is weinig dat\
+we hieraan kunnen doen.\
 ";
 "help_title" = "Veel Gestelde Vragen";
 "highlighting_database" = "Vereiste Bestanden";
-"import_data" = "Importeer Gegevens";
-"import_data_and_override" = "Als je dit bestand importeer zal het al je bladwijzers vervangen met %1$d bladwijzer(s) en %2$d label(s). Importeren?";
-"import_data_error" = "Ongeldige backup-bestand (of niet in staat om back-up bestand te lezen).";
-"import_data_permissions_error" = "Kan geen back-upbestand lezen wegens bevoegdheden fouten.";
-"import_successful" = "Import Successvol";
+"import_data" = "Gegevens importeren";
+"import_data_and_override" = "Als je dit bestand importeert, worden alle bladwijzers\
+vervangen door %1$d bladwijzer(s) en %2$d tag(s). Importeren?";
+"import_data_error" = "Ongeldig back-upbestand (of kan back-upbestand niet lezen).";
+"import_data_permissions_error" = "Kan back-upbestand niet lezen vanwege\
+toestemmingsfout.";
+"import_successful" = "Importeren voltooid";
 "index_loading" = "Laden…";
+"infinity" = "∞";
 "juz2_description" = "Juz\' %1$@";
-"kitkat_external_message" = "Als gevolg van Android beperkingen, als je ervoor kiest om Koran gegevens te plaatsen\
-op uw externe SD-kaart en deze later verwijderd, zal je al deze gegevens opnieuw moeten downloaden. Ben jij\
-zeker dat je de externe SD-kaart wilt gebruiken?";
+"kitkat_external_message" = "Vanwege beperkingen in Android, als u ervoor kiest om\
+Koran-gegevens op uw externe SD-kaart te plaatsen en later Koran Android verwijdert of gegevens\
+wist, worden alle pagina\'s en audio van Koran Android verwijderd en moet u deze opnieuw\
+downloaden. Weet u zeker dat u de externe SD-kaart wilt gebruiken?";
+"logs_email" = "quranandroid+logs@gmail.com";
 "madani" = "Madani";
 "makki" = "Makki";
 "menu_about" = "Over Ons";
@@ -107,92 +199,139 @@ zeker dat je de externe SD-kaart wilt gebruiken?";
 "menu_bookmarks" = "Bladwijzers";
 "menu_bookmarks_ayah" = "Ayah Bladwijzers";
 "menu_bookmarks_page" = "Pagina Bladwijzers";
-"menu_get_translations" = "Verkrijg Vertalingen";
-"menu_help" = "Ondersteuning";
-"menu_jump" = "Ga";
+"menu_get_translations" = "Ontvang vertalingen";
+"menu_help" = "Hulp";
+"menu_jump" = "Ga naar pagina";
 "menu_jump_last_page" = "Laatste Pagina";
 "menu_other_apps" = "Andere apps";
-"menu_search" = "Zoek";
+"menu_search" = "Zoeken";
 "menu_settings" = "Instellingen";
-"menu_sort" = "Sorteren";
+"menu_show_date" = "Datum tonen";
+"menu_show_recents" = "Recente pagina\'s";
+"menu_sort" = "Sorteer";
 "menu_sort_date" = "Datum Toegevoegd";
-"menu_sort_group_by_tags" = "Groepeer via Label";
-"menu_sort_location" = "Locatie in Koran";
-"menu_translation" = "Toon Vertalingen";
-"need_translation" = "Je heb geen enkele vertaling/tafseer gedownload";
-"new_tag" = "Nieuwe Label";
+"menu_sort_group_by_tags" = "Groeperen op tags";
+"menu_sort_location" = "Locatie in de Koran";
+"menu_translation" = "Toon vertaling";
+"more_arabic" = "المزيد…";
+"more_translations" = "Meer vertalingen";
+"move_down" = "Omlaag verplaatsen";
+"move_up" = "Omhoog verplaatsen";
+"need_translation" = "U heeft nog geen vertalingen/tafaseer gedownload.";
+"new_tag" = "Nieuwe Tag";
 "next" = "Volgende";
-"no_arabic_search_available" = "Je hebt \"Arabisch Zoeken\" niet gedownload. Download het en probeer uw zoekopdracht opnieuw.";
+"no_arabic_search_available" = "U heeft het Arabische zoekpakket niet gedownload.\
+Download het alstublieft en probeer uw zoekopdracht opnieuw.";
 "no_results" = "Geen resultaten gevonden voor \"%@\"";
-"not_tagged" = "Niet Gelabeld";
-"notification_download_canceled" = "Download canceled";
+"not_tagged" = "Niet Getaged";
+"notification_channel_audio" = "Koran Recitaties";
+"notification_channel_download" = "Koran Downloads";
+"notification_download_canceled" = "Download geannuleerd";
 "page_description" = "Pagina %1$@, Juz\' %2$@";
-"pause" = "Pauze";
+"pause" = "Pauzeren";
 "play" = "Afspelen";
-"play_apply" = "Pas toe";
-"play_apply_and_play" = "Pas toe en Speel af";
+"play_apply" = "Toepassen";
+"play_apply_and_play" = "Toepassen en Afspelen";
 "play_each_verse" = "Speel elke vers af:";
 "play_from" = "Van";
-"play_restrict_range" = "Speel enkel de bovenstaande verzen af";
+"play_from_here" = "Afspelen van hier";
+"play_restrict_range" = "Speel alleen bovenstaande verzen";
 "play_to" = "Naar";
-"play_verses_range" = "Speel een reeks verzen af:";
-"please_grant_permissions" = "Gelieve toestemming te verlenen in programma-instellingen.";
-"prefs_app_location_summary" = "Kies de locatie voor het opslaan van Koran gegevens.";
-"prefs_app_location_title" = "Koran gegevens bibliotheek";
-"prefs_app_size" = "Huidige gegevens geheugen is";
-"prefs_audio_manager_summary" = "Beheer en download Koran audio";
+"play_verses_range" = "Speel een set van verzen af:";
+"playback_prompt_title" = "Begin met afspelen vanaf:";
+"please_grant_permissions" = "Verleen toestemming in de applicatie-instellingen";
+"please_wait" = "Even geduld aub…";
+"prefs_app_location_summary" = "Kies waar Koran-bestanden moeten worden opgeslagen";
+"prefs_app_location_title" = "Koran gegevensmap";
+"prefs_app_size" = "Huidige gegevensgrootte is";
+"prefs_audio_manager" = "Geluid Manager";
+"prefs_audio_manager_summary" = "Koran audio beheren en downloaden";
 "prefs_ayah_before_translation_summary" = "Toon ayah in het Arabisch boven de vertaling";
-"prefs_ayah_before_translation_title" = "Ayah voor vertaling";
-"prefs_calculating_app_size" = "Berekenen van App Grootte";
+"prefs_ayah_before_translation_title" = "Ayah vóór vertaling";
+"prefs_calculating_app_size" = "App-grootte berekenen";
 "prefs_category_advanced" = "Geavanceerde opties";
-"prefs_category_display_settings" = "Beeldscherminstellingen";
-"prefs_category_download" = "Download Opties";
-"prefs_category_reading" = "Voorkeuren voor Lezen";
-"prefs_category_translation" = "Voorkeuren voor Vertalingen";
+"prefs_category_advanced_summary" = "Bladwijzers importeren/exporteren,\
+Koran-gegevensdirectory instellen, enzovoort.";
+"prefs_category_display_settings" = "Weergave-instellingen";
+"prefs_category_download" = "Downloadopties";
+"prefs_category_dual_screen" = "Voorkeuren voor dubbele pagina\'s";
+"prefs_category_reading" = "Leesvoorkeuren";
+"prefs_category_translation" = "Vertaalvoorkeuren";
 "prefs_copying_app_files" = "App-bestanden kopiëren";
-"prefs_display_marker_summary" = "Er komt een popup bij het bereiken van juz\', hizb, etc.";
-"prefs_display_marker_title" = "Weergeef marker popups";
-"prefs_download_amount_summary" = "Preferred download amount for non-gapless audio";
-"prefs_download_amount_title" = "Hoeveelheid te downloaden";
-"prefs_dual_page_mode_disabled" = "In landscape, zal slechts één pagina verschijnen.";
-"prefs_dual_page_mode_enabled" = "In landscape, worden twee pagina\'s naast elkaar weergegeven.";
-"prefs_dual_page_mode_title" = "Tablet Mode";
-"prefs_err_moving_app_files" = "Kan app bestanden niet verplaatsen";
-"prefs_export_summary" = "Exporteer een kopie van bladwijzers en labels";
+"prefs_display_marker_summary" = "Popup tonen bij het bereiken van juz\', hizb, enz.";
+"prefs_display_marker_title" = "Popup-markeringen tonen";
+"prefs_download_amount_summary" = "Voorkeurshoeveelheid voor het downloaden van\
+niet-gapless audio";
+"prefs_download_amount_title" = "Downloadhoeveelheid";
+"prefs_dual_page_mode_disabled" = "In landschapmodus wordt slechts één pagina\
+weergegeven.";
+"prefs_dual_page_mode_enabled" = "In landschapmodus worden twee pagina\'s naast elkaar\
+weergegeven.";
+"prefs_dual_page_mode_title" = "Dubbele Paginamodus";
+"prefs_err_moving_app_files" = "Fout bij het verplaatsen van app-bestanden";
+"prefs_export_csv_summary" = "Exporteer een kopie van bladwijzers en tags naar CSV";
+"prefs_export_csv_title" = "Exporteren naar CSV";
+"prefs_export_summary" = "Exporteer een kopie van bladwijzers en tags";
 "prefs_export_title" = "Exporteren";
-"prefs_highlight_bookmarks_summary" = "Markeer opgeslagen ayah verzen";
-"prefs_highlight_bookmarks_title" = "Markeer bladwijzers";
-"prefs_landscape_orientation_summary_off" = "Gebruik altijd portret-modus";
-"prefs_landscape_orientation_summary_on" = "Gebruik altijd landscape modus";
-"prefs_landscape_orientation_title" = "Landscape modus";
-"prefs_lock_orientation_summary_off" = "Aanpassen aan de huidige oriëntatie mode";
-"prefs_lock_orientation_summary_on" = "Gebruik vaste oriëntatie-modus";
-"prefs_lock_orientation_title" = "Vergrendel schermoriëntatie";
+"prefs_highlight_bookmarks_summary" = "Gemarkeerde ayah\'s markeren tijdens het lezen";
+"prefs_highlight_bookmarks_title" = "Bladwijzers markeren";
+"prefs_import_summary" = "Importeer bladwijzers en tags";
+"prefs_import_title" = "Importeren";
+"prefs_landscape_orientation_summary_off" = "Gebruik altijd de staande modus";
+"prefs_landscape_orientation_summary_on" = "Gebruik altijd de liggende modus";
+"prefs_landscape_orientation_title" = "Liggende modus";
+"prefs_lock_orientation_summary_off" = "Aanpasbare oriëntatiemodus";
+"prefs_lock_orientation_summary_on" = "Gebruik de modus voor vaste oriëntatie";
+"prefs_lock_orientation_title" = "Schermoriëntatie vergrendelen";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_megabytes_str" = "%@ MB";
 "prefs_new_background_title" = "Nieuwe achtergrond";
-"prefs_night_mode_summary" = "Gebruik een donkere achtergrond en een lichte lettertype";
-"prefs_night_mode_text_brightness_summary" = "Helederheid van de tekst wanneer de nacht modus zijn ingeschakeld.";
-"prefs_night_mode_text_brightness_title" = "Tekst helderheid";
-"prefs_night_mode_title" = "Nacht modus";
-"prefs_no_enough_space_to_move_files" = "Onvoldoende ruimte om app bestanden te verplaatsen";
-"prefs_overlay_page_info_summary" = "Overlay page number, sura name, and juz\' number while reading";
-"prefs_overlay_page_info_title" = "Toon pagina info";
-"prefs_sdcard_external" = "Externe SD kaart %1$d";
-"prefs_sdcard_internal" = "Interne geheugen";
-"prefs_send_logs_summary" = "Verstuur debug logbestanden naar de ontwikkelaar";
-"prefs_send_logs_title" = "Verstuur logbestanden";
-"prefs_streaming_summary" = "Audio streamen indien mogelijk";
-"prefs_streaming_title" = "Streaming";
-"prefs_translation_text_title" = "Vertaling tekstgrootte";
-"prefs_translations" = "Vertaling";
-"prefs_translations_summary" = "Downloaden en beheren van vertalingen";
-"prefs_use_arabic_summary_on" = "Gebruik Arabisch voor de applicatie-interface";
-"prefs_use_arabic_title" = "Arabisch-modus (الوضع العربي)";
-"prefs_volume_key_navigation_summary" = "Navigeren tussen pagina\'s met behulp van de volumetoetsen";
-"prefs_volume_key_navigation_title" = "Volumetoets navigatie";
+"prefs_night_mode_background_brightness_summary" = "Helderheid van de pagina wanneer de\
+nachtmodus actief is";
+"prefs_night_mode_background_brightness_title" = "Achtergrondhelderheid";
+"prefs_night_mode_summary" = "Gebruik een donkere achtergrond en lichte lettertypen";
+"prefs_night_mode_text_brightness_summary" = "Helderheid van de tekst wanneer de\
+nachtmodus actief is";
+"prefs_night_mode_text_brightness_title" = "Teksthelderheid";
+"prefs_night_mode_title" = "Nachtmodus";
+"prefs_no_enough_space_to_move_files" = "Onvoldoende ruimte om app-bestanden te\
+verplaatsen";
+"prefs_overlay_page_info_summary" = "Overlay van paginanummer, soera naam en juz\' nummer\
+tijdens het lezen";
+"prefs_overlay_page_info_title" = "Paginagegevens tonen";
+"prefs_page_type_summary" = "Selecteer het type leespagina\'s";
+"prefs_page_type_title" = "Paginatype (experimenteel)";
+"prefs_preview" = "Voorbeeld";
+"prefs_sdcard_external" = "Externe opslag %1$d";
+"prefs_sdcard_internal" = "Intern geheugen";
+"prefs_send_logs_summary" = "Debug logs naar de ontwikkelaar verzenden";
+"prefs_send_logs_title" = "Logs verzenden";
+"prefs_split_page_and_translation_summary" = "In dubbele paginamodus met vertalingen,\
+koranpagina en vertaling wordt weergegeven";
+"prefs_split_page_and_translation_title" = "Koran en vertaling in dubbele modus";
+"prefs_streaming_summary" = "Audio streamen in plaats van downloaden";
+"prefs_streaming_title" = "Streamen";
+"prefs_sura_translated_name_summary" = "Toon de vertaling van de naam van de soera";
+"prefs_sura_translated_name_title" = "Vertaalde naam van soera";
+"prefs_translation_text_title" = "Tekstgrootte van vertalingen";
+"prefs_translations" = "Vertalingen";
+"prefs_translations_summary" = "Vertalingen downloaden en beheren";
+"prefs_use_arabic_summary_on" = "Gebruik Arabisch voor de toepassingsinterface";
+"prefs_use_arabic_title" = "Arabische modus (الوضع العربي)";
+"prefs_use_dyslexic_font_summary" = "Vertalingen weergeven in een dyslexie-vriendelijk\
+lettertype";
+"prefs_use_dyslexic_font_title" = "Dyslexie-vriendelijk lettertype";
+"prefs_volume_key_navigation_summary" = "Blader tussen pagina\'s met de volumetoetsen";
+"prefs_volume_key_navigation_title" = "Volume-toets navigatie";
 "previous" = "Vorige";
-"process_progress" = "Processing file %1$d / %2$d";
+"process_progress" = "Bestand verwerken %1$d / %2$d";
+"qarilist_dismiss" = "Ontsla";
+"qarilist_gapless" = "continu";
+"qarilist_gapped" = "niet-continu";
+"qarilist_qaris_with_downloads" = "Recitanten met Downloads";
+"qarilist_ready_to_play" = "Klaar om te luisteren";
+"qarilist_select_qari" = "Kies een Qari";
+"qarilist_selected" = "Geselecteerd";
 "quranSearchType" = "Verzen van de Koran";
 "quran_ayah" = "Ayah %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
@@ -204,30 +343,54 @@ zeker dat je de externe SD-kaart wilt gebruiken?";
 "quran_sura" = "Soera";
 "quran_sura_title" = "Soera %1$@";
 "quran_talt_arb3" = "¾";
+"recent_pages" = "Recente pagina\'s";
+"recite_from_here" = "Reciteer vanaf hier";
 "remove_button" = "Verwijder";
-"remove_dlg_msg" = "Bent u zeker dat u %1$@ wilt verwijderen?";
+"remove_dlg_msg" = "Weet u zeker dat u de %1$@ wilt verwijderen?";
 "remove_dlg_title" = "Vertaling Verwijderen?";
 "repeatValues1" = "1 keer";
 "repeatValues2" = "2 keer";
 "repeatValues3" = "3 keer";
 "repeatValues4" = "lus";
-"sdcard_error" = "Kon geen SD-kaart vinden. Gelieve te dit te controleren en opnieuw te proberen.";
-"search_data" = "Zoek Gegevens";
-"search_hint" = "Zoeken in de Koran";
-"stop" = "Stop";
-"storage_permission_please_restart" = "Gelieve de app opnieuw opstarten om de veranderingen uit te voeren.";
-"storage_permission_rationale" = "Koran wil uw toestemming om zijn gegevens op te slaan op\
-uw externe opslag. Koran zal werken zonder deze toestemming, maar als je de app deinstalleerd zullen alle gedownloade pagina\'s, audio en gegevens verwijderd worden. Verleen je Koran toestemming?\
-";
+"scoped_storage_message" = "Vanwege wijzigingen in Android om de privacy van gebruikers\
+te vergroten, kan het kopiëren van bestanden buiten de app-mappen voorkomen dat Koran in\
+toekomstige versies van Android toegang heeft tot zijn gegevens. Weet u zeker dat u deze locatie\
+wilt gebruiken?";
+"sdcard_error" = "SD-kaart niet gevonden. Monteer de kaart en probeer opnieuw.";
+"search_data" = "Data Zoeken";
+"search_entire_mushaf" = "Doorzoek de hele mushaf";
+"search_full_results" = "Volledige resultaten";
+"search_hint" = "Zoek in de Koran";
+"search_key" = "Druk op de zoek-toets om een vers te zoeken.";
+"see_tafseer_of_verse" = "De tafseer van deze ayah is inbegrepen bij de tafseer van ayah\
+%d (Klik om uit te vouwen).";
+"share_ayah" = "Deel Ayah Link";
+"share_ayah_text" = "Deel Ayah Tekst";
+"starting_page_label" = "Begin van Pagina";
+"stop" = "Onderbreken";
+"storage_permission_please_restart" = "Start de app opnieuw op zodat de wijzigingen van\
+kracht worden.";
+"storage_permission_rationale" = "Koran wil toestemming om zijn gegevens op externe\
+opslag op te slaan. Koran werkt zonder deze toestemming, maar als u gegevens wist of de app\
+verwijdert, worden alle gedownloade pagina\'s, audio en gegevens verwijderd. Wilt u Koran\
+toestemming geven?";
+"sura_ayah" = "%1$d:%2$d";
 "sura_ayah_notification_str" = "Soera %1$@, Ayah %2$d";
 "sura_ayah_sharing_str" = "Soera %1$@: %2$d";
-"tag_bookmark" = "Label Bladwijzer";
-"tag_dlg_title" = "Label";
+"tag_ayah" = "Label deze Ayah";
+"tag_blank_tag_error" = "Tagnaam mag niet leeg zijn!";
+"tag_bookmark" = "Tag Bladwijzer";
+"tag_dlg_title" = "Tags";
+"tag_duplicate_tag_error" = "Tagnaam bestaat al!";
 "tag_name" = "Naam";
 "timing_database" = "Vereiste Bestanden";
+"to" = "Naar";
+"translation_ayah" = "Ayah Vertaling/Tafseer";
 "translation_dialog_later" = "Later";
 "translation_dialog_yes" = "Ja";
-"translation_updates_available" = "Er is een update beschikbaar voor een aantal van uw vertalingen. Bezoek het scherm vertalingen nu?";
-"undo" = "Ongedaan Maken";
-"update_available" = "Update Beschikbaar";
+"translation_updates_available" = "Er is een update beschikbaar voor sommige van uw\
+vertalingen. Wilt u nu naar het vertalingenscherm gaan?";
+"translations" = "Vertalingen";
+"undo" = "Ongedaan maken";
+"update_available" = "Update beschikbaar";
 "warning" = "Waarschuwing";

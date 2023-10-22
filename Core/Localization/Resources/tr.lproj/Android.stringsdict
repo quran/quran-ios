@@ -33,6 +33,22 @@
                 <string>%1$d sure silindi</string>
             </dict>
         </dict>
+        <key>audio_manager_files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 sure indirildi</string>
+                <key>other</key>
+                <string>%1$d sure indirildi</string>
+            </dict>
+        </dict>
         <key>bookmark_tag_deleted</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -47,22 +63,6 @@
                 <string>Bir etiket silindi</string>
                 <key>other</key>
                 <string>%d etiket silindi</string>
-            </dict>
-        </dict>
-        <key>files_downloaded</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@files_downloaded@</string>
-            <key>files_downloaded</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>1 sure indirildi</string>
-                <key>other</key>
-                <string>%1$d sure indirildi</string>
             </dict>
         </dict>
         <key>search_results</key>

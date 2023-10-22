@@ -66,7 +66,7 @@ extension AudioDownloadedSize? {
         }
         let suraCount = self.downloadedSuraCount
         let size = Double(self.downloadedSizeInBytes)
-        let filesDownloaded = lFormat("files_downloaded", table: .android, suraCount)
+        let filesDownloaded = lFormat("audio_manager_files_downloaded", table: .android, suraCount)
         let measurement = Measurement<UnitInformationStorage>(value: size, unit: .bytes)
         if suraCount == 0 {
             return filesDownloaded

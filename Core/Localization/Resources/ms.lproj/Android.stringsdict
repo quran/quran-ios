@@ -1,21 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
-        <key>files_downloaded</key>
+        <key>audio_manager_files_downloaded</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
-            <string>%#@files_downloaded@</string>
-            <key>files_downloaded</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>other</key>
+                <string>%1$d surah telah dimuat turun</string>
+            </dict>
+        </dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
             <dict>
                 <key>NSStringFormatSpecTypeKey</key>
                 <string>NSStringPluralRuleType</string>
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>1 surah dimuat turun</string>
+                <string>Penanda dipadamkan</string>
                 <key>other</key>
-                <string>%1$d surah dimuat turun</string>
+                <string>%d penanda telah dipadam</string>
             </dict>
         </dict>
         <key>search_results</key>
@@ -48,38 +61,6 @@
                 <string>Satu ayat</string>
                 <key>other</key>
                 <string>%d ayat-ayat</string>
-            </dict>
-        </dict>
-        <key>bookmark_tag_deleted</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@bookmark_tag_deleted@</string>
-            <key>bookmark_tag_deleted</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Satu item dipadam</string>
-                <key>other</key>
-                <string>%d item dipadam</string>
-            </dict>
-        </dict>
-        <key>plural_recent_pages</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@plural_recent_pages@</string>
-            <key>plural_recent_pages</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Halaman terakhir</string>
-                <key>other</key>
-                <string>Halaman terkini</string>
             </dict>
         </dict>
     </dict>

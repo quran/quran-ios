@@ -38,9 +38,9 @@ public struct AdvancedAudioOptionsView<Sura: AdvancedAudioUISura>: View {
 
             Section(header: Text(l("audio.playing-verses.label"))) {
                 // From
-                VerseStaticView(label: lAndroid("play_from"), verse: dataObject.fromVerse, action: actions.fromVerseTapped)
+                VerseStaticView(label: lAndroid("from"), verse: dataObject.fromVerse, action: actions.fromVerseTapped)
                 // To
-                VerseStaticView(label: lAndroid("play_to"), verse: dataObject.toVerse, action: actions.toVerseTapped)
+                VerseStaticView(label: lAndroid("to"), verse: dataObject.toVerse, action: actions.toVerseTapped)
             }
 
             Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {

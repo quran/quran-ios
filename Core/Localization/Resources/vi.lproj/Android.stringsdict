@@ -12,9 +12,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Surani oʻchirishda xatolik yuz berdi</string>
+                <string>Đã xảy ra lỗi khi xóa surah</string>
                 <key>other</key>
-                <string>%1$d ta surani oʻchirishda xatolik yuz berdi</string>
+                <string>Đã xảy ra lỗi khi xóa %1$d surahs</string>
             </dict>
         </dict>
         <key>audio_manager_delete_surah_success</key>
@@ -28,9 +28,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Sura oʻchirildi</string>
+                <string>Xóa surah thành công</string>
                 <key>other</key>
-                <string>%1$d ta sura oʻchirildi</string>
+                <string>Xóa %1$d surahs thành công</string>
             </dict>
         </dict>
         <key>audio_manager_files_downloaded</key>
@@ -44,9 +44,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Bitta sura saqlangan</string>
+                <string>1 surah đã tải</string>
                 <key>other</key>
-                <string>%1$d ta sura saqlangan</string>
+                <string>%1$d surahs đã tải</string>
             </dict>
         </dict>
         <key>bookmark_tag_deleted</key>
@@ -60,9 +60,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Bitta element oʻchirildi</string>
+                <string>Đã xóa một mục</string>
                 <key>other</key>
-                <string>%d ta element oʻchirildi</string>
+                <string>Đã xóa %d mục</string>
             </dict>
         </dict>
         <key>search_results</key>
@@ -76,9 +76,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>\&quot;%1$d\&quot; boʻyicha bitta natija:</string>
+                <string>Một kết quả cho \&quot;%1$d\&quot;:</string>
                 <key>other</key>
-                <string>\&quot;%1$d\&quot; boʻyicha %2$d ta natijalar:</string>
+                <string>%2$d kết quả cho \&quot;%1$d\&quot;:</string>
             </dict>
         </dict>
         <key>verses</key>
@@ -92,9 +92,9 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>Bir oyat</string>
+                <string>Một câu</string>
                 <key>other</key>
-                <string>%d oyat</string>
+                <string>%d câu</string>
             </dict>
         </dict>
     </dict>

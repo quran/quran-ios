@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <key>audio_manager_files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 soera gedownload</string>
+                <key>other</key>
+                <string>%1$d soera\&apos;s gedownload</string>
+            </dict>
+        </dict>
         <key>bookmark_tag_deleted</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
@@ -12,25 +28,25 @@
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>een item verwijderd</string>
+                <string>Eén item verwijderd</string>
                 <key>other</key>
                 <string>%d items verwijderd</string>
             </dict>
         </dict>
-        <key>files_downloaded</key>
+        <key>plural_recent_pages</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>
-            <string>%#@files_downloaded@</string>
-            <key>files_downloaded</key>
+            <string>%#@plural_recent_pages@</string>
+            <key>plural_recent_pages</key>
             <dict>
                 <key>NSStringFormatSpecTypeKey</key>
                 <string>NSStringPluralRuleType</string>
                 <key>NSStringFormatValueTypeKey</key>
                 <string>d</string>
                 <key>one</key>
-                <string>1 soera gedownload</string>
+                <string>Laatste Pagina</string>
                 <key>other</key>
-                <string>%1$d soera\&apos;s gedownload</string>
+                <string>Recente pagina\&apos;s</string>
             </dict>
         </dict>
         <key>search_results</key>

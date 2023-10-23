@@ -40,15 +40,6 @@ versiyalar oʻchirildi, keyingi safar foydalanganingizda yangilangan versiyalari
 "delete_tag" = "Tegni oʻchirish";
 "delete_translation" = "Oʻchirish";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Uskunangizdagi Qurʼon rasmlari uchun kichik, ammo muhim oʻzgartirishlar kiritish lozim.\
-Yangilangan fayllarni hozir saqlab olasizmi?";
-"downloadPrompt" = "Ilova toʻliq ishlashi uchun baʼzi fayllarni koʻchirib olish lozim.\
-Agar fayllarni hozir saqlab olmasangiz, Qurʼon sahifalarining ochilishi biroz sekin amalga oshishi mumkin\
-hamda doimiy Internet aloqasi kerak boʻladi. Fayllarni hozir saqlab olasizmi?";
-"downloadPrompt_no" = "Yoʻq";
-"downloadPrompt_ok" = "Ha";
-"downloadPrompt_title" = "Kerakli fayllar yuklansinmi?";
-"downloadTabletPrompt" = "Planshetlar uchun rasmlar yangilandi. Yangi fayllarni hozir saqlab olasizmi?";
 "download_amount_in_megabytes" = "%@ Mb";
 "download_cancel" = "Bekor qilish";
 "download_error_disk" = "Uskunada yetarli xotira mavjud emas";
@@ -67,8 +58,17 @@ hamda doimiy Internet aloqasi kerak boʻladi. Fayllarni hozir saqlab olasizmi?";
 "download_sura_ayah_progress" = "%1$d-sura %2$d-oyat saqlanmoqda…";
 "download_sura_progress" = "%3$d-suraning %1$@ (jami: %2$@) saqlanmoqda…";
 "downloaded_translations" = "Saqlab olingan";
+"downloadImportantPrompt" = "Uskunangizdagi Qurʼon rasmlari uchun kichik, ammo muhim oʻzgartirishlar kiritish lozim.\
+Yangilangan fayllarni hozir saqlab olasizmi?";
 "downloading_message" = "Iltimos, fayllar toʻliq saqlanib olinguncha biroz kutib turing.";
 "downloading_title" = "Saqlanmoqda…";
+"downloadPrompt" = "Ilova toʻliq ishlashi uchun baʼzi fayllarni koʻchirib olish lozim.\
+Agar fayllarni hozir saqlab olmasangiz, Qurʼon sahifalarining ochilishi biroz sekin amalga oshishi mumkin\
+hamda doimiy Internet aloqasi kerak boʻladi. Fayllarni hozir saqlab olasizmi?";
+"downloadPrompt_no" = "Yoʻq";
+"downloadPrompt_ok" = "Ha";
+"downloadPrompt_title" = "Kerakli fayllar yuklansinmi?";
+"downloadTabletPrompt" = "Planshetlar uchun rasmlar yangilandi. Yangi fayllarni hozir saqlab olasizmi?";
 "edit_tag" = "Tegni tahrir qilish";
 "email_us" = "Agar savollaringizga yuqorida javob olmagan boʻlsangiz quranandroid@gmail.com\
 adresiga maktub yoʻllashingiz mumkin. Faqat, shuni yodda tutingki, biz juda ham koʻplab e-mail\
@@ -250,7 +250,6 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "qarilist_ready_to_play" = "Eshitishga tayyor";
 "qarilist_select_qari" = "Qori tanlang";
 "qarilist_selected" = "Tanlangan";
-"quranSearchType" = "Suralar";
 "quran_ayah" = "%1$d-oyat";
 "quran_ayah_details" = "%1$@ %2$@-oyat, %3$@-juz";
 "quran_hizb" = "Hizb";
@@ -261,15 +260,16 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "quran_sura" = "Sura";
 "quran_sura_title" = "%1$@ surasi";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Suralar";
 "recent_pages" = "Soʻnggi sahifalar";
 "recite_from_here" = "Bu yerdan o\'qing";
 "remove_button" = "Oʻchirish";
 "remove_dlg_msg" = "Haqiqatda \"%1$@\" tarjimasini oʻchirmoqchimisiz??";
 "remove_dlg_title" = "Tarjima oʻchirilsinmi?";
-"repeatValues1" = "1 marta";
-"repeatValues2" = "2 marta";
-"repeatValues3" = "3 marta";
-"repeatValues4" = "davomiy";
+"repeatValues[0]" = "1 marta";
+"repeatValues[1]" = "2 marta";
+"repeatValues[2]" = "3 marta";
+"repeatValues[3]" = "davomiy";
 "scoped_storage_message" = "Foydalanuvchilar xavfsizligini taʼminotini oshirish boʻyicha oʻzgarishlar tufayli Android tizimining\
 yangi versiyalarida ilovamiz ushbu jilddagi maʼlumotlarni oʻqiy olmay qolishi mumkin. Shunga qaramasdan hozir ushbu jilddan foydalanmoqchimisiz?\
 ";

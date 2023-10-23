@@ -42,12 +42,6 @@
 "delete_tag" = "حذف التصنيف";
 "delete_translation" = "حذف الترجمة";
 "dialog_ok" = "موافق";
-"downloadImportantPrompt" = "هناك تحديث هام صغير على ملفات الصور على هاتفكم. هل تود  تحميل الملف حالا؟";
-"downloadPrompt" = "لكي يعمل التطبيق بنجاح تحتاج لتحميل بعض الملفات الان. إن لم يتم التحميل الان قد لا يعمل التطبيق بشكل صحيح و ستحتاج للاتصال بالإنترنت للقراءة. هل تود التحميل الان؟";
-"downloadPrompt_no" = "لا";
-"downloadPrompt_ok" = "نعم";
-"downloadPrompt_title" = "حمل الملفات المطلوبه؟";
-"downloadTabletPrompt" = "تم تحسين الصور الخاصه بالتابلت. هل تود تحميلها الان؟";
 "download_amount_in_megabytes" = "%@ م ب";
 "download_cancel" = "إلغاء";
 "download_error_disk" = "لا توجد مساحة كافية للتخزين";
@@ -67,8 +61,14 @@
 "download_sura_ayah_progress" = "جاري تحميل السورة %1$d الآية %2$d";
 "download_sura_progress" = "جاري التحميل من سورة %3$d - %1$@ / %2$@";
 "downloaded_translations" = "الملفات المحملة";
+"downloadImportantPrompt" = "هناك تحديث هام صغير على ملفات الصور على هاتفكم. هل تود  تحميل الملف حالا؟";
 "downloading_message" = "يرجى الإنتظار حتى نهاية التحميل";
 "downloading_title" = "جاري التحميل....";
+"downloadPrompt" = "لكي يعمل التطبيق بنجاح تحتاج لتحميل بعض الملفات الان. إن لم يتم التحميل الان قد لا يعمل التطبيق بشكل صحيح و ستحتاج للاتصال بالإنترنت للقراءة. هل تود التحميل الان؟";
+"downloadPrompt_no" = "لا";
+"downloadPrompt_ok" = "نعم";
+"downloadPrompt_title" = "حمل الملفات المطلوبه؟";
+"downloadTabletPrompt" = "تم تحسين الصور الخاصه بالتابلت. هل تود تحميلها الان؟";
 "edit_tag" = "تعديل الصنف";
 "email_us" = "إذا لم تجد إجابة سؤالكم بالأعلى فيمكنكم مراسلتنا على هذا البريد quranandroid@gmail.com للدعم. ونحيط بكم علما أنه تصلنا كثير من الأسئلة، ولهذا قد لا نرد على جميع الرسائل.‎";
 "error_getting_translation_list" = "لم يتم تحميل الملف المطلوب، من فضلك أعد المحاولة";
@@ -230,7 +230,6 @@
 "qarilist_ready_to_play" = "جاهز للتشغيل";
 "qarilist_select_qari" = "اختر قارئ";
 "qarilist_selected" = "تم الإختيار";
-"quranSearchType" = "آيات القرآن";
 "quran_ayah" = "آية %1$d";
 "quran_ayah_details" = "%1$@ - آية %2$@، جزء %3$@";
 "quran_hizb" = "الحزب";
@@ -241,15 +240,16 @@
 "quran_sura" = "سورة";
 "quran_sura_title" = "سُورَةُ %1$@";
 "quran_talt_arb3" = "ثلاثة أرباع";
+"quranSearchType" = "آيات القرآن";
 "recent_pages" = "آخر المتصفحات";
 "recite_from_here" = "اقرأ من هنا";
 "remove_button" = "احذف";
 "remove_dlg_msg" = "هل ترغب في حذف %1$@؟";
 "remove_dlg_title" = "امسح التفسير/الترجمة؟";
-"repeatValues1" = "مرة واحدة";
-"repeatValues2" = "مرتان";
-"repeatValues3" = "ثلاث مرات";
-"repeatValues4" = "لانهائي";
+"repeatValues[0]" = "مرة واحدة";
+"repeatValues[1]" = "مرتان";
+"repeatValues[2]" = "ثلاث مرات";
+"repeatValues[3]" = "لانهائي";
 "scoped_storage_message" = "بسبب القيود الجديدة في أندرويد 11، تخزين بيانات التطبيق في\
 مكان غير مجلد التطبيق الافتراضي قد يؤدي إلى عدم تمكن التطبيق من الوصول لملفاته في إصدارات أندرويد\
 القادمة، هل ترغب في نقل البيانات على أية حال؟\

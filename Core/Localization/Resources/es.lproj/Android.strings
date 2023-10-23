@@ -38,12 +38,6 @@
 "delete_tag" = "Borrar Etiqueta";
 "delete_translation" = "Eliminar la traducción";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Hay disponible una pequeña actualización, pero importante\npara las imágenes del Corán que tienes en tu dispositivo móvil. ¿Quieres descargar \nesta actualización ahora?";
-"downloadPrompt" = "Corán para Android  necesitamos descargar unos archivos para que funcione correctamente. Si no haces esto, la aplicación puede no funcionar confiablemente y requerirá una conexión a internet para leer.\n¿Te gustaría descargar los archivos necesarios ahora?\n\t\t";
-"downloadPrompt_no" = "No";
-"downloadPrompt_ok" = "Si";
-"downloadPrompt_title" = "¿Desea descargar otros archivos necesarios por la aplicación?";
-"downloadTabletPrompt" = "Hemos añadido recientemente imágenes mejoradas para tabletas. ¿Quieres descargar estas imágenes ahora?";
 "download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "Cancelar";
 "download_error_disk" = "No hay suficiente espacio en disco para descargar";
@@ -62,8 +56,14 @@
 "download_sura_ayah_progress" = "Descargando la sura %1$d ayah %2$d";
 "download_sura_progress" = "Descargado %1$@ / %2$@ de la sura %3$d";
 "downloaded_translations" = "Descargado";
+"downloadImportantPrompt" = "Hay disponible una pequeña actualización, pero importante\npara las imágenes del Corán que tienes en tu dispositivo móvil. ¿Quieres descargar \nesta actualización ahora?";
 "downloading_message" = "Por favor, espera a la descarga de los archivos. (La aplicación se reiniciará)";
 "downloading_title" = "Descargando…";
+"downloadPrompt" = "Corán para Android  necesitamos descargar unos archivos para que funcione correctamente. Si no haces esto, la aplicación puede no funcionar confiablemente y requerirá una conexión a internet para leer.\n¿Te gustaría descargar los archivos necesarios ahora?\n\t\t";
+"downloadPrompt_no" = "No";
+"downloadPrompt_ok" = "Si";
+"downloadPrompt_title" = "¿Desea descargar otros archivos necesarios por la aplicación?";
+"downloadTabletPrompt" = "Hemos añadido recientemente imágenes mejoradas para tabletas. ¿Quieres descargar estas imágenes ahora?";
 "edit_tag" = "Editar Etiqueta";
 "email_us" = "Si su pregunta no está respondida anteriormente, usted puede enviar un email a  quranandroid@gmail.com en busca de apoyo. Tenga en cuenta que tenemos un montón de correos electrónicos, por lo que es posible que no podamos responder a todos los emails que recibimos.";
 "error_getting_translation_list" = "No se puede descargar la lista de traducciones. Por favor, inténtelo de nuevo más tarde.";
@@ -207,7 +207,6 @@
 "qarilist_ready_to_play" = "Listo para escuchar";
 "qarilist_select_qari" = "Seleccione un Qari";
 "qarilist_selected" = "Seleccionado";
-"quranSearchType" = "Versículos del Corán";
 "quran_ayah" = "Versículo %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Yuz\' %3$@";
 "quran_hizb" = "Hizb";
@@ -218,6 +217,7 @@
 "quran_sura" = "Capítulo";
 "quran_sura_title" = "Capítulo %1$@";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Versículos del Corán";
 "recent_pages" = "Páginas recientes";
 "recite_from_here" = "Recita desde aquí";
 "remove_button" = "Eliminar";

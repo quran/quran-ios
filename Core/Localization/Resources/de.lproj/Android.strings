@@ -38,21 +38,6 @@
 "delete_tag" = "Schlagwort löschen";
 "delete_translation" = "Übersetzung entfernen";
 "dialog_ok" = "Ok";
-"downloadImportantPrompt" = "Es ist eine kleine, aber wichtige Aktualisierung der\
-Quran-Abbildungen auf ihrem Gerät vorhanden. Wollen Sie diese Aktualisierung jetzt\
-herunterladen?\
-";
-"downloadPrompt" = "Für die optimale Leistung müssen einige Dateien\
-heruntergeladen werden. Wenn Sie sich dagegen entscheiden, wird das\
-Laden jeder Seite spürbar länger dauern. Wollen Sie die benötigten\
-Dateien herunterladen?\
-";
-"downloadPrompt_no" = "Nein";
-"downloadPrompt_ok" = "Ja";
-"downloadPrompt_title" = "Möchten Sie die benötigten Dateien herunterladen?";
-"downloadTabletPrompt" = "Wir haben kürzlich verbesserte Bilder für Tablets hinzugefügt.\
-Wollen Sie diese Bilder jetzt herunterladen?\
-";
 "download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "Abbrechen";
 "download_error_disk" = "Sie verfügen nicht über genug Speicherplatz um die Dateien\
@@ -85,10 +70,25 @@ Dateien trotzdem herunterladen?\
 "download_sura_ayah_progress" = "Herunterladen von Sure %1$d Vers %2$d";
 "download_sura_progress" = "Heruntergeladen %1$@ / %2$@ von Sure %3$d";
 "downloaded_translations" = "Heruntergeladen";
+"downloadImportantPrompt" = "Es ist eine kleine, aber wichtige Aktualisierung der\
+Quran-Abbildungen auf ihrem Gerät vorhanden. Wollen Sie diese Aktualisierung jetzt\
+herunterladen?\
+";
 "downloading_message" = "Bitte warten Sie bis die Dateien heruntergeladen wurden.\
 Sie dürfen den Vorgang unterbrechen, falls es nötig sein sollte.\
 ";
 "downloading_title" = "Dateien werden heruntergeladen…";
+"downloadPrompt" = "Für die optimale Leistung müssen einige Dateien\
+heruntergeladen werden. Wenn Sie sich dagegen entscheiden, wird das\
+Laden jeder Seite spürbar länger dauern. Wollen Sie die benötigten\
+Dateien herunterladen?\
+";
+"downloadPrompt_no" = "Nein";
+"downloadPrompt_ok" = "Ja";
+"downloadPrompt_title" = "Möchten Sie die benötigten Dateien herunterladen?";
+"downloadTabletPrompt" = "Wir haben kürzlich verbesserte Bilder für Tablets hinzugefügt.\
+Wollen Sie diese Bilder jetzt herunterladen?\
+";
 "edit_tag" = "Schlagwort bearbeiten";
 "email_us" = "Wenn Ihre Frage oben nicht beantwortet werden konnte und Sie\
 Unterstützung benötigen, dann können Sie uns eine E-Mail an quranandroid@gmail.com senden.\
@@ -315,7 +315,6 @@ mittels der Lautstärketasten.\
 "qarilist_ready_to_play" = "Bereit zum Zuhören";
 "qarilist_select_qari" = "Wählen Sie einen Qari";
 "qarilist_selected" = "Ausgewählte";
-"quranSearchType" = "Quranverse";
 "quran_ayah" = "Vers %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Ğuzʾ %3$@";
 "quran_hizb" = "Hizb";
@@ -326,15 +325,16 @@ mittels der Lautstärketasten.\
 "quran_sura" = "Sūrah";
 "quran_sura_title" = "Sure %1$@";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Quranverse";
 "recent_pages" = "Neueste Seiten";
 "recite_from_here" = "Ab hier rezitieren";
 "remove_button" = "Entfernen";
 "remove_dlg_msg" = "Sind Sie sicher, dass Sie die %1$@ entfernen wollen?";
 "remove_dlg_title" = "Übersetzung entfernen?";
-"repeatValues1" = "einmal";
-"repeatValues2" = "zweimal";
-"repeatValues3" = "dreimal";
-"repeatValues4" = "unendlich";
+"repeatValues[0]" = "einmal";
+"repeatValues[1]" = "zweimal";
+"repeatValues[2]" = "dreimal";
+"repeatValues[3]" = "unendlich";
 "scoped_storage_message" = "Aufgrund von Android-Änderungen zur Erhöhung des Datenschutzes kann das Kopieren von Dateien außerhalb der App-Verzeichnisse den Zugriff auf die Daten von Quran für Android in zukünftigen Android-Versionen verhindern. Sind Sie sicher, dass Sie diesen Pfad verwenden möchten?";
 "sdcard_error" = "Die SD-Karte konnte nicht gefunden werden. Bitte setzen Sie die Karte\
 erneut ein und versuchen Sie es nochmals.\

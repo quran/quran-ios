@@ -39,20 +39,6 @@ bản sao của các tệp này để có thể tải xuống các phiên bản 
 "delete_tag" = "Xóa Thẻ";
 "delete_translation" = "Xóa Bản dịch";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Có một cập nhật nhỏ nhưng quan trọng\
-cho những hình ảnh Kinh Quran bạn có trên thiết bị của mình. Bạn có muốn tải bản vá này\
-bây giờ không?\
-";
-"downloadPrompt" = "Để Kinh Quran Android hoạt động bình thường,\
-chúng tôi cần tải xuống một số tệp. Nếu bạn không làm điều này bây giờ, ứng dụng\
-có thể không hoạt động đáng tin cậy và sẽ yêu cầu kết nối Internet để đọc.\
-Bạn có muốn tải xuống các tệp cần thiết ngay bây giờ không?\
-";
-"downloadPrompt_no" = "Không";
-"downloadPrompt_ok" = "Có";
-"downloadPrompt_title" = "Tải xuống tệp cần thiết?";
-"downloadTabletPrompt" = "Gần đây chúng tôi đã thêm hình ảnh cải tiến cho\
-máy tính bảng. Bạn có muốn tải xuống những hình ảnh này ngay bây giờ không?";
 "download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "Hủy";
 "download_error_disk" = "Không đủ dung lượng đĩa để tải xuống";
@@ -71,9 +57,23 @@ máy tính bảng. Bạn có muốn tải xuống những hình ảnh này ngay 
 "download_sura_ayah_progress" = "Đang tải xuống surah %1$d ayah %2$d";
 "download_sura_progress" = "Đã tải xuống %1$@ / %2$@ of surah %3$d";
 "downloaded_translations" = "Đã tải";
+"downloadImportantPrompt" = "Có một cập nhật nhỏ nhưng quan trọng\
+cho những hình ảnh Kinh Quran bạn có trên thiết bị của mình. Bạn có muốn tải bản vá này\
+bây giờ không?\
+";
 "downloading_message" = "Vui lòng đợi tệp tải xuống (hỗ trợ tạm dừng).";
 "downloading_title" = "Đang tải…";
 "downloading_title" = "Đang tải xuống…";
+"downloadPrompt" = "Để Kinh Quran Android hoạt động bình thường,\
+chúng tôi cần tải xuống một số tệp. Nếu bạn không làm điều này bây giờ, ứng dụng\
+có thể không hoạt động đáng tin cậy và sẽ yêu cầu kết nối Internet để đọc.\
+Bạn có muốn tải xuống các tệp cần thiết ngay bây giờ không?\
+";
+"downloadPrompt_no" = "Không";
+"downloadPrompt_ok" = "Có";
+"downloadPrompt_title" = "Tải xuống tệp cần thiết?";
+"downloadTabletPrompt" = "Gần đây chúng tôi đã thêm hình ảnh cải tiến cho\
+máy tính bảng. Bạn có muốn tải xuống những hình ảnh này ngay bây giờ không?";
 "edit_tag" = "Sửa Thẻ";
 "email_us" = "Nếu câu hỏi của bạn không được trả lời ở trên, bạn có thể gửi email quranandroid@gmail.com để được hỗ trợ.\
 Xin lưu ý rằng chúng tôi nhận được rất nhiều email, vì vậy chúng tôi không thể trả lời tất cả chúng.";
@@ -256,7 +256,6 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "qarilist_ready_to_play" = "Có sẵn để Phát";
 "qarilist_select_qari" = "Chọn một Qari";
 "qarilist_selected" = "Đã chọn";
-"quranSearchType" = "Những câu Kinh Quran";
 "quran_ayah" = "Ayah %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "Hizb";
@@ -267,15 +266,16 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "quran_sura" = "Surahs";
 "quran_sura_title" = "Surah %1$@";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Những câu Kinh Quran";
 "recent_pages" = "Vừa Đọc";
 "recite_from_here" = "Đọc từ đây";
 "remove_button" = "Xóa";
 "remove_dlg_msg" = "Bạn có chắc chắn muốn xóa %1$@?";
 "remove_dlg_title" = "Xóa Bản dịch?";
-"repeatValues1" = "1 lần";
-"repeatValues2" = "2 lần";
-"repeatValues3" = "3 lần";
-"repeatValues4" = "lặp";
+"repeatValues[0]" = "1 lần";
+"repeatValues[1]" = "2 lần";
+"repeatValues[2]" = "3 lần";
+"repeatValues[3]" = "lặp";
 "scoped_storage_message" = "Do những thay đổi của Android để tăng quyền riêng tư của người dùng, việc sao chép\
 các tệp bên ngoài thư mục của ứng dụng có thể sẽ ngăn Kinh Quran truy cập dữ liệu của nó trong các phiên bản sau\
 của Android. Bạn có chắc chắn muốn sử dụng đường dẫn này không?";

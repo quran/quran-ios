@@ -66,7 +66,7 @@ private extension String {
         var ranges: [Range<String.Index>] = []
         var maximum: Range<String.Index>?
         while true {
-            if let found = range(of: term, options: [.caseInsensitive, .backwards], range: maximum) {
+            if let found = range(of: term, options: [.caseInsensitive, .backwards, .diacriticInsensitive], range: maximum) {
                 ranges.append(found)
                 maximum = startIndex ..< found.lowerBound
             } else {
@@ -80,7 +80,7 @@ private extension String {
         var ranges: [Range<String.Index>] = []
         var maximum: Range<String.Index>?
         while true {
-            if let found = range(of: term, options: [.regularExpression, .backwards], range: maximum) {
+            if let found = range(of: term, options: [.regularExpression, .backwards, .diacriticInsensitive], range: maximum) {
                 ranges.append(found)
                 maximum = startIndex ..< found.lowerBound
             } else {

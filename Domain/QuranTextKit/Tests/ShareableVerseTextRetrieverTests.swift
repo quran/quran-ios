@@ -53,13 +53,13 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                 verses: [quran.suras[0].verses[2]],
                 result: ["ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
                          "",
-                         "Al-Fatihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 3"]
             ),
             (
                 verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
                 result: ["بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾ ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾",
                          "",
-                         "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3"]
             ),
         ]
         for test in tests {
@@ -82,7 +82,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                          "• Sahih International:",
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
                          "",
-                         "Al-Fatihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 3"]
             ),
             (
                 verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
@@ -98,7 +98,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[1]),
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
                          "",
-                         "Al-Fatihah, Ayah 1 - Al-Fatihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3"]
             ),
         ]
         for test in tests {

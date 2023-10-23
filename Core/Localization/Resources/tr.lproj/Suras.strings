@@ -3,14 +3,14 @@
 "sura_names[2]" = "Âl-i İmrân";
 "sura_names[3]" = "Nisâ";
 "sura_names[4]" = "Mâide";
-"sura_names[5]" = "En'âm";
-"sura_names[6]" = "A'râf";
+"sura_names[5]" = "En\'âm";
+"sura_names[6]" = "A\'râf";
 "sura_names[7]" = "Enfâl";
 "sura_names[8]" = "Tevbe";
 "sura_names[9]" = "Yûnus";
 "sura_names[10]" = "Hûd";
 "sura_names[11]" = "Yûsuf";
-"sura_names[12]" = "Ra'd";
+"sura_names[12]" = "Ra\'d";
 "sura_names[13]" = "İbrâhîm";
 "sura_names[14]" = "Hicr";
 "sura_names[15]" = "Nahl";
@@ -20,7 +20,7 @@
 "sura_names[19]" = "Tâhâ";
 "sura_names[20]" = "Enbiyâ";
 "sura_names[21]" = "Hac";
-"sura_names[22]" = "Mu'minûn";
+"sura_names[22]" = "Mu\'minûn";
 "sura_names[23]" = "Nûr";
 "sura_names[24]" = "Furkân";
 "sura_names[25]" = "Şuarâ";
@@ -37,7 +37,7 @@
 "sura_names[36]" = "Sâffât";
 "sura_names[37]" = "Sâd";
 "sura_names[38]" = "Zumer";
-"sura_names[39]" = "Mü'min";
+"sura_names[39]" = "Mü\'min";
 "sura_names[40]" = "Fussilet";
 "sura_names[41]" = "Şûrâ";
 "sura_names[42]" = "Zuhrûf";
@@ -84,7 +84,7 @@
 "sura_names[83]" = "İnşikak";
 "sura_names[84]" = "Bürûc";
 "sura_names[85]" = "Târik";
-"sura_names[86]" = "A'lâ";
+"sura_names[86]" = "A\'lâ";
 "sura_names[87]" = "Gâşiye";
 "sura_names[88]" = "Fecr";
 "sura_names[89]" = "Beled";

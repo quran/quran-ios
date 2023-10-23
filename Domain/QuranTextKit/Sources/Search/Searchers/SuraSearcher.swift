@@ -27,7 +27,7 @@ struct SuraSearcher: Searcher {
             let suraNames: Set<String> = [defaultSuraName, arabicSuraName]
             let trimmedTerm = term.trimmingWords()
             return suraNames.compactMap { suraName -> SearchResult? in
-                guard let range = suraName.range(of: trimmedTerm, options: .caseInsensitive) else {
+                guard let range = suraName.range(of: trimmedTerm, options: [.caseInsensitive, .diacriticInsensitive]) else {
                     return nil
                 }
                 let ayah = sura.firstVerse

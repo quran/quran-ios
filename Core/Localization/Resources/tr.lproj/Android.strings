@@ -40,15 +40,6 @@ sonraki oynatılmasında indirilebilmesi için bu dosyaların cihazınızdaki ko
 "delete_tag" = "Etiketi kaldır";
 "delete_translation" = "Çeviriyi Kaldır";
 "dialog_ok" = "Tamam";
-"downloadImportantPrompt" = "\"Kur'an resim dosyaları için küçük ama önemli bir güncelleme var. Bu güncellemeyi indirmek istiyor musunuz?\"";
-"downloadPrompt" = "Daha iyi performans için bazı dosyalar SD karta kopyalanmalı.\
-Eğer şimdi bu işlemi gerçekleştirmezseniz sayfaların ayrı-ayrı indirilmesi daha uzun sürebilir.\
-Şimdi gerekli dosyaları indirmek istiyor musunuz?\
-";
-"downloadPrompt_no" = "Hayır";
-"downloadPrompt_ok" = "Evet";
-"downloadPrompt_title" = "Gerekli dosyalari indirelim mi?";
-"downloadTabletPrompt" = "Daha gelişmiş resimler eklendi, indirmek istiyor musunuz?";
 "download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "İptal";
 "download_error_disk" = "Yeterli boş alan yok";
@@ -67,8 +58,17 @@ Eğer şimdi bu işlemi gerçekleştirmezseniz sayfaların ayrı-ayrı indirilme
 "download_sura_ayah_progress" = "%1$d suresi %2$d. âyet indiriliyor";
 "download_sura_progress" = "%3$d suresinin %1$@ / %2$@ indirildi";
 "downloaded_translations" = "Yüklendi";
+"downloadImportantPrompt" = "\"Kur'an resim dosyaları için küçük ama önemli bir güncelleme var. Bu güncellemeyi indirmek istiyor musunuz?\"";
 "downloading_message" = "Lütfen dosyaların indirilmesi için bekleyin";
 "downloading_title" = "Yükleniyor…";
+"downloadPrompt" = "Daha iyi performans için bazı dosyalar SD karta kopyalanmalı.\
+Eğer şimdi bu işlemi gerçekleştirmezseniz sayfaların ayrı-ayrı indirilmesi daha uzun sürebilir.\
+Şimdi gerekli dosyaları indirmek istiyor musunuz?\
+";
+"downloadPrompt_no" = "Hayır";
+"downloadPrompt_ok" = "Evet";
+"downloadPrompt_title" = "Gerekli dosyalari indirelim mi?";
+"downloadTabletPrompt" = "Daha gelişmiş resimler eklendi, indirmek istiyor musunuz?";
 "edit_tag" = "Etiket güncelle";
 "email_us" = "Sorunuz yukarıda yanıtlanmamış ise destek için quranandroid@gmail.com e-posta adresine mektup yollayabilirsiniz.\
 Lütfen unutmayın ki bize çok sayıda e-posta geliyor, bu yüzden aldığımız tüm e-postaları yanıtlamayabiliriz.";
@@ -237,7 +237,6 @@ Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
 "qarilist_ready_to_play" = "Dinlemeye hazır";
 "qarilist_select_qari" = "Bir Kari Seçin";
 "qarilist_selected" = "Seçilmiş";
-"quranSearchType" = "\"Kur'an-i Kerîm âyetlerinde arama\"";
 "quran_ayah" = "%1$d.âyet";
 "quran_ayah_details" = "%1$@ %2$@.âyet, %3$@.cüz";
 "quran_hizb" = "Hizb";
@@ -248,15 +247,16 @@ Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
 "quran_sura" = "Sureler";
 "quran_sura_title" = "%1$@ suresi";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "\"Kur'an-i Kerîm âyetlerinde arama\"";
 "recent_pages" = "Son sayfalar";
 "recite_from_here" = "Buradan oku";
 "remove_button" = "Kaldır";
 "remove_dlg_msg" = "\"%1$@\" meâlini kaldırmak istediğinize emin misiniz?";
 "remove_dlg_title" = "Meâl kaldırılsın mı?";
-"repeatValues1" = "1 kere";
-"repeatValues2" = "2 kere";
-"repeatValues3" = "3 kere";
-"repeatValues4" = "sürekli";
+"repeatValues[0]" = "1 kere";
+"repeatValues[1]" = "2 kere";
+"repeatValues[2]" = "3 kere";
+"repeatValues[3]" = "sürekli";
 "scoped_storage_message" = "Kullanıcı gizliliğini artırmak için Android değişiklikleri nedeniyle, uygulama dizinlerinin dışındaki dosyaları kopyalamak, Android için Kuran\'ın android\'in gelecekteki sürümlerinde verilerine erişmesini durdurabilir. Bu yolu kullanmak istediğinizden emin misiniz?";
 "sdcard_error" = "SD kart bulunamadı. Lütfen monte edip tekrar deneyin.";
 "search_data" = "Veri arama";

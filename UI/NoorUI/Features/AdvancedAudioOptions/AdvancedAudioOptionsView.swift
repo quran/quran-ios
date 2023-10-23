@@ -136,10 +136,10 @@ private struct ReciterView: View {
 private extension AdvancedAudioUI.AudioRepeat {
     var localizedDescription: String {
         switch self {
-        case .none: return lAndroid("repeatValues1")
-        case .once: return lAndroid("repeatValues2")
-        case .twice: return lAndroid("repeatValues3")
-        case .indefinite: return lAndroid("repeatValues4")
+        case .none: return lAndroid("repeatValues[0]")
+        case .once: return lAndroid("repeatValues[1]")
+        case .twice: return lAndroid("repeatValues[2]")
+        case .indefinite: return lAndroid("repeatValues[3]")
         }
     }
 }

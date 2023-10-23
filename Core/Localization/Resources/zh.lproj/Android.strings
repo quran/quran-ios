@@ -38,13 +38,6 @@
 "delete_tag" = "删除标签";
 "delete_translation" = "移除翻译";
 "dialog_ok" = "确认";
-"downloadImportantPrompt" = "有一个小而重要的更新 对你设备上的古兰经图像进行了一个小而重要的更新。你想下载这个 补丁吗？";
-"downloadPrompt" = "为了更好的使用体验，需要下载一些文件。如果目前选择不下载，每个页面载入时会花较长的时间。确认开始下载这些文件吗？\
-";
-"downloadPrompt_no" = "取消";
-"downloadPrompt_ok" = "确认";
-"downloadPrompt_title" = "下载所需的文件吗？";
-"downloadTabletPrompt" = "我们最近增加了改进的图像，用于 平板电脑。你想现在下载这些图片吗？";
 "download_cancel" = "取消";
 "download_error_disk" = "磁盘可供下载空间不足";
 "download_error_general" = "下载失败";
@@ -60,8 +53,15 @@
 "download_retry" = "重试";
 "download_successful" = "下载成功";
 "downloaded_translations" = "已经下载";
+"downloadImportantPrompt" = "有一个小而重要的更新 对你设备上的古兰经图像进行了一个小而重要的更新。你想下载这个 补丁吗？";
 "downloading_message" = "文件下载中，请等待。（支持续传）";
 "downloading_title" = "下载中…";
+"downloadPrompt" = "为了更好的使用体验，需要下载一些文件。如果目前选择不下载，每个页面载入时会花较长的时间。确认开始下载这些文件吗？\
+";
+"downloadPrompt_no" = "取消";
+"downloadPrompt_ok" = "确认";
+"downloadPrompt_title" = "下载所需的文件吗？";
+"downloadTabletPrompt" = "我们最近增加了改进的图像，用于 平板电脑。你想现在下载这些图片吗？";
 "edit_tag" = "编辑标签";
 "email_us" = "If your question is not answered above, you can email quranandroid@gmail.com for support. Please note that we get lots of email, so we may not be able to reply to all emails we receive.";
 "error_getting_translation_list" = "无法下载译文列表。请稍后重试.";
@@ -227,7 +227,6 @@
 "qarilist_ready_to_play" = "准备聆听";
 "qarilist_select_qari" = "选择一个卡里";
 "qarilist_selected" = "精选";
-"quranSearchType" = "Verses of the Quran";
 "quran_ayah" = "节 %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "段落";
@@ -237,6 +236,7 @@
 "quran_rob3" = "¼";
 "quran_sura" = "章";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Verses of the Quran";
 "recent_pages" = "最近的页面";
 "recite_from_here" = "从这里背诵";
 "remove_button" = "移除";

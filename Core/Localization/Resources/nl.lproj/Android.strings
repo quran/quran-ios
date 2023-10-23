@@ -89,19 +89,6 @@ de volgende keer dat u ze afspeelt.";
 "delete_tag" = "Verwijder Tag";
 "delete_translation" = "Vertaling verwijderen";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Er is een kleine maar belangrijke update voor de\
-koranafbeeldingen die je op je apparaat hebt staan. Wilt u deze patch nu downloaden?\
-";
-"downloadPrompt" = "Om Koran Android goed te laten werken,\
-moeten we enkele bestanden downloaden. Doe je dit nu niet, dan is de app\
-werkt mogelijk niet betrouwbaar en vereist een internetverbinding om te lezen.\
-Wilt u de benodigde bestanden nu downloaden?\
-";
-"downloadPrompt_no" = "Nee";
-"downloadPrompt_ok" = "Ja";
-"downloadPrompt_title" = "Benodigde bestanden downloaden?";
-"downloadTabletPrompt" = "We hebben onlangs verbeterde afbeeldingen voor tablets\
-toegevoegd. Wilt u deze afbeeldingen nu downloaden?";
 "download_amount_in_megabytes" = "%@ MB";
 "download_cancel" = "Annuleren";
 "download_error_disk" = "Niet genoeg schijfruimte om te downloaden";
@@ -122,10 +109,23 @@ vertalen te ondersteunen. Download nu?";
 "download_sura_ayah_progress" = "Downloaden van Soera %1$d ayah %2$d";
 "download_sura_progress" = "%1$@ Gedowload van %2$@ van soera %3$d";
 "downloaded_translations" = "Gedownload";
+"downloadImportantPrompt" = "Er is een kleine maar belangrijke update voor de\
+koranafbeeldingen die je op je apparaat hebt staan. Wilt u deze patch nu downloaden?\
+";
 "downloading_message" = "Wacht tot de bestanden zijn gedownload (hervatting wordt\
 ondersteund).";
 "downloading_title" = "Downloaden…";
 "downloading_title" = "Downloaden…";
+"downloadPrompt" = "Om Koran Android goed te laten werken,\
+moeten we enkele bestanden downloaden. Doe je dit nu niet, dan is de app\
+werkt mogelijk niet betrouwbaar en vereist een internetverbinding om te lezen.\
+Wilt u de benodigde bestanden nu downloaden?\
+";
+"downloadPrompt_no" = "Nee";
+"downloadPrompt_ok" = "Ja";
+"downloadPrompt_title" = "Benodigde bestanden downloaden?";
+"downloadTabletPrompt" = "We hebben onlangs verbeterde afbeeldingen voor tablets\
+toegevoegd. Wilt u deze afbeeldingen nu downloaden?";
 "edit_tag" = "Bewerk Tag";
 "email_us" = "Als uw vraag hierboven niet wordt beantwoord, kunt u een e-mail sturen\
 naar quranandroid@gmail.com voor ondersteuning. Houd er rekening mee dat we veel e-mails\
@@ -332,7 +332,6 @@ lettertype";
 "qarilist_ready_to_play" = "Klaar om te luisteren";
 "qarilist_select_qari" = "Kies een Qari";
 "qarilist_selected" = "Geselecteerd";
-"quranSearchType" = "Verzen van de Koran";
 "quran_ayah" = "Ayah %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "Hizb";
@@ -343,15 +342,16 @@ lettertype";
 "quran_sura" = "Soera";
 "quran_sura_title" = "Soera %1$@";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Verzen van de Koran";
 "recent_pages" = "Recente pagina\'s";
 "recite_from_here" = "Reciteer vanaf hier";
 "remove_button" = "Verwijder";
 "remove_dlg_msg" = "Weet u zeker dat u de %1$@ wilt verwijderen?";
 "remove_dlg_title" = "Vertaling Verwijderen?";
-"repeatValues1" = "1 keer";
-"repeatValues2" = "2 keer";
-"repeatValues3" = "3 keer";
-"repeatValues4" = "lus";
+"repeatValues[0]" = "1 keer";
+"repeatValues[1]" = "2 keer";
+"repeatValues[2]" = "3 keer";
+"repeatValues[3]" = "lus";
 "scoped_storage_message" = "Vanwege wijzigingen in Android om de privacy van gebruikers\
 te vergroten, kan het kopiëren van bestanden buiten de app-mappen voorkomen dat Koran in\
 toekomstige versies van Android toegang heeft tot zijn gegevens. Weet u zeker dat u deze locatie\

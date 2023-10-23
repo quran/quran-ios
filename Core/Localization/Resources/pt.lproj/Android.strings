@@ -36,19 +36,6 @@
 "delete_tag" = "Deletar Tag";
 "delete_translation" = "Remover Tradução";
 "dialog_ok" = "OK";
-"downloadImportantPrompt" = "Há uma atualização pequena porem importante\
-para as imagens do Alcorão instaladas no seu dispositivo. Voce gostaria de baixar\
-este patch agora?";
-"downloadPrompt" = "Para uma performance ótima, alguns arquivos precisam\
-ser baixados. Se voce optar para não fazer isso agora, cada página irá demorar\
-significamente mais para carregar. Voce gostaria de baixar os arquivos\
-necessários agora?\
-";
-"downloadPrompt_no" = "Não";
-"downloadPrompt_ok" = "Sim";
-"downloadPrompt_title" = "Baixar Arquivos Necessários?";
-"downloadTabletPrompt" = "Recentemente acrescentamos imagens melhoradas para tablets.\
-Voce gostaria fazer download dessas imagens agora?";
 "download_cancel" = "Cancelar";
 "download_error_disk" = "Não há espaço em disco para fazer o download";
 "download_error_general" = "Download Fahou";
@@ -66,8 +53,21 @@ Voce gostaria fazer download dessas imagens agora?";
 "download_sura_ayah_progress" = "Baixar sura %1$d ayah %2$d";
 "download_sura_progress" = "Transferido %1$@ / %2$@ de surah %3$d";
 "downloaded_translations" = "Já foi baixado";
+"downloadImportantPrompt" = "Há uma atualização pequena porem importante\
+para as imagens do Alcorão instaladas no seu dispositivo. Voce gostaria de baixar\
+este patch agora?";
 "downloading_message" = "Por favor aguarde o download dos aqruivos. (Resumo permitido)";
 "downloading_title" = "Baixando…";
+"downloadPrompt" = "Para uma performance ótima, alguns arquivos precisam\
+ser baixados. Se voce optar para não fazer isso agora, cada página irá demorar\
+significamente mais para carregar. Voce gostaria de baixar os arquivos\
+necessários agora?\
+";
+"downloadPrompt_no" = "Não";
+"downloadPrompt_ok" = "Sim";
+"downloadPrompt_title" = "Baixar Arquivos Necessários?";
+"downloadTabletPrompt" = "Recentemente acrescentamos imagens melhoradas para tablets.\
+Voce gostaria fazer download dessas imagens agora?";
 "edit_tag" = "Editar Tag";
 "email_us" = "Se a tua pergunta não foi respondida, mande e-mail para quranandroid@gmail.com. Anote por favor que recebemos muitos e-mails, há a possibilidade de não responder todos os e-mails.";
 "error_getting_translation_list" = "Não foi possível baixar a lista de traduções. Por favor tente mais tarde.";
@@ -210,7 +210,6 @@ Voce gostaria fazer download dessas imagens agora?";
 "qarilist_ready_to_play" = "Pronto para ouvir";
 "qarilist_select_qari" = "Selecione um Qari";
 "qarilist_selected" = "Selecionado";
-"quranSearchType" = "Ayas do Alcorão";
 "quran_ayah" = "Ayah %1$d";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "Hizb";
@@ -221,6 +220,7 @@ Voce gostaria fazer download dessas imagens agora?";
 "quran_sura" = "Sura";
 "quran_sura_title" = "Sura %1$@";
 "quran_talt_arb3" = "¾";
+"quranSearchType" = "Ayas do Alcorão";
 "recent_pages" = "Páginas recentes";
 "remove_button" = "Remover";
 "remove_dlg_msg" = "Voce tem certesa que deseja remover o %1$@?";

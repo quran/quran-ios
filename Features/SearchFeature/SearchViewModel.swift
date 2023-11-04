@@ -39,7 +39,7 @@ struct SearchTerm {
 final class SearchViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, searchService: Searcher, navigateTo: @escaping (AyahNumber) -> Void) {
+    init(analytics: AnalyticsLibrary, searchService: CompositeSearcher, navigateTo: @escaping (AyahNumber) -> Void) {
         self.analytics = analytics
         self.searchService = searchService
         self.navigateTo = navigateTo
@@ -121,7 +121,7 @@ final class SearchViewModel: ObservableObject {
     // MARK: Private
 
     private let analytics: AnalyticsLibrary
-    private let searchService: Searcher
+    private let searchService: CompositeSearcher
     private let navigateTo: (AyahNumber) -> Void
 
     private let recentsService = SearchRecentsService.shared

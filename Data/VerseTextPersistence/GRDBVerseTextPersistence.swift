@@ -11,18 +11,6 @@ import QuranKit
 import SQLitePersistence
 
 public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
-    // MARK: Lifecycle
-
-    public init(fileURL: URL) {
-        self.init(mode: .arabic, fileURL: fileURL)
-    }
-
-    public init(mode: Mode, fileURL: URL) {
-        persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: mode.tabelName)
-    }
-
-    // MARK: Public
-
     public enum Mode {
         case arabic
         case share
@@ -38,6 +26,18 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
             }
         }
     }
+
+    // MARK: Lifecycle
+
+    public init(fileURL: URL) {
+        self.init(mode: .arabic, fileURL: fileURL)
+    }
+
+    public init(mode: Mode, fileURL: URL) {
+        persistence = GRDBVerseTextPersistence(fileURL: fileURL, textTable: mode.tabelName)
+    }
+
+    // MARK: Public
 
     public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
         try await persistence.textForVerses(verses, transform: textFromRow)
@@ -175,6 +175,7 @@ private struct GRDBVerseTextPersistence {
     func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
         try await db.read { db in
             // TODO: Use match for FTS.
+            // Use like to match "_" in the Arabic regex as `match` treats "_" as a regular character.
             let request = SQLRequest<Row>("""
             SELECT text, sura, ayah
             FROM \(sql: searchTable)

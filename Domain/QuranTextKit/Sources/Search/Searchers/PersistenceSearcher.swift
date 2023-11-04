@@ -11,32 +11,24 @@ import QuranText
 import VerseTextPersistence
 
 struct PersistenceSearcher: Searcher {
-    // MARK: Internal
-
     let versePersistence: SearchableTextPersistence
     let source: SearchResults.Source
 
-    func autocomplete(term: String, quran: Quran) async throws -> [String] {
-        let processedTerm = termProcessor.prepareSearchTermForAutocompletion(term)
-        if processedTerm.isEmpty {
-            return []
-        }
-        let matches = try await versePersistence.autocomplete(term: processedTerm)
-        return resultsProcessor.buildAutocompletions(searchResults: matches, term: processedTerm)
+    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [String] {
+        let matches = try await versePersistence.autocomplete(term: term.persistenceQuery)
+        return term.buildAutocompletions(searchResults: matches)
     }
 
-    func search(for term: String, quran: Quran) async throws -> [SearchResults] {
-        let processedTerm = termProcessor.prepareSearchTermForSearching(term)
-        if processedTerm.searchTerm.isEmpty {
+    func search(for term: SearchTerm, quran: Quran) async throws -> [SearchResults] {
+        // Replace certainCharacters with similar other
+        let persistenceSearchTerm = term.persistenceQueryReplacingArabicSimilarityCharactersWithUnderscore()
+        if persistenceSearchTerm.isEmpty {
             return []
         }
-        let matches = try await versePersistence.search(for: processedTerm.searchTerm, quran: quran)
-        let items = resultsProcessor.buildSearchResults(searchRegex: processedTerm.pattern, verses: matches)
+        let matches = try await versePersistence.search(for: persistenceSearchTerm, quran: quran)
+
+        // Use the passed in term to match the original letters not underscoes.
+        let items = term.buildSearchResults(verses: matches)
         return [SearchResults(source: source, items: items)]
     }
-
-    // MARK: Private
-
-    private let termProcessor = SearchTermProcessor()
-    private let resultsProcessor = SearchResultsProcessor()
 }

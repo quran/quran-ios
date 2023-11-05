@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2022-01-16.
 //
 
+import Localization
 import QuranKit
 import QuranText
 import SnapshotTesting
@@ -40,71 +41,93 @@ class CompositeSearcherTests: XCTestCase {
         searcher = nil
     }
 
-    func testAutocompleteNumbers() async throws {
+    func testNumbers() async throws {
         try await autocompleteNumber("4")
         try await autocompleteNumber("44")
         try await autocompleteNumber("444")
         try await autocompleteNumber("4444")
         try await autocompleteNumber("3:4")
+
+        try await testSearch(term: "1")
+        try await testSearch(term: "33")
+        try await testSearch(term: "68:1") // Verse
     }
 
-    func testSearchNumber1() async throws {
-        let result = try await searcher.search(for: "1", quran: quran)
-        assertSnapshot(matching: result, as: .json)
-    }
-
-    func testSearchNumber33() async throws {
-        let result = try await searcher.search(for: "33", quran: quran)
-        assertSnapshot(matching: result, as: .json)
-    }
-
-    func testSearchNumber605() async throws {
+    func testSearchInvalidNumber() async throws {
         let result = try await searcher.search(for: "605", quran: quran)
         XCTAssertEqual(result, [])
     }
 
-    func testSearchNumberVerse() async throws {
-        let result = try await searcher.search(for: "68:1", quran: quran)
-        assertSnapshot(matching: result, as: .json)
+    func testMatchOneSura() async throws {
+        try await testAutocomplete(term: "Al-Ahzab")
+        try await testSearch(term: "Al-Ahzab")
     }
 
-    func testAutocompleteSura() async throws {
+    func testMatchMultipleSuras() async throws {
         try await testAutocomplete(term: "Yu")
+        try await testSearch(term: "Yu")
     }
 
-    func testSearchOneSura() async throws {
-        let result = try await searcher.search(for: "Al-Ahzab", quran: quran)
-        assertSnapshot(matching: result, as: .json)
+    func testMatchSuraAndQuran() async throws {
+        try await testAutocomplete(term: "الفات") // Al-fatiha
+        try await testAutocomplete(term: "الاحۡ") // Al-Ahzab
+        try await testAutocomplete(term: "الأَعۡلَ") // Al-A'la
+
+        try await testSearch(term: "الفات") // Al-fatiha
+        try await testSearch(term: "الاحۡ") // Al-Ahzab
+        try await testSearch(term: "الأَعۡلَ") // Al-A'la
     }
 
-    func testSearchArabicSuraName() async throws {
-        let result = try await searcher.search(for: "النحل", quran: quran)
-        assertSnapshot(matching: result, as: .json)
+    func testMatchArabicSuraName() async throws {
+        try await testAutocomplete(term: "النحل")
+        try await testSearch(term: "النحل")
     }
 
-    func testSearchMultipleSura() async throws {
-        let result = try await searcher.search(for: "Yu", quran: quran)
-        assertSnapshot(matching: result, as: .json)
+    func testMatchSuraAndQuranWithIncorrectTashkeel() async throws {
+        try await testAutocomplete(term: "فُتح")
+        try await testSearch(term: "فُتح")
     }
 
-    func testAutocompleteArabicQuran() async throws {
+    func testMatchArabicQuran() async throws {
         let term = "لكنا"
         try await testAutocomplete(term: term)
+        try await testSearch(term: term)
     }
 
-    func testSearchArabicQuran() async throws {
-        let term = "لكنا"
-        let result = try await searcher.search(for: term, quran: quran)
-        assertSnapshot(matching: result, as: .json)
-    }
-
-    func testAutocompleteTranslation() async throws {
+    func testMatchTranslation() async throws {
         try await testAutocomplete(term: "All")
+        try await testSearch(term: "All")
     }
 
-    func testSearchTranslation() async throws {
-        let result = try await searcher.search(for: "All", quran: quran)
-        assertSnapshot(matching: result, as: .json)
+    func test_autocomplete_allSuras_prefixed() async throws {
+        try await enumerateAllSuras { sura, language in
+            // Autocomplete sura name unchanged.
+            let suraName = sura.localizedName(withPrefix: false, language: language)
+            let suraNamePrefix = prefixSuraName(suraName)
+            let result = try await searcher.autocomplete(term: suraNamePrefix, quran: quran)
+                .map { $0.removeInvalidSearchCharacters() }
+            let strippedSuraName = suraName.removeInvalidSearchCharacters()
+            XCTAssertTrue(result.contains(strippedSuraName), "[\(language)] \(result) doesn't contain \(strippedSuraName)")
+        }
+    }
+
+    func test_match_allSuras_removeInvalidSearchCharacters() async throws {
+        try await enumerateAllSuras { sura, language in
+            let suraName = sura.localizedName(withPrefix: false, language: language)
+            let fullSuraName = sura.localizedName(withPrefix: true, language: language)
+            let cleanedSuraName = suraName.removeInvalidSearchCharacters()
+            let cleanedSuraNamePrefix = prefixSuraName(cleanedSuraName)
+
+            // Check autocomplete partial pure letters and spaces sura name results contains the full sura name.
+            let autocompleteResult = try await searcher.autocomplete(term: cleanedSuraNamePrefix, quran: quran)
+                .map { $0.removeInvalidSearchCharacters() }
+            XCTAssertTrue(autocompleteResult.contains(cleanedSuraName), "[\(language)] \(autocompleteResult) doesn't contain \(cleanedSuraName)")
+
+            // Check search partial pure letters and spaces sura name results contains the full sura name.
+            let searchResult = try await searcher.search(for: cleanedSuraNamePrefix, quran: quran)
+                .flatMap { $0.items.map(\.text) }
+            XCTAssertTrue(searchResult.contains(fullSuraName), "[\(language)] \(searchResult) doesn't contain \(fullSuraName)")
+        }
     }
 
     // MARK: Private
@@ -123,10 +146,29 @@ class CompositeSearcherTests: XCTestCase {
         XCTAssertEqual(result, [number])
     }
 
-    private func testAutocomplete(term: String, testName: String = #function) async throws {
+    private func testAutocomplete(term: String, record: Bool = false, testName: String = #function) async throws {
         let result = try await searcher.autocomplete(term: term, quran: quran)
 
         // assert the text
-        assertSnapshot(matching: result.sorted(), as: .json, testName: testName)
+        assertSnapshot(matching: result.sorted(), as: .json, record: record, testName: testName)
+    }
+
+    private func testSearch(term: String, record: Bool = false, testName: String = #function) async throws {
+        let result = try await searcher.search(for: term, quran: quran)
+
+        // assert the text
+        assertSnapshot(matching: result, as: .json, record: record, testName: testName)
+    }
+
+    private func enumerateAllSuras(_ block: (Sura, Language) async throws -> Void) async throws {
+        for language in [Language.arabic, Language.english] {
+            for sura in quran.suras {
+                try await block(sura, language)
+            }
+        }
+    }
+
+    private func prefixSuraName(_ suraName: String) -> String {
+        suraName.count == 1 ? suraName : String(suraName.prefix(suraName.count - 1))
     }
 }

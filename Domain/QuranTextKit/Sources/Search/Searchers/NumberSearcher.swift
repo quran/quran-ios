@@ -15,14 +15,14 @@ struct NumberSearcher: Searcher {
 
     let quranVerseTextPersistence: VerseTextPersistence
 
-    func autocomplete(term: String, quran: Quran) throws -> [String] {
-        if Int(term) != nil {
-            return resultsProcessor.buildAutocompletions(searchResults: [term], term: term)
+    func autocomplete(term: SearchTerm, quran: Quran) throws -> [String] {
+        if Int(term.compactQuery) != nil {
+            return term.buildAutocompletions(searchResults: [term.compactQuery])
         }
         return []
     }
 
-    func search(for term: String, quran: Quran) async throws -> [SearchResults] {
+    func search(for term: SearchTerm, quran: Quran) async throws -> [SearchResults] {
         let items: [SearchResult] = try await search(for: term, quran: quran)
         return [SearchResults(source: .quran, items: items)]
     }
@@ -35,10 +35,8 @@ struct NumberSearcher: Searcher {
         return formatter
     }()
 
-    private let resultsProcessor = SearchResultsProcessor()
-
-    private func search(for term: String, quran: Quran) async throws -> [SearchResult] {
-        let components = parseIntArray(term)
+    private func search(for term: SearchTerm, quran: Quran) async throws -> [SearchResult] {
+        let components = parseIntArray(term.compactQuery)
         guard !components.isEmpty else {
             return []
         }
@@ -99,17 +97,11 @@ struct NumberSearcher: Searcher {
         guard !components.isEmpty, components.count <= 2 else {
             return []
         }
-        guard let first = parseInt(components[0]) else {
+        let result = components.compactMap { parseInt($0) }
+        if result.count != components.count {
             return []
         }
-        if components.count == 1 {
-            return [first]
-        } else {
-            guard let second = parseInt(components[1]) else {
-                return []
-            }
-            return [first, second]
-        }
+        return result
     }
 
     private func parseInt(_ value: String) -> Int? {

@@ -12,7 +12,7 @@ import TranslationService
 import VerseTextPersistence
 import VLogging
 
-public struct CompositeSearcher: Searcher {
+public struct CompositeSearcher {
     // MARK: Lifecycle
 
     init(
@@ -48,32 +48,39 @@ public struct CompositeSearcher: Searcher {
     // MARK: Public
 
     public func autocomplete(term: String, quran: Quran) async throws -> [String] {
-        logger.info("Autocompleting term: \(term)")
+        guard let term = SearchTerm(term) else {
+            return []
+        }
+        logger.info("Autocompleting term: \(term.compactQuery)")
 
         let autocompletions = try await simpleSearchers.asyncMap { searcher in
             try await searcher.autocomplete(term: term, quran: quran)
         }
         var results = autocompletions.flatMap { $0 }
 
-        if results.isEmpty {
-            results = try await translationsSearcher.autocomplete(term: term, quran: quran)
+        if shouldPerformTranslationSearch(simpleSearchResults: results, term: term.compactQuery) {
+            results += try await translationsSearcher.autocomplete(term: term, quran: quran)
         }
-        if !results.contains(term) {
-            results.insert(term, at: 0)
+        if !results.contains(term.compactQuery) {
+            results.insert(term.compactQuery, at: 0)
         }
         return results.orderedUnique()
     }
 
     public func search(for term: String, quran: Quran) async throws -> [SearchResults] {
-        logger.info("Search for: \(term)")
+        guard let term = SearchTerm(term) else {
+            return []
+        }
+        logger.info("Search for: \(term.compactQuery)")
+
         let searchResults = try await simpleSearchers.asyncMap { searcher in
             try await searcher.search(for: term, quran: quran)
         }
         var results = searchResults
             .flatMap { $0 }
             .filter { !$0.items.isEmpty } // Remove empty search results
-        if results.isEmpty {
-            results = try await translationsSearcher.search(for: term, quran: quran)
+        if shouldPerformTranslationSearch(simpleSearchResults: results, term: term.compactQuery) {
+            results += try await translationsSearcher.search(for: term, quran: quran)
                 .filter { !$0.items.isEmpty } // Remove empty search results
         }
 
@@ -95,5 +102,9 @@ public struct CompositeSearcher: Searcher {
         return resultsPerSource
             .map { source, items in SearchResults(source: source, items: items) }
             .sorted { $0.source < $1.source }
+    }
+
+    private func shouldPerformTranslationSearch(simpleSearchResults: [some Any], term: String) -> Bool {
+        simpleSearchResults.isEmpty || (!term.containsArabic() && !term.containsOnlyNumbers())
     }
 }

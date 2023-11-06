@@ -70,6 +70,11 @@ public actor ReadingResourcesService {
     private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
 
     private func loadResource(of reading: Reading) async {
+        if fileManager.fileExists(at: reading.directory) {
+            send(.ready, from: reading)
+            return
+        }
+
         let tag = reading.resourcesTag
         let resource = OnDemandResource(request: resourceRequestFactory([tag]))
         do {

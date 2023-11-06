@@ -29,12 +29,20 @@ final class ReadingResourcesServiceTests: XCTestCase {
         collector = PublisherCollector(service.publisher)
     }
 
-    func testResourceAvailable() async throws {
+    func test_resourceAvailable_notDownloaded() async throws {
         BundleResourceRequestFake.resourceAvailable = true
         await service.startLoadingResources()
 
         XCTAssertEqual(collector.items, [.ready])
         XCTAssertTrue(fileManager.files.contains(Reading.hafs_1405.directory))
+    }
+
+    func test_resourceNotAvailable_downloaded() async throws {
+        fileManager.files.insert(Reading.hafs_1405.directory)
+        BundleResourceRequestFake.resourceAvailable = false
+        await service.startLoadingResources()
+
+        XCTAssertEqual(collector.items, [.ready])
     }
 
     func testResourceDownloading() async throws {
@@ -61,6 +69,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertFalse(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
+    // TODO: Fix flakiness
     func testResourceSwitching() async throws {
         BundleResourceRequestFake.resourceAvailable = true
         await service.startLoadingResources()

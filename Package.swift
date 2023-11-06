@@ -65,6 +65,7 @@ private func coreTargets() -> [[Target]] {
     return [
         target(type, name: "SystemDependencies", hasTests: false, dependencies: [
             "Utilities",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
         target(type, name: "SystemDependenciesFake", hasTests: false, dependencies: [
             "SystemDependencies",

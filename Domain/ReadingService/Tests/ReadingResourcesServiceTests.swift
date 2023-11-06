@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-02-20.
 //
 
+import AsyncAlgorithms
 import AsyncUtilitiesForTesting
 import QuranKit
 import SystemDependenciesFake
@@ -21,12 +22,20 @@ final class ReadingResourcesServiceTests: XCTestCase {
             bundle.urls[reading.resourcesTag] = URL(fileURLWithPath: reading.resourcesTag)
         }
         fileManager = FileSystemFake()
+        preferencesObservingStarted = AsyncChannelEventObserver()
+        preferenceLoadingCompleted = AsyncChannelEventObserver()
         service = ReadingResourcesService(
             bundle: bundle,
             fileManager: fileManager,
+            preferencesObservingStarted: preferencesObservingStarted,
+            preferenceLoadingCompleted: preferenceLoadingCompleted,
             resourceRequestFactory: BundleResourceRequestFake.init
         )
         collector = PublisherCollector(service.publisher)
+    }
+
+    override func tearDown() {
+        service = nil
     }
 
     func test_resourceAvailable_notDownloaded() async throws {
@@ -69,19 +78,20 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertFalse(fileManager.files.contains(Reading.hafs_1405.directory))
     }
 
-    // TODO: Fix flakiness
     func testResourceSwitching() async throws {
         BundleResourceRequestFake.resourceAvailable = true
         await service.startLoadingResources()
         XCTAssertEqual(collector.items, [.ready])
         XCTAssertTrue(fileManager.files.contains(Reading.hafs_1405.directory))
 
+        await preferencesObservingStarted.waitForNextEvent()
+
         // Switch preference
         BundleResourceRequestFake.resourceAvailable = false
         BundleResourceRequestFake.downloadResult = .success(())
         ReadingPreferences.shared.reading = .hafs_1440
 
-        await Task.megaYield()
+        await preferenceLoadingCompleted.waitForNextEvent()
 
         XCTAssertEqual(collector.items, [.ready,
                                          .downloading(progress: 0),
@@ -97,4 +107,6 @@ final class ReadingResourcesServiceTests: XCTestCase {
     private var collector: PublisherCollector<ReadingResourcesService.ResourceStatus>!
     private var bundle: SystemBundleFake!
     private var fileManager: FileSystemFake!
+    private var preferenceLoadingCompleted: AsyncChannelEventObserver!
+    private var preferencesObservingStarted: AsyncChannelEventObserver!
 }

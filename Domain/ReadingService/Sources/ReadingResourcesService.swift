@@ -24,11 +24,15 @@ public actor ReadingResourcesService {
     public init(
         bundle: SystemBundle = DefaultSystemBundle(),
         fileManager: FileSystem = DefaultFileSystem(),
+        preferencesObservingStarted: EventObserver? = nil,
+        preferenceLoadingCompleted: EventObserver? = nil,
         resourceRequestFactory: @escaping (Set<String>) -> BundleResourceRequest = NSBundleResourceRequest.init
     ) {
         self.bundle = bundle
         self.fileManager = fileManager
         self.resourceRequestFactory = resourceRequestFactory
+        self.preferencesObservingStarted = preferencesObservingStarted
+        self.preferenceLoadingCompleted = preferenceLoadingCompleted
     }
 
     // MARK: Public
@@ -42,12 +46,13 @@ public actor ReadingResourcesService {
     public func startLoadingResources() async {
         await loadResource(of: preferences.reading)
 
-        readingsTask = Task {
-            for await reading in preferences.$reading.values() {
-                readingTask = Task {
-                    await loadResource(of: reading)
-                }
-                .asCancellableTask()
+        readingsTask = Task { [weak self] in
+            guard let readings = self?.preferences.$reading.values() else {
+                return
+            }
+            await self?.preferencesObservingStarted?()
+            for await reading in readings {
+                await self?.loadResourceFromReadingUpdate(reading)
             }
         }
         .asCancellableTask()
@@ -56,6 +61,11 @@ public actor ReadingResourcesService {
     public func retry() async {
         await loadResource(of: preferences.reading)
     }
+
+    // MARK: Internal
+
+    let preferenceLoadingCompleted: EventObserver?
+    let preferencesObservingStarted: EventObserver?
 
     // MARK: Private
 
@@ -68,6 +78,14 @@ public actor ReadingResourcesService {
     private let bundle: SystemBundle
     private let fileManager: FileSystem
     private let resourceRequestFactory: (Set<String>) -> BundleResourceRequest
+
+    private func loadResourceFromReadingUpdate(_ reading: Reading) {
+        readingTask = Task {
+            await self.loadResource(of: reading)
+            await self.preferenceLoadingCompleted?()
+        }
+        .asCancellableTask()
+    }
 
     private func loadResource(of reading: Reading) async {
         if fileManager.fileExists(at: reading.directory) {

@@ -49,7 +49,7 @@ class TranslationsRepositoryTests: XCTestCase {
     func test_updatedVersion() async throws {
         let translation = translations[0]
         let updatedTranslation = Translation(
-            id: translation.id,
+            id: translation.id + 45,
             displayName: translation.displayName,
             translator: translation.translator,
             translatorForeign: translation.translatorForeign,
@@ -69,11 +69,10 @@ class TranslationsRepositoryTests: XCTestCase {
         XCTAssertEqual(localResults, [updatedTranslation])
     }
 
-    // TODO: This crashes the app, we should fix it.
-    func DISABLED_test_updatedFileName() async throws {
+    func test_updatedFileName() async throws {
         let translation = translations[0]
         let updatedTranslation = Translation(
-            id: translation.id,
+            id: translation.id + 19,
             displayName: translation.displayName,
             translator: translation.translator,
             translatorForeign: translation.translatorForeign,
@@ -90,7 +89,14 @@ class TranslationsRepositoryTests: XCTestCase {
         try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
-        XCTAssertEqual(localResults, [updatedTranslation])
+
+        // Expected to create a duplicate entry if fileName changed,
+        // fileName should not change to upgrade, it's a unique value
+        // per translation
+        XCTAssertEqual(localResults.sorted(), [
+            expectedTranslation(translation, installedVersion: nil),
+            expectedTranslation(updatedTranslation, installedVersion: nil),
+        ].sorted())
     }
 
     // MARK: Private

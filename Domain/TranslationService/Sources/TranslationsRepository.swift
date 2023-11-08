@@ -71,11 +71,10 @@ public struct TranslationsRepository {
 
     private func saveCombined(translations: [Translation], localMap: [String: Translation]) async throws {
         for translation in translations {
-            if localMap[translation.fileName] != nil {
-                try await persistence.update(translation)
-            } else {
-                try await persistence.insert(translation)
+            if let oldTranslation = localMap[translation.fileName] {
+                try await persistence.remove(oldTranslation)
             }
+            try await persistence.insert(translation)
         }
     }
 }

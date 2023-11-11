@@ -6,32 +6,16 @@
 	<array>
 		<dict>
 			<key>version</key>
-			<string>1.20.3</string>
+			<string>2.2.0</string>
 			<key>items</key>
 			<array>
 				<dict>
 					<key>title</key>
-					<string>new.reciters-selection</string>
+					<string>new.mushafs</string>
 					<key>subtitle</key>
-					<string>new.reciters-selection.details</string>
+					<string>new.mushafs.details</string>
 					<key>image</key>
-					<string>headphones</string>
-				</dict>
-				<dict>
-					<key>title</key>
-					<string>new.quran-ui</string>
-					<key>subtitle</key>
-					<string>new.quran-ui.details</string>
-					<key>image</key>
-					<string>book</string>
-				</dict>
-				<dict>
-					<key>title</key>
-					<string>new.translations</string>
-					<key>subtitle</key>
-					<string>new.translations.details</string>
-					<key>image</key>
-					<string>globe</string>
+					<string>books.vertical.fill</string>
 				</dict>
 				<dict>
 					<key>title</key>
@@ -39,7 +23,15 @@
 					<key>subtitle</key>
 					<string>new.reciters.details</string>
 					<key>image</key>
-					<string>headphones</string>
+					<string>mic.fill</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.miscellaneous</string>
+					<key>subtitle</key>
+					<string>new.miscellaneous.details</string>
+					<key>image</key>
+					<string>sparkles</string>
 				</dict>
 			</array>
 		</dict>

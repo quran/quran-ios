@@ -151,13 +151,3 @@
 "new.action" = "Ga verder";
 
 "new.reciters" = "Nieuwe Reciteurs";
-"new.reciters.details" = "* %%Readers:qari_muhammad_rashad_shereef_gapless%%\n* %%Readers:qari_wadee3_alyamani_gapless%%";
-
-"new.translations" = "Vertalingen & Tafseers";
-"new.translations.details" = "* Tik lang op een vers om te zien %%Localizable:menu.translation%% voor een enkele Ayah op Arabische weergave.";
-
-"new.quran-ui" = "Quran UI";
-"new.quran-ui.details" = "* Herhaal Ayah-menu-item, om geselecteerde ayah of ayat te herhalen.\n* Ondersteuning van 2 pagina's in landschap voor iPads, iPhone Max en iPhone Plus-apparaten.\n* Pagina linker- en rechterrand.\n* Extra lettergroottes voor vertaal-UI.";
-
-"new.reciters-selection" = "Selectie van Reciteur";
-"new.reciters-selection.details" = "* Sectie die de laatste 3 recente reciteurs laat zien.\n* Sectie voor gedownloade reciteurs.";

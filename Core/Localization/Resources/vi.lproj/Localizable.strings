@@ -159,13 +159,3 @@
 "new.action" = "Tiếp";
 
 "new.reciters" = "Người đọc Mới";
-"new.reciters.details" = "* %%Người đọc:qari_muhammad_rashad_shereef_gapless%%\n* %%Người đọc:qari_wadee3_alyamani_gapless%%";
-
-"new.translations" = "Bản dịch & Tafseers";
-"new.translations.details" = "* Nhấn lâu vào một câu kinh để xem %%Localizable:menu.translation%% cho một Ayah duy nhất ở chế độ xem tiếng Ả Rập.";
-
-"new.quran-ui" = "Quran UI";
-"new.quran-ui.details" = "* Lặp lại mục menu Ayah để lặp lại ayah hoặc ayat đã chọn.\n* Hỗ trợ 2 trang ở chế độ xoay ngang dành cho thiết bị iPad, iPhone Max và iPhone Plus.\n* Đường viền trái và phải của trang.\n* Kích thước phông chữ bổ sung cho giao diện bản dịch.";
-
-"new.reciters-selection" = "Chọn Người đọc";
-"new.reciters-selection.details" = "* Phần hiển thị tới 3 người đọc gần đây nhất.\n* Phần dành cho những người đọc đã tải xuống.";

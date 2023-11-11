@@ -161,14 +161,11 @@
 "new.title" = "What's new";
 "new.action" = "Continue";
 
-"new.reciters" = "New Reciters";
-"new.reciters.details" = "* %%Readers:qari_muhammad_rashad_shereef_gapless%%\n* %%Readers:qari_wadee3_alyamani_gapless%%";
+"new.mushafs" = "New Mushafs:";
+"new.mushafs.details" = "May Allah lift the oppression from our brothers and sisters in Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Madina Mushaf 1421 hijri.\n* Madina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
 
-"new.translations" = "Translations & Tafseers";
-"new.translations.details" = "* Long tap on a verse to see %%Localizable:menu.translation%% for a single Ayah on Arabic view.";
+"new.reciters" = "New Reciters:";
+"new.reciters.details" = "* %%Readers:qari_hady_toure_gapless%%\n* %%Readers:qari_ayman_suwaid_gapless%%\n* %%Readers:qari_khalid_jalil_gapless%%\n* %%Readers:qari_minshawi_mujawwad_gapless%%\n* %%Readers:qari_nabil_rifa3i_gapless%%\n* %%Readers:qari_noreen_siddiq_gapless%%\n* %%Readers:qari_tawfeeq_as_sawaigh_gapless%%";
 
-"new.quran-ui" = "Quran UI";
-"new.quran-ui.details" = "* Repeat Ayah menu item, to repeat selected ayah or ayat.\n* 2-page support on landscape for iPads, iPhone Max and iPhone Plus devices.\n* Page left and right borders.\n* Additional font sizes for translation UI.";
-
-"new.reciters-selection" = "Reciters Selection";
-"new.reciters-selection.details" = "* Section showing up to the last 3 recent reciters.\n* Section for downloaded reciters.";
+"new.miscellaneous" = "Miscellaneous:";
+"new.miscellaneous.details" = "* Updated app look.\n* Enhanced search feature (new algorithm coming soon).\n* Vietnamese localization support.\n* Advanced audio options access available when no recitation is playing.\n* App now is open source: https://github.com/quran/quran-ios";

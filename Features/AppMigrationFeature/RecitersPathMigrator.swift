@@ -8,6 +8,7 @@
 
 import AppMigrator
 import Foundation
+import Localization
 import QuranAudio
 import Utilities
 
@@ -19,7 +20,7 @@ public struct RecitersPathMigrator: Migrator {
     // MARK: Public
 
     public var blocksUI: Bool { true }
-    public var uiTitle: String? { "update.filesystem.title" }
+    public var uiTitle: String? { l("update.filesystem.title") }
 
     public func execute(update: LaunchVersionUpdate) async {
         arrangeFiles()

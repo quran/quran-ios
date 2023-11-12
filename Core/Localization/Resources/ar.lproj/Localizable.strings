@@ -1,7 +1,3 @@
-/*
- New Localizations in Quran for iOS.
- */
-
 // MARK: - General
 
 "button.done" = "تم";
@@ -64,12 +60,6 @@
 
 "ayah.menu.copy" = "نسخ";
 "ayah.menu.share" = "مشاركة...";
-
-"repetitionExperimentalSuffix" = "   (تجريبي)";
-
-"update.dark-theme.title" = "القراءة الليلية";
-"update.dark-theme.desc" = "لقد أضفنا مؤخرًا القراءة الليلية. هل ترغب في تشغيلها؟";
-"update.dark-theme.turnOn" = "تشغيل";
 
 "update.filesystem.title" = "جاري تحديث قواعد البيانات ...";
 

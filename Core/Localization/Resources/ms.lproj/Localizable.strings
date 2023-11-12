@@ -1,5 +1,5 @@
 /*
- New Localizations in Quran for iOS
+ Author: https://github.com/faizmokh
  */
 
 "NetworkError_ConnectionLost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
@@ -38,11 +38,3 @@
 "ayah.menu.copy" = "Salin";
 "ayah.menu.share" = "Kongsi...";
 "ayah.menu.repeat" = "Ulang";
-
-"shareMarketingSuffix" = "-\nQuran - oleh Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
-
-"repetitionExperimentalSuffix" = "   (Eksperimentasi)";
-
-"update.dark-theme.title" = "Tema Gelap";
-"update.dark-theme.desc" = "Kami baru menambahkan tema gelap ke aplikasi ini. Anda ingin menghidupkannya?";
-"update.dark-theme.turnOn" = "Hidupkan";

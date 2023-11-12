@@ -1,5 +1,5 @@
 /*
- New Localizations in Quran for iOS
+ Author: https://github.com/techyescountry
  */
 
 // MARK: - General
@@ -58,16 +58,7 @@
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
 "menu.verticalScrolling" = "Cuộn dọc";
 
-
 "tab.notes" = "Ghi chú";
-
-"shareMarketingSuffix" = "-\nQuran - bởi Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
-
-"repetitionExperimentalSuffix" = "   (Thử nghiệm)";
-
-"update.dark-theme.title" = "Chủ đề Tối";
-"update.dark-theme.desc" = "Chúng tôi mới thêm chủ đề Tối. Bạn có muốn bật nó lên không?";
-"update.dark-theme.turnOn" = "Bật";
 
 "update.filesystem.title" = "Nâng cấp cơ sở dữ liệu...";
 

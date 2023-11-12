@@ -8,6 +8,7 @@
 
 import AppMigrator
 import Foundation
+import Localization
 import ReciterService
 import Utilities
 
@@ -22,7 +23,7 @@ public struct FileSystemMigrator: Migrator {
     // MARK: Public
 
     public var blocksUI: Bool { true }
-    public var uiTitle: String? { "update.filesystem.title" }
+    public var uiTitle: String? { l("update.filesystem.title") }
 
     public func execute(update: LaunchVersionUpdate) async {
         await arrangeFiles()

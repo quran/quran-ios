@@ -1,5 +1,5 @@
 /*
- New Localizations in Quran for iOS
+ Author: https://github.com/abdelouali
  */
 
 // MARK: - General
@@ -58,16 +58,7 @@
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
 "menu.verticalScrolling" = "Verticaal scrollen";
 
-
 "tab.notes" = "Notities";
-
-"shareMarketingSuffix" = "-\nQuran - door Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
-
-"repetitionExperimentalSuffix" = "   (Experimenteel)";
-
-"update.dark-theme.title" = "Donker Thema";
-"update.dark-theme.desc" = "Onlangs hebben we een donker thema toegevoegd. Wilt u deze inschakelen?";
-"update.dark-theme.turnOn" = "Schakel in";
 
 "update.filesystem.title" = "Databases bijwerken...";
 

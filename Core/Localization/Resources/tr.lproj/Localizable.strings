@@ -53,14 +53,6 @@
 
 "tab.notes" = "Notlar";
 
-"shareMarketingSuffix" = "-\nQuran - by Quran.com - قرآن\nhttps://itunes.apple.com/app/id1118663303";
-
-"repetitionExperimentalSuffix" = "   (Deneysel)";
-
-"update.dark-theme.title" = "Koyu Tema";
-"update.dark-theme.desc" = "Uygulamamıza koyu tema ekledik. Denemek ister misiniz?";
-"update.dark-theme.turnOn" = "Etkinleştir";
-
 "update.filesystem.title" = "Veritabanı güncelleniyor...";
 
 "theme.light" = "Açık";

@@ -34,7 +34,7 @@ public class MigrationViewController: BaseViewController {
     public func setTitles(_ titles: Set<String>) {
         loadViewIfNeeded()
         textLabel.numberOfLines = 0
-        textLabel.text = titles.map { l($0) }.joined(separator: "\n")
+        textLabel.text = titles.joined(separator: "\n")
     }
 
     // MARK: Internal

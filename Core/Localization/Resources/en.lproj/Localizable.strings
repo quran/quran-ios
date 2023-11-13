@@ -1,3 +1,8 @@
+/*
+  Quran iOS app localization. Other localizations are from Android repo.
+ */
+
+
 // MARK: - General
 
 "button.done" = "Done";
@@ -64,6 +69,7 @@
 "menu.twoPages" = "2 pages side-by-side (in landscape)";
 "menu.verticalScrolling" = "Vertical scrolling";
 
+// Theme
 "theme.light" = "Light";
 "theme.dark" = "Dark";
 "theme.auto" = "Auto";
@@ -133,23 +139,28 @@
 
 // MARK: - Reading Selector
 
+// Selector UI
 "reading.selector.selectMushaf.short" = "Select";
 "reading.selector.selectMushaf.long" = "Set as current Mushaf";
 "reading.selector.title" = "Choose Mushaf";
 "reading.selector.selection-description" = "Tap on a Mushaf for more information.";
 
+// Hafs 1405
 "reading.hafs-1405.title" = "Hafs, classic Madina, 1405 AH";
 "reading.hafs-1405.description" = "The classic hafs Mushaf issued in Madina in 1405 Hijri. The app used to offer this version for a long time.\nFrom the King Fahd Quran Printing Complex.";
 "reading.hafs-1405.properties" = "Hafs Mushaf\nIssued in 1405 Hijri\n604 pages\n15-line page\nWord-by-word translation";
 
+// Hafs 1421
 "reading.hafs-1421.title" = "Hafs, Madina, 1421 AH";
 "reading.hafs-1421.description" = "The hafs Mushaf issued in Madina in 1421 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1421.properties" = "Hafs Mushaf\nIssued in 1421 Hijri\n604 pages\n15-line page\n!No Word-by-word translation";
 
+// Hafs 1440
 "reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
 "reading.hafs-1440.description" = "The hafs Mushaf issued in Madina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1440.properties" = "Hafs Mushaf\nIssued in 1440 Hijri\n604 pages\n15-line page\n!No Word-by-word translation";
 
+// Hafs Tajweed
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "The tajweed hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
 "reading.tajweed.properties" = "Hafs Mushaf\n604 pages\n15-line page\nWord-by-word translation";
@@ -159,11 +170,14 @@
 "new.title" = "What's new";
 "new.action" = "Continue";
 
+// Mushafs
 "new.mushafs" = "New Mushafs:";
 "new.mushafs.details" = "May Allah lift the oppression from our brothers and sisters in Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Madina Mushaf 1421 hijri.\n* Madina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
 
+// Reciters
 "new.reciters" = "New Reciters:";
 "new.reciters.details" = "* %%Readers:qari_hady_toure_gapless%%\n* %%Readers:qari_ayman_suwaid_gapless%%\n* %%Readers:qari_khalid_jalil_gapless%%\n* %%Readers:qari_minshawi_mujawwad_gapless%%\n* %%Readers:qari_nabil_rifa3i_gapless%%\n* %%Readers:qari_noreen_siddiq_gapless%%\n* %%Readers:qari_tawfeeq_as_sawaigh_gapless%%";
 
+// Miscellaneous
 "new.miscellaneous" = "Miscellaneous:";
 "new.miscellaneous.details" = "* Updated app look.\n* Enhanced search feature (new algorithm coming soon).\n* Vietnamese localization support.\n* Advanced audio options access available when no recitation is playing.\n* App now is open source: https://github.com/quran/quran-ios";

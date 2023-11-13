@@ -1,6 +1,7 @@
 /*
- Author: https://github.com/abdelouali
+  Author: https://github.com/abdelouali
  */
+
 
 // MARK: - General
 
@@ -24,6 +25,11 @@
 "ayah" = "Ayah";
 "surah" = "Soera";
 
+// MARK: - Translation
+
+"translationTextType" = "Vertaling";
+"transliterationTextType" = "Transliteratie";
+
 
 "translatorLabel: " = "Vertaler: ";
 "upgradeTranslationButtonTitle" = "BIJWERKEN";
@@ -32,6 +38,8 @@
 "noAvailableTranslationText" = "Er is geen vertaling beschikbaar voor deze ayah.";
 "referenceVerseTranslationText" = "Zie ayah %d.";
 
+"ayah.text.read-more" = "Lees Meer";
+
 // MARK: - Search
 
 "searchRecentsTitle" = "Recente zoekopdrachten";
@@ -39,13 +47,14 @@
 "searchPlaceholder" = "Soera, vers, vertaling, tafseer en nummers";
 "searchResultTitle" = "%@ (%d)";
 
-"translationTextType" = "Vertaling";
-"transliterationTextType" = "Transliteratie";
+// MARK: - Settings
 
 "write_review" = "Schrijf een app store-recensie...";
 "contact_us" = "Contacteer ons";
 "share_app" = "Deel de app...";
 "app_version" = "App Versie";
+
+// MARK: - Quran Menu
 
 "menu.arabic" = "Arabisch";
 "menu.translation" = "Vertaling/Tafseer";
@@ -58,14 +67,21 @@
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
 "menu.verticalScrolling" = "Verticaal scrollen";
 
-"tab.notes" = "Notities";
-
-"update.filesystem.title" = "Databases bijwerken...";
-
+// Theme
 "theme.light" = "Licht";
 "theme.dark" = "Donker";
 "theme.auto" = "Auto";
 "theme.auto.message" = "De Koran-app houdt zich aan de weergave-instelling van uw iPhone";
+
+// MARK: - Tabs
+
+"tab.notes" = "Notities";
+
+// MARK: - Update
+
+"update.filesystem.title" = "Databases bijwerken...";
+
+// MARK: - Reciters
 
 "reciters.title" = "Selecteer de reciteerder om naar te luisteren";
 "reciters.recent" = "Recent";
@@ -119,26 +135,36 @@
 "ayah.menu.delete-note" = "Verwijder Notitie";
 "ayah.menu.delete-highlight" = "Verwijder Hoogtepunt";
 
-"ayah.text.read-more" = "Lees Meer";
-
 // MARK: - Reading Selector
 
+// Selector UI
 "reading.selector.selectMushaf.short" = "Selecteer";
 "reading.selector.selectMushaf.long" = "Stel in als huidige Mushaf";
 "reading.selector.title" = "Kies Musaf";
 "reading.selector.selection-description" = "Tik op een Mushaf voor meer informatie.";
 
+// Hafs 1405
 "reading.hafs-1405.title" = "Hafs, klassieke Madina, 1405 AH";
 "reading.hafs-1405.description" = "De klassieke hafs Mushaf, uitgegeven in Madina in 1405 Hijri. De app bood deze versie lange tijd aan.\nUit het King Fahd Quran Printing Complex.";
 "reading.hafs-1405.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\nWoord-voor-woord vertaling";
 
+// Hafs 1421
+
+// Hafs 1440
 "reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
 "reading.hafs-1440.description" = "De hafs Mushaf uitgegeven in Medina in 1440 Hijri. Van het King Fahd Quran Printing Complex.";
 "reading.hafs-1440.properties" = "Hafs Mushaf\nUitgegeven in 1405 Hijri\n604 pagina's\nPagina van 15 regels\n!Woord-voor-woord vertaling";
+
+// Hafs Tajweed
 
 // MARK: - What's new
 
 "new.title" = "Wat is er nieuw";
 "new.action" = "Ga verder";
 
+// Mushafs
+
+// Reciters
 "new.reciters" = "Nieuwe Reciteurs";
+
+// Miscellaneous

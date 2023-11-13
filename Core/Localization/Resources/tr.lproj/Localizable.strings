@@ -1,6 +1,7 @@
 /*
- Author: Salih Aydin <slhydn@icloud.com>
+  Author: Salih Aydin <slhydn@icloud.com>
  */
+
 
 // MARK: - General
 
@@ -24,6 +25,11 @@
 "ayah" = "Ayet";
 "surah" = "Sure";
 
+// MARK: - Translation
+
+"translationTextType" = "Meal";
+"transliterationTextType" = "Okunuşu";
+
 
 "translatorLabel: " = "Çevirmen: ";
 "upgradeTranslationButtonTitle" = "GÜNCELLE";
@@ -31,16 +37,21 @@
 "errorInTranslationText" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
 "noAvailableTranslationText" = "Bu Ayetin meali bulunmamaktadır.";
 
+"ayah.text.read-more" = "Daha fazlası";
+
+// MARK: - Search
+
 "searchRecentsTitle" = "Son aramalar";
 "searchPopularTitle" = "Bununla aramayı deneyin";
 "searchPlaceholder" = "Sure, ayet, meal, tefsir, and numaralar";
 
-"translationTextType" = "Meal";
-"transliterationTextType" = "Okunuşu";
+// MARK: - Settings
 
 "write_review" = "Uygulamamızı AppStore'de değerlendirin...";
 "contact_us" = "Bizimle iletişime geçin!";
 "share_app" = "Uygulamayı paylaşın...";
+
+// MARK: - Quran Menu
 
 "menu.arabic" = "Arapça";
 "menu.translation" = "Meal";
@@ -51,14 +62,21 @@
 "menu.translationFontSize" = "Çeviri Boyutu";
 "menu.arabicFontSize" = "Kuran Boyutu";
 
-"tab.notes" = "Notlar";
-
-"update.filesystem.title" = "Veritabanı güncelleniyor...";
-
+// Theme
 "theme.light" = "Açık";
 "theme.dark" = "Koyu";
 "theme.auto" = "Otomatik";
 "theme.auto.message" = "Kur'an uygulamasının teması iPhone ayarlarına göre belirlenecek";
+
+// MARK: - Tabs
+
+"tab.notes" = "Notlar";
+
+// MARK: - Update
+
+"update.filesystem.title" = "Veritabanı güncelleniyor...";
+
+// MARK: - Reciters
 
 "reciters.title" = "Dinlemek istediğiniz hafızı seçiniz";
 "reciters.recent" = "Son";
@@ -74,6 +92,7 @@
 
 "audio.select-start-verse" = "Başlangıç Ayetini Seçin";
 "audio.select-end-verse" = "Son Ayeti Seçin";
+
 
 // MARK: - Bookmarks
 
@@ -94,8 +113,8 @@
 
 "ayah.menu.copy" = "Kopyala";
 "ayah.menu.share" = "Paylaş...";
-"ayah.menu.repeat" = "Tekrarlamak";
 "ayah.menu.play-end-juz" = "Cüzün sonuna kadar";
+"ayah.menu.repeat" = "Tekrarlamak";
 "ayah.menu.highlight" = "Vurgula";
 "ayah.menu.highlight-select-color" = "renk seç";
 "ayah.menu.add-note" = "Not Ekle";
@@ -103,15 +122,25 @@
 "ayah.menu.delete-note" = "Notu Sil";
 "ayah.menu.delete-highlight" = "Vurgulanan Yeri Sil";
 
-"ayah.text.read-more" = "Daha fazlası";
+// MARK: - Reading Selector
+
+// Selector UI
+
+// Hafs 1405
+
+// Hafs 1421
+
+// Hafs 1440
+
+// Hafs Tajweed
 
 // MARK: - What's new
 
 "new.title" = "Yenilikler";
 "new.action" = "Devam Et";
 
-"new.bookmarks-notes" = "Ayraç & Notlar";
-"new.bookmarks-notes.details" = "* Uygulama ayraçlarınızı, kaldığınız sayfaları ve vurguladığınız ayetleri iCloud kullanarak otomatik olarak senkronize edecektir.\n* Ayete not ekleyin.\n* Ayeti vurgulayacağınız rengi seçin.\n* Birden fazla ayeti vurgulamak için parmağınızı basılı tutup sürükleyin.";
+// Mushafs
 
-"new.audio" = "Ses";
-"new.audio.details" = "* Yeni hafız: Dr. Ayman Suwaid.\n* Ses tekrarı daha iyi bir deneyim için tekrar tasarlandı.\n* Birden fazla ayeti vurgulamak için parmağınızı basılı tutup sürükleyin, sadece seçili ayetleri dinlemek için oynatma tuşuna basın.";
+// Reciters
+
+// Miscellaneous

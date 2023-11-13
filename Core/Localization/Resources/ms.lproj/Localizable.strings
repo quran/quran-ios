@@ -1,6 +1,12 @@
 /*
- Author: https://github.com/faizmokh
+  Author: https://github.com/faizmokh
  */
+
+
+// MARK: - General
+
+
+// MARK: - Errors
 
 "NetworkError_ConnectionLost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
 "NetworkError_InternationalRoamingOff" = "Perayauan antarabangsa tidak dibenarkan. Ubah tetapan perayauan atau hidupkan Wi-Fi anda.";
@@ -12,6 +18,14 @@
 "FileSystemError_Unknown" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
 "FileSystemError_NoDiskSpace" = "Ruang storan tidak mencukupi untuk memuat turun.";
 
+// MARK: - Quran
+
+
+// MARK: - Translation
+
+"translationTextType" = "Terjemahan";
+"transliterationTextType" = "Transliterasi";
+
 
 "translatorLabel: " = "Penterjemah: ";
 "upgradeTranslationButtonTitle" = "KEMASKINI";
@@ -19,15 +33,19 @@
 "errorInTranslationText" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
 "noAvailableTranslationText" = "Tiada terjemahan untuk Ayat ini.";
 
+
+// MARK: - Search
+
 "searchRecentsTitle" = "Carian terbaharu";
 "searchPopularTitle" = "Cuba cari";
 
-"translationTextType" = "Terjemahan";
-"transliterationTextType" = "Transliterasi";
+// MARK: - Settings
 
 "write_review" = "Tinggalkan ulasan di App Store...";
 "contact_us" = "Hubungi Kami";
 "share_app" = "Kongi aplikasi ini...";
+
+// MARK: - Quran Menu
 
 "menu.arabic" = "Arab";
 "menu.translation" = "Terjemahan";
@@ -35,6 +53,52 @@
 "menu.pointer" = "Penuding terjemahan perkataan";
 "menu.fontSizeLetter" = "A";
 
+// Theme
+
+// MARK: - Tabs
+
+
+// MARK: - Update
+
+
+// MARK: - Reciters
+
+
+// MARK: - Audio
+
+
+
+
+
+// MARK: - Bookmarks
+
+
+// MARK: - Notes
+
+
+// MARK: - Ayah Menu
+
 "ayah.menu.copy" = "Salin";
 "ayah.menu.share" = "Kongsi...";
 "ayah.menu.repeat" = "Ulang";
+
+// MARK: - Reading Selector
+
+// Selector UI
+
+// Hafs 1405
+
+// Hafs 1421
+
+// Hafs 1440
+
+// Hafs Tajweed
+
+// MARK: - What's new
+
+
+// Mushafs
+
+// Reciters
+
+// Miscellaneous

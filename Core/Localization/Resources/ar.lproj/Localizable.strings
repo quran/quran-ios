@@ -1,5 +1,8 @@
 // MARK: - General
 
+
+// MARK: - General
+
 "button.done" = "تم";
 "button.delete" = "حذف";
 
@@ -21,6 +24,11 @@
 "ayah" = "آية";
 "surah" = "سورة";
 
+// MARK: - Translation
+
+"translationTextType" = "الترجمة إلى الإنجليزية";
+"transliterationTextType" = "نسخ الحروف للإنجليزية";
+
 "translations.selectedTranslations" = "المختار";
 
 "translatorLabel: " = "المفسر: ";
@@ -30,6 +38,8 @@
 "noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
 "referenceVerseTranslationText" = "انظر آية رقم %d.";
 
+"ayah.text.read-more" = "اقرأ المزيد";
+
 // MARK: - Search
 
 "searchRecentsTitle" = "عمليات البحث الأخيرة";
@@ -37,13 +47,14 @@
 "searchPlaceholder" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
 "searchResultTitle" = "(%2$d) %1$@";
 
-"translationTextType" = "الترجمة إلى الإنجليزية";
-"transliterationTextType" = "نسخ الحروف للإنجليزية";
+// MARK: - Settings
 
 "write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
 "contact_us" = "اتصل بنا";
 "share_app" = "مشاركة التطبيق...";
 "app_version" = "نسخة التطبيق";
+
+// MARK: - Quran Menu
 
 "menu.arabic" = "عربي";
 "menu.translation" = "التفاسير والتراجم";
@@ -56,17 +67,21 @@
 "menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
 "menu.verticalScrolling" = "تمرير رأسي";
 
-"tab.notes" = "الملاحظات";
-
-"ayah.menu.copy" = "نسخ";
-"ayah.menu.share" = "مشاركة...";
-
-"update.filesystem.title" = "جاري تحديث قواعد البيانات ...";
-
+// Theme
 "theme.light" = "فاتح";
 "theme.dark" = "داكن";
 "theme.auto" = "تلقائي";
 "theme.auto.message" = "سوف يلتزم تطبيق القرآن بإعداد مظهر iPhone الخاص بك";
+
+// MARK: - Tabs
+
+"tab.notes" = "الملاحظات";
+
+// MARK: - Update
+
+"update.filesystem.title" = "جاري تحديث قواعد البيانات ...";
+
+// MARK: - Reciters
 
 "reciters.title" = "اختر القارئ";
 "reciters.recent" = "الأخيرة";
@@ -103,22 +118,6 @@
 "notes.icloud.alert.title" = "مزامنة iCloud";
 "notes.icloud.alert.body" = "يستخدم التطبيق iCloud لمزامنة الإشارات المرجعية والملاحظات عبر أجهزتك. يمكنك تعطيله من جهازك من خلال إعدادات iCloud.";
 
-"reading.hafs-1405.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٠٥هـ";
-"reading.hafs-1405.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٠٥ هـ. كان التطبيق يقدم هذا الإصدار لفترة طويلة. \n إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1405.properties" = "مصحف حفص عن عاصم\nإصدار١٤٠٥ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
-
-"reading.hafs-1421.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٢١هـ";
-"reading.hafs-1421.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٢١ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1421.properties" = "مصحف حفص عن عاصم\nإصدار١٤٢١ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
-
-"reading.hafs-1440.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٤٠هـ";
-"reading.hafs-1440.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٤٠ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1440.properties" = "مصحف حفص عن عاصم\nإصدار١٤٤٠ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
-
-"reading.tajweed.title" = "مصحف التجويد";
-"reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";
-"reading.tajweed.properties" = "مصحف حفص عن عاصم\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
-
 // MARK: - Ayah Menu
 
 "ayah.menu.copy" = "نسخ";
@@ -136,24 +135,46 @@
 "ayah.menu.delete-note" = "حذف الملاحظة";
 "ayah.menu.delete-highlight" = "حذف التحديد";
 
-"ayah.text.read-more" = "اقرأ المزيد";
-
 // MARK: - Reading Selector
 
+// Selector UI
 "reading.selector.selectMushaf.short" = "اختر";
 "reading.selector.selectMushaf.long" = "اختر هذا المصحف";
 "reading.selector.title" = "اختر المصحف";
 "reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
+
+// Hafs 1405
+"reading.hafs-1405.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٠٥هـ";
+"reading.hafs-1405.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٠٥ هـ. كان التطبيق يقدم هذا الإصدار لفترة طويلة. \n إصدار مجمع الملك فهد لطباعة المصحف.";
+"reading.hafs-1405.properties" = "مصحف حفص عن عاصم\nإصدار١٤٠٥ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
+
+// Hafs 1421
+"reading.hafs-1421.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٢١هـ";
+"reading.hafs-1421.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٢١ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
+"reading.hafs-1421.properties" = "مصحف حفص عن عاصم\nإصدار١٤٢١ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
+
+// Hafs 1440
+"reading.hafs-1440.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٤٠هـ";
+"reading.hafs-1440.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٤٠ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
+"reading.hafs-1440.properties" = "مصحف حفص عن عاصم\nإصدار١٤٤٠ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
+
+// Hafs Tajweed
+"reading.tajweed.title" = "مصحف التجويد";
+"reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";
+"reading.tajweed.properties" = "مصحف حفص عن عاصم\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
 
 // MARK: - What's new
 
 "new.title" = "المضاف حديثاً";
 "new.action" = "استمر";
 
+// Mushafs
 "new.mushafs" = "مصاحف جديدة:";
 "new.mushafs.details" = "نسأل الله أن يرفع الظلم عن إخواننا وأخواتنا في غزة\n\n* مصحف حفص بالتجويد: القرآن الكريم - طبعة دار المعرفة.\n* مصحف المدينة 1421 هجري.\n* مصحف المدينة 1440 هجري.\n* بالإضافة إلى الاستمتاع بالنسخة الكلاسيكية 1405 هجري المستخدمة منذ بداية البرنامج.";
 
+// Reciters
 "new.reciters" = "قراء جدد:";
 
+// Miscellaneous
 "new.miscellaneous" = "متفرقات:";
 "new.miscellaneous.details" = "* تحديث مظهر التطبيق.\n* تحسين ميزة البحث (قادم قريباً خوارزمية بحث جديدة).\n* دعم توطين التطبيق باللغة الفيتنامية.\n* الوصول إلى خيارات الصوت المتقدمة متاح عند عدم تشغيل التلاوة.\n* التطبيق أصبح مفتوح المصدر: https://github.com/quran/quran-ios";

@@ -182,11 +182,12 @@ private struct WordPointerSelection: View {
     }
 
     private func itemText(of item: MoreMenu.TranslationPointerType) -> String {
+        // TODO: This code is repeated.
         switch item {
         case .translation:
-            return l("translationTextType")
+            return l("translation.text-type.translation")
         case .transliteration:
-            return l("transliterationTextType")
+            return l("translation.text-type.transliteration")
         }
     }
 }

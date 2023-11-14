@@ -10,15 +10,11 @@
 
 // MARK: - Errors
 
-"NetworkError_ConnectionLost" = "Internet verbinding is verbroken. Ga naar een locatie waar een meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug tot stand is gekomen.";
-"NetworkError_InternationalRoamingOff" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
-"NetworkError_NotConnectedToInternet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
-"NetworkError_ServerNotReachable" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-"unknown_error_message" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-"NetworkError_Parsing" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
-
-"FileSystemError_Unknown" = "Er is een onbekende fout opgetreden bij het toetreden van de hardeschijf van het toestel.";
-"FileSystemError_NoDiskSpace" = "Er is geen opslagruimte meer beschikbaar. Downloaden mislukt.";
+"error.message.connection_lost" = "Internet verbinding is verbroken. Ga naar een locatie waar een meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug tot stand is gekomen.";
+"error.message.international_roaming_off" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
+"error.message.not_connected_to_internet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
+"error.message.general" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
+"error.message.no_disk_space" = "Er is geen opslagruimte meer beschikbaar. Downloaden mislukt.";
 
 // MARK: - Quran
 
@@ -27,32 +23,27 @@
 
 // MARK: - Translation
 
-"translationTextType" = "Vertaling";
-"transliterationTextType" = "Transliteratie";
-
-
-"translatorLabel: " = "Vertaler: ";
-"upgradeTranslationButtonTitle" = "BIJWERKEN";
-
-"errorInTranslationText" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
-"noAvailableTranslationText" = "Er is geen vertaling beschikbaar voor deze ayah.";
-"referenceVerseTranslationText" = "Zie ayah %d.";
-
-"ayah.text.read-more" = "Lees Meer";
+"translation.text-type.translation" = "Vertaling";
+"translation.text-type.transliteration" = "Transliteratie";
+"translation.translator" = "Vertaler: ";
+"translation.text.see-referenced-verse" = "Zie ayah %d.";
+"translation.text.read-more" = "Lees Meer";
+"error.translation.text-retrieval" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
+"error.translation.text-not-available" = "Er is geen vertaling beschikbaar voor deze ayah.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "Recente zoekopdrachten";
-"searchPopularTitle" = "Probeer te zoeken met";
-"searchPlaceholder" = "Soera, vers, vertaling, tafseer en nummers";
-"searchResultTitle" = "%@ (%d)";
+"search.recents.title" = "Recente zoekopdrachten";
+"search.popular.title" = "Probeer te zoeken met";
+"search.placeholder.text" = "Soera, vers, vertaling, tafseer en nummers";
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
-"write_review" = "Schrijf een app store-recensie...";
-"contact_us" = "Contacteer ons";
-"share_app" = "Deel de app...";
-"app_version" = "App Versie";
+"setting.write_review" = "Schrijf een app store-recensie...";
+"setting.contact_us" = "Contacteer ons";
+"setting.share_app" = "Deel de app...";
+"setting.app_version" = "App Versie";
 
 // MARK: - Quran Menu
 
@@ -67,7 +58,8 @@
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
 "menu.verticalScrolling" = "Verticaal scrollen";
 
-// Theme
+// MARK: - Theme
+
 "theme.light" = "Licht";
 "theme.dark" = "Donker";
 "theme.auto" = "Auto";

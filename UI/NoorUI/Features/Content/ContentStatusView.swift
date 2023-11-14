@@ -9,6 +9,11 @@ import Localization
 import SwiftUI
 
 public struct ContentStatusView: View {
+    public enum State {
+        case downloading(progress: Double)
+        case error(_ error: Error, retry: () -> Void)
+    }
+
     // MARK: Lifecycle
 
     public init(state: State) {
@@ -16,11 +21,6 @@ public struct ContentStatusView: View {
     }
 
     // MARK: Public
-
-    public enum State {
-        case downloading(progress: Double)
-        case error(_ error: Error, retry: () -> Void)
-    }
 
     public var body: some View {
         VStack {
@@ -50,7 +50,7 @@ public struct ContentStatusView: View {
 
     private func errorView(_ error: Error, retry: @escaping () -> Void) -> some View {
         VStack {
-            Text(l("unknown_error_message"))
+            Text(l("error.message.general"))
             Text(error.localizedDescription)
                 .font(.callout)
                 .padding(.bottom)

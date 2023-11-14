@@ -10,15 +10,11 @@
 
 // MARK: - Errors
 
-"NetworkError_ConnectionLost" = "Mất kết nối mạng. Di chuyển đến nới có kết nối ổn định hơn hoặc đợi cho đến khi kết nối ổn định trở lại.";
-"NetworkError_InternationalRoamingOff" = "Chuyển vùng quốc tế không được phép. Thay đổi cài đặt chuyển vùng quốc tế hoặc bật Wi-Fi.";
-"NetworkError_NotConnectedToInternet" = "Không được kết nối với internet. Bật Wi-Fi hoặc cho phép kết nối dữ liệu di động.";
-"NetworkError_ServerNotReachable" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
-"unknown_error_message" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
-"NetworkError_Parsing" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
-
-"FileSystemError_Unknown" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
-"FileSystemError_NoDiskSpace" = "Không đủ dung lượng trống để lưu các bản tải xuống";
+"error.message.connection_lost" = "Mất kết nối mạng. Di chuyển đến nới có kết nối ổn định hơn hoặc đợi cho đến khi kết nối ổn định trở lại.";
+"error.message.international_roaming_off" = "Chuyển vùng quốc tế không được phép. Thay đổi cài đặt chuyển vùng quốc tế hoặc bật Wi-Fi.";
+"error.message.not_connected_to_internet" = "Không được kết nối với internet. Bật Wi-Fi hoặc cho phép kết nối dữ liệu di động.";
+"error.message.general" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
+"error.message.no_disk_space" = "Không đủ dung lượng trống để lưu các bản tải xuống.";
 
 // MARK: - Quran
 
@@ -27,32 +23,27 @@
 
 // MARK: - Translation
 
-"translationTextType" = "Bản dịch";
-"transliterationTextType" = "Phiên âm";
-
-
-"translatorLabel: " = "Dịch giả: ";
-"upgradeTranslationButtonTitle" = "CẬP NHẬT";
-
-"errorInTranslationText" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
-"noAvailableTranslationText" = "Không có bản dịch nào cho Ayah này.";
-"referenceVerseTranslationText" = "Xem ayah %d.";
-
-"ayah.text.read-more" = "Xem thêm";
+"translation.text-type.translation" = "Bản dịch";
+"translation.text-type.transliteration" = "Phiên âm";
+"translation.translator" = "Dịch giả: ";
+"translation.text.see-referenced-verse" = "Xem ayah %d.";
+"translation.text.read-more" = "Xem thêm";
+"error.translation.text-retrieval" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
+"error.translation.text-not-available" = "Không có bản dịch nào cho Ayah này.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "Tìm kiếm gần đây";
-"searchPopularTitle" = "Thử tìm kiếm với";
-"searchPlaceholder" = "Surah, câu kinh, bản dịch, tafseer và số";
-"searchResultTitle" = "%@ (%d)";
+"search.recents.title" = "Tìm kiếm gần đây";
+"search.popular.title" = "Thử tìm kiếm với";
+"search.placeholder.text" = "Surah, câu kinh, bản dịch, tafseer và số";
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
-"write_review" = "Đánh giá ứng dụng trên Appstore...";
-"contact_us" = "Liên hệ";
-"share_app" = "Chia sẻ ứng dụng...";
-"app_version" = "Phiên bản ứng dụng";
+"setting.write_review" = "Đánh giá ứng dụng trên Appstore...";
+"setting.contact_us" = "Liên hệ";
+"setting.share_app" = "Chia sẻ ứng dụng...";
+"setting.app_version" = "Phiên bản ứng dụng";
 
 // MARK: - Quran Menu
 
@@ -67,7 +58,8 @@
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
 "menu.verticalScrolling" = "Cuộn dọc";
 
-// Theme
+// MARK: - Theme
+
 "theme.light" = "Sáng";
 "theme.dark" = "Tối";
 "theme.auto" = "Tự động";

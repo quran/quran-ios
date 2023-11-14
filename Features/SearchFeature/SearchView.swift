@@ -71,7 +71,7 @@ private struct SearchViewUI: View {
             NoorList {
                 ForEach(searchResults) { result in
                     let plainTitle = title(of: result)
-                    let title = lFormat("searchResultTitle", plainTitle, result.items.count)
+                    let title = lFormat("search.result.count", plainTitle, result.items.count)
                     NoorSection(title: title, result.items) { item in
                         let localizedVerse = item.ayah.localizedName
                         let arabicSuraName = item.ayah.sura.arabicSuraName
@@ -115,7 +115,7 @@ private struct SearchViewUI: View {
     @ViewBuilder
     var entry: some View {
         NoorList {
-            NoorSection(title: l("searchRecentsTitle"), recents.map(SelfIdentifiable.init)) { item in
+            NoorSection(title: l("search.recents.title"), recents.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search),
                     title: .text(item.value)
@@ -124,7 +124,7 @@ private struct SearchViewUI: View {
                 }
             }
 
-            NoorSection(title: l("searchPopularTitle"), populars.map(SelfIdentifiable.init)) { item in
+            NoorSection(title: l("search.popular.title"), populars.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search),
                     title: .text(item.value)

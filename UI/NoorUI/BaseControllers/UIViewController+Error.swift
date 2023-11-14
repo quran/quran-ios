@@ -39,7 +39,7 @@ extension UIViewController {
     private func _showErrorAlert(error: Error) {
         crasher.recordError(error, reason: "showErrorAlert")
         let message = error.getErrorDescription()
-        let controller = UIAlertController(title: l("error.title"), message: message, preferredStyle: .alert)
+        let controller = UIAlertController(title: l("error.dialog.title"), message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         present(controller, animated: true)
     }
@@ -48,7 +48,7 @@ extension UIViewController {
 extension Error {
     func getErrorDescription() -> String {
         let description = (self as? LocalizedError)?.errorDescription
-        return description ?? l("unknown_error_message")
+        return description ?? l("error.message.general")
     }
 }
 

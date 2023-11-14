@@ -10,16 +10,12 @@
 
 // MARK: - Errors
 
-"error.title" = "Error";
-"NetworkError_ConnectionLost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
-"NetworkError_InternationalRoamingOff" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
-"NetworkError_NotConnectedToInternet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
-"NetworkError_ServerNotReachable" = "Oops! Something went wrong. Please try again.";
-"unknown_error_message" = "Oops! Something went wrong. Please try again.";
-"NetworkError_Parsing" = "Oops! Something went wrong. Please try again.";
-
-"FileSystemError_Unknown" = "Oops! Something went wrong. Please try again.";
-"FileSystemError_NoDiskSpace" = "No available disk space to save the downloads";
+"error.dialog.title" = "Error";
+"error.message.connection_lost" = "Internet connection is lost. Move to a location where more stable connection is available, or wait until the connection returns to be stable.";
+"error.message.international_roaming_off" = "International roaming is not allowed. Change the international roaming setting, or turn on Wi-Fi.";
+"error.message.not_connected_to_internet" = "Not connected to the internet. Turn on Wi-Fi, or allow cellular data connection.";
+"error.message.general" = "Oops! Something went wrong. Please try again.";
+"error.message.no_disk_space" = "No available disk space to save the downloads.";
 
 // MARK: - Quran
 
@@ -28,33 +24,28 @@
 
 // MARK: - Translation
 
-"translationTextType" = "Translation";
-"transliterationTextType" = "Transliteration";
-
-"translations.selectedTranslations" = "Selected";
-
-"translatorLabel: " = "Translator: ";
-"upgradeTranslationButtonTitle" = "UPDATE";
-
-"errorInTranslationText" = "Oops! Something went wrong. We couldn't retrieve the translation.";
-"noAvailableTranslationText" = "No translation available for this Ayah.";
-"referenceVerseTranslationText" = "See ayah %d.";
-
-"ayah.text.read-more" = "Read more";
+"translation.text-type.translation" = "Translation";
+"translation.text-type.transliteration" = "Transliteration";
+"translation.selectedTranslations" = "Selected";
+"translation.translator" = "Translator: ";
+"translation.text.see-referenced-verse" = "See ayah %d.";
+"translation.text.read-more" = "Read more";
+"error.translation.text-retrieval" = "Oops! Something went wrong. We couldn't retrieve the translation.";
+"error.translation.text-not-available" = "No translation available for this Ayah.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "Recent searches";
-"searchPopularTitle" = "Try searching with";
-"searchPlaceholder" = "Surah, verse, translation, tafseer, and numbers";
-"searchResultTitle" = "%@ (%d)";
+"search.recents.title" = "Recent searches";
+"search.popular.title" = "Try searching with";
+"search.placeholder.text" = "Surah, verse, translation, tafseer, and numbers";
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
-"write_review" = "Write an app store review...";
-"contact_us" = "Contact Us";
-"share_app" = "Share the app...";
-"app_version" = "App Version";
+"setting.write_review" = "Write an app store review...";
+"setting.contact_us" = "Contact Us";
+"setting.share_app" = "Share the app...";
+"setting.app_version" = "App Version";
 
 // MARK: - Quran Menu
 
@@ -69,7 +60,8 @@
 "menu.twoPages" = "2 pages side-by-side (in landscape)";
 "menu.verticalScrolling" = "Vertical scrolling";
 
-// Theme
+// MARK: - Theme
+
 "theme.light" = "Light";
 "theme.dark" = "Dark";
 "theme.auto" = "Auto";

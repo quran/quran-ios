@@ -8,42 +8,33 @@
 
 // MARK: - Errors
 
-"NetworkError_ConnectionLost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
-"NetworkError_InternationalRoamingOff" = "Perayauan antarabangsa tidak dibenarkan. Ubah tetapan perayauan atau hidupkan Wi-Fi anda.";
-"NetworkError_NotConnectedToInternet" = "Tiada sambungan internet. Hidupkan Wi-Fi atau hidupkan sambungan data selular.";
-"NetworkError_ServerNotReachable" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
-"unknown_error_message" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
-"NetworkError_Parsing" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
-
-"FileSystemError_Unknown" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
-"FileSystemError_NoDiskSpace" = "Ruang storan tidak mencukupi untuk memuat turun.";
+"error.message.connection_lost" = "Tiada sambungan internet. Ubah ke lokasi yang mempunyai internet yang stabil atau tunggu sehingga sambungan internet menjadi lebih stabil.";
+"error.message.international_roaming_off" = "Perayauan antarabangsa tidak dibenarkan. Ubah tetapan perayauan atau hidupkan Wi-Fi anda.";
+"error.message.not_connected_to_internet" = "Tiada sambungan internet. Hidupkan Wi-Fi atau hidupkan sambungan data selular.";
+"error.message.general" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
+"error.message.no_disk_space" = "Ruang storan tidak mencukupi untuk memuat turun.";
 
 // MARK: - Quran
 
 
 // MARK: - Translation
 
-"translationTextType" = "Terjemahan";
-"transliterationTextType" = "Transliterasi";
-
-
-"translatorLabel: " = "Penterjemah: ";
-"upgradeTranslationButtonTitle" = "KEMASKINI";
-
-"errorInTranslationText" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
-"noAvailableTranslationText" = "Tiada terjemahan untuk Ayat ini.";
-
+"translation.text-type.translation" = "Terjemahan";
+"translation.text-type.transliteration" = "Transliterasi";
+"translation.translator" = "Penterjemah: ";
+"error.translation.text-retrieval" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
+"error.translation.text-not-available" = "Tiada terjemahan untuk Ayat ini.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "Carian terbaharu";
-"searchPopularTitle" = "Cuba cari";
+"search.recents.title" = "Carian terbaharu";
+"search.popular.title" = "Cuba cari";
 
 // MARK: - Settings
 
-"write_review" = "Tinggalkan ulasan di App Store...";
-"contact_us" = "Hubungi Kami";
-"share_app" = "Kongi aplikasi ini...";
+"setting.write_review" = "Tinggalkan ulasan di App Store...";
+"setting.contact_us" = "Hubungi Kami";
+"setting.share_app" = "Kongi aplikasi ini...";
 
 // MARK: - Quran Menu
 
@@ -53,7 +44,8 @@
 "menu.pointer" = "Penuding terjemahan perkataan";
 "menu.fontSizeLetter" = "A";
 
-// Theme
+// MARK: - Theme
+
 
 // MARK: - Tabs
 

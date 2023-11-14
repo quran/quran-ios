@@ -147,7 +147,7 @@ public struct QuranTextDataService {
         do {
             let versesText = try await translationPersistence.textForVerses(verses)
             for verse in verses {
-                let text = versesText[verse] ?? .string(l("noAvailableTranslationText"))
+                let text = versesText[verse] ?? .string(l("error.translation.text-not-available"))
                 verseTextList.append(translationText(text))
             }
         } catch {
@@ -155,7 +155,7 @@ public struct QuranTextDataService {
                 error,
                 reason: "Issue getting verse \(verses), translation: \(translation.id)"
             )
-            let errorText = l("errorInTranslationText")
+            let errorText = l("error.translation.text-retrieval")
             for _ in verses {
                 verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footerRanges: [])))
             }

@@ -24,9 +24,9 @@ struct MoreMenuWordPointerType: View {
     var typeText: String {
         switch type {
         case .translation:
-            return l("translationTextType")
+            return l("translation.text-type.translation")
         case .transliteration:
-            return l("transliterationTextType")
+            return l("translation.text-type.transliteration")
         }
     }
 }

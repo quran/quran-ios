@@ -45,7 +45,7 @@ struct ErrorAlertModifier: ViewModifier {
                 crasher.recordError(error, reason: "ErrorModifier")
                 if let retry {
                     return Alert(
-                        title: Text(l("error.title")),
+                        title: Text(l("error.dialog.title")),
                         message: Text(error.getErrorDescription()),
                         primaryButton: .default(Text(lAndroid("download_retry"))) {
                             Task {
@@ -56,13 +56,13 @@ struct ErrorAlertModifier: ViewModifier {
                     )
                 } else {
                     return Alert(
-                        title: Text(l("error.title")),
+                        title: Text(l("error.dialog.title")),
                         message: Text(error.getErrorDescription())
                     )
                 }
             } else {
                 return Alert(
-                    title: Text(l("error.title")),
+                    title: Text(l("error.dialog.title")),
                     message: Text("")
                 )
             }

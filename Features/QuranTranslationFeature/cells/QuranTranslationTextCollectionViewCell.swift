@@ -162,7 +162,7 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationItemCollectionView
             .foregroundColor: UIColor.secondaryLabel.resolvedColor(with: traitCollection),
         ]
         let ellipsis = NSAttributedString(string: "\u{2026}", attributes: attributes)
-        let readMore = NSAttributedString(string: l("ayah.text.read-more"), attributes: attributes)
+        let readMore = NSAttributedString(string: l("translation.text.read-more"), attributes: attributes)
 
         let text = NSMutableAttributedString(attributedString: ellipsis)
         text.mutableString.append(" ")

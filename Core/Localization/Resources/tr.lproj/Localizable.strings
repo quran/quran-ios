@@ -10,15 +10,11 @@
 
 // MARK: - Errors
 
-"NetworkError_ConnectionLost" = "İnternet bağlantısı bulunamadı. İnternet bağlantısının daha stabil olduğu bir yere geçin veya düzelene kadar bekleyin.";
-"NetworkError_InternationalRoamingOff" = "Uluslararası dolaşıma izin verilmedi. Uluslararası dolaşım ayarlarını değiştirin veya bir kablosuz ağa bağlanın.";
-"NetworkError_NotConnectedToInternet" = "İnternet bağlantısı bulunamadı. Kablosuz bağlantıyı veya hücresel ağ bağlantısını etkinleştirin.";
-"NetworkError_ServerNotReachable" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
-"unknown_error_message" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
-"NetworkError_Parsing" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
-
-"FileSystemError_Unknown" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
-"FileSystemError_NoDiskSpace" = "İndirilenleri kaydetmek için disk alanı yetersiz";
+"error.message.connection_lost" = "İnternet bağlantısı bulunamadı. İnternet bağlantısının daha stabil olduğu bir yere geçin veya düzelene kadar bekleyin.";
+"error.message.international_roaming_off" = "Uluslararası dolaşıma izin verilmedi. Uluslararası dolaşım ayarlarını değiştirin veya bir kablosuz ağa bağlanın.";
+"error.message.not_connected_to_internet" = "İnternet bağlantısı bulunamadı. Kablosuz bağlantıyı veya hücresel ağ bağlantısını etkinleştirin.";
+"error.message.general" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
+"error.message.no_disk_space" = "İndirilenleri kaydetmek için disk alanı yetersiz.";
 
 // MARK: - Quran
 
@@ -27,29 +23,24 @@
 
 // MARK: - Translation
 
-"translationTextType" = "Meal";
-"transliterationTextType" = "Okunuşu";
-
-
-"translatorLabel: " = "Çevirmen: ";
-"upgradeTranslationButtonTitle" = "GÜNCELLE";
-
-"errorInTranslationText" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
-"noAvailableTranslationText" = "Bu Ayetin meali bulunmamaktadır.";
-
-"ayah.text.read-more" = "Daha fazlası";
+"translation.text-type.translation" = "Meal";
+"translation.text-type.transliteration" = "Okunuşu";
+"translation.translator" = "Çevirmen: ";
+"translation.text.read-more" = "Daha fazlası";
+"error.translation.text-retrieval" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
+"error.translation.text-not-available" = "Bu Ayetin meali bulunmamaktadır.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "Son aramalar";
-"searchPopularTitle" = "Bununla aramayı deneyin";
-"searchPlaceholder" = "Sure, ayet, meal, tefsir, and numaralar";
+"search.recents.title" = "Son aramalar";
+"search.popular.title" = "Bununla aramayı deneyin";
+"search.placeholder.text" = "Sure, ayet, meal, tefsir, and numaralar";
 
 // MARK: - Settings
 
-"write_review" = "Uygulamamızı AppStore'de değerlendirin...";
-"contact_us" = "Bizimle iletişime geçin!";
-"share_app" = "Uygulamayı paylaşın...";
+"setting.write_review" = "Uygulamamızı AppStore'de değerlendirin...";
+"setting.contact_us" = "Bizimle iletişime geçin!";
+"setting.share_app" = "Uygulamayı paylaşın...";
 
 // MARK: - Quran Menu
 
@@ -62,7 +53,8 @@
 "menu.translationFontSize" = "Çeviri Boyutu";
 "menu.arabicFontSize" = "Kuran Boyutu";
 
-// Theme
+// MARK: - Theme
+
 "theme.light" = "Açık";
 "theme.dark" = "Koyu";
 "theme.auto" = "Otomatik";

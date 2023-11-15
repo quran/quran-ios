@@ -19,9 +19,9 @@ extension FileSystemError: LocalizedError {
         let text: String
         switch self {
         case .unknown:
-            text = l("FileSystemError_Unknown")
+            text = l("error.message.general")
         case .noDiskSpace:
-            text = l("FileSystemError_NoDiskSpace")
+            text = l("error.message.no_disk_space")
         }
         return text
     }
@@ -30,18 +30,20 @@ extension FileSystemError: LocalizedError {
 extension NetworkError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .unknown: return l("unknown_error_message")
-        case .serverError: return l("unknown_error_message")
-        case .notConnectedToInternet: return l("NetworkError_NotConnectedToInternet")
-        case .internationalRoamingOff: return l("NetworkError_InternationalRoamingOff")
-        case .serverNotReachable: return l("NetworkError_ServerNotReachable")
-        case .connectionLost: return l("NetworkError_ConnectionLost")
+        case .unknown, .serverError, .serverNotReachable:
+            return l("error.message.general")
+        case .notConnectedToInternet:
+            return l("error.message.not_connected_to_internet")
+        case .internationalRoamingOff:
+            return l("error.message.international_roaming_off")
+        case .connectionLost:
+            return l("error.message.connection_lost")
         }
     }
 }
 
 extension PersistenceError: LocalizedError {
     public var errorDescription: String? {
-        l("unknown_error_message")
+        l("error.message.general")
     }
 }

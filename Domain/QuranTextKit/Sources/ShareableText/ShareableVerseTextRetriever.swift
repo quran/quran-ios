@@ -106,7 +106,7 @@ public struct ShareableVerseTextRetriever {
     private func stringFromTranslationText(_ text: TranslationText) -> String {
         switch text {
         case .reference(let verse):
-            return lFormat("referenceVerseTranslationText", verse.ayah)
+            return lFormat("translation.text.see-referenced-verse", verse.ayah)
         case .string(let string):
             return string.text
         }

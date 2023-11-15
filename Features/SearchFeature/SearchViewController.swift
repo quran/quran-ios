@@ -40,7 +40,7 @@ final class SearchViewController: UIHostingController<SearchView>, UISearchResul
 
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = true
-        searchController.searchBar.placeholder = l("searchPlaceholder")
+        searchController.searchBar.placeholder = l("search.placeholder.text")
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         navigationItem.searchController = searchController

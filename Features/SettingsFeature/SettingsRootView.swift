@@ -86,21 +86,21 @@ private struct SettingsRootViewUI: View {
             NoorBasicSection {
                 NoorListItem(
                     image: .init(.share),
-                    title: .text(l("share_app")),
+                    title: .text(l("setting.share_app")),
                     accessory: .disclosureIndicator,
                     action: shareApp
                 )
 
                 NoorListItem(
                     image: .init(.star),
-                    title: .text(l("write_review")),
+                    title: .text(l("setting.write_review")),
                     accessory: .disclosureIndicator,
                     action: writeReview
                 )
 
                 NoorListItem(
                     image: .init(.mail),
-                    title: .text(l("contact_us")),
+                    title: .text(l("setting.contact_us")),
                     accessory: .disclosureIndicator,
                     action: contactUs
                 )

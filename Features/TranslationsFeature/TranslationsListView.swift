@@ -63,7 +63,7 @@ private struct TranslationsListViewUI: View {
             }
 
             TranslationsListSection(
-                title: l("translations.selectedTranslations"),
+                title: l("translation.selectedTranslations"),
                 items: selectedTranslations,
                 listItem: { item in
                     listItem(item, downloaded: true, image: NoorSystemImage.checkmark_checked) {
@@ -168,7 +168,7 @@ private struct TranslationsListViewUI: View {
     func subtitle(of translation: Translation) -> NoorListItem.Subtitle? {
         if let translatorDisplayName = translation.translatorDisplayName, !translatorDisplayName.isEmpty {
             return .init(
-                label: l("translatorLabel: "),
+                label: l("translation.translator"),
                 text: translatorDisplayName,
                 location: .bottom
             )

@@ -7,16 +7,12 @@
 
 // MARK: - Errors
 
-"error.title" = "خطأ";
-"NetworkError_ConnectionLost" = "فقد الإتصال بشبكة الإنترنت. من فضلك تحرك إلى مكان به إشارة أفضل.";
-"NetworkError_InternationalRoamingOff" = "لا يسمح باستخدام التجوال الدولي. من فضلك قم بتغيير إعدادات خدمة التجوال الدولي، أو إتصل بالإنترنت عن طريق Wi-Fi.";
-"NetworkError_NotConnectedToInternet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";
-"NetworkError_ServerNotReachable" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-"unknown_error_message" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-"NetworkError_Parsing" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-
-"FileSystemError_Unknown" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-"FileSystemError_NoDiskSpace" = "لا توجد مساحة كافيه في ذاكرة الهاتف لحفظ التنزيلات.";
+"error.dialog.title" = "خطأ";
+"error.message.connection_lost" = "فقد الإتصال بشبكة الإنترنت. من فضلك تحرك إلى مكان به إشارة أفضل.";
+"error.message.international_roaming_off" = "لا يسمح باستخدام التجوال الدولي. من فضلك قم بتغيير إعدادات خدمة التجوال الدولي، أو إتصل بالإنترنت عن طريق Wi-Fi.";
+"error.message.not_connected_to_internet" = "لا يوجد إتصال بشبكة الإنترنت. من فضلك قم بتشغيل Wi-Fi، أو السماح باتصال البيانات الخلوية.";
+"error.message.general" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"error.message.no_disk_space" = "لا توجد مساحة كافيه في ذاكرة الهاتف لحفظ التنزيلات.";
 
 // MARK: - Quran
 
@@ -25,33 +21,28 @@
 
 // MARK: - Translation
 
-"translationTextType" = "الترجمة إلى الإنجليزية";
-"transliterationTextType" = "نسخ الحروف للإنجليزية";
-
-"translations.selectedTranslations" = "المختار";
-
-"translatorLabel: " = "المفسر: ";
-"upgradeTranslationButtonTitle" = "تحديث";
-
-"errorInTranslationText" = "عفوا. حدث خطأ، حاول مرة اخرى.";
-"noAvailableTranslationText" = "لا توجد ترجمة متاحة لهذه الآية.";
-"referenceVerseTranslationText" = "انظر آية رقم %d.";
-
-"ayah.text.read-more" = "اقرأ المزيد";
+"translation.text-type.translation" = "الترجمة إلى الإنجليزية";
+"translation.text-type.transliteration" = "نسخ الحروف للإنجليزية";
+"translation.selectedTranslations" = "المختار";
+"translation.translator" = "المفسر: ";
+"translation.text.see-referenced-verse" = "انظر آية رقم %d.";
+"translation.text.read-more" = "اقرأ المزيد";
+"error.translation.text-retrieval" = "عفوا. حدث خطأ، حاول مرة اخرى.";
+"error.translation.text-not-available" = "لا توجد ترجمة متاحة لهذه الآية.";
 
 // MARK: - Search
 
-"searchRecentsTitle" = "عمليات البحث الأخيرة";
-"searchPopularTitle" = "اختبر البحث بإستخدام";
-"searchPlaceholder" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
-"searchResultTitle" = "(%2$d) %1$@";
+"search.recents.title" = "عمليات البحث الأخيرة";
+"search.popular.title" = "اختبر البحث بإستخدام";
+"search.placeholder.text" = "سور أو آيات أو تفاسير أو ترجمات أو الأرقام";
+"search.result.count" = "(%2$d) %1$@";
 
 // MARK: - Settings
 
-"write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
-"contact_us" = "اتصل بنا";
-"share_app" = "مشاركة التطبيق...";
-"app_version" = "نسخة التطبيق";
+"setting.write_review" = "قيم التطبيق على المتجر الالكتروني‎...";
+"setting.contact_us" = "اتصل بنا";
+"setting.share_app" = "مشاركة التطبيق...";
+"setting.app_version" = "نسخة التطبيق";
 
 // MARK: - Quran Menu
 
@@ -66,7 +57,8 @@
 "menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
 "menu.verticalScrolling" = "تمرير رأسي";
 
-// Theme
+// MARK: - Theme
+
 "theme.light" = "فاتح";
 "theme.dark" = "داكن";
 "theme.auto" = "تلقائي";

@@ -136,26 +136,30 @@
 "reading.selector.selectMushaf.long" = "Set as current Mushaf";
 "reading.selector.title" = "Choose Mushaf";
 "reading.selector.selection-description" = "Tap on a Mushaf for more information.";
+"reading.selector.property.hafs" = "Hafs Mushaf";
+"reading.selector.property.pages.604" = "604 pages";
+"reading.selector.property.lines.15" = "15-line page";
+"reading.selector.property.word-translation.supported" = "Word-by-word translation";
+"reading.selector.property.word-translation.not-supported" = "No Word-by-word translation";
 
 // Hafs 1405
 "reading.hafs-1405.title" = "Hafs, classic Madina, 1405 AH";
 "reading.hafs-1405.description" = "The classic hafs Mushaf issued in Madina in 1405 Hijri. The app used to offer this version for a long time.\nFrom the King Fahd Quran Printing Complex.";
-"reading.hafs-1405.properties" = "Hafs Mushaf\nIssued in 1405 Hijri\n604 pages\n15-line page\nWord-by-word translation";
+"reading.hafs-1405.issue" = "Issued in 1405 Hijri";
 
 // Hafs 1421
 "reading.hafs-1421.title" = "Hafs, Madina, 1421 AH";
 "reading.hafs-1421.description" = "The hafs Mushaf issued in Madina in 1421 Hijri. From the King Fahd Quran Printing Complex.";
-"reading.hafs-1421.properties" = "Hafs Mushaf\nIssued in 1421 Hijri\n604 pages\n15-line page\n!No Word-by-word translation";
+"reading.hafs-1421.issue" = "Issued in 1421 Hijri";
 
 // Hafs 1440
 "reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
 "reading.hafs-1440.description" = "The hafs Mushaf issued in Madina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
-"reading.hafs-1440.properties" = "Hafs Mushaf\nIssued in 1440 Hijri\n604 pages\n15-line page\n!No Word-by-word translation";
+"reading.hafs-1440.issue" = "Issued in 1440 Hijri";
 
 // Hafs Tajweed
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "The tajweed hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
-"reading.tajweed.properties" = "Hafs Mushaf\n604 pages\n15-line page\nWord-by-word translation";
 
 // MARK: - What's new
 

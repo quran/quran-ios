@@ -133,26 +133,30 @@
 "reading.selector.selectMushaf.long" = "اختر هذا المصحف";
 "reading.selector.title" = "اختر المصحف";
 "reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
+"reading.selector.property.hafs" = "مصحف حفص عن عاصم";
+"reading.selector.property.pages.604" = "٦٠٤ صفحة";
+"reading.selector.property.lines.15" = "١٥ سطرًا بالصفحة";
+"reading.selector.property.word-translation.supported" = "يدعم ترجمة الكلمات";
+"reading.selector.property.word-translation.not-supported" = "لا يدعم ترجمة الكلمات";
 
 // Hafs 1405
 "reading.hafs-1405.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٠٥هـ";
 "reading.hafs-1405.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٠٥ هـ. كان التطبيق يقدم هذا الإصدار لفترة طويلة. \n إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1405.properties" = "مصحف حفص عن عاصم\nإصدار١٤٠٥ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
+"reading.hafs-1405.issue" = "إصدار ١٤٠٥ هجري";
 
 // Hafs 1421
 "reading.hafs-1421.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٢١هـ";
 "reading.hafs-1421.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٢١ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1421.properties" = "مصحف حفص عن عاصم\nإصدار١٤٢١ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
+"reading.hafs-1421.issue" = "إصدار ١٤٢١ هجري";
 
 // Hafs 1440
 "reading.hafs-1440.title" = "حفص، مصحف المدينة المنورة النمطي، ١٤٤٠هـ";
 "reading.hafs-1440.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٤٠ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
-"reading.hafs-1440.properties" = "مصحف حفص عن عاصم\nإصدار١٤٤٠ هجري\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\n!لا يدعم ترجمة الكلمات";
+"reading.hafs-1440.issue" = "إصدار ١٤٤٠ هجري";
 
 // Hafs Tajweed
 "reading.tajweed.title" = "مصحف التجويد";
 "reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";
-"reading.tajweed.properties" = "مصحف حفص عن عاصم\n٦٠٤ صفحة\n١٥ سطرًا بالصفحة\nيدعم ترجمة الكلمات";
 
 // MARK: - What's new
 

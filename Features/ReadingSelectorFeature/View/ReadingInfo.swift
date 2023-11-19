@@ -7,52 +7,26 @@
 
 import Foundation
 import Localization
+import QuranKit
 
-public struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
-    struct Property: Hashable {
-        enum PropertType {
-            case supports
-            case lacks
-        }
-
-        // MARK: Lifecycle
-
-        init(property: String) {
-            if property.hasPrefix("!") {
-                type = .lacks
-                self.property = property.replacingOccurrences(of: "!", with: "")
-            } else {
-                type = .supports
-                self.property = property
-            }
-        }
-
-        // MARK: Internal
-
-        let type: PropertType
-        let property: String
-    }
-
+struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
     // MARK: Lifecycle
 
-    public init(value: Value, title: String, description: String, properties: String) {
+    init(value: Value, title: String, description: String, properties: [Reading.Property]) {
         self.value = value
         self.title = title
         self.description = description
-        self.properties = properties.components(separatedBy: "\n").map(Property.init)
+        self.properties = properties
     }
-
-    // MARK: Public
-
-    public let value: Value
-    public let title: String
-    public let description: String
-
-    public var id: Value { value }
 
     // MARK: Internal
 
-    let properties: [Property]
+    let value: Value
+    let title: String
+    let description: String
+    let properties: [Reading.Property]
+
+    var id: Value { value }
 }
 
 // Test data
@@ -69,7 +43,7 @@ enum ReadingInfoTestData {
                 value: $0,
                 title: l("reading.hafs-1405.title"),
                 description: l("reading.hafs-1405.description"),
-                properties: l("reading.hafs-1405.properties")
+                properties: []
             )
         }
     }

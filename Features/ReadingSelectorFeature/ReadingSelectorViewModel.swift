@@ -81,7 +81,7 @@ private extension ReadingInfo where Value == Reading {
             value: reading,
             title: reading.title,
             description: reading.description,
-            properties: reading.propertiesDescription
+            properties: reading.properties
         )
     }
 }

@@ -13,6 +13,18 @@ import QuranKit
 import UIKit
 
 extension Reading {
+    struct Property: Hashable {
+        enum PropertType {
+            case supports
+            case lacks
+        }
+
+        // MARK: Internal
+
+        let type: PropertType
+        let property: String
+    }
+
     var title: String {
         switch self {
         case .hafs_1405:
@@ -39,16 +51,39 @@ extension Reading {
         }
     }
 
-    var propertiesDescription: String {
+    var properties: [Property] {
         switch self {
         case .hafs_1405:
-            return l("reading.hafs-1405.properties")
+            return [
+                Property(type: .supports, property: l("reading.selector.property.hafs")),
+                Property(type: .supports, property: l("reading.hafs-1405.issue")),
+                Property(type: .supports, property: l("reading.selector.property.pages.604")),
+                Property(type: .supports, property: l("reading.selector.property.lines.15")),
+                Property(type: .supports, property: l("reading.selector.property.word-translation.supported")),
+            ]
         case .hafs_1421:
-            return l("reading.hafs-1421.properties")
+            return [
+                Property(type: .supports, property: l("reading.selector.property.hafs")),
+                Property(type: .supports, property: l("reading.hafs-1421.issue")),
+                Property(type: .supports, property: l("reading.selector.property.pages.604")),
+                Property(type: .supports, property: l("reading.selector.property.lines.15")),
+                Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
+            ]
         case .hafs_1440:
-            return l("reading.hafs-1440.properties")
+            return [
+                Property(type: .supports, property: l("reading.selector.property.hafs")),
+                Property(type: .supports, property: l("reading.hafs-1440.issue")),
+                Property(type: .supports, property: l("reading.selector.property.pages.604")),
+                Property(type: .supports, property: l("reading.selector.property.lines.15")),
+                Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
+            ]
         case .tajweed:
-            return l("reading.tajweed.properties")
+            return [
+                Property(type: .supports, property: l("reading.selector.property.hafs")),
+                Property(type: .supports, property: l("reading.selector.property.pages.604")),
+                Property(type: .supports, property: l("reading.selector.property.lines.15")),
+                Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
+            ]
         }
     }
 

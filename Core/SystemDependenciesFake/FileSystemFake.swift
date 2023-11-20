@@ -94,6 +94,10 @@ public final class FileSystemFake: FileSystem, Sendable {
         resourceValuesByURL[url] = ResourceValuesFake(fileSize: fileSize)
     }
 
+    public func writeToFile(at path: URL, content: String) throws {
+        files.insert(path)
+    }
+
     // MARK: Private
 
     private let state = ManagedCriticalState(State())

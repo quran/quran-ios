@@ -15,6 +15,8 @@ public protocol FileSystem: Sendable {
     func removeItem(at url: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
     func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
+
+    func writeToFile(at path: URL, content: String) throws
 }
 
 public struct DefaultFileSystem: FileSystem {
@@ -46,6 +48,10 @@ public struct DefaultFileSystem: FileSystem {
 
     public func copyItem(at srcURL: URL, to dstURL: URL) throws {
         try FileManager.default.copyItem(at: srcURL, to: dstURL)
+    }
+
+    public func writeToFile(at path: URL, content: String) throws {
+        try "Success".write(to: path, atomically: true, encoding: .utf8)
     }
 }
 

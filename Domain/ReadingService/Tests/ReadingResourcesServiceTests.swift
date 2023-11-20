@@ -47,7 +47,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
     }
 
     func test_resourceNotAvailable_downloaded() async throws {
-        fileManager.files.insert(Reading.hafs_1405.directory)
+        fileManager.files.insert(Reading.hafs_1405.successFilePath)
         BundleResourceRequestFake.resourceAvailable = false
         await service.startLoadingResources()
 

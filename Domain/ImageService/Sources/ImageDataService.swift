@@ -8,6 +8,7 @@
 import QuranGeometry
 import QuranKit
 import UIKit
+import VLogging
 import WordFramePersistence
 import WordFrameService
 
@@ -32,6 +33,9 @@ public struct ImageDataService {
     public func imageForPage(_ page: Page) async throws -> ImagePage {
         let imageURL = imageURLForPage(page)
         guard let image = UIImage(contentsOfFile: imageURL.path) else {
+            logFiles(directory: imagesURL) // <reading>/images/width/
+            logFiles(directory: imagesURL.deletingLastPathComponent()) // <reading>/images/
+            logFiles(directory: imagesURL.deletingLastPathComponent().deletingLastPathComponent()) // <reading>/
             fatalError("No image found for page '\(page)'")
         }
 
@@ -50,6 +54,13 @@ public struct ImageDataService {
     private let persistence: WordFramePersistence
     private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
+
+    private func logFiles(directory: URL) {
+        let fileManager = FileManager.default
+        let files = (try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
+        let fileNames = files.map(\.lastPathComponent)
+        logger.error("Images: Directory \(directory) contains files \(fileNames)")
+    }
 
     private func imageURLForPage(_ page: Page) -> URL {
         imagesURL.appendingPathComponent("page\(page.pageNumber.as3DigitString()).png")

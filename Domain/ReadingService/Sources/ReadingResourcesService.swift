@@ -88,7 +88,9 @@ public actor ReadingResourcesService {
     }
 
     private func loadResource(of reading: Reading) async {
-        if fileManager.fileExists(at: reading.directory) {
+        logger.info("Resources: Start loading reading resources of: \(reading)")
+        if fileManager.fileExists(at: reading.successFilePath) {
+            logger.info("Resources: Reading \(reading) has been downloaded and saved locally before")
             send(.ready, from: reading)
             return
         }
@@ -100,26 +102,20 @@ public actor ReadingResourcesService {
                 self.send(.downloading(progress: progress), from: reading)
             })
 
-            copyFiles(reading: reading)
+            try copyFiles(reading: reading)
             send(.ready, from: reading)
         } catch {
             send(.error(error as NSError), from: reading)
         }
     }
 
-    private func copyFiles(reading: Reading) {
-        if preferences.reading != reading {
-            return
-        }
-        if reading.directory.isReachable {
-            return
-        }
-
+    private func copyFiles(reading: Reading) throws {
+        // Create `resources` directory if needed.
         try? fileManager.createDirectory(at: Reading.resourcesDirectory, withIntermediateDirectories: true)
-
+        // Remove previously downloaded resources.
         removePreviouslyDownloadedResources()
-
-        copyNewlyDownloadedResource(reading: reading)
+        // Copy new reading to `resources` directory.
+        try copyNewlyDownloadedResource(reading: reading)
     }
 
     private func removePreviouslyDownloadedResources() {
@@ -129,16 +125,18 @@ public actor ReadingResourcesService {
                 try? fileManager.removeItem(at: resource)
             }
         } catch {
-            logger.error("Resources failed to list files. Error: \(error)")
+            logger.error("Resources: Failed to list files in resources directory. Error: \(error)")
         }
     }
 
-    private func copyNewlyDownloadedResource(reading: Reading) {
+    private func copyNewlyDownloadedResource(reading: Reading) throws {
         do {
             let bundleURL = reading.url(inBundle: bundle)
             try fileManager.copyItem(at: bundleURL, to: reading.directory)
+            try fileManager.writeToFile(at: reading.successFilePath, content: "Downloaded")
         } catch {
-            logger.error("Resources \(reading.resourcesTag) failed to copy. Error: \(error)")
+            logger.error("Resources: \(reading) failed to copy. Error: \(error)")
+            throw error
         }
     }
 
@@ -170,5 +168,9 @@ extension Reading {
 
     public var directory: URL {
         Self.resourcesDirectory.appendingPathComponent(resourcesTag, isDirectory: true)
+    }
+
+    var successFilePath: URL {
+        directory.appendingPathComponent("success.txt")
     }
 }

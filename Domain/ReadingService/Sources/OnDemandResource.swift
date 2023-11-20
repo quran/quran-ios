@@ -21,9 +21,9 @@ struct OnDemandResource {
     // MARK: Internal
 
     func fetch(onProgressChange: @Sendable @escaping (Double) -> Void) async throws {
-        logger.info("Fetching resources \(request.tags)")
+        logger.info("Resources: Fetch resources \(request.tags)")
         let available = await request.conditionallyBeginAccessingResources()
-        logger.info("Resources \(request.tags) availability \(available)")
+        logger.info("Resources: \(request.tags) has been downloaded before? \(available)")
         if available {
             return
         }
@@ -35,9 +35,9 @@ struct OnDemandResource {
         }
         do {
             try await request.beginAccessingResources()
-            logger.info("Resources \(request.tags) downloaded")
+            logger.info("Resources: \(request.tags) has been downloaded")
         } catch {
-            logger.error("Resources \(request.tags) failed. Error: \(error)")
+            logger.error("Resources: \(request.tags) has failed to download. Error: \(error)")
             throw error
         }
     }

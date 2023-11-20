@@ -10,6 +10,8 @@
 
 // MARK: - Errors
 
+// Metadata: Translated by ChatGPT; human review required.
+"error.dialog.title" = "Hata";
 "error.message.connection_lost" = "İnternet bağlantısı bulunamadı. İnternet bağlantısının daha stabil olduğu bir yere geçin veya düzelene kadar bekleyin.";
 "error.message.international_roaming_off" = "Uluslararası dolaşıma izin verilmedi. Uluslararası dolaşım ayarlarını değiştirin veya bir kablosuz ağa bağlanın.";
 "error.message.not_connected_to_internet" = "İnternet bağlantısı bulunamadı. Kablosuz bağlantıyı veya hücresel ağ bağlantısını etkinleştirin.";
@@ -25,7 +27,11 @@
 
 "translation.text-type.translation" = "Meal";
 "translation.text-type.transliteration" = "Okunuşu";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.selectedTranslations" = "Seçildi";
 "translation.translator" = "Çevirmen: ";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.see-referenced-verse" = "%d ayeti görün.";
 "translation.text.read-more" = "Daha fazlası";
 "error.translation.text-retrieval" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
 "error.translation.text-not-available" = "Bu Ayetin meali bulunmamaktadır.";
@@ -35,12 +41,16 @@
 "search.recents.title" = "Son aramalar";
 "search.popular.title" = "Bununla aramayı deneyin";
 "search.placeholder.text" = "Sure, ayet, meal, tefsir, and numaralar";
+// Metadata: Translated by ChatGPT; human review required.
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
 "setting.write_review" = "Uygulamamızı AppStore'de değerlendirin...";
 "setting.contact_us" = "Bizimle iletişime geçin!";
 "setting.share_app" = "Uygulamayı paylaşın...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.app_version" = "Uygulama sürümü";
 
 // MARK: - Quran Menu
 
@@ -52,6 +62,10 @@
 "menu.fontSizeLetter" = "A";
 "menu.translationFontSize" = "Çeviri Boyutu";
 "menu.arabicFontSize" = "Kuran Boyutu";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.twoPages" = "Yan yana 2 sayfa (yatayda)";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.verticalScrolling" = "Dikey kaydırma";
 
 // MARK: - Theme
 
@@ -78,6 +92,10 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "Düzenle";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.message" = "%@ ile %@ arası ses oynatılıyor";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.downloading.message" = "%@ ile %@ arasındaki ses indiriliyor";
 
 "audio.playing-verses.label" = "Okunan ayetler";
 "audio.adjust-end-verse-to-the-end.label" = "Bitişi sonuna ayarla";
@@ -85,6 +103,10 @@
 "audio.select-start-verse" = "Başlangıç Ayetini Seçin";
 "audio.select-end-verse" = "Son Ayeti Seçin";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount" = "İndir/Oynatma limiti";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount.description" = "Ses oynatılırken, sonuna kadar oynatılacak";
 
 // MARK: - Bookmarks
 
@@ -106,7 +128,15 @@
 "ayah.menu.copy" = "Kopyala";
 "ayah.menu.share" = "Paylaş...";
 "ayah.menu.play-end-juz" = "Cüzün sonuna kadar";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-surah" = "Sure'nin sonuna kadar";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-page" = "Sayfanın sonuna kadar";
 "ayah.menu.repeat" = "Tekrarlamak";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verse" = "seçilen ayet";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verses" = "seçilen ayetler";
 "ayah.menu.highlight" = "Vurgula";
 "ayah.menu.highlight-select-color" = "renk seç";
 "ayah.menu.add-note" = "Not Ekle";
@@ -117,14 +147,54 @@
 // MARK: - Reading Selector
 
 // Selector UI
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.short" = "Seç";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.long" = "Mevcut Mushaf olarak ayarla";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.title" = "Mushaf Seç";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selection-description" = "Daha fazla bilgi için bir Mushaf'a dokunun.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.hafs" = "Hafs Mushaf";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.604" = "604 sayfa";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.lines.15" = "15 satırlık sayfa";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.supported" = "Kelime kelime çeviri";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.not-supported" = "Kelime kelime çeviri yok";
 
 // Hafs 1405
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.title" = "Hafs, klasik Medine, 1405 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.description" = "1405 Hicri yılında Medine'de yayımlanan klasik Hafs Mushaf. Uygulama uzun süre bu versiyonu sundu.\nKral Fahd Kuran Basım Kompleksinden.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.issue" = "1405 Hicri yılında yayımlandı";
 
 // Hafs 1421
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.title" = "Hafs, Medine, 1421 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.description" = "1421 Hicri yılında Medine'de yayımlanan Hafs Mushaf. Kral Fahd Kuran Basım Kompleksinden.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.issue" = "1421 Hicri yılında yayımlandı";
 
 // Hafs 1440
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.title" = "Hafs, Medine, 1440 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.description" = "1440 Hicri yılında Medine'de yayımlanan Hafs Mushaf. Kral Fahd Kuran Basım Kompleksinden.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.issue" = "1440 Hicri yılında yayımlandı";
 
 // Hafs Tajweed
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.title" = "Hafs, Tecvid";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.description" = "Tecvid Hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Baskısı.";
 
 // MARK: - What's new
 
@@ -132,7 +202,17 @@
 "new.action" = "Devam Et";
 
 // Mushafs
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs" = "Yeni Mushaflar:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs.details" = "Allah, Gazze'deki kardeşlerimizin ve bacılarımızın üzerindeki zulmü kaldırsın.\n\n* Tecvid Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Baskısı.\n* Medine Mushafı 1421 hicri.\n* Medine Mushafı 1440 hicri.\n* Ayrıca, klasik 1405 hicri versiyonunun keyfini çıkarmaya devam edin.";
 
 // Reciters
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters" = "Yeni Hafızlar:";
 
 // Miscellaneous
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous" = "Çeşitli:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous.details" = "* Güncellenmiş uygulama görünümü.\n* Geliştirilmiş arama özelliği (yakında yeni algoritma).\n* Vietnamca yerelleştirme desteği.\n* Kıraat oynatılmadığında gelişmiş ses seçeneklerine erişim mevcut.\n* Uygulama artık açık kaynaklı: https://github.com/quran/quran-ios";

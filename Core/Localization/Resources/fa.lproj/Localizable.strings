@@ -2,70 +2,278 @@
 
 // MARK: - General
 
+// Metadata: Translated by ChatGPT; human review required.
+"button.done" = "انجام شد";
+// Metadata: Translated by ChatGPT; human review required.
+"button.delete" = "حذف";
 
 // MARK: - Errors
 
+// Metadata: Translated by ChatGPT; human review required.
+"error.dialog.title" = "خطا";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.connection_lost" = "ارتباط اینترنت قطع شده است. به مکانی بروید که ارتباط پایدارتری در دسترس باشد یا منتظر بمانید تا ارتباط پایدار شود.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.international_roaming_off" = "رمینگ بین‌المللی مجاز نیست. تنظیمات رمینگ بین‌المللی را تغییر دهید یا وای‌فای را روشن کنید.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.not_connected_to_internet" = "به اینترنت متصل نیست. وای‌فای را روشن کنید یا اجازه اتصال داده سلولی را بدهید.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.general" = "اوه! اشتباهی رخ داد. لطفا دوباره امتحان کنید.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.no_disk_space" = "فضای خالی دیسک برای ذخیره‌سازی دانلودها وجود ندارد.";
 
 // MARK: - Quran
 
+// Metadata: Translated by ChatGPT; human review required.
+"ayah" = "آیه";
+// Metadata: Translated by ChatGPT; human review required.
+"surah" = "سوره";
 
 // MARK: - Translation
 
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.translation" = "ترجمه";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.transliteration" = "ترجمه لفظی";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.selectedTranslations" = "انتخاب شده";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.translator" = "مترجم: ";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.see-referenced-verse" = "آیه %d را ببینید.";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.read-more" = "بیشتر بخوانید";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-retrieval" = "اوه! مشکلی پیش آمد. نتوانستیم ترجمه را بازیابی کنیم.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-not-available" = "ترجمه‌ای برای این آیه موجود نیست.";
 
 // MARK: - Search
 
+// Metadata: Translated by ChatGPT; human review required.
+"search.recents.title" = "جستجوهای اخیر";
+// Metadata: Translated by ChatGPT; human review required.
+"search.popular.title" = "امتحان کردن جستجو با";
+// Metadata: Translated by ChatGPT; human review required.
+"search.placeholder.text" = "سوره، آیه، ترجمه، تفسیر و اعداد";
+// Metadata: Translated by ChatGPT; human review required.
+"search.result.count" = "(%2$d) %1$@";
 
 // MARK: - Settings
 
+// Metadata: Translated by ChatGPT; human review required.
+"setting.write_review" = "نوشتن نظر در فروشگاه برنامه...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.contact_us" = "تماس با ما";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.share_app" = "اشتراک‌گذاری برنامه...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.app_version" = "نسخه برنامه";
 
 // MARK: - Quran Menu
 
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabic" = "عربی";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translation" = "ترجمه/تفسیر";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.select_translation" = "انتخاب ترجمه‌ها/تفسیرها";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer" = "نشانگر ترجمه کلمه";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer.select_translation" = "نمایش نشانگر";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.fontSizeLetter" = "A";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translationFontSize" = "اندازه ترجمه";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabicFontSize" = "اندازه قرآن";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.twoPages" = "2 صفحه کنار هم (در حالت افقی)";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.verticalScrolling" = "اسکرول عمودی";
 
 // MARK: - Theme
 
+// Metadata: Translated by ChatGPT; human review required.
+"theme.light" = "روشن";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.dark" = "تاریک";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto" = "خودکار";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto.message" = "برنامه قرآن به تنظیمات ظاهری آیفون شما احترام می‌گذارد";
 
 // MARK: - Tabs
 
+// Metadata: Translated by ChatGPT; human review required.
+"tab.notes" = "یادداشت‌ها";
 
 // MARK: - Update
 
+// Metadata: Translated by ChatGPT; human review required.
+"update.filesystem.title" = "به‌روزرسانی پایگاه‌های داده...";
 
 // MARK: - Reciters
 
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.title" = "قاری را برای شنیدن انتخاب کنید";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.recent" = "اخیر";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.downloaded" = "دانلود شده";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.all" = "همه";
 
 // MARK: - Audio
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.action.modify" = "تغییر دهید";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.message" = "پخش صوتی از %@ تا %@";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.downloading.message" = "در حال دانلود صوتی از %@ تا %@";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing-verses.label" = "پخش آیات";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.adjust-end-verse-to-the-end.label" = "آخرین آیه را به انتها تنظیم کنید";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-start-verse" = "آیه شروع را انتخاب کنید";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-end-verse" = "آیه پایانی را انتخاب کنید";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount" = "دانلود/پخش تا";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount.description" = "هنگام پخش صوت، تا انتهای";
 
 // MARK: - Bookmarks
 
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.title" = "در حال افزودن نشانک‌ها...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.text" = "هنگام خواندن قرآن، برای علامت‌گذاری صفحه فعلی دکمه نشانک را فشار دهید.";
 
 // MARK: - Notes
 
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.title" = "در حال افزودن برجسته‌های آیه...";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.text" = "روی یک آیه فشار داده و نگه دارید. می‌توانید انتخاب را گسترش دهید تا چندین آیه را شامل شود، سپس دکمه نشانک را بزنید.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.verses-count" = "(+%d آیه)";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.title" = "حذف برجسته";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.body" = "یادداشت مرتبط نیز حذف خواهد شد.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.title" = "همگام‌سازی iCloud";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.body" = "این برنامه از iCloud برای همگام سازی نشانک ها و یادداشت ها در دستگاه های شما استفاده می کند. شما می توانید آن را از تنظیمات iCloud دستگاه خود غیرفعال کنید.";
 
 // MARK: - Ayah Menu
 
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.copy" = "کپی";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.share" = "اشتراک گذاری...";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-juz" = "تا پایان جز'";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-surah" = "تا پایان سوره";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-page" = "تا پایان صفحه";
 "ayah.menu.repeat" = "تکرار";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verse" = "آیه انتخاب شده";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verses" = "آیات انتخاب شده";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight" = "برجسته کردن";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight-select-color" = "انتخاب رنگ";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.add-note" = "افزودن یادداشت";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.edit-note" = "ویرایش یادداشت";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-note" = "حذف یادداشت";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-highlight" = "حذف برجسته سازی";
 
 // MARK: - Reading Selector
 
 // Selector UI
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.short" = "انتخاب کنید";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.long" = "تنظیم به عنوان مشاف فعلی";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.title" = "انتخاب مشاف";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selection-description" = "برای اطلاعات بیشتر روی مشاف ضربه بزنید.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.hafs" = "مشاف حفص";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.604" = "604 صفحه";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.lines.15" = "صفحه 15 خطی";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.supported" = "ترجمه کلمه به کلمه";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.not-supported" = "بدون ترجمه کلمه به کلمه";
 
 // Hafs 1405
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.title" = "حفص، مدینه کلاسیک، 1405 هجری قمری";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.description" = "مشاف حفص کلاسیک که در سال 1405 هجری قمری در مدینه صادر شده است. این برنامه برای مدت طولانی این نسخه را ارائه می‌داد.\nاز مجمع چاپ قرآن پادشاه فهد.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.issue" = "صادر شده در سال 1405 هجری قمری";
 
 // Hafs 1421
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.title" = "حفص، مدینه، 1421 هجری قمری";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.description" = "مشاف حفص که در سال 1421 هجری قمری در مدینه صادر شده است. از مجمع چاپ قرآن پادشاه فهد.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.issue" = "صادر شده در سال 1421 هجری قمری";
 
 // Hafs 1440
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.title" = "حفص، مدینه، 1440 هجری قمری";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.description" = "مشاف حفص که در سال 1440 هجری قمری در مدینه صادر شده است. از مجمع چاپ قرآن پادشاه فهد.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.issue" = "صادر شده در سال 1440 هجری قمری";
 
 // Hafs Tajweed
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.title" = "حفص، تجوید";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.description" = "مشاف حفص تجوید. القرآن الکریم - نسخه دار المعرفه.";
 
 // MARK: - What's new
 
+// Metadata: Translated by ChatGPT; human review required.
+"new.title" = "چه خبر جدیدی است";
+// Metadata: Translated by ChatGPT; human review required.
+"new.action" = "ادامه";
 
 // Mushafs
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs" = "مشاف جدید:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs.details" = "خداوند ظلم برادران و خواهران ما در غزه را برطرف کند.\n\n* مشاف حفص تجوید: القرآن الکریم - نسخه دار المعرفه.\n* مشاف مدینه 1421 هجری.\n* مشاف مدینه 1440 هجری.\n* علاوه بر این، از نسخه کلاسیک 1405 هجری لذت ببرید.";
 
 // Reciters
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters" = "قاریان جدید:";
 
 // Miscellaneous
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous" = "متفرقه:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous.details" = "* به‌روزرسانی ظاهر برنامه.\n* بهبود ویژگی جستجو (الگوریتم جدید به زودی).\n* پشتیبانی از محلی‌سازی ویتنامی.\n* دسترسی پیشرفته به گزینه‌های صوتی در دسترس هنگامی که قرائت در حال پخش نیست.\n* برنامه اکنون متن باز است: https://github.com/quran/quran-ios";

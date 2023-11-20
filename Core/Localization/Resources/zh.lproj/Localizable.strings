@@ -2,71 +2,277 @@
 
 // MARK: - General
 
+// Metadata: Translated by ChatGPT; human review required.
+"button.done" = "完成";
+// Metadata: Translated by ChatGPT; human review required.
+"button.delete" = "删除";
 
 // MARK: - Errors
 
+// Metadata: Translated by ChatGPT; human review required.
+"error.dialog.title" = "错误";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.connection_lost" = "互联网连接丢失。移动到一个有更稳定连接的地方，或等到连接变得稳定。";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.international_roaming_off" = "不允许国际漫游。更改国际漫游设置，或打开 Wi-Fi。";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.not_connected_to_internet" = "未连接到互联网。打开 Wi-Fi 或允许移动数据连接。";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.general" = "哎呀！出错了。请再试一次。";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.no_disk_space" = "没有可用的磁盘空间来保存下载内容。";
 
 // MARK: - Quran
 
+// Metadata: Translated by ChatGPT; human review required.
+"ayah" = "经文";
+// Metadata: Translated by ChatGPT; human review required.
+"surah" = "章";
 
 // MARK: - Translation
 
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.translation" = "翻译";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.transliteration" = "音译";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.selectedTranslations" = "已选";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.translator" = "译者: ";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.see-referenced-verse" = "查看经文 %d。";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.read-more" = "阅读更多";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-retrieval" = "哎呀！出错了。我们无法检索翻译。";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-not-available" = "这个经文没有可用的翻译。";
 
 // MARK: - Search
 
+// Metadata: Translated by ChatGPT; human review required.
+"search.recents.title" = "最近搜索";
+// Metadata: Translated by ChatGPT; human review required.
+"search.popular.title" = "尝试搜索";
+// Metadata: Translated by ChatGPT; human review required.
+"search.placeholder.text" = "章节、经文、翻译、注释和数字";
+// Metadata: Translated by ChatGPT; human review required.
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
+// Metadata: Translated by ChatGPT; human review required.
+"setting.write_review" = "撰写应用商店评论...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.contact_us" = "联系我们";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.share_app" = "分享应用...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.app_version" = "应用版本";
 
 // MARK: - Quran Menu
 
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabic" = "阿拉伯语";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translation" = "翻译/注释";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.select_translation" = "选择翻译/注释";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer" = "单词翻译指针";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer.select_translation" = "显示指针";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.fontSizeLetter" = "A";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translationFontSize" = "翻译大小";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabicFontSize" = "古兰经大小";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.twoPages" = "2页并排（横向模式）";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.verticalScrolling" = "垂直滚动";
 
 // MARK: - Theme
 
+// Metadata: Translated by ChatGPT; human review required.
+"theme.light" = "浅色";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.dark" = "深色";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto" = "自动";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto.message" = "古兰经应用将遵循您的 iPhone 外观设置";
 
 // MARK: - Tabs
 
+// Metadata: Translated by ChatGPT; human review required.
+"tab.notes" = "笔记";
 
 // MARK: - Update
 
+// Metadata: Translated by ChatGPT; human review required.
+"update.filesystem.title" = "正在升级数据库...";
 
 // MARK: - Reciters
 
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.title" = "选择要聆听的诵经者";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.recent" = "最近";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.downloaded" = "已下载";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.all" = "全部";
 
 // MARK: - Audio
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.action.modify" = "修改";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.message" = "正在播放 %@ 至 %@ 的音频";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.downloading.message" = "正在下载 %@ 至 %@ 的音频";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing-verses.label" = "播放经文";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.adjust-end-verse-to-the-end.label" = "将最后一节调整至结束";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-start-verse" = "选择起始经文";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-end-verse" = "选择结束经文";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount" = "下载/播放到";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount.description" = "播放音频时，将播放至";
 
 // MARK: - Bookmarks
 
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.title" = "正在添加书签...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.text" = "阅读古兰经时，点击书签按钮以标记当前页面。";
 
 // MARK: - Notes
 
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.title" = "添加经文高亮...";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.text" = "长按一节经文。您可以扩展选择以包含多个经文，然后点击书签按钮。";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.verses-count" = "(+%d 节经文)";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.title" = "删除高亮";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.body" = "关联的笔记也将被删除。";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.title" = "iCloud 同步";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.body" = "该应用使用iCloud同步您设备上的书签和笔记。您可以在设备的iCloud设置中禁用它。";
 
 // MARK: - Ayah Menu
 
 "ayah.menu.copy" = "拷贝";
 "ayah.menu.share" = "共享…";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-juz" = "直到Juz'结束";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-surah" = "直到苏拉结束";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-page" = "直到页面结束";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.repeat" = "重复";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verse" = "选定的经文";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verses" = "选定的经文";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight" = "高亮";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight-select-color" = "选择颜色";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.add-note" = "添加笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.edit-note" = "编辑笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-note" = "删除笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-highlight" = "删除高亮";
 
 // MARK: - Reading Selector
 
 // Selector UI
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.short" = "选择";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.long" = "设为当前Mushaf";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.title" = "选择Mushaf";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selection-description" = "点击Mushaf获取更多信息。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.hafs" = "哈夫斯穆沙夫";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.604" = "604页";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.lines.15" = "15行页面";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.supported" = "逐字翻译";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.not-supported" = "没有逐字翻译";
 
 // Hafs 1405
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.title" = "哈夫斯，古典麦地那，1405 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.description" = "公元1405年在麦地那发行的经典哈夫斯穆沙夫。该应用程序长时间提供了这个版本。\n来自法赫德国王古兰经印刷复合体。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.issue" = "公元1405年发行";
 
 // Hafs 1421
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.title" = "哈夫斯，麦地那，1421 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.description" = "公元1421年在麦地那发行的哈夫斯穆沙夫。来自法赫德国王古兰经印刷复合体。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.issue" = "公元1421年发行";
 
 // Hafs 1440
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.title" = "哈夫斯，麦地那，1440 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.description" = "公元1440年在麦地那发行的哈夫斯穆沙夫。来自法赫德国王古兰经印刷复合体。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.issue" = "公元1440年发行";
 
 // Hafs Tajweed
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.title" = "哈夫斯，塔吉维德";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.description" = "塔吉维德哈夫斯穆沙夫。阿尔古兰阿尔克里姆 - 达尔马雷法版。";
 
 // MARK: - What's new
 
+// Metadata: Translated by ChatGPT; human review required.
+"new.title" = "最新动态";
+// Metadata: Translated by ChatGPT; human review required.
+"new.action" = "继续";
 
 // Mushafs
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs" = "新穆沙夫:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs.details" = "愿真主解除我们在加沙的兄弟姐妹所受的压迫。\n\n* 塔吉维德哈夫斯穆沙夫：阿尔古兰阿尔克里姆 - 达尔马雷法版。\n* 麦地那穆沙夫1421希杰里。\n* 麦地那穆沙夫1440希杰里。\n* 此外，继续享受经典的1405希杰里版本。";
 
 // Reciters
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters" = "新颂经者:";
 
 // Miscellaneous
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous" = "杂项:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous.details" = "* 更新应用程序外观。\n* 增强搜索功能（新算法即将推出）。\n* 支持越南本地化。\n* 在没有朗诵播放时可访问高级音频选项。\n* 应用现在是开源的：https://github.com/quran/quran-ios";

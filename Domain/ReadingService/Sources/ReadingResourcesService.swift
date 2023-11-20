@@ -97,6 +97,7 @@ public actor ReadingResourcesService {
 
         let tag = reading.resourcesTag
         let resource = OnDemandResource(request: resourceRequestFactory([tag]))
+        defer { resource.endAccessingResources() }
         do {
             try await resource.fetch(onProgressChange: { progress in
                 self.send(.downloading(progress: progress), from: reading)
@@ -171,6 +172,6 @@ extension Reading {
     }
 
     var successFilePath: URL {
-        directory.appendingPathComponent("success.txt")
+        directory.appendingPathComponent("success-v2.txt")
     }
 }

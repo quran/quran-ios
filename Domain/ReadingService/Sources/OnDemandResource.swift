@@ -42,6 +42,10 @@ struct OnDemandResource {
         }
     }
 
+    func endAccessingResources() {
+        request.endAccessingResources()
+    }
+
     // MARK: Private
 
     private let request: BundleResourceRequest

@@ -14,6 +14,7 @@ public protocol BundleResourceRequest: AnyObject {
 
     func conditionallyBeginAccessingResources() async -> Bool
     func beginAccessingResources() async throws
+    func endAccessingResources()
 }
 
 extension NSBundleResourceRequest: BundleResourceRequest {

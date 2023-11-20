@@ -24,6 +24,7 @@ public final class BundleResourceRequestFake: BundleResourceRequest {
     public var progress = Progress()
     public var loadingPriority: Double = 0
     public let tags: Set<String>
+    public var inUse = false
 
     public func conditionallyBeginAccessingResources() async -> Bool {
         Self.resourceAvailable
@@ -32,9 +33,14 @@ public final class BundleResourceRequestFake: BundleResourceRequest {
     public func beginAccessingResources() async throws {
         switch Self.downloadResult {
         case .success:
+            inUse = true
             progress.completedUnitCount = progress.totalUnitCount
         case .failure(let error):
             throw error
         }
+    }
+
+    public func endAccessingResources() {
+        inUse = false
     }
 }

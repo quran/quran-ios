@@ -9,6 +9,7 @@ import Localization
 import QuranText
 import SwiftUI
 import UIx
+import VLogging
 
 struct MoreMenuFontSize: View {
     // MARK: Internal
@@ -39,7 +40,13 @@ struct MoreMenuFontSize: View {
 
     private var fontIndex: Binding<Int> {
         Binding(
-            get: { fonts.firstIndex(of: fontSize)! },
+            get: {
+                let index = fonts.firstIndex(of: fontSize)
+                if index == nil {
+                    logger.error("Couldn't find \(fontSize) in \(fonts)")
+                }
+                return index!
+            },
             set: { fontSize = fonts[$0] }
         )
     }

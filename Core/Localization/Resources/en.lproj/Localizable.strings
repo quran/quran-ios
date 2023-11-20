@@ -143,18 +143,18 @@
 "reading.selector.property.word-translation.not-supported" = "No Word-by-word translation";
 
 // Hafs 1405
-"reading.hafs-1405.title" = "Hafs, classic Madina, 1405 AH";
+"reading.hafs-1405.title" = "Hafs, classic Medina, 1405 AH";
 "reading.hafs-1405.description" = "The classic hafs Mushaf issued in Madina in 1405 Hijri. The app used to offer this version for a long time.\nFrom the King Fahd Quran Printing Complex.";
 "reading.hafs-1405.issue" = "Issued in 1405 Hijri";
 
 // Hafs 1421
-"reading.hafs-1421.title" = "Hafs, Madina, 1421 AH";
-"reading.hafs-1421.description" = "The hafs Mushaf issued in Madina in 1421 Hijri. From the King Fahd Quran Printing Complex.";
+"reading.hafs-1421.title" = "Hafs, Medina, 1421 AH";
+"reading.hafs-1421.description" = "The hafs Mushaf issued in Medina in 1421 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1421.issue" = "Issued in 1421 Hijri";
 
 // Hafs 1440
-"reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
-"reading.hafs-1440.description" = "The hafs Mushaf issued in Madina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
+"reading.hafs-1440.title" = "Hafs, Medina, 1440 AH";
+"reading.hafs-1440.description" = "The hafs Mushaf issued in Medina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1440.issue" = "Issued in 1440 Hijri";
 
 // Hafs Tajweed
@@ -168,7 +168,7 @@
 
 // Mushafs
 "new.mushafs" = "New Mushafs:";
-"new.mushafs.details" = "May Allah lift the oppression from our brothers and sisters in Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Madina Mushaf 1421 hijri.\n* Madina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
+"new.mushafs.details" = "May Allah lift the oppression from our brothers and sisters in Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
 
 // Reciters
 "new.reciters" = "New Reciters:";

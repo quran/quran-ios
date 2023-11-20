@@ -2,72 +2,276 @@
 
 // MARK: - General
 
+// Metadata: Translated by ChatGPT; human review required.
+"button.done" = "Terminé";
+// Metadata: Translated by ChatGPT; human review required.
+"button.delete" = "Supprimer";
 
 // MARK: - Errors
 
+// Metadata: Translated by ChatGPT; human review required.
+"error.dialog.title" = "Erreur";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.connection_lost" = "La connexion Internet est perdue. Déplacez-vous vers un endroit où une connexion plus stable est disponible, ou attendez que la connexion redevienne stable.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.international_roaming_off" = "Le roaming international n'est pas autorisé. Changez les paramètres de roaming international, ou activez le Wi-Fi.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.not_connected_to_internet" = "Non connecté à internet. Activez le Wi-Fi ou autorisez la connexion de données cellulaires.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.general" = "Oups ! Quelque chose a mal tourné. Veuillez réessayer.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.message.no_disk_space" = "Pas d'espace disque disponible pour enregistrer les téléchargements.";
 
 // MARK: - Quran
 
+// Metadata: Translated by ChatGPT; human review required.
+"ayah" = "Ayah";
+// Metadata: Translated by ChatGPT; human review required.
+"surah" = "Sourate";
 
 // MARK: - Translation
 
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.translation" = "Traduction";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text-type.transliteration" = "Translittération";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.selectedTranslations" = "Sélectionné";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.translator" = "Traducteur: ";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.see-referenced-verse" = "Voir l'ayah %d.";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.read-more" = "Lire plus";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-retrieval" = "Oups ! Quelque chose a mal tourné. Nous n'avons pas pu récupérer la traduction.";
+// Metadata: Translated by ChatGPT; human review required.
+"error.translation.text-not-available" = "Pas de traduction disponible pour cette Ayah.";
 
 // MARK: - Search
 
+// Metadata: Translated by ChatGPT; human review required.
+"search.recents.title" = "Recherches récentes";
+// Metadata: Translated by ChatGPT; human review required.
+"search.popular.title" = "Essayez de rechercher avec";
+// Metadata: Translated by ChatGPT; human review required.
+"search.placeholder.text" = "Sourate, verset, traduction, tafsir et numéros";
+// Metadata: Translated by ChatGPT; human review required.
+"search.result.count" = "%@ (%d)";
 
 // MARK: - Settings
 
+// Metadata: Translated by ChatGPT; human review required.
+"setting.write_review" = "Rédiger un avis sur l'App Store...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.contact_us" = "Contactez-nous";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.share_app" = "Partager l'application...";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.app_version" = "Version de l'application";
 
 // MARK: - Quran Menu
 
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabic" = "Arabe";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translation" = "Traduction/Tafsir";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.select_translation" = "Sélectionner des traductions/tafsir";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer" = "Pointeur de traduction de mot";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.pointer.select_translation" = "Affichage du pointeur";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.fontSizeLetter" = "A";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.translationFontSize" = "Taille de la traduction";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.arabicFontSize" = "Taille du Coran";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.twoPages" = "2 pages côte à côte (en paysage)";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.verticalScrolling" = "Défilement vertical";
 
 // MARK: - Theme
 
+// Metadata: Translated by ChatGPT; human review required.
+"theme.light" = "Clair";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.dark" = "Sombre";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto" = "Auto";
+// Metadata: Translated by ChatGPT; human review required.
+"theme.auto.message" = "L'application Coran adhérera aux paramètres d'apparence de votre iPhone";
 
 // MARK: - Tabs
 
+// Metadata: Translated by ChatGPT; human review required.
+"tab.notes" = "Notes";
 
 // MARK: - Update
 
+// Metadata: Translated by ChatGPT; human review required.
+"update.filesystem.title" = "Mise à jour des bases de données...";
 
 // MARK: - Reciters
 
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.title" = "Sélectionnez le récitant à écouter";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.recent" = "Récents";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.downloaded" = "Téléchargé";
+// Metadata: Translated by ChatGPT; human review required.
+"reciters.all" = "Tous";
 
 // MARK: - Audio
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.action.modify" = "Modifier";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing.message" = "Lecture audio de %@ à %@";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.downloading.message" = "Téléchargement de l'audio de %@ à %@";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playing-verses.label" = "Lecture des versets";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.adjust-end-verse-to-the-end.label" = "Ajuster le dernier verset à la fin";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-start-verse" = "Sélectionner le verset de départ";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.select-end-verse" = "Sélectionner le verset final";
 
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount" = "Télécharger/Lire jusqu'à";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.download-play-amount.description" = "Lors de la lecture audio, cela jouera jusqu'à la fin du";
 
 // MARK: - Bookmarks
 
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.title" = "Ajout de signets...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.no-data.text" = "Lorsque vous lisez le Coran, appuyez sur le bouton signet pour marquer la page actuelle.";
 
 // MARK: - Notes
 
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.title" = "Ajout de surbrillances Ayah...";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.no-data.text" = "Appuyez et maintenez sur une Ayah. Vous pouvez étendre la sélection pour inclure plusieurs Ayat, puis appuyez sur le bouton signet.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.verses-count" = "(+%d versets)";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.title" = "Supprimer le surlignage";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete.alert.body" = "La note associée sera également supprimée.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.title" = "Synchronisation iCloud";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.icloud.alert.body" = "L'application utilise iCloud pour synchroniser les signets et les notes sur vos appareils. Vous pouvez le désactiver dans les paramètres iCloud de votre appareil.";
 
 // MARK: - Ayah Menu
 
 "ayah.menu.copy" = "Copier";
 "ayah.menu.share" = "Partager…";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-juz" = "jusqu'à la fin du Juz'";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-surah" = "jusqu'à la fin de la Sourate";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.play-end-page" = "jusqu'à la fin de la page";
 "ayah.menu.repeat" = "Répéter";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verse" = "verset sélectionné";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.selected-verses" = "versets sélectionnés";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight" = "Surligner";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.highlight-select-color" = "sélectionner la couleur";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.add-note" = "Ajouter une note";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.edit-note" = "Modifier la note";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-note" = "Supprimer la note";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.delete-highlight" = "Supprimer la mise en évidence";
 
 // MARK: - Reading Selector
 
 // Selector UI
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.short" = "Sélectionner";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selectMushaf.long" = "Définir comme Mushaf actuel";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.title" = "Choisir le Mushaf";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.selection-description" = "Touchez un Mushaf pour plus d'informations.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.hafs" = "Mushaf Hafs";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.604" = "604 pages";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.lines.15" = "page de 15 lignes";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.supported" = "Traduction mot à mot";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.word-translation.not-supported" = "Pas de traduction mot à mot";
 
 // Hafs 1405
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.title" = "Hafs, Médine classique, 1405 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.description" = "Le Mushaf Hafs classique publié à Médine en 1405 Hijri. L'application a proposé cette version pendant longtemps.\nDu Complexe d'Impression du Coran Roi Fahd.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1405.issue" = "Publié en 1405 Hijri";
 
 // Hafs 1421
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.title" = "Hafs, Médine, 1421 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.description" = "Le Mushaf Hafs publié à Médine en 1421 Hijri. Du Complexe d'Impression du Coran Roi Fahd.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.issue" = "Publié en 1421 Hijri";
 
 // Hafs 1440
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.title" = "Hafs, Médine, 1440 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.description" = "Le Mushaf Hafs publié à Médine en 1440 Hijri. Du Complexe d'Impression du Coran Roi Fahd.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1440.issue" = "Publié en 1440 Hijri";
 
 // Hafs Tajweed
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.title" = "Hafs, Tajweed";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.description" = "Le Mushaf Hafs Tajweed. Al-Quran Al-Kareem - Édition Dar al-Marefa.";
 
 // MARK: - What's new
 
+// Metadata: Translated by ChatGPT; human review required.
+"new.title" = "Quoi de neuf";
+// Metadata: Translated by ChatGPT; human review required.
+"new.action" = "Continuer";
 
 // Mushafs
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs" = "Nouveaux Mushafs:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs.details" = "Puisse Allah soulager l'oppression de nos frères et sœurs à Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Édition Dar al-Marefa.\n* Mushaf de Médine 1421 hijri.\n* Mushaf de Médine 1440 hijri.\n* De plus, continuez à profiter de la version classique de 1405 hijri.";
 
 // Reciters
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters" = "Nouveaux Récitateurs:";
 
 // Miscellaneous
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous" = "Divers:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous.details" = "* Mise à jour de l'apparence de l'application.\n* Fonction de recherche améliorée (nouvel algorithme à venir bientôt).\n* Prise en charge de la localisation vietnamienne.\n* Accès avancé aux options audio disponible lorsque aucune récitation n'est en cours.\n* L'application est désormais open source : https://github.com/quran/quran-ios";

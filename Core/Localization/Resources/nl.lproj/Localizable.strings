@@ -10,6 +10,8 @@
 
 // MARK: - Errors
 
+// Metadata: Translated by ChatGPT; human review required.
+"error.dialog.title" = "Fout";
 "error.message.connection_lost" = "Internet verbinding is verbroken. Ga naar een locatie waar een meer stabiele verbinding beschikbaar is, of wacht tot de verbinding terug tot stand is gekomen.";
 "error.message.international_roaming_off" = "Internationale roaming is niet toegestaan. Verander de internationale roaming-instelling, of schakel Wi-Fi aan.";
 "error.message.not_connected_to_internet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
@@ -25,6 +27,8 @@
 
 "translation.text-type.translation" = "Vertaling";
 "translation.text-type.transliteration" = "Transliteratie";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.selectedTranslations" = "Geselecteerd";
 "translation.translator" = "Vertaler: ";
 "translation.text.see-referenced-verse" = "Zie ayah %d.";
 "translation.text.read-more" = "Lees Meer";
@@ -142,19 +146,25 @@
 
 // Hafs 1405
 "reading.hafs-1405.title" = "Hafs, klassieke Madina, 1405 AH";
-"reading.hafs-1405.description" = "De klassieke hafs Mushaf, uitgegeven in Madina in 1405 Hijri. De app bood deze versie lange tijd aan.\nUit het King Fahd Quran Printing Complex.";
+"reading.hafs-1405.description" = "De klassieke hafs Mushaf, uitgegeven in Medina in 1405 Hijri. De app bood deze versie lange tijd aan.\nUit het King Fahd Quran Printing Complex.";
 "reading.hafs-1405.issue" = "Uitgegeven in 1405 Hijri";
 
 // Hafs 1421
-"reading.hafs-1421.title" = "Hafs, klassieke Madina, 1421 AH";
+"reading.hafs-1421.title" = "Hafs, klassieke Medina, 1421 AH";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1421.description" = "De Hafs Mushaf uitgegeven in Medina in 1421 Hijri. Van het Koning Fahd Koran Drukkomplex.";
 "reading.hafs-1421.issue" = "Uitgegeven in 1421 Hijri";
 
 // Hafs 1440
-"reading.hafs-1440.title" = "Hafs, Madina, 1440 AH";
+"reading.hafs-1440.title" = "Hafs, Medina, 1440 AH";
 "reading.hafs-1440.description" = "De hafs Mushaf uitgegeven in Medina in 1440 Hijri. Van het King Fahd Quran Printing Complex.";
 "reading.hafs-1440.issue" = "Uitgegeven in 1440 Hijri";
 
 // Hafs Tajweed
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.title" = "Hafs, Tajweed";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.tajweed.description" = "De Tajweed Hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Editie.";
 
 // MARK: - What's new
 
@@ -162,8 +172,16 @@
 "new.action" = "Ga verder";
 
 // Mushafs
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs" = "Nieuwe Mushafs:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.mushafs.details" = "Moge Allah de onderdrukking van onze broeders en zusters in Gaza verlichten.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Editie.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, blijf genieten van de klassieke versie uit 1405 hijri.";
 
 // Reciters
 "new.reciters" = "Nieuwe Reciteurs";
 
 // Miscellaneous
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous" = "Diversen:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.miscellaneous.details" = "* Bijgewerkte app-uitstraling.\n* Verbeterde zoekfunctie (nieuw algoritme binnenkort beschikbaar).\n* Ondersteuning voor Vietnamese lokalisatie.\n* Geavanceerde audio-opties toegankelijk wanneer er geen recitatie wordt afgespeeld.\n* App is nu open source: https://github.com/quran/quran-ios";

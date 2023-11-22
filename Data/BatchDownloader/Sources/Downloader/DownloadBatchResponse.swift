@@ -113,7 +113,7 @@ public actor DownloadBatchResponse {
 
     // MARK: Internal
 
-    let batchId: Int64
+    nonisolated let batchId: Int64
 
     var runningTasks: Int {
         responses.values.filter { $0.isInProgress && $0.taskId != nil }.count
@@ -195,7 +195,9 @@ public actor DownloadBatchResponse {
         }
 
         if let error = firstError {
-            crasher.recordError(error, reason: "Download failed \(batchId)")
+            if !(error is CancellationError) {
+                crasher.recordError(error, reason: "Download failed \(batchId)")
+            }
 
             // Cancel other tasks if any has failed
             for request in requests {

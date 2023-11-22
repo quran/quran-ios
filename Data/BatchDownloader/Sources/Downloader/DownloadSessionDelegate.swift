@@ -21,14 +21,16 @@
 import Crashing
 import Foundation
 import NetworkSupport
+import SystemDependencies
 import Utilities
 import VLogging
 
 actor DownloadSessionDelegate: NetworkSessionDelegate {
     // MARK: Lifecycle
 
-    init(dataController: DownloadBatchDataController) {
+    init(dataController: DownloadBatchDataController, fileManager: FileSystem) {
         self.dataController = dataController
+        self.fileManager = fileManager
     }
 
     // MARK: Internal
@@ -66,7 +68,6 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             logger.warning("Missed saving task \(describe(downloadTask))")
             return
         }
-        let fileManager = FileManager.default
 
         let resumePath = response.request.resumePath
         let destinationURL = response.request.destination
@@ -78,7 +79,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
         // create directory if needed
         let directory = destinationURL.deletingLastPathComponent()
-        try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+        try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
 
         // move the file to destination
         do {
@@ -127,6 +128,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
     private let acceptableStatusCodes = 200 ..< 300
 
     private let dataController: DownloadBatchDataController
+    private let fileManager: FileSystem
 
     private func wrap(error theError: Error, resumePath: RelativeFilePath) -> Error {
         var error = theError

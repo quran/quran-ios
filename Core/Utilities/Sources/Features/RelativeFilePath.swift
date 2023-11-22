@@ -57,14 +57,6 @@ public extension FileManager {
         try removeItem(at: path.url)
     }
 
-    func createDirectory(at path: RelativeFilePath, withIntermediateDirectories: Bool, attributes: [FileAttributeKey: Any]? = nil) throws {
-        try createDirectory(at: path.url, withIntermediateDirectories: withIntermediateDirectories, attributes: attributes)
-    }
-
-    func moveItem(at src: URL, to dst: RelativeFilePath) throws {
-        try moveItem(at: src, to: dst.url)
-    }
-
     func copyItem(at src: URL, to dst: RelativeFilePath) throws {
         try copyItem(at: src, to: dst.url)
     }

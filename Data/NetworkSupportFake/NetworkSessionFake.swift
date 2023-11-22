@@ -25,6 +25,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     public let delegateQueue: OperationQueue
     public var downloads: [SessionTask] = []
     public var dataTasks: [SessionTask] = []
+    public var downloadsObserver: AsyncChannel<SessionTask>?
 
     public var dataResults: [URL: Result<Data, Error>] = [:]
 
@@ -43,6 +44,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         let task = SessionTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         downloads.append(task)
+        Task { await downloadsObserver?.send(task) }
         return task
     }
 
@@ -127,6 +129,8 @@ public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTa
     public var response: URLResponse?
     public var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
 
+    public var isCancelled = false
+
     public static func == (lhs: SessionTask, rhs: SessionTask) -> Bool {
         lhs.taskIdentifier == rhs.taskIdentifier
     }
@@ -149,6 +153,4 @@ public final class SessionTask: NetworkSessionDownloadTask, NetworkSessionDataTa
     var resumeData: Data?
 
     weak var session: NetworkSessionFake?
-
-    var isCancelled = false
 }

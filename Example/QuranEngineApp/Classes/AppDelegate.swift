@@ -24,11 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Task {
             // Eagerly load download manager to handle any background downloads.
-            async let download: () = container.downloadManager.start()
+            await container.downloadManager.start()
 
-            // Begin fetching resources immediately upon the application's start-up.
-            async let readingResources: () = container.readingResources.startLoadingResources()
-            _ = await [download, readingResources]
+            // Begin fetching resources immediately after download manager is initialized.
+            await container.readingResources.startLoadingResources()
         }
 
         return true

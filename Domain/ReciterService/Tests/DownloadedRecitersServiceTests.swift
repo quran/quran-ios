@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranAudio
+import SystemDependencies
 import XCTest
 @testable import ReciterService
 
@@ -47,7 +48,7 @@ class DownloadedRecitersServiceTests: XCTestCase {
     // MARK: Private
 
     private var service: DownloadedRecitersService!
-    private var fileManager = FileManager.default
+    private var fileManager = DefaultFileSystem()
 
     private func deleteReciterDirs(_ reciters: [Reciter]) {
         reciters.forEach { reciter in

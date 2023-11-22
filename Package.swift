@@ -56,6 +56,7 @@ let package = Package(
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
+        .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -65,6 +66,7 @@ private func coreTargets() -> [[Target]] {
     return [
         target(type, name: "SystemDependencies", hasTests: false, dependencies: [
             "Utilities",
+            "Zip",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
         target(type, name: "SystemDependenciesFake", hasTests: false, dependencies: [
@@ -284,6 +286,7 @@ private func dataTargets() -> [[Target]] {
             "Crashing",
             "WeakSet",
             "NetworkSupport",
+            "SystemDependencies",
         ], testDependencies: [
             "BatchDownloaderFake",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
@@ -429,10 +432,13 @@ private func domainTargets() -> [[Target]] {
             "QuranKit",
             "VLogging",
             "Preferences",
+            "BatchDownloader",
             "SystemDependencies",
+            .product(name: "CombineSchedulers", package: "combine-schedulers"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "SystemDependenciesFake",
+            "BatchDownloaderFake",
         ]),
 
         target(type, name: "AnnotationsService", dependencies: [
@@ -561,6 +567,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranImageFeature", hasTests: false, dependencies: [
+            "AppDependencies",
             "NoorUI",
             "ImageService",
             "ReadingService",

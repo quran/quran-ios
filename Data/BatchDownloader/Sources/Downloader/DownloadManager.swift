@@ -21,6 +21,7 @@
 import Crashing
 import Foundation
 import NetworkSupport
+import SystemDependencies
 import Utilities
 import VLogging
 
@@ -50,7 +51,8 @@ public final class DownloadManager: Sendable {
     init(
         maxSimultaneousDownloads: Int,
         sessionFactory: @escaping SessionFactory,
-        persistence: DownloadsPersistence
+        persistence: DownloadsPersistence,
+        fileManager: FileSystem = DefaultFileSystem()
     ) {
         let dataController = DownloadBatchDataController(
             maxSimultaneousDownloads: maxSimultaneousDownloads,
@@ -58,7 +60,7 @@ public final class DownloadManager: Sendable {
         )
         self.dataController = dataController
         self.sessionFactory = sessionFactory
-        handler = DownloadSessionDelegate(dataController: dataController)
+        handler = DownloadSessionDelegate(dataController: dataController, fileManager: fileManager)
     }
 
     // MARK: Public

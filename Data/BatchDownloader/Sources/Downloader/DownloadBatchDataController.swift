@@ -84,6 +84,7 @@ actor DownloadBatchDataController {
         logger.info("Batching \(batchRequest.requests.count) to download.")
         // save to persistence
         let batch = try await persistence.insert(batch: batchRequest)
+        logger.info("Batch assigned Id = \(batch.id).")
 
         // create the response
         let response = await createResponse(forBatch: batch)
@@ -134,7 +135,7 @@ actor DownloadBatchDataController {
             // Wait until sequence completes
             for try await _ in response.progress { }
         } catch {
-            logger.error("Batch failed to download with error: \(error)")
+            logger.error("Batch \(response.batchId) failed to download with error: \(error)")
         }
     }
 

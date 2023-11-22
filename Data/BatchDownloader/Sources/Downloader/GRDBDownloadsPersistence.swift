@@ -19,7 +19,7 @@ struct GRDBDownloadsPersistence: DownloadsPersistence {
         do {
             try migrator.migrate(db)
         } catch {
-            logger.error("Error while performing Translations migrations. Error: \(error)")
+            logger.error("Error while performing Downloads migrations. Error: \(error)")
         }
     }
 

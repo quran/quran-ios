@@ -28,6 +28,7 @@ public protocol AppDependencies {
     var downloadManager: DownloadManager { get }
     var analytics: AnalyticsLibrary { get }
     var readingResources: ReadingResourcesService { get }
+    var remoteResources: ReadingRemoteResources? { get }
 
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }

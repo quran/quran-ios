@@ -33,7 +33,7 @@ public struct ContentBuilder {
             noteService: noteService,
             lastPageUpdater: lastPageUpdater,
             quran: quran,
-            imageDataSourceBuilder: ContentImageBuilder(),
+            imageDataSourceBuilder: ContentImageBuilder(container: container),
             translationDataSourceBuilder: ContentTranslationBuilder(container: container)
         )
         let viewModel = ContentViewModel(deps: interactorDeps, input: input)

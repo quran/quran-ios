@@ -8,6 +8,7 @@
 import AsyncAlgorithms
 import Foundation
 import NetworkSupportFake
+import SystemDependencies
 import Utilities
 import XCTest
 @testable import BatchDownloader
@@ -18,8 +19,8 @@ public enum BatchDownloaderFake {
     public static let maxSimultaneousDownloads = 3
     public static let downloadsURL = RelativeFilePath(downloads, isDirectory: true)
 
-    public static func makeDownloader(downloads: [SessionTask] = []) async -> (DownloadManager, NetworkSessionFake) {
-        try? FileManager.default.createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
+    public static func makeDownloader(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> (DownloadManager, NetworkSessionFake) {
+        try? DefaultFileSystem().createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
         let downloadsDBPath = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
 
         let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBPath.url)
@@ -41,7 +42,8 @@ public enum BatchDownloaderFake {
                 }
                 return session
             },
-            persistence: persistence
+            persistence: persistence,
+            fileManager: fileManager
         )
         await downloader.start()
         await sessionActor.channel.next()

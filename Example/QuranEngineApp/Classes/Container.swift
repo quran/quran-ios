@@ -25,7 +25,9 @@ class Container: AppDependencies {
 
     static let shared = Container()
 
-    let readingResources = ReadingResourcesService()
+    let remoteResources: ReadingRemoteResources? = nil
+    private(set) lazy var readingResources = ReadingResourcesService(downloader: downloadManager, remoteResources: remoteResources)
+
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)

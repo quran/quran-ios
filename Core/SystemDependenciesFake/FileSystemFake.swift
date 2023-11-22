@@ -24,6 +24,7 @@ public final class FileSystemFake: FileSystem, Sendable {
 
     enum FileSystemError: Error {
         case noResourceValues
+        case general(String)
     }
 
     // MARK: Lifecycle
@@ -64,7 +65,22 @@ public final class FileSystemFake: FileSystem, Sendable {
 
     public func removeItem(at url: URL) throws {
         removedItems.append(url)
-        files.remove(url)
+        for file in files {
+            if url.isParent(of: file) {
+                files.remove(file)
+            }
+        }
+    }
+
+    public func moveItem(at src: URL, to dst: URL) throws {
+        if !files.contains(src) {
+            throw FileSystemError.general("Source file doesn't exist: \(src)")
+        }
+        if files.contains(dst) {
+            throw FileSystemError.general("Destination file exists: \(src)")
+        }
+        files.remove(src)
+        files.insert(dst)
     }
 
     public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
@@ -95,6 +111,9 @@ public final class FileSystemFake: FileSystem, Sendable {
     }
 
     public func writeToFile(at path: URL, content: String) throws {
+        if files.contains(path) {
+            throw FileSystemError.general("Cannot overwrite file at \(path)")
+        }
         files.insert(path)
     }
 

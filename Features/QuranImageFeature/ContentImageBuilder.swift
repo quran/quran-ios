@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AppDependencies
 import Caching
 import Foundation
 import ImageService
@@ -16,21 +17,25 @@ import QuranPagesFeature
 import ReadingService
 import UIKit
 import Utilities
+import VLogging
 
 @MainActor
 public struct ContentImageBuilder: PageDataSourceBuilder {
     // MARK: Lifecycle
 
-    public init() { }
+    public init(container: AppDependencies) {
+        self.container = container
+    }
 
     // MARK: Public
 
     public func build(actions: PageDataSourceActions, pages: [Page]) -> PageDataSource {
         let reading = ReadingPreferences.shared.reading
+        let readingDirectory = readingDirectory(reading)
 
         let imageService = ImageDataService(
-            ayahInfoDatabase: reading.ayahInfoDatabase,
-            imagesURL: reading.images,
+            ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
+            imagesURL: reading.images(in: readingDirectory),
             cropInsets: reading.cropInsets
         )
 
@@ -47,6 +52,16 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
     }
 
     // MARK: Private
+
+    private let container: AppDependencies
+
+    private func readingDirectory(_ reading: Reading) -> URL {
+        let remoteResource = container.remoteResources?.resource(for: reading)
+        let remotePath = remoteResource?.downloadDestination.url
+        let bundlePath = { Bundle.main.url(forResource: reading.localPath, withExtension: nil) }
+        logger.info("Images: Use \(remoteResource != nil ? "remote" : "bundle") For reading \(reading)")
+        return remotePath ?? bundlePath()!
+    }
 
     private func createCahceableImageService(imageService: ImageDataService, pages: [Page]) -> PagesCacheableService<Page, ImagePage> {
         let cache = Cache<Page, ImagePage>()
@@ -93,7 +108,7 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
 }
 
 private extension Reading {
-    var ayahInfoDatabase: URL {
+    func ayahInfoDatabase(in directory: URL) -> URL {
         switch self {
         case .hafs_1405:
             return directory.appendingPathComponent("images_1920/databases/ayahinfo_1920.db")
@@ -106,7 +121,7 @@ private extension Reading {
         }
     }
 
-    var images: URL {
+    func images(in directory: URL) -> URL {
         switch self {
         case .hafs_1405:
             return directory.appendingPathComponent("images_1920/width_1920")

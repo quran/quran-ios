@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranAudio
+import SystemDependencies
 import TestResources
 import Utilities
 import Zip
@@ -32,7 +33,7 @@ extension Reciter {
 
     public func prepareGaplessReciterForTests(unZip: Bool = false) throws {
         let directory = localFolder()
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try DefaultFileSystem().createDirectory(at: directory, withIntermediateDirectories: true)
         let dbSource = resource(gaplessDatabaseZip)
         let zipDestination = gaplessDatabaseZipPath
         try FileManager.default.copyItem(at: dbSource, to: gaplessDatabaseZipPath)

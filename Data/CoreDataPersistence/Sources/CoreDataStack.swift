@@ -35,6 +35,7 @@ public class CoreDataStack {
     public func newBackgroundContext() -> NSManagedObjectContext {
         let context = persistentContainer.newBackgroundContext()
         context.transactionAuthor = appTransactionAuthorName
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }
 

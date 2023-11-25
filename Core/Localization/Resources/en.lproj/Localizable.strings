@@ -168,7 +168,7 @@
 
 // Mushafs
 "new.mushafs" = "New Mushafs:";
-"new.mushafs.details" = "May Allah lift the oppression from our brothers and sisters in Gaza.\n\n* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
+"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
 
 // Reciters
 "new.reciters" = "New Reciters:";

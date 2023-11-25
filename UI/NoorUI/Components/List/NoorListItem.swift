@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIx
+import VLogging
 
 public struct NoorListItem: View {
     public struct Subtitle {
@@ -85,7 +86,7 @@ public struct NoorListItem: View {
         self.rightSubtitle = rightSubtitle
         self.subtitle = subtitle
         self.accessory = accessory
-        self.action = action
+        _action = action
     }
 
     // MARK: Public
@@ -117,9 +118,28 @@ public struct NoorListItem: View {
     let rightSubtitle: MultipartText?
     let subtitle: Subtitle?
     let accessory: Accessory?
-    let action: AsyncAction?
+    let _action: AsyncAction?
 
     // MARK: Private
+
+    private var action: AsyncAction? {
+        guard let _action else {
+            return nil
+        }
+        return {
+            let properties: [(String, String?)] = [
+                ("heading", heading),
+                ("subheading", subheading?.rawValue),
+                ("rightPretitle", rightPretitle?.rawValue),
+                ("title", title.rawValue),
+                ("rightSubtitle", rightSubtitle?.rawValue),
+                ("subtitle", subtitle?.label),
+            ]
+            let description = properties.compactMap { p in p.1.map { "\(p.0)=\($0)" } }.joined()
+            logger.info("NoorListItem tapped. {\(description)}")
+            await _action()
+        }
+    }
 
     private var content: some View {
         HStack {

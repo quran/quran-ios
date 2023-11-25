@@ -85,6 +85,15 @@ private enum TextPart {
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
     case sura(text: String)
     case verse(text: String, color: Color, lineLimit: Int?)
+
+    // MARK: Internal
+
+    var rawValue: String {
+        switch self {
+        case .plain(let text), .highlighting(let text, _, _), .sura(let text), .verse(let text, _, _):
+            return text
+        }
+    }
 }
 
 public struct MultipartText: ExpressibleByStringInterpolation {
@@ -159,6 +168,10 @@ public struct MultipartText: ExpressibleByStringInterpolation {
     }
 
     // MARK: Internal
+
+    var rawValue: String {
+        parts.map(\.rawValue).joined()
+    }
 
     @ViewBuilder
     func view(ofSize size: FontSize) -> some View {

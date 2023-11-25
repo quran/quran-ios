@@ -101,12 +101,19 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func shareApp() {
+        logger.info("Settings: Share the app.")
         let url = URL(validURL: "https://itunes.apple.com/app/id1118663303")
         let appName = "Quran - by Quran.com - قرآن"
 
         let activityViewController = UIActivityViewController(
             activityItems: [appName, url], applicationActivities: nil
         )
+        let view = navigationController?.view
+        let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
+        activityViewController.modalPresentationStyle = .formSheet
+        activityViewController.popoverPresentationController?.permittedArrowDirections = []
+        activityViewController.popoverPresentationController?.sourceView = view
+        activityViewController.popoverPresentationController?.sourceRect = viewBound ?? .zero
         navigationController?.present(activityViewController, animated: true)
     }
 

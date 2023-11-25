@@ -64,21 +64,6 @@ extension PopoverPresenter {
         presented.popoverPresentationController?.permittedArrowDirections = permittedArrowDirections
         presenting.present(presented, animated: animated, completion: completion)
     }
-
-    func present(
-        presenting: UIViewController,
-        presented: UIViewController,
-        pointingTo barButtonItem: UIBarButtonItem,
-        permittedArrowDirections: UIPopoverArrowDirection = .any,
-        animated: Bool = true,
-        completion: (() -> Void)? = nil
-    ) {
-        presented.modalPresentationStyle = .popover
-        presented.popoverPresentationController?.delegate = self
-        presented.popoverPresentationController?.barButtonItem = barButtonItem
-        presented.popoverPresentationController?.permittedArrowDirections = permittedArrowDirections
-        presenting.present(presented, animated: animated, completion: completion)
-    }
 }
 
 extension UIViewController {

@@ -67,17 +67,7 @@ public final class DownloadManager: Sendable {
 
     public func start() async {
         logger.info("Starting download manager")
-        let operationQueue = OperationQueue()
-        operationQueue.name = "com.quran.downloads"
-        operationQueue.maxConcurrentOperationCount = 1
-
-        let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
-        operationQueue.underlyingQueue = dispatchQueue
-
-        await dataController.bootstrapPersistence()
-
-        let session = sessionFactory(handler, operationQueue)
-        self.session = session
+        let session = createSession()
         await dataController.start(with: session)
         logger.info("Download manager start completed")
     }
@@ -101,4 +91,18 @@ public final class DownloadManager: Sendable {
     private var session: NetworkSession?
     private let handler: DownloadSessionDelegate
     private let dataController: DownloadBatchDataController
+
+    private func createSession() -> NetworkSession {
+        let operationQueue = OperationQueue()
+        operationQueue.name = "com.quran.downloads"
+        operationQueue.maxConcurrentOperationCount = 1
+
+        let dispatchQueue = DispatchQueue(label: "com.quran.downloads.dispatch")
+        operationQueue.underlyingQueue = dispatchQueue
+
+        let session = sessionFactory(handler, operationQueue)
+        self.session = session
+
+        return session
+    }
 }

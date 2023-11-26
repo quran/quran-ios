@@ -67,6 +67,24 @@ final class DownloadManagerTests: XCTestCase {
         XCTAssertEqual(calls.calls, 1)
     }
 
+    func test_onGoingDownloads_whileStartNotFinished() async throws {
+        // Load a single batch
+        let batch = DownloadBatchRequest(requests: [request1])
+        _ = try await downloader.download(batch)
+
+        // Deallocate downloader & create new one
+        downloader = nil
+        downloader = await BatchDownloaderFake.makeDownloaderDontWaitForSession()
+
+        // Test calling getOnGoingDownloads and start at the same time.
+        async let startTask: () = await downloader.start()
+        async let downloadsTask = await downloader.getOnGoingDownloads()
+        let (downloads, _) = await (downloadsTask, startTask)
+
+        // Verify
+        XCTAssertEqual(downloads.count, 1)
+    }
+
     func testLoadingOnGoingDownload() async throws {
         let emptyDownloads = await downloader.getOnGoingDownloads()
         XCTAssertEqual(emptyDownloads.count, 0)

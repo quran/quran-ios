@@ -43,31 +43,23 @@ actor DownloadBatchDataController {
 
     // MARK: Internal
 
-    func bootstrapPersistence() async {
-        do {
-            try await attempt(times: 3) {
-                try await loadBatchesFromPersistence()
-            }
-        } catch {
-            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
-        }
-    }
-
     func start(with session: NetworkSession) async {
+        await bootstrapPersistence()
+
         self.session = session
         let (_, _, downloadTasks) = await session.tasks()
         for batch in batches {
             await batch.associateTasks(downloadTasks)
         }
 
-        loadedInitialRunningTasks = true
+        initialRunningTasks.initialize()
 
         // start pending tasks if needed
         await startPendingTasksIfNeeded()
     }
 
-    func getOnGoingDownloads() -> [DownloadBatchResponse] {
-        precondition(loadedInitialRunningTasks)
+    func getOnGoingDownloads() async -> [DownloadBatchResponse] {
+        await initialRunningTasks.awaitInitialization()
         return Array(batches)
     }
 
@@ -118,7 +110,7 @@ actor DownloadBatchDataController {
 
     private var batches: Set<DownloadBatchResponse> = []
 
-    private var loadedInitialRunningTasks = false
+    private var initialRunningTasks = AsyncInitializer()
 
     private var runningTasks: Int {
         get async {
@@ -136,6 +128,16 @@ actor DownloadBatchDataController {
             for try await _ in response.progress { }
         } catch {
             logger.error("Batch \(response.batchId) failed to download with error: \(error)")
+        }
+    }
+
+    private func bootstrapPersistence() async {
+        do {
+            try await attempt(times: 3) {
+                try await loadBatchesFromPersistence()
+            }
+        } catch {
+            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
         }
     }
 
@@ -172,7 +174,7 @@ actor DownloadBatchDataController {
     }
 
     private func startPendingTasksIfNeeded() async {
-        if !loadedInitialRunningTasks {
+        if !initialRunningTasks.initialized {
             return
         }
 

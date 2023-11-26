@@ -20,10 +20,7 @@ public enum BatchDownloaderFake {
     public static let downloadsURL = RelativeFilePath(downloads, isDirectory: true)
 
     public static func makeDownloader(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> (DownloadManager, NetworkSessionFake) {
-        try? DefaultFileSystem().createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
-        let downloadsDBPath = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
-
-        let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBPath.url)
+        let persistence = makeDownloadsPersistence()
         actor SessionActor {
             var session: NetworkSessionFake!
             let channel = AsyncChannel<Void>()
@@ -50,6 +47,20 @@ public enum BatchDownloaderFake {
         return (downloader, await sessionActor.session)
     }
 
+    public static func makeDownloaderDontWaitForSession(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> DownloadManager {
+        let persistence = makeDownloadsPersistence()
+        let downloader = DownloadManager(
+            maxSimultaneousDownloads: maxSimultaneousDownloads,
+            sessionFactory: { delegate, queue in
+                let session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
+                return session
+            },
+            persistence: persistence,
+            fileManager: fileManager
+        )
+        return downloader
+    }
+
     public static func tearDown() {
         try? FileManager.default.removeItem(at: Self.downloadsURL)
     }
@@ -73,4 +84,11 @@ public enum BatchDownloaderFake {
     // MARK: Private
 
     private static let downloads = "downloads"
+
+    private static func makeDownloadsPersistence() -> GRDBDownloadsPersistence {
+        try? DefaultFileSystem().createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
+        let downloadsDBPath = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
+        let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBPath.url)
+        return persistence
+    }
 }

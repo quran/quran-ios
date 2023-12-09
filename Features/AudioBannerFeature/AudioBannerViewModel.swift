@@ -113,7 +113,14 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
     }
 
     var selectedReciter: Reciter? {
-        reciters.first { $0.id == preferences.lastSelectedReciterId }
+        let storedSelectedReciterId = preferences.lastSelectedReciterId
+        let selectedReciter = reciters.first { $0.id == storedSelectedReciterId }
+        if selectedReciter == nil {
+            let firstReciter = reciters.first
+            logger.error("AudioBanner: couldn't find reciter \(storedSelectedReciterId) using \(String(describing: firstReciter?.id)) instead")
+            return firstReciter
+        }
+        return selectedReciter
     }
 
     func start() async {

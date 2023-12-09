@@ -69,7 +69,7 @@ public final class DownloadManager: Sendable {
         logger.info("Starting download manager")
         let session = createSession()
         await dataController.start(with: session)
-        logger.info("Download manager start completed")
+        logger.info("Download manager started")
     }
 
     @MainActor
@@ -78,11 +78,16 @@ public final class DownloadManager: Sendable {
     }
 
     public func getOnGoingDownloads() async -> [DownloadBatchResponse] {
-        await dataController.getOnGoingDownloads()
+        logger.info("getOnGoingDownloads requested")
+        let downloads = await dataController.getOnGoingDownloads()
+        logger.debug("Found \(downloads.count) ongoing downloads")
+        return downloads
     }
 
     public func download(_ batch: DownloadBatchRequest) async throws -> DownloadBatchResponse {
-        try await dataController.download(batch)
+        logger.debug("Requested to download \(batch.requests.map(\.url.absoluteString))")
+        let result = try await dataController.download(batch)
+        return result
     }
 
     // MARK: Private

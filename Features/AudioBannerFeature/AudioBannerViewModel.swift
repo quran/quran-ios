@@ -293,16 +293,20 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         cancellableTasks.task { [weak self] in
             do {
                 let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
+                logger.info("AudioBanner: reciter downloaded? \(downloaded)")
                 if !downloaded {
                     self?.startDownloading()
                     let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
                     guard let download else {
+                        logger.info("AudioBanner: couldn't create a download request")
                         return
                     }
 
                     await self?.observe([download])
 
                     for try await _ in download.progress { }
+
+                    logger.info("AudioBanner: download completed")
                 }
 
                 try await self?.audioPlayer.play(

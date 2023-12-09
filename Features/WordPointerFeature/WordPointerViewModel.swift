@@ -10,6 +10,7 @@ import Crashing
 import QuranKit
 import UIKit
 import Utilities
+import VLogging
 import WordTextService
 
 @MainActor
@@ -21,6 +22,12 @@ public protocol WordPointerListener: AnyObject {
 
 @MainActor
 final class WordPointerViewModel {
+    enum PanResult {
+        case none
+        case hidePopover
+        case showPopover(text: String)
+    }
+
     // MARK: Lifecycle
 
     init(service: WordTextService) {
@@ -28,12 +35,6 @@ final class WordPointerViewModel {
     }
 
     // MARK: Internal
-
-    enum PanResult {
-        case none
-        case hidePopover
-        case showPopover(text: String)
-    }
 
     weak var listener: WordPointerListener?
 
@@ -43,19 +44,24 @@ final class WordPointerViewModel {
 
     func viewPanned(to point: CGPoint, in view: UIView) async -> PanResult {
         guard let word = listener?.word(at: point, in: view) else {
+            logger.debug("No word found at position \(point)")
             unhighlightWord()
             return .hidePopover
         }
+        logger.debug("Highlighting word \(word) at position: \(point)")
         listener?.highlightWord(word)
 
         if selectedWord == word {
+            logger.debug("Same word selected before")
             return .none
         }
         do {
             if let text = try await service.textForWord(word) {
+                logger.debug("Found text '\(text)' for word \(word)")
                 selectedWord = word
                 return .showPopover(text: text)
             } else {
+                logger.debug("No text found for word \(word)")
                 return .hidePopover
             }
         } catch {

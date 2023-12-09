@@ -10,8 +10,15 @@ import NoorUI
 import Popover_OC
 import UIKit
 import UIx
+import VLogging
 
 public final class WordPointerViewController: UIViewController {
+    private enum GestureState {
+        case began
+        case changed(translation: CGPoint)
+        case ended(velocity: CGPoint)
+    }
+
     // MARK: Lifecycle
 
     init(viewModel: WordPointerViewModel) {
@@ -119,12 +126,6 @@ public final class WordPointerViewController: UIViewController {
 
     // MARK: Private
 
-    private enum GestureState {
-        case began
-        case changed(translation: CGPoint)
-        case ended(velocity: CGPoint)
-    }
-
     private let viewModel: WordPointerViewModel
 
     // For word translation
@@ -180,11 +181,14 @@ public final class WordPointerViewController: UIViewController {
     private func makeGestureState(_ gesture: UIPanGestureRecognizer) -> GestureState? {
         switch gesture.state {
         case .began:
+            logger.debug("Started pointer dragging")
             return .began
         case .changed:
             let translation = gesture.translation(in: container)
+            logger.debug("Pointer dragged to new position \(translation)")
             return .changed(translation: translation)
         case .ended, .cancelled, .failed:
+            logger.debug("Ended pointer dragging \(gesture.state.rawValue)")
             let velocity = gesture.velocity(in: container)
             return .ended(velocity: velocity)
         case .possible:

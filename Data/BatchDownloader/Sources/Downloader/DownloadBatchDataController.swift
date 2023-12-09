@@ -175,20 +175,24 @@ actor DownloadBatchDataController {
 
     private func startPendingTasksIfNeeded() async {
         if !initialRunningTasks.initialized {
+            logger.warning("startPendingTasksIfNeeded not initialized")
             return
         }
 
         // if we have a session
         guard let session else {
+            logger.warning("startPendingTasksIfNeeded no session")
             return
         }
         // and there are empty slots to use for downloading
         let runningTasks = await runningTasks
         guard runningTasks < maxSimultaneousDownloads else {
+            logger.info("startPendingTasksIfNeeded no empty slots for download")
             return
         }
         // and there are things to download
         guard !batches.isEmpty else {
+            logger.info("startPendingTasksIfNeeded no batches to download")
             return
         }
 
@@ -215,11 +219,7 @@ actor DownloadBatchDataController {
             }
         }
 
-        if downloadTasks.isEmpty {
-            return
-        }
-
-        logger.info("Enqueuing \(downloadTasks.count) to download on empty channels.")
+        logger.info("startDownloadTasks \(downloadTasks.count) to download on empty channels.")
 
         // start the tasks
         for download in downloadTasks {

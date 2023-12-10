@@ -18,6 +18,7 @@ import TranslationsFeature
 import UIKit
 import UIx
 import VLogging
+import Zip
 
 @MainActor
 final class SettingsRootViewModel: ObservableObject {
@@ -29,6 +30,7 @@ final class SettingsRootViewModel: ObservableObject {
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
+        diagnosticsBuilder: DiagnosticsBuilder,
         navigationController: UINavigationController
     ) {
         theme = themeService.theme
@@ -38,6 +40,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
+        self.diagnosticsBuilder = diagnosticsBuilder
         self.navigationController = navigationController
 
         themeService.themePublisher.assign(to: &$theme)
@@ -51,6 +54,7 @@ final class SettingsRootViewModel: ObservableObject {
     let audioDownloadsBuilder: AudioDownloadsBuilder
     let translationsListBuilder: TranslationsListBuilder
     let readingSelectorBuilder: ReadingSelectorBuilder
+    let diagnosticsBuilder: DiagnosticsBuilder
 
     let contactUsService = ContactUsService()
     let themeService = ThemeService.shared
@@ -105,16 +109,7 @@ final class SettingsRootViewModel: ObservableObject {
         let url = URL(validURL: "https://itunes.apple.com/app/id1118663303")
         let appName = "Quran - by Quran.com - قرآن"
 
-        let activityViewController = UIActivityViewController(
-            activityItems: [appName, url], applicationActivities: nil
-        )
-        let view = navigationController?.view
-        let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
-        activityViewController.modalPresentationStyle = .formSheet
-        activityViewController.popoverPresentationController?.permittedArrowDirections = []
-        activityViewController.popoverPresentationController?.sourceView = view
-        activityViewController.popoverPresentationController?.sourceRect = viewBound ?? .zero
-        navigationController?.present(activityViewController, animated: true)
+        navigationController?.share([appName, url])
     }
 
     func writeReview() {
@@ -126,6 +121,12 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Settings: presentContactUs")
         let viewController = contactUsService.contactUsController()
         navigationController?.present(viewController, animated: true)
+    }
+
+    func navigateToDiagnotics() {
+        logger.info("Settings: navigateToDiagnotics")
+        let viewController = diagnosticsBuilder.build(navigationController: navigationController)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     // MARK: Private

@@ -163,6 +163,21 @@
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "Tajweed hafs Mushaf. Al-Quran Al-Kareem - Phiên bản Dar al-Marefa.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "Chuẩn đoán";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "Các cài đặt này được nhà phát triển ứng dụng sử dụng cụ thể cho mục đích gỡ lỗi và chẩn đoán.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "Chia sẻ nhật ký ứng dụng";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "Kích hoạt ghi nhật ký gỡ lỗi";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "Cài đặt này sẽ có hiệu lực khi ứng dụng được khởi động lại lần tiếp theo.";
+
+
 // MARK: - What's new
 
 "new.title" = "Có gì mới";

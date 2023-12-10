@@ -22,6 +22,8 @@ public protocol AppDependencies {
     var wordsDatabase: URL { get }
     var appHost: URL { get }
     var filesAppHost: URL { get }
+    var logsDirectory: URL { get }
+    var databasesDirectory: URL { get }
 
     var supportsCloudKit: Bool { get }
 

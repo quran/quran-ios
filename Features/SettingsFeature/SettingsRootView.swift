@@ -24,7 +24,8 @@ struct SettingsRootView: View {
             navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
-            contactUs: { viewModel.contactUs() }
+            contactUs: { viewModel.contactUs() },
+            navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
         )
     }
 }
@@ -39,6 +40,7 @@ private struct SettingsRootViewUI: View {
     let shareApp: AsyncAction
     let writeReview: AsyncAction
     let contactUs: AsyncAction
+    let navigateToDiagnotics: AsyncAction
 
     var body: some View {
         NoorList {
@@ -105,6 +107,15 @@ private struct SettingsRootViewUI: View {
                     action: contactUs
                 )
             }
+
+            NoorBasicSection {
+                NoorListItem(
+                    image: .init(.debug),
+                    title: .text(l("diagnostics.title")),
+                    accessory: .disclosureIndicator,
+                    action: navigateToDiagnotics
+                )
+            }
         }
     }
 }
@@ -123,7 +134,8 @@ struct SettingsRootView_Previews: PreviewProvider {
                 navigateToReadingSelector: {},
                 shareApp: {},
                 writeReview: {},
-                contactUs: {}
+                contactUs: {},
+                navigateToDiagnotics: {}
             )
         }
     }

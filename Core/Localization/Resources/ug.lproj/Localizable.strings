@@ -256,6 +256,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "تەجۋىد حافس مۇشافى. ئەلقۇرئان ئەلكەرىم - دار ئەلمەرىپە نەشرى.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "تەكشۈرۈش";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "بۇ تەڭشەكلەر ئەپ ياسايدىغان تەرەپ تەرىپىدىن مەخسۇسىي تەكشۈرۈش ۋە دىياگنوز قىلىش مەقسىتىدە ئىشلىتىلىدۇ.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "ئەپ خاتىرىلىرىنى ھەمبەھىرلەش";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "تەكشۈرۈش خاتىرىسىنى يولغا قويۇش";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "بۇ تەڭشەك كىيىنكى قېتىم ئەپ قايتا باشلاشتا ئىشقا ئاشىدۇ.";
+
+
 // MARK: - What's new
 
 // Metadata: Translated by ChatGPT; human review required.

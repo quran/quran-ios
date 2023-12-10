@@ -23,6 +23,7 @@ public enum NoorSystemImage: String {
     case lastPage = "clock"
     case search = "magnifyingglass"
     case mushafs = "books.vertical.fill"
+    case debug = "ant"
 
     // MARK: Public
 

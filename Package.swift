@@ -655,6 +655,8 @@ private func featuresTargets() -> [[Target]] {
             "AudioDownloadsFeature",
             "TranslationsFeature",
             "ReadingSelectorFeature",
+            "Preferences",
+            "Zip",
         ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [

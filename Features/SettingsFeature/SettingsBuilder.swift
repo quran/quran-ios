@@ -32,6 +32,7 @@ public struct SettingsBuilder {
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
+            diagnosticsBuilder: DiagnosticsBuilder(container: container),
             navigationController: navigationController
         )
         let view = SettingsRootView(viewModel: viewModel)

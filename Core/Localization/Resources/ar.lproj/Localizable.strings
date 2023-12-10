@@ -158,6 +158,16 @@
 "reading.tajweed.title" = "مصحف التجويد";
 "reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";
 
+// MARK: - Diagnostics
+
+"diagnostics.title" = "تشخيص التطبيق";
+"diagnostics.details" = "يستخدم المطور هذه الإعدادات خصيصًا لأغراض التصحيح والتشخيص.";
+
+"diagnostics.share_app_logs" = "مشاركة سجلات التطبيق";
+"diagnostics.enable_debug_logs" = "تمكين تسجيل التصحيح";
+"diagnostics.enable_debug_logs.details" = "سيكون للإعداد تأثير عند إعادة تشغيل التطبيق التالية.";
+
+
 // MARK: - What's new
 
 "new.title" = "المضاف حديثاً";

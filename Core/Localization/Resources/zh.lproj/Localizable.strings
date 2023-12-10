@@ -254,6 +254,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "塔吉维德哈夫斯穆沙夫。阿尔古兰阿尔克里姆 - 达尔马雷法版。";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "诊断";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "这些设置由应用程序开发者专门用于调试和诊断目的。";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "分享应用日志";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "启用调试日志";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "该设置将在应用程序下次重启时生效。";
+
+
 // MARK: - What's new
 
 // Metadata: Translated by ChatGPT; human review required.

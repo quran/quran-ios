@@ -11,15 +11,32 @@ import UIx
 public struct NoorBasicSection<Content: View>: View {
     // MARK: Lifecycle
 
-    public init(title: String? = nil, @ViewBuilder content: () -> Content) {
+    public init(title: String? = nil, footer: String? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
+        self.footer = footer
         self.content = content()
     }
 
     // MARK: Public
 
     public var body: some View {
-        if let title {
+        if let footer {
+            if let title {
+                Section {
+                    content
+                } header: {
+                    Text(title)
+                } footer: {
+                    Text(footer)
+                }
+            } else {
+                Section {
+                    content
+                } footer: {
+                    Text(footer)
+                }
+            }
+        } else if let title {
             Section {
                 content
             } header: {
@@ -35,6 +52,7 @@ public struct NoorBasicSection<Content: View>: View {
     // MARK: Internal
 
     let title: String?
+    let footer: String?
     let content: Content
 }
 

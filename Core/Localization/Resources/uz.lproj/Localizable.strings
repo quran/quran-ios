@@ -255,6 +255,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "Tajvid Hafs Mushafi. Al-Qur'an Al-Kareem - Dar al-Marefa nashri.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "Diagnostika";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "Ushbu sozlamalar dastur ishlab chiqaruvchisi tomonidan maxsus tuzatish va diagnostika maqsadida ishlatiladi.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "Ilova loglarini ulashish";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "Tuzatish qaydini yoqish";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "Bu sozlama ilovani keyingi qayta ishga tushirilganda amalga oshadi.";
+
+
 // MARK: - What's new
 
 // Metadata: Translated by ChatGPT; human review required.

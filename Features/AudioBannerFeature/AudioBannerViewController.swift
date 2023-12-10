@@ -88,6 +88,7 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     }
 
     func hideAllControls() {
+        logger.info("AudioBanner: hideAllControls")
         loadViewIfNeeded()
         [reciterView, playView, downloadView].forEach { $0.alpha = 0 }
     }
@@ -100,24 +101,28 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     }
 
     func setDownloading(_ progress: Float) {
+        logger.info("AudioBanner: downloading \(progress)")
         downloadView.progressView.progress = progress
 
         hideAllExcept(downloadView)
     }
 
     func setPlaying() {
+        logger.info("AudioBanner: setPlaying")
         playView.pauseResumeButton.setImage(.symbol("pause.fill"), for: UIControl.State())
 
         hideAllExcept(playView)
     }
 
     func setPaused() {
+        logger.info("AudioBanner: setPaused")
         playView.pauseResumeButton.setImage(.symbol("play.fill"), for: UIControl.State())
 
         hideAllExcept(playView)
     }
 
     func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        logger.info("AudioBanner: updateAudioOptions")
         viewModel.updateAudioOptions(to: newOptions)
     }
 
@@ -129,6 +134,7 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     // MARK: - Reciter List
 
     func onSelectedReciterChanged(to reciter: Reciter) {
+        logger.info("AudioBanner: onSelectedReciterChanged to \(reciter.id)")
         viewModel.onSelectedReciterChanged(to: reciter)
     }
 
@@ -184,7 +190,9 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     }
 
     private func showReciterView() {
+        logger.info("AudioBanner: show reciter view \(String(describing: viewModel.selectedReciter?.id))")
         guard let selectedReciter = viewModel.selectedReciter else {
+            logger.info("AudioBanner: No reciter selected")
             return
         }
         setReciter(name: selectedReciter.localizedName)
@@ -278,6 +286,7 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     private func showAdvancedAudioOptions() {
         logger.info("AudioBanner: more button tapped. State: \(viewModel.playingState)")
         guard let options = viewModel.advancedAudioOptions else {
+            logger.info("AudioBanner: showAdvancedAudioOptions couldn't construct advanced audio options")
             return
         }
         let viewController = advancedAudioOptionsBuilder.build(withListener: self, options: options)
@@ -288,6 +297,7 @@ final class AudioBannerViewController: UIViewController, AdvancedAudioOptionsLis
     private func showAdvancedAudioOptionsNotPlaying() {
         logger.info("AudioBanner: more button tapped. State: \(viewModel.playingState)")
         guard let options = viewModel.advancedAudioOptionsNotPlaying else {
+            logger.info("AudioBanner: showAdvancedAudioOptionsNotPlaying couldn't construct advanced audio options")
             return
         }
         let viewController = advancedAudioOptionsBuilder.build(withListener: self, options: options)

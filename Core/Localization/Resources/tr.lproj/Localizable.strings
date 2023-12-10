@@ -196,6 +196,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "Tecvid Hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Baskısı.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "Teşhisler";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "Bu ayarlar, uygulama geliştiricisi tarafından özellikle hata ayıklama ve tanı amaçları için kullanılır.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "Uygulama günlüklerini paylaş";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "Hata ayıklama kaydını etkinleştir";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "Ayar, uygulamanın bir sonraki yeniden başlatılmasında etkili olacak.";
+
+
 // MARK: - What's new
 
 "new.title" = "Yenilikler";

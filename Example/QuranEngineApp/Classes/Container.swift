@@ -48,6 +48,8 @@ class Container: AppDependencies {
     var wordsDatabase: URL { Constant.wordsDatabase }
     var filesAppHost: URL { Constant.filesAppHost }
     var appHost: URL { Constant.appHost }
+    var databasesDirectory: URL { Constant.databasesURL }
+    var logsDirectory: URL { FileManager.documentsURL.appendingPathComponent("logs") }
 
     var supportsCloudKit: Bool { false }
 

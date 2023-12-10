@@ -255,6 +255,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "مشاف حفص تجوید. القرآن الکریم - نسخه دار المعرفه.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "تشخیصات";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "این تنظیمات توسط توسعه‌دهنده برنامه به طور خاص برای اهداف اشکال‌زدایی و تشخیصی استفاده می‌شوند.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "اشتراک گذاری گزارش‌های برنامه";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "فعال‌سازی ثبت خطاها";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "این تنظیم در راه‌اندازی مجدد بعدی برنامه اعمال خواهد شد.";
+
+
 // MARK: - What's new
 
 // Metadata: Translated by ChatGPT; human review required.

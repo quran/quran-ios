@@ -161,6 +161,16 @@
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "The tajweed hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
 
+// MARK: - Diagnostics
+
+"diagnostics.title" = "Diagnostics";
+"diagnostics.details" = "These settings are utilized by the app developer specifically for debugging and diagnostic purposes.";
+
+"diagnostics.share_app_logs" = "Share app logs";
+"diagnostics.enable_debug_logs" = "Enable debug logging";
+"diagnostics.enable_debug_logs.details" = "The setting will take effect upon the next restart of the app.";
+
+
 // MARK: - What's new
 
 "new.title" = "What's new";

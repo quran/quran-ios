@@ -253,6 +253,21 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.description" = "El Mushaf Hafs de Tajweed. Al-Quran Al-Kareem - Edición Dar al-Marefa.";
 
+// MARK: - Diagnostics
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.title" = "Diagnósticos";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.details" = "Estos ajustes son utilizados por el desarrollador de la aplicación específicamente para fines de depuración y diagnóstico.";
+
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.share_app_logs" = "Compartir registros de la aplicación";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs" = "Habilitar el registro de depuración";
+// Metadata: Translated by ChatGPT; human review required.
+"diagnostics.enable_debug_logs.details" = "La configuración surtirá efecto en el próximo reinicio de la aplicación.";
+
+
 // MARK: - What's new
 
 // Metadata: Translated by ChatGPT; human review required.

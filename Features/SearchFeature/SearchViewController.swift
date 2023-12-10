@@ -10,12 +10,13 @@ import Foundation
 import Localization
 import SwiftUI
 
-final class SearchViewController: UIHostingController<SearchView>, UISearchResultsUpdating, UISearchBarDelegate {
+final class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
     // MARK: Lifecycle
 
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
-        super.init(rootView: SearchView(viewModel: viewModel))
+        searchResultsViewController = UIHostingController(rootView: SearchView(viewModel: viewModel))
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -37,6 +38,8 @@ final class SearchViewController: UIHostingController<SearchView>, UISearchResul
     override func viewDidLoad() {
         super.viewDidLoad()
         title = lAndroid("menu_search")
+
+        addFullScreenChild(searchResultsViewController)
 
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = true
@@ -85,4 +88,5 @@ final class SearchViewController: UIHostingController<SearchView>, UISearchResul
     private var cancellables: Set<AnyCancellable> = []
     private let viewModel: SearchViewModel
     private let searchController = UISearchController(searchResultsController: nil)
+    private let searchResultsViewController: UIHostingController<SearchView>
 }

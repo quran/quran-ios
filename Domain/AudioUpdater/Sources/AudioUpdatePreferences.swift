@@ -21,9 +21,8 @@ final class AudioUpdatePreferences {
     @Preference(lastChecked) var lastChecked: Date?
 
     func reset() {
-        for key in [Self.lastRevision.key, Self.lastChecked.key] {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
+        Preferences.shared.removeValueForKey(Self.lastRevision)
+        Preferences.shared.removeValueForKey(Self.lastChecked)
     }
 
     // MARK: Private

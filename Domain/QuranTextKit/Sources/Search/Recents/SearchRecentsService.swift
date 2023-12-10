@@ -57,6 +57,10 @@ public class SearchRecentsService {
         recentSearchItems = recents
     }
 
+    public func reset() {
+        Preferences.shared.removeValueForKey(Self.searchRecentItems)
+    }
+
     // MARK: Private
 
     private static let searchRecentItems = PreferenceKey<[String]>(key: "com.quran.searchRecentItems", defaultValue: [])

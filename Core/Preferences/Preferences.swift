@@ -5,18 +5,23 @@
 //  Created by Mohamed Afifi on 2021-12-17.
 //
 
+import Combine
 import Foundation
 
-public struct Preferences {
+public final class Preferences {
     // MARK: Lifecycle
 
-    public init(userDefaults: UserDefaults) {
+    private init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
 
     // MARK: Public
 
-    public let userDefaults: UserDefaults
+    public static var shared = Preferences(userDefaults: .standard)
+
+    public var notifications: AnyPublisher<String, Never> {
+        notificationsSubject.eraseToAnyPublisher()
+    }
 
     public func valueForKey<T>(_ key: PreferenceKey<T>) -> T {
         let value = userDefaults.object(forKey: key.key)
@@ -24,6 +29,10 @@ public struct Preferences {
     }
 
     public func setValue<T>(_ value: T?, forKey key: PreferenceKey<T>) {
+        defer {
+            notificationsSubject.send(key.key)
+        }
+
         guard let value else {
             userDefaults.removeObject(forKey: key.key)
             return
@@ -46,7 +55,12 @@ public struct Preferences {
         }
     }
 
-    public func removeValueForKey(_ key: PreferenceKey<(some Any)?>) {
-        userDefaults.removeObject(forKey: key.key)
+    public func removeValueForKey(_ key: PreferenceKey<some Any>) {
+        setValue(nil, forKey: key)
     }
+
+    // MARK: Private
+
+    private let userDefaults: UserDefaults
+    private let notificationsSubject = PassthroughSubject<String, Never>()
 }

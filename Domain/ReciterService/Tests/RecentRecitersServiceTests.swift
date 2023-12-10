@@ -15,10 +15,7 @@ class RecentRecitersServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         service = RecentRecitersService()
-        let keys = userDefaults.dictionaryRepresentation().keys
-        for key in keys {
-            userDefaults.removeObject(forKey: key)
-        }
+        ReciterPreferences.shared.reset()
     }
 
     func testRecentReciters() {
@@ -65,7 +62,6 @@ class RecentRecitersServiceTests: XCTestCase {
     // MARK: Private
 
     private var service: RecentRecitersService!
-    private let userDefaults = UserDefaults.standard
 
     private func getRecentRecitersIds(_ allReciters: [Reciter]) -> [Int] {
         service.recentReciters(allReciters).map(\.id)

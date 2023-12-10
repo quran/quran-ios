@@ -43,7 +43,7 @@ struct AppVersionPreferences {
     var appVersion: String?
 
     static func reset() {
-        UserDefaults.standard.removeObject(forKey: appVersion.key)
+        Preferences.shared.removeValueForKey(appVersion)
     }
 
     // MARK: Private

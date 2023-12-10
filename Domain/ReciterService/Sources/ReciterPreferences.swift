@@ -25,6 +25,11 @@ public class ReciterPreferences {
     @TransformedPreference(recentReciterIds, transformer: recentReciterIdsTransfomer)
     public var recentReciterIds: OrderedSet<Int>
 
+    public func reset() {
+        Preferences.shared.removeValueForKey(Self.lastSelectedReciterId)
+        Preferences.shared.removeValueForKey(Self.recentReciterIds)
+    }
+
     // MARK: Private
 
     private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)

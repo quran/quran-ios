@@ -22,10 +22,6 @@ public struct DiagnosticsPreferences {
     @Preference(enableDebugLogging)
     public var enableDebugLogging: Bool
 
-    public static func reset() {
-        UserDefaults.standard.removeObject(forKey: enableDebugLogging.key)
-    }
-
     // MARK: Private
 
     private static let enableDebugLogging = PreferenceKey<Bool>(key: "enableDebugLogging", defaultValue: false)

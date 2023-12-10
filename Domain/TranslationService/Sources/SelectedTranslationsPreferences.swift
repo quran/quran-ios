@@ -54,9 +54,7 @@ public class SelectedTranslationsPreferences {
     // MARK: Internal
 
     func reset() {
-        for key in [Self.selectedTranslations.key] {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
+        Preferences.shared.removeValueForKey(Self.selectedTranslations)
     }
 
     // MARK: Private

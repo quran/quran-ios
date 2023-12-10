@@ -14,10 +14,7 @@ class SearchRecentsServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         service = SearchRecentsService.shared
-        let keys = userDefaults.dictionaryRepresentation().keys
-        for key in keys {
-            userDefaults.removeObject(forKey: key)
-        }
+        service.reset()
     }
 
     func testPopularTerms() {
@@ -49,5 +46,4 @@ class SearchRecentsServiceTests: XCTestCase {
     // MARK: Private
 
     private var service: SearchRecentsService!
-    private let userDefaults = UserDefaults.standard
 }

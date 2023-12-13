@@ -96,9 +96,9 @@ public struct NoorListItem: View {
             if let accessory, accessory.actionable {
                 // Use Tap gesture since tapping accessory button will also trigger the whole cell selection.
                 content
-                    .onTapGesture(asyncAction: action)
+                    .onAsyncTapGesture(asyncAction: action)
             } else {
-                Button(asyncAction: action) {
+                AsyncButton(action: action) {
                     content
                 }
             }

@@ -67,7 +67,7 @@ private struct LastVerseButton: View {
     let action: AsyncAction
 
     var body: some View {
-        Button(asyncAction: action) {
+        AsyncButton(action: action) {
             Text(label)
                 .foregroundColor(.white)
                 .padding(.vertical, 5)

@@ -225,10 +225,7 @@ private struct Row<Symbol: View>: View {
     @ScaledMetric var verticalPadding = 12
 
     var body: some View {
-        Button {
-            await action()
-        }
-        label: {
+        AsyncButton(action: action) {
             HStack {
                 ZStack {
                     IconCircles()
@@ -314,8 +311,8 @@ private struct NoteCircles: View {
     var body: some View {
         HStack {
             ForEach(Note.Color.sortedColors, id: \.self) { color in
-                Button(
-                    asyncAction: { await tapped(color) },
+                AsyncButton(
+                    action: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }
                 )
                 .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)

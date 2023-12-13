@@ -21,7 +21,7 @@ struct AppStoreDownloadButton: View {
     let action: AsyncAction
 
     var body: some View {
-        Button(asyncAction: action) {
+        AsyncButton(action: action) {
             Group {
                 switch type {
                 case .pending:

@@ -18,14 +18,14 @@ struct SearchView: View {
     var body: some View {
         SearchViewUI(
             error: $viewModel.error,
-            type: viewModel.searchType,
+            state: viewModel.uiState,
             term: viewModel.searchTerm.term,
             recents: viewModel.recents,
             populars: viewModel.populars,
             autocompletions: viewModel.autocompletions,
             searchResults: viewModel.searchResults,
             start: { await viewModel.start() },
-            search: { await viewModel.search(searchTerm: $0) },
+            search: { viewModel.search(for: $0) },
             selectSearchResult: { viewModel.select(searchResult: $0.result, source: $0.source) }
         )
     }
@@ -34,7 +34,7 @@ struct SearchView: View {
 private struct SearchViewUI: View {
     @Binding var error: Error?
 
-    let type: SearchUIType
+    let state: SearchUIState
 
     let term: String
     let recents: [String]
@@ -48,7 +48,7 @@ private struct SearchViewUI: View {
 
     var body: some View {
         Group {
-            switch type {
+            switch state {
             case .entry:
                 entry
             case .autocomplete:
@@ -186,14 +186,14 @@ struct SearchView_Previews: PreviewProvider {
         ])
 
         @State var results = [populatedResults]
-        @State var type = SearchUIType.searchResults
+        @State var state = SearchUIState.searchResults
         @State var error: Error?
 
         var body: some View {
             NavigationView {
                 SearchViewUI(
                     error: $error,
-                    type: type,
+                    state: state,
                     term: "is",
                     recents: ["Recent 1", "Recent 2"],
                     populars: ["Popular 1", "Popular 2"],
@@ -207,17 +207,17 @@ struct SearchView_Previews: PreviewProvider {
                 .toolbar {
                     ScrollView(.horizontal) {
                         HStack {
-                            Button("Entry") { type = .entry }
-                            Button("Autocomplete") { type = .autocomplete }
+                            Button("Entry") { state = .entry }
+                            Button("Autocomplete") { state = .autocomplete }
                             Button("Search") {
-                                type = .searchResults
+                                state = .searchResults
                                 results = [Self.populatedResults]
                             }
                             Button("No Results") {
-                                type = .searchResults
+                                state = .searchResults
                                 results = []
                             }
-                            Button("Loading") { type = .loading }
+                            Button("Loading") { state = .loading }
                             Button("Error") { error = URLError(.notConnectedToInternet) }
                         }
                     }

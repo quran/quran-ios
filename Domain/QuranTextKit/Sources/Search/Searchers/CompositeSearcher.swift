@@ -47,19 +47,19 @@ public struct CompositeSearcher {
 
     // MARK: Public
 
-    public func autocomplete(term: String, quran: Quran) async throws -> [String] {
+    public func autocomplete(term: String, quran: Quran) async -> [String] {
         guard let term = SearchTerm(term) else {
             return []
         }
         logger.info("Autocompleting term: \(term.compactQuery)")
 
-        let autocompletions = try await simpleSearchers.asyncMap { searcher in
-            try await searcher.autocomplete(term: term, quran: quran)
+        let autocompletions = await simpleSearchers.asyncMap { searcher in
+            try? await searcher.autocomplete(term: term, quran: quran)
         }
-        var results = autocompletions.flatMap { $0 }
+        var results = autocompletions.compactMap { $0 }.flatMap { $0 }
 
         if shouldPerformTranslationSearch(simpleSearchResults: results, term: term.compactQuery) {
-            results += try await translationsSearcher.autocomplete(term: term, quran: quran)
+            results += (try? await translationsSearcher.autocomplete(term: term, quran: quran)) ?? []
         }
         if !results.contains(term.compactQuery) {
             results.insert(term.compactQuery, at: 0)

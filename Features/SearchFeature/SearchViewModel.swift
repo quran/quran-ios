@@ -15,26 +15,6 @@ import ReadingService
 import TranslationService
 import VLogging
 
-enum SearchUIType {
-    case entry
-    case autocomplete
-    case loading
-    case searchResults
-}
-
-struct SearchTerm {
-    let term: String
-    let autocomplete: Bool
-
-    static func autocomple(_ term: String) -> Self {
-        SearchTerm(term: term, autocomplete: true)
-    }
-
-    static func noAction(_ term: String) -> Self {
-        SearchTerm(term: term, autocomplete: false)
-    }
-}
-
 @MainActor
 final class SearchViewModel: ObservableObject {
     // MARK: Lifecycle
@@ -49,9 +29,9 @@ final class SearchViewModel: ObservableObject {
 
     @Published var error: Error? = nil
 
-    @Published var searchType = SearchUIType.entry
+    @Published var uiState = SearchUIState.entry
 
-    @Published var searchTerm = SearchTerm(term: "", autocomplete: false)
+    @Published var searchTerm = SearchTerm.noAction("")
     @Published var autocompletions: [String] = []
     @Published var searchResults: [SearchResults] = []
     @Published var recents: [String] = []
@@ -63,7 +43,7 @@ final class SearchViewModel: ObservableObject {
     func start() async {
         async let reading: () = observeReadingChanges()
         async let autocomplete: () = observeSearchTermChanges()
-        async let recents: () = observeRecentChanges()
+        async let recents: () = observeRecentSearchItemsChanges()
         _ = await [reading, autocomplete, recents]
     }
 
@@ -86,35 +66,16 @@ final class SearchViewModel: ObservableObject {
         navigateTo(searchResult.ayah)
     }
 
-    func search(searchTerm term: String) async {
-        resignSearchBar.send()
-        searchTerm = .noAction(term)
-        await search()
+    func searchForUserTypedTerm() {
+        search(for: searchTerm.term)
     }
 
-    func search() async {
-        searchType = .loading
+    func search(for term: String) {
+        resignSearchBar.send()
+        searchTerm = .noAction(term)
 
-        let term = searchTerm.term
-        do {
-            let quran = readingPreferences.reading.quran
-            let results = try await searchService.search(for: term, quran: quran)
-            analytics.searching(for: term, results: results)
-
-            if searchTerm.term == term {
-                searchResults = results
-                recentsService.addToRecents(term)
-
-                searchType = .searchResults
-            }
-        } catch {
-            logger.error("Error while searching. Error: \(error)")
-            if searchTerm.term != term {
-                return
-            }
-            searchResults = []
-            self.error = error
-            searchType = .searchResults
+        Task {
+            await search()
         }
     }
 
@@ -129,7 +90,33 @@ final class SearchViewModel: ObservableObject {
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
-    private func observeRecentChanges() async {
+    private func search() async {
+        uiState = .loading
+
+        let term = searchTerm.term
+        do {
+            let quran = readingPreferences.reading.quran
+            let results = try await searchService.search(for: term, quran: quran)
+            analytics.searching(for: term, results: results)
+
+            if searchTerm.term == term {
+                searchResults = results
+                recentsService.addToRecents(term)
+
+                uiState = .searchResults
+            }
+        } catch {
+            logger.error("Error while searching. Error: \(error)")
+            if searchTerm.term != term {
+                return
+            }
+            searchResults = []
+            self.error = error
+            uiState = .searchResults
+        }
+    }
+
+    private func observeRecentSearchItemsChanges() async {
         let recentsSequence = recentsService.$recentSearchItems
             .prepend(recentsService.recentSearchItems)
             .values()
@@ -149,12 +136,12 @@ final class SearchViewModel: ObservableObject {
     private func observeSearchTermChanges() async {
         let searchTermSequence = $searchTerm
             .dropFirst()
-            .filter(\.autocomplete)
+            .filter(\.isAutocomplete)
             .map(\.term)
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .values()
         for await term in searchTermSequence {
-            if searchType == .loading {
+            if uiState == .loading {
                 continue
             }
 
@@ -162,25 +149,17 @@ final class SearchViewModel: ObservableObject {
             if searchTerm.term == term {
                 self.autocompletions = autocompletions
                 if !autocompletions.isEmpty {
-                    searchType = .autocomplete
+                    uiState = .autocomplete
                 } else {
-                    searchType = .entry
+                    uiState = .entry
                 }
             }
         }
     }
 
     private func autocomplete(_ term: String) async -> [String] {
-        if term.trimmingCharacters(in: .whitespaces).isEmpty {
-            return []
-        }
-        do {
-            let quran = readingPreferences.reading.quran
-            return try await searchService.autocomplete(term: term, quran: quran)
-        } catch {
-            logger.error("Error while trying to autocomplete. Error: \(error)")
-            return []
-        }
+        let quran = readingPreferences.reading.quran
+        return await searchService.autocomplete(term: term, quran: quran)
     }
 }
 

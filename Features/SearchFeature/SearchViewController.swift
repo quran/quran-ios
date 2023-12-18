@@ -73,14 +73,12 @@ final class SearchViewController: UIViewController, UISearchResultsUpdating, UIS
     func updateSearchResults(for searchController: UISearchController) {
         let term = searchController.searchBar.text ?? ""
         if viewModel.searchTerm.term != term {
-            viewModel.searchTerm = .autocomple(term)
+            viewModel.searchTerm = .autocomplete(term)
         }
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        Task {
-            await viewModel.search()
-        }
+        viewModel.searchForUserTypedTerm()
     }
 
     // MARK: Private

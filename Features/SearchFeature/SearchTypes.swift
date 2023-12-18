@@ -6,30 +6,19 @@
 //
 
 import Foundation
+import QuranText
 
 enum SearchUIState {
     case entry
-    case autocomplete
-    case loading
-    case searchResults
+    case search(_ term: String)
 }
 
-enum SearchTerm {
-    case autocomplete(_ term: String)
-    case noAction(_ term: String)
+enum SearchState {
+    case searching
+    case searchResult(_ results: [SearchResults])
+}
 
-    // MARK: Internal
-
-    var term: String {
-        switch self {
-        case .autocomplete(let term), .noAction(let term): return term
-        }
-    }
-
-    var isAutocomplete: Bool {
-        switch self {
-        case .autocomplete: return true
-        case .noAction: return false
-        }
-    }
+enum KeyboardState {
+    case open
+    case closed
 }

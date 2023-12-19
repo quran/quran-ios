@@ -209,9 +209,15 @@ final class TranslationsListViewModel: ObservableObject {
             let newKeys = Set(newValue.keys)
             let oldKeys = Set(oldValue.keys)
             // if a download completed
-            if !oldKeys.subtracting(newKeys).isEmpty {
+            let addedKeys = oldKeys.subtracting(newKeys)
+            if !addedKeys.isEmpty {
                 do {
                     try await loadLocalTranslations()
+
+                    // select newly downloaded translation
+                    if let addedTranslation = addedKeys.first {
+                        selectedTranslationsPreferences.select(addedTranslation.id)
+                    }
                 } catch {
                     crasher.recordError(error, reason: "Failed to reload local translations")
                     self.error = error

@@ -29,14 +29,19 @@ final class SearchViewModel: ObservableObject {
 
     @Published var error: Error? = nil
 
-    @Published var uiState = SearchUIState.entry
+    @Published var searchState = SearchState.searching
 
-    @Published var searchTerm = SearchTerm.noAction("")
+    @Published var searchTerm = ""
     @Published var autocompletions: [String] = []
-    @Published var searchResults: [SearchResults] = []
     @Published var recents: [String] = []
 
-    let resignSearchBar = PassthroughSubject<Void, Never>()
+    @Published var keyboardState: KeyboardState = .closed
+
+    @Published var uiState = SearchUIState.entry {
+        didSet {
+            logger.debug("[Search] New UI state: \(uiState)")
+        }
+    }
 
     var populars: [String] { recentsService.popularTerms }
 
@@ -44,7 +49,8 @@ final class SearchViewModel: ObservableObject {
         async let reading: () = observeReadingChanges()
         async let autocomplete: () = observeSearchTermChanges()
         async let recents: () = observeRecentSearchItemsChanges()
-        _ = await [reading, autocomplete, recents]
+        async let search: () = observeSearchChanges()
+        _ = await [reading, autocomplete, recents, search]
     }
 
     func select(searchResult: SearchResult, source: SearchResults.Source) {
@@ -66,17 +72,27 @@ final class SearchViewModel: ObservableObject {
         navigateTo(searchResult.ayah)
     }
 
+    func reset() {
+        uiState = .entry
+        searchTerm = ""
+        autocompletions = []
+    }
+
+    func autocomplete(_ term: String) {
+        if searchTerm != term {
+            uiState = .entry
+            searchTerm = term
+        }
+    }
+
     func searchForUserTypedTerm() {
-        search(for: searchTerm.term)
+        search(for: searchTerm)
     }
 
     func search(for term: String) {
-        resignSearchBar.send()
-        searchTerm = .noAction(term)
-
-        Task {
-            await search()
-        }
+        keyboardState = .closed
+        searchTerm = term
+        uiState = .search(term)
     }
 
     // MARK: Private
@@ -90,29 +106,36 @@ final class SearchViewModel: ObservableObject {
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
-    private func search() async {
-        uiState = .loading
+    private func search(for term: String) async throws -> [SearchResults] {
+        searchState = .searching
+        let quran = readingPreferences.reading.quran
+        let results = try await searchService.search(for: term, quran: quran)
 
-        let term = searchTerm.term
-        do {
-            let quran = readingPreferences.reading.quran
-            let results = try await searchService.search(for: term, quran: quran)
-            analytics.searching(for: term, results: results)
+        analytics.searching(for: term, results: results)
+        recentsService.addToRecents(term)
 
-            if searchTerm.term == term {
-                searchResults = results
-                recentsService.addToRecents(term)
+        return results
+    }
 
-                uiState = .searchResults
+    private func observeSearchChanges() async {
+        let states = $uiState.values()
+        for await state in states {
+            switch state {
+            case .entry:
+                continue
+            case .search(let term):
+                searchState = .searching
+                let result = await Result(catching: { try await search(for: term) })
+                if searchTerm == term {
+                    switch result {
+                    case .success(let results):
+                        searchState = .searchResult(results)
+                    case .failure(let error):
+                        self.error = error
+                        searchState = .searchResult([])
+                    }
+                }
             }
-        } catch {
-            logger.error("Error while searching. Error: \(error)")
-            if searchTerm.term != term {
-                return
-            }
-            searchResults = []
-            self.error = error
-            uiState = .searchResults
         }
     }
 
@@ -129,30 +152,20 @@ final class SearchViewModel: ObservableObject {
         let readings = readingPreferences.$reading
             .values()
         for await _ in readings {
-            searchTerm = .noAction("")
+            searchTerm = ""
         }
     }
 
     private func observeSearchTermChanges() async {
         let searchTermSequence = $searchTerm
-            .dropFirst()
-            .filter(\.isAutocomplete)
-            .map(\.term)
+            .dropFirst() // Drop initial empty value.
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .values()
         for await term in searchTermSequence {
-            if uiState == .loading {
-                continue
-            }
-
+            logger.debug("[Search] Autocomplete requested for \(term)")
             let autocompletions = await autocomplete(term)
-            if searchTerm.term == term {
+            if searchTerm == term {
                 self.autocompletions = autocompletions
-                if !autocompletions.isEmpty {
-                    uiState = .autocomplete
-                } else {
-                    uiState = .entry
-                }
             }
         }
     }

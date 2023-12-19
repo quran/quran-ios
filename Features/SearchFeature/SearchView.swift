@@ -18,12 +18,12 @@ struct SearchView: View {
     var body: some View {
         SearchViewUI(
             error: $viewModel.error,
-            state: viewModel.uiState,
-            term: viewModel.searchTerm.term,
+            uiState: viewModel.uiState,
+            searchState: viewModel.searchState,
+            term: viewModel.searchTerm,
             recents: viewModel.recents,
             populars: viewModel.populars,
             autocompletions: viewModel.autocompletions,
-            searchResults: viewModel.searchResults,
             start: { await viewModel.start() },
             search: { viewModel.search(for: $0) },
             selectSearchResult: { viewModel.select(searchResult: $0.result, source: $0.source) }
@@ -34,13 +34,13 @@ struct SearchView: View {
 private struct SearchViewUI: View {
     @Binding var error: Error?
 
-    let state: SearchUIState
+    let uiState: SearchUIState
+    let searchState: SearchState
 
     let term: String
     let recents: [String]
     let populars: [String]
     let autocompletions: [String]
-    let searchResults: [SearchResults]
 
     let start: AsyncAction
     let search: AsyncItemAction<String>
@@ -48,46 +48,26 @@ private struct SearchViewUI: View {
 
     var body: some View {
         Group {
-            switch state {
+            switch uiState {
             case .entry:
-                entry
-            case .autocomplete:
-                autocompletionsView
-            case .loading:
-                NoorList {
-                    LoadingView()
+                if autocompletions.isEmpty {
+                    entry
+                } else {
+                    autocompletionsView
                 }
-            case .searchResults:
-                searchResultsView
+            case .search:
+                switch searchState {
+                case .searching:
+                    NoorList {
+                        LoadingView()
+                    }
+                case .searchResult(let results):
+                    searchResultsView(searchResults: results)
+                }
             }
         }
         .task(start)
         .errorAlert(error: $error)
-    }
-
-    @ViewBuilder
-    var searchResultsView: some View {
-        if !searchResults.isEmpty {
-            NoorList {
-                ForEach(searchResults) { result in
-                    let plainTitle = title(of: result)
-                    let title = lFormat("search.result.count", plainTitle, result.items.count)
-                    NoorSection(title: title, result.items) { item in
-                        let localizedVerse = item.ayah.localizedName
-                        let arabicSuraName = item.ayah.sura.arabicSuraName
-                        NoorListItem(
-                            subheading: "\(localizedVerse) \(sura: arabicSuraName)",
-                            title: searchResultText(of: item),
-                            accessory: .text(NumberFormatter.shared.format(item.ayah.page.pageNumber))
-                        ) {
-                            selectSearchResult((item, result.source))
-                        }
-                    }
-                }
-            }
-        } else {
-            noResultsData
-        }
     }
 
     var noResultsData: some View {
@@ -132,6 +112,31 @@ private struct SearchViewUI: View {
                     await search(item.value)
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    func searchResultsView(searchResults: [SearchResults]) -> some View {
+        if !searchResults.isEmpty {
+            NoorList {
+                ForEach(searchResults) { result in
+                    let plainTitle = title(of: result)
+                    let title = lFormat("search.result.count", plainTitle, result.items.count)
+                    NoorSection(title: title, result.items) { item in
+                        let localizedVerse = item.ayah.localizedName
+                        let arabicSuraName = item.ayah.sura.arabicSuraName
+                        NoorListItem(
+                            subheading: "\(localizedVerse) \(sura: arabicSuraName)",
+                            title: searchResultText(of: item),
+                            accessory: .text(NumberFormatter.shared.format(item.ayah.page.pageNumber))
+                        ) {
+                            selectSearchResult((item, result.source))
+                        }
+                    }
+                }
+            }
+        } else {
+            noResultsData
         }
     }
 
@@ -185,20 +190,21 @@ struct SearchView_Previews: PreviewProvider {
             ),
         ])
 
-        @State var results = [populatedResults]
-        @State var state = SearchUIState.searchResults
+        @State var uiState = SearchUIState.search("abc")
+        @State var searchState = SearchState.searching
         @State var error: Error?
+        @State var autocompletions: [String] = []
 
         var body: some View {
             NavigationView {
                 SearchViewUI(
                     error: $error,
-                    state: state,
+                    uiState: uiState,
+                    searchState: searchState,
                     term: "is",
                     recents: ["Recent 1", "Recent 2"],
                     populars: ["Popular 1", "Popular 2"],
-                    autocompletions: [Self.englishText, Self.arabicText],
-                    searchResults: results,
+                    autocompletions: autocompletions,
                     start: { },
                     search: { _ in },
                     selectSearchResult: { _ in }
@@ -207,17 +213,26 @@ struct SearchView_Previews: PreviewProvider {
                 .toolbar {
                     ScrollView(.horizontal) {
                         HStack {
-                            Button("Entry") { state = .entry }
-                            Button("Autocomplete") { state = .autocomplete }
+                            Button("Entry") {
+                                uiState = .entry
+                                autocompletions = []
+                            }
+                            Button("Autocomplete") {
+                                uiState = .entry
+                                autocompletions = [Self.englishText, Self.arabicText]
+                            }
                             Button("Search") {
-                                state = .searchResults
-                                results = [Self.populatedResults]
+                                uiState = .search("abc")
+                                searchState = .searchResult([Self.populatedResults])
                             }
                             Button("No Results") {
-                                state = .searchResults
-                                results = []
+                                uiState = .search("abc")
+                                searchState = .searchResult([])
                             }
-                            Button("Loading") { state = .loading }
+                            Button("Loading") {
+                                uiState = .search("abc")
+                                searchState = .searching
+                            }
                             Button("Error") { error = URLError(.notConnectedToInternet) }
                         }
                     }

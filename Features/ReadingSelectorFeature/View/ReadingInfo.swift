@@ -43,7 +43,11 @@ enum ReadingInfoTestData {
                 value: $0,
                 title: l("reading.hafs-1405.title"),
                 description: l("reading.hafs-1405.description"),
-                properties: []
+                properties: [
+                    .init(type: .supports, property: "Property 1"),
+                    .init(type: .supports, property: "Property 2"),
+                    .init(type: .lacks, property: "Property 3"),
+                ]
             )
         }
     }

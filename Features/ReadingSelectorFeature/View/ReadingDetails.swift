@@ -21,19 +21,23 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
         NavigationView {
             ScrollView {
                 VStack {
+                    setCurrentMushafButton
+                        .padding(.top)
+
                     Text(reading.description)
-                        .padding()
+                        .padding(.top)
 
                     propertiesList
-                        .padding([.horizontal])
+                        .padding(.top)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     ReadingImage(imageView: imageView)
-                        .padding()
+                        .padding(.top)
 
                     setCurrentMushafButton
-                        .padding()
+                        .padding(.top)
                 }
+                .padding(.horizontal)
             }
             .navigationTitle(reading.title)
             .navigationBarTitleDisplayMode(.inline)

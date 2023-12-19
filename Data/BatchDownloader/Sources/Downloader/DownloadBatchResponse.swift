@@ -195,9 +195,7 @@ public actor DownloadBatchResponse {
         }
 
         if let error = firstError {
-            if !(error is CancellationError) {
-                crasher.recordError(error, reason: "Download failed \(batchId)")
-            }
+            crasher.recordError(error, reason: "Download failed \(batchId)")
 
             // Cancel other tasks if any has failed
             for request in requests {

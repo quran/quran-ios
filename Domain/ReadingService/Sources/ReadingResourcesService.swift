@@ -126,9 +126,7 @@ public actor ReadingResourcesService {
 
             return .ready
         } catch {
-            if !(error is CancellationError) {
-                crasher.recordError(error, reason: "Failed to download \(reading). Error: \(error)")
-            }
+            crasher.recordError(error, reason: "Failed to download \(reading). Error: \(error)")
             return .error(error as NSError)
         }
     }

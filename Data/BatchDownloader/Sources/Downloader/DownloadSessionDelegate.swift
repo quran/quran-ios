@@ -176,10 +176,6 @@ private extension Error {
         (self as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data
     }
 
-    var isCancelled: Bool {
-        (self as? URLError)?.code == URLError.cancelled
-    }
-
     func removeResumeData() -> Error {
         let error = self as NSError
         guard error.userInfo[NSURLSessionDownloadTaskResumeData] != nil else {

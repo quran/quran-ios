@@ -51,21 +51,3 @@ extension Error {
         return description ?? l("error.message.general")
     }
 }
-
-extension Error {
-    var isCancelled: Bool {
-        if self is CancellationError {
-            return true
-        }
-
-        do {
-            throw self
-        } catch URLError.cancelled {
-            return true
-        } catch CocoaError.userCancelled {
-            return true
-        } catch {
-            return false
-        }
-    }
-}

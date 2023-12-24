@@ -6,10 +6,10 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import Caching
 import Crashing
 import ImageService
-import QuranAnnotations
 import QuranGeometry
 import QuranKit
 import QuranPagesFeature
@@ -21,8 +21,10 @@ class ContentImageViewController: UIViewController, PageView {
     init(
         page: Page,
         dataService: PagesCacheableService<Page, ImagePage>,
-        pageMarkerService: PagesCacheableService<Page, PageMarkers>?
+        pageMarkerService: PagesCacheableService<Page, PageMarkers>?,
+        highlightsService: QuranHighlightsService
     ) {
+        contentView = ContentImageView(highlightsService: highlightsService)
         self.dataService = dataService
         self.pageMarkerService = pageMarkerService
         super.init(nibName: nil, bundle: nil)
@@ -39,11 +41,6 @@ class ContentImageViewController: UIViewController, PageView {
     }
 
     // MARK: Internal
-
-    var quranUITraits: QuranUITraits {
-        get { contentView.quranUITraits }
-        set { contentView.quranUITraits = newValue }
-    }
 
     var page: Page {
         contentView.page!
@@ -63,7 +60,7 @@ class ContentImageViewController: UIViewController, PageView {
 
     // MARK: Private
 
-    private let contentView = ContentImageView()
+    private let contentView: ContentImageView
     private let dataService: PagesCacheableService<Page, ImagePage>
     private let pageMarkerService: PagesCacheableService<Page, PageMarkers>?
 

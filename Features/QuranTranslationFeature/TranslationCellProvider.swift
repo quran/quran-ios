@@ -6,10 +6,13 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
+import Combine
 import Foundation
 import Localization
 import QuranAnnotations
 import QuranText
+import QuranTextKit
 import UIKit
 
 @MainActor
@@ -19,15 +22,51 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
 
     // MARK: Lifecycle
 
-    public init(collapsedNumberOfLines: UInt = 10) {
+    public init(collapsedNumberOfLines: UInt, highlightsService: QuranHighlightsService) {
         self.collapsedNumberOfLines = collapsedNumberOfLines
+        self.highlightsService = highlightsService
+        highlights = highlightsService.highlights
+        translationFontSize = fontSizePreferences.translationFontSize
+        arabicFontSize = fontSizePreferences.arabicFontSize
+
+        highlightsService.$highlights
+            .sink { [weak self] in self?.highlights = $0 }
+            .store(in: &cancellables)
+
+        fontSizePreferences.$translationFontSize
+            .sink { [weak self] in self?.translationFontSize = $0 }
+            .store(in: &cancellables)
+
+        fontSizePreferences.$arabicFontSize
+            .sink { [weak self] in self?.arabicFontSize = $0 }
+            .store(in: &cancellables)
     }
 
     // MARK: Public
 
+    public weak var dataSource: UICollectionViewDiffableDataSource<Section, ItemId>?
+    public weak var collectionView: UICollectionView?
+
     public var translatedVerses: [TranslatedVerse] = []
-    public var quranUITraits: QuranUITraits = QuranUITraits()
     public var expansionHandler: TranslationExpansionHandler<Section>!
+
+    public var highlights: QuranHighlights {
+        didSet {
+            reconfigureAllItems()
+        }
+    }
+
+    public var translationFontSize: FontSize {
+        didSet {
+            reconfigureAllItems()
+        }
+    }
+
+    public var arabicFontSize: FontSize {
+        didSet {
+            reconfigureAllItems()
+        }
+    }
 
     public func provideCell(collectionView: UICollectionView, indexPath: IndexPath, itemId: ItemId) -> UICollectionViewCell {
         let baseCell: QuranTranslationBaseCollectionViewCell
@@ -60,7 +99,9 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
             configure(cell: cell, translationId: translationId)
             baseCell = cell
         }
-        baseCell.quranUITraits = quranUITraits
+        baseCell.highlights = highlights
+        baseCell.translationFontSize = translationFontSize
+        baseCell.arabicFontSize = arabicFontSize
         return baseCell
     }
 
@@ -91,10 +132,17 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
         snapshot.appendItems(verseText.arabicSuffix.map { .arabic(verse, text: $0, alignment: .center) })
     }
 
-    public func updateQuranUITraits(
-        dataSource: UICollectionViewDiffableDataSource<Section, ItemId>,
-        collectionView: UICollectionView?
-    ) {
+    // MARK: Private
+
+    private let collapsedNumberOfLines: UInt
+    private let highlightsService: QuranHighlightsService
+    private let fontSizePreferences = FontSizePreferences.shared
+    private var cancellables: Set<AnyCancellable> = []
+
+    private func reconfigureAllItems() {
+        guard let dataSource else {
+            return
+        }
         if #available(iOS 15.0, *) {
             var snapshot = dataSource.snapshot()
             // reconfigure all items
@@ -105,12 +153,6 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
             collectionView?.reloadData()
         }
     }
-
-    // MARK: Internal
-
-    let collapsedNumberOfLines: UInt
-
-    // MARK: Private
 
     private func configure(cell: QuranTranslationTextCollectionViewCell, translationId: TranslationId) {
         let verse = translatedVerses.first { $0.verse == translationId.verse }!

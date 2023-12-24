@@ -6,6 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import Caching
 import Combine
 import Crashing
@@ -21,8 +22,9 @@ import Utilities
 class ContentTranslationViewController: UIViewController, PageView {
     // MARK: Lifecycle
 
-    init(dataService: PagesCacheableService<Page, TranslatedPage>, page: Page) {
+    init(dataService: PagesCacheableService<Page, TranslatedPage>, page: Page, highlightsService: QuranHighlightsService) {
         self.dataService = dataService
+        contentView = ContentTranslationView(highlightsService: highlightsService)
         super.init(nibName: nil, bundle: nil)
         contentView.page = page
         reloadData()
@@ -39,11 +41,6 @@ class ContentTranslationViewController: UIViewController, PageView {
         contentView.page!
     }
 
-    var quranUITraits: QuranUITraits {
-        get { contentView.quranUITraits }
-        set { contentView.quranUITraits = newValue }
-    }
-
     override func loadView() {
         view = contentView
     }
@@ -58,7 +55,7 @@ class ContentTranslationViewController: UIViewController, PageView {
 
     // MARK: Private
 
-    private let contentView = ContentTranslationView()
+    private let contentView: ContentTranslationView
     private let dataService: PagesCacheableService<Page, TranslatedPage>
 
     private func reloadData() {

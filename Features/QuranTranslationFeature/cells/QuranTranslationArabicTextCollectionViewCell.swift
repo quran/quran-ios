@@ -38,7 +38,7 @@ class QuranTranslationArabicTextCollectionViewCell: QuranTranslationItemCollecti
     override func configure(with item: (text: String, alignment: NSTextAlignment)) {
         super.configure(with: item)
         label.attributedText = NSAttributedString(string: item.text, attributes: [
-            .font: UIFont.arabicQuranText(ofSize: quranUITraits.arabicFontSize),
+            .font: UIFont.arabicQuranText(ofSize: arabicFontSize),
         ])
         label.textAlignment = item.alignment
     }

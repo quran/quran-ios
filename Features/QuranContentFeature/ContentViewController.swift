@@ -50,7 +50,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         setUpPagingStrategyChanges()
         setUpDataSourceChanges()
         setUpBackgroundListener()
-        setUpQuranUITraitsListener()
+        setUpHighlightsListener()
     }
 
     func gestureRecognizer(
@@ -84,26 +84,29 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
     private var pageController: PageController?
     private let viewModel: ContentViewModel
     private var cancellables: Set<AnyCancellable> = []
+    private var lastHighlights: QuranHighlights?
 
     // MARK: - Scrolling
 
-    private func setUpQuranUITraitsListener() {
-        viewModel.$quranUITraits
+    private func setUpHighlightsListener() {
+        viewModel.deps.highlightsService.$highlights
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] newTraits in
-                self?.quranUITraitsUpdatedTo(newTraits)
+            .sink { [weak self] newHighlights in
+                self?.highlightsUpdatedTo(newHighlights)
             }
             .store(in: &cancellables)
     }
 
-    private func quranUITraitsUpdatedTo(_ quranUITraits: QuranUITraits) {
-        guard let dataSource = viewModel.dataSource else {
+    private func highlightsUpdatedTo(_ highlights: QuranHighlights) {
+        defer {
+            lastHighlights = highlights
+        }
+
+        guard let oldValue = lastHighlights else {
             return
         }
-        let oldValue = dataSource.quranUITraits
-        dataSource.quranUITraits = quranUITraits
 
-        if let ayah = quranUITraits.highlights.verseToScrollTo(comparingTo: oldValue.highlights) {
+        if let ayah = highlights.verseToScrollTo(comparingTo: oldValue) {
             scrollTo(page: ayah.page, animated: true, forceReload: false)
         }
     }
@@ -179,7 +182,7 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
 
         dataSource.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: true)
         viewModel.visiblePagesLoaded()
-        quranUITraitsUpdatedTo(viewModel.quranUITraits)
+        highlightsUpdatedTo(viewModel.deps.highlightsService.highlights)
     }
 
     // MARK: - Gestures

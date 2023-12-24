@@ -32,6 +32,8 @@ public struct QuranBuilder {
     // MARK: Public
 
     public func build(input: QuranInput) -> UIViewController {
+        let highlightsService = QuranHighlightsService()
+
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         let interactorDeps = QuranInteractor.Deps(
@@ -44,7 +46,7 @@ public struct QuranBuilder {
             audioBannerBuilder: AudioBannerBuilder(container: container),
             wordPointerBuilder: WordPointerBuilder(container: container),
             noteEditorBuilder: NoteEditorBuilder(container: container),
-            contentBuilder: ContentBuilder(container: container),
+            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources

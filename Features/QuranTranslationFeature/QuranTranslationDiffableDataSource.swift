@@ -6,6 +6,7 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import Foundation
 import GenericDataSources
 import Localization
@@ -51,11 +52,14 @@ public class QuranTranslationDiffableDataSource {
 
     // MARK: - Configuration
 
-    init(collectionView: UICollectionView) {
+    init(collectionView: UICollectionView, highlightsService: QuranHighlightsService) {
         self.collectionView = collectionView
+        cellProvider = TranslationCellProvider<Section>(collapsedNumberOfLines: 10, highlightsService: highlightsService)
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, itemId in
             self?.cellProvider.provideCell(collectionView: collectionView, indexPath: indexPath, itemId: itemId)
         }
+        cellProvider.dataSource = dataSource
+        cellProvider.collectionView = collectionView
         cellProvider.expansionHandler = TranslationExpansionHandler(dataSource: dataSource)
     }
 
@@ -96,14 +100,6 @@ public class QuranTranslationDiffableDataSource {
 
     // MARK: Internal
 
-    var quranUITraits: QuranUITraits {
-        get { cellProvider.quranUITraits }
-        set {
-            cellProvider.quranUITraits = newValue
-            cellProvider.updateQuranUITraits(dataSource: dataSource, collectionView: collectionView)
-        }
-    }
-
     var translatedPage: TranslatedPage? {
         didSet {
             guard let translatedPage else {
@@ -132,7 +128,7 @@ public class QuranTranslationDiffableDataSource {
 
     private weak var collectionView: UICollectionView?
     private var dataSource: UICollectionViewDiffableDataSource<Section, ItemId>! // swiftlint:disable:this implicitly_unwrapped_optional
-    private let cellProvider = TranslationCellProvider<Section>(collapsedNumberOfLines: 10)
+    private let cellProvider: TranslationCellProvider<Section>
 
     // MARK: - Data
 

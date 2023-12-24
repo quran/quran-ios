@@ -38,6 +38,8 @@ public final class ContentViewModel {
         let lastPageUpdater: LastPageUpdater
         let quran: Quran
 
+        let highlightsService: QuranHighlightsService
+
         let imageDataSourceBuilder: PageDataSourceBuilder
         let translationDataSourceBuilder: PageDataSourceBuilder
     }
@@ -61,20 +63,11 @@ public final class ContentViewModel {
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
         verticalScrollingEnabled = deps.quranContentStatePreferences.verticalScrollingEnabled
 
-        quranUITraits.translationFontSize = deps.fontSizePreferences.translationFontSize
-        quranUITraits.arabicFontSize = deps.fontSizePreferences.arabicFontSize
-
         deps.quranContentStatePreferences.$twoPagesEnabled
             .sink { [weak self] in self?.twoPagesEnabled = $0 }
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$verticalScrollingEnabled
             .sink { [weak self] in self?.verticalScrollingEnabled = $0 }
-            .store(in: &cancellables)
-        deps.fontSizePreferences.$arabicFontSize
-            .sink { [weak self] in self?.quranUITraits.arabicFontSize = $0 }
-            .store(in: &cancellables)
-        deps.fontSizePreferences.$translationFontSize
-            .sink { [weak self] in self?.quranUITraits.translationFontSize = $0 }
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$quranMode
             .sink { [weak self] _ in self?.loadNewElementModule() }
@@ -89,8 +82,6 @@ public final class ContentViewModel {
 
     // MARK: Public
 
-    @Published public private(set) var quranUITraits = QuranUITraits()
-
     public var visiblePages: [Page] { dataSource?.visiblePages ?? [] }
 
     public func removeAyahMenuHighlight() {
@@ -103,7 +94,7 @@ public final class ContentViewModel {
     }
 
     public func highlightWord(_ word: Word?) {
-        quranUITraits.highlights.pointedWord = word
+        deps.highlightsService.highlights.pointedWord = word
     }
 
     public func word(at point: CGPoint, in view: UIView) -> Word? {
@@ -111,7 +102,7 @@ public final class ContentViewModel {
     }
 
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
-        quranUITraits.highlights.readingVerses = [ayah].compactMap { $0 }
+        deps.highlightsService.highlights.readingVerses = [ayah].compactMap { $0 }
     }
 
     // MARK: Internal
@@ -120,6 +111,8 @@ public final class ContentViewModel {
 
     @Published var twoPagesEnabled: Bool
     @Published var dataSource: PageDataSource?
+
+    let deps: Deps
 
     var verticalScrollingEnabled: Bool {
         didSet { loadNewElementModule() }
@@ -154,7 +147,7 @@ public final class ContentViewModel {
 
     func visiblePagesUpdated() {
         // remove search highlight when page changes
-        quranUITraits.highlights.searchVerses = []
+        deps.highlightsService.highlights.searchVerses = []
         visiblePagesLoaded()
     }
 
@@ -205,13 +198,12 @@ public final class ContentViewModel {
 
     private var cancellables: Set<AnyCancellable> = []
 
-    private let deps: Deps
     private let input: QuranInput
     private var pages: [Page]
 
     private var longPressData: LongPressData? {
         didSet {
-            quranUITraits.highlights.shareVerses = selectedVerses ?? []
+            deps.highlightsService.highlights.shareVerses = selectedVerses ?? []
         }
     }
 
@@ -247,7 +239,7 @@ public final class ContentViewModel {
     private func configureAsInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
         loadNewElementModule()
-        quranUITraits.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
+        deps.highlightsService.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
     }
 
     private func loadNewElementModule() {
@@ -267,7 +259,7 @@ public final class ContentViewModel {
         deps.noteService.notes(quran: deps.quran)
             .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.quranUITraits.highlights.noteVerses = Self.dictionaryFrom($0) }
+            .sink { [weak self] in self?.deps.highlightsService.highlights.noteVerses = Self.dictionaryFrom($0) }
             .store(in: &cancellables)
     }
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import AppDependencies
 import Caching
 import Foundation
@@ -17,8 +18,9 @@ import Utilities
 public struct ContentTranslationBuilder: PageDataSourceBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
+        self.highlightsService = highlightsService
     }
 
     // MARK: Public
@@ -26,13 +28,14 @@ public struct ContentTranslationBuilder: PageDataSourceBuilder {
     public func build(actions: PageDataSourceActions, pages: [Page]) -> PageDataSource {
         let dataService = createElementLoader(pages: pages)
         return PageDataSource(actions: actions) { page in
-            ContentTranslationViewController(dataService: dataService, page: page)
+            ContentTranslationViewController(dataService: dataService, page: page, highlightsService: highlightsService)
         }
     }
 
     // MARK: Private
 
     private let container: AppDependencies
+    private let highlightsService: QuranHighlightsService
 
     private func createElementLoader(pages: [Page]) -> PagesCacheableService<Page, TranslatedPage> {
         let cache = Cache<Page, TranslatedPage>()

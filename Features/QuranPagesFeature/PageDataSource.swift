@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import QuranAnnotations
 import QuranKit
 import UIKit
 import VLogging
@@ -19,8 +18,6 @@ public protocol PageDataSourceBuilder {
 @MainActor
 public protocol PageView: UIViewController {
     var page: Page { get }
-
-    var quranUITraits: QuranUITraits { get set }
 
     func word(at point: CGPoint) -> Word?
     func verse(at point: CGPoint) -> AyahNumber?
@@ -53,12 +50,6 @@ public class PageDataSource {
     public var items: [Page] = [] {
         didSet {
             updatePageControllerData()
-        }
-    }
-
-    public var quranUITraits: QuranUITraits = QuranUITraits() {
-        didSet {
-            loadedViews.forEach { $0.quranUITraits = quranUITraits }
         }
     }
 
@@ -159,7 +150,6 @@ public class PageDataSource {
         } else {
             let view = viewBuilder(page)
             view.view.backgroundColor = nil
-            view.quranUITraits = quranUITraits
             return view
         }
     }

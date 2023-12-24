@@ -6,12 +6,11 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import Combine
 import MoreMenuFeature
 import NoorUI
-import QuranAnnotations
 import QuranKit
-import QuranTextKit
 import QuranTranslationFeature
 import TranslationService
 import TranslationsFeature
@@ -24,17 +23,16 @@ class TranslationVerseViewController: UIViewController {
 
     init(
         viewModel: TranslationVerseViewModel,
-        quranUITraits: QuranUITraits,
         moreMenuBuilder: MoreMenuBuilder,
-        translationsSelectionBuilder: TranslationsListBuilder
+        translationsSelectionBuilder: TranslationsListBuilder,
+        highlightsService: QuranHighlightsService
     ) {
         self.viewModel = viewModel
         self.moreMenuBuilder = moreMenuBuilder
         self.translationsSelectionBuilder = translationsSelectionBuilder
         collectionView = QuranTranslationDiffableDataSource.translationCollectionView()
-        dataSource = TranslationVerseDataSource(collectionView: collectionView)
+        dataSource = TranslationVerseDataSource(collectionView: collectionView, highlightsService: highlightsService)
         super.init(nibName: nil, bundle: nil)
-        self.quranUITraits = quranUITraits
     }
 
     @available(*, unavailable)
@@ -91,20 +89,9 @@ class TranslationVerseViewController: UIViewController {
     private let moreMenuBuilder: MoreMenuBuilder
     private let translationsSelectionBuilder: TranslationsListBuilder
 
-    private let fontSizePreferences = FontSizePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     private var firstTime = true
-
-    private var quranUITraits: QuranUITraits {
-        get { dataSource.quranUITraits }
-        set {
-            logger.info("Verse Translation: set quranUITraits")
-            var newQuranUITraits = newValue
-            newQuranUITraits.removeHighlights()
-            dataSource.quranUITraits = newQuranUITraits
-        }
-    }
 
     private func configureCollectionView() {
         collectionView.contentInsetAdjustmentBehavior = .automatic
@@ -167,12 +154,6 @@ class TranslationVerseViewController: UIViewController {
     private func configureSettingsObservers() {
         selectedTranslationsPreferences.$selectedTranslations
             .sink { [weak self] _ in self?.viewModel.reload() }
-            .store(in: &cancellables)
-        fontSizePreferences.$arabicFontSize
-            .sink { [weak self] in self?.quranUITraits.arabicFontSize = $0 }
-            .store(in: &cancellables)
-        fontSizePreferences.$translationFontSize
-            .sink { [weak self] in self?.quranUITraits.translationFontSize = $0 }
             .store(in: &cancellables)
     }
 

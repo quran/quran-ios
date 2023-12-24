@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import AppDependencies
 import Caching
 import Foundation
@@ -23,8 +24,9 @@ import VLogging
 public struct ContentImageBuilder: PageDataSourceBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
+        self.highlightsService = highlightsService
     }
 
     // MARK: Public
@@ -45,7 +47,8 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
             let controller = ContentImageViewController(
                 page: page,
                 dataService: cacheableImageService,
-                pageMarkerService: cacheablePageMarkers
+                pageMarkerService: cacheablePageMarkers,
+                highlightsService: highlightsService
             )
             return controller
         }
@@ -54,6 +57,7 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
     // MARK: Private
 
     private let container: AppDependencies
+    private let highlightsService: QuranHighlightsService
 
     private func readingDirectory(_ reading: Reading) -> URL {
         let remoteResource = container.remoteResources?.resource(for: reading)

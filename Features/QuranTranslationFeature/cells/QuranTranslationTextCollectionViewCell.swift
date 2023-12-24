@@ -101,7 +101,7 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationItemCollectionView
         shadow.shadowColor = UIColor.label
 
         translatorLabel.isHidden = !item.showTranslator
-        translatorLabel.font = item.translation.preferredTranslatorNameFont(ofSize: quranUITraits.translationFontSize)
+        translatorLabel.font = item.translation.preferredTranslatorNameFont(ofSize: translationFontSize)
         translatorLabel.text = item.translation.translationName
 
         translationLabel.collapsedNumberOfLines = item.collapsedNumberOfLines
@@ -185,11 +185,11 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationItemCollectionView
     }
 
     private func textFont(translation: Translation) -> UIFont {
-        translation.preferredTextFont(ofSize: quranUITraits.translationFontSize)
+        translation.preferredTextFont(ofSize: translationFontSize)
     }
 
     private func footerFont(translation: Translation) -> UIFont {
-        translation.preferredTextFont(ofSize: quranUITraits.translationFontSize, factor: 0.7)
+        translation.preferredTextFont(ofSize: translationFontSize, factor: 0.7)
     }
 
     private func attributedText(

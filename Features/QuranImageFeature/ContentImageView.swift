@@ -6,6 +6,8 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
+import Combine
 import ImageService
 import Localization
 import NoorUI
@@ -19,21 +21,13 @@ import VLogging
 class ContentImageView: UIView {
     // MARK: Lifecycle
 
-    init() {
+    init(highlightsService: QuranHighlightsService) {
+        self.highlightsService = highlightsService
         imageView = ContentImageContentView(topView: topView, bottomView: bottomView, fullWindowView: true)
         super.init(frame: .zero)
 
-        addAutoLayoutSubview(imageView)
-        imageView.vc.edges()
-
-        setupTopView(topView)
-        setupBottomView(bottomView)
-
-        for label in [juzLabel, suraLabel, pageLabel] {
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.textColor = .label
-        }
-        pageLabel.textAlignment = .center
+        setUpViews()
+        setUpHighlights()
     }
 
     @available(*, unavailable)
@@ -42,20 +36,6 @@ class ContentImageView: UIView {
     }
 
     // MARK: Internal
-
-    // MARK: - PageView
-
-    var quranUITraits = QuranUITraits() {
-        didSet {
-            logger.info("Quran Image: quranUITraits changed")
-
-            highlightingView.highlights = quranUITraits.highlights
-
-            if quranUITraits.highlights.needsScrolling(comparingTo: oldValue.highlights) {
-                scrollToVerseIfNeeded()
-            }
-        }
-    }
 
     var page: Page? {
         didSet {
@@ -103,12 +83,44 @@ class ContentImageView: UIView {
     private let suraLabel = UILabel()
     private let pageLabel = UILabel()
 
+    private let highlightsService: QuranHighlightsService
+    private var cancellables: Set<AnyCancellable> = []
+
     private var highlightingView: QuranImageHighlightingView {
         imageView.highlightingView
     }
 
     private var scrollView: UIScrollView {
         imageView.plainView.scrollView
+    }
+
+    private func setUpViews() {
+        addAutoLayoutSubview(imageView)
+        imageView.vc.edges()
+
+        setupTopView(topView)
+        setupBottomView(bottomView)
+
+        for label in [juzLabel, suraLabel, pageLabel] {
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .label
+        }
+        pageLabel.textAlignment = .center
+    }
+
+    private func setUpHighlights() {
+        highlightsService.$highlights
+            .zip(highlightsService.$highlights.dropFirst())
+            .sink { [weak self] oldValue, newValue in
+                if newValue.needsScrolling(comparingTo: oldValue) {
+                    self?.scrollToVerseIfNeeded()
+                }
+            }
+            .store(in: &cancellables)
+
+        highlightsService.$highlights
+            .sink { [weak self] in self?.highlightingView.highlights = $0 }
+            .store(in: &cancellables)
     }
 
     private func setupTopView(_ topView: UIView) {
@@ -131,7 +143,7 @@ class ContentImageView: UIView {
     }
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = quranUITraits.highlights.firstScrollingVerse() else {
+        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
             return
         }
 

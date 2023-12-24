@@ -6,6 +6,8 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
+import Combine
 import Crashing
 import NoorUI
 import QuranAnnotations
@@ -19,10 +21,11 @@ import VLogging
 class ContentTranslationView: UIView {
     // MARK: Lifecycle
 
-    override init(frame: CGRect) {
+    init(highlightsService: QuranHighlightsService) {
+        self.highlightsService = highlightsService
         collectionView = QuranTranslationDiffableDataSource.translationCollectionView()
-        dataSource = QuranTranslationDiffableDataSource(collectionView: collectionView)
-        super.init(frame: frame)
+        dataSource = QuranTranslationDiffableDataSource(collectionView: collectionView, highlightsService: highlightsService)
+        super.init(frame: .zero)
         setUp()
     }
 
@@ -36,19 +39,6 @@ class ContentTranslationView: UIView {
     let collectionView: UICollectionView
 
     // MARK: - PageView
-
-    var quranUITraits: QuranUITraits {
-        get { dataSource.quranUITraits }
-        set {
-            logger.info("Quran Translation: set quranUITraits")
-            let oldTraits = dataSource.quranUITraits
-            dataSource.quranUITraits = newValue
-
-            if newValue.highlights.needsScrolling(comparingTo: oldTraits.highlights) {
-                scrollToVerseIfNeeded()
-            }
-        }
-    }
 
     var page: Page? {
         didSet {
@@ -75,13 +65,22 @@ class ContentTranslationView: UIView {
 
     // MARK: Private
 
+    private let highlightsService: QuranHighlightsService
     private let dataSource: QuranTranslationDiffableDataSource
-
     private var lastPage: TranslatedPage?
+    private var cancellable: AnyCancellable?
 
     private func setUp() {
         addAutoLayoutSubview(collectionView)
         collectionView.vc.edges()
+
+        cancellable = highlightsService.$highlights
+            .zip(highlightsService.$highlights.dropFirst())
+            .sink { [weak self] oldValue, newValue in
+                if newValue.needsScrolling(comparingTo: oldValue) {
+                    self?.scrollToVerseIfNeeded()
+                }
+            }
     }
 
     private func setPageText(_ page: TranslatedPage) {
@@ -100,7 +99,7 @@ class ContentTranslationView: UIView {
         // layout views if needed
         layoutIfNeeded()
 
-        guard let ayah = dataSource.quranUITraits.highlights.firstScrollingVerse() else {
+        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
             return
         }
         guard let indexPath = dataSource.firstIndexPath(forAyah: ayah) else {

@@ -17,8 +17,9 @@ import UIKit
 public struct ContentBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
+        self.highlightsService = highlightsService
     }
 
     // MARK: Public
@@ -33,8 +34,9 @@ public struct ContentBuilder {
             noteService: noteService,
             lastPageUpdater: lastPageUpdater,
             quran: quran,
-            imageDataSourceBuilder: ContentImageBuilder(container: container),
-            translationDataSourceBuilder: ContentTranslationBuilder(container: container)
+            highlightsService: highlightsService,
+            imageDataSourceBuilder: ContentImageBuilder(container: container, highlightsService: highlightsService),
+            translationDataSourceBuilder: ContentTranslationBuilder(container: container, highlightsService: highlightsService)
         )
         let viewModel = ContentViewModel(deps: interactorDeps, input: input)
 
@@ -47,4 +49,5 @@ public struct ContentBuilder {
     // MARK: Private
 
     private let container: AppDependencies
+    private let highlightsService: QuranHighlightsService
 }

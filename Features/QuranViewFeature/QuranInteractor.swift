@@ -218,13 +218,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func showTranslation(_ verses: [AyahNumber]) {
-        guard let contentViewModel, let verse = verses.first else {
+        guard let verse = verses.first else {
             return
         }
 
         let viewController = deps.translationVerseBuilder.build(
             startingVerse: verse,
-            quranUITraits: contentViewModel.quranUITraits,
             actions: .init(updateCurrentVerseTo: { [weak self] verse in
                 self?.contentViewModel?.highlightTranslationVerse(verse)
             })
@@ -323,7 +322,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private let readingPreferences = ReadingPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
-    private let fontSizePreferences = FontSizePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let themeService = ThemeService.shared
 

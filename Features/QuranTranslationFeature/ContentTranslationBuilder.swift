@@ -13,9 +13,11 @@ import Foundation
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit
+import ReadingService
+import UIKit
 import Utilities
 
-public struct ContentTranslationBuilder: PageDataSourceBuilder {
+public struct ContentTranslationBuilder: PageViewBuilder {
     // MARK: Lifecycle
 
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
@@ -25,9 +27,11 @@ public struct ContentTranslationBuilder: PageDataSourceBuilder {
 
     // MARK: Public
 
-    public func build(actions: PageDataSourceActions, pages: [Page]) -> PageDataSource {
+    public func build() -> (Page) -> PageView {
+        let reading = ReadingPreferences.shared.reading
+        let pages = reading.quran.pages
         let dataService = createElementLoader(pages: pages)
-        return PageDataSource(actions: actions) { page in
+        return { page in
             ContentTranslationViewController(dataService: dataService, page: page, highlightsService: highlightsService)
         }
     }

@@ -24,7 +24,7 @@ public struct ContentBuilder {
 
     // MARK: Public
 
-    public func build(withListener listener: ContentListener, input: QuranInput) -> (UIViewController, ContentViewModel) {
+    public func build(withListener listener: ContentListener, input: QuranInput) -> (ContentViewController, ContentViewModel) {
         let quran = ReadingPreferences.shared.reading.quran
         let noteService = container.noteService()
         let lastPageService = LastPageService(persistence: container.lastPagePersistence)

@@ -261,7 +261,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func word(at point: CGPoint, in view: UIView) -> Word? {
-        contentViewModel?.word(at: point, in: view)
+        contentViewController?.word(at: point, in: view)
     }
 
     func highlightWord(_ word: Word?) {
@@ -277,12 +277,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         } else {
             hideWordPointer()
         }
-    }
-
-    func setVisiblePages(_ pages: [Page]) {
-        logger.info("Quran: set visible pages \(pages)")
-        presenter?.setVisiblePages(pages)
-        showPageBookmarkIfNeeded(for: pages)
     }
 
     func userWillBeginDragScroll() {
@@ -329,14 +323,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private var deps: Deps
     private let input: QuranInput
-    private var contentViewModel: ContentViewModel?
     private var audioBanner: AudioBannerViewModel?
-
     private var cancellables: Set<AnyCancellable> = []
-
     private var isWordPointerActive: Bool = false
-
     private var wordPointer: WordPointerViewController?
+
+    private var visiblePageCancellable: AnyCancellable?
+
+    private var contentViewController: ContentViewController?
+
+    private var contentViewModel: ContentViewModel? {
+        didSet {
+            visiblePageCancellable = contentViewModel?.$visiblePages
+                .sink { [weak self] in self?.setVisiblePages($0) }
+        }
+    }
 
     private var pageBookmarks: [PageBookmark] = [] {
         didSet {
@@ -344,12 +345,18 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    private func setVisiblePages(_ pages: [Page]) {
+        logger.info("Quran: set visible pages \(pages)")
+        presenter?.setVisiblePages(pages)
+        showPageBookmarkIfNeeded(for: pages)
+    }
+
     private func loadContent() {
         let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
         audioBanner = viewModel
         presenter?.presentAudioBanner(viewController)
 
-        contentViewModel = presentQuranContent(with: input)
+        (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()
     }
 
@@ -405,10 +412,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     // MARK: - Quran Content
 
-    private func presentQuranContent(with input: QuranInput) -> ContentViewModel {
+    private func presentQuranContent(with input: QuranInput) -> (ContentViewController, ContentViewModel) {
         let (viewController, contentViewModel) = deps.contentBuilder.build(withListener: self, input: input)
         presenter?.presentQuranContent(viewController)
-        return contentViewModel
+        return (viewController, contentViewModel)
     }
 
     // MARK: - Page Bookmark

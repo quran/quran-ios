@@ -21,7 +21,7 @@ import Utilities
 import VLogging
 
 @MainActor
-public struct ContentImageBuilder: PageDataSourceBuilder {
+public struct ContentImageBuilder: PageViewBuilder {
     // MARK: Lifecycle
 
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
@@ -31,7 +31,7 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
 
     // MARK: Public
 
-    public func build(actions: PageDataSourceActions, pages: [Page]) -> PageDataSource {
+    public func build() -> (Page) -> PageView {
         let reading = ReadingPreferences.shared.reading
         let readingDirectory = readingDirectory(reading)
 
@@ -41,9 +41,11 @@ public struct ContentImageBuilder: PageDataSourceBuilder {
             cropInsets: reading.cropInsets
         )
 
+        let pages = reading.quran.pages
         let cacheableImageService = createCahceableImageService(imageService: imageService, pages: pages)
         let cacheablePageMarkers = createPageMarkersService(imageService: imageService, reading: reading, pages: pages)
-        return PageDataSource(actions: actions) { page in
+
+        return { page in
             let controller = ContentImageViewController(
                 page: page,
                 dataService: cacheableImageService,

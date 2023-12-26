@@ -6,11 +6,11 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import Combine
 import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
+import QuranText
 import QuranTextKit
 import SwiftUI
 import UIKit
@@ -39,8 +39,7 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         super.viewDidLoad()
         view.backgroundColor = .reading
         setUpGesture()
-        setUpPageCollectionBuilderChanges()
-        setUpHighlightsListener()
+        setUpPagesView()
     }
 
     public func gestureRecognizer(
@@ -66,59 +65,15 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 
     // MARK: Private
 
-    private var pagingController: UIViewController?
     private let viewModel: ContentViewModel
-    private var cancellables: Set<AnyCancellable> = []
-    private var lastHighlights: QuranHighlights?
 
     private var pageViews: [PageView] {
         findPageViews(in: self)
     }
 
-    private func setUpHighlightsListener() {
-        viewModel.deps.highlightsService.$highlights
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] newHighlights in
-                self?.highlightsUpdatedTo(newHighlights)
-            }
-            .store(in: &cancellables)
-    }
-
-    private func highlightsUpdatedTo(_ highlights: QuranHighlights) {
-        defer {
-            lastHighlights = highlights
-        }
-
-        guard let oldValue = lastHighlights else {
-            return
-        }
-
-        if let ayah = highlights.verseToScrollTo(comparingTo: oldValue) {
-            viewModel.visiblePages = [ayah.page]
-        }
-    }
-
-    private func setUpPageCollectionBuilderChanges() {
-        viewModel.$pageViewBuilder
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] pageViewBuilder in
-                self?.install(pageViewBuilder)
-            }
-            .store(in: &cancellables)
-    }
-
-    private func install(_ pageViewBuilder: PageViewBuilder?) {
-        guard let pageViewBuilder else {
-            return
-        }
-
-        if let oldPagingController = pagingController {
-            removeChild(oldPagingController)
-        }
-
-        let pagesView = PagesView(viewModel: viewModel, pageBuilder: pageViewBuilder.build())
+    private func setUpPagesView() {
+        let pagesView = PagesView(viewModel: viewModel)
         let pagingController = UIHostingController(rootView: pagesView)
-        self.pagingController = pagingController
         addFullScreenChild(pagingController)
     }
 
@@ -186,18 +141,25 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 }
 
 private struct PagesView: View {
+    private struct PagesId: Hashable {
+        let quranMode: QuranMode
+        let selectedTranslations: [Translation.ID]
+    }
+
+    // MARK: Internal
+
     @ObservedObject var viewModel: ContentViewModel
-    let pageBuilder: (Page) -> UIViewController
 
     var body: some View {
         GeometryReader { geometry in
             QuranPaginationView(
                 pagingStrategy: pagingStrategy(with: geometry),
                 selection: $viewModel.visiblePages,
-                pages: viewModel.pages
+                pages: viewModel.deps.quran.pages
             ) { page in
-                StaticViewControllerRepresentable(viewController: pageBuilder(page))
+                StaticViewControllerRepresentable(viewController: viewModel.pageViewBuilder.build(at: page))
             }
+            .id(PagesId(quranMode: viewModel.quranMode, selectedTranslations: viewModel.selectedTranslations))
         }
     }
 

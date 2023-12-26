@@ -58,26 +58,27 @@ public final class ContentViewModel: ObservableObject {
         self.input = input
 
         visiblePages = [input.initialPage]
-        pages = deps.quran.pages
 
+        highlights = deps.highlightsService.highlights
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
-        verticalScrollingEnabled = deps.quranContentStatePreferences.verticalScrollingEnabled
+        quranMode = deps.quranContentStatePreferences.quranMode
+        selectedTranslations = deps.selectedTranslationsPreferences.selectedTranslations
 
+        deps.highlightsService.$highlights
+            .sink { [weak self] in self?.highlights = $0 }
+            .store(in: &cancellables)
         deps.quranContentStatePreferences.$twoPagesEnabled
             .sink { [weak self] in self?.twoPagesEnabled = $0 }
             .store(in: &cancellables)
-        deps.quranContentStatePreferences.$verticalScrollingEnabled
-            .sink { [weak self] in self?.verticalScrollingEnabled = $0 }
-            .store(in: &cancellables)
         deps.quranContentStatePreferences.$quranMode
-            .sink { [weak self] _ in self?.reloadAllPages() }
+            .sink { [weak self] in self?.quranMode = $0 }
             .store(in: &cancellables)
         deps.selectedTranslationsPreferences.$selectedTranslations
-            .sink { [weak self] _ in self?.reloadAllPages() }
+            .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
 
         loadNotes()
-        configureAsInitialPage()
+        configureInitialPage()
     }
 
     // MARK: Public
@@ -98,11 +99,11 @@ public final class ContentViewModel: ObservableObject {
     }
 
     public func highlightWord(_ word: Word?) {
-        deps.highlightsService.highlights.pointedWord = word
+        highlights.pointedWord = word
     }
 
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
-        deps.highlightsService.highlights.readingVerses = [ayah].compactMap { $0 }
+        highlights.readingVerses = [ayah].compactMap { $0 }
     }
 
     // MARK: Internal
@@ -110,18 +111,31 @@ public final class ContentViewModel: ObservableObject {
     let deps: Deps
     weak var listener: ContentListener?
 
+    @Published var quranMode: QuranMode
+    @Published var selectedTranslations: [Translation.ID]
     @Published var twoPagesEnabled: Bool
-    @Published var pageViewBuilder: PageViewBuilder?
 
-    let pages: [Page]
+    @Published var highlights: QuranHighlights {
+        didSet {
+            if oldValue != highlights {
+                deps.highlightsService.highlights = highlights
 
-    var pagingStrategy: PagingStrategy {
-        let shouldDisplayTwoPages = !verticalScrollingEnabled && twoPagesEnabled
-        return shouldDisplayTwoPages ? .doublePage : .singlePage
+                if let ayah = highlights.verseToScrollTo(comparingTo: oldValue) {
+                    visiblePages = [ayah.page]
+                }
+            }
+        }
     }
 
-    var verticalScrollingEnabled: Bool {
-        didSet { reloadAllPages() }
+    var pagingStrategy: PagingStrategy {
+        twoPagesEnabled ? .doublePage : .singlePage
+    }
+
+    var pageViewBuilder: PageViewBuilder {
+        switch deps.quranContentStatePreferences.quranMode {
+        case .arabic: return deps.imageDataSourceBuilder
+        case .translation: return deps.translationDataSourceBuilder
+        }
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {
@@ -165,7 +179,7 @@ public final class ContentViewModel: ObservableObject {
 
     private var longPressData: LongPressData? {
         didSet {
-            deps.highlightsService.highlights.shareVerses = selectedVerses ?? []
+            highlights.shareVerses = selectedVerses ?? []
         }
     }
 
@@ -181,13 +195,6 @@ public final class ContentViewModel: ObservableObject {
         return start.array(to: end)
     }
 
-    private var newPageCollectionBuilder: PageViewBuilder {
-        switch deps.quranContentStatePreferences.quranMode {
-        case .arabic: return deps.imageDataSourceBuilder
-        case .translation: return deps.translationDataSourceBuilder
-        }
-    }
-
     private static func dictionaryFrom<K: Hashable, U>(_ array: [(K, U)]) -> [K: U] {
         var dict: [K: U] = [:]
         for element in array {
@@ -196,15 +203,14 @@ public final class ContentViewModel: ObservableObject {
         return dict
     }
 
-    private func configureAsInitialPage() {
+    private func configureInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        reloadAllPages()
-        deps.highlightsService.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
+        highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
     }
 
     private func visiblePagesUpdated() {
         // remove search highlight when page changes
-        deps.highlightsService.highlights.searchVerses = []
+        highlights.searchVerses = []
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
@@ -227,20 +233,11 @@ public final class ContentViewModel: ObservableObject {
         deps.lastPageUpdater.updateTo(pages: pages)
     }
 
-    private func reloadAllPages() {
-        switch deps.quranContentStatePreferences.quranMode {
-        case .arabic:
-            pageViewBuilder = deps.imageDataSourceBuilder
-        case .translation:
-            pageViewBuilder = deps.translationDataSourceBuilder
-        }
-    }
-
     private func loadNotes() {
         deps.noteService.notes(quran: deps.quran)
             .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.deps.highlightsService.highlights.noteVerses = Self.dictionaryFrom($0) }
+            .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
             .store(in: &cancellables)
     }
 }

@@ -11,7 +11,7 @@ import UIKit
 
 @MainActor
 public protocol PageViewBuilder {
-    func build() -> (Page) -> PageView
+    func build(at page: Page) -> PageView
 }
 
 @MainActor

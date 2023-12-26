@@ -27,13 +27,9 @@ public struct ContentImageBuilder: PageViewBuilder {
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
         self.highlightsService = highlightsService
-    }
 
-    // MARK: Public
-
-    public func build() -> (Page) -> PageView {
         let reading = ReadingPreferences.shared.reading
-        let readingDirectory = readingDirectory(reading)
+        let readingDirectory = Self.readingDirectory(reading, container: container)
 
         let imageService = ImageDataService(
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
@@ -42,26 +38,29 @@ public struct ContentImageBuilder: PageViewBuilder {
         )
 
         let pages = reading.quran.pages
-        let cacheableImageService = createCahceableImageService(imageService: imageService, pages: pages)
-        let cacheablePageMarkers = createPageMarkersService(imageService: imageService, reading: reading, pages: pages)
+        cacheableImageService = Self.createCahceableImageService(imageService: imageService, pages: pages)
+        cacheablePageMarkers = Self.createPageMarkersService(imageService: imageService, reading: reading, pages: pages)
+    }
 
-        return { page in
-            let controller = ContentImageViewController(
-                page: page,
-                dataService: cacheableImageService,
-                pageMarkerService: cacheablePageMarkers,
-                highlightsService: highlightsService
-            )
-            return controller
-        }
+    // MARK: Public
+
+    public func build(at page: Page) -> PageView {
+        ContentImageViewController(
+            page: page,
+            dataService: cacheableImageService,
+            pageMarkerService: cacheablePageMarkers,
+            highlightsService: highlightsService
+        )
     }
 
     // MARK: Private
 
     private let container: AppDependencies
     private let highlightsService: QuranHighlightsService
+    private let cacheableImageService: PagesCacheableService<Page, ImagePage>
+    private let cacheablePageMarkers: PagesCacheableService<Page, PageMarkers>?
 
-    private func readingDirectory(_ reading: Reading) -> URL {
+    private static func readingDirectory(_ reading: Reading, container: AppDependencies) -> URL {
         let remoteResource = container.remoteResources?.resource(for: reading)
         let remotePath = remoteResource?.downloadDestination.url
         let bundlePath = { Bundle.main.url(forResource: reading.localPath, withExtension: nil) }
@@ -69,7 +68,7 @@ public struct ContentImageBuilder: PageViewBuilder {
         return remotePath ?? bundlePath()!
     }
 
-    private func createCahceableImageService(imageService: ImageDataService, pages: [Page]) -> PagesCacheableService<Page, ImagePage> {
+    private static func createCahceableImageService(imageService: ImageDataService, pages: [Page]) -> PagesCacheableService<Page, ImagePage> {
         let cache = Cache<Page, ImagePage>()
         cache.countLimit = 5
 
@@ -86,7 +85,7 @@ public struct ContentImageBuilder: PageViewBuilder {
         return dataService
     }
 
-    private func createPageMarkersService(
+    private static func createPageMarkersService(
         imageService: ImageDataService,
         reading: Reading,
         pages: [Page]

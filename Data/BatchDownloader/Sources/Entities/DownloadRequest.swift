@@ -43,7 +43,7 @@ public struct DownloadRequest: Hashable, Sendable {
 
     // MARK: Private
 
-    private static let downloadResumeDataExtension = ".resume"
+    private static let downloadResumeDataExtension = "resume"
 }
 
 public struct DownloadBatchRequest: Hashable, Sendable {

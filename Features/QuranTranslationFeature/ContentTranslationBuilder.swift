@@ -23,25 +23,29 @@ public struct ContentTranslationBuilder: PageViewBuilder {
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
         self.highlightsService = highlightsService
+
+        let reading = ReadingPreferences.shared.reading
+        let pages = reading.quran.pages
+        (dataService, selectedTranslationsMonitor) = Self.createElementLoader(pages: pages, container: container)
     }
 
     // MARK: Public
 
-    public func build() -> (Page) -> PageView {
-        let reading = ReadingPreferences.shared.reading
-        let pages = reading.quran.pages
-        let dataService = createElementLoader(pages: pages)
-        return { page in
-            ContentTranslationViewController(dataService: dataService, page: page, highlightsService: highlightsService)
-        }
+    public func build(at page: Page) -> PageView {
+        ContentTranslationViewController(dataService: dataService, page: page, highlightsService: highlightsService)
     }
 
     // MARK: Private
 
     private let container: AppDependencies
     private let highlightsService: QuranHighlightsService
+    private let dataService: PagesCacheableService<Page, TranslatedPage>
+    private let selectedTranslationsMonitor: SelectedTranslationsMonitor
 
-    private func createElementLoader(pages: [Page]) -> PagesCacheableService<Page, TranslatedPage> {
+    private static func createElementLoader(
+        pages: [Page],
+        container: AppDependencies
+    ) -> (PagesCacheableService<Page, TranslatedPage>, SelectedTranslationsMonitor) {
         let cache = Cache<Page, TranslatedPage>()
         cache.countLimit = 5
 
@@ -58,12 +62,15 @@ public struct ContentTranslationBuilder: PageViewBuilder {
             return TranslatedPage(translatedVerses: translatedVerses)
         }
 
-        return PagesCacheableService(
+        let service = PagesCacheableService(
             cache: cache,
             previousPagesCount: 1,
             nextPagesCount: 2,
             pages: pages,
             operation: operation
         )
+
+        let monitor = SelectedTranslationsMonitor(cache: cache)
+        return (service, monitor)
     }
 }

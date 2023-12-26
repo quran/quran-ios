@@ -173,6 +173,7 @@ private func uiTargets() -> [[Target]] {
             "QuranAnnotations",
             "QuranGeometry",
             "NoorFont",
+            "VLogging",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ]),
     ]

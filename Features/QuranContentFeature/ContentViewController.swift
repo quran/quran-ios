@@ -12,13 +12,14 @@ import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit
+import SwiftUI
 import UIKit
 import UIx
 
-final class ContentViewController: UIViewController, UIGestureRecognizerDelegate {
+public final class ContentViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: Lifecycle
 
-    init(viewModel: ContentViewModel) {
+    public init(viewModel: ContentViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,61 +33,47 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    var isLandscape: Bool { view.bounds.width > view.bounds.height }
-    var pagingStrategy: PageController.PagingStrategy = .singlePage {
-        didSet {
-            pageController?.pagingStrategy = pagingStrategy
-        }
-    }
-
-    // MARK: - View hierarchy
-
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .reading
         setUpGesture()
-        setUpPagingStrategyChanges()
-        setUpDataSourceChanges()
-        setUpBackgroundListener()
+        setUpPageCollectionBuilderChanges()
         setUpHighlightsListener()
     }
 
-    func gestureRecognizer(
+    public func gestureRecognizer(
         _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
     ) -> Bool {
         true
     }
 
+    public func word(at point: CGPoint, in view: UIView) -> Word? {
+        convert(point, from: view)
+            .flatMap { $0.word(at: $1) }
+    }
+
+    // MARK: Internal
+
     @objc
     func onViewPanned(_ gesture: UIPanGestureRecognizer) {
         if gesture.state == .began {
-            viewModel.userWillBeginDragScroll()
+            viewModel.listener?.userWillBeginDragScroll()
         }
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
-            updatePagingStrategy()
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updatePagingStrategy()
     }
 
     // MARK: Private
 
-    private var pageController: PageController?
+    private var pagingController: UIViewController?
     private let viewModel: ContentViewModel
     private var cancellables: Set<AnyCancellable> = []
     private var lastHighlights: QuranHighlights?
 
-    // MARK: - Scrolling
+    private var pageViews: [PageView] {
+        findPageViews(in: self)
+    }
 
     private func setUpHighlightsListener() {
         viewModel.deps.highlightsService.$highlights
@@ -107,82 +94,58 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
         }
 
         if let ayah = highlights.verseToScrollTo(comparingTo: oldValue) {
-            scrollTo(page: ayah.page, animated: true, forceReload: false)
+            viewModel.visiblePages = [ayah.page]
         }
     }
 
-    private func scrollTo(page: Page, animated: Bool, forceReload: Bool) {
-        if UIApplication.shared.applicationState != .background {
-            // update the UI only when the app is in foreground
-            viewModel.dataSource?.scrollToPage(page, animated: animated, forceReload: forceReload)
-            viewModel.visiblePagesUpdated()
-        } else {
-            // Only update last page while in background
-            viewModel.updateLastPageTo([page])
-        }
-    }
-
-    // MARK: - Background
-
-    private func setUpBackgroundListener() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(applicationDidBecomeActive),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-    }
-
-    @objc
-    private func applicationDidBecomeActive() {
-        viewModel.dataSource?.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: false)
-    }
-
-    // MARK: - Page controller
-
-    private func setUpDataSourceChanges() {
-        viewModel.$dataSource
+    private func setUpPageCollectionBuilderChanges() {
+        viewModel.$pageViewBuilder
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] dataSource in
-                self?.install(dataSource)
+            .sink { [weak self] pageViewBuilder in
+                self?.install(pageViewBuilder)
             }
             .store(in: &cancellables)
     }
 
-    private func createPageController(navigationOrientation: UIPageViewController.NavigationOrientation) -> PageController {
-        if let oldPageController = pageController {
-            removeChild(oldPageController.viewController)
-        }
-
-        let pageController = PageController(
-            transitionStyle: .scroll,
-            navigationOrientation: navigationOrientation,
-            interPageSpacing: ContentDimension.interPageSpacing
-        )
-        pageController.pagingStrategy = pagingStrategy
-
-        pageController.viewController.view.accessibilityIdentifier = "pages"
-        pageController.viewController.view.backgroundColor = UIColor.reading
-        pageController.viewController.view.semanticContentAttribute = .forceRightToLeft
-        addFullScreenChild(pageController.viewController)
-
-        self.pageController = pageController
-        return pageController
-    }
-
-    private func install(_ dataSource: PageDataSource?) {
-        guard let dataSource else {
+    private func install(_ pageViewBuilder: PageViewBuilder?) {
+        guard let pageViewBuilder else {
             return
         }
 
-        let navigationOrientation: UIPageViewController.NavigationOrientation = viewModel.verticalScrollingEnabled ? .vertical : .horizontal
-        let pageController = createPageController(navigationOrientation: navigationOrientation)
-        pageController.pagingStrategy = newPageStrategy()
-        dataSource.usePageViewController(pageController)
+        if let oldPagingController = pagingController {
+            removeChild(oldPagingController)
+        }
 
-        dataSource.scrollToPage(viewModel.lastViewedPage, animated: false, forceReload: true)
-        viewModel.visiblePagesLoaded()
-        highlightsUpdatedTo(viewModel.deps.highlightsService.highlights)
+        let pagesView = PagesView(viewModel: viewModel, pageBuilder: pageViewBuilder.build())
+        let pagingController = UIHostingController(rootView: pagesView)
+        self.pagingController = pagingController
+        addFullScreenChild(pagingController)
+    }
+
+    private func verse(at point: CGPoint, in view: UIView) -> AyahNumber? {
+        convert(point, from: view)
+            .flatMap { $0.verse(at: $1) }
+    }
+
+    private func convert(_ point: CGPoint, from view: UIView) -> (view: PageView, point: CGPoint)? {
+        let localPointsAndControllers = pageViews.map { (view: $0, point: $0.view.convert(point, from: view)) }
+        let convertedViewPoint = localPointsAndControllers.first { $0.view.view.point(inside: $0.point, with: nil) }
+        return convertedViewPoint
+    }
+
+    private func findPageViews(in viewController: UIViewController) -> [PageView] {
+        var result = [PageView]()
+
+        for child in viewController.children {
+            if let fooVC = child as? PageView {
+                result.append(fooVC)
+            }
+
+            // Recursively search in the child's children
+            result.append(contentsOf: findPageViews(in: child))
+        }
+
+        return result
     }
 
     // MARK: - Gestures
@@ -207,46 +170,46 @@ final class ContentViewController: UIViewController, UIGestureRecognizerDelegate
 
         switch sender.state {
         case .began:
-            viewModel.onViewLongPressStarted(at: point, sourceView: targetView)
+            if let verse = verse(at: point, in: targetView) {
+                viewModel.onViewLongPressStarted(at: point, sourceView: targetView, verse: verse)
+            }
         case .changed:
-            viewModel.onViewLongPressChanged(to: point)
+            if let verse = verse(at: point, in: targetView) {
+                viewModel.onViewLongPressChanged(to: point, verse: verse)
+            }
         case .ended:
             viewModel.onViewLongPressEnded()
         default:
             viewModel.onViewLongPressCancelled()
         }
     }
+}
 
-    // MARK: - Paging Strategy
+private struct PagesView: View {
+    @ObservedObject var viewModel: ContentViewModel
+    let pageBuilder: (Page) -> UIViewController
 
-    private func setUpPagingStrategyChanges() {
-        viewModel.$twoPagesEnabled.sink { [weak self] twoPagesEnabled in
-            self?.updatePagingStrategy(twoPagesEnabled)
+    var body: some View {
+        GeometryReader { geometry in
+            QuranPaginationView(
+                pagingStrategy: pagingStrategy(with: geometry),
+                selection: $viewModel.visiblePages,
+                pages: viewModel.pages
+            ) { page in
+                StaticViewControllerRepresentable(viewController: pageBuilder(page))
+            }
         }
-        .store(in: &cancellables)
     }
 
-    private func updatePagingStrategy() {
-        pageController?.pagingStrategy = newPageStrategy()
-    }
+    func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {
+        if geometry.size.height > geometry.size.width {
+            return .singlePage
+        }
 
-    private func updatePagingStrategy(_ twoPagesEnabled: Bool) {
-        pageController?.pagingStrategy = newPageStrategy(twoPagesEnabled)
-    }
+        if !TwoPagesUtils.hasEnoughHorizontalSpace() {
+            return .singlePage
+        }
 
-    private func newPageStrategy() -> PageController.PagingStrategy {
-        newPageStrategy(viewModel.twoPagesEnabled)
-    }
-
-    private func newPageStrategy(_ twoPagesEnabled: Bool) -> PageController.PagingStrategy {
-        let enoughHorizontalSpace = TwoPagesUtils.hasEnoughHorizontalSpace()
-        let verticalScrolling = viewModel.verticalScrollingEnabled
-
-        let shouldDisplayTwoPages = !verticalScrolling
-            && isLandscape
-            && enoughHorizontalSpace
-            && twoPagesEnabled
-
-        return shouldDisplayTwoPages ? .twoPages : .singlePage
+        return viewModel.pagingStrategy
     }
 }

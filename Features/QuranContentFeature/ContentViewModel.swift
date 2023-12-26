@@ -22,13 +22,12 @@ import VLogging
 
 @MainActor
 public protocol ContentListener: AnyObject {
-    func setVisiblePages(_ pages: [Page])
     func userWillBeginDragScroll()
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
 }
 
 @MainActor
-public final class ContentViewModel {
+public final class ContentViewModel: ObservableObject {
     struct Deps {
         let analytics: AnalyticsLibrary
         let quranContentStatePreferences = QuranContentStatePreferences.shared
@@ -40,8 +39,8 @@ public final class ContentViewModel {
 
         let highlightsService: QuranHighlightsService
 
-        let imageDataSourceBuilder: PageDataSourceBuilder
-        let translationDataSourceBuilder: PageDataSourceBuilder
+        let imageDataSourceBuilder: PageViewBuilder
+        let translationDataSourceBuilder: PageViewBuilder
     }
 
     private struct LongPressData {
@@ -58,6 +57,7 @@ public final class ContentViewModel {
         self.deps = deps
         self.input = input
 
+        visiblePages = [input.initialPage]
         pages = deps.quran.pages
 
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
@@ -70,10 +70,10 @@ public final class ContentViewModel {
             .sink { [weak self] in self?.verticalScrollingEnabled = $0 }
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$quranMode
-            .sink { [weak self] _ in self?.loadNewElementModule() }
+            .sink { [weak self] _ in self?.reloadAllPages() }
             .store(in: &cancellables)
         deps.selectedTranslationsPreferences.$selectedTranslations
-            .sink { [weak self] _ in self?.loadNewElementModule() }
+            .sink { [weak self] _ in self?.reloadAllPages() }
             .store(in: &cancellables)
 
         loadNotes()
@@ -82,7 +82,11 @@ public final class ContentViewModel {
 
     // MARK: Public
 
-    public var visiblePages: [Page] { dataSource?.visiblePages ?? [] }
+    @Published public var visiblePages: [Page] {
+        didSet {
+            visiblePagesUpdated()
+        }
+    }
 
     public func removeAyahMenuHighlight() {
         longPressData = nil
@@ -97,68 +101,30 @@ public final class ContentViewModel {
         deps.highlightsService.highlights.pointedWord = word
     }
 
-    public func word(at point: CGPoint, in view: UIView) -> Word? {
-        dataSource?.word(at: point, in: view)
-    }
-
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
         deps.highlightsService.highlights.readingVerses = [ayah].compactMap { $0 }
     }
 
     // MARK: Internal
 
+    let deps: Deps
     weak var listener: ContentListener?
 
     @Published var twoPagesEnabled: Bool
-    @Published var dataSource: PageDataSource?
+    @Published var pageViewBuilder: PageViewBuilder?
 
-    let deps: Deps
+    let pages: [Page]
+
+    var pagingStrategy: PagingStrategy {
+        let shouldDisplayTwoPages = !verticalScrollingEnabled && twoPagesEnabled
+        return shouldDisplayTwoPages ? .doublePage : .singlePage
+    }
 
     var verticalScrollingEnabled: Bool {
-        didSet { loadNewElementModule() }
+        didSet { reloadAllPages() }
     }
 
-    var lastViewedPage: Page {
-        deps.lastPageUpdater.lastPage ?? input.initialPage
-    }
-
-    func userWillBeginDragScroll() {
-        listener?.userWillBeginDragScroll()
-    }
-
-    func visiblePagesLoaded() {
-        let pages = visiblePages
-        let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
-        crasher.setValue(pages.map(\.pageNumber), forKey: .pages)
-        deps.analytics.showing(
-            pages: pages,
-            isTranslation: isTranslationView,
-            numberOfSelectedTranslations: deps.selectedTranslationsPreferences.selectedTranslations.count,
-            arabicFontSize: deps.fontSizePreferences.arabicFontSize,
-            translationFontSize: deps.fontSizePreferences.translationFontSize
-        )
-        if isTranslationView {
-            logger.info("Using translations \(deps.selectedTranslationsPreferences.selectedTranslations)")
-        }
-
-        listener?.setVisiblePages(pages)
-        updateLastPageTo(pages)
-    }
-
-    func visiblePagesUpdated() {
-        // remove search highlight when page changes
-        deps.highlightsService.highlights.searchVerses = []
-        visiblePagesLoaded()
-    }
-
-    func updateLastPageTo(_ pages: [Page]) {
-        deps.lastPageUpdater.updateTo(pages: pages)
-    }
-
-    func onViewLongPressStarted(at point: CGPoint, sourceView: UIView) {
-        guard let verse = dataSource?.verse(at: point, in: sourceView) else {
-            return
-        }
+    func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {
         longPressData = LongPressData(
             sourceView: sourceView,
             startPosition: point,
@@ -168,11 +134,8 @@ public final class ContentViewModel {
         )
     }
 
-    func onViewLongPressChanged(to point: CGPoint) {
+    func onViewLongPressChanged(to point: CGPoint, verse: AyahNumber) {
         guard var longPressData else {
-            return
-        }
-        guard let verse = dataSource?.verse(at: point, in: longPressData.sourceView) else {
             return
         }
         longPressData.endVerse = verse
@@ -199,7 +162,6 @@ public final class ContentViewModel {
     private var cancellables: Set<AnyCancellable> = []
 
     private let input: QuranInput
-    private var pages: [Page]
 
     private var longPressData: LongPressData? {
         didSet {
@@ -219,9 +181,7 @@ public final class ContentViewModel {
         return start.array(to: end)
     }
 
-    // MARK: - Element
-
-    private var dataSourceBuilder: PageDataSourceBuilder {
+    private var newPageCollectionBuilder: PageViewBuilder {
         switch deps.quranContentStatePreferences.quranMode {
         case .arabic: return deps.imageDataSourceBuilder
         case .translation: return deps.translationDataSourceBuilder
@@ -238,24 +198,45 @@ public final class ContentViewModel {
 
     private func configureAsInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        loadNewElementModule()
+        reloadAllPages()
         deps.highlightsService.highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
     }
 
-    private func loadNewElementModule() {
-        let dataSource = dataSourceBuilder.build(
-            actions: .init(
-                visiblePagesUpdated: { [weak self] in await self?.visiblePagesUpdated() }
-            ),
-            pages: pages
+    private func visiblePagesUpdated() {
+        // remove search highlight when page changes
+        deps.highlightsService.highlights.searchVerses = []
+
+        let pages = visiblePages
+        let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
+        crasher.setValue(pages.map(\.pageNumber), forKey: .pages)
+        deps.analytics.showing(
+            pages: pages,
+            isTranslation: isTranslationView,
+            numberOfSelectedTranslations: deps.selectedTranslationsPreferences.selectedTranslations.count,
+            arabicFontSize: deps.fontSizePreferences.arabicFontSize,
+            translationFontSize: deps.fontSizePreferences.translationFontSize
         )
-        dataSource.items = pages
-        self.dataSource = dataSource
+        if isTranslationView {
+            logger.info("Using translations \(deps.selectedTranslationsPreferences.selectedTranslations)")
+        }
+
+        updateLastPageTo(pages)
     }
 
-    @objc
+    private func updateLastPageTo(_ pages: [Page]) {
+        deps.lastPageUpdater.updateTo(pages: pages)
+    }
+
+    private func reloadAllPages() {
+        switch deps.quranContentStatePreferences.quranMode {
+        case .arabic:
+            pageViewBuilder = deps.imageDataSourceBuilder
+        case .translation:
+            pageViewBuilder = deps.translationDataSourceBuilder
+        }
+    }
+
     private func loadNotes() {
-        // set highlighted notes verses
         deps.noteService.notes(quran: deps.quran)
             .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
             .receive(on: DispatchQueue.main)

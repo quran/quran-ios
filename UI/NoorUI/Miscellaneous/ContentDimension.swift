@@ -13,7 +13,7 @@ public enum ContentDimension {
 
     public static let interSpacing: CGFloat = 8
 
-    public static let interPageSpacing: CGFloat = 10
+    public static let interPageSpacing: CGFloat = 12
 
     public static func insets(of view: UIView) -> NSDirectionalEdgeInsets {
         let readableInsets = view.window?.safeAreaInsets ?? .zero

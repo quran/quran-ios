@@ -1,5 +1,5 @@
 //
-//  HostingTableViewCell.swift
+//  HostingCell.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 11/26/20.
@@ -66,6 +66,19 @@ private final class ViewHostingController<Content: View> {
 
 @available(iOS 13.0, *)
 public final class HostingTableViewCell<Content: View>: UITableViewCell {
+    // MARK: Public
+
+    public func set(rootView: Content, parentController: UIViewController) {
+        hostingController.set(rootView: rootView, parentController: parentController)
+    }
+
+    // MARK: Private
+
+    private lazy var hostingController = ViewHostingController<Content?>(view: self, contentView: contentView)
+}
+
+@available(iOS 13.0, *)
+public final class HostingCollectionViewCell<Content: View>: UICollectionViewCell {
     // MARK: Public
 
     public func set(rootView: Content, parentController: UIViewController) {

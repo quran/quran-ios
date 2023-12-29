@@ -79,11 +79,9 @@ public class QuranTranslationDiffableDataSource {
         section.contentInsets = .zero
         section.interGroupSpacing = 0
 
-        let collectionViewLayout: UICollectionViewCompositionalLayout
-        let collectionView: UICollectionView
         section.contentInsetsReference = .none
-        collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        let collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
 
         collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .never

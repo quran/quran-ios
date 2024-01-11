@@ -33,6 +33,7 @@ public struct TranslatedVerse: Equatable {
     let translations: Translations
 }
 
+// TODO: Remove
 public class Translations: Equatable, CustomStringConvertible {
     // MARK: Lifecycle
 

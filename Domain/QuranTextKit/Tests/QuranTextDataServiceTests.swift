@@ -77,7 +77,7 @@ final class QuranTextDataServiceTests: XCTestCase {
                 VerseText(
                     arabicText: TestData.quranTextAt(verse),
                     translations: translations.map {
-                        .string(TranslationString(text: TestData.translationTextAt($0, verse), quranRanges: [], footerRanges: []))
+                        .string(TranslationString(text: TestData.translationTextAt($0, verse), quranRanges: [], footnoteRanges: [], footnotes: []))
                     },
                     arabicPrefix: [],
                     arabicSuffix: []
@@ -96,10 +96,21 @@ final class QuranTextDataServiceTests: XCTestCase {
         let versesText = try await textService.textForVerses([verse])
 
         let translationText = TestData.translationTextAt(translations[0], verse)
+        let textWithoutFootnotes = "Guide us to the Straight Way.  {ABC} 1 {DE} 2 FG"
         let string = TranslationString(
-            text: translationText,
-            quranRanges: [translationText.nsRange(of: "{ABC}"), translationText.nsRange(of: "{DE}")],
-            footerRanges: [translationText.nsRange(of: "[[Footer1]]"), translationText.nsRange(of: "[[Footer2]]")]
+            text: textWithoutFootnotes,
+            quranRanges: [
+                textWithoutFootnotes.range(of: "{ABC}"),
+                textWithoutFootnotes.range(of: "{DE}"),
+            ].compactMap { $0 },
+            footnoteRanges: [
+                textWithoutFootnotes.range(of: "1"),
+                textWithoutFootnotes.range(of: "2"),
+            ].compactMap { $0 },
+            footnotes: [
+                translationText.range(of: "[[Footer1]]"),
+                translationText.range(of: "[[Footer2]]"),
+            ].compactMap { $0 }.map { translationText[$0] }
         )
         let expectedVerse = VerseText(
             arabicText: TestData.quranTextAt(verse),
@@ -121,10 +132,4 @@ final class QuranTextDataServiceTests: XCTestCase {
         TestData.khanTranslation,
         TestData.sahihTranslation,
     ]
-}
-
-extension String {
-    func nsRange(of substring: String) -> NSRange {
-        (self as NSString).range(of: substring)
-    }
 }

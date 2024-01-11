@@ -13,12 +13,6 @@ import UIx
 import VLogging
 
 public final class WordPointerViewController: UIViewController {
-    private enum GestureState {
-        case began
-        case changed(translation: CGPoint)
-        case ended(velocity: CGPoint)
-    }
-
     // MARK: Lifecycle
 
     init(viewModel: WordPointerViewModel) {
@@ -125,6 +119,12 @@ public final class WordPointerViewController: UIViewController {
     }
 
     // MARK: Private
+
+    private enum GestureState {
+        case began
+        case changed(translation: CGPoint)
+        case ended(velocity: CGPoint)
+    }
 
     private let viewModel: WordPointerViewModel
 

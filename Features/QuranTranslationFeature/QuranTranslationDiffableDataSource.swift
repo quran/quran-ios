@@ -33,21 +33,6 @@ public class QuranTranslationDiffableDataSource {
         let translation: Translation
     }
 
-    public enum ItemId: Hashable, Sendable {
-        case header(AyahNumber)
-        case footer(AyahNumber)
-        case separator(AyahNumber)
-        case suraName(AyahNumber)
-        case arabic(AyahNumber, text: String, alignment: NSTextAlignment)
-        case translation(TranslationId)
-    }
-
-    private enum Section: Hashable {
-        case header
-        case footer
-        case verse(AyahNumber)
-    }
-
     // MARK: Lifecycle
 
     // MARK: - Configuration
@@ -64,6 +49,15 @@ public class QuranTranslationDiffableDataSource {
     }
 
     // MARK: Public
+
+    public enum ItemId: Hashable, Sendable {
+        case header(AyahNumber)
+        case footer(AyahNumber)
+        case separator(AyahNumber)
+        case suraName(AyahNumber)
+        case arabic(AyahNumber, text: String, alignment: NSTextAlignment)
+        case translation(TranslationId)
+    }
 
     // MARK: - Collection View
 
@@ -117,6 +111,12 @@ public class QuranTranslationDiffableDataSource {
     }
 
     // MARK: Private
+
+    private enum Section: Hashable {
+        case header
+        case footer
+        case verse(AyahNumber)
+    }
 
     private class NoSafeAreaCollectionView: UICollectionView {
         override var safeAreaInsets: UIEdgeInsets {

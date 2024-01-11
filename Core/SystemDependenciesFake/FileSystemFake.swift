@@ -22,11 +22,6 @@ public final class FileSystemFake: FileSystem, Sendable {
         var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
     }
 
-    enum FileSystemError: Error {
-        case noResourceValues
-        case general(String)
-    }
-
     // MARK: Lifecycle
 
     public init() {}
@@ -115,6 +110,13 @@ public final class FileSystemFake: FileSystem, Sendable {
             throw FileSystemError.general("Cannot overwrite file at \(path)")
         }
         files.insert(path)
+    }
+
+    // MARK: Internal
+
+    enum FileSystemError: Error {
+        case noResourceValues
+        case general(String)
     }
 
     // MARK: Private

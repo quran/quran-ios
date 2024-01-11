@@ -174,7 +174,7 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
     private func translationTextToString(_ translationText: TranslationText) -> TranslationString {
         switch translationText {
         case .reference(let verse):
-            return TranslationString(text: lFormat("translation.text.see-referenced-verse", verse.ayah), quranRanges: [], footerRanges: [])
+            return TranslationString(text: lFormat("translation.text.see-referenced-verse", verse.ayah), quranRanges: [], footnoteRanges: [], footnotes: [])
         case .string(let string):
             return string
         }

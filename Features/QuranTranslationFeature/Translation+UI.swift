@@ -11,6 +11,7 @@ import QuranText
 import UIKit
 
 extension Translation {
+    // TODO: Use SwiftUI.Font
     func preferredTextFont(ofSize size: FontSize, factor: CGFloat = 1) -> UIFont {
         if languageCode == "am" {
             return .amharicTranslation(ofSize: size, factor: factor)
@@ -21,6 +22,7 @@ extension Translation {
         }
     }
 
+    // TODO: Use SwiftUI.Font
     func preferredTranslatorNameFont(ofSize size: FontSize) -> UIFont {
         if languageCode == "am" {
             return .translatorNameAmharic(ofSize: size)

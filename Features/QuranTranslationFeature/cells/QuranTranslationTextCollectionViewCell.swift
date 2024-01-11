@@ -210,17 +210,17 @@ class QuranTranslationTextCollectionViewCell: QuranTranslationItemCollectionView
         ]
         let attributedString = NSMutableAttributedString(string: text.text, attributes: attributes)
 
-        for range in text.footerRanges {
+        for range in text.footnoteRanges {
             attributedString.addAttributes([
                 .font: footerFont,
                 .foregroundColor: footerColor,
-            ], range: range)
+            ], range: NSRange(range, in: text.text))
         }
 
         for range in text.quranRanges {
             attributedString.addAttributes([
                 .foregroundColor: quranColor,
-            ], range: range)
+            ], range: NSRange(range, in: text.text))
         }
 
         // add verse number

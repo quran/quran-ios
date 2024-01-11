@@ -56,6 +56,12 @@ extension String {
 }
 
 extension String {
+    public func ranges(of regex: NSRegularExpression) -> [Range<String.Index>] {
+        let range = NSRange(startIndex ..< endIndex, in: self)
+        let matches = regex.matches(in: self, range: range)
+        return matches.compactMap { Range($0.range, in: self) }
+    }
+
     public func replacingOccurrences(matchingPattern pattern: String, replacementProvider: (String) -> String?) -> String {
         let expression = try! NSRegularExpression(pattern: pattern, options: []) // swiftlint:disable:this force_try
         let matches = expression.matches(in: self, options: [], range: NSRange(startIndex ..< endIndex, in: self))
@@ -65,5 +71,49 @@ extension String {
             guard let replacement = replacementProvider(token) else { return }
             current.replaceSubrange(range, with: replacement)
         }
+    }
+
+    public func replaceMatches(
+        of regex: NSRegularExpression,
+        replace: (Substring, Int) -> String
+    ) -> (String, [Range<String.Index>]) {
+        let ranges = ranges(of: regex)
+        return replacing(sortedRanges: ranges, body: replace)
+    }
+}
+
+extension String {
+    public func replacing(
+        sortedRanges: [Range<String.Index>],
+        body: (Substring, Int) -> String
+    ) -> (String, [Range<String.Index>]) {
+        var newText = self
+        var offsets = [(start: Int, length: Int, offset: Int)]()
+        var replacementIndex = sortedRanges.count - 1
+
+        for matchRange in sortedRanges.reversed() {
+            let match = self[matchRange]
+
+            let replacement = body(match, replacementIndex)
+            newText.replaceSubrange(matchRange, with: replacement)
+
+            let replacementStart = newText.distance(from: newText.startIndex, to: matchRange.lowerBound)
+            offsets.append((
+                start: replacementStart,
+                length: replacement.count,
+                offset: match.count - replacement.count
+            ))
+
+            replacementIndex -= 1
+        }
+
+        var accumlatedOffset = 0
+        let ranges = offsets.reversed().map { data -> Range<String.Index> in
+            let start = newText.index(newText.startIndex, offsetBy: data.start - accumlatedOffset)
+            let end = newText.index(start, offsetBy: data.length)
+            accumlatedOffset += data.offset
+            return start ..< end
+        }
+        return (newText, ranges)
     }
 }

@@ -6,13 +6,12 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import UIKit
+import SwiftUI
 
 public enum ContentDimension {
     // MARK: Public
 
-    public static let interSpacing: CGFloat = 8
-
+    public static let interSpacing: CGFloat = spacing
     public static let interPageSpacing: CGFloat = 12
 
     public static func insets(of view: UIView) -> NSDirectionalEdgeInsets {
@@ -23,6 +22,15 @@ public enum ContentDimension {
             leading: readableInsets.left + spacing,
             bottom: readableInsets.bottom + spacing,
             trailing: readableInsets.right + spacing
+        )
+    }
+
+    public static func readableInsets(of safeAreaInsets: EdgeInsets) -> EdgeInsets {
+        EdgeInsets(
+            top: max(24, safeAreaInsets.top) + spacing,
+            leading: safeAreaInsets.leading + spacing,
+            bottom: safeAreaInsets.bottom + spacing,
+            trailing: safeAreaInsets.trailing + spacing
         )
     }
 

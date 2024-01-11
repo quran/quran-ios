@@ -45,9 +45,9 @@ public enum FontName: CaseIterable {
             )
         case .quran:
             return FontDetails(
-                name: "KFGQPCHAFSUthmanicScript-Regula",
+                name: "KFGQPCHAFSUthmanicScript-Bold",
                 family: "KFGQPC HAFS Uthmanic Script",
-                fileName: "uthmanic_hafs_ver12.otf"
+                fileName: "UthmanicHafs1B Ver13.ttf"
             )
         case .suraNames:
             return FontDetails(

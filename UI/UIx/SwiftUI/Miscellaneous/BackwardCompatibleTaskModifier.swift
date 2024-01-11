@@ -39,11 +39,16 @@ public struct BackwardCompatibleTaskModifier: ViewModifier {
         } else {
             content
                 .onAppear {
+                    if appeared {
+                        return
+                    }
+                    appeared = true
                     task = Task {
                         await action()
                     }
                 }
                 .onDisappear {
+                    appeared = false
                     task?.cancel()
                     task = nil
                 }
@@ -55,4 +60,5 @@ public struct BackwardCompatibleTaskModifier: ViewModifier {
     private var priority: TaskPriority
     private var action: @Sendable () async -> Void
     @State private var task: Task<Void, Never>?
+    @State private var appeared = false
 }

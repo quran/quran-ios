@@ -52,17 +52,17 @@ public struct QuranTextDataService {
 
     // MARK: Internal
 
+    // regex to detect quran text in translation text
+    static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
+    // regex to detect footnotes in translation text
+    static let footnotesRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
+
     let localTranslationRetriever: LocalTranslationsRetriever
     let arabicPersistence: VerseTextPersistence
     let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     // MARK: Private
-
-    // regex to detect quran text in translation text
-    private static let quranRegex = try! NSRegularExpression(pattern: #"([«{﴿][\s\S]*?[﴾}»])"#)
-    // regex to detect footer notes in translation text
-    private static let footerRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
     private func textForVerses(
         _ verses: [AyahNumber],
@@ -146,6 +146,7 @@ public struct QuranTextDataService {
         var verseTextList: [TranslationText] = []
         do {
             let versesText = try await translationPersistence.textForVerses(verses)
+            // TODO: Use TaskGroup.
             for verse in verses {
                 let text = versesText[verse] ?? .string(l("error.translation.text-not-available"))
                 verseTextList.append(translationText(text))
@@ -157,7 +158,7 @@ public struct QuranTextDataService {
             )
             let errorText = l("error.translation.text-retrieval")
             for _ in verses {
-                verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footerRanges: [])))
+                verseTextList.append(.string(TranslationString(text: errorText, quranRanges: [], footnoteRanges: [], footnotes: [])))
             }
         }
         return (translation, verseTextList)
@@ -172,15 +173,16 @@ public struct QuranTextDataService {
         }
     }
 
-    private func translationString(_ string: String) -> TranslationString {
-        let range = NSRange(string.startIndex ..< string.endIndex, in: string)
-        let quranRanges = ranges(of: Self.quranRegex, in: string, range: range)
-        let footerRanges = ranges(of: Self.footerRegex, in: string, range: range)
-        return TranslationString(text: string, quranRanges: quranRanges, footerRanges: footerRanges)
-    }
+    private func translationString(_ originalString: String) -> TranslationString {
+        let footnoteTextRanges = originalString.ranges(of: Self.footnotesRegex)
+        let footnotes = footnoteTextRanges.map { originalString[$0] }
+        let (string, footnoteRanges) = originalString.replacing(
+            sortedRanges: footnoteTextRanges)
+        { _, index -> String in
+            NumberFormatter.shared.format(index + 1)
+        }
 
-    private func ranges(of regex: NSRegularExpression, in string: String, range: NSRange) -> [NSRange] {
-        let matches = regex.matches(in: string, options: [], range: range)
-        return matches.map(\.range)
+        let quranRanges = string.ranges(of: Self.quranRegex)
+        return TranslationString(text: string, quranRanges: quranRanges, footnoteRanges: footnoteRanges, footnotes: footnotes)
     }
 }

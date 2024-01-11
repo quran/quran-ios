@@ -8,7 +8,11 @@
 --wrapparameters before-first # wrapArguments
 --funcattributes prev-line # wrapAttributes
 --typeattributes prev-line # wrapAttributes
---beforemarks typealias,struct,enum  # organizeDeclarations
+--beforemarks typealias,struct  # organizeDeclarations
+
+--structthreshold 70
+--classthreshold 70
+--enumthreshold 70
 
 # Disabled
 

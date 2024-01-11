@@ -21,23 +21,25 @@
 import Foundation
 import QuranKit
 
-public struct TranslationString: Equatable {
+public struct TranslationString: Hashable {
     // MARK: Lifecycle
 
-    public init(text: String, quranRanges: [NSRange], footerRanges: [NSRange]) {
+    public init(text: String, quranRanges: [Range<String.Index>], footnoteRanges: [Range<String.Index>], footnotes: [Substring]) {
         self.text = text
-        self.footerRanges = footerRanges
         self.quranRanges = quranRanges
+        self.footnoteRanges = footnoteRanges
+        self.footnotes = footnotes
     }
 
     // MARK: Public
 
     public let text: String
-    public let quranRanges: [NSRange]
-    public let footerRanges: [NSRange]
+    public let quranRanges: [Range<String.Index>]
+    public let footnoteRanges: [Range<String.Index>]
+    public let footnotes: [Substring]
 }
 
-public enum TranslationText: Equatable {
+public enum TranslationText: Hashable {
     case string(TranslationString)
     case reference(AyahNumber)
 }

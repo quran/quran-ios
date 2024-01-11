@@ -26,11 +26,6 @@ public struct NoorListItem: View {
         let location: SubtitleLocation
     }
 
-    public enum SubtitleLocation {
-        case trailing
-        case bottom
-    }
-
     public struct ItemImage {
         // MARK: Lifecycle
 
@@ -43,24 +38,6 @@ public struct NoorListItem: View {
 
         let image: NoorSystemImage
         let color: Color?
-    }
-
-    public enum Accessory {
-        case text(String)
-        case disclosureIndicator
-        case download(DownloadType, action: AsyncAction)
-        case image(NoorSystemImage, color: Color? = nil)
-
-        // MARK: Internal
-
-        var actionable: Bool {
-            switch self {
-            case .text: return false
-            case .download: return true
-            case .disclosureIndicator: return false
-            case .image: return false
-            }
-        }
     }
 
     // MARK: Lifecycle
@@ -90,6 +67,29 @@ public struct NoorListItem: View {
     }
 
     // MARK: Public
+
+    public enum SubtitleLocation {
+        case trailing
+        case bottom
+    }
+
+    public enum Accessory {
+        case text(String)
+        case disclosureIndicator
+        case download(DownloadType, action: AsyncAction)
+        case image(NoorSystemImage, color: Color? = nil)
+
+        // MARK: Internal
+
+        var actionable: Bool {
+            switch self {
+            case .text: return false
+            case .download: return true
+            case .disclosureIndicator: return false
+            case .image: return false
+            }
+        }
+    }
 
     public var body: some View {
         if let action {

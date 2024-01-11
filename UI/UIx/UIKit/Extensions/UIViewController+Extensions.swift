@@ -15,10 +15,18 @@ public extension UIViewController {
         viewController.didMove(toParent: self)
     }
 
+    func removeSelfFromParentIfNeeded() {
+        if parent == nil {
+            return
+        }
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+        didMove(toParent: nil)
+    }
+
     func removeChild(_ viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-        viewController.view.removeFromSuperview()
-        viewController.removeFromParent()
+        viewController.removeSelfFromParentIfNeeded()
     }
 
     func rotateToPortraitIfPhone() {

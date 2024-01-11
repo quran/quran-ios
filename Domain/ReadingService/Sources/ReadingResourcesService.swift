@@ -16,12 +16,6 @@ import Utilities
 import VLogging
 
 public actor ReadingResourcesService {
-    public enum ResourceStatus: Equatable {
-        case downloading(progress: Double)
-        case ready
-        case error(NSError)
-    }
-
     // MARK: Lifecycle
 
     public init(
@@ -43,6 +37,12 @@ public actor ReadingResourcesService {
     }
 
     // MARK: Public
+
+    public enum ResourceStatus: Equatable {
+        case downloading(progress: Double)
+        case ready
+        case error(NSError)
+    }
 
     public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
         subject

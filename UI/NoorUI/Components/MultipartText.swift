@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIx
 
 public struct HighlightingRange {
     // MARK: Lifecycle
@@ -124,6 +125,10 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.plain(text: plain))
         }
 
+        public mutating func appendInterpolation(_ other: MultipartText) {
+            parts.append(contentsOf: other.parts)
+        }
+
         // MARK: Fileprivate
 
         fileprivate var parts: [TextPart] = []
@@ -139,17 +144,19 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         parts = [.plain(text: value)]
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    enum FontSize {
+    public enum FontSize {
         case body
         case caption
+        case footnote
 
         // MARK: Internal
 
         var plainFont: Font {
             switch self {
             case .body: return .body
+            case .footnote: return .footnote
             case .caption: return .caption
             }
         }
@@ -157,38 +164,82 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         var suraFont: Font {
             switch self {
             case .body: return .custom(.suraNames, size: 20, relativeTo: .body)
-            case .caption: return .custom(.suraNames, size: 17, relativeTo: .caption)
+            case .footnote: return .custom(.suraNames, size: 16, relativeTo: .footnote)
+            case .caption: return .custom(.suraNames, size: 15, relativeTo: .caption)
             }
         }
 
         var verseFont: Font {
             switch self {
             case .body: return .custom(.quran, size: 20, relativeTo: .body)
-            case .caption: return .custom(.quran, size: 17, relativeTo: .caption)
+            case .footnote: return .custom(.suraNames, size: 16, relativeTo: .footnote)
+            case .caption: return .custom(.quran, size: 15, relativeTo: .caption)
             }
         }
     }
+
+    public mutating func append(_ other: MultipartText) {
+        parts.append(contentsOf: other.parts)
+    }
+
+    // MARK: Internal
 
     var rawValue: String {
         parts.map(\.rawValue).joined()
     }
 
-    @ViewBuilder
     func view(ofSize size: FontSize) -> some View {
-        HStack(spacing: 0) {
-            ForEach(0 ..< parts.count, id: \.self) { i in
-                TextPartView(part: parts[i], size: size)
-            }
-        }
+        MultiPartTextView(text: self, size: size)
     }
 
-    // MARK: Private
+    // MARK: Fileprivate
 
-    private let parts: [TextPart]
+    fileprivate var parts: [TextPart]
 }
 
 extension MultipartText {
     public static func text(_ plain: String) -> MultipartText {
         MultipartText(stringLiteral: plain)
+    }
+}
+
+public struct MultiPartTextView: View {
+    // MARK: Lifecycle
+
+    public init(text: MultipartText, size: MultipartText.FontSize, alignment: Alignment = .leading) {
+        self.text = text
+        self.size = size
+        self.alignment = alignment
+    }
+
+    // MARK: Public
+
+    public var body: some View {
+        wrap {
+            ForEach(0 ..< text.parts.count, id: \.self) { i in
+                TextPartView(part: text.parts[i], size: size)
+            }
+        }
+    }
+
+    // MARK: Internal
+
+    let text: MultipartText
+    let size: MultipartText.FontSize
+    let alignment: Alignment
+
+    // MARK: Private
+
+    @ViewBuilder
+    private func wrap(@ViewBuilder content: () -> some View) -> some View {
+        if #available(iOS 16.0, *) {
+            WrappingHStack(alignment: alignment, horizontalSpacing: 0) {
+                content()
+            }
+        } else {
+            HStack(spacing: 0) {
+                content()
+            }
+        }
     }
 }

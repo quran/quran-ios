@@ -184,34 +184,6 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
     // MARK: Internal
 
-    enum FontSize {
-        case body
-        case caption
-
-        // MARK: Internal
-
-        var plainFont: Font {
-            switch self {
-            case .body: return .body
-            case .caption: return .caption
-            }
-        }
-
-        var suraFont: Font {
-            switch self {
-            case .body: return .custom(.suraNames, size: 20, relativeTo: .body)
-            case .caption: return .custom(.suraNames, size: 17, relativeTo: .caption)
-            }
-        }
-
-        var verseFont: Font {
-            switch self {
-            case .body: return .custom(.quran, size: 20, relativeTo: .body)
-            case .caption: return .custom(.quran, size: 17, relativeTo: .caption)
-            }
-        }
-    }
-
     var rawValue: String {
         parts.map(\.rawValue).joined()
     }

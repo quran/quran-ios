@@ -160,6 +160,7 @@ private func uiTargets() -> [[Target]] {
         target(type, name: "ViewConstrainer", hasTests: false),
         target(type, name: "UIx", hasTests: false, dependencies: [
             "ViewConstrainer",
+            "VLogging",
         ]),
         target(type, name: "NoorFont", hasTests: false, resources: [
             .process("Resources"),

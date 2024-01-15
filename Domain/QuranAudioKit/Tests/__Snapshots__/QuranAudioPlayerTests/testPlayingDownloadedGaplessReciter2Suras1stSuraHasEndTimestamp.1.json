@@ -1,7 +1,7 @@
 {
   "playing" : {
     "_0" : {
-      "endTime" : 33.093000000000004,
+      "endTime" : 33.093,
       "files" : [
         {
           "frames" : [
@@ -11,7 +11,7 @@
             },
             {
               "endTime" : 284.899,
-              "startTime" : 275.88099999999997
+              "startTime" : 275.881
             }
           ],
           "url" : "\/audio_files\/mishari_alafasy\/077.mp3"
@@ -24,11 +24,11 @@
             },
             {
               "endTime" : null,
-              "startTime" : 21.518999999999998
+              "startTime" : 21.519
             },
             {
               "endTime" : null,
-              "startTime" : 27.111999999999998
+              "startTime" : 27.112
             }
           ],
           "url" : "\/audio_files\/mishari_alafasy\/078.mp3"

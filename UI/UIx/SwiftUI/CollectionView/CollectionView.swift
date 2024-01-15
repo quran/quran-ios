@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+public enum ScrollAnchor {
+    case center
+}
+
 public struct CollectionView<
     SectionId: Hashable,
     Item: Identifiable & Hashable,
@@ -17,7 +21,7 @@ public struct CollectionView<
     public init(
         layout: UICollectionViewLayout,
         sections: [ListSection<SectionId, Item>],
-        content: @escaping (SectionId, Item) -> ItemContent
+        @ViewBuilder content: @escaping (SectionId, Item) -> ItemContent
     ) {
         self.layout = layout
         self.sections = sections
@@ -31,14 +35,33 @@ public struct CollectionView<
             layout: layout,
             sections: sections,
             configure: configure,
-            content: content
+            content: content,
+            isPagingEnabled: isPagingEnabled,
+            scrollAnchorId: scrollAnchorId,
+            scrollAnchor: scrollAnchor
         )
     }
 
     public func configureCollectionView(configure: @escaping (UICollectionView) -> Void) -> Self {
-        var collectionView = self
-        collectionView.configure = configure
-        return collectionView
+        mutateSelf {
+            $0.configure = configure
+        }
+    }
+
+    public func anchorScrollTo(
+        id scrollAnchorId: Binding<Item.ID>,
+        anchor: ScrollAnchor = .center
+    ) -> Self {
+        mutateSelf {
+            $0.scrollAnchorId = scrollAnchorId
+            $0.scrollAnchor = anchor
+        }
+    }
+
+    public func pagingEnabled(_ isPagingEnabled: Bool) -> Self {
+        mutateSelf {
+            $0.isPagingEnabled = isPagingEnabled
+        }
     }
 
     // MARK: Private
@@ -47,6 +70,11 @@ public struct CollectionView<
     private let sections: [ListSection<SectionId, Item>]
     private let content: (SectionId, Item) -> ItemContent
     private var configure: ((UICollectionView) -> Void)?
+
+    private var isPagingEnabled: Bool = false
+
+    private var scrollAnchorId: Binding<Item.ID>?
+    private var scrollAnchor: ScrollAnchor = .center
 }
 
 private struct CollectionViewBody<
@@ -54,7 +82,7 @@ private struct CollectionViewBody<
     Item: Identifiable & Hashable,
     ItemContent: View
 >: UIViewControllerRepresentable {
-    typealias UIViewControllerType = CollectionViewController<ItemContent>
+    typealias UIViewControllerType = CollectionViewController<SectionId, Item, ItemContent>
 
     // MARK: Internal
 
@@ -63,14 +91,16 @@ private struct CollectionViewBody<
     let configure: ((UICollectionView) -> Void)?
     let content: (SectionId, Item) -> ItemContent
 
+    let isPagingEnabled: Bool
+
+    let scrollAnchorId: Binding<Item.ID>?
+    let scrollAnchor: ScrollAnchor
+
     func makeUIViewController(context: Context) -> UIViewControllerType {
-        let viewController = UIViewControllerType(collectionViewLayout: layout)
-        viewController.collectionView.backgroundColor = .clear
+        let viewController = UIViewControllerType(collectionViewLayout: layout, content: content)
         configure?(viewController.collectionView)
 
         context.coordinator.viewController = viewController
-        context.coordinator.setUpDataSource(content: content)
-
         updateUIViewController(viewController, context: context)
 
         return viewController
@@ -91,7 +121,15 @@ private struct CollectionViewBody<
             viewController.collectionView.collectionViewLayout = layout
         }
 
-        context.coordinator.updateData(sections: sections)
+        viewController.dataSource?.sections = sections
+
+        viewController.scroller.isPagingEnabled = isPagingEnabled
+        viewController.scroller.onScrollAnchorIdUpdated = {
+            scrollAnchorId?.wrappedValue = $0
+        }
+        if let scrollAnchorId {
+            viewController.scroller.anchorScrollTo(id: scrollAnchorId.wrappedValue, anchor: scrollAnchor)
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -101,112 +139,11 @@ private struct CollectionViewBody<
 
 extension CollectionViewBody {
     class Coordinator {
-        // MARK: Lifecycle
+        let parent: CollectionViewBody
+        weak var viewController: UIViewControllerType?
 
         init(_ parent: CollectionViewBody) {
             self.parent = parent
-        }
-
-        // MARK: Internal
-
-        let parent: CollectionViewBody
-        var dataSource: UICollectionViewDiffableDataSource<SectionId, Item.ID>?
-        weak var viewController: UIViewControllerType?
-
-        func updateData(sections: [ListSection<SectionId, Item>]) {
-            let oldSections = self.sections
-            self.sections = sections
-
-            updateData(oldSections: oldSections, newSections: sections)
-        }
-
-        func setUpDataSource(content: @escaping (SectionId, Item) -> ItemContent) {
-            guard let viewController else {
-                fatalError("setUpDataSource called before setting the viewController.")
-            }
-
-            let cellType = UIViewControllerType.CellType.self
-            viewController.collectionView.register(cellType, forCellWithReuseIdentifier: cellType.reuseId)
-
-            dataSource = UICollectionViewDiffableDataSource(collectionView: viewController.collectionView) {
-                [weak self] _, indexPath, itemId in
-                guard let self, let viewController = self.viewController else {
-                    return UICollectionViewCell()
-                }
-
-                // Get the item.
-                let section = sections[indexPath.section]
-                let item = sections[indexPath.section].items[indexPath.item]
-                assert(item.id == itemId, "Sections data doesn't match data source snapshot.")
-
-                // Get & configure the cell.
-                let cell = viewController.collectionView.dequeueReusableCell(UIViewControllerType.CellType.self, for: indexPath)
-                cell.configure(content: content(section.id, item), dataId: itemId)
-
-                return cell
-            }
-        }
-
-        // MARK: Private
-
-        private var sections: [ListSection<SectionId, Item>] = []
-
-        private func updateData(
-            oldSections: [ListSection<SectionId, Item>],
-            newSections: [ListSection<SectionId, Item>]
-        ) {
-            guard let dataSource else {
-                return
-            }
-
-            var snapshot = dataSource.snapshot()
-            var hasDataSourceChanged = false
-            defer {
-                if hasDataSourceChanged {
-                    dataSource.apply(snapshot, animatingDifferences: false)
-                }
-            }
-
-            // Early return for initial update.
-            guard !oldSections.isEmpty else {
-                hasDataSourceChanged = true
-
-                snapshot.deleteAllItems()
-                for newSection in newSections {
-                    snapshot.appendSections([newSection.sectionId])
-                    snapshot.appendItems(newSection.items.map(\.id))
-                }
-                return
-            }
-
-            // Build new snapshot, if any item/section id changed.
-            let oldSectionIds = oldSections.map(\.sectionId)
-            let newSectionIds = newSections.map(\.sectionId)
-            let oldItemIds = oldSections.map { $0.items.map(\.id) }
-            let newItemIds = newSections.map { $0.items.map(\.id) }
-
-            if oldSectionIds != newSectionIds || oldItemIds != newItemIds {
-                hasDataSourceChanged = true
-                snapshot = .init()
-                for newSection in newSections {
-                    snapshot.appendSections([newSection.sectionId])
-                    snapshot.appendItems(newSection.items.map(\.id))
-                }
-            }
-
-            // Reload updated items.
-            let allOldItems = oldSections.flatMap(\.items)
-            let oldItemsDictionary = Dictionary(grouping: allOldItems, by: \.id).mapValues(\.first)
-
-            let allNewItems = newSections.flatMap(\.items)
-            let newItemsDictionary = Dictionary(grouping: allNewItems, by: \.id).mapValues(\.first)
-
-            for (itemId, newItem) in newItemsDictionary {
-                if newItem != oldItemsDictionary[itemId] {
-                    hasDataSourceChanged = true
-                    snapshot.backwardCompatibleReconfigureItems([itemId])
-                }
-            }
         }
     }
 }
@@ -229,7 +166,9 @@ struct StaticCollectionView_Previews: PreviewProvider {
             )
             let item = NSCollectionLayoutItem(layoutSize: size)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitem: item, count: 1)
-            let collectionViewLayout = UICollectionViewCompositionalLayout(section: .init(group: group))
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 60
+            let collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
             return collectionViewLayout
         }()
 
@@ -240,17 +179,30 @@ struct StaticCollectionView_Previews: PreviewProvider {
             ),
         ]
 
-        var body: some View {
-            CollectionView(layout: layout, sections: sections) { _, item in
-                VStack {
-                    Text("\(item.text.uppercased())")
-                        .fontWeight(.bold)
-                        .padding()
-                    Divider()
-                }
+        @State var scrollAnchorId: Int = 45 {
+            didSet {
+                print("Scrolled to item \(scrollAnchorId)")
             }
-            .configureCollectionView { collectionView in
-                collectionView.contentInsetAdjustmentBehavior = .never
+        }
+
+        var body: some View {
+            ZStack {
+                CollectionView(layout: layout, sections: sections) { _, item in
+                    VStack {
+                        Text(item.text)
+                            .padding()
+                        Divider()
+                    }
+                    .border(.purple)
+                }
+                .configureCollectionView { collectionView in
+                    collectionView.contentInsetAdjustmentBehavior = .never
+                }
+                .anchorScrollTo(id: $scrollAnchorId)
+
+                Circle()
+                    .foregroundColor(.purple)
+                    .frame(width: 10)
             }
         }
     }

@@ -1,7 +1,7 @@
 {
   "playing" : {
     "_0" : {
-      "endTime" : 33.567999999999998,
+      "endTime" : 33.568,
       "files" : [
         {
           "frames" : [
@@ -11,11 +11,11 @@
             },
             {
               "endTime" : null,
-              "startTime" : 17.731999999999999
+              "startTime" : 17.732
             },
             {
               "endTime" : null,
-              "startTime" : 22.329999999999998
+              "startTime" : 22.33
             },
             {
               "endTime" : null,

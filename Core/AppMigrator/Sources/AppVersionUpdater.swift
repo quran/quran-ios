@@ -1,5 +1,5 @@
 //
-//  AppUpdater.swift
+//  AppVersionUpdater.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/2/17.

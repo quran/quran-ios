@@ -1,5 +1,5 @@
 //
-//  MainTabBarController.swift
+//  AppViewController.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/19/16.

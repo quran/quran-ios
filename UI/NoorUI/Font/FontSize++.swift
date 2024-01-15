@@ -1,5 +1,5 @@
 //
-//  FontSize+++.swift
+//  FontSize++.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/2/18.

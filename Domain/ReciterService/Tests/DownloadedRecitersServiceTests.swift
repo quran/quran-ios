@@ -51,7 +51,7 @@ class DownloadedRecitersServiceTests: XCTestCase {
     private var fileManager = DefaultFileSystem()
 
     private func deleteReciterDirs(_ reciters: [Reciter]) {
-        reciters.forEach { reciter in
+        for reciter in reciters {
             try? fileManager.removeItem(at: reciter.localFolder())
         }
     }

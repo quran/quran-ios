@@ -1,5 +1,5 @@
 //
-//  UIView+VC.swift
+//  UIView+Const.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/21/17.

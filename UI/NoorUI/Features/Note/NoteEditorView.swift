@@ -56,7 +56,6 @@ public struct NoteEditorView: View {
                 Text(note.ayahText)
                     .lineLimit(3)
                     .font(.quran(ofSize: .small))
-
                     .padding(.leading)
                     .overlay(HStack {
                         Rectangle().fill(note.selectedColor.color)

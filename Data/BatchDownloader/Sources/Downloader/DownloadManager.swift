@@ -1,5 +1,5 @@
 //
-//  URLSessionDownloadManager.swift
+//  DownloadManager.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 5/14/16.

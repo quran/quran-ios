@@ -1,5 +1,5 @@
 //
-//  Screen.swift
+//  Analytics.Screen.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 4/8/17.

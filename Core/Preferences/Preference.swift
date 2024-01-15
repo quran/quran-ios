@@ -1,5 +1,5 @@
 //
-//  PreferencesValue.swift
+//  Preference.swift
 //
 //
 //  Created by Mohamed Afifi on 2022-04-16.

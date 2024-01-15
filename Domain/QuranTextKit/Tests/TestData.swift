@@ -13,7 +13,7 @@ import TestResources
 import TranslationServiceFake
 import VerseTextPersistence
 
-struct TestData {
+enum TestData {
     static let khanTranslation = TranslationTestData.khanTranslation
     static let sahihTranslation = TranslationTestData.sahihTranslation
 

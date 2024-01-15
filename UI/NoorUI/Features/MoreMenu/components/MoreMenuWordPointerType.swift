@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  MoreMenuWordPointerType.swift
 //
 //
 //  Created by Afifi, Mohamed on 9/5/21.

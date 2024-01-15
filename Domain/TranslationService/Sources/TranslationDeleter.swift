@@ -38,7 +38,7 @@ public struct TranslationDeleter {
         selectedTranslationsPreferences.remove(translation.id)
 
         // delete from disk
-        translation.localFiles.forEach { url in
+        for url in translation.localFiles {
             try? fileSystem.removeItem(at: url)
         }
 

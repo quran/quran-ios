@@ -57,7 +57,7 @@ public struct TranslationsRepository {
         var localMap = localMapConstant
 
         var combinedList: [Translation] = []
-        remote.forEach { remote in
+        for remote in remote {
             var combined = remote
             if let local = localMap[remote.fileName] {
                 combined.installedVersion = local.installedVersion

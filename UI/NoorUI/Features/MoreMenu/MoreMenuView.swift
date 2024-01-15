@@ -1,5 +1,5 @@
 //
-//  MoreMenuLandingView.swift
+//  MoreMenuView.swift
 //
 //
 //  Created by Afifi, Mohamed on 9/5/21.

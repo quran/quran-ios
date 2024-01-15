@@ -19,7 +19,7 @@
     @_implementationOnly import WinSDK
 #endif
 
-internal struct Lock {
+struct Lock {
     #if canImport(Darwin)
         typealias Primitive = os_unfair_lock
     #elseif canImport(Glibc)

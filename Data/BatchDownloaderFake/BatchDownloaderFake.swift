@@ -62,7 +62,7 @@ public enum BatchDownloaderFake {
     }
 
     public static func tearDown() {
-        try? FileManager.default.removeItem(at: Self.downloadsURL)
+        try? FileManager.default.removeItem(at: downloadsURL)
     }
 
     public static func makeDownloadRequest(_ id: String) -> DownloadRequest {
@@ -86,7 +86,7 @@ public enum BatchDownloaderFake {
     private static let downloads = "downloads"
 
     private static func makeDownloadsPersistence() -> GRDBDownloadsPersistence {
-        try? DefaultFileSystem().createDirectory(at: Self.downloadsURL, withIntermediateDirectories: true)
+        try? DefaultFileSystem().createDirectory(at: downloadsURL, withIntermediateDirectories: true)
         let downloadsDBPath = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
         let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBPath.url)
         return persistence

@@ -1,5 +1,5 @@
 //
-//  AdvancedAudioViewModel.swift
+//  AdvancedAudioUI.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 12/26/20.

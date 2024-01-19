@@ -37,6 +37,7 @@ public struct CollectionView<
             configure: configure,
             content: content,
             isPagingEnabled: isPagingEnabled,
+            usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,
             scrollAnchorId: scrollAnchorId,
             scrollAnchor: scrollAnchor
         )
@@ -64,6 +65,12 @@ public struct CollectionView<
         }
     }
 
+    public func usesCollectionViewSafeAreaForCellLayoutMargins(_ flag: Bool) -> Self {
+        mutateSelf {
+            $0.usesCollectionViewSafeAreaForCellLayoutMargins = flag
+        }
+    }
+
     // MARK: Private
 
     private let layout: UICollectionViewLayout
@@ -72,6 +79,7 @@ public struct CollectionView<
     private var configure: ((UICollectionView) -> Void)?
 
     private var isPagingEnabled: Bool = false
+    private var usesCollectionViewSafeAreaForCellLayoutMargins: Bool = false
 
     private var scrollAnchorId: Binding<Item.ID>?
     private var scrollAnchor: ScrollAnchor = .center
@@ -92,6 +100,7 @@ private struct CollectionViewBody<
     let content: (SectionId, Item) -> ItemContent
 
     let isPagingEnabled: Bool
+    let usesCollectionViewSafeAreaForCellLayoutMargins: Bool
 
     let scrollAnchorId: Binding<Item.ID>?
     let scrollAnchor: ScrollAnchor
@@ -122,6 +131,8 @@ private struct CollectionViewBody<
         }
 
         viewController.dataSource?.sections = sections
+
+        viewController.usesCollectionViewSafeAreaForCellLayoutMargins = usesCollectionViewSafeAreaForCellLayoutMargins
 
         viewController.scroller.isPagingEnabled = isPagingEnabled
         viewController.scroller.onScrollAnchorIdUpdated = {

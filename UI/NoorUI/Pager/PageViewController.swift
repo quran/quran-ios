@@ -247,7 +247,7 @@ extension _PageViewController {
             self.element = element
             super.init(rootView: rootView)
             view.backgroundColor = .clear
-            _disableSafeAreaInsets()
+            _disableSafeArea = true
         }
 
         @available(*, unavailable)

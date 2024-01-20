@@ -60,24 +60,20 @@ private struct TextPartView: View {
     @ScaledMetric private var versePadding = 5
 
     private func highlighting(text: String, ranges: [HighlightingRange]) -> Text {
-        if #available(iOS 15, *) {
-            var attributedString = AttributedString(text)
-            for highlight in ranges {
-                if let start = AttributedString.Index(highlight.range.lowerBound, within: attributedString),
-                   let end = AttributedString.Index(highlight.range.upperBound, within: attributedString)
-                {
-                    if let foregroundColor = highlight.foregroundColor {
-                        attributedString[start ..< end].foregroundColor = foregroundColor
-                    }
-                    if let fontWeight = highlight.fontWeight {
-                        attributedString[start ..< end].font = size.plainFont.weight(fontWeight)
-                    }
+        var attributedString = AttributedString(text)
+        for highlight in ranges {
+            if let start = AttributedString.Index(highlight.range.lowerBound, within: attributedString),
+               let end = AttributedString.Index(highlight.range.upperBound, within: attributedString)
+            {
+                if let foregroundColor = highlight.foregroundColor {
+                    attributedString[start ..< end].foregroundColor = foregroundColor
+                }
+                if let fontWeight = highlight.fontWeight {
+                    attributedString[start ..< end].font = size.plainFont.weight(fontWeight)
                 }
             }
-            return Text(attributedString)
-        } else {
-            return Text(text)
         }
+        return Text(attributedString)
     }
 }
 

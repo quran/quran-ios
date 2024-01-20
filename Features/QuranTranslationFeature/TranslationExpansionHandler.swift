@@ -38,7 +38,7 @@ public class TranslationExpansionHandler<Section: Hashable & Sendable> {
         let itemId: ItemId = .translation(translationId)
 
         var snapshot = dataSource.snapshot()
-        snapshot.backwardCompatibleReconfigureItems([itemId])
+        snapshot.reconfigureItems([itemId])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 

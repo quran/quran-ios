@@ -8,14 +8,12 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 private class NoNavigationHostingController<C: View>: UIHostingController<C> {
     override var navigationController: UINavigationController? {
         nil
     }
 }
 
-@available(iOS 13.0, *)
 private final class ViewHostingController<Content: View> {
     // MARK: Lifecycle
 
@@ -64,7 +62,6 @@ private final class ViewHostingController<Content: View> {
     private weak var contentView: UIView?
 }
 
-@available(iOS 13.0, *)
 public final class HostingTableViewCell<Content: View>: UITableViewCell {
     // MARK: Public
 

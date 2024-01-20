@@ -9,7 +9,6 @@
 import CoreData
 import VLogging
 
-@available(iOS 13.0, *)
 class CoreDataPersistentHistoryProcessor {
     // MARK: Lifecycle
 

@@ -211,11 +211,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void) {
-        if #available(iOS 15.0, *) {
-            if let sheet = viewController.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-                sheet.prefersGrabberVisible = true
-            }
+        if let sheet = viewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
         }
         if let navigationController = viewController as? UINavigationController {
             navigationController.visibleViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(

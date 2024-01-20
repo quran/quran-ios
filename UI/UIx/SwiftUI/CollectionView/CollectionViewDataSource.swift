@@ -87,7 +87,7 @@ final class CollectionViewDataSource<
         for (itemId, newItem) in newItemsDictionary {
             if newItem != oldItemsDictionary[itemId] {
                 hasDataSourceChanged = true
-                snapshot.backwardCompatibleReconfigureItems([itemId])
+                snapshot.reconfigureItems([itemId])
             }
         }
     }

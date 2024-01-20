@@ -108,12 +108,10 @@ extension UIImage {
         return newImage
     }
 
-    @available(iOS 13.0, *)
     public static func symbol(_ name: String) -> UIImage {
         UIImage(systemName: name)!
     }
 
-    @available(iOS 13.0, *)
     public static func symbol(_ name: String, withConfiguration configuration: UIImage.Configuration?) -> UIImage {
         UIImage(systemName: name, withConfiguration: configuration)!
     }

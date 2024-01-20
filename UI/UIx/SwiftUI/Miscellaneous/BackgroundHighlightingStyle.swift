@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 public struct BackgroundHighlightingStyle: ButtonStyle {
     // MARK: Lifecycle
 

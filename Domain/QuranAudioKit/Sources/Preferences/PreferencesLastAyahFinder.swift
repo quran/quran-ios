@@ -8,7 +8,6 @@
 import Foundation
 import QuranKit
 
-@available(iOS 13.0, *)
 public struct PreferencesLastAyahFinder: LastAyahFinder {
     // MARK: Lifecycle
 

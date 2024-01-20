@@ -9,7 +9,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-@available(iOS 13.0, *)
 public struct ViewModelContainer<ViewModel: ObservableObject, Content: View>: View {
     // MARK: Lifecycle
 

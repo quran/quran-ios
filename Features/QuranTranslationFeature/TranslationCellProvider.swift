@@ -143,15 +143,11 @@ public class TranslationCellProvider<Section: Hashable & Sendable> {
         guard let dataSource else {
             return
         }
-        if #available(iOS 15.0, *) {
-            var snapshot = dataSource.snapshot()
-            // reconfigure all items
-            snapshot.reconfigureItems(snapshot.itemIdentifiers)
-            // animate font size changes
-            dataSource.apply(snapshot, animatingDifferences: true)
-        } else {
-            collectionView?.reloadData()
-        }
+        var snapshot = dataSource.snapshot()
+        // reconfigure all items
+        snapshot.reconfigureItems(snapshot.itemIdentifiers)
+        // animate font size changes
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     private func configure(cell: QuranTranslationTextCollectionViewCell, translationId: TranslationId) {

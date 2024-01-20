@@ -105,7 +105,6 @@ extension UIView {
 }
 
 extension UIView {
-    @available(iOS 11.0, *)
     public var readableContentInsets: NSDirectionalEdgeInsets {
         let readbleContentFrame = readableContentGuide.layoutFrame
         return NSDirectionalEdgeInsets(

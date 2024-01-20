@@ -145,7 +145,7 @@ public final class WordPointerViewController: UIViewController {
 
     private var container: UIView { view }
 
-    private var borderInsets: DirectionalEdgeInsets {
+    private var borderInsets: NSDirectionalEdgeInsets {
         // TODO: Use the containing window
         UIApplication.shared.windows.first?.directionalSafeAreaInsets ?? .zero
     }

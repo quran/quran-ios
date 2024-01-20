@@ -39,10 +39,27 @@ final class CollectionViewController<
     let collectionView: UICollectionView
     lazy var scroller = CollectionViewScroller<SectionId, Item>(collectionView: collectionView)
 
+    var usesCollectionViewSafeAreaForCellLayoutMargins = true {
+        didSet {
+            if usesCollectionViewSafeAreaForCellLayoutMargins != oldValue {
+                updateLayoutMarginsForVisibleCells()
+            }
+        }
+    }
+
     var dataSource: CollectionViewDataSource<SectionId, Item>? {
         didSet {
             scroller.dataSource = dataSource
         }
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        updateLayoutMarginsForVisibleCells()
+    }
+
+    override func loadView() {
+        view = collectionView
     }
 
     override func viewIsAppearing(_ animated: Bool) {
@@ -63,7 +80,15 @@ final class CollectionViewController<
     // MARK: - Cell Lifecycle
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        (cell as? CellType)?.cellWillDisplay(animated: false)
+        guard let typedCell = cell as? CellType else {
+            return
+        }
+        typedCell.updateLayoutMargins(
+            usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,
+            collectionViewSafeAreaInsets: view.safeAreaInsets
+        )
+
+        typedCell.cellWillDisplay(animated: false)
     }
 
     func collectionView(
@@ -71,7 +96,10 @@ final class CollectionViewController<
         didEndDisplaying cell: UICollectionViewCell,
         forItemAt indexPath: IndexPath
     ) {
-        (cell as? CellType)?.cellDidEndDisplaying(animated: false)
+        guard let typedCell = cell as? CellType else {
+            return
+        }
+        typedCell.cellDidEndDisplaying(animated: false)
     }
 
     // MARK: - Paging
@@ -104,10 +132,6 @@ final class CollectionViewController<
         scroller.endInteractiveScrolling()
     }
 
-    override func loadView() {
-        view = collectionView
-    }
-
     // MARK: Private
 
     private func setUpDataSource(content: @escaping (SectionId, Item) -> ItemContent) {
@@ -129,7 +153,21 @@ final class CollectionViewController<
             let cell = collectionView.dequeueReusableCell(CellType.self, for: indexPath)
             cell.configure(content: content(section.id, item), dataId: itemId)
 
+            cell.updateLayoutMargins(
+                usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,
+                collectionViewSafeAreaInsets: view.safeAreaInsets
+            )
+
             return cell
+        }
+    }
+
+    private func updateLayoutMarginsForVisibleCells() {
+        for cell in collectionView.visibleCells {
+            (cell as? CellType)?.updateLayoutMargins(
+                usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,
+                collectionViewSafeAreaInsets: view.safeAreaInsets
+            )
         }
     }
 }

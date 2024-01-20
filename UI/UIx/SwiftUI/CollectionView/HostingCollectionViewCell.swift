@@ -10,6 +10,18 @@ import SwiftUI
 final class HostingCollectionViewCell<Content: View>: UICollectionViewCell {
     // MARK: Internal
 
+    override var safeAreaInsets: UIEdgeInsets {
+        .zero
+    }
+
+    func updateLayoutMargins(usesCollectionViewSafeAreaForCellLayoutMargins: Bool, collectionViewSafeAreaInsets: UIEdgeInsets) {
+        if usesCollectionViewSafeAreaForCellLayoutMargins {
+            cellLayoutMargins = .useCollectionViewSafeArea(collectionViewSafeAreaInsets)
+        } else {
+            cellLayoutMargins = .zero
+        }
+    }
+
     func configure(content: Content, dataId: AnyHashable) {
         self.dataId = dataId
         let content = EpoxySwiftUIHostingView<Content>.Content(rootView: content, dataID: dataId)
@@ -34,6 +46,12 @@ final class HostingCollectionViewCell<Content: View>: UICollectionViewCell {
     private var dataId: AnyHashable?
     private var hostingView: EpoxySwiftUIHostingView<Content>?
 
+    private var cellLayoutMargins: CollectionViewCellLayoutMargins = .zero {
+        didSet {
+            updateLayoutMarginsIfNeeded()
+        }
+    }
+
     private func setViewIfNeeded(view: EpoxySwiftUIHostingView<Content>) {
         guard hostingView == nil else {
             return
@@ -52,4 +70,18 @@ final class HostingCollectionViewCell<Content: View>: UICollectionViewCell {
             view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
+
+    private func updateLayoutMarginsIfNeeded() {
+        switch cellLayoutMargins {
+        case .zero:
+            hostingView?.layoutMargins = .zero
+        case .useCollectionViewSafeArea(let insets):
+            hostingView?.layoutMargins = insets
+        }
+    }
+}
+
+private enum CollectionViewCellLayoutMargins {
+    case zero
+    case useCollectionViewSafeArea(_ safeArea: UIEdgeInsets)
 }

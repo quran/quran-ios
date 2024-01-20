@@ -65,15 +65,3 @@ public struct NoorList<Content: View>: View {
         }
     }
 }
-
-extension NoorList {
-    public func refreshableIfAvailable(action: @escaping @Sendable () async -> Void) -> some View {
-        Group {
-            if #available(iOS 15.0, *) {
-                refreshable(action: action)
-            } else {
-                self
-            }
-        }
-    }
-}

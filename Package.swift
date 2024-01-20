@@ -29,7 +29,7 @@ let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
     ],
     products: libraries(from: targets),
     dependencies: [
@@ -121,10 +121,7 @@ private func coreTargets() -> [[Target]] {
 
         target(type, name: "QueuePlayer", hasTests: false, dependencies: [
             "Timing",
-            "QueuePlayerObjc",
         ]),
-
-        target(type, name: "QueuePlayerObjc", hasTests: false, dependencies: []),
 
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),

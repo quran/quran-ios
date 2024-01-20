@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 extension Color {
     public static var systemRed: Color {
         .init(.systemRed)
@@ -72,7 +71,6 @@ extension Color {
 }
 
 /// Foreground colors for static text and related elements.
-@available(iOS 13.0, *)
 extension Color {
     /// The color for text labels that contain primary content.
     public static var label: Color {
@@ -95,7 +93,6 @@ extension Color {
     }
 }
 
-@available(iOS 13.0, *)
 extension Color {
     /// A foreground color for standard system links.
     public static var link: Color {
@@ -113,7 +110,6 @@ extension Color {
     }
 }
 
-@available(iOS 13.0, *)
 extension Color {
     /// The color for the main background of your interface.
     public static var systemBackground: Color {
@@ -148,7 +144,6 @@ extension Color {
 
 /// Fill colors for UI elements.
 /// These are meant to be used over the background colors, since their alpha component is less than 1.
-@available(iOS 13.0, *)
 extension Color {
     /// A color  appropriate for filling thin and small shapes.
     ///

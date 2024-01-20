@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
+// TODO: Use SwiftUI.TextEditor
 public struct TextView: View {
     // MARK: Lifecycle
 
@@ -31,7 +31,6 @@ public struct TextView: View {
     private var font: UIFont = UIFont.preferredFont(forTextStyle: .body)
 }
 
-@available(iOS 13.0, *)
 extension TextView {
     func font(_ textStyle: UIFont.TextStyle) -> Self {
         font(UIFont.preferredFont(forTextStyle: textStyle))
@@ -44,7 +43,6 @@ extension TextView {
     }
 }
 
-@available(iOS 13.0, *)
 private struct SwiftUITextView: UIViewRepresentable {
     class Coordinator: NSObject, UITextViewDelegate {
         // MARK: Lifecycle
@@ -101,7 +99,6 @@ private struct SwiftUITextView: UIViewRepresentable {
 }
 
 // swiftlint:disable line_length
-@available(iOS 13.0, *)
 struct TextView_Previews: PreviewProvider {
     @State static var editing: Bool = true
 

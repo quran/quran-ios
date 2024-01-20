@@ -8,7 +8,6 @@
 import Combine
 import Foundation
 
-@available(iOS 13.0, *)
 @propertyWrapper
 public final class Preference<T> {
     // MARK: Lifecycle
@@ -43,7 +42,6 @@ public final class Preference<T> {
     private let preferences: Preferences
 }
 
-@available(iOS 13.0, *)
 @propertyWrapper
 public final class TransformedPreference<Raw, T> {
     // MARK: Lifecycle

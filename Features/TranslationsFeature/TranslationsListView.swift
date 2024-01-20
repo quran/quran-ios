@@ -98,7 +98,7 @@ private struct TranslationsListViewUI: View {
                 )
             }
         }
-        .refreshableIfAvailable(action: refresh)
+        .refreshable(action: refresh)
         .task(start)
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)

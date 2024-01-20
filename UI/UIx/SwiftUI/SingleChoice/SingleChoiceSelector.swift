@@ -22,7 +22,6 @@ public struct SingleChoiceSection<Item: Equatable> {
     let items: [Item]
 }
 
-@available(iOS 13.0, *)
 public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewController {
     private typealias Cell = HostingTableViewCell<Content>
 

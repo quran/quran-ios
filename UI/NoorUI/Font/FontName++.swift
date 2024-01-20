@@ -17,7 +17,6 @@ private let arabicTranslationTextFontSize: CGFloat = 24
 private let englishTranslationTextFontSize: CGFloat = 20
 private let amharicTranslationTextFontSize: CGFloat = 20
 
-@available(iOS 13.0, *)
 public extension Font {
     static func quran(ofSize size: FontSize) -> Font {
         custom(.quran, size: size.fontSize(forMediumSize: arabicQuranTextFontSize))

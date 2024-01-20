@@ -7,7 +7,6 @@
 //
 
 import AVFoundation
-import QueuePlayerObjc
 
 public struct QueuePlayerActions: Sendable {
     // MARK: Lifecycle
@@ -34,11 +33,7 @@ public class QueuePlayer {
     // MARK: Lifecycle
 
     public init() {
-        if #available(iOS 10.0, *) {
-            try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
-        } else {
-            try? AVAudioSession.sharedInstance().setCategoryiO9Compatible(.playback)
-        }
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
     }
 
     // MARK: Open

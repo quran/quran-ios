@@ -87,7 +87,6 @@ public class CoreDataStack {
     private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
     private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
 
-    @available(iOS 13.0, *)
     private lazy var historyProcessor: CoreDataPersistentHistoryProcessor = CoreDataPersistentHistoryProcessor(name: name, uniquifiers: uniquifiers)
 
     /// An operation queue for handling history processing tasks: watching changes, deduplicating entities, and triggering UI updates if needed.
@@ -108,7 +107,6 @@ public class CoreDataStack {
 
     /// Handle remote store change notifications (.NSPersistentStoreRemoteChange).
     @objc
-    @available(iOS 13.0, *)
     private func storeRemoteChange(_ notification: Notification) {
         logger.info("Merging changes from the other persistent store coordinator.")
 

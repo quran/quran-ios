@@ -12,9 +12,6 @@ public enum FontName: CaseIterable {
     /// Used in Arabic tafseer
     case arabic
 
-    /// Used in Amharic translation
-    case amharic
-
     /// Used in quran text in translation view
     case quran
 
@@ -37,12 +34,6 @@ public enum FontName: CaseIterable {
                 family: "Kitab",
                 fileName: "Kitab-Regular.ttf"
             )
-        case .amharic:
-            return FontDetails(
-                name: "AbyssinicaSIL",
-                family: "Abyssinica SIL",
-                fileName: "AbyssinicaSIL-R.ttf"
-            )
         case .quran:
             return FontDetails(
                 name: "KFGQPCHAFSUthmanicScript-Bold",
@@ -58,11 +49,6 @@ public enum FontName: CaseIterable {
         }
     }
 }
-
-private let arabicQuranTextFontSize: CGFloat = 24
-private let arabicTranslationTextFontSize: CGFloat = 24
-private let englishTranslationTextFontSize: CGFloat = 20
-private let amharicTranslationTextFontSize: CGFloat = 20
 
 public extension Font {
     static func custom(_ name: FontName, size: CGFloat) -> Font {

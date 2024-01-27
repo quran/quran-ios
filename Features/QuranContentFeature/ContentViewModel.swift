@@ -62,7 +62,6 @@ public final class ContentViewModel: ObservableObject {
         highlights = deps.highlightsService.highlights
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
         quranMode = deps.quranContentStatePreferences.quranMode
-        selectedTranslations = deps.selectedTranslationsPreferences.selectedTranslations
 
         deps.highlightsService.$highlights
             .sink { [weak self] in self?.highlights = $0 }
@@ -72,9 +71,6 @@ public final class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$quranMode
             .sink { [weak self] in self?.quranMode = $0 }
-            .store(in: &cancellables)
-        deps.selectedTranslationsPreferences.$selectedTranslations
-            .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
 
         loadNotes()
@@ -112,7 +108,6 @@ public final class ContentViewModel: ObservableObject {
     weak var listener: ContentListener?
 
     @Published var quranMode: QuranMode
-    @Published var selectedTranslations: [Translation.ID]
     @Published var twoPagesEnabled: Bool
 
     @Published var highlights: QuranHighlights {
@@ -218,12 +213,12 @@ public final class ContentViewModel: ObservableObject {
         deps.analytics.showing(
             pages: pages,
             isTranslation: isTranslationView,
-            numberOfSelectedTranslations: deps.selectedTranslationsPreferences.selectedTranslations.count,
+            numberOfSelectedTranslations: deps.selectedTranslationsPreferences.selectedTranslationIds.count,
             arabicFontSize: deps.fontSizePreferences.arabicFontSize,
             translationFontSize: deps.fontSizePreferences.translationFontSize
         )
         if isTranslationView {
-            logger.info("Using translations \(deps.selectedTranslationsPreferences.selectedTranslations)")
+            logger.info("Using translations \(deps.selectedTranslationsPreferences.selectedTranslationIds)")
         }
 
         updateLastPageTo(pages)

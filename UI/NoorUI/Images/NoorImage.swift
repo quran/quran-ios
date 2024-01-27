@@ -10,16 +10,12 @@ import UIKit
 
 public enum NoorImage: String {
     case ayahEnd = "ayah-end"
-    case innerShadow = "inner-shadow"
     case pointer = "pointer-25"
     case rotateToLandscape = "rotate_to_landscape-25"
     case rotateToPortrait = "rotate_to_portrait-25"
     case settings = "settings-25"
     case settingsFilled = "settings_filled-25"
     case suraHeader = "sura_header"
-    case suraDecorationLeft = "sura-decoration-left"
-    case suraDecorationMiddle = "sura-decoration-middle"
-    case suraDecorationRight = "sura-decoration-right"
 
     // MARK: Public
 

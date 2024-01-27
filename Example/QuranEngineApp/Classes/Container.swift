@@ -10,6 +10,7 @@ import AppDependencies
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
+import Foundation
 import LastPagePersistence
 import NotePersistence
 import PageBookmarkPersistence

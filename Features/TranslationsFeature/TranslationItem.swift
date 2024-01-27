@@ -26,17 +26,6 @@ extension Translation {
     var localizedLanguage: String? {
         Locale.localizedLanguage(forCode: languageCode)
     }
-
-    // TODO: Reuse in QuranTranslationTranslatorNameCollectionViewCell
-    func preferredTranslatorNameFont(ofSize size: FontSize) -> UIFont {
-        if languageCode == "am" {
-            return .translatorNameAmharic(ofSize: size)
-        } else if languageCode == "ar" {
-            return .translatorNameArabic(ofSize: size)
-        } else {
-            return .translatorNameEnglish(ofSize: size)
-        }
-    }
 }
 
 extension Locale {

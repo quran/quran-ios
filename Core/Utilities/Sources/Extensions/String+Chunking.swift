@@ -13,8 +13,12 @@ extension String {
     }
 
     public func chunkRanges(maxChunkSize: Int) -> [Range<String.Index>] {
+        chunkRanges(range: startIndex ..< endIndex, maxChunkSize: maxChunkSize)
+    }
+
+    public func chunkRanges(range: Range<String.Index>, maxChunkSize: Int) -> [Range<String.Index>] {
         var chunks: [Range<String.Index>] = []
-        chunkText(self, range: startIndex ..< endIndex, maxChunkSize: maxChunkSize, strategy: .paragraph, chunks: &chunks)
+        chunkText(self, range: range, maxChunkSize: maxChunkSize, strategy: .paragraph, chunks: &chunks)
         return chunks
     }
 }

@@ -67,10 +67,10 @@ struct TranslationsVersionUpdater {
 
             // remove the translation from selected translations
             if translation.installedVersion == nil {
-                var selectedTranslations = selectedTranslationsPreferences.selectedTranslations
+                var selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
                 if let index = selectedTranslations.firstIndex(of: translation.id) {
                     selectedTranslations.remove(at: index)
-                    selectedTranslationsPreferences.selectedTranslations = selectedTranslations
+                    selectedTranslationsPreferences.selectedTranslationIds = selectedTranslations
                 }
             }
         }

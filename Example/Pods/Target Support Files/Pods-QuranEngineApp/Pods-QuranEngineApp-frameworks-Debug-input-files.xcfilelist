@@ -1,5 +1,0 @@
-${PODS_ROOT}/Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp-frameworks.sh
-${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework
-${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework
-${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework
-${BUILT_PRODUCTS_DIR}/Texture/AsyncDisplayKit.framework

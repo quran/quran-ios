@@ -50,7 +50,7 @@ public struct LocalTranslationsFake {
         for translation in translations {
             try await persistence.insert(translation)
         }
-        preferences.selectedTranslations = translations.map(\.id)
+        preferences.selectedTranslationIds = translations.map(\.id)
         fileSystem.files = Set(translations.map(\.localPath.url))
     }
 

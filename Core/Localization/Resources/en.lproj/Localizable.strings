@@ -30,6 +30,9 @@
 "translation.translator" = "Translator: ";
 "translation.text.see-referenced-verse" = "See ayah %d.";
 "translation.text.read-more" = "Read more";
+"translation.text.ayah-number" = "%d:%d";
+"translation.text.footnote-number" = "[%d]";
+"translation.text.footnote-title" = "Footnote #%d";
 "error.translation.text-retrieval" = "Oops! Something went wrong. We couldn't retrieve the translation.";
 "error.translation.text-not-available" = "No translation available for this Ayah.";
 

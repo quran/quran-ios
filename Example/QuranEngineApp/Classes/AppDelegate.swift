@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         FontName.registerFonts()
         LoggingSystem.bootstrap(StreamLogHandler.standardError)
-        AsyncTextLabelSystem.bootstrap(FixedTextNode.init)
 
         Task {
             // Eagerly load download manager to handle any background downloads.

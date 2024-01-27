@@ -42,10 +42,19 @@ public struct QuranTextDataService {
 
     // MARK: Public
 
+    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> [AyahNumber: VerseText] {
+        let translatedVerses: TranslatedVerses = try await textForVerses(verses, translations: translations)
+        return Dictionary(uniqueKeysWithValues: (0 ..< verses.count).map { i in (verses[i], translatedVerses.verses[i]) })
+    }
+
+    // TODO: Remove
+    @available(*, deprecated, message: "Use textForVerses(:translations:)")
     public func textForVerses(_ verses: [AyahNumber]) async throws -> TranslatedVerses {
         try await textForVerses(verses, translations: { try await localTranslations() })
     }
 
+    // TODO: Remove
+    @available(*, deprecated, message: "Use textForVerses(:translations:)")
     public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> TranslatedVerses {
         try await textForVerses(verses, translations: { translations })
     }
@@ -107,7 +116,7 @@ public struct QuranTextDataService {
     }
 
     private func selectedTranslations(allTranslations: [Translation]) -> [Translation] {
-        let selected = selectedTranslationsPreferences.selectedTranslations
+        let selected = selectedTranslationsPreferences.selectedTranslationIds
         let translationsById = allTranslations.flatGroup { $0.id }
         return selected.compactMap { translationsById[$0] }
     }
@@ -179,7 +188,7 @@ public struct QuranTextDataService {
         let (string, footnoteRanges) = originalString.replacing(
             sortedRanges: footnoteTextRanges)
         { _, index -> String in
-            NumberFormatter.shared.format(index + 1)
+            lFormat("translation.text.footnote-number", index + 1)
         }
 
         let quranRanges = string.ranges(of: Self.quranRegex)

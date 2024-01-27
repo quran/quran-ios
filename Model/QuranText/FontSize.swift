@@ -5,6 +5,8 @@
 //  Created by Mohamed Afifi on 5/2/18.
 //
 
+import SwiftUI
+
 public enum FontSize: Int, CaseIterable, CustomStringConvertible {
     case xxLarge = -1
     case xLarge = 0
@@ -25,6 +27,20 @@ public enum FontSize: Int, CaseIterable, CustomStringConvertible {
         case .small: return "small"
         case .xSmall: return "xSmall"
         case .xxSmall: return "xxSmall"
+        }
+    }
+}
+
+extension FontSize {
+    public var dynamicTypeSize: DynamicTypeSize {
+        switch self {
+        case .xxLarge: .xxxLarge
+        case .xLarge: .xxLarge
+        case .large: .xLarge
+        case .medium: .large
+        case .small: .medium
+        case .xSmall: .small
+        case .xxSmall: .xSmall
         }
     }
 }

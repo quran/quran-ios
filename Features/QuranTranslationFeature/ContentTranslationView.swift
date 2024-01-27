@@ -1,118 +1,74 @@
 //
 //  ContentTranslationView.swift
-//  Quran
 //
-//  Created by Afifi, Mohamed on 12/30/19.
-//  Copyright © 2019 Quran.com. All rights reserved.
+//
+//  Created by Mohamed Afifi on 2023-12-29.
 //
 
-import AnnotationsService
-import Combine
-import Crashing
 import NoorUI
-import QuranAnnotations
 import QuranKit
-import QuranTextKit
-import TranslationService
-import UIKit
+import QuranText
+import SwiftUI
+import UIx
 import Utilities
-import VLogging
 
-class ContentTranslationView: UIView {
-    // MARK: Lifecycle
+public struct ContentTranslationView: View {
+    @ObservedObject var viewModel: ContentTranslationViewModel
 
-    init(highlightsService: QuranHighlightsService) {
-        self.highlightsService = highlightsService
-        collectionView = QuranTranslationDiffableDataSource.translationCollectionView()
-        dataSource = QuranTranslationDiffableDataSource(collectionView: collectionView, highlightsService: highlightsService)
-        super.init(frame: .zero)
-        setUp()
+    public init(viewModel: ContentTranslationViewModel) {
+        self.viewModel = viewModel
     }
 
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: Internal
-
-    let collectionView: UICollectionView
-
-    // MARK: - PageView
-
-    var page: Page? {
-        didSet {
-            logger.info("Quran Translation: set page \(String(describing: page))")
+    public var body: some View {
+        ContentTranslationViewBody(
+            items: viewModel.items,
+            arabicFontSize: viewModel.arabicFontSize,
+            translationFontSize: viewModel.translationFontSize,
+            highlights: viewModel.highlights,
+            scrollToItem: viewModel.scrollToItem,
+            tracker: viewModel.tracker,
+            footnote: $viewModel.footnote,
+            openURL: { viewModel.openURL($0) }
+        )
+        .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
+            await viewModel.load()
         }
     }
+}
 
-    func word(at point: CGPoint) -> Word? {
-        fatalError("Not implemented")
-    }
+private struct ContentTranslationViewBody: View {
+    let items: [TranslationItem]
 
-    func verse(at point: CGPoint) -> AyahNumber? {
-        let localPoint = collectionView.convert(point, from: self)
-        let indexPath = collectionView.indexPathForItem(at: localPoint)
-        let cell = indexPath.flatMap { collectionView.cellForItem(at: $0) }
-        let translationCell = cell as? QuranTranslationBaseCollectionViewCell
-        return translationCell?.ayah
-    }
+    let arabicFontSize: FontSize
+    let translationFontSize: FontSize
+    let highlights: [AyahNumber: Color]
+    let scrollToItem: TranslationItemId?
+    let tracker: CollectionTracker<TranslationItemId>
 
-    func configure(for page: TranslatedPage) {
-        setPageText(page)
-        scrollToVerseIfNeeded()
-    }
+    @Binding var footnote: TranslationFootnote?
 
-    // MARK: Private
+    let openURL: (TranslationURL) -> Void
 
-    private let highlightsService: QuranHighlightsService
-    private let dataSource: QuranTranslationDiffableDataSource
-    private var lastPage: TranslatedPage?
-    private var cancellable: AnyCancellable?
-
-    private func setUp() {
-        addAutoLayoutSubview(collectionView)
-        collectionView.vc.edges()
-
-        cancellable = highlightsService.$highlights
-            .zip(highlightsService.$highlights.dropFirst())
-            .sink { [weak self] oldValue, newValue in
-                if newValue.needsScrolling(comparingTo: oldValue) {
-                    self?.scrollToVerseIfNeeded()
+    var body: some View {
+        ScrollViewReader { scrollView in
+            List {
+                ForEach(items) { item in
+                    item
                 }
             }
-    }
-
-    private func setPageText(_ page: TranslatedPage) {
-        logger.info("Quran Translation: set TranslatedPage")
-        if page != lastPage {
-            dataSource.translatedPage = page
-            collectionView.reloadData()
-            collectionView.layoutIfNeeded()
-        }
-    }
-
-    // MARK: - share specifics
-
-    private func scrollToVerseIfNeededSynchronously() {
-        logger.info("Quran Translation: scrollToVerseIfNeeded")
-        // layout views if needed
-        layoutIfNeeded()
-
-        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
-            return
-        }
-        guard let indexPath = dataSource.firstIndexPath(forAyah: ayah) else {
-            return
-        }
-        logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah), \(indexPath)")
-        collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-    }
-
-    private func scrollToVerseIfNeeded() {
-        // Execute in the next runloop to allow the collection view to load.
-        DispatchQueue.main.async {
-            self.scrollToVerseIfNeededSynchronously()
+            .listStyle(.plain)
+            .environment(\.defaultMinListRowHeight, 1)
+            .populateReadableInsets()
+            .openTranslationURL(openURL)
+            .trackCollection(with: tracker)
+            .sheet(item: $footnote) { $0 }
+            .onChange(of: scrollToItem) { scrollToItem in
+                if let scrollToItem {
+                    withAnimation {
+                        scrollView.scrollTo(scrollToItem, anchor: UnitPoint(x: 0.2, y: 0.2))
+                    }
+                }
+            }
         }
     }
 }

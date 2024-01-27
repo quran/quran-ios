@@ -14,6 +14,7 @@ import MoreMenuFeature
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
+import TranslationService
 import TranslationsFeature
 import UIKit
 
@@ -32,13 +33,12 @@ public struct TranslationVerseBuilder {
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
-        let viewModel = TranslationVerseViewModel(startingVerse: startingVerse, dataService: dataService, actions: actions)
+        let localTranslationsRetriever = LocalTranslationsRetriever(databasesURL: container.databasesURL)
+        let viewModel = TranslationVerseViewModel(startingVerse: startingVerse, localTranslationsRetriever: localTranslationsRetriever, dataService: dataService, actions: actions)
         let viewController = TranslationVerseViewController(
             viewModel: viewModel,
             moreMenuBuilder: MoreMenuBuilder(),
-            translationsSelectionBuilder: TranslationsListBuilder(container: container),
-            // Pass a new highlights service that will always be empty
-            highlightsService: QuranHighlightsService()
+            translationsSelectionBuilder: TranslationsListBuilder(container: container)
         )
         let navigationController = UINavigationController(rootViewController: viewController)
         return navigationController

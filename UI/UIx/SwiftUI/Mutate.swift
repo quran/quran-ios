@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func mutateSelf(_ body: (inout Self) -> Void) -> Self {
+    public func mutateSelf(_ body: (inout Self) -> Void) -> Self {
         var copy = self
         body(&copy)
         return copy

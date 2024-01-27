@@ -12,50 +12,16 @@ import NoorFont
 import QuranText
 import SwiftUI
 
-private let arabicQuranTextFontSize: CGFloat = 24
-private let arabicTranslationTextFontSize: CGFloat = 24
-private let englishTranslationTextFontSize: CGFloat = 20
-private let amharicTranslationTextFontSize: CGFloat = 20
+private let arabicQuranTextFontSize: CGFloat = 17
+private let arabicTafseerTextFontSize: CGFloat = 21
 
 public extension Font {
-    static func quran(ofSize size: FontSize) -> Font {
-        custom(.quran, size: size.fontSize(forMediumSize: arabicQuranTextFontSize))
-    }
-}
-
-public extension UIFont {
-    // MARK: Translator
-
-    static func translatorNameArabic(ofSize size: FontSize) -> UIFont {
-        UIFont(.arabic, size: size.fontSize(forMediumSize: 20))
+    static func quran(ofSize size: FontSize? = nil) -> Font {
+        custom(.quran, size: size?.fontSize(forMediumSize: arabicQuranTextFontSize) ?? arabicQuranTextFontSize)
     }
 
-    static func translatorNameEnglish(ofSize size: FontSize) -> UIFont {
-        .systemFont(ofSize: size.fontSize(forMediumSize: 17))
-    }
-
-    static func translatorNameAmharic(ofSize size: FontSize) -> UIFont {
-        UIFont(.amharic, size: size.fontSize(forMediumSize: 17))
-    }
-
-    // MARK: Quran
-
-    static func arabicQuranText(ofSize size: FontSize) -> UIFont {
-        UIFont(.quran, size: size.fontSize(forMediumSize: arabicQuranTextFontSize))
-    }
-
-    // MARK: Translations
-
-    static func arabicTranslation(ofSize size: FontSize, factor: CGFloat) -> UIFont {
-        UIFont(.arabic, size: size.fontSize(forMediumSize: arabicTranslationTextFontSize) * factor)
-    }
-
-    static func englishTranslation(ofSize size: FontSize, factor: CGFloat) -> UIFont {
-        .systemFont(ofSize: size.fontSize(forMediumSize: englishTranslationTextFontSize) * factor)
-    }
-
-    static func amharicTranslation(ofSize size: FontSize, factor: CGFloat) -> UIFont {
-        UIFont(.amharic, size: size.fontSize(forMediumSize: amharicTranslationTextFontSize) * factor)
+    static func arabicTafseer() -> Font {
+        custom(.arabic, size: arabicTafseerTextFontSize)
     }
 }
 

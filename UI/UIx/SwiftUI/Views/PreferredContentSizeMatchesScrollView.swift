@@ -34,7 +34,7 @@ public extension ScrollView {
 }
 
 private struct PreferredContentSizeMatchesScrollViewBody<ScrollViewContent: View>: UIViewControllerRepresentable {
-    class PreferredContentSizeMatchesScrollViewController<ScrollViewContent: View>: UIHostingController<ScrollViewContent> {
+    class PreferredContentSizeMatchesScrollViewController: UIHostingController<ScrollViewContent> {
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             view.backgroundColor = nil
@@ -56,11 +56,11 @@ private struct PreferredContentSizeMatchesScrollViewBody<ScrollViewContent: View
 
     let content: ScrollViewContent
 
-    func makeUIViewController(context: Context) -> PreferredContentSizeMatchesScrollViewController<ScrollViewContent> {
+    func makeUIViewController(context: Context) -> PreferredContentSizeMatchesScrollViewController {
         PreferredContentSizeMatchesScrollViewController(rootView: content)
     }
 
-    func updateUIViewController(_ view: PreferredContentSizeMatchesScrollViewController<ScrollViewContent>, context: Context) {
+    func updateUIViewController(_ view: PreferredContentSizeMatchesScrollViewController, context: Context) {
         view.rootView = content
     }
 }

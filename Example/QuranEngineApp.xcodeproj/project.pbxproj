@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83F443632E67F32978757C94 /* Pods_QuranEngineApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF39BBA3A9CEE4575039527 /* Pods_QuranEngineApp.framework */; };
 		D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDC52A4791D6009DE942 /* AppDelegate.swift */; };
 		D975EDC82A4791D6009DE942 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDC72A4791D6009DE942 /* SceneDelegate.swift */; };
 		D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D975EDCE2A4791D7009DE942 /* Assets.xcassets */; };
@@ -17,14 +16,10 @@
 		D975EDE72A4796AA009DE942 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDE62A4796AA009DE942 /* Analytics.swift */; };
 		D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */ = {isa = PBXBuildFile; fileRef = D975EDE92A4799A2009DE942 /* reciters.plist */; };
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; };
-		D98543D72A47E14200F477A2 /* FixedTextNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D98543D62A47E14200F477A2 /* FixedTextNode.m */; };
-		D98543D92A47E17800F477A2 /* AsyncTextLabelImplmentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98543D82A47E17800F477A2 /* AsyncTextLabelImplmentation.swift */; };
 		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A375AACF010B2D1C89D8774 /* Pods-QuranEngineApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranEngineApp.debug.xcconfig"; path = "Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp.debug.xcconfig"; sourceTree = "<group>"; };
-		8D74650D8B96D828EB8F24A1 /* Pods-QuranEngineApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuranEngineApp.release.xcconfig"; path = "Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp.release.xcconfig"; sourceTree = "<group>"; };
 		D975EDC22A4791D6009DE942 /* QuranEngineApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuranEngineApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D975EDC52A4791D6009DE942 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D975EDC72A4791D6009DE942 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,11 +32,7 @@
 		D975EDE92A4799A2009DE942 /* reciters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = reciters.plist; sourceTree = "<group>"; };
 		D98543D22A47C88700F477A2 /* hafs_1405 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hafs_1405; sourceTree = "<group>"; };
 		D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuranEngineApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		D98543D52A47E14200F477A2 /* FixedTextNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FixedTextNode.h; sourceTree = "<group>"; };
-		D98543D62A47E14200F477A2 /* FixedTextNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FixedTextNode.m; sourceTree = "<group>"; };
-		D98543D82A47E17800F477A2 /* AsyncTextLabelImplmentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncTextLabelImplmentation.swift; sourceTree = "<group>"; };
 		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
-		DBF39BBA3A9CEE4575039527 /* Pods_QuranEngineApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuranEngineApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +41,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D975EDE22A4795BD009DE942 /* AppStructureFeature in Frameworks */,
-				83F443632E67F32978757C94 /* Pods_QuranEngineApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +53,6 @@
 				D975EDDC2A479335009DE942 /* Packages */,
 				D975EDC42A4791D6009DE942 /* QuranEngineApp */,
 				D975EDC32A4791D6009DE942 /* Products */,
-				D975EDE02A4795BD009DE942 /* Frameworks */,
 				F21FCED1DC6D36311F7D44C0 /* Pods */,
 			);
 			sourceTree = "<group>";
@@ -93,10 +82,7 @@
 				D975EDC72A4791D6009DE942 /* SceneDelegate.swift */,
 				D975EDE42A47960D009DE942 /* Container.swift */,
 				D975EDE62A4796AA009DE942 /* Analytics.swift */,
-				D98543D52A47E14200F477A2 /* FixedTextNode.h */,
-				D98543D62A47E14200F477A2 /* FixedTextNode.m */,
 				D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */,
-				D98543D82A47E17800F477A2 /* AsyncTextLabelImplmentation.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -121,19 +107,9 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		D975EDE02A4795BD009DE942 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DBF39BBA3A9CEE4575039527 /* Pods_QuranEngineApp.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		F21FCED1DC6D36311F7D44C0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4A375AACF010B2D1C89D8774 /* Pods-QuranEngineApp.debug.xcconfig */,
-				8D74650D8B96D828EB8F24A1 /* Pods-QuranEngineApp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -145,11 +121,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D975EDD62A4791D7009DE942 /* Build configuration list for PBXNativeTarget "QuranEngineApp" */;
 			buildPhases = (
-				2F5377374F8AC3E38300E6E3 /* [CP] Check Pods Manifest.lock */,
 				D975EDBE2A4791D6009DE942 /* Sources */,
 				D975EDBF2A4791D6009DE942 /* Frameworks */,
 				D975EDC02A4791D6009DE942 /* Resources */,
-				BA153C6AB2872699CBE75F30 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -171,7 +145,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					D975EDC12A4791D6009DE942 = {
 						CreatedOnToolsVersion = 14.3;
@@ -212,58 +186,14 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		2F5377374F8AC3E38300E6E3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-QuranEngineApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BA153C6AB2872699CBE75F30 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QuranEngineApp/Pods-QuranEngineApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		D975EDBE2A4791D6009DE942 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */,
-				D98543D72A47E14200F477A2 /* FixedTextNode.m in Sources */,
 				D975EDE52A47960D009DE942 /* Container.swift in Sources */,
 				D975EDE72A4796AA009DE942 /* Analytics.swift in Sources */,
-				D98543D92A47E17800F477A2 /* AsyncTextLabelImplmentation.swift in Sources */,
 				D975EDC82A4791D6009DE942 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +248,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -378,6 +309,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -398,7 +330,6 @@
 		};
 		D975EDD72A4791D7009DE942 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A375AACF010B2D1C89D8774 /* Pods-QuranEngineApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -406,6 +337,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuranEngineApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -430,7 +362,6 @@
 		};
 		D975EDD82A4791D7009DE942 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D74650D8B96D828EB8F24A1 /* Pods-QuranEngineApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -438,6 +369,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MKP73M5X4A;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuranEngineApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

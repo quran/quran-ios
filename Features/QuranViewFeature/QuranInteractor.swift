@@ -160,7 +160,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func onQuranModeUpdated() {
-        let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslations.isEmpty
+        let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslationIds.isEmpty
         if quranMode == .translation, noTranslationsSelected {
             presentTranslationsSelection()
         }

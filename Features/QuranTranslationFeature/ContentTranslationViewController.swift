@@ -6,28 +6,36 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
-import Caching
-import Combine
-import Crashing
-import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
-import QuranTextKit
-import TranslationService
+import SwiftUI
 import UIKit
-import Utilities
 
-@MainActor
+private struct ContentTranslationViewStateHolder: View {
+    @StateObject var viewModel: ContentTranslationViewModel
+
+    var body: some View {
+        ContentTranslationView(viewModel: viewModel)
+    }
+}
+
 class ContentTranslationViewController: UIViewController, PageView {
     // MARK: Lifecycle
 
-    init(dataService: PagesCacheableService<Page, TranslatedPage>, page: Page, highlightsService: QuranHighlightsService) {
-        self.dataService = dataService
-        contentView = ContentTranslationView(highlightsService: highlightsService)
+    private let viewModel: ContentTranslationViewModel
+
+    init(page: Page, viewModel: ContentTranslationViewModel) {
+        self.viewModel = viewModel
+        self.page = page
         super.init(nibName: nil, bundle: nil)
-        contentView.page = page
-        reloadData()
+
+        viewModel.verses = page.verses
+
+        let view = ContentTranslationViewStateHolder(viewModel: viewModel)
+        let viewController = UIHostingController(rootView: view)
+        viewController._disableSafeArea = true
+        viewController.view.backgroundColor = .clear
+        addFullScreenChild(viewController)
     }
 
     @available(*, unavailable)
@@ -37,44 +45,13 @@ class ContentTranslationViewController: UIViewController, PageView {
 
     // MARK: Internal
 
-    var page: Page {
-        contentView.page!
-    }
-
-    override func loadView() {
-        view = contentView
-    }
+    let page: Page
 
     func word(at point: CGPoint) -> Word? {
-        contentView.word(at: point)
+        nil
     }
 
     func verse(at point: CGPoint) -> AyahNumber? {
-        contentView.verse(at: point)
-    }
-
-    // MARK: Private
-
-    private let contentView: ContentTranslationView
-    private let dataService: PagesCacheableService<Page, TranslatedPage>
-
-    private func reloadData() {
-        if let element = dataService.getCached(page) {
-            configureWithElement(element)
-        } else {
-            Task { @MainActor in
-                do {
-                    let element = try await dataService.get(page)
-                    configureWithElement(element)
-                } catch {
-                    // TODO: should show error to the user
-                    crasher.recordError(error, reason: "Failed to retrieve quran page details")
-                }
-            }
-        }
-    }
-
-    private func configureWithElement(_ element: TranslatedPage) {
-        contentView.configure(for: element)
+        viewModel.ayahAtPoint(point, from: view)
     }
 }

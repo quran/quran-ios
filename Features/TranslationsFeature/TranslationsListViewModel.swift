@@ -39,8 +39,8 @@ final class TranslationsListViewModel: ObservableObject {
         )
         self.downloadsObserver = downloadsObserver
 
-        selectedTranslationsPreferences.$selectedTranslations
-            .prepend(selectedTranslationsPreferences.selectedTranslations)
+        selectedTranslationsPreferences.$selectedTranslationIds
+            .prepend(selectedTranslationsPreferences.selectedTranslationIds)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.selectedTranslationIds = $0 }
             .store(in: &cancellables)
@@ -88,7 +88,7 @@ final class TranslationsListViewModel: ObservableObject {
     }
 
     func moveSelectedTranslations(at indexSet: IndexSet, to destination: Int) {
-        selectedTranslationsPreferences.selectedTranslations.move(fromOffsets: indexSet, toOffset: destination)
+        selectedTranslationsPreferences.selectedTranslationIds.move(fromOffsets: indexSet, toOffset: destination)
     }
 
     func selectTranslation(_ translation: TranslationItem) async {

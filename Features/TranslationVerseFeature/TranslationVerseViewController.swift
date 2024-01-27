@@ -6,33 +6,30 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
 import Combine
 import MoreMenuFeature
 import NoorUI
-import QuranKit
-import QuranTranslationFeature
+import SwiftUI
 import TranslationService
 import TranslationsFeature
-import UIKit
 import UIx
 import VLogging
 
-class TranslationVerseViewController: UIViewController {
+class TranslationVerseViewController: UIHostingController<TranslationVerseView> {
     // MARK: Lifecycle
 
     init(
         viewModel: TranslationVerseViewModel,
         moreMenuBuilder: MoreMenuBuilder,
-        translationsSelectionBuilder: TranslationsListBuilder,
-        highlightsService: QuranHighlightsService
+        translationsSelectionBuilder: TranslationsListBuilder
     ) {
         self.viewModel = viewModel
         self.moreMenuBuilder = moreMenuBuilder
         self.translationsSelectionBuilder = translationsSelectionBuilder
-        collectionView = QuranTranslationDiffableDataSource.translationCollectionView()
-        dataSource = TranslationVerseDataSource(collectionView: collectionView, highlightsService: highlightsService)
-        super.init(nibName: nil, bundle: nil)
+
+        let viewModel = self.viewModel
+        let view = TranslationVerseView(viewModel: viewModel)
+        super.init(rootView: view)
     }
 
     @available(*, unavailable)
@@ -46,29 +43,21 @@ class TranslationVerseViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.reading
 
-        configureCollectionView()
         configureNavigationBar()
-        configureSettingsObservers()
-
-        viewModel.$translatedVerse
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateUI()
-            }
-            .store(in: &cancellables)
 
         viewModel.$currentVerse
             .receive(on: DispatchQueue.main)
             .sink { [weak self] verse in
                 self?.nextButton?.isEnabled = verse.next != nil
                 self?.previousButton?.isEnabled = verse.previous != nil
+                self?.updateTitle()
             }
             .store(in: &cancellables)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslations.isEmpty
+        let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslationIds.isEmpty
         if firstTime && noTranslationsSelected {
             presentTranslationsSelection()
         }
@@ -77,9 +66,6 @@ class TranslationVerseViewController: UIViewController {
 
     // MARK: Private
 
-    private let collectionView: UICollectionView
-
-    private let dataSource: TranslationVerseDataSource
     private let viewModel: TranslationVerseViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -92,12 +78,6 @@ class TranslationVerseViewController: UIViewController {
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     private var firstTime = true
-
-    private func configureCollectionView() {
-        collectionView.contentInsetAdjustmentBehavior = .automatic
-        view.addAutoLayoutSubview(collectionView)
-        collectionView.vc.edges()
-    }
 
     private func configureNavigationBar() {
         navigationItem.rightBarButtonItems?.append(
@@ -151,12 +131,6 @@ class TranslationVerseViewController: UIViewController {
         presentPopover(viewController, pointingTo: item, permittedArrowDirections: [.up, .down])
     }
 
-    private func configureSettingsObservers() {
-        selectedTranslationsPreferences.$selectedTranslations
-            .sink { [weak self] _ in self?.viewModel.reload() }
-            .store(in: &cancellables)
-    }
-
     @objc
     private func nextTapped() {
         viewModel.next()
@@ -167,18 +141,11 @@ class TranslationVerseViewController: UIViewController {
         viewModel.previous()
     }
 
-    private func updateUI() {
-        guard let translatedVerse = viewModel.translatedVerse else {
-            return
-        }
-        logger.info("Verse Translation: set TranslatedVerse")
+    private func updateTitle() {
         updateTitle(
-            firstLine: translatedVerse.verse.sura.localizedName(withNumber: true),
-            secondLine: translatedVerse.verse.localizedAyahNumber
+            firstLine: viewModel.currentVerse.sura.localizedName(withNumber: true),
+            secondLine: viewModel.currentVerse.localizedAyahNumber
         )
-        dataSource.translatedVerse = translatedVerse
-        collectionView.reloadData()
-        collectionView.layoutIfNeeded()
     }
 
     private func updateTitle(firstLine: String, secondLine: String) {

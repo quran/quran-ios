@@ -96,6 +96,32 @@ extension UIView {
         }
         return result
     }
+
+    /// Finds all visible subviews of a specific type in the view hierarchy.
+    /// - Parameter type: The type of subviews to find.
+    /// - Returns: An array of visible subviews of the specified type.
+    public func findVisibleSubviews<T: UIView>(ofType type: T.Type) -> [T] {
+        findSubviews(ofType: T.self) { subview in
+            subview.isHidden == false && subview.alpha > 0 && subview.frame.size != .zero
+        }
+    }
+
+    private func findSubviews<T: UIView>(ofType type: T.Type, include: (UIView) -> Bool) -> [T] {
+        var filteredSubviews: [T] = []
+
+        // Function to recursively search for subviews of the specified type.
+        func findInView(_ view: UIView) {
+            for subview in view.subviews where include(subview) {
+                if let typedSubview = subview as? T {
+                    filteredSubviews.append(typedSubview)
+                }
+                findInView(subview) // Recursively search in the subview.
+            }
+        }
+
+        findInView(self) // Start the search from the current view.
+        return filteredSubviews
+    }
 }
 
 extension UIView {

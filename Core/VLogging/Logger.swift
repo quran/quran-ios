@@ -7,4 +7,4 @@
 
 import Logging
 
-public let logger = Logger(label: "default")
+public let logger = Logger(label: "quran-ios")

@@ -19,36 +19,42 @@ public class SelectedTranslationsPreferences {
     public static let shared = SelectedTranslationsPreferences()
 
     @Preference(selectedTranslations)
-    public var selectedTranslations: [Translation.ID]
+    public var selectedTranslationIds: [Translation.ID]
 
     public func remove(_ translationId: Int) {
-        if let index = selectedTranslations.firstIndex(of: translationId) {
-            selectedTranslations.remove(at: index)
+        if let index = selectedTranslationIds.firstIndex(of: translationId) {
+            selectedTranslationIds.remove(at: index)
         }
     }
 
     public func isSelected(_ translationId: Translation.ID) -> Bool {
-        selectedTranslations.contains(translationId)
+        selectedTranslationIds.contains(translationId)
     }
 
     public func toggleSelection(_ translationId: Translation.ID) {
-        if let index = selectedTranslations.firstIndex(of: translationId) {
-            selectedTranslations.remove(at: index)
+        if let index = selectedTranslationIds.firstIndex(of: translationId) {
+            selectedTranslationIds.remove(at: index)
         } else {
-            selectedTranslations.append(translationId)
+            selectedTranslationIds.append(translationId)
         }
     }
 
     public func select(_ id: Translation.ID) {
-        if !selectedTranslations.contains(id) {
-            selectedTranslations.append(id)
+        if !selectedTranslationIds.contains(id) {
+            selectedTranslationIds.append(id)
         }
     }
 
     public func deselect(_ id: Translation.ID) {
-        if let index = selectedTranslations.firstIndex(of: id) {
-            selectedTranslations.remove(at: index)
+        if let index = selectedTranslationIds.firstIndex(of: id) {
+            selectedTranslationIds.remove(at: index)
         }
+    }
+
+    public func selectedTranslations(from localTranslations: [Translation]) -> [Translation] {
+        let selected = selectedTranslationIds
+        let translationsById = Dictionary(uniqueKeysWithValues: localTranslations.map { ($0.id, $0) })
+        return selected.compactMap { translationsById[$0] }
     }
 
     // MARK: Internal

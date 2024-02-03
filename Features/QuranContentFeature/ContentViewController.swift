@@ -141,13 +141,6 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 }
 
 private struct PagesView: View {
-    private struct PagesId: Hashable {
-        let quranMode: QuranMode
-        let selectedTranslations: [Translation.ID]
-    }
-
-    // MARK: Internal
-
     @ObservedObject var viewModel: ContentViewModel
 
     var body: some View {
@@ -159,7 +152,7 @@ private struct PagesView: View {
             ) { page in
                 StaticViewControllerRepresentable(viewController: viewModel.pageViewBuilder.build(at: page))
             }
-            .id(PagesId(quranMode: viewModel.quranMode, selectedTranslations: viewModel.selectedTranslations))
+            .id(viewModel.quranMode)
         }
     }
 

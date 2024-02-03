@@ -62,6 +62,7 @@ public struct VerseText: Equatable {
     public let arabicSuffix: [String]
 }
 
+// TODO: Remove
 public struct TranslatedVerses: Equatable {
     // MARK: Lifecycle
 

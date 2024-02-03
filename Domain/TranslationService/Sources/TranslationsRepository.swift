@@ -53,7 +53,7 @@ public struct TranslationsRepository {
     // MARK: Private
 
     private func combine(local: [Translation], remote: [Translation]) -> ([Translation], [String: Translation]) {
-        let localMapConstant = local.flatGroup { $0.fileName }
+        let localMapConstant = Dictionary(uniqueKeysWithValues: local.map { ($0.fileName, $0) })
         var localMap = localMapConstant
 
         var combinedList: [Translation] = []

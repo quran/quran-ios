@@ -33,7 +33,7 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         )
 
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-        selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
+        selectedTranslationsPreferences.selectedTranslationIds = translations.map(\.id)
 
         try await localTranslationsFake.setTranslations(translations)
     }

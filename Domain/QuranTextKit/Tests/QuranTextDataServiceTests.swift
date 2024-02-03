@@ -30,7 +30,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         )
 
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-        selectedTranslationsPreferences.selectedTranslations = translations.map(\.id)
+        selectedTranslationsPreferences.selectedTranslationIds = translations.map(\.id)
 
         try await localTranslationsFake.setTranslations(translations)
     }
@@ -50,7 +50,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[1].verses[0]],
         ]
         for verses in tests {
-            let versesText = try await textService.textForVerses(verses, translations: [])
+            let versesText: TranslatedVerses = try await textService.textForVerses(verses, translations: [])
 
             let expectedVerses = verses.map {
                 VerseText(
@@ -96,7 +96,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         let versesText = try await textService.textForVerses([verse])
 
         let translationText = TestData.translationTextAt(translations[0], verse)
-        let textWithoutFootnotes = "Guide us to the Straight Way.  {ABC} 1 {DE} 2 FG"
+        let textWithoutFootnotes = "Guide us to the Straight Way.  {ABC} [1] {DE} [2] FG"
         let string = TranslationString(
             text: textWithoutFootnotes,
             quranRanges: [
@@ -104,8 +104,8 @@ final class QuranTextDataServiceTests: XCTestCase {
                 textWithoutFootnotes.range(of: "{DE}"),
             ].compactMap { $0 },
             footnoteRanges: [
-                textWithoutFootnotes.range(of: "1"),
-                textWithoutFootnotes.range(of: "2"),
+                textWithoutFootnotes.range(of: "[1]"),
+                textWithoutFootnotes.range(of: "[2]"),
             ].compactMap { $0 },
             footnotes: [
                 translationText.range(of: "[[Footer1]]"),

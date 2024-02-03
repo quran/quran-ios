@@ -17,16 +17,16 @@ class SelectedTranslationsPreferencesTests: XCTestCase {
     }
 
     func testPreferences() {
-        XCTAssertEqual(preferences.selectedTranslations, [])
+        XCTAssertEqual(preferences.selectedTranslationIds, [])
 
         preferences.toggleSelection(45)
         preferences.toggleSelection(10)
         preferences.toggleSelection(20)
-        XCTAssertEqual(preferences.selectedTranslations, [45, 10, 20])
+        XCTAssertEqual(preferences.selectedTranslationIds, [45, 10, 20])
         XCTAssertTrue(preferences.isSelected(10))
 
         preferences.toggleSelection(10)
-        XCTAssertEqual(preferences.selectedTranslations, [45, 20])
+        XCTAssertEqual(preferences.selectedTranslationIds, [45, 20])
         XCTAssertFalse(preferences.isSelected(10))
     }
 

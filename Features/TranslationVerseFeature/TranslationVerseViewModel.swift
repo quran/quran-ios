@@ -6,61 +6,66 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
-import Crashing
-import Foundation
+import AnnotationsService
+import Combine
 import QuranKit
+import QuranText
 import QuranTextKit
 import QuranTranslationFeature
+import TranslationService
 import VLogging
 
 public struct TranslationVerseActions {
     // MARK: Lifecycle
 
-    public init(updateCurrentVerseTo: @escaping (_: AyahNumber) -> Void) {
+    public init(updateCurrentVerseTo: @escaping (AyahNumber) -> Void) {
         self.updateCurrentVerseTo = updateCurrentVerseTo
     }
 
     // MARK: Internal
 
-    let updateCurrentVerseTo: (_ verse: AyahNumber) -> Void
+    let updateCurrentVerseTo: (AyahNumber) -> Void
 }
 
 @MainActor
-class TranslationVerseViewModel {
+class TranslationVerseViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(startingVerse: AyahNumber, dataService: QuranTextDataService, actions: TranslationVerseActions) {
+    init(startingVerse: AyahNumber, localTranslationsRetriever: LocalTranslationsRetriever, dataService: QuranTextDataService, actions: TranslationVerseActions) {
         currentVerse = startingVerse
         self.dataService = dataService
         self.actions = actions
-        retieveTranslatedVerse(verse: startingVerse)
+
+        let noOpHighlightingService = QuranHighlightsService()
+        translationViewModel = ContentTranslationViewModel(localTranslationsRetriever: localTranslationsRetriever, dataService: dataService, highlightsService: noOpHighlightingService)
+        translationViewModel.showHeaderAndFooter = false
+        translationViewModel.verses = [startingVerse]
     }
 
     // MARK: Internal
 
-    @Published var translatedVerse: TranslatedVerse?
+    private var cancellables: Set<AnyCancellable> = []
+
+    let translationViewModel: ContentTranslationViewModel
 
     @Published var currentVerse: AyahNumber {
         didSet {
+            translationViewModel.verses = [currentVerse]
             actions.updateCurrentVerseTo(currentVerse)
         }
-    }
-
-    func reload() {
-        retieveTranslatedVerse(verse: currentVerse)
     }
 
     func next() {
         logger.info("Verse Translation: moving to next verse currentVerse:\(currentVerse)")
         if let next = currentVerse.next {
-            retieveTranslatedVerse(verse: next)
+            currentVerse = next
         }
     }
 
     func previous() {
         logger.info("Verse Translation: moving to previous verse currentVerse:\(currentVerse)")
         if let previous = currentVerse.previous {
-            retieveTranslatedVerse(verse: previous)
+            currentVerse = previous
         }
     }
 
@@ -69,26 +74,4 @@ class TranslationVerseViewModel {
     private let dataService: QuranTextDataService
 
     private let actions: TranslationVerseActions
-
-    private func retieveTranslatedVerse(verse: AyahNumber) {
-        currentVerse = verse
-        Task {
-            do {
-                let texts = try await dataService.textForVerses([verse])
-                let translations = Translations(texts.translations)
-                let translatedVerse = zip([verse], texts.verses).map { verse, text in
-                    TranslatedVerse(verse: verse, text: text, translations: translations)
-                }
-
-                updateTranslatedVerse(translatedVerse)
-            } catch {
-                // TODO: Show an error to the user
-                crasher.recordError(error, reason: "Failed to retrieve translation text verse \(verse)")
-            }
-        }
-    }
-
-    private func updateTranslatedVerse(_ translatedVerses: [TranslatedVerse]) {
-        translatedVerse = translatedVerses.first
-    }
 }

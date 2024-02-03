@@ -12,6 +12,7 @@ import QuranTextKit
 import UIKit
 
 extension Page {
+    // TODO: Remove
     public func suraNames() -> NSAttributedString {
         let suras = verses.map(\.sura).orderedUnique()
         return suras.reduce(NSMutableAttributedString()) { fullString, sura in
@@ -22,6 +23,27 @@ extension Page {
             fullString.append(suraString)
             return fullString
         }
+    }
+
+    public func suraNames() -> MultipartText {
+        let suras = verses.map(\.sura).orderedUnique()
+        let textArray = suras.map { $0.multipartSuraName() }
+
+        var result: MultipartText = ""
+        for (index, text) in textArray.enumerated() {
+            if index == 0 {
+                result.append(text)
+            } else {
+                result.append(" - \(text)")
+            }
+        }
+        return result
+    }
+}
+
+private extension Sura {
+    func multipartSuraName() -> MultipartText {
+        "\(localizedName()) \(sura: arabicSuraName)"
     }
 }
 

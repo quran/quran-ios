@@ -178,14 +178,14 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         parts.append(contentsOf: other.parts)
     }
 
+    public func view(ofSize size: FontSize, alignment: Alignment = .leading) -> some View {
+        MultiPartTextView(text: self, size: size, alignment: alignment)
+    }
+
     // MARK: Internal
 
     var rawValue: String {
         parts.map(\.rawValue).joined()
-    }
-
-    func view(ofSize size: FontSize) -> some View {
-        MultiPartTextView(text: self, size: size)
     }
 
     // MARK: Fileprivate
@@ -199,32 +199,20 @@ extension MultipartText {
     }
 }
 
-public struct MultiPartTextView: View {
+private struct MultiPartTextView: View {
     // MARK: Lifecycle
 
-    public init(text: MultipartText, size: MultipartText.FontSize, alignment: Alignment = .leading) {
-        self.text = text
-        self.size = size
-        self.alignment = alignment
-    }
+    let text: MultipartText
+    let size: MultipartText.FontSize
+    let alignment: Alignment
 
-    // MARK: Public
-
-    public var body: some View {
+    var body: some View {
         wrap {
             ForEach(0 ..< text.parts.count, id: \.self) { i in
                 TextPartView(part: text.parts[i], size: size)
             }
         }
     }
-
-    // MARK: Internal
-
-    let text: MultipartText
-    let size: MultipartText.FontSize
-    let alignment: Alignment
-
-    // MARK: Private
 
     @ViewBuilder
     private func wrap(@ViewBuilder content: () -> some View) -> some View {

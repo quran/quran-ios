@@ -60,10 +60,10 @@ final class SearchViewModel: ObservableObject {
         case .quran: break
         case .translation(let translation):
             contentStatePreferences.quranMode = .translation
-            var translationIds = selectedTranslationsPreferences.selectedTranslations
+            var translationIds = selectedTranslationsPreferences.selectedTranslationIds
             if !translationIds.contains(translation.id) {
                 translationIds.append(translation.id)
-                selectedTranslationsPreferences.selectedTranslations = translationIds
+                selectedTranslationsPreferences.selectedTranslationIds = translationIds
             }
         }
 

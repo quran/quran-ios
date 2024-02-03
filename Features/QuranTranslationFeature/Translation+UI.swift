@@ -8,29 +8,11 @@
 
 import NoorUI
 import QuranText
-import UIKit
+import SwiftUI
 
 extension Translation {
-    // TODO: Use SwiftUI.Font
-    func preferredTextFont(ofSize size: FontSize, factor: CGFloat = 1) -> UIFont {
-        if languageCode == "am" {
-            return .amharicTranslation(ofSize: size, factor: factor)
-        } else if languageCode == "ar" {
-            return .arabicTranslation(ofSize: size, factor: factor)
-        } else {
-            return .englishTranslation(ofSize: size, factor: factor)
-        }
-    }
-
-    // TODO: Use SwiftUI.Font
-    func preferredTranslatorNameFont(ofSize size: FontSize) -> UIFont {
-        if languageCode == "am" {
-            return .translatorNameAmharic(ofSize: size)
-        } else if languageCode == "ar" {
-            return .translatorNameArabic(ofSize: size)
-        } else {
-            return .translatorNameEnglish(ofSize: size)
-        }
+    var textFont: Font {
+        languageCode == "ar" ? .arabicTafseer() : .body
     }
 
     var characterDirection: Locale.LanguageDirection {

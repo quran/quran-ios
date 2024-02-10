@@ -52,7 +52,7 @@ public actor ReadingResourcesService {
             .eraseToAnyPublisher()
     }
 
-    public func startLoadingResources() async {
+    public func startLoadingResources() {
         let initialReading = preferences.reading
         readingsTask = Task { [weak self] in
             guard let readings = self?.preferences.$reading.prepend(initialReading).values() else {

@@ -29,13 +29,7 @@ public struct ContentImageBuilder: PageViewBuilder {
         self.highlightsService = highlightsService
 
         let reading = ReadingPreferences.shared.reading
-        let readingDirectory = Self.readingDirectory(reading, container: container)
-
-        let imageService = ImageDataService(
-            ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
-            imagesURL: reading.images(in: readingDirectory),
-            cropInsets: reading.cropInsets
-        )
+        let imageService = Self.buildImageDataService(reading: reading, container: container)
 
         let pages = reading.quran.pages
         cacheableImageService = Self.createCahceableImageService(imageService: imageService, pages: pages)
@@ -50,6 +44,17 @@ public struct ContentImageBuilder: PageViewBuilder {
             dataService: cacheableImageService,
             pageMarkerService: cacheablePageMarkers,
             highlightsService: highlightsService
+        )
+    }
+
+    // MARK: Internal
+
+    static func buildImageDataService(reading: Reading, container: AppDependencies) -> ImageDataService {
+        let readingDirectory = Self.readingDirectory(reading, container: container)
+        return ImageDataService(
+            ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
+            imagesURL: reading.images(in: readingDirectory),
+            cropInsets: reading.cropInsets
         )
     }
 

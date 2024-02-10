@@ -1,36 +1,35 @@
 //
-//  TranslationReadableInsets.swift
+//  ReadableInsetsViewModifier.swift
 //
 //
 //  Created by Mohamed Afifi on 2024-01-19.
 //
 
-import NoorUI
 import SwiftUI
 
 private extension EnvironmentValues {
-    var translationReadableInsets: EdgeInsets {
-        get { self[TranslationReadableInsetsKey.self] }
-        set { self[TranslationReadableInsetsKey.self] = newValue }
+    var readableInsets: EdgeInsets {
+        get { self[ReadableInsetsKey.self] }
+        set { self[ReadableInsetsKey.self] = newValue }
     }
 }
 
-private struct TranslationReadableInsetsKey: EnvironmentKey {
+private struct ReadableInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
 
-private struct TranslationReadableInsetsModifier: ViewModifier {
+private struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
 
     func body(content: Content) -> some View {
         content
             .readWindowSafeAreaInsets($windowSafeAreaInsets)
-            .environment(\.translationReadableInsets, ContentDimension.readableInsets(of: windowSafeAreaInsets))
+            .environment(\.readableInsets, ContentDimension.readableInsets(of: windowSafeAreaInsets))
     }
 }
 
 private struct ReadableInsetsPadding: ViewModifier {
-    @Environment(\.translationReadableInsets) var readableInsets
+    @Environment(\.readableInsets) var readableInsets
     let edges: Edge.Set
 
     func body(content: Content) -> some View {
@@ -43,11 +42,11 @@ private struct ReadableInsetsPadding: ViewModifier {
 }
 
 extension View {
-    func populateReadableInsets() -> some View {
-        modifier(TranslationReadableInsetsModifier())
+    public func populateReadableInsets() -> some View {
+        modifier(ReadableInsetsModifier())
     }
 
-    func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {
+    public func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {
         modifier(ReadableInsetsPadding(edges: edges))
     }
 }

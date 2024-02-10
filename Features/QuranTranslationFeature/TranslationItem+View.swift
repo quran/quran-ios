@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-12-28.
 //
 
-import Localization
 import NoorUI
 import QuranKit
 import QuranText
@@ -13,172 +12,71 @@ import SwiftUI
 
 extension TranslationPageHeader: View {
     var body: some View {
-        HStack {
-            Text(page.localizedQuarterName)
-            Spacer()
-            page.suraNames()
-                .view(ofSize: .footnote, alignment: .trailing)
-        }
-        .readableInsetsPadding([.top, .horizontal])
-        .padding(.bottom, ContentDimension.interSpacing)
+        QuranPageHeader(quarterName: page.localizedQuarterName, suraNames: page.suraNames())
     }
 }
 
 extension TranslationPageFooter: View {
     var body: some View {
-        HStack {
-            Spacer()
-            Text(page.localizedNumber)
-            Spacer()
-        }
-        .padding(.top, ContentDimension.interSpacing)
-        .readableInsetsPadding([.bottom, .horizontal])
+        QuranPageFooter(page: page.localizedNumber)
     }
 }
 
-extension TranslationVerseSeparator: View {
+extension TranslationSuraName: View {
     var body: some View {
-        Rectangle()
-            .fill(Color.systemGray4)
-            .frame(height: 1)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.top, ContentDimension.interSpacing)
+        QuranSuraName(suraName: sura.localizedName(withPrefix: false), besmAllah: sura.quran.arabicBesmAllah, besmAllahFontSize: arabicFontSize)
     }
 }
 
-struct TranslationSuraNameView: View {
-    @ScaledMetric var bottomPadding = 5
-    @ScaledMetric var topPadding = 10
-
-    let suraName: TranslationSuraName
-
+extension TranslationArabicText: View {
     var body: some View {
-        VStack {
-            NoorImage.suraHeader.image.resizable()
-                .aspectRatio(contentMode: .fit)
-                .overlay {
-                    Text(suraName.sura.localizedName(withPrefix: false))
-                        .font(.title3)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.3)
-                }
-            Text(suraName.sura.quran.arabicBesmAllah)
-                .font(.quran())
-                .dynamicTypeSize(suraName.arabicFontSize.dynamicTypeSize)
-        }
-        .padding(.bottom, bottomPadding)
-        .padding(.top, topPadding)
-        .readableInsetsPadding(.horizontal)
+        QuranArabicText(verse: verse, text: text, fontSize: arabicFontSize)
     }
 }
 
-struct TranslationArabicTextView: View {
-    @ScaledMetric var bottomPadding = 5
-    @ScaledMetric var topPadding = 10
-
-    let arabicText: TranslationArabicText
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(lFormat("translation.text.ayah-number", arabicText.verse.sura.suraNumber, arabicText.verse.ayah))
-                .padding(8)
-                .foregroundColor(.secondaryLabel)
-                .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.systemGray5.opacity(0.5))
-                )
-
-            Text(arabicText.text)
-                .font(.quran())
-                .dynamicTypeSize(arabicText.arabicFontSize.dynamicTypeSize)
-                .textAlignment(follows: .rightToLeft)
-        }
-        .padding(.bottom, bottomPadding)
-        .padding(.top, topPadding)
-        .readableInsetsPadding(.horizontal)
+extension TranslationTextChunk {
+    var readMoreURL: URL {
+        TranslationURL.readMore(
+            translationId: translation.id,
+            sura: verse.sura.suraNumber,
+            ayah: verse.ayah
+        ).url
     }
 }
 
-struct TranslationTextChunkView: View {
-    @ScaledMetric var topPadding = 10
-    @ScaledMetric var baselineOffset = 5
-
-    let chunk: TranslationTextChunk
-
+extension TranslationTextChunk: View {
     var body: some View {
-        Text(string)
-            .font(chunk.translation.textFont)
-            .dynamicTypeSize(chunk.translationFontSize.dynamicTypeSize)
-            .textAlignment(follows: chunk.translation.characterDirection)
-            .padding(.top, chunk.chunkIndex == 0 ? topPadding : 0)
-            .readableInsetsPadding(.horizontal)
-    }
-
-    private var string: AttributedString {
-        let chunkRange = chunk.chunks[chunk.chunkIndex]
-        let chunkText = chunk.text.text[chunkRange]
-
-        var string = AttributedString(chunkText)
-        for (index, footnoteRange) in chunk.text.footnoteRanges.enumerated() {
-            if let range = string.range(from: footnoteRange, overallRange: chunkRange, overallText: chunk.text.text) {
-                string[range].link = TranslationURL.footnote(
-                    translationId: chunk.translation.id,
-                    sura: chunk.verse.sura.suraNumber,
-                    ayah: chunk.verse.ayah,
+        QuranTranslationTextChunk(
+            text: text.text,
+            chunk: chunks[chunkIndex],
+            footnoteRanges: text.footnoteRanges,
+            quranRanges: text.quranRanges,
+            firstChunk: chunkIndex == 0,
+            readMoreURL: readMore ? readMoreURL : nil,
+            footnoteURL: { index in
+                TranslationURL.footnote(
+                    translationId: translation.id,
+                    sura: verse.sura.suraNumber,
+                    ayah: verse.ayah,
                     footnoteIndex: index
                 ).url
-                string[range].font = .footnote
-                string[range].baselineOffset = baselineOffset
-            }
-        }
-
-        for quranRange in chunk.text.quranRanges {
-            if let range = string.range(from: quranRange, overallRange: chunkRange, overallText: chunk.text.text) {
-                string[range].foregroundColor = .accentColor
-            }
-        }
-
-        if chunk.readMore {
-            var readMore = AttributedString("\n\(l("translation.text.read-more"))")
-            readMore.foregroundColor = .accentColor
-            readMore.link = TranslationURL.readMore(
-                translationId: chunk.translation.id,
-                sura: chunk.verse.sura.suraNumber,
-                ayah: chunk.verse.ayah
-            ).url
-            readMore.font = .body
-            string.append(readMore)
-        }
-
-        return string
+            },
+            font: translation.textFont,
+            fontSize: translationFontSize,
+            characterDirection: translation.characterDirection
+        )
     }
 }
 
-struct TranslationReferenceVerseView: View {
-    @ScaledMetric var topPadding = 10
-    let referenceVerse: TranslationReferenceVerse
-
+extension TranslationReferenceVerse: View {
     var body: some View {
-        Text(lFormat("translation.text.see-referenced-verse", referenceVerse.reference.ayah))
-            .font(.body)
-            .dynamicTypeSize(referenceVerse.translationFontSize.dynamicTypeSize)
-            .textAlignment(follows: referenceVerse.translation.characterDirection)
-            .padding(.top, topPadding)
-            .readableInsetsPadding(.horizontal)
+        QuranTranslationReferenceVerse(reference: reference, fontSize: translationFontSize, characterDirection: translation.characterDirection)
     }
 }
 
-struct TranslatorTextView: View {
-    @ScaledMetric var bottomPadding = 10
-    let translator: TranslatorText
+extension TranslatorText: View {
     var body: some View {
-        Text(verbatim: "- \(translator.translation.translationName)")
-            .foregroundColor(.secondaryLabel)
-            .font(.body)
-            .dynamicTypeSize(translator.translationFontSize.dynamicTypeSize)
-            .textAlignment(follows: translator.translation.characterDirection)
-            .padding(.bottom, bottomPadding)
-            .readableInsetsPadding(.horizontal)
+        QuranTranslatorName(name: translation.translationName, fontSize: translationFontSize, characterDirection: translation.characterDirection)
     }
 }
 
@@ -190,18 +88,18 @@ extension TranslationItem: View {
                 pageHeader
             case .pageFooter(let pageFooter):
                 pageFooter
-            case .verseSeparator(let separator, _):
-                separator
+            case .verseSeparator:
+                QuranVerseSeparator()
             case .suraName(let suraName, _):
-                TranslationSuraNameView(suraName: suraName)
+                suraName
             case .arabicText(let arabicText, _):
-                TranslationArabicTextView(arabicText: arabicText)
+                arabicText
             case .translationTextChunk(let translationTextChunk, _):
-                TranslationTextChunkView(chunk: translationTextChunk)
+                translationTextChunk
             case .translationReferenceVerse(let translationReferenceVerse, _):
-                TranslationReferenceVerseView(referenceVerse: translationReferenceVerse)
+                translationReferenceVerse
             case .translatorText(let translatorText, _):
-                TranslatorTextView(translator: translatorText)
+                translatorText
             }
         }
         .font(.footnote)

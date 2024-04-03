@@ -6,33 +6,33 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
-import Caching
-import Crashing
-import ImageService
-import QuranGeometry
 import QuranKit
 import QuranPagesFeature
-import UIKit
+import SwiftUI
+
+private struct ContentImageViewStateHolder: View {
+    @StateObject var viewModel: ContentImageViewModel
+
+    var body: some View {
+        ContentImageView(viewModel: viewModel)
+    }
+}
 
 class ContentImageViewController: UIViewController, PageView {
     // MARK: Lifecycle
 
-    init(
-        page: Page,
-        dataService: PagesCacheableService<Page, ImagePage>,
-        pageMarkerService: PagesCacheableService<Page, PageMarkers>?,
-        highlightsService: QuranHighlightsService
-    ) {
-        contentView = ContentImageView(highlightsService: highlightsService)
-        self.dataService = dataService
-        self.pageMarkerService = pageMarkerService
+    private let viewModel: ContentImageViewModel
+
+    init(page: Page, viewModel: ContentImageViewModel) {
+        self.viewModel = viewModel
+        self.page = page
         super.init(nibName: nil, bundle: nil)
-        contentView.page = page
-        loadPageImage(page)
-        if let pageMarkerService {
-            loadPageMarkers(page, dataService: pageMarkerService)
-        }
+
+        let view = ContentImageViewStateHolder(viewModel: viewModel)
+        let viewController = UIHostingController(rootView: view)
+        viewController._disableSafeArea = true
+        viewController.view.backgroundColor = .clear
+        addFullScreenChild(viewController)
     }
 
     @available(*, unavailable)
@@ -42,67 +42,14 @@ class ContentImageViewController: UIViewController, PageView {
 
     // MARK: Internal
 
-    var page: Page {
-        contentView.page!
-    }
-
-    override func loadView() {
-        view = contentView
-    }
+    let page: Page
 
     func word(at point: CGPoint) -> Word? {
-        contentView.word(at: point)
+        let globalPoint = view.convert(point, to: view.window)
+        return viewModel.wordAtGlobalPoint(globalPoint)
     }
 
     func verse(at point: CGPoint) -> AyahNumber? {
-        contentView.verse(at: point)
-    }
-
-    // MARK: Private
-
-    private let contentView: ContentImageView
-    private let dataService: PagesCacheableService<Page, ImagePage>
-    private let pageMarkerService: PagesCacheableService<Page, PageMarkers>?
-
-    private func loadPageImage(_ page: Page) {
-        if let element = dataService.getCached(page) {
-            configure(with: element)
-        } else {
-            Task { @MainActor in
-                do {
-                    let element = try await dataService.get(page)
-                    configure(with: element)
-                } catch {
-                    // TODO: should show error to the user
-                    crasher.recordError(error, reason: "Failed to retrieve quran page details")
-                }
-            }
-        }
-    }
-
-    private func configure(with element: ImagePage) {
-        contentView.configure(with: element)
-    }
-
-    // MARK: - Page Markers
-
-    private func loadPageMarkers(_ page: Page, dataService: PagesCacheableService<Page, PageMarkers>) {
-        if let element = dataService.getCached(page) {
-            configure(with: element)
-        } else {
-            Task {
-                do {
-                    let element = try await dataService.get(page)
-                    configure(with: element)
-                } catch {
-                    // TODO: should show error to the user
-                    crasher.recordError(error, reason: "Failed to retrieve quran page markers \(page)")
-                }
-            }
-        }
-    }
-
-    private func configure(with element: PageMarkers) {
-        contentView.configure(with: element)
+        word(at: point)?.verse
     }
 }

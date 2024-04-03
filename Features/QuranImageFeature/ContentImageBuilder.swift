@@ -27,23 +27,22 @@ public struct ContentImageBuilder: PageViewBuilder {
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
         self.container = container
         self.highlightsService = highlightsService
-
-        let reading = ReadingPreferences.shared.reading
-        let imageService = Self.buildImageDataService(reading: reading, container: container)
-
-        let pages = reading.quran.pages
-        cacheableImageService = Self.createCahceableImageService(imageService: imageService, pages: pages)
-        cacheablePageMarkers = Self.createPageMarkersService(imageService: imageService, reading: reading, pages: pages)
     }
 
     // MARK: Public
 
     public func build(at page: Page) -> PageView {
-        ContentImageViewController(
+        let reading = ReadingPreferences.shared.reading
+        let imageService = Self.buildImageDataService(reading: reading, container: container)
+
+        return ContentImageViewController(
             page: page,
-            dataService: cacheableImageService,
-            pageMarkerService: cacheablePageMarkers,
-            highlightsService: highlightsService
+            viewModel: ContentImageViewModel(
+                reading: reading,
+                page: page,
+                imageDataService: imageService,
+                highlightsService: highlightsService
+            )
         )
     }
 
@@ -62,8 +61,6 @@ public struct ContentImageBuilder: PageViewBuilder {
 
     private let container: AppDependencies
     private let highlightsService: QuranHighlightsService
-    private let cacheableImageService: PagesCacheableService<Page, ImagePage>
-    private let cacheablePageMarkers: PagesCacheableService<Page, PageMarkers>?
 
     private static func readingDirectory(_ reading: Reading, container: AppDependencies) -> URL {
         let remoteResource = container.remoteResources?.resource(for: reading)
@@ -71,49 +68,6 @@ public struct ContentImageBuilder: PageViewBuilder {
         let bundlePath = { Bundle.main.url(forResource: reading.localPath, withExtension: nil) }
         logger.info("Images: Use \(remoteResource != nil ? "remote" : "bundle") For reading \(reading)")
         return remotePath ?? bundlePath()!
-    }
-
-    private static func createCahceableImageService(imageService: ImageDataService, pages: [Page]) -> PagesCacheableService<Page, ImagePage> {
-        let cache = Cache<Page, ImagePage>()
-        cache.countLimit = 5
-
-        let operation = { @Sendable (page: Page) in
-            try await imageService.imageForPage(page)
-        }
-        let dataService = PagesCacheableService(
-            cache: cache,
-            previousPagesCount: 1,
-            nextPagesCount: 2,
-            pages: pages,
-            operation: operation
-        )
-        return dataService
-    }
-
-    private static func createPageMarkersService(
-        imageService: ImageDataService,
-        reading: Reading,
-        pages: [Page]
-    ) -> PagesCacheableService<Page, PageMarkers>? {
-        // Only hafs 1421 supports page markers
-        guard reading == .hafs_1421 else {
-            return nil
-        }
-
-        let cache = Cache<Page, PageMarkers>()
-        cache.countLimit = 5
-
-        let operation = { @Sendable (page: Page) in
-            try await imageService.pageMarkers(page)
-        }
-        let dataService = PagesCacheableService(
-            cache: cache,
-            previousPagesCount: 1,
-            nextPagesCount: 2,
-            pages: pages,
-            operation: operation
-        )
-        return dataService
     }
 }
 

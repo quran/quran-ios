@@ -41,6 +41,16 @@ private struct ReadableInsetsPadding: ViewModifier {
     }
 }
 
+private struct ReadableInsetsReader: ViewModifier {
+    @Environment(\.readableInsets) var readableInsets
+    let onChange: (EdgeInsets) -> Void
+
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: readableInsets, perform: onChange)
+    }
+}
+
 extension View {
     public func populateReadableInsets() -> some View {
         modifier(ReadableInsetsModifier())
@@ -48,5 +58,9 @@ extension View {
 
     public func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {
         modifier(ReadableInsetsPadding(edges: edges))
+    }
+
+    public func onReadableInsetsChange(_ body: @escaping (EdgeInsets) -> Void) -> some View {
+        modifier(ReadableInsetsReader(onChange: body))
     }
 }

@@ -20,17 +20,20 @@
 
 import QuranAnnotations
 import QuranKit
+import SwiftUI
 import UIKit
 
+// TODO: Use SwiftUI.Color and remove UIColor usage.
 extension QuranHighlights {
     public static let opacity = 0.3
 
-    public static let wordHighlightColor = UIColor.appIdentity.withAlphaComponent(opacity)
+    public static let wordHighlightColor = Color.appIdentity.opacity(opacity)
 
     static let readingColor = UIColor.appIdentity.withAlphaComponent(opacity)
     static let shareColor = UIColor.systemBlue.withAlphaComponent(opacity)
     static let searchColor = UIColor.systemGray.withAlphaComponent(opacity)
 
+    // TODO: Use Color
     public func versesByHighlights() -> [AyahNumber: UIColor] {
         // Sort order: share, reading, search, .note
         var versesByHighlights: [AyahNumber: UIColor] = [:]

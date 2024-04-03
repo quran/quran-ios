@@ -11,6 +11,12 @@ extension Color {
     public static var appIdentity: Color {
         Color("appTint", bundle: .module)
     }
+
+    public static var pageMarkerTint: Color {
+        Color(UIColor { collection in
+            collection.userInterfaceStyle == .dark ? UIColor(rgb: 0x039F85) : UIColor(rgb: 0x004D40)
+        })
+    }
 }
 
 public extension UIColor {
@@ -28,11 +34,5 @@ public extension UIColor {
 
     static var pageSeparatorBackground: UIColor {
         UIColor(named: "pageSeparatorBackground", in: .module, compatibleWith: nil)!
-    }
-
-    static var pageMarkerTint: UIColor {
-        UIColor { collection in
-            collection.userInterfaceStyle == .dark ? UIColor(rgb: 0x039F85) : UIColor(rgb: 0x004D40)
-        }
     }
 }

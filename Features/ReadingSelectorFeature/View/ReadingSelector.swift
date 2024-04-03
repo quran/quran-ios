@@ -33,7 +33,8 @@ struct ReadingSelector: View {
     private func imageView(reading: ReadingInfo<Reading>) -> some View {
         ReadingImageView(
             image: UIImage(named: reading.value.imageName)!,
-            pageMarkers: reading.value.pageMarkers
+            suraHeaders: reading.value.suraHeaders,
+            ayahNumbers: reading.value.ayahNumbers
         )
     }
 }

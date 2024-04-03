@@ -38,9 +38,10 @@ class ImageDataServiceTests: XCTestCase {
 
         var surasHeaders = 0
         for page in quran.pages {
-            let markers = try await service.pageMarkers(page)
-            XCTAssertEqual(markers.ayahNumbers.count, page.verses.count, "Page \(page.pageNumber)")
-            surasHeaders += markers.suraHeaders.count
+            let ayahNumbers = try await service.ayahNumbers(page)
+            let pageSuraHeaders = try await service.suraHeaders(page)
+            XCTAssertEqual(ayahNumbers.count, page.verses.count, "Page \(page.pageNumber)")
+            surasHeaders += pageSuraHeaders.count
         }
         XCTAssertEqual(surasHeaders, quran.suras.count)
     }

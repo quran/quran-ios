@@ -100,17 +100,24 @@ extension Reading {
         }
     }
 
-    var pageMarkers: PageMarkers {
+    var suraHeaders: [SuraHeaderLocation] {
         guard self == .hafs_1421 else {
-            return PageMarkers(suraHeaders: [], ayahNumbers: [])
+            return []
         }
 
-        let suraHeaders = [
+        return [
             SuraHeaderLocation(sura: Sura(quran: quran, suraNumber: 112)!, x: 14, y: 93, width: 1092, height: 116),
             SuraHeaderLocation(sura: Sura(quran: quran, suraNumber: 113)!, x: 14, y: 557, width: 1092, height: 116),
             SuraHeaderLocation(sura: Sura(quran: quran, suraNumber: 114)!, x: 14, y: 1148, width: 1092, height: 116),
         ]
-        let ayahNumbers = [
+    }
+
+    var ayahNumbers: [AyahNumberLocation] {
+        guard self == .hafs_1421 else {
+            return []
+        }
+
+        return [
             AyahNumberLocation(ayah: AyahNumber(quran: quran, sura: 112, ayah: 1)!, x: 747, y: 322),
             AyahNumberLocation(ayah: AyahNumber(quran: quran, sura: 112, ayah: 2)!, x: 425, y: 322),
             AyahNumberLocation(ayah: AyahNumber(quran: quran, sura: 112, ayah: 3)!, x: 78, y: 317),
@@ -127,6 +134,5 @@ extension Reading {
             AyahNumberLocation(ayah: AyahNumber(quran: quran, sura: 114, ayah: 5)!, x: 237, y: 1614),
             AyahNumberLocation(ayah: AyahNumber(quran: quran, sura: 114, ayah: 6)!, x: 323, y: 1728),
         ]
-        return PageMarkers(suraHeaders: suraHeaders, ayahNumbers: ayahNumbers)
     }
 }

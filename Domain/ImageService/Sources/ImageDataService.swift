@@ -23,11 +23,12 @@ public struct ImageDataService {
 
     // MARK: Public
 
-    public func pageMarkers(_ page: Page) async throws -> PageMarkers {
-        await PageMarkers(
-            suraHeaders: try persistence.suraHeaders(page),
-            ayahNumbers: try persistence.ayahNumbers(page)
-        )
+    public func suraHeaders(_ page: Page) async throws -> [SuraHeaderLocation] {
+        try await persistence.suraHeaders(page)
+    }
+
+    public func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
+        try await persistence.ayahNumbers(page)
     }
 
     public func imageForPage(_ page: Page) async throws -> ImagePage {

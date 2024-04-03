@@ -21,8 +21,8 @@ public struct AyahNumberLocation {
 
     public let ayah: AyahNumber
 
-    public func rect(ofLength length: CGFloat) -> CGRect {
-        CGRect(x: CGFloat(x) - length / 2, y: CGFloat(y) - length / 2, width: length, height: length)
+    public var center: CGPoint {
+        CGPoint(x: CGFloat(x), y: CGFloat(y))
     }
 
     // MARK: Internal

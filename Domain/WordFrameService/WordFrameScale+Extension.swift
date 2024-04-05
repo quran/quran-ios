@@ -11,7 +11,7 @@ import UIKit
 
 extension WordFrameCollection {
     public func wordAtLocation(_ location: CGPoint, imageScale: WordFrameScale) -> Word? {
-        let flattenFrames = frames.values.flatMap { $0 }
+        let flattenFrames = lines.flatMap { $0 }
         for frame in flattenFrames {
             let rectangle = frame.rect.scaled(by: imageScale)
             if rectangle.contains(location) {

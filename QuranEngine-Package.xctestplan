@@ -9,7 +9,13 @@
     }
   ],
   "defaultOptions" : {
-
+    "environmentVariableEntries" : [
+      {
+        "enabled" : false,
+        "key" : "LocalSnapshots",
+        "value" : "TRUE"
+      }
+    ]
   },
   "testTargets" : [
     {

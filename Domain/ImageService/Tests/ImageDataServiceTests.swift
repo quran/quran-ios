@@ -51,12 +51,12 @@ class ImageDataServiceTests: XCTestCase {
         let image = try await service.imageForPage(page)
         let wordFrames = image.wordFrames
 
-        XCTAssertEqual(wordFrames.frames[page.firstVerse], wordFrames.wordFramesForVerse(page.firstVerse))
+        XCTAssertEqual(wordFrames.lines[0], wordFrames.wordFramesForVerse(page.firstVerse))
         XCTAssertEqual(
             CGRect(x: 671.0, y: 244.0, width: 46.0, height: 95.0),
             wordFrames.wordFrameForWord(Word(verse: page.firstVerse, wordNumber: 2))?.rect
         )
-        XCTAssertNil(wordFrames.wordFramesForVerse(quran.lastVerse))
+        XCTAssertEqual([], wordFrames.wordFramesForVerse(quran.lastVerse))
 
         let verticalScaling = WordFrameScale.scaling(imageSize: image.image.size, into: CGSize(width: 359, height: 668))
         let horizontalScaling = WordFrameScale.scaling(imageSize: image.image.size, into: CGSize(width: 708, height: 1170.923076923077))
@@ -102,7 +102,7 @@ class ImageDataServiceTests: XCTestCase {
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
 
         // assert the word frames values
-        let frames = imagePage.wordFrames.frames.values.flatMap { $0 }.sorted { $0.word < $1.word }
+        let frames = imagePage.wordFrames.lines.flatMap { $0 }.sorted { $0.word < $1.word }
         assertSnapshot(matching: frames, as: .json, testName: testName)
 
         if ProcessInfo.processInfo.environment["LocalSnapshots"] != nil {
@@ -124,9 +124,9 @@ class ImageDataServiceTests: XCTestCase {
             .systemTeal,
         ]
         let strokeColor = UIColor.gray
-        let verses = frames.frames.keys.sorted()
+        let verses = Set(frames.lines.flatMap { $0.map(\.word.verse) }).sorted()
         for (offset, verse) in verses.enumerated() {
-            let frames = try XCTUnwrap(frames.frames[verse])
+            let frames = try XCTUnwrap(frames.wordFramesForVerse(verse))
             let color = fillColors[offset % fillColors.count]
             color.setFill()
             strokeColor.setStroke()

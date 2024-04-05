@@ -18,103 +18,78 @@ public struct WordFrameProcessor {
     // MARK: Public
 
     public func processWordFrames(
-        _ wordFrames: WordFrameCollection,
+        _ wordFrames: [WordFrame],
         cropInsets: UIEdgeInsets
     ) -> WordFrameCollection {
-        let frames = wordFrames.frames.flatMap(\.value).map { $0.withCropInsets(cropInsets) }
+        let frames = wordFrames.map { $0.withCropInsets(cropInsets) }
 
         // group by line
-        var framesByLines = Dictionary(grouping: frames, by: { $0.line })
-        let sortedLines = framesByLines.keys.sorted()
+        let framesByLines = Dictionary(grouping: frames, by: { $0.line })
+        var sortedLines = framesByLines
+            .sorted { $0.key < $1.key }
+            .map { line, wordFrames in
+                wordFrames.sorted { $0.word < $1.word }
+            }
 
-        framesByLines = sortFramesInEachLine(sortedLines, framesByLines)
-        framesByLines = alignFramesVerticallyInEachLine(sortedLines, framesByLines)
-        framesByLines = unionLinesVertically(sortedLines, framesByLines)
-        framesByLines = unionFramesHorizontallyInEachLine(sortedLines, framesByLines)
-        framesByLines = alignLineEdges(sortedLines, framesByLines)
+        alignFramesVerticallyInEachLine(&sortedLines)
+        unionLinesVertically(&sortedLines)
+        unionFramesHorizontallyInEachLine(&sortedLines)
+        alignLineEdges(&sortedLines)
 
-        let framesDictionary = Dictionary(grouping: framesByLines.flatMap(\.value), by: { $0.word.verse })
-        return WordFrameCollection(frames: framesDictionary)
+        return WordFrameCollection(lines: sortedLines)
     }
 
     // MARK: Private
 
-    private func sortFramesInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
-        // sort each line from left to right
-        var sortedFramesByLines: [Int: [WordFrame]] = [:]
-        for line in sortedLines {
-            let frames = framesByLines[line]!
-            sortedFramesByLines[line] = frames.sorted { lhs, rhs in
-                lhs.word < rhs.word
-            }
-        }
-        return sortedFramesByLines
-    }
-
-    private func alignFramesVerticallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
+    private func alignFramesVerticallyInEachLine(_ lines: inout [[WordFrame]]) {
         // align vertically each line
-        var alignedFrames: [Int: [WordFrame]] = [:]
-        for line in sortedLines {
-            let list = framesByLines[line]!
-            alignedFrames[line] = WordFrame.alignedVertically(list)
+        for i in 0 ..< lines.count {
+            lines[i] = WordFrame.alignedVertically(lines[i])
         }
-        return alignedFrames
     }
 
-    private func unionLinesVertically(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
+    private func unionLinesVertically(_ lines: inout [[WordFrame]]) {
         // union each line with its neighbors
-        var unionFrames: [Int: [WordFrame]] = framesByLines
-        for i in 0 ..< sortedLines.count - 1 {
-            let lineTop = sortedLines[i]
-            var framesTop = unionFrames[lineTop]!
+        for i in 0 ..< lines.count - 1 {
+            // Create temporary copies
+            var topFrames = lines[i]
+            var bottomFrames = lines[i + 1]
 
-            let lineBottom = sortedLines[i + 1]
-            var framesBottom = unionFrames[lineBottom]!
+            WordFrame.unionVertically(top: &topFrames, bottom: &bottomFrames)
 
-            WordFrame.unionVertically(top: &framesTop, bottom: &framesBottom)
-
-            unionFrames[lineTop] = framesTop
-            unionFrames[lineBottom] = framesBottom
+            // Assign the modified copies back to the original array
+            lines[i] = topFrames
+            lines[i + 1] = bottomFrames
         }
-        return unionFrames
     }
 
-    private func unionFramesHorizontallyInEachLine(_ sortedLines: [Int], _ framesByLines: [Int: [WordFrame]]) -> [Int: [WordFrame]] {
+    private func unionFramesHorizontallyInEachLine(_ lines: inout [[WordFrame]]) {
         // union each position with its neighbors
-        var unionFrames: [Int: [WordFrame]] = [:]
-        for line in sortedLines {
-            var frames = framesByLines[line]!
+        for i in 0 ..< lines.count {
+            for j in 0 ..< lines[i].count - 1 {
+                // Create temporary copies
+                var left = lines[i][j]
+                var right = lines[i][j + 1]
 
-            for j in 0 ..< frames.count - 1 {
-                var first = frames[j]
-                var second = frames[j + 1]
-                first.unionHorizontally(left: &second)
-                frames[j] = first
-                frames[j + 1] = second
+                left.unionHorizontally(left: &right)
+
+                // Assign the modified copies back to the original array
+                lines[i][j] = left
+                lines[i][j + 1] = right
             }
-            unionFrames[line] = frames
         }
-        return unionFrames
     }
 
-    private func alignLineEdges(
-        _ sortedLines: [Dictionary<Int, [WordFrame]>.Keys.Element],
-        _ framesByLines: [Int: [WordFrame]]
-    ) -> [Int: [WordFrame]] {
+    private func alignLineEdges(_ lines: inout [[WordFrame]]) {
         // align the edges
-        var firstEdge = sortedLines.map { framesByLines[$0]!.first! }
-        var lastEdge = sortedLines.map { framesByLines[$0]!.last! }
+        var firstEdge = lines.map { $0.first! }
+        var lastEdge = lines.map { $0.last! }
         WordFrame.unionLeftEdge(&lastEdge)
         WordFrame.unionRightEdge(&firstEdge)
 
-        var alignedEdges: [Int: [WordFrame]] = [:]
-        for i in 0 ..< sortedLines.count {
-            let key = sortedLines[i]
-            var list = framesByLines[key]!
-            list[0] = firstEdge[i]
-            list[list.count - 1] = lastEdge[i]
-            alignedEdges[key] = list
+        for i in 0 ..< lines.count {
+            lines[i][0] = firstEdge[i]
+            lines[i][lines[i].count - 1] = lastEdge[i]
         }
-        return alignedEdges
     }
 }

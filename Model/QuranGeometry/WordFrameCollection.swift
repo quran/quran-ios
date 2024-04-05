@@ -8,24 +8,20 @@
 import QuranKit
 
 public struct WordFrameCollection: Equatable {
-    // MARK: Lifecycle
+    public var lines: [[WordFrame]]
 
-    public init(frames: [AyahNumber: [WordFrame]]) {
-        self.frames = frames
+    public init(lines: [[WordFrame]]) {
+        self.lines = lines
     }
 
-    // MARK: Public
-
-    public let frames: [AyahNumber: [WordFrame]]
-
-    public func wordFramesForVerse(_ verse: AyahNumber) -> [WordFrame]? {
-        frames[verse]
+    public func wordFramesForVerse(_ verse: AyahNumber) -> [WordFrame] {
+        lines
+            .flatMap { $0 }
+            .filter { $0.word.verse == verse }
     }
 
     public func wordFrameForWord(_ word: Word) -> WordFrame? {
-        if let frames = wordFramesForVerse(word.verse) {
-            return frames.first(where: { $0.word == word })
-        }
-        return nil
+        let frames = wordFramesForVerse(word.verse)
+        return frames.first(where: { $0.word == word })
     }
 }

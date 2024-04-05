@@ -24,19 +24,16 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
 
     // MARK: Public
 
-    public func wordFrameCollectionForPage(_ page: Page) async throws -> WordFrameCollection {
+    public func wordFrameCollectionForPage(_ page: Page) async throws -> [WordFrame] {
         try await db.read { db in
             let query = GRDBGlyph.filter(GRDBGlyph.Columns.page == page.pageNumber)
 
-            var result = [AyahNumber: [WordFrame]]()
+            var frames = [WordFrame]()
             for glyph in try GRDBGlyph.fetchAll(db, query) {
                 let frame = glyph.toWordFrame(quran: page.quran)
-                let ayah = frame.word.verse
-                var mutableFrames = result[ayah] ?? []
-                mutableFrames += [frame]
-                result[ayah] = mutableFrames
+                frames.append(frame)
             }
-            return WordFrameCollection(frames: result)
+            return frames
         }
     }
 

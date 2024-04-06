@@ -21,16 +21,18 @@ public struct WordFrameProcessor {
         _ wordFrames: [WordFrame],
         cropInsets: UIEdgeInsets
     ) -> WordFrameCollection {
+        guard !wordFrames.isEmpty else {
+            return WordFrameCollection(lines: [])
+        }
         let frames = wordFrames.map { $0.withCropInsets(cropInsets) }
 
         // group by line
         let framesByLines = Dictionary(grouping: frames, by: { $0.line })
         var sortedLines = framesByLines
             .sorted { $0.key < $1.key }
-            .map { line, wordFrames in
-                wordFrames.sorted { $0.word < $1.word }
-            }
+            .map { _, wordFrames in wordFrames }
 
+        normalize(&sortedLines)
         alignFramesVerticallyInEachLine(&sortedLines)
         unionLinesVertically(&sortedLines)
         unionFramesHorizontallyInEachLine(&sortedLines)
@@ -40,6 +42,14 @@ public struct WordFrameProcessor {
     }
 
     // MARK: Private
+
+    private func normalize(_ lines: inout [[WordFrame]]) {
+        for i in 0 ..< lines.count {
+            for j in 0 ..< lines[i].count {
+                lines[i][j].normalize()
+            }
+        }
+    }
 
     private func alignFramesVerticallyInEachLine(_ lines: inout [[WordFrame]]) {
         // align vertically each line
@@ -64,18 +74,20 @@ public struct WordFrameProcessor {
     }
 
     private func unionFramesHorizontallyInEachLine(_ lines: inout [[WordFrame]]) {
-        // union each position with its neighbors
-        for i in 0 ..< lines.count {
-            for j in 0 ..< lines[i].count - 1 {
-                // Create temporary copies
-                var left = lines[i][j]
-                var right = lines[i][j + 1]
+        for lineIndex in 0 ..< lines.count {
+            // Sort frames in the current line based on minX to ensure they are in decreasing order
+            lines[lineIndex].sort(by: { $0.minX > $1.minX })
 
-                left.unionHorizontally(left: &right)
+            for frameIndex in 0 ..< lines[lineIndex].count - 1 {
+                var leftFrame = lines[lineIndex][frameIndex + 1]
+                var rightFrame = lines[lineIndex][frameIndex + 0]
 
-                // Assign the modified copies back to the original array
-                lines[i][j] = left
-                lines[i][j + 1] = right
+                // Ensure the frames touch each other without gaps or overlaps
+                WordFrame.unionHorizontally(leftFrame: &leftFrame, rightFrame: &rightFrame)
+
+                // Update the frames in the current line
+                lines[lineIndex][frameIndex + 1] = leftFrame
+                lines[lineIndex][frameIndex + 0] = rightFrame
             }
         }
     }

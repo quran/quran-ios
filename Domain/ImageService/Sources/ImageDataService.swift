@@ -44,9 +44,16 @@ public struct ImageDataService {
         let unloadedImage: UIImage = image
         let preloadedImage = preloadImage(unloadedImage, cropInsets: cropInsets)
 
+        let wordFrames = try await wordFrames(page)
+        return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
+    }
+
+    // MARK: Internal
+
+    func wordFrames(_ page: Page) async throws -> WordFrameCollection {
         let plainWordFrames = try await persistence.wordFrameCollectionForPage(page)
         let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
-        return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
+        return wordFrames
     }
 
     // MARK: Private

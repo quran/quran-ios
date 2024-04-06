@@ -8,6 +8,7 @@
 import QuranGeometry
 import QuranKit
 import UIKit
+import VLogging
 
 extension WordFrameCollection {
     public func wordAtLocation(_ location: CGPoint, imageScale: WordFrameScale) -> Word? {
@@ -23,9 +24,21 @@ extension WordFrameCollection {
 }
 
 extension WordFrame {
+    mutating func normalize() {
+        // Ensure minX is less than or equal to maxX
+        if minX > maxX {
+            swap(&minX, &maxX)
+        }
+
+        // Ensure minY is less than or equal to maxY
+        if minY > maxY {
+            swap(&minY, &maxY)
+        }
+    }
+
     static func alignedVertically(_ list: [WordFrame]) -> [WordFrame] {
-        let minY = list.map(\.minY).min()!
-        let maxY = list.map(\.maxY).max()!
+        let minY = list.map(\.minY).min() ?? 0
+        let maxY = list.map(\.maxY).max() ?? 0
         var result: [WordFrame] = []
         for var frame in list {
             frame.minY = minY
@@ -35,32 +48,39 @@ extension WordFrame {
         return result
     }
 
-    mutating func unionHorizontally(left: inout WordFrame) {
-        let distance = Int(ceil((CGFloat(minX) - CGFloat(left.maxX)) / 2))
-        left.maxX += distance
-        minX -= distance
-        left.maxX = minX
+    static func unionHorizontally(leftFrame: inout WordFrame, rightFrame: inout WordFrame) {
+        if leftFrame.maxX < rightFrame.minX {
+            // If there's a gap, middleX is halfway between the left frame's maxX and the right frame's minX
+            let middleX = (leftFrame.maxX + rightFrame.minX) / 2
+            rightFrame.minX = middleX
+            leftFrame.maxX = middleX
+        } else {
+            // If there's an overlap or the frames are touching, leftFrame.maxX is set to rightFrame.minX
+            leftFrame.maxX = rightFrame.minX
+        }
     }
 
+    /// Adjusts the top and bottom arrays of WordFrame instances to meet vertically with an equal gap between them,
+    /// but only if they belong to the same sura.
+    ///
+    /// - Parameters:
+    ///   - top: An array of WordFrame instances representing the top line, to be adjusted downwards.
+    ///   - bottom: An array of WordFrame instances representing the bottom line, to be adjusted upwards.
     static func unionVertically(top: inout [WordFrame], bottom: inout [WordFrame]) {
-        // If not continuous lines (different suras).
-        guard top.last!.word.verse.sura == bottom.first!.word.verse.sura else {
+        // Early return if not continuous lines (different suras).
+        guard top.last?.word.verse.sura == bottom.first?.word.verse.sura else {
             return
         }
 
-        var topMaxY = top.map(\.maxY).max()!
-        var bottomMinY = bottom.map(\.minY).min()!
-
-        let distance = Int(ceil((CGFloat(bottomMinY) - CGFloat(topMaxY)) / 2))
-        topMaxY += distance
-        bottomMinY -= distance
-        topMaxY = bottomMinY
+        let topMaxY = top.map(\.maxY).max() ?? 0
+        let bottomMinY = bottom.map(\.minY).min() ?? 0
+        let middleY = (topMaxY + bottomMinY) / 2
 
         for i in 0 ..< top.count {
-            top[i].maxY = topMaxY
+            top[i].maxY = middleY
         }
         for i in 0 ..< bottom.count {
-            bottom[i].minY = bottomMinY
+            bottom[i].minY = middleY
         }
     }
 

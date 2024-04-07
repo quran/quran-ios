@@ -28,17 +28,17 @@ public struct WordFrameProcessor {
 
         // group by line
         let framesByLines = Dictionary(grouping: frames, by: { $0.line })
-        var sortedLines = framesByLines
+        var lines = framesByLines
             .sorted { $0.key < $1.key }
             .map { _, wordFrames in wordFrames }
 
-        normalize(&sortedLines)
-        alignFramesVerticallyInEachLine(&sortedLines)
-        unionLinesVertically(&sortedLines)
-        unionFramesHorizontallyInEachLine(&sortedLines)
-        alignLineEdges(&sortedLines)
+        normalize(&lines)
+        alignFramesVerticallyInEachLine(&lines)
+        unionLinesVertically(&lines)
+        unionFramesHorizontallyInEachLine(&lines)
+        alignLineEdges(&lines)
 
-        return WordFrameCollection(lines: sortedLines)
+        return WordFrameCollection(lines: lines)
     }
 
     // MARK: Private
@@ -94,14 +94,14 @@ public struct WordFrameProcessor {
 
     private func alignLineEdges(_ lines: inout [[WordFrame]]) {
         // align the edges
-        var firstEdge = lines.map { $0.first! }
-        var lastEdge = lines.map { $0.last! }
-        WordFrame.unionLeftEdge(&lastEdge)
-        WordFrame.unionRightEdge(&firstEdge)
+        var rightEdge = lines.map { $0[0] }
+        var leftEdge = lines.map { $0[$0.count - 1] }
+        WordFrame.unionLeftEdge(&leftEdge)
+        WordFrame.unionRightEdge(&rightEdge)
 
         for i in 0 ..< lines.count {
-            lines[i][0] = firstEdge[i]
-            lines[i][lines[i].count - 1] = lastEdge[i]
+            lines[i][0] = rightEdge[i]
+            lines[i][lines[i].count - 1] = leftEdge[i]
         }
     }
 }

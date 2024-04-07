@@ -1,5 +1,5 @@
 //
-//  WordFrameScale+Extension.swift
+//  WordFrame+Extension.swift
 //
 //
 //  Created by Mohamed Afifi on 2021-12-26.
@@ -7,21 +7,6 @@
 
 import QuranGeometry
 import QuranKit
-import UIKit
-import VLogging
-
-extension WordFrameCollection {
-    public func wordAtLocation(_ location: CGPoint, imageScale: WordFrameScale) -> Word? {
-        let flattenFrames = lines.flatMap { $0 }
-        for frame in flattenFrames {
-            let rectangle = frame.rect.scaled(by: imageScale)
-            if rectangle.contains(location) {
-                return frame.word
-            }
-        }
-        return nil
-    }
-}
 
 extension WordFrame {
     mutating func normalize() {
@@ -87,41 +72,19 @@ extension WordFrame {
     private static func unionEdge(
         _ list: inout [WordFrame],
         keyPath: WritableKeyPath<WordFrame, Int>,
-        isMin: Bool
+        reduce: ([Int]) -> Int?
     ) {
-        var longest: [Int] = []
-        for i in 0 ..< list.count - 1 {
-            let pivot = list[i]
-            var running = [i]
-            for j in i + 1 ..< list.count {
-                let other = list[j]
-                if abs(pivot[keyPath: keyPath] - other[keyPath: keyPath]) < 50 {
-                    running.append(j)
-                }
-            }
-            if running.count > longest.count {
-                longest = running
-            }
-        }
-
-        guard !longest.isEmpty else {
-            return
-        }
-
-        let values = longest.map { list[$0][keyPath: keyPath] }
-        let value = isMin ? values.min()! : values.max()!
-        for i in longest {
-            var frame = list[i]
-            frame[keyPath: keyPath] = value
-            list[i] = frame
+        let value = reduce(list.map { $0[keyPath: keyPath] })!
+        for i in 0 ..< list.count {
+            list[i][keyPath: keyPath] = value
         }
     }
 
     static func unionLeftEdge(_ list: inout [WordFrame]) {
-        unionEdge(&list, keyPath: \.minX, isMin: true)
+        unionEdge(&list, keyPath: \.minX, reduce: { $0.min() })
     }
 
     static func unionRightEdge(_ list: inout [WordFrame]) {
-        unionEdge(&list, keyPath: \.maxX, isMin: false)
+        unionEdge(&list, keyPath: \.maxX, reduce: { $0.max() })
     }
 }

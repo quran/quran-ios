@@ -49,9 +49,9 @@ class ImageDataServiceTests: XCTestCase {
         let image = try await service.imageForPage(page)
         let wordFrames = image.wordFrames
 
-        XCTAssertEqual(wordFrames.lines[0], wordFrames.wordFramesForVerse(page.firstVerse))
+        XCTAssertEqual(wordFrames.lines[0].frames, wordFrames.wordFramesForVerse(page.firstVerse))
         XCTAssertEqual(
-            CGRect(x: 671.0, y: 244.0, width: 46.0, height: 95.0),
+            CGRect(x: 705, y: 254.0, width: 46.0, height: 95.0),
             wordFrames.wordFrameForWord(Word(verse: page.firstVerse, wordNumber: 2))?.rect
         )
         XCTAssertEqual([], wordFrames.wordFramesForVerse(quran.lastVerse))
@@ -60,13 +60,13 @@ class ImageDataServiceTests: XCTestCase {
         let horizontalScaling = WordFrameScale.scaling(imageSize: image.image.size, into: CGSize(width: 708, height: 1170.923076923077))
 
         XCTAssertEqual(
-            Word(verse: AyahNumber(quran: quran, sura: 1, ayah: 6)!, wordNumber: 1),
-            wordFrames.wordAtLocation(CGPoint(x: 69, y: 225), imageScale: verticalScaling)
+            Word(verse: AyahNumber(quran: quran, sura: 1, ayah: 7)!, wordNumber: 3),
+            wordFrames.wordAtLocation(CGPoint(x: 103, y: 235), imageScale: verticalScaling)
         )
 
         XCTAssertEqual(
             Word(verse: AyahNumber(quran: quran, sura: 1, ayah: 3)!, wordNumber: 1),
-            wordFrames.wordAtLocation(CGPoint(x: 570, y: 280), imageScale: horizontalScaling)
+            wordFrames.wordAtLocation(CGPoint(x: 540, y: 290), imageScale: horizontalScaling)
         )
 
         XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
@@ -100,7 +100,7 @@ class ImageDataServiceTests: XCTestCase {
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
 
         // assert the word frames values
-        let frames = imagePage.wordFrames.lines.flatMap { $0 }.sorted { $0.word < $1.word }
+        let frames = imagePage.wordFrames.lines.flatMap(\.frames).sorted { $0.word < $1.word }
         assertSnapshot(matching: frames, as: .json, testName: testName)
 
         if ProcessInfo.processInfo.environment["LocalSnapshots"] != nil {
@@ -122,7 +122,7 @@ class ImageDataServiceTests: XCTestCase {
             .systemTeal,
         ]
         let strokeColor = UIColor.gray
-        let verses = Set(frames.lines.flatMap { $0.map(\.word.verse) }).sorted()
+        let verses = Set(frames.lines.flatMap(\.frames).map(\.word.verse)).sorted()
         for (offset, verse) in verses.enumerated() {
             let frames = try XCTUnwrap(frames.wordFramesForVerse(verse))
             let color = fillColors[offset % fillColors.count]

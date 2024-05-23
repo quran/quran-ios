@@ -39,12 +39,9 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.highlights = $0.versesByHighlights().mapValues { Color($0) } }
             .store(in: &cancellables)
 
-        highlightsService.$highlights
-            .zip(highlightsService.$highlights.dropFirst())
-            .sink { [weak self] oldValue, newValue in
-                if newValue.needsScrolling(comparingTo: oldValue) {
-                    self?.scrollToVerseIfNeeded()
-                }
+        highlightsService.scrolling
+            .sink { [weak self] in
+                self?.scrollToVerseIfNeeded()
             }
             .store(in: &cancellables)
 

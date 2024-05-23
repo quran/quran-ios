@@ -14,6 +14,7 @@ import QuranAnnotations
 import QuranGeometry
 import QuranKit
 import SwiftUI
+import VLogging
 
 @MainActor
 class ContentImageViewModel: ObservableObject {
@@ -29,6 +30,12 @@ class ContentImageViewModel: ObservableObject {
         highlightsService.$highlights
             .sink { [weak self] in self?.highlights = $0 }
             .store(in: &cancellables)
+
+        highlightsService.scrolling
+            .sink { [weak self] in
+                self?.scrollToVerseIfNeeded()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: Internal
@@ -38,6 +45,7 @@ class ContentImageViewModel: ObservableObject {
     @Published var suraHeaderLocations: [SuraHeaderLocation] = []
     @Published var ayahNumberLocations: [AyahNumberLocation] = []
     @Published var highlights: QuranHighlights
+    @Published var scrollToItem: WordFrameLine?
 
     @Published var scale: WordFrameScale = .zero
     @Published var imageFrame: CGRect = .zero
@@ -73,6 +81,8 @@ class ContentImageViewModel: ObservableObject {
                 suraHeaderLocations = try await imageDataService.suraHeaders(page)
                 ayahNumberLocations = try await imageDataService.ayahNumbers(page)
             }
+
+            scrollToVerseIfNeeded()
         } catch {
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to retrieve quran image details")
@@ -93,4 +103,21 @@ class ContentImageViewModel: ObservableObject {
     private let highlightsService: QuranHighlightsService
     private let reading: Reading
     private var cancellables: Set<AnyCancellable> = []
+
+    private func scrollToVerseIfNeededSynchronously() {
+        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
+            return
+        }
+        if let line = imagePage?.wordFrames.lineFramesVerVerse(ayah).first {
+            logger.info("Quran Image: scrollToVerseIfNeeded \(ayah) - \(line.frames)")
+            scrollToItem = line
+        }
+    }
+
+    private func scrollToVerseIfNeeded() {
+        // Execute in the next runloop to allow the highlightsService value to load.
+        DispatchQueue.main.async {
+            self.scrollToVerseIfNeededSynchronously()
+        }
+    }
 }

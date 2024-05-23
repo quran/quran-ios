@@ -20,6 +20,7 @@ struct ContentImageView: View {
                 quarterName: viewModel.page.localizedQuarterName,
                 suraNames: viewModel.page.suraNames(),
                 page: viewModel.page.localizedNumber,
+                scrollToItem: viewModel.scrollToItem,
                 onScaleChange: { viewModel.scale = $0 },
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
@@ -36,6 +37,7 @@ private struct ContentImageViewBody: View {
     let quarterName: String
     let suraNames: MultipartText
     let page: String
+    let scrollToItem: WordFrameLine?
     let onScaleChange: (WordFrameScale) -> Void
     let onGlobalFrameChange: (CGRect) -> Void
 
@@ -55,6 +57,13 @@ private struct ContentImageViewBody: View {
             // TODO: Should be part of the headers and footers.
             .font(.footnote)
             .populateReadableInsets()
+            .onChange(of: scrollToItem) { scrollToItem in
+                if let scrollToItem {
+                    withAnimation {
+                        scrollView.scrollTo(scrollToItem, anchor: UnitPoint(x: 0, y: 0.2))
+                    }
+                }
+            }
         }
     }
 }
@@ -71,6 +80,7 @@ private struct ContentImageViewBody: View {
         quarterName: "ABC",
         suraNames: "ABC",
         page: "604",
+        scrollToItem: nil,
         onScaleChange: { _ in },
         onGlobalFrameChange: { _ in }
     )

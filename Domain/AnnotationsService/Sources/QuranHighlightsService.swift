@@ -22,6 +22,16 @@ public final class QuranHighlightsService {
         }
     }
 
+    public var scrolling: AnyPublisher<Void, Never> {
+        $highlights
+            .zip($highlights.dropFirst())
+            .filter { oldValue, newValue in
+                newValue.needsScrolling(comparingTo: oldValue)
+            }
+            .map { _ in }
+            .eraseToAnyPublisher()
+    }
+
     public func reset() {
         highlights = QuranHighlights()
     }

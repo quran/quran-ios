@@ -31,7 +31,7 @@ struct ContentImageView: View {
 }
 
 private struct ContentImageViewBody: View {
-    let decorations: [ImageDecoration]
+    let decorations: ImageDecorations
     let image: UIImage?
     let quarterName: String
     let suraNames: MultipartText
@@ -40,26 +40,33 @@ private struct ContentImageViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        AdaptiveImageScrollView(decorations: decorations) {
-            image
-        } onScaleChange: {
-            onScaleChange($0)
-        } onGlobalFrameChange: {
-            onGlobalFrameChange($0)
-        } header: {
-            QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
-        } footer: {
-            QuranPageFooter(page: page)
+        ScrollViewReader { scrollView in
+            AdaptiveImageScrollView(decorations: decorations) {
+                image
+            } onScaleChange: {
+                onScaleChange($0)
+            } onGlobalFrameChange: {
+                onGlobalFrameChange($0)
+            } header: {
+                QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
+            } footer: {
+                QuranPageFooter(page: page)
+            }
+            // TODO: Should be part of the headers and footers.
+            .font(.footnote)
+            .populateReadableInsets()
         }
-        // TODO: Should be part of the headers and footers.
-        .font(.footnote)
-        .populateReadableInsets()
     }
 }
 
 #Preview {
     ContentImageViewBody(
-        decorations: [],
+        decorations: ImageDecorations(
+            suraHeaders: [],
+            ayahNumbers: [],
+            wordFrames: WordFrameCollection(lines: []),
+            highlights: [:]
+        ),
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").absoluteString)!,
         quarterName: "ABC",
         suraNames: "ABC",

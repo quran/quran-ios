@@ -15,9 +15,8 @@ import WordFrameService
 public struct ImageDataService {
     // MARK: Lifecycle
 
-    public init(ayahInfoDatabase: URL, imagesURL: URL, cropInsets: UIEdgeInsets) {
+    public init(ayahInfoDatabase: URL, imagesURL: URL) {
         self.imagesURL = imagesURL
-        self.cropInsets = cropInsets
         persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
     }
 
@@ -42,7 +41,7 @@ public struct ImageDataService {
 
         // preload the image
         let unloadedImage: UIImage = image
-        let preloadedImage = preloadImage(unloadedImage, cropInsets: cropInsets)
+        let preloadedImage = preloadImage(unloadedImage)
 
         let wordFrames = try await wordFrames(page)
         return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
@@ -52,7 +51,7 @@ public struct ImageDataService {
 
     func wordFrames(_ page: Page) async throws -> WordFrameCollection {
         let plainWordFrames = try await persistence.wordFrameCollectionForPage(page)
-        let wordFrames = processor.processWordFrames(plainWordFrames, cropInsets: cropInsets)
+        let wordFrames = processor.processWordFrames(plainWordFrames)
         return wordFrames
     }
 
@@ -60,7 +59,6 @@ public struct ImageDataService {
 
     private let processor = WordFrameProcessor()
     private let persistence: WordFramePersistence
-    private let cropInsets: UIEdgeInsets
     private let imagesURL: URL
 
     private func logFiles(directory: URL) {

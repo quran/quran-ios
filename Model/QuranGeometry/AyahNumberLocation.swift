@@ -8,7 +8,7 @@
 import CoreGraphics
 import QuranKit
 
-public struct AyahNumberLocation {
+public struct AyahNumberLocation: Hashable {
     // MARK: Lifecycle
 
     public init(ayah: AyahNumber, x: Int, y: Int) {

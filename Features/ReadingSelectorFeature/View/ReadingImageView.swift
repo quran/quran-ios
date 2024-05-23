@@ -27,14 +27,12 @@ struct ReadingImageView: View {
         .aspectRatio(image.size, contentMode: .fit)
     }
 
-    private var decorations: [ImageDecoration] {
-        var decorations: [ImageDecoration] = []
-        for suraHeader in suraHeaders {
-            decorations.append(.suraHeader(suraHeader.rect))
-        }
-        for ayahNumber in ayahNumbers {
-            decorations.append(.ayahNumber(ayahNumber.ayah.ayah, ayahNumber.center))
-        }
-        return decorations
+    private var decorations: ImageDecorations {
+        ImageDecorations(
+            suraHeaders: suraHeaders,
+            ayahNumbers: ayahNumbers,
+            wordFrames: WordFrameCollection(lines: []),
+            highlights: [:]
+        )
     }
 }

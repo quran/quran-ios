@@ -23,8 +23,7 @@ class ImageDataServiceTests: XCTestCase {
     override func setUpWithError() throws {
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
-            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
-            cropInsets: UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images")
         )
     }
 
@@ -32,8 +31,7 @@ class ImageDataServiceTests: XCTestCase {
         let quran = Reading.hafs_1421.quran
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1421_ayahinfo_1120.db"),
-            imagesURL: URL(string: "invalid")!,
-            cropInsets: .zero
+            imagesURL: URL(string: "invalid")!
         )
 
         var surasHeaders = 0

@@ -8,83 +8,96 @@
 import QuranGeometry
 import SwiftUI
 
-// TODO: Remove
-extension CGRect: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(origin.x)
-        hasher.combine(origin.y)
-        hasher.combine(size.width)
-        hasher.combine(size.height)
-    }
-}
+public struct ImageDecorations {
+    public var suraHeaders: [SuraHeaderLocation]
+    public var ayahNumbers: [AyahNumberLocation]
+    public var wordFrames: WordFrameCollection
+    public var highlights: [WordFrame: Color]
 
-extension CGPoint: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
-    }
-}
-
-public enum ImageDecoration: Hashable {
-    case color(Color, CGRect)
-    case suraHeader(CGRect)
-    case ayahNumber(Int, CGPoint)
-
-    func rect(forImageSize imageSize: CGSize) -> CGRect {
-        switch self {
-        case .color(_, let rect):
-            return rect
-        case .suraHeader(let rect):
-            return rect
-        case .ayahNumber(_, let center):
-            let length = 0.06 * imageSize.width
-            return CGRect(
-                x: center.x - length / 2,
-                y: center.y - length / 2,
-                width: length,
-                height: length
-            )
-        }
-    }
-
-    @ViewBuilder var decorationView: some View {
-        switch self {
-        case .color(let color, _):
-            color
-        case .suraHeader:
-            SuraHeaderView()
-        case .ayahNumber(let number, _):
-            AyahNumberView(number: number)
-        }
+    public init(
+        suraHeaders: [SuraHeaderLocation],
+        ayahNumbers: [AyahNumberLocation],
+        wordFrames: WordFrameCollection,
+        highlights: [WordFrame: Color]
+    ) {
+        self.suraHeaders = suraHeaders
+        self.ayahNumbers = ayahNumbers
+        self.wordFrames = wordFrames
+        self.highlights = highlights
     }
 }
 
 struct ImageDecorationsView: View {
-    let imageSize: CGSize
-    let decorations: [ImageDecoration]
-    let onScaleChange: (WordFrameScale) -> Void
-    let onGlobalFrameChange: (CGRect) -> Void
-
     private struct SizeInfo: Equatable {
         var imageSize: CGSize
         var viewSize: CGSize
     }
 
-    @State private var sizeInfo: SizeInfo = SizeInfo(imageSize: .zero, viewSize: .zero)
+    // MARK: Internal
+
+    let imageSize: CGSize
+    let decorations: ImageDecorations
+    let onScaleChange: (WordFrameScale) -> Void
+    let onGlobalFrameChange: (CGRect) -> Void
 
     var scale: WordFrameScale {
         WordFrameScale.scaling(imageSize: sizeInfo.imageSize, into: sizeInfo.viewSize)
     }
 
+    var highlights: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(decorations.wordFrames.lines.enumerated()), id: \.element) { item in
+                let line = item.element
+                let index = item.offset
+                ZStack(alignment: .topLeading) {
+                    // Needed to ensure ZStack takes full width.
+                    Spacer()
+                        .frame(maxWidth: .infinity, maxHeight: 0)
+
+                    ForEach(line.frames, id: \.self) { frame in
+                        let color = decorations.highlights[frame] ?? .clear
+                        let scaledRectangle = frame.rect.scaled(by: scale)
+                        color
+                            .offset(x: scaledRectangle.minX)
+                            .frame(width: scaledRectangle.width, height: scaledRectangle.height)
+                    }
+                }
+                .padding(.top, decorations.wordFrames.topPadding(atLineIndex: index, scale: scale))
+            }
+        }
+        .padding(.top, scale.yOffset)
+    }
+
+    var suraHeaders: some View {
+        ForEach(decorations.suraHeaders, id: \.self) { suraHeader in
+            let scaledRectangle = suraHeader.rect.scaled(by: scale)
+            SuraHeaderView()
+                .offset(x: scaledRectangle.minX, y: scaledRectangle.minY)
+                .frame(width: scaledRectangle.width, height: scaledRectangle.height)
+        }
+    }
+
+    var ayahNumbers: some View {
+        ForEach(decorations.ayahNumbers, id: \.self) { ayahNumber in
+            let length = 0.06 * imageSize.width
+            let scaledRectangle = CGRect(
+                x: ayahNumber.center.x - length / 2,
+                y: ayahNumber.center.y - length / 2,
+                width: length,
+                height: length
+            ).scaled(by: scale)
+            AyahNumberView(number: ayahNumber.ayah.ayah)
+                .offset(x: scaledRectangle.minX, y: scaledRectangle.minY)
+                .frame(width: scaledRectangle.width, height: scaledRectangle.height)
+        }
+    }
+
     var body: some View {
         GeometryReader { g in
             ZStack(alignment: .topLeading) {
-                ForEach(decorations, id: \.self) { decoration in
-                    let scaledRectangle = decoration.rect(forImageSize: imageSize).scaled(by: scale)
-                    decoration.decorationView
-                        .offset(x: scaledRectangle.minX, y: scaledRectangle.minY)
-                        .frame(width: scaledRectangle.width, height: scaledRectangle.height)
-                }
+                highlights
+                suraHeaders
+                ayahNumbers
             }
         }
         .onChangeWithInitial(of: imageSize) { sizeInfo.imageSize = $0 }
@@ -94,6 +107,10 @@ struct ImageDecorationsView: View {
         }
         .onGlobalFrameChanged(onGlobalFrameChange)
     }
+
+    // MARK: Private
+
+    @State private var sizeInfo: SizeInfo = SizeInfo(imageSize: .zero, viewSize: .zero)
 }
 
 private struct SuraHeaderView: View {

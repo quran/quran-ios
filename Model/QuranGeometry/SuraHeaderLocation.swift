@@ -8,7 +8,7 @@
 import CoreGraphics
 import QuranKit
 
-public struct SuraHeaderLocation {
+public struct SuraHeaderLocation: Hashable {
     // MARK: Lifecycle
 
     public init(sura: Sura, x: Int, y: Int, width: Int, height: Int) {

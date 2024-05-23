@@ -21,7 +21,7 @@
 import QuranKit
 import UIKit
 
-public struct WordFrame: Equatable {
+public struct WordFrame: Hashable {
     // MARK: Lifecycle
 
     public init(line: Int, word: Word, minX: Int, maxX: Int, minY: Int, maxY: Int) {
@@ -42,21 +42,14 @@ public struct WordFrame: Equatable {
     public var maxX: Int
     public var minY: Int
     public var maxY: Int
-    public var cropInsets: UIEdgeInsets = .zero
 
     public var rect: CGRect {
         CGRect(
-            x: minX - Int(cropInsets.left),
-            y: minY - Int(cropInsets.top),
+            x: minX,
+            y: minY,
             width: maxX - minX,
             height: maxY - minY
         )
-    }
-
-    public func withCropInsets(_ cropInsets: UIEdgeInsets) -> Self {
-        var mutable = self
-        mutable.cropInsets = cropInsets
-        return mutable
     }
 }
 

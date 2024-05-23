@@ -17,14 +17,10 @@ public struct WordFrameProcessor {
 
     // MARK: Public
 
-    public func processWordFrames(
-        _ wordFrames: [WordFrame],
-        cropInsets: UIEdgeInsets
-    ) -> WordFrameCollection {
-        guard !wordFrames.isEmpty else {
+    public func processWordFrames(_ frames: [WordFrame]) -> WordFrameCollection {
+        guard !frames.isEmpty else {
             return WordFrameCollection(lines: [])
         }
-        let frames = wordFrames.map { $0.withCropInsets(cropInsets) }
 
         // group by line
         let framesByLines = Dictionary(grouping: frames, by: { $0.line })
@@ -38,7 +34,7 @@ public struct WordFrameProcessor {
         unionFramesHorizontallyInEachLine(&lines)
         alignLineEdges(&lines)
 
-        return WordFrameCollection(lines: lines)
+        return WordFrameCollection(lines: lines.map { WordFrameLine(frames: $0) })
     }
 
     // MARK: Private

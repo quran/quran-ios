@@ -42,34 +42,33 @@ class ContentImageViewModel: ObservableObject {
     @Published var scale: WordFrameScale = .zero
     @Published var imageFrame: CGRect = .zero
 
-    var decorations: [ImageDecoration] {
-        var decorations: [ImageDecoration] = []
-
-        for suraHeaderLocation in suraHeaderLocations {
-            decorations.append(.suraHeader(suraHeaderLocation.rect))
-        }
-
-        for ayahNumberLocation in ayahNumberLocations {
-            decorations.append(.ayahNumber(ayahNumberLocation.ayah.ayah, ayahNumberLocation.center))
-        }
-
-        // remove duplicate highlights
+    var decorations: ImageDecorations {
+        // Add verse highlights
+        var frameHighlights: [WordFrame: Color] = [:]
         let versesByHighlights = highlights.versesByHighlights()
         for (ayah, color) in versesByHighlights {
             for frame in imagePage?.wordFrames.wordFramesForVerse(ayah) ?? [] {
-                decorations.append(.color(Color(color), frame.rect))
+                frameHighlights[frame] = Color(color)
             }
         }
 
+        // Add word highlight
         if let word = highlights.pointedWord, let frame = imagePage?.wordFrames.wordFrameForWord(word) {
-            decorations.append(.color(QuranHighlights.wordHighlightColor, frame.rect))
+            frameHighlights[frame] = QuranHighlights.wordHighlightColor
         }
-        return decorations
+
+        return ImageDecorations(
+            suraHeaders: suraHeaderLocations,
+            ayahNumbers: ayahNumberLocations,
+            wordFrames: imagePage?.wordFrames ?? WordFrameCollection(lines: []),
+            highlights: frameHighlights
+        )
     }
 
     func loadImagePage() async {
         do {
             imagePage = try await imageDataService.imageForPage(page)
+
             if reading == .hafs_1421 {
                 suraHeaderLocations = try await imageDataService.suraHeaders(page)
                 ayahNumberLocations = try await imageDataService.ayahNumbers(page)
@@ -93,6 +92,5 @@ class ContentImageViewModel: ObservableObject {
     private let imageDataService: ImageDataService
     private let highlightsService: QuranHighlightsService
     private let reading: Reading
-
     private var cancellables: Set<AnyCancellable> = []
 }

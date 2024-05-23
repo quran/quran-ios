@@ -15,7 +15,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Lifecycle
 
     public init(
-        decorations: [ImageDecoration],
+        decorations: ImageDecorations,
         image: () -> UIImage?,
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
@@ -76,7 +76,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let header: Header
     private let footer: Footer
     private let image: UIImage?
-    private let decorations: [ImageDecoration]
+    private let decorations: ImageDecorations
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
 

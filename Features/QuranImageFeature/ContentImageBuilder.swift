@@ -52,8 +52,7 @@ public struct ContentImageBuilder: PageViewBuilder {
         let readingDirectory = Self.readingDirectory(reading, container: container)
         return ImageDataService(
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
-            imagesURL: reading.images(in: readingDirectory),
-            cropInsets: reading.cropInsets
+            imagesURL: reading.images(in: readingDirectory)
         )
     }
 
@@ -101,7 +100,7 @@ private extension Reading {
     var cropInsets: UIEdgeInsets {
         switch self {
         case .hafs_1405:
-            return UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
+            return .zero // UIEdgeInsets(top: 10, left: 34, bottom: 40, right: 24)
         case .hafs_1421:
             return .zero
         case .hafs_1440:

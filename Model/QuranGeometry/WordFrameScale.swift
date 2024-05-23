@@ -26,19 +26,27 @@ public struct WordFrameScale {
 }
 
 extension WordFrameScale {
-    public static func scaling(imageSize: CGSize, into imageViewSize: CGSize) -> WordFrameScale {
-        if imageSize == .zero || imageViewSize == .zero {
+    public static func scaling(imageSize: CGSize, into viewSize: CGSize) -> WordFrameScale {
+        // Return zero scaling if either size is zero
+        if imageSize == .zero || viewSize == .zero {
             return .zero
         }
 
+        // Calculate the scaling factor to fit the image within the view while maintaining aspect ratio
         let scale: CGFloat
-        if imageSize.width / imageSize.height < imageViewSize.width / imageViewSize.height {
-            scale = imageViewSize.height / imageSize.height
+        let imageAspectRatio = imageSize.width / imageSize.height
+        let viewAspectRatio = viewSize.width / viewSize.height
+        if imageAspectRatio < viewAspectRatio {
+            // Image is taller relative to the view, fit by height
+            scale = viewSize.height / imageSize.height
         } else {
-            scale = imageViewSize.width / imageSize.width
+            // Image is wider relative to the view, fit by width
+            scale = viewSize.width / imageSize.width
         }
-        let xOffset = (imageViewSize.width - (scale * imageSize.width)) / 2
-        let yOffset = (imageViewSize.height - (scale * imageSize.height)) / 2
+
+        // Calculate offsets to center the image within the view
+        let xOffset = (viewSize.width - (scale * imageSize.width)) / 2
+        let yOffset = (viewSize.height - (scale * imageSize.height)) / 2
         return WordFrameScale(scale: scale, xOffset: xOffset, yOffset: yOffset)
     }
 }

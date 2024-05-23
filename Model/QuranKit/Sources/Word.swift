@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-17.
 //
 
-public struct Word: Equatable, Comparable {
+public struct Word: Hashable, Comparable {
     // MARK: Lifecycle
 
     public init(verse: AyahNumber, wordNumber: Int) {

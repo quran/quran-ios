@@ -45,4 +45,4 @@ jobs:
         run: sudo xcode-select -s "/Applications/Xcode_15.1.app"
       
       - name: SwiftFormat
-        run: swift run -c release --package-path ./BuildTools swiftformat --lint .
+        run: make format-lint

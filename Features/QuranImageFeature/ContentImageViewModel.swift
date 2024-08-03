@@ -45,7 +45,7 @@ class ContentImageViewModel: ObservableObject {
     @Published var suraHeaderLocations: [SuraHeaderLocation] = []
     @Published var ayahNumberLocations: [AyahNumberLocation] = []
     @Published var highlights: QuranHighlights
-    @Published var scrollToItem: WordFrameLine?
+    @Published var scrollToVerse: AyahNumber?
 
     @Published var scale: WordFrameScale = .zero
     @Published var imageFrame: CGRect = .zero
@@ -108,10 +108,8 @@ class ContentImageViewModel: ObservableObject {
         guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
             return
         }
-        if let line = imagePage?.wordFrames.lineFramesVerVerse(ayah).first {
-            logger.info("Quran Image: scrollToVerseIfNeeded \(ayah) - \(line.frames)")
-            scrollToItem = line
-        }
+        logger.info("Quran Image: scrollToVerseIfNeeded \(ayah)")
+        scrollToVerse = ayah
     }
 
     private func scrollToVerseIfNeeded() {

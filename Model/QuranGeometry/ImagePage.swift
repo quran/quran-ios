@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import QuranGeometry
 import QuranKit
 import UIKit
 
@@ -14,4 +13,10 @@ public struct ImagePage: Equatable {
     public let image: UIImage
     public let wordFrames: WordFrameCollection
     public let startAyah: AyahNumber
+
+    public init(image: UIImage, wordFrames: WordFrameCollection, startAyah: AyahNumber) {
+        self.image = image
+        self.wordFrames = wordFrames
+        self.startAyah = startAyah
+    }
 }

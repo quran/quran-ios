@@ -50,25 +50,17 @@ private struct ContentTranslationViewBody: View {
     let openURL: (TranslationURL) -> Void
 
     var body: some View {
-        ScrollViewReader { scrollView in
-            List {
-                ForEach(items) { item in
-                    item
-                }
-            }
-            .listStyle(.plain)
-            .environment(\.defaultMinListRowHeight, 1)
-            .populateReadableInsets()
-            .openTranslationURL(openURL)
-            .trackCollection(with: tracker)
-            .sheet(item: $footnote) { $0 }
-            .onChange(of: scrollToItem) { scrollToItem in
-                if let scrollToItem {
-                    withAnimation {
-                        scrollView.scrollTo(scrollToItem, anchor: UnitPoint(x: 0.2, y: 0.2))
-                    }
-                }
+        List {
+            ForEach(items) { item in
+                item
             }
         }
+        .listStyle(.plain)
+        .environment(\.defaultMinListRowHeight, 1)
+        .populateReadableInsets()
+        .openTranslationURL(openURL)
+        .trackCollection(with: tracker)
+        .sheet(item: $footnote) { $0 }
+        .quranScrolling(scrollToValue: scrollToItem)
     }
 }

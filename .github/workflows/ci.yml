@@ -19,9 +19,9 @@ jobs:
     - name: Run tests
       run: set -o pipefail && xcrun xcodebuild build test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 14 Pro,OS=17.2" | xcpretty
 
-    - uses: codecov/codecov-action@v3
+    - uses: codecov/codecov-action@v4
       with:
-        swift: true
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   ExampleApp:
     runs-on: macos-13

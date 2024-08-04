@@ -7,6 +7,7 @@
 
 import NoorUI
 import QuranGeometry
+import QuranKit
 import SwiftUI
 
 struct ContentImageView: View {
@@ -20,7 +21,8 @@ struct ContentImageView: View {
                 quarterName: viewModel.page.localizedQuarterName,
                 suraNames: viewModel.page.suraNames(),
                 page: viewModel.page.localizedNumber,
-                scrollToItem: viewModel.scrollToItem,
+                scrollToVerse: viewModel.scrollToVerse,
+                wordFrames: viewModel.imagePage?.wordFrames,
                 onScaleChange: { viewModel.scale = $0 },
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
@@ -37,33 +39,28 @@ private struct ContentImageViewBody: View {
     let quarterName: String
     let suraNames: MultipartText
     let page: String
-    let scrollToItem: WordFrameLine?
+    let scrollToVerse: AyahNumber?
+    let wordFrames: WordFrameCollection?
     let onScaleChange: (WordFrameScale) -> Void
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        ScrollViewReader { scrollView in
-            AdaptiveImageScrollView(decorations: decorations) {
-                image
-            } onScaleChange: {
-                onScaleChange($0)
-            } onGlobalFrameChange: {
-                onGlobalFrameChange($0)
-            } header: {
-                QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
-            } footer: {
-                QuranPageFooter(page: page)
-            }
-            // TODO: Should be part of the headers and footers.
-            .font(.footnote)
-            .populateReadableInsets()
-            .onChange(of: scrollToItem) { scrollToItem in
-                if let scrollToItem {
-                    withAnimation {
-                        scrollView.scrollTo(scrollToItem, anchor: UnitPoint(x: 0, y: 0.2))
-                    }
-                }
-            }
+        AdaptiveImageScrollView(decorations: decorations) {
+            image
+        } onScaleChange: {
+            onScaleChange($0)
+        } onGlobalFrameChange: {
+            onGlobalFrameChange($0)
+        } header: {
+            QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
+        } footer: {
+            QuranPageFooter(page: page)
+        }
+        // TODO: Should be part of the headers and footers.
+        .font(.footnote)
+        .populateReadableInsets()
+        .quranScrolling(scrollToValue: scrollToVerse) {
+            wordFrames?.lineFramesVerVerse($0).first
         }
     }
 }
@@ -80,7 +77,8 @@ private struct ContentImageViewBody: View {
         quarterName: "ABC",
         suraNames: "ABC",
         page: "604",
-        scrollToItem: nil,
+        scrollToVerse: nil,
+        wordFrames: nil,
         onScaleChange: { _ in },
         onGlobalFrameChange: { _ in }
     )

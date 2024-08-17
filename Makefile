@@ -1,7 +1,7 @@
 BUILD_TOOLS_DIR=./BuildTools
 
 SWIFTFORMAT_REPO=https://github.com/nicklockwood/SwiftFormat
-SWIFTFORMAT_VERSION=0.53.10
+SWIFTFORMAT_VERSION=0.54.3
 SWIFTFORMAT_DIR=$(BUILD_TOOLS_DIR)/SwiftFormat
 SWIFTFORMAT_BIN=$(SWIFTFORMAT_DIR)/.build/release/swiftformat
 

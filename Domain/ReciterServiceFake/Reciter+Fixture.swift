@@ -37,10 +37,9 @@ extension Reciter {
     }
 
     public func toPlistDictionary() -> [String: Any] {
-        let databaseName: String
-        switch audioType {
-        case .gapless(let db): databaseName = db
-        case .gapped: databaseName = ""
+        let databaseName: String = switch audioType {
+        case .gapless(let db): db
+        case .gapped: ""
         }
         return [
             "id": id,

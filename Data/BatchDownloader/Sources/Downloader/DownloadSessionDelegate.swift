@@ -151,11 +151,10 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         crasher.recordError(error, reason: "Download network error occurred")
 
         // check if no disk space
-        let finalError: Error
-        if let error = error as? POSIXError, error.code == .ENOENT {
-            finalError = FileSystemError.noDiskSpace
+        let finalError: Error = if let error = error as? POSIXError, error.code == .ENOENT {
+            FileSystemError.noDiskSpace
         } else {
-            finalError = NetworkError(error: error)
+            NetworkError(error: error)
         }
         return finalError
     }

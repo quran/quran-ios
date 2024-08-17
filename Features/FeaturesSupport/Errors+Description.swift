@@ -16,12 +16,11 @@ import SQLitePersistence
 
 extension FileSystemError: LocalizedError {
     public var errorDescription: String? {
-        let text: String
-        switch self {
+        let text: String = switch self {
         case .unknown:
-            text = l("error.message.general")
+            l("error.message.general")
         case .noDiskSpace:
-            text = l("error.message.no_disk_space")
+            l("error.message.no_disk_space")
         }
         return text
     }

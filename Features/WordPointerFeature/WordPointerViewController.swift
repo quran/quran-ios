@@ -228,11 +228,10 @@ public final class WordPointerViewController: UIViewController {
             hideWordPopover()
             viewModel.unhighlightWord()
 
-            let goLeft: Bool
-            if abs(velocity.x) > 100 {
-                goLeft = velocity.x < 0
+            let goLeft: Bool = if abs(velocity.x) > 100 {
+                velocity.x < 0
             } else {
-                goLeft = pointer.center.x < container.bounds.width / 2
+                pointer.center.x < container.bounds.width / 2
             }
 
             let finalY = max(10, min(container.bounds.height - pointer.bounds.height, velocity.y * 0.3 + pointer.frame.minY))

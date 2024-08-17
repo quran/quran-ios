@@ -20,15 +20,14 @@ extension FontSize: Strideable {
 
 extension FontSize {
     func fontSize(forMediumSize size: CGFloat) -> CGFloat {
-        let factor: CGFloat
-        switch self {
-        case .xxSmall: factor = 0.7 * 0.7 * 0.7
-        case .xSmall: factor = 0.7 * 0.7
-        case .small: factor = 0.7
-        case .medium: factor = 1
-        case .large: factor = 1 / 0.8
-        case .xLarge: factor = 1 / 0.8 / 0.8
-        case .xxLarge: factor = 1 / 0.8 / 0.8 / 0.8
+        let factor: CGFloat = switch self {
+        case .xxSmall: 0.7 * 0.7 * 0.7
+        case .xSmall: 0.7 * 0.7
+        case .small: 0.7
+        case .medium: 1
+        case .large: 1 / 0.8
+        case .xLarge: 1 / 0.8 / 0.8
+        case .xxLarge: 1 / 0.8 / 0.8 / 0.8
         }
         return size * factor
     }

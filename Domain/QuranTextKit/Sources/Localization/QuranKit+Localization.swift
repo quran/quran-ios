@@ -58,12 +58,11 @@ extension Quarter {
         let rub = quarterNumber - 1
         let reminder = rub % 4
 
-        let fraction: String?
-        switch reminder {
-        case 1: fraction = lAndroid("quran_rob3")
-        case 2: fraction = lAndroid("quran_nos")
-        case 3: fraction = lAndroid("quran_talt_arb3")
-        default: fraction = nil
+        let fraction: String? = switch reminder {
+        case 1: lAndroid("quran_rob3")
+        case 2: lAndroid("quran_nos")
+        case 3: lAndroid("quran_talt_arb3")
+        default: nil
         }
 
         let hizbString = hizb.localizedName

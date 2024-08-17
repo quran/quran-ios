@@ -34,7 +34,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollView {
+            scrollView {
                 VStack(spacing: 0) {
                     header
                         .onSizeChange { headerSize = $0 }
@@ -79,6 +79,16 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let decorations: ImageDecorations
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
+
+    @ViewBuilder
+    private func scrollView(@ViewBuilder content: () -> some View) -> some View {
+        if #available(iOS 16.4, *) {
+            ScrollView(content: content)
+                .scrollBounceBehavior(.basedOnSize)
+        } else {
+            ScrollView(content: content)
+        }
+    }
 
     private func imageGeometrySize(from geometry: GeometryProxy) -> CGSize {
         CGSize(

@@ -56,7 +56,6 @@ private struct ContentImageViewBody: View {
         } footer: {
             QuranPageFooter(page: page)
         }
-        // TODO: Should be part of the headers and footers.
         .font(.footnote)
         .populateReadableInsets()
         .quranScrolling(scrollToValue: scrollToVerse) {

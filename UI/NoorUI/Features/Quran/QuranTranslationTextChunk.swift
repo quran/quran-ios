@@ -56,6 +56,7 @@ public struct QuranTranslationTextChunk: View {
         for (index, footnoteRange) in footnoteRanges.enumerated() {
             if let range = string.range(from: footnoteRange, overallRange: chunk, overallText: text) {
                 string[range].link = footnoteURL(index)
+                // TODO: Should get footnote from environment.
                 string[range].font = .footnote
                 string[range].baselineOffset = baselineOffset
             }

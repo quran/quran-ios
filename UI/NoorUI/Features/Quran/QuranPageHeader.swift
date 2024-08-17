@@ -21,6 +21,7 @@ public struct QuranPageHeader: View {
             Text(quarterName)
             Spacer()
             suraNames
+                // TODO: Should get footnote from environment.
                 .view(ofSize: .footnote, alignment: .trailing)
         }
         .readableInsetsPadding([.top, .horizontal])

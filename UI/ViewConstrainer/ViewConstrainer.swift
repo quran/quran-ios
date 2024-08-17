@@ -98,17 +98,16 @@ extension ViewConstrainer {
         superviewFirst: Bool,
         usesMargins: Bool
     ) -> SingleConstrainer {
-        let marginalAttribute: NSLayoutConstraint.Attribute
-        if usesMargins {
+        let marginalAttribute: NSLayoutConstraint.Attribute = if usesMargins {
             switch attribute {
-            case .leading: marginalAttribute = .leadingMargin
-            case .trailing: marginalAttribute = .trailingMargin
-            case .top: marginalAttribute = .topMargin
-            case .bottom: marginalAttribute = .bottomMargin
-            default: marginalAttribute = attribute
+            case .leading: .leadingMargin
+            case .trailing: .trailingMargin
+            case .top: .topMargin
+            case .bottom: .bottomMargin
+            default: attribute
             }
         } else {
-            marginalAttribute = attribute
+            attribute
         }
         guard let superview = view.superview else {
             fatalError("View \(view) should have been added as subview to another view before constraining it.")

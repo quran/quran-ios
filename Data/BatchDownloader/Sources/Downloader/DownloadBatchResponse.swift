@@ -70,12 +70,11 @@ public actor DownloadBatchResponse {
 
         for download in batch.downloads {
             let request = download.request
-            let state: ResponseData.State
-            switch download.status {
+            let state: ResponseData.State = switch download.status {
             case .completed:
-                state = .finished
+                .finished
             case .downloading:
-                state = .inProgress
+                .inProgress
             }
             responses[request] = ResponseData(request: request, state: state, taskId: download.taskId, task: nil)
         }

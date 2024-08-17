@@ -84,15 +84,14 @@ open class BackgroundColorButton: UIButton {
     }
 
     private func updateBackgroundColor() {
-        let background: UIColor
-        if !isEnabled {
-            background = disabledBackground
+        let background: UIColor = if !isEnabled {
+            disabledBackground
         } else if isHighlighted {
-            background = highlightedBackground
+            highlightedBackground
         } else if isSelected {
-            background = selectedBackground
+            selectedBackground
         } else {
-            background = normalBackground
+            normalBackground
         }
 
         backgroundColor = background

@@ -140,11 +140,10 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 
         let previousIndex = forEach.data.firstIndex { $0 == previousSelection }
         let currentIndex = forEach.data.firstIndex { $0 == selection }
-        let direction: UIPageViewController.NavigationDirection
-        if let previousIndex, let currentIndex {
-            direction = currentIndex < previousIndex ? .forward : .reverse
+        let direction: UIPageViewController.NavigationDirection = if let previousIndex, let currentIndex {
+            currentIndex < previousIndex ? .forward : .reverse
         } else {
-            direction = .forward
+            .forward
         }
 
         pageViewController.setViewControllers([viewController], direction: direction, animated: animated)

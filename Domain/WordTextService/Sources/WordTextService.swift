@@ -21,12 +21,11 @@ public struct WordTextService {
 
     public func textForWord(_ word: Word) async throws -> String? {
         let textType = preferences.wordTextType
-        var text: String?
-        switch textType {
+        let text: String? = switch textType {
         case .translation:
-            text = try await persistence.translationForWord(word)
+            try await persistence.translationForWord(word)
         case .transliteration:
-            text = try await persistence.transliterationForWord(word)
+            try await persistence.transliterationForWord(word)
         }
         return text
     }

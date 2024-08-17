@@ -24,6 +24,7 @@
 --disable hoistTry
 --disable redundantType
 --disable unusedArguments
+--disable redundantReturn
 
 # Enabled
 

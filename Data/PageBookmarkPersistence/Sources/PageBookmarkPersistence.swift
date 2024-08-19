@@ -7,7 +7,6 @@
 //
 
 import Combine
-import Foundation
 
 public protocol PageBookmarkPersistence {
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never>

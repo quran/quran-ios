@@ -16,7 +16,6 @@ import FeaturesSupport
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
-import QueuePlayer
 import QuranAnnotations
 import QuranContentFeature
 import QuranKit
@@ -28,7 +27,6 @@ import TranslationsFeature
 import TranslationVerseFeature
 import UIKit
 import UIx
-import Utilities
 import VLogging
 import WordPointerFeature
 
@@ -37,14 +35,12 @@ protocol QuranPresentable: UIViewController {
     var pagesView: UIView { get }
 
     func startHiddenBarsTimer()
-    func stopBarHiddenTimer()
     func hideBars()
 
     func setVisiblePages(_ pages: [Page])
     func updateBookmark(_ isBookmarked: Bool)
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint, completion: @escaping () -> Void)
-    func confirmNoteDelete(delete: @escaping AsyncAction, cancel: @escaping () -> Void)
 
     func presentMoreMenu(_ viewController: UIViewController)
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
@@ -317,7 +313,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let readingPreferences = ReadingPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-    private let themeService = ThemeService.shared
 
     private var notes: [Note] = []
 

@@ -9,7 +9,6 @@
 
 import SwiftUI
 import UIKit
-import UIx
 import VLogging
 
 public struct PageViewController<Element, Content>: View
@@ -258,10 +257,6 @@ extension _PageViewController {
         // MARK: Internal
 
         let element: Element
-
-        var description1: String {
-            "<PageContentController: \(ObjectIdentifier(self))>"
-        }
     }
 }
 

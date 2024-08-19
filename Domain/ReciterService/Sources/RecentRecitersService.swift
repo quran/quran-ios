@@ -5,7 +5,6 @@
 //  Created by Zubair Khan on 12/6/22.
 //
 
-import Foundation
 import QuranAudio
 
 public class RecentRecitersService {

@@ -7,7 +7,6 @@
 //
 
 import Combine
-import Foundation
 import PageBookmarkPersistence
 import QuranAnnotations
 import QuranKit

@@ -5,8 +5,6 @@
 //  Created by Mohammad Abdurraafay on 2023-02-12.
 //
 
-import AudioTimingPersistence
-import Foundation
 import QuranAudio
 import QuranKit
 import ReciterServiceFake

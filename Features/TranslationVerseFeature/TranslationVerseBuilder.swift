@@ -6,12 +6,8 @@
 //  Copyright © 2022 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
 import AppDependencies
-import Caching
-import Foundation
 import MoreMenuFeature
-import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import TranslationService

@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2024-02-02.
 //
 
-import Foundation
-
 public struct Pair<First, Second> {
     public var first: First
     public var second: Second

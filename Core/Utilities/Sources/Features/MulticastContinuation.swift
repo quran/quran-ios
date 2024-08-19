@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2023-04-30.
 //
 
-import Foundation
-
 public struct MulticastContinuation<T, E: Error>: Sendable {
     private struct State {
         var continuations: [CheckedContinuation<T, E>] = []

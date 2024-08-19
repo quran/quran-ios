@@ -6,7 +6,6 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import Localization
 import QuranAnnotations
 import SwiftUI
 import UIx

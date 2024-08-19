@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-12.
 //
 
-import Foundation
-
 public protocol Navigatable: Comparable, Hashable, CustomStringConvertible, Sendable {
     var next: Self? { get }
     var previous: Self? { get }

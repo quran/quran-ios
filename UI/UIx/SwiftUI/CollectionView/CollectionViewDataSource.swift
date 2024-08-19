@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2024-01-10.
 //
 
-import SwiftUI
+import UIKit
 
 final class CollectionViewDataSource<
     SectionId: Hashable,

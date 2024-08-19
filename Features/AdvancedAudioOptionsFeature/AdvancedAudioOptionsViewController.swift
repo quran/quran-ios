@@ -21,7 +21,6 @@
 import Localization
 import NoorUI
 import QuranAudio
-import QuranKit
 import ReciterListFeature
 import SwiftUI
 

@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-06-08.
 //
 
-import Foundation
 import Preferences
 
 public struct WordTextPreferences {

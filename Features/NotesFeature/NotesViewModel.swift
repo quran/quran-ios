@@ -9,7 +9,6 @@ import Analytics
 import AnnotationsService
 import Combine
 import Crashing
-import FeaturesSupport
 import Foundation
 import QuranAnnotations
 import QuranKit

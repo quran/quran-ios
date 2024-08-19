@@ -7,7 +7,6 @@
 
 import NetworkSupportFake
 import QuranText
-import SystemDependenciesFake
 import TranslationServiceFake
 import XCTest
 @testable import NetworkSupport

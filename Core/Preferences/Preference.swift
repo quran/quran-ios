@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 @propertyWrapper
 public final class Preference<T> {

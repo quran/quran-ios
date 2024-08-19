@@ -6,11 +6,9 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
 import AppDependencies
 import FeaturesSupport
 import QuranKit
-import QuranTextKit
 import UIKit
 
 @MainActor

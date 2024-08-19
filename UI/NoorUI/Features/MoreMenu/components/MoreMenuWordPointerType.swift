@@ -7,7 +7,6 @@
 
 import Localization
 import SwiftUI
-import UIx
 
 struct MoreMenuWordPointerType: View {
     let type: MoreMenu.TranslationPointerType

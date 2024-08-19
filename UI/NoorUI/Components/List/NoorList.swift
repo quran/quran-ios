@@ -11,17 +11,6 @@ public struct NoorList<Content: View>: View {
     public enum ListType {
         case app
         case searching
-
-        // MARK: Internal
-
-        var listStyle: any ListStyle {
-            switch self {
-            case .app:
-                return InsetGroupedListStyle()
-            case .searching:
-                return PlainListStyle()
-            }
-        }
     }
 
     // MARK: Lifecycle
@@ -47,12 +36,6 @@ public struct NoorList<Content: View>: View {
 
     private let listType: ListType
     private let content: Content
-
-    private var list: some View {
-        List {
-            content
-        }
-    }
 
     @ViewBuilder
     private func configureList(@ViewBuilder list: () -> some View) -> some View {

@@ -68,15 +68,6 @@ private struct AyahMenuViewList: View {
     let dataObject: AyahMenuUI.DataObject
     let showHighlights: AsyncAction
 
-    var noteEditText: String {
-        switch dataObject.state {
-        case .noHighlight, .highlighted:
-            return l("ayah.menu.add-note")
-        case .noted:
-            return l("ayah.menu.edit-note")
-        }
-    }
-
     var noteDeleteText: String {
         switch dataObject.state {
         case .noHighlight:

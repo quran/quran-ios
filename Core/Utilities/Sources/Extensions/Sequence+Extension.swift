@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 extension Sequence {
     public func flatGroup<U: Hashable>(by key: (Iterator.Element) -> U) -> [U: Iterator.Element] {
         var categories: [U: Iterator.Element] = [:]

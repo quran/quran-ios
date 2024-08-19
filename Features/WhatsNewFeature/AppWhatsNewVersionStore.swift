@@ -6,7 +6,6 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import Foundation
 import Preferences
 import WhatsNewKit
 

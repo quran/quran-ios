@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 public final class CancellableTask: Hashable {
     // MARK: Lifecycle

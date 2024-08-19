@@ -188,10 +188,6 @@ class AudioPlayer {
         actions?.playbackRateChanged(rate)
     }
 
-    private func isPaused(rate: Float) -> Bool {
-        rate < 0.1
-    }
-
     private func seek(to frame: AudioFrame) {
         player.seek(to: frame.startTime)
     }

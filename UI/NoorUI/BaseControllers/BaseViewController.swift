@@ -21,4 +21,3 @@
 import UIKit
 
 open class BaseViewController: UIViewController { }
-open class BaseTableViewController: UITableViewController { }

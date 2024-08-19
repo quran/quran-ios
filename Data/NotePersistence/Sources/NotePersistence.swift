@@ -7,8 +7,6 @@
 //
 
 import Combine
-import Foundation
-import QuranKit
 
 public protocol NotePersistence {
     func notes() -> AnyPublisher<[NotePersistenceModel], Never>

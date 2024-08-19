@@ -17,7 +17,6 @@ import QuranText
 import QuranTextKit
 import TranslationService
 import UIKit
-import Utilities
 import VLogging
 
 @MainActor

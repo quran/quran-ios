@@ -7,7 +7,6 @@
 
 import Localization
 import SwiftUI
-import UIx
 
 struct MoreMenuTwoPages: View {
     @Binding var enabled: Bool

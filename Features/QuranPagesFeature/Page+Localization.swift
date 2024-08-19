@@ -6,10 +6,10 @@
 //
 
 import Caching
+import Foundation
 import NoorUI
 import QuranKit
 import QuranTextKit
-import UIKit
 
 extension Page {
     // TODO: Remove

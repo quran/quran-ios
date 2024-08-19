@@ -5,8 +5,8 @@
 //  Created by Mohamed Afifi on 5/2/18.
 //
 
+import CoreFoundation
 import QuranText
-import UIKit
 
 extension FontSize: Strideable {
     public func distance(to other: FontSize) -> Int {

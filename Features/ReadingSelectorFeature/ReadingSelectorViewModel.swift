@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import NoorUI
 import QuranKit
 import ReadingService
 
@@ -33,10 +32,6 @@ class ReadingSelectorViewModel: ObservableObject {
         async let reading: () = listenToReadingChanges()
         async let resources: () = listenToResourcesEvents()
         _ = await (reading, resources)
-    }
-
-    func retry() async {
-        await resources.retry()
     }
 
     func showReading(_ reading: Reading) {

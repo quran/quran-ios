@@ -11,7 +11,6 @@
 import AppDependencies
 import FeaturesSupport
 import QuranTextKit
-import TranslationService
 import UIKit
 
 @MainActor

@@ -18,7 +18,6 @@ import TranslationsFeature
 import UIKit
 import UIx
 import VLogging
-import Zip
 
 @MainActor
 final class SettingsRootViewModel: ObservableObject {

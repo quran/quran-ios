@@ -9,7 +9,6 @@ import AsyncAlgorithms
 import AsyncUtilitiesForTesting
 import Foundation
 import NetworkSupport
-import XCTest
 
 public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     // MARK: Lifecycle

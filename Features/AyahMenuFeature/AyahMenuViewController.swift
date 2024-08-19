@@ -7,8 +7,7 @@
 //
 
 import NoorUI
-import QuranAnnotations
-import SwiftUI
+import UIKit
 import UIx
 
 final class AyahMenuViewController: UIViewController {

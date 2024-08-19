@@ -11,8 +11,6 @@ import Crashing
 import Foundation
 import NoorUI
 import QuranAnnotations
-import QuranTextKit
-import Utilities
 import VLogging
 
 @MainActor

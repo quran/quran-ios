@@ -7,7 +7,6 @@
 
 import Localization
 import SwiftUI
-import UIx
 
 struct MoreMenuTranslationSelector: View {
     var body: some View {

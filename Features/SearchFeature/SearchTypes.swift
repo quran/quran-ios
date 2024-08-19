@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-12-16.
 //
 
-import Foundation
 import QuranText
 
 enum SearchUIState {

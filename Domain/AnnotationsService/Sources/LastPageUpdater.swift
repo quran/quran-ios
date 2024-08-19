@@ -19,8 +19,6 @@
 //
 
 import Crashing
-import Foundation
-import QuranAnnotations
 import QuranKit
 
 @MainActor

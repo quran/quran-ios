@@ -6,7 +6,6 @@
 //
 
 import BatchDownloader
-import Foundation
 import QuranText
 
 public struct TranslationsDownloader {

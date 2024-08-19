@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import QuranKit
 import QuranText
 import SwiftUI
 import UIx

@@ -97,10 +97,7 @@ class TranslationDeleterTests: XCTestCase {
 
     private var service: TranslationDeleter!
     private var localTranslationsFake: LocalTranslationsFake!
-
     private let preferences = SelectedTranslationsPreferences.shared
-
-    private let baseURL = URL(validURL: "http://example.com")
 
     private var retriever: LocalTranslationsRetriever {
         localTranslationsFake.retriever

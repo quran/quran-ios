@@ -124,11 +124,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             .store(in: &cancellables)
     }
 
-    func stopBarHiddenTimer() {
-        barsTimer?.cancel()
-        barsTimer = nil
-    }
-
     func hideBars() {
         setBarsHidden(true)
     }
@@ -283,6 +278,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             setNeedsStatusBarAppearanceUpdate()
             setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+    }
+
+    private func stopBarHiddenTimer() {
+        barsTimer?.cancel()
+        barsTimer = nil
     }
 
     @objc

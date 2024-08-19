@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-17.
 //
 
-import Crashing
 import Foundation
 import QuranKit
 import WordTextPersistence

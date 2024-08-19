@@ -10,7 +10,6 @@ import BatchDownloaderFake
 import NetworkSupportFake
 import QuranAudio
 import QuranKit
-import SnapshotTesting
 import SystemDependenciesFake
 import Utilities
 import XCTest

@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2022-02-08.
 //
 
-import Foundation
 import QueuePlayer
 @testable import QuranAudioKit
 

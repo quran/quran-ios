@@ -22,7 +22,6 @@ import Foundation
 import Localization
 import QuranKit
 import QuranText
-import TranslationService
 import VerseTextPersistence
 
 public struct ShareableVerseTextRetriever {

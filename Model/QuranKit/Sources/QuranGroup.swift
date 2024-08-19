@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-11.
 //
 
-import Foundation
-
 public protocol QuranGroup {
     var firstVerse: AyahNumber { get }
     var lastVerse: AyahNumber { get }

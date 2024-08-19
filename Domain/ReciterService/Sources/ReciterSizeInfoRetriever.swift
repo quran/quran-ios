@@ -11,11 +11,6 @@ import QuranKit
 import SystemDependencies
 import VLogging
 
-private struct AudioFileLists {
-    let gapped: [ReciterAudioFile]
-    let gapless: [ReciterAudioFile]
-}
-
 public struct ReciterSizeInfoRetriever: Sendable {
     // MARK: Lifecycle
 

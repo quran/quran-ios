@@ -9,9 +9,7 @@
 import CoreData
 import CoreDataModel
 import CoreDataPersistence
-import QuranKit
 import SystemDependencies
-import Utilities
 import VLogging
 
 public struct CoreDataNoteUniquifier: CoreDataEntityUniquifier {

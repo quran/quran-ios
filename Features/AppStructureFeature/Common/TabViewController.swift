@@ -8,7 +8,6 @@
 
 import NoorUI
 import UIKit
-import Utilities
 
 class TabViewController: BaseNavigationController, TabPresenter {
     // MARK: Lifecycle

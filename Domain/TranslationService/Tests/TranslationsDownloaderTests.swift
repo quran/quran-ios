@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-05-21.
 //
 
-import AsyncUtilitiesForTesting
 import BatchDownloaderFake
 import NetworkSupportFake
 import SystemDependenciesFake
@@ -54,8 +53,6 @@ class TranslationsDownloaderTests: XCTestCase {
     }
 
     // MARK: Private
-
-    private static let baseURL = URL(validURL: "http://example.com")
 
     private var downloader: TranslationsDownloader!
     private var batchDownloader: DownloadManager!

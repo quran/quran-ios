@@ -7,7 +7,6 @@
 
 import QuranKit
 import QuranText
-import SystemDependenciesFake
 import TranslationServiceFake
 import VerseTextPersistence
 import XCTest

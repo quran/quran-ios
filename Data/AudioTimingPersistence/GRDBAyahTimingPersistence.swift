@@ -10,7 +10,6 @@ import GRDB
 import QuranAudio
 import QuranKit
 import SQLitePersistence
-import VLogging
 
 public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
     // MARK: Lifecycle

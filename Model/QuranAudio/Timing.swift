@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2023-06-10.
 //
 
-import Foundation
-
 public struct Timing {
     // MARK: Lifecycle
 

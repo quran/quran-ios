@@ -5,7 +5,6 @@
 //  Created by Afifi, Mohamed on 10/10/21.
 //
 
-import Localization
 import UIKit
 
 public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITableViewController {

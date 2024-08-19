@@ -45,10 +45,6 @@ final class Player {
         asset.duration.seconds
     }
 
-    var rate: Float {
-        player.rate
-    }
-
     func play() {
         player.play()
     }

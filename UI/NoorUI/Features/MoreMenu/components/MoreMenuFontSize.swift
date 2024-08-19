@@ -8,7 +8,6 @@
 import Localization
 import QuranText
 import SwiftUI
-import UIx
 import VLogging
 
 struct MoreMenuFontSize: View {

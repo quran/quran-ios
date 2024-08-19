@@ -6,7 +6,7 @@
 //
 
 import Combine
-import SwiftUI
+import UIKit
 
 @MainActor
 final class DiagnosticsViewModel: ObservableObject {

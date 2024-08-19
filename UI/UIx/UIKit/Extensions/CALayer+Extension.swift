@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-import UIKit
+import QuartzCore
 
 extension CALayer {
     public class func withoutAnimation(_ block: () -> Void) {

@@ -18,11 +18,9 @@
 //  GNU General Public License for more details.
 //
 
-import Crashing
 import Foundation
 import NetworkSupport
 import SystemDependencies
-import Utilities
 import VLogging
 
 public final class DownloadManager: Sendable {

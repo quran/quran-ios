@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2022-09-10.
 //
 
-import Foundation
-
 public struct PreferenceTransformer<Raw, T> {
     // MARK: Lifecycle
 

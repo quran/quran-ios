@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import Foundation
 import QueuePlayer
 import QuranAudio
 import QuranKit

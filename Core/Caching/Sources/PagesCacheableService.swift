@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 public protocol Pageable: Hashable, Sendable {
     var pageNumber: Int { get }
 }

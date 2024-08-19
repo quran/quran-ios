@@ -18,8 +18,8 @@
 //  GNU General Public License for more details.
 //
 
+import CoreGraphics
 import QuranKit
-import UIKit
 
 public struct WordFrame: Hashable {
     // MARK: Lifecycle

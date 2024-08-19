@@ -6,8 +6,6 @@
 //
 
 import QuranGeometry
-import QuranKit
-import UIKit
 
 public struct WordFrameProcessor {
     // MARK: Lifecycle

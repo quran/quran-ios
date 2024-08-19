@@ -6,7 +6,6 @@
 //
 
 import CoreDataPersistence
-import Foundation
 
 public enum Schema {
     public enum Note: String, CoreDataKey {

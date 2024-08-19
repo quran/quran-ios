@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 public func attempt<T>(times: UInt, _ body: () throws -> T) throws -> T {
     precondition(times > 0, "cannot execute something 0 times")
     var lastError: Error?

@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-05-22.
 //
 
-import Foundation
 import QuranGeometry
 import QuranKit
 

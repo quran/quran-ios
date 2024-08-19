@@ -6,11 +6,9 @@
 //  Copyright © 2023 Quran.com. All rights reserved.
 //
 
-import Foundation
 import Localization
 import QuranGeometry
 import QuranKit
-import UIKit
 
 extension Reading {
     struct Property: Hashable {

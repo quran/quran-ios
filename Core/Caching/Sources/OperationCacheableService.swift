@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-import Locking
 import Utilities
 
 public typealias CacheableOperation<Input, Output> = @Sendable (Input) async throws -> Output

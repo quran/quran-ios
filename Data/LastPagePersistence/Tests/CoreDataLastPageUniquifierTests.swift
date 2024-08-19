@@ -9,7 +9,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
-import SystemDependencies
 import SystemDependenciesFake
 import XCTest
 @testable import LastPagePersistence

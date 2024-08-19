@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import QuranKit
 
 public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
     // MARK: Lifecycle

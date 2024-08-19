@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2023-06-10.
 //
 
-import CoreGraphics
+import CoreFoundation
 import QuranKit
 
 public struct AyahNumberLocation: Hashable {

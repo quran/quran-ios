@@ -6,7 +6,8 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import AVFoundation
+import AVFAudio
+import Foundation
 
 enum AudioInterruptionType {
     case began

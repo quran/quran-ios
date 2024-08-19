@@ -11,13 +11,6 @@ import QuranAudio
 import SwiftUI
 import UIx
 
-struct DownloadItem {
-    let title: String
-    let subtitle: String
-    let downloadType: DownloadType?
-    let editable: Bool
-}
-
 struct AudioDownloadsView: View {
     @StateObject var viewModel: AudioDownloadsViewModel
 

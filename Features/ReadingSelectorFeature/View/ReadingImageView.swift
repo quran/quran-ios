@@ -6,7 +6,6 @@
 //  Copyright © 2023 Quran.com. All rights reserved.
 //
 
-import AVFoundation
 import NoorUI
 import QuranGeometry
 import SwiftUI

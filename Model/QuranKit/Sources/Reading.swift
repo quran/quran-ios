@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2023-02-14.
 //
 
-import Foundation
-
 public enum Reading: Int {
     case hafs_1405 = 0
     case hafs_1440 = 1

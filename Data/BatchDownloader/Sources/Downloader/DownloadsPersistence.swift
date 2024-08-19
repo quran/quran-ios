@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 protocol DownloadsPersistence: Sendable {
     func retrieveAll() async throws -> [DownloadBatch]
     func insert(batch: DownloadBatchRequest) async throws -> DownloadBatch

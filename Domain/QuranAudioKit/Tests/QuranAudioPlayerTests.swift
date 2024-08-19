@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2022-02-08.
 //
 
-import AsyncUtilitiesForTesting
 import AVFoundation
 import QuranAudio
 import QuranKit
@@ -14,10 +13,10 @@ import XCTest
 @testable import QueuePlayer
 @testable import QuranAudioKit
 
-@MainActor
 class QuranAudioPlayerTests: XCTestCase {
     // MARK: Internal
 
+    @MainActor
     override func setUp() async throws {
         queuePlayer = QueuePlayerFake()
         delegate = QuranAudioPlayerDelegateClosures()
@@ -26,6 +25,7 @@ class QuranAudioPlayerTests: XCTestCase {
         player.setActions(delegate.makeActions())
     }
 
+    @MainActor
     override func tearDownWithError() throws {
         Reciter.cleanUpAudio()
     }
@@ -149,6 +149,7 @@ class QuranAudioPlayerTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testAudioPlaybackControls() async throws {
         for i in 0 ..< 2 {
             // play
@@ -183,6 +184,7 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testRespondsToQueuePlayerDelegate() async throws {
         let frameChanges = [(file: 0, frame: 2), (file: 2, frame: 0)]
         for i in 0 ..< 2 {
@@ -250,6 +252,7 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
+    @MainActor
     private func runDownloadedGappedTestCase(
         from: AyahNumber,
         to: AyahNumber,
@@ -268,6 +271,7 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
+    @MainActor
     private func runDownloadedGaplessTestCase(
         from: AyahNumber,
         to: AyahNumber,

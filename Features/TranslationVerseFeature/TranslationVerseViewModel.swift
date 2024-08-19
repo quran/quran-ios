@@ -9,7 +9,6 @@
 import AnnotationsService
 import Combine
 import QuranKit
-import QuranText
 import QuranTextKit
 import QuranTranslationFeature
 import TranslationService
@@ -44,8 +43,6 @@ class TranslationVerseViewModel: ObservableObject {
 
     // MARK: Internal
 
-    private var cancellables: Set<AnyCancellable> = []
-
     let translationViewModel: ContentTranslationViewModel
 
     @Published var currentVerse: AyahNumber {
@@ -72,6 +69,5 @@ class TranslationVerseViewModel: ObservableObject {
     // MARK: Private
 
     private let dataService: QuranTextDataService
-
     private let actions: TranslationVerseActions
 }

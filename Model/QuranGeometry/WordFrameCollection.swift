@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-26.
 //
 
-import Foundation
+import CoreGraphics
 import QuranKit
 
 public struct WordFrameCollection: Equatable {

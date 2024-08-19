@@ -18,7 +18,6 @@ import ReadingService
 import TranslationsFeature
 import TranslationVerseFeature
 import UIKit
-import Utilities
 import WordPointerFeature
 
 @MainActor

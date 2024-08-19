@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-11-16.
 //
 
-import Foundation
 import QuranKit
 import QuranText
 import VerseTextPersistence

@@ -26,16 +26,6 @@ struct WhatsNewItem: Decodable {
     let subtitle: String
     let image: String
 
-    var uiImage: UIImage? {
-        if image.isEmpty {
-            return UIColor.clear.image()
-        }
-
-        let image: UIImage?
-        image = UIImage.symbol(self.image, withConfiguration: UIImage.SymbolConfiguration(weight: .light))
-        return image ?? UIImage(named: self.image) ?? UIColor.clear.image()
-    }
-
     var whatsNewItem: WhatsNew.Item {
         let image: UIImage?
         image = UIImage.symbol(self.image, withConfiguration: UIImage.SymbolConfiguration(weight: .light))

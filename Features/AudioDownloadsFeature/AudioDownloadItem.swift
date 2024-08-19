@@ -8,7 +8,6 @@
 
 import Foundation
 import Localization
-import NoorUI
 import QuranAudio
 
 struct AudioDownloadItem: Hashable, Comparable, Identifiable {

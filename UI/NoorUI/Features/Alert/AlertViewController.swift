@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Utilities
 
 public class AlertViewController: UIViewController {
     // MARK: Lifecycle

@@ -7,7 +7,6 @@
 
 import Localization
 import SwiftUI
-import UIx
 
 struct MoreMenuVerticalScrolling: View {
     @Binding var enabled: Bool

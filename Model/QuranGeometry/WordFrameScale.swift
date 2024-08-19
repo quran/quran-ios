@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2023-06-10.
 //
 
-import Foundation
+import CoreGraphics
 
 public struct WordFrameScale {
     // MARK: Lifecycle

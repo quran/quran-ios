@@ -10,7 +10,6 @@ import CoreDataModel
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import NotePersistence
-import SystemDependencies
 import SystemDependenciesFake
 import XCTest
 

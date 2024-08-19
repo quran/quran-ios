@@ -19,7 +19,6 @@
 //
 
 import Combine
-import Foundation
 
 public protocol LastPagePersistence: Sendable {
     func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never>

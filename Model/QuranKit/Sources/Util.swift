@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2022-01-08.
 //
 
-import Foundation
-
 extension RandomAccessCollection {
     func binarySearchFirst(predicate: (Element) -> Bool) -> Element {
         let index = binarySearchIndex(predicate: predicate)

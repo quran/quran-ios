@@ -304,7 +304,6 @@ final class DownloadManagerTests: XCTestCase {
 
     // MARK: Private
 
-    private let fileManager = FileManager.default
     private var downloader: DownloadManager!
     private var session: NetworkSessionFake?
 

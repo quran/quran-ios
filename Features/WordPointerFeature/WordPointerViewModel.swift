@@ -9,7 +9,6 @@
 import Crashing
 import QuranKit
 import UIKit
-import Utilities
 import VLogging
 import WordTextService
 

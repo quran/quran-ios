@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import CoreDataModel
 import XCTest
 @testable import CoreDataPersistence
 

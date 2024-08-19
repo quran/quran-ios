@@ -7,7 +7,6 @@
 
 import Combine
 import QuranText
-import UIKit
 
 public enum MoreMenu {
     public enum Mode {

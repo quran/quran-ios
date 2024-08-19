@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import Utilities
 
 public final class CoreDataLastPagePersistence: LastPagePersistence {
     // MARK: Lifecycle

@@ -6,9 +6,7 @@
 //
 
 import BatchDownloader
-import Foundation
 import QuranKit
-import VLogging
 
 struct ReadingResourceDownloader {
     // MARK: Lifecycle

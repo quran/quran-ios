@@ -6,10 +6,8 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
-import CoreData
 import CoreDataModel
 import CoreDataPersistence
-import SystemDependencies
 
 public typealias CoreDataPageBookmarkUniquifier = SimpleCoreDataEntityUniquifier<MO_PageBookmark>
 extension CoreDataPageBookmarkUniquifier {

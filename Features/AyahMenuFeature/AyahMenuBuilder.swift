@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import AnnotationsService
 import AppDependencies
 import QuranAnnotations
 import QuranKit

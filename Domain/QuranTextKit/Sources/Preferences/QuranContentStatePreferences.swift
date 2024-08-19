@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2021-11-24.
 //
 
-import Foundation
 import Preferences
 import QuranText
 

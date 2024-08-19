@@ -8,7 +8,6 @@
 
 import AnnotationsService
 import Crashing
-import Foundation
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -17,7 +16,6 @@ import QuranKit
 import QuranTextKit
 import ReadingService
 import UIKit
-import Utilities
 import VLogging
 
 @MainActor

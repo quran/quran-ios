@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2024-01-20.
 //
 
-import SwiftUI
+import Foundation
 
 extension AttributedString {
     public func range(

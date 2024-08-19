@@ -7,8 +7,6 @@
 //
 
 import Localization
-import NoorUI
-import QuranKit
 import SwiftUI
 
 final class ReadingSelectorViewController: UIHostingController<ReadingSelector> {

@@ -7,12 +7,11 @@
 //
 
 import Combine
-import Localization
 import NoorUI
 import QueuePlayer
 import QuranAudio
-import QuranAudioKit
 import QuranKit
+import QuranTextKit
 
 @MainActor
 public protocol AdvancedAudioOptionsListener: AnyObject {

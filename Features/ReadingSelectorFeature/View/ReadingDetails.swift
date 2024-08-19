@@ -115,7 +115,7 @@ struct ReadingDetails_Previews: PreviewProvider {
 
         var body: some View {
             ReadingDetails(
-                reading: ReadingInfoTestData.readings[0],
+                reading: reading,
                 imageView: imageView,
                 useAction: {},
                 closeAction: {}

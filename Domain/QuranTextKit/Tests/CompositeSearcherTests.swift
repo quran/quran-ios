@@ -14,7 +14,6 @@ import VerseTextPersistence
 import XCTest
 @testable import QuranTextKit
 
-@MainActor
 class CompositeSearcherTests: XCTestCase {
     // MARK: Internal
 
@@ -146,6 +145,7 @@ class CompositeSearcherTests: XCTestCase {
         XCTAssertEqual(result, [number])
     }
 
+    @MainActor
     private func testAutocomplete(term: String, record: Bool = false, testName: String = #function) async {
         let result = await searcher.autocomplete(term: term, quran: quran)
 
@@ -153,6 +153,7 @@ class CompositeSearcherTests: XCTestCase {
         assertSnapshot(matching: result.sorted(), as: .json, record: record, testName: testName)
     }
 
+    @MainActor
     private func testSearch(term: String, record: Bool = false, testName: String = #function) async throws {
         let result = try await searcher.search(for: term, quran: quran)
 

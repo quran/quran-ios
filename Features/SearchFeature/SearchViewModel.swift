@@ -7,7 +7,7 @@
 
 import Analytics
 import Combine
-import Foundation
+import Dispatch
 import QuranKit
 import QuranText
 import QuranTextKit

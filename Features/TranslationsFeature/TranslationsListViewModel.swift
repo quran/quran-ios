@@ -150,7 +150,6 @@ final class TranslationsListViewModel: ObservableObject {
     private let downloader: TranslationsDownloader
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private var downloadsObserver: DownloadsObserver<Translation>?
-    private var cancellableTasks = Set<CancellableTask>()
     private var cancellables = Set<AnyCancellable>()
 
     @Published private var translations: [Translation] = []
@@ -162,14 +161,6 @@ final class TranslationsListViewModel: ObservableObject {
             info: translation,
             progress: progress[translation].map { .downloading($0) } ?? .notDownloading
         )
-    }
-
-    private func progress(of translation: Translation) -> TranslationItem.DownloadingProgress {
-        if let progress = progress[translation] {
-            return .downloading(progress)
-        } else {
-            return translation.needsUpgrade ? .needsUpgrade : .notDownloading
-        }
     }
 
     private func loadTranslations() async {

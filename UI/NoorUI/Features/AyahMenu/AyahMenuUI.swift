@@ -5,10 +5,7 @@
 //  Created by Afifi, Mohamed on 7/25/21.
 //
 
-import Combine
 import QuranAnnotations
-import SwiftUI
-import UIKit
 import UIx
 
 public enum AyahMenuUI {

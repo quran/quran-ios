@@ -18,8 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Foundation
-
 public struct Juz: QuranValueGroup, Identifiable {
     // MARK: Lifecycle
 

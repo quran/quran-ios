@@ -8,11 +8,8 @@
 
 import AnnotationsService
 import AppDependencies
-import Caching
 import Foundation
 import ImageService
-import NoorUI
-import QuranGeometry
 import QuranKit
 import QuranPagesFeature
 import ReadingService
@@ -97,6 +94,7 @@ private extension Reading {
         }
     }
 
+    // TODO: Add cropInsets back
     var cropInsets: UIEdgeInsets {
         switch self {
         case .hafs_1405:

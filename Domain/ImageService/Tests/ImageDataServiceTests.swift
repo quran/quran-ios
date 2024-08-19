@@ -9,17 +9,16 @@ import QuranGeometry
 import QuranKit
 import SnapshotTesting
 import TestResources
-import WordFrameService
 import XCTest
 @testable import ImageService
 
-@MainActor
 class ImageDataServiceTests: XCTestCase {
     // MARK: Internal
 
     var service: ImageDataService!
     let quran = Quran.hafsMadani1405
 
+    @MainActor
     override func setUpWithError() throws {
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
@@ -72,6 +71,7 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
     }
 
+    @MainActor
     func testGettingImageAtPage1() async throws {
         let page = quran.pages[0]
         let image = try await service.imageForPage(page)
@@ -79,6 +79,7 @@ class ImageDataServiceTests: XCTestCase {
         try verifyImagePage(image)
     }
 
+    @MainActor
     func testGettingImageAtPage3() async throws {
         let page = quran.pages[2]
         let image = try await service.imageForPage(page)
@@ -86,6 +87,7 @@ class ImageDataServiceTests: XCTestCase {
         try verifyImagePage(image)
     }
 
+    @MainActor
     func testGettingImageAtPage604() async throws {
         let page = quran.pages.last!
         let image = try await service.imageForPage(page)
@@ -95,6 +97,7 @@ class ImageDataServiceTests: XCTestCase {
 
     // MARK: Private
 
+    @MainActor
     private func verifyImagePage(_ imagePage: ImagePage, testName: String = #function) throws {
         // assert the image
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)

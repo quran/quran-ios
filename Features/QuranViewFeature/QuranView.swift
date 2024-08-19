@@ -18,7 +18,6 @@
 //  GNU General Public License for more details.
 //
 import UIKit
-import Utilities
 import ViewConstrainer
 
 @MainActor
@@ -98,10 +97,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     // MARK: Private
 
-    private weak var bottomBarConstraint: NSLayoutConstraint?
-
     private let tapGesture = UITapGestureRecognizer()
-
     private var audioView: UIView?
 
     private func setUp() {

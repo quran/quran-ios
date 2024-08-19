@@ -11,7 +11,6 @@ import Analytics
 import BatchDownloader
 import Crashing
 import Foundation
-import NoorUI
 import QueuePlayer
 import QuranAudio
 import QuranAudioKit

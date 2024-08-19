@@ -7,7 +7,6 @@
 
 import Localization
 import SwiftUI
-import UIx
 
 struct MoreMenuModeSelector: View {
     @Binding var mode: MoreMenu.Mode

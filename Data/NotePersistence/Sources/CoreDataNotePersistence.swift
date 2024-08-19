@@ -11,7 +11,6 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-import QuranKit
 import SystemDependencies
 
 public struct CoreDataNotePersistence: NotePersistence {

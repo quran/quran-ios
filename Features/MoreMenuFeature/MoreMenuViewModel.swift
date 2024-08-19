@@ -7,12 +7,9 @@
 //
 
 import Combine
-import Localization
 import NoorUI
 import QuranText
 import QuranTextKit
-import UIKit
-import Utilities
 import VLogging
 import WordTextService
 
@@ -34,11 +31,6 @@ public struct MoreMenuModel {
 public protocol MoreMenuListener: AnyObject {
     func onTranslationsSelectionsTapped()
     func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool)
-}
-
-struct MoreMenuActions {
-    let translationsSelectionsTapped: () -> Void
-    let isWordPointerActiveUpdated: (Bool) -> Void
 }
 
 @MainActor

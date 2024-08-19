@@ -11,7 +11,6 @@ import CloudKit
 import Crashing
 import Foundation
 import LastPagePersistence
-import QuranKit
 import VLogging
 
 @MainActor

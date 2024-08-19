@@ -10,7 +10,6 @@ import QuranKit
 import XCTest
 @testable import WordFrameService
 
-@MainActor
 class WordFrameTests: XCTestCase {
     let word1 = Word(verse: Quran.hafsMadani1405.firstVerse, wordNumber: 1)
     let word2 = Word(verse: Quran.hafsMadani1405.firstVerse, wordNumber: 2)

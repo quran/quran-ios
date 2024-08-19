@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2023-07-09.
 //
 
-import Foundation
-
 public struct MultiPredicateComparer<T> {
     public typealias Predicate = (T, T) -> Bool
 

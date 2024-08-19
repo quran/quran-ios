@@ -11,7 +11,6 @@ import AppDependencies
 import QuranImageFeature
 import QuranTranslationFeature
 import ReadingService
-import UIKit
 
 @MainActor
 public struct ContentBuilder {

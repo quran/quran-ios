@@ -8,7 +8,6 @@
 
 import AppDependencies
 import QuranAudioKit
-import QuranKit
 import ReciterService
 import UIKit
 

@@ -10,7 +10,6 @@
 
 import Combine
 import Crashing
-import Foundation
 import NetworkSupport
 import Utilities
 import VLogging
@@ -254,11 +253,6 @@ public actor DownloadBatchResponse {
             }
         }
         return nil
-    }
-
-    private func progress(of request: DownloadRequest) -> AnyPublisher<DownloadProgress, Error> {
-        let response = response(of: request)
-        return response.progress.eraseToAnyPublisher()
     }
 
     private func cancel(_ request: DownloadRequest) {

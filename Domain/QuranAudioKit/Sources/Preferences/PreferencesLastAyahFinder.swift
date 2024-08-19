@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2022-04-16.
 //
 
-import Foundation
 import QuranKit
 
 public struct PreferencesLastAyahFinder: LastAyahFinder {

@@ -8,7 +8,6 @@
 import Combine
 import QuranAudio
 import ReciterService
-import Utilities
 import VLogging
 
 @MainActor
@@ -33,7 +32,6 @@ final class ReciterListViewModel: ObservableObject {
     @Published var englishReciters: [Reciter] = []
     @Published var arabicReciters: [Reciter] = []
 
-    @Published var reciters: [[Reciter]] = []
     @Published var selectedReciter: Reciter?
 
     func start() async {

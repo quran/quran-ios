@@ -6,7 +6,6 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
-import QuranAnnotations
 import QuranKit
 
 public struct QuranInput {

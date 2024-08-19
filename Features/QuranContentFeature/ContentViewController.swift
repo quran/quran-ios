@@ -7,10 +7,8 @@
 //
 
 import NoorUI
-import QuranAnnotations
 import QuranKit
 import QuranPagesFeature
-import QuranText
 import QuranTextKit
 import SwiftUI
 import UIKit

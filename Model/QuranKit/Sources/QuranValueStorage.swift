@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2021-12-12.
 //
 
-import Foundation
-
 struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable, @unchecked Sendable {
     // MARK: Public
 

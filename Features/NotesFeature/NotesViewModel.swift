@@ -12,10 +12,13 @@ import Crashing
 import Foundation
 import QuranAnnotations
 import QuranKit
+import QuranTextKit
 import ReadingService
 import SwiftUI
 import Utilities
 import VLogging
+import Localization
+
 
 @MainActor
 final class NotesViewModel: ObservableObject {
@@ -24,10 +27,12 @@ final class NotesViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         noteService: NoteService,
+        textRetriever: ShareableVerseTextRetriever,
         navigateTo: @escaping (AyahNumber) -> Void
     ) {
         self.analytics = analytics
         self.noteService = noteService
+        self.textRetriever = textRetriever
         self.navigateTo = navigateTo
     }
 
@@ -66,10 +71,40 @@ final class NotesViewModel: ObservableObject {
         }
     }
 
+    func prepareNotesForSharing() async -> String {
+        do {
+            return try await crasher.recordError("Failed to share notes") {
+                var notesText = ""
+                for note in await notes {
+                    let noteText = if let noteContent = note.note.note, noteContent != "" {
+                        "Note: \(noteContent.trimmingCharacters(in: .newlines))\n"
+                    } else {
+                        ""
+                    }
+                    
+                    let verses = try await textRetriever.textForVerses(Array(note.note.verses))
+                        .filter { !$0.isEmpty }
+                        .map { $0.hasSuffix("﴾") ? String($0.dropLast()) : $0 }
+                        .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                                    
+                                    
+                    let verseText = verses.joined(separator: "\n")
+                    
+                    notesText += "\(noteText)\(verseText)\n\n"
+                }
+                
+                return notesText
+            }
+        } catch {
+            return ""
+        }
+    }
+
     // MARK: Private
 
     private let analytics: AnalyticsLibrary
     private let noteService: NoteService
+    private let textRetriever: ShareableVerseTextRetriever
     private let navigateTo: (AyahNumber) -> Void
     private let readingPreferences = ReadingPreferences.shared
 

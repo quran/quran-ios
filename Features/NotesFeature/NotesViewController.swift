@@ -18,7 +18,7 @@ final class NotesViewController: UIHostingController<NotesView> {
 
         initialize()
     }
-
+    
     @available(*, unavailable)
     @MainActor
     dynamic required init?(coder aDecoder: NSCoder) {
@@ -47,7 +47,22 @@ final class NotesViewController: UIHostingController<NotesView> {
             editMode: Binding(
                 get: { [weak self] in self?.currentEditMode },
                 set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
-            )
-        )
+            ),
+            customItems: [
+                UIBarButtonItem(
+                    image: UIImage(systemName: "square.and.arrow.up"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(shareAllNotes))])
+    }    
+
+    @objc private func shareAllNotes() {
+        Task {
+            let notesText = await viewModel.prepareNotesForSharing()
+            let activityViewController = UIActivityViewController(activityItems: [notesText], applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            
+            present(activityViewController, animated: true, completion: nil)
+        }
     }
 }

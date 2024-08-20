@@ -9,6 +9,7 @@
 import AppDependencies
 import FeaturesSupport
 import QuranKit
+import QuranTextKit
 import UIKit
 
 @MainActor
@@ -22,9 +23,15 @@ public struct NotesBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
+        let textRetriever = ShareableVerseTextRetriever(
+                    databasesURL: container.databasesURL,
+                    quranFileURL: container.quranUthmaniV2Database
+        )
+        
         let viewModel = NotesViewModel(
             analytics: container.analytics,
             noteService: container.noteService(),
+            textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
             }

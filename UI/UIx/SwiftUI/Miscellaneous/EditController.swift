@@ -15,9 +15,11 @@ public final class EditController {
     public init(
         navigationItem: UINavigationItem,
         reload: AnyPublisher<Void, Never>,
-        editMode: Binding<EditMode?>
+        editMode: Binding<EditMode?>,
+        customItems: [UIBarButtonItem] = []
     ) {
         self.navigationItem = navigationItem
+        self.customItems = customItems
         _editMode = editMode
 
         reload
@@ -31,6 +33,7 @@ public final class EditController {
     // MARK: Private
 
     private let navigationItem: UINavigationItem
+    private var customItems: [UIBarButtonItem]
     @Binding private var editMode: EditMode?
     private var cancellables: Set<AnyCancellable> = []
 
@@ -60,7 +63,11 @@ public final class EditController {
     }
 
     private func updateEditButton() {
-        navigationItem.setRightBarButton(editButton, animated: true)
+        if let editButton = editButton {
+            navigationItem.setRightBarButtonItems(customItems + [editButton], animated: true)
+        } else {
+            navigationItem.setRightBarButtonItems(customItems, animated: true)
+        }
     }
 
     @objc

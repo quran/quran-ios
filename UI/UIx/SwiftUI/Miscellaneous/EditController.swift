@@ -63,7 +63,7 @@ public final class EditController {
     }
 
     private func updateEditButton() {
-        if let editButton = editButton {
+        if let editButton {
             navigationItem.setRightBarButtonItems(customItems + [editButton], animated: true)
         } else {
             navigationItem.setRightBarButtonItems(customItems, animated: true)

@@ -24,10 +24,10 @@ public struct NotesBuilder {
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         let textRetriever = ShareableVerseTextRetriever(
-                    databasesURL: container.databasesURL,
-                    quranFileURL: container.quranUthmaniV2Database
+            databasesURL: container.databasesURL,
+            quranFileURL: container.quranUthmaniV2Database
         )
-        
+
         let viewModel = NotesViewModel(
             analytics: container.analytics,
             noteService: container.noteService(),

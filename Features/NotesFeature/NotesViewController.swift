@@ -18,7 +18,7 @@ final class NotesViewController: UIHostingController<NotesView> {
 
         initialize()
     }
-    
+
     @available(*, unavailable)
     @MainActor
     dynamic required init?(coder aDecoder: NSCoder) {
@@ -53,16 +53,32 @@ final class NotesViewController: UIHostingController<NotesView> {
                     image: UIImage(systemName: "square.and.arrow.up"),
                     style: .plain,
                     target: self,
-                    action: #selector(shareAllNotes))])
-    }    
+                    action: #selector(shareAllNotes)
+                ),
+            ]
+        )
+    }
 
-    @objc private func shareAllNotes() {
+    @objc
+    private func shareAllNotes() {
         Task {
-            let notesText = await viewModel.prepareNotesForSharing()
-            let activityViewController = UIActivityViewController(activityItems: [notesText], applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self.view
-            
-            present(activityViewController, animated: true, completion: nil)
+            do {
+                let notesText = try await viewModel.prepareNotesForSharing()
+
+                let activityViewController = UIActivityViewController(activityItems: [notesText], applicationActivities: nil)
+
+                // iPad support
+                let view = navigationController?.view
+                let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
+                activityViewController.modalPresentationStyle = .formSheet
+                activityViewController.popoverPresentationController?.permittedArrowDirections = []
+                activityViewController.popoverPresentationController?.sourceView = view
+                activityViewController.popoverPresentationController?.sourceRect = viewBound ?? .zero
+
+                present(activityViewController, animated: true)
+            } catch {
+                showErrorAlert(error: error)
+            }
         }
     }
 }

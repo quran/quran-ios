@@ -47,7 +47,38 @@ final class NotesViewController: UIHostingController<NotesView> {
             editMode: Binding(
                 get: { [weak self] in self?.currentEditMode },
                 set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
-            )
+            ),
+            customItems: [
+                UIBarButtonItem(
+                    image: UIImage(systemName: "square.and.arrow.up"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(shareAllNotes)
+                ),
+            ]
         )
+    }
+
+    @objc
+    private func shareAllNotes() {
+        Task {
+            do {
+                let notesText = try await viewModel.prepareNotesForSharing()
+
+                let activityViewController = UIActivityViewController(activityItems: [notesText], applicationActivities: nil)
+
+                // iPad support
+                let view = navigationController?.view
+                let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
+                activityViewController.modalPresentationStyle = .formSheet
+                activityViewController.popoverPresentationController?.permittedArrowDirections = []
+                activityViewController.popoverPresentationController?.sourceView = view
+                activityViewController.popoverPresentationController?.sourceRect = viewBound ?? .zero
+
+                present(activityViewController, animated: true)
+            } catch {
+                showErrorAlert(error: error)
+            }
+        }
     }
 }

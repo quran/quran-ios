@@ -75,22 +75,27 @@ final class NotesViewModel: ObservableObject {
             var notesText = ""
             for note in await notes {
                 let noteText = if let noteContent = note.note.note, noteContent != "" {
-                    "\(noteContent.trimmingCharacters(in: .newlines))\n"
+                    "\(noteContent.trimmingCharacters(in: .newlines))\n\n"
                 } else {
                     ""
                 }
 
                 let verses = try await textRetriever.textForVerses(Array(note.note.verses))
-                    .filter { !$0.isEmpty }
-                    .map { $0.hasSuffix("﴾") ? String($0.dropLast()) : $0 }
-                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                
+                // Avoid the arabic text to be displayed in the wrong direction in LTR languages
+                if let arabicVerse = verses.first {
+                    let restOfVerses = verses.dropFirst()
 
-                let verseText = verses.joined(separator: "\n")
+                    let rightToLeftMark = "\u{202B}"
+                    let endMark = "\u{202E}"
+                    let arabicTextWithMarks = "\(rightToLeftMark)\(arabicVerse)\(endMark)"
+                    
+                    let verseText = ([arabicTextWithMarks] + restOfVerses).joined(separator: "\n")
 
-                notesText += "\(noteText)\(verseText)\n\n"
+                    notesText += "\(noteText)\(verseText)\n\n\n\n"
+                }                
             }
-
-            return notesText
+            return notesText.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 

@@ -65,7 +65,14 @@ public struct ShareableVerseTextRetriever {
 
     private func arabicText(for verse: AyahNumber) async throws -> String {
         let verseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-        return try await shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
+
+        // Avoid the arabic text to be displayed in the wrong direction in LTR languages
+        let rightToLeftMark = "\u{202B}"
+        let endMark = "\u{202C}"
+
+        let arabicVerse = try await shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
+
+        return "\(rightToLeftMark)\(arabicVerse)\(endMark)"
     }
 
     private func arabicScript(for verses: [AyahNumber]) async throws -> [String] {

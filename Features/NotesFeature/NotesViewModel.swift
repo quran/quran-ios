@@ -72,30 +72,18 @@ final class NotesViewModel: ObservableObject {
 
     func prepareNotesForSharing() async throws -> String {
         try await crasher.recordError("Failed to share notes") {
-            var notesText = ""
+            var notesText = [String]()
             for note in await notes {
-                let noteText = if let noteContent = note.note.note, noteContent != "" {
+                let title = if let noteContent = note.note.note, noteContent != "" {
                     "\(noteContent.trimmingCharacters(in: .newlines))\n\n"
                 } else {
                     ""
                 }
+                let verses = try await textRetriever.textForVerses(Array(note.note.verses)).joined(separator: "\n")
 
-                let verses = try await textRetriever.textForVerses(Array(note.note.verses))
-                
-                // Avoid the arabic text to be displayed in the wrong direction in LTR languages
-                if let arabicVerse = verses.first {
-                    let restOfVerses = verses.dropFirst()
-
-                    let rightToLeftMark = "\u{202B}"
-                    let endMark = "\u{202E}"
-                    let arabicTextWithMarks = "\(rightToLeftMark)\(arabicVerse)\(endMark)"
-                    
-                    let verseText = ([arabicTextWithMarks] + restOfVerses).joined(separator: "\n")
-
-                    notesText += "\(noteText)\(verseText)\n\n\n\n"
-                }                
+                notesText.append("\(title)\(verses)")
             }
-            return notesText.trimmingCharacters(in: .whitespacesAndNewlines)
+            return notesText.joined(separator: "\n\n\n\n")
         }
     }
 

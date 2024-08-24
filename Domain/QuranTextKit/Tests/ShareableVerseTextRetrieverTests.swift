@@ -64,7 +64,6 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         ]
         for test in tests {
             let versesText = try await shareableTextRetriever.textForVerses(test.verses)
-            print(versesText)
             XCTAssertEqual(test.result, versesText)
         }
     }

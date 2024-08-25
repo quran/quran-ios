@@ -46,6 +46,7 @@ public final class AppMigrator {
     public func migrationStatus() -> MigrationStatus {
         let updaters = versionUpdaters()
         if updaters.isEmpty {
+            updater.commitUpdates()
             return .noMigration
         } else {
             let blocksUI = updaters.contains { $0.blocksUI }
@@ -66,6 +67,7 @@ public final class AppMigrator {
                 }
             }
         }
+        updater.commitUpdates()
     }
 
     // MARK: Private

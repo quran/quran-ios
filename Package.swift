@@ -43,7 +43,7 @@ let package = Package(
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
 
         // Database
-        .package(url: "https://github.com/groue/GRDB.swift", from: "6.29.2"),
+        .package(url: "https://github.com/groue/GRDB.swift", from: "6.29.1"),
 
         // Async
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),

@@ -55,6 +55,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let urlContext = URLContexts.first else {
+            return
+        }
+        
+        let url = urlContext.url
+        if url.scheme == "quran" || url.scheme == "quran-ios" {
+            let path: String
+            
+            if #available(iOS 16.0, *) {
+                path = url.path(percentEncoded: true)
+            } else {
+                path = url.path
+            }
+            
+            _ = navigateTo(path: path)
+        }
+    }
+    
+    private func navigateTo(path: String) -> Bool {
+        print("Navigating to: \(path)")
+        // Implement the actual navigation or handling logic in follow up pr
+        return true
+    }
 
     // MARK: Private
 

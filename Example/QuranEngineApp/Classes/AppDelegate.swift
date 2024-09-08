@@ -49,27 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let downloadManager = container.downloadManager
         downloadManager.setBackgroundSessionCompletion(completionHandler)
     }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        // Check if the URL scheme matches the custom scheme
-        if url.scheme == "quran-ios" {
-            // Parse the URL to determine the desired action
-            let path = url.host ?? ""
-            
-            // Implement custom logic to navigate to a specific view or perform an action
-            // Example: Navigate to a specific surah or ayah
-            handleCustomURL(path: path)
-            
-            return true
-        }
-        return false
-    }
-
-    private func handleCustomURL(path: String) {
-        // Example logic to handle the custom URL path
-        // This could involve navigating to a specific part of the app
-        // For instance, opening a specific Surah or Ayah
-    }
 
     // MARK: Private
 

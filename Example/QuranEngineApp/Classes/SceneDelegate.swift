@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.overrideUserInterfaceStyle = ThemeService.shared.theme.userInterfaceStyle
         self.window = window
 
-        let launchBuilder = LaunchBuilder(container: Container.shared)
+        let launchBuilder = LaunchBuilder(container: container)
         let launchStartup = launchBuilder.launchStartup()
         launchStartup.launch(from: window)
 
@@ -57,31 +57,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let urlContext = URLContexts.first else {
+        guard let urlContext: UIOpenURLContext = URLContexts.first else {
             return
         }
-        
-        let url = urlContext.url
-        if url.scheme == "quran" || url.scheme == "quran-ios" {
-            let path: String
-            
-            if #available(iOS 16.0, *) {
-                path = url.path(percentEncoded: true)
-            } else {
-                path = url.path
-            }
-            
-            _ = navigateTo(path: path)
-        }
-    }
-    
-    private func navigateTo(path: String) -> Bool {
-        print("Navigating to: \(path)")
-        // Implement the actual navigation or handling logic in follow up pr
-        return true
+        container.handleIncomingUrl(urlContext: urlContext)
     }
 
     // MARK: Private
 
     private var launchStartup: LaunchStartup?
+    private let container = Container.shared
 }

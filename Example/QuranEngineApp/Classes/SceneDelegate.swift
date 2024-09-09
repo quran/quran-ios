@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // MARK: Internal
 
     var window: UIWindow?
+    private var launchBuilder: LaunchBuilder?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -21,9 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.overrideUserInterfaceStyle = ThemeService.shared.theme.userInterfaceStyle
         self.window = window
 
-        let launchBuilder = LaunchBuilder(container: container)
-        let launchStartup = launchBuilder.launchStartup()
-        launchStartup.launch(from: window)
+        self.launchBuilder = LaunchBuilder(container: container)
+        let launchStartup = launchBuilder?.launchStartup()
+        launchStartup?.launch(from: window)
 
         self.launchStartup = launchStartup
     }
@@ -60,7 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let urlContext: UIOpenURLContext = URLContexts.first else {
             return
         }
-        container.handleIncomingUrl(urlContext: urlContext)
+        launchBuilder?.handleIncomingUrl(urlContext: urlContext)
     }
 
     // MARK: Private

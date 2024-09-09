@@ -11,6 +11,7 @@ import AppMigrationFeature
 import AudioUpdater
 import ReciterService
 import SettingsService
+import UIKit
 
 @MainActor
 public struct LaunchBuilder {
@@ -36,8 +37,30 @@ public struct LaunchBuilder {
             reviewService: ReviewService(analytics: container.analytics)
         )
     }
+    
+    public func handleIncomingUrl(urlContext: UIOpenURLContext) {
+        let url = urlContext.url
+        
+        if url.scheme == "quran" || url.scheme == "quran-ios" {
+            let path: String
+            
+            if #available(iOS 16.0, *) {
+                path = url.path(percentEncoded: true)
+            } else {
+                path = url.path
+            }
+            
+            _ = navigateTo(path: path)
+        }
+    }
 
     // MARK: Internal
 
     let container: AppDependencies
+    
+    // MARK: Public
+    private func navigateTo(path: String) -> Bool {
+        // Implement the actual navigation or handling logic in follow up pr
+        return true
+    }
 }

@@ -54,23 +54,6 @@ class Container: AppDependencies {
     var logsDirectory: URL { FileManager.documentsURL.appendingPathComponent("logs") }
 
     var supportsCloudKit: Bool { false }
-    
-    // MARK: Public
-    func handleIncomingUrl(urlContext: UIOpenURLContext) {
-        let url = urlContext.url
-        
-        if url.scheme == "quran" || url.scheme == "quran-ios" {
-            let path: String
-            
-            if #available(iOS 16.0, *) {
-                path = url.path(percentEncoded: true)
-            } else {
-                path = url.path
-            }
-            
-            _ = navigateTo(path: path)
-        }
-    }
 
     // MARK: Private
 
@@ -83,11 +66,6 @@ class Container: AppDependencies {
         }
         return stack
     }()
-    
-    private func navigateTo(path: String) -> Bool {
-        // Implement the actual navigation or handling logic in follow up pr
-        return true
-    }
 }
 
 private enum Constant {

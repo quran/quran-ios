@@ -44,6 +44,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
+                                .invertInDarkMode()
                                 .background(
                                     ImageDecorationsView(
                                         imageSize: image.size,

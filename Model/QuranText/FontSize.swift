@@ -8,25 +8,35 @@
 import SwiftUI
 
 public enum FontSize: Int, CaseIterable, CustomStringConvertible {
-    case xxLarge = -1
-    case xLarge = 0
-    case large = 1
-    case medium = 2
-    case small = 3
-    case xSmall = 4
-    case xxSmall = 5
+    case accessibility5 = -6
+    case accessibility4 = -5
+    case accessibility3 = -4
+    case accessibility2 = -3
+    case accessibility1 = -2
+    case xxxLarge = -1
+    case xxLarge = 0
+    case xLarge = 1
+    case large = 2
+    case medium = 3
+    case small = 4
+    case xSmall = 5
 
     // MARK: Public
 
     public var description: String {
         switch self {
-        case .xxLarge: return "xxLarge"
-        case .xLarge: return "xLarge"
-        case .large: return "large"
-        case .medium: return "medium"
-        case .small: return "small"
-        case .xSmall: return "xSmall"
-        case .xxSmall: return "xxSmall"
+        case .accessibility5: "accessibility5"
+        case .accessibility4: "accessibility4"
+        case .accessibility3: "accessibility3"
+        case .accessibility2: "accessibility2"
+        case .accessibility1: "accessibility1"
+        case .xxxLarge: "xxxLarge"
+        case .xxLarge: "xxLarge"
+        case .xLarge: "xLarge"
+        case .large: "large"
+        case .medium: "medium"
+        case .small: "small"
+        case .xSmall: "xSmall"
         }
     }
 }
@@ -34,13 +44,18 @@ public enum FontSize: Int, CaseIterable, CustomStringConvertible {
 extension FontSize {
     public var dynamicTypeSize: DynamicTypeSize {
         switch self {
-        case .xxLarge: .xxxLarge
-        case .xLarge: .xxLarge
-        case .large: .xLarge
-        case .medium: .large
-        case .small: .medium
-        case .xSmall: .small
-        case .xxSmall: .xSmall
+        case .accessibility5: .accessibility5
+        case .accessibility4: .accessibility4
+        case .accessibility3: .accessibility3
+        case .accessibility2: .accessibility2
+        case .accessibility1: .accessibility1
+        case .xxxLarge: .xxxLarge
+        case .xxLarge: .xxLarge
+        case .xLarge: .xLarge
+        case .large: .large
+        case .medium: .medium
+        case .small: .small
+        case .xSmall: .xSmall
         }
     }
 }

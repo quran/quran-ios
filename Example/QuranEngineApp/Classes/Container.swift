@@ -15,6 +15,7 @@ import LastPagePersistence
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingService
+import UIKit
 
 /// Hosts singleton dependencies
 class Container: AppDependencies {

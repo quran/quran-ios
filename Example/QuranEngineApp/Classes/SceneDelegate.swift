@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // MARK: Internal
 
     var window: UIWindow?
+    private var launchBuilder: LaunchBuilder?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -21,9 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.overrideUserInterfaceStyle = ThemeService.shared.theme.userInterfaceStyle
         self.window = window
 
-        let launchBuilder = LaunchBuilder(container: Container.shared)
-        let launchStartup = launchBuilder.launchStartup()
-        launchStartup.launch(from: window)
+        self.launchBuilder = LaunchBuilder(container: container)
+        let launchStartup = launchBuilder?.launchStartup()
+        launchStartup?.launch(from: window)
 
         self.launchStartup = launchStartup
     }
@@ -55,8 +56,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let urlContext: UIOpenURLContext = URLContexts.first else {
+            return
+        }
+        launchBuilder?.handleIncomingUrl(urlContext: urlContext)
+    }
 
     // MARK: Private
 
     private var launchStartup: LaunchStartup?
+    private let container = Container.shared
 }

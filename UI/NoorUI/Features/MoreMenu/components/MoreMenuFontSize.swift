@@ -52,20 +52,18 @@ struct MoreMenuFontSize: View {
 
     private var fontSizeInPoints: CGFloat {
         switch fontSize {
-        case .xxLarge:
-            return 35
-        case .xLarge:
-            return 31
-        case .large:
-            return 25
-        case .medium:
-            return 20
-        case .small:
-            return 14
-        case .xSmall:
-            return 10
-        case .xxSmall:
-            return 7
+        case .accessibility5: return 61
+        case .accessibility4: return 57
+        case .accessibility3: return 51
+        case .accessibility2: return 46
+        case .accessibility1: return 41
+        case .xxxLarge: return 36
+        case .xxLarge: return 31
+        case .xLarge: return 25
+        case .large: return 20
+        case .medium: return 14
+        case .small: return 10
+        case .xSmall: return 7
         }
     }
 }

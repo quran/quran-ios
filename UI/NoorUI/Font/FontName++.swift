@@ -12,7 +12,7 @@ import NoorFont
 import QuranText
 import SwiftUI
 
-private let arabicQuranTextFontSize: CGFloat = 17
+private let arabicQuranTextFontSize: CGFloat = 21
 private let arabicTafseerTextFontSize: CGFloat = 21
 
 public extension Font {

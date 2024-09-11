@@ -25,7 +25,7 @@ public struct FontSizePreferences {
 
     // MARK: Private
 
-    private static let defaultValue = FontSize.medium
+    private static let defaultValue = FontSize.large
     private static let translationFontSizeKey = PreferenceKey<Int>(key: "translationFontSize", defaultValue: defaultValue.rawValue)
     private static let arabicFontSizeKey = PreferenceKey<Int>(key: "arabicFont", defaultValue: defaultValue.rawValue)
 }

@@ -37,19 +37,16 @@ public struct LaunchBuilder {
             reviewService: ReviewService(analytics: container.analytics)
         )
     }
-    
+
     public func handleIncomingUrl(urlContext: UIOpenURLContext) {
         let url = urlContext.url
-        
+
         if url.scheme == "quran" || url.scheme == "quran-ios" {
-            let path: String
-            
-            if #available(iOS 16.0, *) {
-                path = url.path(percentEncoded: true)
+            let path: String = if #available(iOS 16.0, *) {
+                url.path(percentEncoded: true)
             } else {
-                path = url.path
+                url.path
             }
-            
             _ = navigateTo(path: path)
         }
     }
@@ -57,10 +54,11 @@ public struct LaunchBuilder {
     // MARK: Internal
 
     let container: AppDependencies
-    
+
     // MARK: Public
+
     private func navigateTo(path: String) -> Bool {
-        // Implement the actual navigation or handling logic in follow up pr
+        // TODO: Implement the actual navigation
         return true
     }
 }

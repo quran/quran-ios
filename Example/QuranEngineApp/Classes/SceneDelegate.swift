@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.overrideUserInterfaceStyle = ThemeService.shared.theme.userInterfaceStyle
         self.window = window
 
-        self.launchBuilder = LaunchBuilder(container: container)
+        launchBuilder = LaunchBuilder(container: container)
         let launchStartup = launchBuilder?.launchStartup()
         launchStartup?.launch(from: window)
 
@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let urlContext: UIOpenURLContext = URLContexts.first else {
             return

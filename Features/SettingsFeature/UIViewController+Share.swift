@@ -16,7 +16,7 @@ extension UIViewController {
             completion?()
         }
 
-        let view = navigationController?.view
+        let view = navigationController?.view ?? view
         let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
         activityViewController.modalPresentationStyle = .formSheet
         activityViewController.popoverPresentationController?.permittedArrowDirections = []

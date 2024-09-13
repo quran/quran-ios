@@ -99,6 +99,7 @@ struct ImageDecorationsView: View {
                 suraHeaders
                 ayahNumbers
             }
+            .environment(\.layoutDirection, .leftToRight)
         }
         .onChangeWithInitial(of: imageSize) { sizeInfo.imageSize = $0 }
         .onSizeChange { sizeInfo.viewSize = $0 }

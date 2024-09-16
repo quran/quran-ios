@@ -25,10 +25,8 @@ public struct PlayerItemInfo {
     public init(title: String, artist: String, image: UIImage?) {
         self.title = title
         self.artist = artist
-        if let image {
-            artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
-        } else {
-            artwork = nil
+        artwork = (image ?? UIImage(named: "AppIcon")).map { image in
+            MPMediaItemArtwork(boundsSize: image.size) { _ in image }
         }
     }
 

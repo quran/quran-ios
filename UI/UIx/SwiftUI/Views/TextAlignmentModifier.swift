@@ -12,6 +12,7 @@ extension View {
     public func textAlignment(follows characterDirection: Locale.LanguageDirection) -> some View {
         multilineTextAlignment(characterDirection.textAlignment)
             .frame(maxWidth: .infinity, alignment: characterDirection.alignment)
+            .environment(\.layoutDirection, .leftToRight)
     }
 }
 

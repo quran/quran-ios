@@ -122,7 +122,7 @@ private struct ContentTranslationPreview: View {
 
     let quran = Quran.hafsMadani1405
 
-    let fontSize = FontSize.medium
+    let fontSize = FontSize.large
 
     var translation: Translation {
         Translation(

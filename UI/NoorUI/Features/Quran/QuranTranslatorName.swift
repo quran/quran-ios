@@ -25,7 +25,7 @@ public struct QuranTranslatorName: View {
     public var body: some View {
         Text(verbatim: "- \(name)")
             .foregroundColor(.secondaryLabel)
-            .font(.body)
+            .font(.footnote)
             .dynamicTypeSize(fontSize.dynamicTypeSize)
             .textAlignment(follows: characterDirection)
             .padding(.bottom, bottomPadding)

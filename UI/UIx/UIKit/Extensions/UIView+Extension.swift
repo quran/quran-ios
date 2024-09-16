@@ -141,3 +141,13 @@ extension UIView {
         )
     }
 }
+
+extension UIView {
+    public func snapshot(of area: CGRect? = nil) -> UIImage {
+        let rect = area ?? bounds
+        let renderer = UIGraphicsImageRenderer(size: rect.size)
+        return renderer.image { _ in
+            drawHierarchy(in: CGRect(origin: CGPoint(x: -rect.origin.x, y: -rect.origin.y), size: bounds.size), afterScreenUpdates: true)
+        }
+    }
+}

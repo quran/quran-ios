@@ -64,21 +64,44 @@ public class MagnifyingGlass: UIView {
 }
 
 private class MagnifyingAreaView: UIView {
-    var viewToMagnify: UIView?
+    private var scale: CGFloat = 1.5
 
-    var scale = CGPoint(x: 1.5, y: 1.5)
-
-    var touchPoint: CGPoint = .zero {
-        didSet { setNeedsDisplay() }
+    private let imageView = UIImageView()
+    private var snapshotImage: UIImage? {
+        didSet {
+            imageView.image = snapshotImage
+            if imageView.superview == nil {
+                imageView.contentMode = .center
+                imageView.transform = CGAffineTransform(scaleX: scale, y: scale)
+                addAutoLayoutSubview(imageView)
+                imageView.vc.edges()
+            }
+        }
     }
 
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else {
+    var viewToMagnify: UIView?
+
+    var touchPoint: CGPoint = .zero {
+        didSet {
+            refreshSnapshot() // Update the snapshot when the touch point changes
+        }
+    }
+
+    private func refreshSnapshot() {
+        guard let viewToMagnify else {
+            snapshotImage = nil
             return
         }
-        context.translateBy(x: frame.size.width / 2, y: frame.size.height / 2)
-        context.scaleBy(x: scale.x, y: scale.y) // 1.5 is the zoom scale
-        context.translateBy(x: -1 * touchPoint.x, y: -1 * touchPoint.y)
-        viewToMagnify?.layer.render(in: context)
+
+        // Define the area to capture around the touch point
+        let snapshotSize = CGSize(width: bounds.width / scale, height: bounds.height / scale)
+        let snapshotOrigin = CGPoint(
+            x: touchPoint.x - snapshotSize.width / 2,
+            y: touchPoint.y - snapshotSize.height / 2
+        )
+        let snapshotRect = CGRect(origin: snapshotOrigin, size: snapshotSize)
+
+        // Capture the snapshot of the target area
+        snapshotImage = viewToMagnify.snapshot(of: snapshotRect)
     }
 }

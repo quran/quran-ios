@@ -7,19 +7,21 @@
 
 import SwiftUI
 import UIx
+import VLogging
 
 struct MoreMenuDeviceRotation: View {
     @State var orientation: UIInterfaceOrientation = .unknown
+    @State var updateOrientationTo: UIInterfaceOrientation? = nil
 
     var body: some View {
         HStack {
             DeviceRotation(image: NoorImage.rotateToLandscape.image) {
-                updateOrientationTo(.landscapeLeft)
+                updateOrientationTo = .landscapeLeft
             }
             .disabled(orientation.isLandscape)
 
             DeviceRotation(image: NoorImage.rotateToPortrait.image) {
-                updateOrientationTo(.portrait)
+                updateOrientationTo = .portrait
             }
             .disabled(orientation.isPortrait)
         }
@@ -27,13 +29,8 @@ struct MoreMenuDeviceRotation: View {
             HStack {
                 Divider()
             }
-            .background(DeviceOrientationResolver { orientation = $0 })
+            .background(DeviceOrientationResolver(updateOrientationTo: $updateOrientationTo) { orientation = $0 })
         )
-    }
-
-    func updateOrientationTo(_ orientation: UIInterfaceOrientation) {
-        self.orientation = orientation
-        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
     }
 }
 
@@ -45,6 +42,7 @@ private struct DeviceRotation: View {
     var body: some View {
         Button(action: action) {
             image
+                .renderingMode(.template)
                 .foregroundColor(isEnabled ? .label : .gray)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -92,6 +90,7 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
         }
     }
 
+    @Binding var updateOrientationTo: UIInterfaceOrientation?
     let orientationChanged: (UIInterfaceOrientation) -> Void
 
     func makeUIViewController(context: Context) -> DeviceOrientationResolverController {
@@ -102,5 +101,28 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
 
     func updateUIViewController(_ controller: DeviceOrientationResolverController, context: Context) {
         controller.orientationChanged = orientationChanged
+
+        // Update orientation in the next runloop to prevent state modification during view update.
+        if updateOrientationTo != nil {
+            DispatchQueue.main.async {
+                updateOrientationIfNeeded(of: controller.view)
+            }
+        }
+    }
+
+    private func updateOrientationIfNeeded(of view: UIView) {
+        guard let newOrientation = updateOrientationTo else {
+            return
+        }
+        updateOrientationTo = nil
+
+        if #available(iOS 16.0, *) {
+            let orientationMask: UIInterfaceOrientationMask = newOrientation.isLandscape ? .landscape : .portrait
+            view.window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientationMask)) { error in
+                logger.error("Error while updating orientation to \(newOrientation.rawValue). Error: \(error)")
+            }
+        } else {
+            UIDevice.current.setValue(newOrientation.rawValue, forKey: "orientation")
+        }
     }
 }

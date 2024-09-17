@@ -73,17 +73,23 @@ final class NotesViewModel: ObservableObject {
     func prepareNotesForSharing() async throws -> String {
         try await crasher.recordError("Failed to share notes") {
             var notesText = [String]()
-            for note in await notes {
-                let title = if let noteContent = note.note.note, noteContent != "" {
-                    "\(noteContent.trimmingCharacters(in: .newlines))\n\n"
+            let notes: [NoteItem] = await self.notes
+            for (index, note) in notes.enumerated() {
+                let title: [String] = if let noteContent = note.note.note, noteContent != "" {
+                    [
+                        "\(noteContent.trimmingCharacters(in: .newlines))", "",
+                    ]
                 } else {
-                    ""
+                    []
                 }
-                let verses = try await textRetriever.textForVerses(Array(note.note.verses)).joined(separator: "\n")
+                let verses = try await textRetriever.textForVerses(Array(note.note.verses))
 
-                notesText.append("\(title)\(verses)")
+                notesText.append(contentsOf: title + verses)
+                if (index != notes.count - 1) {
+                    notesText.append(contentsOf: ["","",""])
+                }
             }
-            return notesText.joined(separator: "\n\n\n\n")
+            return notesText.joined(separator: "\n")
         }
     }
 

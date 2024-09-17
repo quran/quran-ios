@@ -49,7 +49,7 @@ extension NumberFormatter {
 
     public static var arabicNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "ar")
+        formatter.locale = Locale(identifier: "ar-SA")
         return formatter
     }()
 }

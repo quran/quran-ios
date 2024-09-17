@@ -85,8 +85,8 @@ final class NotesViewModel: ObservableObject {
                 let verses = try await textRetriever.textForVerses(Array(note.note.verses))
 
                 notesText.append(contentsOf: title + verses)
-                if (index != notes.count - 1) {
-                    notesText.append(contentsOf: ["","",""])
+                if index != notes.count - 1 {
+                    notesText.append(contentsOf: ["", "", ""])
                 }
             }
             return notesText.joined(separator: "\n")

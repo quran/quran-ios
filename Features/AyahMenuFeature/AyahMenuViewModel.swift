@@ -148,7 +148,8 @@ final class AyahMenuViewModel {
         logger.info("AyahMenu: share. Verses: \(deps.verses)")
         Task {
             if let lines = try? await retrieveSelectedAyahText() {
-                listener?.shareText(lines, in: self.deps.sourceView, at: self.deps.pointInView)
+                let withNewLines = lines.joined(separator: "\n")
+                listener?.shareText([withNewLines], in: self.deps.sourceView, at: self.deps.pointInView)
             }
         }
     }

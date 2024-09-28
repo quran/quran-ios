@@ -527,6 +527,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "AudioBannerFeature", hasTests: false, dependencies: [
             "Caching",
             "AppDependencies",
+            "NoorUI",
             "ReciterListFeature",
             "AdvancedAudioOptionsFeature",
         ]),

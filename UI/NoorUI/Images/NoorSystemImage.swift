@@ -24,6 +24,13 @@ public enum NoorSystemImage: String {
     case search = "magnifyingglass"
     case mushafs = "books.vertical.fill"
     case debug = "ant"
+    case play = "play.fill"
+    case stop = "stop.fill"
+    case pause = "pause.fill"
+    case more = "ellipsis.circle"
+    case backward = "backward.fill"
+    case forward = "forward.fill"
+    case cancel = "xmark"
 
     // MARK: Public
 

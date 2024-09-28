@@ -11,12 +11,17 @@ import Analytics
 import BatchDownloader
 import Crashing
 import Foundation
+import Localization
+import NoorUI
 import QueuePlayer
 import QuranAudio
 import QuranAudioKit
 import QuranKit
+import ReciterListFeature
 import ReciterService
+import SwiftUI
 import UIKit
+import UIx
 import Utilities
 import VLogging
 
@@ -26,21 +31,15 @@ public protocol AudioBannerListener: AnyObject {
     func highlightReadingAyah(_ ayah: AyahNumber?)
 }
 
-enum PlaybackState {
+private enum PlaybackState {
     case playing
     case paused
     case stopped
-    case downloading(progress: Float)
-}
-
-struct AudioBannerViewModelInternalActions {
-    let showError: (Error) -> Void
-    let playingStarted: () -> Void
-    let willStartDownloading: () -> Void
+    case downloading(progress: Double)
 }
 
 @MainActor
-public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
+public final class AudioBannerViewModel: ObservableObject {
     typealias AudioRange = (start: AyahNumber, end: AyahNumber)
 
     // MARK: Lifecycle
@@ -51,7 +50,9 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         recentRecitersService: RecentRecitersService,
         audioPlayer: QuranAudioPlayer,
         downloader: QuranAudioDownloader,
-        remoteCommandsHandler: RemoteCommandsHandler
+        remoteCommandsHandler: RemoteCommandsHandler,
+        reciterListBuilder: ReciterListBuilder,
+        advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
     ) {
         self.analytics = analytics
         self.reciterRetreiver = reciterRetreiver
@@ -59,6 +60,8 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         self.audioPlayer = audioPlayer
         self.downloader = downloader
         self.remoteCommandsHandler = remoteCommandsHandler
+        self.reciterListBuilder = reciterListBuilder
+        self.advancedAudioOptionsBuilder = advancedAudioOptionsBuilder
 
         let actions = QuranAudioPlayerActions(
             playbackEnded: { [weak self] in self?.playbackEnded() },
@@ -87,39 +90,19 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
     // MARK: Internal
 
     weak var listener: AudioBannerListener?
-    var internalActions: AudioBannerViewModelInternalActions?
 
-    var audioRange: AudioRange?
+    @Published var error: Error?
+    @Published var toast: (message: String, action: ToastAction?)?
+    @Published var viewControllerToPresent: UIViewController?
+    @Published var dismissPresentedViewController = false
 
-    @Published var playingState: PlaybackState = .stopped
-
-    var advancedAudioOptionsNotPlaying: AdvancedAudioOptions? {
-        setAudioRangeForCurrentPage()
-        return advancedAudioOptions
-    }
-
-    var advancedAudioOptions: AdvancedAudioOptions? {
-        guard let audioRange, let selectedReciter else {
-            return nil
+    var audioBannerState: AudioBannerState {
+        switch playingState {
+        case .playing: .playing(paused: false)
+        case .paused: .playing(paused: true)
+        case .stopped: .readyToPlay(reciter: selectedReciter?.localizedName ?? "")
+        case .downloading(let progress): .downloading(progress: progress)
         }
-        return AdvancedAudioOptions(
-            reciter: selectedReciter,
-            start: audioRange.start,
-            end: audioRange.end,
-            verseRuns: verseRuns,
-            listRuns: listRuns
-        )
-    }
-
-    var selectedReciter: Reciter? {
-        let storedSelectedReciterId = preferences.lastSelectedReciterId
-        let selectedReciter = reciters.first { $0.id == storedSelectedReciterId }
-        if selectedReciter == nil {
-            let firstReciter = reciters.first
-            logger.error("AudioBanner: couldn't find reciter \(storedSelectedReciterId) using \(String(describing: firstReciter?.id)) instead")
-            return firstReciter
-        }
-        return selectedReciter
     }
 
     func start() async {
@@ -148,96 +131,9 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         }
     }
 
-    // MARK: - Advanced Options
-
-    func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
-        logger.info("AudioBanner: playing advanced audio options \(newOptions)")
-        selectReciter(newOptions.reciter)
-        play(from: newOptions.start, to: newOptions.end, verseRuns: newOptions.verseRuns, listRuns: newOptions.listRuns)
-    }
-
-    func onSelectedReciterChanged(to reciter: Reciter) {
-        logger.info("AudioBanner: select reciter")
-        selectReciter(reciter)
-        playingState = .stopped
-    }
-
-    // MARK: - Remote Commands
-
-    func onPlayCommandFired() {
-        logger.info("AudioBanner: play command fired. State: \(playingState)")
-        switch playingState {
-        case .stopped: playStartingCurrentPage()
-        case .paused, .playing: resume()
-        case .downloading: break
-        }
-    }
-
-    func onPauseCommandFired() {
-        logger.info("AudioBanner: pause command fired. State: \(playingState)")
-        pause()
-    }
-
-    func onTogglePlayPauseCommandFired() {
-        logger.info("AudioBanner: toggle play/pause command fired. State: \(playingState)")
-        togglePlayPause()
-    }
-
-    func onStepForwardCommandFired() {
-        logger.info("AudioBanner: step forward command fired. State: \(playingState)")
-        stepForward()
-    }
-
-    func onStepBackwardCommandFire() {
-        logger.info("AudioBanner: step backward command fired. State: \(playingState)")
-        stepBackward()
-    }
-
-    // MARK: - Presenter Listener
-
-    func onPlayTapped() {
-        logger.info("AudioBanner: play button tapped. State: \(playingState)")
-        playStartingCurrentPage()
-    }
-
-    func onPauseResumeTapped() {
-        logger.info("AudioBanner: pause/resume button tapped. State: \(playingState)")
-        togglePlayPause()
-    }
-
-    func onStopTapped() {
-        logger.info("AudioBanner: stop button tapped. State: \(playingState)")
-        stop()
-    }
-
-    func onForwardTapped() {
-        logger.info("AudioBanner: step forward button tapped. State: \(playingState)")
-        stepForward()
-    }
-
-    func onBackwardTapped() {
-        logger.info("AudioBanner: step backward button tapped. State: \(playingState)")
-        stepBackward()
-    }
-
-    func cancelDownload() async {
-        logger.info("AudioBanner: cancel download tapped. State: \(playingState)")
-        await downloader.cancelAllAudioDownloads()
-        playbackEnded()
-    }
-
-    func showReciterView() {
-        logger.info("AudioBanner: show reciter view")
-        if let selectedReciter {
-            crasher.setValue(selectedReciter.id, forKey: .reciterId)
-        }
-        listener?.highlightReadingAyah(nil)
-
-        remoteCommandsHandler.stopListening()
-        remoteCommandsHandler.startListeningToPlayCommand()
-    }
-
     // MARK: Private
+
+    private var audioRange: AudioRange?
 
     private let analytics: AnalyticsLibrary
     private let reciterRetreiver: ReciterDataRetriever
@@ -247,11 +143,43 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
     private let audioPlayer: QuranAudioPlayer
     private let downloader: QuranAudioDownloader
     private let remoteCommandsHandler: RemoteCommandsHandler
+    private let reciterListBuilder: ReciterListBuilder
+    private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
 
     private var verseRuns: Runs = .one
     private var listRuns: Runs = .one
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
+
+    @Published private var playingState: PlaybackState = .stopped {
+        didSet {
+            logger.info("AudioBanner: playingState updated to \(playingState) - reciter: \(String(describing: selectedReciter?.id))")
+            if case .stopped = playingState {
+                onPlayingStateStopped()
+            }
+        }
+    }
+
+    private var selectedReciter: Reciter? {
+        let storedSelectedReciterId = preferences.lastSelectedReciterId
+        let selectedReciter = reciters.first { $0.id == storedSelectedReciterId }
+        if selectedReciter == nil {
+            let firstReciter = reciters.first
+            logger.error("AudioBanner: couldn't find reciter \(storedSelectedReciterId) using \(String(describing: firstReciter?.id)) instead")
+            return firstReciter
+        }
+        return selectedReciter
+    }
+
+    private func onPlayingStateStopped() {
+        if let selectedReciter {
+            crasher.setValue(selectedReciter.id, forKey: .reciterId)
+        }
+        listener?.highlightReadingAyah(nil)
+
+        remoteCommandsHandler.stopListening()
+        remoteCommandsHandler.startListeningToPlayCommand()
+    }
 
     @objc
     private func applicationDidBecomeActive() {
@@ -417,13 +345,18 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         logger.info("AudioBanner: will start downloading")
         crasher.setValue(true, forKey: .downloadingQuran)
         playingState = .downloading(progress: 0)
-        internalActions?.willStartDownloading()
+
+        guard let audioRange else {
+            return
+        }
+        let message = audioMessage("audio.downloading.message", audioRange: audioRange)
+        toast = (message, action: nil)
     }
 
     private func updateDownloadProgress() async {
         let downloads = await downloader.runningAudioDownloads()
         let progress = downloads.map(\.currentProgress.progress).reduce(0, +)
-        playingState = .downloading(progress: Float(progress) / Float(downloads.count))
+        playingState = .downloading(progress: progress / Double(downloads.count))
     }
 
     private func playingStarted() {
@@ -432,13 +365,152 @@ public final class AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         crasher.setValue(false, forKey: .downloadingQuran)
         remoteCommandsHandler.startListening()
         playingState = .playing
-        internalActions?.playingStarted()
+
+        guard let audioRange else {
+            return
+        }
+
+        let message = audioMessage("audio.playing.message", audioRange: audioRange)
+        toast = (message, action: ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
+            self?.showAdvancedAudioOptions()
+        })
     }
 
     private func playbackFailed(_ error: Error) {
         logger.info("AudioBanner: failed to playing audio. \(error)")
-        internalActions?.showError(error)
+        self.error = error
         playbackEnded()
+    }
+
+    private func audioMessage(_ format: String, audioRange: AudioRange) -> String {
+        lFormat(format, audioRange.start.localizedName, audioRange.end.localizedName)
+    }
+}
+
+extension AudioBannerViewModel {
+    func playFromBanner() {
+        logger.info("AudioBanner: play button tapped. State: \(playingState)")
+        playStartingCurrentPage()
+    }
+
+    func pauseFromBanner() {
+        logger.info("AudioBanner: pause button tapped. State: \(playingState)")
+        pause()
+    }
+
+    func resumeFromBanner() {
+        logger.info("AudioBanner: resume button tapped. State: \(playingState)")
+        resume()
+    }
+
+    func stopFromBanner() {
+        logger.info("AudioBanner: stop button tapped. State: \(playingState)")
+        stop()
+    }
+
+    func forwardFromBanner() {
+        logger.info("AudioBanner: step forward button tapped. State: \(playingState)")
+        stepForward()
+    }
+
+    func backwardFromBanner() {
+        logger.info("AudioBanner: step backward button tapped. State: \(playingState)")
+        stepBackward()
+    }
+
+    func cancelDownload() async {
+        logger.info("AudioBanner: cancel download tapped. State: \(playingState)")
+        await downloader.cancelAllAudioDownloads()
+        playbackEnded()
+    }
+}
+
+extension AudioBannerViewModel: RemoteCommandsHandlerDelegate {
+    func onPlayCommandFired() {
+        logger.info("AudioBanner: play command fired. State: \(playingState)")
+        switch playingState {
+        case .stopped: playStartingCurrentPage()
+        case .paused, .playing: resume()
+        case .downloading: break
+        }
+    }
+
+    func onPauseCommandFired() {
+        logger.info("AudioBanner: pause command fired. State: \(playingState)")
+        pause()
+    }
+
+    func onTogglePlayPauseCommandFired() {
+        logger.info("AudioBanner: toggle play/pause command fired. State: \(playingState)")
+        togglePlayPause()
+    }
+
+    func onStepForwardCommandFired() {
+        logger.info("AudioBanner: step forward command fired. State: \(playingState)")
+        stepForward()
+    }
+
+    func onStepBackwardCommandFire() {
+        logger.info("AudioBanner: step backward command fired. State: \(playingState)")
+        stepBackward()
+    }
+}
+
+extension AudioBannerViewModel: ReciterListListener {
+    func presentReciterList() {
+        logger.info("AudioBanner: reciters button tapped. State: \(playingState)")
+        let viewController = reciterListBuilder.build(withListener: self)
+        viewControllerToPresent = ReciterNavigationController(rootViewController: viewController)
+    }
+
+    public func onSelectedReciterChanged(to reciter: Reciter) {
+        logger.info("AudioBanner: onSelectedReciterChanged to \(reciter.id)")
+        selectReciter(reciter)
+        playingState = .stopped
+    }
+
+    public func dismissReciterList() {
+        logger.info("AudioBanner: dismiss reciters list")
+        dismissPresentedViewController = true
+    }
+}
+
+extension AudioBannerViewModel: AdvancedAudioOptionsListener {
+    private var advancedAudioOptions: AdvancedAudioOptions? {
+        guard let audioRange, let selectedReciter else {
+            return nil
+        }
+        return AdvancedAudioOptions(
+            reciter: selectedReciter,
+            start: audioRange.start,
+            end: audioRange.end,
+            verseRuns: verseRuns,
+            listRuns: listRuns
+        )
+    }
+
+    func showAdvancedAudioOptions() {
+        logger.info("AudioBanner: more button tapped. State: \(playingState)")
+        if case .stopped = playingState {
+            setAudioRangeForCurrentPage()
+        }
+
+        guard let options = advancedAudioOptions else {
+            logger.info("AudioBanner: showAdvancedAudioOptions couldn't construct advanced audio options")
+            return
+        }
+        viewControllerToPresent = advancedAudioOptionsBuilder.build(withListener: self, options: options)
+    }
+
+    public func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        logger.info("AudioBanner: playing advanced audio options \(newOptions)")
+        selectReciter(newOptions.reciter)
+        play(from: newOptions.start, to: newOptions.end, verseRuns: newOptions.verseRuns, listRuns: newOptions.listRuns)
+    }
+
+    public func dismissAudioOptions() {
+        logger.info("AudioBanner: dismiss advanced audio options")
+        dismissPresentedViewController = true
     }
 }
 

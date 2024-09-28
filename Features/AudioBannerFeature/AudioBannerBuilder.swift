@@ -11,6 +11,7 @@ import AppDependencies
 import QuranAudioKit
 import ReciterListFeature
 import ReciterService
+import SwiftUI
 import UIKit
 
 @MainActor
@@ -33,13 +34,15 @@ public struct AudioBannerBuilder {
                 baseURL: container.filesAppHost,
                 downloader: container.downloadManager
             ),
-            remoteCommandsHandler: RemoteCommandsHandler(center: .shared())
-        )
-        let viewController = AudioBannerViewController(
-            viewModel: viewModel,
+            remoteCommandsHandler: RemoteCommandsHandler(center: .shared()),
             reciterListBuilder: ReciterListBuilder(),
             advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
         )
+        let view = AudioBannerView(viewModel: viewModel)
+            .enableToastPresenter()
+            .enableUIKitNavigator()
+        let viewController = UIHostingController(rootView: view)
+        viewController.view.backgroundColor = nil
         viewModel.listener = listener
         return (viewController, viewModel)
     }

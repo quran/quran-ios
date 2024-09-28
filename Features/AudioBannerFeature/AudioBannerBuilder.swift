@@ -34,7 +34,6 @@ public struct AudioBannerBuilder {
                 baseURL: container.filesAppHost,
                 downloader: container.downloadManager
             ),
-            remoteCommandsHandler: RemoteCommandsHandler(center: .shared()),
             reciterListBuilder: ReciterListBuilder(),
             advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
         )

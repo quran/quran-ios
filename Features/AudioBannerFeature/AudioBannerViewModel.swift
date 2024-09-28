@@ -50,7 +50,6 @@ public final class AudioBannerViewModel: ObservableObject {
         recentRecitersService: RecentRecitersService,
         audioPlayer: QuranAudioPlayer,
         downloader: QuranAudioDownloader,
-        remoteCommandsHandler: RemoteCommandsHandler,
         reciterListBuilder: ReciterListBuilder,
         advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
     ) {
@@ -59,24 +58,11 @@ public final class AudioBannerViewModel: ObservableObject {
         self.recentRecitersService = recentRecitersService
         self.audioPlayer = audioPlayer
         self.downloader = downloader
-        self.remoteCommandsHandler = remoteCommandsHandler
         self.reciterListBuilder = reciterListBuilder
         self.advancedAudioOptionsBuilder = advancedAudioOptionsBuilder
 
-        let actions = QuranAudioPlayerActions(
-            playbackEnded: { [weak self] in self?.playbackEnded() },
-            playbackPaused: { [weak self] in self?.playbackPaused() },
-            playbackResumed: { [weak self] in self?.playbackResumed() },
-            playing: { [weak self] in self?.playing(ayah: $0) }
-        )
-        audioPlayer.setActions(actions)
-
-        remoteCommandsHandler.delegate = self
-    }
-
-    deinit {
-        remoteCommandsHandler.stopListening()
-        NotificationCenter.default.removeObserver(self)
+        setUpAudioPlayerActions()
+        setUpRemoteCommandHandler()
     }
 
     // MARK: Public
@@ -106,7 +92,7 @@ public final class AudioBannerViewModel: ObservableObject {
     }
 
     func start() async {
-        remoteCommandsHandler.startListeningToPlayCommand()
+        remoteCommandsHandler?.startListeningToPlayCommand()
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(applicationDidBecomeActive),
@@ -142,7 +128,7 @@ public final class AudioBannerViewModel: ObservableObject {
     private let lastAyahFinder: LastAyahFinder = PreferencesLastAyahFinder.shared
     private let audioPlayer: QuranAudioPlayer
     private let downloader: QuranAudioDownloader
-    private let remoteCommandsHandler: RemoteCommandsHandler
+    private var remoteCommandsHandler: RemoteCommandsHandler?
     private let reciterListBuilder: ReciterListBuilder
     private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
 
@@ -177,8 +163,8 @@ public final class AudioBannerViewModel: ObservableObject {
         }
         listener?.highlightReadingAyah(nil)
 
-        remoteCommandsHandler.stopListening()
-        remoteCommandsHandler.startListeningToPlayCommand()
+        remoteCommandsHandler?.stopListening()
+        remoteCommandsHandler?.startListeningToPlayCommand()
     }
 
     @objc
@@ -187,8 +173,6 @@ public final class AudioBannerViewModel: ObservableObject {
         let tempPlayingState = playingState
         playingState = tempPlayingState
     }
-
-    // MARK: - Reciter
 
     private func selectReciter(_ reciter: Reciter) {
         preferences.lastSelectedReciterId = reciter.id
@@ -311,6 +295,16 @@ public final class AudioBannerViewModel: ObservableObject {
 
     // MARK: - Audio Interactor Delegate
 
+    private func setUpAudioPlayerActions() {
+        let actions = QuranAudioPlayerActions(
+            playbackEnded: { [weak self] in self?.playbackEnded() },
+            playbackPaused: { [weak self] in self?.playbackPaused() },
+            playbackResumed: { [weak self] in self?.playbackResumed() },
+            playing: { [weak self] in self?.playing(ayah: $0) }
+        )
+        audioPlayer.setActions(actions)
+    }
+
     private func playbackPaused() {
         logger.info("AudioBanner: playback paused")
         updatePlayingState(to: .paused)
@@ -363,7 +357,7 @@ public final class AudioBannerViewModel: ObservableObject {
         logger.info("AudioBanner: playing started")
         cancellableTasks = []
         crasher.setValue(false, forKey: .downloadingQuran)
-        remoteCommandsHandler.startListening()
+        remoteCommandsHandler?.startListening()
         playingState = .playing
 
         guard let audioRange else {
@@ -425,8 +419,19 @@ extension AudioBannerViewModel {
     }
 }
 
-extension AudioBannerViewModel: RemoteCommandsHandlerDelegate {
-    func onPlayCommandFired() {
+extension AudioBannerViewModel {
+    private func setUpRemoteCommandHandler() {
+        let remoteActions = RemoteCommandActions(
+            play: { [weak self] in self?.handlePlayCommand() },
+            pause: { [weak self] in self?.handlePauseCommand() },
+            togglePlayPause: { [weak self] in self?.handleTogglePlayPauseCommand() },
+            nextTrack: { [weak self] in self?.handleNextTrackCommand() },
+            previousTrack: { [weak self] in self?.handlePreviousTrackCommand() }
+        )
+        remoteCommandsHandler = RemoteCommandsHandler(center: .shared(), actions: remoteActions)
+    }
+
+    private func handlePlayCommand() {
         logger.info("AudioBanner: play command fired. State: \(playingState)")
         switch playingState {
         case .stopped: playStartingCurrentPage()
@@ -435,22 +440,22 @@ extension AudioBannerViewModel: RemoteCommandsHandlerDelegate {
         }
     }
 
-    func onPauseCommandFired() {
+    private func handlePauseCommand() {
         logger.info("AudioBanner: pause command fired. State: \(playingState)")
         pause()
     }
 
-    func onTogglePlayPauseCommandFired() {
+    private func handleTogglePlayPauseCommand() {
         logger.info("AudioBanner: toggle play/pause command fired. State: \(playingState)")
         togglePlayPause()
     }
 
-    func onStepForwardCommandFired() {
+    private func handleNextTrackCommand() {
         logger.info("AudioBanner: step forward command fired. State: \(playingState)")
         stepForward()
     }
 
-    func onStepBackwardCommandFire() {
+    private func handlePreviousTrackCommand() {
         logger.info("AudioBanner: step backward command fired. State: \(playingState)")
         stepBackward()
     }

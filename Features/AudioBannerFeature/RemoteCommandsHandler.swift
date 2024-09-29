@@ -9,36 +9,38 @@
 import MediaPlayer
 
 @MainActor
-protocol RemoteCommandsHandlerDelegate: AnyObject {
-    func onPlayCommandFired()
-    func onPauseCommandFired()
-    func onTogglePlayPauseCommandFired()
-    func onStepForwardCommandFired()
-    func onStepBackwardCommandFire()
+struct RemoteCommandActions {
+    var play: () -> Void
+    var pause: () -> Void
+    var togglePlayPause: () -> Void
+    var nextTrack: () -> Void
+    var previousTrack: () -> Void
 }
 
-final class RemoteCommandsHandler: Sendable {
+@MainActor
+final class RemoteCommandsHandler {
     // MARK: Lifecycle
 
-    init(center: MPRemoteCommandCenter) {
+    init(center: MPRemoteCommandCenter, actions: RemoteCommandActions) {
         self.center = center
+        self.actions = actions
         setUpRemoteControlEvents()
     }
 
     deinit {
-        stopListening()
+        Task { [center] in
+            await center.setCommandsEnabled(false)
+        }
     }
 
     // MARK: Internal
 
-    weak var delegate: RemoteCommandsHandlerDelegate?
-
     func startListening() {
-        setCommandsEnabled(true)
+        center.setCommandsEnabled(true)
     }
 
     func stopListening() {
-        setCommandsEnabled(false)
+        center.setCommandsEnabled(false)
     }
 
     func startListeningToPlayCommand() {
@@ -48,56 +50,79 @@ final class RemoteCommandsHandler: Sendable {
     // MARK: Private
 
     private let center: MPRemoteCommandCenter
+    private let actions: RemoteCommandActions
 
     private func setUpRemoteControlEvents() {
         center.playCommand.addTarget { [weak self] _ in
             guard let self else { return .success }
             Task { @MainActor in
-                self.delegate?.onPlayCommandFired()
+                self.actions.play()
             }
             return .success
         }
         center.pauseCommand.addTarget { [weak self] _ in
             guard let self else { return .success }
             Task { @MainActor in
-                self.delegate?.onPauseCommandFired()
+                self.actions.pause()
             }
             return .success
         }
         center.togglePlayPauseCommand.addTarget { [weak self] _ in
             guard let self else { return .success }
             Task { @MainActor in
-                self.delegate?.onTogglePlayPauseCommandFired()
+                self.actions.togglePlayPause()
             }
             return .success
         }
         center.nextTrackCommand.addTarget { [weak self] _ in
             guard let self else { return .success }
             Task { @MainActor in
-                self.delegate?.onStepForwardCommandFired()
+                self.actions.nextTrack()
             }
             return .success
         }
         center.previousTrackCommand.addTarget { [weak self] _ in
             guard let self else { return .success }
             Task { @MainActor in
-                self.delegate?.onStepBackwardCommandFire()
+                self.actions.previousTrack()
             }
             return .success
         }
 
         // disable all of them initially
-        setCommandsEnabled(false)
+        center.setCommandsEnabled(false)
 
-        // disabled unused command
-        [center.seekForwardCommand, center.seekBackwardCommand, center.skipForwardCommand,
-         center.skipBackwardCommand, center.ratingCommand, center.changePlaybackRateCommand,
-         center.likeCommand, center.dislikeCommand, center.bookmarkCommand, center.changePlaybackPositionCommand].forEach { $0.isEnabled = false }
+        // disabled unused commands
+        let unusedCommands = [
+            center.seekForwardCommand,
+            center.seekBackwardCommand,
+            center.skipForwardCommand,
+            center.skipBackwardCommand,
+            center.ratingCommand,
+            center.changePlaybackRateCommand,
+            center.likeCommand,
+            center.dislikeCommand,
+            center.bookmarkCommand,
+            center.changePlaybackPositionCommand,
+        ]
+        for command in unusedCommands {
+            command.isEnabled = false
+        }
     }
+}
 
-    private func setCommandsEnabled(_ enabled: Bool) {
-        let center = MPRemoteCommandCenter.shared()
-        [center.playCommand, center.pauseCommand, center.togglePlayPauseCommand,
-         center.nextTrackCommand, center.previousTrackCommand].forEach { $0.isEnabled = enabled }
+extension MPRemoteCommandCenter {
+    @MainActor
+    func setCommandsEnabled(_ enabled: Bool) {
+        let commands = [
+            playCommand,
+            pauseCommand,
+            togglePlayPauseCommand,
+            nextTrackCommand,
+            previousTrackCommand,
+        ]
+        for command in commands {
+            command.isEnabled = enabled
+        }
     }
 }

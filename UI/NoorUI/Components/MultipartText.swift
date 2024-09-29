@@ -217,7 +217,7 @@ private struct MultiPartTextView: View {
     @ViewBuilder
     private func wrap(@ViewBuilder content: () -> some View) -> some View {
         if #available(iOS 16.0, *) {
-            WrappingHStack(alignment: alignment, horizontalSpacing: 0) {
+            WrappingHStack(alignment: alignment, horizontalSpacing: 0, fitContentWidth: true) {
                 content()
             }
         } else {

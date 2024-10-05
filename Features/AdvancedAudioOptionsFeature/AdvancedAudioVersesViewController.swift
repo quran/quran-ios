@@ -5,12 +5,13 @@
 //  Created by Afifi, Mohamed on 10/10/21.
 //
 
+import QuranKit
 import UIKit
 
-public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITableViewController {
+class AdvancedAudioVersesViewController: UITableViewController {
     // MARK: Lifecycle
 
-    public init(suras: [Sura], selected: Sura.Verse, onSelection: @escaping (Sura.Verse) -> Void) {
+    init(suras: [Sura], selected: AyahNumber, onSelection: @MainActor @escaping (AyahNumber) -> Void) {
         self.suras = suras
         self.selected = selected
         self.onSelection = onSelection
@@ -22,9 +23,9 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public
+    // MARK: Internal
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = UITableView.automaticDimension
@@ -37,15 +38,15 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
         }
     }
 
-    override public func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         suras.count
     }
 
-    override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         suras[section].verses.count
     }
 
-    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let verse = verseAtIndexPath(indexPath)
         cell.textLabel?.text = verse.localizedName
@@ -54,19 +55,19 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
         return cell
     }
 
-    override public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        suras[section].localizedName
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        suras[section].localizedName()
     }
 
-    override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         onSelection(verseAtIndexPath(indexPath))
     }
 
     // MARK: Private
 
-    private let onSelection: (Sura.Verse) -> Void
+    private let onSelection: (AyahNumber) -> Void
     private let suras: [Sura]
-    private let selected: Sura.Verse
+    private let selected: AyahNumber
 
     private func selectedIndexPath() -> IndexPath? {
         for (section, sura) in suras.enumerated() {
@@ -79,7 +80,7 @@ public class AdvancedAudioVersesViewController<Sura: AdvancedAudioUISura>: UITab
         return nil
     }
 
-    private func verseAtIndexPath(_ indexPath: IndexPath) -> Sura.Verse {
+    private func verseAtIndexPath(_ indexPath: IndexPath) -> AyahNumber {
         suras[indexPath.section].verses[indexPath.item]
     }
 }

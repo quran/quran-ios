@@ -464,19 +464,13 @@ extension AudioBannerViewModel {
 extension AudioBannerViewModel: ReciterListListener {
     func presentReciterList() {
         logger.info("AudioBanner: reciters button tapped. State: \(playingState)")
-        let viewController = reciterListBuilder.build(withListener: self)
-        viewControllerToPresent = ReciterNavigationController(rootViewController: viewController)
+        viewControllerToPresent = reciterListBuilder.build(withListener: self, standalone: true)
     }
 
     public func onSelectedReciterChanged(to reciter: Reciter) {
         logger.info("AudioBanner: onSelectedReciterChanged to \(reciter.id)")
         selectReciter(reciter)
         playingState = .stopped
-    }
-
-    public func dismissReciterList() {
-        logger.info("AudioBanner: dismiss reciters list")
-        dismissPresentedViewController = true
     }
 }
 

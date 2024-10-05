@@ -7,24 +7,22 @@
 //
 
 import ReciterListFeature
-import UIKit
+import SwiftUI
 
 @MainActor
 public struct AdvancedAudioOptionsBuilder {
-    // MARK: Lifecycle
-
     public init() {
     }
 
-    // MARK: Public
-
     public func build(withListener listener: AdvancedAudioOptionsListener, options: AdvancedAudioOptions) -> UIViewController {
-        let viewModel = AdvancedAudioOptionsInteractor(options: options)
-        viewModel.listener = listener
-        let viewController = AdvancedAudioOptionsNavigationController(
-            viewModel: viewModel,
+        let viewModel = AdvancedAudioOptionsViewModel(
+            options: options,
             reciterListBuilder: ReciterListBuilder()
         )
+        viewModel.listener = listener
+
+        let view = AdvancedAudioOptionsView(viewModel: viewModel)
+        let viewController = UIHostingController(rootView: view)
         return viewController
     }
 }

@@ -5,11 +5,10 @@
 //  Created by Mohamed Afifi on 2023-07-25.
 //
 
-import Localization
 import SwiftUI
 import UIx
 
-final class ReciterListViewController: UIHostingController<ReciterListView> {
+final class ReciterListViewController: UIHostingController<ReciterListView>, StackableViewController {
     // MARK: Lifecycle
 
     init(viewModel: ReciterListViewModel) {
@@ -29,19 +28,7 @@ final class ReciterListViewController: UIHostingController<ReciterListView> {
         traitCollection.userInterfaceIdiom == .pad ? .all : .portrait
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = l("reciters.title")
-        navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancelButtonTapped))
-    }
-
     // MARK: Private
 
     private let viewModel: ReciterListViewModel
-
-    @objc
-    private func cancelButtonTapped() {
-        viewModel.dismissRecitersList()
-    }
 }

@@ -13,18 +13,19 @@ import VLogging
 @MainActor
 public protocol ReciterListListener: AnyObject {
     func onSelectedReciterChanged(to reciter: Reciter)
-    func dismissReciterList()
 }
 
 @MainActor
 final class ReciterListViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init() {
+    init(standalone: Bool) {
+        self.standalone = standalone
     }
 
     // MARK: Internal
 
+    let standalone: Bool
     weak var listener: ReciterListListener?
 
     @Published var recentReciters: [Reciter] = []
@@ -51,14 +52,7 @@ final class ReciterListViewModel: ObservableObject {
     }
 
     func selectReciter(_ reciter: Reciter) {
-        logger.info("Reciters: reciter selected \(reciter.id)")
         listener?.onSelectedReciterChanged(to: reciter)
-        listener?.dismissReciterList()
-    }
-
-    func dismissRecitersList() {
-        logger.info("Reciters: dismiss reciters list tapped")
-        listener?.dismissReciterList()
     }
 
     // MARK: Private

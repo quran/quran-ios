@@ -10,12 +10,14 @@ import NoorUI
 import QuranAudio
 import SwiftUI
 import UIx
+import VLogging
 
 struct ReciterListView: View {
     @StateObject var viewModel: ReciterListViewModel
 
     var body: some View {
         ReciterListViewUI(
+            standalone: viewModel.standalone,
             recentReciters: viewModel.recentReciters,
             downloadedReciters: viewModel.downloadedReciters,
             englishReciters: viewModel.englishReciters,
@@ -30,6 +32,9 @@ struct ReciterListView: View {
 private struct ReciterListViewUI: View {
     // MARK: Internal
 
+    @Environment(\.dismiss) var dismiss
+
+    let standalone: Bool
     let recentReciters: [Reciter]
     let downloadedReciters: [Reciter]
     let englishReciters: [Reciter]
@@ -41,6 +46,24 @@ private struct ReciterListViewUI: View {
     let selectAction: ItemAction<Reciter>
 
     var body: some View {
+        Group {
+            if standalone {
+                CocoaNavigationView {
+                    content
+                        .background(Color.blue)
+                }
+                .background(Color.yellow)
+            } else {
+                content
+                    .background(Color.green)
+            }
+        }
+        .background(Color.red)
+    }
+
+    // MARK: Private
+
+    private var content: some View {
         NoorList {
             NoorSection(
                 title: l("reciters.recent"),
@@ -75,9 +98,19 @@ private struct ReciterListViewUI: View {
             )
         }
         .task(start)
+        .navigationTitle(l("reciters.title"))
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    logger.info("Reciters: dismiss reciters list tapped")
+                    dismiss()
+                } label: {
+                    Text(l("button.done"))
+                        .font(.headline)
+                }
+            }
+        }
     }
-
-    // MARK: Private
 
     private func allTitle(languageCode: String) -> String {
         if let language = Locale.fixedCurrentLocaleNumbers.localizedString(forLanguageCode: languageCode) {
@@ -92,7 +125,9 @@ private struct ReciterListViewUI: View {
             title: .text(reciter.localizedName),
             accessory: reciter == selectedReciter ? .image(.checkmark, color: .appIdentity) : nil
         ) {
+            logger.info("Reciters: reciter selected \(reciter.id)")
             selectAction(reciter)
+            dismiss()
         }
     }
 }
@@ -102,27 +137,20 @@ struct ReciterListView_Previews: PreviewProvider {
         @State var selectedReciter: Reciter?
 
         var body: some View {
-            NavigationView {
-                ReciterListViewUI(
-                    recentReciters: [reciter(id: 1), reciter(id: 2)],
-                    downloadedReciters: [reciter(id: 1), reciter(id: 3), reciter(id: 10), reciter(id: 12)],
-                    englishReciters: (1 ... 9).map { reciter(id: $0) },
-                    arabicReciters: (10 ... 20).map { reciter(id: $0) },
-                    selectedReciter: selectedReciter,
-                    start: {},
-                    selectAction: { selectedReciter = $0 }
-                )
-                .navigationTitle("Reciters")
-                .toolbar {
-                    Button("Clear selection") {
-                        selectedReciter = nil
-                    }
-                }
-            }
+            ReciterListViewUI(
+                standalone: true,
+                recentReciters: [reciter(id: 1), reciter(id: 2)],
+                downloadedReciters: [reciter(id: 1), reciter(id: 3), reciter(id: 10), reciter(id: 12)],
+                englishReciters: (1 ... 9).map { reciter(id: $0) },
+                arabicReciters: (10 ... 20).map { reciter(id: $0) },
+                selectedReciter: selectedReciter,
+                start: {},
+                selectAction: { selectedReciter = $0 }
+            )
         }
 
         func reciter(id: Int) -> Reciter {
-            let name = "reciter" + String(id)
+            let name = "Reciter " + String(id)
             return Reciter(
                 id: id,
                 nameKey: name,
@@ -138,8 +166,9 @@ struct ReciterListView_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        VStack {
-            Preview()
-        }
+        VStack {}
+            .sheet(isPresented: .constant(true)) {
+                Preview()
+            }
     }
 }

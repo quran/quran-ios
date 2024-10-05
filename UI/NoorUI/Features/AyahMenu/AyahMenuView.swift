@@ -111,7 +111,7 @@ private struct AyahMenuViewList: View {
                     subtitle: dataObject.playSubtitle,
                     action: dataObject.actions.play
                 ) {
-                    Image(systemName: "play.fill")
+                    NoorSystemImage.play.image
                 }
                 Divider()
                 Row(

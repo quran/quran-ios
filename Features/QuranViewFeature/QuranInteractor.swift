@@ -256,8 +256,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.hideBars()
     }
 
-    func word(at point: CGPoint, in view: UIView) -> Word? {
-        contentViewController?.word(at: point, in: view)
+    func word(at point: CGPoint) -> Word? {
+        contentViewController?.word(at: point)
     }
 
     func highlightWord(_ word: Word?) {

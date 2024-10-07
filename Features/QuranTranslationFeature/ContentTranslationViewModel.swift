@@ -205,8 +205,8 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
     }
 
-    func ayahAtPoint(_ point: CGPoint, from: UICoordinateSpace) -> AyahNumber? {
-        tracker.itemAtPoint(point, from: from)?.ayah
+    func ayahAtPoint(_ point: CGPoint) -> AyahNumber? {
+        tracker.itemAtPoint(point)?.ayah
     }
 
     // MARK: Private

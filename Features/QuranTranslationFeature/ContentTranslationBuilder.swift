@@ -11,9 +11,10 @@ import AppDependencies
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit
+import SwiftUI
 import TranslationService
 
-public struct ContentTranslationBuilder: PageViewBuilder {
+public struct ContentTranslationBuilder {
     private let container: AppDependencies
     private let highlightsService: QuranHighlightsService
 
@@ -22,7 +23,8 @@ public struct ContentTranslationBuilder: PageViewBuilder {
         self.highlightsService = highlightsService
     }
 
-    public func build(at page: Page) -> PageView {
+    @MainActor
+    public func build(at page: Page) -> some View {
         let dataService = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
@@ -34,6 +36,7 @@ public struct ContentTranslationBuilder: PageViewBuilder {
             dataService: dataService,
             highlightsService: highlightsService
         )
-        return ContentTranslationViewController(page: page, viewModel: viewModel)
+        viewModel.verses = page.verses
+        return ContentTranslationView(viewModel: viewModel)
     }
 }

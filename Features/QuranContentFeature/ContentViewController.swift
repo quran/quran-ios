@@ -47,9 +47,14 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         true
     }
 
-    public func word(at point: CGPoint, in view: UIView) -> Word? {
-        convert(point, from: view)
-            .flatMap { $0.word(at: $1) }
+    public func word(at point: CGPoint) -> Word? {
+        let actions = viewModel.geometryActions
+        for action in actions {
+            if let word = action.word(point) {
+                return word
+            }
+        }
+        return nil
     }
 
     // MARK: Internal
@@ -65,40 +70,21 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 
     private let viewModel: ContentViewModel
 
-    private var pageViews: [PageView] {
-        findPageViews(in: self)
-    }
-
     private func setUpPagesView() {
+        let viewModel = viewModel
         let pagesView = PagesView(viewModel: viewModel)
         let pagingController = UIHostingController(rootView: pagesView)
         addFullScreenChild(pagingController)
     }
 
-    private func verse(at point: CGPoint, in view: UIView) -> AyahNumber? {
-        convert(point, from: view)
-            .flatMap { $0.verse(at: $1) }
-    }
-
-    private func convert(_ point: CGPoint, from view: UIView) -> (view: PageView, point: CGPoint)? {
-        let localPointsAndControllers = pageViews.map { (view: $0, point: $0.view.convert(point, from: view)) }
-        let convertedViewPoint = localPointsAndControllers.first { $0.view.view.point(inside: $0.point, with: nil) }
-        return convertedViewPoint
-    }
-
-    private func findPageViews(in viewController: UIViewController) -> [PageView] {
-        var result = [PageView]()
-
-        for child in viewController.children {
-            if let fooVC = child as? PageView {
-                result.append(fooVC)
+    private func verse(at point: CGPoint) -> AyahNumber? {
+        let actions = viewModel.geometryActions
+        for action in actions {
+            if let verse = action.verse(point) {
+                return verse
             }
-
-            // Recursively search in the child's children
-            result.append(contentsOf: findPageViews(in: child))
         }
-
-        return result
+        return nil
     }
 
     // MARK: - Gestures
@@ -120,14 +106,15 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         }
 
         let point = sender.location(in: targetView)
+        let globalPoint = sender.location(in: nil)
 
         switch sender.state {
         case .began:
-            if let verse = verse(at: point, in: targetView) {
+            if let verse = verse(at: globalPoint) {
                 viewModel.onViewLongPressStarted(at: point, sourceView: targetView, verse: verse)
             }
         case .changed:
-            if let verse = verse(at: point, in: targetView) {
+            if let verse = verse(at: globalPoint) {
                 viewModel.onViewLongPressChanged(to: point, verse: verse)
             }
         case .ended:
@@ -135,34 +122,5 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         default:
             viewModel.onViewLongPressCancelled()
         }
-    }
-}
-
-private struct PagesView: View {
-    @ObservedObject var viewModel: ContentViewModel
-
-    var body: some View {
-        GeometryReader { geometry in
-            QuranPaginationView(
-                pagingStrategy: pagingStrategy(with: geometry),
-                selection: $viewModel.visiblePages,
-                pages: viewModel.deps.quran.pages
-            ) { page in
-                StaticViewControllerRepresentable(viewController: viewModel.pageViewBuilder.build(at: page))
-            }
-            .id(viewModel.quranMode)
-        }
-    }
-
-    func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {
-        if geometry.size.height > geometry.size.width {
-            return .singlePage
-        }
-
-        if !TwoPagesUtils.hasEnoughHorizontalSpace() {
-            return .singlePage
-        }
-
-        return viewModel.pagingStrategy
     }
 }

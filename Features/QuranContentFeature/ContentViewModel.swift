@@ -11,10 +11,12 @@ import AnnotationsService
 import Combine
 import Crashing
 import QuranAnnotations
+import QuranImageFeature
 import QuranKit
 import QuranPagesFeature
 import QuranText
 import QuranTextKit
+import QuranTranslationFeature
 import TranslationService
 import UIKit
 import VLogging
@@ -38,8 +40,8 @@ public final class ContentViewModel: ObservableObject {
 
         let highlightsService: QuranHighlightsService
 
-        let imageDataSourceBuilder: PageViewBuilder
-        let translationDataSourceBuilder: PageViewBuilder
+        let imageDataSourceBuilder: ContentImageBuilder
+        let translationDataSourceBuilder: ContentTranslationBuilder
     }
 
     private struct LongPressData {
@@ -108,6 +110,7 @@ public final class ContentViewModel: ObservableObject {
 
     @Published var quranMode: QuranMode
     @Published var twoPagesEnabled: Bool
+    @Published var geometryActions: [PageGeometryActions] = []
 
     @Published var highlights: QuranHighlights {
         didSet {
@@ -123,13 +126,6 @@ public final class ContentViewModel: ObservableObject {
 
     var pagingStrategy: PagingStrategy {
         twoPagesEnabled ? .doublePage : .singlePage
-    }
-
-    var pageViewBuilder: PageViewBuilder {
-        switch deps.quranContentStatePreferences.quranMode {
-        case .arabic: return deps.imageDataSourceBuilder
-        case .translation: return deps.translationDataSourceBuilder
-        }
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {

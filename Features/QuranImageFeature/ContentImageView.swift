@@ -8,10 +8,11 @@
 import NoorUI
 import QuranGeometry
 import QuranKit
+import QuranPagesFeature
 import SwiftUI
 
 struct ContentImageView: View {
-    @ObservedObject var viewModel: ContentImageViewModel
+    @StateObject var viewModel: ContentImageViewModel
 
     var body: some View {
         VStack {
@@ -27,6 +28,13 @@ struct ContentImageView: View {
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
         }
+        .geometryActions(
+            PageGeometryActions(
+                id: ObjectIdentifier(viewModel),
+                word: { point in viewModel.wordAtGlobalPoint(point) },
+                verse: { point in viewModel.wordAtGlobalPoint(point)?.verse }
+            )
+        )
         .task {
             await viewModel.loadImagePage()
         }

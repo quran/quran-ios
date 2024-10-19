@@ -213,7 +213,8 @@ public final class WordPointerViewController: UIViewController {
 
             showMagnifyingGlassIfNeeded()
             moveMagnifyingGlass(to: arrowPoint)
-            let status = await viewModel.viewPanned(to: arrowPoint, in: container)
+            let globalPoint = view.convert(arrowPoint, to: nil)
+            let status = await viewModel.viewPanned(to: globalPoint)
             switch status {
             case .none:
                 break

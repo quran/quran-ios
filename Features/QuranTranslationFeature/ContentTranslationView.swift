@@ -7,16 +7,17 @@
 
 import NoorUI
 import QuranKit
+import QuranPagesFeature
 import QuranText
 import SwiftUI
 import UIx
 import Utilities
 
 public struct ContentTranslationView: View {
-    @ObservedObject var viewModel: ContentTranslationViewModel
+    @StateObject var viewModel: ContentTranslationViewModel
 
-    public init(viewModel: ContentTranslationViewModel) {
-        self.viewModel = viewModel
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
     }
 
     public var body: some View {
@@ -29,6 +30,13 @@ public struct ContentTranslationView: View {
             tracker: viewModel.tracker,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) }
+        )
+        .geometryActions(
+            PageGeometryActions(
+                id: ObjectIdentifier(viewModel),
+                word: { _ in nil },
+                verse: { point in viewModel.ayahAtPoint(point) }
+            )
         )
         .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
             await viewModel.load()

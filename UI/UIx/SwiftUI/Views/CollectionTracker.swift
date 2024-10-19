@@ -76,9 +76,9 @@ public final class CollectionTracker<Item: Hashable> {
         return []
     }
 
-    public func itemAtPoint(_ point: CGPoint, from: UICoordinateSpace) -> Item? {
+    public func itemAtPoint(_ point: CGPoint) -> Item? {
         for visibleView in visibleViews {
-            let localPoint = visibleView.convert(point, from: from)
+            let localPoint = visibleView.convert(point, from: nil)
             if visibleView.point(inside: localPoint, with: nil) {
                 return visibleView.item
             }

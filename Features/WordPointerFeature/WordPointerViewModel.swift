@@ -15,7 +15,7 @@ import WordTextService
 @MainActor
 public protocol WordPointerListener: AnyObject {
     func onWordPointerPanBegan()
-    func word(at point: CGPoint, in view: UIView) -> Word?
+    func word(at point: CGPoint) -> Word?
     func highlightWord(_ position: Word?)
 }
 
@@ -41,8 +41,8 @@ final class WordPointerViewModel {
         listener?.onWordPointerPanBegan()
     }
 
-    func viewPanned(to point: CGPoint, in view: UIView) async -> PanResult {
-        guard let word = listener?.word(at: point, in: view) else {
+    func viewPanned(to point: CGPoint) async -> PanResult {
+        guard let word = listener?.word(at: point) else {
             logger.debug("No word found at position \(point)")
             unhighlightWord()
             return .hidePopover

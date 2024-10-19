@@ -13,12 +13,13 @@ import ImageService
 import QuranKit
 import QuranPagesFeature
 import ReadingService
+import SwiftUI
 import UIKit
 import Utilities
 import VLogging
 
 @MainActor
-public struct ContentImageBuilder: PageViewBuilder {
+public struct ContentImageBuilder {
     // MARK: Lifecycle
 
     public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
@@ -28,19 +29,17 @@ public struct ContentImageBuilder: PageViewBuilder {
 
     // MARK: Public
 
-    public func build(at page: Page) -> PageView {
+    public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
         let imageService = Self.buildImageDataService(reading: reading, container: container)
 
-        return ContentImageViewController(
+        let viewModel = ContentImageViewModel(
+            reading: reading,
             page: page,
-            viewModel: ContentImageViewModel(
-                reading: reading,
-                page: page,
-                imageDataService: imageService,
-                highlightsService: highlightsService
-            )
+            imageDataService: imageService,
+            highlightsService: highlightsService
         )
+        return ContentImageView(viewModel: viewModel)
     }
 
     // MARK: Internal

@@ -6,13 +6,13 @@
 //
 
 import Foundation
-
+import UIKit
 
 // TODO: Need to add functions for authenticating the requests and getting the profile information.
-public final protocol OAuthClient {
+public protocol OAuthClient {
     
-    public func set(clientID: String)
+    func set(clientID: String)
     
     // TODO: May return the profile information
-    public func login(on viewController: UIViewController) async throws
+    func login(on viewController: UIViewController) async throws
 }

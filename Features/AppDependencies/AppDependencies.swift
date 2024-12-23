@@ -15,6 +15,7 @@ import PageBookmarkPersistence
 import QuranResources
 import QuranTextKit
 import ReadingService
+import OAuthClient
 
 public protocol AppDependencies {
     var databasesURL: URL { get }
@@ -35,6 +36,8 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+
+    var oauthClient: OAuthClient { get }
 }
 
 extension AppDependencies {

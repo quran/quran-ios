@@ -36,7 +36,7 @@ public final class AppAuthOAuthClient: OAuthClient {
         try await withCheckedThrowingContinuation { continuation in
             OIDAuthorizationService
                 .discoverConfiguration(forIssuer: issuer) { configuration, error in
-                    guard error != nil else {
+                    guard error == nil else {
                         continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(error))
                         return
                     }
@@ -63,8 +63,7 @@ public final class AppAuthOAuthClient: OAuthClient {
                                               additionalParameters: [:])
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            self.authFlow = OIDAuthState.authState(byPresenting: request,
-                                                   presenting: viewController) { state, error in
+            login(request: request, on: viewController) { state, error in
                 guard error == nil else {
                     continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
                     return
@@ -73,7 +72,21 @@ public final class AppAuthOAuthClient: OAuthClient {
                     continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
                     return
                 }
+                print(state)
                 continuation.resume()
+            }
+        }
+    }
+
+    private func login(request: OIDAuthorizationRequest,
+                       on viewController: UIViewController,
+                       callback: @escaping OIDAuthStateAuthorizationCallback) {
+        Task {
+            await MainActor.run {
+                self.authFlow = OIDAuthState.authState(byPresenting: request,
+                                                       presenting: viewController) { state, error in
+                    callback(state, error)
+                }
             }
         }
     }

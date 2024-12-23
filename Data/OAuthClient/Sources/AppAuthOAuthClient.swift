@@ -9,10 +9,13 @@ import Foundation
 import UIKit
 import AppAuth
 
-public class AppAuthOAuthClient: OAuthClient {
+public final class AppAuthOAuthClient: OAuthClient {
 
+    // TODO: Do we need to maintain that?
     private var authFlow: (any OIDExternalUserAgentSession)?
     private var appConfiguration: OAuthAppConfiguration?
+
+    public init() {}
 
     public func set(appConfiguration: OAuthAppConfiguration) {
         self.appConfiguration = appConfiguration

@@ -466,6 +466,10 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
 
         ]),
+
+        target(type, name: "QuranProfileService", hasTests: false, dependencies: [
+            "OAuthClient",
+        ])
     ]
 }
 

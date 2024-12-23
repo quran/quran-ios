@@ -19,6 +19,13 @@ public struct OAuthAppConfiguration {
     public let redirectURL: URL
     public let scopes: [String]
     public let authorizationHost: URL
+
+    public init(clientID: String, redirectURL: URL, scopes: [String], authorizationHost: URL) {
+        self.clientID = clientID
+        self.redirectURL = redirectURL
+        self.scopes = scopes
+        self.authorizationHost = authorizationHost
+    }
 }
 
 public protocol OAuthClient {

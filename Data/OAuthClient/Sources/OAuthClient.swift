@@ -8,11 +8,23 @@
 import Foundation
 import UIKit
 
-// TODO: Need to add functions for authenticating the requests and getting the profile information.
+public enum OAuthClientError: Error {
+    case oauthClientHasNotBeenSet
+    case errorFetchingConfiguration(Error?)
+    case errorAuthenticating(Error?)
+}
+
+public struct OAuthAppConfiguration {
+    public let clientID: String
+    public let redirectURL: URL
+    public let scopes: [String]
+    public let authorizationHost: URL
+}
+
 public protocol OAuthClient {
     
-    func set(clientID: String)
-    
+    func set(appConfiguration: OAuthAppConfiguration)
+
     // TODO: May return the profile information
     func login(on viewController: UIViewController) async throws
 }

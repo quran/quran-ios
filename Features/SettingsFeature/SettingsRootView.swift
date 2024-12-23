@@ -25,7 +25,8 @@ struct SettingsRootView: View {
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
-            navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
+            navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
+            loginAction: { await viewModel.loginToQuranCom() }
         )
     }
 }
@@ -41,6 +42,7 @@ private struct SettingsRootViewUI: View {
     let writeReview: AsyncAction
     let contactUs: AsyncAction
     let navigateToDiagnotics: AsyncAction
+    let loginAction: AsyncAction
 
     var body: some View {
         NoorList {
@@ -110,6 +112,13 @@ private struct SettingsRootViewUI: View {
 
             NoorBasicSection {
                 NoorListItem(
+                    title: .text(l("Login with Quran.com")),
+                    action: loginAction
+                )
+            }
+
+            NoorBasicSection {
+                NoorListItem(
                     image: .init(.debug),
                     title: .text(l("diagnostics.title")),
                     accessory: .disclosureIndicator,
@@ -135,7 +144,8 @@ struct SettingsRootView_Previews: PreviewProvider {
                 shareApp: {},
                 writeReview: {},
                 contactUs: {},
-                navigateToDiagnotics: {}
+                navigateToDiagnotics: {},
+                loginAction: {}
             )
         }
     }

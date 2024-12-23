@@ -485,6 +485,7 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "ReadingService",
             "QuranResources",
+            "OAuthClient",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
@@ -668,6 +669,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingSelectorFeature",
             "Preferences",
             "Zip",
+            "QuranProfileService",
         ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [

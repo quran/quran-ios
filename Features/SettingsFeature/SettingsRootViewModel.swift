@@ -14,6 +14,7 @@ import QuranAudio
 import QuranAudioKit
 import ReadingSelectorFeature
 import SettingsService
+import QuranProfileService
 import TranslationsFeature
 import UIKit
 import UIx
@@ -26,6 +27,7 @@ final class SettingsRootViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
+        quranProfileService: QuranProfileService,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
@@ -36,6 +38,7 @@ final class SettingsRootViewModel: ObservableObject {
         audioEnd = audioPreferences.audioEnd
         self.analytics = analytics
         self.reviewService = reviewService
+        self.quranProfileService = quranProfileService
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
@@ -50,6 +53,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     let analytics: AnalyticsLibrary
     let reviewService: ReviewService
+    private let quranProfileService: QuranProfileService
     let audioDownloadsBuilder: AudioDownloadsBuilder
     let translationsListBuilder: TranslationsListBuilder
     let readingSelectorBuilder: ReadingSelectorBuilder
@@ -126,6 +130,18 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Settings: navigateToDiagnotics")
         let viewController = diagnosticsBuilder.build(navigationController: navigationController)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func loginToQuranCom() async {
+        guard let viewController = navigationController else {
+            return
+        }
+        do {
+            try await self.quranProfileService.login(on: viewController)
+            print("Login seems successful")
+        } catch {
+            logger.error("Failed to login to Quran.com: \(error)")
+        }
     }
 
     // MARK: Private

@@ -51,19 +51,19 @@ final class SettingsRootViewModel: ObservableObject {
 
     // MARK: Internal
 
-    let analytics: AnalyticsLibrary
-    let reviewService: ReviewService
+    private let analytics: AnalyticsLibrary
+    private let reviewService: ReviewService
     private let quranProfileService: QuranProfileService
-    let audioDownloadsBuilder: AudioDownloadsBuilder
-    let translationsListBuilder: TranslationsListBuilder
-    let readingSelectorBuilder: ReadingSelectorBuilder
-    let diagnosticsBuilder: DiagnosticsBuilder
+    private let audioDownloadsBuilder: AudioDownloadsBuilder
+    private let translationsListBuilder: TranslationsListBuilder
+    private let readingSelectorBuilder: ReadingSelectorBuilder
+    private let diagnosticsBuilder: DiagnosticsBuilder
 
-    let contactUsService = ContactUsService()
-    let themeService = ThemeService.shared
-    let audioPreferences = AudioPreferences.shared
+    private let contactUsService = ContactUsService()
+    private let themeService = ThemeService.shared
+    private let audioPreferences = AudioPreferences.shared
 
-    weak var navigationController: UINavigationController?
+    private weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
 

@@ -11,7 +11,7 @@ import AppAuth
 
 public final class AppAuthOAuthClient: OAuthClient {
 
-    // TODO: Do we need to maintain that?
+    // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
     private var appConfiguration: OAuthAppConfiguration?
 
@@ -26,7 +26,8 @@ public final class AppAuthOAuthClient: OAuthClient {
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
 
-        let serviceConfiguration = try await discoverConfiguration(forIssuer: configuration.authorizationHost)
+        // Quran.com relies on dicovering the configuration from the issuer, and not using a static configuration.
+        let serviceConfiguration = try await discoverConfiguration(forIssuer: configuration.authorizationIssuerURL)
         try await login(withConfiguration: serviceConfiguration,
                         appConfiguration: configuration,
                         on: viewController)
@@ -63,7 +64,7 @@ public final class AppAuthOAuthClient: OAuthClient {
                                               additionalParameters: [:])
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            login(request: request, on: viewController) { state, error in
+            fire(loginRequest: request, on: viewController) { state, error in
                 guard error == nil else {
                     continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
                     return
@@ -78,13 +79,15 @@ public final class AppAuthOAuthClient: OAuthClient {
         }
     }
 
-    private func login(request: OIDAuthorizationRequest,
-                       on viewController: UIViewController,
-                       callback: @escaping OIDAuthStateAuthorizationCallback) {
+    /// Executes the request on the main actor.
+    private func fire(loginRequest: OIDAuthorizationRequest,
+                      on viewController: UIViewController,
+                      callback: @escaping OIDAuthStateAuthorizationCallback) {
         Task {
             await MainActor.run {
-                self.authFlow = OIDAuthState.authState(byPresenting: request,
+                self.authFlow = OIDAuthState.authState(byPresenting: loginRequest,
                                                        presenting: viewController) { state, error in
+                    self.authFlow = nil
                     callback(state, error)
                 }
             }

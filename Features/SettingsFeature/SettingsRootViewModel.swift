@@ -12,9 +12,9 @@ import Localization
 import NoorUI
 import QuranAudio
 import QuranAudioKit
+import QuranProfileService
 import ReadingSelectorFeature
 import SettingsService
-import QuranProfileService
 import TranslationsFeature
 import UIKit
 import UIx
@@ -51,19 +51,19 @@ final class SettingsRootViewModel: ObservableObject {
 
     // MARK: Internal
 
-    private let analytics: AnalyticsLibrary
-    private let reviewService: ReviewService
-    private let quranProfileService: QuranProfileService
-    private let audioDownloadsBuilder: AudioDownloadsBuilder
-    private let translationsListBuilder: TranslationsListBuilder
-    private let readingSelectorBuilder: ReadingSelectorBuilder
-    private let diagnosticsBuilder: DiagnosticsBuilder
+    let analytics: AnalyticsLibrary
+    let reviewService: ReviewService
+    let quranProfileService: QuranProfileService
+    let audioDownloadsBuilder: AudioDownloadsBuilder
+    let translationsListBuilder: TranslationsListBuilder
+    let readingSelectorBuilder: ReadingSelectorBuilder
+    let diagnosticsBuilder: DiagnosticsBuilder
 
-    private let contactUsService = ContactUsService()
-    private let themeService = ThemeService.shared
-    private let audioPreferences = AudioPreferences.shared
+    let contactUsService = ContactUsService()
+    let themeService = ThemeService.shared
+    let audioPreferences = AudioPreferences.shared
 
-    private weak var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
 
@@ -138,7 +138,7 @@ final class SettingsRootViewModel: ObservableObject {
             return
         }
         do {
-            try await self.quranProfileService.login(on: viewController)
+            try await quranProfileService.login(on: viewController)
             // TODO: Replace with the needed UI changes.
             print("Login seems successful")
         } catch {

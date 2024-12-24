@@ -1,15 +1,14 @@
 //
-//  File.swift
+//  QuranProfileService.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 23/12/2024.
 //
 
-import UIKit
 import OAuthClient
+import UIKit
 
 public class QuranProfileService {
-
     private let oauthClient: OAuthClient
 
     public init(oauthClient: OAuthClient) {
@@ -24,4 +23,3 @@ public class QuranProfileService {
         try await oauthClient.login(on: viewController)
     }
 }
-

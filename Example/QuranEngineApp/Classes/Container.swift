@@ -13,9 +13,9 @@ import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 import NotePersistence
+import OAuthClient
 import PageBookmarkPersistence
 import ReadingService
-import OAuthClient
 import UIKit
 
 /// Hosts singleton dependencies

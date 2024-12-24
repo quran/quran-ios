@@ -9,9 +9,9 @@
 import AppDependencies
 import AudioDownloadsFeature
 import Localization
+import QuranProfileService
 import ReadingSelectorFeature
 import SettingsService
-import QuranProfileService
 import SwiftUI
 import TranslationsFeature
 import UIKit

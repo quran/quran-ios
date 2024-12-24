@@ -11,11 +11,11 @@ import BatchDownloader
 import Foundation
 import LastPagePersistence
 import NotePersistence
+import OAuthClient
 import PageBookmarkPersistence
 import QuranResources
 import QuranTextKit
 import ReadingService
-import OAuthClient
 
 public protocol AppDependencies {
     var databasesURL: URL { get }

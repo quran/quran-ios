@@ -47,7 +47,7 @@ let package = Package(
 
         // Async
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
-        
+
         // OAuth
         .package(url: "https://github.com/openid/AppAuth-iOS", .upToNextMajor(from: "1.3.0")),
 
@@ -298,11 +298,12 @@ private func dataTargets() -> [[Target]] {
             "BatchDownloader",
             "NetworkSupportFake",
         ]),
-        
+
         // MARK: - Quran.com OAuth
+
         target(type, name: "OAuthClient", hasTests: false, dependencies: [
             .product(name: "AppAuth", package: "AppAuth-iOS"),
-        ])
+        ]),
     ]
 }
 
@@ -469,7 +470,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "QuranProfileService", hasTests: false, dependencies: [
             "OAuthClient",
-        ])
+        ]),
     ]
 }
 

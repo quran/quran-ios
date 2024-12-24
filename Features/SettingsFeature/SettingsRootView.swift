@@ -33,6 +33,7 @@ struct SettingsRootView: View {
 
 private struct SettingsRootViewUI: View {
     @Binding var theme: Theme
+
     let audioEnd: String
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction

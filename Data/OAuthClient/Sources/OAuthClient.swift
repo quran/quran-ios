@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  OAuthClient.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 19/12/2024.
@@ -34,7 +34,6 @@ public struct OAuthAppConfiguration {
 ///
 /// Note that the connection relies on dicvoering the configuration from the issuer service.
 public protocol OAuthClient {
-
     func set(appConfiguration: OAuthAppConfiguration)
 
     /// Performs the login flow to Quran.com

@@ -28,7 +28,8 @@ public final class AppAuthOAuthClient: OAuthClient {
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
 
-        // Quran.com relies on dicovering the configuration from the issuer, and not using a static configuration.
+        // Quran.com relies on dicovering the service configuration from the issuer,
+        // and not using a static configuration.
         let serviceConfiguration = try await discoverConfiguration(forIssuer: configuration.authorizationIssuerURL)
         try await login(withConfiguration: serviceConfiguration,
                         appConfiguration: configuration,

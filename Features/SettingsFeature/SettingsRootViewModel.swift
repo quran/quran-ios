@@ -133,11 +133,13 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func loginToQuranCom() async {
+        logger.info("Settings: Login to Quran.com")
         guard let viewController = navigationController else {
             return
         }
         do {
             try await self.quranProfileService.login(on: viewController)
+            // TODO: Replace with the needed UI changes.
             print("Login seems successful")
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")

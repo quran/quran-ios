@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import AppAuth
+import VLogging
 
 public final class AppAuthOAuthClient: OAuthClient {
 
@@ -23,6 +24,7 @@ public final class AppAuthOAuthClient: OAuthClient {
 
     public func login(on viewController: UIViewController) async throws {
         guard let configuration = self.appConfiguration else {
+            logger.error("login invoked without OAuth client configurations being set")
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
 
@@ -34,18 +36,22 @@ public final class AppAuthOAuthClient: OAuthClient {
     }
 
     private func discoverConfiguration(forIssuer issuer: URL) async throws -> OIDServiceConfiguration {
-        try await withCheckedThrowingContinuation { continuation in
+        logger.info("Discovering configuration for OAuth")
+        return try await withCheckedThrowingContinuation { continuation in
             OIDAuthorizationService
                 .discoverConfiguration(forIssuer: issuer) { configuration, error in
                     guard error == nil else {
+                        logger.error("Error fetching OAuth configuration: \(error!)")
                         continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(error))
                         return
                     }
                     guard let configuration = configuration else {
                         // This should not happen
+                        logger.error("Error fetching OAuth configuration: no cofniguration was loaded. An unexpected situtation.")
                         continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(nil))
                         return
                     }
+                    logger.info("OAuth configuration fetched successfully")
                     continuation.resume(returning: configuration)
                 }
         }
@@ -63,17 +69,20 @@ public final class AppAuthOAuthClient: OAuthClient {
                                               responseType: OIDResponseTypeCode,
                                               additionalParameters: [:])
 
+        logger.info("Starting OAuth flow")
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
             fire(loginRequest: request, on: viewController) { state, error in
                 guard error == nil else {
+                    logger.error("Error authenticating: \(error!)")
                     continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
                     return
                 }
                 guard let state = state else {
+                    logger.error("Error authenticating: no state returned. An unexpected situtation.")
                     continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
                     return
                 }
-                print(state)
+                logger.info("OAuth flow completed successfully")
                 continuation.resume()
             }
         }

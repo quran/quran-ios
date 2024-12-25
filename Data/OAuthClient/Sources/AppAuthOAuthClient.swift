@@ -106,5 +106,5 @@ public final class AppAuthOAuthClient: OAuthClient {
                 }
             }
         }
-    } 
+    }
 }

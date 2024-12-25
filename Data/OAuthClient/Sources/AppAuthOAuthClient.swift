@@ -57,7 +57,7 @@ public final class AppAuthOAuthClient: OAuthClient {
                     }
                     guard let configuration else {
                         // This should not happen
-                        logger.error("Error fetching OAuth configuration: no cofniguration was loaded. An unexpected situtation.")
+                        logger.error("Error fetching OAuth configuration: no configuration was loaded. An unexpected situtation.")
                         continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(nil))
                         return
                     }
@@ -85,39 +85,26 @@ public final class AppAuthOAuthClient: OAuthClient {
 
         logger.info("Starting OAuth flow")
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            fire(loginRequest: request, on: viewController) { state, error in
-                guard error == nil else {
-                    logger.error("Error authenticating: \(error!)")
-                    continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
-                    return
-                }
-                guard let _ = state else {
-                    logger.error("Error authenticating: no state returned. An unexpected situtation.")
-                    continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
-                    return
-                }
-                logger.info("OAuth flow completed successfully")
-                continuation.resume()
-            }
-        }
-    }
-
-    /// Executes the request on the main actor.
-    private func fire(
-        loginRequest: OIDAuthorizationRequest,
-        on viewController: UIViewController,
-        callback: @escaping OIDAuthStateAuthorizationCallback
-    ) {
-        Task {
-            await MainActor.run {
-                authFlow = OIDAuthState.authState(
-                    byPresenting: loginRequest,
+            DispatchQueue.main.async {
+                self.authFlow = OIDAuthState.authState(
+                    byPresenting: request,
                     presenting: viewController
                 ) { [weak self] state, error in
                     self?.authFlow = nil
-                    callback(state, error)
+                    guard error == nil else {
+                        logger.error("Error authenticating: \(error!)")
+                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
+                        return
+                    }
+                    guard let _ = state else {
+                        logger.error("Error authenticating: no state returned. An unexpected situtation.")
+                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
+                        return
+                    }
+                    logger.info("OAuth flow completed successfully")
+                    continuation.resume()
                 }
             }
         }
-    }
+    } 
 }

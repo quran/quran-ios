@@ -11,6 +11,7 @@ import BatchDownloader
 import Foundation
 import LastPagePersistence
 import NotePersistence
+import OAuthClient
 import PageBookmarkPersistence
 import QuranResources
 import QuranTextKit
@@ -35,6 +36,8 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+
+    var oauthClient: OAuthClient { get }
 }
 
 extension AppDependencies {

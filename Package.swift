@@ -48,6 +48,9 @@ let package = Package(
         // Async
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
 
+        // OAuth
+        .package(url: "https://github.com/openid/AppAuth-iOS", .upToNextMajor(from: "1.3.0")),
+
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.3"),
         .package(url: "https://github.com/SvenTiigi/WhatsNewKit", from: "1.3.7"),
@@ -295,6 +298,13 @@ private func dataTargets() -> [[Target]] {
             "BatchDownloader",
             "NetworkSupportFake",
         ]),
+
+        // MARK: - Quran.com OAuth
+
+        target(type, name: "OAuthClient", hasTests: false, dependencies: [
+            "VLogging",
+            .product(name: "AppAuth", package: "AppAuth-iOS"),
+        ]),
     ]
 }
 
@@ -458,6 +468,10 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
 
         ]),
+
+        target(type, name: "QuranProfileService", hasTests: false, dependencies: [
+            "OAuthClient",
+        ]),
     ]
 }
 
@@ -473,6 +487,7 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "ReadingService",
             "QuranResources",
+            "OAuthClient",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
@@ -656,6 +671,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingSelectorFeature",
             "Preferences",
             "Zip",
+            "QuranProfileService",
         ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [

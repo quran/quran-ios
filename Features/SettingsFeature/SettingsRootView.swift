@@ -25,13 +25,15 @@ struct SettingsRootView: View {
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
-            navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
+            navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
+            loginAction: { await viewModel.loginToQuranCom() }
         )
     }
 }
 
 private struct SettingsRootViewUI: View {
     @Binding var theme: Theme
+
     let audioEnd: String
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
@@ -41,6 +43,7 @@ private struct SettingsRootViewUI: View {
     let writeReview: AsyncAction
     let contactUs: AsyncAction
     let navigateToDiagnotics: AsyncAction
+    let loginAction: AsyncAction
 
     var body: some View {
         NoorList {
@@ -108,6 +111,14 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
+            // TODO: Pending translations, and hiding if OAuth is not configured.
+            NoorBasicSection {
+                NoorListItem(
+                    title: .text(l("Login with Quran.com")),
+                    action: loginAction
+                )
+            }
+
             NoorBasicSection {
                 NoorListItem(
                     image: .init(.debug),
@@ -135,7 +146,8 @@ struct SettingsRootView_Previews: PreviewProvider {
                 shareApp: {},
                 writeReview: {},
                 contactUs: {},
-                navigateToDiagnotics: {}
+                navigateToDiagnotics: {},
+                loginAction: {}
             )
         }
     }

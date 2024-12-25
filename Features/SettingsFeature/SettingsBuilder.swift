@@ -9,6 +9,7 @@
 import AppDependencies
 import AudioDownloadsFeature
 import Localization
+import QuranProfileService
 import ReadingSelectorFeature
 import SettingsService
 import SwiftUI
@@ -29,6 +30,7 @@ public struct SettingsBuilder {
         let viewModel = SettingsRootViewModel(
             analytics: container.analytics,
             reviewService: ReviewService(analytics: container.analytics),
+            quranProfileService: QuranProfileService(oauthClient: container.oauthClient),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

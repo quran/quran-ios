@@ -11,18 +11,19 @@ import VLogging
 
 final class AppAuthCaller: OAuthCaller {
 
-    func login(using configuration: OAuthAppConfiguration, on viewController: UIViewController) async throws -> OIDAuthState {
+    func login(using clientConfiguration: OAuthAppConfiguration, on viewController: UIViewController) async throws -> OIDAuthState {
         // Quran.com relies on dicovering the service configuration from the issuer,
         // and not using a static configuration.
-        let serviceConfiguration = try await discoverConfiguration(forIssuer: configuration.authorizationIssuerURL)
-        return try await login(using: configuration, on: viewController)
+        let serviceConfiguration = try await discoverConfiguration(forIssuer: clientConfiguration.authorizationIssuerURL)
+        return try await login(withConfiguration: serviceConfiguration,
+                               appConfiguration: clientConfiguration,
+                               on: viewController)
     }
 
     // MARK: Private
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
-    private var appConfiguration: OAuthAppConfiguration?
 
     // MARK: - Authenication Flow
 

@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 import VLogging
 
-public final class AppAuthOAuthClient: OAuthClient {
+// TODO: Will need to rename that eventually. 
+public final class AppAuthOAuthClient: AuthentincationDataManager {
     // MARK: Lifecycle
 
     public init() {}

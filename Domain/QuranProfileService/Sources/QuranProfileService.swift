@@ -9,9 +9,9 @@ import OAuthClient
 import UIKit
 
 public class QuranProfileService {
-    private let oauthClient: OAuthClient
+    private let oauthClient: AuthentincationDataManager
 
-    public init(oauthClient: OAuthClient) {
+    public init(oauthClient: AuthentincationDataManager) {
         self.oauthClient = oauthClient
     }
 

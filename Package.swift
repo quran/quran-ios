@@ -301,7 +301,7 @@ private func dataTargets() -> [[Target]] {
 
         // MARK: - Quran.com OAuth
 
-        target(type, name: "OAuthClient", hasTests: false, dependencies: [
+        target(type, name: "OAuthClient", hasTests: true, dependencies: [
             "VLogging",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
         ]),

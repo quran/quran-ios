@@ -12,6 +12,7 @@ public enum OAuthClientError: Error {
     case oauthClientHasNotBeenSet
     case errorFetchingConfiguration(Error?)
     case errorAuthenticating(Error?)
+    case failedToPersistState
 }
 
 public struct OAuthAppConfiguration {

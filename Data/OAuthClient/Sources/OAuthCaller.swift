@@ -10,5 +10,6 @@ import UIKit
 
 protocol OAuthCaller {
 
-    func login(using configuration: OAuthAppConfiguration, on viewController: UIViewController) async throws -> OIDAuthState
+    func login(using configuration: OAuthAppConfiguration,
+               on viewController: UIViewController) async throws -> AuthenticationState
 }

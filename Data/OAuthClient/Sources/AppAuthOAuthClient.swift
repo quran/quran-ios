@@ -31,6 +31,8 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         let caller = AppAuthCaller()
         let state = try await caller.login(using: configuration, on: viewController)
         logger.info("login succeeded with state. isAuthorized: \(state.isAuthorized)")
+        let persistance = KeychainAuthenticationStatePersistance()
+        try persistance.persist(state: state)
     }
 
     // MARK: Private

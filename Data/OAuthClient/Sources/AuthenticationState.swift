@@ -50,7 +50,6 @@ class AppAuthAuthenticationState: AuthenticationState {
 
     override func encode(to encoder: any Encoder) throws {
         var container: KeyedEncodingContainer<CodingKeys> = encoder.container(keyedBy: CodingKeys.self)
-        let archiver = NSKeyedArchiver(requiringSecureCoding: true)
         if let state {
             let data = try NSKeyedArchiver.archivedData(withRootObject: state, requiringSecureCoding: true)
             try container.encode(data, forKey: .state)

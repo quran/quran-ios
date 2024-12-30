@@ -13,7 +13,7 @@ import Combine
 
 final class AppAuthOAuthClientTests: XCTestCase {
 
-    private var sut: AppAuthOAuthClient!
+    private var sut: AuthentincationDataManagerImpl!
     private var caller: OAuthCallerMock!
     private var persistance: OAuthClientPersistanceMock!
 
@@ -25,7 +25,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
     override func setUp() {
         caller = OAuthCallerMock()
         persistance = OAuthClientPersistanceMock()
-        sut = AppAuthOAuthClient(caller: caller, persistance: persistance)
+        sut = AuthentincationDataManagerImpl(caller: caller, persistance: persistance)
     }
 
     func testNoConfigurations() async throws {

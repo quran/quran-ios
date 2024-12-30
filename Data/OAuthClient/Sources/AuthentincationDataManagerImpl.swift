@@ -11,8 +11,7 @@ import UIKit
 import VLogging
 import Combine
 
-// TODO: Will need to rename that eventually.
-public final class AppAuthOAuthClient: AuthentincationDataManager {
+public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
     // MARK: Lifecycle
 
     private let caller: OAuthCaller
@@ -105,7 +104,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
     private var appConfiguration: OAuthAppConfiguration?
 }
 
-extension AppAuthOAuthClient {
+extension AuthentincationDataManagerImpl {
     convenience public init() {
         self.init(caller: AppAuthCaller(), persistance: KeychainAuthenticationStatePersistance())
     }

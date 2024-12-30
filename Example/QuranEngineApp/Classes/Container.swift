@@ -37,7 +37,7 @@ class Container: AppDependencies {
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var oauthClient: any AuthentincationDataManager = {
-        let client = AppAuthOAuthClient()
+        let client = AuthentincationDataManagerImpl()
         if let config = Constant.QuranOAuthAppConfigurations {
             client.set(appConfiguration: config)
         }

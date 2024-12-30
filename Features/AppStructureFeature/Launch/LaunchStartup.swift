@@ -11,6 +11,7 @@ import AppMigrator
 import AudioUpdater
 import SettingsService
 import UIKit
+import OAuthClient
 import VLogging
 
 @MainActor
@@ -22,19 +23,22 @@ public final class LaunchStartup {
         audioUpdater: AudioUpdater,
         fileSystemMigrator: FileSystemMigrator,
         recitersPathMigrator: RecitersPathMigrator,
-        reviewService: ReviewService
+        reviewService: ReviewService,
+        authDataManager: AuthentincationDataManager
     ) {
         self.appBuilder = appBuilder
         self.audioUpdater = audioUpdater
         self.fileSystemMigrator = fileSystemMigrator
         self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
+        self.authDataManager = authDataManager
     }
 
     // MARK: Public
 
     public func launch(from window: UIWindow) {
         upgradeIfNeeded(window: window)
+        handleSynchronization()
     }
 
     // MARK: Private
@@ -44,6 +48,7 @@ public final class LaunchStartup {
     private let appBuilder: AppBuilder
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
+    private let authDataManager: AuthentincationDataManager
 
     private let appMigrator = AppMigrator()
     private var appViewController: UIViewController?
@@ -85,6 +90,19 @@ public final class LaunchStartup {
         } else {
             appViewController.launch(from: window)
             reviewService.checkForReview(in: window)
+        }
+    }
+
+    private func handleSynchronization() {
+        guard authDataManager.authenticationState != .notAvailable else { return }
+        Task {
+            do {
+                let result = try await authDataManager.restoreState()
+                logger.info("LaunchStartup: authentication state restored? \(result)")
+            }
+            catch {
+                logger.error("LaunchStartup: failed to restore authentication state: \(error)")
+            }
         }
     }
 

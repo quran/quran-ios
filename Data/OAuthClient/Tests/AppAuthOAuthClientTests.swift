@@ -85,6 +85,32 @@ final class AppAuthOAuthClientTests: XCTestCase {
             XCTFail("Expected to operation not to fail -- \(error)")
         }
     }
+
+    func testAuthenticationRequestsWithValidState() async throws {
+        sut.set(appConfiguration: configuration)
+
+        let state = AutehenticationStateMock()
+        state.accessToken = "abcd"
+        persistance.currentState = state
+
+        do {
+            _ = try await sut.restoreState()
+            let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
+
+            let result = try await sut.authenticate(request: inputRequest)
+
+            let authHeader = result.allHTTPHeaderFields?.first{ $0.key.contains("auth-token")}
+            XCTAssertNotNil(authHeader, "Expected to return the access token")
+            XCTAssertTrue(authHeader?.value.contains(state.accessToken!) ?? false, "Expeccted to use the access token")
+
+            let clientIDHeader = result.allHTTPHeaderFields?.first{ $0.key.contains("client-id")}
+            XCTAssertNotNil(clientIDHeader, "Expected to return the client id")
+            XCTAssertTrue(clientIDHeader?.value.contains(configuration.clientID) ?? false, "Expeccted to use the client id")
+        }
+        catch {
+            XCTFail("Expected to authenticate without an error -- \(error)")
+        }
+    }
 }
 
 final private class OAuthCallerMock: OAuthCaller {

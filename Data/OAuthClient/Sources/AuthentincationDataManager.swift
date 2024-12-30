@@ -12,6 +12,7 @@ public enum OAuthClientError: Error {
     case oauthClientHasNotBeenSet
     case errorFetchingConfiguration(Error?)
     case errorAuthenticating(Error?)
+    case clientIsNotAuthenticated
     // TODO: We probably don't need to expose these two.
     case failedToPersistState
     case failedToRetrieveState

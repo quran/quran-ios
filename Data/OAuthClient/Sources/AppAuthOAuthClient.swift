@@ -17,6 +17,8 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
     private let caller: OAuthCaller
     private let persistance: AuthenticationStatePersistance
 
+    private var state: AuthenticationState?
+
     init(caller: OAuthCaller, persistance: AuthenticationStatePersistance) {
         self.caller = caller
         self.persistance = persistance
@@ -58,7 +60,20 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
     }
 
     public func authenticate(request: URLRequest) async throws -> URLRequest {
-        fatalError()
+        guard let configuration = appConfiguration else {
+            throw OAuthClientError.oauthClientHasNotBeenSet
+        }
+        guard let state = try persistance.retrieve() else {
+            throw OAuthClientError.clientIsNotAuthenticated
+        }
+        guard state.isAuthorized else {
+            throw OAuthClientError.clientIsNotAuthenticated
+        }
+        let token = try await state.getFreshTokens()
+        var request = request
+        request.setValue(token, forHTTPHeaderField: "x-auth-token")
+        request.setValue(configuration.clientID, forHTTPHeaderField: "x-client-id")
+        return request
     }
 
     // MARK: Private

@@ -40,9 +40,9 @@ final class AppAuthOAuthClientTests: XCTestCase {
     func testLoginSuccessful() async throws {
         sut.set(appConfiguration: configuration)
 
-        persistance.currentState = AuthenticationState()
+        persistance.currentState = AuthenticationData()
 
-        let state = AutehenticationStateMock()
+        let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         caller.loginResult = .success(state)
 
@@ -53,13 +53,13 @@ final class AppAuthOAuthClientTests: XCTestCase {
             XCTFail("Expected to login successfully -- \(error)")
         }
         XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
-        XCTAssertEqual((persistance.currentState as? AutehenticationStateMock), state, "Expected to update the new state")
+        XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
     }
 
     func testRestorationSuccessful() async throws {
         sut.set(appConfiguration: configuration)
 
-        let state = AutehenticationStateMock()
+        let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         persistance.currentState = state
 
@@ -89,7 +89,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
     func testAuthenticationRequestsWithValidState() async throws {
         sut.set(appConfiguration: configuration)
 
-        let state = AutehenticationStateMock()
+        let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         persistance.currentState = state
 
@@ -115,15 +115,15 @@ final class AppAuthOAuthClientTests: XCTestCase {
 
 final private class OAuthCallerMock: OAuthCaller {
 
-    var loginResult: Result<AuthenticationState, Error>?
+    var loginResult: Result<AuthenticationData, Error>?
 
     func login(using configuration: OAuthClient.OAuthAppConfiguration,
-               on viewController: UIViewController) async throws -> AuthenticationState {
+               on viewController: UIViewController) async throws -> AuthenticationData {
         try loginResult!.get()
     }
 }
 
-final private class AutehenticationStateMock: AuthenticationState, Equatable {
+final private class AutehenticationDataMock: AuthenticationData, Equatable {
     var accessToken: String?
 
     override init() {
@@ -145,20 +145,20 @@ final private class AutehenticationStateMock: AuthenticationState, Equatable {
         return token
     }
 
-    static func == (lhs: AutehenticationStateMock, rhs: AutehenticationStateMock) -> Bool {
+    static func == (lhs: AutehenticationDataMock, rhs: AutehenticationDataMock) -> Bool {
         lhs.accessToken == rhs.accessToken
     }
 }
 
 final private class OAuthClientPersistanceMock: AuthenticationStatePersistance {
     var clearCalled = false
-    var currentState: AuthenticationState?
+    var currentState: AuthenticationData?
 
-    func persist(state: OAuthClient.AuthenticationState) throws {
+    func persist(state: OAuthClient.AuthenticationData) throws {
         self.currentState = state
     }
     
-    func retrieve() throws -> AuthenticationState? {
+    func retrieve() throws -> AuthenticationData? {
         currentState
     }
     

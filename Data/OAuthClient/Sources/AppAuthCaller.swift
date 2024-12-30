@@ -12,14 +12,14 @@ import VLogging
 final class AppAuthCaller: OAuthCaller {
 
     func login(using clientConfiguration: OAuthAppConfiguration,
-               on viewController: UIViewController) async throws -> AuthenticationState {
+               on viewController: UIViewController) async throws -> AuthenticationData {
         // Quran.com relies on dicovering the service configuration from the issuer,
         // and not using a static configuration.
         let serviceConfiguration = try await discoverConfiguration(forIssuer: clientConfiguration.authorizationIssuerURL)
         let state = try await login(withConfiguration: serviceConfiguration,
                                     appConfiguration: clientConfiguration,
                                     on: viewController)
-        return AppAuthAuthenticationState(state: state)
+        return AppAuthAuthenticationData(state: state)
     }
 
     // MARK: Private

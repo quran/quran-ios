@@ -10,9 +10,9 @@ import VLogging
 
 protocol AuthenticationStatePersistance {
 
-    func persist(state: AuthenticationState) throws
+    func persist(state: AuthenticationData) throws
 
-    func retrieve() throws -> AuthenticationState?
+    func retrieve() throws -> AuthenticationData?
 
     func clear() throws
 }
@@ -21,7 +21,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
 
     private let itemKey = "com.quran.oauth.state"
 
-    func persist(state: AuthenticationState) throws {
+    func persist(state: AuthenticationData) throws {
         let data = try JSONEncoder().encode(state)
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -36,7 +36,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         logger.info("State persisted successfully")
     }
 
-    func retrieve() throws -> AuthenticationState? {
+    func retrieve() throws -> AuthenticationData? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
@@ -56,7 +56,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
             logger.error("Invalid data type found")
             throw OAuthClientError.failedToRetrieveState
         }
-        let state = try JSONDecoder().decode(AuthenticationState.self, from: data)
+        let state = try JSONDecoder().decode(AuthenticationData.self, from: data)
         return state
     }
 

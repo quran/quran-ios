@@ -17,7 +17,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
     private let caller: OAuthCaller
     private let persistance: AuthenticationStatePersistance
 
-    private var state: AuthenticationState?
+    private var state: AuthenticationData?
 
     init(caller: OAuthCaller, persistance: AuthenticationStatePersistance) {
         self.caller = caller

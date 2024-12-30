@@ -13,7 +13,7 @@ enum AuthenticationStateError: Error {
     case failedToRefreshTokens(Error?)
 }
 
-class AuthenticationState: Codable {
+class AuthenticationData: Codable {
 
     var isAuthorized: Bool {
         fatalError()
@@ -29,7 +29,7 @@ class AuthenticationState: Codable {
     }
 }
 
-class AppAuthAuthenticationState: AuthenticationState {
+class AppAuthAuthenticationData: AuthenticationData {
     private enum CodingKeys: String, CodingKey {
         case state
     }

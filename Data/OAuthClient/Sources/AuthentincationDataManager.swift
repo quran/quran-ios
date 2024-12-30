@@ -23,7 +23,7 @@ public enum AuthenticationState: Equatable {
     /// (such as logging in or invoking user APIs) should not be attempted..
     case notAvailable
 
-    /// No user is currently authenticated, or access has been revoked.
+    /// No user is currently authenticated, or access has been revoked or is expired.
     /// Logging in is availble and is required for further APIs.
     case notAuthenticated
 

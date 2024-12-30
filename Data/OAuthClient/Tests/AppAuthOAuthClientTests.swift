@@ -8,6 +8,7 @@
 import Foundation
 import AppAuth
 import XCTest
+import Combine
 @testable import OAuthClient
 
 final class AppAuthOAuthClientTests: XCTestCase {
@@ -116,6 +117,36 @@ final class AppAuthOAuthClientTests: XCTestCase {
             XCTFail("Expected to authenticate without an error -- \(error)")
         }
     }
+
+    func testRefreshedTokens() async throws {
+        sut.set(appConfiguration: configuration)
+
+        let state = AutehenticationDataMock()
+        state.accessToken = "abcd"
+        persistance.currentState = state
+
+        do {
+            _ = try await sut.restoreState()
+
+            // Clear the mock persistance for test's sake
+            persistance.currentState = nil
+            persistance.clearCalled = false
+
+            // Change the state
+            state.accessToken = "xyz"
+
+            XCTAssertEqual((persistance.currentState as? AutehenticationDataMock)?.accessToken, "xyz",
+                           "Expected to persist the refreshed state")
+
+            let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
+            let resultRequest = try await sut.authenticate(request: inputRequest)
+            let authHeader = resultRequest.allHTTPHeaderFields?.first{ $0.key.contains("auth-token")}
+            XCTAssertEqual(authHeader?.value, "xyz", "Expected to use the refreshed access token for the request")
+        }
+        catch {
+            XCTFail("Expected not to throw any errors -- \(error)")
+        }
+    }
 }
 
 final private class OAuthCallerMock: OAuthCaller {
@@ -128,8 +159,19 @@ final private class OAuthCallerMock: OAuthCaller {
     }
 }
 
-final private class AutehenticationDataMock: AuthenticationData, Equatable {
-    var accessToken: String?
+final private class AutehenticationDataMock: AuthenticationData {
+    var accessToken: String? {
+        didSet {
+            guard oldValue != nil else { return }
+            subject.send()
+        }
+    }
+
+    override var stateChangedPublisher: AnyPublisher<Void, Never> {
+        subject.eraseToAnyPublisher()
+    }
+
+    let subject = PassthroughSubject<Void, Never>()
 
     override init() {
         super.init()

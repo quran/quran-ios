@@ -9,6 +9,7 @@ import AppAuth
 import Foundation
 import UIKit
 import VLogging
+import Combine
 
 // TODO: Will need to rename that eventually.
 public final class AppAuthOAuthClient: AuthentincationDataManager {
@@ -17,7 +18,16 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
     private let caller: OAuthCaller
     private let persistance: AuthenticationStatePersistance
 
-    private var state: AuthenticationData?
+    private var cancellables = Set<AnyCancellable>()
+
+    private var state: AuthenticationData? {
+        didSet {
+            guard let state = state, oldValue == nil else { return }
+            state.stateChangedPublisher.sink { [weak self] _ in
+                self?.persist(state: state)
+            }.store(in: &cancellables)
+        }
+    }
 
     init(caller: OAuthCaller, persistance: AuthenticationStatePersistance) {
         self.caller = caller
@@ -72,10 +82,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         guard let configuration = appConfiguration else {
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
-        guard let state = self.state else {
-            throw OAuthClientError.clientIsNotAuthenticated
-        }
-        guard state.isAuthorized else {
+        guard authenticationState == .authenticated, let state = self.state else {
             throw OAuthClientError.clientIsNotAuthenticated
         }
         let token = try await state.getFreshTokens()
@@ -83,6 +90,14 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         request.setValue(token, forHTTPHeaderField: "x-auth-token")
         request.setValue(configuration.clientID, forHTTPHeaderField: "x-client-id")
         return request
+    }
+
+    private func persist(state: AuthenticationData) {
+        do {
+            try persistance.persist(state: state)
+        } catch {
+            logger.error("Failed to persist authentication state: \(error)")
+        }
     }
 
     // MARK: Private

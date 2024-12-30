@@ -7,13 +7,16 @@
 
 import Foundation
 import AppAuth
+import Combine
 import VLogging
 
 enum AuthenticationStateError: Error {
     case failedToRefreshTokens(Error?)
 }
 
-class AuthenticationData: Codable {
+class AuthenticationData: NSObject, Codable {
+
+    var stateChangedPublisher: AnyPublisher<Void, Never> { fatalError() }
 
     var isAuthorized: Bool {
         fatalError()
@@ -23,7 +26,8 @@ class AuthenticationData: Codable {
         fatalError()
     }
 
-    init() { }
+    override init() { }
+
     required init(from decoder: any Decoder) throws {
         fatalError()
     }
@@ -34,7 +38,16 @@ class AppAuthAuthenticationData: AuthenticationData {
         case state
     }
 
-    private var state: OIDAuthState?
+    private let stateChangedSubject: PassthroughSubject<Void, Never> = .init()
+    override var stateChangedPublisher: AnyPublisher<Void, Never> {
+        stateChangedSubject.eraseToAnyPublisher()
+    }
+
+    private var state: OIDAuthState? {
+        didSet {
+            stateChangedSubject.send()
+        }
+    }
 
     override var isAuthorized: Bool {
         state?.isAuthorized ?? false
@@ -43,6 +56,7 @@ class AppAuthAuthenticationData: AuthenticationData {
     init(state: OIDAuthState? = nil) {
         self.state = state
         super.init()
+        state?.stateChangeDelegate = self
     }
 
     required init(from decoder: any Decoder) throws {
@@ -51,6 +65,7 @@ class AppAuthAuthenticationData: AuthenticationData {
             self.state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
         }
         super.init()
+        state?.stateChangeDelegate = self
     }
 
     override func encode(to encoder: any Encoder) throws {
@@ -84,5 +99,12 @@ class AppAuthAuthenticationData: AuthenticationData {
                 continuation.resume(returning: accessToken)
             }
         }
+    }
+}
+
+extension AppAuthAuthenticationData: OIDAuthStateChangeDelegate {
+
+    func didChange(_ state: OIDAuthState) {
+        self.stateChangedSubject.send()
     }
 }

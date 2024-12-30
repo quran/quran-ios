@@ -44,4 +44,9 @@ public protocol AuthentincationDataManager {
     /// - Parameter viewController: The view controller to be used as base for presenting the login flow.
     /// - Returns: Nothing is returned for now. The client may return the profile infromation in the future.
     func login(on viewController: UIViewController) async throws
+
+    /// Returns `true` if the client is authenticated.
+    func restoreState() async throws -> Bool
+
+    func authenticate(request: URLRequest) async throws -> URLRequest
 }

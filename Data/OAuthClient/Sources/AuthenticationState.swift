@@ -7,6 +7,11 @@
 
 import Foundation
 import AppAuth
+import VLogging
+
+enum AuthenticationStateError: Error {
+    case failedToRefreshTokens(Error?)
+}
 
 class AuthenticationState: Codable {
 
@@ -14,11 +19,11 @@ class AuthenticationState: Codable {
         fatalError()
     }
 
-    func getFreshTokens() async throws -> OIDTokenResponse {
+    func getFreshTokens() async throws -> String {
         fatalError()
     }
 
-    fileprivate init() { }
+    init() { }
     required init(from decoder: any Decoder) throws {
         fatalError()
     }
@@ -56,6 +61,28 @@ class AppAuthAuthenticationState: AuthenticationState {
         }
         else {
             try container.encodeNil(forKey: .state)
+        }
+    }
+
+    override func getFreshTokens() async throws -> String {
+        guard let state = state else {
+            // TODO: We need to define proper errors here.
+            throw NSError()
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            state.performAction { accessToken, clientID, error in
+                guard error == nil else {
+                    logger.error("Failed to refresh tokens: \(error!)")
+                    continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(error))
+                    return
+                }
+                guard let accessToken = accessToken else {
+                    logger.error("Failed to refresh tokens: No access token returned. An unexpected situation.")
+                    continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(nil))
+                    return
+                }
+                continuation.resume(returning: accessToken)
+            }
         }
     }
 }

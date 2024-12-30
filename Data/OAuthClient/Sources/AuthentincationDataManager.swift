@@ -18,6 +18,18 @@ public enum OAuthClientError: Error {
     case failedToRetrieveState
 }
 
+public enum AuthenticationState: Equatable {
+    /// Authentication is not available. Any action dependent on authentication
+    /// (such as logging in or invoking user APIs) should not be attempted..
+    case notAvailable
+
+    /// No user is currently authenticated, or access has been revoked.
+    /// Logging in is availble and is required for further APIs.
+    case notAuthenticated
+
+    case authenticated
+}
+
 public struct OAuthAppConfiguration {
     public let clientID: String
     public let redirectURL: URL
@@ -50,4 +62,6 @@ public protocol AuthentincationDataManager {
     func restoreState() async throws -> Bool
 
     func authenticate(request: URLRequest) async throws -> URLRequest
+
+    var authenticationState: AuthenticationState { get }
 }

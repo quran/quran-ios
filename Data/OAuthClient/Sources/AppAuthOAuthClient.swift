@@ -26,6 +26,13 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
 
     // MARK: Public
 
+    public var authenticationState: AuthenticationState {
+        guard appConfiguration != nil else {
+            return .notAvailable
+        }
+        return state?.isAuthorized == true ? .authenticated : .notAuthenticated
+    }
+
     public func set(appConfiguration: OAuthAppConfiguration) {
         self.appConfiguration = appConfiguration
     }
@@ -41,6 +48,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         }
 
         let state = try await caller.login(using: configuration, on: viewController)
+        self.state = state
         logger.info("login succeeded with state. isAuthorized: \(state.isAuthorized)")
         try persistance.persist(state: state)
     }
@@ -56,6 +64,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         // Check authorization state and such.
         // TODO: Called for the side effects!
         _ = try await state.getFreshTokens()
+        self.state = state
         return state.isAuthorized
     }
 
@@ -63,7 +72,7 @@ public final class AppAuthOAuthClient: AuthentincationDataManager {
         guard let configuration = appConfiguration else {
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
-        guard let state = try persistance.retrieve() else {
+        guard let state = self.state else {
             throw OAuthClientError.clientIsNotAuthenticated
         }
         guard state.isAuthorized else {

@@ -27,13 +27,14 @@ final class AppAuthOAuthClientTests: XCTestCase {
         sut = AppAuthOAuthClient(caller: caller, persistance: persistance)
     }
 
-    func testLoginWithoutConfigurations() async throws {
+    func testNoConfigurations() async throws {
+        XCTAssertEqual(sut.authenticationState, .notAvailable, "Expected to signal a not-configured state")
         do {
             try await sut.login(on: UIViewController())
-            XCTFail("Expected to throw error")
+            XCTFail("Expected to throw an error if prompted to login without app configuration being set.")
         }
         catch {
-            // TODO
+            // Success
         }
     }
 
@@ -48,12 +49,14 @@ final class AppAuthOAuthClientTests: XCTestCase {
 
         do {
             try await sut.login(on: UIViewController())
+
+            XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
+            XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
+            XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
         }
         catch {
             XCTFail("Expected to login successfully -- \(error)")
         }
-        XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
-        XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
     }
 
     func testRestorationSuccessful() async throws {
@@ -66,6 +69,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
         do {
             let result = try await sut.restoreState()
             XCTAssert(result, "Expected to be signed in successfully")
+            XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
         }
         catch {
             XCTFail("Expected to restore the state successfully -- \(error)")
@@ -80,6 +84,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
         do {
             let result = try await sut.restoreState()
             XCTAssertFalse(result, "Expected to not be signed in")
+            XCTAssertEqual(sut.authenticationState, .notAuthenticated)
         }
         catch {
             XCTFail("Expected to operation not to fail -- \(error)")

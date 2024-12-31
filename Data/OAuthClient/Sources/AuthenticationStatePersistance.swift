@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AuthenticationStatePersistance.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 28/12/2024.
@@ -14,7 +14,6 @@ enum AuthenticationStatePersistanceError: Error {
 }
 
 protocol AuthenticationStatePersistance {
-
     func persist(state: AuthenticationData) throws
 
     func retrieve() throws -> AuthenticationData?
@@ -23,7 +22,6 @@ protocol AuthenticationStatePersistance {
 }
 
 final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistance {
-
     private let itemKey = "com.quran.oauth.state"
 
     func persist(state: AuthenticationData) throws {
@@ -31,7 +29,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
-            kSecValueData as String: data
+            kSecValueData as String: data,
         ]
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
@@ -46,7 +44,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
+            kSecMatchLimit as String: kSecMatchLimitOne,
         ]
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
@@ -61,7 +59,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
             logger.error("Invalid data type found")
             throw AuthenticationStatePersistanceError.retrievalFailed
         }
-        
+
         // Both AuthenticationData and Persistance are internal types to the package, so it's
         // good enough to hardcode the type here. No need for the hassle of the extra field.
         let state = try JSONDecoder().decode(AppAuthAuthenticationData.self, from: data)

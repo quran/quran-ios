@@ -1,24 +1,29 @@
 //
-//  File.swift
+//  AppAuthCaller.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 26/12/2024.
 //
 
-import Foundation
 import AppAuth
+import Foundation
 import VLogging
 
 final class AppAuthCaller: OAuthCaller {
+    // MARK: Internal
 
-    func login(using clientConfiguration: OAuthAppConfiguration,
-               on viewController: UIViewController) async throws -> AuthenticationData {
+    func login(
+        using clientConfiguration: OAuthAppConfiguration,
+        on viewController: UIViewController
+    ) async throws -> AuthenticationData {
         // Quran.com relies on dicovering the service configuration from the issuer,
         // and not using a static configuration.
         let serviceConfiguration = try await discoverConfiguration(forIssuer: clientConfiguration.authorizationIssuerURL)
-        let state = try await login(withConfiguration: serviceConfiguration,
-                                    appConfiguration: clientConfiguration,
-                                    on: viewController)
+        let state = try await login(
+            withConfiguration: serviceConfiguration,
+            appConfiguration: clientConfiguration,
+            on: viewController
+        )
         return AppAuthAuthenticationData(state: state)
     }
 

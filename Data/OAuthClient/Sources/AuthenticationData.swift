@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  AuthenticationData.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 27/12/2024.
 //
 
-import Foundation
 import AppAuth
 import Combine
+import Foundation
 import VLogging
 
 enum AuthenticationStateError: Error {
@@ -16,7 +16,6 @@ enum AuthenticationStateError: Error {
 }
 
 class AuthenticationData: NSObject, Codable {
-
     var stateChangedPublisher: AnyPublisher<Void, Never> { fatalError() }
 
     var isAuthorized: Bool {
@@ -69,8 +68,7 @@ class AppAuthAuthenticationData: AuthenticationData {
                 throw AuthenticationStateError.decodingError(nil)
             }
             self.state = state
-        }
-        catch {
+        } catch {
             logger.error("Failed to decode OIDAuthState: \(error)")
             throw AuthenticationStateError.decodingError(error)
         }
@@ -92,7 +90,7 @@ class AppAuthAuthenticationData: AuthenticationData {
                     continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(error))
                     return
                 }
-                guard let accessToken = accessToken else {
+                guard let accessToken else {
                     logger.error("Failed to refresh tokens: No access token returned. An unexpected situation.")
                     continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(nil))
                     return
@@ -104,9 +102,8 @@ class AppAuthAuthenticationData: AuthenticationData {
 }
 
 extension AppAuthAuthenticationData: OIDAuthStateChangeDelegate {
-
     func didChange(_ state: OIDAuthState) {
         logger.info("OIDAuthState changed")
-        self.stateChangedSubject.send()
+        stateChangedSubject.send()
     }
 }

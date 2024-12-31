@@ -1,32 +1,18 @@
 //
-//  AppAuthOAuthClient.swift
+//  AuthentincationDataManagerImpl.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 23/12/2024.
 //
 
 import AppAuth
+import Combine
 import Foundation
 import UIKit
 import VLogging
-import Combine
 
 public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
     // MARK: Lifecycle
-
-    private let caller: OAuthCaller
-    private let persistance: AuthenticationStatePersistance
-
-    private var cancellables = Set<AnyCancellable>()
-
-    private var state: AuthenticationData? {
-        didSet {
-            guard let state else { return }
-            state.stateChangedPublisher.sink { [weak self] _ in
-                self?.persist(state: state)
-            }.store(in: &cancellables)
-        }
-    }
 
     init(caller: OAuthCaller, persistance: AuthenticationStatePersistance) {
         self.caller = caller
@@ -50,8 +36,7 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
         do {
             try persistance.clear()
             logger.info("Cleared previous authentication state before login")
-        }
-        catch {
+        } catch {
             // If persisting the new state works, this error should be of little concern.
             logger.warning("Failed to clear previous authentication state before login: \(error)")
         }
@@ -88,7 +73,7 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
             logger.error("authenticate invoked without OAuth client configurations being set")
             throw OAuthClientError.oauthClientHasNotBeenSet
         }
-        guard authenticationState == .authenticated, let state = self.state else {
+        guard authenticationState == .authenticated, let state else {
             logger.error("authenticate invoked without client being authenticated")
             throw OAuthClientError.clientIsNotAuthenticated
         }
@@ -99,6 +84,24 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
         return request
     }
 
+    // MARK: Private
+
+    private let caller: OAuthCaller
+    private let persistance: AuthenticationStatePersistance
+
+    private var cancellables = Set<AnyCancellable>()
+
+    private var appConfiguration: OAuthAppConfiguration?
+
+    private var state: AuthenticationData? {
+        didSet {
+            guard let state else { return }
+            state.stateChangedPublisher.sink { [weak self] _ in
+                self?.persist(state: state)
+            }.store(in: &cancellables)
+        }
+    }
+
     private func persist(state: AuthenticationData) {
         do {
             try persistance.persist(state: state)
@@ -106,14 +109,10 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
             logger.error("Failed to persist authentication state: \(error)")
         }
     }
-
-    // MARK: Private
-
-    private var appConfiguration: OAuthAppConfiguration?
 }
 
 extension AuthentincationDataManagerImpl {
-    convenience public init() {
+    public convenience init() {
         self.init(caller: AppAuthCaller(), persistance: KeychainAuthenticationStatePersistance())
     }
 }

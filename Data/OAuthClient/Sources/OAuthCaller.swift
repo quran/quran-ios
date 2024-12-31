@@ -9,7 +9,8 @@ import AppAuth
 import UIKit
 
 protocol OAuthCaller {
-
-    func login(using configuration: OAuthAppConfiguration,
-               on viewController: UIViewController) async throws -> AuthenticationData
+    func login(
+        using configuration: OAuthAppConfiguration,
+        on viewController: UIViewController
+    ) async throws -> AuthenticationData
 }

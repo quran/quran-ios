@@ -88,5 +88,10 @@ private enum Constant {
         .appendingPathComponent("databases", isDirectory: true)
 
     /// If set, the Quran.com login will be enabled.
-    static let QuranOAuthAppConfigurations: OAuthAppConfiguration? = nil
+    static let QuranOAuthAppConfigurations: OAuthAppConfiguration? = OAuthAppConfiguration(
+        clientID: "954eb549-3566-4f9a-b65f-fa61bf9a9e37",
+        redirectURL: URL(validURL: "com.example.app:/oauth2redirect/example-provider"),
+        scopes: ["bookmark"],
+        authorizationIssuerURL: URL(validURL: "https://staging-oauth2.quran.foundation")
+    )
 }

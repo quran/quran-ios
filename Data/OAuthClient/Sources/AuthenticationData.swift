@@ -12,6 +12,7 @@ import VLogging
 
 enum AuthenticationStateError: Error {
     case failedToRefreshTokens(Error?)
+    case decodingError(Error?)
 }
 
 class AuthenticationData: NSObject, Codable {
@@ -43,47 +44,47 @@ class AppAuthAuthenticationData: AuthenticationData {
         stateChangedSubject.eraseToAnyPublisher()
     }
 
-    private var state: OIDAuthState? {
+    private var state: OIDAuthState {
         didSet {
             stateChangedSubject.send()
         }
     }
 
     override var isAuthorized: Bool {
-        state?.isAuthorized ?? false
+        state.isAuthorized
     }
 
-    init(state: OIDAuthState? = nil) {
+    init(state: OIDAuthState) {
         self.state = state
         super.init()
-        state?.stateChangeDelegate = self
+        state.stateChangeDelegate = self
     }
 
     required init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let data = try container.decodeIfPresent(Data.self, forKey: .state) {
-            self.state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
+        do {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let data = try container.decode(Data.self, forKey: .state)
+            guard let state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) else {
+                logger.error("Failed to decode OIDAuthState: Failed to unarchive data")
+                throw AuthenticationStateError.decodingError(nil)
+            }
+            self.state = state
+        }
+        catch {
+            logger.error("Failed to decode OIDAuthState: \(error)")
+            throw AuthenticationStateError.decodingError(error)
         }
         super.init()
-        state?.stateChangeDelegate = self
+        state.stateChangeDelegate = self
     }
 
     override func encode(to encoder: any Encoder) throws {
         var container: KeyedEncodingContainer<CodingKeys> = encoder.container(keyedBy: CodingKeys.self)
-        if let state {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: state, requiringSecureCoding: true)
-            try container.encode(data, forKey: .state)
-        }
-        else {
-            try container.encodeNil(forKey: .state)
-        }
+        let data = try NSKeyedArchiver.archivedData(withRootObject: state, requiringSecureCoding: true)
+        try container.encode(data, forKey: .state)
     }
 
     override func getFreshTokens() async throws -> String {
-        guard let state = state else {
-            // TODO: We need to define proper errors here.
-            throw NSError()
-        }
         return try await withCheckedThrowingContinuation { continuation in
             state.performAction { accessToken, clientID, error in
                 guard error == nil else {
@@ -105,6 +106,7 @@ class AppAuthAuthenticationData: AuthenticationData {
 extension AppAuthAuthenticationData: OIDAuthStateChangeDelegate {
 
     func didChange(_ state: OIDAuthState) {
+        logger.info("OIDAuthState changed")
         self.stateChangedSubject.send()
     }
 }

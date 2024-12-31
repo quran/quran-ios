@@ -8,6 +8,11 @@
 import Foundation
 import VLogging
 
+enum AuthenticationStatePersistanceError: Error {
+    case persistanceFailed
+    case retrievalFailed
+}
+
 protocol AuthenticationStatePersistance {
 
     func persist(state: AuthenticationData) throws
@@ -31,7 +36,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
             logger.error("Failed to persist state -- \(status) status")
-            throw OAuthClientError.failedToPersistState
+            throw AuthenticationStatePersistanceError.persistanceFailed
         }
         logger.info("State persisted successfully")
     }
@@ -50,13 +55,17 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
             return nil
         } else if status != errSecSuccess {
             logger.error("Failed to retrieve state -- \(status) status")
-            throw OAuthClientError.failedToRetrieveState
+            throw AuthenticationStatePersistanceError.retrievalFailed
         }
         guard let data = result as? Data else {
             logger.error("Invalid data type found")
-            throw OAuthClientError.failedToRetrieveState
+            throw AuthenticationStatePersistanceError.retrievalFailed
         }
-        let state = try JSONDecoder().decode(AuthenticationData.self, from: data)
+        
+        // Both AuthenticationData and Persistance are internal types to the package, so it's
+        // good enough to hardcode the type here. No need for the hassle of the extra field.
+        let state = try JSONDecoder().decode(AppAuthAuthenticationData.self, from: data)
+        logger.info("AuthenticationData restored.")
         return state
     }
 
@@ -69,7 +78,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess && status != errSecItemNotFound {
             logger.error("Failed to clear state -- \(status) status")
-            // throw something?
+            throw AuthenticationStatePersistanceError.persistanceFailed
         }
     }
 }

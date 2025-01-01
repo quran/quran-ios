@@ -1,5 +1,5 @@
 //
-//  AppAuthOAuthClientTests.swift
+//  AuthentincationDataManagerTests.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 26/12/2024.
@@ -9,9 +9,9 @@ import AppAuth
 import Combine
 import Foundation
 import XCTest
-@testable import OAuthClient
+@testable import AuthenticationClient
 
-final class AppAuthOAuthClientTests: XCTestCase {
+final class AuthentincationDataManagerTests: XCTestCase {
     // MARK: Internal
 
     let configuration = OAuthAppConfiguration(
@@ -155,7 +155,7 @@ private final class OAuthCallerMock: OAuthCaller {
     var loginResult: Result<AuthenticationData, Error>?
 
     func login(
-        using configuration: OAuthClient.OAuthAppConfiguration,
+        using configuration: OAuthAppConfiguration,
         on viewController: UIViewController
     ) async throws -> AuthenticationData {
         try loginResult!.get()
@@ -204,7 +204,7 @@ private final class PersistanceMock: Persistance {
     var clearCalled = false
     var currentState: AuthenticationData?
 
-    func persist(state: OAuthClient.AuthenticationData) throws {
+    func persist(state: AuthenticationData) throws {
         currentState = state
     }
 

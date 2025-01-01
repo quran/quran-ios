@@ -9,7 +9,7 @@
 import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
-import OAuthClient
+import AuthenticationClient
 import SettingsService
 import UIKit
 import VLogging

@@ -7,13 +7,13 @@
 
 import Analytics
 import AppDependencies
+import AuthenticationClient
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 import NotePersistence
-import OAuthClient
 import PageBookmarkPersistence
 import ReadingService
 import UIKit

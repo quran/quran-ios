@@ -5,7 +5,7 @@
 //  Created by Mohannad Hassan on 23/12/2024.
 //
 
-import OAuthClient
+import AuthenticationClient
 import UIKit
 
 public class QuranProfileService {

@@ -301,7 +301,7 @@ private func dataTargets() -> [[Target]] {
 
         // MARK: - Quran.com OAuth
 
-        target(type, name: "OAuthClient", hasTests: true, dependencies: [
+        target(type, name: "AuthenticationClient", hasTests: true, dependencies: [
             "VLogging",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
         ]),
@@ -470,7 +470,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranProfileService", hasTests: false, dependencies: [
-            "OAuthClient",
+            "AuthenticationClient",
         ]),
     ]
 }
@@ -487,7 +487,7 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "ReadingService",
             "QuranResources",
-            "OAuthClient",
+            "AuthenticationClient",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [

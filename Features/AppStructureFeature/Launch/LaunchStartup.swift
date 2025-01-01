@@ -99,8 +99,7 @@ public final class LaunchStartup {
             do {
                 let result = try await authDataManager.restoreState()
                 logger.info("LaunchStartup: authentication state restored? \(result)")
-            }
-            catch {
+            } catch {
                 logger.error("LaunchStartup: failed to restore authentication state: \(error)")
             }
         }

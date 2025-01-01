@@ -1,5 +1,5 @@
 //
-//  OAuthClient.swift
+//  AuthentincationDataManager.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 19/12/2024.
@@ -10,8 +10,23 @@ import UIKit
 
 public enum OAuthClientError: Error {
     case oauthClientHasNotBeenSet
-    case errorFetchingConfiguration(Error?)
     case errorAuthenticating(Error?)
+
+    /// Thrown when an operation, that needs authentication, is attempted wheile the client
+    /// hasn't been authenticated or if the client's access has been revoked.
+    case clientIsNotAuthenticated
+}
+
+public enum AuthenticationState: Equatable {
+    /// Authentication is not available. Any action dependent on authentication
+    /// (such as logging in or invoking user APIs) should not be attempted..
+    case notAvailable
+
+    /// No user is currently authenticated, or access has been revoked or is expired.
+    /// Logging in is availble and is required for further APIs.
+    case notAuthenticated
+
+    case authenticated
 }
 
 public struct OAuthAppConfiguration {
@@ -32,8 +47,9 @@ public struct OAuthAppConfiguration {
 
 /// Handles the OAuth flow to Quran.com
 ///
-/// Note that the connection relies on dicvoering the configuration from the issuer service.
-public protocol OAuthClient {
+/// Expected to be configuered with the host app's OAuth configuration before further operations are attempted.
+public protocol AuthentincationDataManager {
+    /// Sets the app configuration to be used for authentication.
     func set(appConfiguration: OAuthAppConfiguration)
 
     /// Performs the login flow to Quran.com
@@ -41,4 +57,11 @@ public protocol OAuthClient {
     /// - Parameter viewController: The view controller to be used as base for presenting the login flow.
     /// - Returns: Nothing is returned for now. The client may return the profile infromation in the future.
     func login(on viewController: UIViewController) async throws
+
+    /// Returns `true` if the client is authenticated.
+    func restoreState() async throws -> Bool
+
+    func authenticate(request: URLRequest) async throws -> URLRequest
+
+    var authenticationState: AuthenticationState { get }
 }

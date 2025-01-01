@@ -7,13 +7,13 @@
 
 import Analytics
 import AppDependencies
+import AuthenticationClient
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 import NotePersistence
-import OAuthClient
 import PageBookmarkPersistence
 import ReadingService
 import UIKit
@@ -36,8 +36,8 @@ class Container: AppDependencies {
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
-    private(set) lazy var oauthClient: any OAuthClient = {
-        let client = AppAuthOAuthClient()
+    private(set) lazy var oauthClient: any AuthentincationDataManager = {
+        let client = AuthentincationDataManagerImpl()
         if let config = Constant.QuranOAuthAppConfigurations {
             client.set(appConfiguration: config)
         }

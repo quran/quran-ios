@@ -1,47 +1,46 @@
 //
-//  AppAuthOAuthClient.swift
+//  OAuthCaller.swift
 //  QuranEngine
 //
-//  Created by Mohannad Hassan on 23/12/2024.
+//  Created by Mohannad Hassan on 26/12/2024.
 //
 
 import AppAuth
-import Foundation
 import UIKit
 import VLogging
 
-public final class AppAuthOAuthClient: OAuthClient {
-    // MARK: Lifecycle
+/// Encapsulates the logic to perform OAuth login.
+///
+/// The abstraction is added for testing purposes.
+protocol OAuthCaller {
+    func login(
+        using configuration: OAuthAppConfiguration,
+        on viewController: UIViewController
+    ) async throws -> AuthenticationData
+}
 
-    public init() {}
+final class AppAuthCaller: OAuthCaller {
+    // MARK: Internal
 
-    // MARK: Public
-
-    public func set(appConfiguration: OAuthAppConfiguration) {
-        self.appConfiguration = appConfiguration
-    }
-
-    public func login(on viewController: UIViewController) async throws {
-        guard let configuration = appConfiguration else {
-            logger.error("login invoked without OAuth client configurations being set")
-            throw OAuthClientError.oauthClientHasNotBeenSet
-        }
-
+    func login(
+        using clientConfiguration: OAuthAppConfiguration,
+        on viewController: UIViewController
+    ) async throws -> AuthenticationData {
         // Quran.com relies on dicovering the service configuration from the issuer,
         // and not using a static configuration.
-        let serviceConfiguration = try await discoverConfiguration(forIssuer: configuration.authorizationIssuerURL)
-        try await login(
+        let serviceConfiguration = try await discoverConfiguration(forIssuer: clientConfiguration.authorizationIssuerURL)
+        let state = try await login(
             withConfiguration: serviceConfiguration,
-            appConfiguration: configuration,
+            appConfiguration: clientConfiguration,
             on: viewController
         )
+        return AppAuthAuthenticationData(state: state)
     }
 
     // MARK: Private
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
-    private var appConfiguration: OAuthAppConfiguration?
 
     // MARK: - Authenication Flow
 
@@ -52,13 +51,13 @@ public final class AppAuthOAuthClient: OAuthClient {
                 .discoverConfiguration(forIssuer: issuer) { configuration, error in
                     guard error == nil else {
                         logger.error("Error fetching OAuth configuration: \(error!)")
-                        continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(error))
+                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
                         return
                     }
                     guard let configuration else {
                         // This should not happen
                         logger.error("Error fetching OAuth configuration: no configuration was loaded. An unexpected situtation.")
-                        continuation.resume(throwing: OAuthClientError.errorFetchingConfiguration(nil))
+                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
                         return
                     }
                     logger.info("OAuth configuration fetched successfully")
@@ -71,7 +70,7 @@ public final class AppAuthOAuthClient: OAuthClient {
         withConfiguration configuration: OIDServiceConfiguration,
         appConfiguration: OAuthAppConfiguration,
         on viewController: UIViewController
-    ) async throws {
+    ) async throws -> OIDAuthState {
         let scopes = [OIDScopeOpenID, OIDScopeProfile] + appConfiguration.scopes
         let request = OIDAuthorizationRequest(
             configuration: configuration,
@@ -84,7 +83,7 @@ public final class AppAuthOAuthClient: OAuthClient {
         )
 
         logger.info("Starting OAuth flow")
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+        return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.main.async {
                 self.authFlow = OIDAuthState.authState(
                     byPresenting: request,
@@ -96,13 +95,13 @@ public final class AppAuthOAuthClient: OAuthClient {
                         continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
                         return
                     }
-                    guard let _ = state else {
+                    guard let state else {
                         logger.error("Error authenticating: no state returned. An unexpected situtation.")
                         continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
                         return
                     }
                     logger.info("OAuth flow completed successfully")
-                    continuation.resume()
+                    continuation.resume(returning: state)
                 }
             }
         }

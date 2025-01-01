@@ -1,5 +1,5 @@
 //
-//  AuthenticationStatePersistance.swift
+//  Persistance.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 28/12/2024.
@@ -8,13 +8,13 @@
 import Foundation
 import VLogging
 
-enum AuthenticationStatePersistanceError: Error {
+enum PersistanceError: Error {
     case persistanceFailed
     case retrievalFailed
 }
 
 /// An abstraction for secure persistance of the authentication state.
-protocol AuthenticationStatePersistance {
+protocol Persistance {
     func persist(state: AuthenticationData) throws
 
     func retrieve() throws -> AuthenticationData?
@@ -22,7 +22,7 @@ protocol AuthenticationStatePersistance {
     func clear() throws
 }
 
-final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistance {
+final class KeychainPersistance: Persistance {
     private let itemKey = "com.quran.oauth.state"
 
     func persist(state: AuthenticationData) throws {
@@ -35,7 +35,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
             logger.error("Failed to persist state -- \(status) status")
-            throw AuthenticationStatePersistanceError.persistanceFailed
+            throw PersistanceError.persistanceFailed
         }
         logger.info("State persisted successfully")
     }
@@ -54,11 +54,11 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
             return nil
         } else if status != errSecSuccess {
             logger.error("Failed to retrieve state -- \(status) status")
-            throw AuthenticationStatePersistanceError.retrievalFailed
+            throw PersistanceError.retrievalFailed
         }
         guard let data = result as? Data else {
             logger.error("Invalid data type found")
-            throw AuthenticationStatePersistanceError.retrievalFailed
+            throw PersistanceError.retrievalFailed
         }
 
         // Both AuthenticationData and Persistance are internal types to the package, so it's
@@ -77,7 +77,7 @@ final class KeychainAuthenticationStatePersistance: AuthenticationStatePersistan
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess && status != errSecItemNotFound {
             logger.error("Failed to clear state -- \(status) status")
-            throw AuthenticationStatePersistanceError.persistanceFailed
+            throw PersistanceError.persistanceFailed
         }
     }
 }

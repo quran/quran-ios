@@ -23,7 +23,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
 
     override func setUp() {
         caller = OAuthCallerMock()
-        persistance = OAuthClientPersistanceMock()
+        persistance = PersistanceMock()
         sut = AuthentincationDataManagerImpl(caller: caller, persistance: persistance)
     }
 
@@ -148,7 +148,7 @@ final class AppAuthOAuthClientTests: XCTestCase {
 
     private var sut: AuthentincationDataManagerImpl!
     private var caller: OAuthCallerMock!
-    private var persistance: OAuthClientPersistanceMock!
+    private var persistance: PersistanceMock!
 }
 
 private final class OAuthCallerMock: OAuthCaller {
@@ -200,7 +200,7 @@ private final class AutehenticationDataMock: AuthenticationData {
     }
 }
 
-private final class OAuthClientPersistanceMock: AuthenticationStatePersistance {
+private final class PersistanceMock: Persistance {
     var clearCalled = false
     var currentState: AuthenticationData?
 

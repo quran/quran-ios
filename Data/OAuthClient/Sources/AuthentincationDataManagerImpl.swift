@@ -14,7 +14,7 @@ import VLogging
 public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
     // MARK: Lifecycle
 
-    init(caller: OAuthCaller, persistance: AuthenticationStatePersistance) {
+    init(caller: OAuthCaller, persistance: Persistance) {
         self.caller = caller
         self.persistance = persistance
     }
@@ -87,7 +87,7 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
     // MARK: Private
 
     private let caller: OAuthCaller
-    private let persistance: AuthenticationStatePersistance
+    private let persistance: Persistance
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -115,6 +115,6 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
 
 extension AuthentincationDataManagerImpl {
     public convenience init() {
-        self.init(caller: AppAuthCaller(), persistance: KeychainAuthenticationStatePersistance())
+        self.init(caller: AppAuthCaller(), persistance: KeychainPersistance())
     }
 }

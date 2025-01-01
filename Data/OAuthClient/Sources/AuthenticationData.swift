@@ -11,17 +11,29 @@ import Foundation
 import VLogging
 
 enum AuthenticationStateError: Error {
+    /// Throws when the refresh token operation fails. Assume that the user is not authenticated anymore.
     case failedToRefreshTokens(Error?)
+
+    /// Failed to decode the persisted state back.
     case decodingError(Error?)
 }
 
+/// A wrapper for the authentication state's data.
+///
+/// The abstraction is mainly for testing purposes. The API has been designed to be in conjunction
+/// with the `AppAuth's OIDAuthState` class.
 class AuthenticationData: NSObject, Codable {
+    /// Invokes subscribers when the state changes. Usually happens during refreshing tokens.
     var stateChangedPublisher: AnyPublisher<Void, Never> { fatalError() }
 
     var isAuthorized: Bool {
         fatalError()
     }
 
+    /// Returns fresh access token to be used for API requests.
+    ///
+    /// - throws: `AuthenticationStateError.failedToRefreshTokens` if the
+    /// refresh operation fails for any reason.
     func getFreshTokens() async throws -> String {
         fatalError()
     }
@@ -103,7 +115,7 @@ class AppAuthAuthenticationData: AuthenticationData {
 
 extension AppAuthAuthenticationData: OIDAuthStateChangeDelegate {
     func didChange(_ state: OIDAuthState) {
-        logger.info("OIDAuthState changed")
+        logger.info("OIDAuthState changed - isAuthorized: \(state.isAuthorized)")
         stateChangedSubject.send()
     }
 }

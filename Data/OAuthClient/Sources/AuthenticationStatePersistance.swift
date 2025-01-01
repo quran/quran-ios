@@ -13,6 +13,7 @@ enum AuthenticationStatePersistanceError: Error {
     case retrievalFailed
 }
 
+/// An abstraction for secure persistance of the authentication state.
 protocol AuthenticationStatePersistance {
     func persist(state: AuthenticationData) throws
 

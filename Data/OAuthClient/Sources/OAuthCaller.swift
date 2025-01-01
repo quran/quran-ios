@@ -8,6 +8,9 @@
 import AppAuth
 import UIKit
 
+/// Encapsulates the logic to perform OAuth login.
+///
+/// The abstraction is added for testing purposes.
 protocol OAuthCaller {
     func login(
         using configuration: OAuthAppConfiguration,

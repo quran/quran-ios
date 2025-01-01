@@ -11,6 +11,9 @@ import UIKit
 public enum OAuthClientError: Error {
     case oauthClientHasNotBeenSet
     case errorAuthenticating(Error?)
+
+    /// Thrown when an operation, that needs authentication, is attempted wheile the client
+    /// hasn't been authenticated or if the client's access has been revoked.
     case clientIsNotAuthenticated
 }
 
@@ -44,8 +47,9 @@ public struct OAuthAppConfiguration {
 
 /// Handles the OAuth flow to Quran.com
 ///
-/// Note that the connection relies on dicvoering the configuration from the issuer service.
+/// Expected to be configuered with the host app's OAuth configuration before further operations are attempted.
 public protocol AuthentincationDataManager {
+    /// Sets the app configuration to be used for authentication.
     func set(appConfiguration: OAuthAppConfiguration)
 
     /// Performs the login flow to Quran.com

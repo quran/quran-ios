@@ -106,7 +106,9 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
         do {
             try persistance.persist(state: state)
         } catch {
-            logger.error("Failed to persist authentication state: \(error)")
+            // If this happens, the state will not nullified so to keep the current session usable
+            // for the user. As for now, no workaround is in hand.
+            logger.error("Failed to persist authentication state. No workaround in hand.: \(error)")
         }
     }
 }

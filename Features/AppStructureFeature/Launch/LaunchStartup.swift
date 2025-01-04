@@ -24,14 +24,14 @@ public final class LaunchStartup {
         fileSystemMigrator: FileSystemMigrator,
         recitersPathMigrator: RecitersPathMigrator,
         reviewService: ReviewService,
-        authDataManager: AuthentincationDataManager
+        authenticationClient: AuthenticationClient
     ) {
         self.appBuilder = appBuilder
         self.audioUpdater = audioUpdater
         self.fileSystemMigrator = fileSystemMigrator
         self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
-        self.authDataManager = authDataManager
+        self.authenticationClient = authenticationClient
     }
 
     // MARK: Public
@@ -48,7 +48,7 @@ public final class LaunchStartup {
     private let appBuilder: AppBuilder
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
-    private let authDataManager: AuthentincationDataManager
+    private let authenticationClient: AuthenticationClient
 
     private let appMigrator = AppMigrator()
     private var appViewController: UIViewController?
@@ -94,10 +94,10 @@ public final class LaunchStartup {
     }
 
     private func handleSynchronization() {
-        guard authDataManager.authenticationState != .notAvailable else { return }
+        guard authenticationClient.authenticationState != .notAvailable else { return }
         Task {
             do {
-                let result = try await authDataManager.restoreState()
+                let result = try await authenticationClient.restoreState()
                 logger.info("LaunchStartup: authentication state restored? \(result)")
             } catch {
                 logger.error("LaunchStartup: failed to restore authentication state: \(error)")

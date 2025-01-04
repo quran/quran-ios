@@ -1,5 +1,5 @@
 //
-//  AuthentincationDataManagerImpl.swift
+//  AuthentincationClientImpl.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 23/12/2024.
@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import VLogging
 
-public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
+public final class AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
     init(caller: OAuthCaller, persistance: Persistance) {
@@ -113,7 +113,7 @@ public final class AuthentincationDataManagerImpl: AuthentincationDataManager {
     }
 }
 
-extension AuthentincationDataManagerImpl {
+extension AuthenticationClientImpl {
     public convenience init() {
         self.init(caller: AppAuthCaller(), persistance: KeychainPersistance())
     }

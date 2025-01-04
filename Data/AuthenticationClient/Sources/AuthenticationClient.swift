@@ -1,5 +1,5 @@
 //
-//  AuthentincationDataManager.swift
+//  AuthenticationClient.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 19/12/2024.
@@ -12,7 +12,7 @@ public enum OAuthClientError: Error {
     case oauthClientHasNotBeenSet
     case errorAuthenticating(Error?)
 
-    /// Thrown when an operation, that needs authentication, is attempted wheile the client
+    /// Thrown when an operation, that needs authentication, is attempted while the client
     /// hasn't been authenticated or if the client's access has been revoked.
     case clientIsNotAuthenticated
 }
@@ -48,7 +48,7 @@ public struct OAuthAppConfiguration {
 /// Handles the OAuth flow to Quran.com
 ///
 /// Expected to be configuered with the host app's OAuth configuration before further operations are attempted.
-public protocol AuthentincationDataManager {
+public protocol AuthenticationClient {
     /// Sets the app configuration to be used for authentication.
     func set(appConfiguration: OAuthAppConfiguration)
 

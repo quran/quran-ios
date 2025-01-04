@@ -1,5 +1,5 @@
 //
-//  AuthentincationDataManagerTests.swift
+//  AuthenticationClientTests.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 26/12/2024.
@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import AuthenticationClient
 
-final class AuthentincationDataManagerTests: XCTestCase {
+final class AuthenticationClientTests: XCTestCase {
     // MARK: Internal
 
     let configuration = OAuthAppConfiguration(
@@ -24,7 +24,7 @@ final class AuthentincationDataManagerTests: XCTestCase {
     override func setUp() {
         caller = OAuthCallerMock()
         persistance = PersistanceMock()
-        sut = AuthentincationDataManagerImpl(caller: caller, persistance: persistance)
+        sut = AuthenticationClientImpl(caller: caller, persistance: persistance)
     }
 
     func testNoConfigurations() async throws {
@@ -146,7 +146,7 @@ final class AuthentincationDataManagerTests: XCTestCase {
 
     // MARK: Private
 
-    private var sut: AuthentincationDataManagerImpl!
+    private var sut: AuthenticationClientImpl!
     private var caller: OAuthCallerMock!
     private var persistance: PersistanceMock!
 }

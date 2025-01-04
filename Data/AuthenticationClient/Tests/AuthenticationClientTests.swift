@@ -6,6 +6,7 @@
 //
 
 import AppAuth
+import AsyncUtilitiesForTesting
 import Combine
 import Foundation
 import XCTest
@@ -29,12 +30,11 @@ final class AuthenticationClientTests: XCTestCase {
 
     func testNoConfigurations() async throws {
         XCTAssertEqual(sut.authenticationState, .notAvailable, "Expected to signal a not-configured state")
-        do {
-            try await sut.login(on: UIViewController())
-            XCTFail("Expected to throw an error if prompted to login without app configuration being set.")
-        } catch {
-            // Success
-        }
+        await AsyncAssertThrows(
+            try await sut.login(on: UIViewController()),
+            nil,
+            "Expected to throw an error if prompted to login without app configuration being set."
+        )
     }
 
     func testLoginSuccessful() async throws {
@@ -46,15 +46,11 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         caller.loginResult = .success(state)
 
-        do {
-            try await sut.login(on: UIViewController())
+        try await sut.login(on: UIViewController())
 
-            XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
-            XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
-            XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
-        } catch {
-            XCTFail("Expected to login successfully -- \(error)")
-        }
+        XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
+        XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
+        XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
     }
 
     func testRestorationSuccessful() async throws {
@@ -64,13 +60,9 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         persistance.currentState = state
 
-        do {
-            let result = try await sut.restoreState()
-            XCTAssert(result, "Expected to be signed in successfully")
-            XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
-        } catch {
-            XCTFail("Expected to restore the state successfully -- \(error)")
-        }
+        let result = try await sut.restoreState()
+        XCTAssert(result, "Expected to be signed in successfully")
+        XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
     }
 
     func testRestorationButNotAuthenticated() async throws {
@@ -78,13 +70,9 @@ final class AuthenticationClientTests: XCTestCase {
 
         persistance.currentState = nil
 
-        do {
-            let result = try await sut.restoreState()
-            XCTAssertFalse(result, "Expected to not be signed in")
-            XCTAssertEqual(sut.authenticationState, .notAuthenticated)
-        } catch {
-            XCTFail("Expected to operation not to fail -- \(error)")
-        }
+        let result = try await sut.restoreState()
+        XCTAssertFalse(result, "Expected to not be signed in")
+        XCTAssertEqual(sut.authenticationState, .notAuthenticated)
     }
 
     func testAuthenticationRequestsWithValidState() async throws {
@@ -94,22 +82,18 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         persistance.currentState = state
 
-        do {
-            _ = try await sut.restoreState()
-            let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
+        _ = try await sut.restoreState()
+        let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
 
-            let result = try await sut.authenticate(request: inputRequest)
+        let result = try await sut.authenticate(request: inputRequest)
 
-            let authHeader = result.allHTTPHeaderFields?.first { $0.key.contains("auth-token") }
-            XCTAssertNotNil(authHeader, "Expected to return the access token")
-            XCTAssertTrue(authHeader?.value.contains(state.accessToken!) ?? false, "Expeccted to use the access token")
+        let authHeader = result.allHTTPHeaderFields?.first { $0.key.contains("auth-token") }
+        XCTAssertNotNil(authHeader, "Expected to return the access token")
+        XCTAssertTrue(authHeader?.value.contains(state.accessToken!) ?? false, "Expeccted to use the access token")
 
-            let clientIDHeader = result.allHTTPHeaderFields?.first { $0.key.contains("client-id") }
-            XCTAssertNotNil(clientIDHeader, "Expected to return the client id")
-            XCTAssertTrue(clientIDHeader?.value.contains(configuration.clientID) ?? false, "Expeccted to use the client id")
-        } catch {
-            XCTFail("Expected to authenticate without an error -- \(error)")
-        }
+        let clientIDHeader = result.allHTTPHeaderFields?.first { $0.key.contains("client-id") }
+        XCTAssertNotNil(clientIDHeader, "Expected to return the client id")
+        XCTAssertTrue(clientIDHeader?.value.contains(configuration.clientID) ?? false, "Expeccted to use the client id")
     }
 
     func testRefreshedTokens() async throws {
@@ -119,29 +103,25 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         persistance.currentState = state
 
-        do {
-            _ = try await sut.restoreState()
+        _ = try await sut.restoreState()
 
-            // Clear the mock persistance for test's sake
-            persistance.currentState = nil
-            persistance.clearCalled = false
+        // Clear the mock persistance for test's sake
+        persistance.currentState = nil
+        persistance.clearCalled = false
 
-            // Change the state
-            state.accessToken = "xyz"
+        // Change the state
+        state.accessToken = "xyz"
 
-            XCTAssertEqual(
-                (persistance.currentState as? AutehenticationDataMock)?.accessToken,
-                "xyz",
-                "Expected to persist the refreshed state"
-            )
+        XCTAssertEqual(
+            (persistance.currentState as? AutehenticationDataMock)?.accessToken,
+            "xyz",
+            "Expected to persist the refreshed state"
+        )
 
-            let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
-            let resultRequest = try await sut.authenticate(request: inputRequest)
-            let authHeader = resultRequest.allHTTPHeaderFields?.first { $0.key.contains("auth-token") }
-            XCTAssertEqual(authHeader?.value, "xyz", "Expected to use the refreshed access token for the request")
-        } catch {
-            XCTFail("Expected not to throw any errors -- \(error)")
-        }
+        let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
+        let resultRequest = try await sut.authenticate(request: inputRequest)
+        let authHeader = resultRequest.allHTTPHeaderFields?.first { $0.key.contains("auth-token") }
+        XCTAssertEqual(authHeader?.value, "xyz", "Expected to use the refreshed access token for the request")
     }
 
     // MARK: Private

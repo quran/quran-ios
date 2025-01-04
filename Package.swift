@@ -304,7 +304,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "AuthenticationClient", hasTests: true, dependencies: [
             "VLogging",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
-        ]),
+        ], testDependencies: ["AsyncUtilitiesForTesting"]),
     ]
 }
 

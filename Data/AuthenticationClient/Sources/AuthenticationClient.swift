@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public enum OAuthClientError: Error {
+public enum AuthenticationClientError: Error {
     case oauthClientHasNotBeenSet
     case errorAuthenticating(Error?)
 

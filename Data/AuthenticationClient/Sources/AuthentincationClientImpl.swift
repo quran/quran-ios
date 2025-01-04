@@ -43,7 +43,7 @@ public final class AuthenticationClientImpl: AuthenticationClient {
 
         guard let configuration = appConfiguration else {
             logger.error("login invoked without OAuth client configurations being set")
-            throw OAuthClientError.oauthClientHasNotBeenSet
+            throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
 
         let state = try await caller.login(using: configuration, on: viewController)
@@ -55,7 +55,7 @@ public final class AuthenticationClientImpl: AuthenticationClient {
     public func restoreState() async throws -> Bool {
         guard appConfiguration != nil else {
             logger.error("restoreState invoked without OAuth client configurations being set")
-            throw OAuthClientError.oauthClientHasNotBeenSet
+            throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
         guard let state = try persistance.retrieve() else {
             logger.info("No previous authentication state found")
@@ -71,11 +71,11 @@ public final class AuthenticationClientImpl: AuthenticationClient {
     public func authenticate(request: URLRequest) async throws -> URLRequest {
         guard let configuration = appConfiguration else {
             logger.error("authenticate invoked without OAuth client configurations being set")
-            throw OAuthClientError.oauthClientHasNotBeenSet
+            throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
         guard authenticationState == .authenticated, let state else {
             logger.error("authenticate invoked without client being authenticated")
-            throw OAuthClientError.clientIsNotAuthenticated
+            throw AuthenticationClientError.clientIsNotAuthenticated
         }
         let token = try await state.getFreshTokens()
         var request = request
@@ -89,16 +89,16 @@ public final class AuthenticationClientImpl: AuthenticationClient {
     private let caller: OAuthCaller
     private let persistance: Persistance
 
-    private var cancellables = Set<AnyCancellable>()
+    private var stateChangedCancellable: AnyCancellable?
 
     private var appConfiguration: OAuthAppConfiguration?
 
     private var state: AuthenticationData? {
         didSet {
             guard let state else { return }
-            state.stateChangedPublisher.sink { [weak self] _ in
+            stateChangedCancellable = state.stateChangedPublisher.sink { [weak self] _ in
                 self?.persist(state: state)
-            }.store(in: &cancellables)
+            }
         }
     }
 

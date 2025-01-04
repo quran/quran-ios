@@ -51,13 +51,13 @@ final class AppAuthCaller: OAuthCaller {
                 .discoverConfiguration(forIssuer: issuer) { configuration, error in
                     guard error == nil else {
                         logger.error("Error fetching OAuth configuration: \(error!)")
-                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
+                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(error))
                         return
                     }
                     guard let configuration else {
                         // This should not happen
                         logger.error("Error fetching OAuth configuration: no configuration was loaded. An unexpected situtation.")
-                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
+                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(nil))
                         return
                     }
                     logger.info("OAuth configuration fetched successfully")
@@ -92,12 +92,12 @@ final class AppAuthCaller: OAuthCaller {
                     self?.authFlow = nil
                     guard error == nil else {
                         logger.error("Error authenticating: \(error!)")
-                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(error))
+                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(error))
                         return
                     }
                     guard let state else {
                         logger.error("Error authenticating: no state returned. An unexpected situtation.")
-                        continuation.resume(throwing: OAuthClientError.errorAuthenticating(nil))
+                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(nil))
                         return
                     }
                     logger.info("OAuth flow completed successfully")

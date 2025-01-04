@@ -34,8 +34,7 @@ public struct LaunchBuilder {
             audioUpdater: audioUpdater,
             fileSystemMigrator: fileSystemMigrator,
             recitersPathMigrator: RecitersPathMigrator(),
-            reviewService: ReviewService(analytics: container.analytics),
-            authDataManager: container.oauthClient
+            reviewService: ReviewService(analytics: container.analytics)
         )
     }
 

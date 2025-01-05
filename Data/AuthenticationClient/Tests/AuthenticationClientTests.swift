@@ -25,9 +25,11 @@ final class AuthenticationClientTests: XCTestCase {
     override func setUp() {
         caller = OAuthCallerMock()
         persistence = PersistenceMock()
+        sut = AuthenticationClientImpl(configurations: configuration, caller: caller, persistence: persistence)
     }
 
     func testNoConfigurations() async throws {
+        sut = AuthenticationClientImpl(configurations: nil, caller: caller, persistence: persistence)
         XCTAssertEqual(sut.authenticationState, .notAvailable, "Expected to signal a not-configured state")
         await AsyncAssertThrows(
             try await sut.login(on: UIViewController()),
@@ -37,8 +39,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testLoginSuccessful() async throws {
-        sut.set(appConfiguration: configuration)
-
         persistence.currentState = AutehenticationDataMock()
 
         let state = AutehenticationDataMock()
@@ -53,8 +53,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationSuccessful() async throws {
-        sut.set(appConfiguration: configuration)
-
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         persistence.currentState = state
@@ -65,8 +63,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationButNotAuthenticated() async throws {
-        sut.set(appConfiguration: configuration)
-
         persistence.currentState = nil
 
         let result = try await sut.restoreState()
@@ -75,8 +71,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testAuthenticationRequestsWithValidState() async throws {
-        sut.set(appConfiguration: configuration)
-
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         persistence.currentState = state
@@ -96,8 +90,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRefreshedTokens() async throws {
-        sut.set(appConfiguration: configuration)
-
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         persistence.currentState = state

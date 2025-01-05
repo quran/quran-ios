@@ -40,7 +40,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testLoginSuccessful() async throws {
         sut.set(appConfiguration: configuration)
 
-        persistance.currentState = AuthenticationData()
+        persistance.currentState = AutehenticationDataMock()
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
@@ -142,7 +142,7 @@ private final class OAuthCallerMock: OAuthCaller {
     }
 }
 
-private final class AutehenticationDataMock: AuthenticationData {
+private final class AutehenticationDataMock: Equatable, AuthenticationData {
     var accessToken: String? {
         didSet {
             guard oldValue != nil else { return }
@@ -150,25 +150,27 @@ private final class AutehenticationDataMock: AuthenticationData {
         }
     }
 
-    override var stateChangedPublisher: AnyPublisher<Void, Never> {
+    var stateChangedPublisher: AnyPublisher<Void, Never> {
         subject.eraseToAnyPublisher()
     }
 
     let subject = PassthroughSubject<Void, Never>()
 
-    override init() {
-        super.init()
-    }
+    init() { }
 
     required init(from decoder: any Decoder) throws {
         fatalError()
     }
 
-    override var isAuthorized: Bool {
+    func encode(to encoder: any Encoder) throws {
+        fatalError()
+    }
+
+    var isAuthorized: Bool {
         accessToken != nil
     }
 
-    override func getFreshTokens() async throws -> String {
+    func getFreshTokens() async throws -> String {
         guard let token = accessToken else {
             throw AuthenticationStateError.failedToRefreshTokens(nil)
         }

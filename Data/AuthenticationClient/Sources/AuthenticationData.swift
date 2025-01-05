@@ -22,36 +22,26 @@ enum AuthenticationStateError: Error {
 ///
 /// The abstraction is mainly for testing purposes. The API has been designed to be in conjunction
 /// with the `AppAuth's OIDAuthState` class.
-class AuthenticationData: NSObject, Codable {
+protocol AuthenticationData: Codable {
     /// Invokes subscribers when the state changes. Usually happens during refreshing tokens.
-    var stateChangedPublisher: AnyPublisher<Void, Never> { fatalError() }
+    var stateChangedPublisher: AnyPublisher<Void, Never> { get }
 
-    var isAuthorized: Bool {
-        fatalError()
-    }
+    var isAuthorized: Bool { get }
 
     /// Returns fresh access token to be used for API requests.
     ///
     /// - throws: `AuthenticationStateError.failedToRefreshTokens` if the
     /// refresh operation fails for any reason.
-    func getFreshTokens() async throws -> String {
-        fatalError()
-    }
-
-    override init() { }
-
-    required init(from decoder: any Decoder) throws {
-        fatalError()
-    }
+    func getFreshTokens() async throws -> String
 }
 
-class AppAuthAuthenticationData: AuthenticationData {
+final class AppAuthAuthenticationData: NSObject, AuthenticationData {
     private enum CodingKeys: String, CodingKey {
         case state
     }
 
     private let stateChangedSubject: PassthroughSubject<Void, Never> = .init()
-    override var stateChangedPublisher: AnyPublisher<Void, Never> {
+    var stateChangedPublisher: AnyPublisher<Void, Never> {
         stateChangedSubject.eraseToAnyPublisher()
     }
 
@@ -61,7 +51,7 @@ class AppAuthAuthenticationData: AuthenticationData {
         }
     }
 
-    override var isAuthorized: Bool {
+    var isAuthorized: Bool {
         state.isAuthorized
     }
 
@@ -88,13 +78,13 @@ class AppAuthAuthenticationData: AuthenticationData {
         state.stateChangeDelegate = self
     }
 
-    override func encode(to encoder: any Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container: KeyedEncodingContainer<CodingKeys> = encoder.container(keyedBy: CodingKeys.self)
         let data = try NSKeyedArchiver.archivedData(withRootObject: state, requiringSecureCoding: true)
         try container.encode(data, forKey: .state)
     }
 
-    override func getFreshTokens() async throws -> String {
+    func getFreshTokens() async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             state.performAction { accessToken, clientID, error in
                 guard error == nil else {

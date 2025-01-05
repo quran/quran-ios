@@ -63,8 +63,7 @@ public protocol AuthenticationClient {
     var authenticationState: AuthenticationState { get }
 }
 
-
-public struct AuthentincationClientBuilder {
+public enum AuthentincationClientBuilder {
     public static func make(withConfigurations config: OAuthAppConfiguration?) -> AuthenticationClient {
         AuthenticationClientImpl(configurations: config)
     }

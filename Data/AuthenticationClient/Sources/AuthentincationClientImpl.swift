@@ -17,7 +17,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
     init(configurations: OAuthAppConfiguration?, caller: OAuthCaller, persistance: Persistance) {
         self.caller = caller
         self.persistance = persistance
-        self.appConfiguration = configurations
+        appConfiguration = configurations
     }
 
     // MARK: Public
@@ -112,8 +112,10 @@ final class AuthenticationClientImpl: AuthenticationClient {
 
 extension AuthenticationClientImpl {
     public convenience init(configurations: OAuthAppConfiguration?) {
-        self.init(configurations: configurations,
-                  caller: AppAuthCaller(),
-                  persistance: KeychainPersistance())
+        self.init(
+            configurations: configurations,
+            caller: AppAuthCaller(),
+            persistance: KeychainPersistance()
+        )
     }
 }

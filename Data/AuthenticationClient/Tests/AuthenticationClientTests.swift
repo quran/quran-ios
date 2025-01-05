@@ -25,7 +25,6 @@ final class AuthenticationClientTests: XCTestCase {
     override func setUp() {
         caller = OAuthCallerMock()
         persistance = PersistanceMock()
-        sut = AuthenticationClientImpl(caller: caller, persistance: persistance)
     }
 
     func testNoConfigurations() async throws {

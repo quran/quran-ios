@@ -49,9 +49,6 @@ public struct OAuthAppConfiguration {
 ///
 /// Expected to be configuered with the host app's OAuth configuration before further operations are attempted.
 public protocol AuthenticationClient {
-    /// Sets the app configuration to be used for authentication.
-    func set(appConfiguration: OAuthAppConfiguration)
-
     /// Performs the login flow to Quran.com
     ///
     /// - Parameter viewController: The view controller to be used as base for presenting the login flow.
@@ -64,4 +61,11 @@ public protocol AuthenticationClient {
     func authenticate(request: URLRequest) async throws -> URLRequest
 
     var authenticationState: AuthenticationState { get }
+}
+
+
+public struct AuthentincationClientBuilder {
+    public static func make(withConfigurations config: OAuthAppConfiguration?) -> AuthenticationClient {
+        AuthenticationClientImpl(configurations: config)
+    }
 }

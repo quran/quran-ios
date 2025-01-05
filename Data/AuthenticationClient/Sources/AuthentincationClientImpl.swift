@@ -11,12 +11,13 @@ import Foundation
 import UIKit
 import VLogging
 
-public final class AuthenticationClientImpl: AuthenticationClient {
+final class AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    init(caller: OAuthCaller, persistance: Persistance) {
+    init(configurations: OAuthAppConfiguration?, caller: OAuthCaller, persistance: Persistance) {
         self.caller = caller
         self.persistance = persistance
+        self.appConfiguration = configurations
     }
 
     // MARK: Public
@@ -26,10 +27,6 @@ public final class AuthenticationClientImpl: AuthenticationClient {
             return .notAvailable
         }
         return state?.isAuthorized == true ? .authenticated : .notAuthenticated
-    }
-
-    public func set(appConfiguration: OAuthAppConfiguration) {
-        self.appConfiguration = appConfiguration
     }
 
     public func login(on viewController: UIViewController) async throws {
@@ -114,7 +111,9 @@ public final class AuthenticationClientImpl: AuthenticationClient {
 }
 
 extension AuthenticationClientImpl {
-    public convenience init() {
-        self.init(caller: AppAuthCaller(), persistance: KeychainPersistance())
+    public convenience init(configurations: OAuthAppConfiguration?) {
+        self.init(configurations: configurations,
+                  caller: AppAuthCaller(),
+                  persistance: KeychainPersistance())
     }
 }

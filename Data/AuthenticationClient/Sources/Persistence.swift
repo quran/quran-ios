@@ -1,5 +1,5 @@
 //
-//  Persistance.swift
+//  Persistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 28/12/2024.
@@ -8,13 +8,13 @@
 import Foundation
 import VLogging
 
-enum PersistanceError: Error {
-    case persistanceFailed
+enum PersistenceError: Error {
+    case persistenceFailed
     case retrievalFailed
 }
 
-/// An abstraction for secure persistance of the authentication state.
-protocol Persistance {
+/// An abstraction for secure persistence of the authentication state.
+protocol Persistence {
     func persist(state: AuthenticationData) throws
 
     func retrieve() throws -> AuthenticationData?
@@ -22,7 +22,7 @@ protocol Persistance {
     func clear() throws
 }
 
-final class KeychainPersistance: Persistance {
+final class KeychainPersistence: Persistence {
     private let itemKey = "com.quran.oauth.state"
 
     func persist(state: AuthenticationData) throws {
@@ -35,7 +35,7 @@ final class KeychainPersistance: Persistance {
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
             logger.error("Failed to persist state -- \(status) status")
-            throw PersistanceError.persistanceFailed
+            throw PersistenceError.persistenceFailed
         }
         logger.info("State persisted successfully")
     }
@@ -54,14 +54,14 @@ final class KeychainPersistance: Persistance {
             return nil
         } else if status != errSecSuccess {
             logger.error("Failed to retrieve state -- \(status) status")
-            throw PersistanceError.retrievalFailed
+            throw PersistenceError.retrievalFailed
         }
         guard let data = result as? Data else {
             logger.error("Invalid data type found")
-            throw PersistanceError.retrievalFailed
+            throw PersistenceError.retrievalFailed
         }
 
-        // Both AuthenticationData and Persistance are internal types to the package, so it's
+        // Both AuthenticationData and Persistence are internal types to the package, so it's
         // good enough to hardcode the type here. No need for the hassle of the extra field.
         let state = try JSONDecoder().decode(AppAuthAuthenticationData.self, from: data)
         logger.info("AuthenticationData restored.")
@@ -77,7 +77,7 @@ final class KeychainPersistance: Persistance {
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess && status != errSecItemNotFound {
             logger.error("Failed to clear state -- \(status) status")
-            throw PersistanceError.persistanceFailed
+            throw PersistenceError.persistenceFailed
         }
     }
 }

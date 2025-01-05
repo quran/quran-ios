@@ -24,7 +24,7 @@ final class AuthenticationClientTests: XCTestCase {
 
     override func setUp() {
         caller = OAuthCallerMock()
-        persistance = PersistanceMock()
+        persistence = PersistenceMock()
     }
 
     func testNoConfigurations() async throws {
@@ -39,7 +39,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testLoginSuccessful() async throws {
         sut.set(appConfiguration: configuration)
 
-        persistance.currentState = AutehenticationDataMock()
+        persistence.currentState = AutehenticationDataMock()
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
@@ -47,8 +47,8 @@ final class AuthenticationClientTests: XCTestCase {
 
         try await sut.login(on: UIViewController())
 
-        XCTAssertTrue(persistance.clearCalled, "Expected to clear the persistance first")
-        XCTAssertEqual((persistance.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
+        XCTAssertTrue(persistence.clearCalled, "Expected to clear the persistence first")
+        XCTAssertEqual((persistence.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
         XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
     }
 
@@ -57,7 +57,7 @@ final class AuthenticationClientTests: XCTestCase {
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistance.currentState = state
+        persistence.currentState = state
 
         let result = try await sut.restoreState()
         XCTAssert(result, "Expected to be signed in successfully")
@@ -67,7 +67,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationButNotAuthenticated() async throws {
         sut.set(appConfiguration: configuration)
 
-        persistance.currentState = nil
+        persistence.currentState = nil
 
         let result = try await sut.restoreState()
         XCTAssertFalse(result, "Expected to not be signed in")
@@ -79,7 +79,7 @@ final class AuthenticationClientTests: XCTestCase {
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistance.currentState = state
+        persistence.currentState = state
 
         _ = try await sut.restoreState()
         let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
@@ -100,19 +100,19 @@ final class AuthenticationClientTests: XCTestCase {
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistance.currentState = state
+        persistence.currentState = state
 
         _ = try await sut.restoreState()
 
-        // Clear the mock persistance for test's sake
-        persistance.currentState = nil
-        persistance.clearCalled = false
+        // Clear the mock persistence for test's sake
+        persistence.currentState = nil
+        persistence.clearCalled = false
 
         // Change the state
         state.accessToken = "xyz"
 
         XCTAssertEqual(
-            (persistance.currentState as? AutehenticationDataMock)?.accessToken,
+            (persistence.currentState as? AutehenticationDataMock)?.accessToken,
             "xyz",
             "Expected to persist the refreshed state"
         )
@@ -127,7 +127,7 @@ final class AuthenticationClientTests: XCTestCase {
 
     private var sut: AuthenticationClientImpl!
     private var caller: OAuthCallerMock!
-    private var persistance: PersistanceMock!
+    private var persistence: PersistenceMock!
 }
 
 private final class OAuthCallerMock: OAuthCaller {
@@ -181,7 +181,7 @@ private final class AutehenticationDataMock: Equatable, AuthenticationData {
     }
 }
 
-private final class PersistanceMock: Persistance {
+private final class PersistenceMock: Persistence {
     var clearCalled = false
     var currentState: AuthenticationData?
 

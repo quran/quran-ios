@@ -14,9 +14,9 @@ import VLogging
 final class AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    init(configurations: OAuthAppConfiguration?, caller: OAuthCaller, persistance: Persistance) {
+    init(configurations: OAuthAppConfiguration?, caller: OAuthCaller, persistence: Persistence) {
         self.caller = caller
-        self.persistance = persistance
+        self.persistence = persistence
         appConfiguration = configurations
     }
 
@@ -31,7 +31,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
 
     public func login(on viewController: UIViewController) async throws {
         do {
-            try persistance.clear()
+            try persistence.clear()
             logger.info("Cleared previous authentication state before login")
         } catch {
             // If persisting the new state works, this error should be of little concern.
@@ -54,7 +54,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
             logger.error("restoreState invoked without OAuth client configurations being set")
             throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
-        guard let state = try persistance.retrieve() else {
+        guard let state = try persistence.retrieve() else {
             logger.info("No previous authentication state found")
             return false
         }
@@ -84,7 +84,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
     // MARK: Private
 
     private let caller: OAuthCaller
-    private let persistance: Persistance
+    private let persistence: Persistence
 
     private var stateChangedCancellable: AnyCancellable?
 
@@ -101,7 +101,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
 
     private func persist(state: AuthenticationData) {
         do {
-            try persistance.persist(state: state)
+            try persistence.persist(state: state)
         } catch {
             // If this happens, the state will not nullified so to keep the current session usable
             // for the user. As for now, no workaround is in hand.
@@ -115,7 +115,7 @@ extension AuthenticationClientImpl {
         self.init(
             configurations: configurations,
             caller: AppAuthCaller(),
-            persistance: KeychainPersistance()
+            persistence: KeychainPersistence()
         )
     }
 }

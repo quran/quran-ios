@@ -14,6 +14,10 @@ enum OAuthServiceError: Error {
 
     /// Failed to decode the persisted state back.
     case decodingError(Error?)
+
+    case failedToDiscoverService(Error?)
+
+    case failedToAuthenticate(Error?)
 }
 
 protocol OAuthStateData {

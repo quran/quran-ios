@@ -16,7 +16,6 @@ struct AppAuthStateData: OAuthStateData {
 }
 
 struct AppAuthStateEncoder: OAuthStateDataEncoder {
-
     func encode(_ data: any OAuthStateData) throws -> Data {
         guard let data = data as? AppAuthStateData else {
             fatalError()
@@ -28,7 +27,7 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
 
     func decode(_ data: Data) throws -> any OAuthStateData {
         guard let state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) else {
-            throw PersistenceError.persistenceFailed
+            throw OAuthServiceError.decodingError(nil)
         }
         return AppAuthStateData(state: state)
     }
@@ -95,13 +94,13 @@ final class AppAuthOAuthService: OAuthService {
                 .discoverConfiguration(forIssuer: issuer) { configuration, error in
                     guard error == nil else {
                         logger.error("Error fetching OAuth configuration: \(error!)")
-                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(error))
+                        continuation.resume(throwing: OAuthServiceError.failedToDiscoverService(error))
                         return
                     }
                     guard let configuration else {
                         // This should not happen
                         logger.error("Error fetching OAuth configuration: no configuration was loaded. An unexpected situtation.")
-                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(nil))
+                        continuation.resume(throwing: OAuthServiceError.failedToDiscoverService(nil))
                         return
                     }
                     logger.info("OAuth configuration fetched successfully")
@@ -136,12 +135,12 @@ final class AppAuthOAuthService: OAuthService {
                     self?.authFlow = nil
                     guard error == nil else {
                         logger.error("Error authenticating: \(error!)")
-                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(error))
+                        continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(error))
                         return
                     }
                     guard let state else {
                         logger.error("Error authenticating: no state returned. An unexpected situtation.")
-                        continuation.resume(throwing: AuthenticationClientError.errorAuthenticating(nil))
+                        continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(nil))
                         return
                     }
                     logger.info("OAuth flow completed successfully")

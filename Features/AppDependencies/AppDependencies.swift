@@ -37,7 +37,7 @@ public protocol AppDependencies {
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
 
-    var authenticationClient: AuthenticationClient { get }
+    var authenticationClient: (any AuthenticationClient)? { get }
 }
 
 extension AppDependencies {

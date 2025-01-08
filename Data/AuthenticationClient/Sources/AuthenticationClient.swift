@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 public enum AuthenticationClientError: Error {
-    case oauthClientHasNotBeenSet
     case errorAuthenticating(Error?)
 
     /// Thrown when an operation, that needs authentication, is attempted while the client
@@ -18,10 +17,6 @@ public enum AuthenticationClientError: Error {
 }
 
 public enum AuthenticationState: Equatable {
-    /// Authentication is not available. Any action dependent on authentication
-    /// (such as logging in or invoking user APIs) should not be attempted..
-    case notAvailable
-
     /// No user is currently authenticated, or access has been revoked or is expired.
     /// Logging in is availble and is required for further APIs.
     case notAuthenticated
@@ -64,7 +59,7 @@ public protocol AuthenticationClient {
 }
 
 public enum AuthentincationClientBuilder {
-    public static func make(withConfigurations config: OAuthAppConfiguration?) -> AuthenticationClient {
-        AuthenticationClientImpl(configurations: config!)
+    public static func make(withConfigurations config: OAuthAppConfiguration) -> AuthenticationClient {
+        AuthenticationClientImpl(configurations: config)
     }
 }

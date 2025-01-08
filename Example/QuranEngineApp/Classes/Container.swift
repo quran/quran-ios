@@ -36,8 +36,11 @@ class Container: AppDependencies {
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
-    private(set) lazy var authenticationClient: any AuthenticationClient = {
-        let client = AuthentincationClientBuilder.make(withConfigurations: Constant.QuranOAuthAppConfigurations)
+    private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
+        guard let configurations = Constant.QuranOAuthAppConfigurations else {
+            return nil
+        }
+        let client = AuthentincationClientBuilder.make(withConfigurations: configurations)
         return client
     }()
 

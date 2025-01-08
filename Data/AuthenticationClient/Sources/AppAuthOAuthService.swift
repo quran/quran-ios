@@ -9,14 +9,6 @@ import Foundation
 import AppAuth
 import VLogging
 
-enum AuthenticationStateError: Error {
-    /// Throws when the refresh token operation fails. Assume that the user is not authenticated anymore.
-    case failedToRefreshTokens(Error?)
-
-    /// Failed to decode the persisted state back.
-    case decodingError(Error?)
-}
-
 struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
 
@@ -71,12 +63,12 @@ final class AppAuthOAuthService: OAuthService {
             data.state.performAction { accessToken, clientID, error in
                 guard error == nil else {
                     logger.error("Failed to refresh tokens: \(error!)")
-                    continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(error))
+                    continuation.resume(throwing: OAuthServiceError.failedToRefreshTokens(error))
                     return
                 }
                 guard let accessToken else {
                     logger.error("Failed to refresh tokens: No access token returned. An unexpected situation.")
-                    continuation.resume(throwing: AuthenticationStateError.failedToRefreshTokens(nil))
+                    continuation.resume(throwing: OAuthServiceError.failedToRefreshTokens(nil))
                     return
                 }
                 let updatedData = AppAuthStateData(state: data.state)

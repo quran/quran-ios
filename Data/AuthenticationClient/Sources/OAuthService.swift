@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+enum OAuthServiceError: Error {
+    /// Throws when the refresh token operation fails. Assume that the user is not authenticated anymore.
+    case failedToRefreshTokens(Error?)
+
+    /// Failed to decode the persisted state back.
+    case decodingError(Error?)
+}
+
 protocol OAuthStateData {
 
     var isAuthorized: Bool { get }

@@ -13,7 +13,7 @@ public enum AuthenticationClientError: Error {
 
     /// Thrown when an operation, that needs authentication, is attempted while the client
     /// hasn't been authenticated or if the client's access has been revoked.
-    case clientIsNotAuthenticated
+    case clientIsNotAuthenticated(Error?)
 }
 
 public enum AuthenticationState: Equatable {

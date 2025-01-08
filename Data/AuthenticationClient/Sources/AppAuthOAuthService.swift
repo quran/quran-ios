@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AppAuthOAuthService.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 08/01/2025.

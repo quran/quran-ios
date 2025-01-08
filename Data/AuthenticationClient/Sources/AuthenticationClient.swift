@@ -65,6 +65,6 @@ public protocol AuthenticationClient {
 
 public enum AuthentincationClientBuilder {
     public static func make(withConfigurations config: OAuthAppConfiguration?) -> AuthenticationClient {
-        AuthenticationClientImpl(configurations: config)
+        AuthenticationClientImpl(configurations: config!)
     }
 }

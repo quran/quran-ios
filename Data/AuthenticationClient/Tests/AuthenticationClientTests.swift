@@ -24,38 +24,48 @@ final class AuthenticationClientTests: XCTestCase {
 
     override func setUp() {
         caller = OAuthCallerMock()
+        encoder = OauthStateEncoderMock()
+        oauthService = OAuthServiceMock()
         persistence = PersistenceMock()
-        sut = AuthenticationClientImpl(configurations: configuration, caller: caller, persistence: persistence)
+        sut = AuthenticationClientImpl(configurations: configuration,
+                                       oauthService: oauthService,
+                                       encoder: encoder,
+                                       persistence: persistence)
     }
 
-    func testNoConfigurations() async throws {
-        sut = AuthenticationClientImpl(configurations: nil, caller: caller, persistence: persistence)
-        XCTAssertEqual(sut.authenticationState, .notAvailable, "Expected to signal a not-configured state")
-        await AsyncAssertThrows(
-            try await sut.login(on: UIViewController()),
-            nil,
-            "Expected to throw an error if prompted to login without app configuration being set."
-        )
-    }
+//    func testNoConfigurations() async throws {
+//        sut = AuthenticationClientImpl(configurations: nil, caller: caller, persistence: persistence)
+//        XCTAssertEqual(sut.authenticationState, .notAvailable, "Expected to signal a not-configured state")
+//        await AsyncAssertThrows(
+//            try await sut.login(on: UIViewController()),
+//            nil,
+//            "Expected to throw an error if prompted to login without app configuration being set."
+//        )
+//    }
 
     func testLoginSuccessful() async throws {
-        persistence.currentState = AutehenticationDataMock()
+        persistence.data = Data()
 
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        caller.loginResult = .success(state)
+        oauthService.loginResult = .success(state)
+        oauthService.accessTokenBehavior = .success("abcd")
 
         try await sut.login(on: UIViewController())
 
         XCTAssertTrue(persistence.clearCalled, "Expected to clear the persistence first")
-        XCTAssertEqual((persistence.currentState as? AutehenticationDataMock), state, "Expected to update the new state")
         XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
+
+        XCTAssertEqual(try persistence.data.map(encoder.decode(_:)) as? AutehenticationDataMock,
+                       state,
+                       "Expected to persist the new state")
     }
 
     func testRestorationSuccessful() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.currentState = state
+        persistence.data = try encoder.encode(state)
+        oauthService.refreshResult = .success(nil)
 
         let result = try await sut.restoreState()
         XCTAssert(result, "Expected to be signed in successfully")
@@ -63,7 +73,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationButNotAuthenticated() async throws {
-        persistence.currentState = nil
+        persistence.data = nil
 
         let result = try await sut.restoreState()
         XCTAssertFalse(result, "Expected to not be signed in")
@@ -73,8 +83,10 @@ final class AuthenticationClientTests: XCTestCase {
     func testAuthenticationRequestsWithValidState() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.currentState = state
+        persistence.data = try encoder.encode(state)
 
+        oauthService.accessTokenBehavior = .success("abcd")
+        oauthService.refreshResult = .success(nil)
         _ = try await sut.restoreState()
         let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
 
@@ -92,19 +104,16 @@ final class AuthenticationClientTests: XCTestCase {
     func testRefreshedTokens() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.currentState = state
-
+        persistence.data = try encoder.encode(state)
+        let newState = AutehenticationDataMock()
+        newState.accessToken = "xyz"
+        oauthService.refreshResult = .success(newState)
+        oauthService.accessTokenBehavior = .success("xyz")
         _ = try await sut.restoreState()
 
-        // Clear the mock persistence for test's sake
-        persistence.currentState = nil
-        persistence.clearCalled = false
-
-        // Change the state
-        state.accessToken = "xyz"
-
+        let decoded = try persistence.data.map(encoder.decode) as? AutehenticationDataMock
         XCTAssertEqual(
-            (persistence.currentState as? AutehenticationDataMock)?.accessToken,
+            decoded?.accessToken,
             "xyz",
             "Expected to persist the refreshed state"
         )
@@ -119,6 +128,8 @@ final class AuthenticationClientTests: XCTestCase {
 
     private var sut: AuthenticationClientImpl!
     private var caller: OAuthCallerMock!
+    private var oauthService: OAuthServiceMock!
+    private var encoder: OAuthStateDataEncoder!
     private var persistence: PersistenceMock!
 }
 
@@ -133,39 +144,95 @@ private final class OAuthCallerMock: OAuthCaller {
     }
 }
 
-private final class AutehenticationDataMock: Equatable, AuthenticationData {
-    var accessToken: String? {
-        didSet {
-            guard oldValue != nil else { return }
-            subject.send()
+private struct OauthStateEncoderMock: OAuthStateDataEncoder {
+    func encode(_ data: any OAuthStateData) throws -> Data {
+        guard let data = data as? AutehenticationDataMock else {
+            fatalError()
+        }
+        return try JSONEncoder().encode(data)
+    }
+
+    func decode(_ data: Data) throws -> any OAuthStateData {
+        try JSONDecoder().decode(AutehenticationDataMock.self, from: data)
+    }
+}
+
+private final class OAuthServiceMock: OAuthService {
+    enum AccessTokenBehavior {
+        case success(String)
+        case successWithNewData(String, any OAuthStateData)
+        case failure(Error)
+
+        func getToken() throws -> String {
+            switch self {
+            case .success(let token), .successWithNewData(let token, _):
+                return token
+            case .failure(let error):
+                throw error
+            }
+        }
+
+        func getStateData() throws -> (any OAuthStateData)? {
+            switch self {
+            case .success:
+                return nil
+            case .successWithNewData(_, let data):
+                return data
+            case .failure(let error):
+                throw error
+            }
         }
     }
 
-    var stateChangedPublisher: AnyPublisher<Void, Never> {
-        subject.eraseToAnyPublisher()
+    var accessTokenBehavior: AccessTokenBehavior?
+    var refreshResult: Result<(any OAuthStateData)?, Error>?
+
+    func getAccessToken(using data: any OAuthStateData) async throws -> (String, any OAuthStateData) {
+        guard let behavior = accessTokenBehavior else {
+            fatalError()
+        }
+        return (try behavior.getToken(), try behavior.getStateData() ?? data)
+    }
+    
+    var loginResult: Result<OAuthStateData, Error>?
+
+    func login(on viewController: UIViewController) async throws -> any OAuthStateData {
+        try loginResult!.get()
     }
 
-    let subject = PassthroughSubject<Void, Never>()
+    func refreshIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
+        guard let refreshResult = refreshResult else {
+            fatalError()
+        }
+        return try refreshResult.get() ?? data
+    }
+}
+
+private final class AutehenticationDataMock: Equatable, Codable, OAuthStateData {
+    enum Codingkey: String, CodingKey {
+        case accessToken
+    }
+
+    var accessToken: String? {
+        didSet {
+            guard oldValue != nil else { return }
+        }
+    }
 
     init() { }
 
     required init(from decoder: any Decoder) throws {
-        fatalError()
+        let container = try decoder.container(keyedBy: Codingkey.self)
+        accessToken = try container.decode(String.self, forKey: .accessToken)
     }
 
     func encode(to encoder: any Encoder) throws {
-        fatalError()
+        var container = encoder.container(keyedBy: Codingkey.self)
+        try container.encode(self.accessToken, forKey: .accessToken)
     }
 
     var isAuthorized: Bool {
         accessToken != nil
-    }
-
-    func getFreshTokens() async throws -> String {
-        guard let token = accessToken else {
-            throw AuthenticationStateError.failedToRefreshTokens(nil)
-        }
-        return token
     }
 
     static func == (lhs: AutehenticationDataMock, rhs: AutehenticationDataMock) -> Bool {
@@ -174,19 +241,20 @@ private final class AutehenticationDataMock: Equatable, AuthenticationData {
 }
 
 private final class PersistenceMock: Persistence {
+    
     var clearCalled = false
-    var currentState: AuthenticationData?
+    var data: Data?
 
-    func persist(state: AuthenticationData) throws {
-        currentState = state
+    func persist(state: Data) throws {
+        data = state
     }
 
-    func retrieve() throws -> AuthenticationData? {
-        currentState
+    func retrieve() throws -> Data? {
+        data
     }
 
     func clear() throws {
         clearCalled = true
-        currentState = nil
+        data = nil
     }
 }

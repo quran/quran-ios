@@ -14,10 +14,14 @@ import VLogging
 final class AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    init(configurations: OAuthAppConfiguration?, caller: OAuthCaller, persistence: Persistence) {
-        self.caller = caller
+    init(configurations: OAuthAppConfiguration,
+         oauthService: OAuthService,
+         encoder: OAuthStateDataEncoder,
+         persistence: Persistence) {
+        self.oauthService = oauthService
         self.persistence = persistence
-        appConfiguration = configurations
+        self.encoder = encoder
+        self.appConfiguration = configurations
     }
 
     // MARK: Public
@@ -26,7 +30,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
         guard appConfiguration != nil else {
             return .notAvailable
         }
-        return state?.isAuthorized == true ? .authenticated : .notAuthenticated
+        return stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
     public func login(on viewController: UIViewController) async throws {
@@ -38,15 +42,15 @@ final class AuthenticationClientImpl: AuthenticationClient {
             logger.warning("Failed to clear previous authentication state before login: \(error)")
         }
 
-        guard let configuration = appConfiguration else {
+        guard let _ = appConfiguration else {
             logger.error("login invoked without OAuth client configurations being set")
             throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
 
-        let state = try await caller.login(using: configuration, on: viewController)
-        self.state = state
-        logger.info("login succeeded with state. isAuthorized: \(state.isAuthorized)")
-        persist(state: state)
+        let data = try await oauthService.login(on: viewController)
+        self.stateData = data
+        logger.info("login succeeded with state. isAuthorized: \(data.isAuthorized)")
+        persist(data: data)
     }
 
     public func restoreState() async throws -> Bool {
@@ -54,15 +58,16 @@ final class AuthenticationClientImpl: AuthenticationClient {
             logger.error("restoreState invoked without OAuth client configurations being set")
             throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
-        guard let state = try persistence.retrieve() else {
+        guard let data: Data = try persistence.retrieve() else {
             logger.info("No previous authentication state found")
             return false
         }
-        // TODO: Called for the side effects!
-        _ = try await state.getFreshTokens()
-        self.state = state
-        logger.info("Restored previous authentication state. isAuthorized: \(state.isAuthorized)")
-        return state.isAuthorized
+        // TODO: Catch and log
+        let stateData = try encoder.decode(data)
+        let newData = try await oauthService.refreshIfNeeded(data: stateData)
+        self.stateData = newData
+        self.persist(data: newData)
+        return stateData.isAuthorized
     }
 
     public func authenticate(request: URLRequest) async throws -> URLRequest {
@@ -70,11 +75,13 @@ final class AuthenticationClientImpl: AuthenticationClient {
             logger.error("authenticate invoked without OAuth client configurations being set")
             throw AuthenticationClientError.oauthClientHasNotBeenSet
         }
-        guard authenticationState == .authenticated, let state else {
+        guard authenticationState == .authenticated, let stateData else {
             logger.error("authenticate invoked without client being authenticated")
             throw AuthenticationClientError.clientIsNotAuthenticated
         }
-        let token = try await state.getFreshTokens()
+        // TODO: Do we need to catch this?
+        let (token, data) = try await oauthService.getAccessToken(using: stateData)
+        persist(data: data)
         var request = request
         request.setValue(token, forHTTPHeaderField: "x-auth-token")
         request.setValue(configuration.clientID, forHTTPHeaderField: "x-client-id")
@@ -83,25 +90,20 @@ final class AuthenticationClientImpl: AuthenticationClient {
 
     // MARK: Private
 
-    private let caller: OAuthCaller
+    private let oauthService: OAuthService
+    private let encoder: OAuthStateDataEncoder
     private let persistence: Persistence
 
     private var stateChangedCancellable: AnyCancellable?
 
     private var appConfiguration: OAuthAppConfiguration?
 
-    private var state: AuthenticationData? {
-        didSet {
-            guard let state else { return }
-            stateChangedCancellable = state.stateChangedPublisher.sink { [weak self] _ in
-                self?.persist(state: state)
-            }
-        }
-    }
+    private var stateData: OAuthStateData?
 
-    private func persist(state: AuthenticationData) {
+    private func persist(data: OAuthStateData) {
         do {
-            try persistence.persist(state: state)
+            let data = try encoder.encode(data)
+            try persistence.persist(state: data)
         } catch {
             // If this happens, the state will not nullified so to keep the current session usable
             // for the user. As for now, no workaround is in hand.
@@ -111,10 +113,13 @@ final class AuthenticationClientImpl: AuthenticationClient {
 }
 
 extension AuthenticationClientImpl {
-    public convenience init(configurations: OAuthAppConfiguration?) {
+    public convenience init(configurations: OAuthAppConfiguration) {
+        let service = AppAuthOAuthService(appConfigurations: configurations)
+        let encoder = AppAuthStateEncoder()
         self.init(
             configurations: configurations,
-            caller: AppAuthCaller(),
+            oauthService: service,
+            encoder: encoder,
             persistence: KeychainPersistence()
         )
     }

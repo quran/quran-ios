@@ -15,9 +15,9 @@ enum PersistenceError: Error {
 
 /// An abstraction for secure persistence of the authentication state.
 protocol Persistence {
-    func persist(state: AuthenticationData) throws
+    func persist(state: Data) throws
 
-    func retrieve() throws -> AuthenticationData?
+    func retrieve() throws -> Data?
 
     func clear() throws
 }
@@ -25,12 +25,11 @@ protocol Persistence {
 final class KeychainPersistence: Persistence {
     private let itemKey = "com.quran.oauth.state"
 
-    func persist(state: AuthenticationData) throws {
-        let data = try JSONEncoder().encode(state)
+    func persist(state: Data) throws {
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
-            kSecValueData as String: data,
+            kSecValueData as String: state,
         ]
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
@@ -40,7 +39,7 @@ final class KeychainPersistence: Persistence {
         logger.info("State persisted successfully")
     }
 
-    func retrieve() throws -> AuthenticationData? {
+    func retrieve() throws -> Data? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
@@ -61,11 +60,7 @@ final class KeychainPersistence: Persistence {
             throw PersistenceError.retrievalFailed
         }
 
-        // Both AuthenticationData and Persistence are internal types to the package, so it's
-        // good enough to hardcode the type here. No need for the hassle of the extra field.
-        let state = try JSONDecoder().decode(AppAuthAuthenticationData.self, from: data)
-        logger.info("AuthenticationData restored.")
-        return state
+        return data
     }
 
     func clear() throws {

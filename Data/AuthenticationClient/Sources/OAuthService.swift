@@ -10,13 +10,16 @@ import UIKit
 
 protocol OAuthStateData {
 
+    var isAuthorized: Bool { get }
 }
 
 protocol OAuthService {
 
     func login(on viewController: UIViewController) async throws -> OAuthStateData
 
-    func getAccessToken(using data: OAuthStateData) async throws -> String
+    func getAccessToken(using data: OAuthStateData) async throws -> (String, OAuthStateData)
+
+    func refreshIfNeeded(data: OAuthStateData) async throws -> OAuthStateData
 }
 
 protocol OAuthStateDataEncoder {

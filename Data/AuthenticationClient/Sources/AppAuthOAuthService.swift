@@ -9,6 +9,14 @@ import Foundation
 import AppAuth
 import VLogging
 
+enum AuthenticationStateError: Error {
+    /// Throws when the refresh token operation fails. Assume that the user is not authenticated anymore.
+    case failedToRefreshTokens(Error?)
+
+    /// Failed to decode the persisted state back.
+    case decodingError(Error?)
+}
+
 struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
 

@@ -23,7 +23,6 @@ final class AuthenticationClientTests: XCTestCase {
     )
 
     override func setUp() {
-        caller = OAuthCallerMock()
         encoder = OauthStateEncoderMock()
         oauthService = OAuthServiceMock()
         persistence = PersistenceMock()
@@ -127,21 +126,9 @@ final class AuthenticationClientTests: XCTestCase {
     // MARK: Private
 
     private var sut: AuthenticationClientImpl!
-    private var caller: OAuthCallerMock!
     private var oauthService: OAuthServiceMock!
     private var encoder: OAuthStateDataEncoder!
     private var persistence: PersistenceMock!
-}
-
-private final class OAuthCallerMock: OAuthCaller {
-    var loginResult: Result<AuthenticationData, Error>?
-
-    func login(
-        using configuration: OAuthAppConfiguration,
-        on viewController: UIViewController
-    ) async throws -> AuthenticationData {
-        try loginResult!.get()
-    }
 }
 
 private struct OauthStateEncoderMock: OAuthStateDataEncoder {

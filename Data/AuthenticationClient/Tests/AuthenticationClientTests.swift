@@ -53,8 +53,9 @@ final class AuthenticationClientTests: XCTestCase {
         try await sut.login(on: UIViewController())
 
         XCTAssertTrue(persistence.clearCalled, "Expected to clear the persistence first")
-        XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
-
+        await AsyncAssertEqual(await sut.authenticationState,
+                               .authenticated,
+                               "Expected the auth manager to be in authenticated state")
         XCTAssertEqual(try persistence.data.map(encoder.decode(_:)) as? AutehenticationDataMock,
                        state,
                        "Expected to persist the new state")
@@ -68,7 +69,9 @@ final class AuthenticationClientTests: XCTestCase {
 
         let result = try await sut.restoreState()
         XCTAssert(result, "Expected to be signed in successfully")
-        XCTAssertEqual(sut.authenticationState, .authenticated, "Expected the auth manager to be in authenticated state")
+        await AsyncAssertEqual(await sut.authenticationState,
+                               .authenticated,
+                               "Expected the auth manager to be in authenticated state")
     }
 
     func testRestorationButNotAuthenticated() async throws {
@@ -76,7 +79,7 @@ final class AuthenticationClientTests: XCTestCase {
 
         let result = try await sut.restoreState()
         XCTAssertFalse(result, "Expected to not be signed in")
-        XCTAssertEqual(sut.authenticationState, .notAuthenticated)
+        await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated)
     }
 
     func testAuthenticationRequestsWithValidState() async throws {

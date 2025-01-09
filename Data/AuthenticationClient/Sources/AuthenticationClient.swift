@@ -55,7 +55,7 @@ public protocol AuthenticationClient {
 
     func authenticate(request: URLRequest) async throws -> URLRequest
 
-    var authenticationState: AuthenticationState { get }
+    var authenticationState: AuthenticationState { get async }
 }
 
 public enum AuthentincationClientBuilder {

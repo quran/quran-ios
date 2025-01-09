@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import VLogging
 
-final class AuthenticationClientImpl: AuthenticationClient {
+final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
     init(configurations: OAuthAppConfiguration,
@@ -26,7 +26,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
 
     // MARK: Public
 
-    public var authenticationState: AuthenticationState {
+    public var authenticationState: AuthenticationState  {
         return stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
@@ -119,7 +119,7 @@ final class AuthenticationClientImpl: AuthenticationClient {
 }
 
 extension AuthenticationClientImpl {
-    public convenience init(configurations: OAuthAppConfiguration) {
+    public init(configurations: OAuthAppConfiguration) {
         let service = AppAuthOAuthService(appConfigurations: configurations)
         let encoder = AppAuthStateEncoder()
         self.init(

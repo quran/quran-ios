@@ -52,6 +52,15 @@ final class AuthenticationClientTests: XCTestCase {
                        "Expected to persist the new state")
     }
 
+    func testLoginFails() async throws {
+        persistence.data = nil
+        oauthService.loginResult = .failure(OAuthServiceError.failedToAuthenticate(nil))
+
+        await AsyncAssertThrows(try await sut.login(on: UIViewController()) , nil,
+                                    "Expected to throw an error")
+        await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated, "Expected to not be authenticated")
+    }
+
     func testRestorationSuccessful() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"

@@ -40,10 +40,16 @@ final actor AuthenticationClientImpl: AuthenticationClient {
             logger.warning("Failed to clear previous authentication state before login: \(error)")
         }
 
-        let data = try await oauthService.login(on: viewController)
-        self.stateData = data
-        logger.info("login succeeded with state. isAuthorized: \(data.isAuthorized)")
-        persist(data: data)
+        let data: OAuthStateData
+        do {
+            data = try await oauthService.login(on: viewController)
+            self.stateData = data
+            logger.info("login succeeded with state. isAuthorized: \(data.isAuthorized)")
+            persist(data: data)
+        } catch {
+            logger.error("Failed to login: \(error)")
+            throw AuthenticationClientError.errorAuthenticating(error)
+        }
     }
 
     public func restoreState() async throws -> Bool {
@@ -65,6 +71,12 @@ final actor AuthenticationClientImpl: AuthenticationClient {
         do {
             newData = try await oauthService.refreshIfNeeded(data: persistedData)
         } catch {
+            // We'll need to differentiate between two sets of errors here:
+            // - Connectivity and server errors. These should not change the authentication
+            //   state. Instead, the clients of `AuthenticationClient` should retry.
+            // - Client errors. These should nullify the authentication state.
+            //
+            // For time sakes, we'll treat all errors as the latter.
             logger.error("Failed to refresh the authentication state: \(error)")
             throw AuthenticationClientError.clientIsNotAuthenticated(error)
         }
@@ -78,7 +90,6 @@ final actor AuthenticationClientImpl: AuthenticationClient {
             logger.error("authenticate invoked without client being authenticated")
             throw AuthenticationClientError.clientIsNotAuthenticated(nil)
         }
-        // TODO: Do we need to catch this?
         let token: String
         let data: OAuthStateData
         do {

@@ -27,7 +27,7 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
 
     func decode(_ data: Data) throws -> any OAuthStateData {
         guard let state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) else {
-            throw OAuthServiceError.decodingError(nil)
+            throw OAuthServiceError.stateDataDecodingError(nil)
         }
         return AppAuthStateData(state: state)
     }

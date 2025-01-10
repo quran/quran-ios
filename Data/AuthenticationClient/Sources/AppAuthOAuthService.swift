@@ -5,10 +5,10 @@
 //  Created by Mohannad Hassan on 08/01/2025.
 //
 
-import Foundation
 import AppAuth
-import VLogging
+import Foundation
 import OAuthService
+import VLogging
 
 struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
@@ -21,8 +21,10 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
         guard let data = data as? AppAuthStateData else {
             fatalError()
         }
-        let encoded = try NSKeyedArchiver.archivedData(withRootObject: data.state,
-                                                       requiringSecureCoding: true)
+        let encoded = try NSKeyedArchiver.archivedData(
+            withRootObject: data.state,
+            requiringSecureCoding: true
+        )
         return encoded
     }
 
@@ -35,12 +37,13 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
 }
 
 final class AppAuthOAuthService: OAuthService {
-
-    private let appConfigurations: Configuration
+    // MARK: Lifecycle
 
     init(appConfigurations: Configuration) {
         self.appConfigurations = appConfigurations
     }
+
+    // MARK: Internal
 
     func login(on viewController: UIViewController) async throws -> any OAuthStateData {
         // Quran.com relies on dicovering the service configuration from the issuer,
@@ -82,6 +85,8 @@ final class AppAuthOAuthService: OAuthService {
     }
 
     // MARK: Private
+
+    private let appConfigurations: Configuration
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?

@@ -9,8 +9,8 @@ import AppAuth
 import AsyncUtilitiesForTesting
 import Combine
 import Foundation
-import XCTest
 import OAuthService
+import XCTest
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {
@@ -27,10 +27,12 @@ final class AuthenticationClientTests: XCTestCase {
         encoder = OauthStateEncoderMock()
         oauthService = OAuthServiceMock()
         persistence = PersistenceMock()
-        sut = AuthenticationClientImpl(configurations: configuration,
-                                       oauthService: oauthService,
-                                       encoder: encoder,
-                                       persistence: persistence)
+        sut = AuthenticationClientImpl(
+            configurations: configuration,
+            oauthService: oauthService,
+            encoder: encoder,
+            persistence: persistence
+        )
     }
 
     func testLoginSuccessful() async throws {
@@ -44,20 +46,27 @@ final class AuthenticationClientTests: XCTestCase {
         try await sut.login(on: UIViewController())
 
         XCTAssertTrue(persistence.clearCalled, "Expected to clear the persistence first")
-        await AsyncAssertEqual(await sut.authenticationState,
-                               .authenticated,
-                               "Expected the auth manager to be in authenticated state")
-        XCTAssertEqual(try persistence.data.map(encoder.decode(_:)) as? AutehenticationDataMock,
-                       state,
-                       "Expected to persist the new state")
+        await AsyncAssertEqual(
+            await sut.authenticationState,
+            .authenticated,
+            "Expected the auth manager to be in authenticated state"
+        )
+        XCTAssertEqual(
+            try persistence.data.map(encoder.decode(_:)) as? AutehenticationDataMock,
+            state,
+            "Expected to persist the new state"
+        )
     }
 
     func testLoginFails() async throws {
         persistence.data = nil
         oauthService.loginResult = .failure(OAuthServiceError.failedToAuthenticate(nil))
 
-        await AsyncAssertThrows(try await sut.login(on: UIViewController()) , nil,
-                                    "Expected to throw an error")
+        await AsyncAssertThrows(
+            try await sut.login(on: UIViewController()),
+            nil,
+            "Expected to throw an error"
+        )
         await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated, "Expected to not be authenticated")
     }
 
@@ -68,9 +77,11 @@ final class AuthenticationClientTests: XCTestCase {
         oauthService.refreshResult = .success(nil)
 
         try await AsyncAssertEqual(try await sut.restoreState(), true, "Expected to be signed in successfully")
-        await AsyncAssertEqual(await sut.authenticationState,
-                               .authenticated,
-                               "Expected the auth manager to be in authenticated state")
+        await AsyncAssertEqual(
+            await sut.authenticationState,
+            .authenticated,
+            "Expected the auth manager to be in authenticated state"
+        )
     }
 
     func testRestorationButNotAuthenticated() async throws {
@@ -128,10 +139,16 @@ final class AuthenticationClientTests: XCTestCase {
 
         oauthService.accessTokenBehavior = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
-        try await AsyncAssertThrows(await {_ = try await sut.authenticate(request: inputRequest)}(),
-                                    nil, "Expected to throw an error as well.")
-        await AsyncAssertEqual(await sut.authenticationState,
-            .notAuthenticated, "Expected to signal not authenticated state")
+        try await AsyncAssertThrows(
+            await { _ = try await sut.authenticate(request: inputRequest) }(),
+            nil,
+            "Expected to throw an error as well."
+        )
+        await AsyncAssertEqual(
+            await sut.authenticationState,
+            .notAuthenticated,
+            "Expected to signal not authenticated state"
+        )
     }
 
     func testRefreshedTokens() async throws {
@@ -214,7 +231,7 @@ private final class OAuthServiceMock: OAuthService {
         }
         return (try behavior.getToken(), try behavior.getStateData() ?? data)
     }
-    
+
     var loginResult: Result<OAuthStateData, Error>?
 
     func login(on viewController: UIViewController) async throws -> any OAuthStateData {
@@ -222,7 +239,7 @@ private final class OAuthServiceMock: OAuthService {
     }
 
     func refreshIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
-        guard let refreshResult = refreshResult else {
+        guard let refreshResult else {
             fatalError()
         }
         return try refreshResult.get() ?? data
@@ -249,7 +266,7 @@ private final class AutehenticationDataMock: Equatable, Codable, OAuthStateData 
 
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: Codingkey.self)
-        try container.encode(self.accessToken, forKey: .accessToken)
+        try container.encode(accessToken, forKey: .accessToken)
     }
 
     var isAuthorized: Bool {

@@ -20,7 +20,6 @@ public enum OAuthServiceError: Error {
 
 /// Encapsulates the OAuth state data. Should only be managed and mutated by `OAuthService.`
 public protocol OAuthStateData {
-
     var isAuthorized: Bool { get }
 }
 
@@ -30,7 +29,6 @@ public protocol OAuthStateData {
 /// to hold and persist the state data. Each call to the service returns an updated `OAuthStateData`
 /// that reflects the latest state.
 public protocol OAuthService {
-
     func login(on viewController: UIViewController) async throws -> OAuthStateData
 
     func getAccessToken(using data: OAuthStateData) async throws -> (String, OAuthStateData)
@@ -41,7 +39,6 @@ public protocol OAuthService {
 /// Encodes and decodes the `OAuthStateData`. A convneience to hide the conforming `OAuthStateData` type
 /// while preparing the state for persistence.
 public protocol OAuthStateDataEncoder {
-
     func encode(_ data: OAuthStateData) throws -> Data
 
     func decode(_ data: Data) throws -> OAuthStateData

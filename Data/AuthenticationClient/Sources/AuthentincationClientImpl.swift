@@ -8,26 +8,28 @@
 import AppAuth
 import Combine
 import Foundation
-import UIKit
 import OAuthService
+import UIKit
 import VLogging
 
 final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    init(configurations: Configuration,
-         oauthService: OAuthService,
-         encoder: OAuthStateDataEncoder,
-         persistence: Persistence) {
+    init(
+        configurations: Configuration,
+        oauthService: OAuthService,
+        encoder: OAuthStateDataEncoder,
+        persistence: Persistence
+    ) {
         self.oauthService = oauthService
         self.persistence = persistence
         self.encoder = encoder
-        self.appConfiguration = configurations
+        appConfiguration = configurations
     }
 
     // MARK: Public
 
-    public var authenticationState: AuthenticationState  {
+    public var authenticationState: AuthenticationState {
         stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
@@ -43,7 +45,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
         let data: OAuthStateData
         do {
             data = try await oauthService.login(on: viewController)
-            self.stateData = data
+            stateData = data
             logger.info("login succeeded with state. isAuthorized: \(data.isAuthorized)")
             persist(data: data)
         } catch {
@@ -80,8 +82,8 @@ final actor AuthenticationClientImpl: AuthenticationClient {
             logger.error("Failed to refresh the authentication state: \(error)")
             throw AuthenticationClientError.clientIsNotAuthenticated(error)
         }
-        self.stateData = newData
-        self.persist(data: newData)
+        stateData = newData
+        persist(data: newData)
         return newData.isAuthorized
     }
 

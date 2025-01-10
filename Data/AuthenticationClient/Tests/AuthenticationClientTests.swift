@@ -16,7 +16,7 @@ import XCTest
 final class AuthenticationClientTests: XCTestCase {
     // MARK: Internal
 
-    let configuration = Configuration(
+    let configuration = AuthenticationClientConfiguration(
         clientID: "client-id",
         redirectURL: URL(string: "callback://")!,
         scopes: [],

@@ -88,5 +88,5 @@ private enum Constant {
         .appendingPathComponent("databases", isDirectory: true)
 
     /// If set, the Quran.com login will be enabled.
-    static let QuranOAuthAppConfigurations: OAuthAppConfiguration? = nil
+    static let QuranOAuthAppConfigurations: AuthenticationClientConfiguration? = nil
 }

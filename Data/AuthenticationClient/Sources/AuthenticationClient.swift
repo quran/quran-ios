@@ -24,7 +24,7 @@ public enum AuthenticationState: Equatable {
     case authenticated
 }
 
-public struct Configuration {
+public struct AuthenticationClientConfiguration {
     public let clientID: String
     public let redirectURL: URL
     /// Indicates the Quran.com specific scopes to be requested by the app.
@@ -59,7 +59,7 @@ public protocol AuthenticationClient {
 }
 
 public enum AuthentincationClientBuilder {
-    public static func make(withConfigurations config: Configuration) -> AuthenticationClient {
+    public static func make(withConfigurations config: AuthenticationClientConfiguration) -> AuthenticationClient {
         AuthenticationClientImpl(configurations: config)
     }
 }

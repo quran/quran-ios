@@ -16,7 +16,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
     init(
-        configurations: Configuration,
+        configurations: AuthenticationClientConfiguration,
         oauthService: OAuthService,
         encoder: OAuthStateDataEncoder,
         persistence: Persistence
@@ -117,7 +117,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
 
     private var stateChangedCancellable: AnyCancellable?
 
-    private var appConfiguration: Configuration
+    private var appConfiguration: AuthenticationClientConfiguration
 
     private var stateData: OAuthStateData?
 
@@ -134,7 +134,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
 }
 
 extension AuthenticationClientImpl {
-    public init(configurations: Configuration) {
+    public init(configurations: AuthenticationClientConfiguration) {
         let service = AppAuthOAuthService(appConfigurations: configurations)
         let encoder = AppAuthStateEncoder()
         self.init(

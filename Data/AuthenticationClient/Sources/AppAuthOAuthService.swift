@@ -39,7 +39,7 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
 final class AppAuthOAuthService: OAuthService {
     // MARK: Lifecycle
 
-    init(appConfigurations: Configuration) {
+    init(appConfigurations: AuthenticationClientConfiguration) {
         self.appConfigurations = appConfigurations
     }
 
@@ -86,7 +86,7 @@ final class AppAuthOAuthService: OAuthService {
 
     // MARK: Private
 
-    private let appConfigurations: Configuration
+    private let appConfigurations: AuthenticationClientConfiguration
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
@@ -117,7 +117,7 @@ final class AppAuthOAuthService: OAuthService {
 
     private func login(
         withConfiguration configuration: OIDServiceConfiguration,
-        appConfiguration: Configuration,
+        appConfiguration: AuthenticationClientConfiguration,
         on viewController: UIViewController
     ) async throws -> OIDAuthState {
         let scopes = [OIDScopeOpenID, OIDScopeProfile] + appConfiguration.scopes

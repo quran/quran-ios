@@ -8,6 +8,7 @@
 import Foundation
 import AppAuth
 import VLogging
+import OAuthService
 
 struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
@@ -35,9 +36,9 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
 
 final class AppAuthOAuthService: OAuthService {
 
-    private let appConfigurations: OAuthAppConfiguration
+    private let appConfigurations: Configuration
 
-    init(appConfigurations: OAuthAppConfiguration) {
+    init(appConfigurations: Configuration) {
         self.appConfigurations = appConfigurations
     }
 
@@ -111,7 +112,7 @@ final class AppAuthOAuthService: OAuthService {
 
     private func login(
         withConfiguration configuration: OIDServiceConfiguration,
-        appConfiguration: OAuthAppConfiguration,
+        appConfiguration: Configuration,
         on viewController: UIViewController
     ) async throws -> OIDAuthState {
         let scopes = [OIDScopeOpenID, OIDScopeProfile] + appConfiguration.scopes

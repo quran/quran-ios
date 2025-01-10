@@ -129,6 +129,8 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
+
+        target(type, name: "OAuthService", hasTests: false, dependencies: []),
     ]
 }
 
@@ -302,6 +304,7 @@ private func dataTargets() -> [[Target]] {
         // MARK: - Quran.com OAuth
 
         target(type, name: "AuthenticationClient", hasTests: true, dependencies: [
+            "OAuthService",
             "VLogging",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
         ], testDependencies: ["AsyncUtilitiesForTesting"]),

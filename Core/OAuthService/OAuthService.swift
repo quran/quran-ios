@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum OAuthServiceError: Error {
+public enum OAuthServiceError: Error {
     case failedToRefreshTokens(Error?)
 
     case stateDataDecodingError(Error?)
@@ -19,7 +19,7 @@ enum OAuthServiceError: Error {
 }
 
 /// Encapsulates the OAuth state data. Should only be managed and mutated by `OAuthService.`
-protocol OAuthStateData {
+public protocol OAuthStateData {
 
     var isAuthorized: Bool { get }
 }
@@ -29,7 +29,7 @@ protocol OAuthStateData {
 /// The service is assumed not to have any internal state. It's the responsibility of the client of this service
 /// to hold and persist the state data. Each call to the service returns an updated `OAuthStateData`
 /// that reflects the latest state.
-protocol OAuthService {
+public protocol OAuthService {
 
     func login(on viewController: UIViewController) async throws -> OAuthStateData
 
@@ -40,15 +40,9 @@ protocol OAuthService {
 
 /// Encodes and decodes the `OAuthStateData`. A convneience to hide the conforming `OAuthStateData` type
 /// while preparing the state for persistence.
-protocol OAuthStateDataEncoder {
+public protocol OAuthStateDataEncoder {
 
     func encode(_ data: OAuthStateData) throws -> Data
 
     func decode(_ data: Data) throws -> OAuthStateData
-}
-
-protocol OAuthServiceBuilder {
-
-    func buildService(appConfigurations: OAuthAppConfiguration) -> OAuthService
-    func buildEncoder() -> OAuthStateDataEncoder
 }

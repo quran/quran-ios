@@ -10,12 +10,13 @@ import AsyncUtilitiesForTesting
 import Combine
 import Foundation
 import XCTest
+import OAuthService
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {
     // MARK: Internal
 
-    let configuration = OAuthAppConfiguration(
+    let configuration = Configuration(
         clientID: "client-id",
         redirectURL: URL(string: "callback://")!,
         scopes: [],
@@ -262,6 +263,7 @@ private final class PersistenceMock: Persistence {
 
     func retrieve() throws -> Data? {
         if let result = retrievalResult {
+            retrievalResult = nil
             data = try result.get()
         }
         return data

@@ -9,12 +9,13 @@ import AppAuth
 import Combine
 import Foundation
 import UIKit
+import OAuthService
 import VLogging
 
 final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    init(configurations: OAuthAppConfiguration,
+    init(configurations: Configuration,
          oauthService: OAuthService,
          encoder: OAuthStateDataEncoder,
          persistence: Persistence) {
@@ -27,7 +28,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Public
 
     public var authenticationState: AuthenticationState  {
-        return stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
+        stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
     public func login(on viewController: UIViewController) async throws {
@@ -103,7 +104,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
 
     private var stateChangedCancellable: AnyCancellable?
 
-    private var appConfiguration: OAuthAppConfiguration
+    private var appConfiguration: Configuration
 
     private var stateData: OAuthStateData?
 
@@ -120,7 +121,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
 }
 
 extension AuthenticationClientImpl {
-    public init(configurations: OAuthAppConfiguration) {
+    public init(configurations: Configuration) {
         let service = AppAuthOAuthService(appConfigurations: configurations)
         let encoder = AppAuthStateEncoder()
         self.init(

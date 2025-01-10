@@ -83,7 +83,8 @@ final actor AuthenticationClientImpl: AuthenticationClient {
         do {
             (token, data) = try await oauthService.getAccessToken(using: stateData)
         } catch {
-            logger.error("Failed to get access token: \(error)")
+            logger.error("Failed to get access token. Resetting to non-authenticated state: \(error)")
+            self.stateData = nil
             throw AuthenticationClientError.clientIsNotAuthenticated(error)
         }
 

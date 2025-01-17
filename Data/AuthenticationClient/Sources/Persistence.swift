@@ -32,11 +32,30 @@ final class KeychainPersistence: Persistence {
             kSecValueData as String: state,
         ]
         let status = SecItemAdd(addquery as CFDictionary, nil)
-        if status != errSecSuccess {
+        if status == errSecDuplicateItem {
+            logger.info("State already exists, updating")
+            try update(state: state)
+        } else if status != errSecSuccess {
             logger.error("Failed to persist state -- \(status) status")
             throw PersistenceError.persistenceFailed
         }
         logger.info("State persisted successfully")
+    }
+
+    private func update(state: Data) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: itemKey,
+            ]
+        let attributes: [String: Any] = [
+            kSecValueData as String: state,
+        ]
+        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        if status != errSecSuccess {
+            logger.error("Failed to update state -- \(status) status")
+            throw PersistenceError.persistenceFailed
+        }
+        logger.info("State updated")
     }
 
     func retrieve() throws -> Data? {

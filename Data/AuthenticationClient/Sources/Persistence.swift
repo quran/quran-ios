@@ -23,7 +23,7 @@ protocol Persistence {
 }
 
 final class KeychainPersistence: Persistence {
-    private let itemKey = "com.quran.oauth.state"
+    // MARK: Internal
 
     func persist(state: Data) throws {
         let addquery: [String: Any] = [
@@ -40,22 +40,6 @@ final class KeychainPersistence: Persistence {
             throw PersistenceError.persistenceFailed
         }
         logger.info("State persisted successfully")
-    }
-
-    private func update(state: Data) throws {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: itemKey,
-            ]
-        let attributes: [String: Any] = [
-            kSecValueData as String: state,
-        ]
-        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if status != errSecSuccess {
-            logger.error("Failed to update state -- \(status) status")
-            throw PersistenceError.persistenceFailed
-        }
-        logger.info("State updated")
     }
 
     func retrieve() throws -> Data? {
@@ -93,5 +77,25 @@ final class KeychainPersistence: Persistence {
             logger.error("Failed to clear state -- \(status) status")
             throw PersistenceError.persistenceFailed
         }
+    }
+
+    // MARK: Private
+
+    private let itemKey = "com.quran.oauth.state"
+
+    private func update(state: Data) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: itemKey,
+        ]
+        let attributes: [String: Any] = [
+            kSecValueData as String: state,
+        ]
+        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        if status != errSecSuccess {
+            logger.error("Failed to update state -- \(status) status")
+            throw PersistenceError.persistenceFailed
+        }
+        logger.info("State updated")
     }
 }

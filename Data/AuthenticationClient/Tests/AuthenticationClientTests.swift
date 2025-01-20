@@ -76,7 +76,7 @@ final class AuthenticationClientTests: XCTestCase {
         persistence.data = try encoder.encode(state)
         oauthService.refreshResult = .success(nil)
 
-        try await AsyncAssertEqual(try await sut.restoreState(), true, "Expected to be signed in successfully")
+        try await AsyncAssertEqual(try await sut.restoreState(), .authenticated, "Expected to be signed in successfully")
         await AsyncAssertEqual(
             await sut.authenticationState,
             .authenticated,
@@ -87,14 +87,14 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationButNotAuthenticated() async throws {
         persistence.data = nil
 
-        try await AsyncAssertEqual(try await sut.restoreState(), false, "Expected to not be signed in")
-        await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated)
+        try await AsyncAssertEqual(try await sut.restoreState(), .notAuthenticated, "Expected to not be signed in")
+        await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated, "Should be reflected in state property")
     }
 
     func testRestorationFails() async throws {
         persistence.retrievalResult = .failure(PersistenceError.retrievalFailed)
 
-        try await AsyncAssertEqual(try await sut.restoreState(), false, "Expected to just return failure")
+        try await AsyncAssertEqual(try await sut.restoreState(), .notAuthenticated, "Expected not to be signed in")
     }
 
     func testRestorationFailsRefreshingSession() async throws {
@@ -238,7 +238,7 @@ private final class OAuthServiceMock: OAuthService {
         try loginResult!.get()
     }
 
-    func refreshIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
+    func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
         guard let refreshResult else {
             fatalError()
         }

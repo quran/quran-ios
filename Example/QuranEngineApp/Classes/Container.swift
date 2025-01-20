@@ -40,7 +40,7 @@ class Container: AppDependencies {
         guard let configurations = Constant.QuranOAuthAppConfigurations else {
             return nil
         }
-        let client = AuthentincationClientBuilder.make(withConfigurations: configurations)
+        let client = AuthenticationClientImpl(configurations: configurations)
         return client
     }()
 

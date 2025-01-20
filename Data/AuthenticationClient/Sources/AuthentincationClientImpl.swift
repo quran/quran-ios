@@ -12,7 +12,7 @@ import OAuthService
 import UIKit
 import VLogging
 
-final actor AuthenticationClientImpl: AuthenticationClient {
+public final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
 
     init(
@@ -54,24 +54,24 @@ final actor AuthenticationClientImpl: AuthenticationClient {
         }
     }
 
-    public func restoreState() async throws -> Bool {
+    public func restoreState() async throws -> AuthenticationState {
         let persistedData: OAuthStateData
         do {
             if let data = try persistence.retrieve() {
                 persistedData = try encoder.decode(data)
             } else {
                 logger.info("No previous authentication state found")
-                return false
+                return authenticationState
             }
         } catch {
             // Aside from requesting the user to share the diagnostic logs, there's no workaround for this.
             logger.error("Failed to refresh the authentication state. Will default to unauthenticated: \(error)")
-            return false
+            return authenticationState
         }
 
         let newData: OAuthStateData
         do {
-            newData = try await oauthService.refreshIfNeeded(data: persistedData)
+            newData = try await oauthService.refreshAccessTokenIfNeeded(data: persistedData)
         } catch {
             // We'll need to differentiate between two sets of errors here:
             // - Connectivity and server errors. These should not change the authentication
@@ -84,7 +84,7 @@ final actor AuthenticationClientImpl: AuthenticationClient {
         }
         stateData = newData
         persist(data: newData)
-        return newData.isAuthorized
+        return authenticationState
     }
 
     public func authenticate(request: URLRequest) async throws -> URLRequest {

@@ -46,8 +46,6 @@ final class AppAuthOAuthService: OAuthService {
     // MARK: Internal
 
     func login(on viewController: UIViewController) async throws -> any OAuthStateData {
-        // Quran.com relies on dicovering the service configuration from the issuer,
-        // and not using a static configuration.
         let serviceConfiguration = try await discoverConfiguration(forIssuer: appConfigurations.authorizationIssuerURL)
         let state = try await login(
             withConfiguration: serviceConfiguration,
@@ -80,7 +78,7 @@ final class AppAuthOAuthService: OAuthService {
         }
     }
 
-    func refreshIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
+    func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
         try await getAccessToken(using: data).1
     }
 

@@ -30,6 +30,8 @@ public struct AuthenticationClientConfiguration {
     /// Indicates the Quran.com specific scopes to be requested by the app.
     /// The client requests the `offline` and `openid` scopes by default.
     public let scopes: [String]
+    /// Quran.com relies on dicovering the service configuration from the issuer,
+    /// and not using a static configuration.
     public let authorizationIssuerURL: URL
 
     public init(clientID: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
@@ -50,16 +52,9 @@ public protocol AuthenticationClient {
     /// - Returns: Nothing is returned for now. The client may return the profile infromation in the future.
     func login(on viewController: UIViewController) async throws
 
-    /// Returns `true` if the client is authenticated.
-    func restoreState() async throws -> Bool
+    func restoreState() async throws -> AuthenticationState
 
     func authenticate(request: URLRequest) async throws -> URLRequest
 
     var authenticationState: AuthenticationState { get async }
-}
-
-public enum AuthentincationClientBuilder {
-    public static func make(withConfigurations config: AuthenticationClientConfiguration) -> AuthenticationClient {
-        AuthenticationClientImpl(configurations: config)
-    }
 }

@@ -29,11 +29,12 @@ public protocol OAuthStateData {
 /// to hold and persist the state data. Each call to the service returns an updated `OAuthStateData`
 /// that reflects the latest state.
 public protocol OAuthService {
+    /// Attempts to discover the authentication services and redirects the user to the authentication service.
     func login(on viewController: UIViewController) async throws -> OAuthStateData
 
     func getAccessToken(using data: OAuthStateData) async throws -> (String, OAuthStateData)
 
-    func refreshIfNeeded(data: OAuthStateData) async throws -> OAuthStateData
+    func refreshAccessTokenIfNeeded(data: OAuthStateData) async throws -> OAuthStateData
 }
 
 /// Encodes and decodes the `OAuthStateData`. A convneience to hide the conforming `OAuthStateData` type

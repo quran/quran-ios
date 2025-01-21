@@ -12,6 +12,7 @@ import OAuthService
 import SecurePersistence
 import UIKit
 import VLogging
+import AppAuthOAuthService
 
 public final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle
@@ -140,13 +141,26 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
 extension AuthenticationClientImpl {
     public init(configurations: AuthenticationClientConfiguration) {
-        let service = AppAuthOAuthService(appConfigurations: configurations)
+        let service = AppAuthOAuthService(appConfigurations: configurations.oAuthServiceConfiguration)
         let encoder = AppAuthStateEncoder()
         self.init(
             configurations: configurations,
             oauthService: service,
             encoder: encoder,
             persistence: KeychainPersistence()
+        )
+    }
+}
+
+private extension AuthenticationClientConfiguration {
+    // The interfaces for the configurations of both modules will change.
+    // Noticeably,
+    var oAuthServiceConfiguration: OAuthServiceConfiguration {
+        OAuthServiceConfiguration(
+            clientID: clientID,
+            redirectURL: redirectURL,
+            scopes: scopes,
+            authorizationIssuerURL: authorizationIssuerURL
         )
     }
 }

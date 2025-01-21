@@ -8,6 +8,24 @@
 import Foundation
 import UIKit
 
+public struct OAuthServiceConfiguration {
+    public let clientID: String
+    public let redirectURL: URL
+    /// Indicates the Quran.com specific scopes to be requested by the app.
+    /// The client requests the `offline` and `openid` scopes by default.
+    public let scopes: [String]
+    /// Quran.com relies on dicovering the service configuration from the issuer,
+    /// and not using a static configuration.
+    public let authorizationIssuerURL: URL
+
+    public init(clientID: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
+        self.clientID = clientID
+        self.redirectURL = redirectURL
+        self.scopes = scopes
+        self.authorizationIssuerURL = authorizationIssuerURL
+    }
+}
+
 public enum OAuthServiceError: Error {
     case failedToRefreshTokens(Error?)
 

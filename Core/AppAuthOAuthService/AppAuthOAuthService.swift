@@ -6,18 +6,20 @@
 //
 
 import AppAuth
-import Foundation
+import UIKit
 import OAuthService
 import VLogging
 
-struct AppAuthStateData: OAuthStateData {
+public struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
 
-    var isAuthorized: Bool { state.isAuthorized }
+    public var isAuthorized: Bool { state.isAuthorized }
 }
 
-struct AppAuthStateEncoder: OAuthStateDataEncoder {
-    func encode(_ data: any OAuthStateData) throws -> Data {
+public struct AppAuthStateEncoder: OAuthStateDataEncoder {
+    public init () { }
+
+    public func encode(_ data: any OAuthStateData) throws -> Data {
         guard let data = data as? AppAuthStateData else {
             fatalError()
         }
@@ -28,7 +30,7 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
         return encoded
     }
 
-    func decode(_ data: Data) throws -> any OAuthStateData {
+    public func decode(_ data: Data) throws -> any OAuthStateData {
         guard let state = try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) else {
             throw OAuthServiceError.stateDataDecodingError(nil)
         }
@@ -36,16 +38,16 @@ struct AppAuthStateEncoder: OAuthStateDataEncoder {
     }
 }
 
-final class AppAuthOAuthService: OAuthService {
+public final class AppAuthOAuthService: OAuthService {
     // MARK: Lifecycle
 
-    init(appConfigurations: AuthenticationClientConfiguration) {
+    public init(appConfigurations: OAuthServiceConfiguration) {
         self.appConfigurations = appConfigurations
     }
 
     // MARK: Internal
 
-    func login(on viewController: UIViewController) async throws -> any OAuthStateData {
+    public func login(on viewController: UIViewController) async throws -> any OAuthStateData {
         let serviceConfiguration = try await discoverConfiguration(forIssuer: appConfigurations.authorizationIssuerURL)
         let state = try await login(
             withConfiguration: serviceConfiguration,
@@ -55,7 +57,7 @@ final class AppAuthOAuthService: OAuthService {
         return AppAuthStateData(state: state)
     }
 
-    func getAccessToken(using data: any OAuthStateData) async throws -> (String, any OAuthStateData) {
+    public func getAccessToken(using data: any OAuthStateData) async throws -> (String, any OAuthStateData) {
         guard let data = data as? AppAuthStateData else {
             // This should be a fatal error.
             fatalError()
@@ -78,13 +80,13 @@ final class AppAuthOAuthService: OAuthService {
         }
     }
 
-    func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
+    public func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
         try await getAccessToken(using: data).1
     }
 
     // MARK: Private
 
-    private let appConfigurations: AuthenticationClientConfiguration
+    private let appConfigurations: OAuthServiceConfiguration
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
@@ -115,7 +117,7 @@ final class AppAuthOAuthService: OAuthService {
 
     private func login(
         withConfiguration configuration: OIDServiceConfiguration,
-        appConfiguration: AuthenticationClientConfiguration,
+        appConfiguration: OAuthServiceConfiguration,
         on viewController: UIViewController
     ) async throws -> OIDAuthState {
         let scopes = [OIDScopeOpenID, OIDScopeProfile] + appConfiguration.scopes

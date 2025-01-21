@@ -10,10 +10,10 @@ import AsyncUtilitiesForTesting
 import Combine
 import Foundation
 import OAuthService
-import XCTest
-import SystemDependenciesFake
-import SystemDependencies
 import SecurePersistence
+import SystemDependencies
+import SystemDependenciesFake
+import XCTest
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {
@@ -73,8 +73,10 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationSuccessful() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.set(data: try encoder.encode(state),
-                                forKey: AuthenticationClientImpl.persistenceKey)
+        try persistence.set(
+            data: try encoder.encode(state),
+            forKey: AuthenticationClientImpl.persistenceKey
+        )
         oauthService.refreshResult = .success(nil)
 
         try await AsyncAssertEqual(try await sut.restoreState(), .authenticated, "Expected to be signed in successfully")
@@ -98,8 +100,10 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationFailsRefreshingSession() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.set(data: try encoder.encode(state),
-                                forKey: AuthenticationClientImpl.persistenceKey)
+        try persistence.set(
+            data: try encoder.encode(state),
+            forKey: AuthenticationClientImpl.persistenceKey
+        )
         oauthService.refreshResult = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
         try await AsyncAssertThrows(await { _ = try await sut.restoreState() }(), nil, "Expected to throw an error")
@@ -153,8 +157,10 @@ final class AuthenticationClientTests: XCTestCase {
     func testRefreshedTokens() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.set(data: try encoder.encode(state),
-                                forKey: AuthenticationClientImpl.persistenceKey)
+        try persistence.set(
+            data: try encoder.encode(state),
+            forKey: AuthenticationClientImpl.persistenceKey
+        )
 
         let newState = AutehenticationDataMock()
         newState.accessToken = "xyz"

@@ -133,7 +133,7 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "OAuthService", hasTests: false, dependencies: []),
 
         target(type, name: "SecurePersistence", hasTests: false, dependencies: [
-            "SystemDependencies"
+            "SystemDependencies",
         ]),
     ]
 }

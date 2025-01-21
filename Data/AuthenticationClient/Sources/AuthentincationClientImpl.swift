@@ -9,8 +9,8 @@ import AppAuth
 import Combine
 import Foundation
 import OAuthService
-import UIKit
 import SecurePersistence
+import UIKit
 import VLogging
 
 public final actor AuthenticationClientImpl: AuthenticationClient {
@@ -110,9 +110,11 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         return request
     }
 
-    // MARK: Private
+    // MARK: Internal
 
     static let persistenceKey: String = "com.quran.oauth.state"
+
+    // MARK: Private
 
     private let oauthService: OAuthService
     private let encoder: OAuthStateDataEncoder

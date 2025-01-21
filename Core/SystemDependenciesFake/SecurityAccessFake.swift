@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SecurityAccessFake.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 21/01/2025.
@@ -9,12 +9,11 @@ import Foundation
 import SystemDependencies
 
 public class SecurityAccessFake: KeychainAccess {
-
     private var items: [String: [String: Any]] = [:]
 
     public init() { }
 
-    public func addItem(query: [String : Any]) -> OSStatus {
+    public func addItem(query: [String: Any]) -> OSStatus {
         guard let key = query[kSecAttrAccount as String] as? String else {
             return errSecParam
         }
@@ -22,7 +21,7 @@ public class SecurityAccessFake: KeychainAccess {
         return errSecSuccess
     }
 
-    public func updateItem(query: [String : Any], attributes: [String : Any]) -> OSStatus {
+    public func updateItem(query: [String: Any], attributes: [String: Any]) -> OSStatus {
         guard let key = query[kSecAttrAccount as String] as? String else {
             return errSecItemNotFound
         }
@@ -30,7 +29,7 @@ public class SecurityAccessFake: KeychainAccess {
         return errSecSuccess
     }
 
-    public func deleteItem(query: [String : Any]) -> OSStatus {
+    public func deleteItem(query: [String: Any]) -> OSStatus {
         guard let key = query[kSecAttrAccount as String] as? String else {
             return errSecParam
         }
@@ -38,7 +37,7 @@ public class SecurityAccessFake: KeychainAccess {
         return errSecSuccess
     }
 
-    public func copyItem(query: [String : Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
+    public func copyItem(query: [String: Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
         guard let key = query[kSecAttrAccount as String] as? String else {
             return errSecItemNotFound
         }

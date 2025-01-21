@@ -7,32 +7,7 @@
 
 import Foundation
 import VLogging
-
-protocol SecurityAccess {
-    mutating func addItem(query: [String: Any]) -> OSStatus
-    mutating func updateItem(query: [String: Any], attributes: [String: Any]) -> OSStatus
-    mutating func deleteItem(query: [String: Any]) -> OSStatus
-    func copyItem(query: [String: Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus
-}
-
-struct KeychainAccess: SecurityAccess {
-
-    func addItem(query: [String : Any]) -> OSStatus {
-        SecItemAdd(query as CFDictionary, nil)
-    }
-
-    func updateItem(query: [String : Any], attributes: [String : Any]) -> OSStatus {
-        SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-    }
-
-    func deleteItem(query: [String : Any]) -> OSStatus {
-        SecItemDelete(query as CFDictionary)
-    }
-
-    func copyItem(query: [String : Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
-        SecItemCopyMatching(query as CFDictionary, result)
-    }
-}
+import SystemDependencies
 
 enum PersistenceError: Error {
     case persistenceFailed
@@ -51,9 +26,9 @@ protocol Persistence {
 final class KeychainPersistence: Persistence {
     // MARK: Internal
 
-    private var keychainAccess: SecurityAccess
+    private var keychainAccess: KeychainAccess
 
-    init(keychainAccess: SecurityAccess = KeychainAccess()) {
+    init(keychainAccess: KeychainAccess = DefaultKeychainAccess()) {
         self.keychainAccess = keychainAccess
     }
 

@@ -11,6 +11,8 @@ import Combine
 import Foundation
 import OAuthService
 import XCTest
+import SystemDependenciesFake
+import SystemDependencies
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {
@@ -26,7 +28,7 @@ final class AuthenticationClientTests: XCTestCase {
     override func setUp() {
         encoder = OauthStateEncoderMock()
         oauthService = OAuthServiceMock()
-        persistence = KeychainPersistence(keychainAccess: FakeSecurityAccess())
+        persistence = KeychainPersistence(keychainAccess: SecurityAccessFake())
         sut = AuthenticationClientImpl(
             configurations: configuration,
             oauthService: oauthService,
@@ -269,51 +271,5 @@ private final class AutehenticationDataMock: Equatable, Codable, OAuthStateData 
 
     static func == (lhs: AutehenticationDataMock, rhs: AutehenticationDataMock) -> Bool {
         lhs.accessToken == rhs.accessToken
-    }
-}
-
-struct FakeSecurityAccess: SecurityAccess {
-
-    var items: [String: [String: Any]] = [:]
-
-    mutating
-    func addItem(query: [String : Any]) -> OSStatus {
-        guard let key = query[kSecAttrAccount as String] as? String else {
-            return errSecParam
-        }
-        items[key] = query
-        return errSecSuccess
-    }
-
-    mutating
-    func updateItem(query: [String : Any], attributes: [String : Any]) -> OSStatus {
-        guard let key = query[kSecAttrAccount as String] as? String else {
-            return errSecItemNotFound
-        }
-        items[key] = attributes
-        return errSecSuccess
-    }
-
-    mutating
-    func deleteItem(query: [String : Any]) -> OSStatus {
-        guard let key = query[kSecAttrAccount as String] as? String else {
-            return errSecParam
-        }
-        items[key] = nil
-        return errSecSuccess
-    }
-
-    func copyItem(query: [String : Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
-        guard let key = query[kSecAttrAccount as String] as? String else {
-            return errSecItemNotFound
-        }
-        guard let item = items[key] else {
-            return errSecItemNotFound
-        }
-        guard let value = item[kSecValueData as String] as? Data else {
-            return errSecParam
-        }
-        result.pointee = value as CFData
-        return errSecSuccess
     }
 }

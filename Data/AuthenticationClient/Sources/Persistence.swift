@@ -8,6 +8,32 @@
 import Foundation
 import VLogging
 
+protocol SecurityAccess {
+    mutating func addItem(query: [String: Any]) -> OSStatus
+    mutating func updateItem(query: [String: Any], attributes: [String: Any]) -> OSStatus
+    mutating func deleteItem(query: [String: Any]) -> OSStatus
+    func copyItem(query: [String: Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus
+}
+
+struct KeychainAccess: SecurityAccess {
+
+    func addItem(query: [String : Any]) -> OSStatus {
+        SecItemAdd(query as CFDictionary, nil)
+    }
+
+    func updateItem(query: [String : Any], attributes: [String : Any]) -> OSStatus {
+        SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+    }
+
+    func deleteItem(query: [String : Any]) -> OSStatus {
+        SecItemDelete(query as CFDictionary)
+    }
+
+    func copyItem(query: [String : Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
+        SecItemCopyMatching(query as CFDictionary, result)
+    }
+}
+
 enum PersistenceError: Error {
     case persistenceFailed
     case retrievalFailed
@@ -25,13 +51,19 @@ protocol Persistence {
 final class KeychainPersistence: Persistence {
     // MARK: Internal
 
+    private var keychainAccess: SecurityAccess
+
+    init(keychainAccess: SecurityAccess = KeychainAccess()) {
+        self.keychainAccess = keychainAccess
+    }
+
     func persist(state: Data) throws {
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: itemKey,
             kSecValueData as String: state,
         ]
-        let status = SecItemAdd(addquery as CFDictionary, nil)
+        let status = keychainAccess.addItem(query: addquery)
         if status == errSecDuplicateItem {
             logger.info("State already exists, updating")
             try update(state: state)
@@ -50,7 +82,7 @@ final class KeychainPersistence: Persistence {
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]
         var result: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        let status = keychainAccess.copyItem(query: query, result: &result)
         if status == errSecItemNotFound {
             logger.info("No state found")
             return nil
@@ -72,7 +104,7 @@ final class KeychainPersistence: Persistence {
             kSecAttrAccount as String: itemKey,
         ]
 
-        let status = SecItemDelete(query as CFDictionary)
+        let status = keychainAccess.deleteItem(query: query)
         if status != errSecSuccess && status != errSecItemNotFound {
             logger.error("Failed to clear state -- \(status) status")
             throw PersistenceError.persistenceFailed
@@ -91,7 +123,7 @@ final class KeychainPersistence: Persistence {
         let attributes: [String: Any] = [
             kSecValueData as String: state,
         ]
-        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        let status = keychainAccess.updateItem(query: query, attributes: attributes)
         if status != errSecSuccess {
             logger.error("Failed to update state -- \(status) status")
             throw PersistenceError.persistenceFailed

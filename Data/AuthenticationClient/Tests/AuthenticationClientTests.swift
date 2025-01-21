@@ -26,7 +26,7 @@ final class AuthenticationClientTests: XCTestCase {
     override func setUp() {
         encoder = OauthStateEncoderMock()
         oauthService = OAuthServiceMock()
-        persistence = PersistenceMock()
+        persistence = KeychainPersistence(keychainAccess: FakeSecurityAccess())
         sut = AuthenticationClientImpl(
             configurations: configuration,
             oauthService: oauthService,
@@ -36,8 +36,6 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testLoginSuccessful() async throws {
-        persistence.data = Data()
-
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         oauthService.loginResult = .success(state)
@@ -45,21 +43,19 @@ final class AuthenticationClientTests: XCTestCase {
 
         try await sut.login(on: UIViewController())
 
-        XCTAssertTrue(persistence.clearCalled, "Expected to clear the persistence first")
         await AsyncAssertEqual(
             await sut.authenticationState,
             .authenticated,
             "Expected the auth manager to be in authenticated state"
         )
         XCTAssertEqual(
-            try persistence.data.map(encoder.decode(_:)) as? AutehenticationDataMock,
+            try persistence.retrieve().map(encoder.decode(_:)) as? AutehenticationDataMock,
             state,
             "Expected to persist the new state"
         )
     }
 
     func testLoginFails() async throws {
-        persistence.data = nil
         oauthService.loginResult = .failure(OAuthServiceError.failedToAuthenticate(nil))
 
         await AsyncAssertThrows(
@@ -73,7 +69,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationSuccessful() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.data = try encoder.encode(state)
+        try persistence.persist(state: try encoder.encode(state))
         oauthService.refreshResult = .success(nil)
 
         try await AsyncAssertEqual(try await sut.restoreState(), .authenticated, "Expected to be signed in successfully")
@@ -85,22 +81,19 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationButNotAuthenticated() async throws {
-        persistence.data = nil
-
         try await AsyncAssertEqual(try await sut.restoreState(), .notAuthenticated, "Expected to not be signed in")
         await AsyncAssertEqual(await sut.authenticationState, .notAuthenticated, "Should be reflected in state property")
     }
 
-    func testRestorationFails() async throws {
-        persistence.retrievalResult = .failure(PersistenceError.retrievalFailed)
-
+    func testRestorationFailsWithEmptyData() async throws {
+        // Persistance starts with empty data.
         try await AsyncAssertEqual(try await sut.restoreState(), .notAuthenticated, "Expected not to be signed in")
     }
 
     func testRestorationFailsRefreshingSession() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.data = try encoder.encode(state)
+        try persistence.persist(state: try encoder.encode(state))
         oauthService.refreshResult = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
         try await AsyncAssertThrows(await { _ = try await sut.restoreState() }(), nil, "Expected to throw an error")
@@ -109,7 +102,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testAuthenticatingRequestsWithValidState() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.data = try encoder.encode(state)
+        try persistence.persist(state: try encoder.encode(state))
 
         oauthService.accessTokenBehavior = .success("abcd")
         oauthService.refreshResult = .success(nil)
@@ -130,7 +123,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testAuthenticatingRequestFailsGettingToken() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.data = try encoder.encode(state)
+        try persistence.persist(state: try encoder.encode(state))
 
         oauthService.refreshResult = .success(nil)
         _ = try await sut.restoreState()
@@ -154,14 +147,15 @@ final class AuthenticationClientTests: XCTestCase {
     func testRefreshedTokens() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        persistence.data = try encoder.encode(state)
+        try persistence.persist(state: try encoder.encode(state))
+
         let newState = AutehenticationDataMock()
         newState.accessToken = "xyz"
         oauthService.refreshResult = .success(newState)
         oauthService.accessTokenBehavior = .success("xyz")
         _ = try await sut.restoreState()
 
-        let decoded = try persistence.data.map(encoder.decode) as? AutehenticationDataMock
+        let decoded = try persistence.retrieve().map(encoder.decode(_:)) as? AutehenticationDataMock
         XCTAssertEqual(
             decoded?.accessToken,
             "xyz",
@@ -179,7 +173,7 @@ final class AuthenticationClientTests: XCTestCase {
     private var sut: AuthenticationClientImpl!
     private var oauthService: OAuthServiceMock!
     private var encoder: OAuthStateDataEncoder!
-    private var persistence: PersistenceMock!
+    private var persistence: Persistence!
 }
 
 private struct OauthStateEncoderMock: OAuthStateDataEncoder {
@@ -278,25 +272,48 @@ private final class AutehenticationDataMock: Equatable, Codable, OAuthStateData 
     }
 }
 
-private final class PersistenceMock: Persistence {
-    var clearCalled = false
-    var retrievalResult: Result<Data?, Error>?
-    var data: Data?
+struct FakeSecurityAccess: SecurityAccess {
 
-    func persist(state: Data) throws {
-        data = state
-    }
+    var items: [String: [String: Any]] = [:]
 
-    func retrieve() throws -> Data? {
-        if let result = retrievalResult {
-            retrievalResult = nil
-            data = try result.get()
+    mutating
+    func addItem(query: [String : Any]) -> OSStatus {
+        guard let key = query[kSecAttrAccount as String] as? String else {
+            return errSecParam
         }
-        return data
+        items[key] = query
+        return errSecSuccess
     }
 
-    func clear() throws {
-        clearCalled = true
-        data = nil
+    mutating
+    func updateItem(query: [String : Any], attributes: [String : Any]) -> OSStatus {
+        guard let key = query[kSecAttrAccount as String] as? String else {
+            return errSecItemNotFound
+        }
+        items[key] = attributes
+        return errSecSuccess
+    }
+
+    mutating
+    func deleteItem(query: [String : Any]) -> OSStatus {
+        guard let key = query[kSecAttrAccount as String] as? String else {
+            return errSecParam
+        }
+        items[key] = nil
+        return errSecSuccess
+    }
+
+    func copyItem(query: [String : Any], result: UnsafeMutablePointer<CFTypeRef?>) -> OSStatus {
+        guard let key = query[kSecAttrAccount as String] as? String else {
+            return errSecItemNotFound
+        }
+        guard let item = items[key] else {
+            return errSecItemNotFound
+        }
+        guard let value = item[kSecValueData as String] as? Data else {
+            return errSecParam
+        }
+        result.pointee = value as CFData
+        return errSecSuccess
     }
 }

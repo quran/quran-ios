@@ -19,7 +19,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         configurations: AuthenticationClientConfiguration,
         oauthService: OAuthService,
         encoder: OAuthStateDataEncoder,
-        persistence: Persistence
+        persistence: SecurePersistence
     ) {
         self.oauthService = oauthService
         self.persistence = persistence
@@ -35,7 +35,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
     public func login(on viewController: UIViewController) async throws {
         do {
-            try persistence.clear()
+            try persistence.clearData(forKey: Self.persistenceKey)
             logger.info("Cleared previous authentication state before login")
         } catch {
             // If persisting the new state works, this error should be of little concern.
@@ -57,7 +57,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
     public func restoreState() async throws -> AuthenticationState {
         let persistedData: OAuthStateData
         do {
-            if let data = try persistence.retrieve() {
+            if let data = try persistence.getData(forKey: Self.persistenceKey) {
                 persistedData = try encoder.decode(data)
             } else {
                 logger.info("No previous authentication state found")
@@ -111,9 +111,11 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
     // MARK: Private
 
+    static let persistenceKey: String = "com.quran.oauth.state"
+
     private let oauthService: OAuthService
     private let encoder: OAuthStateDataEncoder
-    private let persistence: Persistence
+    private let persistence: SecurePersistence
 
     private var stateChangedCancellable: AnyCancellable?
 
@@ -124,7 +126,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
     private func persist(data: OAuthStateData) {
         do {
             let data = try encoder.encode(data)
-            try persistence.persist(state: data)
+            try persistence.set(data: data, forKey: Self.persistenceKey)
         } catch {
             // If this happens, the state will not nullified so to keep the current session usable
             // for the user. As for now, no workaround is in hand.

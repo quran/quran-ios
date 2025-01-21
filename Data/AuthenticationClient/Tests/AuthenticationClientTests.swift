@@ -51,7 +51,8 @@ final class AuthenticationClientTests: XCTestCase {
             "Expected the auth manager to be in authenticated state"
         )
         XCTAssertEqual(
-            try persistence.retrieve().map(encoder.decode(_:)) as? AutehenticationDataMock,
+            try persistence.getData(forKey: AuthenticationClientImpl.persistenceKey)
+                .map(encoder.decode(_:)) as? AutehenticationDataMock,
             state,
             "Expected to persist the new state"
         )
@@ -71,7 +72,8 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationSuccessful() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.persist(state: try encoder.encode(state))
+        try persistence.set(data: try encoder.encode(state),
+                                forKey: AuthenticationClientImpl.persistenceKey)
         oauthService.refreshResult = .success(nil)
 
         try await AsyncAssertEqual(try await sut.restoreState(), .authenticated, "Expected to be signed in successfully")
@@ -95,7 +97,8 @@ final class AuthenticationClientTests: XCTestCase {
     func testRestorationFailsRefreshingSession() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.persist(state: try encoder.encode(state))
+        try persistence.set(data: try encoder.encode(state),
+                                forKey: AuthenticationClientImpl.persistenceKey)
         oauthService.refreshResult = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
         try await AsyncAssertThrows(await { _ = try await sut.restoreState() }(), nil, "Expected to throw an error")
@@ -104,7 +107,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testAuthenticatingRequestsWithValidState() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.persist(state: try encoder.encode(state))
+        try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
         oauthService.accessTokenBehavior = .success("abcd")
         oauthService.refreshResult = .success(nil)
@@ -125,7 +128,7 @@ final class AuthenticationClientTests: XCTestCase {
     func testAuthenticatingRequestFailsGettingToken() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.persist(state: try encoder.encode(state))
+        try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
         oauthService.refreshResult = .success(nil)
         _ = try await sut.restoreState()
@@ -149,7 +152,8 @@ final class AuthenticationClientTests: XCTestCase {
     func testRefreshedTokens() async throws {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
-        try persistence.persist(state: try encoder.encode(state))
+        try persistence.set(data: try encoder.encode(state),
+                                forKey: AuthenticationClientImpl.persistenceKey)
 
         let newState = AutehenticationDataMock()
         newState.accessToken = "xyz"
@@ -157,7 +161,8 @@ final class AuthenticationClientTests: XCTestCase {
         oauthService.accessTokenBehavior = .success("xyz")
         _ = try await sut.restoreState()
 
-        let decoded = try persistence.retrieve().map(encoder.decode(_:)) as? AutehenticationDataMock
+        let decoded = try persistence.getData(forKey: AuthenticationClientImpl.persistenceKey)
+            .map(encoder.decode(_:)) as? AutehenticationDataMock
         XCTAssertEqual(
             decoded?.accessToken,
             "xyz",
@@ -175,7 +180,7 @@ final class AuthenticationClientTests: XCTestCase {
     private var sut: AuthenticationClientImpl!
     private var oauthService: OAuthServiceMock!
     private var encoder: OAuthStateDataEncoder!
-    private var persistence: Persistence!
+    private var persistence: SecurePersistence!
 }
 
 private struct OauthStateEncoderMock: OAuthStateDataEncoder {

@@ -14,16 +14,18 @@ enum PersistenceError: Error {
     case retrievalFailed
 }
 
-/// An abstraction for secure persistence of the authentication state.
-protocol Persistence {
-    func persist(state: Data) throws
+/// An abstraction for secure persistence of data.
+///
+/// Currently, only supports `Data` as the data type of the saved objects.
+protocol SecurePersistence {
+    func set(data: Data, forKey key: String) throws
 
-    func retrieve() throws -> Data?
+    func getData(forKey key: String) throws -> Data?
 
-    func clear() throws
+    func clearData(forKey key: String) throws
 }
 
-final class KeychainPersistence: Persistence {
+final class KeychainPersistence: SecurePersistence {
     // MARK: Internal
 
     private var keychainAccess: KeychainAccess
@@ -32,77 +34,75 @@ final class KeychainPersistence: Persistence {
         self.keychainAccess = keychainAccess
     }
 
-    func persist(state: Data) throws {
+    func set(data: Data, forKey key: String) throws {
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: itemKey,
-            kSecValueData as String: state,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: data,
         ]
         let status = keychainAccess.addItem(query: addquery)
         if status == errSecDuplicateItem {
-            logger.info("State already exists, updating")
-            try update(state: state)
+            logger.info("[KeychainPersistence] Data already exists, updating")
+            try update(dat: data, forKey: key)
         } else if status != errSecSuccess {
-            logger.error("Failed to persist state -- \(status) status")
+            logger.error("[KeychainPersistence] Failed to persist data -- \(status) status")
             throw PersistenceError.persistenceFailed
         }
-        logger.info("State persisted successfully")
+        logger.info("[KeychainPersistence] Data persisted successfully")
     }
 
-    func retrieve() throws -> Data? {
+    func getData(forKey key: String) throws -> Data? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: itemKey,
+            kSecAttrAccount as String: key,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]
         var result: CFTypeRef?
         let status = keychainAccess.copyItem(query: query, result: &result)
         if status == errSecItemNotFound {
-            logger.info("No state found")
+            logger.info("[KeychainPersistence] No data found")
             return nil
         } else if status != errSecSuccess {
-            logger.error("Failed to retrieve state -- \(status) status")
+            logger.error("[KeychainPersistence] Failed to retrieve data -- \(status) status")
             throw PersistenceError.retrievalFailed
         }
         guard let data = result as? Data else {
-            logger.error("Invalid data type found")
+            logger.error("[KeychainPersistence] Invalid data type found")
             throw PersistenceError.retrievalFailed
         }
 
         return data
     }
 
-    func clear() throws {
+    func clearData(forKey key: String) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: itemKey,
+            kSecAttrAccount as String: key,
         ]
 
         let status = keychainAccess.deleteItem(query: query)
         if status != errSecSuccess && status != errSecItemNotFound {
-            logger.error("Failed to clear state -- \(status) status")
+            logger.error("[KeychainPersistence] Failed to clear data -- \(status) status")
             throw PersistenceError.persistenceFailed
         }
     }
 
     // MARK: Private
 
-    private let itemKey = "com.quran.oauth.state"
-
-    private func update(state: Data) throws {
+    private func update(dat: Data, forKey key: String) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: itemKey,
+            kSecAttrAccount as String: key,
         ]
         let attributes: [String: Any] = [
-            kSecValueData as String: state,
+            kSecValueData as String: dat,
         ]
         let status = keychainAccess.updateItem(query: query, attributes: attributes)
         if status != errSecSuccess {
-            logger.error("Failed to update state -- \(status) status")
+            logger.error("[KeychainPersistence] Failed to update data -- \(status) status")
             throw PersistenceError.persistenceFailed
         }
-        logger.info("State updated")
+        logger.info("[KeychainPersistence] Data updated")
     }
 }

@@ -13,6 +13,7 @@ import OAuthService
 import XCTest
 import SystemDependenciesFake
 import SystemDependencies
+import SecurePersistence
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {

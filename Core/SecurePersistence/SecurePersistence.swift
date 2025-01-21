@@ -9,7 +9,7 @@ import Foundation
 import VLogging
 import SystemDependencies
 
-enum PersistenceError: Error {
+public enum PersistenceError: Error {
     case persistenceFailed
     case retrievalFailed
 }
@@ -17,7 +17,7 @@ enum PersistenceError: Error {
 /// An abstraction for secure persistence of data.
 ///
 /// Currently, only supports `Data` as the data type of the saved objects.
-protocol SecurePersistence {
+public protocol SecurePersistence {
     func set(data: Data, forKey key: String) throws
 
     func getData(forKey key: String) throws -> Data?
@@ -25,16 +25,16 @@ protocol SecurePersistence {
     func clearData(forKey key: String) throws
 }
 
-final class KeychainPersistence: SecurePersistence {
+public final class KeychainPersistence: SecurePersistence {
     // MARK: Internal
 
     private var keychainAccess: KeychainAccess
 
-    init(keychainAccess: KeychainAccess = DefaultKeychainAccess()) {
+    public init(keychainAccess: KeychainAccess = DefaultKeychainAccess()) {
         self.keychainAccess = keychainAccess
     }
 
-    func set(data: Data, forKey key: String) throws {
+    public func set(data: Data, forKey key: String) throws {
         let addquery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -51,7 +51,7 @@ final class KeychainPersistence: SecurePersistence {
         logger.info("[KeychainPersistence] Data persisted successfully")
     }
 
-    func getData(forKey key: String) throws -> Data? {
+    public func getData(forKey key: String) throws -> Data? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -75,7 +75,7 @@ final class KeychainPersistence: SecurePersistence {
         return data
     }
 
-    func clearData(forKey key: String) throws {
+    public func clearData(forKey key: String) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,

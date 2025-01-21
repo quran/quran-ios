@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import OAuthService
 import UIKit
+import SecurePersistence
 import VLogging
 
 public final actor AuthenticationClientImpl: AuthenticationClient {

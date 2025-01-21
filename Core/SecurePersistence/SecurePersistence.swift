@@ -1,13 +1,13 @@
 //
-//  Persistence.swift
+//  SecurePersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 28/12/2024.
 //
 
 import Foundation
-import VLogging
 import SystemDependencies
+import VLogging
 
 public enum PersistenceError: Error {
     case persistenceFailed
@@ -26,13 +26,13 @@ public protocol SecurePersistence {
 }
 
 public final class KeychainPersistence: SecurePersistence {
-    // MARK: Internal
-
-    private var keychainAccess: KeychainAccess
+    // MARK: Lifecycle
 
     public init(keychainAccess: KeychainAccess = DefaultKeychainAccess()) {
         self.keychainAccess = keychainAccess
     }
+
+    // MARK: Public
 
     public func set(data: Data, forKey key: String) throws {
         let addquery: [String: Any] = [
@@ -89,6 +89,8 @@ public final class KeychainPersistence: SecurePersistence {
     }
 
     // MARK: Private
+
+    private var keychainAccess: KeychainAccess
 
     private func update(dat: Data, forKey key: String) throws {
         let query: [String: Any] = [

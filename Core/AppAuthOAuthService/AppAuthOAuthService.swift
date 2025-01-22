@@ -10,7 +10,7 @@ import OAuthService
 import UIKit
 import VLogging
 
-public struct AppAuthStateData: OAuthStateData {
+struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
 
     public var isAuthorized: Bool { state.isAuthorized }

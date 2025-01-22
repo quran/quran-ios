@@ -1,12 +1,12 @@
 //
-//  File.swift
+//  OAuthServiceFake.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 22/01/2025.
 //
 
-import UIKit
 import OAuthService
+import UIKit
 
 public struct OAuthStateEncoderFake: OAuthStateDataEncoder {
     public init() {}

@@ -6,13 +6,13 @@
 //
 
 import AppAuth
+import AppAuthOAuthService
 import Combine
 import Foundation
 import OAuthService
 import SecurePersistence
 import UIKit
 import VLogging
-import AppAuthOAuthService
 
 public final actor AuthenticationClientImpl: AuthenticationClient {
     // MARK: Lifecycle

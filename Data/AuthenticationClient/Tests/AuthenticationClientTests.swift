@@ -10,11 +10,11 @@ import AsyncUtilitiesForTesting
 import Combine
 import Foundation
 import OAuthService
+import OAuthServiceFake
 import SecurePersistence
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
-import OAuthServiceFake
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {

@@ -42,7 +42,7 @@ final class AuthenticationClientTests: XCTestCase {
         let state = AutehenticationDataMock()
         state.accessToken = "abcd"
         oauthService.loginResult = .success(state)
-        oauthService.accessTokenBehavior = .success("abcd")
+        oauthService.accessTokenRefreshBehavior = .success("abcd")
 
         try await sut.login(on: UIViewController())
 
@@ -77,7 +77,7 @@ final class AuthenticationClientTests: XCTestCase {
             data: try encoder.encode(state),
             forKey: AuthenticationClientImpl.persistenceKey
         )
-        oauthService.refreshResult = .success(nil)
+        oauthService.accessTokenRefreshBehavior = .success(state.accessToken!)
 
         try await AsyncAssertEqual(try await sut.restoreState(), .authenticated, "Expected to be signed in successfully")
         await AsyncAssertEqual(
@@ -104,7 +104,7 @@ final class AuthenticationClientTests: XCTestCase {
             data: try encoder.encode(state),
             forKey: AuthenticationClientImpl.persistenceKey
         )
-        oauthService.refreshResult = .failure(OAuthServiceError.failedToRefreshTokens(nil))
+        oauthService.accessTokenRefreshBehavior = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
         try await AsyncAssertThrows(await { _ = try await sut.restoreState() }(), nil, "Expected to throw an error")
     }
@@ -114,8 +114,7 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
-        oauthService.accessTokenBehavior = .success("abcd")
-        oauthService.refreshResult = .success(nil)
+        oauthService.accessTokenRefreshBehavior = .success("abcd")
         _ = try await sut.restoreState()
         let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
 
@@ -135,12 +134,12 @@ final class AuthenticationClientTests: XCTestCase {
         state.accessToken = "abcd"
         try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
-        oauthService.refreshResult = .success(nil)
+        oauthService.accessTokenRefreshBehavior = .success(state.accessToken!)
         _ = try await sut.restoreState()
 
         let inputRequest = URLRequest(url: URL(string: "https://example.com")!)
 
-        oauthService.accessTokenBehavior = .failure(OAuthServiceError.failedToRefreshTokens(nil))
+        oauthService.accessTokenRefreshBehavior = .failure(OAuthServiceError.failedToRefreshTokens(nil))
 
         try await AsyncAssertThrows(
             await { _ = try await sut.authenticate(request: inputRequest) }(),
@@ -164,8 +163,7 @@ final class AuthenticationClientTests: XCTestCase {
 
         let newState = AutehenticationDataMock()
         newState.accessToken = "xyz"
-        oauthService.refreshResult = .success(newState)
-        oauthService.accessTokenBehavior = .success("xyz")
+        oauthService.accessTokenRefreshBehavior = .successWithNewData("xyz", newState)
         _ = try await sut.restoreState()
 
         let decoded = try persistence.getData(forKey: AuthenticationClientImpl.persistenceKey)
@@ -230,11 +228,10 @@ private final class OAuthServiceMock: OAuthService {
         }
     }
 
-    var accessTokenBehavior: AccessTokenBehavior?
-    var refreshResult: Result<(any OAuthStateData)?, Error>?
+    var accessTokenRefreshBehavior: AccessTokenBehavior?
 
     func getAccessToken(using data: any OAuthStateData) async throws -> (String, any OAuthStateData) {
-        guard let behavior = accessTokenBehavior else {
+        guard let behavior = accessTokenRefreshBehavior else {
             fatalError()
         }
         return (try behavior.getToken(), try behavior.getStateData() ?? data)
@@ -247,10 +244,7 @@ private final class OAuthServiceMock: OAuthService {
     }
 
     func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
-        guard let refreshResult else {
-            fatalError()
-        }
-        return try refreshResult.get() ?? data
+        try await getAccessToken(using: data).1
     }
 }
 

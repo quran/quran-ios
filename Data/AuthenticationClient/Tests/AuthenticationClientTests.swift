@@ -14,6 +14,7 @@ import SecurePersistence
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
+import OAuthServiceFake
 @testable import AuthenticationClient
 
 final class AuthenticationClientTests: XCTestCase {
@@ -27,8 +28,8 @@ final class AuthenticationClientTests: XCTestCase {
     )
 
     override func setUp() {
-        encoder = OauthStateEncoderMock()
-        oauthService = OAuthServiceMock()
+        encoder = OAuthStateEncoderFake()
+        oauthService = OAuthServiceFake()
         persistence = KeychainPersistence(keychainAccess: SecurityAccessFake())
         sut = AuthenticationClientImpl(
             configurations: configuration,
@@ -39,7 +40,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testLoginSuccessful() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         oauthService.loginResult = .success(state)
         oauthService.accessTokenRefreshBehavior = .success("abcd")
@@ -53,7 +54,7 @@ final class AuthenticationClientTests: XCTestCase {
         )
         XCTAssertEqual(
             try persistence.getData(forKey: AuthenticationClientImpl.persistenceKey)
-                .map(encoder.decode(_:)) as? AutehenticationDataMock,
+                .map(encoder.decode(_:)) as? OAuthStateDataFake,
             state,
             "Expected to persist the new state"
         )
@@ -71,7 +72,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationSuccessful() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         try persistence.set(
             data: try encoder.encode(state),
@@ -98,7 +99,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRestorationFailsRefreshingSession() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         try persistence.set(
             data: try encoder.encode(state),
@@ -110,7 +111,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testAuthenticatingRequestsWithValidState() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
@@ -130,7 +131,7 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testAuthenticatingRequestFailsGettingToken() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         try persistence.set(data: try encoder.encode(state), forKey: AuthenticationClientImpl.persistenceKey)
 
@@ -154,20 +155,20 @@ final class AuthenticationClientTests: XCTestCase {
     }
 
     func testRefreshedTokens() async throws {
-        let state = AutehenticationDataMock()
+        let state = OAuthStateDataFake()
         state.accessToken = "abcd"
         try persistence.set(
             data: try encoder.encode(state),
             forKey: AuthenticationClientImpl.persistenceKey
         )
 
-        let newState = AutehenticationDataMock()
+        let newState = OAuthStateDataFake()
         newState.accessToken = "xyz"
         oauthService.accessTokenRefreshBehavior = .successWithNewData("xyz", newState)
         _ = try await sut.restoreState()
 
         let decoded = try persistence.getData(forKey: AuthenticationClientImpl.persistenceKey)
-            .map(encoder.decode(_:)) as? AutehenticationDataMock
+            .map(encoder.decode(_:)) as? OAuthStateDataFake
         XCTAssertEqual(
             decoded?.accessToken,
             "xyz",
@@ -183,99 +184,7 @@ final class AuthenticationClientTests: XCTestCase {
     // MARK: Private
 
     private var sut: AuthenticationClientImpl!
-    private var oauthService: OAuthServiceMock!
+    private var oauthService: OAuthServiceFake!
     private var encoder: OAuthStateDataEncoder!
     private var persistence: SecurePersistence!
-}
-
-private struct OauthStateEncoderMock: OAuthStateDataEncoder {
-    func encode(_ data: any OAuthStateData) throws -> Data {
-        guard let data = data as? AutehenticationDataMock else {
-            fatalError()
-        }
-        return try JSONEncoder().encode(data)
-    }
-
-    func decode(_ data: Data) throws -> any OAuthStateData {
-        try JSONDecoder().decode(AutehenticationDataMock.self, from: data)
-    }
-}
-
-private final class OAuthServiceMock: OAuthService {
-    enum AccessTokenBehavior {
-        case success(String)
-        case successWithNewData(String, any OAuthStateData)
-        case failure(Error)
-
-        func getToken() throws -> String {
-            switch self {
-            case .success(let token), .successWithNewData(let token, _):
-                return token
-            case .failure(let error):
-                throw error
-            }
-        }
-
-        func getStateData() throws -> (any OAuthStateData)? {
-            switch self {
-            case .success:
-                return nil
-            case .successWithNewData(_, let data):
-                return data
-            case .failure(let error):
-                throw error
-            }
-        }
-    }
-
-    var accessTokenRefreshBehavior: AccessTokenBehavior?
-
-    func getAccessToken(using data: any OAuthStateData) async throws -> (String, any OAuthStateData) {
-        guard let behavior = accessTokenRefreshBehavior else {
-            fatalError()
-        }
-        return (try behavior.getToken(), try behavior.getStateData() ?? data)
-    }
-
-    var loginResult: Result<OAuthStateData, Error>?
-
-    func login(on viewController: UIViewController) async throws -> any OAuthStateData {
-        try loginResult!.get()
-    }
-
-    func refreshAccessTokenIfNeeded(data: any OAuthStateData) async throws -> any OAuthStateData {
-        try await getAccessToken(using: data).1
-    }
-}
-
-private final class AutehenticationDataMock: Equatable, Codable, OAuthStateData {
-    enum Codingkey: String, CodingKey {
-        case accessToken
-    }
-
-    var accessToken: String? {
-        didSet {
-            guard oldValue != nil else { return }
-        }
-    }
-
-    init() { }
-
-    required init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: Codingkey.self)
-        accessToken = try container.decode(String.self, forKey: .accessToken)
-    }
-
-    func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(keyedBy: Codingkey.self)
-        try container.encode(accessToken, forKey: .accessToken)
-    }
-
-    var isAuthorized: Bool {
-        accessToken != nil
-    }
-
-    static func == (lhs: AutehenticationDataMock, rhs: AutehenticationDataMock) -> Bool {
-        lhs.accessToken == rhs.accessToken
-    }
 }

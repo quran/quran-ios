@@ -140,6 +140,8 @@ private func coreTargets() -> [[Target]] {
             "OAuthService", "VLogging",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
         ]),
+
+        target(type, name: "OAuthServiceFake", hasTests: false, dependencies: ["OAuthService"]),
     ]
 }
 
@@ -319,7 +321,7 @@ private func dataTargets() -> [[Target]] {
             "SecurePersistence",
             "AppAuthOAuthService",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
-        ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake"]),
+        ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
     ]
 }
 

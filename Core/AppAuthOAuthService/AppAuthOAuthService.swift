@@ -6,8 +6,8 @@
 //
 
 import AppAuth
-import UIKit
 import OAuthService
+import UIKit
 import VLogging
 
 public struct AppAuthStateData: OAuthStateData {
@@ -17,7 +17,7 @@ public struct AppAuthStateData: OAuthStateData {
 }
 
 public struct AppAuthStateEncoder: OAuthStateDataEncoder {
-    public init () { }
+    public init() { }
 
     public func encode(_ data: any OAuthStateData) throws -> Data {
         guard let data = data as? AppAuthStateData else {
@@ -45,7 +45,7 @@ public final class AppAuthOAuthService: OAuthService {
         self.appConfigurations = appConfigurations
     }
 
-    // MARK: Internal
+    // MARK: Public
 
     public func login(on viewController: UIViewController) async throws -> any OAuthStateData {
         let serviceConfiguration = try await discoverConfiguration(forIssuer: appConfigurations.authorizationIssuerURL)

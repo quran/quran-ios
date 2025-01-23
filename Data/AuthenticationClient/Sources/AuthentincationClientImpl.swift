@@ -6,10 +6,10 @@
 //
 
 import AppAuth
-import OAuthServiceAppAuthImpl
 import Combine
 import Foundation
 import OAuthService
+import OAuthServiceAppAuthImpl
 import SecurePersistence
 import UIKit
 import VLogging

@@ -6,7 +6,7 @@
 //
 
 import AppAuth
-import AppAuthOAuthService
+import OAuthServiceAppAuthImpl
 import Combine
 import Foundation
 import OAuthService
@@ -141,8 +141,8 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
 extension AuthenticationClientImpl {
     public init(configurations: AuthenticationClientConfiguration) {
-        let service = AppAuthOAuthService(appConfigurations: configurations.oAuthServiceConfiguration)
-        let encoder = AppAuthStateEncoder()
+        let service = OAuthServiceAppAuthImpl(appConfigurations: configurations.oAuthServiceConfiguration)
+        let encoder = OAuthStateEncoderAppAuthImpl()
         self.init(
             configurations: configurations,
             oauthService: service,
@@ -158,7 +158,7 @@ private extension AuthenticationClientConfiguration {
     // services. The client may request offline access and profile scopes by default.
     // The OAuth service would still only accept String scopes.
     // On another hand, the issuer host is probably going to be the API host. We
-    // may see how the relationship pans out. 
+    // may see how the relationship pans out.
     var oAuthServiceConfiguration: OAuthServiceConfiguration {
         OAuthServiceConfiguration(
             clientID: clientID,

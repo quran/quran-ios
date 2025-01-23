@@ -16,7 +16,7 @@ struct AppAuthStateData: OAuthStateData {
     public var isAuthorized: Bool { state.isAuthorized }
 }
 
-public struct AppAuthStateEncoder: OAuthStateDataEncoder {
+public struct OAuthStateEncoderAppAuthImpl: OAuthStateDataEncoder {
     public init() { }
 
     public func encode(_ data: any OAuthStateData) throws -> Data {
@@ -38,7 +38,7 @@ public struct AppAuthStateEncoder: OAuthStateDataEncoder {
     }
 }
 
-public final class AppAuthOAuthService: OAuthService {
+public final class OAuthServiceAppAuthImpl: OAuthService {
     // MARK: Lifecycle
 
     public init(appConfigurations: OAuthServiceConfiguration) {

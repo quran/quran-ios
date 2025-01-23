@@ -154,7 +154,11 @@ extension AuthenticationClientImpl {
 
 private extension AuthenticationClientConfiguration {
     // The interfaces for the configurations of both modules will change.
-    // Noticeably,
+    // Noticeably, AuthenticationClient may accept an enum defining the available
+    // services. The client may request offline access and profile scopes by default.
+    // The OAuth service would still only accept String scopes.
+    // On another hand, the issuer host is probably going to be the API host. We
+    // may see how the relationship pans out. 
     var oAuthServiceConfiguration: OAuthServiceConfiguration {
         OAuthServiceConfiguration(
             clientID: clientID,

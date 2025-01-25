@@ -7,13 +7,13 @@
 
 import Analytics
 import AppDependencies
+import AuthenticationClient
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 import NotePersistence
-import OAuthClient
 import PageBookmarkPersistence
 import ReadingService
 import UIKit
@@ -36,11 +36,11 @@ class Container: AppDependencies {
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
-    private(set) lazy var oauthClient: any OAuthClient = {
-        let client = AppAuthOAuthClient()
-        if let config = Constant.QuranOAuthAppConfigurations {
-            client.set(appConfiguration: config)
+    private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
+        guard let configurations = Constant.QuranOAuthAppConfigurations else {
+            return nil
         }
+        let client = AuthenticationClientImpl(configurations: configurations)
         return client
     }()
 
@@ -88,5 +88,5 @@ private enum Constant {
         .appendingPathComponent("databases", isDirectory: true)
 
     /// If set, the Quran.com login will be enabled.
-    static let QuranOAuthAppConfigurations: OAuthAppConfiguration? = nil
+    static let QuranOAuthAppConfigurations: AuthenticationClientConfiguration? = nil
 }

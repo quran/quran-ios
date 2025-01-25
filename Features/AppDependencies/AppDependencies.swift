@@ -7,11 +7,11 @@
 
 import Analytics
 import AnnotationsService
+import AuthenticationClient
 import BatchDownloader
 import Foundation
 import LastPagePersistence
 import NotePersistence
-import OAuthClient
 import PageBookmarkPersistence
 import QuranResources
 import QuranTextKit
@@ -37,7 +37,7 @@ public protocol AppDependencies {
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
 
-    var oauthClient: OAuthClient { get }
+    var authenticationClient: (any AuthenticationClient)? { get }
 }
 
 extension AppDependencies {

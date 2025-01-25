@@ -30,7 +30,7 @@ public struct SettingsBuilder {
         let viewModel = SettingsRootViewModel(
             analytics: container.analytics,
             reviewService: ReviewService(analytics: container.analytics),
-            quranProfileService: QuranProfileService(oauthClient: container.oauthClient),
+            quranProfileService: QuranProfileService(authenticationClient: container.authenticationClient),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

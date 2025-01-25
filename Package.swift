@@ -129,6 +129,19 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
+
+        target(type, name: "OAuthService", hasTests: false, dependencies: []),
+
+        target(type, name: "SecurePersistence", hasTests: false, dependencies: [
+            "SystemDependencies",
+        ]),
+
+        target(type, name: "OAuthServiceAppAuthImpl", hasTests: false, dependencies: [
+            "OAuthService", "VLogging",
+            .product(name: "AppAuth", package: "AppAuth-iOS"),
+        ]),
+
+        target(type, name: "OAuthServiceFake", hasTests: false, dependencies: ["OAuthService"]),
     ]
 }
 
@@ -301,10 +314,14 @@ private func dataTargets() -> [[Target]] {
 
         // MARK: - Quran.com OAuth
 
-        target(type, name: "OAuthClient", hasTests: false, dependencies: [
+        target(type, name: "AuthenticationClient", hasTests: true, dependencies: [
+            "OAuthService",
             "VLogging",
+            "SystemDependencies",
+            "SecurePersistence",
+            "OAuthServiceAppAuthImpl",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
-        ]),
+        ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
     ]
 }
 
@@ -470,7 +487,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranProfileService", hasTests: false, dependencies: [
-            "OAuthClient",
+            "AuthenticationClient",
         ]),
     ]
 }
@@ -487,7 +504,7 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "ReadingService",
             "QuranResources",
-            "OAuthClient",
+            "AuthenticationClient",
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [

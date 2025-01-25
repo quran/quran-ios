@@ -141,7 +141,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
 extension AuthenticationClientImpl {
     public init(configurations: AuthenticationClientConfiguration) {
-        let service = OAuthServiceAppAuthImpl(appConfigurations: configurations.oAuthServiceConfiguration)
+        let service = OAuthServiceAppAuthImpl(configurations: configurations.oAuthServiceConfiguration)
         let encoder = OAuthStateEncoderAppAuthImpl()
         self.init(
             configurations: configurations,
@@ -159,8 +159,8 @@ private extension AuthenticationClientConfiguration {
     // The OAuth service would still only accept String scopes.
     // On another hand, the issuer host is probably going to be the API host. We
     // may see how the relationship pans out.
-    var oAuthServiceConfiguration: OAuthServiceConfiguration {
-        OAuthServiceConfiguration(
+    var oAuthServiceConfiguration: AppAuthConfiguration {
+        AppAuthConfiguration(
             clientID: clientID,
             redirectURL: redirectURL,
             scopes: scopes,

@@ -8,21 +8,6 @@
 import Foundation
 import UIKit
 
-public struct OAuthServiceConfiguration {
-    public let clientID: String
-    public let redirectURL: URL
-    /// The client requests the `offline` and `openid` scopes by default.
-    public let scopes: [String]
-    public let authorizationIssuerURL: URL
-
-    public init(clientID: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
-        self.clientID = clientID
-        self.redirectURL = redirectURL
-        self.scopes = scopes
-        self.authorizationIssuerURL = authorizationIssuerURL
-    }
-}
-
 public enum OAuthServiceError: Error {
     case failedToRefreshTokens(Error?)
 

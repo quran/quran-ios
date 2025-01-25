@@ -10,6 +10,21 @@ import OAuthService
 import UIKit
 import VLogging
 
+public struct AppAuthConfiguration {
+    public let clientID: String
+    public let redirectURL: URL
+    /// The client requests the `offline` and `openid` scopes by default.
+    public let scopes: [String]
+    public let authorizationIssuerURL: URL
+
+    public init(clientID: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
+        self.clientID = clientID
+        self.redirectURL = redirectURL
+        self.scopes = scopes
+        self.authorizationIssuerURL = authorizationIssuerURL
+    }
+}
+
 struct AppAuthStateData: OAuthStateData {
     let state: OIDAuthState
 
@@ -41,17 +56,17 @@ public struct OAuthStateEncoderAppAuthImpl: OAuthStateDataEncoder {
 public final class OAuthServiceAppAuthImpl: OAuthService {
     // MARK: Lifecycle
 
-    public init(appConfigurations: OAuthServiceConfiguration) {
-        self.appConfigurations = appConfigurations
+    public init(configurations: AppAuthConfiguration) {
+        self.configurations = configurations
     }
 
     // MARK: Public
 
     public func login(on viewController: UIViewController) async throws -> any OAuthStateData {
-        let serviceConfiguration = try await discoverConfiguration(forIssuer: appConfigurations.authorizationIssuerURL)
+        let serviceConfiguration = try await discoverConfiguration(forIssuer: configurations.authorizationIssuerURL)
         let state = try await login(
-            withConfiguration: serviceConfiguration,
-            appConfiguration: appConfigurations,
+            withServiceConfiguration: serviceConfiguration,
+            appConfiguration: configurations,
             on: viewController
         )
         return AppAuthStateData(state: state)
@@ -86,7 +101,7 @@ public final class OAuthServiceAppAuthImpl: OAuthService {
 
     // MARK: Private
 
-    private let appConfigurations: OAuthServiceConfiguration
+    private let configurations: AppAuthConfiguration
 
     // Needed mainly for retention.
     private var authFlow: (any OIDExternalUserAgentSession)?
@@ -116,13 +131,13 @@ public final class OAuthServiceAppAuthImpl: OAuthService {
     }
 
     private func login(
-        withConfiguration configuration: OIDServiceConfiguration,
-        appConfiguration: OAuthServiceConfiguration,
+        withServiceConfiguration serviceConfiguration: OIDServiceConfiguration,
+        appConfiguration: AppAuthConfiguration,
         on viewController: UIViewController
     ) async throws -> OIDAuthState {
         let scopes = [OIDScopeOpenID, OIDScopeProfile] + appConfiguration.scopes
         let request = OIDAuthorizationRequest(
-            configuration: configuration,
+            configuration: serviceConfiguration,
             clientId: appConfiguration.clientID,
             clientSecret: nil,
             scopes: scopes,

@@ -1,5 +1,5 @@
 //
-//  SecurityAccessFake.swift
+//  KeychainAccessFake.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 21/01/2025.
@@ -8,7 +8,7 @@
 import Foundation
 import SystemDependencies
 
-public class SecurityAccessFake: KeychainAccess {
+public class KeychainAccessFake: KeychainAccess {
     private var items: [String: [String: Any]] = [:]
 
     public init() { }

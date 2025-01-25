@@ -30,7 +30,7 @@ final class AuthenticationClientTests: XCTestCase {
     override func setUp() {
         encoder = OAuthStateEncoderFake()
         oauthService = OAuthServiceFake()
-        persistence = KeychainPersistence(keychainAccess: SecurityAccessFake())
+        persistence = KeychainPersistence(keychainAccess: KeychainAccessFake())
         sut = AuthenticationClientImpl(
             configurations: configuration,
             oauthService: oauthService,

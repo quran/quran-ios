@@ -52,6 +52,10 @@ public class CoreDataStack {
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
+        // Enables automatic data migration.
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = true
+
         container.loadPersistentStores(completionHandler: { _, error in
             guard let error = error as NSError? else { return }
             fatalError("###\(#function): Failed to load persistent store: \(error)")

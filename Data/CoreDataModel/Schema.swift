@@ -17,7 +17,7 @@ public enum Schema {
     }
 
     public enum PageBookmark: String, CoreDataKey {
-        case color, createdOn, modifiedOn, page
+        case color, createdOn, modifiedOn, page, remoteID
     }
 
     public enum LastPage: String, CoreDataKey {

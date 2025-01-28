@@ -11,4 +11,5 @@ import Foundation
 public struct PageBookmarkPersistenceModel {
     public let page: Int
     public let creationDate: Date
+    public let remoteID: String?
 }

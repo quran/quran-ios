@@ -17,6 +17,7 @@
         <attribute name="createdOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedOn" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="page" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String"/>
     </entity>
     <entity name="MO_Verse" representedClassName="MO_Verse" syncable="YES" codeGenerationType="class">
         <attribute name="ayah" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>

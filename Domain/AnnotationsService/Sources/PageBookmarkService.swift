@@ -43,7 +43,8 @@ private extension PageBookmark {
     init(quran: Quran, _ other: PageBookmarkPersistenceModel) {
         self.init(
             page: Page(quran: quran, pageNumber: Int(other.page))!,
-            creationDate: other.creationDate
+            creationDate: other.creationDate,
+            remoteID: other.remoteID
         )
     }
 }

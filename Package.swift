@@ -210,6 +210,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
+            .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",

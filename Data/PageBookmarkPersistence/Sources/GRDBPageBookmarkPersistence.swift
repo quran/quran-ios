@@ -8,17 +8,25 @@
 import Foundation
 import Combine
 import GRDB
+import VLogging
+import SQLitePersistence
 
-public struct GRDBPAgeBookmarkPersistence: PageBookmarkPersistence {
+public struct GRDBPageBookmarkPersistence: PageBookmarkPersistence {
+    private let db: DatabaseConnection
+
+    init(db: DatabaseConnection) {
+        self.db = db
+    }
+
     public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
-        <#code#>
+        CurrentValueSubject([]).eraseToAnyPublisher()
     }
     
     public func insertPageBookmark(_ page: Int) async throws {
-        <#code#>
+
     }
     
     public func removePageBookmark(_ page: Int) async throws {
-        <#code#>
+        
     }
 }

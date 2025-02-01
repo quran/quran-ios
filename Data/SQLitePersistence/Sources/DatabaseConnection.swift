@@ -9,6 +9,7 @@ import Foundation
 import GRDB
 import Utilities
 import VLogging
+import Combine
 
 private struct DatabaseConnectionPool: Sendable {
     private struct Connection {
@@ -107,6 +108,13 @@ public final class DatabaseConnection: Sendable {
             logger.error("General error while executing query. Error: \(error).")
             throw PersistenceError(error, databaseURL: databaseURL)
         }
+    }
+
+    public func readPublisher<T>(_ block: @Sendable @escaping (Database) throws -> T) throws -> AnyPublisher<T, Error> {
+        ValueObservation
+            .tracking(block)
+            .publisher(in: try getDatabase())
+            .eraseToAnyPublisher()
     }
 
     public func write<T>(_ block: @Sendable @escaping (Database) throws -> T) async throws -> T {

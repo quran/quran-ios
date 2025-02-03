@@ -7,6 +7,7 @@
 
 import AsyncUtilitiesForTesting
 import GRDB
+import Combine
 import XCTest
 @testable import SQLitePersistence
 
@@ -39,6 +40,54 @@ class DatabaseConnectionTests: XCTestCase {
 
         let names = try await connection.readNames()
         XCTAssertEqual(names, ["Alice"])
+    }
+
+    func test_readPublisher() async throws {
+        /*
+         Since we can't guarantee a defined sequence of intermediate states, the test
+         here attempts to perform a series of changes in a way that would eventually
+         deliver a specifc set of values.
+         Adding some latency is key, as it allows SQLite to commit changes to the desk. 
+         */
+        let connection = DatabaseConnection(url: testURL, readonly: false)
+        let publisher = try connection.namesPublisher()
+            .catch{ _ in Empty<[String], Never>() }
+            .eraseToAnyPublisher()
+
+        var assertExpectation: XCTestExpectation?
+        var expectedNames: [String]?
+        let cancellable = publisher.sink { names in
+            guard let expected = expectedNames else { return }
+
+            if Set(expected) == Set(names) {
+                assertExpectation?.fulfill()
+                assertExpectation = nil
+                expectedNames = nil
+            }
+        }
+
+        expectedNames = ["Alice"]
+        let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
+        assertExpectation = expectation1
+        try await connection.insertNames()
+        await fulfillment(of: [expectation1], timeout: 1)
+
+        // Add more
+        expectedNames = ["Alice", "Bob", "Derek"]
+        let expectation2 = expectation(description: "Expected to deliver the second batch of names")
+        assertExpectation = expectation2
+        try await connection.insert(name: "Bob")
+        try await connection.insert(name: "Derek")
+        await fulfillment(of: [expectation2], timeout: 1)
+
+        // Remove one
+        expectedNames = ["Alice", "Derek"]
+        let expectation3 = expectation(description: "Expected to deliver the third batch of names")
+        assertExpectation = expectation3
+        try await connection.remove(name: "Bob")
+        await fulfillment(of: [expectation3], timeout: 1)
+
+        cancellable.cancel()
     }
 
     func test_sharing() async throws {
@@ -82,6 +131,24 @@ private extension DatabaseConnection {
                 t.column("name", .text)
             }
             try db.execute(sql: "INSERT INTO test (name) VALUES (?)", arguments: ["Alice"])
+        }
+    }
+
+    func insert(name: String) async throws {
+        try await write { db in
+            try db.execute(sql: "INSERT INTO test (name) VALUES (?)", arguments: StatementArguments([name]))
+        }
+    }
+
+    func remove(name: String) async throws {
+        try await write { db in
+            try db.execute(sql: "DELETE FROM test WHERE name = ?", arguments: [name])
+        }
+    }
+
+    func namesPublisher() throws -> AnyPublisher<[String], Error> {
+        try readPublisher { db in
+            try String.fetchAll(db, sql: "SELECT name FROM test")
         }
     }
 

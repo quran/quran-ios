@@ -8,7 +8,7 @@
 import XCTest
 import SQLitePersistence
 import AsyncUtilitiesForTesting
-@testable import PageBookmarkPersistence
+@testable import SyncedPageBookmarkPersistence
 
 final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
     private var testURL: URL!

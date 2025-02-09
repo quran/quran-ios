@@ -52,7 +52,10 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
     }
 
     public func removeBookmark(withRemoteID remoteID: String) async throws {
-        // TODO: check empty remoteID
+        guard !remoteID.isEmpty else {
+            logger.critical("[SyncedPageBookmarkPersistence] Attempted to remove a bookmark with an empty remote ID.")
+            fatalError()
+        }
         try await db.write { db in
             try db.execute(sql: "DELETE FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE remote_id = ?", arguments: [remoteID])
         }
@@ -62,7 +65,6 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBSyncedPageBookmark.databaseTableName, options: .ifNotExists) { table in
-                // Don't think we need a separate local id column.
                 table.column("page", .integer).notNull()
                 table.column("remote_id", .text).primaryKey()
                 table.column("creation_date", .datetime).notNull()

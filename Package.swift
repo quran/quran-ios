@@ -196,22 +196,31 @@ private func uiTargets() -> [[Target]] {
 private func dataTargets() -> [[Target]] {
     let type = TargetType.data
     return [
-        // MARK: - Core Data
-
-        target(type, name: "LastPagePersistence", dependencies: [
-            "CoreDataModel",
-            "CoreDataPersistence",
-        ], testDependencies: [
-            "AsyncUtilitiesForTesting",
-            "CoreDataPersistenceTestSupport",
-        ]),
-
+        // MARK: - Page Bookmarks
         target(type, name: "PageBookmarkPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
             "SQLitePersistence",
             "QuranKit",
             .product(name: "GRDB", package: "GRDB.swift"),
+        ], testDependencies: [
+            "AsyncUtilitiesForTesting",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(type, name: "SyncedPageBookmarkPersistence", dependencies: [
+            "SQLitePersistence",
+            "QuranKit",
+            .product(name: "GRDB", package: "GRDB.swift"),
+        ], testDependencies: [
+            "AsyncUtilitiesForTesting",
+        ]),
+
+        // MARK: - Core Data
+
+        target(type, name: "LastPagePersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",

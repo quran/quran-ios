@@ -12,7 +12,7 @@ import VLogging
 import SQLitePersistence
 
 // Rename this to SyncedPageBookmark?
-public struct GRDBPageBookmarkPersistence {
+public struct GRDBSyncedPageBookmarkPersistence {
     private let db: DatabaseConnection
 
     init(db: DatabaseConnection) {

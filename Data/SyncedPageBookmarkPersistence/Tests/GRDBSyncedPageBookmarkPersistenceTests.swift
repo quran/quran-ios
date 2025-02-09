@@ -1,13 +1,13 @@
 //
-//  GRDBPAgeBookmarkPersistence.swift
+//  GRDBSyncedPageBookmarkPersistenceTests.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 01/02/2025.
 //
 
-import XCTest
-import SQLitePersistence
 import AsyncUtilitiesForTesting
+import SQLitePersistence
+import XCTest
 @testable import SyncedPageBookmarkPersistence
 
 final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
@@ -71,7 +71,6 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
         try await persistence.removeBookmark(withRemoteID: pages[1].remoteID)
 
         await fulfillment(of: [exp], timeout: 1)
-
         cancellable.cancel()
     }
 }

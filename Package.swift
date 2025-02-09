@@ -197,6 +197,7 @@ private func dataTargets() -> [[Target]] {
     let type = TargetType.data
     return [
         // MARK: - Page Bookmarks
+
         target(type, name: "PageBookmarkPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",

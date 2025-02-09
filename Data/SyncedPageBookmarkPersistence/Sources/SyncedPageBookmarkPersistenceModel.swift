@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SyncedPageBookmarkPersistenceModel.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 09/02/2025.

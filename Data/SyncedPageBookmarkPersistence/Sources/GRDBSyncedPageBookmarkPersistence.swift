@@ -1,15 +1,15 @@
 //
-//  File.swift
+//  GRDBSyncedPageBookmarkPersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 31/01/2025.
 //
 
-import Foundation
 import Combine
+import Foundation
 import GRDB
-import VLogging
 import SQLitePersistence
+import VLogging
 
 public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
     private let db: DatabaseConnection
@@ -31,15 +31,14 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
     public func syncedPageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
         do {
             return try db.readPublisher { db in
-                try GRDBSyncedPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
+                try GRDBSyncedPageBookmark.fetchAll(db).map { $0.toPersistenceModel() }
             }
             .catch { error in
                 logger.error("Error in page bookmarks publisher: \(error)")
                 return Empty<[SyncedPageBookmarkPersistenceModel], Never>()
             }
             .eraseToAnyPublisher()
-        }
-        catch {
+        } catch {
             logger.error("Failed to create a publisher for page bookmarks: \(error)")
             return Empty<[SyncedPageBookmarkPersistenceModel], Never>().eraseToAnyPublisher()
         }
@@ -79,6 +78,7 @@ private struct GRDBSyncedPageBookmark: Identifiable, Codable, FetchableRecord, M
         case creationDate = "creation_date"
         case remoteID = "remote_id"
     }
+
     static var databaseTableName: String {
         "synced_page_bookmarks"
     }
@@ -94,9 +94,9 @@ private struct GRDBSyncedPageBookmark: Identifiable, Codable, FetchableRecord, M
 
 extension GRDBSyncedPageBookmark {
     init(_ bookmark: SyncedPageBookmarkPersistenceModel) {
-        self.page = bookmark.page
-        self.creationDate = bookmark.creationDate
-        self.remoteID = bookmark.remoteID
+        page = bookmark.page
+        creationDate = bookmark.creationDate
+        remoteID = bookmark.remoteID
     }
 
     func toPersistenceModel() -> SyncedPageBookmarkPersistenceModel {

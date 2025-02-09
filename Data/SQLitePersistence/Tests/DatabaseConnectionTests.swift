@@ -6,8 +6,8 @@
 //
 
 import AsyncUtilitiesForTesting
-import GRDB
 import Combine
+import GRDB
 import XCTest
 @testable import SQLitePersistence
 
@@ -43,15 +43,13 @@ class DatabaseConnectionTests: XCTestCase {
     }
 
     func test_readPublisher() async throws {
-        /*
-         Since we can't guarantee a defined sequence of intermediate states, the test
-         here attempts to perform a series of changes in a way that would eventually
-         deliver a specifc set of values.
-         Adding some latency is key, as it allows SQLite to commit changes to the desk. 
-         */
+        // Since we can't guarantee a defined sequence of intermediate states, the test
+        // here attempts to perform a series of changes in a way that would eventually
+        // deliver a specifc set of values.
+        // Adding some latency is key, as it allows SQLite to commit changes to the desk.
         let connection = DatabaseConnection(url: testURL, readonly: false)
         let publisher = try connection.namesPublisher()
-            .catch{ _ in Empty<[String], Never>() }
+            .catch { _ in Empty<[String], Never>() }
             .eraseToAnyPublisher()
 
         var assertExpectation: XCTestExpectation?

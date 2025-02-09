@@ -5,11 +5,11 @@
 //  Created by Mohamed Afifi on 2023-05-25.
 //
 
+import Combine
 import Foundation
 import GRDB
 import Utilities
 import VLogging
-import Combine
 
 private struct DatabaseConnectionPool: Sendable {
     private struct Connection {

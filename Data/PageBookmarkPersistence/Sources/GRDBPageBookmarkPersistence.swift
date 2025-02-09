@@ -11,7 +11,8 @@ import GRDB
 import VLogging
 import SQLitePersistence
 
-public struct GRDBPageBookmarkPersistence: PageBookmarkPersistence {
+// Rename this to SyncedPageBookmark?
+public struct GRDBPageBookmarkPersistence {
     private let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
@@ -31,8 +32,7 @@ public struct GRDBPageBookmarkPersistence: PageBookmarkPersistence {
     public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         do {
             return try db.readPublisher { db in
-                let vals = try GRDBPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
-                return try GRDBPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
+                try GRDBPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
             }
             .catch { error in
                 logger.error("Error in page bookmarks publisher: \(error)")

@@ -11,8 +11,7 @@ import GRDB
 import VLogging
 import SQLitePersistence
 
-// Rename this to SyncedPageBookmark?
-public struct GRDBSyncedPageBookmarkPersistence {
+public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
     private let db: DatabaseConnection
 
     init(db: DatabaseConnection) {
@@ -29,7 +28,7 @@ public struct GRDBSyncedPageBookmarkPersistence {
         self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
 
-    public func pageBookmarks() -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
+    public func pageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
         do {
             return try db.readPublisher { db in
                 try GRDBSyncedPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
@@ -52,17 +51,17 @@ public struct GRDBSyncedPageBookmarkPersistence {
         }
     }
 
-    public func insertPageBookmark(_ page: Int) async throws {
+    public func insert(bookmark: SyncedPageBookmarkPersistenceModel) async throws {
         try await db.write { db in
-            var bookmark = GRDBSyncedPageBookmark(page: page)
+            var bookmark = GRDBSyncedPageBookmark(bookmark)
             try bookmark.insert(db)
         }
     }
-    
-    public func removePageBookmark(_ page: Int) async throws {
+
+    public func removeBookmark(withRemoteID remoteID: SyncedPageBookmarkPersistenceModel) async throws {
+        // TODO: check empty remoteID
         try await db.write { db in
-            let bookmark = GRDBSyncedPageBookmark(page: page)
-            try bookmark.delete(db)
+            try db.execute(sql: "DELETE FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE remote_id = ?", arguments: [remoteID.remoteID])
         }
     }
 
@@ -71,8 +70,8 @@ public struct GRDBSyncedPageBookmarkPersistence {
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBSyncedPageBookmark.databaseTableName, options: .ifNotExists) { table in
                 // Don't think we need a separate local id column.
-                table.column("page", .integer).primaryKey()
-                table.column("remote_id", .text)
+                table.column("page", .integer).notNull()
+                table.column("remote_id", .text).primaryKey()
                 table.column("creation_date", .datetime).notNull()
             }
         }
@@ -104,6 +103,12 @@ extension GRDBSyncedPageBookmark {
         self.page = page
         self.creationDate = Date()
         self.remoteID = UUID().uuidString
+    }
+
+    init(_ bookmark: SyncedPageBookmarkPersistenceModel) {
+        self.page = bookmark.page
+        self.creationDate = bookmark.creationDate
+        self.remoteID = bookmark.remoteID
     }
 
     func toPersistenceModel() -> SyncedPageBookmarkPersistenceModel {

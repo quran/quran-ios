@@ -28,7 +28,7 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
 
-    public func pageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
+    public func syncedPageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
         do {
             return try db.readPublisher { db in
                 try GRDBSyncedPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
@@ -45,12 +45,6 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         }
     }
 
-    func allPageBookmarks() async throws -> [SyncedPageBookmarkPersistenceModel] {
-        try await db.read { db in
-            try GRDBSyncedPageBookmark.fetchAll(db).map{ $0.toPersistenceModel() }
-        }
-    }
-
     public func insert(bookmark: SyncedPageBookmarkPersistenceModel) async throws {
         try await db.write { db in
             var bookmark = GRDBSyncedPageBookmark(bookmark)
@@ -58,10 +52,10 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         }
     }
 
-    public func removeBookmark(withRemoteID remoteID: SyncedPageBookmarkPersistenceModel) async throws {
+    public func removeBookmark(withRemoteID remoteID: String) async throws {
         // TODO: check empty remoteID
         try await db.write { db in
-            try db.execute(sql: "DELETE FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE remote_id = ?", arguments: [remoteID.remoteID])
+            try db.execute(sql: "DELETE FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE remote_id = ?", arguments: [remoteID])
         }
     }
 
@@ -99,12 +93,6 @@ private struct GRDBSyncedPageBookmark: Identifiable, Codable, FetchableRecord, M
 }
 
 extension GRDBSyncedPageBookmark {
-    init(page: Int) {
-        self.page = page
-        self.creationDate = Date()
-        self.remoteID = UUID().uuidString
-    }
-
     init(_ bookmark: SyncedPageBookmarkPersistenceModel) {
         self.page = bookmark.page
         self.creationDate = bookmark.creationDate
@@ -112,7 +100,6 @@ extension GRDBSyncedPageBookmark {
     }
 
     func toPersistenceModel() -> SyncedPageBookmarkPersistenceModel {
-        // TODO: Add remoteID to PageBookmarkPersistenceModel
         .init(page: page, remoteID: remoteID, creationDate: creationDate)
     }
 }

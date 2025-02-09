@@ -28,87 +28,56 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
         super.tearDown()
     }
 
-    func testInsertAndRetrieveBookmarks() async throws {
-        // 1. Insert some page bookmarks to the persistence
+    func testInsertion() async throws {
         let pages = [1, 2, 300]
 
-//        var cnt = 0
-//        // NOTE: GRDB's publishers do not guarantee that it will fire after each
-//        // mutation, rather, it seems to be firieing peridoically.
-//        let blabbity = persistence.pageBookmarks().sink { vals in
-//            cnt += 1
-//            print("#\(cnt) Received these: \(vals.map(\.page))")
-//        }
-//
-//        for page in pages {
-//            try await persistence.insertPageBookmark(page)
-//            sleep(1)
-//        }
-//
-//        // 2. Fetch the page bookmarks using pageBookmarks()
-////        let collector = PublisherCollector(persistence.pageBookmarks())
-//
-//        let publisher = persistence.pageBookmarks()
-//
-//        let expectation1 = expectation(description: "Initial asserts")
-//        let firstAsserts = publisher.collect(1).sink { vals in
-//            XCTAssertEqual(vals.count, 1)
-//            XCTAssertEqual(Set(vals.last?.map(\.page) ?? []), Set(pages))
-//            expectation1.fulfill()
-//        }
-//
-//        try await persistence.insertPageBookmark(45)
-//
-//        let expectation2 = expectation(description: "Second asserts after first insert")
-//        let secondAsserts = publisher.collect(1).sink { vals in
-//            XCTAssertEqual(Set(vals.last?.map(\.page) ?? []), [45, 300, 2, 1])
-//            expectation2.fulfill()
-//        }
-//
-//        try await persistence.removePageBookmark(2)
-//
-//        let expectation3 = expectation(description: "Third asserts after first remove")
-//        let thirdAsserts = publisher.collect(1).sink { vals in
-//            XCTAssertEqual(Set(vals.last?.map(\.page) ?? []), [45, 300, 1])
-//            expectation3.fulfill()
-//        }
-//
-//        try await persistence.removePageBookmark(45)
-//
-//        let expectation4 = expectation(description: "Fourth asserts after second remove")
-//        let fourthAsserts = publisher.collect(4).sink { vals in
-//            XCTAssertEqual(Set(vals.last?.map(\.page) ?? []), [300, 1])
-//            expectation4.fulfill()
-//        }
-//
-//        let newPublisher = persistence.pageBookmarks()
-//        let expectation5 = expectation(description: "Assertion for second publisher")
-//        let fifthAsserts = newPublisher.collect(1).sink { vals in
-//            XCTAssertEqual(Set(vals.last?.map(\.page) ?? []), [300, 1])
-//            expectation5.fulfill()
-//        }
+        let expectedBookmarkedPages = [1, 2, 300]
 
-//        await fulfillment(of: [expectation1, expectation2, expectation3, expectation4, expectation5], timeout: 2)
+        let exp = expectation(description: "Expected to send the expected bookmarks")
+        let cancellable = try persistence.syncedPageBookmarksPublisher()
+            .sink { bookmarks in
+                let pages = bookmarks.map(\.page)
+                guard Set(pages) == Set(expectedBookmarkedPages) else {
+                    return
+                }
+                exp.fulfill()
+            }
 
-        // 3. Verify that the returned page bookmarks match what you expect
+        for page in pages {
+            try await persistence.insert(bookmark: SyncedPageBookmarkPersistenceModel(page: page))
+        }
+        await fulfillment(of: [exp], timeout: 1)
+        cancellable.cancel()
+    }
 
-        //        XCTAssertEqual(collector.items.count, 1)
-        //        XCTAssertEqual(Set(collector.items.last?.map(\.page) ?? []), [300, 2, 1])
+    func testDeletion() async throws {
+        let pageNos = [1, 2, 300]
+        let pages = pageNos.map(SyncedPageBookmarkPersistenceModel.init(page:))
+        for page in pages {
+            try await persistence.insert(bookmark: page)
+        }
 
-        // 4. Insert more
-        //        try await persistence.insertPageBookmark(45)
-        //        XCTAssertEqual(Set(collector.items.last?.map(\.page) ?? []), [45, 300, 2, 1])
+        let expectedPageNumbers = [1, 300]
+        let exp = expectation(description: "Expected to send the expected bookmarks without the deleted one")
+        let cancellable = try persistence.syncedPageBookmarksPublisher()
+            .sink { bookmarks in
+                let pages = bookmarks.map(\.page)
+                guard Set(pages) == Set(expectedPageNumbers) else {
+                    return
+                }
+                exp.fulfill()
+            }
 
-        // 5. Remove a page bookmark
-        //        try await persistence.removePageBookmark(2)
-        //        XCTAssertEqual(Set(collector.items.last?.map(\.page) ?? []), [45, 300, 1])
+        try await persistence.removeBookmark(withRemoteID: pages[1].remoteID)
 
-        // 6. Remove another page bookmark
-        //        try await persistence.removePageBookmark(45)
-        //        XCTAssertEqual(Set(collector.items.last?.map(\.page) ?? []), [300, 1])
+        await fulfillment(of: [exp], timeout: 1)
 
-        // 7. Verify new collectors return same result
-        //        let newcollector = PublisherCollector(persistence.pageBookmarks())
-        //        XCTAssertEqual(Set(newcollector.items.last?.map(\.page) ?? []), [300, 1])
+        cancellable.cancel()
+    }
+}
+
+private extension SyncedPageBookmarkPersistenceModel {
+    init(page: Int) {
+        self.init(page: page, remoteID: UUID().uuidString, creationDate: .distantPast)
     }
 }

@@ -214,6 +214,13 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
+        target(type, name: "PageBookmarkMutationsPersistence", dependencies: [
+            "SQLitePersistence",
+            .product(name: "GRDB", package: "GRDB.swift"),
+        ], testDependencies: [
+            "AsyncUtilitiesForTesting",
+        ]),
+
         // MARK: - Core Data
 
         target(type, name: "LastPagePersistence", dependencies: [

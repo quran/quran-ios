@@ -201,9 +201,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "PageBookmarkPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
-            "SQLitePersistence",
             "QuranKit",
-            .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -211,7 +209,6 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "SyncedPageBookmarkPersistence", dependencies: [
             "SQLitePersistence",
-            "QuranKit",
             .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",

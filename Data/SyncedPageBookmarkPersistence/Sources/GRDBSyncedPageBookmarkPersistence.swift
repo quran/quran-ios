@@ -28,7 +28,7 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
 
-    public func syncedPageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
+    public func pageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
         do {
             return try db.readPublisher { db in
                 try GRDBSyncedPageBookmark.fetchAll(db).map { $0.toPersistenceModel() }

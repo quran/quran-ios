@@ -34,7 +34,7 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
         let expectedBookmarkedPages = [1, 2, 300]
 
         let exp = expectation(description: "Expected to send the expected bookmarks")
-        let cancellable = try persistence.syncedPageBookmarksPublisher()
+        let cancellable = try persistence.pageBookmarksPublisher()
             .sink { bookmarks in
                 let pages = bookmarks.map(\.page)
                 guard Set(pages) == Set(expectedBookmarkedPages) else {
@@ -59,7 +59,7 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
 
         let expectedPageNumbers = [1, 300]
         let exp = expectation(description: "Expected to send the expected bookmarks without the deleted one")
-        let cancellable = try persistence.syncedPageBookmarksPublisher()
+        let cancellable = try persistence.pageBookmarksPublisher()
             .sink { bookmarks in
                 let pages = bookmarks.map(\.page)
                 guard Set(pages) == Set(expectedPageNumbers) else {

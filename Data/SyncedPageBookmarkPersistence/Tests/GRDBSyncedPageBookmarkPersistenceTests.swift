@@ -44,7 +44,7 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
             }
 
         for page in pages {
-            try await persistence.insert(bookmark: SyncedPageBookmarkPersistenceModel(page: page))
+            try await persistence.insertBookmark(SyncedPageBookmarkPersistenceModel(page: page))
         }
         await fulfillment(of: [exp], timeout: 1)
         cancellable.cancel()
@@ -54,7 +54,7 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
         let pageNos = [1, 2, 300]
         let pages = pageNos.map(SyncedPageBookmarkPersistenceModel.init(page:))
         for page in pages {
-            try await persistence.insert(bookmark: page)
+            try await persistence.insertBookmark(page)
         }
 
         let expectedPageNumbers = [1, 300]

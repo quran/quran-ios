@@ -10,6 +10,6 @@ import Foundation
 
 public protocol SyncedPageBookmarkPersistence {
     func syncedPageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never>
-    func insert(bookmark: SyncedPageBookmarkPersistenceModel) async throws
+    func insertBookmark(_ bookmark: SyncedPageBookmarkPersistenceModel) async throws
     func removeBookmark(withRemoteID remoteID: String) async throws
 }

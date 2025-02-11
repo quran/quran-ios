@@ -44,7 +44,7 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         }
     }
 
-    public func insert(bookmark: SyncedPageBookmarkPersistenceModel) async throws {
+    public func insertBookmark(_ bookmark: SyncedPageBookmarkPersistenceModel) async throws {
         try await db.write { db in
             var bookmark = GRDBSyncedPageBookmark(bookmark)
             try bookmark.insert(db)

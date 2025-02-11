@@ -6,7 +6,17 @@
 //
 
 import Foundation
+import Combine
 
 protocol PageBookmarkMutationsPersistence {
 
+    func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never>
+
+    func bookmarks() async throws -> [MutatedPageBookmarkModel]
+
+    func createBookmark(page: Int) async throws
+
+    func removeBookmark(page: Int) async throws
+
+    func clear() async throws
 }

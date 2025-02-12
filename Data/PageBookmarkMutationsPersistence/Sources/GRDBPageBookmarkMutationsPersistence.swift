@@ -34,14 +34,54 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func createBookmark(page: Int) async throws {
+        if let persisted = try await fetchRecord(for: page) {
+            if persisted.remoteID != nil && persisted.deleted {
+                // Recreating a synced bookmark that was deleted locally.
+                // Ignore the deletion event.
+                // Modify the creation date?
+                try await deleteRecord(for: page)
+            } else {
+                // TODO: Error
+            }
+        }
+        else {
+            try await db.write { db in
+                var instance = GRDBMutatedPageBookmark(page: page)
+                try instance.insert(db)
+            }
+        }
+    }
+
+    func removeBookmark(_ bookmark: MutatedPageBookmarkModel) async throws {
+        if let persisted = try await fetchRecord(for: bookmark.page), persisted.remoteID == nil {
+            // Record hasn't been synced yet. Remove it!
+            try await deleteRecord(for: bookmark.page)
+        } else {
+            // Record is synced. Create deletion record.
+            try await createDeletedRecord(for: bookmark)
+        }
+    }
+
+    private func fetchRecord(for page: Int) async throws -> GRDBMutatedPageBookmark? {
+        try await db.read { db in
+            try GRDBMutatedPageBookmark.fetchOne(db, id: page)
+        }
+    }
+
+    private func createDeletedRecord(for bookmark: MutatedPageBookmarkModel) async throws {
         try await db.write { db in
-            var instance = GRDBMutatedPageBookmark(page: page)
+            var instance = GRDBMutatedPageBookmark(remoteID: bookmark.remoteID,
+                                                   page: bookmark.page,
+                                                   modificationDate: Date(),
+                                                   deleted: true)
             try instance.insert(db)
         }
     }
 
-    func removeBookmark(page: Int) async throws {
-        fatalError("Not implemented")
+    private func deleteRecord(for page: Int) async throws {
+        try await db.write { db in
+            try db.execute(sql: "DELETE FROM \(GRDBMutatedPageBookmark.databaseTableName) WHERE page = ?", arguments: [page])
+        }
     }
 
     func clear() async throws {
@@ -53,6 +93,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBMutatedPageBookmark.databaseTableName, options: .ifNotExists) { table in
                 table.column("page", .integer).primaryKey()
+                table.column("remote_id", .text)
                 table.column("deleted", .boolean).notNull().defaults(to: false)
                 table.column("modification_date", .datetime).notNull()
             }
@@ -63,6 +104,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
 
 private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
     enum CodingKeys: String, CodingKey {
+        case remoteID = "remote_id"
         case page
         case modificationDate = "modification_date"
         case deleted
@@ -70,6 +112,7 @@ private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, 
 
     static var databaseTableName: String { "mutated_page_bookmarks" }
 
+    var remoteID: String?
     var page: Int
     var modificationDate: Date
     var deleted: Bool
@@ -84,6 +127,6 @@ private extension GRDBMutatedPageBookmark {
     }
 
     func toMutatedBookmarkModel() -> MutatedPageBookmarkModel {
-        .init(page: page, modificationDate: modificationDate, deleted: deleted)
+        .init(remoteID: remoteID, page: page, modificationDate: modificationDate, deleted: deleted)
     }
 }

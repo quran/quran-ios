@@ -85,7 +85,10 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func clear() async throws {
-        fatalError()
+        try await db.write { db in
+            // TODO: Log this?
+            _ = try GRDBMutatedPageBookmark.deleteAll(db)
+        }
     }
 
     private var migrator: DatabaseMigrator {

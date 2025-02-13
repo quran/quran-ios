@@ -82,4 +82,18 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [22])
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false])
     }
+
+    func testClearingAll() async throws {
+        try await persistence.createBookmark(page: 10)
+        try await persistence.createBookmark(page: 22)
+        try await persistence.removeBookmark(.init(remoteID: "remID:12dc",
+                                                   page: 34,
+                                                   modificationDate: .distantPast,
+                                                   deleted: false))
+        try await persistence.createBookmark(page: 200)
+        
+        try await persistence.clear()
+
+        try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
+    }
 }

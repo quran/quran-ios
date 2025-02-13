@@ -41,7 +41,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
                 // Modify the creation date?
                 try await deleteRecord(for: page)
             } else {
-                // TODO: Error
+                throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
             }
         }
         else {

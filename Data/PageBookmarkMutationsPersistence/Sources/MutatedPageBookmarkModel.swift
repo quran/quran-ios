@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MutatedPageBookmarkModel {
+public struct MutatedPageBookmarkModel {
     let remoteID: String?
     let page: Int
     let modificationDate: Date

@@ -33,6 +33,9 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
     func testCreationAndRemoval() async throws {
         try await persistence.createBookmark(page: 10)
         try await persistence.createBookmark(page: 20)
+
+        await AsyncAssertThrows(try await persistence.createBookmark(page: 10), nil)
+
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [10, 20])
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false, false])
     }
@@ -58,6 +61,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
     }
 
     func testRecreatingDeletedBookmark() async throws {
+        // Synced
         try await persistence.removeBookmark(.init(remoteID: "remID:abc",
                                                    page: 13,
                                                    modificationDate: .distantPast,
@@ -65,5 +69,17 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await persistence.createBookmark(page: 13)
 
         try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
+
+        // Unsynced
+        try await persistence.createBookmark(page: 22)
+        try await persistence.removeBookmark(.init(remoteID: nil,
+                                                   page: 22,
+                                                   modificationDate: .distantPast,
+                                                   deleted: false))
+
+        try await persistence.createBookmark(page: 22)
+
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [22])
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false])
     }
 }

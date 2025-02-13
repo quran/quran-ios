@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol PageBookmarkMutationsPersistence {
+public enum PageBookmarkMutationsPersistenceError: Error {
+    case bookmarkAlreadyExists(page: Int)
+}
+
+public protocol PageBookmarkMutationsPersistence {
 
     func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never>
 

@@ -91,9 +91,53 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
                                                    modificationDate: .distantPast,
                                                    deleted: false))
         try await persistence.createBookmark(page: 200)
-        
+
         try await persistence.clear()
 
         try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
+    }
+
+    func testPublisher() async throws {
+        var assertionExp: XCTestExpectation?
+        var expectedBookmarks: [MutatedPageBookmarkModel]?
+        let cancellable = try persistence.bookmarksPublisher().sink { bookmarks in
+            guard let expected = expectedBookmarks else {
+                return
+            }
+            if Set(bookmarks.map(\.page)) == Set(expected.map(\.page)) {
+                assertionExp?.fulfill()
+                assertionExp = nil
+                expectedBookmarks = nil
+            }
+        }
+
+        let exp1 = expectation(description: "After two creations and one deletion. Expecting 3")
+        assertionExp = exp1
+        expectedBookmarks = [
+            .init(remoteID: nil, page: 100, modificationDate: .distantPast, deleted: false),
+            .init(remoteID: nil, page: 102, modificationDate: .distantPast, deleted: false),
+            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, deleted: true)
+        ]
+        try await persistence.createBookmark(page: 100)
+        try await persistence.createBookmark(page: 102)
+        try await persistence.removeBookmark(.init(remoteID: "remID:abd34",
+                                                   page: 35,
+                                                   modificationDate: .distantPast,
+                                                   deleted: false))
+        await fulfillment(of: [exp1], timeout: 1)
+
+        let exp2 = expectation(description: "")
+        assertionExp = exp2
+        expectedBookmarks = [
+            .init(remoteID: nil, page: 100, modificationDate: .distantPast, deleted: false),
+            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, deleted: true),
+            .init(remoteID: nil, page: 201, modificationDate: .distantPast, deleted: false),
+        ]
+        try await persistence.createBookmark(page: 201)
+        try await persistence.removeBookmark(.init(remoteID: nil, page: 102, modificationDate: .distantPast, deleted: false))
+
+        await fulfillment(of: [exp2], timeout: 1)
+
+        cancellable.cancel()
     }
 }

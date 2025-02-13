@@ -24,12 +24,21 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
-        fatalError("Not implemented")
+        try db.readPublisher { db in
+            try GRDBMutatedPageBookmark.fetchAll(db)
+                .map{ $0.toMutatedBookmarkModel() }
+        }
+        .catch { error in
+            logger.error("Error in page bookmarks publisher: \(error)")
+            return Empty<[MutatedPageBookmarkModel], Never>()
+        }
+        .eraseToAnyPublisher()
     }
 
     func bookmarks() async throws -> [MutatedPageBookmarkModel] {
         try await db.read {
-            try GRDBMutatedPageBookmark.fetchAll($0).map{ $0.toMutatedBookmarkModel() }
+            try GRDBMutatedPageBookmark.fetchAll($0)
+                .map{ $0.toMutatedBookmarkModel() }
         }
     }
 

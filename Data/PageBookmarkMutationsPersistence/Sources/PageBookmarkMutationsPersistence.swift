@@ -10,6 +10,7 @@ import Combine
 
 public enum PageBookmarkMutationsPersistenceError: Error {
     case bookmarkAlreadyExists(page: Int)
+    case illegalState(reason: String, page: Int)
 }
 
 public protocol PageBookmarkMutationsPersistence {

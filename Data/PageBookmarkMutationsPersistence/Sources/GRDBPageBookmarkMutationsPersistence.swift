@@ -43,31 +43,32 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func createBookmark(page: Int) async throws {
-        if let persisted = try await fetchPesistedRecord(for: page) {
-            if persisted.remoteID != nil && persisted.deleted {
-                // Recreating a synced bookmark that was deleted locally.
-                // Keep the deletion event for the synced bookmark, and make a new unsynced one.
-                try await createBookmark(page: page)
-            } 
-            else {
-                throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
-            }
+        let persisted = try await fetchPesistedRecord(for: page)
+        if persisted != nil && !persisted!.deleted {
+            throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
         }
-        else {
-            try await db.write { db in
-                var instance = GRDBMutatedPageBookmark(page: page)
-                try instance.insert(db)
-            }
+        try await db.write { db in
+            var instance = GRDBMutatedPageBookmark(page: page)
+            try instance.insert(db)
         }
     }
 
     func removeBookmark(_ bookmark: MutatedPageBookmarkModel) async throws {
         if let persisted = try await fetchPesistedRecord(for: bookmark.page), persisted.remoteID == nil {
-            // Record hasn't been synced yet. Remove it!
-            try await deleteRecord(for: bookmark.page)
-        } else {
+            if bookmark.remoteID != nil {
+                let reason = "Deleting a synced bookmark on a page, after creating an unsynced one."
+                throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: bookmark.page)
+            }
+            else {
+                // Record hasn't been synced yet.
+                try await deleteRecord(for: bookmark.page)
+            }
+        } else if bookmark.remoteID != nil {
             // Record is synced. Create deletion record.
             try await createDeletedRecord(for: bookmark)
+        } else {
+            let reason = "Deleting an unsynced bookmark on a page with no record of being created."
+            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: bookmark.page)
         }
     }
 
@@ -120,6 +121,12 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 }
 
+/// Imperatives:
+/// - If remote ID is not nil, then `deleted` must be true.
+/// - If remote ID is nil, then `deleted` can't be true
+/// - If there are two records with the same `page`, then the first must be a deletion for a synced bookmark, so the remote
+///   ID must be nil, and the second must be a new unsynced one.
+/// - Otherwise, there can't be two records for the same `page`.
 private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
     enum CodingKeys: String, CodingKey {
         case remoteID = "remote_id"

@@ -30,6 +30,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - Creation
     func testCreation() async throws {
         try await persistence.createBookmark(page: 10)
         try await persistence.createBookmark(page: 20)
@@ -52,6 +53,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
             "Expected mofication dates to be recent.")
     }
 
+    // MARK: - Removal Scenarios
     func testRemovingSyncedBookmark() async throws {
         try await persistence.removeBookmark(.init(remoteID: "remID:abc",
                                                    page: 12,
@@ -77,6 +79,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
     }
 
+    // MARK: - Recreating deleted bookmarks
     func testRecreatingDeletedSyncedBookmark() async throws {
         // Synced
         try await persistence.removeBookmark(.init(remoteID: "remID:abc",
@@ -115,6 +118,33 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false])
     }
 
+    // MARK: - Illegal Data States
+    func testIllegalStates() async throws {
+        // Add a new bookmark
+        try await persistence.createBookmark(page: 10)
+
+        // Remove a synced bookmark
+        await AsyncAssertThrows(
+            try await persistence.removeBookmark(.init(remoteID: "remID:uyx",
+                                                       page: 10,
+                                                       modificationDate: .distantPast,
+                                                       deleted: false)),
+            nil,
+            "Expected to fail if removed a synced bookmark, given that an unsynced bookmark with the same " +
+            "page already exists."
+        )
+
+        await AsyncAssertThrows(
+            try await persistence.removeBookmark(.init(remoteID: nil,
+                                                       page: 234,
+                                                       modificationDate: .distantPast,
+                                                       deleted: false)),
+            nil,
+        "Expected to fail if attempted to remove an unsynced bookmark on a page, where it one wasn't created"
+        )
+    }
+
+    // MARK: - Rest of Public APIS
     func testClearingAll() async throws {
         try await persistence.createBookmark(page: 10)
         try await persistence.createBookmark(page: 22)

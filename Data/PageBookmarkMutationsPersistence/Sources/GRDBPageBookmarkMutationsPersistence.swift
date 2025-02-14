@@ -91,11 +91,12 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBMutatedPageBookmark.databaseTableName, options: .ifNotExists) { table in
-                // TODO: Add an auto-incrementing primary key?
                 table.column("page", .integer).notNull()
                 table.column("remote_id", .text)
                 table.column("deleted", .boolean).notNull().defaults(to: false)
                 table.column("modification_date", .datetime).notNull()
+                // See the documentation on GRDBMutatedPageBookmark. 
+                table.column("id", .integer).primaryKey(autoincrement: true)
             }
         }
         return migrator
@@ -135,6 +136,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
 /// - Otherwise, there can't be two records for the same `page`.
 private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, MutablePersistableRecord {
     enum CodingKeys: String, CodingKey {
+        case id
         case remoteID = "remote_id"
         case page
         case modificationDate = "modification_date"
@@ -143,12 +145,11 @@ private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, 
 
     static var databaseTableName: String { "mutated_page_bookmarks" }
 
+    var id: Int64?
     var remoteID: String?
     var page: Int
     var modificationDate: Date
     var deleted: Bool
-
-    var id: Int { page }
 }
 
 private extension GRDBMutatedPageBookmark {

@@ -1,18 +1,18 @@
 //
-//  File.swift
+//  GRDBPageBookmarkMutationsPersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 10/02/2025.
 //
 
+import Combine
 import Foundation
+import GRDB
 import SQLitePersistence
 import VLogging
-import GRDB
-import Combine
 
 struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
-    private let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -23,10 +23,12 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
+    // MARK: Internal
+
     func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
         try db.readPublisher { db in
             try GRDBMutatedPageBookmark.fetchAll(db)
-                .map{ $0.toMutatedBookmarkModel() }
+                .map { $0.toMutatedBookmarkModel() }
         }
         .catch { error in
             logger.error("Error in page bookmarks publisher: \(error)")
@@ -38,7 +40,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     func bookmarks() async throws -> [MutatedPageBookmarkModel] {
         try await db.read { db in
             try GRDBMutatedPageBookmark.fetchAll(db)
-                .map{ $0.toMutatedBookmarkModel() }
+                .map { $0.toMutatedBookmarkModel() }
         }
     }
 
@@ -74,35 +76,16 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    /// Fetches a bookmark for the given page that isn't marked for deletion.
-    private func fetchCreatedBookmark(forPage page: Int) async throws -> GRDBMutatedPageBookmark? {
-        try await db.read { db in
-            try GRDBMutatedPageBookmark.fetchOne(db.makeStatement(sql: "SELECT * from \(GRDBMutatedPageBookmark.databaseTableName) WHERE page=? AND deleted=false"), arguments: ["\(page)"])
-        }
-    }
-
-    private func createBookamrkMarkedForDelete(for bookmark: MutatedPageBookmarkModel) async throws {
-        try await db.write { db in
-            var instance = GRDBMutatedPageBookmark(remoteID: bookmark.remoteID,
-                                                   page: bookmark.page,
-                                                   modificationDate: Date(),
-                                                   deleted: true)
-            try instance.insert(db)
-        }
-    }
-
-    private func deleteAll(forPage page: Int) async throws {
-        try await db.write { db in
-            try db.execute(sql: "DELETE FROM \(GRDBMutatedPageBookmark.databaseTableName) WHERE page = ?", arguments: [page])
-        }
-    }
-
     func clear() async throws {
         try await db.write { db in
             // TODO: Log this?
             _ = try GRDBMutatedPageBookmark.deleteAll(db)
         }
     }
+
+    // MARK: Private
+
+    private let db: DatabaseConnection
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -116,6 +99,31 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
             }
         }
         return migrator
+    }
+
+    /// Fetches a bookmark for the given page that isn't marked for deletion.
+    private func fetchCreatedBookmark(forPage page: Int) async throws -> GRDBMutatedPageBookmark? {
+        try await db.read { db in
+            try GRDBMutatedPageBookmark.fetchOne(db.makeStatement(sql: "SELECT * from \(GRDBMutatedPageBookmark.databaseTableName) WHERE page=? AND deleted=false"), arguments: ["\(page)"])
+        }
+    }
+
+    private func createBookamrkMarkedForDelete(for bookmark: MutatedPageBookmarkModel) async throws {
+        try await db.write { db in
+            var instance = GRDBMutatedPageBookmark(
+                remoteID: bookmark.remoteID,
+                page: bookmark.page,
+                modificationDate: Date(),
+                deleted: true
+            )
+            try instance.insert(db)
+        }
+    }
+
+    private func deleteAll(forPage page: Int) async throws {
+        try await db.write { db in
+            try db.execute(sql: "DELETE FROM \(GRDBMutatedPageBookmark.databaseTableName) WHERE page = ?", arguments: [page])
+        }
     }
 }
 
@@ -144,7 +152,6 @@ private struct GRDBMutatedPageBookmark: Identifiable, Codable, FetchableRecord, 
 }
 
 private extension GRDBMutatedPageBookmark {
-
     init(page: Int) {
         self.init(page: page, modificationDate: Date(), deleted: false)
     }
@@ -155,6 +162,5 @@ private extension GRDBMutatedPageBookmark {
 }
 
 private extension MutatedPageBookmarkModel {
-
     var isSynced: Bool { remoteID != nil }
 }

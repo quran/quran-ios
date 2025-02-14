@@ -1,12 +1,12 @@
 //
-//  File.swift
+//  PageBookmarkMutationsPersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 10/02/2025.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 public enum PageBookmarkMutationsPersistenceError: Error {
     case bookmarkAlreadyExists(page: Int)
@@ -14,7 +14,6 @@ public enum PageBookmarkMutationsPersistenceError: Error {
 }
 
 public protocol PageBookmarkMutationsPersistence {
-
     func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never>
 
     func bookmarks() async throws -> [MutatedPageBookmarkModel]

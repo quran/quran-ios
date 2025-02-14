@@ -43,13 +43,13 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func createBookmark(page: Int) async throws {
-        if let persisted = try await fetchRecord(for: page) {
+        if let persisted = try await fetchPesistedRecord(for: page) {
             if persisted.remoteID != nil && persisted.deleted {
                 // Recreating a synced bookmark that was deleted locally.
-                // Ignore the deletion event.
-                // Modify the creation date?
-                try await deleteRecord(for: page)
-            } else {
+                // Keep the deletion event for the synced bookmark, and make a new unsynced one.
+                try await createBookmark(page: page)
+            } 
+            else {
                 throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
             }
         }
@@ -62,7 +62,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     }
 
     func removeBookmark(_ bookmark: MutatedPageBookmarkModel) async throws {
-        if let persisted = try await fetchRecord(for: bookmark.page), persisted.remoteID == nil {
+        if let persisted = try await fetchPesistedRecord(for: bookmark.page), persisted.remoteID == nil {
             // Record hasn't been synced yet. Remove it!
             try await deleteRecord(for: bookmark.page)
         } else {
@@ -74,6 +74,12 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     private func fetchRecord(for page: Int) async throws -> GRDBMutatedPageBookmark? {
         try await db.read { db in
             try GRDBMutatedPageBookmark.fetchOne(db, id: page)
+        }
+    }
+
+    private func fetchPesistedRecord(for page: Int) async throws -> GRDBMutatedPageBookmark? {
+        try await db.read { db in
+            try GRDBMutatedPageBookmark.fetchOne(db.makeStatement(sql: "SELECT * from \(GRDBMutatedPageBookmark.databaseTableName) WHERE page=? AND deleted=false"), arguments: ["\(page)"])
         }
     }
 
@@ -104,7 +110,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBMutatedPageBookmark.databaseTableName, options: .ifNotExists) { table in
-                table.column("page", .integer).primaryKey()
+                table.column("page", .integer).notNull()
                 table.column("remote_id", .text)
                 table.column("deleted", .boolean).notNull().defaults(to: false)
                 table.column("modification_date", .datetime).notNull()

@@ -30,14 +30,26 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         super.tearDown()
     }
 
-    func testCreationAndRemoval() async throws {
+    func testCreation() async throws {
         try await persistence.createBookmark(page: 10)
         try await persistence.createBookmark(page: 20)
 
-        await AsyncAssertThrows(try await persistence.createBookmark(page: 10), nil)
+        await AsyncAssertThrows(
+            try await persistence.createBookmark(page: 10),
+            nil,
+            "Should throw if tried to duplicate a bookmark on a page."
+        )
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [10, 20])
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false, false])
+
+        let date = Date()
+        try await AsyncAssertEqual(
+            try await persistence.bookmarks()
+                .map(\.modificationDate)
+                .map(date.timeIntervalSince).map{ $0 < 5 }, // enough to judge for recency, while giving enough leeway for exeuction latency.
+            [true, true],
+            "Expected mofication dates to be recent.")
     }
 
     func testRemovingSyncedBookmark() async throws {
@@ -48,6 +60,11 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [12])
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [true])
+        try await AsyncAssertEqual(
+            try await persistence.bookmarks().first
+                .map{ Date().timeIntervalSince($0.modificationDate) < 5 },
+            true,
+            "Modification date should be adjusted")
     }
 
     func testRemovingUnsyncedBookmark() async throws {
@@ -56,11 +73,11 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
                                                    page: 12,
                                                    modificationDate: .distantPast,
                                                    deleted: false))
-        
+
         try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
     }
 
-    func testRecreatingDeletedBookmark() async throws {
+    func testRecreatingDeletedSyncedBookmark() async throws {
         // Synced
         try await persistence.removeBookmark(.init(remoteID: "remID:abc",
                                                    page: 13,
@@ -68,9 +85,24 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
                                                    deleted: false))
         try await persistence.createBookmark(page: 13)
 
-        try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [13, 13])
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.remoteID),
+                                   ["remID:abc", nil],
+                                   "Expected to have two records: one for the synced bookmark, and a new unsynced one.")
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted),
+                                   [true, false],
+                                   "The synced record should be marked for deletion. The unsynced one is created.")
 
-        // Unsynced
+        let date = Date()
+        try await AsyncAssertEqual(
+            try await persistence.bookmarks()
+                .map(\.modificationDate)
+                .map{ date.timeIntervalSince($0) }
+                .map{ $0 < 5}, [true, true],
+            "The modification dates should be recent.")
+    }
+
+    func testRecreatingDeletedUnsyncedBookmark() async throws {
         try await persistence.createBookmark(page: 22)
         try await persistence.removeBookmark(.init(remoteID: nil,
                                                    page: 22,

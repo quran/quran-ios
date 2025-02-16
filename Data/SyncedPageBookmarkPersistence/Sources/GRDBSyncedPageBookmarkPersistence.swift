@@ -65,7 +65,7 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("createPageBookmarks") { db in
             try db.create(table: GRDBSyncedPageBookmark.databaseTableName, options: .ifNotExists) { table in
-                table.column("page", .integer).notNull()
+                table.column("page", .integer).notNull().unique()
                 table.column("remote_id", .text).primaryKey()
                 table.column("creation_date", .datetime).notNull()
             }

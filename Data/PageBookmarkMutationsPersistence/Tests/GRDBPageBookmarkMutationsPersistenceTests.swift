@@ -55,12 +55,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
     // MARK: - Removal Scenarios
 
     func testRemovingSyncedBookmark() async throws {
-        try await persistence.removeBookmark(.init(
-            remoteID: "remID:abc",
-            page: 12,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 12, remoteID: "remID:abc")
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [12])
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [true])
@@ -74,12 +69,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
     func testRemovingUnsyncedBookmark() async throws {
         try await persistence.createBookmark(page: 12)
-        try await persistence.removeBookmark(.init(
-            remoteID: nil,
-            page: 12,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 12, remoteID: nil)
 
         try await AsyncAssertEqual(try await persistence.bookmarks().count, 0)
     }
@@ -88,12 +78,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
     func testRecreatingDeletedSyncedBookmark() async throws {
         // Synced
-        try await persistence.removeBookmark(.init(
-            remoteID: "remID:abc",
-            page: 13,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 13, remoteID: "remID:abc")
         try await persistence.createBookmark(page: 13)
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [13, 13])
@@ -120,12 +105,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
     func testRecreatingDeletedUnsyncedBookmark() async throws {
         try await persistence.createBookmark(page: 22)
-        try await persistence.removeBookmark(.init(
-            remoteID: nil,
-            page: 22,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 22, remoteID: nil)
 
         try await persistence.createBookmark(page: 22)
 
@@ -141,24 +121,14 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
         // Remove a synced bookmark
         await AsyncAssertThrows(
-            try await persistence.removeBookmark(.init(
-                remoteID: "remID:uyx",
-                page: 10,
-                modificationDate: .distantPast,
-                deleted: false
-            )),
+            try await persistence.removeBookmark(page: 10, remoteID: "remID:uyx"),
             nil,
             "Expected to fail if removed a synced bookmark, given that an unsynced bookmark with the same " +
                 "page already exists."
         )
 
         await AsyncAssertThrows(
-            try await persistence.removeBookmark(.init(
-                remoteID: nil,
-                page: 234,
-                modificationDate: .distantPast,
-                deleted: false
-            )),
+            try await persistence.removeBookmark(page: 234, remoteID: nil),
             nil,
             "Expected to fail if attempted to remove an unsynced bookmark on a page, where it one wasn't created"
         )
@@ -169,12 +139,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
     func testClearingAll() async throws {
         try await persistence.createBookmark(page: 10)
         try await persistence.createBookmark(page: 22)
-        try await persistence.removeBookmark(.init(
-            remoteID: "remID:12dc",
-            page: 34,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 34, remoteID: "remID:12dc")
         try await persistence.createBookmark(page: 200)
 
         try await persistence.clear()
@@ -205,12 +170,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         ]
         try await persistence.createBookmark(page: 100)
         try await persistence.createBookmark(page: 102)
-        try await persistence.removeBookmark(.init(
-            remoteID: "remID:abd34",
-            page: 35,
-            modificationDate: .distantPast,
-            deleted: false
-        ))
+        try await persistence.removeBookmark(page: 35, remoteID: "remID:abd34")
         await fulfillment(of: [exp1], timeout: 1)
 
         let exp2 = expectation(description: "")
@@ -221,7 +181,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
             .init(remoteID: nil, page: 201, modificationDate: .distantPast, deleted: false),
         ]
         try await persistence.createBookmark(page: 201)
-        try await persistence.removeBookmark(.init(remoteID: nil, page: 102, modificationDate: .distantPast, deleted: false))
+        try await persistence.removeBookmark(page: 102, remoteID: nil)
 
         await fulfillment(of: [exp2], timeout: 1)
 

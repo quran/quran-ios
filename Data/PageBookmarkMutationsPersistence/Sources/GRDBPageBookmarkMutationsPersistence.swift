@@ -60,19 +60,19 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    func removeBookmark(_ input: MutatedPageBookmarkModel) async throws {
-        let hasCreatedRecord = try await fetchCreatedBookmark(forPage: input.page) != nil
+    func removeBookmark(page: Int, remoteID: String?) async throws {
+        let hasCreatedRecord = try await fetchCreatedBookmark(forPage: page) != nil
 
-        if hasCreatedRecord && input.isSynced {
+        if hasCreatedRecord && remoteID != nil {
             let reason = "Deleting a synced bookmark on a page, after creating an unsynced one."
-            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: input.page)
-        } else if hasCreatedRecord && !input.isSynced {
-            try await deleteAll(forPage: input.page)
-        } else if input.isSynced {
-            try await createBookamrkMarkedForDelete(for: input)
+            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
+        } else if hasCreatedRecord && remoteID == nil {
+            try await deleteAll(forPage: page)
+        } else if remoteID != nil {
+            try await createBookamrkMarkedForDelete(for: page, remoteID: remoteID!)
         } else {
             let reason = "Deleting an unsynced bookmark on a page with no record of being created."
-            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: input.page)
+            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
         }
     }
 
@@ -109,11 +109,11 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    private func createBookamrkMarkedForDelete(for bookmark: MutatedPageBookmarkModel) async throws {
+    private func createBookamrkMarkedForDelete(for page: Int, remoteID: String) async throws {
         try await db.write { db in
             var instance = GRDBMutatedPageBookmark(
-                remoteID: bookmark.remoteID,
-                page: bookmark.page,
+                remoteID: remoteID,
+                page: page,
                 modificationDate: Date(),
                 deleted: true
             )

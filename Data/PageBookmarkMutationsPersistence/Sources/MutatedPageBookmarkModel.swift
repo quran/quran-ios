@@ -8,8 +8,13 @@
 import Foundation
 
 public struct MutatedPageBookmarkModel {
+    public enum Mutation {
+        case created
+        case deleted
+    }
+
     let remoteID: String?
     let page: Int
     let modificationDate: Date
-    let deleted: Bool
+    let mutation: Mutation
 }

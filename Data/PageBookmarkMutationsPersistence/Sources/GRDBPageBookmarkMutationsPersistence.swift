@@ -47,6 +47,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     func createBookmark(page: Int) async throws {
         let persisted = try await fetchCreatedBookmark(forPage: page)
         if persisted?.deleted == false {
+            logger.error("[PageBookamrksMutatiosn] Adding a duplicate page bookmark.")
             throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
         }
 
@@ -64,13 +65,17 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         let hasCreatedRecord = try await fetchCreatedBookmark(forPage: page) != nil
 
         if hasCreatedRecord && remoteID != nil {
+            logger.error("[PageBookamrksMutatiosn] Illegal state: Deleting a bookmark on page, while there's an unsynced bookmark on the same page.")
             let reason = "Deleting a synced bookmark on a page, after creating an unsynced one."
             throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
         } else if hasCreatedRecord && remoteID == nil {
+            logger.trace("[PageBookamrksMutatiosn] Removing records for a page bookmark, after deleting an unsynced bookmark.")
             try await deleteAll(forPage: page)
         } else if remoteID != nil {
+            logger.trace("[PageBookamrksMutatiosn] Adding a delete record for a synced page bookmark.")
             try await createBookamrkMarkedForDelete(for: page, remoteID: remoteID!)
         } else {
+            logger.error("[PageBookamrksMutatiosn] Illegal state: Deleting an unsynced page bookmark, while there's no record for it.")
             let reason = "Deleting an unsynced bookmark on a page with no record of being created."
             throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
         }
@@ -78,8 +83,8 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
 
     func clear() async throws {
         try await db.write { db in
-            // TODO: Log this?
-            _ = try GRDBMutatedPageBookmark.deleteAll(db)
+            let cnt = try GRDBMutatedPageBookmark.deleteAll(db)
+            logger.info("[PageBookmarkMutationsPersistence] Cleared \(cnt) bookmark records.")
         }
     }
 
@@ -95,7 +100,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
                 table.column("remote_id", .text)
                 table.column("deleted", .boolean).notNull().defaults(to: false)
                 table.column("modification_date", .datetime).notNull()
-                // See the documentation on GRDBMutatedPageBookmark. 
+                // See the documentation on GRDBMutatedPageBookmark.
                 table.column("id", .integer).primaryKey(autoincrement: true)
             }
         }
@@ -158,7 +163,12 @@ private extension GRDBMutatedPageBookmark {
     }
 
     func toMutatedBookmarkModel() -> MutatedPageBookmarkModel {
-        .init(remoteID: remoteID, page: page, modificationDate: modificationDate, deleted: deleted)
+        .init(
+            remoteID: remoteID,
+            page: page,
+            modificationDate: modificationDate,
+            mutation: remoteID == nil ? .created : .deleted
+        )
     }
 }
 

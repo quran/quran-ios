@@ -40,7 +40,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         )
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [10, 20])
-        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false, false])
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.mutation), [.created, .created])
 
         let date = Date()
         try await AsyncAssertEqual(
@@ -58,7 +58,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await persistence.removeBookmark(page: 12, remoteID: "remID:abc")
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [12])
-        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [true])
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.mutation), [.deleted])
         try await AsyncAssertEqual(
             try await persistence.bookmarks().first
                 .map { Date().timeIntervalSince($0.modificationDate) < 5 },
@@ -88,8 +88,8 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
             "Expected to have two records: one for the synced bookmark, and a new unsynced one."
         )
         try await AsyncAssertEqual(
-            try await persistence.bookmarks().map(\.deleted),
-            [true, false],
+            try await persistence.bookmarks().map(\.mutation),
+            [.deleted, .created],
             "The synced record should be marked for deletion. The unsynced one is created."
         )
 
@@ -110,7 +110,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         try await persistence.createBookmark(page: 22)
 
         try await AsyncAssertEqual(try await persistence.bookmarks().map(\.page), [22])
-        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.deleted), [false])
+        try await AsyncAssertEqual(try await persistence.bookmarks().map(\.mutation), [.created])
     }
 
     // MARK: - Illegal Data States
@@ -164,9 +164,9 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         let exp1 = expectation(description: "After two creations and one deletion. Expecting 3")
         assertionExp = exp1
         expectedBookmarks = [
-            .init(remoteID: nil, page: 100, modificationDate: .distantPast, deleted: false),
-            .init(remoteID: nil, page: 102, modificationDate: .distantPast, deleted: false),
-            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, deleted: true),
+            .init(remoteID: nil, page: 100, modificationDate: .distantPast, mutation: .created),
+            .init(remoteID: nil, page: 102, modificationDate: .distantPast, mutation: .created),
+            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, mutation: .deleted),
         ]
         try await persistence.createBookmark(page: 100)
         try await persistence.createBookmark(page: 102)
@@ -176,9 +176,9 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
         let exp2 = expectation(description: "")
         assertionExp = exp2
         expectedBookmarks = [
-            .init(remoteID: nil, page: 100, modificationDate: .distantPast, deleted: false),
-            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, deleted: true),
-            .init(remoteID: nil, page: 201, modificationDate: .distantPast, deleted: false),
+            .init(remoteID: nil, page: 100, modificationDate: .distantPast, mutation: .created),
+            .init(remoteID: "remID:abd34", page: 35, modificationDate: .distantPast, mutation: .deleted),
+            .init(remoteID: nil, page: 201, modificationDate: .distantPast, mutation: .created),
         ]
         try await persistence.createBookmark(page: 201)
         try await persistence.removeBookmark(page: 102, remoteID: nil)

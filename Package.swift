@@ -202,6 +202,8 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
+            "SyncedPageBookmarkPersistence",
+            "PageBookmarkMutationsPersistence",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",

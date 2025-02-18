@@ -8,7 +8,15 @@
 
 import Foundation
 
-public struct PageBookmarkPersistenceModel {
+public struct PageBookmarkPersistenceModel: Equatable {
+    public let remoteID: String?
     public let page: Int
     public let creationDate: Date
+}
+
+extension PageBookmarkPersistenceModel {
+
+    init(page: Int, creationDate: Date) {
+        self.init(remoteID: nil, page: page, creationDate: creationDate)
+    }
 }

@@ -66,5 +66,6 @@ private extension PageBookmarkPersistenceModel {
     init(_ other: MO_PageBookmark) {
         creationDate = other.createdOn ?? Date()
         page = Int(other.page)
+        remoteID = nil
     }
 }

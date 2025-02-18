@@ -53,7 +53,6 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
                 expectedPageBookmarks = nil
             }
 
-
         let bookmarks: [SyncedPageBookmarkPersistenceModel] = [
             .init(page: 10, remoteID: "remID:1", creationDate: .init(timeIntervalSince1970: 1_000)),
             .init(page: 22, remoteID: "remID:2", creationDate: .init(timeIntervalSince1970: 2_000)),
@@ -87,8 +86,37 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         }
         try await syncedPersistence.removeBookmark(withRemoteID: "remID:2")
 
-        await fulfillment(of: [expectation2])
+        await fulfillment(of: [expectation2], timeout: 1)
 
+        cancellable.cancel()
+    }
+
+    func testReadingOnlyBookmarkMutations() async throws {
+        var assertExpectation: XCTestExpectation?
+        var expectedPages: [Int]?
+        let cancellable = persistence.pageBookmarks()
+            .sink { bookmarks in
+                guard let expected = expectedPages else { return }
+                guard Set(expected) == Set(bookmarks.map(\.page)) else {
+                    return
+                }
+
+                assertExpectation?.fulfill()
+
+                assertExpectation = nil
+                expectedPages = nil
+            }
+
+        let expectation1 = self.expectation(description: "Reading the first updates")
+        assertExpectation = expectation1
+        let addedPages: [Int] = [ 10, 12, 20 ]
+        expectedPages = addedPages
+        for page in addedPages {
+            try await localMutationsPersistence.createBookmark(page: page)
+        }
+        await fulfillment(of: [expectation1], timeout: 1)
+
+        // Will test deletions in other cases.
         cancellable.cancel()
     }
 }

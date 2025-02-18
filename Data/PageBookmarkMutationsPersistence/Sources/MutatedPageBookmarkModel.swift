@@ -13,8 +13,8 @@ public struct MutatedPageBookmarkModel {
         case deleted
     }
 
-    let remoteID: String?
-    let page: Int
-    let modificationDate: Date
-    let mutation: Mutation
+    public let remoteID: String?
+    public let page: Int
+    public let modificationDate: Date
+    public let mutation: Mutation
 }

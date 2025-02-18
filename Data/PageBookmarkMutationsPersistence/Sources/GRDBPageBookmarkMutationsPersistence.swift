@@ -11,7 +11,7 @@ import GRDB
 import SQLitePersistence
 import VLogging
 
-struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
+public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
     // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
@@ -23,9 +23,14 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    // MARK: Internal
+    public init(directory: URL) {
+        let fileURL = directory.appendingPathComponent("local_pagebookmarks_mutations.db", isDirectory: false)
+        self.init(db: DatabaseConnection(url: fileURL, readonly: false))
+    }
 
-    func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
+    // MARK: Public
+
+    public func bookmarksPublisher() throws -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
         try db.readPublisher { db in
             try GRDBMutatedPageBookmark.fetchAll(db)
                 .map { $0.toMutatedBookmarkModel() }
@@ -37,14 +42,14 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         .eraseToAnyPublisher()
     }
 
-    func bookmarks() async throws -> [MutatedPageBookmarkModel] {
+    public func bookmarks() async throws -> [MutatedPageBookmarkModel] {
         try await db.read { db in
             try GRDBMutatedPageBookmark.fetchAll(db)
                 .map { $0.toMutatedBookmarkModel() }
         }
     }
 
-    func createBookmark(page: Int) async throws {
+    public func createBookmark(page: Int) async throws {
         let persisted = try await fetchCreatedBookmark(forPage: page)
         if persisted?.deleted == false {
             logger.error("[PageBookamrksMutatiosn] Adding a duplicate page bookmark.")
@@ -61,7 +66,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    func removeBookmark(page: Int, remoteID: String?) async throws {
+    public func removeBookmark(page: Int, remoteID: String?) async throws {
         let hasCreatedRecord = try await fetchCreatedBookmark(forPage: page) != nil
 
         if hasCreatedRecord && remoteID != nil {
@@ -81,7 +86,7 @@ struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
         }
     }
 
-    func clear() async throws {
+    public func clear() async throws {
         try await db.write { db in
             let cnt = try GRDBMutatedPageBookmark.deleteAll(db)
             logger.info("[PageBookmarkMutationsPersistence] Cleared \(cnt) bookmark records.")

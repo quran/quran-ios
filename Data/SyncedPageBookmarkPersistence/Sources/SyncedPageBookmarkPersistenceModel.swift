@@ -8,7 +8,13 @@
 import Foundation
 
 public struct SyncedPageBookmarkPersistenceModel {
-    let page: Int
-    let remoteID: String
-    let creationDate: Date
+    public let page: Int
+    public let remoteID: String
+    public let creationDate: Date
+
+    public init(page: Int, remoteID: String, creationDate: Date) {
+        self.page = page
+        self.remoteID = remoteID
+        self.creationDate = creationDate
+    }
 }

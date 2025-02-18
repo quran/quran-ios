@@ -41,8 +41,6 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         var expectedPageBookmarks: [PageBookmarkPersistenceModel]?
         let cancellable = persistence.pageBookmarks()
             .sink { bookmarks in
-
-                print("Received bookmarks for: \(bookmarks.map(\.page)). Expected: \(expectedPageBookmarks?.map(\.page) ?? [])")
                 guard let expected = expectedPageBookmarks else { return }
                 guard Set(expected.map(\.page)) == Set(bookmarks.map(\.page)) else {
                     return
@@ -61,7 +59,7 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
             .init(page: 22, remoteID: "remID:2", creationDate: .init(timeIntervalSince1970: 2_000)),
         ]
 
-        let expectation1 = self.expectation(description: "")
+        let expectation1 = self.expectation(description: "Reading the first batch.")
         assertExpectation = expectation1
         expectedPageBookmarks = bookmarks.map{ PageBookmarkPersistenceModel(remoteID: $0.remoteID, page: $0.page, creationDate: $0.creationDate) }
 
@@ -69,8 +67,27 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
             try await syncedPersistence.insertBookmark(bookmark)
         }
 
-        await fulfillment(of: [expectation1], timeout: 2)
+        await fulfillment(of: [expectation1], timeout: 1)
 
+        // Test updates
+        let added: [SyncedPageBookmarkPersistenceModel] = [
+            .init(page: 35, remoteID: "remID:3", creationDate: .init(timeIntervalSince1970: 4_000)),
+            .init(page: 120, remoteID: "remID:4", creationDate: .init(timeIntervalSince1970: 5_000)),
+        ]
+
+        let expectation2 = self.expectation(description: "After adding two bookmarks and removing one.")
+        assertExpectation = expectation2
+        expectedPageBookmarks = [
+            PageBookmarkPersistenceModel(remoteID: "remID:1", page: 10, creationDate: .init(timeIntervalSince1970: 1_000)),
+            PageBookmarkPersistenceModel(remoteID: "remID:3", page: 35, creationDate: .init(timeIntervalSince1970: 4_000)),
+            PageBookmarkPersistenceModel(remoteID: "remID:4", page: 120, creationDate: .init(timeIntervalSince1970: 5_000)),
+        ]
+        for bookmark in added {
+            try await syncedPersistence.insertBookmark(bookmark)
+        }
+        try await syncedPersistence.removeBookmark(withRemoteID: "remID:2")
+
+        await fulfillment(of: [expectation2])
 
         cancellable.cancel()
     }

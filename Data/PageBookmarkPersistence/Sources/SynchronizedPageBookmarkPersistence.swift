@@ -37,23 +37,28 @@ public final class SynchronizedPageBookmarkPersistence: PageBookmarkPersistence 
             syncedPublisher = Empty<[PageBookmarkPersistenceModel], Never>().eraseToAnyPublisher()
         }
 
-        let mutatedPublisher: AnyPublisher<[PageBookmarkPersistenceModel], Never>
+        let mutatedPublisher: AnyPublisher<[MutatedPageBookmarkModel], Never>
         do {
             mutatedPublisher = try bookmarkMutationsPersistence.bookmarksPublisher()
-                .map{ $0.map {
-                    PageBookmarkPersistenceModel(page: $0.page, creationDate: $0.modificationDate)
-                }}
                 .eraseToAnyPublisher()
         }
         catch {
             logger.error("Failed to create a publisher for mutated apge bookmarks: \(error)")
-            mutatedPublisher = Empty<[PageBookmarkPersistenceModel], Never>().eraseToAnyPublisher()
+            mutatedPublisher = Empty<[MutatedPageBookmarkModel], Never>().eraseToAnyPublisher()
         }
 
         return syncedPublisher
             .combineLatest(mutatedPublisher)
             .map{ syncedBookmarks, mutatedBookmarks in
-                syncedBookmarks + mutatedBookmarks
+                let mutationByPage = mutatedBookmarks.reduce(into: [Int:MutatedPageBookmarkModel]()) { partialResult, bookmark in
+                    partialResult[bookmark.page] = bookmark
+                }
+
+                let uneditedSynced = syncedBookmarks.filter{ mutationByPage[$0.page] == nil }
+                let newBookmarks = mutatedBookmarks.filter{ $0.mutation != .deleted }
+                    .map{ PageBookmarkPersistenceModel(page: $0.page, creationDate: $0.modificationDate) }
+
+                return uneditedSynced + newBookmarks
             }
             .eraseToAnyPublisher()
     }

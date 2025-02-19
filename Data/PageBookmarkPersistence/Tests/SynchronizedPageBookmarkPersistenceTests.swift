@@ -119,4 +119,70 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         // Will test deletions in other cases.
         cancellable.cancel()
     }
+
+    func testMergingSyncedAndMutatedBookmarks() async throws {
+        var assertexpectation: XCTestExpectation?
+        var expecteBookmarks: [PageBookmarkPersistenceModel]?
+        let cancellable = persistence.pageBookmarks()
+            .sink { bookmarks in
+                guard let expected = expecteBookmarks else { return }
+                guard Set(expected.map(\.page)) == Set(bookmarks.map(\.page)) else {
+                    return
+                }
+                assertexpectation?.fulfill()
+                assertexpectation = nil
+                expecteBookmarks = nil
+            }
+
+        let expectation1 = self.expectation(description: "Merging the initial uncolliding bookmarks")
+        assertexpectation = expectation1
+        expecteBookmarks = [
+            .init(remoteID: "remID:1", page: 10, creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(remoteID: "remID:2", page: 15, creationDate: .init(timeIntervalSince1970: 2_000)),
+            .init(page: 23, creationDate: Date()),
+            .init(page: 25, creationDate: Date()),
+            .init(page: 100, creationDate: Date()),
+        ]
+
+        let syncedBookmarks: [SyncedPageBookmarkPersistenceModel] = [
+            .init(page: 10, remoteID: "remID:1", creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(page: 15, remoteID: "remID:2", creationDate: .init(timeIntervalSince1970: 2_000)),
+        ]
+        let newPages: [Int] = [ 23, 25, 100 ]
+        for bookmark in syncedBookmarks {
+            try await syncedPersistence.insertBookmark(bookmark)
+        }
+        for page in newPages {
+            try await localMutationsPersistence.createBookmark(page: page)
+        }
+        await fulfillment(of: [expectation1])
+
+        let expectation2 = self.expectation(description: "Merging: one synced bookmark removed")
+        assertexpectation = expectation2
+        expecteBookmarks = [
+            .init(remoteID: "remID:2", page: 15, creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(page: 23, creationDate: Date()),
+            .init(page: 25, creationDate: Date()),
+            .init(page: 100, creationDate: Date()),
+        ]
+        try await localMutationsPersistence.removeBookmark(page: 10, remoteID: "remID:1")
+
+        await fulfillment(of: [expectation2], timeout: 1)
+
+        let expectation3 = self.expectation(description: "Merging: Locally adding the removed bookmark")
+        assertexpectation = expectation3
+        expecteBookmarks = [
+            .init(remoteID: "remID:2", page: 15, creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(page: 23, creationDate: Date()),
+            .init(page: 25, creationDate: Date()),
+            .init(page: 100, creationDate: Date()),
+            .init(page: 10, creationDate: Date()),
+        ]
+        try await localMutationsPersistence.createBookmark(page: 10)
+        
+        await fulfillment(of: [expectation3], timeout: 1)
+
+
+        cancellable.cancel()
+    }
 }

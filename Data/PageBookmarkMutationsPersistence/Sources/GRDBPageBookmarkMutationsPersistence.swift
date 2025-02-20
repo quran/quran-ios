@@ -42,6 +42,16 @@ public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersist
         .eraseToAnyPublisher()
     }
 
+    public func bookmarkMutations(page: Int) async throws -> [MutatedPageBookmarkModel] {
+        try await db.read { db in
+            try GRDBMutatedPageBookmark.fetchAll(
+                db.makeStatement(sql: "SELECT * FROM \(GRDBMutatedPageBookmark.databaseTableName) WHERE page = ?"),
+                arguments: [page]
+            )
+            .map { $0.toMutatedBookmarkModel() }
+        }
+    }
+
     public func bookmarks() async throws -> [MutatedPageBookmarkModel] {
         try await db.read { db in
             try GRDBMutatedPageBookmark.fetchAll(db)

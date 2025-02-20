@@ -18,6 +18,8 @@ public protocol PageBookmarkMutationsPersistence {
 
     func bookmarks() async throws -> [MutatedPageBookmarkModel]
 
+    func bookmarkMutations(page: Int) async throws -> [MutatedPageBookmarkModel]
+
     func createBookmark(page: Int) async throws
 
     func removeBookmark(page: Int, remoteID: String?) async throws

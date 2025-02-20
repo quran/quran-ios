@@ -10,6 +10,7 @@ import XCTest
 import SQLitePersistence
 import SyncedPageBookmarkPersistence
 import PageBookmarkMutationsPersistence
+import AsyncUtilitiesForTesting
 @testable import PageBookmarkPersistence
 
 final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
@@ -184,5 +185,40 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
 
 
         cancellable.cancel()
+    }
+
+    func testDeletionsSideEffects() async throws {
+        // Initialize with syncrhonized data.
+        let syncedBookmarks: [SyncedPageBookmarkPersistenceModel] = [
+            .init(page: 10, remoteID: "remID:1", creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(page: 22, remoteID: "remID:2", creationDate: .init(timeIntervalSince1970: 3_000)),
+        ]
+        for bookmark in syncedBookmarks {
+            try await syncedPersistence.insertBookmark(bookmark)
+        }
+
+        // Delete
+        try await persistence.removePageBookmark(22)
+
+        // Assert
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.page,
+                                   22,
+                                   "Expected to have a record for page 22 in the local mutations persistence")
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.remoteID,
+                                   "remID:2",
+                                   "Expected to have a the correct remote ID")
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.mutation,
+                                   .deleted,
+                                   "Expected to have the correct mutation event.")
+
+        //
+        // Preparses some local mutations
+        try await localMutationsPersistence.createBookmark(page: 301)
+
+        // Delete
+        try await persistence.removePageBookmark(301)
+
+        // Assert
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().map(\.page), [22])
     }
 }

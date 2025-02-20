@@ -12,7 +12,7 @@ import PageBookmarkMutationsPersistence
 import VLogging
 
 // TODO: Might need to rename this.
-public final class SynchronizedPageBookmarkPersistence: PageBookmarkPersistence {
+public struct SynchronizedPageBookmarkPersistence: PageBookmarkPersistence {
     private let syncedBookmarksPersistence: SyncedPageBookmarkPersistence
     private let bookmarkMutationsPersistence: PageBookmarkMutationsPersistence
 
@@ -50,6 +50,7 @@ public final class SynchronizedPageBookmarkPersistence: PageBookmarkPersistence 
         return syncedPublisher
             .combineLatest(mutatedPublisher)
             .map{ syncedBookmarks, mutatedBookmarks in
+                // TODO: Replace with a set!
                 let mutationByPage = mutatedBookmarks.reduce(into: [Int:MutatedPageBookmarkModel]()) { partialResult, bookmark in
                     partialResult[bookmark.page] = bookmark
                 }
@@ -68,6 +69,11 @@ public final class SynchronizedPageBookmarkPersistence: PageBookmarkPersistence 
     }
     
     public func removePageBookmark(_ page: Int) async throws {
-        fatalError()
+        let mutations = try await bookmarkMutationsPersistence.bookmarkMutations(page: page)
+        if let syncedBookmark = try await syncedBookmarksPersistence.bookmark(page: page) {
+            try await bookmarkMutationsPersistence.removeBookmark(page: page, remoteID: syncedBookmark.remoteID)
+        } else {
+            try await bookmarkMutationsPersistence.removeBookmark(page: page, remoteID: nil)
+        }
     }
 }

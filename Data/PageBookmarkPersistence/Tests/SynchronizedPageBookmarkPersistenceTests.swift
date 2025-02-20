@@ -187,6 +187,59 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         cancellable.cancel()
     }
 
+    func testMutationsPblished() async throws {
+        // Initialize with syncrhonized data.
+        let syncedBookmarks: [SyncedPageBookmarkPersistenceModel] = [
+            .init(page: 10, remoteID: "remID:1", creationDate: .init(timeIntervalSince1970: 1_000)),
+            .init(page: 22, remoteID: "remID:2", creationDate: .init(timeIntervalSince1970: 3_000)),
+            .init(page: 33, remoteID: "remID:3", creationDate: .init(timeIntervalSince1970: 10_000)),
+        ]
+        for bookmark in syncedBookmarks {
+            try await syncedPersistence.insertBookmark(bookmark)
+        }
+
+        // Insert and delete some records locally
+        try await localMutationsPersistence.createBookmark(page: 40)
+        try await localMutationsPersistence.removeBookmark(page: 22, remoteID: "remID:2")
+
+        var assertexpectation: XCTestExpectation?
+        var expecteBookmarkedPages: [Int]?
+        let cancellable = persistence.pageBookmarks()
+            .sink { bookmarks in
+                print("Received bookmarks on: \(bookmarks.map(\.page))")
+                guard let expected = expecteBookmarkedPages else { return }
+                guard Set(expected) == Set(bookmarks.map(\.page)) else {
+                    return
+                }
+                assertexpectation?.fulfill()
+                assertexpectation = nil
+                expecteBookmarkedPages = nil
+            }
+
+        // Insert a new one
+        let expectation1 = self.expectation(description: "After creating a new bookmark")
+        assertexpectation = expectation1
+        expecteBookmarkedPages = [10, 33, 40, 230]
+
+        try await persistence.insertPageBookmark(230)
+
+        await fulfillment(of: [expectation1], timeout: 1)
+
+        // Insert some and remove some
+        let expectation2 = self.expectation(description: "After creating some and removing some")
+        assertexpectation = expectation2
+        expecteBookmarkedPages = [22, 33, 40, 100, 230]
+
+        try await persistence.removePageBookmark(10)
+        try await persistence.insertPageBookmark(100)
+        try await persistence.insertPageBookmark(22) // Add it again
+
+        await fulfillment(of: [expectation2], timeout: 2)
+
+
+        cancellable.cancel()
+    }
+
     func testDeletionsSideEffects() async throws {
         // Initialize with syncrhonized data.
         let syncedBookmarks: [SyncedPageBookmarkPersistenceModel] = [
@@ -210,6 +263,9 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.mutation,
                                    .deleted,
                                    "Expected to have the correct mutation event.")
+        try await AsyncAssertEqual(try await syncedPersistence.bookmark(page: 22) != nil,
+                                   true,
+                                   "Expected not to be removed from the synced table")
 
         //
         // Preparses some local mutations
@@ -220,5 +276,38 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
 
         // Assert
         try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().map(\.page), [22])
+    }
+
+    func testCreationsSideEffects() async throws {
+        // Initialize with syncrhonized data.
+        let syncedBookmarks: [SyncedPageBookmarkPersistenceModel] = [
+            .init(page: 10, remoteID: "remID:1", creationDate: .init(timeIntervalSince1970: 1_000)),
+        ]
+        for bookmark in syncedBookmarks {
+            try await syncedPersistence.insertBookmark(bookmark)
+        }
+
+        // Insert
+        try await persistence.insertPageBookmark(123)
+
+        // Assert
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.page,
+                                   123,
+                                   "Expected to have a record for page 123 in the local mutations persistence")
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.remoteID,
+                                   nil,
+                                   "Expected to have a nil remote ID.")
+        try await AsyncAssertEqual(try await localMutationsPersistence.bookmarks().first?.mutation,
+                                   .created,
+                                   "Expected to have the correct mutation event.")
+        try await AsyncAssertEqual(try await syncedPersistence.bookmark(page: 123) == nil,
+                                   true,
+                                   "Expected not to be added in the synced table")
+
+        // Attempt duplicates
+        await AsyncAssertThrows(try await persistence.insertPageBookmark(10), nil,
+                                "Should fail if tried to duplicate")
+        await AsyncAssertThrows(try await persistence.insertPageBookmark(123), nil,
+                                "Should fail if tried to duplicate")
     }
 }

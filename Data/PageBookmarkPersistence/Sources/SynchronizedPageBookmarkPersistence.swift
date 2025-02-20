@@ -65,7 +65,18 @@ public struct SynchronizedPageBookmarkPersistence: PageBookmarkPersistence {
     }
 
     public func insertPageBookmark(_ page: Int) async throws {
-        fatalError()
+        if let _ = try await syncedBookmarksPersistence.bookmark(page: page) {
+            let mutations = try await bookmarkMutationsPersistence.bookmarkMutations(page: page)
+            if mutations.filter({ $0.mutation == .created} ).isEmpty {
+                try await bookmarkMutationsPersistence.createBookmark(page: page)
+            } else {
+                // TODO: Throw a specific error!
+                throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
+            }
+        }
+        else {
+            try await bookmarkMutationsPersistence.createBookmark(page: page)
+        }
     }
     
     public func removePageBookmark(_ page: Int) async throws {

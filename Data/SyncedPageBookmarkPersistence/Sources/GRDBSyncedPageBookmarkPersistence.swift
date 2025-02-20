@@ -44,6 +44,16 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         }
     }
 
+    public func bookmark(page: Int) async throws -> SyncedPageBookmarkPersistenceModel? {
+        try await db.read { db in
+            try GRDBSyncedPageBookmark.fetchOne(
+                db.makeStatement(sql: "SELECT * FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE page = ?"),
+                arguments: [page]
+            )
+            .map { $0.toPersistenceModel() }
+        }
+    }
+
     public func insertBookmark(_ bookmark: SyncedPageBookmarkPersistenceModel) async throws {
         try await db.write { db in
             var bookmark = GRDBSyncedPageBookmark(bookmark)

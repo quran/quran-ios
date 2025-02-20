@@ -12,7 +12,7 @@ import SQLitePersistence
 import VLogging
 
 public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
-    private let db: DatabaseConnection
+    // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
         self.db = db
@@ -27,6 +27,8 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
         let fileURL = directory.appendingPathComponent("pagebookmarks.db", isDirectory: false)
         self.init(db: DatabaseConnection(url: fileURL, readonly: false))
     }
+
+    // MARK: Public
 
     public func pageBookmarksPublisher() throws -> AnyPublisher<[SyncedPageBookmarkPersistenceModel], Never> {
         do {
@@ -70,6 +72,10 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
             try db.execute(sql: "DELETE FROM \(GRDBSyncedPageBookmark.databaseTableName) WHERE remote_id = ?", arguments: [remoteID])
         }
     }
+
+    // MARK: Private
+
+    private let db: DatabaseConnection
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()

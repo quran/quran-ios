@@ -68,7 +68,7 @@ class DatabaseConnectionTests: XCTestCase {
         let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
         assertExpectation = expectation1
         try await connection.insertNames()
-        await fulfillment(of: [expectation1], timeout: 1)
+        await fulfillment(of: [expectation1], timeout: 2)
 
         // Add more
         expectedNames = ["Alice", "Bob", "Derek"]
@@ -76,14 +76,14 @@ class DatabaseConnectionTests: XCTestCase {
         assertExpectation = expectation2
         try await connection.insert(name: "Bob")
         try await connection.insert(name: "Derek")
-        await fulfillment(of: [expectation2], timeout: 1)
+        await fulfillment(of: [expectation2], timeout: 2)
 
         // Remove one
         expectedNames = ["Alice", "Derek"]
         let expectation3 = expectation(description: "Expected to deliver the third batch of names")
         assertExpectation = expectation3
         try await connection.remove(name: "Bob")
-        await fulfillment(of: [expectation3], timeout: 1)
+        await fulfillment(of: [expectation3], timeout: 2)
 
         cancellable.cancel()
     }

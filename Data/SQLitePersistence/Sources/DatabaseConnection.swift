@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-05-25.
 //
 
+import Combine
 import Foundation
 import GRDB
 import Utilities
@@ -107,6 +108,20 @@ public final class DatabaseConnection: Sendable {
             logger.error("General error while executing query. Error: \(error).")
             throw PersistenceError(error, databaseURL: databaseURL)
         }
+    }
+
+    /// Creates a publisher that tracks changes in the results of database requests,
+    /// and notifies fresh values whenever the database changes
+    ///
+    /// The first value is notified when the publisher is created. Subsequent changes *may* get coalesced in notifications.
+    public func readPublisher<T>(_ block: @Sendable @escaping (Database) throws -> T) throws -> AnyPublisher<T, Error> {
+        // - ValueObservation may coalesce subsequent changes into a single notification
+        // - ValueObservation fetches a fresh value immediately after a change *is committed in the database*.
+        // - By default, delivers on the main thread.
+        ValueObservation
+            .tracking(block)
+            .publisher(in: try getDatabase())
+            .eraseToAnyPublisher()
     }
 
     public func write<T>(_ block: @Sendable @escaping (Database) throws -> T) async throws -> T {

@@ -214,7 +214,7 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
-        target(type, name: "PageBookmarkMutationsPersistence", dependencies: [
+        target(type, name: "MutatedPageBookmarkPersistence", dependencies: [
             "SQLitePersistence",
             .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [

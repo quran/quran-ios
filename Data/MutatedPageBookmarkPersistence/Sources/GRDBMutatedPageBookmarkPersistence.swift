@@ -1,5 +1,5 @@
 //
-//  GRDBPageBookmarkMutationsPersistence.swift
+//  GRDBMutatedPageBookmarkPersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 10/02/2025.
@@ -11,7 +11,7 @@ import GRDB
 import SQLitePersistence
 import VLogging
 
-public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersistence {
+public struct GRDBMutatedPageBookmarkPersistence: MutatedPageBookmarkPersistence {
     // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
@@ -63,7 +63,7 @@ public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersist
         let persisted = try await fetchCreatedBookmark(forPage: page)
         if persisted?.deleted == false {
             logger.error("[PageBookamrksMutatiosn] Adding a duplicate page bookmark.")
-            throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
+            throw MutatedPageBookmarkPersistenceError.bookmarkAlreadyExists(page: page)
         }
 
         // If `persisted` is still not nil, then it's been deleted, and it was a synced one.
@@ -82,7 +82,7 @@ public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersist
         if hasCreatedRecord && remoteID != nil {
             logger.error("[PageBookamrksMutatiosn] Illegal state: Deleting a bookmark on page, while there's an unsynced bookmark on the same page.")
             let reason = "Deleting a synced bookmark on a page, after creating an unsynced one."
-            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
+            throw MutatedPageBookmarkPersistenceError.illegalState(reason: reason, page: page)
         } else if hasCreatedRecord && remoteID == nil {
             logger.trace("[PageBookamrksMutatiosn] Removing records for a page bookmark, after deleting an unsynced bookmark.")
             try await deleteAll(forPage: page)
@@ -92,7 +92,7 @@ public struct GRDBPageBookmarkMutationsPersistence: PageBookmarkMutationsPersist
         } else {
             logger.error("[PageBookamrksMutatiosn] Illegal state: Deleting an unsynced page bookmark, while there's no record for it.")
             let reason = "Deleting an unsynced bookmark on a page with no record of being created."
-            throw PageBookmarkMutationsPersistenceError.illegalState(reason: reason, page: page)
+            throw MutatedPageBookmarkPersistenceError.illegalState(reason: reason, page: page)
         }
     }
 

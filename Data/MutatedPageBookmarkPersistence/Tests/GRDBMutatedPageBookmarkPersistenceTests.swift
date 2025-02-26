@@ -1,5 +1,5 @@
 //
-//  GRDBPageBookmarkMutationsPersistenceTests.swift
+//  GRDBMutatedPageBookmarkPersistenceTests.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 11/02/2025.
@@ -9,9 +9,9 @@ import AsyncUtilitiesForTesting
 import Foundation
 import SQLitePersistence
 import XCTest
-@testable import PageBookmarkMutationsPersistence
+@testable import MutatedPageBookmarkPersistence
 
-final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
+final class GRDBMutatedPageBookmarkPersistenceTests: XCTestCase {
     // MARK: Internal
 
     override func setUp() {
@@ -19,7 +19,7 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
         testURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
         db = DatabaseConnection(url: testURL, readonly: false)
-        persistence = GRDBPageBookmarkMutationsPersistence(db: db)
+        persistence = GRDBMutatedPageBookmarkPersistence(db: db)
     }
 
     override func tearDown() {
@@ -192,5 +192,5 @@ final class GRDBPageBookmarkMutationsPersistenceTests: XCTestCase {
 
     private var testURL: URL!
     private var db: DatabaseConnection!
-    private var persistence: GRDBPageBookmarkMutationsPersistence!
+    private var persistence: GRDBMutatedPageBookmarkPersistence!
 }

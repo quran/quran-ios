@@ -203,7 +203,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistence",
             "QuranKit",
             "SyncedPageBookmarkPersistence",
-            "PageBookmarkMutationsPersistence",
+            "MutatedPageBookmarkPersistence",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",

@@ -8,16 +8,16 @@
 import Foundation
 import Combine
 import SyncedPageBookmarkPersistence
-import PageBookmarkMutationsPersistence
+import MutatedPageBookmarkPersistence
 import VLogging
 
 // TODO: Might need to rename this.
 public struct SynchronizedPageBookmarkPersistence: PageBookmarkPersistence {
     private let syncedBookmarksPersistence: SyncedPageBookmarkPersistence
-    private let bookmarkMutationsPersistence: PageBookmarkMutationsPersistence
+    private let bookmarkMutationsPersistence: MutatedPageBookmarkPersistence
 
     init(syncedBookmarksPersistence: SyncedPageBookmarkPersistence,
-         bookmarkMutationsPersistence: PageBookmarkMutationsPersistence) {
+         bookmarkMutationsPersistence: MutatedPageBookmarkPersistence) {
         self.syncedBookmarksPersistence = syncedBookmarksPersistence
         self.bookmarkMutationsPersistence = bookmarkMutationsPersistence
     }

@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import SQLitePersistence
 import SyncedPageBookmarkPersistence
-import PageBookmarkMutationsPersistence
+import MutatedPageBookmarkPersistence
 import AsyncUtilitiesForTesting
 @testable import PageBookmarkPersistence
 
@@ -18,7 +18,7 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
     private var testURL: URL!
     private var db: DatabaseConnection!
     private var syncedPersistence: SyncedPageBookmarkPersistence!
-    private var localMutationsPersistence: GRDBPageBookmarkMutationsPersistence!
+    private var localMutationsPersistence: GRDBMutatedPageBookmarkPersistence!
     private var persistence: SynchronizedPageBookmarkPersistence!
 
     override func setUp() {
@@ -27,7 +27,7 @@ final class SynchronizedPageBookmarkPersistenceTests: XCTestCase {
         testURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
         db = DatabaseConnection(url: testURL, readonly: false)
         syncedPersistence = GRDBSyncedPageBookmarkPersistence(directory: testURL)
-        localMutationsPersistence = GRDBPageBookmarkMutationsPersistence(directory: testURL)
+        localMutationsPersistence = GRDBMutatedPageBookmarkPersistence(directory: testURL)
         persistence = SynchronizedPageBookmarkPersistence(syncedBookmarksPersistence: syncedPersistence,
                                                           bookmarkMutationsPersistence: localMutationsPersistence)
     }

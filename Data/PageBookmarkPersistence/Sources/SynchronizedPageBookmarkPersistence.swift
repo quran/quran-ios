@@ -65,17 +65,23 @@ public struct SynchronizedPageBookmarkPersistence: PageBookmarkPersistence {
     }
 
     public func insertPageBookmark(_ page: Int) async throws {
-        if let _ = try await syncedBookmarksPersistence.bookmark(page: page) {
-            let mutations = try await bookmarkMutationsPersistence.bookmarkMutations(page: page)
-            if mutations.filter({ $0.mutation == .created} ).isEmpty {
-                try await bookmarkMutationsPersistence.createBookmark(page: page)
-            } else {
-                // TODO: Throw a specific error!
-                throw PageBookmarkMutationsPersistenceError.bookmarkAlreadyExists(page: page)
-            }
+        let remote = try await syncedBookmarksPersistence.bookmark(page: page)
+        let mutations = try await bookmarkMutationsPersistence.bookmarkMutations(page: page)
+
+        let hasRemote = remote != nil
+        let remoteDeleted = mutations.filter{ $0.mutation == .deleted }.count > 0
+        let createdLocally = mutations.filter{ $0.mutation == .created }.count > 0
+
+        guard !createdLocally && ( !hasRemote || remoteDeleted ) else {
+            // TODO: Throw a specific error!
+            throw MutatedPageBookmarkPersistenceError.bookmarkAlreadyExists(page: page)
         }
-        else {
+
+        do {
             try await bookmarkMutationsPersistence.createBookmark(page: page)
+        } catch {
+            logger.error("Failed to create a bookmark mutation: \(error)")
+            throw error
         }
     }
     

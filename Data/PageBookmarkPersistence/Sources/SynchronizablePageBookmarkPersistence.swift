@@ -1,26 +1,29 @@
 //
-//  File.swift
+//  SynchronizablePageBookmarkPersistence.swift
 //  QuranEngine
 //
 //  Created by Mohannad Hassan on 18/02/2025.
 //
 
-import Foundation
 import Combine
-import SyncedPageBookmarkPersistence
+import Foundation
 import MutatedPageBookmarkPersistence
+import SyncedPageBookmarkPersistence
 import VLogging
 
 /// The repository that tracks the state of synchronized and unsynchronized bookmarks.
 public struct SynchronizablePageBookmarkPersistence: PageBookmarkPersistence {
-    private let syncedBookmarksPersistence: SyncedPageBookmarkPersistence
-    private let bookmarkMutationsPersistence: MutatedPageBookmarkPersistence
+    // MARK: Lifecycle
 
-    init(syncedBookmarksPersistence: SyncedPageBookmarkPersistence,
-         bookmarkMutationsPersistence: MutatedPageBookmarkPersistence) {
+    init(
+        syncedBookmarksPersistence: SyncedPageBookmarkPersistence,
+        bookmarkMutationsPersistence: MutatedPageBookmarkPersistence
+    ) {
         self.syncedBookmarksPersistence = syncedBookmarksPersistence
         self.bookmarkMutationsPersistence = bookmarkMutationsPersistence
     }
+
+    // MARK: Public
 
     public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         let syncedPublisher = syncedPageBookmarksPublisher()
@@ -28,43 +31,16 @@ public struct SynchronizablePageBookmarkPersistence: PageBookmarkPersistence {
 
         return syncedPublisher
             .combineLatest(mutatedPublisher)
-            .map{ syncedBookmarks, mutatedBookmarks in
+            .map { syncedBookmarks, mutatedBookmarks in
                 let mutatedPages = Set(mutatedBookmarks.map(\.page))
 
-                let uneditedSynced = syncedBookmarks.filter{ !mutatedPages.contains($0.page) }
-                let newBookmarks = mutatedBookmarks.filter{ $0.mutation != .deleted }
-                    .map{ PageBookmarkPersistenceModel(page: $0.page, creationDate: $0.modificationDate) }
+                let uneditedSynced = syncedBookmarks.filter { !mutatedPages.contains($0.page) }
+                let newBookmarks = mutatedBookmarks.filter { $0.mutation != .deleted }
+                    .map { PageBookmarkPersistenceModel(page: $0.page, creationDate: $0.modificationDate) }
 
                 return uneditedSynced + newBookmarks
             }
             .eraseToAnyPublisher()
-    }
-
-    private func syncedPageBookmarksPublisher() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
-        do {
-            return try syncedBookmarksPersistence.pageBookmarksPublisher().map{
-                $0.map{ PageBookmarkPersistenceModel(remoteID: $0.remoteID,
-                                                     page: $0.page,
-                                                     creationDate: $0.creationDate)
-                }
-            }
-            .eraseToAnyPublisher()
-        }
-        catch {
-            logger.error("Failed to create a publisher for synced page bookmarks: \(error)")
-            return Empty<[PageBookmarkPersistenceModel], Never>().eraseToAnyPublisher()
-        }
-    }
-
-    private func mutatedPageBookmarksPublisher() -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
-        do {
-            return try bookmarkMutationsPersistence.bookmarksPublisher()
-                .eraseToAnyPublisher()
-        }
-        catch {
-            logger.error("Failed to create a publisher for mutated apge bookmarks: \(error)")
-            return Empty<[MutatedPageBookmarkModel], Never>().eraseToAnyPublisher()
-        }
     }
 
     public func insertPageBookmark(_ page: Int) async throws {
@@ -72,10 +48,10 @@ public struct SynchronizablePageBookmarkPersistence: PageBookmarkPersistence {
         let mutations = try await bookmarkMutationsPersistence.bookmarkMutations(page: page)
 
         let hasRemote = remote != nil
-        let remoteDeleted = mutations.filter{ $0.mutation == .deleted }.count > 0
-        let createdLocally = mutations.filter{ $0.mutation == .created }.count > 0
+        let remoteDeleted = mutations.filter { $0.mutation == .deleted }.count > 0
+        let createdLocally = mutations.filter { $0.mutation == .created }.count > 0
 
-        guard !createdLocally && ( !hasRemote || remoteDeleted ) else {
+        guard !createdLocally && (!hasRemote || remoteDeleted) else {
             throw PageBookmarkPersistenceError.bookmarkAlreadyExists
         }
 
@@ -86,7 +62,7 @@ public struct SynchronizablePageBookmarkPersistence: PageBookmarkPersistence {
             throw error
         }
     }
-    
+
     public func removePageBookmark(_ page: Int) async throws {
         do {
             // Will rely on MutatedPageBookmarkPersistence to handle its internal state.
@@ -98,6 +74,38 @@ public struct SynchronizablePageBookmarkPersistence: PageBookmarkPersistence {
         } catch {
             logger.error("Failed to remove a bookmark locally: \(error). Rethrown.")
             throw error
+        }
+    }
+
+    // MARK: Private
+
+    private let syncedBookmarksPersistence: SyncedPageBookmarkPersistence
+    private let bookmarkMutationsPersistence: MutatedPageBookmarkPersistence
+
+    private func syncedPageBookmarksPublisher() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
+        do {
+            return try syncedBookmarksPersistence.pageBookmarksPublisher().map {
+                $0.map { PageBookmarkPersistenceModel(
+                    remoteID: $0.remoteID,
+                    page: $0.page,
+                    creationDate: $0.creationDate
+                )
+                }
+            }
+            .eraseToAnyPublisher()
+        } catch {
+            logger.error("Failed to create a publisher for synced page bookmarks: \(error)")
+            return Empty<[PageBookmarkPersistenceModel], Never>().eraseToAnyPublisher()
+        }
+    }
+
+    private func mutatedPageBookmarksPublisher() -> AnyPublisher<[MutatedPageBookmarkModel], Never> {
+        do {
+            return try bookmarkMutationsPersistence.bookmarksPublisher()
+                .eraseToAnyPublisher()
+        } catch {
+            logger.error("Failed to create a publisher for mutated apge bookmarks: \(error)")
+            return Empty<[MutatedPageBookmarkModel], Never>().eraseToAnyPublisher()
         }
     }
 }

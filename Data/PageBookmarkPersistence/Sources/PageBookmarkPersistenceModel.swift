@@ -15,7 +15,6 @@ public struct PageBookmarkPersistenceModel: Equatable {
 }
 
 extension PageBookmarkPersistenceModel {
-
     init(page: Int, creationDate: Date) {
         self.init(remoteID: nil, page: page, creationDate: creationDate)
     }

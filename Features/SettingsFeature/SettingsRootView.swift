@@ -111,13 +111,15 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
-            // TODO: Pending translations, and hiding if OAuth is not configured.
-            NoorBasicSection {
-                NoorListItem(
-                    title: .text(l("Login with Quran.com")),
-                    action: loginAction
-                )
-            }
+            #if QURAN_SYNC
+                // TODO: Pending translations, and hiding if OAuth is not configured.
+                NoorBasicSection {
+                    NoorListItem(
+                        title: .text(l("Login with Quran.com")),
+                        action: loginAction
+                    )
+                }
+            #endif
 
             NoorBasicSection {
                 NoorListItem(

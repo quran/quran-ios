@@ -22,7 +22,7 @@ struct AudioDownloadsView: View {
             start: { await viewModel.start() },
             downloadAction: { await viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
-            deleteAction: { await viewModel.deleteReciterFiles($0.reciter) }
+            deleteAction: { @Sendable item in await viewModel.deleteReciterFiles(item.reciter) }
         )
     }
 }
@@ -48,7 +48,7 @@ private struct AudioDownloadsViewUI: View {
                         accessory: accessory(item)
                     )
                 },
-                onDelete: deleteAction
+                onDelete: { @Sendable in await deleteAction($0) }
             )
 
             AudioDownloadsSection(
@@ -63,7 +63,7 @@ private struct AudioDownloadsViewUI: View {
                 onDelete: nil
             )
         }
-        .task(start)
+        .task { await start() }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }

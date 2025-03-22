@@ -259,6 +259,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "SQLitePersistence", dependencies: [
             "Utilities",
             "VLogging",
+            "Localization",
             .product(name: "GRDB", package: "GRDB.swift"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
@@ -293,6 +294,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "NetworkSupport", dependencies: [
             "Crashing",
+            "Localization",
         ], testDependencies: [
             "Utilities",
             "AsyncUtilitiesForTesting",

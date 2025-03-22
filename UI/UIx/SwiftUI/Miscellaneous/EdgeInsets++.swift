@@ -13,7 +13,7 @@ extension EdgeInsets {
     }
 }
 
-extension EdgeInsets: Hashable {
+extension EdgeInsets: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(leading)
         hasher.combine(trailing)

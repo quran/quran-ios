@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import Localization
 
 public enum FileSystemError: Error {
     case noDiskSpace
@@ -36,5 +37,17 @@ public enum FileSystemError: Error {
         } else {
             self = .unknown(error)
         }
+    }
+}
+
+extension FileSystemError: LocalizedError {
+    public var errorDescription: String? {
+        let text: String = switch self {
+        case .unknown:
+            l("error.message.general")
+        case .noDiskSpace:
+            l("error.message.no_disk_space")
+        }
+        return text
     }
 }

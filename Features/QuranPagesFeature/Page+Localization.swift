@@ -47,4 +47,4 @@ private extension Sura {
     }
 }
 
-extension Page: Pageable { }
+extension Page: @retroactive Pageable { }

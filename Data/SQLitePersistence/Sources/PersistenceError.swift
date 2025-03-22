@@ -18,6 +18,9 @@
 //  GNU General Public License for more details.
 //
 
+import Foundation
+import Localization
+
 public enum PersistenceError: Error {
     case general(String)
     case openDatabase(Error, filePath: String)
@@ -29,5 +32,11 @@ public enum PersistenceError: Error {
 
     public static func generalError(_ error: Error, info: String) -> PersistenceError {
         .general("error: \(error), info: \(info)")
+    }
+}
+
+extension PersistenceError: LocalizedError {
+    public var errorDescription: String? {
+        l("error.message.general")
     }
 }

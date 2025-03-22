@@ -66,7 +66,7 @@ private struct SearchViewUI: View {
                 }
             }
         }
-        .task(start)
+        .task { await start() }
         .errorAlert(error: $error)
     }
 

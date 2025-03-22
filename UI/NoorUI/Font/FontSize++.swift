@@ -8,16 +8,6 @@
 import CoreFoundation
 import QuranText
 
-extension FontSize: Strideable {
-    public func distance(to other: FontSize) -> Int {
-        Stride(other.rawValue) - Stride(rawValue)
-    }
-
-    public func advanced(by n: Int) -> FontSize {
-        FontSize(rawValue: Stride(rawValue) + n)!
-    }
-}
-
 extension FontSize {
     func fontSize(forMediumSize size: CGFloat) -> CGFloat {
         let factor: CGFloat = switch self {

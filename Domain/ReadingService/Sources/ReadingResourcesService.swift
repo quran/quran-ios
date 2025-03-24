@@ -77,7 +77,7 @@ public actor ReadingResourcesService {
 
     // MARK: Private
 
-    private let preferences = ReadingPreferences.shared
+    private nonisolated let preferences = ReadingPreferences.shared
 
     private var readingTask: CancellableTask?
     private var readingsTask: CancellableTask?

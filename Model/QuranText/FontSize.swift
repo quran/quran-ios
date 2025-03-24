@@ -59,3 +59,13 @@ extension FontSize {
         }
     }
 }
+
+extension FontSize: Strideable {
+    public func distance(to other: FontSize) -> Int {
+        Stride(other.rawValue) - Stride(rawValue)
+    }
+
+    public func advanced(by n: Int) -> FontSize {
+        FontSize(rawValue: Stride(rawValue) + n)!
+    }
+}

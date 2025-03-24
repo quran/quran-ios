@@ -97,7 +97,7 @@ private struct ReciterListViewUI: View {
                 }
             )
         }
-        .task(start)
+        .task { await start() }
         .navigationTitle(l("reciters.title"))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

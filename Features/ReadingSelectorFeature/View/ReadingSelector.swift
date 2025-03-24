@@ -83,7 +83,7 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
             Color.systemGroupedBackground
                 .edgesIgnoringSafeArea(.all)
         )
-        .task(start)
+        .task { await start() }
         .errorAlert(error: $error, retry: retry)
     }
 

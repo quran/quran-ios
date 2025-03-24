@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Localization
 
 public enum NetworkError: Error {
     /// Unknown or not supported error.
@@ -48,6 +49,21 @@ public enum NetworkError: Error {
             }
         } else {
             self = .unknown(error)
+        }
+    }
+}
+
+extension NetworkError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .unknown, .serverError, .serverNotReachable:
+            return l("error.message.general")
+        case .notConnectedToInternet:
+            return l("error.message.not_connected_to_internet")
+        case .internationalRoamingOff:
+            return l("error.message.international_roaming_off")
+        case .connectionLost:
+            return l("error.message.connection_lost")
         }
     }
 }

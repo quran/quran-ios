@@ -101,7 +101,7 @@ final class NotesViewModel: ObservableObject {
     private let navigateTo: (AyahNumber) -> Void
     private let readingPreferences = ReadingPreferences.shared
 
-    private func noteItems(with notes: [Note]) async -> [NoteItem] {
+    private nonisolated func noteItems(with notes: [Note]) async -> [NoteItem] {
         await withTaskGroup(of: NoteItem.self) { group in
             for note in notes {
                 group.addTask {

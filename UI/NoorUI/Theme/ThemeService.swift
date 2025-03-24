@@ -28,7 +28,10 @@ public class ThemeService {
             }
             preferenceTheme = newValue
             let newInterfaceStyle = newValue.userInterfaceStyle
-            let windows = UIApplication.shared.windows
+            let windows = UIApplication.shared
+                .connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
             for window in windows {
                 window.overrideUserInterfaceStyle = newInterfaceStyle
             }

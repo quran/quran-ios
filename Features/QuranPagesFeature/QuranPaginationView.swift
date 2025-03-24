@@ -172,7 +172,7 @@ private struct QuranSinglePaginationView<Content: View>: View {
     }
 }
 
-extension Page: Identifiable {
+extension Page: @retroactive Identifiable {
     public var id: Int { pageNumber }
 }
 

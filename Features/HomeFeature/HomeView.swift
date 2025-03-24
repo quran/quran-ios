@@ -58,7 +58,7 @@ private struct HomeViewUI: View {
                 }
             }
         }
-        .task(start)
+        .task { await start() }
     }
 
     func lastPageView(_ lastPage: LastPage) -> some View {

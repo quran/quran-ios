@@ -52,7 +52,7 @@ private struct NotesViewUI: View {
                 }
             }
         }
-        .task(start)
+        .task { await start() }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }

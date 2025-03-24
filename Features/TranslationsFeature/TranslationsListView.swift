@@ -70,7 +70,7 @@ private struct TranslationsListViewUI: View {
                         await deselectAction(item)
                     }
                 },
-                onDelete: deleteAction,
+                onDelete: { await deleteAction($0) },
                 onMove: moveSelectedItemsAction
             )
 
@@ -82,7 +82,7 @@ private struct TranslationsListViewUI: View {
                         await selectAction(item)
                     }
                 },
-                onDelete: deleteAction,
+                onDelete: { await deleteAction($0) },
                 onMove: nil
             )
 
@@ -98,8 +98,8 @@ private struct TranslationsListViewUI: View {
                 )
             }
         }
-        .refreshable(action: refresh)
-        .task(start)
+        .refreshable { await refresh() }
+        .task { await start() }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -258,7 +258,7 @@ struct TranslationsListView_Previews: PreviewProvider {
                     moveSelectedItemsAction: { source, destination in
                         selected.move(fromOffsets: source, toOffset: destination)
                     },
-                    start: {
+                    start: { @MainActor in
                         try! await Task.sleep(nanoseconds: 3_000_000_000)
                         loading = false
                     },

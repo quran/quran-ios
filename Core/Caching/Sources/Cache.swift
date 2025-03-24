@@ -116,4 +116,4 @@ public final class Cache<KeyType: Hashable, ObjectType>: Sendable {
     }
 }
 
-extension NSCache: @unchecked Sendable {}
+extension NSCache: @retroactive @unchecked Sendable {}

@@ -76,7 +76,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .reading
+        view.backgroundColor = .readingBackground
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
 

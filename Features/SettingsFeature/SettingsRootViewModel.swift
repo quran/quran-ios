@@ -34,7 +34,7 @@ final class SettingsRootViewModel: ObservableObject {
         diagnosticsBuilder: DiagnosticsBuilder,
         navigationController: UINavigationController
     ) {
-        theme = themeService.theme
+        appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
         self.analytics = analytics
         self.reviewService = reviewService
@@ -45,7 +45,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.diagnosticsBuilder = diagnosticsBuilder
         self.navigationController = navigationController
 
-        themeService.themePublisher.assign(to: &$theme)
+        themeService.themePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
     }
 
@@ -67,9 +67,9 @@ final class SettingsRootViewModel: ObservableObject {
 
     @Published var audioEnd: AudioEnd
 
-    @Published var theme: Theme {
+    @Published var appearanceMode: AppearanceMode {
         didSet {
-            themeService.theme = theme
+            themeService.appearanceMode = appearanceMode
         }
     }
 

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        window.overrideUserInterfaceStyle = ThemeService.shared.theme.userInterfaceStyle
+        window.overrideUserInterfaceStyle = ThemeService.shared.appearanceMode.userInterfaceStyle
         self.window = window
 
         launchBuilder = LaunchBuilder(container: container)

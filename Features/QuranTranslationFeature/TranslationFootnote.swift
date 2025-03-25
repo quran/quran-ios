@@ -42,7 +42,7 @@ struct TranslationFootnote: View, Identifiable {
                     .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.reading))
+            .background(Color(.readingBackground))
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(lFormat("translation.text.footnote-title", footnoteIndex + 1))
             .toolbar {

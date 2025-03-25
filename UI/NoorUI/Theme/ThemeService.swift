@@ -20,41 +20,65 @@ public class ThemeService {
 
     public static let shared = ThemeService()
 
-    public var theme: Theme {
-        get { preferenceTheme }
+    public var appearanceMode: AppearanceMode {
+        get { preferenceAppearanceMode }
         set {
-            guard newValue != preferenceTheme else {
+            guard newValue != preferenceAppearanceMode else {
                 return
             }
-            preferenceTheme = newValue
-            let newInterfaceStyle = newValue.userInterfaceStyle
-            let windows = UIApplication.shared
-                .connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap(\.windows)
-            for window in windows {
-                window.overrideUserInterfaceStyle = newInterfaceStyle
-            }
+            preferenceAppearanceMode = newValue
+            updateUserInterfaceStyle(themeStyle: themeStyle, appearanceMode: appearanceMode)
         }
     }
 
-    public var themePublisher: AnyPublisher<Theme, Never> {
-        $preferenceTheme
+    public var themeStyle: ThemeStyle {
+        get { preferenceThemeStyle }
+        set {
+            guard newValue != preferenceThemeStyle else {
+                return
+            }
+            preferenceThemeStyle = newValue
+            updateUserInterfaceStyle(themeStyle: newValue, appearanceMode: appearanceMode)
+        }
+    }
+
+    public var themePublisher: AnyPublisher<AppearanceMode, Never> {
+        $preferenceAppearanceMode
     }
 
     // MARK: Private
 
-    private static let themeRaw = PreferenceKey<Int?>(key: "theme", defaultValue: nil)
-    private static let themeTransformer = PreferenceTransformer<Int?, Theme>(
-        rawToValue: { $0.flatMap { Theme(rawValue: $0) } ?? .auto },
+    private static let appearanceModeRaw = PreferenceKey<Int?>(key: "theme", defaultValue: nil)
+    private static let appearanceModeTransformer = PreferenceTransformer<Int?, AppearanceMode>(
+        rawToValue: { $0.flatMap { AppearanceMode(rawValue: $0) } ?? .auto },
         valueToRaw: { $0.rawValue }
     )
 
-    @TransformedPreference(themeRaw, transformer: themeTransformer)
-    private var preferenceTheme: Theme
+    @TransformedPreference(appearanceModeRaw, transformer: appearanceModeTransformer)
+    private var preferenceAppearanceMode: AppearanceMode
+
+    private static let themeStyleRaw = PreferenceKey<Int?>(key: "themeStyle", defaultValue: nil)
+    private static let themeStyleTransformer = PreferenceTransformer<Int?, ThemeStyle>(
+        rawToValue: { $0.flatMap { ThemeStyle(rawValue: $0) } ?? .paper },
+        valueToRaw: { $0.rawValue }
+    )
+
+    @TransformedPreference(themeStyleRaw, transformer: themeStyleTransformer)
+    private var preferenceThemeStyle: ThemeStyle
+
+    private func updateUserInterfaceStyle(themeStyle: ThemeStyle, appearanceMode: AppearanceMode) {
+        let newInterfaceStyle = themeStyle == .quiet ? .dark : appearanceMode.userInterfaceStyle
+        let windows = UIApplication.shared
+            .connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+        for window in windows {
+            window.overrideUserInterfaceStyle = newInterfaceStyle
+        }
+    }
 }
 
-public enum Theme: Int, CustomStringConvertible {
+public enum AppearanceMode: Int, CustomStringConvertible {
     case light = 0
     case dark = 1
     case auto = 2
@@ -70,7 +94,15 @@ public enum Theme: Int, CustomStringConvertible {
     }
 }
 
-extension Theme {
+public enum ThemeStyle: Int {
+    case calm
+    case focus
+    case original
+    case paper
+    case quiet
+}
+
+extension AppearanceMode {
     public var userInterfaceStyle: UIUserInterfaceStyle {
         switch self {
         case .light:

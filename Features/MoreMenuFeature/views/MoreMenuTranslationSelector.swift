@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import SwiftUI
 
 struct MoreMenuTranslationSelector: View {

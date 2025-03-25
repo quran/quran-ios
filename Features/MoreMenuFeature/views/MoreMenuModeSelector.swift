@@ -6,17 +6,18 @@
 //
 
 import Localization
+import QuranText
 import SwiftUI
 
 struct MoreMenuModeSelector: View {
-    @Binding var mode: MoreMenu.Mode
+    @Binding var mode: QuranMode
 
     var body: some View {
         Picker(selection: $mode, label: Text("")) {
             Text(l("menu.arabic"))
-                .tag(MoreMenu.Mode.arabic)
+                .tag(QuranMode.arabic)
             Text(l("menu.translation"))
-                .tag(MoreMenu.Mode.translation)
+                .tag(QuranMode.translation)
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding(.bottom, 1)
@@ -25,7 +26,7 @@ struct MoreMenuModeSelector: View {
 
 struct MoreMenuModeSelector_Previews: PreviewProvider {
     struct Container: View {
-        @State var mode: MoreMenu.Mode
+        @State var mode: QuranMode
 
         var body: some View {
             MoreMenuModeSelector(mode: $mode)

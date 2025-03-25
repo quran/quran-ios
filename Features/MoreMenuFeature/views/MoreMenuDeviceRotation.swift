@@ -5,6 +5,7 @@
 //  Created by Afifi, Mohamed on 9/5/21.
 //
 
+import NoorUI
 import SwiftUI
 import UIx
 import VLogging

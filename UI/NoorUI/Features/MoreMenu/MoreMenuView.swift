@@ -104,7 +104,7 @@ private struct MoreMenuRootView: View {
                     }
 
                     viewBasedOn(state.theme) {
-                        ThemeSelector(theme: $store.theme)
+                        AppearanceModeSelector(appearanceMode: $store.appearanceMode)
                             .background(Color.systemBackground)
                     }
                 }

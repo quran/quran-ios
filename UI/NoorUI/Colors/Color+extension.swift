@@ -24,8 +24,48 @@ public extension UIColor {
         UIColor(named: "appTint", in: .module, compatibleWith: nil) ?? .systemIndigo
     }
 
-    static var reading: UIColor {
+    static var readingBackground: UIColor {
         UIColor(named: "reading", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeCalmText: UIColor {
+        UIColor(named: "theme-calm-text", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeCalmBackground: UIColor {
+        UIColor(named: "theme-calm-bg", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeFocusText: UIColor {
+        UIColor(named: "theme-focus-text", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeFocusBackground: UIColor {
+        UIColor(named: "theme-focus-bg", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeOriginalText: UIColor {
+        UIColor(named: "theme-original-text", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeOriginalBackground: UIColor {
+        UIColor(named: "theme-original-bg", in: .module, compatibleWith: nil)!
+    }
+
+    static var themePaperText: UIColor {
+        UIColor(named: "theme-paper-text", in: .module, compatibleWith: nil)!
+    }
+
+    static var themePaperBackground: UIColor {
+        UIColor(named: "theme-paper-bg", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeQuietText: UIColor {
+        UIColor(named: "theme-quiet-text", in: .module, compatibleWith: nil)!
+    }
+
+    static var themeQuietBackground: UIColor {
+        UIColor(named: "theme-quiet-bg", in: .module, compatibleWith: nil)!
     }
 
     static var pageSeparatorLine: UIColor {

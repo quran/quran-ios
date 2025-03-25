@@ -41,7 +41,7 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.reading
+        view.backgroundColor = UIColor.readingBackground
 
         configureNavigationBar()
 

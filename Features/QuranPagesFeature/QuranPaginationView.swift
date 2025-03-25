@@ -45,7 +45,7 @@ public struct QuranPaginationView<Content: View>: View {
         }
         .environment(\.layoutDirection, .rightToLeft)
         .accessibilityIdentifier("pages")
-        .background(Color(.reading))
+        .background(Color(.readingBackground))
         .ignoresSafeArea()
     }
 

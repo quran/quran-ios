@@ -49,7 +49,7 @@ final class MoreMenuViewModel {
             arabicFontSize: fontSizePreferences.arabicFontSize,
             twoPagesEnabled: preferences.twoPagesEnabled,
             verticalScrollingEnabled: preferences.verticalScrollingEnabled,
-            theme: themeService.theme
+            appearanceMode: themeService.appearanceMode
         )
 
         store.state = model.state
@@ -116,11 +116,11 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$theme
+        store.$appearanceMode
             .dropFirst()
             .sink { [weak self] newValue in
-                logger.info("More Menu: set theme \(newValue)")
-                self?.themeService.theme = newValue
+                logger.info("More Menu: set appearanceMode \(newValue)")
+                self?.themeService.appearanceMode = newValue
             }
             .store(in: &cancellables)
     }

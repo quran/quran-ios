@@ -16,7 +16,7 @@ struct SettingsRootView: View {
 
     var body: some View {
         SettingsRootViewUI(
-            theme: $viewModel.theme,
+            appearanceMode: $viewModel.appearanceMode,
             audioEnd: viewModel.audioEnd.name,
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
@@ -32,7 +32,7 @@ struct SettingsRootView: View {
 }
 
 private struct SettingsRootViewUI: View {
-    @Binding var theme: Theme
+    @Binding var appearanceMode: AppearanceMode
 
     let audioEnd: String
     let navigateToAudioEndSelector: AsyncAction
@@ -49,7 +49,7 @@ private struct SettingsRootViewUI: View {
         NoorList {
             NoorBasicSection {
                 VStack {
-                    ThemeSelector(theme: $theme)
+                    AppearanceModeSelector(appearanceMode: $appearanceMode)
                 }
             }
 
@@ -135,11 +135,11 @@ private struct SettingsRootViewUI: View {
 
 struct SettingsRootView_Previews: PreviewProvider {
     struct Container: View {
-        @State var theme: Theme
+        @State var appearanceMode: AppearanceMode
 
         var body: some View {
             SettingsRootViewUI(
-                theme: $theme,
+                appearanceMode: $appearanceMode,
                 audioEnd: "Surah",
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
@@ -158,7 +158,7 @@ struct SettingsRootView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            Container(theme: .auto)
+            Container(appearanceMode: .auto)
         }
     }
 }

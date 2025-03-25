@@ -1,5 +1,5 @@
 //
-//  ThemeSelector.swift
+//  AppearanceModeSelector.swift
 //
 //
 //  Created by Afifi, Mohamed on 9/5/21.
@@ -9,11 +9,11 @@ import Localization
 import SwiftUI
 import UIx
 
-public struct ThemeSelector: View {
+public struct AppearanceModeSelector: View {
     // MARK: Lifecycle
 
-    public init(theme: Binding<Theme>) {
-        _theme = theme
+    public init(appearanceMode: Binding<AppearanceMode>) {
+        _appearanceMode = appearanceMode
     }
 
     // MARK: Public
@@ -21,14 +21,14 @@ public struct ThemeSelector: View {
     public var body: some View {
         HStack {
             Spacer()
-            ThemeSelection(label: l("theme.light"), selected: theme == .light) {
-                theme = .light
+            AppearanceModeSelection(label: l("theme.light"), selected: appearanceMode == .light) {
+                appearanceMode = .light
             }
-            ThemeSelection(label: l("theme.dark"), selected: theme == .dark) {
-                theme = .dark
+            AppearanceModeSelection(label: l("theme.dark"), selected: appearanceMode == .dark) {
+                appearanceMode = .dark
             }
-            ThemeSelection(label: l("theme.auto"), selected: theme == .auto) {
-                theme = .auto
+            AppearanceModeSelection(label: l("theme.auto"), selected: appearanceMode == .auto) {
+                appearanceMode = .auto
             }
             Spacer()
         }
@@ -36,10 +36,10 @@ public struct ThemeSelector: View {
 
     // MARK: Internal
 
-    @Binding var theme: Theme
+    @Binding var appearanceMode: AppearanceMode
 }
 
-private struct ThemeSelection: View {
+private struct AppearanceModeSelection: View {
     let label: String
     let selected: Bool
     var action: () -> Void
@@ -70,20 +70,15 @@ private struct ThemeSelection: View {
     }
 }
 
-struct ThemeSelector_Previews: PreviewProvider {
+#Preview {
     struct Container: View {
-        @State var theme: Theme
+        @State var appearanceMode: AppearanceMode = .auto
 
         var body: some View {
-            ThemeSelector(theme: $theme)
+            VStack {
+                AppearanceModeSelector(appearanceMode: $appearanceMode)
+            }
         }
     }
-
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Container(theme: .auto)
-        }
-    }
+    return Container()
 }

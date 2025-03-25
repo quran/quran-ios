@@ -59,7 +59,7 @@ public class MoreMenuStore: ObservableObject {
         arabicFontSize: FontSize,
         twoPagesEnabled: Bool,
         verticalScrollingEnabled: Bool,
-        theme: Theme
+        appearanceMode: AppearanceMode
     ) {
         self.mode = mode
         self.wordPointerEnabled = wordPointerEnabled
@@ -68,7 +68,7 @@ public class MoreMenuStore: ObservableObject {
         self.arabicFontSize = arabicFontSize
         self.twoPagesEnabled = twoPagesEnabled
         self.verticalScrollingEnabled = verticalScrollingEnabled
-        self.theme = theme
+        self.appearanceMode = appearanceMode
     }
 
     // MARK: Public
@@ -84,7 +84,7 @@ public class MoreMenuStore: ObservableObject {
     @Published public var twoPagesEnabled: Bool
     @Published public var verticalScrollingEnabled: Bool
 
-    @Published public var theme: Theme
+    @Published public var appearanceMode: AppearanceMode
 
     public var state = MoreMenuControlsState()
 

@@ -35,7 +35,7 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .reading
+        view.backgroundColor = .readingBackground
         setUpGesture()
         setUpPagesView()
     }

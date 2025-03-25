@@ -1,5 +1,5 @@
 //
-//  MoreMenuView.swift
+//  MoreMenuController.swift
 //
 //
 //  Created by Afifi, Mohamed on 9/6/21.
@@ -9,12 +9,12 @@ import NoorUI
 import SwiftUI
 import UIKit
 
-class MoreMenuView: UIHostingController<NoorUI.MoreMenuView> {
+class MoreMenuController: UIHostingController<MoreMenuView> {
     // MARK: Lifecycle
 
     init(viewModel: MoreMenuViewModel) {
         self.viewModel = viewModel
-        super.init(rootView: .init(store: viewModel.store))
+        super.init(rootView: .init(store: viewModel))
     }
 
     @available(*, unavailable)

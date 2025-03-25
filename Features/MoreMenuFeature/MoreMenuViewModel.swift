@@ -13,20 +13,6 @@ import QuranTextKit
 import VLogging
 import WordTextService
 
-public struct MoreMenuModel {
-    // MARK: Lifecycle
-
-    public init(isWordPointerActive: Bool, state: MoreMenuControlsState) {
-        self.isWordPointerActive = isWordPointerActive
-        self.state = state
-    }
-
-    // MARK: Public
-
-    public var isWordPointerActive: Bool
-    public var state: MoreMenuControlsState
-}
-
 @MainActor
 public protocol MoreMenuListener: AnyObject {
     func onTranslationsSelectionsTapped()
@@ -34,41 +20,33 @@ public protocol MoreMenuListener: AnyObject {
 }
 
 @MainActor
-final class MoreMenuViewModel {
+final class MoreMenuViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(model: MoreMenuModel) {
         self.model = model
+        state = model.state
 
-        let translationType = wordTextPreferences.wordTextType
-        store = MoreMenuStore(
-            mode: MoreMenu.Mode(preferences.quranMode),
-            wordPointerEnabled: model.isWordPointerActive,
-            wordPointerType: MoreMenu.TranslationPointerType(translationType),
-            translationFontSize: fontSizePreferences.translationFontSize,
-            arabicFontSize: fontSizePreferences.arabicFontSize,
-            twoPagesEnabled: preferences.twoPagesEnabled,
-            verticalScrollingEnabled: preferences.verticalScrollingEnabled,
-            appearanceMode: themeService.appearanceMode
-        )
+        mode = preferences.quranMode
+        wordPointerEnabled = model.isWordPointerActive
+        wordPointerType = wordTextPreferences.wordTextType
+        translationFontSize = fontSizePreferences.translationFontSize
+        arabicFontSize = fontSizePreferences.arabicFontSize
+        twoPagesEnabled = preferences.twoPagesEnabled
+        verticalScrollingEnabled = preferences.verticalScrollingEnabled
+        appearanceMode = themeService.appearanceMode
 
-        store.state = model.state
-        store.state.twoPages = (model.state.twoPages == .custom && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .custom : .alwaysOff
+        state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
 
-        store.selectTranslation = { [weak self] in
-            logger.info("More Menu: translations selections tapped")
-            self?.listener?.onTranslationsSelectionsTapped()
-        }
-
-        store.$mode
+        $mode
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set quran model \(newValue)")
-                self?.preferences.quranMode = newValue.mode
+                self?.preferences.quranMode = newValue
             }
             .store(in: &cancellables)
 
-        store.$wordPointerEnabled
+        $wordPointerEnabled
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set is word pointer active \(newValue)")
@@ -76,15 +54,15 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$wordPointerType
+        $wordPointerType
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set word pointer type \(newValue)")
-                self?.updateTranslationTypeTo(newValue)
+                self?.wordTextPreferences.wordTextType = newValue
             }
             .store(in: &cancellables)
 
-        store.$translationFontSize
+        $translationFontSize
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set translation font size \(newValue)")
@@ -92,7 +70,7 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$arabicFontSize
+        $arabicFontSize
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set arabic font size \(newValue)")
@@ -100,7 +78,7 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$twoPagesEnabled
+        $twoPagesEnabled
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set two pages enabled \(newValue)")
@@ -108,7 +86,7 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$verticalScrollingEnabled
+        $verticalScrollingEnabled
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set vertical scrolling enabled \(newValue)")
@@ -116,7 +94,7 @@ final class MoreMenuViewModel {
             }
             .store(in: &cancellables)
 
-        store.$appearanceMode
+        $appearanceMode
             .dropFirst()
             .sink { [weak self] newValue in
                 logger.info("More Menu: set appearanceMode \(newValue)")
@@ -125,14 +103,35 @@ final class MoreMenuViewModel {
             .store(in: &cancellables)
     }
 
+    // MARK: Public
+
+    @Published public var mode: QuranMode {
+        didSet {
+            if mode == .translation {
+                wordPointerEnabled = false
+            }
+        }
+    }
+
     // MARK: Internal
 
     weak var listener: MoreMenuListener?
 
-    let store: MoreMenuStore
+    var state: MoreMenuControlsState
 
-    func updateTranslationTypeTo(_ newType: MoreMenu.TranslationPointerType) {
-        wordTextPreferences.wordTextType = WordTextType(newType)
+    @Published var wordPointerEnabled: Bool
+    @Published var wordPointerType: WordTextType
+    @Published var translationFontSize: FontSize
+    @Published var arabicFontSize: FontSize
+
+    @Published var twoPagesEnabled: Bool
+    @Published var verticalScrollingEnabled: Bool
+
+    @Published var appearanceMode: AppearanceMode
+
+    func selectTranslations() {
+        logger.info("More Menu: translations selections tapped")
+        listener?.onTranslationsSelectionsTapped()
     }
 
     // MARK: Private
@@ -144,42 +143,4 @@ final class MoreMenuViewModel {
     private let fontSizePreferences = FontSizePreferences.shared
 
     private var cancellables: Set<AnyCancellable> = []
-}
-
-private extension MoreMenu.Mode {
-    init(_ mode: QuranMode) {
-        switch mode {
-        case .arabic: self = .arabic
-        case .translation: self = .translation
-        }
-    }
-
-    var mode: QuranMode {
-        switch self {
-        case .arabic: return .arabic
-        case .translation: return .translation
-        }
-    }
-}
-
-private extension MoreMenu.TranslationPointerType {
-    init(_ value: WordTextType) {
-        switch value {
-        case .transliteration:
-            self = .transliteration
-        case .translation:
-            self = .translation
-        }
-    }
-}
-
-private extension WordTextType {
-    init(_ value: MoreMenu.TranslationPointerType) {
-        switch value {
-        case .transliteration:
-            self = .transliteration
-        case .translation:
-            self = .translation
-        }
-    }
 }

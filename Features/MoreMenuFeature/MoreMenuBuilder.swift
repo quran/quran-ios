@@ -19,7 +19,7 @@ public struct MoreMenuBuilder {
 
     public func build(withListener listener: MoreMenuListener, model: MoreMenuModel) -> UIViewController {
         let viewModel = MoreMenuViewModel(model: model)
-        let viewController = MoreMenuView(viewModel: viewModel)
+        let viewController = MoreMenuController(viewModel: viewModel)
         viewModel.listener = listener
         return viewController
     }

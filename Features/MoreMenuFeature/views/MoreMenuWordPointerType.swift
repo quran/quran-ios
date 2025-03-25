@@ -6,27 +6,20 @@
 //
 
 import Localization
+import NoorUI
+import QuranText
 import SwiftUI
 
 struct MoreMenuWordPointerType: View {
-    let type: MoreMenu.TranslationPointerType
+    let type: WordTextType
 
     var body: some View {
         NoorListItem(
             title: .text(l("menu.pointer.select_translation")),
-            subtitle: .init(text: typeText, location: .trailing),
+            subtitle: .init(text: type.localizedName, location: .trailing),
             accessory: .disclosureIndicator
         )
         .padding()
-    }
-
-    var typeText: String {
-        switch type {
-        case .translation:
-            return l("translation.text-type.translation")
-        case .transliteration:
-            return l("translation.text-type.transliteration")
-        }
     }
 }
 
@@ -36,6 +29,17 @@ struct MoreMenuWordPointerType_Previews: PreviewProvider {
             MoreMenuWordPointerType(type: .translation)
             Divider()
             MoreMenuWordPointerType(type: .transliteration)
+        }
+    }
+}
+
+extension WordTextType {
+    var localizedName: String {
+        switch self {
+        case .translation:
+            return l("translation.text-type.translation")
+        case .transliteration:
+            return l("translation.text-type.transliteration")
         }
     }
 }

@@ -6,34 +6,29 @@
 //
 
 import Localization
+import NoorUI
+import QuranText
 import SwiftUI
 import UIKit
 import UIx
 
-public struct MoreMenuView: View {
-    // MARK: Lifecycle
-
-    public init(store: MoreMenuStore) {
+struct MoreMenuView: View {
+    @ObservedObject private var store: MoreMenuViewModel
+    init(store: MoreMenuViewModel) {
         self.store = store
     }
 
-    // MARK: Public
-
-    public var body: some View {
+    var body: some View {
         CocoaNavigationView(rootConfiguration: .init(navigationBarHidden: true)) {
             MoreMenuRootView(store: store)
         }
     }
-
-    // MARK: Private
-
-    @ObservedObject private var store: MoreMenuStore
 }
 
 private struct MoreMenuRootView: View {
     // MARK: Internal
 
-    @ObservedObject var store: MoreMenuStore
+    @ObservedObject var store: MoreMenuViewModel
     @Environment(\.navigator) var navigator: Navigator?
 
     var body: some View {
@@ -46,7 +41,7 @@ private struct MoreMenuRootView: View {
 
                     viewBasedOn(state.translationsSelection, customCondition: store.mode == .translation) {
                         Button {
-                            store.selectTranslation?()
+                            store.selectTranslations()
                         } label: {
                             MoreMenuTranslationSelector()
                                 .contentShape(Rectangle())
@@ -140,7 +135,7 @@ private struct MoreMenuRootView: View {
             EmptyView()
         case .alwaysOn:
             content()
-        case .custom:
+        case .conditional:
             if customCondition {
                 content()
             }
@@ -157,20 +152,20 @@ private struct MoreMenuRootView: View {
 private struct WordPointerSelection: View {
     // MARK: Internal
 
-    @ObservedObject var store: MoreMenuStore
+    @ObservedObject var store: MoreMenuViewModel
     @Environment(\.navigator) var navigator: Navigator?
 
     var body: some View {
         SingleChoiceSelectorView(
-            sections: [SingleChoiceSection(items: [MoreMenu.TranslationPointerType.translation, .transliteration])],
+            sections: [SingleChoiceSection(items: [WordTextType.translation, .transliteration])],
             selected: selected,
-            itemText: itemText(of:)
+            itemText: { $0.localizedName }
         )
     }
 
     // MARK: Private
 
-    private var selected: Binding<MoreMenu.TranslationPointerType?> {
+    private var selected: Binding<WordTextType?> {
         Binding(get: {
             store.wordPointerType
         }, set: { value in
@@ -179,15 +174,5 @@ private struct WordPointerSelection: View {
                 navigator?.pop()
             }
         })
-    }
-
-    private func itemText(of item: MoreMenu.TranslationPointerType) -> String {
-        // TODO: This code is repeated.
-        switch item {
-        case .translation:
-            return l("translation.text-type.translation")
-        case .transliteration:
-            return l("translation.text-type.transliteration")
-        }
     }
 }

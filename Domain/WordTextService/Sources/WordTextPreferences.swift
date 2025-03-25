@@ -6,6 +6,7 @@
 //
 
 import Preferences
+import QuranText
 
 public struct WordTextPreferences {
     // MARK: Lifecycle

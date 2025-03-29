@@ -14,10 +14,10 @@ public class PhonePopoverPresenter: PopoverPresenter {
     }
 }
 
-class PhonePopoverAdapativeController: NSObject, UIAdaptivePresentationControllerDelegate {
-    static let shared = PhonePopoverAdapativeController()
+public class PhoneAdapativeController: NSObject, UIAdaptivePresentationControllerDelegate, UISheetPresentationControllerDelegate {
+    public static let shared = PhoneAdapativeController()
 
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         .none
     }
 }

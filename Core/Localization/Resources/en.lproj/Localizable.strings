@@ -62,6 +62,7 @@
 "menu.arabicFontSize" = "Quran Size";
 "menu.twoPages" = "2 pages side-by-side (in landscape)";
 "menu.verticalScrolling" = "Vertical scrolling";
+"menu.theme_settings" = "Themes & Settings";
 
 // MARK: - Theme
 

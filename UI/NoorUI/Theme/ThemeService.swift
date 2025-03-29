@@ -42,7 +42,7 @@ public class ThemeService {
         }
     }
 
-    public var themePublisher: AnyPublisher<AppearanceMode, Never> {
+    public var appearanceModePublisher: AnyPublisher<AppearanceMode, Never> {
         $preferenceAppearanceMode
     }
 

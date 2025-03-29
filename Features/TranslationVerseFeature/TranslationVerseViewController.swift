@@ -126,7 +126,6 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
         state.fontSize = .alwaysOn
         state.twoPages = .alwaysOff
         state.verticalScrolling = .alwaysOff
-        state.theme = .alwaysOff
         let viewController = moreMenuBuilder.build(withListener: self, model: MoreMenuModel(isWordPointerActive: false, state: state))
         presentPopover(viewController, pointingTo: item, permittedArrowDirections: [.up, .down])
     }

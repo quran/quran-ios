@@ -92,6 +92,8 @@
 "menu.twoPages" = "Yonma-yon 2 sahifa (gorizontal formatda)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Vertikal aylantirish";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.theme_settings" = "Mavzular va sozlamalar";
 
 // MARK: - Theme
 

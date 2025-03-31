@@ -24,22 +24,24 @@ private struct ThemeStyleOptionView: View {
             VStack {
                 Text("الله")
                     .font(.largeTitle)
-                    .foregroundColor(Color(themeStyle.textColor))
+                    .themedForeground()
 
                 Text(themeStyle.localizedName)
-                    .foregroundColor(Color(themeStyle.textColor))
+                    .themedForeground()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .padding()
-            .background(Color(themeStyle.backgroundColor))
+            .themedBackground()
             .cornerRadius(cornerRadius)
+            .appearanceModeColorSchema()
             .overlay {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(Color.label, lineWidth: isSelected ? borderWidth : 0)
             }
             .shadow(color: .secondaryLabel, radius: 1)
         }
+        .environment(\.themeStyle, themeStyle)
     }
 }
 
@@ -83,36 +85,6 @@ private extension ThemeStyle {
             return "Original"
         case .quiet:
             return "Quiet"
-        }
-    }
-
-    var textColor: UIColor {
-        switch self {
-        case .calm:
-            return .themeCalmText
-        case .focus:
-            return .themeFocusText
-        case .original:
-            return .themeOriginalText
-        case .paper:
-            return .themePaperText
-        case .quiet:
-            return .themeQuietText
-        }
-    }
-
-    var backgroundColor: UIColor {
-        switch self {
-        case .calm:
-            return .themeCalmBackground
-        case .focus:
-            return .themeFocusBackground
-        case .original:
-            return .themeOriginalBackground
-        case .paper:
-            return .themePaperBackground
-        case .quiet:
-            return .themeQuietBackground
         }
     }
 }

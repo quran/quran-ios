@@ -46,6 +46,10 @@ public class ThemeService {
         $preferenceAppearanceMode
     }
 
+    public var themeStylePublisher: AnyPublisher<ThemeStyle, Never> {
+        $preferenceThemeStyle
+    }
+
     // MARK: Private
 
     private static let appearanceModeRaw = PreferenceKey<Int?>(key: "theme", defaultValue: nil)

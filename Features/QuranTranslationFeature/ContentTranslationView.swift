@@ -38,6 +38,8 @@ public struct ContentTranslationView: View {
                 verse: { point in viewModel.ayahAtPoint(point) }
             )
         )
+        .themedForeground()
+        .themedBackground()
         .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
             await viewModel.load()
         }

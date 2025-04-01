@@ -50,6 +50,10 @@ public class ThemeService {
         $preferenceThemeStyle
     }
 
+    public var userInterfaceStyle: UIUserInterfaceStyle {
+        return themeStyle == .quiet ? .dark : appearanceMode.userInterfaceStyle
+    }
+
     // MARK: Private
 
     private static let appearanceModeRaw = PreferenceKey<Int?>(key: "theme", defaultValue: nil)
@@ -58,26 +62,28 @@ public class ThemeService {
         valueToRaw: { $0.rawValue }
     )
 
-    @TransformedPreference(appearanceModeRaw, transformer: appearanceModeTransformer)
-    private var preferenceAppearanceMode: AppearanceMode
-
     private static let themeStyleRaw = PreferenceKey<Int?>(key: "themeStyle", defaultValue: nil)
     private static let themeStyleTransformer = PreferenceTransformer<Int?, ThemeStyle>(
         rawToValue: { $0.flatMap { ThemeStyle(rawValue: $0) } ?? .paper },
         valueToRaw: { $0.rawValue }
     )
 
+    @TransformedPreference(appearanceModeRaw, transformer: appearanceModeTransformer)
+    private var preferenceAppearanceMode: AppearanceMode
+
     @TransformedPreference(themeStyleRaw, transformer: themeStyleTransformer)
     private var preferenceThemeStyle: ThemeStyle
 
     private func updateUserInterfaceStyle(themeStyle: ThemeStyle, appearanceMode: AppearanceMode) {
-        let newInterfaceStyle = themeStyle == .quiet ? .dark : appearanceMode.userInterfaceStyle
+        let newInterfaceStyle = userInterfaceStyle
         let windows = UIApplication.shared
             .connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap(\.windows)
         for window in windows {
-            window.overrideUserInterfaceStyle = newInterfaceStyle
+            if !(window is SystemUserInterfaceStyleObserverWindow) {
+                window.overrideUserInterfaceStyle = newInterfaceStyle
+            }
         }
     }
 }
@@ -104,10 +110,12 @@ public enum ThemeStyle: Int {
     case original
     case paper
     case quiet
+
+    static let styles: [ThemeStyle] = [.paper, .original, .quiet, .calm, .focus]
 }
 
-extension AppearanceMode {
-    public var userInterfaceStyle: UIUserInterfaceStyle {
+private extension AppearanceMode {
+    var userInterfaceStyle: UIUserInterfaceStyle {
         switch self {
         case .light:
             return .light

@@ -22,7 +22,7 @@ private struct ThemeStyleOptionView: View {
         }
         label: {
             VStack {
-                Text("الله")
+                Text("نور")
                     .font(.largeTitle)
                     .themedForeground()
 
@@ -56,7 +56,7 @@ public struct ThemeStyleSelector: View {
         GridItem(.adaptive(minimum: 100)),
     ]
 
-    let styles: [ThemeStyle] = [.paper, .original, .quiet, .calm, .focus]
+    let styles = ThemeStyle.styles
 
     public var body: some View {
         LazyVGrid(columns: columns) {

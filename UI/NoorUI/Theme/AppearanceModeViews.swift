@@ -57,7 +57,7 @@ private struct AppearanceModeColorSchema: ViewModifier {
     }
 }
 
-private class SystemUserInterfaceStyleObserverWindow: UIWindow {
+class SystemUserInterfaceStyleObserverWindow: UIWindow {
     static let shared: SystemUserInterfaceStyleObserverWindow = {
         let window = SystemUserInterfaceStyleObserverWindow(frame: .zero)
         window.isHidden = true

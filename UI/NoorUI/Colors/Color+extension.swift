@@ -27,7 +27,9 @@ public extension UIColor {
     static var readingBackground: UIColor {
         UIColor(named: "reading", in: .module, compatibleWith: nil)!
     }
+}
 
+extension UIColor {
     static var themeCalmText: UIColor {
         UIColor(named: "theme-calm-text", in: .module, compatibleWith: nil)!
     }

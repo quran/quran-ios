@@ -45,7 +45,9 @@ public struct QuranPaginationView<Content: View>: View {
         }
         .environment(\.layoutDirection, .rightToLeft)
         .accessibilityIdentifier("pages")
-        .background(Color(.readingBackground))
+        .themedBackground()
+        .populateThemeStyle()
+        .appearanceModeColorSchema()
         .ignoresSafeArea()
     }
 
@@ -143,18 +145,20 @@ private struct QuranSinglePaginationView<Content: View>: View {
             selection: $selection
         ) {
             ForEach(pages) { page in
-                if isRightSide(page) {
-                    HStack(spacing: 0) {
-                        QuranSeparators.PageSideSeparator(leading: true)
-                        content(page)
-                        QuranSeparators.PageMiddleSeparator()
-                            .offset(x: middleOffset)
-                            .padding(.leading, -middleOffset)
-                    }
-                } else {
-                    HStack(spacing: 0) {
-                        content(page)
-                        QuranSeparators.PageSideSeparator(leading: false)
+                Group {
+                    if isRightSide(page) {
+                        HStack(spacing: 0) {
+                            QuranSeparators.PageSideSeparator(leading: true)
+                            content(page)
+                            QuranSeparators.PageMiddleSeparator()
+                                .offset(x: middleOffset)
+                                .padding(.leading, -middleOffset)
+                        }
+                    } else {
+                        HStack(spacing: 0) {
+                            content(page)
+                            QuranSeparators.PageSideSeparator(leading: false)
+                        }
                     }
                 }
             }

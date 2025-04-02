@@ -54,6 +54,18 @@ final class HomeViewController: UIHostingController<HomeView> {
             target: self,
             action: #selector(openReadingSelectors)
         )
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage.symbol("arrow.up.arrow.down"),
+            style: .plain,
+            target: self,
+            action: #selector(toggleSort)
+        )
+    }
+
+    @objc
+    private func toggleSort() {
+        viewModel.toggleSurahSortOrder()
     }
 
     @objc

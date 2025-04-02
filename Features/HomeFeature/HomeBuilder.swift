@@ -41,7 +41,8 @@ public struct HomeBuilder {
             },
             navigateToQuarter: { [weak listener] quarter in
                 listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
-            }
+            },
+            userDefaults: container.userDefaults
         )
         let viewController = HomeViewController(
             viewModel: viewModel,

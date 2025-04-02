@@ -23,10 +23,6 @@ public extension UIColor {
     static var appIdentity: UIColor {
         UIColor(named: "appTint", in: .module, compatibleWith: nil) ?? .systemIndigo
     }
-
-    static var readingBackground: UIColor {
-        UIColor(named: "reading", in: .module, compatibleWith: nil)!
-    }
 }
 
 extension UIColor {
@@ -68,13 +64,5 @@ extension UIColor {
 
     static var themeQuietBackground: UIColor {
         UIColor(named: "theme-quiet-bg", in: .module, compatibleWith: nil)!
-    }
-
-    static var pageSeparatorLine: UIColor {
-        UIColor(named: "pageSeparatorLine", in: .module, compatibleWith: nil)!
-    }
-
-    static var pageSeparatorBackground: UIColor {
-        UIColor(named: "pageSeparatorBackground", in: .module, compatibleWith: nil)!
     }
 }

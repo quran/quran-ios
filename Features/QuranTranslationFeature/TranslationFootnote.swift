@@ -42,7 +42,8 @@ struct TranslationFootnote: View, Identifiable {
                     .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.readingBackground))
+            .themedForeground()
+            .themedBackground()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(lFormat("translation.text.footnote-title", footnoteIndex + 1))
             .toolbar {
@@ -51,6 +52,7 @@ struct TranslationFootnote: View, Identifiable {
                 } label: {
                     Text(l("button.done"))
                         .bold()
+                        .foregroundStyle(Color.appIdentity)
                 }
             }
         }
@@ -102,4 +104,5 @@ private struct TranslationFootnotePreview: View {
 
 #Preview {
     TranslationFootnotePreview()
+        .environment(\.themeStyle, .calm)
 }

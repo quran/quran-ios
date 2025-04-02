@@ -150,7 +150,7 @@ extension ThemeStyle {
         }
     }
 
-    var backgroundColor: UIColor {
+    public var backgroundColor: UIColor {
         switch self {
         case .calm: .themeCalmBackground
         case .focus: .themeFocusBackground

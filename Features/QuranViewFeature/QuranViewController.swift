@@ -76,7 +76,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .readingBackground
+        // Set initial background color while the pages are being loaded, no need to listen for updates.
+        view.backgroundColor = ThemeService.shared.themeStyle.backgroundColor
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
 

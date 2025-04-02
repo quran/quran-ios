@@ -40,12 +40,12 @@ private struct EnableUIKitNavigator: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .background(UIViewControllerReader(navigator: navigator))
+            .background(UIViewControllerParentReader(navigator: navigator))
             .environment(\.uikitNavigator, navigator)
     }
 }
 
-private struct UIViewControllerReader: UIViewControllerRepresentable {
+private struct UIViewControllerParentReader: UIViewControllerRepresentable {
     let navigator: UIKitNavigator
 
     func makeUIViewController(context: Context) -> UIViewController {

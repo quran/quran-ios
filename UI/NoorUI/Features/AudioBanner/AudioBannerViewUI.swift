@@ -177,11 +177,12 @@ private struct Downloading: View {
 
 private struct BannerBackground: View {
     let color: Color
+    @ScaledMetric private var cornerRadius = Dimensions.cornerRadius
 
     var body: some View {
         color
             .background(.thinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 15.0))
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
     }
 }

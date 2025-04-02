@@ -41,4 +41,12 @@ public extension UIViewController {
         let height = min(maxSize.height, max(minSize.height, size.height))
         preferredContentSize = CGSize(width: width, height: height)
     }
+
+    func deepPresentedViewController() -> UIViewController {
+        var deepPresented: UIViewController = self
+        while let presented = deepPresented.presentedViewController {
+            deepPresented = presented
+        }
+        return deepPresented
+    }
 }

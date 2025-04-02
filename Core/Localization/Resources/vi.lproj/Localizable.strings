@@ -61,6 +61,8 @@
 "menu.arabicFontSize" = "Cỡ chữ Quran";
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
 "menu.verticalScrolling" = "Cuộn dọc";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.theme_settings" = "Chủ đề & Cài đặt";
 
 // MARK: - Theme
 

@@ -13,6 +13,7 @@ import SwiftUI
 public struct QuranArabicText: View {
     @ScaledMetric var bottomPadding = 5
     @ScaledMetric var topPadding = 10
+    @ScaledMetric var cornerRadius = 6
 
     let verse: AyahNumber
     let text: String
@@ -28,11 +29,9 @@ public struct QuranArabicText: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(lFormat("translation.text.ayah-number", verse.sura.suraNumber, verse.ayah))
                 .padding(8)
-                .foregroundColor(.secondaryLabel)
-                .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.systemGray5.opacity(0.5))
-                )
+                .themedSecondaryForeground()
+                .themedSecondaryBackground()
+                .cornerRadius(cornerRadius)
 
             Text(text)
                 .font(.quran())

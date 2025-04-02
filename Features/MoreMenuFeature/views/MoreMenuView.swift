@@ -76,18 +76,6 @@ private struct MoreMenuRootView: View {
                         empty
                     }
 
-                    viewBasedOn(state.fontSize, customCondition: store.mode == .translation) {
-                        MoreMenuFontSize(label: l("menu.arabicFontSize"), fontSize: $store.arabicFontSize)
-                            .background(Color.systemBackground)
-                        MoreMenuFontSize(label: l("menu.translationFontSize"), fontSize: $store.translationFontSize)
-                            .background(Color.systemBackground)
-
-                        // TODO: workaround to remove the empty space in the translation verse view
-                        if state.fontSize != .alwaysOn {
-                            empty
-                        }
-                    }
-
                     viewBasedOn(state.twoPages) {
                         MoreMenuTwoPages(enabled: $store.twoPagesEnabled)
                             .background(Color.systemBackground)
@@ -99,8 +87,7 @@ private struct MoreMenuRootView: View {
                     }
 
                     viewBasedOn(state.theme) {
-                        AppearanceModeSelector(appearanceMode: $store.appearanceMode)
-                            .background(Color.systemBackground)
+                        MoreMenuThemeSettingsMenuItem(showFontSize: isVisible(state.fontSize, customCondition: store.mode == .translation))
                     }
                 }
             }
@@ -139,6 +126,17 @@ private struct MoreMenuRootView: View {
             if customCondition {
                 content()
             }
+        }
+    }
+
+    private func isVisible(_ state: ConfigState, customCondition: Bool) -> Bool {
+        switch state {
+        case .alwaysOff:
+            return false
+        case .alwaysOn:
+            return true
+        case .conditional:
+            return customCondition
         }
     }
 

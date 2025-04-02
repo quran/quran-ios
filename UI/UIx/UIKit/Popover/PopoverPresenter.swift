@@ -75,7 +75,7 @@ extension UIViewController {
         completion: (() -> Void)? = nil
     ) {
         presented.modalPresentationStyle = .popover
-        presented.presentationController?.delegate = PhonePopoverAdapativeController.shared
+        presented.presentationController?.delegate = PhoneAdapativeController.shared
         presented.popoverPresentationController?.barButtonItem = barButtonItem
         presented.popoverPresentationController?.permittedArrowDirections = permittedArrowDirections
         present(presented, animated: animated, completion: completion)

@@ -76,6 +76,21 @@ public struct Navigator {
         navigationController.popToRootViewController(animated: animated)
     }
 
+    public func present(
+        configuration: NavigationConfiguration? = nil,
+        animated: Bool = true,
+        @ViewBuilder _ view: () -> some View
+    ) {
+        let view = view()
+            .environment(\.navigator, Navigator(navigationController: navigationController))
+        let viewController = ElementController(rootView: view, configuration: configuration)
+        navigationController.present(viewController, animated: animated)
+    }
+
+    public func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        navigationController.dismiss(animated: animated, completion: completion)
+    }
+
     // MARK: Internal
 
     let navigationController: UINavigationController

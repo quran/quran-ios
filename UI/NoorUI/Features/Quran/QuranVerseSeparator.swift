@@ -11,10 +11,17 @@ public struct QuranVerseSeparator: View {
     public init() { }
 
     public var body: some View {
-        Rectangle()
-            .fill(Color.systemGray4)
+        Spacer()
             .frame(height: 1)
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .themedSecondaryBackground()
             .padding(.top, ContentDimension.interSpacing)
     }
+}
+
+#Preview {
+    VStack {
+        QuranVerseSeparator()
+    }
+    .environment(\.themeStyle, .original)
 }

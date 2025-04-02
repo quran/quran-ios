@@ -92,6 +92,8 @@
 "menu.twoPages" = "2 صفحه کنار هم (در حالت افقی)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "اسکرول عمودی";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.theme_settings" = "پوسته‌ها و تنظیمات";
 
 // MARK: - Theme
 

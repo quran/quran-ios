@@ -448,6 +448,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "WordTextService", dependencies: [
+            "QuranText",
             "WordTextPersistence",
             "Preferences",
             "Crashing",

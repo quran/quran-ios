@@ -94,7 +94,7 @@ private struct ThemeStyleKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-    var themeStyle: ThemeStyle {
+    public var themeStyle: ThemeStyle {
         get { return self[ThemeStyleKey.self]
         } set { self[ThemeStyleKey.self] = newValue }
     }

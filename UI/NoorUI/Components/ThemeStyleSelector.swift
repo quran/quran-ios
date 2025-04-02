@@ -24,14 +24,13 @@ private struct ThemeStyleOptionView: View {
             VStack {
                 Text("نور")
                     .font(.largeTitle)
-                    .themedForeground()
 
                 Text(themeStyle.localizedName)
-                    .themedForeground()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .padding()
+            .themedForeground()
             .themedBackground()
             .cornerRadius(cornerRadius)
             .appearanceModeColorSchema()

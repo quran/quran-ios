@@ -170,4 +170,16 @@ extension UIColor {
             return self.resolvedColor(with: trait).pageSeparatorBackgroundVariantDefaultTraits()
         }
     }
+
+    /// Returns a new color with its brightness multiplied by the given factor.
+    public func adjustedBrightness(by factor: CGFloat) -> UIColor {
+        var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
+        // If the color can’t be converted to HSB, return self.
+        guard getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
+            return self
+        }
+        // Multiply brightness (clamped between 0 and 1).
+        let newBrightness = min(max(brightness * factor, 0), 1)
+        return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
+    }
 }

@@ -142,4 +142,37 @@ extension UIImage {
 
         return image?.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius))
     }
+
+    /// Returns a tinted version of the image where all colors are remapped to shades of the provided tintColor.
+    ///
+    /// - Parameter tintColor: The primary color you want to use (for example, UIColor.red).
+    /// - Returns: A new UIImage tinted with the provided color.
+    public func tintedImageUsingFalseColorFilter(with tintColor: UIColor) -> UIImage? {
+        // Create a CIImage from the UIImage.
+        guard let ciImage = CIImage(image: self),
+              let falseColorFilter = CIFilter(name: "CIFalseColor")
+        else {
+            return nil
+        }
+
+        falseColorFilter.setValue(ciImage, forKey: kCIInputImageKey)
+
+        // Define two colors very close to each other based on your tint color.
+        // The "shadow" color is a slightly darker version.
+        let shadowColor = tintColor.adjustedBrightness(by: 0.95)
+
+        // Set the filter’s colors. The filter maps black to inputColor0 and white to inputColor1.
+        falseColorFilter.setValue(CIColor(color: shadowColor), forKey: "inputColor0")
+        falseColorFilter.setValue(CIColor(color: tintColor), forKey: "inputColor1")
+
+        // Get the output image from the filter.
+        guard let outputCIImage = falseColorFilter.outputImage else { return nil }
+
+        // Create a context and generate a CGImage.
+        let context = CIContext(options: nil)
+        guard let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
+
+        // Return a new UIImage.
+        return UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
+    }
 }

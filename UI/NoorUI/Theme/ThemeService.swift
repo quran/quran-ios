@@ -104,7 +104,7 @@ public enum AppearanceMode: Int, CustomStringConvertible {
     }
 }
 
-public enum ThemeStyle: Int {
+public enum ThemeStyle: Int, Sendable {
     case calm
     case focus
     case original

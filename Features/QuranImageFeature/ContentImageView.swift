@@ -89,6 +89,8 @@ private struct ContentImageViewBody: View {
         onScaleChange: { _ in },
         onGlobalFrameChange: { _ in }
     )
+    .themedBackground()
     .populateReadableInsets()
     .ignoresSafeArea()
+    .environment(\.themeStyle, .calm)
 }

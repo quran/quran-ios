@@ -41,10 +41,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
                     Group {
                         if let image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .invertInDarkMode()
+                            QuranThemedImage(image: image)
                                 .background(
                                     ImageDecorationsView(
                                         imageSize: image.size,

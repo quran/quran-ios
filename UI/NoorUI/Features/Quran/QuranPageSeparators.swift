@@ -14,9 +14,6 @@ public enum QuranSeparators {
 
     // MARK: Internal
 
-    static let gradient = [Color(.pageSeparatorBackground), Color(.reading)]
-    static let line = Color(.pageSeparatorLine)
-
     static let sideWidth: CGFloat = 10
 }
 
@@ -55,8 +52,16 @@ extension QuranSeparators {
 
         // MARK: Internal
 
-        let gradientColors = QuranSeparators.gradient
-        let lineColor = QuranSeparators.line
+        @Environment(\.themeStyle) var themeStyle
+
+        var gradientColors: [Color] {
+            [Color(themeStyle.pageSeparatorBackground), Color(themeStyle.backgroundColor)]
+        }
+
+        var lineColor: Color {
+            Color(themeStyle.pageSeparatorLine)
+        }
+
         let lines: Int = 5
         let width: CGFloat = QuranSeparators.sideWidth
         let lineWidth: CGFloat = 0.5
@@ -93,6 +98,7 @@ extension QuranSeparators {
                     )
                     .frame(width: width)
                 }
+                .hidden()
 
                 // Adding 1 line on top of the gradients
                 Rectangle()
@@ -104,8 +110,16 @@ extension QuranSeparators {
 
         // MARK: Internal
 
-        let gradientColors = QuranSeparators.gradient
-        let lineColor = QuranSeparators.line
+        @Environment(\.themeStyle) var themeStyle
+
+        var gradientColors: [Color] {
+            [Color(themeStyle.pageSeparatorBackground), Color(themeStyle.backgroundColor)]
+        }
+
+        var lineColor: Color {
+            Color(themeStyle.pageSeparatorLine)
+        }
+
         let width: CGFloat = QuranSeparators.middleWidth / 2
         let lineWidth: CGFloat = 0.7
 
@@ -117,6 +131,7 @@ extension QuranSeparators {
 
 struct QuranPageSeparators_Previews: PreviewProvider {
     struct QuranPageSeparatorsPreview: View {
+        @Environment(\.themeStyle) var themeStyle
         var body: some View {
             HStack {
                 QuranSeparators.PageSideSeparator(leading: true)
@@ -126,7 +141,7 @@ struct QuranPageSeparators_Previews: PreviewProvider {
                 QuranSeparators.PageSideSeparator(leading: false)
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-            .background(Color(.reading))
+            .themedBackground()
             .ignoresSafeArea()
             .environment(\.layoutDirection, .rightToLeft)
         }
@@ -135,6 +150,11 @@ struct QuranPageSeparators_Previews: PreviewProvider {
     // MARK: Internal
 
     static var previews: some View {
-        QuranPageSeparatorsPreview()
+        VStack {
+            ForEach(ThemeStyle.styles, id: \.self) { s in
+                QuranPageSeparatorsPreview()
+                    .environment(\.themeStyle, s)
+            }
+        }
     }
 }

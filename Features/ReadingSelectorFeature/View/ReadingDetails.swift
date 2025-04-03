@@ -17,6 +17,8 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
     let useAction: () -> Void
     let closeAction: () -> Void
 
+    @ScaledMetric var cornerRadius = Dimensions.cornerRadius
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -92,7 +94,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
             }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(
                         LinearGradient(
                             gradient: Gradient(

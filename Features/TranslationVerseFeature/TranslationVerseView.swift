@@ -13,5 +13,8 @@ struct TranslationVerseView: View {
 
     var body: some View {
         ContentTranslationView(viewModel: viewModel.translationViewModel)
+            .themedBackground()
+            .themedForeground()
+            .populateThemeStyle()
     }
 }

@@ -50,6 +50,12 @@ extension UIColor {
         return String(format: "#%06x", rgb)
     }
 
+    public func rgba() -> [CGFloat] {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return [r * 255, g * 255, b * 255, a]
+    }
+
     public func image(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage? {
         let rect = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContext(rect.size)
@@ -58,5 +64,122 @@ extension UIColor {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+
+    // Hypothetical helper that returns a luminance value (0 for black, 1 for white)
+    private var luminance: CGFloat {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        // This is a rough approximation
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+
+    // Blends two colors using a given factor.
+    // factor = 0 returns self, factor = 1 returns the other color.
+    private func blended(with color: UIColor, factor: CGFloat) -> UIColor {
+        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+        getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        color.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+        return UIColor(
+            red: r1 * (1 - factor) + r2 * factor,
+            green: g1 * (1 - factor) + g2 * factor,
+            blue: b1 * (1 - factor) + b2 * factor,
+            alpha: 1.0
+        ) // We'll apply alpha separately.
+    }
+
+    // Creates a secondary label color based on the receiver (the label color).
+    private func secondaryLabelVariantDefaultTraits() -> UIColor {
+        // Use a blend factor of about 0.31 (derived from default system values)
+        let blendFactor: CGFloat = 0.31
+        // Choose a reference color depending on whether the label color is light or dark.
+        // For light label colors (high luminance), we use the dark-mode reference.
+        let lightReference = UIColor(red: 193 / 255.0, green: 193 / 255.0, blue: 216 / 255.0, alpha: 1.0)
+        let darkReference = UIColor(red: 190 / 255.0, green: 190 / 255.0, blue: 222 / 255.0, alpha: 1.0)
+        let reference = luminance < 0.5 ? lightReference : darkReference
+        // Blend the label color with the chosen reference.
+        let blendedColor = blended(with: reference, factor: blendFactor)
+        // Return the blended color with an effective alpha of 0.6.
+        return blendedColor.withAlphaComponent(0.6)
+    }
+
+    // Generates a secondary background color from the primary background color.
+    // For light backgrounds (high luminance), we blend with a dark reference.
+    // For dark backgrounds (low luminance), we blend with a light reference.
+    private func secondaryBackgroundVariantDefaultTraits() -> UIColor {
+        let blendFactor: CGFloat = 0.31
+        // For a light primary background (e.g., white), secondary should be slightly darker.
+        let darkReference = UIColor(red: 171 / 255.0, green: 171 / 255.0, blue: 187 / 255.0, alpha: 1.0)
+        // For a dark primary background (e.g., black), secondary should be slightly lighter.
+        let lightReference = UIColor(red: 142 / 255.0, green: 142 / 255.0, blue: 149 / 255.0, alpha: 1.0)
+
+        // Reverse the test: if the primary is light, use the dark reference; if dark, use the light reference.
+        let reference = luminance > 0.5 ? darkReference : lightReference
+        return blended(with: reference, factor: blendFactor).withAlphaComponent(0.5)
+    }
+
+    public func secondaryLabelVariant() -> UIColor {
+        UIColor { trait in
+            return self.resolvedColor(with: trait).secondaryLabelVariantDefaultTraits()
+        }
+    }
+
+    public func secondaryBackgroundVariant() -> UIColor {
+        UIColor { trait in
+            return self.resolvedColor(with: trait).secondaryBackgroundVariantDefaultTraits()
+        }
+    }
+
+    /// Computes a page separator line variant relative to the label color.
+    /// - For dark label colors (luminance < 0.5), blends with white using f ≈ 0.788.
+    /// - For light label colors, blends with black using f ≈ 0.212.
+    private func pageSeparatorLineVariantDefaultTraits() -> UIColor {
+        let blendFactor: CGFloat = 1 - (201 / 255.0) // ~0.212
+        if luminance < 0.5 {
+            // Dark label (like black) → blend with white
+            return blended(with: .white, factor: blendFactor)
+        } else {
+            // Light label (like white) → blend with black
+            return blended(with: .black, factor: blendFactor)
+        }
+    }
+
+    /// Computes a page separator background variant relative to the label color.
+    /// - For dark label colors, blends with white using f ≈ 0.882.
+    /// - For light label colors, blends with black using f ≈ 0.118.
+    private func pageSeparatorBackgroundVariantDefaultTraits() -> UIColor {
+        let blendFactor: CGFloat = 1 - (225 / 255.0) // ~0.118
+        if luminance < 0.5 {
+            // Dark label → blend with white
+            return blended(with: .white, factor: blendFactor)
+        } else {
+            // Light label → blend with black
+            return blended(with: .black, factor: blendFactor)
+        }
+    }
+
+    public func pageSeparatorLineVariant() -> UIColor {
+        UIColor { trait in
+            return self.resolvedColor(with: trait).pageSeparatorLineVariantDefaultTraits()
+        }
+    }
+
+    public func pageSeparatorBackgroundVariant() -> UIColor {
+        UIColor { trait in
+            return self.resolvedColor(with: trait).pageSeparatorBackgroundVariantDefaultTraits()
+        }
+    }
+
+    /// Returns a new color with its brightness multiplied by the given factor.
+    public func adjustedBrightness(by factor: CGFloat) -> UIColor {
+        var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
+        // If the color can’t be converted to HSB, return self.
+        guard getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
+            return self
+        }
+        // Multiply brightness (clamped between 0 and 1).
+        let newBrightness = min(max(brightness * factor, 0), 1)
+        return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
     }
 }

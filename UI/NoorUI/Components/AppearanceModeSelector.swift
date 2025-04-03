@@ -21,14 +21,10 @@ public struct AppearanceModeSelector: View {
     public var body: some View {
         HStack {
             Spacer()
-            AppearanceModeSelection(label: l("theme.light"), selected: appearanceMode == .light) {
-                appearanceMode = .light
-            }
-            AppearanceModeSelection(label: l("theme.dark"), selected: appearanceMode == .dark) {
-                appearanceMode = .dark
-            }
-            AppearanceModeSelection(label: l("theme.auto"), selected: appearanceMode == .auto) {
-                appearanceMode = .auto
+            ForEach([AppearanceMode.light, .dark, .auto], id: \.self) { mode in
+                AppearanceModeSelection(label: mode.localizedName, selected: appearanceMode == mode) {
+                    appearanceMode = mode
+                }
             }
             Spacer()
         }
@@ -37,6 +33,16 @@ public struct AppearanceModeSelector: View {
     // MARK: Internal
 
     @Binding var appearanceMode: AppearanceMode
+}
+
+extension AppearanceMode {
+    public var localizedName: String {
+        switch self {
+        case .auto: l("theme.auto")
+        case .light: l("theme.light")
+        case .dark: l("theme.dark")
+        }
+    }
 }
 
 private struct AppearanceModeSelection: View {

@@ -18,6 +18,8 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     let progress: Double?
     let action: () -> Void
 
+    @ScaledMetric var cornerRadius = Dimensions.cornerRadius
+
     var body: some View {
         Button(action: action) {
             ZStack(alignment: .topTrailing) {
@@ -60,7 +62,7 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     }
 
     private var backgroundRectangle: some InsettableShape {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
     }
 
     private var background: some View {

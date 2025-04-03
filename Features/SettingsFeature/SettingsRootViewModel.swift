@@ -45,7 +45,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.diagnosticsBuilder = diagnosticsBuilder
         self.navigationController = navigationController
 
-        themeService.themePublisher.assign(to: &$appearanceMode)
+        themeService.appearanceModePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
     }
 

@@ -92,6 +92,8 @@
 "menu.twoPages" = "ئىككى بەت يانما-يان (شەكىل تەرتىپىدە)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "تىك مېكىش";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.theme_settings" = "ئۆرنەك ۋە تەڭشەك";
 
 // MARK: - Theme
 

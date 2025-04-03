@@ -8,12 +8,18 @@
 import AnnotationsService
 import Combine
 import Crashing
+import Foundation
 import QuranAnnotations
 import QuranKit
 import QuranText
 import QuranTextKit
 import ReadingService
 import VLogging
+
+enum SurahSortOrder: Int, Codable {
+    case ascending = 1
+    case descending = -1
+}
 
 enum HomeViewType: Int {
     case suras
@@ -44,6 +50,8 @@ final class HomeViewModel: ObservableObject {
     @Published var quarters: [QuarterItem] = []
     @Published var lastPages: [LastPage] = []
 
+    @Published var surahSortOrder: SurahSortOrder = .ascending
+
     @Published var type = HomeViewType.suras {
         didSet {
             logger.info("Home: \(type) selected")
@@ -69,6 +77,10 @@ final class HomeViewModel: ObservableObject {
         navigateToQuarter(item.quarter)
     }
 
+    func toggleSurahSortOrder() {
+        surahSortOrder = surahSortOrder == .ascending ? .descending : .ascending
+    }
+
     // MARK: Private
 
     private let lastPageService: LastPageService
@@ -76,7 +88,6 @@ final class HomeViewModel: ObservableObject {
     private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
-
     private let readingPreferences = ReadingPreferences.shared
 
     private func loadLastPages() async {

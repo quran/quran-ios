@@ -24,7 +24,8 @@ struct HomeView: View {
             start: { await viewModel.start() },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
-            selectQuarter: { viewModel.navigateTo($0) }
+            selectQuarter: { viewModel.navigateTo($0) },
+            surahSortOrder: viewModel.surahSortOrder
         )
     }
 }
@@ -40,6 +41,7 @@ private struct HomeViewUI: View {
     let selectLastPage: ItemAction<Page>
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
+    let surahSortOrder: SurahSortOrder
 
     var body: some View {
         NoorList {
@@ -111,9 +113,22 @@ private struct HomeViewUI: View {
         @ViewBuilder listItem: @escaping (Item) -> some View
     ) -> some View {
         let itemsByJuz = Dictionary(grouping: items, by: groupBy)
-        let juzs = itemsByJuz.keys.sorted()
+        let juzs = itemsByJuz.keys.sorted {
+            surahSortOrder.rawValue * ($0.juzNumber - $1.juzNumber) < 0
+        }
+
         ForEach(juzs) { juz in
-            NoorSection(title: juz.localizedName, itemsByJuz[juz] ?? []) { item in
+            let items = (itemsByJuz[juz] ?? []).sorted {
+                switch ($0, $1) {
+                case let (thisSura as Sura, thatSura as Sura):
+                    surahSortOrder.rawValue * (thisSura.suraNumber - thatSura.suraNumber) < 0
+                case let (thisQuarter as QuarterItem, thatQuarter as QuarterItem):
+                    surahSortOrder.rawValue * (thisQuarter.quarter.quarterNumber - thatQuarter.quarter.quarterNumber) < 0
+                default:
+                    false
+                }
+            }
+            NoorSection(title: juz.localizedName, items) { item in
                 listItem(item)
             }
         }
@@ -150,7 +165,8 @@ struct HomeView_Previews: PreviewProvider {
                     start: {},
                     selectLastPage: { _ in },
                     selectSura: { _ in },
-                    selectQuarter: { _ in }
+                    selectQuarter: { _ in },
+                    surahSortOrder: .ascending
                 )
                 .navigationTitle("Home")
                 .toolbar {

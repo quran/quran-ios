@@ -35,20 +35,13 @@ final class HomeViewModel: ObservableObject {
         textRetriever: QuranTextDataService,
         navigateToPage: @escaping (Page) -> Void,
         navigateToSura: @escaping (Sura) -> Void,
-        navigateToQuarter: @escaping (Quarter) -> Void,
-        userDefaults: UserDefaults = .standard
+        navigateToQuarter: @escaping (Quarter) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.navigateToPage = navigateToPage
         self.navigateToSura = navigateToSura
         self.navigateToQuarter = navigateToQuarter
-        self.userDefaults = userDefaults
-
-        surahSortOrder =
-            (userDefaults.object(forKey: surahSortOrderKey) as? Int).flatMap {
-                SurahSortOrder(rawValue: $0)
-            } ?? .ascending
     }
 
     // MARK: Internal
@@ -57,15 +50,11 @@ final class HomeViewModel: ObservableObject {
     @Published var quarters: [QuarterItem] = []
     @Published var lastPages: [LastPage] = []
 
+    @Published var surahSortOrder: SurahSortOrder = .ascending
+
     @Published var type = HomeViewType.suras {
         didSet {
             logger.info("Home: \(type) selected")
-        }
-    }
-
-    @Published var surahSortOrder: SurahSortOrder {
-        didSet {
-            saveSortOrder(surahSortOrder)
         }
     }
 
@@ -90,9 +79,6 @@ final class HomeViewModel: ObservableObject {
 
     func toggleSurahSortOrder() {
         surahSortOrder = surahSortOrder == .ascending ? .descending : .ascending
-        suras.sort {
-            surahSortOrder.rawValue * ($0.suraNumber - $1.suraNumber) < 0
-        }
     }
 
     // MARK: Private
@@ -102,14 +88,7 @@ final class HomeViewModel: ObservableObject {
     private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
-    private let userDefaults: UserDefaults
     private let readingPreferences = ReadingPreferences.shared
-
-    private let surahSortOrderKey = "homeSurahSortOrder"
-
-    private func saveSortOrder(_ order: SurahSortOrder) {
-        userDefaults.set(order.rawValue, forKey: surahSortOrderKey)
-    }
 
     private func loadLastPages() async {
         let lastPagesSequence = readingPreferences.$reading
@@ -132,9 +111,6 @@ final class HomeViewModel: ObservableObject {
 
         for await reading in readings {
             suras = reading.quran.suras
-            suras.sort {
-                surahSortOrder.rawValue * ($0.suraNumber - $1.suraNumber) < 0
-            }
         }
     }
 
@@ -146,14 +122,7 @@ final class HomeViewModel: ObservableObject {
         for await reading in readings {
             let quarters = reading.quran.quarters
             let quartersText = await textForQuarters(quarters)
-            let quarterItems = quarters.map { QuarterItem(quarter: $0, ayahText: quartersText[$0] ?? "") }.sorted {
-                switch surahSortOrder {
-                case .ascending:
-                    ($0.quarter.juz.juzNumber, $0.quarter.firstVerse.sura.suraNumber) < ($1.quarter.juz.juzNumber, $1.quarter.firstVerse.sura.suraNumber)
-                case .descending:
-                    ($0.quarter.juz.juzNumber, $0.quarter.firstVerse.sura.suraNumber) > ($1.quarter.juz.juzNumber, $1.quarter.firstVerse.sura.suraNumber)
-                }
-            }
+            let quarterItems = quarters.map { QuarterItem(quarter: $0, ayahText: quartersText[$0] ?? "") }
             self.quarters = quarterItems
         }
     }

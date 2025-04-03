@@ -36,7 +36,6 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
-    var userDefaults: UserDefaults { get }
 
     var authenticationClient: (any AuthenticationClient)? { get }
 }

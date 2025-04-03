@@ -118,7 +118,22 @@ private struct HomeViewUI: View {
         }
 
         ForEach(juzs) { juz in
-            NoorSection(title: juz.localizedName, itemsByJuz[juz] ?? []) { item in
+            let items = (itemsByJuz[juz] ?? []).sorted {
+                switch ($0, $1) {
+                case let (thisSura as Sura, thatSura as Sura):
+                    surahSortOrder.rawValue * (thisSura.suraNumber - thatSura.suraNumber) < 0
+                case let (thisQuarter as QuarterItem, thatQuarter as QuarterItem):
+                    switch surahSortOrder {
+                    case .ascending:
+                        (thisQuarter.quarter.juz.juzNumber, thisQuarter.quarter.firstVerse.sura.suraNumber) < (thatQuarter.quarter.juz.juzNumber, thatQuarter.quarter.firstVerse.sura.suraNumber)
+                    case .descending:
+                        (thisQuarter.quarter.juz.juzNumber, thisQuarter.quarter.firstVerse.sura.suraNumber) > (thatQuarter.quarter.juz.juzNumber, thatQuarter.quarter.firstVerse.sura.suraNumber)
+                    }
+                default:
+                    false
+                }
+            }
+            NoorSection(title: juz.localizedName, items) { item in
                 listItem(item)
             }
         }

@@ -33,8 +33,6 @@ class Container: AppDependencies {
 
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
-    let userDefaults: UserDefaults = .standard
-
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)

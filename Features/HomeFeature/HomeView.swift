@@ -123,12 +123,7 @@ private struct HomeViewUI: View {
                 case let (thisSura as Sura, thatSura as Sura):
                     surahSortOrder.rawValue * (thisSura.suraNumber - thatSura.suraNumber) < 0
                 case let (thisQuarter as QuarterItem, thatQuarter as QuarterItem):
-                    switch surahSortOrder {
-                    case .ascending:
-                        (thisQuarter.quarter.juz.juzNumber, thisQuarter.quarter.firstVerse.sura.suraNumber) < (thatQuarter.quarter.juz.juzNumber, thatQuarter.quarter.firstVerse.sura.suraNumber)
-                    case .descending:
-                        (thisQuarter.quarter.juz.juzNumber, thisQuarter.quarter.firstVerse.sura.suraNumber) > (thatQuarter.quarter.juz.juzNumber, thatQuarter.quarter.firstVerse.sura.suraNumber)
-                    }
+                    surahSortOrder.rawValue * (thisQuarter.quarter.quarterNumber - thatQuarter.quarter.quarterNumber) < 0
                 default:
                     false
                 }

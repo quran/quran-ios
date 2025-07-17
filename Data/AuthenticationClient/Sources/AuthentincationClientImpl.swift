@@ -111,6 +111,26 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         return request
     }
 
+    func getAuthenticationHeaders() async throws -> [String : String] {
+        guard authenticationState == .authenticated, let stateData else {
+            logger.error("getAuthenticationHeaders called without being authenticated")
+            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
+        }
+        let token: String
+        let data: OAuthStateData
+        do {
+            (token, data) = try await oauthService.getAccessToken(using: stateData)
+        } catch {
+            logger.error("Failed to get access token. Resetting to non-authenticated state: \(error)")
+            self.stateData = nil
+            throw AuthenticationClientError.clientIsNotAuthenticated(error)
+        }
+
+        persist(data: data)
+
+        return ["x-auth-token": token, "x-client-id": appConfiguration.clientID]
+    }
+
     // MARK: Internal
 
     static let persistenceKey: String = "com.quran.oauth.state"

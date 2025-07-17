@@ -56,5 +56,7 @@ public protocol AuthenticationClient {
 
     func authenticate(request: URLRequest) async throws -> URLRequest
 
+    func getAuthenticationHeaders() -> async throws -> [String: String]
+
     var authenticationState: AuthenticationState { get async }
 }

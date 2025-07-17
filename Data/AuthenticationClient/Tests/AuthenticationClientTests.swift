@@ -22,6 +22,7 @@ final class AuthenticationClientTests: XCTestCase {
 
     let configuration = AuthenticationClientConfiguration(
         clientID: "client-id",
+        clientSecret: "client-secret",
         redirectURL: URL(string: "callback://")!,
         scopes: [],
         authorizationIssuerURL: URL(string: "https://example.com")!

@@ -12,13 +12,15 @@ import VLogging
 
 public struct AppAuthConfiguration {
     public let clientID: String
+    public let clientSecret: String
     public let redirectURL: URL
     /// The client requests the `offline` and `openid` scopes by default.
     public let scopes: [String]
     public let authorizationIssuerURL: URL
 
-    public init(clientID: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
+    public init(clientID: String, clientSecret: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
         self.clientID = clientID
+        self.clientSecret = clientSecret
         self.redirectURL = redirectURL
         self.scopes = scopes
         self.authorizationIssuerURL = authorizationIssuerURL
@@ -139,7 +141,7 @@ public final class OAuthServiceAppAuthImpl: OAuthService {
         let request = OIDAuthorizationRequest(
             configuration: serviceConfiguration,
             clientId: appConfiguration.clientID,
-            clientSecret: nil,
+            clientSecret: appConfiguration.clientSecret,
             scopes: scopes,
             redirectURL: appConfiguration.redirectURL,
             responseType: OIDResponseTypeCode,

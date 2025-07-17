@@ -111,7 +111,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         return request
     }
 
-    func getAuthenticationHeaders() async throws -> [String : String] {
+    public func getAuthenticationHeaders() async throws -> [String: String] {
         guard authenticationState == .authenticated, let stateData else {
             logger.error("getAuthenticationHeaders called without being authenticated")
             throw AuthenticationClientError.clientIsNotAuthenticated(nil)
@@ -182,6 +182,7 @@ private extension AuthenticationClientConfiguration {
     var oAuthServiceConfiguration: AppAuthConfiguration {
         AppAuthConfiguration(
             clientID: clientID,
+            clientSecret: clientSecret,
             redirectURL: redirectURL,
             scopes: scopes,
             authorizationIssuerURL: authorizationIssuerURL

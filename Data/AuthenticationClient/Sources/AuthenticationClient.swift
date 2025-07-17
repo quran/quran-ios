@@ -35,7 +35,6 @@ public struct AuthenticationClientConfiguration {
     /// and not using a static configuration.
     public let authorizationIssuerURL: URL
 
-
     public init(clientID: String, clientSecret: String, redirectURL: URL, scopes: [String], authorizationIssuerURL: URL) {
         self.clientID = clientID
         self.clientSecret = clientSecret

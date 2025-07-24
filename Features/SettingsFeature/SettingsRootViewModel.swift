@@ -141,6 +141,8 @@ final class SettingsRootViewModel: ObservableObject {
             try await quranProfileService.login(on: viewController)
             // TODO: Replace with the needed UI changes.
             print("Login seems successful")
+            NotificationCenter.default
+                .post(name: NSNotification.Name.init("bookmarksupdated"), object: nil)
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
         }

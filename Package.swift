@@ -60,6 +60,7 @@ let package = Package(
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
+        .package(path: "../mobile-sync/"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -202,6 +203,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
+            .product(name: "shared", package: "mobile-sync"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -690,7 +692,9 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
         ]),
 
-        target(type, name: "SettingsFeature", hasTests: false, dependencies: [
+        target(type, name: "SettingsFeature", hasTests: false,
+               extraSettings: [.unsafeFlags(["-DQURAN_SYNC"])],
+               dependencies: [
             "AppDependencies",
             "SettingsService",
             "NoorUI",
@@ -745,6 +749,7 @@ func target(
     _ type: TargetType,
     name: String,
     hasTests: Bool = true,
+    extraSettings: [SwiftSetting] = [],
     dependencies: [Target.Dependency] = [],
     resources: [Resource]? = nil,
     testDependencies: [Target.Dependency] = [],
@@ -757,7 +762,7 @@ func target(
             dependencies: dependencies,
             path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
             resources: resources,
-            swiftSettings: settings
+            swiftSettings: settings + extraSettings
         ),
     ]
     guard hasTests else {

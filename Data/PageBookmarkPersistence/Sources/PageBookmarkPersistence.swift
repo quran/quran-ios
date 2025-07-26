@@ -8,6 +8,11 @@
 
 import Combine
 
+public enum PageBookmarkPersistenceError: Error {
+    case bookmarkAlreadyExists
+    case bookmarkDoesntExist
+}
+
 public protocol PageBookmarkPersistence {
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never>
     func insertPageBookmark(_ page: Int) async throws

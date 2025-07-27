@@ -745,6 +745,7 @@ func target(
     _ type: TargetType,
     name: String,
     hasTests: Bool = true,
+    otherSettings: [SwiftSetting] = [],
     dependencies: [Target.Dependency] = [],
     resources: [Resource]? = nil,
     testDependencies: [Target.Dependency] = [],
@@ -757,7 +758,7 @@ func target(
             dependencies: dependencies,
             path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
             resources: resources,
-            swiftSettings: settings
+            swiftSettings: settings + otherSettings
         ),
     ]
     guard hasTests else {

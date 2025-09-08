@@ -126,7 +126,7 @@ private struct SearchViewUI: View {
                         let localizedVerse = item.ayah.localizedName
                         let arabicSuraName = item.ayah.sura.arabicSuraName
                         NoorListItem(
-                            subheading: "\(localizedVerse) \(sura: arabicSuraName)",
+                            subheading: "(\(String(item.ayah.sura.suraNumber))) \(localizedVerse) \(sura: arabicSuraName)",
                             title: searchResultText(of: item),
                             accessory: .text(NumberFormatter.shared.format(item.ayah.page.pageNumber))
                         ) {

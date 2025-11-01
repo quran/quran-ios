@@ -41,6 +41,7 @@ public class QueuePlayer {
     open func play(request: AudioRequest) {
         player = AudioPlayer(request: request)
         player?.actions = newPlayerActions()
+        player?.setRate(playbackRate)
         player?.startPlaying()
     }
 
@@ -50,6 +51,11 @@ public class QueuePlayer {
 
     public func pause() {
         player?.pause()
+    }
+    
+    public func setRate(_ rate: Float) {
+        playbackRate = rate
+        player?.setRate(rate)
     }
 
     public func resume() {
@@ -75,6 +81,7 @@ public class QueuePlayer {
             oldValue?.actions = nil
         }
     }
+    private var playbackRate: Float = 1.0
 
     private func playbackEnded() {
         player = nil

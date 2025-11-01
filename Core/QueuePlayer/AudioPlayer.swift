@@ -17,6 +17,9 @@ class AudioPlayer {
         self.request = request
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         player = Player(url: request.files[0].url)
+        player.onRateChanged = { [weak self] in
+            self?.rateChanged(to: $0)
+        }
         player.setRate(playbackRate)
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
@@ -44,16 +47,19 @@ class AudioPlayer {
     }
 
     func resume() {
+        isPaused = false
         timer?.resume()
         player.play()
     }
 
     func pause() {
+        isPaused = true
         timer?.pause()
         player.pause()
     }
 
     func stop() {
+        isPaused = true
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -63,6 +69,11 @@ class AudioPlayer {
     func setRate(_ rate: Float) {
         playbackRate = rate
         player.setRate(rate)
+        // if we are actively playing a frame, re-schedule its end based on the new rate
+        if !isPaused, rate > 0 {
+            timer?.cancel()
+            waitUntilFrameEnds()
+        }
     }
 
     func stepForward() {
@@ -89,8 +100,8 @@ class AudioPlayer {
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
-
     private var playbackRate: Float = 1.0
+    private var isPaused = false
 
     private var player: Player {
         didSet {
@@ -185,8 +196,11 @@ class AudioPlayer {
     }
 
     private func waitUntilFrameEnds(currentTime: TimeInterval? = nil) {
-        // max with 100ms since sometimes the returned value could be negative
-        let interval = max(0.1, getDurationToFrameEnd(currentTime: currentTime))
+        // media time remaining to the end of frame (Double)
+        let mediaDelta: TimeInterval = max(0, getDurationToFrameEnd(currentTime: currentTime))
+        // cast Float -> Double for math with TimeInterval
+        let effectiveRate = max(0.1, Double(playbackRate))
+        let interval: TimeInterval = max(0.05, mediaDelta / effectiveRate) // small floor for stability
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()
@@ -196,6 +210,13 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func rateChanged(to rate: Float) {
+        // keep our in-memory rate in sync with the actual player rate
+        playbackRate = rate
+        // if we are playing and rate changed mid-frame, re-schedule the timer
+        if !isPaused, rate > 0 {
+            timer?.cancel()
+            waitUntilFrameEnds()
+        }
         actions?.playbackRateChanged(rate)
     }
 

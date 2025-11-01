@@ -78,6 +78,11 @@ public class QuranAudioPlayer {
     public func stepBackward() {
         player.stepBackward()
     }
+    
+    // NEW: forward playback rate changes to the queue player
+    public func setRate(_ rate: Float) {
+        player.setRate(rate)
+    }
 
     // MARK: - Play
 

@@ -81,6 +81,7 @@ public final class AudioBannerViewModel: ObservableObject {
     @Published var toast: (message: String, action: ToastAction?)?
     @Published var viewControllerToPresent: UIViewController?
     @Published var dismissPresentedViewController = false
+    @Published var playbackRate: Float = 1.0
 
     var audioBannerState: AudioBannerState {
         switch playingState {
@@ -102,6 +103,17 @@ public final class AudioBannerViewModel: ObservableObject {
 
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
+
+        // apply persisted playback rate (default 1.0 if none saved)
+        let savedRateObject = UserDefaults.standard.object(forKey: Self.playbackRateKey)
+        let savedRate = (savedRateObject as? Float) ?? 1.0
+        if savedRateObject == nil {
+            // persist the default so future launches are consistent
+            UserDefaults.standard.set(1.0, forKey: Self.playbackRateKey)
+        }
+        playbackRate = savedRate
+        audioPlayer.setRate(savedRate)
+
 
         let runningDownloads = await downloader.runningAudioDownloads()
         logger.info("AudioBanner: loaded runningAudioDownloads count: \(runningDownloads.count)")
@@ -136,6 +148,9 @@ public final class AudioBannerViewModel: ObservableObject {
     private var listRuns: Runs = .one
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
+
+    private static let playbackRateKey = "Audio.PlaybackRate"
+
 
     @Published private var playingState: PlaybackState = .stopped {
         didSet {
@@ -269,6 +284,13 @@ public final class AudioBannerViewModel: ObservableObject {
     private func stop() {
         audioRange = nil
         audioPlayer.stopAudio()
+    }
+    
+    // NEW: update playback speed from UI
+    func updatePlaybackRate(to rate: Float) {
+        playbackRate = rate
+        UserDefaults.standard.set(rate, forKey: Self.playbackRateKey)
+        audioPlayer.setRate(rate)
     }
 
     // MARK: - Downloading

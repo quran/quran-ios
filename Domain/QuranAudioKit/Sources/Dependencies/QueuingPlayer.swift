@@ -17,6 +17,7 @@ protocol QueuingPlayer: AnyObject {
     func stop()
     func stepForward()
     func stepBackward()
+    func setRate(_ rate: Float)
 }
 
 extension QueuePlayer: QueuingPlayer {

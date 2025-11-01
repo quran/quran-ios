@@ -19,6 +19,7 @@ final class Player {
     init(url: URL) {
         asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         playerItem = AVPlayerItem(asset: asset)
+        playerItem.audioTimePitchAlgorithm = .timeDomain
         player = AVPlayer(playerItem: playerItem)
 
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
@@ -47,6 +48,7 @@ final class Player {
 
     func play() {
         player.play()
+        player.rate = currentRate
     }
 
     func pause() {
@@ -55,6 +57,14 @@ final class Player {
 
     func stop() {
         player.pause()
+    }
+    
+    // NEW: set playback speed; if currently playing, apply immediately
+    func setRate(_ rate: Float) {
+        currentRate = rate
+        if player.rate != 0 {
+            player.rate = rate
+        }
     }
 
     func seek(to timeInSeconds: TimeInterval) {
@@ -67,6 +77,7 @@ final class Player {
 
     private let asset: AVURLAsset
     private let player: AVPlayer
+    private var currentRate: Float = 1.0
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }

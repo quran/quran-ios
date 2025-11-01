@@ -17,6 +17,7 @@ class AudioPlayer {
         self.request = request
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         player = Player(url: request.files[0].url)
+        player.setRate(playbackRate)
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -57,6 +58,12 @@ class AudioPlayer {
         player.stop()
         actions?.playbackEnded()
     }
+    
+    // NEW: externally set playback rate (persist in-memory and apply to current player)
+    func setRate(_ rate: Float) {
+        playbackRate = rate
+        player.setRate(rate)
+    }
 
     func stepForward() {
         if let next = audioPlaying.nextFrame() {
@@ -79,18 +86,22 @@ class AudioPlayer {
     }
 
     // MARK: Private
-
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
+
+    private var playbackRate: Float = 1.0
 
     private var player: Player {
         didSet {
             player.onRateChanged = { [weak self] in
                 self?.rateChanged(to: $0)
             }
+            // keep rate consistent across newly created AVPlayer instances
+            player.setRate(playbackRate)
         }
     }
+
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }

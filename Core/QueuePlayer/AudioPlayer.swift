@@ -119,7 +119,6 @@ class AudioPlayer {
             player.onRateChanged = { [weak self] in
                 self?.rateChanged(to: $0)
             }
-            // keep rate consistent across newly created AVPlayer instances
             player.setRate(playbackRate)
         }
     }
@@ -221,9 +220,7 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func rateChanged(to rate: Float) {
-        // keep our in-memory rate in sync with the actual player rate
         playbackRate = rate
-        // if the player is actively playing and the rate changed mid-frame, re-schedule
         if player.isPlaying, rate > 0 {
             timer?.cancel()
             waitUntilFrameEnds()

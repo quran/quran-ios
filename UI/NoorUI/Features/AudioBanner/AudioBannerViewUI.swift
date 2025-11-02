@@ -55,7 +55,6 @@ public struct AudioBannerActions {
     }
 }
 
-
 public struct AudioBannerViewUI: View {
     private let state: AudioBannerState
     private let actions: AudioBannerActions

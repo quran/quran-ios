@@ -82,7 +82,6 @@ public struct AudioBannerViewUI: View {
     }
 }
 
-// Locale-aware speed options and formatter
 private let speedValues: [Float] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
 private let speedFormatter: NumberFormatter = {
@@ -150,7 +149,6 @@ private struct AudioPlaying: View {
                     .padding()
             }
         }
-
     }
 }
 

@@ -107,6 +107,7 @@ class AudioPlayer {
     }
 
     // MARK: Private
+    
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
@@ -122,7 +123,6 @@ class AudioPlayer {
             player.setRate(playbackRate)
         }
     }
-
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }

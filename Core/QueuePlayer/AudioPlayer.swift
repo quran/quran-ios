@@ -206,7 +206,7 @@ class AudioPlayer {
     }
 
     private func waitUntilFrameEnds(currentTime: TimeInterval? = nil) {
-        // Remaining media time to the end of the frame 
+        // max with 100ms since sometimes the returned value could be negative
         let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
         // Convert media time to wall-clock time 
         let rate = max(0.1, Double(player.effectiveRate))

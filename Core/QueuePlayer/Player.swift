@@ -26,11 +26,12 @@ final class Player {
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
             if let rate = change.newValue {
                 guard let self else { return }
-                Task { await self.onRateChanged?(rate) }
+                Task {
+                    await self.onRateChanged?(rate)
+                }
             }
         }
     }
-
 
     // MARK: Internal
 
@@ -58,7 +59,6 @@ final class Player {
         player.pause()
     }
     
-    // NEW: set playback speed; if currently playing, apply immediately
     func setRate(_ rate: Float) {
         currentRate = rate
         if player.rate != 0 {

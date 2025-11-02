@@ -25,7 +25,6 @@ public struct AudioBannerActions {
     let cancelDownloading: AsyncAction
     let reciters: () -> Void
     let more: () -> Void
-    // NEW
     let currentRate: Float
     let setPlaybackRate: (Float) -> Void
 
@@ -39,7 +38,6 @@ public struct AudioBannerActions {
         cancelDownloading: @escaping AsyncAction,
         reciters: @escaping () -> Void,
         more: @escaping () -> Void,
-        // NEW (added at the end to minimize churn)
         currentRate: Float,
         setPlaybackRate: @escaping (Float) -> Void
     ) {
@@ -85,22 +83,21 @@ public struct AudioBannerViewUI: View {
     }
 }
 
-// Speed menu options + label helper (no locale/comma issues).
-private let kSpeedOptions: [(title: String, value: Float)] = [
-    ("0.25×", 0.25), ("0.5×", 0.5), ("0.75×", 0.75),
-    ("1×", 1.0),
-    ("1.25×", 1.25), ("1.5×", 1.5), ("1.75×", 1.75), ("2×", 2.0),
-]
+// Locale-aware speed options and formatter
+private let speedValues: [Float] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
-private func speedLabel(_ rate: Float) -> String {
-    if let m = kSpeedOptions.first(where: { abs($0.value - rate) < 0.001 }) {
-        return m.title
-    }
-    var s = String(format: "%.2f", rate)
-    while s.contains(".") && (s.hasSuffix("0") || s.hasSuffix(".")) { s.removeLast() }
+private let speedFormatter: NumberFormatter = {
+    let nf = NumberFormatter()
+    nf.locale = .current
+    nf.minimumFractionDigits = 0
+    nf.maximumFractionDigits = 2
+    return nf
+}()
+
+private func formattedSpeed(_ rate: Float) -> String {
+    let s = speedFormatter.string(from: NSNumber(value: rate)) ?? String(rate)
     return s + "×"
 }
-
 
 private struct AudioPlaying: View {
     let paused: Bool
@@ -114,14 +111,11 @@ private struct AudioPlaying: View {
             }
             
             Menu {
-                ForEach(kSpeedOptions, id: \.value) { opt in
-                    let isNormal = abs(opt.value - 1.0) < 0.001
-                    let title = isNormal ? "\(opt.title) (Normal)" : opt.title
-                    Button(title) { actions.setPlaybackRate(opt.value) }
+                ForEach(speedValues, id: \.self) { value in
+                    Button(formattedSpeed(value)) { actions.setPlaybackRate(value) }
                 }
             } label: {
-                // Keep the chip label clean: "1×" without "(Normal)"
-                Text(speedLabel(actions.currentRate))
+                Text(formattedSpeed(actions.currentRate))
                     .font(.footnote)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
@@ -129,7 +123,6 @@ private struct AudioPlaying: View {
                     .clipShape(Capsule())
             }
             .padding(.leading, 4)
-
             
             Button(action: actions.backward) {
                 NoorSystemImage.backward.image

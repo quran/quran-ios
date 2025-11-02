@@ -104,7 +104,6 @@ public final class AudioBannerViewModel: ObservableObject {
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
 
-        // apply persisted playback rate using Preferences (defer applying to player until playback starts)
         let savedRate = AudioPreferences.shared.playbackRate
         playbackRate = savedRate
 
@@ -141,7 +140,6 @@ public final class AudioBannerViewModel: ObservableObject {
     private var listRuns: Runs = .one
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
-
 
     @Published private var playingState: PlaybackState = .stopped {
         didSet {
@@ -242,7 +240,6 @@ public final class AudioBannerViewModel: ObservableObject {
                     self?.audioPlayer.setRate(rate)
                 }
                 self?.playingStarted()
-
             } catch {
                 self?.playbackFailed(error)
             }

@@ -8,7 +8,6 @@
 import Foundation
 import Preferences
 
-// Single, file-scoped key instance (avoids DEBUG duplicate-key fatalError)
 private let audioPlaybackRateKey = PreferenceKey<Float>(key: "audio.playbackRate", defaultValue: 1.0)
 
 public extension AudioPreferences {

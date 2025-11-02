@@ -48,6 +48,13 @@ class AudioPlayer {
 
     func resume() {
         isPaused = false
+        // apply any pending rate before resuming playback
+        if let r = pendingRate {
+            playbackRate = r
+            pendingRate = nil
+            player.setRate(r)
+            actions?.playbackRateChanged(r)
+        }
         timer?.resume()
         player.play()
     }
@@ -65,14 +72,17 @@ class AudioPlayer {
         actions?.playbackEnded()
     }
     
-    // NEW: externally set playback rate (persist in-memory and apply to current player)
     func setRate(_ rate: Float) {
         playbackRate = rate
         player.setRate(rate)
-        // if we are actively playing a frame, re-schedule its end based on the new rate
-        if !isPaused, rate > 0 {
+        actions?.playbackRateChanged(rate)
+
+        // if currently playing, re-schedule the end of the current frame using the new rate
+        if player.isPlaying, rate > 0 {
             timer?.cancel()
             waitUntilFrameEnds()
+        } else {
+            pendingRate = nil
         }
     }
 
@@ -102,6 +112,7 @@ class AudioPlayer {
     private var audioPlaying: AudioPlaying
     private var playbackRate: Float = 1.0
     private var isPaused = false
+    private var pendingRate: Float?
 
     private var player: Player {
         didSet {
@@ -196,11 +207,11 @@ class AudioPlayer {
     }
 
     private func waitUntilFrameEnds(currentTime: TimeInterval? = nil) {
-        // media time remaining to the end of frame (Double)
-        let mediaDelta: TimeInterval = max(0, getDurationToFrameEnd(currentTime: currentTime))
-        // cast Float -> Double for math with TimeInterval
-        let effectiveRate = max(0.1, Double(playbackRate))
-        let interval: TimeInterval = max(0.05, mediaDelta / effectiveRate) // small floor for stability
+        // Remaining media time to the end of the frame (in seconds on the media timeline)
+        let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
+        // Convert media time to wall-clock time by dividing by the effective playback rate
+        let rate = max(0.1, Double(player.effectiveRate))
+        let interval = max(0.05, mediaDelta / rate) // small floor for stability
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()
@@ -212,8 +223,8 @@ class AudioPlayer {
     private func rateChanged(to rate: Float) {
         // keep our in-memory rate in sync with the actual player rate
         playbackRate = rate
-        // if we are playing and rate changed mid-frame, re-schedule the timer
-        if !isPaused, rate > 0 {
+        // if the player is actively playing and the rate changed mid-frame, re-schedule
+        if player.isPlaying, rate > 0 {
             timer?.cancel()
             waitUntilFrameEnds()
         }

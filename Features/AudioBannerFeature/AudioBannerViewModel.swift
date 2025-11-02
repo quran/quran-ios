@@ -104,16 +104,9 @@ public final class AudioBannerViewModel: ObservableObject {
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
 
-        // apply persisted playback rate (default 1.0 if none saved)
-        let savedRateObject = UserDefaults.standard.object(forKey: Self.playbackRateKey)
-        let savedRate = (savedRateObject as? Float) ?? 1.0
-        if savedRateObject == nil {
-            // persist the default so future launches are consistent
-            UserDefaults.standard.set(1.0, forKey: Self.playbackRateKey)
-        }
+        // apply persisted playback rate using Preferences (defer applying to player until playback starts)
+        let savedRate = AudioPreferences.shared.playbackRate
         playbackRate = savedRate
-        audioPlayer.setRate(savedRate)
-
 
         let runningDownloads = await downloader.runningAudioDownloads()
         logger.info("AudioBanner: loaded runningAudioDownloads count: \(runningDownloads.count)")
@@ -148,8 +141,6 @@ public final class AudioBannerViewModel: ObservableObject {
     private var listRuns: Runs = .one
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
-
-    private static let playbackRateKey = "Audio.PlaybackRate"
 
 
     @Published private var playingState: PlaybackState = .stopped {
@@ -247,7 +238,11 @@ public final class AudioBannerViewModel: ObservableObject {
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns
                 )
+                if let rate = self?.playbackRate {
+                    self?.audioPlayer.setRate(rate)
+                }
                 self?.playingStarted()
+
             } catch {
                 self?.playbackFailed(error)
             }
@@ -286,10 +281,9 @@ public final class AudioBannerViewModel: ObservableObject {
         audioPlayer.stopAudio()
     }
     
-    // NEW: update playback speed from UI
     func updatePlaybackRate(to rate: Float) {
         playbackRate = rate
-        UserDefaults.standard.set(rate, forKey: Self.playbackRateKey)
+        AudioPreferences.shared.playbackRate = rate
         audioPlayer.setRate(rate)
     }
 

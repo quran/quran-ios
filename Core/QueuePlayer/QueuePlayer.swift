@@ -51,6 +51,10 @@ public class QueuePlayer {
     public func pause() {
         player?.pause()
     }
+    
+    public func setRate(_ rate: Float) {
+        player?.setRate(rate)
+    }
 
     public func resume() {
         player?.resume()

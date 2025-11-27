@@ -17,6 +17,10 @@ class AudioPlayer {
         self.request = request
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         player = Player(url: request.files[0].url)
+        player.onRateChanged = { [weak self] in
+            self?.rateChanged(to: $0)
+        }
+        player.setRate(playbackRate)
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -43,19 +47,43 @@ class AudioPlayer {
     }
 
     func resume() {
+        isPaused = false
+        // apply any pending rate before resuming playback
+        if let r = pendingRate {
+            playbackRate = r
+            pendingRate = nil
+            player.setRate(r)
+            actions?.playbackRateChanged(r)
+        }
         timer?.resume()
         player.play()
     }
 
     func pause() {
+        isPaused = true
         timer?.pause()
         player.pause()
     }
 
     func stop() {
+        isPaused = true
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
+    }
+    
+    func setRate(_ rate: Float) {
+        playbackRate = rate
+        player.setRate(rate)
+        actions?.playbackRateChanged(rate)
+
+        // if currently playing, re-schedule the end of the current frame using the new rate
+        if player.isPlaying, rate > 0 {
+            timer?.cancel()
+            waitUntilFrameEnds()
+        } else {
+            pendingRate = nil
+        }
     }
 
     func stepForward() {
@@ -79,16 +107,20 @@ class AudioPlayer {
     }
 
     // MARK: Private
-
+    
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private var audioPlaying: AudioPlaying
+    private var playbackRate: Float = 1.0
+    private var isPaused = false
+    private var pendingRate: Float?
 
     private var player: Player {
         didSet {
             player.onRateChanged = { [weak self] in
                 self?.rateChanged(to: $0)
             }
+            player.setRate(playbackRate)
         }
     }
 
@@ -175,7 +207,10 @@ class AudioPlayer {
 
     private func waitUntilFrameEnds(currentTime: TimeInterval? = nil) {
         // max with 100ms since sometimes the returned value could be negative
-        let interval = max(0.1, getDurationToFrameEnd(currentTime: currentTime))
+        let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
+        // Convert media time to wall-clock time 
+        let rate = max(0.1, Double(player.effectiveRate))
+        let interval = max(0.05, mediaDelta / rate) // small floor for stability
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()
@@ -185,6 +220,11 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func rateChanged(to rate: Float) {
+        playbackRate = rate
+        if player.isPlaying, rate > 0 {
+            timer?.cancel()
+            waitUntilFrameEnds()
+        }
         actions?.playbackRateChanged(rate)
     }
 

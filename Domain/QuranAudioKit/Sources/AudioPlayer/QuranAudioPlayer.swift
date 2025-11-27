@@ -78,6 +78,10 @@ public class QuranAudioPlayer {
     public func stepBackward() {
         player.stepBackward()
     }
+    
+    public func setRate(_ rate: Float) {
+        player.setRate(rate)
+    }
 
     // MARK: - Play
 

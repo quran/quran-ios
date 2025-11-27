@@ -25,7 +25,22 @@ public struct AudioBannerActions {
     let cancelDownloading: AsyncAction
     let reciters: () -> Void
     let more: () -> Void
-    public init(play: @escaping () -> Void, pause: @escaping () -> Void, resume: @escaping () -> Void, stop: @escaping () -> Void, backward: @escaping () -> Void, forward: @escaping () -> Void, cancelDownloading: @escaping AsyncAction, reciters: @escaping () -> Void, more: @escaping () -> Void) {
+    let currentRate: Float
+    let setPlaybackRate: (Float) -> Void
+
+    public init(
+        play: @escaping () -> Void,
+        pause: @escaping () -> Void,
+        resume: @escaping () -> Void,
+        stop: @escaping () -> Void,
+        backward: @escaping () -> Void,
+        forward: @escaping () -> Void,
+        cancelDownloading: @escaping AsyncAction,
+        reciters: @escaping () -> Void,
+        more: @escaping () -> Void,
+        currentRate: Float,
+        setPlaybackRate: @escaping (Float) -> Void
+    ) {
         self.play = play
         self.pause = pause
         self.resume = resume
@@ -35,6 +50,8 @@ public struct AudioBannerActions {
         self.cancelDownloading = cancelDownloading
         self.reciters = reciters
         self.more = more
+        self.currentRate = currentRate
+        self.setPlaybackRate = setPlaybackRate
     }
 }
 
@@ -65,6 +82,21 @@ public struct AudioBannerViewUI: View {
     }
 }
 
+private let speedValues: [Float] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
+
+private let speedFormatter: NumberFormatter = {
+    let nf = NumberFormatter()
+    nf.locale = .current
+    nf.minimumFractionDigits = 0
+    nf.maximumFractionDigits = 2
+    return nf
+}()
+
+private func formattedSpeed(_ rate: Float) -> String {
+    let s = speedFormatter.string(from: NSNumber(value: rate)) ?? String(rate)
+    return s + "×"
+}
+
 private struct AudioPlaying: View {
     let paused: Bool
     let actions: AudioBannerActions
@@ -75,8 +107,21 @@ private struct AudioPlaying: View {
                 NoorSystemImage.stop.image
                     .padding()
             }
-            Spacer()
-
+            
+            Menu {
+                ForEach(speedValues, id: \.self) { value in
+                    Button(formattedSpeed(value)) { actions.setPlaybackRate(value) }
+                }
+            } label: {
+                Text(formattedSpeed(actions.currentRate))
+                    .font(.footnote)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color(.systemGray5))
+                    .clipShape(Capsule())
+            }
+            .padding(.leading, 4)
+            
             Button(action: actions.backward) {
                 NoorSystemImage.backward.image
                     .padding()
@@ -198,7 +243,9 @@ private struct BannerBackground: View {
             forward: {},
             cancelDownloading: {},
             reciters: {},
-            more: {}
+            more: {},
+            currentRate: 1.0,
+            setPlaybackRate: { _ in }
         )
 
         let readyToPlay = AudioBannerState.readyToPlay(reciter: "Mishary Al-afasy")

@@ -81,6 +81,7 @@ public final class AudioBannerViewModel: ObservableObject {
     @Published var toast: (message: String, action: ToastAction?)?
     @Published var viewControllerToPresent: UIViewController?
     @Published var dismissPresentedViewController = false
+    @Published var playbackRate: Float = 1.0
 
     var audioBannerState: AudioBannerState {
         switch playingState {
@@ -102,6 +103,9 @@ public final class AudioBannerViewModel: ObservableObject {
 
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
+
+        let savedRate = AudioPreferences.shared.playbackRate
+        playbackRate = savedRate
 
         let runningDownloads = await downloader.runningAudioDownloads()
         logger.info("AudioBanner: loaded runningAudioDownloads count: \(runningDownloads.count)")
@@ -232,6 +236,9 @@ public final class AudioBannerViewModel: ObservableObject {
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns
                 )
+                if let rate = self?.playbackRate {
+                    self?.audioPlayer.setRate(rate)
+                }
                 self?.playingStarted()
             } catch {
                 self?.playbackFailed(error)
@@ -269,6 +276,12 @@ public final class AudioBannerViewModel: ObservableObject {
     private func stop() {
         audioRange = nil
         audioPlayer.stopAudio()
+    }
+    
+    func updatePlaybackRate(to rate: Float) {
+        playbackRate = rate
+        AudioPreferences.shared.playbackRate = rate
+        audioPlayer.setRate(rate)
     }
 
     // MARK: - Downloading

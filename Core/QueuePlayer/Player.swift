@@ -19,7 +19,9 @@ final class Player {
     init(url: URL) {
         asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         playerItem = AVPlayerItem(asset: asset)
+        playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
+        player.automaticallyWaitsToMinimizeStalling = false
 
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
             if let rate = change.newValue {
@@ -46,7 +48,7 @@ final class Player {
     }
 
     func play() {
-        player.play()
+        player.playImmediately(atRate: currentRate)
     }
 
     func pause() {
@@ -56,6 +58,13 @@ final class Player {
     func stop() {
         player.pause()
     }
+    
+    func setRate(_ rate: Float) {
+        currentRate = rate
+        if player.rate != 0 {
+            player.rate = rate
+        }
+    }
 
     func seek(to timeInSeconds: TimeInterval) {
         pause()
@@ -63,10 +72,24 @@ final class Player {
         play()
     }
 
+    // MARK: Internal helpers (read-only)
+
+    var isPlaying: Bool {
+        player.rate != 0
+    }
+
+    /// The effective rate to use for scheduling:
+    /// - if playing, use the live AVPlayer rate
+    /// - if paused, fall back to the last requested rate (currentRate)
+    var effectiveRate: Float {
+        player.rate != 0 ? player.rate : currentRate
+    }
+
     // MARK: Private
 
     private let asset: AVURLAsset
     private let player: AVPlayer
+    private var currentRate: Float = 1.0
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }

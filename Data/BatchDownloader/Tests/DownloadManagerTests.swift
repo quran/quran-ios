@@ -53,7 +53,7 @@ final class DownloadManagerTests: XCTestCase {
             }
         }
         let calls = Calls()
-        downloader.setBackgroundSessionCompletion { @Sendable @MainActor () in
+        downloader.setBackgroundSessionCompletion { @Sendable @MainActor in
             XCTAssertTrue(Thread.isMainThread)
             calls.increment()
         }
@@ -127,6 +127,19 @@ final class DownloadManagerTests: XCTestCase {
         await AsyncAssertEqual(1.0, await batchListener.values.last)
 
         for try await _ in response.progress { }
+    }
+
+    func testCancelDownloadsRemovesBatches() async throws {
+        let batch = DownloadBatchRequest(requests: [request1, request2])
+        _ = try await downloader.download(batch)
+
+        let downloads = await downloader.getOnGoingDownloads()
+        XCTAssertEqual(downloads.count, 1)
+
+        await downloader.cancel(downloads: downloads)
+
+        let remaining = await downloader.getOnGoingDownloads()
+        XCTAssertEqual(remaining.count, 0)
     }
 
     @MainActor

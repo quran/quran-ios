@@ -51,7 +51,7 @@ class QueuePlayerFake: QueuingPlayer {
     var state: PlayingState = .stopped
     var location = 0
 
-    func play(request: AudioRequest) {
+    func play(request: AudioRequest, rate: Float) {
         state = .playing(request)
         location = 0
     }
@@ -78,5 +78,8 @@ class QueuePlayerFake: QueuingPlayer {
 
     func stepBackward() {
         location -= 1
+    }
+
+    func setRate(_ rate: Float) {
     }
 }

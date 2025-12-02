@@ -14,12 +14,12 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setting up Xcode
-      run: sudo xcode-select -s "/Applications/Xcode_16.2.app"
+      run: sudo xcode-select -s "/Applications/Xcode_16.4.app"
 
     - name: Run tests
       run: |
         gem install xcpretty
-        set -o pipefail && xcrun xcodebuild build test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 16,OS=18.2" | xcpretty
+        set -o pipefail && xcrun xcodebuild build test -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 16,OS=18.4" | xcpretty
 
     - uses: codecov/codecov-action@v4
       with:
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setting up Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_16.2.app"
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app"
       
       - name: Build
         run: |
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setting up Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_16.2.app"
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app"
       
       - name: SwiftFormat
         run: make format-lint

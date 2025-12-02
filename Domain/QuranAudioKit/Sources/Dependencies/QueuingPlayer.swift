@@ -11,7 +11,7 @@ import QueuePlayer
 protocol QueuingPlayer: AnyObject {
     var actions: QueuePlayerActions? { get set }
 
-    func play(request: AudioRequest)
+    func play(request: AudioRequest, rate: Float)
     func pause()
     func resume()
     func stop()

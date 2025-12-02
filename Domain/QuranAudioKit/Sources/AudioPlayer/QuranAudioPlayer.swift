@@ -78,7 +78,7 @@ public class QuranAudioPlayer {
     public func stepBackward() {
         player.stepBackward()
     }
-    
+
     public func setRate(_ rate: Float) {
         player.setRate(rate)
     }
@@ -87,6 +87,7 @@ public class QuranAudioPlayer {
 
     public func play(
         reciter: Reciter,
+        rate: Float,
         from start: AyahNumber,
         to end: AyahNumber,
         verseRuns: Runs,
@@ -108,7 +109,7 @@ public class QuranAudioPlayer {
         willPlay(request)
         self.audioRequest = audioRequest
         player.actions = newPlayerActions()
-        player.play(request: request)
+        player.play(request: request, rate: rate)
     }
 
     // MARK: Private

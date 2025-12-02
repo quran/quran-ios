@@ -47,8 +47,14 @@ final class Player {
         asset.duration.seconds
     }
 
-    func play() {
-        player.playImmediately(atRate: currentRate)
+    // MARK: Internal helpers (read-only)
+
+    var isPlaying: Bool {
+        player.rate != 0
+    }
+
+    func play(rate: Float) {
+        player.playImmediately(atRate: rate)
     }
 
     func pause() {
@@ -58,38 +64,21 @@ final class Player {
     func stop() {
         player.pause()
     }
-    
+
     func setRate(_ rate: Float) {
-        currentRate = rate
-        if player.rate != 0 {
-            player.rate = rate
-        }
+        player.rate = rate
     }
 
-    func seek(to timeInSeconds: TimeInterval) {
+    func seek(to timeInSeconds: TimeInterval, rate: Float) {
         pause()
         player.seek(to: timeInSeconds)
-        play()
-    }
-
-    // MARK: Internal helpers (read-only)
-
-    var isPlaying: Bool {
-        player.rate != 0
-    }
-
-    /// The effective rate to use for scheduling:
-    /// - if playing, use the live AVPlayer rate
-    /// - if paused, fall back to the last requested rate (currentRate)
-    var effectiveRate: Float {
-        player.rate != 0 ? player.rate : currentRate
+        play(rate: rate)
     }
 
     // MARK: Private
 
     private let asset: AVURLAsset
     private let player: AVPlayer
-    private var currentRate: Float = 1.0
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }

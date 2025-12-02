@@ -102,6 +102,16 @@ actor DownloadBatchDataController {
         await startPendingTasksIfNeeded()
     }
 
+    func waitUntilBatchesRemoved(batchIds: Set<Int64>) async {
+        guard !batchIds.isEmpty else {
+            return
+        }
+
+        while batches.contains(where: { batchIds.contains($0.batchId) }) {
+            try? await Task.sleep(nanoseconds: 50_000_000)
+        }
+    }
+
     // MARK: Private
 
     private let maxSimultaneousDownloads: Int

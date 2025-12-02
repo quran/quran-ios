@@ -53,9 +53,8 @@ public struct QuranAudioDownloader: Sendable {
     }
 
     public func cancelAllAudioDownloads() async {
-        for download in await runningAudioDownloads() {
-            await download.cancel()
-        }
+        let downloads = await runningAudioDownloads()
+        await downloader.cancel(downloads: downloads)
     }
 
     public func runningAudioDownloads() async -> [DownloadBatchResponse] {

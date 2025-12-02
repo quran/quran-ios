@@ -88,12 +88,36 @@ public final class DownloadManager: Sendable {
         return result
     }
 
+    public func cancel(downloads: [DownloadBatchResponse]) async {
+        guard !downloads.isEmpty else {
+            return
+        }
+
+        await withTaskGroup(of: Void.self) { group in
+            for download in downloads {
+                group.addTask {
+                    await download.cancel()
+                    await Self.waitForCompletion(of: download)
+                }
+            }
+        }
+
+        let batchIds = Set(downloads.map(\.batchId))
+        await dataController.waitUntilBatchesRemoved(batchIds: batchIds)
+    }
+
     // MARK: Private
 
     private let sessionFactory: SessionFactory
-    private var session: NetworkSession?
+    private nonisolated(unsafe) var session: NetworkSession?
     private let handler: DownloadSessionDelegate
     private let dataController: DownloadBatchDataController
+
+    private static func waitForCompletion(of download: DownloadBatchResponse) async {
+        do {
+            for try await _ in download.progress { }
+        } catch { }
+    }
 
     private func createSession() -> NetworkSession {
         let operationQueue = OperationQueue()

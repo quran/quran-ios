@@ -263,7 +263,7 @@ class QuranAudioPlayerTests: XCTestCase {
         let reciter = gappedReciter
 
         // test playing audio for downloaded gapped reciter
-        try await player.play(reciter: reciter, from: from, to: to, verseRuns: .one, listRuns: .one)
+        try await player.play(reciter: reciter, rate: 1.0, from: from, to: to, verseRuns: .one, listRuns: .one)
 
         if snaphot {
             let state = queuePlayer.state
@@ -283,7 +283,7 @@ class QuranAudioPlayerTests: XCTestCase {
         try reciter.prepareGaplessReciterForTests()
 
         // test playing audio for downloaded gapless reciter
-        try await player.play(reciter: reciter, from: from, to: to, verseRuns: .one, listRuns: .one)
+        try await player.play(reciter: reciter, rate: 1.0, from: from, to: to, verseRuns: .one, listRuns: .one)
 
         if snaphot {
             let state = queuePlayer.state

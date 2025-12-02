@@ -20,7 +20,11 @@ public class AudioPreferences {
     @TransformedPreference(audioEndKey, transformer: .rawRepresentable(defaultValue: .juz))
     public var audioEnd: AudioEnd
 
+    @Preference(audioPlaybackRateKey)
+    public var playbackRate: Float
+
     // MARK: Private
 
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
+    private static let audioPlaybackRateKey = PreferenceKey<Float>(key: "audioPlaybackRate", defaultValue: 1.0)
 }

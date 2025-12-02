@@ -60,9 +60,12 @@ public final class AudioBannerViewModel: ObservableObject {
         self.downloader = downloader
         self.reciterListBuilder = reciterListBuilder
         self.advancedAudioOptionsBuilder = advancedAudioOptionsBuilder
+        playbackRate = AudioPreferences.shared.playbackRate
 
         setUpAudioPlayerActions()
         setUpRemoteCommandHandler()
+
+        AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
     }
 
     // MARK: Public
@@ -81,12 +84,12 @@ public final class AudioBannerViewModel: ObservableObject {
     @Published var toast: (message: String, action: ToastAction?)?
     @Published var viewControllerToPresent: UIViewController?
     @Published var dismissPresentedViewController = false
-    @Published var playbackRate: Float = 1.0
+    @Published var playbackRate: Float
 
     var audioBannerState: AudioBannerState {
         switch playingState {
-        case .playing: .playing(paused: false)
-        case .paused: .playing(paused: true)
+        case .playing: .playing(paused: false, rate: playbackRate)
+        case .paused: .playing(paused: true, rate: playbackRate)
         case .stopped: .readyToPlay(reciter: selectedReciter?.localizedName ?? "")
         case .downloading(let progress): .downloading(progress: progress)
         }
@@ -104,9 +107,6 @@ public final class AudioBannerViewModel: ObservableObject {
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
 
-        let savedRate = AudioPreferences.shared.playbackRate
-        playbackRate = savedRate
-
         let runningDownloads = await downloader.runningAudioDownloads()
         logger.info("AudioBanner: loaded runningAudioDownloads count: \(runningDownloads.count)")
 
@@ -119,6 +119,11 @@ public final class AudioBannerViewModel: ObservableObject {
                 }.asCancellableTask()
             )
         }
+    }
+
+    func updatePlaybackRate(to rate: Float) {
+        AudioPreferences.shared.playbackRate = rate
+        audioPlayer.setRate(rate)
     }
 
     // MARK: Private
@@ -231,15 +236,17 @@ public final class AudioBannerViewModel: ObservableObject {
                     logger.info("AudioBanner: download completed")
                 }
 
-                try await self?.audioPlayer.play(
+                guard let self else {
+                    return
+                }
+
+                try await audioPlayer.play(
                     reciter: selectedReciter,
+                    rate: playbackRate,
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns
                 )
-                if let rate = self?.playbackRate {
-                    self?.audioPlayer.setRate(rate)
-                }
-                self?.playingStarted()
+                playingStarted()
             } catch {
                 self?.playbackFailed(error)
             }
@@ -276,12 +283,6 @@ public final class AudioBannerViewModel: ObservableObject {
     private func stop() {
         audioRange = nil
         audioPlayer.stopAudio()
-    }
-    
-    func updatePlaybackRate(to rate: Float) {
-        playbackRate = rate
-        AudioPreferences.shared.playbackRate = rate
-        audioPlayer.setRate(rate)
     }
 
     // MARK: - Downloading

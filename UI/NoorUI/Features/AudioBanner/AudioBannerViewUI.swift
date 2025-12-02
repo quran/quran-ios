@@ -10,7 +10,7 @@ import SwiftUI
 import UIx
 
 public enum AudioBannerState {
-    case playing(paused: Bool)
+    case playing(paused: Bool, rate: Float)
     case readyToPlay(reciter: String)
     case downloading(progress: Double)
 }
@@ -25,7 +25,6 @@ public struct AudioBannerActions {
     let cancelDownloading: AsyncAction
     let reciters: () -> Void
     let more: () -> Void
-    let currentRate: Float
     let setPlaybackRate: (Float) -> Void
 
     public init(
@@ -38,7 +37,6 @@ public struct AudioBannerActions {
         cancelDownloading: @escaping AsyncAction,
         reciters: @escaping () -> Void,
         more: @escaping () -> Void,
-        currentRate: Float,
         setPlaybackRate: @escaping (Float) -> Void
     ) {
         self.play = play
@@ -50,7 +48,6 @@ public struct AudioBannerActions {
         self.cancelDownloading = cancelDownloading
         self.reciters = reciters
         self.more = more
-        self.currentRate = currentRate
         self.setPlaybackRate = setPlaybackRate
     }
 }
@@ -66,8 +63,8 @@ public struct AudioBannerViewUI: View {
     public var body: some View {
         ZStack {
             switch state {
-            case .playing(let paused):
-                AudioPlaying(paused: paused, actions: actions)
+            case .playing(let paused, let rate):
+                AudioPlaying(paused: paused, currentRate: rate, actions: actions)
             case .readyToPlay(let reciter):
                 ReadyToPlay(reciter: reciter, actions: actions)
             case .downloading(let progress):
@@ -82,23 +79,24 @@ public struct AudioBannerViewUI: View {
     }
 }
 
-private let speedValues: [Float] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
+private let speedValues: [Float] = [0.5, 0.75, 1.0, 1.25, 1.5]
 
 private let speedFormatter: NumberFormatter = {
     let nf = NumberFormatter()
-    nf.locale = .current
+    nf.locale = Locale.current.fixedLocaleNumbers()
     nf.minimumFractionDigits = 0
     nf.maximumFractionDigits = 2
     return nf
 }()
 
 private func formattedSpeed(_ rate: Float) -> String {
-    let s = speedFormatter.string(from: NSNumber(value: rate)) ?? String(rate)
-    return s + "×"
+    // TODO: Localize this
+    return speedFormatter.format(rate) + "×"
 }
 
 private struct AudioPlaying: View {
     let paused: Bool
+    let currentRate: Float
     let actions: AudioBannerActions
 
     var body: some View {
@@ -107,13 +105,13 @@ private struct AudioPlaying: View {
                 NoorSystemImage.stop.image
                     .padding()
             }
-            
+
             Menu {
                 ForEach(speedValues, id: \.self) { value in
                     Button(formattedSpeed(value)) { actions.setPlaybackRate(value) }
                 }
             } label: {
-                Text(formattedSpeed(actions.currentRate))
+                Text(formattedSpeed(currentRate))
                     .font(.footnote)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
@@ -121,7 +119,7 @@ private struct AudioPlaying: View {
                     .clipShape(Capsule())
             }
             .padding(.leading, 4)
-            
+
             Button(action: actions.backward) {
                 NoorSystemImage.backward.image
                     .padding()
@@ -244,12 +242,11 @@ private struct BannerBackground: View {
             cancelDownloading: {},
             reciters: {},
             more: {},
-            currentRate: 1.0,
             setPlaybackRate: { _ in }
         )
 
         let readyToPlay = AudioBannerState.readyToPlay(reciter: "Mishary Al-afasy")
-        let playing = AudioBannerState.playing(paused: false)
+        let playing = AudioBannerState.playing(paused: false, rate: 1.0)
         let downloading = AudioBannerState.downloading(progress: 0.7)
         var state: AudioBannerState {
             switch counter % 3 {

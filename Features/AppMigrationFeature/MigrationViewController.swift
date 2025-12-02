@@ -7,14 +7,20 @@
 //
 
 import NoorUI
-import NVActivityIndicatorView
+import SwiftUI
 import UIKit
 
-public class MigrationViewController: BaseViewController {
+@MainActor
+public final class MigrationViewController: BaseViewController {
     // MARK: Lifecycle
 
     public init() {
-        super.init(nibName: nil, bundle: .module)
+        let viewModel = MigrationViewModel(titles: [])
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+
+        let viewController = UIHostingController(rootView: MigrationView(viewModel: viewModel))
+        addFullScreenChild(viewController)
     }
 
     @available(*, unavailable)
@@ -24,20 +30,11 @@ public class MigrationViewController: BaseViewController {
 
     // MARK: Public
 
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-
-        activityIndicator.startAnimating()
-    }
-
     public func setTitles(_ titles: Set<String>) {
-        loadViewIfNeeded()
-        textLabel.numberOfLines = 0
-        textLabel.text = titles.joined(separator: "\n")
+        viewModel.setTitles(titles)
     }
 
-    // MARK: Internal
+    // MARK: Private
 
-    @IBOutlet var textLabel: UILabel!
-    @IBOutlet var activityIndicator: NVActivityIndicatorView!
+    private let viewModel: MigrationViewModel
 }

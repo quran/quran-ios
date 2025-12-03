@@ -305,7 +305,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.personalization" = "O'qish mavzulari:";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Bir nechta mavzuni qo'llab-quvvatlaydi. Qur'onni oching -> yuqori o'ng menyu -> Mavzular va Sozlamalar.\n* Oldingi uslubga qaytmoqchi bo'lsangiz, 'Original'dan foydalaning.";
+"new.personalization.details" = "* Bir nechta mavzuni qo'llab-quvvatlaydi. Qur'onning bir betini oching -> yuqori o'ng menyu -> Mavzular va Sozlamalar.\n* Oldingi uslubga qaytmoqchi bo'lsangiz, 'Original'dan foydalaning.";
 
 // Library & Navigation
 // Metadata: Translated by ChatGPT; human review required.

@@ -303,7 +303,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.personalization" = "Темы чтения:";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Поддержка нескольких тем. Откройте Коран -> верхнее правое меню -> Темы и настройки.\n* Используйте 'Original', если хотите вернуться к предыдущему стилю.";
+"new.personalization.details" = "* Поддержка нескольких тем. Откройте страницу Корана -> верхнее правое меню -> Темы и настройки.\n* Используйте 'Original', если хотите вернуться к предыдущему стилю.";
 
 // Library & Navigation
 // Metadata: Translated by ChatGPT; human review required.

@@ -191,3 +191,15 @@
 // Miscellaneous
 "new.miscellaneous" = "Miscellaneous:";
 "new.miscellaneous.details" = "* Updated app look.\n* Enhanced search feature (new algorithm coming soon).\n* Vietnamese localization support.\n* Advanced audio options access available when no recitation is playing.\n* App now is open source: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+"new.audio_upgrades" = "Audio:";
+"new.audio_upgrades.details" = "* Adjustable recitation speed control: 0.5x, 0.75x, 1x, 1.25x, 1.5x - thanks to @adnan29979.\n* Playback remembers your preferred rate - thanks to @adnan29979.";
+
+// Personalization
+"new.personalization" = "Reading Themes:";
+"new.personalization.details" = "* Support for multiple themes. Open Quran -> Top Right Menu -> Themes & Settings.\n* Use 'Original' if you want to revert to the previous style.";
+
+// Library & Navigation
+"new.library_navigation" = "Library & Navigation:";
+"new.library_navigation.details" = "* Sort surahs and juz on Home, and display surah numbers so you can jump to what you need faster - thanks to @yismailuofa.";

@@ -202,3 +202,21 @@
 "new.miscellaneous" = "Diversen:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Bijgewerkte app-uitstraling.\n* Verbeterde zoekfunctie (nieuw algoritme binnenkort beschikbaar).\n* Ondersteuning voor Vietnamese lokalisatie.\n* Geavanceerde audio-opties toegankelijk wanneer er geen recitatie wordt afgespeeld.\n* App is nu open source: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Audio:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Instelbare recitatiesnelheid: 0,5x, 0,75x, 1x, 1,25x, 1,5x - dankzij @adnan29979.\n* De weergave onthoudt je favoriete snelheid - dankzij @adnan29979.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Leesthema's:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Ondersteuning voor meerdere thema's. Open de Koran -> Menu rechtsboven -> Thema's & Instellingen.\n* Gebruik 'Original' als je wilt teruggaan naar de vorige stijl.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Bibliotheek & Navigatie:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Sorteer soera's en juz op het Startscherm en toon soeranummers zodat je sneller gaat naar wat je nodig hebt - dankzij @yismailuofa.";

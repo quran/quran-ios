@@ -292,3 +292,21 @@
 "new.miscellaneous" = "Verschiedenes:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Aktualisiertes App-Design.\n* Verbesserte Suchfunktion (neuer Algorithmus in Kürze).\n* Unterstützung für vietnamesische Lokalisierung.\n* Erweiterter Zugang zu Audiooptionen verfügbar, wenn keine Rezitation läuft.\n* App ist jetzt Open Source: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Audio:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Einstellbare Rezitationsgeschwindigkeit: 0,5x, 0,75x, 1x, 1,25x, 1,5x - danke an @adnan29979.\n* Die Wiedergabe merkt sich Ihre bevorzugte Geschwindigkeit - danke an @adnan29979.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Lesethemen:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Unterstützung für mehrere Themen. Öffnen Sie den Quran -> Menü oben rechts -> Themen & Einstellungen.\n* Verwenden Sie \"Original\", wenn Sie zum vorherigen Stil zurückkehren möchten.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Bibliothek & Navigation:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Sortieren Sie Suren und Juz auf der Startseite und zeigen Sie Surennummern an, damit Sie schneller zu dem gelangen, was Sie brauchen - danke an @yismailuofa.";

@@ -199,3 +199,21 @@
 "new.miscellaneous" = "Đa dạng:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Cập nhật giao diện ứng dụng.\n* Cải tiến tính năng tìm kiếm (thuật toán mới sắp ra mắt).\n* Hỗ trợ đa ngôn ngữ tiếng Việt.\n* Truy cập tùy chọn âm thanh nâng cao khi không có bản đọc nào đang phát.\n* Ứng dụng hiện đã là mã nguồn mở: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Âm thanh:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Điều chỉnh tốc độ đọc: 0.5x, 0.75x, 1x, 1.25x, 1.5x - nhờ @adnan29979.\n* Phát lại ghi nhớ tốc độ ưa thích của bạn - nhờ @adnan29979.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Chủ đề đọc:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Hỗ trợ nhiều chủ đề. Mở Quran -> Menu góc trên bên phải -> Chủ đề & Cài đặt.\n* Dùng 'Original' nếu bạn muốn quay lại phong cách trước.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Thư viện & Điều hướng:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Sắp xếp surah và juz trên Trang chủ và hiển thị số surah để bạn đến nội dung cần nhanh hơn - nhờ @yismailuofa.";

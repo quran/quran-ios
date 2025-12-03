@@ -304,7 +304,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.personalization" = "阅读主题:";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* 支持多种主题。打开《古兰经》 -> 右上角菜单 -> 主题与设置。\n* 如果想恢复以前的样式，请使用 'Original'。";
+"new.personalization.details" = "* 支持多种主题。打开一页《古兰经》 -> 右上角菜单 -> 主题与设置。\n* 如果想恢复以前的样式，请使用 'Original'。";
 
 // Library & Navigation
 // Metadata: Translated by ChatGPT; human review required.

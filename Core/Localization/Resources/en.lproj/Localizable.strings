@@ -198,7 +198,7 @@
 
 // Personalization
 "new.personalization" = "Reading Themes:";
-"new.personalization.details" = "* Support for multiple themes. Open Quran -> Top Right Menu -> Themes & Settings.\n* Use 'Original' if you want to revert to the previous style.";
+"new.personalization.details" = "* Support for multiple themes. Open a Quran Page -> Top Right Menu -> Themes & Settings.\n* Use 'Original' if you want to revert to the previous style.";
 
 // Library & Navigation
 "new.library_navigation" = "Library & Navigation:";

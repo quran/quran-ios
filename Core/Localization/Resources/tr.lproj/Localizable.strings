@@ -244,7 +244,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.personalization" = "Okuma Temaları:";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Birden fazla tema desteği. Kur'an'ı açın -> Sağ üst menü -> Temalar ve Ayarlar.\n* Önceki stile dönmek isterseniz 'Original'i kullanın.";
+"new.personalization.details" = "* Birden fazla tema desteği. Bir Kur'an sayfası açın -> Sağ üst menü -> Temalar ve Ayarlar.\n* Önceki stile dönmek isterseniz 'Original'i kullanın.";
 
 // Library & Navigation
 // Metadata: Translated by ChatGPT; human review required.

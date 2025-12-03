@@ -192,10 +192,8 @@
 "new.audio_upgrades.details" = "* التحكم في سرعة التلاوة: 0.5x، 0.75x، 1x، 1.25x، 1.5x - بفضل @adnan29979.\n* يتذكر تشغيل تلاوة جديدة السرعة المفضلة لديك - بفضل @adnan29979.";
 
 // Personalization
-// Metadata: Translated by ChatGPT; human review required.
 "new.personalization" = "الأنماط:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* دعم لعدة أنماط. افتح القرآن -> القائمة العلوية اليمنى -> السمات والإعدادات.\n* استخدم \"الأصلي\" إذا كنت تريد العودة إلى النمط السابق.";
+"new.personalization.details" = "* دعم لعدة أنماط. افتح صفحة من القرآن -> القائمة العلوية اليمنى -> السمات والإعدادات.\n* استخدم \"الأصلي\" إذا كنت تريد العودة إلى النمط السابق.";
 
 // Library & Navigation
 // Metadata: Translated by ChatGPT; human review required.

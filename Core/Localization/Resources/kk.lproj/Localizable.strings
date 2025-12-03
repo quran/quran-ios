@@ -274,3 +274,21 @@
 "new.miscellaneous" = "Әртүрлі:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Қосымшаның жаңартылған көрінісі.\n* Іздеу қызметі жақсартылды (жаңа алгоритм жақында шығады).\n* Вьетнам тіліндегі локализация қолдауы.\n* Қайталау ойнатылмайтын кезде кеңейтілген аудио параметрлеріне қолжетімділік.\n* Қосымша қазір ашық кодты: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Дыбыс:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Қайта оқу жылдамдығын 0.5x, 0.75x, 1x, 1.25x, 1.5x деңгейінде реттеңіз - @adnan29979-ға рахмет.\n* Ойнату сүйікті жылдамдығыңызды есте сақтайды - @adnan29979-ға рахмет.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Оқу тақырыптары:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Бірнеше тақырыпты қолдау. Құранды ашыңыз -> жоғарғы оң мәзір -> Тақырыптар және баптаулар.\n* Алдыңғы стильге оралғыңыз келсе, 'Original' параметрін пайдаланыңыз.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Кітапхана және навигация:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Үй бетінде сүрелер мен жүздерді сұрыптап, сүре нөмірлерін көрсетіңіз, сонда қажет нәрсеге тезірек жете аласыз - @yismailuofa-ға рахмет.";

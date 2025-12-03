@@ -275,3 +275,21 @@
 "new.miscellaneous" = "Pelbagai:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Rupa aplikasi dikemas kini.\n* Ciri carian diperhebatkan (algoritma baru akan datang tidak lama lagi).\n* Sokongan penyetempatan Bahasa Vietnam.\n* Akses opsyen audio lanjutan tersedia apabila tiada bacaan sedang dimainkan.\n* Aplikasi kini bersumber terbuka: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Audio:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Kawalan kelajuan bacaan boleh laras: 0.5x, 0.75x, 1x, 1.25x, 1.5x - terima kasih kepada @adnan29979.\n* Main balik mengingati kadar pilihan anda - terima kasih kepada @adnan29979.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Tema Membaca:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Sokongan untuk pelbagai tema. Buka Al-Quran -> Menu kanan atas -> Tema & Tetapan.\n* Gunakan 'Original' jika anda mahu kembali kepada gaya sebelumnya.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Perpustakaan & Navigasi:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Susun surah dan juz di Halaman Utama serta paparkan nombor surah supaya anda boleh pergi ke yang diperlukan dengan lebih pantas - terima kasih kepada @yismailuofa.";

@@ -294,3 +294,21 @@
 "new.miscellaneous" = "متفرقه:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* به‌روزرسانی ظاهر برنامه.\n* بهبود ویژگی جستجو (الگوریتم جدید به زودی).\n* پشتیبانی از محلی‌سازی ویتنامی.\n* دسترسی پیشرفته به گزینه‌های صوتی در دسترس هنگامی که قرائت در حال پخش نیست.\n* برنامه اکنون متن باز است: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "صوتی:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* کنترل سرعت تلاوت قابل تنظیم: 0.5x، 0.75x، 1x، 1.25x، 1.5x - با تشکر از @adnan29979.\n* پخش، سرعت دلخواه شما را به خاطر می‌سپارد - با تشکر از @adnan29979.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "موضوعات مطالعه:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* پشتیبانی از چندین تم. قرآن را باز کنید -> منوی بالا سمت راست -> تم‌ها و تنظیمات.\n* اگر می‌خواهید به سبک قبلی برگردید از 'Original' استفاده کنید.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "کتابخانه و پیمایش:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* سوره‌ها و جزءها را در صفحه اصلی مرتب کنید و شماره سوره‌ها را نمایش دهید تا سریع‌تر به آنچه نیاز دارید برسید - با تشکر از @yismailuofa.";

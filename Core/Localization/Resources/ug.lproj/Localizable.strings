@@ -295,3 +295,21 @@
 "new.miscellaneous" = "ھەرخىل:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* يېڭىلانغان ئەپ كۆرۈنۈشى.\n* ئىزدەش خۇسۇسىيىتى ياخشىلاندى (يېڭى ئالگورىتم تېزدىن بولىدۇ).\n* ۋىيېتنام تىلىدىكى يەرلىكلەشتۈرۈش قوللىمىسى.\n* تىلاۋەت قىلىنمىغاندا ئالىي دەرىجىلىك ئاۋاز تاللاشلىرىغا كىرىشكە بولىدۇ.\n* ئەپ ھازىر ئوچۇق مەنبە: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "ئاۋاز:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* تىلىۋەت سۈرئىتىنى 0.5x، 0.75x، 1x، 1.25x، 1.5x قىلدۇرىدۇ - @adnan29979 غا رەھمەت.\n* قويۇش سىز ياخشى كۆرىدىغان سۈرئەتنى ئەستە تۇتىدۇ - @adnan29979 غا رەھمەت.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "ئوقۇش تېمىلىرى:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* كۆپ تېمىلارنى قوللايدۇ. قۇرئاننى ئېچىڭ -> ئوڭ يۇقىرى تەرەپتىكى تىزىملىك -> تېمىلەر ۋە تەڭشەكلەر.\n* 'Original' نى ئىشلىتىپ بۇرۇنقى ئۇسلۇپقا قايتالايسىز.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "كىتەپخانا ۋە يولباشچىلىق:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* باش بەتتە سۈرە ۋە جۇزلارنى تەرتىپلەپ، سۈرە نومۇرلىرىنى كۆرسىتىڭ، شۇنداق قىلىپ لازىملىق بەتكە تېز يېتىڭ - @yismailuofa غا رەھمەت.";

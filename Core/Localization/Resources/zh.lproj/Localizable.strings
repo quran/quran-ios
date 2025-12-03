@@ -293,3 +293,21 @@
 "new.miscellaneous" = "杂项:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* 更新应用程序外观。\n* 增强搜索功能（新算法即将推出）。\n* 支持越南本地化。\n* 在没有朗诵播放时可访问高级音频选项。\n* 应用现在是开源的：https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "音频:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* 可调节的诵读速度：0.5x、0.75x、1x、1.25x、1.5x - 感谢 @adnan29979。\n* 播放会记住你偏好的速度 - 感谢 @adnan29979。";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "阅读主题:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* 支持多种主题。打开《古兰经》 -> 右上角菜单 -> 主题与设置。\n* 如果想恢复以前的样式，请使用 'Original'。";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "书库与导航:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* 在主页排序苏拉和朱兹并显示苏拉编号，帮助你更快跳转到所需内容 - 感谢 @yismailuofa。";

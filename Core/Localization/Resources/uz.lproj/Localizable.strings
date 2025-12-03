@@ -294,3 +294,21 @@
 "new.miscellaneous" = "Turli-tuman:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Yangi ilovalarning tashqi ko'rinishi yangilandi.\n* Qidiruvni yaxshi qilish imkoniyatini oshirdi (yaqinda yangi algoritm keladi).\n* Vietnam lokalizatsiya qo'llab-quvvatlash.\n* Tilovchi ishlayotganida yuqori audio sozlamalari yo'l qo'yiladi.\n* Ilovadan hozirgi kunlarda ochiq manbai: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Audio:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Qiroat tezligini 0.5x, 0.75x, 1x, 1.25x, 1.5x darajalarida sozlang - @adnan29979 ga rahmat.\n* Qayta ijro etish sevimli tezligingizni eslab qoladi - @adnan29979 ga rahmat.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "O'qish mavzulari:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Bir nechta mavzuni qo'llab-quvvatlaydi. Qur'onni oching -> yuqori o'ng menyu -> Mavzular va Sozlamalar.\n* Oldingi uslubga qaytmoqchi bo'lsangiz, 'Original'dan foydalaning.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Kutubxona va navigatsiya:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Bosh sahifada suralar va juzlarni tartiblang hamda sura raqamlarini ko'rsating, shunda kerakli joyga tezroq o'tasiz - @yismailuofa ga rahmat.";

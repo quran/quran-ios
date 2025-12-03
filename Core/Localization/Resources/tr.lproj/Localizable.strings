@@ -233,3 +233,21 @@
 "new.miscellaneous" = "Çeşitli:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Güncellenmiş uygulama görünümü.\n* Geliştirilmiş arama özelliği (yakında yeni algoritma).\n* Vietnamca yerelleştirme desteği.\n* Kıraat oynatılmadığında gelişmiş ses seçeneklerine erişim mevcut.\n* Uygulama artık açık kaynaklı: https://github.com/quran/quran-ios";
+
+// Audio upgrades
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades" = "Ses:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_upgrades.details" = "* Ayarlanabilir kıraat hız kontrolü: 0.5x, 0.75x, 1x, 1.25x, 1.5x - @adnan29979 sayesinde.\n* Oynatma tercih ettiğiniz hızı hatırlar - @adnan29979 sayesinde.";
+
+// Personalization
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization" = "Okuma Temaları:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.personalization.details" = "* Birden fazla tema desteği. Kur'an'ı açın -> Sağ üst menü -> Temalar ve Ayarlar.\n* Önceki stile dönmek isterseniz 'Original'i kullanın.";
+
+// Library & Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation" = "Kütüphane ve Gezinme:";
+// Metadata: Translated by ChatGPT; human review required.
+"new.library_navigation.details" = "* Ana Sayfa'da sureleri ve cüzleri sıralayın ve sure numaralarını gösterin, böylece ihtiyacınız olana daha hızlı ulaşabilirsiniz - @yismailuofa sayesinde.";

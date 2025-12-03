@@ -6,6 +6,37 @@
 	<array>
 		<dict>
 			<key>version</key>
+			<string>2.4.1</string>
+			<key>items</key>
+			<array>
+				<dict>
+					<key>title</key>
+					<string>new.audio_upgrades</string>
+					<key>subtitle</key>
+					<string>new.audio_upgrades.details</string>
+					<key>image</key>
+					<string>speedometer</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.personalization</string>
+					<key>subtitle</key>
+					<string>new.personalization.details</string>
+					<key>image</key>
+					<string>paintpalette.fill</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.library_navigation</string>
+					<key>subtitle</key>
+					<string>new.library_navigation.details</string>
+					<key>image</key>
+					<string>book.fill</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>version</key>
 			<string>2.2.3</string>
 			<key>items</key>
 			<array>

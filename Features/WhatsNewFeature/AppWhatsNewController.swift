@@ -68,8 +68,9 @@ public class AppWhatsNewController {
         configuration.titleView.titleColor = .label
         configuration.itemsView.titleColor = .label
         configuration.itemsView.subtitleColor = .secondaryLabel
-        configuration.itemsView.titleFont = .preferredFont(forTextStyle: .title2)
-        configuration.itemsView.subtitleFont = .preferredFont(forTextStyle: .subheadline)
+        configuration.itemsView.titleFont = .preferredFont(forTextStyle: .headline)
+        configuration.itemsView.subtitleFont = .preferredFont(forTextStyle: .callout)
+        configuration.itemsView.imageSize = .fixed(height: 30)
 
         // Initialize WhatsNewViewController with WhatsNew
         if let whatsNewViewController = WhatsNewViewController(

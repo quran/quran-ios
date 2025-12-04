@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>version</key>
-			<string>2.4.0</string>
+			<string>2.4.1</string>
 			<key>items</key>
 			<array>
 				<dict>
@@ -33,21 +33,6 @@
 					<key>image</key>
 					<string>book.fill</string>
 				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>version</key>
-			<string>2.2.3</string>
-			<key>items</key>
-			<array>
-				<dict>
-					<key>title</key>
-					<string>new.mushafs</string>
-					<key>subtitle</key>
-					<string>new.mushafs.details</string>
-					<key>image</key>
-					<string>books.vertical.fill</string>
-				</dict>
 				<dict>
 					<key>title</key>
 					<string>new.reciters</string>
@@ -55,14 +40,6 @@
 					<string>new.reciters.details</string>
 					<key>image</key>
 					<string>mic.fill</string>
-				</dict>
-				<dict>
-					<key>title</key>
-					<string>new.miscellaneous</string>
-					<key>subtitle</key>
-					<string>new.miscellaneous.details</string>
-					<key>image</key>
-					<string>sparkles</string>
 				</dict>
 			</array>
 		</dict>

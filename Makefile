@@ -1,9 +1,32 @@
+SHELL=/bin/bash
+
 BUILD_TOOLS_DIR=./BuildTools
+
+PACKAGE_SCHEME ?= QuranEngine-Package
+PACKAGE_SDK ?= iphonesimulator
+PACKAGE_DESTINATION ?= name=iPhone 16,OS=18.5
+EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
+EXAMPLE_SCHEME ?= QuranEngineApp
+EXAMPLE_SDK ?= iphonesimulator
+EXAMPLE_DESTINATION ?= generic/platform=iOS
 
 SWIFT_FORMAT_REPO=https://github.com/nicklockwood/SwiftFormat
 SWIFT_FORMAT_VERSION=0.54.3
 SWIFT_FORMAT_DIR=$(BUILD_TOOLS_DIR)/SwiftFormat
 SWIFT_FORMAT_BIN=$(SWIFT_FORMAT_DIR)/.build/release/swiftformat
+
+CURRENT_TARGET=$(if $(TARGET),$(TARGET),$(PACKAGE_SCHEME))
+
+.PHONY: test build build-example clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect install-swiftlint build-for-analyzer swiftlint-analyzer
+
+test:
+	set -o pipefail; xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcpretty
+
+build:
+	set -o pipefail; xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcpretty
+
+build-example:
+	set -o pipefail; xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

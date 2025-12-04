@@ -7,44 +7,77 @@
 
 import QuranText
 
-extension SearchResults: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case source
-        case items
-    }
+struct EncodableSearchResults: Encodable {
+    // MARK: Internal
 
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(source, forKey: .source)
-        try container.encode(items, forKey: .items)
-    }
-}
+    let results: [SearchResults]
 
-extension SearchResults.Source: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case rawKey
-    }
+    // MARK: Encodable
 
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case .quran:
-            try container.encode(name.lowercased(), forKey: .rawKey)
-        case .translation(let translation):
-            try container.encode("\(name.lowercased()): \(translation.id)", forKey: .rawKey)
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.unkeyedContainer()
+        for result in results {
+            try container.encode(EncodableSearchResult(result: result))
         }
     }
 }
 
-extension SearchResult: Encodable {
-    enum CodingKeys: String, CodingKey {
+private struct EncodableSearchResult: Encodable {
+    // MARK: Internal
+
+    let result: SearchResults
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+        case source
+        case items
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(EncodableSearchSource(source: result.source), forKey: .source)
+        try container.encode(result.items.map(EncodableSearchResultItem.init), forKey: .items)
+    }
+}
+
+private struct EncodableSearchSource: Encodable {
+    // MARK: Internal
+
+    let source: SearchResults.Source
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+        case rawKey
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch source {
+        case .quran:
+            try container.encode(source.name.lowercased(), forKey: .rawKey)
+        case .translation(let translation):
+            try container.encode("\(source.name.lowercased()): \(translation.id)", forKey: .rawKey)
+        }
+    }
+}
+
+private struct EncodableSearchResultItem: Encodable {
+    // MARK: Internal
+
+    let result: SearchResult
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
         case text
         case ayah
     }
 
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(text, forKey: .text)
-        try container.encode(ayah, forKey: .ayah)
+        try container.encode(result.text, forKey: .text)
+        try container.encode(result.ayah, forKey: .ayah)
     }
 }

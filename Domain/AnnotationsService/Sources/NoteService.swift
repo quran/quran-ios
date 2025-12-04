@@ -90,8 +90,8 @@ public struct NoteService {
     private var lastUsedHighlightColor: Note.Color
 
     private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
-        let translatedVerses: TranslatedVerses = try await textService.textForVerses(verses, translations: [])
-        return Dictionary(zip(verses, translatedVerses.verses).map { ($0, $1.arabicText) }, uniquingKeysWith: { x, _ in x })
+        let verseTexts = try await textService.textForVerses(verses, translations: [])
+        return verseTexts.mapValues(\.arabicText)
     }
 }
 

@@ -158,7 +158,7 @@ class CompositeSearcherTests: XCTestCase {
         let result = try await searcher.search(for: term, quran: quran)
 
         // assert the text
-        assertSnapshot(matching: result, as: .json, record: record, testName: testName)
+        assertSnapshot(matching: EncodableSearchResults(results: result), as: .json, record: record, testName: testName)
     }
 
     private func enumerateAllSuras(_ block: (Sura, Language) async throws -> Void) async rethrows {

@@ -147,7 +147,7 @@ public final class WordPointerViewController: UIViewController {
 
     private var borderInsets: NSDirectionalEdgeInsets {
         // TODO: Use the containing window
-        UIApplication.shared.windows.first?.directionalSafeAreaInsets ?? .zero
+        view.window?.directionalSafeAreaInsets ?? .zero
     }
 
     private var minX: CGFloat {

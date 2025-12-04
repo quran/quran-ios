@@ -33,7 +33,7 @@ public class QueuePlayer {
     // MARK: Lifecycle
 
     public init() {
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetoothHFP])
     }
 
     // MARK: Open

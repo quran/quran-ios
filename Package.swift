@@ -133,6 +133,7 @@ private func coreTargets() -> [[Target]] {
 
         target(type, name: "SecurePersistence", hasTests: false, dependencies: [
             "SystemDependencies",
+            "VLogging",
         ]),
 
         target(type, name: "OAuthServiceAppAuthImpl", hasTests: false, dependencies: [
@@ -188,6 +189,9 @@ private func uiTargets() -> [[Target]] {
             "NoorFont",
             "VLogging",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
+        ], resources: [
+            .process("Colors/Colors.xcassets"),
+            .process("Images/Images.xcassets"),
         ]),
     ]
 }

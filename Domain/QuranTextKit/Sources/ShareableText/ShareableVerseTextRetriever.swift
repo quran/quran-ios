@@ -22,6 +22,7 @@ import Foundation
 import Localization
 import QuranKit
 import QuranText
+import TranslationService
 import VerseTextPersistence
 
 public struct ShareableVerseTextRetriever {
@@ -30,14 +31,17 @@ public struct ShareableVerseTextRetriever {
     public init(databasesURL: URL, quranFileURL: URL) {
         textService = QuranTextDataService(databasesURL: databasesURL, quranFileURL: quranFileURL)
         shareableVersePersistence = GRDBQuranVerseTextPersistence(mode: .share, fileURL: quranFileURL)
+        localTranslationsRetriever = LocalTranslationsRetriever(databasesURL: databasesURL)
     }
 
     init(
         textService: QuranTextDataService,
-        shareableVersePersistence: VerseTextPersistence
+        shareableVersePersistence: VerseTextPersistence,
+        localTranslationsRetriever: LocalTranslationsRetriever
     ) {
         self.textService = textService
         self.shareableVersePersistence = shareableVersePersistence
+        self.localTranslationsRetriever = localTranslationsRetriever
     }
 
     // MARK: Public
@@ -53,8 +57,10 @@ public struct ShareableVerseTextRetriever {
     // MARK: Private
 
     private let preferences = QuranContentStatePreferences.shared
+    private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let textService: QuranTextDataService
     private let shareableVersePersistence: VerseTextPersistence
+    private let localTranslationsRetriever: LocalTranslationsRetriever
 
     private func versesSummary(_ verses: [AyahNumber]) -> String {
         if verses.count == 1 {
@@ -87,26 +93,32 @@ public struct ShareableVerseTextRetriever {
             return []
         }
 
-        let translatedVerses = try await textService.textForVerses(verses)
-        return versesTranslationsText(translatedVerses: translatedVerses)
+        let translations = try await selectedTranslations()
+        let verseTexts = try await textService.textForVerses(verses, translations: translations)
+        let orderedVerseTexts = verses.compactMap { verseTexts[$0] }
+        return versesTranslationsText(translations: translations, verseTexts: orderedVerseTexts)
     }
 
-    private func versesTranslationsText(translatedVerses: TranslatedVerses) -> [String] {
+    private func versesTranslationsText(translations: [Translation], verseTexts: [VerseText]) -> [String] {
         var components = [""]
 
-        // group by translation
-        for (i, translation) in translatedVerses.translations.enumerated() {
+        for (index, translation) in translations.enumerated() {
             // translator
             components.append("• \(translation.translationName):")
 
             // translation text for all verses
-            components.append(contentsOf: translatedVerses.verses.map { stringFromTranslationText($0.translations[i]) })
+            components.append(contentsOf: verseTexts.map { stringFromTranslationText($0.translations[index]) })
 
             // separate multiple translations
             components.append("")
         }
 
         return components.dropLast()
+    }
+
+    private func selectedTranslations() async throws -> [Translation] {
+        let localTranslations = try await localTranslationsRetriever.getLocalTranslations()
+        return selectedTranslationsPreferences.selectedTranslations(from: localTranslations)
     }
 
     private func stringFromTranslationText(_ text: TranslationText) -> String {

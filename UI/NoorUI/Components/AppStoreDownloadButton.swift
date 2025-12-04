@@ -41,21 +41,17 @@ struct AppStoreDownloadButton: View {
 }
 
 struct CircularPendingView: View {
-    // MARK: Internal
-
     var body: some View {
         Arc(circlePercentage: 0.94)
             .stroke(Color.accentColor, lineWidth: lineWidth)
-            .rotationEffect(.degrees(rotationAngle))
-            .animation(.linear(duration: 1).repeatForever(autoreverses: false))
+            .rotationEffect(.degrees(isAnimating ? 360 : 0))
+            .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating)
             .onAppear {
-                rotationAngle = 360
+                isAnimating = true
             }
     }
 
-    // MARK: Private
-
-    @State private var rotationAngle: Double = 0
+    @State private var isAnimating = false
     @ScaledMetric private var lineWidth: Double = 1
 }
 

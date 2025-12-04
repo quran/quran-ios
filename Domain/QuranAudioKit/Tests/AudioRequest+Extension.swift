@@ -8,7 +8,15 @@
 import Foundation
 @testable import QueuePlayer
 
-extension AudioRequest: Encodable {
+struct EncodableAudioRequest: Encodable {
+    // MARK: Lifecycle
+
+    init(request: AudioRequest) {
+        self.request = request
+    }
+
+    // MARK: Internal
+
     enum CodingKeys: String, CodingKey {
         case files
         case endTime
@@ -16,44 +24,84 @@ extension AudioRequest: Encodable {
         case requestRuns
     }
 
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(files, forKey: .files)
-        try container.encode(endTime, forKey: .endTime)
-        try container.encode(frameRuns, forKey: .frameRuns)
-        try container.encode(requestRuns, forKey: .requestRuns)
+        try container.encode(request.files.map(EncodableAudioFile.init), forKey: .files)
+        try container.encode(request.endTime, forKey: .endTime)
+        try container.encode(EncodableRuns(runs: request.frameRuns), forKey: .frameRuns)
+        try container.encode(EncodableRuns(runs: request.requestRuns), forKey: .requestRuns)
     }
+
+    // MARK: Private
+
+    private let request: AudioRequest
 }
 
-extension AudioFile: Encodable {
+private struct EncodableAudioFile: Encodable {
+    // MARK: Lifecycle
+
+    init(file: AudioFile) {
+        self.file = file
+    }
+
+    // MARK: Internal
+
     enum CodingKeys: String, CodingKey {
         case frames
         case url
     }
 
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(frames, forKey: .frames)
-        try container.encode(url.path.replacingOccurrences(of: FileManager.documentsPath, with: ""), forKey: .url)
+        try container.encode(file.frames.map(EncodableAudioFrame.init), forKey: .frames)
+        try container.encode(file.url.path.replacingOccurrences(of: FileManager.documentsPath, with: ""), forKey: .url)
     }
+
+    // MARK: Private
+
+    private let file: AudioFile
 }
 
-extension AudioFrame: Encodable {
+private struct EncodableAudioFrame: Encodable {
+    // MARK: Lifecycle
+
+    init(frame: AudioFrame) {
+        self.frame = frame
+    }
+
+    // MARK: Internal
+
     enum CodingKeys: String, CodingKey {
         case startTime
         case endTime
     }
 
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(startTime, forKey: .startTime)
-        try container.encode(endTime, forKey: .endTime)
+        try container.encode(frame.startTime, forKey: .startTime)
+        try container.encode(frame.endTime, forKey: .endTime)
     }
+
+    // MARK: Private
+
+    private let frame: AudioFrame
 }
 
-extension Runs: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(maxRuns)
+private struct EncodableRuns: Encodable {
+    // MARK: Lifecycle
+
+    init(runs: Runs) {
+        self.runs = runs
     }
+
+    // MARK: Internal
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(runs.maxRuns)
+    }
+
+    // MARK: Private
+
+    private let runs: Runs
 }

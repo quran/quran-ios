@@ -29,7 +29,8 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
 
         shareableTextRetriever = ShareableVerseTextRetriever(
             textService: textService,
-            shareableVersePersistence: persistence
+            shareableVersePersistence: persistence,
+            localTranslationsRetriever: localtranslationsRetriever
         )
 
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared

@@ -119,5 +119,3 @@ public class CoreDataStack {
         }
     }
 }
-
-extension NSManagedObjectContext: @retroactive @unchecked Sendable {}

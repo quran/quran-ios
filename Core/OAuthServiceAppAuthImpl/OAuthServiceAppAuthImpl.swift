@@ -106,7 +106,7 @@ public final class OAuthServiceAppAuthImpl: OAuthService {
     private let configurations: AppAuthConfiguration
 
     // Needed mainly for retention.
-    private var authFlow: (any OIDExternalUserAgentSession)?
+    @MainActor private var authFlow: (any OIDExternalUserAgentSession)?
 
     // MARK: - Authenication Flow
 
@@ -150,24 +150,26 @@ public final class OAuthServiceAppAuthImpl: OAuthService {
 
         logger.info("Starting OAuth flow")
         return try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.authFlow = OIDAuthState.authState(
                     byPresenting: request,
                     presenting: viewController
                 ) { [weak self] state, error in
-                    self?.authFlow = nil
-                    guard error == nil else {
-                        logger.error("Error authenticating: \(error!)")
-                        continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(error))
-                        return
+                    Task { @MainActor in
+                        self?.authFlow = nil
+                        guard error == nil else {
+                            logger.error("Error authenticating: \(error!)")
+                            continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(error))
+                            return
+                        }
+                        guard let state else {
+                            logger.error("Error authenticating: no state returned. An unexpected situtation.")
+                            continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(nil))
+                            return
+                        }
+                        logger.info("OAuth flow completed successfully")
+                        continuation.resume(returning: state)
                     }
-                    guard let state else {
-                        logger.error("Error authenticating: no state returned. An unexpected situtation.")
-                        continuation.resume(throwing: OAuthServiceError.failedToAuthenticate(nil))
-                        return
-                    }
-                    logger.info("OAuth flow completed successfully")
-                    continuation.resume(returning: state)
                 }
             }
         }

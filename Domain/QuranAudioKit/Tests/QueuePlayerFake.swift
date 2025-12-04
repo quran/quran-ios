@@ -83,3 +83,29 @@ class QueuePlayerFake: QueuingPlayer {
     func setRate(_ rate: Float) {
     }
 }
+
+extension QueuePlayerFake.PlayingState {
+    private enum CaseCodingKeys: String, CodingKey {
+        case playing
+        case paused
+        case stopped
+    }
+
+    private enum AssociatedValueCodingKeys: String, CodingKey {
+        case _0
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CaseCodingKeys.self)
+        switch self {
+        case .playing(let request):
+            var nested = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .playing)
+            try nested.encode(EncodableAudioRequest(request: request), forKey: ._0)
+        case .paused(let request):
+            var nested = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .paused)
+            try nested.encode(EncodableAudioRequest(request: request), forKey: ._0)
+        case .stopped:
+            _ = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .stopped)
+        }
+    }
+}

@@ -22,7 +22,7 @@ public struct QuranTextDataService {
 
     init(databasesURL: URL, arabicPersistence: VerseTextPersistence) {
         self.init(
-            localTranslationRetriever: TranslationService.LocalTranslationsRetriever(databasesURL: databasesURL),
+            localTranslationRetriever: LocalTranslationsRetriever(databasesURL: databasesURL),
             arabicPersistence: arabicPersistence,
             translationsPersistenceBuilder: { translation in
                 GRDBTranslationVerseTextPersistence(fileURL: translation.localPath.url)
@@ -43,20 +43,8 @@ public struct QuranTextDataService {
     // MARK: Public
 
     public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> [AyahNumber: VerseText] {
-        let translatedVerses: TranslatedVerses = try await textForVerses(verses, translations: translations)
+        let translatedVerses = try await textForVerses(verses, translations: { translations })
         return Dictionary(uniqueKeysWithValues: (0 ..< verses.count).map { i in (verses[i], translatedVerses.verses[i]) })
-    }
-
-    // TODO: Remove
-    @available(*, deprecated, message: "Use textForVerses(:translations:)")
-    public func textForVerses(_ verses: [AyahNumber]) async throws -> TranslatedVerses {
-        try await textForVerses(verses, translations: { try await localTranslations() })
-    }
-
-    // TODO: Remove
-    @available(*, deprecated, message: "Use textForVerses(:translations:)")
-    public func textForVerses(_ verses: [AyahNumber], translations: [Translation]) async throws -> TranslatedVerses {
-        try await textForVerses(verses, translations: { translations })
     }
 
     // MARK: Internal
@@ -108,17 +96,6 @@ public struct QuranTextDataService {
             versesText.append(verseText)
         }
         return versesText
-    }
-
-    private func localTranslations() async throws -> [Translation] {
-        let translations = try await localTranslationRetriever.getLocalTranslations()
-        return selectedTranslations(allTranslations: translations)
-    }
-
-    private func selectedTranslations(allTranslations: [Translation]) -> [Translation] {
-        let selected = selectedTranslationsPreferences.selectedTranslationIds
-        let translationsById = allTranslations.flatGroup { $0.id }
-        return selected.compactMap { translationsById[$0] }
     }
 
     private func retrieveArabicText(verses: [AyahNumber]) async throws -> [String] {

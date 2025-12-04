@@ -49,7 +49,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[1].verses[0]],
         ]
         for verses in tests {
-            let versesText: TranslatedVerses = try await textService.textForVerses(verses, translations: [])
+            let versesText = try await textService.textForVerses(verses, translations: [])
 
             let expectedVerses = verses.map {
                 VerseText(
@@ -59,7 +59,7 @@ final class QuranTextDataServiceTests: XCTestCase {
                     arabicSuffix: []
                 )
             }
-            let expected = TranslatedVerses(translations: [], verses: expectedVerses)
+            let expected = Dictionary(uniqueKeysWithValues: zip(verses, expectedVerses))
             XCTAssertEqual(expected, versesText)
         }
     }
@@ -70,7 +70,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             [quran.suras[0].verses[1], quran.suras[0].verses[2]],
         ]
         for verses in tests {
-            let versesText = try await textService.textForVerses(verses)
+            let versesText = try await textService.textForVerses(verses, translations: translations)
 
             let expectedVerses = verses.map { verse in
                 VerseText(
@@ -82,7 +82,7 @@ final class QuranTextDataServiceTests: XCTestCase {
                     arabicSuffix: []
                 )
             }
-            let expected = TranslatedVerses(translations: translations, verses: expectedVerses)
+            let expected = Dictionary(uniqueKeysWithValues: zip(verses, expectedVerses))
             XCTAssertEqual(expected, versesText)
         }
     }
@@ -92,7 +92,7 @@ final class QuranTextDataServiceTests: XCTestCase {
         try await localTranslationsFake.setTranslations(translations)
 
         let verse = quran.suras[0].verses[5]
-        let versesText = try await textService.textForVerses([verse])
+        let versesText = try await textService.textForVerses([verse], translations: translations)
 
         let translationText = TestData.translationTextAt(translations[0], verse)
         let textWithoutFootnotes = "Guide us to the Straight Way.  {ABC} [1] {DE} [2] FG"
@@ -117,7 +117,7 @@ final class QuranTextDataServiceTests: XCTestCase {
             arabicPrefix: [],
             arabicSuffix: []
         )
-        let expected = TranslatedVerses(translations: translations, verses: [expectedVerse])
+        let expected = [verse: expectedVerse]
         XCTAssertEqual(expected, versesText)
     }
 

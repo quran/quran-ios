@@ -9,11 +9,10 @@ import Foundation
 import QuranKit
 import SwiftUI
 
-@MainActor
 public struct PageGeometryActions: Equatable {
     let id: AnyHashable
-    public var word: (CGPoint) -> Word?
-    public var verse: (CGPoint) -> AyahNumber?
+    public var word: @MainActor (CGPoint) -> Word?
+    public var verse: @MainActor (CGPoint) -> AyahNumber?
 
     public init(id: some Hashable, word: @escaping (CGPoint) -> Word?, verse: @escaping (CGPoint) -> AyahNumber?) {
         self.id = id

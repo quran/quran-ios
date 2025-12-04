@@ -132,21 +132,19 @@ final class HomeViewModel: ObservableObject {
     ) async -> [Quarter: String] {
         do {
             let verses = Array(quarters.map(\.firstVerse))
-            let translatedVerses: TranslatedVerses = try await textRetriever.textForVerses(verses, translations: [])
-            return cleanUpText(quarters: quarters, verses: verses, versesText: translatedVerses.verses)
+            let verseTexts = try await textRetriever.textForVerses(verses, translations: [])
+            return cleanUpText(quarters: quarters, verseTexts: verseTexts)
         } catch {
             crasher.recordError(error, reason: "Failed to retrieve quarters text")
             return [:]
         }
     }
 
-    private func cleanUpText(quarters: [Quarter], verses: [AyahNumber], versesText: [VerseText]) -> [Quarter: String] {
+    private func cleanUpText(quarters: [Quarter], verseTexts: [AyahNumber: VerseText]) -> [Quarter: String] {
         let quarterStart = "۞" // Hizb marker
-        let cleanedVersesText = versesText.map { $0.arabicText.replacingOccurrences(of: quarterStart, with: "") }
-        let zippedVersesAndText = zip(verses, cleanedVersesText)
-        let versesTextDict = Dictionary(zippedVersesAndText, uniquingKeysWith: { x, _ in x })
+        let cleanedVersesText = verseTexts.mapValues { $0.arabicText.replacingOccurrences(of: quarterStart, with: "") }
         return quarters.reduce(into: [Quarter: String]()) { partialResult, quarter in
-            partialResult[quarter] = versesTextDict[quarter.firstVerse]
+            partialResult[quarter] = cleanedVersesText[quarter.firstVerse]
         }
     }
 }

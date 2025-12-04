@@ -67,12 +67,14 @@ final class AppInteractor {
         let db = CKContainer.default().privateCloudDatabase
         let zone = CKRecordZone(zoneName: "com.apple.coredata.cloudkit.zone")
         let query = CKQuery(recordType: "CD_MO_LastPage", predicate: NSPredicate(format: "TRUEPREDICATE"))
-        db.perform(query, inZoneWith: zone.zoneID) { [analytics] records, error in
-            if let error {
+        db.fetch(withQuery: query, inZoneWith: zone.zoneID, desiredKeys: nil, resultsLimit: CKQueryOperation.maximumResults) { [analytics] result in
+            switch result {
+            case let .failure(error):
                 logger.error("Error while accessing CloudKit \(error)")
                 analytics.cloudkitLastPagesMatch(.error)
-            } else {
-                let ckLastPages = Set((records ?? []).compactMap { $0["CD_page"] as? Int })
+            case let .success(output):
+                let records = output.matchResults.compactMap { try? $0.1.get() }
+                let ckLastPages = Set(records.compactMap { $0["CD_page"] as? Int })
                 Task {
                     do {
                         let cdLastPages = try await self.lastPagePersistence.retrieveAll()

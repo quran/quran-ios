@@ -50,6 +50,10 @@ class ContentImageViewModel: ObservableObject {
     @Published var scale: WordFrameScale = .zero
     @Published var imageFrame: CGRect = .zero
 
+    var imageRenderingMode: QuranThemedImage.RenderingMode {
+        reading == .tajweed ? .invertInDarkMode : .tinted
+    }
+
     var decorations: ImageDecorations {
         // Add verse highlights
         var frameHighlights: [WordFrame: Color] = [:]

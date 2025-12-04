@@ -14,9 +14,10 @@ struct ReadingImageView: View {
     let image: UIImage
     let suraHeaders: [SuraHeaderLocation]
     let ayahNumbers: [AyahNumberLocation]
+    let renderingMode: QuranThemedImage.RenderingMode
 
     var body: some View {
-        AdaptiveImageScrollView(decorations: decorations) {
+        AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
             image
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in

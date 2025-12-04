@@ -7,16 +7,22 @@
 
 import SwiftUI
 
-struct QuranThemedImage: View {
-    @Environment(\.themeStyle) var themeStyle
-    @Environment(\.colorScheme) var colorScheme
+public struct QuranThemedImage: View {
+    // MARK: Lifecycle
 
-    let image: UIImage
+    public init(image: UIImage, renderingMode: RenderingMode = .tinted) {
+        self.image = image
+        self.renderingMode = renderingMode
+    }
 
-    @State private var themedImage: UIImage?
-    @State private var processingTask: Task<Void, Never>? = nil
+    // MARK: Public
 
-    var body: some View {
+    public enum RenderingMode: Equatable {
+        case tinted
+        case invertInDarkMode
+    }
+
+    public var body: some View {
         Image(uiImage: themedImage ?? image)
             .resizable()
             .aspectRatio(contentMode: .fit)
@@ -30,32 +36,64 @@ struct QuranThemedImage: View {
                 processImage(colorScheme: colorScheme, themeStyle: themeStyle)
             }
             .onDisappear {
-                // Cancel any ongoing task when view disappears
                 processingTask?.cancel()
             }
     }
 
+    // MARK: Internal
+
+    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.colorScheme) var colorScheme
+
+    let image: UIImage
+    let renderingMode: RenderingMode
+
+    // MARK: Private
+
+    @State private var themedImage: UIImage?
+    @State private var processingTask: Task<Void, Never>? = nil
+
     /// Process the image on a background thread and update the state on the main thread.
     private func processImage(colorScheme: ColorScheme, themeStyle: ThemeStyle) {
-        // Cancel any ongoing processing task
         processingTask?.cancel()
 
-        // Create a new task for image processing
         processingTask = Task {
-            // Run the processing on a background queue
-            let processedImage = await withCheckedContinuation { continuation in
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let result = image.tintedImageUsingFalseColorFilter(colorScheme: colorScheme, themeStyle: themeStyle)
-                    continuation.resume(returning: result)
-                }
-            }
+            let processedImage = await processedImage(colorScheme: colorScheme, themeStyle: themeStyle)
 
-            // If the task has been cancelled, exit early.
             guard !Task.isCancelled else { return }
 
-            // Update the UI on the main thread
             await MainActor.run {
                 themedImage = processedImage
+            }
+        }
+    }
+
+    private func processedImage(colorScheme: ColorScheme, themeStyle: ThemeStyle) async -> UIImage? {
+        switch renderingMode {
+        case .tinted:
+            return await tintedImage(colorScheme: colorScheme, themeStyle: themeStyle)
+        case .invertInDarkMode:
+            guard colorScheme == .dark else {
+                return nil
+            }
+            return await invertedImage()
+        }
+    }
+
+    private func tintedImage(colorScheme: ColorScheme, themeStyle: ThemeStyle) async -> UIImage? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let result = image.tintedImageUsingFalseColorFilter(colorScheme: colorScheme, themeStyle: themeStyle)
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
+    private func invertedImage() async -> UIImage {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let result = image.inverted()
+                continuation.resume(returning: result)
             }
         }
     }

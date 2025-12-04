@@ -19,6 +19,7 @@ struct ContentImageView: View {
             ContentImageViewBody(
                 decorations: viewModel.decorations,
                 image: viewModel.imagePage?.image,
+                renderingMode: viewModel.imageRenderingMode,
                 quarterName: viewModel.page.localizedQuarterName,
                 suraNames: viewModel.page.suraNames(),
                 page: viewModel.page.localizedNumber,
@@ -44,6 +45,7 @@ struct ContentImageView: View {
 private struct ContentImageViewBody: View {
     let decorations: ImageDecorations
     let image: UIImage?
+    let renderingMode: QuranThemedImage.RenderingMode
     let quarterName: String
     let suraNames: MultipartText
     let page: String
@@ -53,7 +55,7 @@ private struct ContentImageViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        AdaptiveImageScrollView(decorations: decorations) {
+        AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
             image
         } onScaleChange: {
             onScaleChange($0)
@@ -81,6 +83,7 @@ private struct ContentImageViewBody: View {
             highlights: [:]
         ),
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").absoluteString)!,
+        renderingMode: .tinted,
         quarterName: "ABC",
         suraNames: "ABC",
         page: "604",

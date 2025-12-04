@@ -3,6 +3,7 @@
 "qari_abdulbaset_gapless" = "Әбдүлбәсит Әбдусамад";
 "qari_abdulbaset_mujawwad" = "Әбдүлбәсит Әбдусамад (тәжуид)";
 "qari_abdulbaset_mujawwad_gapless" = "Әбдүлбәсит Әбдусамад (тәжуид)";
+"qari_abdulhadi_kanakeri_gapless" = "АбдулХади Канакери";
 "qari_abdullah_matroud_gapless" = "Абдулла Матуд";
 "qari_abdulmuhsin_qasim_gapless" = "Абдул Мохсен Қасым";
 "qari_abdulrahman_alshahat_gapless" = "Abdulrahman Al-Shahat";
@@ -11,10 +12,12 @@
 "qari_afasy_cali_gapless" = "Мишари Афаси (Калифорния)";
 "qari_afasy_gapless" = "Мишәри Әфаси";
 "qari_ahmad_nauina_gapless" = "Ахмед Науина";
+"qari_ahmed_al_nufais_gapless" = "Ахмед Ал-Нуфайс";
 "qari_ajamy_gapless" = "Ахмед ибн Әли әл-Аджами";
 "qari_akram_al_alaqmi" = "Әкрам Ғалақми";
 "qari_ali_hajjaj_alsouasi_gapless" = "Әли Хажаж Суайси";
 "qari_ali_jaber_gapless" = "Али Джабер";
+"qari_alijon_qari_gapless" = "Әлижон Қари";
 "qari_aloosi_gapless" = "Абдул Рахман Аль-Авси";
 "qari_alzain_ahmad_gapless" = "Альзаин Мохаммед Ахмед";
 "qari_ayman_suwaid_gapless" = "Ayman Suwaid";
@@ -22,11 +25,14 @@
 "qari_ayyoub" = "Мұхаммед Әйюб (үзілген)";
 "qari_ayyoub_gapless" = "Мұхаммед Әйюб";
 "qari_aziz_alili_gapless" = "Әзиз Әлили";
+"qari_badr_al_turki_gapless" = "Бадр Ал-Турки";
 "qari_bandar_baleela_gapless" = "Bandar Baleela";
 "qari_basfar" = "Абдуллах Басфар (үзілген)";
 "qari_basfar_gapless" = "Абдуллах Басфар";
 "qari_dussary" = "Ясир Дусари (үзілген)";
 "qari_fares_abbad_gapless" = "Фарес Аббад";
+"qari_farman_shawani_gapless" = "Фарман Шавани";
+"qari_fatih_seferagic_gapless" = "Фатих Сеферагич";
 "qari_hady_toure_gapless" = "Hady Toure";
 "qari_hani_rifai" = "Һәни Рифаи (үзілген)";
 "qari_hani_rifai_gapless" = "Һәни Рифаи";
@@ -38,6 +44,7 @@
 "qari_husary_mujawwad" = "Махмұд Һәлил Хусари (тәжуид)";
 "qari_husary_mujawwad_gapless" = "Махмұд Һәлил Хусари (тәжуид)";
 "qari_ibrahim_alakhdar_gapless" = "Ибрахим әл-Ахдар";
+"qari_idrees_abkar_gapless" = "Идрис Абкар";
 "qari_jibreel" = "Мұхаммед Жибрил (үзілген)";
 "qari_jibreel_gapless" = "Мұхаммед Жибрил";
 "qari_juhany_gapless" = "Абдулла әл-Джахани";
@@ -45,6 +52,7 @@
 "qari_khalid_jalil_gapless" = "Khalid Al-Jalil";
 "qari_khalid_qahtani_gapless" = "Халид әл-Кахтани";
 "qari_khalifa_taniji_gapless" = "Халифа Тенги";
+"qari_luhaidan_gapless" = "Мұхаммед Ал-Лухайдан";
 "qari_mahmoud_ali_albana_gapless" = "Mahmoud Ali al Bana";
 "qari_minshawi_mujawwad" = "Мұхаммед Сыддық Миншәуи (тәжуид)";
 "qari_minshawi_mujawwad_gapless" = "Мұхаммед Сыддық Миншәуи";
@@ -59,7 +67,9 @@
 "qari_muhammad_rashad_shereef_gapless" = "Мухаммад Рашад Аль-Шериф";
 "qari_nabil_rifa3i_gapless" = "Nabil Ar-Rifai";
 "qari_noreen_siddiq_gapless" = "Noreen Siddiq";
+"qari_peshawa_qadir_al_qurdi_gapless" = "Пешева Қадир аль-Курди";
 "qari_qatami_gapless" = "Насыр Қатами";
+"qari_raad_al_kurdi_gapless" = "Рағад Ал-Курди";
 "qari_saad_al_ghamdi" = "Сәид Ғамиди (үзілген)";
 "qari_saad_al_ghamidi_gapless" = "Saad Al-Ghamdi";
 "qari_sahl_yaseen_gapless" = "Сәһил Йасин";

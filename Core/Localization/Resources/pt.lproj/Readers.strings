@@ -3,6 +3,7 @@
 "qari_abdulbaset_gapless" = "Abd Al-Baset";
 "qari_abdulbaset_mujawwad" = "Abd Al-Baset Mujawwad (intervalo)";
 "qari_abdulbaset_mujawwad_gapless" = "Abd Al-Basit Mujawwad";
+"qari_abdulhadi_kanakeri_gapless" = "AbdulHadi Kanakeri";
 "qari_abdullah_matroud_gapless" = "Abdullah Matroud";
 "qari_abdulmuhsin_qasim_gapless" = "Abdul Mohsen Al-Qasim";
 "qari_abdulrahman_alshahat_gapless" = "Abdulrahman Al-Shahat";
@@ -11,10 +12,12 @@
 "qari_afasy_cali_gapless" = "Mishari Al-Afasy (Califórnia)";
 "qari_afasy_gapless" = "Mishary Al-Afasy";
 "qari_ahmad_nauina_gapless" = "Ahmad Nauina";
+"qari_ahmed_al_nufais_gapless" = "Ahmed Al-Nufais";
 "qari_ajamy_gapless" = "Ahmed ibn Ali al-Ajamy";
 "qari_akram_al_alaqmi" = "Akram Al-Alaqmi";
 "qari_ali_hajjaj_alsouasi_gapless" = "Ali Hajjaj Alsouasi";
 "qari_ali_jaber_gapless" = "Ali Jaber";
+"qari_alijon_qari_gapless" = "Alijon Qari";
 "qari_aloosi_gapless" = "Abdul Rahman Aloosi";
 "qari_alzain_ahmad_gapless" = "Alzain Muhammad Ahmad";
 "qari_ayman_suwaid_gapless" = "Ayman Suwaid";
@@ -22,11 +25,14 @@
 "qari_ayyoub" = "Muhammad Ayyoub (intervalo)";
 "qari_ayyoub_gapless" = "Muhammad Ayyoub";
 "qari_aziz_alili_gapless" = "Aziz Alili";
+"qari_badr_al_turki_gapless" = "Badr Al-Turki";
 "qari_bandar_baleela_gapless" = "Bandar Baleela";
 "qari_basfar" = "Abdullah Basfar (intervalo)";
 "qari_basfar_gapless" = "Abdullah Basfar";
 "qari_dussary" = "Yasser Ad-Dossary (intervalo)";
 "qari_fares_abbad_gapless" = "Fares Abbad";
+"qari_farman_shawani_gapless" = "Farman Shawani";
+"qari_fatih_seferagic_gapless" = "Fatih Seferagic";
 "qari_hady_toure_gapless" = "Hady Toure";
 "qari_hani_rifai" = "Hani Ar-Rifai (intervalo)";
 "qari_hani_rifai_gapless" = "Hani Ar-Rifai";
@@ -38,6 +44,7 @@
 "qari_husary_mujawwad" = "Hosary Mujawwad (intervalo)";
 "qari_husary_mujawwad_gapless" = "Hosary (Mujawwad)";
 "qari_ibrahim_alakhdar_gapless" = "Ibrahim Al-Akhdar";
+"qari_idrees_abkar_gapless" = "Idrees Abkar";
 "qari_jibreel" = "Muhammad Jebreel (intervalo)";
 "qari_jibreel_gapless" = "Muhammad Jibreel";
 "qari_juhany_gapless" = "Abdullah Al-Juhany";
@@ -45,6 +52,7 @@
 "qari_khalid_jalil_gapless" = "Khalid Al-Jalil";
 "qari_khalid_qahtani_gapless" = "Khalid Al Qahtani";
 "qari_khalifa_taniji_gapless" = "Khalifa Tangi";
+"qari_luhaidan_gapless" = "Muhammad Al-Luhaidan";
 "qari_mahmoud_ali_albana_gapless" = "Mahmoud Ali al Bana";
 "qari_minshawi_mujawwad" = "Minshawy Mujawwad (intervalo)";
 "qari_minshawi_mujawwad_gapless" = "Minshawy Mujawwad";
@@ -59,7 +67,9 @@
 "qari_muhammad_rashad_shereef_gapless" = "Muhammad Rashad Al-Shereef";
 "qari_nabil_rifa3i_gapless" = "Nabil Ar-Rifai";
 "qari_noreen_siddiq_gapless" = "Noreen Siddiq";
+"qari_peshawa_qadir_al_qurdi_gapless" = "Peshewa Qadir al-Kurdi";
 "qari_qatami_gapless" = "Nasser Al Qatami";
+"qari_raad_al_kurdi_gapless" = "Raad Al-Kurdi";
 "qari_saad_al_ghamdi" = "Saad Al-Ghamedi (intervalo)";
 "qari_saad_al_ghamidi_gapless" = "Saad Al-Ghamdi";
 "qari_sahl_yaseen_gapless" = "Sahl Yasin";

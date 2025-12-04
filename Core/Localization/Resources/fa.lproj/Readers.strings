@@ -3,6 +3,7 @@
 "qari_abdulbaset_gapless" = "عبدالباسط";
 "qari_abdulbaset_mujawwad" = "عبدالباسط عبدالصمد مجود (شکاف زده)";
 "qari_abdulbaset_mujawwad_gapless" = "عبدالباسط مجود";
+"qari_abdulhadi_kanakeri_gapless" = "عبدالهادی کناکری";
 "qari_abdullah_matroud_gapless" = "عبدالله المطرود";
 "qari_abdulmuhsin_qasim_gapless" = "عبد ال محسن القاسم";
 "qari_abdulrahman_alshahat_gapless" = "عبد الرحمن الشحات";
@@ -11,10 +12,12 @@
 "qari_afasy_cali_gapless" = "مشاري العفاسي (كاليفورنيا)";
 "qari_afasy_gapless" = "مشاري بن راشد العفاسي";
 "qari_ahmad_nauina_gapless" = "أحمد نعينع";
+"qari_ahmed_al_nufais_gapless" = "احمد النفیس";
 "qari_ajamy_gapless" = "أحمد بن علي العجمي";
 "qari_akram_al_alaqmi" = "أكرم العلقمي";
 "qari_ali_hajjaj_alsouasi_gapless" = "علي حجاج السويسي";
 "qari_ali_jaber_gapless" = "علی جابر";
+"qari_alijon_qari_gapless" = "عليجون قاری";
 "qari_aloosi_gapless" = "عبدالرحمن العوسي";
 "qari_alzain_ahmad_gapless" = "الزين محمد احمد";
 "qari_ayman_suwaid_gapless" = "أيمن سويد";
@@ -22,11 +25,14 @@
 "qari_ayyoub" = "محمد أيوب (شکاف زده)";
 "qari_ayyoub_gapless" = "محمد أيوب";
 "qari_aziz_alili_gapless" = "عزيز عليلي";
+"qari_badr_al_turki_gapless" = "بدر الترکی";
 "qari_bandar_baleela_gapless" = "بندر بليلة";
 "qari_basfar" = "عبدالله بصفر (شکاف زده)";
 "qari_basfar_gapless" = "عبدالله بصفر";
 "qari_dussary" = "ياسر الدوسري (شکاف زده)";
 "qari_fares_abbad_gapless" = "فارس عباد";
+"qari_farman_shawani_gapless" = "فەرمان شوانی";
+"qari_fatih_seferagic_gapless" = "فاتح سفراگیچ";
 "qari_hady_toure_gapless" = "محمد الهادي توري";
 "qari_hani_rifai" = "هاني الرفاعي (شکاف زده)";
 "qari_hani_rifai_gapless" = "هاني الرفاعي";
@@ -38,6 +44,7 @@
 "qari_husary_mujawwad" = "الحصري مجود (شکاف زده)";
 "qari_husary_mujawwad_gapless" = "الحصري  (مجود، بی‌وقفه)";
 "qari_ibrahim_alakhdar_gapless" = "ابراهیم الاخضر";
+"qari_idrees_abkar_gapless" = "ادریس ابکر";
 "qari_jibreel" = "محمد جبريل (شکاف زده)";
 "qari_jibreel_gapless" = "محمد جبريل";
 "qari_juhany_gapless" = "عبدالله الجهني";
@@ -45,6 +52,7 @@
 "qari_khalid_jalil_gapless" = "خالد الجليل";
 "qari_khalid_qahtani_gapless" = "خالد القحطانی";
 "qari_khalifa_taniji_gapless" = "خليفة الطنيجي";
+"qari_luhaidan_gapless" = "محمد اللحیدان";
 "qari_mahmoud_ali_albana_gapless" = "محمود علي البنا";
 "qari_minshawi_mujawwad" = "المنشاوي مجود (شکاف زده)";
 "qari_minshawi_mujawwad_gapless" = "المنشاوي مجود";
@@ -59,7 +67,9 @@
 "qari_muhammad_rashad_shereef_gapless" = "محمد رشاد الشريف";
 "qari_nabil_rifa3i_gapless" = "نبيل الرفاعي";
 "qari_noreen_siddiq_gapless" = "نورين محمد صديق";
+"qari_peshawa_qadir_al_qurdi_gapless" = "پێشەوا قادر الکردی";
 "qari_qatami_gapless" = "ناصر القطامي";
+"qari_raad_al_kurdi_gapless" = "رعد الکردی";
 "qari_saad_al_ghamdi" = "سعد الغامدي (شکاف زده)";
 "qari_saad_al_ghamidi_gapless" = "سعد الغامدي";
 "qari_sahl_yaseen_gapless" = "سهل ياسين";

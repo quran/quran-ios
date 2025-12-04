@@ -48,7 +48,6 @@
 "download_error_network_retry" = "Error de la red, intentando reanudar…";
 "download_error_perms" = "No se pudo descargar debido a un error de permisos";
 "download_extra_data" = "Tenemos que descargar una o dos pequeñas actualizaciones para la función de compartir la traducción. ¿Descargar ahora?";
-"download_non_wifi_prompt" = "No estás conectado a una red WiFi. ¿Descargar los datos de todos modos?";
 "download_processing" = "Procesando la descarga…";
 "download_progress" = "Descargado %1$@ / %2$@";
 "download_retry" = "Reintente";
@@ -58,7 +57,6 @@
 "downloaded_translations" = "Descargado";
 "downloadImportantPrompt" = "Hay disponible una pequeña actualización, pero importante\npara las imágenes del Corán que tienes en tu dispositivo móvil. ¿Quieres descargar \nesta actualización ahora?";
 "downloading_message" = "Por favor, espera a la descarga de los archivos. (La aplicación se reiniciará)";
-"downloading_title" = "Descargando…";
 "downloadPrompt" = "Corán para Android  necesitamos descargar unos archivos para que funcione correctamente. Si no haces esto, la aplicación puede no funcionar confiablemente y requerirá una conexión a internet para leer.\n¿Te gustaría descargar los archivos necesarios ahora?\n\t\t";
 "downloadPrompt_no" = "No";
 "downloadPrompt_ok" = "Si";
@@ -70,7 +68,7 @@
 "export_data_error" = "Error en la exportación de datos";
 "exported_data" = "Datos exportados a %1$@";
 "extracting_title" = "Procesando…";
-"found_in_sura" = "Capítulo encontrado %1$@: %2$d (Página %3$d)";
+"found_in_sura" = "Capítulo encontrado (%1$d) %2$@: %3$d (Página %4$d)";
 "from" = "Desde";
 "get_arabic_search_db" = "Buscar en la Base de Datos Árabe";
 "get_translations" = "Obtener traducciones";
@@ -83,9 +81,9 @@
 "import_data_error" = "Archivo de copia de seguridad no válido (o no se puede leer el archivo de copia de seguridad).";
 "import_data_permissions_error" = "No se puede leer el archivo de copia de seguridad debido a un error de permisos.";
 "import_successful" = "Importar con éxito";
-"index_loading" = "Cargando…";
 "juz2_description" = "Yuz %1$@";
 "kitkat_external_message" = "Debido a las limitaciones de Android, si decide almacenar los datos de la aplicación en su sdcard externa y luego desinstalar, los datos de la aplicación dejarán de ser útilies. Las páginas y audios de Android serán eliminados y usted tendrá que volver a descargarlos. ¿Está seguro que quiere usar la sdcard externa?";
+"loading" = "Cargando…";
 "madani" = "Revelado en Medina";
 "makki" = "Revelado en La Meca";
 "menu_about" = "Acerca de Nosotros";
@@ -128,6 +126,7 @@
 "play_restrict_range" = "Sólo reproducir los versículos anteriores";
 "play_verses_range" = "Escucha el conjunto de ayat:";
 "playback_prompt_title" = "Inicie la reproducción desde:";
+"playback_speed" = "Velocidad de reproducción:";
 "please_grant_permissions" = "Por favor, conceda el permiso en la configuración de la aplicación";
 "please_wait" = "Por favor, espere...";
 "prefs_app_location_summary" = "Elegir ubicación para almacenar los archivos del Corán.";
@@ -159,12 +158,6 @@
 "prefs_highlight_bookmarks_title" = "Resaltar favoritos";
 "prefs_import_summary" = "Importar marcadores y etiquetas";
 "prefs_import_title" = "Importar";
-"prefs_landscape_orientation_summary_off" = "Se utilizará la orientación vertical";
-"prefs_landscape_orientation_summary_on" = "Se utilizará orientación horizontal";
-"prefs_landscape_orientation_title" = "Orientación horizontal";
-"prefs_lock_orientation_summary_off" = "Adaptable a la orientación actual";
-"prefs_lock_orientation_summary_on" = "La Página del Corán estará en modo de orientación fija";
-"prefs_lock_orientation_title" = "Bloquear orientación de la pantalla";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Nuevo fondo";
 "prefs_night_mode_background_brightness_summary" = "Brillo de la página cuando se activa el modo nocturno";

@@ -49,7 +49,6 @@ bản sao của các tệp này để có thể tải xuống các phiên bản 
 "download_error_network_retry" = "Lỗi mạng, đang cố gắng tải tiếp…";
 "download_error_perms" = "Không thể tải xuống do lỗi quyền";
 "download_extra_data" = "Chúng tôi cần tải xuống một hoặc hai tệp nhỏ để hỗ trợ chia sẻ và dịch thuật. Tải ngay?";
-"download_non_wifi_prompt" = "Bạn đang không dùng Wi-Fi. Vẫn tải xuống dữ liệu?";
 "download_processing" = "Xử lý tải xuống…";
 "download_progress" = "Đã tải xuống %1$@ / %2$@";
 "download_retry" = "Thử lại";
@@ -62,8 +61,6 @@ cho những hình ảnh Kinh Quran bạn có trên thiết bị của mình. B�
 bây giờ không?\
 ";
 "downloading_message" = "Vui lòng đợi tệp tải xuống (hỗ trợ tạm dừng).";
-"downloading_title" = "Đang tải…";
-"downloading_title" = "Đang tải xuống…";
 "downloadPrompt" = "Để Kinh Quran Android hoạt động bình thường,\
 chúng tôi cần tải xuống một số tệp. Nếu bạn không làm điều này bây giờ, ứng dụng\
 có thể không hoạt động đáng tin cậy và sẽ yêu cầu kết nối Internet để đọc.\
@@ -81,7 +78,7 @@ Xin lưu ý rằng chúng tôi nhận được rất nhiều email, vì vậy ch
 "export_data_error" = "Lỗi xuất dữ liệu";
 "exported_data" = "Dữ liệu được xuất sang %1$@";
 "extracting_title" = "Đang xử lý…";
-"found_in_sura" = "Tìm thấy ở Surah %1$@: %2$d (page %3$d)";
+"found_in_sura" = "Tìm thấy ở Surah (%1$d) %2$@: %3$d (page %4$d)";
 "from" = "Từ";
 "get_arabic_search_db" = "Tải Gói dữ liệu Tìm kiếm tiếng Ả Rập";
 "get_translations" = "Tải Bản dịch";
@@ -125,12 +122,12 @@ chúng tôi không giúp được gì nhiều.\
 "import_data_error" = "Tệp sao lưu không hợp lệ (hoặc không thể đọc tệp sao lưu).";
 "import_data_permissions_error" = "Không thể đọc tệp sao lưu do lỗi quyền.";
 "import_successful" = "Nhập thành công";
-"index_loading" = "Đang tải…";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Do những hạn chế của Android, nếu bạn chọn đặt dữ liệu Kinh Quran\
 trên thẻ nhớ SD ngoài và sau đó gỡ cài đặt hoặc xóa dữ liệu của Kinh Quran Android, tất cả các trang và âm thanh\
 của Kinh Quran Android sẽ bị xóa và bạn sẽ phải tải xuống lại. Bạn có\
 chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
+"loading" = "Đang tải…";
 "madani" = "Madani";
 "madani_description" = "Bản kinh Madani cổ điển.";
 "madani_title" = "Madani Mushaf cổ điển";
@@ -175,6 +172,7 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "play_restrict_range" = "Chỉ phát những câu trên";
 "play_verses_range" = "Lần phát cả bộ câu:";
 "playback_prompt_title" = "Bắt đầu phát từ:";
+"playback_speed" = "Tốc độ phát lại:";
 "please_grant_permissions" = "Vui lòng cấp quyền trong cài đặt ứng dụng";
 "please_wait" = "Xin đợi…";
 "prefs_app_location_summary" = "Chọn nơi lưu trữ các tệp Kinh Quran";
@@ -208,12 +206,6 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "prefs_highlight_bookmarks_title" = "Tô sáng các đánh dấu";
 "prefs_import_summary" = "Nhập đánh dấu và thẻ";
 "prefs_import_title" = "Nhập";
-"prefs_landscape_orientation_summary_off" = "Luôn dùng chế độ nằm dọc";
-"prefs_landscape_orientation_summary_on" = "Luôn dùng chế độ nằm ngang";
-"prefs_landscape_orientation_title" = "Hướng ngang";
-"prefs_lock_orientation_summary_off" = "Tự chuyển hướng cùng thiết bị";
-"prefs_lock_orientation_summary_on" = "Khóa một hướng cố định";
-"prefs_lock_orientation_title" = "Khóa hướng màn hình";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Màu nền mới";
 "prefs_night_mode_background_brightness_summary" = "Độ sáng của trang khi chế độ tối được kích hoạt";

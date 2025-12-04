@@ -78,6 +78,7 @@
 // MARK: - Update
 
 "update.filesystem.title" = "Upgrading databases...";
+"downloading_title" = "Downloading…";
 
 // MARK: - Reciters
 

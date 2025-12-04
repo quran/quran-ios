@@ -4,8 +4,6 @@ https://developer.android.com/jetpack/androidx";
 "about_contributors" = "Bijdragers";
 "about_contributors_summary" = "Een lijst met mensen die hebben bijgedragen aan de\
 ontwikkeling van Koran voor Android";
-"about_contributors_url" = "\
-https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md";
 "about_dagger2" = "Dagger 2";
 "about_dagger2_url" = "https://google.github.io/dagger";
 "about_data_sources" = "Data bronnen";
@@ -101,7 +99,6 @@ geprobeerd";
 "download_error_perms" = "Downloaden mislukt vanwege machtigingsfout";
 "download_extra_data" = "We moeten een of twee kleine bestanden downloaden om delen en\
 vertalen te ondersteunen. Download nu?";
-"download_non_wifi_prompt" = "U bent niet verbonden met Wi-Fi. Data toch downloaden?";
 "download_processing" = "Download verwerken…";
 "download_progress" = "%1$@ Gedowload van %2$@";
 "download_retry" = "Opnieuw Proberen";
@@ -114,8 +111,6 @@ koranafbeeldingen die je op je apparaat hebt staan. Wilt u deze patch nu downloa
 ";
 "downloading_message" = "Wacht tot de bestanden zijn gedownload (hervatting wordt\
 ondersteund).";
-"downloading_title" = "Downloaden…";
-"downloading_title" = "Downloaden…";
 "downloadPrompt" = "Om Koran Android goed te laten werken,\
 moeten we enkele bestanden downloaden. Doe je dit nu niet, dan is de app\
 werkt mogelijk niet betrouwbaar en vereist een internetverbinding om te lezen.\
@@ -135,7 +130,7 @@ Probeer het later opnieuw.";
 "export_data_error" = "Fout bij exporteren van gegevens";
 "exported_data" = "Gegevens geëxporteerd naar %1$@";
 "extracting_title" = "Verwerken…";
-"found_in_sura" = "Gevonden in Soera %1$@: %2$d (pagina %3$d)";
+"found_in_sura" = "Gevonden in Soera (%1$d) %2$@: %3$d (pagina %4$d)";
 "from" = "Van";
 "get_arabic_search_db" = "Arabische zoekdatabase verkrijgen";
 "get_translations" = "Vertalingen Ophalen";
@@ -184,13 +179,12 @@ vervangen door %1$d bladwijzer(s) en %2$d tag(s). Importeren?";
 "import_data_permissions_error" = "Kan back-upbestand niet lezen vanwege\
 toestemmingsfout.";
 "import_successful" = "Importeren voltooid";
-"index_loading" = "Laden…";
-"infinity" = "∞";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Vanwege beperkingen in Android, als u ervoor kiest om\
 Koran-gegevens op uw externe SD-kaart te plaatsen en later Koran Android verwijdert of gegevens\
 wist, worden alle pagina\'s en audio van Koran Android verwijderd en moet u deze opnieuw\
 downloaden. Weet u zeker dat u de externe SD-kaart wilt gebruiken?";
+"loading" = "Laden…";
 "logs_email" = "quranandroid+logs@gmail.com";
 "madani" = "Madani";
 "makki" = "Makki";
@@ -239,6 +233,7 @@ Download het alstublieft en probeer uw zoekopdracht opnieuw.";
 "play_to" = "Naar";
 "play_verses_range" = "Speel een set van verzen af:";
 "playback_prompt_title" = "Begin met afspelen vanaf:";
+"playback_speed" = "Afspeelsnelheid:";
 "please_grant_permissions" = "Verleen toestemming in de applicatie-instellingen";
 "please_wait" = "Even geduld aub…";
 "prefs_app_location_summary" = "Kies waar Koran-bestanden moeten worden opgeslagen";
@@ -277,12 +272,6 @@ weergegeven.";
 "prefs_highlight_bookmarks_title" = "Bladwijzers markeren";
 "prefs_import_summary" = "Importeer bladwijzers en tags";
 "prefs_import_title" = "Importeren";
-"prefs_landscape_orientation_summary_off" = "Gebruik altijd de staande modus";
-"prefs_landscape_orientation_summary_on" = "Gebruik altijd de liggende modus";
-"prefs_landscape_orientation_title" = "Liggende modus";
-"prefs_lock_orientation_summary_off" = "Aanpasbare oriëntatiemodus";
-"prefs_lock_orientation_summary_on" = "Gebruik de modus voor vaste oriëntatie";
-"prefs_lock_orientation_title" = "Schermoriëntatie vergrendelen";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_megabytes_str" = "%@ MB";
 "prefs_new_background_title" = "Nieuwe achtergrond";

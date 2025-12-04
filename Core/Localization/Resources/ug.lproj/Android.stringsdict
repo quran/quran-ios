@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <key>bookmark_tag_deleted</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@bookmark_tag_deleted@</string>
+            <key>bookmark_tag_deleted</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>بىر تۈر ئۆچۈرۈلدى</string>
+                <key>other</key>
+                <string>%d تۈر ئۆچۈرۈلدى</string>
+            </dict>
+        </dict>
+        <key>search_results</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@search_results@</string>
+            <key>search_results</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>\&quot;%d\&quot; نىڭ بىر نەتىجىسى:</string>
+                <key>other</key>
+                <string>\&quot;%1$d\&quot; نىڭ %2$d نەتىجىسى:</string>
+            </dict>
+        </dict>
         <key>verses</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>

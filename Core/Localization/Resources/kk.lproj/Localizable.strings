@@ -101,6 +101,7 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "update.filesystem.title" = "Дерекқорларды жаңарту...";
+"downloading_title" = "Жүктеу…";
 
 // MARK: - Reciters
 

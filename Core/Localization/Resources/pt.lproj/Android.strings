@@ -47,7 +47,6 @@
 "download_error_network_retry" = "Erro de rede, tentando resumir…";
 "download_error_perms" = "Não foi possível fazer o download, erro de permissão";
 "download_extra_data" = "Precisamos fazer download de um ou dois pequenos arquivos para apoiar tradução e compartilhamento. Fazer isso agora?";
-"download_non_wifi_prompt" = "Voce não está no wifi. Deseja realmente baixar os dados?";
 "download_processing" = "Processando Download…";
 "download_progress" = "Baixado %1$@ / %2$@";
 "download_retry" = "Tentar Novamente";
@@ -59,7 +58,6 @@
 para as imagens do Alcorão instaladas no seu dispositivo. Voce gostaria de baixar\
 este patch agora?";
 "downloading_message" = "Por favor aguarde o download dos aqruivos. (Resumo permitido)";
-"downloading_title" = "Baixando…";
 "downloadPrompt" = "Para uma performance ótima, alguns arquivos precisam\
 ser baixados. Se voce optar para não fazer isso agora, cada página irá demorar\
 significamente mais para carregar. Voce gostaria de baixar os arquivos\
@@ -76,7 +74,7 @@ Voce gostaria fazer download dessas imagens agora?";
 "export_data_error" = "Erro ao exportar dados";
 "exported_data" = "Dados exportados para %1$@";
 "extracting_title" = "Procesando…";
-"found_in_sura" = "Encontrado em Sura %1$@: %2$d (Página %3$d)";
+"found_in_sura" = "Encontrado em Sura (%1$d) %2$@: %3$d (Página %4$d)";
 "from" = "De";
 "get_arabic_search_db" = "Obter a base de pesquisa em Árabe";
 "get_translations" = "Obter Traduções";
@@ -90,9 +88,9 @@ Voce gostaria fazer download dessas imagens agora?";
 "import_data_error" = "Arquivo de backup inválido (ou incapaz de ler o arquivo de backup).";
 "import_data_permissions_error" = "Não foi possível ler o arquivo de backup devido a erro de permissão.";
 "import_successful" = "Importação bem sucedida";
-"index_loading" = "Carregando…";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Devido às limitações do Android, se você optar por colocar dados do Alcorão em seu cartão SD externo e posteriormente desinstalar ou limpar dados para o Android do Alcorão, todas as páginas e áudio do Android do Alcorão serão excluídas e você terá que baixá-los novamente. Você tem certeza de que deseja usar o cartão SD externo?";
+"loading" = "Carregando…";
 "madani" = "Madanita";
 "makki" = "Makkita";
 "menu_about" = "Sobre Nos";
@@ -135,6 +133,7 @@ Voce gostaria fazer download dessas imagens agora?";
 "play_restrict_range" = "Toque apenas o ayat acima";
 "play_verses_range" = "Ouça o conjunto de ayat:";
 "playback_prompt_title" = "Iniciar a reprodução a partir de:";
+"playback_speed" = "Velocidade de reprodução:";
 "please_grant_permissions" = "Por favor, conceda permissão nas configurações de aplicação";
 "please_wait" = "Por favor, aguarde...";
 "prefs_app_location_summary" = "Selecione qual sdcard para armazenar os arquivos";
@@ -166,12 +165,6 @@ Voce gostaria fazer download dessas imagens agora?";
 "prefs_highlight_bookmarks_title" = "Marcadores de destaque";
 "prefs_import_summary" = "Importação de marcadores e etiquetas";
 "prefs_import_title" = "Importação";
-"prefs_landscape_orientation_summary_off" = "Portrait orientation will be used";
-"prefs_landscape_orientation_summary_on" = "Landscape orientation will be used";
-"prefs_landscape_orientation_title" = "Landscape orientation";
-"prefs_lock_orientation_summary_off" = "Adaptive to current orientation mode";
-"prefs_lock_orientation_summary_on" = "Quran page will be in fixed orientation mode";
-"prefs_lock_orientation_title" = "Lock screen orientation";
 "prefs_new_background_title" = "New background";
 "prefs_night_mode_background_brightness_summary" = "Luminosidade da página quando o modo nocturno está activo";
 "prefs_night_mode_background_brightness_title" = "Brilho de fundo";

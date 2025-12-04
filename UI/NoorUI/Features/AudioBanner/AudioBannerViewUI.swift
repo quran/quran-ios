@@ -209,7 +209,7 @@ private struct Downloading: View {
                 ProgressView(value: progress)
                     .progressViewStyle(LinearProgressViewStyle())
 
-                Text(lAndroid("downloading_title"))
+                Text(l("downloading_title"))
                     .font(.body)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

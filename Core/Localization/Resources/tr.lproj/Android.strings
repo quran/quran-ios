@@ -50,7 +50,6 @@ sonraki oynatılmasında indirilebilmesi için bu dosyaların cihazınızdaki ko
 "download_error_network_retry" = "İnternet bağlantısı hatası, kurtarılmaya çalışılıyor";
 "download_error_perms" = "İzin verilmediği için indirilemedi";
 "download_extra_data" = "Paylaşma ve meâl için bir veya iki küçük dosya indirilmesi gerekiyor. İzin veriyor musunuz?";
-"download_non_wifi_prompt" = "Kablosuz bağlantı mevctu değil. Yine de indirmek istiyor musunuz?";
 "download_processing" = "İndirme devam ediyor…";
 "download_progress" = "%1$@ / %2$@ indirildi";
 "download_retry" = "Tekrar dene";
@@ -60,7 +59,6 @@ sonraki oynatılmasında indirilebilmesi için bu dosyaların cihazınızdaki ko
 "downloaded_translations" = "Yüklendi";
 "downloadImportantPrompt" = "\"Kur'an resim dosyaları için küçük ama önemli bir güncelleme var. Bu güncellemeyi indirmek istiyor musunuz?\"";
 "downloading_message" = "Lütfen dosyaların indirilmesi için bekleyin";
-"downloading_title" = "Yükleniyor…";
 "downloadPrompt" = "Daha iyi performans için bazı dosyalar SD karta kopyalanmalı.\
 Eğer şimdi bu işlemi gerçekleştirmezseniz sayfaların ayrı-ayrı indirilmesi daha uzun sürebilir.\
 Şimdi gerekli dosyaları indirmek istiyor musunuz?\
@@ -76,7 +74,7 @@ Lütfen unutmayın ki bize çok sayıda e-posta geliyor, bu yüzden aldığımı
 "export_data_error" = "Veriler dışa aktarılırken hata oluştu";
 "exported_data" = "\"Veriler %1$@'e aktarıldı\"";
 "extracting_title" = "İşlem yapılıyor…";
-"found_in_sura" = "%1$@ suresi, %2$d.âyet (Sayfa %3$d)";
+"found_in_sura" = "(%1$d) %2$@ suresi, %3$d.âyet (Sayfa %4$d)";
 "from" = "Başlangıç";
 "get_arabic_search_db" = "Arapça arama veritabanını indirin";
 "get_translations" = "Meâlleri getir";
@@ -111,11 +109,11 @@ Menüden âyeti işaretleyebilir, paylaşabilir, meâlini okuyabilir veya âyeti
 "import_data_error" = "Geçersiz yedekleme dosyası (veya yedekleme dosyası okunamıyor)";
 "import_data_permissions_error" = "İzinler hatası nedeniyle yedekleme dosyası okunamıyor";
 "import_successful" = "İçe aktarma başarıyla tamamlandı";
-"index_loading" = "Yükleniyor…";
 "juz2_description" = "Cüz %1$@";
 "kitkat_external_message" = "\"Android sistem sınırlamaları nedeniyle, Kur'an verilerini harici SD kartınıza yerleştirmeyi ve\
 daha sonra uygulamayı silmeyi veya verilerini temizlemeyi seçerseniz, tüm Kur'an sayfaları ve sesleri silinir ve tekrar indirmeniz gerekir.\
 Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
+"loading" = "Yükleniyor…";
 "madani" = "Medenî";
 "makki" = "Mekkî";
 "menu_about" = "Hakkında";
@@ -158,6 +156,7 @@ Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
 "play_restrict_range" = "Sadece yukarıdaki âyetleri dinle";
 "play_verses_range" = "âyetler grubu:";
 "playback_prompt_title" = "Şuradan başlat:";
+"playback_speed" = "Oynatma Hızı:";
 "please_grant_permissions" = "Lütfen uygulama ayarlarında izin verin";
 "please_wait" = "Lütfen bekleyin...";
 "prefs_app_location_summary" = "Lütfen hangi SD karta kopyalanacağını seçin";
@@ -189,12 +188,6 @@ Harici SD kartı kullanmak istediğinizden emin misiniz?\"";
 "prefs_highlight_bookmarks_title" = "İşaretleri vurgulama";
 "prefs_import_summary" = "İşaret ve etiketleri içe aktar";
 "prefs_import_title" = "İçe aktar";
-"prefs_landscape_orientation_summary_off" = "Dikey yönelimi açık";
-"prefs_landscape_orientation_summary_on" = "Yatay yönelimi açık";
-"prefs_landscape_orientation_title" = "Yatay düzen yönelimli";
-"prefs_lock_orientation_summary_off" = "Otomatik döndürme özellikleri çalışır vaziyette";
-"prefs_lock_orientation_summary_on" = "\"Kur'an sayfları döndürme özellikleri olmadan gösterilecek\"";
-"prefs_lock_orientation_title" = "Ekran döndürmeyi kapat";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Yeni arkaplan";
 "prefs_night_mode_background_brightness_summary" = "Gece modu etkinken sayfanın parlaklığı";

@@ -48,7 +48,6 @@
 "download_error_network_retry" = "Erreur réseau, tentative de reprise…";
 "download_error_perms" = "Impossible de télécharger en raison d\'une erreur d\'autorisation";
 "download_extra_data" = "Nous avons besoin de télécharger un ou deux petits fichiers pour le support du partage et de la traduction.  Télécharger maintenant ?";
-"download_non_wifi_prompt" = "Vous n\'êtes pas en wifi.  Télécharger les données malgré tout ?";
 "download_processing" = "Traitement du téléchargement…";
 "download_progress" = "Téléchargé %1$@ / %2$@";
 "download_retry" = "Réessayer";
@@ -58,7 +57,6 @@
 "downloaded_translations" = "Téléchargées";
 "downloadImportantPrompt" = "Il y a une petite mais importante mise à jour pour les images du Coran. Voulez-vous télécharger cette mise à jour maintenant ?";
 "downloading_message" = "Veuillez patienter jusqu\'à la fin du téléchargement. (Reprise supportée)";
-"downloading_title" = "Téléchargement en cours…";
 "downloadPrompt" = "Pour des performances optimales, certains fichiers doivent être téléchargés. Si vous ne voulez pas faire cela maintenant, chaque page prendra plus de temps à charger. Souhaitez-vous télécharger les fichiers requis maintenant ?";
 "downloadPrompt_no" = "Non";
 "downloadPrompt_ok" = "Oui";
@@ -70,7 +68,7 @@
 "export_data_error" = "Erreur lors de l\'export des données.";
 "exported_data" = "Données exportées dans %1$@.";
 "extracting_title" = "Traitement en cours…";
-"found_in_sura" = "Trouvée dans la sourate %1$@: %2$d (Page %3$d)";
+"found_in_sura" = "Trouvée dans la sourate (%1$d) %2$@: %3$d (Page %4$d)";
 "from" = "Depuis";
 "get_arabic_search_db" = "Télécharger la base de données de recherche arabe";
 "get_translations" = "Obtenir des traductions";
@@ -107,13 +105,13 @@ Pour les traductions, allez dans paramètres et choisissez la taille de la tradu
 "import_data_error" = "Fichier de sauvegarde invalide (ou impossible de lire le fichier de sauvegarde).";
 "import_data_permissions_error" = "Impossible de lire le fichier de sauvegarde à cause d\'une erreur de permissions.";
 "import_successful" = "Données importées avec succès";
-"index_loading" = "Chargement…";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Dû à certaines restrictions d\'Android, si vous choisissez\
 de stocker les données de l\'application sur votre carte SD et que par la suite vous désinstallez\
 ou supprimez les données de Quran Android, toutes les pages et les audios de Quran Android\
 seront supprimés et vous serez contraints de les télécharger de nouveau. Êtes-vous certains de\
 vouloir utiliser la carte SD externe ?";
+"loading" = "Chargement…";
 "madani" = "Madani";
 "makki" = "Makki";
 "menu_about" = "À propos";
@@ -156,6 +154,7 @@ vouloir utiliser la carte SD externe ?";
 "play_restrict_range" = "Écouter uniquement les Ayāts sélectionnés";
 "play_verses_range" = "Écouter la selection de Ayāt :";
 "playback_prompt_title" = "Lecture depuis :";
+"playback_speed" = "Vitesse de lecture :";
 "please_grant_permissions" = "S\'il vous plaît, accordez les permissions dans les paramètres des applicaitons.";
 "please_wait" = "Veuillez patienter...";
 "prefs_app_location_summary" = "Sélectionnez sur quelle sdcard sauvegarder les fichiers";
@@ -187,12 +186,6 @@ vouloir utiliser la carte SD externe ?";
 "prefs_highlight_bookmarks_title" = "Surligner les favoris";
 "prefs_import_summary" = "Importer des signets et des tags";
 "prefs_import_title" = "Importer";
-"prefs_landscape_orientation_summary_off" = "L\'orientation portrait sera utilisée.";
-"prefs_landscape_orientation_summary_on" = "L\'orientation paysage sera utilisée.";
-"prefs_landscape_orientation_title" = "Mode paysage";
-"prefs_lock_orientation_summary_off" = "L\'affichage du coran s\'adaptera au changement d\'orientation de l\'écran.";
-"prefs_lock_orientation_summary_on" = "L\'affichage du coran ne s\'adaptera pas au changement d\'orientation de l\'écran.";
-"prefs_lock_orientation_title" = "Verrouiller l\'orientation de l\'écran";
 "prefs_megabytes_int" = "%1$d Mo";
 "prefs_new_background_title" = "Nouvel arrière-plan";
 "prefs_night_mode_background_brightness_summary" = "Luminosité de la page lorsque le mode nuit est actif";

@@ -2,7 +2,7 @@
 "about_androidx_url" = "https://developer.android.com/jetpack/androidx";
 "about_contributors" = "Contributors";
 "about_contributors_summary" = "A list of people who contributed to the development of Quran for Android";
-"about_contributors_url" = "https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md";
+"about_contributors_url" = "https://github.com/quran/quran_android/blob/main/CONTRIBUTORS.md";
 "about_dagger2" = "Dagger 2";
 "about_dagger2_url" = "https://google.github.io/dagger";
 "about_data_sources" = "Data Sources";
@@ -54,7 +54,11 @@
 "about_timber" = "Timber";
 "about_timber_url" = "https://github.com/JakeWharton/timber";
 "app_name" = "Quran";
+"appearance" = "Appearance";
 "audio_manager" = "Audio Manager";
+"audio_manager_database" = "Audio Database";
+"audio_manager_database_delete" = "Delete database";
+"audio_manager_database_download" = "Download database";
 "audio_manager_delete_selection" = "Delete selection";
 "audio_manager_download_all" = "Download all";
 "audio_manager_download_selection" = "Download selection";
@@ -90,7 +94,6 @@ back.";
 "download_error_network_retry" = "Network error, trying to resume…";
 "download_error_perms" = "Could not download due to permissions error";
 "download_extra_data" = "We need to download one or two small files to support sharing and translation. Download now?";
-"download_non_wifi_prompt" = "You are not on Wi-Fi. Download data anyway?";
 "download_processing" = "Processing Download…";
 "download_progress" = "Downloaded %1$@ / %2$@";
 "download_retry" = "Retry";
@@ -103,8 +106,6 @@ for the Quran images you have on your device. Would you like to download this\
 patch now?\
 ";
 "downloading_message" = "Please wait for the files to download (resume supported).";
-"downloading_title" = "Downloading…";
-"downloading_title" = "Downloading…";
 "downloadPrompt" = "In order for Quran Android to work properly,\
 we need to download some files. If you do not do this now, the app\
 may not work reliably and will require an Internet connection for reading.\
@@ -122,7 +123,7 @@ Please note that we receive lots of emails, so we may not be able to reply to al
 "export_data_error" = "Error exporting data";
 "exported_data" = "Data exported to %1$@";
 "extracting_title" = "Processing…";
-"found_in_sura" = "Found in Surah %1$@: %2$d (page %3$d)";
+"found_in_sura" = "Found in Surah (%1$d) %2$@: %3$d (page %4$d)";
 "from" = "From";
 "get_arabic_search_db" = "Get Arabic Search Database";
 "get_translations" = "Get Translations";
@@ -166,13 +167,13 @@ little we can do to help with this.\
 "import_data_error" = "Invalid backup file (or unable to read backup file).";
 "import_data_permissions_error" = "Unable to read backup file due to permissions error.";
 "import_successful" = "Import Successful";
-"index_loading" = "Loading…";
 "infinity" = "∞";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Due to Android limitations, if you choose to place Quran\
 data on your external SD card and later uninstall or clear data for Quran Android, all Quran\
 Android pages and audio will be deleted and you will have to download them again. Are you\
 sure you want to use the external SD card?";
+"loading" = "Loading…";
 "logs_email" = "quranandroid+logs@gmail.com";
 "madani" = "Madani";
 "madani_description" = "The classic Madani script.";
@@ -223,6 +224,7 @@ sure you want to use the external SD card?";
 "play_to" = "To";
 "play_verses_range" = "Play set of verses:";
 "playback_prompt_title" = "Start playback from:";
+"playback_speed" = "Playback Speed:";
 "please_grant_permissions" = "Please grant permission in application settings";
 "please_wait" = "Please wait…";
 "post_notification_permission" = "Allow Quran for Android to post notifications? This is only used to give updates on download status, or to warn when audio files are automatically updated.";
@@ -233,6 +235,7 @@ sure you want to use the external SD card?";
 "prefs_audio_manager_summary" = "Manage and download Quranic audio";
 "prefs_ayah_before_translation_summary" = "Show ayah in Arabic above the translation";
 "prefs_ayah_before_translation_title" = "Ayah before translation";
+"prefs_ayah_text_title" = "Ayah text size";
 "prefs_calculating_app_size" = "Calculating App Size";
 "prefs_category_advanced" = "Advanced Options";
 "prefs_category_advanced_summary" = "Import/export bookmarks, set Quran data directory, etc.";
@@ -258,12 +261,6 @@ sure you want to use the external SD card?";
 "prefs_highlight_bookmarks_title" = "Highlight bookmarks";
 "prefs_import_summary" = "Import bookmarks and tags";
 "prefs_import_title" = "Import";
-"prefs_landscape_orientation_summary_off" = "Always use portrait mode";
-"prefs_landscape_orientation_summary_on" = "Always use landscape mode";
-"prefs_landscape_orientation_title" = "Landscape orientation";
-"prefs_lock_orientation_summary_off" = "Adaptive to current orientation mode";
-"prefs_lock_orientation_summary_on" = "Use fixed orientation mode";
-"prefs_lock_orientation_title" = "Lock screen orientation";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_megabytes_str" = "%@ MB";
 "prefs_new_background_title" = "New background";
@@ -346,6 +343,7 @@ of Android. Are you sure you\'d like to use this path?";
 external storage. Quran will work without this permission, but if you clear data or\
 uninstall the app, all downloaded pages, audio, and data will be removed. Grant\
 Quran permission?";
+"sura_and_ayah" = "Sura and Ayah";
 "sura_ayah" = "%1$d:%2$d";
 "sura_ayah_notification_str" = "Surah %1$@, Ayah %2$d";
 "sura_ayah_sharing_str" = "Surah %1$@: %2$d";

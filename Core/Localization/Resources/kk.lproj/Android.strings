@@ -49,7 +49,6 @@
 "download_error_network_retry" = "Байланыс қателігі; қайта қосылуда…";
 "download_error_perms" = "Рұқсат қателігі";
 "download_extra_data" = "Бөлісу және аудармаларды пайдалану үшін бір-екі файл жүктеу керек. Қазір жүктелсін бе?";
-"download_non_wifi_prompt" = "Wi-Fi қосылмаған. Бәрібір жүктелсін бе?";
 "download_processing" = "Жүктеу…";
 "download_progress" = "%1$@/%2$@ жүктелді";
 "download_retry" = "Қайталау";
@@ -61,7 +60,6 @@
 Жаңа файлдар қазір жүктелінсін бе?\
 ";
 "downloading_message" = "Файлдар толық жазылғанша күтіңіз";
-"downloading_title" = "Жүктеу…";
 "downloadPrompt" = "Бағдарламаның дұрыс істеуі үшін тағы басқа файлдар жазу керек.\
 Егер файлдар дәл қазір жазылмаса, Құран беттерінің жүктелуі біраз уақыт алуы мүмкін\
 және Интернет қосылысы қажет болады. Файлдар қазір жазылсын ба?";
@@ -76,7 +74,7 @@
 "export_data_error" = "Экспорт қателігі";
 "exported_data" = "Деректер %1$@ жеріне экспортталды";
 "extracting_title" = "Шығару…";
-"found_in_sura" = "Сүреде табылды %1$@, %2$d-аят (Бет %3$d)";
+"found_in_sura" = "Сүреде табылды (%1$d) %2$@, %3$d-аят (Бет %4$d)";
 "from" = "Басы";
 "get_arabic_search_db" = "Арабша іздеу деректерін орнату";
 "get_translations" = "Аударма жүктеу";
@@ -121,11 +119,11 @@
 "import_data_error" = "Жарамсыз резервтік файл (немесе резервтік файл оқылмайды).";
 "import_data_permissions_error" = "Рұқсат қателіктеріне байланысты резервтік файлдарды оқу мүмкін емес.";
 "import_successful" = "Деректер импортталды";
-"index_loading" = "Жүктеу…";
 "juz2_description" = "%1$@-пара";
 "kitkat_external_message" = "Бағдарлама сыртқы жадқа (SD карта) көшірілген соң жойылып қайта орнатылса\
 немесе деректер тазаланса барлық Құран суреттері мен аудиолары жойылады және ол деректерді қайта жүктеу керек болады.\
 Сыртқы жадты пайдалануға сенімдімісіз?";
+"loading" = "Жүктеу…";
 "madani" = "Мәдина";
 "makki" = "Мекке";
 "menu_about" = "Бағдарлама туралы";
@@ -170,6 +168,7 @@
 "play_restrict_range" = "Тек жоғарыдағы аяттарды тыңдау";
 "play_verses_range" = "Аят топтамасын тыңдау:";
 "playback_prompt_title" = "Ойнатуды мынадан бастаңыз:";
+"playback_speed" = "Жүктеу жылдамдылығы:";
 "please_grant_permissions" = "Өтініш, бағдарлама баптаулары арқылы керекті рұқсаттарды беріңіз";
 "please_wait" = "Күте тұршы...";
 "prefs_app_location_summary" = "Құран файлдары сақталған орын";
@@ -201,12 +200,6 @@
 "prefs_highlight_bookmarks_title" = "Бетбелгі деректері";
 "prefs_import_summary" = "Бетбелгілер мен тегтерді импорттау";
 "prefs_import_title" = "Импорттау";
-"prefs_landscape_orientation_summary_off" = "Тік бағытта пайдалану";
-"prefs_landscape_orientation_summary_on" = "Көлденең бағытта пайдалану";
-"prefs_landscape_orientation_title" = "Көлденең бағыт";
-"prefs_lock_orientation_summary_off" = "Ағымдық бағытта пайдалану";
-"prefs_lock_orientation_summary_on" = "Құран беттері экранның белгіленген бағытында ұсталады";
-"prefs_lock_orientation_title" = "Экран бағытын құлыптау";
 "prefs_megabytes_int" = "%1$d Mб";
 "prefs_new_background_title" = "Жаңа фон";
 "prefs_night_mode_background_brightness_summary" = "Түнгі режим белсенді болған кездегі беттің жарықтығы";

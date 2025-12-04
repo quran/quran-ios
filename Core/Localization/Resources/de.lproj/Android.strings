@@ -60,9 +60,6 @@ werden.\
 Teilen- und Übersetzungs-Funktion Gebrauch machen zu können. Möchten Sie die Dateien jetzt\
 herunterladen?\
 ";
-"download_non_wifi_prompt" = "Sie sind nicht mit einem W-LAN verbunden. Möchten Sie die\
-Dateien trotzdem herunterladen?\
-";
 "download_processing" = "Download wird durchgeführt…";
 "download_progress" = "Heruntergeladen %1$@ / %2$@";
 "download_retry" = "Nochmals versuchen";
@@ -77,7 +74,6 @@ herunterladen?\
 "downloading_message" = "Bitte warten Sie bis die Dateien heruntergeladen wurden.\
 Sie dürfen den Vorgang unterbrechen, falls es nötig sein sollte.\
 ";
-"downloading_title" = "Dateien werden heruntergeladen…";
 "downloadPrompt" = "Für die optimale Leistung müssen einige Dateien\
 heruntergeladen werden. Wenn Sie sich dagegen entscheiden, wird das\
 Laden jeder Seite spürbar länger dauern. Wollen Sie die benötigten\
@@ -101,7 +97,7 @@ mit den Übersetzungen herunterzuladen. Versuchen Sie es später erneut.\
 "export_data_error" = "Fehler beim Exportieren von Daten";
 "exported_data" = "In %1$@ exportierte Daten";
 "extracting_title" = "Dateien werden verarbeitet…";
-"found_in_sura" = "Gefunden in Sure %1$@: %2$d (Seite %3$d)";
+"found_in_sura" = "Gefunden in Sure (%1$d) %2$@: %3$d (Seite %4$d)";
 "from" = "Von";
 "get_arabic_search_db" = "Lade die arabische Such-Datenbank herunter";
 "get_translations" = "Übersetzungen herunterladen";
@@ -161,7 +157,6 @@ wir Ihnen leider auch nicht weiterhelfen.\
 "import_data_error" = "Ungültige Sicherungsdatei (oder Sicherungsdatei kann nicht gelesen werden).";
 "import_data_permissions_error" = "Die Sicherungsdatei kann aufgrund eines Berechtigungsfehlers nicht gelesen werden.";
 "import_successful" = "Import erfolgreich";
-"index_loading" = "Lade…";
 "juz2_description" = "Juz\' %1$@";
 "kitkat_external_message" = "Aufgrund von Systemeinschränkungen durch Android, werden im\
 Falle der Speicherung der Daten auf einer externen SD-Karte, diese Daten nach einer\
@@ -169,6 +164,7 @@ Deinstallation oder einer Löschung der Applikationsdaten dauerhaft gelöscht un
 erneutes Herunterladen erforderlich. Sind Sie sicher, dass Sie die externe SD-Karte benutzen\
 wollen?\
 ";
+"loading" = "Lade…";
 "madani" = "Medinensisch";
 "makki" = "Mekkanisch";
 "menu_about" = "Über uns";
@@ -214,6 +210,7 @@ heruntergeladen. Bitte laden Sie dieses herunter und versuchen Sie es danach ern
 "play_restrict_range" = "Nur die oben genannten Verse abspielen";
 "play_verses_range" = "Abspielen einer Reihe von Ayat:";
 "playback_prompt_title" = "Starten Sie die Wiedergabe von:";
+"playback_speed" = "Wiedergabegeschwindigkeit:";
 "please_grant_permissions" = "Bitte erlauben Sie dies in den Anwendungseinstellungen";
 "please_wait" = "Bitte warten...";
 "prefs_app_location_summary" = "Wählen Sie den Speicherort der Dateien aus.";
@@ -254,16 +251,6 @@ dargestellt.\
 "prefs_highlight_bookmarks_title" = "Lesezeichen hervorheben";
 "prefs_import_summary" = "Lesezeichen und Tags importieren";
 "prefs_import_title" = "Importieren";
-"prefs_landscape_orientation_summary_off" = "Hochformat wird genutzt.";
-"prefs_landscape_orientation_summary_on" = "Querformat wird genutzt.";
-"prefs_landscape_orientation_title" = "Querformat";
-"prefs_lock_orientation_summary_off" = "Verwendet für die Bildschirmausrichtung die\
-aktuellen System-Einstellungen.\
-";
-"prefs_lock_orientation_summary_on" = "Die Quranseiten werden immer in einer bestimmten\
-Bildschirmausrichtung angezeigt.\
-";
-"prefs_lock_orientation_title" = "Bildschirmausrichtung sperren";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Neuen Hintergrund verwenden";
 "prefs_night_mode_background_brightness_summary" = "Helligkeit der Seite im Nachtmodus.";

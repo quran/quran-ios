@@ -44,7 +44,7 @@ public struct ContentStatusView: View {
     private func downloadingView(_ progress: Double) -> some View {
         VStack {
             ProgressView(value: progress, total: 1)
-            Text(lAndroid("downloading_title"))
+            Text(l("downloading_title"))
         }
     }
 

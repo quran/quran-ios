@@ -115,6 +115,7 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "update.filesystem.title" = "Atualizando bancos de dados...";
+"downloading_title" = "Baixando…";
 
 // MARK: - Reciters
 

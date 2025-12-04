@@ -98,6 +98,7 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "update.filesystem.title" = "Mengemas kini pangkalan data...";
+"downloading_title" = "Sedang memuat turun…";
 
 // MARK: - Reciters
 

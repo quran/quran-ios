@@ -18,6 +18,7 @@ Shuningdek doktor Ayman Suvayd qiroati ham ushbu proyektdan olingan.\
 "about_quranicaudio_summary" = "Muttasil mp3 Qurʼon tilovatlari";
 "about_tanzil_summary" = "Baʼzi tillardagi Qurʼon maʼnolari tarjimalari";
 "app_name" = "Qurʼon";
+"appearance" = "Koʻrinish";
 "audio_manager" = "Audio menejer";
 "audio_manager_delete_selection" = "Tanlanganlarni oʻchirish";
 "audio_manager_download_all" = "Hammasini saqlash";
@@ -50,7 +51,6 @@ versiyalar oʻchirildi, keyingi safar foydalanganingizda yangilangan versiyalari
 "download_error_network_retry" = "Tarqmoq xatoligi, qayta harakat qilinmoqda…";
 "download_error_perms" = "Ruhsat muammosi tufayli saqlab boʻlmadi";
 "download_extra_data" = "Boʻlishish va tarjimalardan foydalana olish uchun bir-ikkita kichik hajmdagi fayllar lozim. Hozir saqlab olasizmi?";
-"download_non_wifi_prompt" = "Wi-Fi tarmogʻiga ulanmagansiz, baribir fayllarni saqlab olmoqchimisiz?";
 "download_processing" = "Saqlanmoqda…";
 "download_progress" = "%1$@/%2$@ saqlandi";
 "download_retry" = "Qayta harakat qilish";
@@ -61,7 +61,6 @@ versiyalar oʻchirildi, keyingi safar foydalanganingizda yangilangan versiyalari
 "downloadImportantPrompt" = "Uskunangizdagi Qurʼon rasmlari uchun kichik, ammo muhim oʻzgartirishlar kiritish lozim.\
 Yangilangan fayllarni hozir saqlab olasizmi?";
 "downloading_message" = "Iltimos, fayllar toʻliq saqlanib olinguncha biroz kutib turing.";
-"downloading_title" = "Saqlanmoqda…";
 "downloadPrompt" = "Ilova toʻliq ishlashi uchun baʼzi fayllarni koʻchirib olish lozim.\
 Agar fayllarni hozir saqlab olmasangiz, Qurʼon sahifalarining ochilishi biroz sekin amalga oshishi mumkin\
 hamda doimiy Internet aloqasi kerak boʻladi. Fayllarni hozir saqlab olasizmi?";
@@ -79,7 +78,7 @@ Iltimos, maktubni ingliz tilida yuborishni unutmang.\
 "export_data_error" = "Eksport qilishda xatolik yuz berdi";
 "exported_data" = "Maʼlumotlar \"%1$@\"ga eksport qilindi";
 "extracting_title" = "Ishlanmoqda…";
-"found_in_sura" = "%1$@ surasi, %2$d-oyat (Sahifa %3$d)";
+"found_in_sura" = "(%1$d) %2$@ surasi, %3$d-oyat (%4$d-bet)";
 "from" = "Boshi";
 "get_arabic_search_db" = "Arabcha izlash bazasini oʻrnatish";
 "get_translations" = "Tarjimalar saqlab olish";
@@ -120,17 +119,18 @@ bu boradi biz biror yordam qila olmaymiz.\
 "highlighting_database" = "Kerakli fayllar";
 "import_data" = "Import";
 "import_data_and_override" = "Ushbu import barcha xatchoʻplarni %1$d ta xatchoʻp(lar) va %2$d ta teg(lar) bilan almashtiradi.\
-Import qilinsinmi?";
+Import qilasizmi?";
 "import_data_error" = "Yaroqsiz zaxira fayl (yoxud zaxira faylni oʻqib boʻlmadi).";
 "import_data_permissions_error" = "Ruxsat xatoliklari tufayli zaxira faylini oʻqib boʻlmadi.";
 "import_successful" = "Muvaffaqiyatli import qilindi";
-"index_loading" = "Yuklanmoqda…";
 "juz2_description" = "%1$@-juz";
 "kitkat_external_message" = "Ilovani tashqi xotiraga (SD kartaga) koʻchirib oʻtkazgach, agar u oʻchirib tashlab-qayta oʻrnatilsa\
 yoki maʼlumotlari tozalansa barcha Qurʼon rasmlari va audio fayllar ham oʻchib ketadi va ushbu kerakli maʼlumotlarni yana qayta saqlab\
 olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
+"loading" = "Yuklanmoqda…";
 "madani" = "Madaniy";
 "makki" = "Makkiy";
+"manzil_description" = "%1$@-manzil";
 "menu_about" = "Ilova haqida";
 "menu_back_to_page" = "Qurʼon";
 "menu_bookmarks" = "Xatchoʻplar";
@@ -171,18 +171,21 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "play_restrict_range" = "Yuqorida oyatlarnigina eshitish";
 "play_verses_range" = "Oyatlar toʻplamini:";
 "playback_prompt_title" = "Boshlash joyi:";
+"playback_speed" = "Tezlik:";
 "please_grant_permissions" = "Iltimos, ilova sozlamalari orqali kerakli ruxsatlarni bering";
 "please_wait" = "Iltimos, biroz kuting…";
+"post_notification_permission" = "Qurʼon bildirishnomalar yuborishi uchun ruxsat berasizmi? Bu faqat fayllar saqlab olish statuslarini koʻrsatish yoxud audio fayllar avtomatik ravishda yuklab olinishida koʻrsatiladi.";
 "prefs_app_location_summary" = "Qurʼon fayllari saqlanadigan joy";
 "prefs_app_location_title" = "Maʼlumotlar jildi";
 "prefs_app_size" = "Mavjud fayllar hajmi:";
 "prefs_audio_manager_summary" = "Qurʼon audio fayllarini saqlab olish va boshqarish";
 "prefs_ayah_before_translation_summary" = "Arabcha oyatlarni tarjima matni ustida koʻrsatish";
 "prefs_ayah_before_translation_title" = "Oyatni avval koʻrsatish";
+"prefs_ayah_text_title" = "Oyat matni hajmi";
 "prefs_calculating_app_size" = "Ilova hajmi hisoblanmoqda…";
 "prefs_category_advanced" = "Ilgʻor";
 "prefs_category_advanced_summary" = "Xatchoʻplarni import/eksport qilish, maʼlumotlar jildini tanlash va h.k.";
-"prefs_category_display_settings" = "Koʻrinish";
+"prefs_category_display_settings" = "Displey";
 "prefs_category_download" = "Saqlab olish";
 "prefs_category_dual_screen" = "Juft sahifa sozlamalari";
 "prefs_category_reading" = "Oʻqish";
@@ -196,26 +199,22 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "prefs_dual_page_mode_enabled" = "Yotiq holatda ikki sahifa yonma-yon koʻrinadi";
 "prefs_dual_page_mode_title" = "Juft sahifa rejimi";
 "prefs_err_moving_app_files" = "Fayllarni koʻchirib oʻtkazishda xatolik yuz berdi";
+"prefs_export_csv_summary" = "Xatchoʻp va teglarni CSV formatda eksport qilish";
+"prefs_export_csv_title" = "CSV formatda eksport";
 "prefs_export_summary" = "Xatchoʻp va teglarni eksport qilish";
 "prefs_export_title" = "Eksport";
 "prefs_highlight_bookmarks_summary" = "Xatchoʻplangan oyatlarni alohida ajratib koʻrsatish";
 "prefs_highlight_bookmarks_title" = "Xatchoʻp maʼlumotlari";
 "prefs_import_summary" = "Xatchoʻp va teglarni import qilish";
 "prefs_import_title" = "Import";
-"prefs_landscape_orientation_summary_off" = "Tik oriyentatsiyadan foydalaniladi";
-"prefs_landscape_orientation_summary_on" = "Yotiq oriyentatsiyadan foydalaniladi";
-"prefs_landscape_orientation_title" = "Landshaft rejim";
-"prefs_lock_orientation_summary_off" = "Joriy oriyentatsiyadan foydalaniladi";
-"prefs_lock_orientation_summary_on" = "Qurʼon sahifalari doim belgilangan oriyentatsiyada boʻladi";
-"prefs_lock_orientation_title" = "Ekran oriyentatsiyasini qulflash";
 "prefs_megabytes_int" = "%1$d Mb";
 "prefs_new_background_title" = "Yangi fon";
 "prefs_night_mode_background_brightness_summary" = "Tungi rejim faol boʼlganda sahifaning yorqinligi";
 "prefs_night_mode_background_brightness_title" = "Fon yorqinligi";
 "prefs_night_mode_summary" = "Qora fon va porloq shriftlardan foydalaniladi";
-"prefs_night_mode_text_brightness_summary" = "Tunggi rejim ishga tushirilgan paytdagi matn porloqliligi";
+"prefs_night_mode_text_brightness_summary" = "Tungi rejim ishga tushirilgan paytdagi matn porloqliligi";
 "prefs_night_mode_text_brightness_title" = "Matn porloqliligi";
-"prefs_night_mode_title" = "Tunggi rejim";
+"prefs_night_mode_title" = "Tungi rejim";
 "prefs_no_enough_space_to_move_files" = "Fayllarni koʻchirib oʻtkazish uchun yetarli joy mavjud emas";
 "prefs_overlay_page_info_summary" = "Sura nomi, sahifa va juz raqamlarini koʻrsatish";
 "prefs_overlay_page_info_title" = "Sahifa maʼlumotlari";
@@ -237,8 +236,8 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "prefs_translations_summary" = "Tarjimalarni saqlab olish va boshqarish";
 "prefs_use_arabic_summary_on" = "Ilova arab tilida ishlaydi";
 "prefs_use_arabic_title" = "Arabcha rejim (الوضع العربي)";
-"prefs_use_dyslexic_font_summary" = "Display translations in dyslexia friendly font";
-"prefs_use_dyslexic_font_title" = "Dyslexia friendly font";
+"prefs_use_dyslexic_font_summary" = "Tarjimalar matni disleksiyasi borlar uchun qulay shriftda ko‘rsatiladi";
+"prefs_use_dyslexic_font_title" = "Disleksiyaga mos shrift";
 "prefs_volume_key_navigation_summary" = "Qurilmaning ovoz tugmalari yordamida varoqlash";
 "prefs_volume_key_navigation_title" = "Ovoz tugmalaridan foydalanish";
 "previous" = "Avvalgi";
@@ -292,7 +291,7 @@ mumkin, biroq ilovani oʻchirsangiz yoki maʼlumotlarni tozalasangiz barcha saql
 suralar, audio va tarjimalar ham oʻchib ketadi. Tashqi xotiraga bogʻlanishga ruxsat\
 berasizmi?";
 "sura_ayah_notification_str" = "%1$@ surasi %2$d-oyat";
-"sura_ayah_sharing_str" = "%1$@ surasi: %2$d";
+"sura_ayah_sharing_str" = "%1$@ - %2$d";
 "tag_ayah" = "Oyatni teglash";
 "tag_blank_tag_error" = "Teg nomi boʻsh boʻlmasligi kerak!";
 "tag_bookmark" = "Xatchoʻpni teglash";

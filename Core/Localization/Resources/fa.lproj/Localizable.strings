@@ -115,6 +115,7 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "update.filesystem.title" = "به‌روزرسانی پایگاه‌های داده...";
+"downloading_title" = "بارگذاری…";
 
 // MARK: - Reciters
 

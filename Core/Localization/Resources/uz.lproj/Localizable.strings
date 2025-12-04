@@ -115,6 +115,7 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "update.filesystem.title" = "Ma'lumotlar bazasini yangilamoqda...";
+"downloading_title" = "Saqlanmoqda…";
 
 // MARK: - Reciters
 

@@ -47,7 +47,6 @@
 "download_error_network_retry" = "网络错误，正在重新连接…";
 "download_error_perms" = "权限错误，无法下载";
 "download_extra_data" = "共享功能和下载功能需要下载一两个小文件，现在下载吗？";
-"download_non_wifi_prompt" = "没有连接到wifi. 要继续下载吗？";
 "download_processing" = "正在下载…";
 "download_progress" = "已下载 %1$@ / %2$@";
 "download_retry" = "重试";
@@ -55,7 +54,6 @@
 "downloaded_translations" = "已经下载";
 "downloadImportantPrompt" = "有一个小而重要的更新 对你设备上的古兰经图像进行了一个小而重要的更新。你想下载这个 补丁吗？";
 "downloading_message" = "文件下载中，请等待。（支持续传）";
-"downloading_title" = "下载中…";
 "downloadPrompt" = "为了更好的使用体验，需要下载一些文件。如果目前选择不下载，每个页面载入时会花较长的时间。确认开始下载这些文件吗？\
 ";
 "downloadPrompt_no" = "取消";
@@ -68,7 +66,7 @@
 "export_data_error" = "输出数据时出错";
 "exported_data" = "数据导出到%1$@";
 "extracting_title" = "处理中…";
-"found_in_sura" = "对应章节 %1$@ 节 %2$d (页 %3$d)";
+"found_in_sura" = "对应章节 (%1$d) %2$@ 节 %3$d (页 %4$d)";
 "from" = "来自";
 "get_arabic_search_db" = "下载阿拉伯语搜索包";
 "get_translations" = "下载译文";
@@ -104,9 +102,9 @@
 "import_data_error" = "无效的备份文件（或无法读取备份文件）。";
 "import_data_permissions_error" = "由于权限错误，无法读取备份文件。";
 "import_successful" = "进口成功";
-"index_loading" = "正在载入…";
 "juz2_description" = "第%1$@卷";
 "kitkat_external_message" = "由于安卓系统的限制，如果你选择将古兰经数据放在外部SD卡上，后来卸载或清除古兰经安卓系统的数据，所有古兰经安卓系统的页面和音频将被删除，你将不得不重新下载它们。你确定你要使用外部SD卡吗？";
+"loading" = "正在载入…";
 "madani" = "麦地那章";
 "makki" = "麦加章";
 "menu_about" = "关于";
@@ -149,6 +147,7 @@
 "play_restrict_range" = "只播放上述阿亚特";
 "play_verses_range" = "听听这组阿亚特。";
 "playback_prompt_title" = "开始播放从。";
+"playback_speed" = "播放速度：";
 "please_grant_permissions" = "请在应用程序设置中授予权限";
 "please_wait" = "请等待...";
 "prefs_app_location_summary" = "选择存储古兰经文件的地方";
@@ -180,12 +179,6 @@
 "prefs_highlight_bookmarks_title" = "突出显示书签";
 "prefs_import_summary" = "导入书签和标签";
 "prefs_import_title" = "进口";
-"prefs_landscape_orientation_summary_off" = "锁定竖屏";
-"prefs_landscape_orientation_summary_on" = "锁定横屏";
-"prefs_landscape_orientation_title" = "锁屏方向";
-"prefs_lock_orientation_summary_off" = "跟随系统";
-"prefs_lock_orientation_summary_on" = "古兰经页面的屏幕旋转方向";
-"prefs_lock_orientation_title" = "屏幕旋转方向";
 "prefs_new_background_title" = "新的壁纸";
 "prefs_night_mode_background_brightness_summary" = "夜间模式激活时的页面亮度";
 "prefs_night_mode_background_brightness_title" = "背景亮度";

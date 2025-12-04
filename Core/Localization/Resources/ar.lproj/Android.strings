@@ -20,7 +20,11 @@
 "about_tanzil" = "تنزيل";
 "about_tanzil_summary" = "ترجمات لبعض اللغات";
 "app_name" = "قرآن";
+"appearance" = "المظهر";
 "audio_manager" = "إدارة الصوتيات";
+"audio_manager_database" = "قاعدة بيانات الصوتيات";
+"audio_manager_database_delete" = "حذف قاعدة البيانات";
+"audio_manager_database_download" = "تنزيل قاعدة البيانات";
 "audio_manager_delete_selection" = "حذف التحديد";
 "audio_manager_download_all" = "تحميل الكل";
 "audio_manager_download_selection" = "تحميل التحديد";
@@ -53,7 +57,6 @@
 "download_error_perms" = "الصلاحيات غير كافية لتحميل الملفات";
 "download_extra_data" = "لدعم الترجمة و المشاركة يجب تحميل بعض\
 الملفات .. حمل الأن؟";
-"download_non_wifi_prompt" = "أنت لست على واي فاي.  تحميل البيانات على أية حال؟";
 "download_processing" = "جاري تجهيز الملفات…";
 "download_progress" = "تم تحميل %1$@ / %2$@";
 "download_retry" = "أعد المحاولة";
@@ -63,7 +66,6 @@
 "downloaded_translations" = "الملفات المحملة";
 "downloadImportantPrompt" = "هناك تحديث هام صغير على ملفات الصور على هاتفكم. هل تود  تحميل الملف حالا؟";
 "downloading_message" = "يرجى الإنتظار حتى نهاية التحميل";
-"downloading_title" = "جاري التحميل....";
 "downloadPrompt" = "لكي يعمل التطبيق بنجاح تحتاج لتحميل بعض الملفات الان. إن لم يتم التحميل الان قد لا يعمل التطبيق بشكل صحيح و ستحتاج للاتصال بالإنترنت للقراءة. هل تود التحميل الان؟";
 "downloadPrompt_no" = "لا";
 "downloadPrompt_ok" = "نعم";
@@ -75,7 +77,7 @@
 "export_data_error" = "خطأ في استيراد البيانات.";
 "exported_data" = "صدرت البيانات إلى %1$@";
 "extracting_title" = "تجهيز…";
-"found_in_sura" = "سورة %1$@: %2$d (صفحة %3$d)";
+"found_in_sura" = "سورة (%1$d) %2$@: %3$d (صفحة %4$d)";
 "from" = "من";
 "get_arabic_search_db" = "حمل قاعدة البيانات";
 "get_translations" = "حمّل التفسير أو الترجمة";
@@ -105,9 +107,9 @@
 "import_data_error" = "ملف النسخة الاحتياطية تالف (أو فشلت قراءة النسخة الاحتياطية)";
 "import_data_permissions_error" = "فشلت قراءة ملف النسخة الاحتياطية بسبب فقدان الإذن";
 "import_successful" = "تم الاستيراد بنجاح";
-"index_loading" = "جاري التحميل…";
 "juz2_description" = "الجزء %1$@";
 "kitkat_external_message" = "بسبب قيود الأندرويد، إذا اخترت تخزين ملفات قرآن على الذاكرة الخارجية ثم مسحت التطبيق أو بيانات قرآن أندرويد، ستحذف جميع صفحات المصحف والصوت ولابد من تحميلها مجددا. هل ترغب في استعمال الذاكرة الخارجية؟";
+"loading" = "جاري التحميل…";
 "madani" = "مدنية";
 "makki" = "مكية";
 "manzil_description" = "منزل %1$@";
@@ -151,6 +153,7 @@
 "play_restrict_range" = "\" شغل ما تم اختياره من الآيات فقط\"";
 "play_verses_range" = "تشغيل مجموعة الآيات:";
 "playback_prompt_title" = "بدء التشغيل من:";
+"playback_speed" = "سرعة التشغيل:";
 "please_grant_permissions" = "رجاء امنح الإذن في الإعدادات";
 "please_wait" = "الرجاء الانتظار…";
 "prefs_app_location_summary" = "اختر الذاكرة التي سيتم تخزين الملفات عليها";
@@ -182,12 +185,6 @@
 "prefs_highlight_bookmarks_title" = "تعليم المرجعيات";
 "prefs_import_summary" = "استيراد الإشارات المرجعية والعلامات";
 "prefs_import_title" = "استيراد";
-"prefs_landscape_orientation_summary_off" = "سيتم استخدام الوضع الرأسي";
-"prefs_landscape_orientation_summary_on" = "سيتم استخدام الوضع اﻷفقي";
-"prefs_landscape_orientation_title" = "الوضع اﻷفقي";
-"prefs_lock_orientation_summary_off" = "وضع العرض يتغير تلقائيا";
-"prefs_lock_orientation_summary_on" = "وضع العرض سيتم الحفاظ عليه";
-"prefs_lock_orientation_title" = "اﻹبقاء على وضع العرض";
 "prefs_megabytes_int" = "%1$d م ب";
 "prefs_new_background_title" = "الخلفية الجديدة";
 "prefs_night_mode_background_brightness_summary" = "إضاءة الصفحة عند تفعيل القراءة الليلية";
@@ -267,6 +264,7 @@
 "stop" = "إيقاف";
 "storage_permission_please_restart" = "يرجى إعادة تشغيل التطبيق لتفعيل الإذن";
 "storage_permission_rationale" = "تطبيق قرآن يحتاج إلى إذنك بالوصول إلى الذاكرة الخارجية. التطبيق سيعمل دون الإذن، لكن عند مسح البيانات أو حذف التطبيق، ستحذف جميع صفحات المصحف والبيانات والصوت. هل تريد الإذن لتطبيق قرآن؟";
+"sura_and_ayah" = "السورة والآية";
 "sura_ayah_notification_str" = "سُورَةُ %1$@، آية %2$d";
 "sura_ayah_sharing_str" = "سُورَةُ %1$@: %2$d";
 "tag_ayah" = "تصنيف الآية";

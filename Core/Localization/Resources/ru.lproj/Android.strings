@@ -61,7 +61,6 @@ Editions Et Diffusion (Тунис)\
 "download_error_network_retry" = "Ошибка соединения, попытка возобновить…";
 "download_error_perms" = "Не удалось загрузить из-за ошибки разрешений";
 "download_extra_data" = "Для поддержки перевода и обмена аятами необходимо скачать один или два маленьких файла. Загрузить сейчас?";
-"download_non_wifi_prompt" = "Вы не подключены к Wi-Fi. Все равно продолжить загрузку?";
 "download_processing" = "Загрузка…";
 "download_progress" = "Загружено %1$@ / %2$@";
 "download_retry" = "Повторить";
@@ -75,7 +74,6 @@ Editions Et Diffusion (Тунис)\
 "downloading_message" = "Пожалуйста, дождитесь загрузки файлов (имеется возможность\
 возобновить).\
 ";
-"downloading_title" = "Загрузка …";
 "downloadPrompt" = "Для правильной работы приложения необходимо скачать некоторые\
 файлы. Если не сделать это сейчас, загрузка каждой страницы будет занимать значительно\
 большее время. Вы хотите загрузить требуемые файлы сейчас?\
@@ -93,7 +91,7 @@ Editions Et Diffusion (Тунис)\
 "export_data_error" = "Ошибка экспорта данных";
 "exported_data" = "Данные экспортированы в %1$@";
 "extracting_title" = "Извлечение…";
-"found_in_sura" = "Найдено в суре %1$@: %2$d (Страница %3$d)";
+"found_in_sura" = "Найдено в суре (%1$d) %2$@: %3$d (Страница %4$d)";
 "from" = "От";
 "get_arabic_search_db" = "Скачать данные для арабского поиска";
 "get_translations" = "Скачать перевод";
@@ -139,12 +137,12 @@ Editions Et Diffusion (Тунис)\
 "import_data_error" = "Неверный файл резервной копии (или не удалось открыть файл с резервной копией).";
 "import_data_permissions_error" = "Не удается прочитать файл резервной копии из-за ошибки разрешения.";
 "import_successful" = "Данные успешно импортированы";
-"index_loading" = "Загрузка…";
 "juz2_description" = "джуз %1$@";
 "kitkat_external_message" = "Из-за ограничений Android, если Вы сейчас разместите исходные данные\
 приложения Quran for Android на Вашей внешней SD карте, а затем очистите или деинсталлируете приложение,\
 все страницы и аудио приложения Quran for Android будут удалены. Все эти данные нужно будет скачать снова. Вы уверены,\
 что хотите использовать внешнюю SD карту?";
+"loading" = "Загрузка…";
 "madani" = "Медина";
 "makki" = "Мекка";
 "menu_about" = "О нас";
@@ -189,6 +187,7 @@ Editions Et Diffusion (Тунис)\
 "play_restrict_range" = "Воспроизвести только вышестоящие аяты";
 "play_verses_range" = "Вос-ти набор аятов:";
 "playback_prompt_title" = "Начать воспроизведение с:";
+"playback_speed" = "Скорость воспроизведения:";
 "please_grant_permissions" = "Пожалуйста, предоставляйте разрешения в настройках приложения";
 "please_wait" = "Подождите пожалуйста…";
 "prefs_app_location_summary" = "Выберите место хранения файлов";
@@ -220,12 +219,6 @@ Editions Et Diffusion (Тунис)\
 "prefs_highlight_bookmarks_title" = "Выделять закладки";
 "prefs_import_summary" = "Импорт закладок и тегов";
 "prefs_import_title" = "Импорт";
-"prefs_landscape_orientation_summary_off" = "Использовать портретный режим";
-"prefs_landscape_orientation_summary_on" = "Использовать альбомный режим";
-"prefs_landscape_orientation_title" = "Альбомный режим";
-"prefs_lock_orientation_summary_off" = "Адаптировать под текущую ориентацию";
-"prefs_lock_orientation_summary_on" = "Страницы Корана будут удерживаться в выбранном режиме";
-"prefs_lock_orientation_title" = "Удерживать ориентацию экрана";
 "prefs_megabytes_int" = "%1$d Mб";
 "prefs_new_background_title" = "Новый фон";
 "prefs_night_mode_background_brightness_summary" = "Яркость страницы при активном ночном режиме";

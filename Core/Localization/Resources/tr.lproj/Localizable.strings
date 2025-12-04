@@ -83,6 +83,7 @@
 // MARK: - Update
 
 "update.filesystem.title" = "Veritabanı güncelleniyor...";
+"downloading_title" = "Yükleniyor…";
 
 // MARK: - Reciters
 

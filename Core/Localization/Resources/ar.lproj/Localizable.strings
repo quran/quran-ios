@@ -72,6 +72,7 @@
 // MARK: - Update
 
 "update.filesystem.title" = "جاري تحديث قواعد البيانات ...";
+"downloading_title" = "جاري التحميل....";
 
 // MARK: - Reciters
 

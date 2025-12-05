@@ -71,7 +71,8 @@ public struct QuranThemedImage: View {
     private func processedImage(colorScheme: ColorScheme, themeStyle: ThemeStyle) async -> UIImage? {
         switch renderingMode {
         case .tinted:
-            return await tintedImage(colorScheme: colorScheme, themeStyle: themeStyle)
+            // return await tintedImage(colorScheme: colorScheme, themeStyle: themeStyle)
+            fallthrough // Tinting is not perfect, currently, let's reconsider it later
         case .invertInDarkMode:
             guard colorScheme == .dark || themeStyle == .quiet else {
                 return nil

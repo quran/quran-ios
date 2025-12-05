@@ -187,7 +187,7 @@
 
 // Reciters
 "new.reciters" = "New Reciters:";
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_fatih_seferagic_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";
+"new.reciters.details" = "* %Readers:qari_abdulhadi_kanakeri_gapless%\n* %Readers:qari_ahmed_al_nufais_gapless%\n* %Readers:qari_alijon_qari_gapless%\n* %Readers:qari_badr_al_turki_gapless%\n* %Readers:qari_farman_shawani_gapless%\n* %Readers:qari_idrees_abkar_gapless%\n* %Readers:qari_luhaidan_gapless%\n* %Readers:qari_peshawa_qadir_al_qurdi_gapless%\n* %Readers:qari_raad_al_kurdi_gapless%";
 
 // Miscellaneous
 "new.miscellaneous" = "Miscellaneous:";

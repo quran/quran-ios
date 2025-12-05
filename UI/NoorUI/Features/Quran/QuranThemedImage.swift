@@ -73,7 +73,7 @@ public struct QuranThemedImage: View {
         case .tinted:
             return await tintedImage(colorScheme: colorScheme, themeStyle: themeStyle)
         case .invertInDarkMode:
-            guard colorScheme == .dark else {
+            guard colorScheme == .dark || themeStyle == .quiet else {
                 return nil
             }
             return await invertedImage()

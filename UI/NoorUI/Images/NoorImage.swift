@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 public enum NoorImage: String {
-    case ayahEnd = "ayah-end"
+    case ayahEnd = "ayah-end-marker"
     case pointer = "pointer-25"
     case rotateToLandscape = "rotate_to_landscape-25"
     case rotateToPortrait = "rotate_to_portrait-25"

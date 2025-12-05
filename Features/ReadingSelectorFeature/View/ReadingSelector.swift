@@ -41,7 +41,7 @@ struct ReadingSelector: View {
     }
 
     private func renderingMode(for reading: Reading) -> QuranThemedImage.RenderingMode {
-        reading == .tajweed ? .invertInDarkMode : .tinted
+        [.tajweed, .hafs_1440].contains(reading) ? .invertInDarkMode : .tinted
     }
 }
 

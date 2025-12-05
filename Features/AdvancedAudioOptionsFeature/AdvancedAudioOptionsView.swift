@@ -25,7 +25,7 @@ struct AdvancedAudioOptionsView: View {
     }
 }
 
-struct AdvancedAudioOptionsRootView: View {
+private struct AdvancedAudioOptionsRootView: View {
     @StateObject var viewModel: AdvancedAudioOptionsViewModel
 
     var body: some View {
@@ -129,7 +129,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
 
     private var toVerseSelectionViewController: UIViewController {
         let verseSelection = AdvancedAudioVersesViewController(suras: toVerse.quran.suras, selected: toVerse) { toVerse in
-            updateFromVerseTo(toVerse)
+            updateToVerseTo(toVerse)
             navigator?.pop()
         }
         verseSelection.title = l("audio.select-start-verse")

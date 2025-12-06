@@ -117,6 +117,7 @@ struct ImageDecorationsView: View {
 private struct SuraHeaderView: View {
     public var body: some View {
         NoorImage.suraHeader.image
+            .renderingMode(.template)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .foregroundColor(.pageMarkerTint)
@@ -128,6 +129,7 @@ private struct AyahNumberView: View {
 
     public var body: some View {
         NoorImage.ayahEnd.image
+            .renderingMode(.template)
             .resizable()
             .padding(.horizontal, 1)
             .aspectRatio(contentMode: .fit)

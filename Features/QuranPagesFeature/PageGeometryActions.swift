@@ -45,18 +45,6 @@ private struct PageGeometryActionsViewModifier: ViewModifier {
             }
     }
 
-    private var wrappedActions: PageGeometryActions {
-        PageGeometryActions(
-            id: actions.id,
-            word: { point in
-                actions.word(toLocalPoint(point))
-            },
-            verse: { point in
-                actions.verse(toLocalPoint(point))
-            }
-        )
-    }
-
     func toLocalPoint(_ globalPoint: CGPoint) -> CGPoint {
         CGPoint(
             x: globalPoint.x - frame.minX,

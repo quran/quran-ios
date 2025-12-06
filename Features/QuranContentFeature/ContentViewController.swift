@@ -105,7 +105,7 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         }
 
         let point = sender.location(in: targetView)
-        let globalPoint = sender.location(in: nil)
+        let globalPoint = targetView.convert(point, to: targetView.window)
 
         switch sender.state {
         case .began:

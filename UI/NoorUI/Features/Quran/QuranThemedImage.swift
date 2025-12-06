@@ -26,6 +26,7 @@ public struct QuranThemedImage: View {
         Image(uiImage: themedImage ?? image)
             .resizable()
             .aspectRatio(contentMode: .fit)
+            .invertThemedColorIfNeeded()
             .onChange(of: themeStyle) { newThemeStyle in
                 processImage(colorScheme: colorScheme, themeStyle: newThemeStyle)
             }
@@ -77,7 +78,9 @@ public struct QuranThemedImage: View {
             guard colorScheme == .dark || themeStyle == .quiet else {
                 return nil
             }
-            return await invertedImage()
+            // Not used, using SwiftUI's color invert (invertThemedColorIfNeeded) instead
+            // return await invertedImage()
+            return nil
         }
     }
 

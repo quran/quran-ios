@@ -127,13 +127,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
              return imageGeometry.height
         }
         
-        // If scrolling is enabled, we fit the image if it's taller than wide (portrait-ish)
-        // or if we are forced to fit (not implemented here but implied by original logic).
-        // Original logic: if imageGeometry.width > imageGeometry.height (landscape view), scale to fit width.
-        // Actually the original logic was:
-        // if imageGeometry.width > imageGeometry.height { return imageGeometry.width * Ratio }
-        // else { return imageGeometry.height }
-        
         if scrollingEnabled {
             if imageGeometry.width > imageGeometry.height {
                 return imageGeometry.width * (imageSize.height / imageSize.width)

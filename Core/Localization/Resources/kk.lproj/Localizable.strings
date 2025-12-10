@@ -77,7 +77,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "2 бет жанасып (альбомдық бетте)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "Тік жылжыту";
+"menu.scroll_direction" = "Жылжыту бағыты";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Көлденең";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Тік";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Тақырыптар мен параметрлер";
 

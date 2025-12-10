@@ -91,7 +91,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "2 страницы рядом (в альбомном формате)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "Вертикальная прокрутка";
+"menu.scroll_direction" = "Направление прокрутки";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Горизонтальная";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Вертикальная";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Темы и настройки";
 

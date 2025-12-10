@@ -60,7 +60,12 @@
 "menu.translationFontSize" = "Vertaalgrootte";
 "menu.arabicFontSize" = "Koran Grootte";
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
-"menu.verticalScrolling" = "Verticaal scrollen";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_direction" = "Scrollrichting";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Horizontaal";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Verticaal";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thema's en instellingen";
 

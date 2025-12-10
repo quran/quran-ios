@@ -74,7 +74,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "2 halaman bersebelahan (dalam landskap)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "Skrol menegak";
+"menu.scroll_direction" = "Arah skrol";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Mendatar";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Menegak";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Tema & Tetapan";
 

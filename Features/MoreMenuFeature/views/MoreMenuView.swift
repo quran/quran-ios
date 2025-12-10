@@ -82,7 +82,7 @@ private struct MoreMenuRootView: View {
                         empty
                     }
 
-                    viewBasedOn(state.verticalScrolling) {
+                    viewBasedOn(state.verticalScrolling, customCondition: store.mode == .translation) {
                         MoreMenuVerticalScrolling(enabled: $store.verticalScrollingEnabled)
                     }
 

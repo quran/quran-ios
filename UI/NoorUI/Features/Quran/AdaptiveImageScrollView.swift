@@ -8,10 +8,22 @@
 import QuranGeometry
 import SwiftUI
 
+public struct ScrollingEnabledKey: EnvironmentKey {
+    public static let defaultValue: Bool = true
+}
+
+public extension EnvironmentValues {
+    var scrollingEnabled: Bool {
+        get { self[ScrollingEnabledKey.self] }
+        set { self[ScrollingEnabledKey.self] = newValue }
+    }
+}
+
 /// `AdaptiveImageScrollView` adjusts an image to fill the available space and enables scrolling
 /// when the view's width is greater than its height. In contrast, it fits the image within the view
 /// without scrolling when the view's height is greater than its width.
 public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
+    @Environment(\.scrollingEnabled) private var envScrollingEnabled
     // MARK: Lifecycle
 
     public init(
@@ -20,12 +32,14 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         image: () -> UIImage?,
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
+        scrollingEnabled: Bool = true,
         @ViewBuilder header: () -> Header,
         @ViewBuilder footer: () -> Footer
     ) {
         self.decorations = decorations
         self.image = image()
         self.renderingMode = renderingMode
+        self.scrollingEnabledParameter = scrollingEnabled
         self.header = header()
         self.footer = footer()
         self.onScaleChange = onScaleChange
@@ -81,13 +95,22 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
 
+    private let scrollingEnabledParameter: Bool
+    private var scrollingEnabled: Bool {
+        scrollingEnabledParameter && envScrollingEnabled
+    }
+
     @ViewBuilder
     private func scrollView(@ViewBuilder content: () -> some View) -> some View {
-        if #available(iOS 16.4, *) {
-            ScrollView(content: content)
-                .scrollBounceBehavior(.basedOnSize)
+        if scrollingEnabled {
+            if #available(iOS 16.4, *) {
+                ScrollView(content: content)
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                ScrollView(content: content)
+            }
         } else {
-            ScrollView(content: content)
+            content()
         }
     }
 
@@ -100,10 +123,26 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     private func imageHeight(geometry: GeometryProxy) -> CGFloat {
         let imageGeometry = imageGeometrySize(from: geometry)
-        if let imageSize = image?.size, imageGeometry.width > imageGeometry.height {
-            return imageGeometry.width * (imageSize.height / imageSize.width)
+        guard let imageSize = image?.size else {
+             return imageGeometry.height
+        }
+        
+        // If scrolling is enabled, we fit the image if it's taller than wide (portrait-ish)
+        // or if we are forced to fit (not implemented here but implied by original logic).
+        // Original logic: if imageGeometry.width > imageGeometry.height (landscape view), scale to fit width.
+        // Actually the original logic was:
+        // if imageGeometry.width > imageGeometry.height { return imageGeometry.width * Ratio }
+        // else { return imageGeometry.height }
+        
+        if scrollingEnabled {
+            if imageGeometry.width > imageGeometry.height {
+                return imageGeometry.width * (imageSize.height / imageSize.width)
+            } else {
+                return imageGeometry.height
+            }
         } else {
-            return imageGeometry.height
+            // In vertical scrolling mode, we always want to fit width and expand height
+            return imageGeometry.width * (imageSize.height / imageSize.width)
         }
     }
 }

@@ -9,7 +9,6 @@ import Localization
 import SwiftUI
 
 /// A segmented control for selecting scroll direction (horizontal/vertical) in Translation mode.
-/// Uses SF Symbol icons for clear visual representation.
 struct MoreMenuScrollDirection: View {
     @Binding var verticalScrollingEnabled: Bool
     

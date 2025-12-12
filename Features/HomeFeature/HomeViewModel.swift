@@ -9,6 +9,7 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
+import Preferences
 import QuranAnnotations
 import QuranKit
 import QuranText
@@ -42,6 +43,9 @@ final class HomeViewModel: ObservableObject {
         self.navigateToPage = navigateToPage
         self.navigateToSura = navigateToSura
         self.navigateToQuarter = navigateToQuarter
+
+        HomePreferences.shared.$surahSortOrder
+            .assign(to: &$surahSortOrder)
     }
 
     // MARK: Internal
@@ -50,7 +54,7 @@ final class HomeViewModel: ObservableObject {
     @Published var quarters: [QuarterItem] = []
     @Published var lastPages: [LastPage] = []
 
-    @Published var surahSortOrder: SurahSortOrder = .ascending
+    @Published var surahSortOrder: SurahSortOrder = HomePreferences.shared.surahSortOrder
 
     @Published var type = HomeViewType.suras {
         didSet {
@@ -78,7 +82,7 @@ final class HomeViewModel: ObservableObject {
     }
 
     func toggleSurahSortOrder() {
-        surahSortOrder = surahSortOrder == .ascending ? .descending : .ascending
+        HomePreferences.shared.surahSortOrder = surahSortOrder == .ascending ? .descending : .ascending
     }
 
     // MARK: Private

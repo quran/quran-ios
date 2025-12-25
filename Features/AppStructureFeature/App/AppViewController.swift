@@ -17,7 +17,6 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-
 import Analytics
 import UIKit
 import WhatsNewFeature
@@ -26,6 +25,7 @@ protocol AppPresenter: UITabBarController {
 }
 
 class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPresenter {
+
     // MARK: Lifecycle
 
     init(analytics: AnalyticsLibrary, interactor: AppInteractor) {
@@ -56,6 +56,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        configureTabBarAppearance()
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -71,7 +72,6 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         // show whats new controller if needed
         whatsNewController.presentWhatsNewIfNeeded(from: self)
     }
@@ -84,7 +84,26 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private var visibleViewController: UIViewController? {
         presentedViewController ?? selectedViewController
     }
+
+    private func configureTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+
+        if UIAccessibility.isReduceTransparencyEnabled {
+            appearance.backgroundColor = .systemBackground
+        } else {
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+
+        appearance.shadowColor = UIColor.white.withAlphaComponent(0.15)
+
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+        tabBar.isTranslucent = true
+    }
 }
+
+// MARK: - Orientation helpers
 
 private extension UIInterfaceOrientation {
     var asMask: UIInterfaceOrientationMask? {

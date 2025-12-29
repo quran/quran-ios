@@ -21,8 +21,7 @@ import Analytics
 import UIKit
 import WhatsNewFeature
 
-protocol AppPresenter: UITabBarController {
-}
+protocol AppPresenter: UITabBarController {}
 
 class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPresenter {
 
@@ -41,7 +40,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Open
+    // MARK: Orientation
 
     override open var shouldAutorotate: Bool {
         visibleViewController?.shouldAutorotate ?? super.shouldAutorotate
@@ -51,29 +50,78 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         visibleViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
     }
 
-    // MARK: Internal
+    // MARK: View lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
-        configureTabBarAppearance()
+        configureFloatingLiquidGlassTabBar()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layoutFloatingTabBar()
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let targetMask = tabBarController.supportedInterfaceOrientations
         if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
-            if !targetMask.contains(currentMask) {
-                if let interface = targetMask.asOrientation {
-                    UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
-                }
+            if !targetMask.contains(currentMask),
+               let interface = targetMask.asOrientation {
+                UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
             }
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // show whats new controller if needed
         whatsNewController.presentWhatsNewIfNeeded(from: self)
+    }
+
+    // MARK: - Liquid Glass Tab Bar (Apple-style)
+
+    private func configureFloatingLiquidGlassTabBar() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+
+        if #available(iOS 18.0, *) {
+            appearance.backgroundEffect = UIGlassEffect(style: .system)
+            appearance.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+        } else {
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+            appearance.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        }
+
+        appearance.shadowColor = .clear
+
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+
+        tabBar.tintColor = .white
+        tabBar.unselectedItemTintColor = UIColor.white.withAlphaComponent(0.6)
+    }
+
+    private func layoutFloatingTabBar() {
+        let height: CGFloat = 64
+        let horizontalInset: CGFloat = 20
+        let bottomInset: CGFloat = 18
+
+        tabBar.frame = CGRect(
+            x: horizontalInset,
+            y: view.bounds.height - height - bottomInset,
+            width: view.bounds.width - horizontalInset * 2,
+            height: height
+        )
+
+        // FULL capsule
+        tabBar.layer.cornerRadius = height / 2
+        tabBar.layer.masksToBounds = true
+
+        // smooth floating shadow
+        tabBar.layer.shadowColor = UIColor.black.cgColor
+        tabBar.layer.shadowOpacity = 0.35
+        tabBar.layer.shadowOffset = CGSize(width: 0, height: 10)
+        tabBar.layer.shadowRadius = 30
     }
 
     // MARK: Private
@@ -84,26 +132,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private var visibleViewController: UIViewController? {
         presentedViewController ?? selectedViewController
     }
-
-    private func configureTabBarAppearance() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithTransparentBackground()
-
-        if UIAccessibility.isReduceTransparencyEnabled {
-            appearance.backgroundColor = .systemBackground
-        } else {
-            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-        }
-
-        appearance.shadowColor = UIColor.white.withAlphaComponent(0.15)
-
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-        tabBar.isTranslucent = true
-    }
 }
-
-// MARK: - Orientation helpers
 
 private extension UIInterfaceOrientation {
     var asMask: UIInterfaceOrientationMask? {
@@ -119,16 +148,10 @@ private extension UIInterfaceOrientation {
 
 private extension UIInterfaceOrientationMask {
     var asOrientation: UIInterfaceOrientation? {
-        if contains(.portrait) {
-            return .portrait
-        } else if contains(.landscapeLeft) {
-            return .landscapeLeft
-        } else if contains(.landscapeRight) {
-            return .landscapeRight
-        } else if contains(.portraitUpsideDown) {
-            return .portraitUpsideDown
-        } else {
-            return nil
-        }
+        if contains(.portrait) { return .portrait }
+        if contains(.landscapeLeft) { return .landscapeLeft }
+        if contains(.landscapeRight) { return .landscapeRight }
+        if contains(.portraitUpsideDown) { return .portraitUpsideDown }
+        return nil
     }
 }

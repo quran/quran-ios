@@ -252,6 +252,8 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "Hizb";
 "quran_juz2" = "Juz\'";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "Kinh Quran";
 "quran_nos" = "½";
 "quran_page" = "Trang";
 "quran_rob3" = "¼";

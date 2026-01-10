@@ -188,6 +188,8 @@
 "ayah.menu.play-end-surah" = "تا پایان سوره";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "تا پایان صفحه";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "تا پایان قرآن";
 "ayah.menu.repeat" = "تکرار";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.selected-verse" = "آیه انتخاب شده";

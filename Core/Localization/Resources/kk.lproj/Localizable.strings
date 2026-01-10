@@ -171,6 +171,8 @@
 "ayah.menu.play-end-juz" = "Пара соңына дейін";
 "ayah.menu.play-end-surah" = "Сүре соңына дейін";
 "ayah.menu.play-end-page" = "Бет соңына дейін";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "Құран соңына дейін";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.repeat" = "қайталаңыз";
 "ayah.menu.selected-verse" = "таңдалған аят";

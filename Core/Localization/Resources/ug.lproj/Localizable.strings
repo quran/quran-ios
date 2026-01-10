@@ -188,6 +188,8 @@
 "ayah.menu.play-end-surah" = "سۈرە ئاخىرىغىچە";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "بەت ئاخىرىغىچە";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "قۇرئان ئاخىرىغىچە";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.repeat" = "تەكرارلاش";
 // Metadata: Translated by ChatGPT; human review required.

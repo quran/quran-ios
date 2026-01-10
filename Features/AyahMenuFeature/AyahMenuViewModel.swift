@@ -69,6 +69,7 @@ final class AyahMenuViewModel {
         case .juz: return l("ayah.menu.play-end-juz")
         case .sura: return l("ayah.menu.play-end-surah")
         case .page: return l("ayah.menu.play-end-page")
+        case .quran: return l("ayah.menu.play-end-quran")
         }
     }
 

@@ -224,6 +224,8 @@
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Juz\' %3$@";
 "quran_hizb" = "段落";
 "quran_juz2" = "卷";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "古兰经";
 "quran_nos" = "½";
 "quran_page" = "页";
 "quran_rob3" = "¼";

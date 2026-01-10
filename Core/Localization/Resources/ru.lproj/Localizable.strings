@@ -186,6 +186,8 @@
 "ayah.menu.play-end-surah" = "до конца Суры";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "до конца страницы";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "до конца Корана";
 "ayah.menu.repeat" = "Повторение";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.selected-verse" = "выбранный стих";

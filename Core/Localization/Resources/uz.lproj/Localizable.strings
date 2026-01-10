@@ -188,6 +188,8 @@
 "ayah.menu.play-end-surah" = "Surah oxirigacha";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "Sahifa oxirigacha";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "Qur'on oxirigacha";
 "ayah.menu.repeat" = "Takrorlang";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.selected-verse" = "tanlangan oyat";

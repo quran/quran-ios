@@ -221,6 +221,8 @@
 "quran_ayah_details" = "%1$@ - آیه %2$@، جزء %3$@";
 "quran_hizb" = "حزب";
 "quran_juz2" = "جزء";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "قرآن";
 "quran_nos" = "نصف";
 "quran_page" = "صفحه";
 "quran_rob3" = "ربع";

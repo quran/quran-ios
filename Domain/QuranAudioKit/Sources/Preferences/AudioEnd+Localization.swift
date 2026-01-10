@@ -17,6 +17,8 @@ extension AudioEnd {
             return lAndroid("quran_sura")
         case .page:
             return lAndroid("quran_page")
+        case .quran:
+            return lAndroid("quran_alquran")
         }
     }
 }

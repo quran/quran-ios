@@ -124,6 +124,8 @@
 "ayah.menu.play-end-juz" = "tot het einde van Juz'";
 "ayah.menu.play-end-surah" = "tot het einde van Soera";
 "ayah.menu.play-end-page" = "tot het einde van Pagina";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "tot het einde van de Koran";
 "ayah.menu.repeat" = "Herhaal";
 "ayah.menu.selected-verse" = "geselecteerd vers";
 "ayah.menu.selected-verses" = "geselecteerde verzen";

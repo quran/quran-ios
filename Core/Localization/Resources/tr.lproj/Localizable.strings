@@ -135,6 +135,8 @@
 "ayah.menu.play-end-surah" = "Sure'nin sonuna kadar";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "Sayfanın sonuna kadar";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "Kur'an'ın sonuna kadar";
 "ayah.menu.repeat" = "Tekrarlamak";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.selected-verse" = "seçilen ayet";

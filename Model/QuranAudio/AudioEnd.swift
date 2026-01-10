@@ -9,4 +9,5 @@ public enum AudioEnd: Int {
     case sura
     case juz
     case page
+    case quran
 }

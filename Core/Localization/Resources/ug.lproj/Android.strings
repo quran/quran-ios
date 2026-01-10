@@ -208,6 +208,8 @@
 "quran_ayah_details" = "%1$@-ئايەت %2$@، %3$@-پارە";
 "quran_hizb" = "ھىزب";
 "quran_juz2" = "پارە";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "قۇرئان";
 "quran_nos" = "½";
 "quran_page" = "بەت";
 "quran_rob3" = "¼";

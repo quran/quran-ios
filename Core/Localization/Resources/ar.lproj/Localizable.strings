@@ -118,6 +118,7 @@
 "ayah.menu.play-end-juz" = "إلى نهاية الجزء";
 "ayah.menu.play-end-surah" = "إلى نهاية السورة";
 "ayah.menu.play-end-page" = "إلى نهاية الصفحة";
+"ayah.menu.play-end-quran" = "إلى نهاية القرآن";
 "ayah.menu.repeat" = "كرر";
 "ayah.menu.selected-verse" = "الآية المختارة";
 "ayah.menu.selected-verses" = "الآيات المختارة";

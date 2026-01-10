@@ -306,6 +306,8 @@ mittels der Lautstärketasten.\
 "quran_ayah_details" = "%1$@ - Ayah %2$@, Ğuzʾ %3$@";
 "quran_hizb" = "Hizb";
 "quran_juz2" = "Juz\'";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "Der Koran";
 "quran_nos" = "½";
 "quran_page" = "Seite";
 "quran_rob3" = "¼";

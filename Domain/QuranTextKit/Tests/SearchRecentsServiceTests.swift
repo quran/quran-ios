@@ -18,10 +18,10 @@ class SearchRecentsServiceTests: XCTestCase {
     }
 
     func testPopularTerms() {
-        assertSnapshot(matching: service.popularTerms, as: .json)
+        assertSnapshot(of: service.popularTerms, as: .json)
 
         service.recentSearchItems = ["1", "2"]
-        assertSnapshot(matching: service.popularTerms, as: .json)
+        assertSnapshot(of: service.popularTerms, as: .json)
     }
 
     func testRecents() {

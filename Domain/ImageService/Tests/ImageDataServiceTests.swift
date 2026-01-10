@@ -100,17 +100,17 @@ class ImageDataServiceTests: XCTestCase {
     @MainActor
     private func verifyImagePage(_ imagePage: ImagePage, testName: String = #function) throws {
         // assert the image
-        assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
+        assertSnapshot(of: imagePage.image, as: .image, testName: testName)
 
         // assert the word frames values
         let frames = imagePage.wordFrames.lines.flatMap(\.frames).sorted { $0.word < $1.word }
-        assertSnapshot(matching: frames, as: .json, testName: testName)
+        assertSnapshot(of: frames, as: .json, testName: testName)
 
         if ProcessInfo.processInfo.environment["LocalSnapshots"] != nil {
             print("[Test] Asserting LocalSnapshots")
             // assert the drawn word frames
             let highlightedImage = try drawFrames(imagePage.image, frames: imagePage.wordFrames, strokeWords: false)
-            assertSnapshot(matching: highlightedImage, as: .image, testName: testName)
+            assertSnapshot(of: highlightedImage, as: .image, testName: testName)
         }
     }
 

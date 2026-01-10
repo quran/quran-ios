@@ -60,7 +60,7 @@ struct TranslationFootnote: View, Identifiable {
     }
 }
 
-private struct TranslationFootnotePreview: View {
+struct TranslationFootnotePreview: View {
     static let string = TranslationString(
         text: "",
         quranRanges: [],

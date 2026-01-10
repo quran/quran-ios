@@ -267,7 +267,7 @@ class QuranAudioPlayerTests: XCTestCase {
 
         if snaphot {
             let state = queuePlayer.state
-            assertSnapshot(matching: state, as: .json, testName: testName)
+            assertSnapshot(of: state, as: .json, testName: testName)
         }
     }
 
@@ -287,7 +287,7 @@ class QuranAudioPlayerTests: XCTestCase {
 
         if snaphot {
             let state = queuePlayer.state
-            assertSnapshot(matching: state, as: .json, testName: testName)
+            assertSnapshot(of: state, as: .json, testName: testName)
         }
     }
 }

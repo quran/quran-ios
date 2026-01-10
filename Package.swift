@@ -33,6 +33,12 @@ let package = Package(
     ],
     products: libraries(from: targets),
     dependencies: [
+        .package(url: "https://github.com/BarredEwe/Prefire.git", from: "5.3.0"),
+        .package(
+            url: "https://github.com/pointfreeco/swift-snapshot-testing",
+            from: "1.18.7"
+        ),
+
         // Logging
         .package(url: "https://github.com/apple/swift-log", from: "1.4.2"),
 
@@ -57,7 +63,6 @@ let package = Package(
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
 
         // Testing
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
@@ -850,9 +855,16 @@ func testTargetLinkingAllPackageTargets(_ targets: [Target]) -> Target {
     let nonTestTargets = targets.filter { !$0.isTest }
     return .testTarget(
         name: "AllTargetsTests",
-        dependencies: nonTestTargets.map { .init(stringLiteral: $0.name) },
+        dependencies: nonTestTargets.map { .init(stringLiteral: $0.name) } + [
+            "Prefire",
+            .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+        ],
         path: "AllTargetsTests",
-        swiftSettings: settings
+        swiftSettings: settings,
+        plugins: [
+            // For Snapshot Tests
+            .plugin(name: "PrefireTestsPlugin", package: "Prefire"),
+        ]
     )
 }
 

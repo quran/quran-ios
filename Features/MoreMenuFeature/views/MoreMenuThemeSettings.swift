@@ -125,7 +125,7 @@ private struct FontSizeView: View {
     }
 }
 
-private struct MoreMenuThemeSettingsView: View {
+struct MoreMenuThemeSettingsView: View {
     @StateObject var viewModel = MoreMenuThemeSettingsViewModel()
 
     let showFontSize: Bool

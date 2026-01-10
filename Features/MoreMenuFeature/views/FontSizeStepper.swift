@@ -123,18 +123,18 @@ struct FontSizeStepper: View {
 
 // MARK: - Preview
 
-#Preview {
-    struct FontSizeStepper_Previews: View {
-        @State var size = FontSize.medium
+struct FontSizeStepperPreview: View {
+    @State var size = FontSize.medium
 
-        var body: some View {
-            HStack {
-                Text("Quran")
-                FontSizeStepper(fontSize: $size)
-            }
-            .padding()
+    var body: some View {
+        HStack {
+            Text("Quran")
+            FontSizeStepper(fontSize: $size)
         }
+        .padding()
     }
+}
 
-    return FontSizeStepper_Previews()
+#Preview {
+    FontSizeStepperPreview()
 }

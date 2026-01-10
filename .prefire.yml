@@ -1,0 +1,29 @@
+test_configuration:
+  target: AppStructureFeature
+  sources:
+    - ${PACKAGE_DIR}/Features/MoreMenuFeature/views/FontSizeStepper.swift
+    - ${PACKAGE_DIR}/Features/MoreMenuFeature/views/MoreMenuThemeSettings.swift
+    - ${PACKAGE_DIR}/Features/QuranTranslationFeature/TranslationFootnote.swift
+    - ${PACKAGE_DIR}/Features/AdvancedAudioOptionsFeature/AdvancedAudioOptionsView.swift
+    - ${PACKAGE_DIR}/Features/QuranImageFeature/ContentImageView.swift
+    - ${PACKAGE_DIR}/UI/NoorUI/Features/Quran/ImageDecorationsView.swift
+    - ${PACKAGE_DIR}/UI/NoorUI/Features/Quran/QuranVerseSeparator.swift
+    - ${PACKAGE_DIR}/UI/NoorUI/Features/AudioBanner/AudioBannerViewUI.swift
+    - ${PACKAGE_DIR}/UI/NoorUI/Components/ThemeStyleSelector.swift
+    - ${PACKAGE_DIR}/UI/NoorUI/Components/AppearanceModeSelector.swift
+    - ${PACKAGE_DIR}/UI/UIx/SwiftUI/Toast/Toast.swift
+  imports:
+    - UIKit
+  testable_imports:
+    - NoorUI
+    - UIx
+    - MoreMenuFeature
+    - QuranTranslationFeature
+    - QuranImageFeature
+    - AdvancedAudioOptionsFeature
+    - QueuePlayer
+    - QuranText
+    - QuranGeometry
+    - QuranPagesFeature
+  template_file_path: Prefire/PreviewTests.stencil
+  use_grouped_snapshots: false

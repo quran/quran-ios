@@ -40,7 +40,7 @@ public struct Toast {
     }
 }
 
-private struct ToastView: View {
+struct ToastView: View {
     let message: String
     let action: ToastAction?
     let dismiss: () -> Void

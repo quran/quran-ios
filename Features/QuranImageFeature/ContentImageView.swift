@@ -42,7 +42,7 @@ struct ContentImageView: View {
     }
 }
 
-private struct ContentImageViewBody: View {
+struct ContentImageViewBody: View {
     let decorations: ImageDecorations
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode

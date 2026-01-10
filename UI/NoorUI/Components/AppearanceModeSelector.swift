@@ -76,15 +76,16 @@ private struct AppearanceModeSelection: View {
     }
 }
 
-#Preview {
-    struct Container: View {
-        @State var appearanceMode: AppearanceMode = .auto
+struct AppearanceModeSelectorPreview: View {
+    @State var appearanceMode: AppearanceMode = .auto
 
-        var body: some View {
-            VStack {
-                AppearanceModeSelector(appearanceMode: $appearanceMode)
-            }
+    var body: some View {
+        VStack {
+            AppearanceModeSelector(appearanceMode: $appearanceMode)
         }
     }
-    return Container()
+}
+
+#Preview {
+    AppearanceModeSelectorPreview()
 }

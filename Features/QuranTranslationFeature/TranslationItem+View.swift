@@ -121,7 +121,7 @@ import NoorFont
     ContentTranslationPreview()
 }
 
-private struct ContentTranslationPreview: View {
+struct ContentTranslationPreview: View {
     @State var readMore: Bool = true
 
     let quran = Quran.hafsMadani1405

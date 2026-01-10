@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-06-17.
 //
 
+import Prefire
 import XCTest
 
 /// Empty test class to help ensure we have at least one test case.

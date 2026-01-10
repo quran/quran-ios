@@ -185,30 +185,30 @@ private struct ReciterSection: View {
     }
 }
 
-#Preview {
-    struct Container: View {
-        @State var verseRuns: Runs = .one
-        @State var listRuns: Runs = .three
+struct AdvancedAudioOptionsPreview: View {
+    @State var verseRuns: Runs = .one
+    @State var listRuns: Runs = .three
 
-        var body: some View {
-            AdvancedAudioOptionsRootViewUI(
-                reciterName: "Mishary",
-                fromVerse: Quran.hafsMadani1405.suras[0].firstVerse,
-                toVerse: Quran.hafsMadani1405.suras[0].lastVerse,
-                verseRuns: $verseRuns,
-                listRuns: $listRuns,
-                dismiss: {},
-                play: {},
-                lastPageTapped: {},
-                lastSuraTapped: {},
-                lastJuzTapped: {},
-                lastQuranAyahTapped: {},
-                updateFromVerseTo: { _ in },
-                updateToVerseTo: { _ in },
-                recitersViewController: { UIViewController() }
-            )
-        }
+    var body: some View {
+        AdvancedAudioOptionsRootViewUI(
+            reciterName: "Mishary",
+            fromVerse: Quran.hafsMadani1405.suras[0].firstVerse,
+            toVerse: Quran.hafsMadani1405.suras[0].lastVerse,
+            verseRuns: $verseRuns,
+            listRuns: $listRuns,
+            dismiss: {},
+            play: {},
+            lastPageTapped: {},
+            lastSuraTapped: {},
+            lastJuzTapped: {},
+            lastQuranAyahTapped: {},
+            updateFromVerseTo: { _ in },
+            updateToVerseTo: { _ in },
+            recitersViewController: { UIViewController() }
+        )
     }
+}
 
-    return Container()
+#Preview {
+    AdvancedAudioOptionsPreview()
 }

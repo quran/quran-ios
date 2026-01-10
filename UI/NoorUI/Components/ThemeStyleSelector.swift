@@ -88,16 +88,17 @@ private extension ThemeStyle {
     }
 }
 
-#Preview {
-    struct Container: View {
-        @State var selectedStyle: ThemeStyle = .focus
+struct ThemeStyleSelectorPreview: View {
+    @State var selectedStyle: ThemeStyle = .focus
 
-        var body: some View {
-            VStack {
-                ThemeStyleSelector(selectedStyle: $selectedStyle)
-                    .padding()
-            }
+    var body: some View {
+        VStack {
+            ThemeStyleSelector(selectedStyle: $selectedStyle)
+                .padding()
         }
     }
-    return Container()
+}
+
+#Preview {
+    ThemeStyleSelectorPreview()
 }

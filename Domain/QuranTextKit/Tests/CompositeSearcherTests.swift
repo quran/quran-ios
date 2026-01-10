@@ -150,7 +150,7 @@ class CompositeSearcherTests: XCTestCase {
         let result = await searcher.autocomplete(term: term, quran: quran)
 
         // assert the text
-        assertSnapshot(matching: result.sorted(), as: .json, record: record, testName: testName)
+        assertSnapshot(of: result.sorted(), as: .json, record: record, testName: testName)
     }
 
     @MainActor
@@ -158,7 +158,7 @@ class CompositeSearcherTests: XCTestCase {
         let result = try await searcher.search(for: term, quran: quran)
 
         // assert the text
-        assertSnapshot(matching: EncodableSearchResults(results: result), as: .json, record: record, testName: testName)
+        assertSnapshot(of: EncodableSearchResults(results: result), as: .json, record: record, testName: testName)
     }
 
     private func enumerateAllSuras(_ block: (Sura, Language) async throws -> Void) async rethrows {

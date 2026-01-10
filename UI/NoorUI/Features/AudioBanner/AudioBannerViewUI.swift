@@ -230,49 +230,49 @@ private struct BannerBackground: View {
     }
 }
 
-#Preview {
-    struct PreviewView: View {
-        let actions = AudioBannerActions(
-            play: {},
-            pause: {},
-            resume: {},
-            stop: {},
-            backward: {},
-            forward: {},
-            cancelDownloading: {},
-            reciters: {},
-            more: {},
-            setPlaybackRate: { _ in }
-        )
+struct AudioBannerPreview: View {
+    let actions = AudioBannerActions(
+        play: {},
+        pause: {},
+        resume: {},
+        stop: {},
+        backward: {},
+        forward: {},
+        cancelDownloading: {},
+        reciters: {},
+        more: {},
+        setPlaybackRate: { _ in }
+    )
 
-        let readyToPlay = AudioBannerState.readyToPlay(reciter: "Mishary Al-afasy")
-        let playing = AudioBannerState.playing(paused: false, rate: 1.0)
-        let downloading = AudioBannerState.downloading(progress: 0.7)
-        var state: AudioBannerState {
-            switch counter % 3 {
-            case 0: readyToPlay
-            case 1: playing
-            default: downloading
-            }
-        }
-
-        @State var counter: Int = 0
-
-        var body: some View {
-            VStack {
-                Spacer()
-                Button {
-                    counter += 1
-                } label: {
-                    Text("Rotate")
-                }
-                Spacer()
-                Group {
-                    AudioBannerViewUI(state: state, actions: actions)
-                }
-            }
+    let readyToPlay = AudioBannerState.readyToPlay(reciter: "Mishary Al-afasy")
+    let playing = AudioBannerState.playing(paused: false, rate: 1.0)
+    let downloading = AudioBannerState.downloading(progress: 0.7)
+    var state: AudioBannerState {
+        switch counter % 3 {
+        case 0: readyToPlay
+        case 1: playing
+        default: downloading
         }
     }
 
-    return PreviewView()
+    @State var counter: Int = 0
+
+    var body: some View {
+        VStack {
+            Spacer()
+            Button {
+                counter += 1
+            } label: {
+                Text("Rotate")
+            }
+            Spacer()
+            Group {
+                AudioBannerViewUI(state: state, actions: actions)
+            }
+        }
+    }
+}
+
+#Preview {
+    AudioBannerPreview()
 }

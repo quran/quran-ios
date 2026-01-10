@@ -40,6 +40,7 @@ private struct AdvancedAudioOptionsRootView: View {
             lastPageTapped: { viewModel.setLastVerseInPage() },
             lastSuraTapped: { viewModel.setLastVerseInSura() },
             lastJuzTapped: { viewModel.setLastVerseInJuz() },
+            lastQuranAyahTapped: { viewModel.setLastVerseInQuran() },
             updateFromVerseTo: { viewModel.updateFromVerseTo($0) },
             updateToVerseTo: { viewModel.updateToVerseTo($0) },
             recitersViewController: { viewModel.recitersViewController() }
@@ -60,6 +61,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     let lastPageTapped: @MainActor @Sendable () -> Void
     let lastSuraTapped: @MainActor @Sendable () -> Void
     let lastJuzTapped: @MainActor @Sendable () -> Void
+    let lastQuranAyahTapped: @MainActor @Sendable () -> Void
     let updateFromVerseTo: ItemAction<AyahNumber>
     let updateToVerseTo: ItemAction<AyahNumber>
     let recitersViewController: () -> UIViewController
@@ -81,6 +83,8 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     ActiveRoundedButton(label: l("surah"), action: lastSuraTapped)
                     Spacer()
                     ActiveRoundedButton(label: lAndroid("quran_juz2"), action: lastJuzTapped)
+                    Spacer()
+                    ActiveRoundedButton(label: l("quran_alquran"), action: lastQuranAyahTapped)
                 }
             }
 
@@ -198,6 +202,7 @@ private struct ReciterSection: View {
                 lastPageTapped: {},
                 lastSuraTapped: {},
                 lastJuzTapped: {},
+                lastQuranAyahTapped: {},
                 updateFromVerseTo: { _ in },
                 updateToVerseTo: { _ in },
                 recitersViewController: { UIViewController() }

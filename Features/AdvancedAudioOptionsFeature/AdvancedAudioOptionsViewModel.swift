@@ -93,6 +93,10 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         }
     }
 
+    func setLastVerseInQuran() {
+        setLastVerse(using: QuranBasedLastAyahFinder())
+    }
+
     // MARK: Private
 
     private let options: AdvancedAudioOptions

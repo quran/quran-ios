@@ -22,6 +22,8 @@
 
 "ayah" = "Ayah";
 "surah" = "Surah";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "Kinh Quran";
 
 // MARK: - Translation
 
@@ -124,6 +126,8 @@
 "ayah.menu.play-end-juz" = "đến cuối Juz'";
 "ayah.menu.play-end-surah" = "đến cuối Surah";
 "ayah.menu.play-end-page" = "đến cuối Trang";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "đến cuối Kinh Quran";
 "ayah.menu.repeat" = "Lặp lại";
 "ayah.menu.selected-verse" = "câu đã chọn";
 "ayah.menu.selected-verses" = "bộ câu đã chọn";

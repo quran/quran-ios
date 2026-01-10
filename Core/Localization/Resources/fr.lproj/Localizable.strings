@@ -28,6 +28,8 @@
 "ayah" = "Ayah";
 // Metadata: Translated by ChatGPT; human review required.
 "surah" = "Sourate";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "Le Coran";
 
 // MARK: - Translation
 
@@ -186,6 +188,8 @@
 "ayah.menu.play-end-surah" = "jusqu'à la fin de la Sourate";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "jusqu'à la fin de la page";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "jusqu'à la fin du Coran";
 "ayah.menu.repeat" = "Répéter";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.selected-verse" = "verset sélectionné";

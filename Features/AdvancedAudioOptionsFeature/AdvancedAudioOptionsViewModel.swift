@@ -92,7 +92,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
             }
         }
     }
-    
+
     func setLastVerseInQuran() {
         setLastVerse(using: QuranBasedLastAyahFinder())
     }

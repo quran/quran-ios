@@ -17,7 +17,8 @@
 // MARK: - Quran
 
 "ayah" = "آية";
-"surah" = "سورة";
+"surah" = "السورة";
+"quran_alquran" = "القرآن";
 
 // MARK: - Translation
 

@@ -28,6 +28,8 @@
 "ayah" = "آیه";
 // Metadata: Translated by ChatGPT; human review required.
 "surah" = "سوره";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "قرآن";
 
 // MARK: - Translation
 

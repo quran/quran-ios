@@ -1,0 +1,6250 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.4.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-collections"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.3",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "zip",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/marmelroy/Zip"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.1.1",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "grdb.swift",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/groue/GRDB.swift"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "6.29.1",
+                "upperBound" : "7.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-async-algorithms",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-async-algorithms"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.1.0",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "appauth-ios",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/openid/AppAuth-iOS"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "genericdatasource",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/GenericDataSource/GenericDataSource"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.1.3",
+                "upperBound" : "4.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "whatsnewkit",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/SvenTiigi/WhatsNewKit"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.7",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "popover",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/mohamede1945/Popover"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "branch" : [
+              "master"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-snapshot-testing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-snapshot-testing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.9.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "combine-schedulers",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/combine-schedulers"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "QuranEngine",
+  "packageKind" : {
+    "root" : [
+      "/Users/mohamed/Work/Projects/Quran/quran-ios"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SystemDependencies",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SystemDependencies"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SystemDependenciesFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SystemDependenciesFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Locking",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Locking"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Preferences",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Preferences"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "VLogging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "VLogging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Analytics",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Analytics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Caching",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Caching"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Timing",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Timing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WeakSet",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WeakSet"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Crashing",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Crashing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Utilities",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Utilities"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppMigrator",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppMigrator"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Localization",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Localization"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QueuePlayer",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QueuePlayer"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AsyncUtilitiesForTesting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AsyncUtilitiesForTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OAuthService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OAuthService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SecurePersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SecurePersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OAuthServiceAppAuthImpl",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OAuthServiceAppAuthImpl"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OAuthServiceFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OAuthServiceFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranKit",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranGeometry",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranGeometry"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranAudio",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranAudio"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranText",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranText"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranAnnotations",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranAnnotations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ViewConstrainer",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ViewConstrainer"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "UIx",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "UIx"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NoorFont",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NoorFont"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NoorUI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NoorUI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "PageBookmarkPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "PageBookmarkPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SyncedPageBookmarkPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SyncedPageBookmarkPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "LastPagePersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "LastPagePersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NotePersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NotePersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CoreDataPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CoreDataPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CoreDataPersistenceTestSupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CoreDataPersistenceTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CoreDataModel",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CoreDataModel"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SQLitePersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SQLitePersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AudioTimingPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AudioTimingPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WordFramePersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WordFramePersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WordTextPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WordTextPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "VerseTextPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "VerseTextPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TranslationPersistence",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TranslationPersistence"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NetworkSupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NetworkSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NetworkSupportFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NetworkSupportFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "BatchDownloader",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "BatchDownloader"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "BatchDownloaderFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "BatchDownloaderFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AuthenticationClient",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AuthenticationClient"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranResources",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranResources"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TestResources",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TestResources"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ReciterService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ReciterService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ReciterServiceFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ReciterServiceFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AudioUpdater",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AudioUpdater"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AudioTimingService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AudioTimingService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranAudioKit",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranAudioKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranTextKit",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranTextKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TranslationService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TranslationService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TranslationServiceFake",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TranslationServiceFake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WordFrameService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WordFrameService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WordTextService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WordTextService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ImageService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ImageService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ReadingService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ReadingService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AnnotationsService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AnnotationsService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SettingsService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SettingsService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranProfileService",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranProfileService"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppDependencies",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppDependencies"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FeaturesSupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FeaturesSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ReciterListFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ReciterListFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AyahMenuFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AyahMenuFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WhatsNewFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WhatsNewFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "WordPointerFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "WordPointerFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppMigrationFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppMigrationFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AdvancedAudioOptionsFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AdvancedAudioOptionsFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AudioBannerFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AudioBannerFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AudioDownloadsFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AudioDownloadsFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "MoreMenuFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "MoreMenuFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NoteEditorFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NoteEditorFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "BookmarksFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "BookmarksFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranPagesFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranPagesFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranImageFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranImageFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ReadingSelectorFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ReadingSelectorFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranTranslationFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranTranslationFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranContentFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranContentFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TranslationsFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TranslationsFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NotesFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NotesFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TranslationVerseFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TranslationVerseFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SearchFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SearchFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "HomeFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "HomeFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "QuranViewFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuranViewFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SettingsFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SettingsFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppStructureFeature",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppStructureFeature"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Zip",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AsyncAlgorithms",
+            "swift-async-algorithms",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SystemDependencies",
+      "packageAccess" : false,
+      "path" : "Core/SystemDependencies",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SystemDependenciesFake",
+      "packageAccess" : false,
+      "path" : "Core/SystemDependenciesFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Locking",
+      "packageAccess" : false,
+      "path" : "Core/Locking",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Preferences",
+      "packageAccess" : false,
+      "path" : "Core/Preferences",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "VLogging",
+      "packageAccess" : false,
+      "path" : "Core/VLogging",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Analytics",
+      "packageAccess" : false,
+      "path" : "Core/Analytics",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Locking",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Caching",
+      "packageAccess" : false,
+      "path" : "Core/Caching/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CachingTests",
+      "packageAccess" : false,
+      "path" : "Core/Caching/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Locking",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Timing",
+      "packageAccess" : false,
+      "path" : "Core/Timing",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Locking",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WeakSet",
+      "packageAccess" : false,
+      "path" : "Core/WeakSet",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Locking",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Crashing",
+      "packageAccess" : false,
+      "path" : "Core/Crashing",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Utilities",
+      "packageAccess" : false,
+      "path" : "Core/Utilities/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "UtilitiesTests",
+      "packageAccess" : false,
+      "path" : "Core/Utilities/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppMigrator",
+      "packageAccess" : false,
+      "path" : "Core/AppMigrator/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppMigrator",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppMigratorTests",
+      "packageAccess" : false,
+      "path" : "Core/AppMigrator/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Localization",
+      "packageAccess" : false,
+      "path" : "Core/Localization",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Timing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QueuePlayer",
+      "packageAccess" : false,
+      "path" : "Core/QueuePlayer",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "AsyncAlgorithms",
+            "swift-async-algorithms",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AsyncUtilitiesForTesting",
+      "packageAccess" : false,
+      "path" : "Core/AsyncUtilitiesForTesting",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OAuthService",
+      "packageAccess" : false,
+      "path" : "Core/OAuthService",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SecurePersistence",
+      "packageAccess" : false,
+      "path" : "Core/SecurePersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OAuthService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppAuth",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OAuthServiceAppAuthImpl",
+      "packageAccess" : false,
+      "path" : "Core/OAuthServiceAppAuthImpl",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OAuthService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OAuthServiceFake",
+      "packageAccess" : false,
+      "path" : "Core/OAuthServiceFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranKit",
+      "packageAccess" : false,
+      "path" : "Model/QuranKit/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranKitTests",
+      "packageAccess" : false,
+      "path" : "Model/QuranKit/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranGeometry",
+      "packageAccess" : false,
+      "path" : "Model/QuranGeometry",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranAudio",
+      "packageAccess" : false,
+      "path" : "Model/QuranAudio",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranText",
+      "packageAccess" : false,
+      "path" : "Model/QuranText",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranAnnotations",
+      "packageAccess" : false,
+      "path" : "Model/QuranAnnotations",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ViewConstrainer",
+      "packageAccess" : false,
+      "path" : "UI/ViewConstrainer",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ViewConstrainer",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "UIx",
+      "packageAccess" : false,
+      "path" : "UI/UIx",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NoorFont",
+      "packageAccess" : false,
+      "path" : "UI/NoorFont",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "UIx",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAnnotations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranGeometry",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorFont",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GenericDataSources",
+            "GenericDataSource",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NoorUI",
+      "packageAccess" : false,
+      "path" : "UI/NoorUI",
+      "resources" : [
+        {
+          "path" : "Colors/Colors.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Images/Images.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "PageBookmarkPersistence",
+      "packageAccess" : false,
+      "path" : "Data/PageBookmarkPersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "PageBookmarkPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistenceTestSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "PageBookmarkPersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/PageBookmarkPersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRDB",
+            "GRDB.swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SyncedPageBookmarkPersistence",
+      "packageAccess" : false,
+      "path" : "Data/SyncedPageBookmarkPersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SyncedPageBookmarkPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SyncedPageBookmarkPersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/SyncedPageBookmarkPersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LastPagePersistence",
+      "packageAccess" : false,
+      "path" : "Data/LastPagePersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "LastPagePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistenceTestSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LastPagePersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/LastPagePersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NotePersistence",
+      "packageAccess" : false,
+      "path" : "Data/NotePersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NotePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistenceTestSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NotePersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/NotePersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CoreDataPersistence",
+      "packageAccess" : false,
+      "path" : "Data/CoreDataPersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistenceTestSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CoreDataPersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/CoreDataPersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CoreDataPersistenceTestSupport",
+      "packageAccess" : false,
+      "path" : "Data/CoreDataPersistenceTestSupport",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CoreDataModel",
+      "packageAccess" : false,
+      "path" : "Data/CoreDataModel",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRDB",
+            "GRDB.swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SQLitePersistence",
+      "packageAccess" : false,
+      "path" : "Data/SQLitePersistence/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SQLitePersistenceTests",
+      "packageAccess" : false,
+      "path" : "Data/SQLitePersistence/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudio",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioTimingPersistence",
+      "packageAccess" : false,
+      "path" : "Data/AudioTimingPersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranGeometry",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordFramePersistence",
+      "packageAccess" : false,
+      "path" : "Data/WordFramePersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordTextPersistence",
+      "packageAccess" : false,
+      "path" : "Data/WordTextPersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "VerseTextPersistence",
+      "packageAccess" : false,
+      "path" : "Data/VerseTextPersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationPersistence",
+      "packageAccess" : false,
+      "path" : "Data/TranslationPersistence",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NetworkSupport",
+      "packageAccess" : false,
+      "path" : "Data/NetworkSupport/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NetworkSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupportFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NetworkSupportTests",
+      "packageAccess" : false,
+      "path" : "Data/NetworkSupport/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NetworkSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AsyncAlgorithms",
+            "swift-async-algorithms",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NetworkSupportFake",
+      "packageAccess" : false,
+      "path" : "Data/NetworkSupportFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WeakSet",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "BatchDownloader",
+      "packageAccess" : false,
+      "path" : "Data/BatchDownloader/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloaderFake",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AsyncAlgorithms",
+            "swift-async-algorithms",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "BatchDownloaderTests",
+      "packageAccess" : false,
+      "path" : "Data/BatchDownloader/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupportFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "BatchDownloaderFake",
+      "packageAccess" : false,
+      "path" : "Data/BatchDownloaderFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OAuthService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SecurePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "OAuthServiceAppAuthImpl",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppAuth",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AuthenticationClient",
+      "packageAccess" : false,
+      "path" : "Data/AuthenticationClient/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AuthenticationClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "OAuthServiceFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AuthenticationClientTests",
+      "packageAccess" : false,
+      "path" : "Data/AuthenticationClient/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranResources",
+      "packageAccess" : false,
+      "path" : "Domain/QuranResources",
+      "resources" : [
+        {
+          "path" : "Databases",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TestResources",
+      "packageAccess" : false,
+      "path" : "Domain/TestResources",
+      "resources" : [
+        {
+          "path" : "test_data",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudio",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Zip",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OrderedCollections",
+            "swift-collections",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReciterService",
+      "packageAccess" : false,
+      "path" : "Domain/ReciterService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReciterServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/ReciterService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReciterServiceFake",
+      "packageAccess" : false,
+      "path" : "Domain/ReciterServiceFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NetworkSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioTimingPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioUpdater",
+      "packageAccess" : false,
+      "path" : "Domain/AudioUpdater/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AudioUpdater",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupportFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioUpdaterTests",
+      "packageAccess" : false,
+      "path" : "Domain/AudioUpdater/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AudioTimingPersistence",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioTimingService",
+      "packageAccess" : false,
+      "path" : "Domain/AudioTimingService",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioTimingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QueuePlayer",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Zip",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranAudioKit",
+      "packageAccess" : false,
+      "path" : "Domain/QuranAudioKit/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranAudioKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloaderFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterServiceFake",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SnapshotTesting",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "__Snapshots__"
+      ],
+      "name" : "QuranAudioKitTests",
+      "packageAccess" : false,
+      "path" : "Domain/QuranAudioKit/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TranslationService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordFrameService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VerseTextPersistence",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranTextKit",
+      "packageAccess" : false,
+      "path" : "Domain/QuranTextKit/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SnapshotTesting",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranResources",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "__Snapshots__"
+      ],
+      "name" : "QuranTextKitTests",
+      "packageAccess" : false,
+      "path" : "Domain/QuranTextKit/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VerseTextPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Zip",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationService",
+      "packageAccess" : false,
+      "path" : "Domain/TranslationService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TranslationService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloaderFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/TranslationService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TranslationService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationServiceFake",
+      "packageAccess" : false,
+      "path" : "Domain/TranslationServiceFake",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "WordFramePersistence",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordFrameService",
+      "packageAccess" : false,
+      "path" : "Domain/WordFrameService",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordTextPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordTextService",
+      "packageAccess" : false,
+      "path" : "Domain/WordTextService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "WordTextService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordTextServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/WordTextService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "WordFrameService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ImageService",
+      "packageAccess" : false,
+      "path" : "Domain/ImageService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ImageService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SnapshotTesting",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "__Snapshots__"
+      ],
+      "name" : "ImageServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/ImageService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CombineSchedulers",
+            "combine-schedulers",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReadingService",
+      "packageAccess" : false,
+      "path" : "Domain/ReadingService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloaderFake",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReadingServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/ReadingService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranAnnotations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "LastPagePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NotePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "PageBookmarkPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AnnotationsService",
+      "packageAccess" : false,
+      "path" : "Domain/AnnotationsService/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AnnotationsServiceTests",
+      "packageAccess" : false,
+      "path" : "Domain/AnnotationsService/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SettingsService",
+      "packageAccess" : false,
+      "path" : "Domain/SettingsService",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AuthenticationClient",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranProfileService",
+      "packageAccess" : false,
+      "path" : "Domain/QuranProfileService",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NotePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "LastPagePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranResources",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AuthenticationClient",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppDependencies",
+      "packageAccess" : false,
+      "path" : "Features/AppDependencies",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAnnotations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FeaturesSupport",
+      "packageAccess" : false,
+      "path" : "Features/FeaturesSupport",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranAudio",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReciterListFeature",
+      "packageAccess" : false,
+      "path" : "Features/ReciterListFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudioKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AyahMenuFeature",
+      "packageAccess" : false,
+      "path" : "Features/AyahMenuFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "WhatsNewKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WhatsNewFeature",
+      "packageAccess" : false,
+      "path" : "Features/WhatsNewFeature",
+      "resources" : [
+        {
+          "path" : "whats-new.plist",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordTextService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Popover_OC",
+            "Popover",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "WordPointerFeature",
+      "packageAccess" : false,
+      "path" : "Features/WordPointerFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppMigrator",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppMigrationFeature",
+      "packageAccess" : false,
+      "path" : "Features/AppMigrationFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ReciterListFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudioKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AdvancedAudioOptionsFeature",
+      "packageAccess" : false,
+      "path" : "Features/AdvancedAudioOptionsFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterListFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AdvancedAudioOptionsFeature",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioBannerFeature",
+      "packageAccess" : false,
+      "path" : "Features/AudioBannerFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudioKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AudioDownloadsFeature",
+      "packageAccess" : false,
+      "path" : "Features/AudioDownloadsFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordTextService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "MoreMenuFeature",
+      "packageAccess" : false,
+      "path" : "Features/MoreMenuFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NoteEditorFeature",
+      "packageAccess" : false,
+      "path" : "Features/NoteEditorFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "BookmarksFeature",
+      "packageAccess" : false,
+      "path" : "Features/BookmarksFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WeakSet",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranPagesFeature",
+      "packageAccess" : false,
+      "path" : "Features/QuranPagesFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ImageService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranPagesFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranImageFeature",
+      "packageAccess" : false,
+      "path" : "Features/QuranImageFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ReadingSelectorFeature",
+      "packageAccess" : false,
+      "path" : "Features/ReadingSelectorFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranPagesFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranTranslationFeature",
+      "packageAccess" : false,
+      "path" : "Features/QuranTranslationFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuranImageFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTranslationFeature",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranContentFeature",
+      "packageAccess" : false,
+      "path" : "Features/QuranContentFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationsFeature",
+      "packageAccess" : false,
+      "path" : "Features/TranslationsFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NotesFeature",
+      "packageAccess" : false,
+      "path" : "Features/NotesFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "MoreMenuFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTranslationFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TranslationVerseFeature",
+      "packageAccess" : false,
+      "path" : "Features/TranslationVerseFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SearchFeature",
+      "packageAccess" : false,
+      "path" : "Features/SearchFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingSelectorFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "HomeFeature",
+      "packageAccess" : false,
+      "path" : "Features/HomeFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AudioBannerFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranContentFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AyahMenuFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "MoreMenuFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoteEditorFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordPointerFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationVerseFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuranViewFeature",
+      "packageAccess" : false,
+      "path" : "Features/QuranViewFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SettingsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioDownloadsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingSelectorFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Zip",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranProfileService",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SettingsFeature",
+      "packageAccess" : false,
+      "path" : "Features/SettingsFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "HomeFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BookmarksFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NotesFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SearchFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SettingsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranViewFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WhatsNewFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioUpdater",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppMigrationFeature",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppStructureFeature",
+      "packageAccess" : false,
+      "path" : "Features/AppStructureFeature",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SystemDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SystemDependenciesFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Locking",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Preferences",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Analytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Caching",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Timing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WeakSet",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Crashing",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Utilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppMigrator",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Localization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QueuePlayer",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AsyncUtilitiesForTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "OAuthService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SecurePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "OAuthServiceAppAuthImpl",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "OAuthServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranGeometry",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudio",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranText",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAnnotations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ViewConstrainer",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "UIx",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorFont",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoorUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "PageBookmarkPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SyncedPageBookmarkPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "LastPagePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NotePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataPersistenceTestSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CoreDataModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SQLitePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioTimingPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordFramePersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordTextPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "VerseTextPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationPersistence",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NetworkSupportFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloader",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BatchDownloaderFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AuthenticationClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranResources",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioUpdater",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioTimingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranAudioKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTextKit",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationServiceFake",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordFrameService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordTextService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ImageService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AnnotationsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SettingsService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranProfileService",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppDependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FeaturesSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReciterListFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AyahMenuFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WhatsNewFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "WordPointerFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppMigrationFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AdvancedAudioOptionsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioBannerFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AudioDownloadsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "MoreMenuFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NoteEditorFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "BookmarksFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranPagesFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranImageFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ReadingSelectorFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranTranslationFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranContentFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NotesFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TranslationVerseFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SearchFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "HomeFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "QuranViewFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SettingsFeature",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppStructureFeature",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AllTargetsTests",
+      "packageAccess" : false,
+      "path" : "AllTargetsTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.8.0"
+  },
+  "traits" : [
+
+  ]
+}

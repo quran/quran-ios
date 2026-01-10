@@ -14,11 +14,11 @@ extension AudioEnd {
         case .juz:
             return lAndroid("quran_juz2")
         case .sura:
-            return lAndroid("quran_sura")
+            return l("surah")
         case .page:
             return lAndroid("quran_page")
         case .quran:
-            return lAndroid("quran_alquran")
+            return l("quran_alquran")
         }
     }
 }

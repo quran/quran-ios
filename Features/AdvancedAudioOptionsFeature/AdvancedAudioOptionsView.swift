@@ -84,7 +84,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     Spacer()
                     ActiveRoundedButton(label: lAndroid("quran_juz2"), action: lastJuzTapped)
                     Spacer()
-                    ActiveRoundedButton(label: lAndroid("app_name"), action: lastQuranAyahTapped)
+                    ActiveRoundedButton(label: lAndroid("quran_alquran"), action: lastQuranAyahTapped)
                 }
             }
 

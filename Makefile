@@ -4,7 +4,7 @@ BUILD_TOOLS_DIR=./BuildTools
 
 PACKAGE_SCHEME ?= QuranEngine-Package
 PACKAGE_SDK ?= iphonesimulator
-PACKAGE_DESTINATION ?= name=iPhone 16,OS=18.5
+PACKAGE_DESTINATION ?= name=iPhone 17,OS=26.2
 EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
@@ -20,13 +20,13 @@ CURRENT_TARGET=$(if $(TARGET),$(TARGET),$(PACKAGE_SCHEME))
 .PHONY: test build build-example clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect install-swiftlint build-for-analyzer swiftlint-analyzer
 
 test:
-	set -o pipefail; xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcpretty
+	set -o pipefail; xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 build:
-	set -o pipefail; xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcpretty
+	set -o pipefail; xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcbeautify --renderer github-actions
 
 build-example:
-	set -o pipefail; xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
+	set -o pipefail; xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcbeautify --renderer github-actions
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

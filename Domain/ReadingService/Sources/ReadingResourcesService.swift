@@ -22,6 +22,7 @@ public actor ReadingResourcesService {
         fileManager: FileSystem = DefaultFileSystem(),
         zipper: Zipper = DefaultZipper(),
         scheduler: AnySchedulerOf<DispatchQueue> = .main,
+        throttleInterval: DispatchQueue.SchedulerTimeType.Stride = .seconds(0.1),
         preferencesObservingStarted: EventObserver? = nil,
         preferenceLoadingCompleted: EventObserver? = nil,
         downloader: DownloadManager,
@@ -34,6 +35,7 @@ public actor ReadingResourcesService {
         self.remoteResources = remoteResources
         self.downloader = ReadingResourceDownloader(downloader: downloader, remoteResources: remoteResources)
         self.scheduler = scheduler
+        self.throttleInterval = throttleInterval
     }
 
     // MARK: Public
@@ -45,10 +47,13 @@ public actor ReadingResourcesService {
     }
 
     public nonisolated var publisher: AnyPublisher<ResourceStatus, Never> {
-        subject
-            // It helps slow down download progress a little, otherwise the UI may keep rendering progress after the download completes.
-            .throttle(for: .seconds(0.1), scheduler: scheduler, latest: true)
-            .compactMap { $0 }
+        let base = subject.compactMap { $0 }
+        guard throttleInterval > .zero else {
+            return base.eraseToAnyPublisher()
+        }
+        // It helps slow down download progress a little, otherwise the UI may keep rendering progress after the download completes.
+        return base
+            .throttle(for: throttleInterval, scheduler: scheduler, latest: true)
             .eraseToAnyPublisher()
     }
 
@@ -84,6 +89,7 @@ public actor ReadingResourcesService {
 
     private nonisolated let subject = CurrentValueSubject<ResourceStatus?, Never>(nil)
     private let scheduler: AnySchedulerOf<DispatchQueue>
+    private let throttleInterval: DispatchQueue.SchedulerTimeType.Stride
     private let zipper: Zipper
     private let fileManager: FileSystem
     private let downloader: ReadingResourceDownloader

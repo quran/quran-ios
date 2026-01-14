@@ -35,6 +35,10 @@ struct PagesView: View {
     }
 
     private func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {
+        if viewModel.pagingStrategy == .vertical {
+            return .vertical
+        }
+        
         // If portrait
         if geometry.size.height > geometry.size.width {
             return .singlePage

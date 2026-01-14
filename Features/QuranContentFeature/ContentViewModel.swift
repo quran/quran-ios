@@ -62,6 +62,7 @@ public final class ContentViewModel: ObservableObject {
 
         highlights = deps.highlightsService.highlights
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
+        verticalScrollingEnabled = deps.quranContentStatePreferences.verticalScrollingEnabled
         quranMode = deps.quranContentStatePreferences.quranMode
 
         deps.highlightsService.$highlights
@@ -69,6 +70,9 @@ public final class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$twoPagesEnabled
             .sink { [weak self] in self?.twoPagesEnabled = $0 }
+            .store(in: &cancellables)
+        deps.quranContentStatePreferences.$verticalScrollingEnabled
+            .sink { [weak self] in self?.verticalScrollingEnabled = $0 }
             .store(in: &cancellables)
         deps.quranContentStatePreferences.$quranMode
             .sink { [weak self] in self?.quranMode = $0 }
@@ -110,6 +114,7 @@ public final class ContentViewModel: ObservableObject {
 
     @Published var quranMode: QuranMode
     @Published var twoPagesEnabled: Bool
+    @Published var verticalScrollingEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
 
     @Published var highlights: QuranHighlights {
@@ -125,7 +130,10 @@ public final class ContentViewModel: ObservableObject {
     }
 
     var pagingStrategy: PagingStrategy {
-        twoPagesEnabled ? .doublePage : .singlePage
+        if quranMode == .translation && verticalScrollingEnabled {
+            return .vertical
+        }
+        return twoPagesEnabled ? .doublePage : .singlePage
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {

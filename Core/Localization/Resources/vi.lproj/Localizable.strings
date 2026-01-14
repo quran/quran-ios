@@ -62,7 +62,12 @@
 "menu.translationFontSize" = "Cỡ chữ Bản dịch";
 "menu.arabicFontSize" = "Cỡ chữ Quran";
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
-"menu.verticalScrolling" = "Cuộn dọc";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_direction" = "Hướng cuộn";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Ngang";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Dọc";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Chủ đề & Cài đặt";
 

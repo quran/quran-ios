@@ -67,7 +67,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "Yan yana 2 sayfa (yatayda)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "Dikey kaydırma";
+"menu.scroll_direction" = "Kaydırma yönü";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Yatay";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Dikey";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temalar ve ayarlar";
 

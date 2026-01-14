@@ -93,7 +93,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "ئىككى بەت يانما-يان (شەكىل تەرتىپىدە)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "تىك مېكىش";
+"menu.scroll_direction" = "مېكىش يۆنىلىشى";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "توغرىسىغا";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "تىك";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "ئۆرنەك ۋە تەڭشەك";
 

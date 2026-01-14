@@ -12,6 +12,7 @@ import SwiftUI
 public enum PagingStrategy {
     case singlePage
     case doublePage
+    case vertical
 }
 
 public struct QuranPaginationView<Content: View>: View {
@@ -37,6 +38,12 @@ public struct QuranPaginationView<Content: View>: View {
                 )
             case .doublePage:
                 QuranDoublePaginationView(
+                    selection: $selection,
+                    pages: pages,
+                    content: contentView
+                )
+            case .vertical:
+                QuranVerticalPaginationView(
                     selection: $selection,
                     pages: pages,
                     content: contentView

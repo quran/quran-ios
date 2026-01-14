@@ -93,7 +93,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "2页并排（横向模式）";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "垂直滚动";
+"menu.scroll_direction" = "滚动方向";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "水平";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "垂直";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "主题和设置";
 

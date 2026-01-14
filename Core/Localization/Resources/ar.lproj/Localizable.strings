@@ -56,7 +56,12 @@
 "menu.translationFontSize" = "حجم خط تفسير";
 "menu.arabicFontSize" = "حجم خط القرآن";
 "menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
-"menu.verticalScrolling" = "تمرير رأسي";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_direction" = "اتجاه التمرير";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "أفقي";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "رأسي";
 "menu.theme_settings" = "المظهر والإعدادات";
 
 // MARK: - Theme

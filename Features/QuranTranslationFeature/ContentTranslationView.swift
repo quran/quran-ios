@@ -57,18 +57,44 @@ private struct ContentTranslationViewBody: View {
 
     let openURL: (TranslationURL) -> Void
 
+    @Environment(\.scrollingEnabled) private var scrollingEnabled
+
     var body: some View {
-        List {
-            ForEach(items) { item in
-                item
+        Group {
+            if items.isEmpty {
+                // Loading state - fill space with background color to hide separators
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .padding()
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, minHeight: 200)
+                .themedBackground()
+            } else if scrollingEnabled {
+                List {
+                    content
+                }
+                .listStyle(.plain)
+                .environment(\.defaultMinListRowHeight, 1)
+                .trackCollection(with: tracker)
+            } else {
+                LazyVStack(spacing: 0) {
+                    content
+                }
+                .trackCollection(with: tracker)
             }
         }
-        .listStyle(.plain)
-        .environment(\.defaultMinListRowHeight, 1)
         .populateReadableInsets()
         .openTranslationURL(openURL)
-        .trackCollection(with: tracker)
         .sheet(item: $footnote) { $0 }
         .quranScrolling(scrollToValue: scrollToItem)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        ForEach(items) { item in
+            item
+        }
     }
 }

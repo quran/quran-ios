@@ -93,7 +93,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "menu.twoPages" = "2 Seiten nebeneinander (im Querformat)";
 // Metadata: Translated by ChatGPT; human review required.
-"menu.verticalScrolling" = "Vertikales Scrollen";
+"menu.scroll_direction" = "Scrollrichtung";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_horizontal" = "Horizontal";
+// Metadata: Translated by ChatGPT; human review required.
+"menu.scroll_vertical" = "Vertikal";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Themen & Einstellungen";
 

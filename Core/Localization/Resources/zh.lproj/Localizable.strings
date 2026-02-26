@@ -28,6 +28,8 @@
 "ayah" = "经文";
 // Metadata: Translated by ChatGPT; human review required.
 "surah" = "章";
+// Metadata: Translated by AI; human review required.
+"quran_alquran" = "古兰经";
 
 // MARK: - Translation
 
@@ -186,6 +188,8 @@
 "ayah.menu.play-end-surah" = "直到苏拉结束";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "直到页面结束";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quran" = "直到古兰经结束";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.repeat" = "重复";
 // Metadata: Translated by ChatGPT; human review required.

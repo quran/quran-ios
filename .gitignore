@@ -23,6 +23,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+package.json
 
 # Swift Package Manager. See: https://github.com/apple/swift-package-manager/blob/main/Sources/Workspace/InitPackage.swift#L381
 

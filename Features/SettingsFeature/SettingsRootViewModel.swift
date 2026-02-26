@@ -79,7 +79,7 @@ final class SettingsRootViewModel: ObservableObject {
             title: l("audio.download-play-amount"),
             sections: [SingleChoiceSection(
                 header: l("audio.download-play-amount.description"),
-                items: [AudioEnd.juz, .sura, .page]
+                items: [AudioEnd.juz, .sura, .page, .quran]
             )],
             selected: audioPreferences.audioEnd,
             itemText: { $0.name },

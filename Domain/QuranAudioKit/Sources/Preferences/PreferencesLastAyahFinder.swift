@@ -35,6 +35,8 @@ public struct PreferencesLastAyahFinder: LastAyahFinder {
             return SuraBasedLastAyahFinder()
         case .page:
             return pageFinder
+        case .quran:
+            return QuranBasedLastAyahFinder()
         }
     }
 

@@ -39,6 +39,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
             fileManager: fileManager,
             zipper: zipper,
             scheduler: testScheduler,
+            throttleInterval: .zero,
             preferencesObservingStarted: preferencesObservingStarted,
             preferenceLoadingCompleted: preferenceLoadingCompleted,
             downloader: downloader,
@@ -241,7 +242,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
 
         // Then
         XCTAssertTrue(firstDownload.isCancelled)
-        XCTAssertEqual(collector.items.last, .ready)
+        await waitForReady()
         try assertDownloadedFiles(secondReading)
     }
 
@@ -304,5 +305,15 @@ final class ReadingResourcesServiceTests: XCTestCase {
                                          remoteResource.downloadDestination.url]
         downloadedFiles.formUnion(zipper.zipContents(remoteResource.zipFile.url))
         XCTAssertEqual(fileManager.files, downloadedFiles, file: file, line: line)
+    }
+
+    private func waitForReady(file: StaticString = #filePath, line: UInt = #line) async {
+        for _ in 0 ..< 10 {
+            if collector.items.last == .ready {
+                return
+            }
+            await Task.megaYield()
+        }
+        XCTAssertEqual(collector.items.last, .ready, file: file, line: line)
     }
 }

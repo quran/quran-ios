@@ -34,6 +34,10 @@ public struct PageBookmarkService {
         try await persistence.removePageBookmark(page.pageNumber)
     }
 
+    public func removeAllPageBookmarks() async throws {
+        try await persistence.removeAllPageBookmarks()
+    }
+
     // MARK: Internal
 
     let persistence: PageBookmarkPersistence

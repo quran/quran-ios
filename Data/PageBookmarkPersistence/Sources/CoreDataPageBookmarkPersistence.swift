@@ -51,6 +51,17 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
         }
     }
 
+    public func removeAllPageBookmarks() async throws {
+        try await context.perform { context in
+            let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()
+            let bookmarks = try context.fetch(request)
+            for bookmark in bookmarks {
+                context.delete(bookmark)
+            }
+            try context.save(with: "removeAllPageBookmarks")
+        }
+    }
+
     // MARK: Private
 
     private let context: NSManagedObjectContext

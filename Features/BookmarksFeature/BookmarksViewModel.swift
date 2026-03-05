@@ -62,6 +62,15 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func deleteAll() async {
+        logger.info("Bookmarks: delete all bookmarks")
+        do {
+            try await service.removeAllPageBookmarks()
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: Private
 
     private let navigateTo: (Page) -> Void

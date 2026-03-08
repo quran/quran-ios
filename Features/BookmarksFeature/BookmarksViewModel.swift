@@ -84,6 +84,15 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func deleteAll() async {
+        logger.info("Bookmarks: delete all bookmarks")
+        do {
+            try await service.removeAllPageBookmarks()
+        } catch {
+            self.error = error
+        }
+    }
+
     func dismissSyncBanner() {
         isSyncBannerDismissed = true
         UserDefaults.standard.set(true, forKey: Self.bannerDismissedPreferenceKey)

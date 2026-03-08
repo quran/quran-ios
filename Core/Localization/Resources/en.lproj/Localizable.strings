@@ -108,6 +108,8 @@
 
 "bookmarks.no-data.title" = "Adding Bookmarks...";
 "bookmarks.no-data.text" = "When you're reading the Quran, tap the Bookmark button to mark the current page.";
+"bookmarks.delete-all" = "Delete All";
+"bookmarks.delete-all.confirmation" = "Are you sure you want to delete all bookmarks?";
 
 // MARK: - Notes
 

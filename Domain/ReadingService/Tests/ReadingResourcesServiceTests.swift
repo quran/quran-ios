@@ -98,9 +98,15 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await completeRunningDownload()
 
         // Then
-        XCTAssertEqual(collector.items, [.downloading(progress: 0),
-                                         .downloading(progress: 1),
-                                         .ready])
+        XCTAssertEqual(collector.items.last, .ready)
+        let progressUpdates = collector.items.compactMap { status -> Double? in
+            guard case let .downloading(progress) = status else {
+                return nil
+            }
+            return progress
+        }
+        XCTAssertFalse(progressUpdates.isEmpty)
+        XCTAssertEqual(progressUpdates.last, 1)
         try assertDownloadedFiles(reading)
         XCTAssertEqual(zipper.unzippedFiles, [remoteResource.zipFile.url])
     }

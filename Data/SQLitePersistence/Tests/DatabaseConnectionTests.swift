@@ -48,9 +48,8 @@ class DatabaseConnectionTests: XCTestCase {
         // deliver a specifc set of values.
         // Adding some latency is key, as it allows SQLite to commit changes to the desk.
         let connection = DatabaseConnection(url: testURL, readonly: false)
+        try await connection.createNamesTable()
         let publisher = try connection.namesPublisher()
-            .catch { _ in Empty<[String], Never>() }
-            .eraseToAnyPublisher()
 
         var assertExpectation: XCTestExpectation?
         var expectedNames: [String]?
@@ -124,11 +123,14 @@ class DatabaseConnectionTests: XCTestCase {
 private extension DatabaseConnection {
     func insertNames() async throws {
         try await write { db in
-            try db.create(table: "test") { t in
-                t.autoIncrementedPrimaryKey("id")
-                t.column("name", .text)
-            }
+            try createNamesTable(in: db)
             try db.execute(sql: "INSERT INTO test (name) VALUES (?)", arguments: ["Alice"])
+        }
+    }
+
+    func createNamesTable() async throws {
+        try await write { db in
+            try createNamesTable(in: db)
         }
     }
 
@@ -153,6 +155,13 @@ private extension DatabaseConnection {
     func readNames() async throws -> [String] {
         try await read { db in
             try String.fetchAll(db, sql: "SELECT name FROM test")
+        }
+    }
+
+    private func createNamesTable(in db: Database) throws {
+        try db.create(table: "test", ifNotExists: true) { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text)
         }
     }
 }

@@ -34,14 +34,15 @@ class Container: AppDependencies {
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
+    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
+        MobileSyncPageBookmarkPersistence(session: mobileSyncSession, legacyStack: coreDataStack)
+    }()
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
-        guard let configurations = Constant.QuranOAuthAppConfigurations else {
+        guard Constant.QuranOAuthAppConfigurations != nil else {
             return nil
         }
-        let client = AuthenticationClientImpl(configurations: configurations)
-        return client
+        return AuthenticationClientMobileSyncImpl(session: mobileSyncSession)
     }()
 
     private(set) lazy var downloadManager: DownloadManager = {
@@ -65,6 +66,8 @@ class Container: AppDependencies {
 
     // MARK: Private
 
+    private lazy var mobileSyncSession = MobileSyncSession(configurations: Constant.QuranOAuthAppConfigurations)
+
     private lazy var coreDataStack: CoreDataStack = {
         let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
             let lastPage = CoreDataLastPageUniquifier()
@@ -77,6 +80,8 @@ class Container: AppDependencies {
 }
 
 private enum Constant {
+    private static let environment = ProcessInfo.processInfo.environment
+
     static let wordsDatabase = Bundle.main
         .url(forResource: "words", withExtension: "db")!
 
@@ -87,6 +92,50 @@ private enum Constant {
     static let databasesURL = FileManager.documentsURL
         .appendingPathComponent("databases", isDirectory: true)
 
-    /// If set, the Quran.com login will be enabled.
-    static let QuranOAuthAppConfigurations: AuthenticationClientConfiguration? = nil
+    /// Reads Quran.com OAuth configuration from environment variables.
+    static let QuranOAuthAppConfigurations: AuthenticationClientConfiguration? = {
+        guard
+            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID"),
+            let issuerURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL") ?? "")
+        else {
+            return nil
+        }
+        guard
+            let redirectURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_REDIRECT_URL") ?? "com.quran.oauth://callback")
+        else {
+            return nil
+        }
+
+        let clientSecret = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET") ?? ""
+        let scopes = nonEmptyEnvironmentValue("QURAN_OAUTH_SCOPES")?
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty } ?? [
+                "openid",
+                "offline_access",
+                "content",
+                "user",
+                "bookmark",
+                "sync",
+                "collection",
+                "reading_session",
+                "preference",
+                "note",
+            ]
+
+        return AuthenticationClientConfiguration(
+            clientID: clientID,
+            clientSecret: clientSecret,
+            redirectURL: redirectURL,
+            scopes: scopes,
+            authorizationIssuerURL: issuerURL
+        )
+    }()
+
+    private static func nonEmptyEnvironmentValue(_ key: String) -> String? {
+        guard let value = environment[key]?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+            return nil
+        }
+        return value
+    }
 }

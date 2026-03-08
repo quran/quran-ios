@@ -67,10 +67,17 @@ final class SettingsRootViewModel: ObservableObject {
 
     @Published var audioEnd: AudioEnd
 
+    @Published var error: Error? = nil
+    @Published var isAuthenticated: Bool = false
+
     @Published var appearanceMode: AppearanceMode {
         didSet {
             themeService.appearanceMode = appearanceMode
         }
+    }
+
+    var isQuranComLoginAvailable: Bool {
+        quranProfileService.isAuthenticationAvailable
     }
 
     func navigateToAudioEndSelector() {
@@ -132,6 +139,28 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    func refreshAuthenticationState() async {
+        guard quranProfileService.isAuthenticationAvailable else {
+            isAuthenticated = false
+            return
+        }
+
+        do {
+            isAuthenticated = try await quranProfileService.restoreState() == .authenticated
+        } catch {
+            logger.error("Failed to restore Quran.com auth state: \(error)")
+            isAuthenticated = await quranProfileService.authenticationState() == .authenticated
+        }
+    }
+
+    func authenticationAction() async {
+        if isAuthenticated {
+            await logoutFromQuranCom()
+        } else {
+            await loginToQuranCom()
+        }
+    }
+
     func loginToQuranCom() async {
         logger.info("Settings: Login to Quran.com")
         guard let viewController = navigationController else {
@@ -139,10 +168,21 @@ final class SettingsRootViewModel: ObservableObject {
         }
         do {
             try await quranProfileService.login(on: viewController)
-            // TODO: Replace with the needed UI changes.
-            print("Login seems successful")
+            isAuthenticated = true
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
+            self.error = error
+        }
+    }
+
+    func logoutFromQuranCom() async {
+        logger.info("Settings: Logout from Quran.com")
+        do {
+            try await quranProfileService.logout()
+            isAuthenticated = false
+        } catch {
+            logger.error("Failed to logout from Quran.com: \(error)")
+            self.error = error
         }
     }
 

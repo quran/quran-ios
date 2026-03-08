@@ -12,7 +12,14 @@ let swiftConcurrencySettings: [SwiftSetting] = [
     ]),
 ]
 
-let settings = enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []
+let quranSyncCompilationConditions = ProcessInfo.processInfo.environment["QURAN_SYNC_SWIFT_ACTIVE_COMPILATION_CONDITIONS"] ?? ""
+let quranSyncEnabled = ProcessInfo.processInfo.environment["QURAN_SYNC"] == "1"
+    || quranSyncCompilationConditions.split(separator: " ").contains("QURAN_SYNC")
+let quranSyncSettings: [SwiftSetting] = quranSyncEnabled ? [
+    .define("QURAN_SYNC"),
+] : []
+
+let settings = (enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []) + quranSyncSettings
 
 let targets = [
     coreTargets(),
@@ -59,6 +66,10 @@ let package = Package(
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
+
+        // Sync
+        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.3"),
+        .package(url: "https://github.com/rickclephas/KMP-NativeCoroutines.git", exact: "1.0.0-ALPHA-48"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -205,6 +216,9 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            .product(name: "KMPNativeCoroutinesAsync", package: "KMP-NativeCoroutines"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -335,6 +349,8 @@ private func dataTargets() -> [[Target]] {
             "SecurePersistence",
             "OAuthServiceAppAuthImpl",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            .product(name: "KMPNativeCoroutinesAsync", package: "KMP-NativeCoroutines"),
         ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
     ]
 }
@@ -603,6 +619,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "NoorUI",
             "ReadingService",
+            "QuranProfileService",
         ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
@@ -691,6 +708,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",
+            "QuranProfileService",
         ]),
 
         target(type, name: "SettingsFeature", hasTests: false, dependencies: [

@@ -56,6 +56,8 @@ public protocol AuthenticationClient {
 
     func restoreState() async throws -> AuthenticationState
 
+    func logout() async throws
+
     func authenticate(request: URLRequest) async throws -> URLRequest
 
     func getAuthenticationHeaders() async throws -> [String: String]

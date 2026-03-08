@@ -37,12 +37,39 @@
       }
     },
     {
+      "identity" : "kmp-nativecoroutines",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rickclephas/KMP-NativeCoroutines.git",
+      "state" : {
+        "revision" : "d6db2878cc0c6c06a0ccddb89f44b8f6f6d0b78f",
+        "version" : "1.0.0-ALPHA-48"
+      }
+    },
+    {
+      "identity" : "mobile-sync-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/quran/mobile-sync-spm.git",
+      "state" : {
+        "revision" : "b4324acd7f5352e4d54d9cb923f5152a4d29b632",
+        "version" : "0.0.3"
+      }
+    },
+    {
       "identity" : "popover",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mohamede1945/Popover",
       "state" : {
         "branch" : "master",
         "revision" : "9641cb324d61554f7e542acb58df2eba55b3a537"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift.git",
+      "state" : {
+        "revision" : "132aea4f236ccadc51590b38af0357a331d51fa2",
+        "version" : "6.10.2"
       }
     },
     {

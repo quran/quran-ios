@@ -9,6 +9,7 @@
 import AnnotationsService
 import AppDependencies
 import FeaturesSupport
+import QuranProfileService
 import UIKit
 
 @MainActor
@@ -26,6 +27,7 @@ public struct BookmarksBuilder {
         let viewModel = BookmarksViewModel(
             analytics: container.analytics,
             service: service,
+            quranProfileService: QuranProfileService(authenticationClient: container.authenticationClient),
             navigateTo: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }

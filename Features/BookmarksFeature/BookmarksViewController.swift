@@ -39,7 +39,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     private func initialize() {
         title = lAndroid("menu_bookmarks")
-        addCloudSyncInfo()
+        viewModel.presenter = self
 
         editController = EditController(
             navigationItem: navigationItem,

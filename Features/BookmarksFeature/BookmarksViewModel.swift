@@ -9,20 +9,29 @@ import Analytics
 import AnnotationsService
 import Combine
 import FeaturesSupport
+import QuranProfileService
 import QuranAnnotations
 import QuranKit
 import ReadingService
 import SwiftUI
+import UIKit
 import VLogging
 
 @MainActor
 final class BookmarksViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, service: PageBookmarkService, navigateTo: @escaping (Page) -> Void) {
+    init(
+        analytics: AnalyticsLibrary,
+        service: PageBookmarkService,
+        quranProfileService: QuranProfileService,
+        navigateTo: @escaping (Page) -> Void
+    ) {
         self.analytics = analytics
         self.service = service
+        self.quranProfileService = quranProfileService
         self.navigateTo = navigateTo
+        isSyncBannerDismissed = UserDefaults.standard.bool(forKey: Self.bannerDismissedPreferenceKey)
     }
 
     // MARK: Internal
@@ -30,8 +39,21 @@ final class BookmarksViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
     @Published var bookmarks: [PageBookmark] = []
+    @Published var isAuthenticated: Bool = false
+    @Published var isSyncBannerDismissed: Bool
+
+    weak var presenter: UIViewController?
+
+    var isAuthenticationAvailable: Bool {
+        quranProfileService.isAuthenticationAvailable
+    }
+
+    var shouldShowSyncBanner: Bool {
+        isAuthenticationAvailable && !isAuthenticated && !isSyncBannerDismissed
+    }
 
     func start() async {
+        await refreshAuthenticationState()
         let bookmarksSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .map { [service] reading in
@@ -62,10 +84,46 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func dismissSyncBanner() {
+        isSyncBannerDismissed = true
+        UserDefaults.standard.set(true, forKey: Self.bannerDismissedPreferenceKey)
+    }
+
+    func loginToQuranCom() async {
+        guard let presenter else {
+            return
+        }
+
+        do {
+            try await quranProfileService.login(on: presenter)
+            isAuthenticated = true
+        } catch {
+            logger.error("Failed to login to Quran.com from bookmarks: \(error)")
+            self.error = error
+        }
+    }
+
+    func refreshAuthenticationState() async {
+        guard isAuthenticationAvailable else {
+            isAuthenticated = false
+            return
+        }
+
+        do {
+            isAuthenticated = try await quranProfileService.restoreState() == .authenticated
+        } catch {
+            logger.error("Failed to restore Quran.com auth state in bookmarks: \(error)")
+            isAuthenticated = await quranProfileService.authenticationState() == .authenticated
+        }
+    }
+
     // MARK: Private
+
+    private static let bannerDismissedPreferenceKey = "com.quran.sync.bookmarks.banner-dismissed"
 
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
+    private let quranProfileService: QuranProfileService
     private let readingPreferences = ReadingPreferences.shared
 }

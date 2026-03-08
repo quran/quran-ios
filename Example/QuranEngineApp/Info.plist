@@ -9,6 +9,7 @@
             <string>com.quran.QuranEngineApp</string>
             <key>CFBundleURLSchemes</key>
             <array>
+                <string>com.quran.oauth</string>
                 <string>quran</string>
                 <string>quran-ios</string>
             </array>

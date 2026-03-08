@@ -12,6 +12,7 @@ import AudioBannerFeature
 import AyahMenuFeature
 import MoreMenuFeature
 import NoteEditorFeature
+import QuranProfileService
 import QuranContentFeature
 import QuranKit
 import ReadingService
@@ -39,6 +40,7 @@ public struct QuranBuilder {
             quran: quran,
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
+            quranProfileService: QuranProfileService(authenticationClient: container.authenticationClient),
             noteService: container.noteService(),
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),

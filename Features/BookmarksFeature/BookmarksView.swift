@@ -20,9 +20,12 @@ struct BookmarksView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             bookmarks: viewModel.bookmarks,
+            shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
-            deleteAction: { await viewModel.deleteItem($0) }
+            deleteAction: { await viewModel.deleteItem($0) },
+            dismissSyncBanner: { viewModel.dismissSyncBanner() },
+            signInAction: { await viewModel.loginToQuranCom() }
         )
     }
 }
@@ -34,17 +37,25 @@ private struct BookmarksViewUI: View {
     @Binding var error: Error?
 
     let bookmarks: [PageBookmark]
+    let shouldShowSyncBanner: Bool
 
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
     let deleteAction: AsyncItemAction<PageBookmark>
+    let dismissSyncBanner: () -> Void
+    let signInAction: AsyncAction
 
     var body: some View {
         Group {
             if bookmarks.isEmpty {
-                noData
+                emptyState
             } else {
                 NoorList {
+                    if shouldShowSyncBanner {
+                        NoorBasicSection {
+                            syncBanner
+                        }
+                    }
                     NoorSection(bookmarks) { bookmark in
                         listItem(bookmark)
                     }
@@ -59,11 +70,30 @@ private struct BookmarksViewUI: View {
 
     // MARK: Private
 
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            if shouldShowSyncBanner {
+                syncBanner
+                    .padding(.horizontal)
+                    .padding(.top, 12)
+            }
+
+            noData
+        }
+    }
+
     private var noData: some View {
         DataUnavailableView(
             title: l("bookmarks.no-data.title"),
             text: l("bookmarks.no-data.text"),
             image: .bookmark
+        )
+    }
+
+    private var syncBanner: some View {
+        BookmarksSyncBanner(
+            dismiss: dismissSyncBanner,
+            signInAction: signInAction
         )
     }
 
@@ -77,6 +107,63 @@ private struct BookmarksViewUI: View {
         ) {
             selectAction(bookmark)
         }
+    }
+}
+
+private struct BookmarksSyncBanner: View {
+    let dismiss: () -> Void
+    let signInAction: AsyncAction
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "link.icloud.fill")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(Color(uiColor: .systemTeal))
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Sync your bookmarks")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    Text("Sign in to Quran.com to keep your bookmarks available across devices.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 8)
+
+                Button(action: dismiss) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                }
+                .buttonStyle(.plain)
+            }
+
+            Button {
+                Task { await signInAction() }
+            } label: {
+                Text("Sign In")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color(uiColor: .systemTeal))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(16)
+        .background(Color(uiColor: .secondarySystemBackground))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color(uiColor: .systemTeal).opacity(0.18), lineWidth: 1)
+        )
+        .background(Color(uiColor: .systemTeal).opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
 
@@ -99,9 +186,12 @@ struct BookmarksView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     bookmarks: items,
+                    shouldShowSyncBanner: true,
                     start: {},
                     selectAction: { _ in },
-                    deleteAction: { item in items = items.filter { $0 != item } }
+                    deleteAction: { item in items = items.filter { $0 != item } },
+                    dismissSyncBanner: {},
+                    signInAction: {}
                 )
                 .navigationTitle("Bookmarks")
                 .toolbar {

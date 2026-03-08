@@ -53,15 +53,18 @@ class DatabaseConnectionTests: XCTestCase {
 
         var assertExpectation: XCTestExpectation?
         var expectedNames: [String]?
-        let cancellable = publisher.sink { names in
-            guard let expected = expectedNames else { return }
+        let cancellable = publisher.sink(
+            receiveCompletion: { _ in },
+            receiveValue: { names in
+                guard let expected = expectedNames else { return }
 
-            if Set(expected) == Set(names) {
-                assertExpectation?.fulfill()
-                assertExpectation = nil
-                expectedNames = nil
+                if Set(expected) == Set(names) {
+                    assertExpectation?.fulfill()
+                    assertExpectation = nil
+                    expectedNames = nil
+                }
             }
-        }
+        )
 
         expectedNames = ["Alice"]
         let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
@@ -123,14 +126,14 @@ class DatabaseConnectionTests: XCTestCase {
 private extension DatabaseConnection {
     func insertNames() async throws {
         try await write { db in
-            try createNamesTable(in: db)
+            try self.createNamesTable(in: db)
             try db.execute(sql: "INSERT INTO test (name) VALUES (?)", arguments: ["Alice"])
         }
     }
 
     func createNamesTable() async throws {
         try await write { db in
-            try createNamesTable(in: db)
+            try self.createNamesTable(in: db)
         }
     }
 

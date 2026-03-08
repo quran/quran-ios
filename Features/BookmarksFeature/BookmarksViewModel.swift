@@ -9,9 +9,9 @@ import Analytics
 import AnnotationsService
 import Combine
 import FeaturesSupport
-import QuranProfileService
 import QuranAnnotations
 import QuranKit
+import QuranProfileService
 import ReadingService
 import SwiftUI
 import UIKit

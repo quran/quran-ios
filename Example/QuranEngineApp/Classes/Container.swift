@@ -34,9 +34,8 @@ class Container: AppDependencies {
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
-        MobileSyncPageBookmarkPersistence(session: mobileSyncSession, legacyStack: coreDataStack)
-    }()
+    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = MobileSyncPageBookmarkPersistence(session: mobileSyncSession, legacyStack: coreDataStack)
+
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
         guard Constant.QuranOAuthAppConfigurations != nil else {

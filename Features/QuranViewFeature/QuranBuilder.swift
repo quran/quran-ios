@@ -12,9 +12,9 @@ import AudioBannerFeature
 import AyahMenuFeature
 import MoreMenuFeature
 import NoteEditorFeature
-import QuranProfileService
 import QuranContentFeature
 import QuranKit
+import QuranProfileService
 import ReadingService
 import TranslationsFeature
 import TranslationVerseFeature

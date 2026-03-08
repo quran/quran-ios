@@ -16,10 +16,10 @@ import FeaturesSupport
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
-import QuranProfileService
 import QuranAnnotations
 import QuranContentFeature
 import QuranKit
+import QuranProfileService
 import QuranText
 import QuranTextKit
 import ReadingService

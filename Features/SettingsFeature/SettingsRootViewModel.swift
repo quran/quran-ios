@@ -66,7 +66,6 @@ final class SettingsRootViewModel: ObservableObject {
     weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
-
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
 
@@ -74,10 +73,6 @@ final class SettingsRootViewModel: ObservableObject {
         didSet {
             themeService.appearanceMode = appearanceMode
         }
-    }
-
-    var isQuranComLoginAvailable: Bool {
-        quranProfileService.isAuthenticationAvailable
     }
 
     func navigateToAudioEndSelector() {
@@ -140,25 +135,7 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func refreshAuthenticationState() async {
-        guard quranProfileService.isAuthenticationAvailable else {
-            isAuthenticated = false
-            return
-        }
-
-        do {
-            isAuthenticated = try await quranProfileService.restoreState() == .authenticated
-        } catch {
-            logger.error("Failed to restore Quran.com auth state: \(error)")
-            isAuthenticated = await quranProfileService.authenticationState() == .authenticated
-        }
-    }
-
-    func authenticationAction() async {
-        if isAuthenticated {
-            await logoutFromQuranCom()
-        } else {
-            await loginToQuranCom()
-        }
+        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
     }
 
     func loginToQuranCom() async {

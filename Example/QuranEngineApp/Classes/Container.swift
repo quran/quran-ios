@@ -34,14 +34,28 @@ class Container: AppDependencies {
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = MobileSyncPageBookmarkPersistence(session: mobileSyncSession, legacyStack: coreDataStack)
+    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
+        #if QURAN_SYNC
+            if let mobileSyncSession {
+                return MobileSyncPageBookmarkPersistence(session: mobileSyncSession)
+            }
+        #endif
+        return CoreDataPageBookmarkPersistence(stack: coreDataStack)
+    }()
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
-        guard Constant.QuranOAuthAppConfigurations != nil else {
+        guard let configurations = Self.quranOAuthConfiguration() else {
             return nil
         }
-        return AuthenticationClientMobileSyncImpl(session: mobileSyncSession)
+
+        #if QURAN_SYNC
+            if let mobileSyncSession {
+                return AuthenticationClientMobileSyncImpl(session: mobileSyncSession)
+            }
+        #endif
+
+        return AuthenticationClientImpl(configurations: configurations)
     }()
 
     private(set) lazy var downloadManager: DownloadManager = {
@@ -65,7 +79,14 @@ class Container: AppDependencies {
 
     // MARK: Private
 
-    private lazy var mobileSyncSession = MobileSyncSession(configurations: Constant.QuranOAuthAppConfigurations)
+    #if QURAN_SYNC
+        private lazy var mobileSyncSession: MobileSyncSession? = {
+            guard let configurations = Self.quranOAuthConfiguration() else {
+                return nil
+            }
+            return MobileSyncSession(configurations: configurations)
+        }()
+    #endif
 
     private lazy var coreDataStack: CoreDataStack = {
         let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
@@ -76,11 +97,44 @@ class Container: AppDependencies {
         }
         return stack
     }()
+
+    private static func quranOAuthConfiguration() -> AuthenticationClientConfiguration? {
+        guard
+            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID"),
+            let issuerURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL") ?? ""),
+            let redirectURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_REDIRECT_URL") ?? ""),
+            let scopesValue = nonEmptyEnvironmentValue("QURAN_OAUTH_SCOPES")
+        else {
+            return nil
+        }
+
+        let scopes = scopesValue
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        guard !scopes.isEmpty else {
+            return nil
+        }
+
+        return AuthenticationClientConfiguration(
+            clientID: clientID,
+            clientSecret: "",
+            redirectURL: redirectURL,
+            scopes: scopes,
+            authorizationIssuerURL: issuerURL
+        )
+    }
+
+    private static func nonEmptyEnvironmentValue(_ key: String) -> String? {
+        guard let value = ProcessInfo.processInfo.environment[key]?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+            return nil
+        }
+        return value
+    }
 }
 
 private enum Constant {
-    private static let environment = ProcessInfo.processInfo.environment
-
     static let wordsDatabase = Bundle.main
         .url(forResource: "words", withExtension: "db")!
 
@@ -90,51 +144,4 @@ private enum Constant {
 
     static let databasesURL = FileManager.documentsURL
         .appendingPathComponent("databases", isDirectory: true)
-
-    /// Reads Quran.com OAuth configuration from environment variables.
-    static let QuranOAuthAppConfigurations: AuthenticationClientConfiguration? = {
-        guard
-            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID"),
-            let issuerURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL") ?? "")
-        else {
-            return nil
-        }
-        guard
-            let redirectURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_REDIRECT_URL") ?? "com.quran.oauth://callback")
-        else {
-            return nil
-        }
-
-        let clientSecret = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET") ?? ""
-        let scopes = nonEmptyEnvironmentValue("QURAN_OAUTH_SCOPES")?
-            .split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty } ?? [
-                "openid",
-                "offline_access",
-                "content",
-                "user",
-                "bookmark",
-                "sync",
-                "collection",
-                "reading_session",
-                "preference",
-                "note",
-            ]
-
-        return AuthenticationClientConfiguration(
-            clientID: clientID,
-            clientSecret: clientSecret,
-            redirectURL: redirectURL,
-            scopes: scopes,
-            authorizationIssuerURL: issuerURL
-        )
-    }()
-
-    private static func nonEmptyEnvironmentValue(_ key: String) -> String? {
-        guard let value = environment[key]?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
-            return nil
-        }
-        return value
-    }
 }

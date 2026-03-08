@@ -1,23 +1,28 @@
-import Foundation
 #if QURAN_SYNC
+    import Combine
+    import Foundation
     import MobileSync
-#endif
 
-public final class MobileSyncSession {
-    #if QURAN_SYNC
+    public final class MobileSyncSession {
+        private typealias NativeSuspendCancellation = () -> KotlinUnit
+        private typealias NativeSuspend<Result> = (
+            @escaping (Result, KotlinUnit) -> KotlinUnit,
+            @escaping (Error, KotlinUnit) -> KotlinUnit,
+            @escaping (Error, KotlinUnit) -> KotlinUnit
+        ) -> NativeSuspendCancellation
+        private typealias NativeFlow<Element> = (
+            @escaping (Element, @escaping () -> KotlinUnit, KotlinUnit) -> KotlinUnit,
+            @escaping (Error?, KotlinUnit) -> KotlinUnit,
+            @escaping (Error, KotlinUnit) -> KotlinUnit
+        ) -> NativeSuspendCancellation
 
-        public init(configurations: AuthenticationClientConfiguration?) {
+        // MARK: Lifecycle
+
+        public init(configurations: AuthenticationClientConfiguration) {
             let driverFactory = DriverFactory()
             let environment = Self.makeSynchronizationEnvironment(from: configurations)
             let graph = SharedDependencyGraph.shared.doInit(driverFactory: driverFactory, environment: environment)
             bookmarksRepository = graph.bookmarksRepository
-
-            guard let configurations else {
-                authService = nil
-                syncService = nil
-                oidcAuthRepository = nil
-                return
-            }
 
             AuthFlowFactoryProvider.shared.doInitialize()
 
@@ -29,17 +34,16 @@ public final class MobileSyncSession {
             let authStorage = AuthStorage(settings: authSettings, json: json)
             let authNetworkDataSource = AuthNetworkDataSource(authConfig: authConfig, httpClient: authHttpClient)
             let logger = KermitLogger.companion.withTag(tag: "quran-ios")
-            let oidcAuthRepository = OidcAuthRepository(
+            let authRepository = OidcAuthRepository(
                 authConfig: authConfig,
                 authStorage: authStorage,
                 oidcClient: oidcClient,
                 networkDataSource: authNetworkDataSource,
                 logger: logger
             )
-            let authService = AuthService(authRepository: oidcAuthRepository)
+            let authService = AuthService(authRepository: authRepository)
 
-            self.authService = authService
-            self.oidcAuthRepository = oidcAuthRepository
+            self.authRepository = authRepository
             syncService = SyncService(
                 authService: authService,
                 pipeline: graph.syncService.pipelineForIos,
@@ -51,16 +55,31 @@ public final class MobileSyncSession {
         // MARK: Public
 
         public let bookmarksRepository: any BookmarksRepository
-        public let authService: AuthService?
-        public let syncService: SyncService?
+        public let syncService: SyncService
 
-        public func continuePendingLoginIfNeeded() async throws -> Bool {
-            guard let oidcAuthRepository else {
-                return false
+        public var isLoggedIn: Bool {
+            authRepository.isLoggedIn()
+        }
+
+        public func login() async throws {
+            let _: Void = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                authRepository.login { error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume()
+                    }
+                }
+            }
+        }
+
+        public func restoreAuthenticationState() async throws -> AuthenticationState {
+            if try await continuePendingLoginIfNeeded() {
+                return .authenticated
             }
 
-            let canContinue: Bool = try await Self.await { continuation in
-                oidcAuthRepository.canContinueLogin { result, error in
+            let isAuthenticated: Bool = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+                authRepository.refreshTokensIfNeeded { result, error in
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
@@ -69,12 +88,12 @@ public final class MobileSyncSession {
                 }
             }
 
-            guard canContinue else {
-                return false
-            }
+            return isAuthenticated ? .authenticated : .notAuthenticated
+        }
 
-            try await Self.awaitVoid { continuation in
-                oidcAuthRepository.continueLogin { error in
+        public func logout() async throws {
+            let _: Void = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                authRepository.logout { error in
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
@@ -82,13 +101,93 @@ public final class MobileSyncSession {
                     }
                 }
             }
+        }
 
-            return true
+        public func getAuthenticationHeaders() async throws -> [String: String] {
+            try await withCheckedThrowingContinuation { continuation in
+                authRepository.getAuthHeaders { headers, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: headers ?? [:])
+                    }
+                }
+            }
+        }
+
+        public func bookmarksPublisher() -> AnyPublisher<[Bookmark], Never> {
+            Deferred {
+                let subject = CurrentValueSubject<[Bookmark], Never>([])
+                let cancel = self.observeBookmarks(
+                    onValue: { subject.send($0) },
+                    onCompletion: {
+                        if $0 != nil {
+                            subject.send([])
+                        }
+                        subject.send(completion: .finished)
+                    }
+                )
+                return subject
+                    .handleEvents(receiveCancel: { _ = cancel() })
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        }
+
+        public func addPageBookmark(_ page: Int) async throws {
+            _ = try await Self.await(syncService.addBookmark(page: Int32(page)))
+            syncService.triggerSync()
+        }
+
+        public func removePageBookmark(_ page: Int) async throws {
+            let bookmarks = try await allBookmarks()
+            guard let bookmark = Self.pageBookmark(in: bookmarks, page: page) else {
+                return
+            }
+
+            _ = try await Self.await(syncService.deleteBookmark(bookmark: bookmark))
+            syncService.triggerSync()
+        }
+
+        public func removeAllPageBookmarks() async throws {
+            let bookmarks = try await allBookmarks()
+            let pageBookmarks = bookmarks.compactMap { $0 as? Bookmark.PageBookmark }
+
+            for bookmark in pageBookmarks {
+                _ = try await Self.await(syncService.deleteBookmark(bookmark: bookmark))
+            }
+
+            syncService.triggerSync()
         }
 
         // MARK: Private
 
-        private let oidcAuthRepository: OidcAuthRepository?
+        private let authRepository: OidcAuthRepository
+
+        private static func pageBookmark(in bookmarks: [Bookmark], page: Int) -> Bookmark.PageBookmark? {
+            bookmarks
+                .compactMap { $0 as? Bookmark.PageBookmark }
+                .first { Int($0.page) == page }
+        }
+
+        private static func await<Result>(_ work: @escaping NativeSuspend<Result>) async throws -> Result {
+            try await withCheckedThrowingContinuation { continuation in
+                _ = work(
+                    { result, _ in
+                        continuation.resume(returning: result)
+                        return KotlinUnit.shared
+                    },
+                    { error, _ in
+                        continuation.resume(throwing: error)
+                        return KotlinUnit.shared
+                    },
+                    { error, _ in
+                        continuation.resume(throwing: error)
+                        return KotlinUnit.shared
+                    }
+                )
+            }
+        }
 
         private static func makeAuthConfig(from configurations: AuthenticationClientConfiguration) -> AuthConfig {
             AuthConfig(
@@ -106,28 +205,64 @@ public final class MobileSyncSession {
             return value.contains("staging") || value.contains("preprod") || value.contains("prelive") || value.contains("dev")
         }
 
-        private static func makeSynchronizationEnvironment(from configurations: AuthenticationClientConfiguration?) -> SynchronizationEnvironment {
-            let endpoint = configurations.map { isPreproductionIssuer($0.authorizationIssuerURL) } == true
+        private static func makeSynchronizationEnvironment(from configurations: AuthenticationClientConfiguration) -> SynchronizationEnvironment {
+            let endpoint = isPreproductionIssuer(configurations.authorizationIssuerURL)
                 ? "https://apis-prelive.quran.foundation/auth"
                 : "https://apis.quran.foundation/auth"
             return SynchronizationEnvironment(endPointURL: endpoint)
         }
 
-        private static func await<T>(_ work: @escaping (CheckedContinuation<T, Error>) -> Void) async throws -> T {
-            try await withCheckedThrowingContinuation(work)
+        private func continuePendingLoginIfNeeded() async throws -> Bool {
+            let canContinue: Bool = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+                authRepository.canContinueLogin { result, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: result?.boolValue ?? false)
+                    }
+                }
+            }
+
+            guard canContinue else {
+                return false
+            }
+
+            let _: Void = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                authRepository.continueLogin { error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume()
+                    }
+                }
+            }
+
+            return true
         }
 
-        private static func awaitVoid(_ work: @escaping (CheckedContinuation<Void, Error>) -> Void) async throws {
-            try await withCheckedThrowingContinuation(work)
+        private func allBookmarks() async throws -> [Bookmark] {
+            try await Self.await(bookmarksRepository.getAllBookmarks())
         }
 
-    #else
-
-        public init(configurations: AuthenticationClientConfiguration?) {
-            self.configurations = configurations
+        private func observeBookmarks(
+            onValue: @escaping ([Bookmark]) -> Void,
+            onCompletion: @escaping (Error?) -> Void
+        ) -> NativeSuspendCancellation {
+            let nativeFlow = syncService.bookmarks
+            return nativeFlow(
+                { bookmarks, next, _ in
+                    onValue(bookmarks)
+                    return next()
+                },
+                { error, _ in
+                    onCompletion(error)
+                    return KotlinUnit.shared
+                },
+                { error, _ in
+                    onCompletion(error)
+                    return KotlinUnit.shared
+                }
+            )
         }
-
-        public let configurations: AuthenticationClientConfiguration?
-
-    #endif
-}
+    }
+#endif

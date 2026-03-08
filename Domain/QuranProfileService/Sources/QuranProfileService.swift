@@ -8,29 +8,25 @@
 import AuthenticationClient
 import UIKit
 
-public class QuranProfileService {
-    private let authenticationClient: AuthenticationClient?
+public final class QuranProfileService {
+    // MARK: Lifecycle
 
     public init(authenticationClient: AuthenticationClient?) {
         self.authenticationClient = authenticationClient
     }
 
-    public var isAuthenticationAvailable: Bool {
-        authenticationClient != nil
-    }
+    // MARK: Public
 
-    public func authenticationState() async -> AuthenticationState {
+    public func refreshAuthenticationState() async -> AuthenticationState {
         guard let authenticationClient else {
             return .notAuthenticated
         }
-        return await authenticationClient.authenticationState
-    }
 
-    public func restoreState() async throws -> AuthenticationState {
-        guard let authenticationClient else {
-            return .notAuthenticated
+        do {
+            return try await authenticationClient.restoreState()
+        } catch {
+            return await authenticationClient.authenticationState
         }
-        return try await authenticationClient.restoreState()
     }
 
     /// Performs the login flow to Quran.com
@@ -44,4 +40,8 @@ public class QuranProfileService {
     public func logout() async throws {
         try await authenticationClient?.logout()
     }
+
+    // MARK: Private
+
+    private let authenticationClient: AuthenticationClient?
 }

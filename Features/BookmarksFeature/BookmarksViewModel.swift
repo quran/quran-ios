@@ -31,7 +31,7 @@ final class BookmarksViewModel: ObservableObject {
         self.service = service
         self.quranProfileService = quranProfileService
         self.navigateTo = navigateTo
-        isSyncBannerDismissed = UserDefaults.standard.bool(forKey: Self.bannerDismissedPreferenceKey)
+        isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
     // MARK: Internal
@@ -44,16 +44,12 @@ final class BookmarksViewModel: ObservableObject {
 
     weak var presenter: UIViewController?
 
-    var isAuthenticationAvailable: Bool {
-        quranProfileService.isAuthenticationAvailable
-    }
-
     var shouldShowSyncBanner: Bool {
-        isAuthenticationAvailable && !isAuthenticated && !isSyncBannerDismissed
+        !isAuthenticated && !isSyncBannerDismissed
     }
 
     func start() async {
-        await refreshAuthenticationState()
+        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
         let bookmarksSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .map { [service] reading in
@@ -95,7 +91,7 @@ final class BookmarksViewModel: ObservableObject {
 
     func dismissSyncBanner() {
         isSyncBannerDismissed = true
-        UserDefaults.standard.set(true, forKey: Self.bannerDismissedPreferenceKey)
+        preferences.isSyncBannerDismissed = true
     }
 
     func loginToQuranCom() async {
@@ -112,27 +108,12 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
-    func refreshAuthenticationState() async {
-        guard isAuthenticationAvailable else {
-            isAuthenticated = false
-            return
-        }
-
-        do {
-            isAuthenticated = try await quranProfileService.restoreState() == .authenticated
-        } catch {
-            logger.error("Failed to restore Quran.com auth state in bookmarks: \(error)")
-            isAuthenticated = await quranProfileService.authenticationState() == .authenticated
-        }
-    }
-
     // MARK: Private
-
-    private static let bannerDismissedPreferenceKey = "com.quran.sync.bookmarks.banner-dismissed"
 
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let quranProfileService: QuranProfileService
     private let readingPreferences = ReadingPreferences.shared
+    private let preferences = BookmarksPreferences.shared
 }

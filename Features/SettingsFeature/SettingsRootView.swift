@@ -19,7 +19,6 @@ struct SettingsRootView: View {
             appearanceMode: $viewModel.appearanceMode,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
-            isQuranComLoginAvailable: viewModel.isQuranComLoginAvailable,
             isAuthenticated: viewModel.isAuthenticated,
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
@@ -30,7 +29,8 @@ struct SettingsRootView: View {
             contactUs: { viewModel.contactUs() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
             refreshAuthenticationState: { await viewModel.refreshAuthenticationState() },
-            authenticationAction: { await viewModel.authenticationAction() }
+            loginAction: { await viewModel.loginToQuranCom() },
+            logoutAction: { await viewModel.logoutFromQuranCom() }
         )
     }
 }
@@ -40,7 +40,6 @@ private struct SettingsRootViewUI: View {
     @Binding var error: Error?
 
     let audioEnd: String
-    let isQuranComLoginAvailable: Bool
     let isAuthenticated: Bool
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
@@ -51,7 +50,8 @@ private struct SettingsRootViewUI: View {
     let contactUs: AsyncAction
     let navigateToDiagnotics: AsyncAction
     let refreshAuthenticationState: AsyncAction
-    let authenticationAction: AsyncAction
+    let loginAction: AsyncAction
+    let logoutAction: AsyncAction
 
     var body: some View {
         NoorList {
@@ -119,22 +119,22 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
-            if isQuranComLoginAvailable {
+            #if QURAN_SYNC
+                // TODO: Pending translations, and hiding if OAuth is not configured.
                 NoorBasicSection {
-                    NoorListItem(
-                        image: .init(.share),
-                        title: .text("Quran.com Sync"),
-                        subtitle: .init(
-                            text: isAuthenticated
-                                ? "Signed in. Your bookmarks can sync across devices."
-                                : "Sign in to sync your bookmarks across devices.",
-                            location: .bottom
-                        ),
-                        accessory: .text(isAuthenticated ? "Sign Out" : "Sign In"),
-                        action: authenticationAction
-                    )
+                    if isAuthenticated {
+                        NoorListItem(
+                            title: .text("Logout from Quran.com"),
+                            action: logoutAction
+                        )
+                    } else {
+                        NoorListItem(
+                            title: .text("Login with Quran.com"),
+                            action: loginAction
+                        )
+                    }
                 }
-            }
+            #endif
 
             NoorBasicSection {
                 NoorListItem(
@@ -159,7 +159,6 @@ struct SettingsRootView_Previews: PreviewProvider {
                 appearanceMode: $appearanceMode,
                 error: .constant(nil),
                 audioEnd: "Surah",
-                isQuranComLoginAvailable: true,
                 isAuthenticated: false,
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
@@ -170,7 +169,8 @@ struct SettingsRootView_Previews: PreviewProvider {
                 contactUs: {},
                 navigateToDiagnotics: {},
                 refreshAuthenticationState: {},
-                authenticationAction: {}
+                loginAction: {},
+                logoutAction: {}
             )
         }
     }

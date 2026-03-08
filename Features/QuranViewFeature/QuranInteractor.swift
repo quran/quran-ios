@@ -19,7 +19,6 @@ import NoteEditorFeature
 import QuranAnnotations
 import QuranContentFeature
 import QuranKit
-import QuranProfileService
 import QuranText
 import QuranTextKit
 import ReadingService
@@ -63,7 +62,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let quran: Quran
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
-        let quranProfileService: QuranProfileService
         let noteService: NoteService
         let ayahMenuBuilder: AyahMenuBuilder
         let moreMenuBuilder: MoreMenuBuilder
@@ -304,10 +302,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                     try await group.waitForAll()
                 }
             }
-            if !wasBookmarked {
-                await promptForBookmarkSyncIfNeeded()
-            }
-
         } catch {
             crasher.recordError(error, reason: "Failed to toggle page bookmark")
         }
@@ -329,7 +323,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var wordPointer: WordPointerViewController?
 
     private var visiblePageCancellable: AnyCancellable?
-    private var syncPromptPreferences = SyncPromptPreferences()
 
     private var contentViewController: ContentViewController?
 
@@ -436,52 +429,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func showPageBookmarkIfNeeded(for pages: [Page]) {
         presenter?.updateBookmark(bookmarked(pages))
     }
-
-    private func promptForBookmarkSyncIfNeeded() async {
-        guard deps.quranProfileService.isAuthenticationAvailable else {
-            return
-        }
-        guard !syncPromptPreferences.didShowBookmarkPrompt else {
-            return
-        }
-        guard await deps.quranProfileService.authenticationState() != .authenticated else {
-            return
-        }
-        guard let presenter else {
-            return
-        }
-
-        syncPromptPreferences.didShowBookmarkPrompt = true
-
-        let alert = UIAlertController(
-            title: "Sync your bookmarks",
-            message: "Sign in to Quran.com to keep your bookmarks available across devices.",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Not Now", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Sign In", style: .default) { [weak self, weak presenter] _ in
-            guard let self, let presenter else {
-                return
-            }
-            Task {
-                do {
-                    try await self.deps.quranProfileService.login(on: presenter)
-                } catch {
-                    presenter.showErrorAlert(error: error)
-                }
-            }
-        })
-        presenter.present(alert, animated: true)
-    }
-}
-
-private struct SyncPromptPreferences {
-    var didShowBookmarkPrompt: Bool {
-        get { UserDefaults.standard.bool(forKey: Self.bookmarkPromptShownKey) }
-        set { UserDefaults.standard.set(newValue, forKey: Self.bookmarkPromptShownKey) }
-    }
-
-    private static let bookmarkPromptShownKey = "com.quran.sync.bookmarks.prompt-shown"
 }
 
 private extension Reading {

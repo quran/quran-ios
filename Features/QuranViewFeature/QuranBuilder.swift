@@ -14,7 +14,6 @@ import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature
 import QuranKit
-import QuranProfileService
 import ReadingService
 import TranslationsFeature
 import TranslationVerseFeature
@@ -40,7 +39,6 @@ public struct QuranBuilder {
             quran: quran,
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
-            quranProfileService: QuranProfileService(authenticationClient: container.authenticationClient),
             noteService: container.noteService(),
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),

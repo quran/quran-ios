@@ -12,9 +12,9 @@ let swiftConcurrencySettings: [SwiftSetting] = [
     ]),
 ]
 
-let quranSyncCompilationConditions = ProcessInfo.processInfo.environment["QURAN_SYNC_SWIFT_ACTIVE_COMPILATION_CONDITIONS"] ?? ""
-let quranSyncEnabled = ProcessInfo.processInfo.environment["QURAN_SYNC"] == "1"
-    || quranSyncCompilationConditions.split(separator: " ").contains("QURAN_SYNC")
+let quranSyncValue = ProcessInfo.processInfo.environment["QURAN_SYNC"]?
+    .trimmingCharacters(in: .whitespacesAndNewlines)
+let quranSyncEnabled = quranSyncValue != nil && quranSyncValue != "0" && quranSyncValue != ""
 let quranSyncSettings: [SwiftSetting] = quranSyncEnabled ? [
     .define("QURAN_SYNC"),
 ] : []
@@ -69,7 +69,6 @@ let package = Package(
 
         // Sync
         .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.3"),
-        .package(url: "https://github.com/rickclephas/KMP-NativeCoroutines.git", exact: "1.0.0-ALPHA-48"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -218,7 +217,6 @@ private func dataTargets() -> [[Target]] {
             "QuranKit",
             "AuthenticationClient",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
-            .product(name: "KMPNativeCoroutinesAsync", package: "KMP-NativeCoroutines"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -350,7 +348,6 @@ private func dataTargets() -> [[Target]] {
             "OAuthServiceAppAuthImpl",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
             .product(name: "MobileSync", package: "mobile-sync-spm"),
-            .product(name: "KMPNativeCoroutinesAsync", package: "KMP-NativeCoroutines"),
         ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
     ]
 }
@@ -517,7 +514,7 @@ private func domainTargets() -> [[Target]] {
 
         ]),
 
-        target(type, name: "QuranProfileService", hasTests: false, dependencies: [
+        target(type, name: "QuranProfileService", dependencies: [
             "AuthenticationClient",
         ]),
     ]
@@ -618,6 +615,7 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
             "AnnotationsService",
             "NoorUI",
+            "Preferences",
             "ReadingService",
             "QuranProfileService",
         ]),
@@ -708,7 +706,6 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",
-            "QuranProfileService",
         ]),
 
         target(type, name: "SettingsFeature", hasTests: false, dependencies: [

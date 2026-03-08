@@ -12,6 +12,7 @@ import QuranKit
 import SwiftUI
 import UIx
 
+@MainActor
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
 
@@ -30,6 +31,7 @@ struct BookmarksView: View {
     }
 }
 
+@MainActor
 private struct BookmarksViewUI: View {
     // MARK: Internal
 
@@ -43,7 +45,7 @@ private struct BookmarksViewUI: View {
     let selectAction: ItemAction<PageBookmark>
     let deleteAction: AsyncItemAction<PageBookmark>
     let dismissSyncBanner: () -> Void
-    let signInAction: AsyncAction
+    let signInAction: @MainActor () async -> Void
 
     var body: some View {
         Group {
@@ -51,11 +53,13 @@ private struct BookmarksViewUI: View {
                 emptyState
             } else {
                 NoorList {
-                    if shouldShowSyncBanner {
-                        NoorBasicSection {
-                            syncBanner
+                    #if QURAN_SYNC
+                        if shouldShowSyncBanner {
+                            NoorBasicSection {
+                                syncBanner
+                            }
                         }
-                    }
+                    #endif
                     NoorSection(bookmarks) { bookmark in
                         listItem(bookmark)
                     }
@@ -72,11 +76,13 @@ private struct BookmarksViewUI: View {
 
     private var emptyState: some View {
         VStack(spacing: 16) {
-            if shouldShowSyncBanner {
-                syncBanner
-                    .padding(.horizontal)
-                    .padding(.top, 12)
-            }
+            #if QURAN_SYNC
+                if shouldShowSyncBanner {
+                    syncBanner
+                        .padding(.horizontal)
+                        .padding(.top, 12)
+                }
+            #endif
 
             noData
         }
@@ -110,21 +116,24 @@ private struct BookmarksViewUI: View {
     }
 }
 
+@MainActor
 private struct BookmarksSyncBanner: View {
+    @ScaledMetric private var buttonCornerRadius = Dimensions.cornerRadius
+    @ScaledMetric private var containerCornerRadius = Dimensions.cornerRadius
+
     let dismiss: () -> Void
-    let signInAction: AsyncAction
+    let signInAction: @MainActor () async -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "link.icloud.fill")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(Color(uiColor: .systemTeal))
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Color.accentColor)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Sync your bookmarks")
                         .font(.headline)
-                        .foregroundStyle(.primary)
 
                     Text("Sign in to Quran.com to keep your bookmarks available across devices.")
                         .font(.subheadline)
@@ -136,34 +145,32 @@ private struct BookmarksSyncBanner: View {
 
                 Button(action: dismiss) {
                     Image(systemName: "xmark")
-                        .font(.system(size: 12, weight: .bold))
+                        .font(.footnote.weight(.bold))
                         .foregroundStyle(.secondary)
                         .padding(8)
                 }
                 .buttonStyle(.plain)
             }
 
-            Button {
-                Task { await signInAction() }
-            } label: {
+            AsyncButton(action: { await signInAction() }) {
                 Text("Sign In")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color(uiColor: .systemTeal))
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .background(Color.accentColor)
+                    .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius, style: .continuous))
             }
             .buttonStyle(.plain)
         }
         .padding(16)
-        .background(Color(uiColor: .secondarySystemBackground))
+        .background(Color.secondarySystemBackground)
         .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color(uiColor: .systemTeal).opacity(0.18), lineWidth: 1)
+            RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous)
+                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
         )
-        .background(Color(uiColor: .systemTeal).opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Color.accentColor.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
     }
 }
 

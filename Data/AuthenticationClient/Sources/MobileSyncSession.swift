@@ -43,6 +43,7 @@ public final class MobileSyncSession {
         let authService = AuthService(authRepository: authRepository)
 
         self.authRepository = authRepository
+        self.authService = authService
         syncService = SyncService(
             authService: authService,
             pipeline: graph.syncService.pipelineForIos,
@@ -61,15 +62,7 @@ public final class MobileSyncSession {
     }
 
     public func login() async throws {
-        let _: Void = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            authRepository.login { error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume()
-                }
-            }
-        }
+        try await Self.awaitIgnoringResult(authService.login())
     }
 
     public func restoreAuthenticationState() async throws -> AuthenticationState {
@@ -77,29 +70,13 @@ public final class MobileSyncSession {
             return .authenticated
         }
 
-        let isAuthenticated: Bool = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
-            authRepository.refreshTokensIfNeeded { result, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: result?.boolValue ?? false)
-                }
-            }
-        }
+        try await Self.awaitIgnoringResult(authService.refreshAccessTokenIfNeeded())
 
-        return isAuthenticated ? .authenticated : .notAuthenticated
+        return isLoggedIn ? .authenticated : .notAuthenticated
     }
 
     public func logout() async throws {
-        let _: Void = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            authRepository.logout { error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume()
-                }
-            }
-        }
+        try await Self.awaitIgnoringResult(authService.logout())
     }
 
     public func getAuthenticationHeaders() async throws -> [String: String] {
@@ -162,6 +139,7 @@ public final class MobileSyncSession {
     // MARK: Private
 
     private let authRepository: OidcAuthRepository
+    private let authService: AuthService
 
     private static func pageBookmark(in bookmarks: [Bookmark], page: Int) -> Bookmark.PageBookmark? {
         bookmarks
@@ -186,6 +164,10 @@ public final class MobileSyncSession {
                 }
             )
         }
+    }
+
+    private static func awaitIgnoringResult<Result>(_ work: @escaping NativeSuspend<Result>) async throws {
+        _ = try await Self.await(work)
     }
 
     private static func makeAuthConfig(from configurations: AuthenticationClientConfiguration) -> AuthConfig {

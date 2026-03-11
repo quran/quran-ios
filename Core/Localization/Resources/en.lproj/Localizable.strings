@@ -49,6 +49,7 @@
 
 "setting.write_review" = "Write an app store review...";
 "setting.contact_us" = "Contact Us";
+"setting.donate" = "Donate";
 "setting.share_app" = "Share the app...";
 "setting.app_version" = "App Version";
 

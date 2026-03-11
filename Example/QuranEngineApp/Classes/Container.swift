@@ -124,7 +124,7 @@ class Container: AppDependencies {
 
         return AuthenticationClientConfiguration(
             clientID: clientID,
-            clientSecret: "",
+            clientSecret: nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET") ?? "",
             redirectURL: redirectURL,
             scopes: scopes,
             authorizationIssuerURL: issuerURL

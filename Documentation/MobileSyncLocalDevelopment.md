@@ -6,11 +6,18 @@ This project keeps the mobile sync integration behind the `QURAN_SYNC` compilati
 
 ### From Xcode
 
-1. Open `Example/QuranEngineApp.xcodeproj` or `Example/QuranEngineApp.xcworkspace`.
-2. Select the `QuranEngineApp` target.
-3. Open `Build Settings`.
-4. Add a user-defined build setting named `QURAN_SYNC` with the value `QURAN_SYNC` for the configuration you want to run.
-5. Clean the build folder before the first run after toggling the flag.
+The example app target is already wired to pass `QURAN_SYNC` into `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.
+
+Swift package targets still read `QURAN_SYNC` from the build process environment via `Package.swift`, so for a clean local Xcode run:
+
+1. Quit Xcode.
+2. Launch Xcode from Terminal with `QURAN_SYNC` in the environment:
+
+```bash
+QURAN_SYNC=1 open Example/QuranEngineApp.xcodeproj
+```
+
+3. Clean the build folder before the first run after toggling the flag.
 
 ### From the command line
 
@@ -43,7 +50,13 @@ The package defaults currently used by the sync path are:
 - post logout redirect URI: `com.quran.oauth://callback`
 - scopes: `openid,offline_access,content,user,bookmark,sync,collection,reading_session,preference,note`
 
-The existing native fallback auth client still reads the full app-level OAuth configuration when sync is not compiled in.
+The existing native fallback auth client still reads the app-level OAuth configuration when sync is not compiled in:
+
+- `QURAN_OAUTH_CLIENT_ID`
+- `QURAN_OAUTH_ISSUER_URL`
+- `QURAN_OAUTH_REDIRECT_URL`
+- `QURAN_OAUTH_SCOPES`
+- optional `QURAN_OAUTH_CLIENT_SECRET`
 
 ## Expected behavior
 
@@ -56,7 +69,7 @@ When `QURAN_SYNC` is enabled and the sync OAuth environment is configured:
 When the flag is disabled, or the sync client id is missing:
 
 - the app falls back to the existing Core Data page bookmarks
-- the app falls back to the existing native auth client when sync is not compiled in
+- the app falls back to the existing native auth client when its app-level OAuth configuration is present
 
 ## Manual verification
 

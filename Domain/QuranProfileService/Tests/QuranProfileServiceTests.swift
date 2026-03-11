@@ -49,6 +49,40 @@ final class QuranProfileServiceTests: XCTestCase {
         XCTAssertTrue(client.lastLoginViewController === viewController)
         XCTAssertEqual(client.logoutCallCount, 1)
     }
+
+    func test_login_throwsWhenClientIsMissing() async {
+        let service = QuranProfileService(authenticationClient: nil)
+
+        await XCTAssertThrowsErrorAsync(try await service.login(on: UIViewController())) { error in
+            guard case .clientIsNotAuthenticated = error as? AuthenticationClientError else {
+                return XCTFail("Expected clientIsNotAuthenticated, got \(error)")
+            }
+        }
+    }
+
+    func test_logout_throwsWhenClientIsMissing() async {
+        let service = QuranProfileService(authenticationClient: nil)
+
+        await XCTAssertThrowsErrorAsync(try await service.logout()) { error in
+            guard case .clientIsNotAuthenticated = error as? AuthenticationClientError else {
+                return XCTFail("Expected clientIsNotAuthenticated, got \(error)")
+            }
+        }
+    }
+}
+
+private func XCTAssertThrowsErrorAsync(
+    _ expression: @autoclosure () async throws -> Void,
+    _ errorHandler: (Error) -> Void,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async {
+    do {
+        try await expression()
+        XCTFail("Expected error to be thrown", file: file, line: line)
+    } catch {
+        errorHandler(error)
+    }
 }
 
 private final class AuthenticationClientSpy: AuthenticationClient {

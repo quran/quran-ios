@@ -24,30 +24,36 @@ QURAN_SYNC=QURAN_SYNC xcrun xcodebuild build \
 
 ## Required runtime environment variables
 
-The example app reads the OAuth configuration from environment variables. All of the following values are required:
+The sync-enabled example app uses `mobile-sync-spm` for the OAuth redirect URI and scope defaults.
+
+For the sync path, provide:
 
 - `QURAN_OAUTH_CLIENT_ID`
 - `QURAN_OAUTH_ISSUER_URL`
-- `QURAN_OAUTH_REDIRECT_URL`
-- `QURAN_OAUTH_SCOPES`
 
-`QURAN_OAUTH_CLIENT_SECRET` is intentionally not used in the example app.
+Optional:
 
-`QURAN_OAUTH_SCOPES` should be provided as a comma-separated list, for example:
+- `QURAN_OAUTH_CLIENT_SECRET`
 
-```text
-openid,offline_access,content,user,bookmark,sync,collection,reading_session,preference,note
-```
+`QURAN_OAUTH_CLIENT_SECRET` is only needed when the configured OAuth client is registered as a confidential client. If the environment supports a public PKCE client, leave the secret unset.
+
+The package defaults currently used by the sync path are:
+
+- redirect URI: `com.quran.oauth://callback`
+- post logout redirect URI: `com.quran.oauth://callback`
+- scopes: `openid,offline_access,content,user,bookmark,sync,collection,reading_session,preference,note`
+
+The existing native fallback auth client still reads the full app-level OAuth configuration when sync is not compiled in.
 
 ## Expected behavior
 
-When `QURAN_SYNC` is enabled and the OAuth environment is configured:
+When `QURAN_SYNC` is enabled and the sync OAuth environment is configured:
 
 - Settings shows the Quran.com login/logout action.
 - Bookmarks shows the sync sign-in banner while the user is signed out.
 - Page bookmarks are stored through `mobile-sync-spm` instead of Core Data.
 
-When the flag is disabled, or the OAuth environment is missing:
+When the flag is disabled, or the sync client id is missing:
 
 - the app falls back to the existing Core Data page bookmarks
 - the app falls back to the existing native auth client when sync is not compiled in

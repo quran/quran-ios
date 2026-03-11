@@ -45,15 +45,15 @@ class Container: AppDependencies {
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
-        guard let configurations = Self.quranOAuthConfiguration() else {
-            return nil
-        }
-
         #if QURAN_SYNC
             if let mobileSyncSession {
                 return AuthenticationClientMobileSyncImpl(session: mobileSyncSession)
             }
         #endif
+
+        guard let configurations = Self.quranOAuthConfiguration() else {
+            return nil
+        }
 
         return AuthenticationClientImpl(configurations: configurations)
     }()
@@ -81,10 +81,15 @@ class Container: AppDependencies {
 
     #if QURAN_SYNC
         private lazy var mobileSyncSession: MobileSyncSession? = {
-            guard let configurations = Self.quranOAuthConfiguration() else {
+            guard let clientID = Container.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") else {
                 return nil
             }
-            return MobileSyncSession(configurations: configurations)
+            let clientSecret = Container.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET")
+            return MobileSyncSession(
+                clientID: clientID,
+                clientSecret: clientSecret,
+                usePreProduction: Self.usePreProductionSyncEnvironment()
+            )
         }()
     #endif
 
@@ -131,6 +136,13 @@ class Container: AppDependencies {
             return nil
         }
         return value
+    }
+
+    private static func usePreProductionSyncEnvironment() -> Bool {
+        guard let issuer = nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL")?.lowercased() else {
+            return false
+        }
+        return issuer.contains("staging") || issuer.contains("preprod") || issuer.contains("prelive") || issuer.contains("dev")
     }
 }
 

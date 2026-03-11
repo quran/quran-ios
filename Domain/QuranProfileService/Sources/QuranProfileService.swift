@@ -34,14 +34,23 @@ public final class QuranProfileService {
     /// - Parameter viewController: The view controller to be used as base for presenting the login flow.
     /// - Returns: Nothing is returned for now. The client may return the profile infromation in the future.
     public func login(on viewController: UIViewController) async throws {
-        try await authenticationClient?.login(on: viewController)
+        let authenticationClient = try requireAuthenticationClient()
+        try await authenticationClient.login(on: viewController)
     }
 
     public func logout() async throws {
-        try await authenticationClient?.logout()
+        let authenticationClient = try requireAuthenticationClient()
+        try await authenticationClient.logout()
     }
 
     // MARK: Private
 
     private let authenticationClient: AuthenticationClient?
+
+    private func requireAuthenticationClient() throws -> AuthenticationClient {
+        guard let authenticationClient else {
+            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
+        }
+        return authenticationClient
+    }
 }

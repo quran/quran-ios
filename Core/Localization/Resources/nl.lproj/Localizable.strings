@@ -48,6 +48,8 @@
 
 "setting.write_review" = "Schrijf een app store-recensie...";
 "setting.contact_us" = "Contacteer ons";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.donate" = "Doneren";
 "setting.share_app" = "Deel de app...";
 "setting.app_version" = "App Versie";
 

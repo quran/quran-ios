@@ -14,6 +14,7 @@ import QuranAudio
 import QuranAudioKit
 import QuranProfileService
 import ReadingSelectorFeature
+import SafariServices
 import SettingsService
 import TranslationsFeature
 import UIKit
@@ -113,6 +114,13 @@ final class SettingsRootViewModel: ObservableObject {
         let appName = "Quran - by Quran.com - قرآن"
 
         navigationController?.share([appName, url])
+    }
+
+    func donate() {
+        logger.info("Settings: Open donation page.")
+        let url = URL(validURL: "https://donate.quran.foundation/")
+        let viewController = SFSafariViewController(url: url)
+        navigationController?.present(viewController, animated: true)
     }
 
     func writeReview() {

@@ -11,18 +11,27 @@ import Combine
 import FeaturesSupport
 import QuranAnnotations
 import QuranKit
+import QuranProfileService
 import ReadingService
 import SwiftUI
+import UIKit
 import VLogging
 
 @MainActor
 final class BookmarksViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, service: PageBookmarkService, navigateTo: @escaping (Page) -> Void) {
+    init(
+        analytics: AnalyticsLibrary,
+        service: PageBookmarkService,
+        quranProfileService: QuranProfileService,
+        navigateTo: @escaping (Page) -> Void
+    ) {
         self.analytics = analytics
         self.service = service
+        self.quranProfileService = quranProfileService
         self.navigateTo = navigateTo
+        isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
     // MARK: Internal
@@ -30,8 +39,17 @@ final class BookmarksViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
     @Published var bookmarks: [PageBookmark] = []
+    @Published var isAuthenticated: Bool = false
+    @Published var isSyncBannerDismissed: Bool
+
+    weak var presenter: UIViewController?
+
+    var shouldShowSyncBanner: Bool {
+        !isAuthenticated && !isSyncBannerDismissed
+    }
 
     func start() async {
+        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
         let bookmarksSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .map { [service] reading in
@@ -71,10 +89,31 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func dismissSyncBanner() {
+        isSyncBannerDismissed = true
+        preferences.isSyncBannerDismissed = true
+    }
+
+    func loginToQuranCom() async {
+        guard let presenter else {
+            return
+        }
+
+        do {
+            try await quranProfileService.login(on: presenter)
+            isAuthenticated = true
+        } catch {
+            logger.error("Failed to login to Quran.com from bookmarks: \(error)")
+            self.error = error
+        }
+    }
+
     // MARK: Private
 
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
+    private let quranProfileService: QuranProfileService
     private let readingPreferences = ReadingPreferences.shared
+    private let preferences = BookmarksPreferences.shared
 }

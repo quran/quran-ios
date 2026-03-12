@@ -53,7 +53,6 @@
 				D975EDDC2A479335009DE942 /* Packages */,
 				D975EDC42A4791D6009DE942 /* QuranEngineApp */,
 				D975EDC32A4791D6009DE942 /* Products */,
-				F21FCED1DC6D36311F7D44C0 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,13 +106,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		F21FCED1DC6D36311F7D44C0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -162,6 +154,9 @@
 				Base,
 			);
 			mainGroup = D975EDB92A4791D6009DE942;
+			packageReferences = (
+				F0A9C0013B1A000100000001 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = D975EDC32A4791D6009DE942 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -186,7 +181,7 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXSourcesBuildPhase section */
+		/* Begin PBXSourcesBuildPhase section */
 		D975EDBE2A4791D6009DE942 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,6 +347,8 @@
 				MARKETING_VERSION = 1.20.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QuranEngineApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				QURAN_SYNC = QURAN_SYNC;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) $(QURAN_SYNC)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "QuranEngineApp/Classes/QuranEngineApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -384,6 +381,8 @@
 				MARKETING_VERSION = 1.20.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.quran.QuranEngineApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				QURAN_SYNC = QURAN_SYNC;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) $(QURAN_SYNC)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "QuranEngineApp/Classes/QuranEngineApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -414,9 +413,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		F0A9C0013B1A000100000001 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		D975EDE12A4795BD009DE942 /* AppStructureFeature */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = F0A9C0013B1A000100000001 /* XCLocalSwiftPackageReference ".." */;
 			productName = AppStructureFeature;
 		};
 /* End XCSwiftPackageProductDependency section */

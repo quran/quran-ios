@@ -17,7 +17,9 @@ struct SettingsRootView: View {
     var body: some View {
         SettingsRootViewUI(
             appearanceMode: $viewModel.appearanceMode,
+            error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
+            isAuthenticated: viewModel.isAuthenticated,
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
@@ -27,15 +29,19 @@ struct SettingsRootView: View {
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
-            loginAction: { await viewModel.loginToQuranCom() }
+            refreshAuthenticationState: { await viewModel.refreshAuthenticationState() },
+            loginAction: { await viewModel.loginToQuranCom() },
+            logoutAction: { await viewModel.logoutFromQuranCom() }
         )
     }
 }
 
 private struct SettingsRootViewUI: View {
     @Binding var appearanceMode: AppearanceMode
+    @Binding var error: Error?
 
     let audioEnd: String
+    let isAuthenticated: Bool
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
     let navigateToTranslationsList: AsyncAction
@@ -45,7 +51,9 @@ private struct SettingsRootViewUI: View {
     let writeReview: AsyncAction
     let contactUs: AsyncAction
     let navigateToDiagnotics: AsyncAction
+    let refreshAuthenticationState: AsyncAction
     let loginAction: AsyncAction
+    let logoutAction: AsyncAction
 
     var body: some View {
         NoorList {
@@ -123,10 +131,17 @@ private struct SettingsRootViewUI: View {
             #if QURAN_SYNC
                 // TODO: Pending translations, and hiding if OAuth is not configured.
                 NoorBasicSection {
-                    NoorListItem(
-                        title: .text(l("Login with Quran.com")),
-                        action: loginAction
-                    )
+                    if isAuthenticated {
+                        NoorListItem(
+                            title: .text("Logout from Quran.com"),
+                            action: logoutAction
+                        )
+                    } else {
+                        NoorListItem(
+                            title: .text("Login with Quran.com"),
+                            action: loginAction
+                        )
+                    }
                 }
             #endif
 
@@ -139,6 +154,8 @@ private struct SettingsRootViewUI: View {
                 )
             }
         }
+        .task { await refreshAuthenticationState() }
+        .errorAlert(error: $error)
     }
 }
 
@@ -149,7 +166,9 @@ struct SettingsRootView_Previews: PreviewProvider {
         var body: some View {
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
+                error: .constant(nil),
                 audioEnd: "Surah",
+                isAuthenticated: false,
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
@@ -159,7 +178,9 @@ struct SettingsRootView_Previews: PreviewProvider {
                 writeReview: {},
                 contactUs: {},
                 navigateToDiagnotics: {},
-                loginAction: {}
+                refreshAuthenticationState: {},
+                loginAction: {},
+                logoutAction: {}
             )
         }
     }

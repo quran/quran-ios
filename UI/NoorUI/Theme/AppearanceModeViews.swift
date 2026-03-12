@@ -12,6 +12,10 @@ extension View {
     public func appearanceModeColorSchema() -> some View {
         modifier(AppearanceModeColorSchema())
     }
+
+    public func themedColorScheme() -> some View {
+        modifier(ThemedColorScheme())
+    }
 }
 
 @MainActor
@@ -51,6 +55,18 @@ private struct AppearanceModeColorSchema: ViewModifier {
         if let colorSchema = viewModel.colorSchema {
             content
                 .environment(\.colorScheme, colorSchema)
+        } else {
+            content
+        }
+    }
+}
+
+private struct ThemedColorScheme: ViewModifier {
+    @Environment(\.themeStyle) private var themeStyle
+
+    func body(content: Content) -> some View {
+        if themeStyle == .quiet {
+            content.environment(\.colorScheme, .dark)
         } else {
             content
         }

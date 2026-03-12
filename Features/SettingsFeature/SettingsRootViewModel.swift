@@ -118,7 +118,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     func donate() {
         logger.info("Settings: Open donation page.")
-        let url = URL(validURL: "https://donate.quran.foundation/")
+        let url = URL(validURL: "https://give.quran.foundation/ios")
         let viewController = SFSafariViewController(url: url)
         navigationController?.present(viewController, animated: true)
     }

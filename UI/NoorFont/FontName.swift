@@ -15,6 +15,9 @@ public enum FontName: CaseIterable {
     /// Used in quran text in translation view
     case quran
 
+    /// Used in quran text in naskh mushaf
+    case naskh
+
     /// Used in arabic suras in Uthmanic font
     case suraNames
 
@@ -39,6 +42,12 @@ public enum FontName: CaseIterable {
                 name: "KFGQPCHAFSUthmanicScript-Bold",
                 family: "KFGQPC HAFS Uthmanic Script",
                 fileName: "UthmanicHafs1B Ver13.ttf"
+            )
+        case .naskh:
+            return FontDetails(
+                name: "noorehira",
+                family: "noorehira",
+                fileName: "noorehira.ttf"
             )
         case .suraNames:
             return FontDetails(

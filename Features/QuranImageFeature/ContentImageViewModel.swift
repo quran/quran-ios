@@ -15,16 +15,24 @@ import QuranGeometry
 import QuranKit
 import SwiftUI
 import VLogging
+import WordAnnotationService
 
 @MainActor
 class ContentImageViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(reading: Reading, page: Page, imageDataService: ImageDataService, highlightsService: QuranHighlightsService) {
+    init(
+        reading: Reading,
+        page: Page,
+        imageDataService: ImageDataService,
+        highlightsService: QuranHighlightsService,
+        wordAnnotationService: WordAnnotationService? = nil
+    ) {
         self.page = page
         self.reading = reading
         self.imageDataService = imageDataService
         self.highlightsService = highlightsService
+        self.wordAnnotationService = wordAnnotationService
         highlights = highlightsService.highlights
 
         highlightsService.$highlights
@@ -69,11 +77,29 @@ class ContentImageViewModel: ObservableObject {
             frameHighlights[frame] = QuranHighlights.wordHighlightColor
         }
 
+        // Build tajweed colour + transliteration maps from word annotations
+        var tajweedColors: [WordFrame: Color] = [:]
+        var transliterations: [WordFrame: String] = [:]
+        for (ayah, annotations) in highlights.wordAnnotations {
+            for annotation in annotations {
+                let word = Word(verse: ayah, wordNumber: annotation.wordIndex)
+                guard let frame = imagePage?.wordFrames.wordFrameForWord(word) else { continue }
+                if let tajweedColor = annotation.tajweedColor {
+                    tajweedColors[frame] = tajweedColor.swiftUIColor
+                }
+                if let transliteration = annotation.transliteration, !transliteration.isEmpty {
+                    transliterations[frame] = transliteration
+                }
+            }
+        }
+
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(lines: []),
-            highlights: frameHighlights
+            highlights: frameHighlights,
+            tajweedColors: tajweedColors,
+            transliterations: transliterations
         )
     }
 
@@ -91,6 +117,9 @@ class ContentImageViewModel: ObservableObject {
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to retrieve quran image details")
         }
+
+        // Load word annotations (tajweed colours + transliteration) in background.
+        await loadWordAnnotations()
     }
 
     func wordAtGlobalPoint(_ point: CGPoint) -> Word? {
@@ -105,8 +134,19 @@ class ContentImageViewModel: ObservableObject {
 
     private let imageDataService: ImageDataService
     private let highlightsService: QuranHighlightsService
+    private let wordAnnotationService: WordAnnotationService?
     private let reading: Reading
     private var cancellables: Set<AnyCancellable> = []
+
+    private func loadWordAnnotations() async {
+        guard let wordAnnotationService else { return }
+        do {
+            let annotations = try await wordAnnotationService.annotations(for: page)
+            highlights.wordAnnotations = annotations
+        } catch {
+            logger.error("WordAnnotations: failed to load for page \(page.pageNumber): \(error)")
+        }
+    }
 
     private func scrollToVerseIfNeededSynchronously() {
         guard let ayah = highlightsService.highlights.firstScrollingVerse() else {

@@ -5,25 +5,35 @@
 //  Created by Mohamed Afifi on 2024-04-02.
 //
 
+import QuranAnnotations
 import QuranGeometry
 import SwiftUI
+import UIKit
 
 public struct ImageDecorations {
     public var suraHeaders: [SuraHeaderLocation]
     public var ayahNumbers: [AyahNumberLocation]
     public var wordFrames: WordFrameCollection
     public var highlights: [WordFrame: Color]
+    /// Tajweed colour per word frame.
+    public var tajweedColors: [WordFrame: Color]
+    /// Transliteration text per word frame.
+    public var transliterations: [WordFrame: String]
 
     public init(
         suraHeaders: [SuraHeaderLocation],
         ayahNumbers: [AyahNumberLocation],
         wordFrames: WordFrameCollection,
-        highlights: [WordFrame: Color]
+        highlights: [WordFrame: Color],
+        tajweedColors: [WordFrame: Color] = [:],
+        transliterations: [WordFrame: String] = [:]
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
         self.wordFrames = wordFrames
         self.highlights = highlights
+        self.tajweedColors = tajweedColors
+        self.transliterations = transliterations
     }
 }
 
@@ -68,6 +78,59 @@ struct ImageDecorationsView: View {
         .padding(.top, scale.yOffset)
     }
 
+    var tajweedOverlay: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(decorations.wordFrames.lines.enumerated()), id: \.element) { item in
+                let line = item.element
+                let index = item.offset
+                ZStack(alignment: .topLeading) {
+                    Spacer()
+                        .frame(maxWidth: .infinity, maxHeight: 0)
+
+                    ForEach(line.frames, id: \.self) { frame in
+                        if let color = decorations.tajweedColors[frame] {
+                            let scaledRectangle = frame.rect.scaled(by: scale)
+                            color.opacity(0.45)
+                                .offset(x: scaledRectangle.minX)
+                                .frame(width: scaledRectangle.width, height: scaledRectangle.height)
+                        }
+                    }
+                }
+                .padding(.top, decorations.wordFrames.topPadding(atLineIndex: index, scale: scale))
+            }
+        }
+        .padding(.top, scale.yOffset)
+    }
+
+    var transliterationOverlay: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(decorations.wordFrames.lines.enumerated()), id: \.element) { item in
+                let line = item.element
+                let index = item.offset
+                ZStack(alignment: .topLeading) {
+                    Spacer()
+                        .frame(maxWidth: .infinity, maxHeight: 0)
+
+                    ForEach(line.frames, id: \.self) { frame in
+                        if let text = decorations.transliterations[frame] {
+                            let scaledRectangle = frame.rect.scaled(by: scale)
+                            let fontSize = max(7, scaledRectangle.height * 0.28)
+                            Text(text)
+                                .font(.system(size: fontSize))
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                                .frame(width: scaledRectangle.width, alignment: .center)
+                                .offset(x: scaledRectangle.minX, y: scaledRectangle.maxY)
+                        }
+                    }
+                }
+                .padding(.top, decorations.wordFrames.topPadding(atLineIndex: index, scale: scale))
+            }
+        }
+        .padding(.top, scale.yOffset)
+    }
+
     var suraHeaders: some View {
         ForEach(decorations.suraHeaders, id: \.self) { suraHeader in
             let scaledRectangle = suraHeader.rect.scaled(by: scale)
@@ -96,6 +159,8 @@ struct ImageDecorationsView: View {
         GeometryReader { g in
             ZStack(alignment: .topLeading) {
                 highlights
+                tajweedOverlay
+                transliterationOverlay
                 suraHeaders
                 ayahNumbers
             }

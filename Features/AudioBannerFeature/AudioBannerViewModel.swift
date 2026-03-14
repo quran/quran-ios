@@ -29,6 +29,7 @@ import VLogging
 public protocol AudioBannerListener: AnyObject {
     var visiblePages: [Page] { get }
     func highlightReadingAyah(_ ayah: AyahNumber?)
+    func highlightReadingWord(_ word: Word?)
 }
 
 private enum PlaybackState {
@@ -314,9 +315,14 @@ public final class AudioBannerViewModel: ObservableObject {
             playbackEnded: { [weak self] in self?.playbackEnded() },
             playbackPaused: { [weak self] in self?.playbackPaused() },
             playbackResumed: { [weak self] in self?.playbackResumed() },
-            playing: { [weak self] in self?.playing(ayah: $0) }
+            playing: { [weak self] in self?.playing(ayah: $0) },
+            playingWord: { [weak self] in self?.playingWord($0) }
         )
         audioPlayer.setActions(actions)
+    }
+
+    private func playingWord(_ word: Word?) {
+        listener?.highlightReadingWord(word)
     }
 
     private func playbackPaused() {

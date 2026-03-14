@@ -20,6 +20,9 @@ public struct QuranHighlights: Equatable {
     public var noteVerses: [AyahNumber: Note] = [:]
 
     public var pointedWord: Word?
+
+    /// Per-word annotations (tajweed colour, transliteration).  Keyed by verse then word position.
+    public var wordAnnotations: [AyahNumber: [WordAnnotation]] = [:]
 }
 
 extension QuranHighlights {

@@ -171,6 +171,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         contentViewModel?.highlightReadingAyah(ayah)
     }
 
+    func highlightReadingWord(_ word: Word?) {
+        contentViewModel?.highlightReadingWord(word)
+    }
+
     // MARK: - Ayah Menu
 
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {

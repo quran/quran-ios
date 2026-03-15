@@ -20,6 +20,10 @@ public extension Font {
         custom(.quran, size: size?.fontSize(forMediumSize: arabicQuranTextFontSize) ?? arabicQuranTextFontSize)
     }
 
+    static func quranNaskh(ofSize size: FontSize? = nil) -> Font {
+        custom(.naskh, size: size?.fontSize(forMediumSize: arabicQuranTextFontSize) ?? arabicQuranTextFontSize)
+    }
+
     static func arabicTafseer() -> Font {
         custom(.arabic, size: arabicTafseerTextFontSize)
     }

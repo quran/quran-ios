@@ -156,6 +156,26 @@ final class LinePageGeometryTests: XCTestCase {
         )
     }
 
+    func testHiddenHeaderFooterDoesNotReserveChromeSpace() throws {
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 600, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: false, showSidelines: false),
+                data: makeData(),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        XCTAssertEqual(layout.contentSize.width, 600)
+        XCTAssertEqual(layout.contentSize.height, 800)
+        XCTAssertEqual(layout.pageFrame, CGRect(x: 50, y: 0, width: 500, height: 800))
+        XCTAssertEqual(layout.headerFrame, CGRect(x: 300, y: 0, width: 0, height: 0))
+        XCTAssertEqual(layout.footerFrame, CGRect(x: 300, y: 800, width: 0, height: 0))
+        XCTAssertNil(layout.sidelineFrame)
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405

@@ -53,7 +53,6 @@
 				D975EDDC2A479335009DE942 /* Packages */,
 				D975EDC42A4791D6009DE942 /* QuranEngineApp */,
 				D975EDC32A4791D6009DE942 /* Products */,
-				F21FCED1DC6D36311F7D44C0 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,13 +106,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		F21FCED1DC6D36311F7D44C0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -162,6 +154,9 @@
 				Base,
 			);
 			mainGroup = D975EDB92A4791D6009DE942;
+			packageReferences = (
+				D975EDEB2A479A50009DE942 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = D975EDC32A4791D6009DE942 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -414,9 +409,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		D975EDEB2A479A50009DE942 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		D975EDE12A4795BD009DE942 /* AppStructureFeature */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = D975EDEB2A479A50009DE942 /* XCLocalSwiftPackageReference ".." */;
 			productName = AppStructureFeature;
 		};
 /* End XCSwiftPackageProductDependency section */

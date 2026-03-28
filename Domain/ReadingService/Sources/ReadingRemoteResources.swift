@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import SystemDependencies
 import Utilities
 
 public protocol ReadingRemoteResources {
@@ -37,6 +38,10 @@ public struct RemoteResource {
 
     var successFilePath: RelativeFilePath {
         downloadDestination.appendingPathComponent("success-v\(version).txt", isDirectory: false)
+    }
+
+    public func isDownloaded(fileSystem: FileSystem = DefaultFileSystem()) -> Bool {
+        fileSystem.fileExists(at: successFilePath)
     }
 }
 

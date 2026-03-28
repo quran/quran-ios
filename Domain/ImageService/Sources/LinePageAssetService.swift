@@ -29,7 +29,7 @@ public struct LinePageAssets {
         public let image: UIImage
     }
 
-    public enum SidelineDirection: String {
+    public enum SidelineDirection: String, Sendable {
         case up
         case down
     }
@@ -91,6 +91,10 @@ public struct LinePageAssetService {
     // MARK: Public
 
     public func isReadingAvailable() -> Bool {
+        hasRequiredStructure()
+    }
+
+    public func hasRequiredStructure() -> Bool {
         guard let readingDirectory else {
             return false
         }
@@ -100,16 +104,13 @@ public struct LinePageAssetService {
         guard fileSystem.fileExists(at: ayahInfoDatabaseURL(in: readingDirectory)) else {
             return false
         }
-
-        for pageNumber in requiredPageNumbers {
-            for lineNumber in 1 ... lineCount {
-                guard canLoadImage(at: lineImageURL(pageNumber: pageNumber, lineNumber: lineNumber, in: readingDirectory)) else {
-                    return false
-                }
-            }
+        guard let firstPageNumber = requiredPageNumbers.first else {
+            return true
         }
 
-        return true
+        return fileSystem.fileExists(
+            at: lineImageURL(pageNumber: firstPageNumber, lineNumber: 1, in: readingDirectory)
+        )
     }
 
     public func assetsForPage(_ page: Page) -> LinePageAssetsResult {
@@ -179,10 +180,6 @@ public struct LinePageAssetService {
             .appendingPathComponent("sidelines")
     }
 
-    private func canLoadImage(at url: URL) -> Bool {
-        UIImage(contentsOfFile: url.path) != nil
-    }
-
     private func loadSidelines(pageNumber: Int, in readingDirectory: URL) -> [LinePageAssets.SidelineImage] {
         let directory = sidelinesDirectory(pageNumber: pageNumber, in: readingDirectory)
         guard fileSystem.fileExists(at: directory) else {
@@ -228,32 +225,5 @@ public struct LinePageAssetService {
                 }
                 return $0.targetLine < $1.targetLine
             }
-    }
-}
-
-public struct ReadingSelectionGuard {
-    // MARK: Lifecycle
-
-    public init(isReadingAvailable: @escaping (Reading) -> Bool) {
-        self.isReadingAvailable = isReadingAvailable
-    }
-
-    // MARK: Public
-
-    public func resolvedReading(current: Reading, requested: Reading) -> Reading {
-        guard requested.requiresLinePageAssets else {
-            return requested
-        }
-        return isReadingAvailable(requested) ? requested : current
-    }
-
-    // MARK: Private
-
-    private let isReadingAvailable: (Reading) -> Bool
-}
-
-private extension Reading {
-    var requiresLinePageAssets: Bool {
-        self == .hafs_1441
     }
 }

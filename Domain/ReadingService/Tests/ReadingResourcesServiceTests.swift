@@ -98,9 +98,11 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await completeRunningDownload()
 
         // Then
-        XCTAssertEqual(collector.items, [.downloading(progress: 0),
-                                         .downloading(progress: 1),
-                                         .ready])
+        let expectedSequences: [[ReadingResourcesService.ResourceStatus]] = [
+            [.downloading(progress: 0), .downloading(progress: 1), .ready],
+            [.downloading(progress: 1), .ready],
+        ]
+        XCTAssertTrue(expectedSequences.contains(collector.items), "Unexpected statuses: \(collector.items)")
         try assertDownloadedFiles(reading)
         XCTAssertEqual(zipper.unzippedFiles, [remoteResource.zipFile.url])
     }

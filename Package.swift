@@ -278,6 +278,13 @@ private func dataTargets() -> [[Target]] {
             "QuranGeometry",
         ]),
 
+        target(type, name: "LinePagePersistence", dependencies: [
+            "SQLitePersistence",
+            "QuranKit",
+        ], testResources: [
+            .process("Resources"),
+        ]),
+
         target(type, name: "WordTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",

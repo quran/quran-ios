@@ -104,6 +104,22 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertEqual(collector.items, [.ready])
     }
 
+    func test_remoteResourceIsDownloadedWhenSuccessFileExists() throws {
+        let reading = Reading.hafs_1441
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+
+        fileManager.files.insert(remoteResource.successFilePath.url)
+
+        XCTAssertTrue(remoteResource.isDownloaded(fileSystem: fileManager))
+    }
+
+    func test_remoteResourceIsNotDownloadedWithoutSuccessFile() throws {
+        let reading = Reading.hafs_1441
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+
+        XCTAssertFalse(remoteResource.isDownloaded(fileSystem: fileManager))
+    }
+
     func test_downloadResourceSuccessfully() async throws {
         // Given
         let reading = Reading.hafs_1440

@@ -18,24 +18,40 @@ final class LinePageAssetServiceTests: XCTestCase {
         try? FileManager.default.removeItem(at: rootURL)
     }
 
-    func testReadingAvailabilityReturnsAvailableWhenAllLinesExist() throws {
+    func testReadingAvailabilityReturnsAvailableWhenRequiredStructureExists() throws {
         try createAyahInfoDatabase()
-        try createPage(pageNumber: 1)
-        try createPage(pageNumber: 2)
+        try createPage(pageNumber: 1, missingLines: Set(2 ... 15))
 
         let service = makeService(requiredPageNumbers: [1, 2])
 
         XCTAssertTrue(service.isReadingAvailable())
     }
 
-    func testReadingAvailabilityReturnsUnavailableWhenALineIsMissing() throws {
+    func testReadingAvailabilityReturnsUnavailableWhenFirstLineIsMissing() throws {
         try createAyahInfoDatabase()
-        try createPage(pageNumber: 1)
-        try createPage(pageNumber: 2, missingLines: [7])
+        try createPage(pageNumber: 1, missingLines: [1])
 
         let service = makeService(requiredPageNumbers: [1, 2])
 
         XCTAssertFalse(service.isReadingAvailable())
+    }
+
+    func testRequiredStructureReturnsAvailableWhenDatabaseAndFirstLineExist() throws {
+        try createAyahInfoDatabase()
+        try createPage(pageNumber: 1, missingLines: Set(2 ... 15))
+
+        let service = makeService(requiredPageNumbers: [1, 2])
+
+        XCTAssertTrue(service.hasRequiredStructure())
+    }
+
+    func testRequiredStructureReturnsUnavailableWhenFirstLineIsMissing() throws {
+        try createAyahInfoDatabase()
+        try createPage(pageNumber: 1, missingLines: [1])
+
+        let service = makeService(requiredPageNumbers: [1, 2])
+
+        XCTAssertFalse(service.hasRequiredStructure())
     }
 
     func testAssetsForPageReturnsAvailableWhenSidelinesAreMissing() throws {
@@ -53,24 +69,6 @@ final class LinePageAssetServiceTests: XCTestCase {
         case .unavailable:
             XCTFail("Expected available assets")
         }
-    }
-
-    func testReadingSelectionGuardKeepsCurrentReadingWhen1441IsUnavailable() {
-        let guardrail = ReadingSelectionGuard { reading in
-            reading != .hafs_1441
-        }
-
-        let resolved = guardrail.resolvedReading(current: .hafs_1405, requested: .hafs_1441)
-
-        XCTAssertEqual(resolved, .hafs_1405)
-    }
-
-    func testReadingSelectionGuardAllows1441WhenItIsAvailable() {
-        let guardrail = ReadingSelectionGuard { _ in true }
-
-        let resolved = guardrail.resolvedReading(current: .hafs_1405, requested: .hafs_1441)
-
-        XCTAssertEqual(resolved, .hafs_1441)
     }
 
     // MARK: Private

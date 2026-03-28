@@ -441,6 +441,8 @@ private extension Reading {
             return false
         case .hafs_1440:
             return false
+        case .hafs_1441:
+            return false
         case .tajweed:
             // TODO: Enable word-by-word translation.
             // Tajweed ayah info contains words dimensions, but they don't match the word-by-word database.

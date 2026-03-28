@@ -159,6 +159,11 @@
 "reading.hafs-1440.description" = "مصحف حفص عن عاصم، إصدر المدينة المنورة عام ١٤٤٠ هـ. إصدار مجمع الملك فهد لطباعة المصحف.";
 "reading.hafs-1440.issue" = "إصدار ١٤٤٠ هجري";
 
+// Hafs 1441
+"reading.hafs-1441.title" = "مصحف المدينة (١٤٤١)";
+"reading.hafs-1441.description" = "مصحف المدينة إصدار ١٤٤١ من مجمع الملك فهد لطباعة المصحف الشريف، ومهيأ للشاشات الأكبر.";
+"reading.hafs-1441.issue" = "إصدار ١٤٤١ هجري";
+
 // Hafs Tajweed
 "reading.tajweed.title" = "مصحف التجويد";
 "reading.tajweed.description" = "مصحف التجويد (حفص عن عاصم) – دار المعرفة";

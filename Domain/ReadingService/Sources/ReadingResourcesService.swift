@@ -157,7 +157,7 @@ public actor ReadingResourcesService {
     }
 
     private func removePreviouslyDownloadedResources(exclude reading: Reading) {
-        let readings = Reading.sortedReadings.filter { $0 != reading }
+        let readings = Reading.allReadings.filter { $0 != reading }
         for reading in readings {
             removeDownloadedResource(for: reading)
         }

@@ -14,10 +14,12 @@ public enum Reading: Int {
 
     // MARK: Public
 
+    public static let allReadings: [Reading] = [
+        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1441,
+    ]
+
     public static let sortedReadings: [Reading] = {
-        var readings: [Reading] = [
-            .hafs_1405, .tajweed, .hafs_1421, .hafs_1440,
-        ]
+        var readings = allReadings.filter { $0 != .hafs_1441 }
         if is1441Visible {
             readings.append(.hafs_1441)
         }

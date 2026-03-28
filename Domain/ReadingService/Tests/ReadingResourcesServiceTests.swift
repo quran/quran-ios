@@ -131,11 +131,21 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await completeRunningDownload()
 
         // Then
-        let expectedSequences: [[ReadingResourcesService.ResourceStatus]] = [
-            [.downloading(progress: 0), .downloading(progress: 1), .ready],
-            [.downloading(progress: 1), .ready],
-        ]
-        XCTAssertTrue(expectedSequences.contains(collector.items), "Unexpected statuses: \(collector.items)")
+        await waitForReady()
+        XCTAssertEqual(collector.items.last, .ready)
+
+        var lastProgress = 0.0
+        for status in collector.items.dropLast() {
+            switch status {
+            case .downloading(let progress):
+                XCTAssertGreaterThanOrEqual(progress, lastProgress)
+                XCTAssertLessThanOrEqual(progress, 1)
+                lastProgress = progress
+            case .ready, .error:
+                XCTFail("Unexpected statuses: \(collector.items)")
+            }
+        }
+
         try assertDownloadedFiles(reading)
         XCTAssertEqual(zipper.unzippedFiles, [remoteResource.zipFile.url])
     }

@@ -29,17 +29,28 @@ public struct ContentImageBuilder {
 
     // MARK: Public
 
+    @ViewBuilder
     public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
-        let imageService = Self.buildImageDataService(reading: reading, container: container)
-
-        let viewModel = ContentImageViewModel(
-            reading: reading,
-            page: page,
-            imageDataService: imageService,
-            highlightsService: highlightsService
-        )
-        return ContentImageView(viewModel: viewModel)
+        switch reading {
+        case .hafs_1441:
+            let linePageAssetService = Self.buildLinePageAssetService(reading: reading, container: container)
+            let viewModel = ContentLineViewModel(
+                reading: reading,
+                page: page,
+                linePageAssetService: linePageAssetService
+            )
+            ContentLineView(viewModel: viewModel)
+        default:
+            let imageService = Self.buildImageDataService(reading: reading, container: container)
+            let viewModel = ContentImageViewModel(
+                reading: reading,
+                page: page,
+                imageDataService: imageService,
+                highlightsService: highlightsService
+            )
+            ContentImageView(viewModel: viewModel)
+        }
     }
 
     // MARK: Internal
@@ -50,6 +61,10 @@ public struct ContentImageBuilder {
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
             imagesURL: reading.images(in: readingDirectory)
         )
+    }
+
+    static func buildLinePageAssetService(reading: Reading, container: AppDependencies) -> LinePageAssetService {
+        LinePageAssetService(readingDirectory: readingDirectory(reading, container: container))
     }
 
     // MARK: Private

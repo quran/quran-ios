@@ -30,7 +30,8 @@ final class ReadingResourcesServiceTests: XCTestCase {
         preferenceLoadingCompleted = AsyncChannelEventObserver()
         zipper = ZipperFake(fileManager: fileManager)
 
-        (downloader, session) = await BatchDownloaderFake.makeDownloader(fileManager: fileManager)
+        testContext = BatchDownloaderFake.makeContext()
+        (downloader, session) = await testContext.makeDownloader(fileManager: fileManager)
 
         downloadsObserver = AsyncChannel<SessionTask>()
         session.downloadsObserver = downloadsObserver
@@ -49,7 +50,8 @@ final class ReadingResourcesServiceTests: XCTestCase {
     }
 
     override func tearDown() {
-        BatchDownloaderFake.tearDown()
+        testContext.tearDown()
+        testContext = nil
         downloader = nil
         session = nil
         service = nil
@@ -59,7 +61,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         // Given
         ReadingPreferences.shared.reading = .hafs_1405
         // Assume all reading directories exist.
-        fileManager.files = Set(Reading.sortedReadings.compactMap {
+        fileManager.files = Set(Reading.allReadings.compactMap {
             remoteResources.resource(for: $0)?.downloadDestination.url
         })
 
@@ -70,6 +72,21 @@ final class ReadingResourcesServiceTests: XCTestCase {
         // Then
         XCTAssertEqual(collector.items, [.ready])
         XCTAssertEqual(fileManager.files, []) // Delete other readings directories
+    }
+
+    func test_bundledResourceDeletesHidden1441Resources() async throws {
+        // Given
+        ReadingPreferences.shared.reading = .hafs_1405
+        let hidden1441Directory = try XCTUnwrap(remoteResources.resource(for: .hafs_1441)?.downloadDestination.url)
+        fileManager.files = [hidden1441Directory]
+
+        // Test
+        await service.startLoadingResources()
+        await finishLoadingNoDownload()
+
+        // Then
+        XCTAssertEqual(collector.items, [.ready])
+        XCTAssertEqual(fileManager.files, [])
     }
 
     func test_resourceDownloadedAndUnzipped() async throws {
@@ -256,6 +273,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
     private var downloader: DownloadManager!
     private var downloadsObserver: AsyncChannel<SessionTask>!
     private var session: NetworkSessionFake!
+    private var testContext: BatchDownloaderTestContext!
     private var zipper: ZipperFake!
     private var fileManager: FileSystemFake!
     private var preferenceLoadingCompleted: AsyncChannelEventObserver!

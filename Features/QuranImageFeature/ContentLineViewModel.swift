@@ -8,6 +8,7 @@
 import AnnotationsService
 import Combine
 import ImageService
+import LinePagePersistence
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -74,6 +75,7 @@ final class ContentLineViewModel: ObservableObject {
 
         switch result {
         case .available(let assets):
+            let persistence = GRDBLinePagePersistence(fileURL: assets.ayahInfoDatabaseURL)
             self.assets = assets
             geometryData = LinePageGeometryData(
                 lineCount: assets.lines.count,
@@ -84,9 +86,9 @@ final class ContentLineViewModel: ObservableObject {
             )
 
             do {
-                async let highlightSpans = assets.persistence.highlightSpans(page)
-                async let ayahMarkers = assets.persistence.ayahMarkers(page)
-                async let suraHeaders = assets.persistence.suraHeaders(page)
+                async let highlightSpans = persistence.highlightSpans(page)
+                async let ayahMarkers = persistence.ayahMarkers(page)
+                async let suraHeaders = persistence.suraHeaders(page)
                 let loadedHighlightSpans = try await highlightSpans
                 let loadedAyahMarkers = try await ayahMarkers
                 let loadedSuraHeaders = try await suraHeaders

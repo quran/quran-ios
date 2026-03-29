@@ -625,6 +625,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "NoorUI",
             "ImageService",
+            "LinePagePersistence",
             "ReadingService",
             "QuranPagesFeature",
             "QuranTextKit",

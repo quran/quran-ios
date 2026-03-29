@@ -51,20 +51,17 @@ public struct LinePageAssets {
     public init(
         page: Page,
         ayahInfoDatabaseURL: URL,
-        persistence: any LinePagePersistence,
         lines: [LineImage],
         sidelines: [SidelineImage]
     ) {
         self.page = page
         self.ayahInfoDatabaseURL = ayahInfoDatabaseURL
-        self.persistence = persistence
         self.lines = lines
         self.sidelines = sidelines
     }
 
     public let page: Page
     public let ayahInfoDatabaseURL: URL
-    public let persistence: any LinePagePersistence
     public let lines: [LineImage]
     public let sidelines: [SidelineImage]
 }
@@ -152,7 +149,6 @@ public struct LinePageAssetService {
             LinePageAssets(
                 page: page,
                 ayahInfoDatabaseURL: ayahInfoDatabaseURL,
-                persistence: GRDBLinePagePersistence(fileURL: ayahInfoDatabaseURL),
                 lines: lines,
                 sidelines: loadSidelines(pageNumber: page.pageNumber, in: readingDirectory)
             )

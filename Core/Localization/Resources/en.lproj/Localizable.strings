@@ -168,6 +168,11 @@
 "reading.hafs-1440.description" = "The hafs Mushaf issued in Medina in 1440 Hijri. From the King Fahd Quran Printing Complex.";
 "reading.hafs-1440.issue" = "Issued in 1440 Hijri";
 
+// Hafs 1439
+"reading.hafs-1439.title" = "Madani Mushaf (1439)";
+"reading.hafs-1439.description" = "The 1439 Madani script from the King Fahd Quran Printing Complex. Optimized for larger screens.";
+"reading.hafs-1439.issue" = "Issued in 1439 Hijri";
+
 // Hafs 1441
 "reading.hafs-1441.title" = "Madani Mushaf (1441)";
 "reading.hafs-1441.description" = "The 1441 Madani Mushaf from the King Fahd Quran Printing Complex. Optimized for larger screens.";

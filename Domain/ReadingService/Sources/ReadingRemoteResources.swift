@@ -55,6 +55,7 @@ extension Reading {
         case .hafs_1405: return "hafs_1405"
         case .hafs_1440: return "hafs_1440"
         case .hafs_1421: return "hafs_1421"
+        case .hafs_1439: return "hafs_1439"
         case .hafs_1441: return "hafs_1441"
         case .tajweed: return "tajweed"
         }

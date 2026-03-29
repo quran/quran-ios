@@ -31,6 +31,8 @@ extension Reading {
             return l("reading.hafs-1421.title")
         case .hafs_1440:
             return l("reading.hafs-1440.title")
+        case .hafs_1439:
+            return l("reading.hafs-1439.title")
         case .hafs_1441:
             return l("reading.hafs-1441.title")
         case .tajweed:
@@ -46,6 +48,8 @@ extension Reading {
             return l("reading.hafs-1421.description")
         case .hafs_1440:
             return l("reading.hafs-1440.description")
+        case .hafs_1439:
+            return l("reading.hafs-1439.description")
         case .hafs_1441:
             return l("reading.hafs-1441.description")
         case .tajweed:
@@ -79,6 +83,14 @@ extension Reading {
                 Property(type: .supports, property: l("reading.selector.property.lines.15")),
                 Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
             ]
+        case .hafs_1439:
+            return [
+                Property(type: .supports, property: l("reading.selector.property.hafs")),
+                Property(type: .supports, property: l("reading.hafs-1439.issue")),
+                Property(type: .supports, property: l("reading.selector.property.pages.604")),
+                Property(type: .supports, property: l("reading.selector.property.lines.15")),
+                Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
+            ]
         case .hafs_1441:
             return [
                 Property(type: .supports, property: l("reading.selector.property.hafs")),
@@ -105,6 +117,8 @@ extension Reading {
             return "hafs_1421"
         case .hafs_1440:
             return "hafs_1440"
+        case .hafs_1439:
+            return "hafs_1439"
         case .hafs_1441:
             return "hafs_1441"
         case .tajweed:

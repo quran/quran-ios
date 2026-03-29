@@ -55,7 +55,7 @@ final class ContentLineViewModel: ObservableObject {
     @Published var scrollToVerse: AyahNumber?
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
-        [.tajweed, .hafs_1440, .hafs_1441].contains(reading) ? .invertInDarkMode : .tinted
+        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
     }
 
     var highlightColorsByVerse: [AyahNumber: Color] {

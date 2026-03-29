@@ -230,13 +230,11 @@ struct ContentLineViewBody: View {
 }
 
 enum LinePageChromeStyle: Equatable {
-    case classic
-    case newMadani
+    case greenChrome
+    case blueChrome
 
     init(reading: Reading) {
-        // Keep all current iOS line-page readings on the existing green styling.
-        // Future 1439-style line pages can opt into `.newMadani`.
-        self = .classic
+        self = reading.usesBlueLinePageChrome ? .blueChrome : .greenChrome
     }
 }
 
@@ -258,28 +256,28 @@ private func rgb(_ hex: Int) -> Color {
 private extension LinePageChromeStyle {
     func palette(for colorScheme: ColorScheme) -> LinePageChromePalette {
         switch (self, colorScheme) {
-        case (.newMadani, .dark):
+        case (.blueChrome, .dark):
             return LinePageChromePalette(
                 headerTint: rgb(0x73AFFA),
                 markerRing: rgb(0x73AFFA),
                 markerInner: rgb(0x172554),
                 markerText: rgb(0x73AFFA)
             )
-        case (.newMadani, .light):
+        case (.blueChrome, .light):
             return LinePageChromePalette(
                 headerTint: rgb(0x2563EB),
                 markerRing: rgb(0x2563EB),
                 markerInner: rgb(0xEFF6FF),
                 markerText: rgb(0x1D4ED8)
             )
-        case (.classic, .dark):
+        case (.greenChrome, .dark):
             return LinePageChromePalette(
                 headerTint: rgb(0x047857),
                 markerRing: rgb(0x047857),
                 markerInner: rgb(0x022C22),
                 markerText: rgb(0x34D399)
             )
-        case (.classic, .light):
+        case (.greenChrome, .light):
             return LinePageChromePalette(
                 headerTint: rgb(0x047857),
                 markerRing: rgb(0x047857),
@@ -297,7 +295,7 @@ private struct LinePageSuraHeaderView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        if style == .classic {
+        if style == .greenChrome {
             NoorImage.suraHeader.image
                 .renderingMode(.template)
                 .resizable()
@@ -322,7 +320,7 @@ private struct LinePageAyahMarkerView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        if style == .classic {
+        if style == .greenChrome {
             NoorImage.ayahEnd.image
                 .renderingMode(.template)
                 .resizable()

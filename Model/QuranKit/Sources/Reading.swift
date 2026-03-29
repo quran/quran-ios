@@ -11,11 +11,12 @@ public enum Reading: Int {
     case tajweed = 2
     case hafs_1421 = 3
     case hafs_1441 = 4
+    case hafs_1439 = 5
 
     // MARK: Public
 
     public static let allReadings: [Reading] = [
-        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1441,
+        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1439, .hafs_1441,
     ]
 
     public static let sortedReadings: [Reading] = allReadings
@@ -27,6 +28,8 @@ public enum Reading: Int {
         case .hafs_1440:
             return .hafsMadani1440
         case .hafs_1421:
+            return .hafsMadani1440
+        case .hafs_1439:
             return .hafsMadani1440
         case .hafs_1441:
             return .hafsMadani1440
@@ -41,10 +44,25 @@ public enum Reading: Int {
 
     public var linePageAssetWidth: Int? {
         switch self {
+        case .hafs_1439:
+            return 1080
         case .hafs_1441:
             return 1440
         default:
             return nil
+        }
+    }
+
+    public var usesBlueLinePageChrome: Bool {
+        self == .hafs_1439
+    }
+
+    public var usesInvertedQuranImageRenderingInDarkMode: Bool {
+        switch self {
+        case .hafs_1440, .hafs_1439, .hafs_1441, .tajweed:
+            return true
+        case .hafs_1405, .hafs_1421:
+            return false
         }
     }
 }

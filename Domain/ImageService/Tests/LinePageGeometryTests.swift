@@ -102,11 +102,7 @@ final class LinePageGeometryTests: XCTestCase {
             expectedHeaderFrame(for: header.header, pageFrame: layout.pageFrame, aspectRatio: 0.25)
         )
 
-        XCTAssertEqual(
-            try XCTUnwrap(layout.scrollTargetY),
-            try XCTUnwrap(layout.selectionAnchors(for: markerAyah)).start.minY,
-            accuracy: 0.001
-        )
+        XCTAssertEqual(layout.scrollTargetLineNumber(for: markerAyah), 7)
     }
 
     func testVerseHitTestingAndSelectionAnchorsFollowAyahSpans() throws {
@@ -123,23 +119,28 @@ final class LinePageGeometryTests: XCTestCase {
             )
         )
 
+        let data = makeData()
+        let firstRect = try XCTUnwrap(layout.selectionAnchors(for: firstAyah)).start
+        let secondRect = try XCTUnwrap(layout.selectionAnchors(for: secondAyah)).start
+        let firstPoint = CGPoint(x: firstRect.midX, y: firstRect.midY)
+        let secondPoint = CGPoint(x: secondRect.midX, y: secondRect.midY)
+
         XCTAssertEqual(
-            layout.verse(at: CGPoint(x: layout.pageFrame.minX + 300, y: layout.pageFrame.minY + 210)),
+            layout.verse(at: firstPoint),
             firstAyah
         )
         XCTAssertEqual(
-            layout.verse(at: CGPoint(x: layout.pageFrame.minX + 140, y: layout.pageFrame.minY + 260)),
+            layout.verse(at: secondPoint),
             secondAyah
         )
         XCTAssertNil(
-            layout.verse(at: CGPoint(x: layout.pageFrame.minX + 40, y: layout.pageFrame.minY + 210))
+            layout.verse(at: CGPoint(x: layout.pageFrame.minX + 40, y: firstPoint.y))
         )
         XCTAssertNil(
-            layout.verse(at: CGPoint(x: layout.pageFrame.minX + 360, y: layout.pageFrame.minY + 210))
+            layout.verse(at: CGPoint(x: layout.pageFrame.maxX - 40, y: firstPoint.y))
         )
         XCTAssertNil(layout.verse(at: CGPoint(x: layout.pageFrame.minX - 1, y: layout.pageFrame.minY + 210)))
 
-        let data = makeData()
         let firstAnchors = try XCTUnwrap(layout.selectionAnchors(for: firstAyah))
         let firstSpan = data.highlightSpans[0]
         assertEqual(firstAnchors.start, expectedSelectionRect(for: firstSpan, pageFrame: layout.pageFrame))
@@ -154,6 +155,32 @@ final class LinePageGeometryTests: XCTestCase {
             secondAnchors.end,
             expectedSelectionRect(for: data.highlightSpans[2], pageFrame: layout.pageFrame)
         )
+    }
+
+    func testVerseHitTestingSupportsLastLine() throws {
+        let lastAyah = try ayah(1, 7)
+        let data = LinePageGeometryData(
+            highlightSpans: [
+                .init(ayah: lastAyah, line: 14, left: 0.2, right: 0.8),
+            ],
+            ayahMarkers: [],
+            suraHeaders: [],
+            sidelines: []
+        )
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 400, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
+                data: data,
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        let selectionRect = try XCTUnwrap(layout.selectionAnchors(for: lastAyah)).start
+        let point = CGPoint(x: selectionRect.midX, y: selectionRect.midY)
+        XCTAssertEqual(layout.verse(at: point), lastAyah)
     }
 
     func testHiddenHeaderFooterDoesNotReserveChromeSpace() throws {
@@ -214,7 +241,7 @@ final class LinePageGeometryTests: XCTestCase {
         let lineHeight = pageFrame.width * lineHeightRatio
         let lineHeightWithoutOverlap = (pageFrame.height - lineHeight) / 14
         let yStart = (lineHeight - lineHeightWithoutOverlap) / 2
-        let y = pageFrame.minY + yStart + (lineHeightWithoutOverlap * CGFloat(span.line - 1))
+        let y = pageFrame.minY + yStart + (lineHeightWithoutOverlap * CGFloat(span.line))
         return CGRect(
             x: pageFrame.minX + (span.left * pageFrame.width),
             y: y,
@@ -226,7 +253,7 @@ final class LinePageGeometryTests: XCTestCase {
     private func expectedMarkerFrame(for marker: LinePageAyahMarker, pageFrame: CGRect) -> CGRect {
         let lineHeight = pageFrame.width * lineHeightRatio
         let markerDimension = pageFrame.width * 0.05
-        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(marker.line - 1)
+        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(marker.line)
         return CGRect(
             x: pageFrame.minX + (marker.centerX * pageFrame.width) - (markerDimension / 2),
             y: pageFrame.minY + yStart + (marker.centerY * lineHeight) - (markerDimension / 2),
@@ -243,7 +270,7 @@ final class LinePageGeometryTests: XCTestCase {
         let lineHeight = pageFrame.width * lineHeightRatio
         let width = pageFrame.width * suraHeaderWidthRatio
         let height = width * aspectRatio
-        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(header.line - 1)
+        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(header.line)
         return CGRect(
             x: pageFrame.minX + (header.centerX * pageFrame.width) - (width / 2),
             y: pageFrame.minY + yStart + (header.centerY * lineHeight) - (height / 2),
@@ -268,7 +295,7 @@ final class LinePageGeometryTests: XCTestCase {
         let lineHeight = Int(CGFloat(width) * lineHeightRatio)
         let lineHeightWithoutOverlap = (height - lineHeight) / 14
         let offset = (lineHeight - lineHeightWithoutOverlap) / 2
-        let lineIndex = lineNumber - 1
+        let lineIndex = lineNumber
         let fullLineStart = Int(floor(Double(height - lineHeight) / 14 * Double(lineIndex)))
         return CGRect(
             x: pageFrame.minX,

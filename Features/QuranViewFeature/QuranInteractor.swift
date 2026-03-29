@@ -43,7 +43,7 @@ protocol QuranPresentable: UIViewController {
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint, completion: @escaping () -> Void)
 
     func presentMoreMenu(_ viewController: UIViewController)
-    func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
+    func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at sourceRect: CGRect)
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
@@ -231,9 +231,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
+    func presentAyahMenu(in sourceView: UIView, at sourceRect: CGRect, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
         let notes = notesInteractingVerses(verses)
+        let point = CGPoint(x: sourceRect.midX, y: sourceRect.midY)
         let input = AyahMenuInput(
             sourceView: sourceView,
             pointInView: point,
@@ -241,7 +242,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             notes: notes
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
-        presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
+        presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: sourceRect)
     }
 
     func dismissAyahMenu() {

@@ -154,6 +154,16 @@ final class ContentLineViewModel: ObservableObject {
         return currentLayout.verse(at: localPoint)
     }
 
+    func selectionRect(for ayah: AyahNumber) -> CGRect? {
+        guard let currentLayout, !contentFrame.isEmpty,
+              let anchors = currentLayout.selectionAnchors(for: ayah)
+        else {
+            return nil
+        }
+        let localRect = anchors.start.union(anchors.end)
+        return localRect.offsetBy(dx: contentFrame.minX, dy: contentFrame.minY)
+    }
+
     // MARK: Private
 
     private let reading: Reading

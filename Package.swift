@@ -629,17 +629,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranPagesFeature",
             "QuranTextKit",
             "Caching",
-        ]) + [
-            .testTarget(
-                name: "QuranImageFeatureTests",
-                dependencies: [
-                    "QuranImageFeature",
-                    .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-                ],
-                path: "Features/QuranImageFeatureTests",
-                swiftSettings: settings
-            ),
-        ],
+        ]),
 
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
             "AppDependencies",

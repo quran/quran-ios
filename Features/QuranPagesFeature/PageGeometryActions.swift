@@ -13,11 +13,18 @@ public struct PageGeometryActions: Equatable {
     let id: AnyHashable
     public var word: @MainActor (CGPoint) -> Word?
     public var verse: @MainActor (CGPoint) -> AyahNumber?
+    public var selectionRect: @MainActor (AyahNumber) -> CGRect?
 
-    public init(id: some Hashable, word: @escaping (CGPoint) -> Word?, verse: @escaping (CGPoint) -> AyahNumber?) {
+    public init(
+        id: some Hashable,
+        word: @escaping (CGPoint) -> Word?,
+        verse: @escaping (CGPoint) -> AyahNumber?,
+        selectionRect: @escaping (AyahNumber) -> CGRect? = { _ in nil }
+    ) {
         self.id = id
         self.word = word
         self.verse = verse
+        self.selectionRect = selectionRect
     }
 
     public nonisolated static func == (lhs: PageGeometryActions, rhs: PageGeometryActions) -> Bool {

@@ -101,6 +101,23 @@ class ContentImageViewModel: ObservableObject {
         return imagePage?.wordFrames.wordAtLocation(localPoint, imageScale: scale)
     }
 
+    func selectionRect(for ayah: AyahNumber) -> CGRect? {
+        guard !imageFrame.isEmpty else {
+            return nil
+        }
+        let localRect = imagePage?.wordFrames
+            .wordFramesForVerse(ayah)
+            .map { $0.rect.scaled(by: scale) }
+            .reduce(into: CGRect.null) { partialResult, rect in
+                partialResult = partialResult.union(rect)
+            }
+
+        guard let localRect, !localRect.isNull else {
+            return nil
+        }
+        return localRect.offsetBy(dx: imageFrame.minX, dy: imageFrame.minY)
+    }
+
     // MARK: Private
 
     private let imageDataService: ImageDataService

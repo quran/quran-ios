@@ -32,7 +32,8 @@ struct ContentLineView: View {
             PageGeometryActions(
                 id: ObjectIdentifier(viewModel),
                 word: { _ in nil },
-                verse: { point in viewModel.verseAtGlobalPoint(point) }
+                verse: { point in viewModel.verseAtGlobalPoint(point) },
+                selectionRect: { ayah in viewModel.selectionRect(for: ayah) }
             )
         )
         .task {

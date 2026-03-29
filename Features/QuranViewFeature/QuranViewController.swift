@@ -192,12 +192,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         setAudioBarHidden(false)
     }
 
-    func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint) {
+    func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at sourceRect: CGRect) {
         popoverPresenter.present(
             presenting: self,
             presented: viewController,
             pointingTo: sourceView,
-            at: CGRect(x: point.x, y: point.y, width: 1, height: 1),
+            at: sourceRect,
             permittedArrowDirections: []
         )
     }

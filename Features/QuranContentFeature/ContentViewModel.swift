@@ -24,7 +24,7 @@ import VLogging
 @MainActor
 public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
-    func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
+    func presentAyahMenu(in sourceView: UIView, at sourceRect: CGRect, verses: [AyahNumber])
 }
 
 @MainActor
@@ -150,9 +150,11 @@ public final class ContentViewModel: ObservableObject {
         guard let longPressData, let selectedVerses else {
             return
         }
+        let sourceRect = selectionRect(for: selectedVerses, in: longPressData.sourceView)
+            ?? CGRect(x: longPressData.startPosition.x, y: longPressData.startPosition.y, width: 1, height: 1)
         listener?.presentAyahMenu(
             in: longPressData.sourceView,
-            at: longPressData.startPosition,
+            at: sourceRect,
             verses: selectedVerses
         )
     }
@@ -229,6 +231,23 @@ public final class ContentViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
             .store(in: &cancellables)
+    }
+
+    private func selectionRect(for verses: [AyahNumber], in sourceView: UIView) -> CGRect? {
+        let globalRects = verses.compactMap { verse in
+            geometryActions.compactMap { $0.selectionRect(verse) }.first
+        }
+        guard let firstGlobalRect = globalRects.first else {
+            return nil
+        }
+
+        let globalRect = globalRects.dropFirst().reduce(firstGlobalRect) { partialResult, rect in
+            partialResult.union(rect)
+        }
+        guard let window = sourceView.window else {
+            return globalRect
+        }
+        return sourceView.convert(globalRect, from: window)
     }
 }
 

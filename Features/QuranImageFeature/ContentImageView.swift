@@ -33,7 +33,8 @@ struct ContentImageView: View {
             PageGeometryActions(
                 id: ObjectIdentifier(viewModel),
                 word: { point in viewModel.wordAtGlobalPoint(point) },
-                verse: { point in viewModel.wordAtGlobalPoint(point)?.verse }
+                verse: { point in viewModel.wordAtGlobalPoint(point)?.verse },
+                selectionRect: { ayah in viewModel.selectionRect(for: ayah) }
             )
         )
         .task {

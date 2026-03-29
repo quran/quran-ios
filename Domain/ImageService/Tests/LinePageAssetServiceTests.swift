@@ -36,14 +36,14 @@ final class LinePageAssetServiceTests: XCTestCase {
         XCTAssertFalse(service.hasRequiredStructure())
     }
 
-    func testAssetsForPageReturnsAvailableWhenSidelinesAreMissing() throws {
+    func testAssetsForPageReturnsAvailableWhenSidelinesAreMissing() async throws {
         try createAyahInfoDatabase()
         try createPage(pageNumber: 1)
 
         let service = makeService(requiredPageNumbers: [1])
         let page = try XCTUnwrap(Page(quran: .hafsMadani1440, pageNumber: 1))
 
-        switch service.assetsForPage(page) {
+        switch await service.assetsForPage(page) {
         case .available(let assets):
             XCTAssertEqual(assets.lines.count, 15)
             XCTAssertTrue(assets.sidelines.isEmpty)

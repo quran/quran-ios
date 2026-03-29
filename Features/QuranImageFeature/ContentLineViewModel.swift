@@ -70,7 +70,7 @@ final class ContentLineViewModel: ObservableObject {
         let page = page
         let linePageAssetService = linePageAssetService
 
-        let result = linePageAssetService.assetsForPage(page)
+        let result = await linePageAssetService.assetsForPage(page)
 
         switch result {
         case .available(let assets):

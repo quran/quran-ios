@@ -23,8 +23,10 @@ struct ContentLineView: View {
                 layout: layout,
                 scrollToVerse: viewModel.scrollToVerse,
                 highlightColorsByVerse: viewModel.highlightColorsByVerse,
+                chromeStyle: viewModel.chromeStyle,
                 imageRenderingMode: viewModel.imageRenderingMode,
                 imageForLine: viewModel.lineImage(for:),
+                imageForSideline: viewModel.sidelineImage(for:),
                 onGlobalFrameChange: viewModel.updateContentFrame
             )
         }
@@ -48,8 +50,10 @@ struct ContentLineViewBody: View {
     let layout: LinePageLayout?
     let scrollToVerse: AyahNumber?
     let highlightColorsByVerse: [AyahNumber: Color]
+    let chromeStyle: LinePageChromeStyle
     let imageRenderingMode: QuranThemedImage.RenderingMode
     let imageForLine: (Int) -> UIImage?
+    let imageForSideline: (String) -> UIImage?
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
@@ -78,8 +82,22 @@ struct ContentLineViewBody: View {
                         }
                     }
 
+                    ForEach(layout.sidelinePlacements, id: \.self) { placement in
+                        if let image = imageForSideline(placement.sideline.id) {
+                            QuranThemedImage(image: image, renderingMode: imageRenderingMode)
+                                .frame(
+                                    width: placement.frame.width,
+                                    height: placement.frame.height
+                                )
+                                .offset(
+                                    x: placement.frame.minX,
+                                    y: placement.frame.minY
+                                )
+                        }
+                    }
+
                     ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
-                        LinePageSuraHeaderView()
+                        LinePageSuraHeaderView(style: chromeStyle)
                             .frame(
                                 width: placement.frame.width,
                                 height: placement.frame.height
@@ -91,7 +109,7 @@ struct ContentLineViewBody: View {
                     }
 
                     ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
-                        LinePageAyahMarkerView(number: placement.marker.ayah.ayah)
+                        LinePageAyahMarkerView(number: placement.marker.ayah.ayah, style: chromeStyle)
                             .frame(
                                 width: placement.frame.width,
                                 height: placement.frame.height
@@ -202,33 +220,135 @@ struct ContentLineViewBody: View {
     }
 }
 
+enum LinePageChromeStyle: Equatable {
+    case classic
+    case newMadani
+
+    init(reading: Reading) {
+        // Keep all current iOS line-page readings on the existing green styling.
+        // Future 1439-style line pages can opt into `.newMadani`.
+        self = .classic
+    }
+}
+
+private struct LinePageChromePalette {
+    let headerTint: Color
+    let markerRing: Color
+    let markerInner: Color
+    let markerText: Color
+}
+
+private func rgb(_ hex: Int) -> Color {
+    Color(
+        red: Double((hex >> 16) & 0xFF) / 255,
+        green: Double((hex >> 8) & 0xFF) / 255,
+        blue: Double(hex & 0xFF) / 255
+    )
+}
+
+private extension LinePageChromeStyle {
+    func palette(for colorScheme: ColorScheme) -> LinePageChromePalette {
+        switch (self, colorScheme) {
+        case (.newMadani, .dark):
+            return LinePageChromePalette(
+                headerTint: rgb(0x73AFFA),
+                markerRing: rgb(0x73AFFA),
+                markerInner: rgb(0x172554),
+                markerText: rgb(0x73AFFA)
+            )
+        case (.newMadani, .light):
+            return LinePageChromePalette(
+                headerTint: rgb(0x2563EB),
+                markerRing: rgb(0x2563EB),
+                markerInner: rgb(0xEFF6FF),
+                markerText: rgb(0x1D4ED8)
+            )
+        case (.classic, .dark):
+            return LinePageChromePalette(
+                headerTint: rgb(0x047857),
+                markerRing: rgb(0x047857),
+                markerInner: rgb(0x022C22),
+                markerText: rgb(0x34D399)
+            )
+        case (.classic, .light):
+            return LinePageChromePalette(
+                headerTint: rgb(0x047857),
+                markerRing: rgb(0x047857),
+                markerInner: rgb(0xECFDF5),
+                markerText: rgb(0x047857)
+            )
+        @unknown default:
+            return palette(for: .light)
+        }
+    }
+}
+
 private struct LinePageSuraHeaderView: View {
+    let style: LinePageChromeStyle
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        NoorImage.suraHeader.image
-            .renderingMode(.template)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
-            .themedColorScheme()
+        if style == .classic {
+            NoorImage.suraHeader.image
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.pageMarkerTint)
+                .themedColorScheme()
+        } else {
+            let palette = style.palette(for: colorScheme)
+            NoorImage.suraHeader.image
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(palette.headerTint)
+                .themedColorScheme()
+        }
     }
 }
 
 private struct LinePageAyahMarkerView: View {
     let number: Int
+    let style: LinePageChromeStyle
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        NoorImage.ayahEnd.image
-            .renderingMode(.template)
-            .resizable()
-            .padding(.horizontal, 1)
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
-            .overlay(
+        if style == .classic {
+            NoorImage.ayahEnd.image
+                .renderingMode(.template)
+                .resizable()
+                .padding(.horizontal, 1)
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.pageMarkerTint)
+                .overlay(
+                    Text(NumberFormatter.arabicNumberFormatter.format(number))
+                        .font(.largeTitle)
+                        .minimumScaleFactor(0.03)
+                        .padding(3)
+                )
+                .themedColorScheme()
+        } else {
+            let palette = style.palette(for: colorScheme)
+
+            ZStack {
+                Circle()
+                    .fill(palette.markerInner)
+                    .padding(5)
+
+                NoorImage.ayahEnd.image
+                    .renderingMode(.template)
+                    .resizable()
+                    .padding(.horizontal, 1)
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(palette.markerRing)
+
                 Text(NumberFormatter.arabicNumberFormatter.format(number))
                     .font(.largeTitle)
                     .minimumScaleFactor(0.03)
                     .padding(3)
-            )
+                    .foregroundColor(palette.markerText)
+            }
             .themedColorScheme()
+        }
     }
 }

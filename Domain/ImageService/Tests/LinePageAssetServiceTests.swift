@@ -18,24 +18,6 @@ final class LinePageAssetServiceTests: XCTestCase {
         try? FileManager.default.removeItem(at: rootURL)
     }
 
-    func testReadingAvailabilityReturnsAvailableWhenRequiredStructureExists() throws {
-        try createAyahInfoDatabase()
-        try createPage(pageNumber: 1, missingLines: Set(2 ... 15))
-
-        let service = makeService(requiredPageNumbers: [1, 2])
-
-        XCTAssertTrue(service.isReadingAvailable())
-    }
-
-    func testReadingAvailabilityReturnsUnavailableWhenFirstLineIsMissing() throws {
-        try createAyahInfoDatabase()
-        try createPage(pageNumber: 1, missingLines: [1])
-
-        let service = makeService(requiredPageNumbers: [1, 2])
-
-        XCTAssertFalse(service.isReadingAvailable())
-    }
-
     func testRequiredStructureReturnsAvailableWhenDatabaseAndFirstLineExist() throws {
         try createAyahInfoDatabase()
         try createPage(pageNumber: 1, missingLines: Set(2 ... 15))

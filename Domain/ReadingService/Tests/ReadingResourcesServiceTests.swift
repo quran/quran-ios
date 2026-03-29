@@ -74,11 +74,11 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertEqual(fileManager.files, []) // Delete other readings directories
     }
 
-    func test_bundledResourceDeletesHidden1441Resources() async throws {
+    func test_bundledResourceDeletesPreviouslyDownloadedReadingResources() async throws {
         // Given
         ReadingPreferences.shared.reading = .hafs_1405
-        let hidden1441Directory = try XCTUnwrap(remoteResources.resource(for: .hafs_1441)?.downloadDestination.url)
-        fileManager.files = [hidden1441Directory]
+        let downloadedReadingDirectory = try XCTUnwrap(remoteResources.resource(for: .hafs_1441)?.downloadDestination.url)
+        fileManager.files = [downloadedReadingDirectory]
 
         // Test
         await service.startLoadingResources()

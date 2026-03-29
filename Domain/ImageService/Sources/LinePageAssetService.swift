@@ -72,7 +72,7 @@ public struct LinePageAssets {
 public struct LinePageAssetService {
     // MARK: Lifecycle
 
-    public init(readingDirectory: URL?, widthParameter: Int = 1440, fileSystem: FileSystem = DefaultFileSystem()) {
+    public init(readingDirectory: URL?, widthParameter: Int, fileSystem: FileSystem = DefaultFileSystem()) {
         self.init(
             readingDirectory: readingDirectory,
             widthParameter: widthParameter,
@@ -89,10 +89,6 @@ public struct LinePageAssetService {
     }
 
     // MARK: Public
-
-    public func isReadingAvailable() -> Bool {
-        hasRequiredStructure()
-    }
 
     public func hasRequiredStructure() -> Bool {
         guard let readingDirectory else {

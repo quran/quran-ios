@@ -185,7 +185,6 @@ public struct LinePageLayout: Sendable {
         ayahMarkerPlacements: [LinePageAyahMarkerPlacement],
         suraHeaderPlacements: [LinePageSuraHeaderPlacement],
         sidelinePlacements: [LinePageSidelinePlacement],
-        scrollTargetY: CGFloat?,
         versesByLine: [Int: [LinePageHighlightSpan]],
         selectionLineRanges: [SelectionLineRange],
         selectionAnchorsByAyah: [AyahNumber: LinePageSelectionAnchors]
@@ -200,7 +199,6 @@ public struct LinePageLayout: Sendable {
         self.ayahMarkerPlacements = ayahMarkerPlacements
         self.suraHeaderPlacements = suraHeaderPlacements
         self.sidelinePlacements = sidelinePlacements
-        self.scrollTargetY = scrollTargetY
         self.versesByLine = versesByLine
         self.selectionLineRanges = selectionLineRanges
         self.selectionAnchorsByAyah = selectionAnchorsByAyah
@@ -218,7 +216,6 @@ public struct LinePageLayout: Sendable {
     public let ayahMarkerPlacements: [LinePageAyahMarkerPlacement]
     public let suraHeaderPlacements: [LinePageSuraHeaderPlacement]
     public let sidelinePlacements: [LinePageSidelinePlacement]
-    public let scrollTargetY: CGFloat?
 
     public func verse(at point: CGPoint) -> AyahNumber? {
         guard pageFrame.contains(point) else {
@@ -242,6 +239,14 @@ public struct LinePageLayout: Sendable {
 
     public func selectionAnchors(for ayah: AyahNumber) -> LinePageSelectionAnchors? {
         selectionAnchorsByAyah[ayah]
+    }
+
+    public func scrollTargetLineNumber(for ayah: AyahNumber) -> Int? {
+        versesByLine
+            .filter { _, spans in spans.contains(where: { $0.ayah == ayah }) }
+            .keys
+            .min()
+            .map { $0 + 1 }
     }
 
     // MARK: Private
@@ -363,9 +368,6 @@ public struct LinePageGeometryEngine {
             lineCount: input.data.lineCount
         )
 
-        let scrollTargetY = input.highlights.scrollingVerse
-            .flatMap { selectionAnchorsByAyah[$0]?.start.minY }
-
         return LinePageLayout(
             contentSize: contentSize,
             headerFrame: headerFrame,
@@ -377,7 +379,6 @@ public struct LinePageGeometryEngine {
             ayahMarkerPlacements: ayahMarkerPlacements,
             suraHeaderPlacements: suraHeaderPlacements,
             sidelinePlacements: sidelinePlacements,
-            scrollTargetY: scrollTargetY,
             versesByLine: versesByLine,
             selectionLineRanges: selectionLineRanges,
             selectionAnchorsByAyah: selectionAnchorsByAyah
@@ -490,7 +491,7 @@ public struct LinePageGeometryEngine {
             let fullLineStart = Int(floor(Double(height - lineHeight) / Double(lastLineIndex) * Double(lineIndex)))
             let hitY = fullLineStart + offset
             return SelectionLineRange(
-                lineNumber: lineIndex + 1,
+                lineNumber: lineIndex,
                 fullLineRange: CGFloat(fullLineStart) ... CGFloat(fullLineStart + lineHeight),
                 hitFrame: CGRect(
                     x: pageFrame.minX,
@@ -522,7 +523,7 @@ public struct LinePageGeometryEngine {
                 return nil
             }
 
-            let lineIndex = CGFloat(span.line - 1)
+            let lineIndex = CGFloat(span.line)
             let x = pageFrame.minX + (span.left * pageFrame.width)
             let width = ceil((span.right - span.left) * pageFrame.width)
             let y = pageFrame.minY + yStart + (lineHeightWithoutOverlap * lineIndex)
@@ -543,7 +544,7 @@ public struct LinePageGeometryEngine {
         let markerDimension = 0.05 * pageFrame.width
 
         return markers.map { marker in
-            let lineIndex = CGFloat(marker.line - 1)
+            let lineIndex = CGFloat(marker.line)
             let x = pageFrame.minX + ((marker.centerX * pageFrame.width) - (markerDimension / 2))
             let yStart = ((pageFrame.height - lineHeight) / lastLineIndex) * lineIndex
             let y = pageFrame.minY + yStart + (marker.centerY * lineHeight) - (markerDimension / 2)
@@ -567,7 +568,7 @@ public struct LinePageGeometryEngine {
         let height = width * aspectRatio
 
         return headers.map { header in
-            let lineIndex = CGFloat(header.line - 1)
+            let lineIndex = CGFloat(header.line)
             let x = pageFrame.minX + ((header.centerX * pageFrame.width) - (width / 2))
             let yStart = ((pageFrame.height - lineHeight) / lastLineIndex) * lineIndex
             let y = pageFrame.minY + yStart + (header.centerY * lineHeight) - (height / 2)

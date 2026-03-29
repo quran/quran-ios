@@ -38,7 +38,8 @@ public struct ContentImageBuilder {
             let viewModel = ContentLineViewModel(
                 reading: reading,
                 page: page,
-                linePageAssetService: linePageAssetService
+                linePageAssetService: linePageAssetService,
+                highlightsService: highlightsService
             )
             ContentLineView(viewModel: viewModel)
         default:

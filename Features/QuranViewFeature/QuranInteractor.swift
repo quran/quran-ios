@@ -441,6 +441,8 @@ private extension Reading {
             return false
         case .hafs_1440:
             return false
+        case .hafs_1439:
+            return false
         case .hafs_1441:
             return false
         case .tajweed:

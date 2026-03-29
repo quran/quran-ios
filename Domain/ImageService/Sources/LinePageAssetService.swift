@@ -109,7 +109,24 @@ public struct LinePageAssetService {
         )
     }
 
-    public func assetsForPage(_ page: Page) -> LinePageAssetsResult {
+    public func assetsForPage(_ page: Page) async -> LinePageAssetsResult {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                continuation.resume(returning: loadAssetsForPage(page))
+            }
+        }
+    }
+
+    // MARK: Private
+
+    private let readingDirectory: URL?
+    private let widthParameter: Int
+    private let requiredPageNumbers: [Int]
+    private let fileSystem: FileSystem
+
+    private let lineCount = 15
+
+    private func loadAssetsForPage(_ page: Page) -> LinePageAssetsResult {
         guard let readingDirectory else {
             return .unavailable
         }
@@ -141,15 +158,6 @@ public struct LinePageAssetService {
             )
         )
     }
-
-    // MARK: Private
-
-    private let readingDirectory: URL?
-    private let widthParameter: Int
-    private let requiredPageNumbers: [Int]
-    private let fileSystem: FileSystem
-
-    private let lineCount = 15
 
     private func ayahInfoDatabaseURL(in readingDirectory: URL) -> URL {
         readingDirectory

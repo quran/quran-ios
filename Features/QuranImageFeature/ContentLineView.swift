@@ -79,7 +79,7 @@ struct ContentLineViewBody: View {
                     }
 
                     ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
-                        LinePageSuraHeaderView()
+                        SuraHeaderView()
                             .frame(
                                 width: placement.frame.width,
                                 height: placement.frame.height
@@ -91,7 +91,7 @@ struct ContentLineViewBody: View {
                     }
 
                     ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
-                        LinePageAyahMarkerView(number: placement.marker.ayah.ayah)
+                        AyahNumberView(number: placement.marker.ayah.ayah)
                             .frame(
                                 width: placement.frame.width,
                                 height: placement.frame.height
@@ -199,36 +199,5 @@ struct ContentLineViewBody: View {
         .frame(width: layout.contentSize.width, height: layout.contentSize.height, alignment: .topLeading)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
-    }
-}
-
-private struct LinePageSuraHeaderView: View {
-    var body: some View {
-        NoorImage.suraHeader.image
-            .renderingMode(.template)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
-            .themedColorScheme()
-    }
-}
-
-private struct LinePageAyahMarkerView: View {
-    let number: Int
-
-    var body: some View {
-        NoorImage.ayahEnd.image
-            .renderingMode(.template)
-            .resizable()
-            .padding(.horizontal, 1)
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
-            .overlay(
-                Text(NumberFormatter.arabicNumberFormatter.format(number))
-                    .font(.largeTitle)
-                    .minimumScaleFactor(0.03)
-                    .padding(3)
-            )
-            .themedColorScheme()
     }
 }

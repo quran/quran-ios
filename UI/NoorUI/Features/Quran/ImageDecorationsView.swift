@@ -114,7 +114,9 @@ struct ImageDecorationsView: View {
     @State private var sizeInfo: SizeInfo = SizeInfo(imageSize: .zero, viewSize: .zero)
 }
 
-private struct SuraHeaderView: View {
+public struct SuraHeaderView: View {
+    public init() {}
+
     public var body: some View {
         NoorImage.suraHeader.image
             .renderingMode(.template)
@@ -125,8 +127,12 @@ private struct SuraHeaderView: View {
     }
 }
 
-private struct AyahNumberView: View {
+public struct AyahNumberView: View {
     let number: Int
+
+    public init(number: Int) {
+        self.number = number
+    }
 
     public var body: some View {
         NoorImage.ayahEnd.image

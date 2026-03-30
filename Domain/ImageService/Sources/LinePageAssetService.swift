@@ -107,11 +107,9 @@ public struct LinePageAssetService {
     }
 
     public func assetsForPage(_ page: Page) async -> LinePageAssetsResult {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                continuation.resume(returning: loadAssetsForPage(page))
-            }
-        }
+        await Task.detached(priority: .userInitiated) {
+            loadAssetsForPage(page)
+        }.value
     }
 
     // MARK: Private

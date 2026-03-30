@@ -25,7 +25,7 @@ class ReadingSelectorViewModel: ObservableObject {
     @Published var error: Error?
 
     var readings: [ReadingInfo<Reading>] {
-        Reading.sortedReadings.map { ReadingInfo($0) }
+        Reading.allReadings.map { ReadingInfo($0) }
     }
 
     func start() async {

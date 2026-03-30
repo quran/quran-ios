@@ -11,6 +11,7 @@ import ImageService
 import LinePagePersistence
 import NoorUI
 import QuranAnnotations
+import QuranGeometry
 import QuranKit
 import SwiftUI
 import VLogging
@@ -67,6 +68,14 @@ final class ContentLineViewModel: ObservableObject {
         LinePageChromeStyle(reading: reading)
     }
 
+    var wordFrames: WordFrameCollection {
+        wordFrameAdapter.wordFrames(
+            from: geometryData.highlightSpans,
+            quran: page.quran,
+            lineCount: geometryData.lineCount
+        )
+    }
+
     func loadLinePage() async {
         let page = page
         let linePageAssetService = linePageAssetService
@@ -110,7 +119,7 @@ final class ContentLineViewModel: ObservableObject {
         }
     }
 
-    func layout(for availableSize: CGSize) -> LinePageLayout? {
+    func layout(for availableSize: CGSize, showHeaderFooter: Bool = true) -> LinePageLayout? {
         guard let assets else {
             currentLayout = nil
             return nil
@@ -123,7 +132,7 @@ final class ContentLineViewModel: ObservableObject {
                 orientation: orientation,
                 pageParity: page.pageNumber.isMultiple(of: 2) ? .even : .odd,
                 displaySettings: LinePageDisplaySettings(
-                    showHeaderFooter: true,
+                    showHeaderFooter: showHeaderFooter,
                     showSidelines: !geometryData.sidelines.isEmpty
                 ),
                 data: LinePageGeometryData(
@@ -134,8 +143,7 @@ final class ContentLineViewModel: ObservableObject {
                     sidelines: geometryData.sidelines
                 ),
                 highlights: LinePageHighlightState(
-                    highlightedVerses: Set(highlightColorsByVerse.keys),
-                    scrollingVerse: scrollToVerse
+                    highlightedVerses: Set(highlightColorsByVerse.keys)
                 ),
                 suraHeaderAspectRatio: suraHeaderAspectRatio
             )
@@ -171,6 +179,7 @@ final class ContentLineViewModel: ObservableObject {
 
     private let reading: Reading
     private let linePageAssetService: LinePageAssetService
+    private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
     private var cancellables: Set<AnyCancellable> = []
     private var currentLayout: LinePageLayout?

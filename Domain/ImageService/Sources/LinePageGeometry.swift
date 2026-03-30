@@ -31,13 +31,11 @@ public struct LinePageDisplaySettings: Sendable {
 }
 
 public struct LinePageHighlightState: Sendable {
-    public init(highlightedVerses: Set<AyahNumber> = [], scrollingVerse: AyahNumber? = nil) {
+    public init(highlightedVerses: Set<AyahNumber> = []) {
         self.highlightedVerses = highlightedVerses
-        self.scrollingVerse = scrollingVerse
     }
 
     public let highlightedVerses: Set<AyahNumber>
-    public let scrollingVerse: AyahNumber?
 }
 
 public struct LinePageGeometryData: Sendable {
@@ -242,14 +240,6 @@ public struct LinePageLayout: Sendable {
 
     public func selectionAnchors(for ayah: AyahNumber) -> LinePageSelectionAnchors? {
         selectionAnchorsByAyah[ayah]
-    }
-
-    public func scrollTargetLineNumber(for ayah: AyahNumber) -> Int? {
-        versesByLine
-            .filter { _, spans in spans.contains(where: { $0.ayah == ayah }) }
-            .keys
-            .min()
-            .map { $0 + 1 }
     }
 
     // MARK: Private

@@ -63,7 +63,7 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertEqual(sideline.frame.height, 146.13333333333333, accuracy: 0.001)
     }
 
-    func testHighlightsMarkersHeadersAndScrollTargetUseSharedGeometry() throws {
+    func testHighlightsMarkersAndHeadersUseSharedGeometry() throws {
         let highlightedAyah = try ayah(1, 1)
         let markerAyah = try ayah(1, 2)
         let layout = makeEngine().layout(
@@ -74,8 +74,7 @@ final class LinePageGeometryTests: XCTestCase {
                 displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
                 data: makeData(),
                 highlights: LinePageHighlightState(
-                    highlightedVerses: [highlightedAyah, markerAyah],
-                    scrollingVerse: markerAyah
+                    highlightedVerses: [highlightedAyah, markerAyah]
                 ),
                 suraHeaderAspectRatio: 0.25
             )
@@ -101,8 +100,6 @@ final class LinePageGeometryTests: XCTestCase {
             header.frame,
             expectedHeaderFrame(for: header.header, pageFrame: layout.pageFrame, aspectRatio: 0.25)
         )
-
-        XCTAssertEqual(layout.scrollTargetLineNumber(for: markerAyah), 7)
     }
 
     func testVerseHitTestingAndSelectionAnchorsFollowAyahSpans() throws {

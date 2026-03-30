@@ -10,8 +10,10 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
+import CompletionService
 import MoreMenuFeature
 import NoteEditorFeature
+import PageBookmarkPersistence
 import QuranContentFeature
 import QuranKit
 import ReadingService
@@ -35,10 +37,15 @@ public struct QuranBuilder {
 
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
+        let completionService = CompletionService(
+            persistence: container.completionPersistence,
+            pageBookmarkPersistence: container.pageBookmarkPersistence
+        )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
+            completionService: completionService,
             noteService: container.noteService(),
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),

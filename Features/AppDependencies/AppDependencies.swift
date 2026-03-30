@@ -9,6 +9,7 @@ import Analytics
 import AnnotationsService
 import AuthenticationClient
 import BatchDownloader
+import CompletionPersistence
 import Foundation
 import LastPagePersistence
 import NotePersistence
@@ -36,6 +37,7 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+    var completionPersistence: CompletionPersistence { get }
 
     var authenticationClient: (any AuthenticationClient)? { get }
 }

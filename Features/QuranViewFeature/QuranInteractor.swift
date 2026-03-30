@@ -11,6 +11,7 @@ import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
 import Combine
+import CompletionService
 import Crashing
 import FeaturesSupport
 import MoreMenuFeature
@@ -29,6 +30,12 @@ import UIKit
 import UIx
 import VLogging
 import WordPointerFeature
+
+enum CompletionSelectionResult {
+    case completion(UUID)
+    case withoutCompletion
+    case cancel
+}
 
 @MainActor
 protocol QuranPresentable: UIViewController {
@@ -49,6 +56,7 @@ protocol QuranPresentable: UIViewController {
     func presentWordPointer(_ viewController: UIViewController)
     func presentQuranContent(_ viewController: UIViewController)
     func presentTranslationsSelection(_ viewController: UIViewController)
+    func presentCompletionSelection(options: [(name: String, id: UUID)], onSelect: @escaping (CompletionSelectionResult) -> Void)
 
     func dismissWordPointer(_ viewController: UIViewController)
     func dismissPresentedViewController(completion: (() -> Void)?)
@@ -62,6 +70,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let quran: Quran
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
+        let completionService: CompletionService?
         let noteService: NoteService
         let ayahMenuBuilder: AyahMenuBuilder
         let moreMenuBuilder: MoreMenuBuilder
@@ -107,6 +116,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.pageBookmarks = $0 }
+            .store(in: &cancellables)
+
+        deps.completionService?.completions(quran: deps.quran)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.activeCompletions = $0.filter { $0.finishedAt == nil }
+            }
             .store(in: &cancellables)
 
         contentStatePreferences.$quranMode
@@ -287,16 +303,31 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
         do {
             let analytics = deps.analytics
-            let service = deps.pageBookmarkService
-            try await withThrowingTaskGroup(of: Void.self) { group in
-                for page in pages {
-                    group.addTask {
-                        if !wasBookmarked {
-                            analytics.bookmarkPage(page)
-                            try await service.insertPageBookmark(page)
-                        } else {
+            let pageService = deps.pageBookmarkService
+
+            if wasBookmarked {
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    for page in pages {
+                        group.addTask {
                             analytics.removeBookmarkPage(page)
-                            try await service.removePageBookmark(page)
+                            try await pageService.removePageBookmark(page)
+                        }
+                    }
+                    try await group.waitForAll()
+                }
+            } else {
+                // Resolve which completion (if any) to associate with these bookmarks
+                let sessionResult = await resolvedCompletionForSession()
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    for page in pages {
+                        group.addTask {
+                            analytics.bookmarkPage(page)
+                            try await pageService.insertPageBookmark(page)
+                        }
+                        if case .completion(let completion) = sessionResult {
+                            group.addTask { [completionService = deps.completionService] in
+                                try await completionService?.addBookmark(page: page, to: completion)
+                            }
                         }
                     }
                     try await group.waitForAll()
@@ -308,7 +339,58 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    func resetCompletionSession() {
+        logger.info("Quran: reset completion session")
+        sessionState = .undecided
+    }
+
     // MARK: Private
+
+    private enum CompletionSessionState {
+        case undecided
+        case noCompletion
+        case completion(Completion)
+    }
+
+    private var sessionState: CompletionSessionState = .undecided
+    private var activeCompletions: [Completion] = []
+
+    private func resolvedCompletionForSession() async -> CompletionSessionState {
+        switch sessionState {
+        case .undecided:
+            break
+        case .noCompletion, .completion:
+            return sessionState
+        }
+
+        // No active completions → no session needed
+        guard !activeCompletions.isEmpty else {
+            return .noCompletion
+        }
+
+        // Ask user to choose
+        let result = await withCheckedContinuation { (continuation: CheckedContinuation<CompletionSelectionResult, Never>) in
+            let options = activeCompletions.map { (name: $0.name ?? "Completion", id: $0.id) }
+            presenter?.presentCompletionSelection(options: options) { result in
+                continuation.resume(returning: result)
+            }
+        }
+
+        switch result {
+        case .completion(let id):
+            if let chosen = activeCompletions.first(where: { $0.id == id }) {
+                sessionState = .completion(chosen)
+                return .completion(chosen)
+            }
+            return .noCompletion
+        case .withoutCompletion:
+            sessionState = .noCompletion
+            return .noCompletion
+        case .cancel:
+            // Don't persist the choice; PageBookmark is still created but no CompletionBookmark
+            return .noCompletion
+        }
+    }
 
     private let readingPreferences = ReadingPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared

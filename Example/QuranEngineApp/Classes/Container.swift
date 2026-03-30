@@ -9,6 +9,7 @@ import Analytics
 import AppDependencies
 import AuthenticationClient
 import BatchDownloader
+import CompletionPersistence
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
@@ -36,6 +37,7 @@ class Container: AppDependencies {
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+    private(set) lazy var completionPersistence: CompletionPersistence = CoreDataCompletionPersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
         guard let configurations = Constant.QuranOAuthAppConfigurations else {
             return nil
@@ -70,7 +72,9 @@ class Container: AppDependencies {
             let lastPage = CoreDataLastPageUniquifier()
             let pageBookmark = CoreDataPageBookmarkUniquifier()
             let note = CoreDataNoteUniquifier()
-            return [lastPage, pageBookmark, note]
+            let completion = CoreDataCompletionUniquifier()
+            let completionBookmark = CoreDataCompletionBookmarkUniquifier()
+            return [lastPage, pageBookmark, note, completion, completionBookmark]
         }
         return stack
     }()

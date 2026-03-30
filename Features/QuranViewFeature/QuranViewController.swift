@@ -248,6 +248,34 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         updateRightBarItems(animated: false, isBookmarked: isBookmarked)
     }
 
+    func presentCompletionSelection(options: [(name: String, id: UUID)], onSelect: @escaping (CompletionSelectionResult) -> Void) {
+        let alert = UIAlertController(
+            title: "Add to Reading Journey",
+            message: "Choose which completion to record this bookmark in.",
+            preferredStyle: .actionSheet
+        )
+
+        for option in options {
+            alert.addAction(UIAlertAction(title: option.name, style: .default) { _ in
+                onSelect(.completion(option.id))
+            })
+        }
+
+        alert.addAction(UIAlertAction(title: "Without completion", style: .default) { _ in
+            onSelect(.withoutCompletion)
+        })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            onSelect(.cancel)
+        })
+
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.barButtonItem = quranView?.navigationItem.rightBarButtonItems?.last
+        }
+
+        present(alert, animated: true)
+    }
+
     // MARK: Private
 
     private class TranslationsSelectionNavigationController: BaseNavigationController {}
@@ -368,16 +396,34 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
         let bookmarkImage = UIImage.symbol(isBookmarked ? "bookmark.fill" : "bookmark")
-        let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
+
+        // Use a custom UIButton so we can attach both tap and long-press gestures
+        let button = UIButton(type: .system)
+        button.setImage(bookmarkImage, for: .normal)
         if isBookmarked {
-            bookmark.tintColor = .systemRed
+            button.tintColor = .systemRed
         }
+        button.addTarget(self, action: #selector(onBookmarkButtonTapped), for: .touchUpInside)
+
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(onBookmarkButtonLongPressed(_:)))
+        button.addGestureRecognizer(longPress)
+
+        let bookmark = UIBarButtonItem(customView: button)
 
         quranView?.navigationItem.setRightBarButtonItems([moreNavigationButton, bookmark], animated: animated)
     }
 
     @objc
     private func onBookmarkButtonTapped() {
+        Task {
+            await interactor.toogleBookmark()
+        }
+    }
+
+    @objc
+    private func onBookmarkButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+        interactor.resetCompletionSession()
         Task {
             await interactor.toogleBookmark()
         }

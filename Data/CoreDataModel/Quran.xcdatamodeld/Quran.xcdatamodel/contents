@@ -23,7 +23,23 @@
         <attribute name="sura" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <relationship name="note" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MO_Note" inverseName="verses" inverseEntity="MO_Note"/>
     </entity>
+    <entity name="MO_Completion" representedClassName="MO_Completion" syncable="YES" codeGenerationType="class">
+        <attribute name="finishedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="quranId" optional="YES" attributeType="String"/>
+        <attribute name="startedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="MO_CompletionBookmark" representedClassName="MO_CompletionBookmark" syncable="YES" codeGenerationType="class">
+        <attribute name="completionId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="page" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+    </entity>
     <elements>
+        <element name="MO_Completion" positionX="0" positionY="320" width="128" height="133"/>
+        <element name="MO_CompletionBookmark" positionX="200" positionY="320" width="128" height="103"/>
         <element name="MO_LastPage" positionX="-63" positionY="-18" width="128" height="88"/>
         <element name="MO_Note" positionX="163.96484375" positionY="-12.609375" width="128" height="118"/>
         <element name="MO_PageBookmark" positionX="-63.015625" positionY="135.2890625" width="128" height="103"/>

@@ -26,8 +26,22 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Internal
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        isSyncingToParent = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        isSyncingToParent = false
+        viewModel.editMode = .inactive
+    }
+
     // MARK: Private
 
+    private var isSyncingToParent = true
     private var editController: EditController?
     private let viewModel: BookmarksViewModel
     private var cancellables: Set<AnyCancellable> = []
@@ -70,6 +84,17 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
         } else {
             addCloudSyncInfo()
         }
+        // EditController updates rightBarButtonItems on the same run-loop pass;
+        // dispatch async so we copy after it has finished.
+        DispatchQueue.main.async { [weak self] in
+            self?.syncBarItemsToParent()
+        }
+    }
+
+    private func syncBarItemsToParent() {
+        guard let parent, isSyncingToParent else { return }
+        parent.navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems
+        parent.navigationItem.rightBarButtonItems = navigationItem.rightBarButtonItems
     }
 
     @objc

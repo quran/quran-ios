@@ -210,6 +210,13 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
+        // MARK: - Completion Persistence
+
+        target(type, name: "CompletionPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ]),
+
         target(type, name: "SyncedPageBookmarkPersistence", dependencies: [
             "SQLitePersistence",
             .product(name: "GRDB", package: "GRDB.swift"),
@@ -494,6 +501,12 @@ private func domainTargets() -> [[Target]] {
         ], testDependencies: [
         ]),
 
+        target(type, name: "CompletionService", dependencies: [
+            "CompletionPersistence",
+            "PageBookmarkPersistence",
+            "QuranKit",
+        ]),
+
         target(type, name: "SettingsService", hasTests: false, dependencies: [
             "Analytics",
             "Preferences",
@@ -516,7 +529,9 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnnotationsService",
             "BatchDownloader",
+            "CompletionPersistence",
             "LastPagePersistence",
+            "PageBookmarkPersistence",
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
@@ -601,8 +616,19 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "FeaturesSupport",
             "AnnotationsService",
+            "CompletionService",
             "NoorUI",
             "ReadingService",
+        ]),
+
+        target(type, name: "CompletionsFeature", hasTests: false, dependencies: [
+            "AppDependencies",
+            "CompletionService",
+            "FeaturesSupport",
+            "Localization",
+            "NoorUI",
+            "ReadingService",
+            "UIx",
         ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
@@ -683,6 +709,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "QuranViewFeature", hasTests: false, dependencies: [
             "AudioBannerFeature",
+            "CompletionService",
             "QuranContentFeature",
             "AyahMenuFeature",
             "MoreMenuFeature",
@@ -709,6 +736,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
             "HomeFeature",
             "BookmarksFeature",
+            "CompletionsFeature",
             "NotesFeature",
             "SearchFeature",
             "SettingsFeature",

@@ -1,20 +1,17 @@
 //
-//  BookmarksBuilder.swift
-//  Quran
+//  CompletionsBuilder.swift
 //
-//  Created by Afifi, Mohamed on 3/31/19.
-//  Copyright © 2019 Quran.com. All rights reserved.
+//
+//  Created by Selim on 29.03.2026.
 //
 
-import AnnotationsService
 import AppDependencies
 import CompletionService
 import FeaturesSupport
-import PageBookmarkPersistence
 import UIKit
 
 @MainActor
-public struct BookmarksBuilder {
+public struct CompletionsBuilder {
     // MARK: Lifecycle
 
     public init(container: AppDependencies) {
@@ -24,20 +21,17 @@ public struct BookmarksBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let completionService = CompletionService(
+        let service = CompletionService(
             persistence: container.completionPersistence,
             pageBookmarkPersistence: container.pageBookmarkPersistence
         )
-        let viewModel = BookmarksViewModel(
-            analytics: container.analytics,
-            service: pageBookmarkService,
-            completionService: completionService,
+        let viewModel = CompletionsViewModel(
+            service: service,
             navigateTo: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }
         )
-        let viewController = BookmarksViewController(viewModel: viewModel)
+        let viewController = CompletionsViewController(viewModel: viewModel)
         return viewController
     }
 

@@ -20,6 +20,7 @@ struct BookmarksView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             bookmarks: viewModel.bookmarks,
+            completionNameByPage: viewModel.completionNameByPage,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             deleteAction: { await viewModel.deleteItem($0) }
@@ -34,6 +35,7 @@ private struct BookmarksViewUI: View {
     @Binding var error: Error?
 
     let bookmarks: [PageBookmark]
+    let completionNameByPage: [Int: String]
 
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
@@ -69,10 +71,12 @@ private struct BookmarksViewUI: View {
 
     private func listItem(_ bookmark: PageBookmark) -> some View {
         let ayah = bookmark.page.firstVerse
+        let completionName = completionNameByPage[bookmark.page.pageNumber]
+        let subtitleText = completionName.map { "\(bookmark.creationDate.timeAgo())\n\($0)" } ?? bookmark.creationDate.timeAgo()
         return NoorListItem(
             image: .init(.bookmark, color: .red),
             title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
-            subtitle: .init(text: bookmark.creationDate.timeAgo(), location: .bottom),
+            subtitle: .init(text: subtitleText, location: .bottom),
             accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
         ) {
             selectAction(bookmark)
@@ -99,6 +103,7 @@ struct BookmarksView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     bookmarks: items,
+                    completionNameByPage: [:],
                     start: {},
                     selectAction: { _ in },
                     deleteAction: { item in items = items.filter { $0 != item } }

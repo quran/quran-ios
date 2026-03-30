@@ -23,4 +23,12 @@ public enum Schema {
     public enum LastPage: String, CoreDataKey {
         case createdOn, modifiedOn, page
     }
+
+    public enum Completion: String, CoreDataKey {
+        case id, name, quranId, startedAt, finishedAt, isActive
+    }
+
+    public enum CompletionBookmark: String, CoreDataKey {
+        case id, completionId, page, createdAt
+    }
 }

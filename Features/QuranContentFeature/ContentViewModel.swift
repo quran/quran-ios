@@ -103,6 +103,10 @@ public final class ContentViewModel: ObservableObject {
         highlights.readingVerses = [ayah].compactMap { $0 }
     }
 
+    public func highlightReadingWord(_ word: Word?) {
+        highlights.pointedWord = word
+    }
+
     // MARK: Internal
 
     let deps: Deps

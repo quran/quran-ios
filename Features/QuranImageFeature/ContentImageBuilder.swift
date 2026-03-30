@@ -17,6 +17,7 @@ import SwiftUI
 import UIKit
 import Utilities
 import VLogging
+import WordAnnotationService
 
 @MainActor
 public struct ContentImageBuilder {
@@ -32,12 +33,14 @@ public struct ContentImageBuilder {
     public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
         let imageService = Self.buildImageDataService(reading: reading, container: container)
+        let annotationService = WordAnnotationService(wordsDatabase: container.wordsDatabase)
 
         let viewModel = ContentImageViewModel(
             reading: reading,
             page: page,
             imageDataService: imageService,
-            highlightsService: highlightsService
+            highlightsService: highlightsService,
+            wordAnnotationService: annotationService
         )
         return ContentImageView(viewModel: viewModel)
     }

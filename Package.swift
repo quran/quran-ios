@@ -398,6 +398,7 @@ private func domainTargets() -> [[Target]] {
             "QueuePlayer",
             "SystemDependencies",
             "Zip",
+            "WordAnnotationService",
         ], testDependencies: [
             "SystemDependenciesFake",
             "TranslationServiceFake",
@@ -457,6 +458,14 @@ private func domainTargets() -> [[Target]] {
             "Crashing",
         ], testDependencies: [
             "TestResources",
+        ]),
+
+        target(type, name: "WordAnnotationService", hasTests: false, dependencies: [
+            "QuranAnnotations",
+            "QuranKit",
+            "QuranAudio",
+            "WordTextPersistence",
+            "VLogging",
         ]),
 
         target(type, name: "ImageService", dependencies: [
@@ -620,6 +629,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranPagesFeature",
             "QuranTextKit",
             "Caching",
+            "WordAnnotationService",
         ]),
 
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [

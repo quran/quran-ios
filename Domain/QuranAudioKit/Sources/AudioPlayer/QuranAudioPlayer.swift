@@ -12,6 +12,7 @@ import QuranAudio
 import QuranKit
 import ReciterService
 import VLogging
+import WordAnnotationService
 
 public struct QuranAudioPlayerActions: Sendable {
     // MARK: Lifecycle
@@ -20,12 +21,14 @@ public struct QuranAudioPlayerActions: Sendable {
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
         playbackPaused: @Sendable @MainActor @escaping () -> Void,
         playbackResumed: @Sendable @MainActor @escaping () -> Void,
-        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void
+        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void,
+        playingWord: (@Sendable @MainActor (Word?) -> Void)? = nil
     ) {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused
         self.playbackResumed = playbackResumed
         self.playing = playing
+        self.playingWord = playingWord
     }
 
     // MARK: Internal
@@ -34,6 +37,8 @@ public struct QuranAudioPlayerActions: Sendable {
     let playbackPaused: @Sendable @MainActor () -> Void
     let playbackResumed: @Sendable @MainActor () -> Void
     let playing: @Sendable @MainActor (AyahNumber) -> Void
+    /// Called with the currently playing word (nil when verse ends or between words).
+    let playingWord: (@Sendable @MainActor (Word?) -> Void)?
 }
 
 @MainActor
@@ -103,6 +108,7 @@ public class QuranAudioPlayer {
         logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
         try await unzipper.unzip(reciter: reciter)
 
+        currentReciter = reciter
         let builder = getAudioRequestBuilder(for: reciter)
         let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
         let request = audioRequest.getRequest()
@@ -121,11 +127,14 @@ public class QuranAudioPlayer {
     private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
+    private let wordTimingScheduler = WordTimingScheduler()
+    private var currentReciter: Reciter?
 
     // MARK: - AudioPlayerActions
 
     private func playbackEnded() {
         nowPlaying.clear()
+        wordTimingScheduler.cancel()
         actions?.playbackEnded()
         // not interested to get more notifications
         player.actions = nil
@@ -154,6 +163,15 @@ public class QuranAudioPlayer {
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
         actions?.playing(ayah)
+
+        // Schedule word-level highlights if the listener wants them.
+        if actions?.playingWord != nil, let reciter = currentReciter {
+            wordTimingScheduler.onWord = { [weak self] word in
+                self?.actions?.playingWord?(word)
+            }
+            let playerOffset = playerItem.currentTime().seconds
+            wordTimingScheduler.schedule(ayah: ayah, reciter: reciter, playerTimeOffset: playerOffset)
+        }
     }
 
     private func willPlay(_ request: AudioRequest) {

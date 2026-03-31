@@ -121,6 +121,7 @@ private struct SuraHeaderView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .foregroundColor(.pageMarkerTint)
+            .themedColorScheme()
     }
 }
 
@@ -140,6 +141,7 @@ private struct AyahNumberView: View {
                     .minimumScaleFactor(0.03)
                     .padding(3)
             )
+            .themedColorScheme()
     }
 }
 

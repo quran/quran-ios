@@ -48,6 +48,8 @@
 
 "setting.write_review" = "Đánh giá ứng dụng trên Appstore...";
 "setting.contact_us" = "Liên hệ";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.donate" = "Quyên góp";
 "setting.share_app" = "Chia sẻ ứng dụng...";
 "setting.app_version" = "Phiên bản ứng dụng";
 

@@ -50,6 +50,8 @@
 
 "setting.write_review" = "Uygulamamızı AppStore'de değerlendirin...";
 "setting.contact_us" = "Bizimle iletişime geçin!";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.donate" = "Bağış Yap";
 "setting.share_app" = "Uygulamayı paylaşın...";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.app_version" = "Uygulama sürümü";

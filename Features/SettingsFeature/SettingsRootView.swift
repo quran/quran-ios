@@ -24,6 +24,7 @@ struct SettingsRootView: View {
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
             navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
+            donate: { viewModel.donate() },
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
@@ -45,6 +46,7 @@ private struct SettingsRootViewUI: View {
     let navigateToAudioManager: AsyncAction
     let navigateToTranslationsList: AsyncAction
     let navigateToReadingSelector: AsyncAction
+    let donate: AsyncAction
     let shareApp: AsyncAction
     let writeReview: AsyncAction
     let contactUs: AsyncAction
@@ -97,6 +99,13 @@ private struct SettingsRootViewUI: View {
             }
 
             NoorBasicSection {
+                NoorListItem(
+                    image: .init(.heart),
+                    title: .text(l("setting.donate")),
+                    accessory: .disclosureIndicator,
+                    action: donate
+                )
+
                 NoorListItem(
                     image: .init(.share),
                     title: .text(l("setting.share_app")),
@@ -164,6 +173,7 @@ struct SettingsRootView_Previews: PreviewProvider {
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
                 navigateToReadingSelector: {},
+                donate: {},
                 shareApp: {},
                 writeReview: {},
                 contactUs: {},

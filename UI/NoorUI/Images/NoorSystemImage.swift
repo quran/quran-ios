@@ -12,6 +12,7 @@ public enum NoorSystemImage: String {
     case downloads = "square.and.arrow.down"
     case download = "icloud.and.arrow.down"
     case translation = "globe"
+    case heart = "heart.fill"
     case share = "square.and.arrow.up"
     case star
     case mail = "envelope"

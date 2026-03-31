@@ -93,7 +93,7 @@ public final class MobileSyncSession {
     }
 
     public func removePageBookmark(_ page: Int) async throws {
-        let bookmarks = try await currentBookmarks()
+        let bookmarks = try await bookmarks()
         guard let bookmark = Self.pageBookmark(in: bookmarks, page: page) else {
             return
         }
@@ -102,7 +102,7 @@ public final class MobileSyncSession {
     }
 
     public func removeAllPageBookmarks() async throws {
-        let bookmarks = try await currentBookmarks()
+        let bookmarks = try await bookmarks()
         let pageBookmarks = bookmarks.compactMap { $0 as? Bookmark.PageBookmark }
 
         for bookmark in pageBookmarks {
@@ -111,6 +111,37 @@ public final class MobileSyncSession {
     }
 
     // MARK: Private
+
+    private static let redirectURI = "com.quran.oauth://callback"
+    private static let scopes = [
+        "openid",
+        "offline_access",
+        "content",
+        "user",
+        "bookmark",
+        "sync",
+        "collection",
+        "reading_session",
+        "preference",
+        "note",
+    ]
+
+    private let authService: AuthService
+    private let bookmarksSubject = CurrentValueSubject<[Bookmark], Never>([])
+    private var bookmarksObservationTask: Task<Void, Never>?
+
+    private static func pageBookmark(in bookmarks: [Bookmark], page: Int) -> Bookmark.PageBookmark? {
+        bookmarks
+            .compactMap { $0 as? Bookmark.PageBookmark }
+            .first { Int($0.page) == page }
+    }
+
+    private static func makeSynchronizationEnvironment(usePreProduction: Bool) -> SynchronizationEnvironment {
+        let endpoint = usePreProduction
+            ? "https://apis-prelive.quran.foundation/auth"
+            : "https://apis.quran.foundation/auth"
+        return SynchronizationEnvironment(endPointURL: endpoint)
+    }
 
     private func startBookmarksObservationIfNeeded() {
         guard bookmarksObservationTask == nil else {
@@ -132,43 +163,12 @@ public final class MobileSyncSession {
         }
     }
 
-    private let authService: AuthService
-    private let bookmarksSubject = CurrentValueSubject<[Bookmark], Never>([])
-    private var bookmarksObservationTask: Task<Void, Never>?
-
-    private static func pageBookmark(in bookmarks: [Bookmark], page: Int) -> Bookmark.PageBookmark? {
-        bookmarks
-            .compactMap { $0 as? Bookmark.PageBookmark }
-            .first { Int($0.page) == page }
-    }
-
-    private static func makeSynchronizationEnvironment(usePreProduction: Bool) -> SynchronizationEnvironment {
-        let endpoint = usePreProduction
-            ? "https://apis-prelive.quran.foundation/auth"
-            : "https://apis.quran.foundation/auth"
-        return SynchronizationEnvironment(endPointURL: endpoint)
-    }
-
     @MainActor
-    private func currentBookmarks() async throws -> [Bookmark] {
+    private func bookmarks() async throws -> [Bookmark] {
         for try await bookmarks in syncService.bookmarksSequence() {
             return bookmarks
         }
 
         return []
     }
-
-    private static let redirectURI = "com.quran.oauth://callback"
-    private static let scopes = [
-        "openid",
-        "offline_access",
-        "content",
-        "user",
-        "bookmark",
-        "sync",
-        "collection",
-        "reading_session",
-        "preference",
-        "note",
-    ]
 }

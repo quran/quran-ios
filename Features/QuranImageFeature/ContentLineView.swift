@@ -14,13 +14,20 @@ import UIx
 
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
+    @State private var windowSafeAreaInsets: EdgeInsets = .zero
 
     var body: some View {
         GeometryReader { geometry in
-            let layout = viewModel.layout(for: geometry.size)
+            let horizontalGutter = max(windowSafeAreaInsets.leading, windowSafeAreaInsets.trailing)
+            let layoutSize = CGSize(
+                width: max(0, geometry.size.width - (2 * horizontalGutter)),
+                height: geometry.size.height
+            )
+            let layout = viewModel.layout(for: layoutSize)
             ContentLineViewBody(
                 page: viewModel.page,
                 layout: layout,
+                horizontalGutter: horizontalGutter,
                 scrollToVerse: viewModel.scrollToVerse,
                 highlightColorsByVerse: viewModel.highlightColorsByVerse,
                 chromeStyle: viewModel.chromeStyle,
@@ -40,6 +47,7 @@ struct ContentLineView: View {
         .task {
             await viewModel.loadLinePage()
         }
+        .readWindowSafeAreaInsets($windowSafeAreaInsets)
     }
 }
 
@@ -48,6 +56,7 @@ struct ContentLineViewBody: View {
 
     let page: Page
     let layout: LinePageLayout?
+    let horizontalGutter: CGFloat
     let scrollToVerse: AyahNumber?
     let highlightColorsByVerse: [AyahNumber: Color]
     let chromeStyle: LinePageChromeStyle
@@ -174,11 +183,11 @@ struct ContentLineViewBody: View {
                 height: layout?.contentSize.height ?? 0,
                 alignment: .topLeading
             )
+            .padding(.horizontal, horizontalGutter)
             .environment(\.layoutDirection, .leftToRight)
             .onGlobalFrameChanged(onGlobalFrameChange)
         }
         .font(.footnote)
-        .populateReadableInsets()
         .themedBackground()
         .quranScrolling(scrollToValue: scrollToVerse) { ayah in
             layout?.scrollTargetLineNumber(for: ayah)

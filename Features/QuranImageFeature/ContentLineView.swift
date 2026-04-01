@@ -7,6 +7,7 @@
 
 import ImageService
 import NoorUI
+import QuranGeometry
 import QuranKit
 import QuranPagesFeature
 import SwiftUI
@@ -14,29 +15,20 @@ import UIx
 
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
-    @State private var windowSafeAreaInsets: EdgeInsets = .zero
 
     var body: some View {
-        GeometryReader { geometry in
-            let horizontalGutter = max(windowSafeAreaInsets.leading, windowSafeAreaInsets.trailing)
-            let layoutSize = CGSize(
-                width: max(0, geometry.size.width - (2 * horizontalGutter)),
-                height: geometry.size.height
-            )
-            let layout = viewModel.layout(for: layoutSize)
-            ContentLineViewBody(
-                page: viewModel.page,
-                layout: layout,
-                horizontalGutter: horizontalGutter,
-                scrollToVerse: viewModel.scrollToVerse,
-                highlightColorsByVerse: viewModel.highlightColorsByVerse,
-                chromeStyle: viewModel.chromeStyle,
-                imageRenderingMode: viewModel.imageRenderingMode,
-                imageForLine: viewModel.lineImage(for:),
-                imageForSideline: viewModel.sidelineImage(for:),
-                onGlobalFrameChange: viewModel.updateContentFrame
-            )
-        }
+        ContentLineViewBody(
+            page: viewModel.page,
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            scrollToVerse: viewModel.scrollToVerse,
+            wordFrames: viewModel.wordFrames,
+            highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            chromeStyle: viewModel.chromeStyle,
+            imageRenderingMode: viewModel.imageRenderingMode,
+            imageForLine: viewModel.lineImage(for:),
+            imageForSideline: viewModel.sidelineImage(for:),
+            onGlobalFrameChange: viewModel.updateContentFrame
+        )
         .geometryActions(
             PageGeometryActions(
                 id: ObjectIdentifier(viewModel),
@@ -47,7 +39,6 @@ struct ContentLineView: View {
         .task {
             await viewModel.loadLinePage()
         }
-        .readWindowSafeAreaInsets($windowSafeAreaInsets)
     }
 }
 
@@ -55,9 +46,9 @@ struct ContentLineViewBody: View {
     // MARK: Internal
 
     let page: Page
-    let layout: LinePageLayout?
-    let horizontalGutter: CGFloat
+    let layoutForSize: (CGSize) -> LinePageLayout?
     let scrollToVerse: AyahNumber?
+    let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
     let chromeStyle: LinePageChromeStyle
     let imageRenderingMode: QuranThemedImage.RenderingMode
@@ -66,166 +57,157 @@ struct ContentLineViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        scrollView {
-            ZStack(alignment: .topLeading) {
-                Color.clear
-                    .frame(
-                        width: layout?.contentSize.width ?? 0,
-                        height: layout?.contentSize.height ?? 0
-                    )
-
-                if let layout {
-                    lineScrollAnchors(layout)
-
-                    ForEach(layout.lineFrames, id: \.self) { lineFrame in
-                        if let image = imageForLine(lineFrame.lineNumber) {
-                            QuranThemedImage(image: image, renderingMode: imageRenderingMode)
-                                .frame(
-                                    width: lineFrame.imageFrame.width,
-                                    height: lineFrame.imageFrame.height
-                                )
-                                .offset(
-                                    x: lineFrame.imageFrame.minX,
-                                    y: lineFrame.imageFrame.minY
-                                )
-                        }
-                    }
-
-                    ForEach(layout.sidelinePlacements, id: \.self) { placement in
-                        if let image = imageForSideline(placement.sideline.id) {
-                            QuranThemedImage(image: image, renderingMode: imageRenderingMode)
-                                .frame(
-                                    width: placement.frame.width,
-                                    height: placement.frame.height
-                                )
-                                .offset(
-                                    x: placement.frame.minX,
-                                    y: placement.frame.minY
-                                )
-                        }
-                    }
-
-                    ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
-                        LinePageSuraHeaderView(style: chromeStyle)
-                            .frame(
-                                width: placement.frame.width,
-                                height: placement.frame.height
-                            )
-                            .offset(
-                                x: placement.frame.minX,
-                                y: placement.frame.minY
-                            )
-                    }
-
-                    ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
-                        LinePageAyahMarkerView(number: placement.marker.ayah.ayah, style: chromeStyle)
-                            .frame(
-                                width: placement.frame.width,
-                                height: placement.frame.height
-                            )
-                            .offset(
-                                x: placement.frame.minX,
-                                y: placement.frame.minY
-                            )
-                    }
-
-                    ForEach(layout.highlightRects, id: \.self) { highlight in
-                        if let color = highlightColorsByVerse[highlight.ayah] {
-                            color
-                                .frame(
-                                    width: highlight.rect.width,
-                                    height: highlight.rect.height
-                                )
-                                .offset(
-                                    x: highlight.rect.minX,
-                                    y: highlight.rect.minY
-                                )
-                        }
-                    }
-
-                    if layout.headerFrame.height > 0 {
-                        QuranPageHeader(
-                            quarterName: page.localizedQuarterName,
-                            suraNames: page.suraNames(),
-                            readableInsetEdges: []
-                        )
-                        .frame(
-                            width: layout.headerFrame.width,
-                            height: layout.headerFrame.height,
-                            alignment: .topLeading
-                        )
-                        .offset(
-                            x: layout.headerFrame.minX,
-                            y: layout.headerFrame.minY
-                        )
-                        .environment(\.layoutDirection, layoutDirection)
-                        .zIndex(1)
-                    }
-
-                    if layout.footerFrame.height > 0 {
-                        QuranPageFooter(page: page.localizedNumber, readableInsetEdges: [])
-                            .frame(
-                                width: layout.footerFrame.width,
-                                height: layout.footerFrame.height,
-                                alignment: .topLeading
-                            )
-                            .offset(
-                                x: layout.footerFrame.minX,
-                                y: layout.footerFrame.minY
-                            )
-                            .environment(\.layoutDirection, layoutDirection)
-                            .zIndex(1)
-                    }
-                }
-            }
-            .frame(
-                width: layout?.contentSize.width ?? 0,
-                height: layout?.contentSize.height ?? 0,
-                alignment: .topLeading
+        AdaptiveQuranScrollView {
+            QuranPageHeader(
+                quarterName: page.localizedQuarterName,
+                suraNames: page.suraNames()
             )
-            .padding(.horizontal, horizontalGutter)
-            .environment(\.layoutDirection, .leftToRight)
-            .onGlobalFrameChanged(onGlobalFrameChange)
+        } footer: {
+            QuranPageFooter(page: page.localizedNumber)
+        } content: { availableContentSize in
+            lineCanvas(layoutForSize(availableContentSize))
         }
         .font(.footnote)
+        .populateReadableInsets()
         .themedBackground()
-        .quranScrolling(scrollToValue: scrollToVerse) { ayah in
-            layout?.scrollTargetLineNumber(for: ayah)
+        .quranScrolling(scrollToValue: scrollToVerse, anchor: UnitPoint(x: 0, y: 0.2)) { ayah in
+            wordFrames.wordFramesForVerse(ayah).first?.word
         }
     }
 
     // MARK: Private
 
-    @Environment(\.layoutDirection) private var layoutDirection
-
     @ViewBuilder
-    private func scrollView(@ViewBuilder content: () -> some View) -> some View {
-        if #available(iOS 16.4, *) {
-            ScrollView(content: content)
-                .scrollBounceBehavior(.basedOnSize)
-        } else {
-            ScrollView(content: content)
+    private func scrollAnchors(_ layout: LinePageLayout) -> some View {
+        let verses = Set(wordFrames.lines.flatMap(\.frames).map(\.word.verse)).sorted()
+
+        ForEach(verses, id: \.self) { ayah in
+            if let anchorWord = wordFrames.wordFramesForVerse(ayah).first?.word,
+               let start = layout.selectionAnchors(for: ayah)?.start
+            {
+                VStack(spacing: 0) {
+                    Color.clear
+                        .frame(height: start.minY)
+
+                    Color.clear
+                        .frame(width: 1, height: 1)
+                        .id(anchorWord)
+
+                    Spacer(minLength: 0)
+                }
+                .frame(
+                    width: layout.contentSize.width,
+                    height: layout.contentSize.height,
+                    alignment: .topLeading
+                )
+            }
         }
     }
 
-    private func lineScrollAnchors(_ layout: LinePageLayout) -> some View {
+    private func lineCanvas(_ layout: LinePageLayout?) -> some View {
+        ZStack(alignment: .topLeading) {
+            Color.clear
+                .frame(
+                    width: layout?.contentSize.width ?? 0,
+                    height: layout?.contentSize.height ?? 0
+                )
+
+            if let layout {
+                scrollAnchors(layout)
+
+                lineImages(layout)
+
+                ForEach(layout.sidelinePlacements, id: \.self) { placement in
+                    if let image = imageForSideline(placement.sideline.id) {
+                        QuranThemedImage(image: image, renderingMode: imageRenderingMode)
+                            .frame(
+                                width: placement.frame.width,
+                                height: placement.frame.height
+                            )
+                            .offset(
+                                x: placement.frame.minX,
+                                y: placement.frame.minY
+                            )
+                    }
+                }
+
+                ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
+                    LinePageSuraHeaderView(style: chromeStyle)
+                        .frame(
+                            width: placement.frame.width,
+                            height: placement.frame.height
+                        )
+                        .offset(
+                            x: placement.frame.minX,
+                            y: placement.frame.minY
+                        )
+                }
+
+                ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
+                    LinePageAyahMarkerView(number: placement.marker.ayah.ayah, style: chromeStyle)
+                        .frame(
+                            width: placement.frame.width,
+                            height: placement.frame.height
+                        )
+                        .offset(
+                            x: placement.frame.minX,
+                            y: placement.frame.minY
+                        )
+                }
+
+                ForEach(layout.highlightRects, id: \.self) { highlight in
+                    if let color = highlightColorsByVerse[highlight.ayah] {
+                        color
+                            .frame(
+                                width: highlight.rect.width,
+                                height: highlight.rect.height
+                            )
+                            .offset(
+                                x: highlight.rect.minX,
+                                y: highlight.rect.minY
+                            )
+                    }
+                }
+            }
+        }
+        .frame(
+            width: layout?.contentSize.width ?? 0,
+            height: layout?.contentSize.height ?? 0,
+            alignment: .topLeading
+        )
+        .environment(\.layoutDirection, .leftToRight)
+        .onGlobalFrameChanged(onGlobalFrameChange)
+    }
+
+    private func lineImages(_ layout: LinePageLayout) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(layout.lineFrames.enumerated()), id: \.element) { item in
                 let lineFrame = item.element
-                let anchorY = lineFrame.imageFrame.minY
-                let previousAnchorMaxY = item.offset == 0 ? 0 : (layout.lineFrames[item.offset - 1].imageFrame.minY + 1)
-                let topPadding = max(0, anchorY - previousAnchorMaxY)
+                let previousLineMaxY = item.offset == 0 ? 0 : layout.lineFrames[item.offset - 1].imageFrame.maxY
+                let topPadding = lineFrame.imageFrame.minY - previousLineMaxY
 
-                Color.clear
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 1)
-                    .padding(.top, topPadding)
-                    .id(lineFrame.lineNumber)
+                Group {
+                    if let image = imageForLine(lineFrame.lineNumber) {
+                        QuranThemedImage(image: image, renderingMode: imageRenderingMode)
+                    } else {
+                        Color.clear
+                    }
+                }
+                .frame(
+                    width: lineFrame.imageFrame.width,
+                    height: lineFrame.imageFrame.height,
+                    alignment: .topLeading
+                )
+                .padding(.top, topPadding)
+                .id(lineFrame.lineNumber)
             }
         }
-        .frame(width: layout.contentSize.width, height: layout.contentSize.height, alignment: .topLeading)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
+        .padding(.leading, layout.pageFrame.minX)
+        .frame(
+            width: layout.contentSize.width,
+            height: layout.contentSize.height,
+            alignment: .topLeading
+        )
     }
 }
 

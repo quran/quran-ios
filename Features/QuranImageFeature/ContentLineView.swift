@@ -11,6 +11,7 @@ import QuranGeometry
 import QuranKit
 import QuranPagesFeature
 import SwiftUI
+import UIKit
 import UIx
 
 struct ContentLineView: View {
@@ -79,32 +80,8 @@ struct ContentLineViewBody: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var headerTint: Color {
-        if chromeStyle == .greenChrome {
-            return .pageMarkerTint
-        }
-        return chromeStyle.palette(for: colorScheme).headerTint
-    }
-
-    private var markerRingColor: Color {
-        if chromeStyle == .greenChrome {
-            return .pageMarkerTint
-        }
-        return chromeStyle.palette(for: colorScheme).markerRing
-    }
-
-    private var markerFillColor: Color? {
-        if chromeStyle == .greenChrome {
-            return nil
-        }
-        return chromeStyle.palette(for: colorScheme).markerInner
-    }
-
-    private var markerTextColor: Color? {
-        if chromeStyle == .greenChrome {
-            return nil
-        }
-        return chromeStyle.palette(for: colorScheme).markerText
+    private var chromePalette: LinePageChromePalette {
+        chromeStyle.palette(for: colorScheme)
     }
 
     @ViewBuilder
@@ -162,7 +139,7 @@ struct ContentLineViewBody: View {
                 }
 
                 ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
-                    SuraHeaderView(tint: headerTint)
+                    SuraHeaderView(tint: chromePalette.header.foreground)
                         .frame(
                             width: placement.frame.width,
                             height: placement.frame.height
@@ -176,9 +153,9 @@ struct ContentLineViewBody: View {
                 ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
                     AyahNumberView(
                         number: placement.marker.ayah.ayah,
-                        ringColor: markerRingColor,
-                        fillColor: markerFillColor,
-                        textColor: markerTextColor
+                        ringColor: chromePalette.marker.ringForeground,
+                        fillColor: chromePalette.marker.content?.background,
+                        textColor: chromePalette.marker.content?.foreground
                     )
                     .frame(
                         width: placement.frame.width,
@@ -255,19 +232,23 @@ enum LinePageChromeStyle: Equatable {
     }
 }
 
-private struct LinePageChromePalette {
-    let headerTint: Color
-    let markerRing: Color
-    let markerInner: Color
-    let markerText: Color
+private struct LinePageChromeColors {
+    let foreground: Color
+    let background: Color?
 }
 
-private func rgb(_ hex: Int) -> Color {
-    Color(
-        red: Double((hex >> 16) & 0xFF) / 255,
-        green: Double((hex >> 8) & 0xFF) / 255,
-        blue: Double(hex & 0xFF) / 255
-    )
+private struct LinePageChromeMarkerPalette {
+    let ringForeground: Color
+    let content: LinePageChromeColors?
+}
+
+private struct LinePageChromePalette {
+    let header: LinePageChromeColors
+    let marker: LinePageChromeMarkerPalette
+}
+
+private func color(hex: Int) -> Color {
+    Color(uiColor: UIColor(rgb: hex))
 }
 
 private extension LinePageChromeStyle {
@@ -275,31 +256,47 @@ private extension LinePageChromeStyle {
         switch (self, colorScheme) {
         case (.blueChrome, .dark):
             return LinePageChromePalette(
-                headerTint: rgb(0x73AFFA),
-                markerRing: rgb(0x73AFFA),
-                markerInner: rgb(0x172554),
-                markerText: rgb(0x73AFFA)
+                header: LinePageChromeColors(foreground: color(hex: 0x73AFFA), background: nil),
+                marker: LinePageChromeMarkerPalette(
+                    ringForeground: color(hex: 0x73AFFA),
+                    content: LinePageChromeColors(
+                        foreground: color(hex: 0x73AFFA),
+                        background: color(hex: 0x172554)
+                    )
+                )
             )
         case (.blueChrome, .light):
             return LinePageChromePalette(
-                headerTint: rgb(0x2563EB),
-                markerRing: rgb(0x2563EB),
-                markerInner: rgb(0xEFF6FF),
-                markerText: rgb(0x1D4ED8)
+                header: LinePageChromeColors(foreground: color(hex: 0x2563EB), background: nil),
+                marker: LinePageChromeMarkerPalette(
+                    ringForeground: color(hex: 0x2563EB),
+                    content: LinePageChromeColors(
+                        foreground: color(hex: 0x1D4ED8),
+                        background: color(hex: 0xEFF6FF)
+                    )
+                )
             )
         case (.greenChrome, .dark):
             return LinePageChromePalette(
-                headerTint: rgb(0x047857),
-                markerRing: rgb(0x047857),
-                markerInner: rgb(0x022C22),
-                markerText: rgb(0x34D399)
+                header: LinePageChromeColors(foreground: color(hex: 0x047857), background: nil),
+                marker: LinePageChromeMarkerPalette(
+                    ringForeground: color(hex: 0x047857),
+                    content: LinePageChromeColors(
+                        foreground: color(hex: 0x34D399),
+                        background: color(hex: 0x022C22)
+                    )
+                )
             )
         case (.greenChrome, .light):
             return LinePageChromePalette(
-                headerTint: rgb(0x047857),
-                markerRing: rgb(0x047857),
-                markerInner: rgb(0xECFDF5),
-                markerText: rgb(0x047857)
+                header: LinePageChromeColors(foreground: color(hex: 0x047857), background: nil),
+                marker: LinePageChromeMarkerPalette(
+                    ringForeground: color(hex: 0x047857),
+                    content: LinePageChromeColors(
+                        foreground: color(hex: 0x047857),
+                        background: color(hex: 0xECFDF5)
+                    )
+                )
             )
         @unknown default:
             return palette(for: .light)

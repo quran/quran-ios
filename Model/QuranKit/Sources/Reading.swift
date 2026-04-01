@@ -19,8 +19,6 @@ public enum Reading: Int {
         .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1439, .hafs_1441,
     ]
 
-    public static let sortedReadings: [Reading] = allReadings
-
     public var quran: Quran {
         switch self {
         case .hafs_1405:

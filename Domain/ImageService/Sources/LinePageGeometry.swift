@@ -269,13 +269,15 @@ public struct LinePageGeometryEngine {
     public func layout(_ input: LinePageGeometryInput) -> LinePageLayout {
         let pageMeasurements = measurements(for: input)
         let contentSize = contentSize(for: input, pageMeasurements: pageMeasurements)
+        let headerFooterWidth = input.displaySettings.showHeaderFooter ? pageMeasurements.headerFooterWidth : 0
+        let headerFooterHeight = input.displaySettings.showHeaderFooter ? pageMeasurements.headerFooterHeight : 0
 
         let sidelineWidth = pageMeasurements.sidelineWidth
         let nonSidelinesWidth = input.availableSize.width - sidelineWidth
         let leadingSideline = input.displaySettings.showSidelines && input.pageParity == .odd
         let sidelineStartDelta = leadingSideline ? sidelineWidth : 0
 
-        let headerX = sidelineStartDelta + ((nonSidelinesWidth - pageMeasurements.headerFooterWidth) / 2)
+        let headerX = sidelineStartDelta + ((nonSidelinesWidth - headerFooterWidth) / 2)
         let pageX = sidelineStartDelta + ((nonSidelinesWidth - pageMeasurements.pageWidth) / 2)
 
         let headerY: CGFloat
@@ -285,23 +287,23 @@ public struct LinePageGeometryEngine {
         switch input.orientation {
         case .portrait:
             let headerTop = (input.availableSize.height
-                - pageMeasurements.headerFooterHeight
+                - headerFooterHeight
                 - pageMeasurements.pageHeight
-                - pageMeasurements.headerFooterHeight) / 2
+                - headerFooterHeight) / 2
             headerY = headerTop
-            pageY = headerTop + pageMeasurements.headerFooterHeight
+            pageY = headerTop + headerFooterHeight
             footerY = pageY + pageMeasurements.pageHeight
         case .landscape:
             headerY = input.verticalPadding
-            pageY = headerY + pageMeasurements.headerFooterHeight
+            pageY = headerY + headerFooterHeight
             footerY = pageY + pageMeasurements.pageHeight
         }
 
         let headerFrame = CGRect(
             x: headerX,
             y: headerY,
-            width: pageMeasurements.headerFooterWidth,
-            height: pageMeasurements.headerFooterHeight
+            width: headerFooterWidth,
+            height: headerFooterHeight
         )
         let pageFrame = CGRect(
             x: pageX,
@@ -312,8 +314,8 @@ public struct LinePageGeometryEngine {
         let footerFrame = CGRect(
             x: headerX,
             y: footerY,
-            width: pageMeasurements.headerFooterWidth,
-            height: pageMeasurements.headerFooterHeight
+            width: headerFooterWidth,
+            height: headerFooterHeight
         )
         let sidelineFrame: CGRect? = if input.displaySettings.showSidelines {
             CGRect(
@@ -387,6 +389,7 @@ public struct LinePageGeometryEngine {
     private func measurements(for input: LinePageGeometryInput) -> Measurements {
         let availableWidth = input.availableSize.width
         let availableHeight = input.availableSize.height
+        let effectiveHeaderFooterHeightRatio = input.displaySettings.showHeaderFooter ? headerFooterHeightRatio : 0
 
         let sidelineWidth = input.displaySettings.showSidelines
             ? floor(availableWidth * sidelineWidthRatio)
@@ -395,7 +398,7 @@ public struct LinePageGeometryEngine {
 
         switch input.orientation {
         case .portrait:
-            let initialHeaderFooterHeight = floor(headerFooterHeightRatio * availableHeight)
+            let initialHeaderFooterHeight = floor(effectiveHeaderFooterHeightRatio * availableHeight)
             let initialPageHeight = availableHeight - (2 * initialHeaderFooterHeight)
             let computedWidth = floor(initialPageHeight * pageMinWidthToHeightRatio)
             let pageWidth = min(layoutWidth, computedWidth)
@@ -404,7 +407,7 @@ public struct LinePageGeometryEngine {
             let headerFooterHeight: CGFloat
             let pageHeight: CGFloat
             if initialPageHeight > maxPageHeight {
-                headerFooterHeight = round((maxPageHeight + 2 * initialHeaderFooterHeight) * headerFooterHeightRatio)
+                headerFooterHeight = round((maxPageHeight + 2 * initialHeaderFooterHeight) * effectiveHeaderFooterHeightRatio)
                 pageHeight = maxPageHeight
             } else {
                 headerFooterHeight = initialHeaderFooterHeight
@@ -422,7 +425,7 @@ public struct LinePageGeometryEngine {
         case .landscape:
             let pageWidth = min(scrollableMaximumPageWidth, round(layoutWidth * scrollablePageWidthRatio))
             let pageHeight = ceil(pageWidth * scrollablePageHeightToWidthRatio)
-            let headerFooterHeight = floor(pageWidth * headerFooterHeightRatio)
+            let headerFooterHeight = floor(pageWidth * effectiveHeaderFooterHeightRatio)
             let headerMargin = floor(pageWidth * headerFooterMarginRatio)
 
             return Measurements(
@@ -436,17 +439,19 @@ public struct LinePageGeometryEngine {
     }
 
     private func contentSize(for input: LinePageGeometryInput, pageMeasurements: Measurements) -> CGSize {
+        let headerFooterHeight = input.displaySettings.showHeaderFooter ? pageMeasurements.headerFooterHeight : 0
+
         switch input.orientation {
         case .portrait:
             return input.availableSize
         case .landscape:
-            let contentInset = floor(pageMeasurements.headerFooterHeight * 0.5)
+            let contentInset = floor(headerFooterHeight * 0.5)
             return CGSize(
                 width: input.availableSize.width,
                 height: input.verticalPadding
-                    + pageMeasurements.headerFooterHeight
+                    + headerFooterHeight
                     + pageMeasurements.pageHeight
-                    + pageMeasurements.headerFooterHeight
+                    + headerFooterHeight
                     + input.verticalPadding
                     + contentInset
             )

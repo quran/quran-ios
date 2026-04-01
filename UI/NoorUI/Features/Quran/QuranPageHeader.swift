@@ -10,10 +10,16 @@ import SwiftUI
 public struct QuranPageHeader: View {
     private let quarterName: String
     private let suraNames: MultipartText
+    private let readableInsetEdges: Edge.Set
 
-    public init(quarterName: String, suraNames: MultipartText) {
+    public init(
+        quarterName: String,
+        suraNames: MultipartText,
+        readableInsetEdges: Edge.Set = [.top, .horizontal]
+    ) {
         self.quarterName = quarterName
         self.suraNames = suraNames
+        self.readableInsetEdges = readableInsetEdges
     }
 
     public var body: some View {
@@ -24,7 +30,7 @@ public struct QuranPageHeader: View {
                 // TODO: Should get footnote from environment.
                 .view(ofSize: .footnote, alignment: .trailing)
         }
-        .readableInsetsPadding([.top, .horizontal])
+        .readableInsetsPadding(readableInsetEdges)
         .padding(.bottom, ContentDimension.interSpacing)
     }
 }

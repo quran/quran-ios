@@ -468,6 +468,8 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "ImageService", dependencies: [
             "WordFrameService",
+            "LinePagePersistence",
+            "SystemDependencies",
         ], testDependencies: [
             "ReadingService",
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
@@ -632,6 +634,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "ReadingService",
+            "ImageService",
             "NoorUI",
         ]),
 

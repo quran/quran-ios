@@ -19,12 +19,14 @@ class TranslationsDownloaderTests: XCTestCase {
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
-        (batchDownloader, session) = await BatchDownloaderFake.makeDownloader()
+        testContext = BatchDownloaderFake.makeContext()
+        (batchDownloader, session) = await testContext.makeDownloader()
         downloader = TranslationsDownloader(downloader: batchDownloader)
     }
 
     override func tearDownWithError() throws {
-        BatchDownloaderFake.tearDown()
+        testContext.tearDown()
+        testContext = nil
         downloader = nil
         batchDownloader = nil
         session = nil
@@ -58,6 +60,7 @@ class TranslationsDownloaderTests: XCTestCase {
     private var batchDownloader: DownloadManager!
     private var session: NetworkSessionFake!
     private var fileSystem: FileSystemFake!
+    private var testContext: BatchDownloaderTestContext!
 }
 
 private extension DownloadBatchResponse {

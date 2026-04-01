@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ImageService
 import QuranKit
 import ReadingService
 
@@ -14,8 +15,9 @@ import ReadingService
 class ReadingSelectorViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(resources: ReadingResourcesService) {
+    init(resources: ReadingResourcesService, selectionGuard: ReadingSelectionGuard) {
         self.resources = resources
+        self.selectionGuard = selectionGuard
     }
 
     // MARK: Internal
@@ -35,13 +37,14 @@ class ReadingSelectorViewModel: ObservableObject {
     }
 
     func showReading(_ reading: Reading) {
-        preferences.reading = reading
+        preferences.reading = selectionGuard.resolvedReading(current: preferences.reading, requested: reading)
     }
 
     // MARK: Private
 
     private let preferences = ReadingPreferences.shared
     private let resources: ReadingResourcesService
+    private let selectionGuard: ReadingSelectionGuard
 
     private func listenToReadingChanges() async {
         let readingsSequence = preferences.$reading

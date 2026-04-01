@@ -13,13 +13,18 @@ import Utilities
 import XCTest
 @testable import BatchDownloader
 
-public enum BatchDownloaderFake {
+public final class BatchDownloaderTestContext: Sendable {
+    // MARK: Lifecycle
+
+    init(downloadsURL: RelativeFilePath) {
+        self.downloadsURL = downloadsURL
+    }
+
     // MARK: Public
 
-    public static let maxSimultaneousDownloads = 3
-    public static let downloadsURL = RelativeFilePath(downloads, isDirectory: true)
+    public let downloadsURL: RelativeFilePath
 
-    public static func makeDownloader(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> (DownloadManager, NetworkSessionFake) {
+    public func makeDownloader(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> (DownloadManager, NetworkSessionFake) {
         let persistence = makeDownloadsPersistence()
         actor SessionActor {
             var session: NetworkSessionFake!
@@ -31,7 +36,7 @@ public enum BatchDownloaderFake {
         }
         let sessionActor = SessionActor()
         let downloader = DownloadManager(
-            maxSimultaneousDownloads: maxSimultaneousDownloads,
+            maxSimultaneousDownloads: BatchDownloaderFake.maxSimultaneousDownloads,
             sessionFactory: { delegate, queue in
                 let session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
                 Task {
@@ -47,10 +52,10 @@ public enum BatchDownloaderFake {
         return (downloader, await sessionActor.session)
     }
 
-    public static func makeDownloaderDontWaitForSession(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> DownloadManager {
+    public func makeDownloaderDontWaitForSession(downloads: [SessionTask] = [], fileManager: FileSystem = DefaultFileSystem()) async -> DownloadManager {
         let persistence = makeDownloadsPersistence()
         let downloader = DownloadManager(
-            maxSimultaneousDownloads: maxSimultaneousDownloads,
+            maxSimultaneousDownloads: BatchDownloaderFake.maxSimultaneousDownloads,
             sessionFactory: { delegate, queue in
                 let session = NetworkSessionFake(queue: queue, delegate: delegate, downloads: downloads)
                 return session
@@ -61,19 +66,20 @@ public enum BatchDownloaderFake {
         return downloader
     }
 
-    public static func tearDown() {
-        try? FileManager.default.removeItem(at: downloadsURL)
+    public func tearDown() {
+        // Tests may still hold sqlite file descriptors briefly after assertions complete.
+        // Keep the per-test sandbox in place to avoid unlinking a live database.
     }
 
-    public static func makeDownloadRequest(_ id: String) -> DownloadRequest {
+    public func makeDownloadRequest(_ id: String) -> DownloadRequest {
         DownloadRequest(
             url: URL(validURL: "http://request/\(id)"),
             destination: downloadsURL.appendingPathComponent("/\(id).txt", isDirectory: false)
         )
     }
 
-    public static func createTextFile(at path: String, content: String) throws -> URL {
-        let directory = Self.downloadsURL.appendingPathComponent("temp", isDirectory: true).url
+    public func createTextFile(at path: String, content: String) throws -> URL {
+        let directory = downloadsURL.appendingPathComponent("temp", isDirectory: true).url
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let url = directory.appendingPathComponent(path)
         let data = try XCTUnwrap(content.data(using: .utf8))
@@ -83,12 +89,26 @@ public enum BatchDownloaderFake {
 
     // MARK: Private
 
-    private static let downloads = "downloads"
-
-    private static func makeDownloadsPersistence() -> GRDBDownloadsPersistence {
+    private func makeDownloadsPersistence() -> GRDBDownloadsPersistence {
         try? DefaultFileSystem().createDirectory(at: downloadsURL, withIntermediateDirectories: true)
-        let downloadsDBPath = Self.downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
+        let downloadsDBPath = downloadsURL.appendingPathComponent("ongoing-downloads.db", isDirectory: false)
         let persistence = GRDBDownloadsPersistence(fileURL: downloadsDBPath.url)
         return persistence
     }
+}
+
+public enum BatchDownloaderFake {
+    // MARK: Public
+
+    public static let maxSimultaneousDownloads = 3
+
+    public static func makeContext() -> BatchDownloaderTestContext {
+        BatchDownloaderTestContext(
+            downloadsURL: RelativeFilePath("\(downloads)/\(UUID().uuidString)", isDirectory: true)
+        )
+    }
+
+    // MARK: Private
+
+    private static let downloads = "downloads"
 }

@@ -114,34 +114,77 @@ struct ImageDecorationsView: View {
     @State private var sizeInfo: SizeInfo = SizeInfo(imageSize: .zero, viewSize: .zero)
 }
 
-private struct SuraHeaderView: View {
+public struct SuraHeaderView: View {
+    private let tint: Color
+
+    public init(tint: Color = .pageMarkerTint) {
+        self.tint = tint
+    }
+
     public var body: some View {
         NoorImage.suraHeader.image
             .renderingMode(.template)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
+            .foregroundColor(tint)
             .themedColorScheme()
     }
 }
 
-private struct AyahNumberView: View {
-    let number: Int
+public struct AyahNumberView: View {
+    private let number: Int
+    private let ringColor: Color
+    private let fillColor: Color?
+    private let textColor: Color?
+
+    public init(
+        number: Int,
+        ringColor: Color = .pageMarkerTint,
+        fillColor: Color? = nil,
+        textColor: Color? = nil
+    ) {
+        self.number = number
+        self.ringColor = ringColor
+        self.fillColor = fillColor
+        self.textColor = textColor
+    }
 
     public var body: some View {
+        Group {
+            if let fillColor, let textColor {
+                ZStack {
+                    Circle()
+                        .fill(fillColor)
+                        .padding(5)
+
+                    ayahRing
+                        .foregroundColor(ringColor)
+
+                    ayahText
+                        .foregroundColor(textColor)
+                }
+            } else {
+                ayahRing
+                    .foregroundColor(ringColor)
+                    .overlay(ayahText)
+            }
+        }
+        .themedColorScheme()
+    }
+
+    private var ayahRing: some View {
         NoorImage.ayahEnd.image
             .renderingMode(.template)
             .resizable()
             .padding(.horizontal, 1)
             .aspectRatio(contentMode: .fit)
-            .foregroundColor(.pageMarkerTint)
-            .overlay(
-                Text(NumberFormatter.arabicNumberFormatter.format(number))
-                    .font(.largeTitle)
-                    .minimumScaleFactor(0.03)
-                    .padding(3)
-            )
-            .themedColorScheme()
+    }
+
+    private var ayahText: some View {
+        Text(NumberFormatter.arabicNumberFormatter.format(number))
+            .font(.largeTitle)
+            .minimumScaleFactor(0.03)
+            .padding(3)
     }
 }
 

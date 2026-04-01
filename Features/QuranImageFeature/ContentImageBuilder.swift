@@ -75,6 +75,8 @@ private extension Reading {
             return directory.appendingPathComponent("images_1120/databases/ayahinfo_1120.db")
         case .hafs_1440:
             return directory.appendingPathComponent("images_1352/databases/ayahinfo_1352.db")
+        case .hafs_1441:
+            return directory.appendingPathComponent("images_1440/databases/ayahinfo_1440.db")
         case .tajweed:
             return directory.appendingPathComponent("images_1280/databases/ayahinfo_1280.db")
         }
@@ -88,6 +90,8 @@ private extension Reading {
             return directory.appendingPathComponent("images_1120/width_1120")
         case .hafs_1440:
             return directory.appendingPathComponent("images_1352/width_1352")
+        case .hafs_1441:
+            return directory.appendingPathComponent("images_1440/width_1440")
         case .tajweed:
             return directory.appendingPathComponent("images_1280/width_1280")
         }
@@ -101,6 +105,8 @@ private extension Reading {
         case .hafs_1421:
             return .zero
         case .hafs_1440:
+            return .zero
+        case .hafs_1441:
             return .zero
         case .tajweed:
             return .zero

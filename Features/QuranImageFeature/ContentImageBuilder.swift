@@ -32,8 +32,7 @@ public struct ContentImageBuilder {
     @ViewBuilder
     public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
-        switch reading {
-        case .hafs_1441:
+        if reading.usesLinePages {
             let linePageAssetService = Self.buildLinePageAssetService(reading: reading, container: container)
             let viewModel = ContentLineViewModel(
                 reading: reading,
@@ -42,7 +41,7 @@ public struct ContentImageBuilder {
                 highlightsService: highlightsService
             )
             ContentLineView(viewModel: viewModel)
-        default:
+        } else {
             let imageService = Self.buildImageDataService(reading: reading, container: container)
             let viewModel = ContentImageViewModel(
                 reading: reading,
@@ -65,7 +64,13 @@ public struct ContentImageBuilder {
     }
 
     static func buildLinePageAssetService(reading: Reading, container: AppDependencies) -> LinePageAssetService {
-        LinePageAssetService(readingDirectory: readingDirectory(reading, container: container))
+        guard let widthParameter = reading.linePageAssetWidth else {
+            preconditionFailure("Attempted to build line-page assets for non-line-page reading \(reading)")
+        }
+        return LinePageAssetService(
+            readingDirectory: Self.readingDirectory(reading, container: container),
+            widthParameter: widthParameter
+        )
     }
 
     // MARK: Private

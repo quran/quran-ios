@@ -62,6 +62,10 @@ final class ContentLineViewModel: ObservableObject {
         highlights.versesByHighlights().mapValues { Color($0) }
     }
 
+    var chromeStyle: LinePageChromeStyle {
+        LinePageChromeStyle(reading: reading)
+    }
+
     func loadLinePage() async {
         let page = page
         let linePageAssetService = linePageAssetService
@@ -116,7 +120,10 @@ final class ContentLineViewModel: ObservableObject {
                 availableSize: availableSize,
                 orientation: orientation,
                 pageParity: page.pageNumber.isMultiple(of: 2) ? .even : .odd,
-                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
+                displaySettings: LinePageDisplaySettings(
+                    showHeaderFooter: true,
+                    showSidelines: !geometryData.sidelines.isEmpty
+                ),
                 data: LinePageGeometryData(
                     lineCount: assets.lines.count,
                     highlightSpans: geometryData.highlightSpans,
@@ -137,6 +144,10 @@ final class ContentLineViewModel: ObservableObject {
 
     func lineImage(for lineNumber: Int) -> UIImage? {
         assets?.lines.first(where: { $0.lineNumber == lineNumber })?.image
+    }
+
+    func sidelineImage(for id: String) -> UIImage? {
+        assets?.sidelines.first(where: { $0.imageURL.lastPathComponent == id })?.image
     }
 
     func updateContentFrame(_ frame: CGRect) {
@@ -171,6 +182,7 @@ final class ContentLineViewModel: ObservableObject {
     private func geometrySidelines(from assets: LinePageAssets) -> [LinePageGeometryData.Sideline] {
         assets.sidelines.map {
             LinePageGeometryData.Sideline(
+                id: $0.imageURL.lastPathComponent,
                 targetLine: $0.targetLine,
                 direction: $0.direction,
                 intrinsicSize: $0.image.size
@@ -179,10 +191,10 @@ final class ContentLineViewModel: ObservableObject {
     }
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = highlights.firstScrollingVerse() else {
-            return
+        let ayah = highlights.firstScrollingVerse()
+        if let ayah {
+            logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah)")
         }
-        logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah)")
         scrollToVerse = ayah
     }
 

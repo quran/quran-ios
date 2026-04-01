@@ -43,15 +43,18 @@ public struct LinePageHighlightState: Sendable {
 public struct LinePageGeometryData: Sendable {
     public struct Sideline: Hashable, Sendable {
         public init(
+            id: String = "",
             targetLine: Int,
             direction: LinePageAssets.SidelineDirection,
             intrinsicSize: CGSize
         ) {
+            self.id = id
             self.targetLine = targetLine
             self.direction = direction
             self.intrinsicSize = intrinsicSize
         }
 
+        public let id: String
         public let targetLine: Int
         public let direction: LinePageAssets.SidelineDirection
         public let intrinsicSize: CGSize

@@ -10,32 +10,47 @@ import NoorUI
 import QuranKit
 import QuranPagesFeature
 import SwiftUI
+import UIx
 
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
 
     var body: some View {
         GeometryReader { geometry in
+            let layout = viewModel.layout(for: geometry.size)
             ContentLineViewBody(
                 page: viewModel.page,
-                layout: viewModel.layout(for: geometry.size),
+                layout: layout,
+                scrollToVerse: viewModel.scrollToVerse,
+                highlightColorsByVerse: viewModel.highlightColorsByVerse,
                 imageRenderingMode: viewModel.imageRenderingMode,
-                imageForLine: viewModel.lineImage(for:)
+                imageForLine: viewModel.lineImage(for:),
+                onGlobalFrameChange: viewModel.updateContentFrame
             )
         }
+        .geometryActions(
+            PageGeometryActions(
+                id: ObjectIdentifier(viewModel),
+                word: { _ in nil },
+                verse: { point in viewModel.verseAtGlobalPoint(point) }
+            )
+        )
         .task {
             await viewModel.loadLinePage()
         }
     }
 }
 
-private struct ContentLineViewBody: View {
+struct ContentLineViewBody: View {
     // MARK: Internal
 
     let page: Page
     let layout: LinePageLayout?
+    let scrollToVerse: AyahNumber?
+    let highlightColorsByVerse: [AyahNumber: Color]
     let imageRenderingMode: QuranThemedImage.RenderingMode
     let imageForLine: (Int) -> UIImage?
+    let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
         scrollView {
@@ -47,6 +62,8 @@ private struct ContentLineViewBody: View {
                     )
 
                 if let layout {
+                    lineScrollAnchors(layout)
+
                     ForEach(layout.lineFrames, id: \.self) { lineFrame in
                         if let image = imageForLine(lineFrame.lineNumber) {
                             QuranThemedImage(image: image, renderingMode: imageRenderingMode)
@@ -57,6 +74,44 @@ private struct ContentLineViewBody: View {
                                 .offset(
                                     x: lineFrame.imageFrame.minX,
                                     y: lineFrame.imageFrame.minY
+                                )
+                        }
+                    }
+
+                    ForEach(layout.suraHeaderPlacements, id: \.self) { placement in
+                        LinePageSuraHeaderView()
+                            .frame(
+                                width: placement.frame.width,
+                                height: placement.frame.height
+                            )
+                            .offset(
+                                x: placement.frame.minX,
+                                y: placement.frame.minY
+                            )
+                    }
+
+                    ForEach(layout.ayahMarkerPlacements, id: \.self) { placement in
+                        LinePageAyahMarkerView(number: placement.marker.ayah.ayah)
+                            .frame(
+                                width: placement.frame.width,
+                                height: placement.frame.height
+                            )
+                            .offset(
+                                x: placement.frame.minX,
+                                y: placement.frame.minY
+                            )
+                    }
+
+                    ForEach(layout.highlightRects, id: \.self) { highlight in
+                        if let color = highlightColorsByVerse[highlight.ayah] {
+                            color
+                                .frame(
+                                    width: highlight.rect.width,
+                                    height: highlight.rect.height
+                                )
+                                .offset(
+                                    x: highlight.rect.minX,
+                                    y: highlight.rect.minY
                                 )
                         }
                     }
@@ -76,6 +131,7 @@ private struct ContentLineViewBody: View {
                             x: layout.headerFrame.minX,
                             y: layout.headerFrame.minY
                         )
+                        .environment(\.layoutDirection, layoutDirection)
                         .zIndex(1)
                     }
 
@@ -90,22 +146,30 @@ private struct ContentLineViewBody: View {
                                 x: layout.footerFrame.minX,
                                 y: layout.footerFrame.minY
                             )
+                            .environment(\.layoutDirection, layoutDirection)
                             .zIndex(1)
                     }
                 }
             }
             .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity,
+                width: layout?.contentSize.width ?? 0,
+                height: layout?.contentSize.height ?? 0,
                 alignment: .topLeading
             )
+            .environment(\.layoutDirection, .leftToRight)
+            .onGlobalFrameChanged(onGlobalFrameChange)
         }
         .font(.footnote)
         .populateReadableInsets()
         .themedBackground()
+        .quranScrolling(scrollToValue: scrollToVerse) { ayah in
+            layout?.scrollTargetLineNumber(for: ayah)
+        }
     }
 
     // MARK: Private
+
+    @Environment(\.layoutDirection) private var layoutDirection
 
     @ViewBuilder
     private func scrollView(@ViewBuilder content: () -> some View) -> some View {
@@ -115,5 +179,56 @@ private struct ContentLineViewBody: View {
         } else {
             ScrollView(content: content)
         }
+    }
+
+    private func lineScrollAnchors(_ layout: LinePageLayout) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(layout.lineFrames.enumerated()), id: \.element) { item in
+                let lineFrame = item.element
+                let anchorY = lineFrame.imageFrame.minY
+                let previousAnchorMaxY = item.offset == 0 ? 0 : (layout.lineFrames[item.offset - 1].imageFrame.minY + 1)
+                let topPadding = max(0, anchorY - previousAnchorMaxY)
+
+                Color.clear
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 1)
+                    .padding(.top, topPadding)
+                    .id(lineFrame.lineNumber)
+            }
+        }
+        .frame(width: layout.contentSize.width, height: layout.contentSize.height, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+private struct LinePageSuraHeaderView: View {
+    var body: some View {
+        NoorImage.suraHeader.image
+            .renderingMode(.template)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .foregroundColor(.pageMarkerTint)
+            .themedColorScheme()
+    }
+}
+
+private struct LinePageAyahMarkerView: View {
+    let number: Int
+
+    var body: some View {
+        NoorImage.ayahEnd.image
+            .renderingMode(.template)
+            .resizable()
+            .padding(.horizontal, 1)
+            .aspectRatio(contentMode: .fit)
+            .foregroundColor(.pageMarkerTint)
+            .overlay(
+                Text(NumberFormatter.arabicNumberFormatter.format(number))
+                    .font(.largeTitle)
+                    .minimumScaleFactor(0.03)
+                    .padding(3)
+            )
+            .themedColorScheme()
     }
 }

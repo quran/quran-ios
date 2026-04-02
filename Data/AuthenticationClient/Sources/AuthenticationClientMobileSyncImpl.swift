@@ -6,19 +6,19 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(session: MobileSyncSession) {
-        self.session = session
+    public init(authService: AuthService) {
+        self.authService = authService
     }
 
     // MARK: Public
 
     public var authenticationState: AuthenticationState {
-        session.isLoggedIn ? .authenticated : .notAuthenticated
+        authService.isLoggedIn() ? .authenticated : .notAuthenticated
     }
 
     public func login(on _: UIViewController) async throws {
         do {
-            try await session.login()
+            try await authService.signIn()
         } catch {
             logger.error("Failed to login via mobile sync: \(error)")
             throw AuthenticationClientError.errorAuthenticating(error)
@@ -27,7 +27,8 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func restoreState() async throws -> AuthenticationState {
         do {
-            return try await session.restoreAuthenticationState()
+            _ = try await authService.refreshAuthentication()
+            return authenticationState
         } catch {
             logger.error("Failed to restore mobile sync auth state: \(error)")
             throw AuthenticationClientError.clientIsNotAuthenticated(error)
@@ -36,7 +37,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func logout() async throws {
         do {
-            try await session.logout()
+            try await authService.signOut()
         } catch {
             logger.error("Failed to logout via mobile sync: \(error)")
             throw AuthenticationClientError.errorAuthenticating(error)
@@ -54,7 +55,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func getAuthenticationHeaders() async throws -> [String: String] {
         do {
-            return try await session.getAuthenticationHeaders()
+            return try await authService.authenticationHeaders()
         } catch {
             throw AuthenticationClientError.clientIsNotAuthenticated(error)
         }
@@ -62,5 +63,5 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     // MARK: Private
 
-    private let session: MobileSyncSession
+    private let authService: AuthService
 }

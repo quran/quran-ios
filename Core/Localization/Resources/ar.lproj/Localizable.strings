@@ -103,6 +103,10 @@
 "bookmarks.no-data.title" = "إضافة الإشارات المرجعية...";
 "bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
 
+"bookmarks.sync.title" = "زامن العلامات المرجعية";
+"bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";
+"bookmarks.sync.action" = "تسجيل الدخول";
+
 // MARK: - Notes
 
 "notes.no-data.title" = "إضافة آيات مرجعية...";

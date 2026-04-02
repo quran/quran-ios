@@ -6,23 +6,24 @@ This project keeps the mobile sync integration behind the `QURAN_SYNC` compilati
 
 ### From Xcode
 
-The example app target is already wired to pass `QURAN_SYNC` into `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.
+Set `QURAN_SYNC` directly in the example app target build settings:
 
-Swift package targets still read `QURAN_SYNC` from the build process environment via `Package.swift`, so for a clean local Xcode run:
+```text
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) QURAN_SYNC
+```
 
-1. Quit Xcode.
-2. Launch Xcode from Terminal with `QURAN_SYNC` in the environment:
+Swift package targets also read `QURAN_SYNC` from `Package.swift`, so launch Xcode with the environment variable set when you want the package feature modules to compile with sync enabled:
 
 ```bash
 QURAN_SYNC=1 open Example/QuranEngineApp.xcodeproj
 ```
 
-3. Clean the build folder before the first run after toggling the flag.
+Clean the build folder before the first run after toggling the flag.
 
 ### From the command line
 
 ```bash
-QURAN_SYNC=QURAN_SYNC xcrun xcodebuild build \
+QURAN_SYNC=1 xcrun xcodebuild build \
   -project Example/QuranEngineApp.xcodeproj \
   -scheme QuranEngineApp \
   -sdk iphonesimulator \
@@ -30,8 +31,6 @@ QURAN_SYNC=QURAN_SYNC xcrun xcodebuild build \
 ```
 
 ## Required runtime environment variables
-
-The sync-enabled example app uses `mobile-sync-spm` for the OAuth redirect URI and scope defaults.
 
 For the sync path, provide:
 
@@ -44,7 +43,7 @@ Optional:
 
 `QURAN_OAUTH_CLIENT_SECRET` is only needed when the configured OAuth client is registered as a confidential client. If the environment supports a public PKCE client, leave the secret unset.
 
-The package defaults currently used by the sync path are:
+The sync auth configuration currently defined in `Container` is:
 
 - redirect URI: `com.quran.oauth://callback`
 - post logout redirect URI: `com.quran.oauth://callback`

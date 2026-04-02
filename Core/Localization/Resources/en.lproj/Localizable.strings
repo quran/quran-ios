@@ -112,6 +112,10 @@
 "bookmarks.delete-all" = "Delete All";
 "bookmarks.delete-all.confirmation" = "Are you sure you want to delete all bookmarks?";
 
+"bookmarks.sync.title" = "Sync your bookmarks";
+"bookmarks.sync.body" = "Sign in to Quran.com to keep your bookmarks available across devices.";
+"bookmarks.sync.action" = "Sign In";
+
 // MARK: - Notes
 
 "notes.no-data.title" = "Adding Ayah Highlights...";

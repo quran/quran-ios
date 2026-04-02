@@ -13,6 +13,9 @@ import CoreDataModel
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
+#if QURAN_SYNC
+    import MobileSync
+#endif
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingService
@@ -36,8 +39,8 @@ class Container: AppDependencies {
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
         #if QURAN_SYNC
-            if let mobileSyncSession {
-                return MobileSyncPageBookmarkPersistence(session: mobileSyncSession)
+            if let syncService = mobileSyncServices?.syncService {
+                return MobileSyncPageBookmarkPersistence(syncService: syncService)
             }
         #endif
         return CoreDataPageBookmarkPersistence(stack: coreDataStack)
@@ -46,8 +49,8 @@ class Container: AppDependencies {
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
         #if QURAN_SYNC
-            if let mobileSyncSession {
-                return AuthenticationClientMobileSyncImpl(session: mobileSyncSession)
+            if let authService = mobileSyncServices?.authService {
+                return AuthenticationClientMobileSyncImpl(authService: authService)
             }
         #endif
 
@@ -80,17 +83,91 @@ class Container: AppDependencies {
     // MARK: Private
 
     #if QURAN_SYNC
-        private lazy var mobileSyncSession: MobileSyncSession? = {
-            guard let clientID = Container.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") else {
+        private static let mobileSyncRedirectURI = "com.quran.oauth://callback"
+        private static let mobileSyncScopes = [
+            "openid",
+            "offline_access",
+            "content",
+            "user",
+            "bookmark",
+            "sync",
+            "collection",
+            "reading_session",
+            "preference",
+            "note",
+        ]
+
+        private lazy var mobileSyncServices: (authService: AuthService, syncService: SyncService)? = {
+            guard let authConfig = Self.mobileSyncAuthConfiguration() else {
                 return nil
             }
-            let clientSecret = Container.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET")
-            return MobileSyncSession(
-                clientID: clientID,
-                clientSecret: clientSecret,
-                usePreProduction: Self.usePreProductionSyncEnvironment()
+
+            let synchronizationEnvironment = Self.makeSynchronizationEnvironment(usePreProduction: Self.usePreProductionSyncEnvironment())
+
+            AuthFlowFactoryProvider.shared.doInitialize()
+
+            let driverFactory = DriverFactory()
+            let graph = SharedDependencyGraph.shared.doInit(
+                driverFactory: driverFactory,
+                environment: synchronizationEnvironment,
+                authEnvironment: authConfig.environment
             )
+
+            let json = AuthModule.companion.provideJson()
+            let settings = AuthModule.companion.provideSettings()
+            let httpClient = AuthModule.companion.provideHttpClient(json: json, config: authConfig)
+            let oidcClient = AuthModule.companion.provideOpenIdConnectClient(
+                config: authConfig,
+                httpClient: httpClient
+            )
+            let authStorage = AuthStorage(settings: settings, json: json)
+            let authNetworkDataSource = AuthNetworkDataSource(
+                authConfig: authConfig,
+                httpClient: httpClient
+            )
+            let logger = KermitLogger.companion.withTag(tag: "quran-ios")
+            let authRepository = OidcAuthRepository(
+                authConfig: authConfig,
+                authStorage: authStorage,
+                oidcClient: oidcClient,
+                networkDataSource: authNetworkDataSource,
+                logger: logger
+            )
+            let authService = AuthService(authRepository: authRepository)
+            let syncService = SyncService(
+                authService: authService,
+                pipeline: graph.syncService.pipelineForIos,
+                environment: synchronizationEnvironment,
+                settings: SyncServiceKt.makeSettings()
+            )
+
+            return (authService, syncService)
         }()
+
+        private static func mobileSyncAuthConfiguration() -> AuthConfig? {
+            guard let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") else {
+                return nil
+            }
+
+            let usePreProduction = usePreProductionSyncEnvironment()
+            let authEnvironment: AuthEnvironment = usePreProduction ? .prelive : .production
+
+            return AuthConfig(
+                environment: authEnvironment,
+                clientId: clientID,
+                clientSecret: nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET"),
+                redirectUri: mobileSyncRedirectURI,
+                postLogoutRedirectUri: mobileSyncRedirectURI,
+                scopes: mobileSyncScopes
+            )
+        }
+
+        private static func makeSynchronizationEnvironment(usePreProduction: Bool) -> SynchronizationEnvironment {
+            let endpoint = usePreProduction
+                ? "https://apis-prelive.quran.foundation/auth"
+                : "https://apis.quran.foundation/auth"
+            return SynchronizationEnvironment(endPointURL: endpoint)
+        }
     #endif
 
     private lazy var coreDataStack: CoreDataStack = {

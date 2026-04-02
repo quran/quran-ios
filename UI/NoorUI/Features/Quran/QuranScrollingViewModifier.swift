@@ -9,6 +9,7 @@ import SwiftUI
 
 struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier {
     let scrollToValue: Value?
+    let anchor: UnitPoint
     let transform: (Value) -> ID?
     @State private var scrollToValueRequest: Value?
 
@@ -19,7 +20,7 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
                 .onChange(of: scrollToValueRequest) { scrollToValue in
                     if let scrollToValue, let id = transform(scrollToValue) {
                         withAnimation {
-                            scrollView.scrollTo(id, anchor: UnitPoint(x: 0, y: 0.2))
+                            scrollView.scrollTo(id, anchor: anchor)
                         }
                         scrollToValueRequest = nil
                     }
@@ -34,12 +35,16 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
 extension View {
     public func quranScrolling<Value: Equatable>(
         scrollToValue: Value?,
+        anchor: UnitPoint = UnitPoint(x: 0, y: 0.2),
         transform: @escaping (Value) -> (some Hashable)?
     ) -> some View {
-        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue, transform: transform))
+        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue, anchor: anchor, transform: transform))
     }
 
-    public func quranScrolling(scrollToValue: (some Hashable)?) -> some View {
-        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue) { $0 })
+    public func quranScrolling(
+        scrollToValue: (some Hashable)?,
+        anchor: UnitPoint = UnitPoint(x: 0, y: 0.2)
+    ) -> some View {
+        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue, anchor: anchor) { $0 })
     }
 }

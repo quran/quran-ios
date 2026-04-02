@@ -29,17 +29,28 @@ public struct ContentImageBuilder {
 
     // MARK: Public
 
+    @ViewBuilder
     public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
-        let imageService = Self.buildImageDataService(reading: reading, container: container)
-
-        let viewModel = ContentImageViewModel(
-            reading: reading,
-            page: page,
-            imageDataService: imageService,
-            highlightsService: highlightsService
-        )
-        return ContentImageView(viewModel: viewModel)
+        if reading.usesLinePages {
+            let linePageAssetService = Self.buildLinePageAssetService(reading: reading, container: container)
+            let viewModel = ContentLineViewModel(
+                reading: reading,
+                page: page,
+                linePageAssetService: linePageAssetService,
+                highlightsService: highlightsService
+            )
+            ContentLineView(viewModel: viewModel)
+        } else {
+            let imageService = Self.buildImageDataService(reading: reading, container: container)
+            let viewModel = ContentImageViewModel(
+                reading: reading,
+                page: page,
+                imageDataService: imageService,
+                highlightsService: highlightsService
+            )
+            ContentImageView(viewModel: viewModel)
+        }
     }
 
     // MARK: Internal
@@ -49,6 +60,16 @@ public struct ContentImageBuilder {
         return ImageDataService(
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
             imagesURL: reading.images(in: readingDirectory)
+        )
+    }
+
+    static func buildLinePageAssetService(reading: Reading, container: AppDependencies) -> LinePageAssetService {
+        guard let widthParameter = reading.linePageAssetWidth else {
+            preconditionFailure("Attempted to build line-page assets for non-line-page reading \(reading)")
+        }
+        return LinePageAssetService(
+            readingDirectory: Self.readingDirectory(reading, container: container),
+            widthParameter: widthParameter
         )
     }
 
@@ -75,6 +96,10 @@ private extension Reading {
             return directory.appendingPathComponent("images_1120/databases/ayahinfo_1120.db")
         case .hafs_1440:
             return directory.appendingPathComponent("images_1352/databases/ayahinfo_1352.db")
+        case .hafs_1439:
+            return directory.appendingPathComponent("images_1080/databases/ayahinfo_1080.db")
+        case .hafs_1441:
+            return directory.appendingPathComponent("images_1440/databases/ayahinfo_1440.db")
         case .tajweed:
             return directory.appendingPathComponent("images_1280/databases/ayahinfo_1280.db")
         }
@@ -88,6 +113,10 @@ private extension Reading {
             return directory.appendingPathComponent("images_1120/width_1120")
         case .hafs_1440:
             return directory.appendingPathComponent("images_1352/width_1352")
+        case .hafs_1439:
+            return directory.appendingPathComponent("images_1080/width_1080")
+        case .hafs_1441:
+            return directory.appendingPathComponent("images_1440/width_1440")
         case .tajweed:
             return directory.appendingPathComponent("images_1280/width_1280")
         }
@@ -101,6 +130,10 @@ private extension Reading {
         case .hafs_1421:
             return .zero
         case .hafs_1440:
+            return .zero
+        case .hafs_1439:
+            return .zero
+        case .hafs_1441:
             return .zero
         case .tajweed:
             return .zero

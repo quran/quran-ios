@@ -9,9 +9,11 @@ import SwiftUI
 
 public struct QuranPageFooter: View {
     let page: String
+    let readableInsetEdges: Edge.Set
 
-    public init(page: String) {
+    public init(page: String, readableInsetEdges: Edge.Set = [.bottom, .horizontal]) {
         self.page = page
+        self.readableInsetEdges = readableInsetEdges
     }
 
     public var body: some View {
@@ -21,6 +23,6 @@ public struct QuranPageFooter: View {
             Spacer()
         }
         .padding(.top, ContentDimension.interSpacing)
-        .readableInsetsPadding([.bottom, .horizontal])
+        .readableInsetsPadding(readableInsetEdges)
     }
 }

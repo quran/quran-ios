@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import SystemDependencies
 import Utilities
 
 public protocol ReadingRemoteResources {
@@ -38,6 +39,10 @@ public struct RemoteResource {
     var successFilePath: RelativeFilePath {
         downloadDestination.appendingPathComponent("success-v\(version).txt", isDirectory: false)
     }
+
+    public func isDownloaded(fileSystem: FileSystem = DefaultFileSystem()) -> Bool {
+        fileSystem.fileExists(at: successFilePath)
+    }
 }
 
 private extension Reading {
@@ -50,6 +55,8 @@ extension Reading {
         case .hafs_1405: return "hafs_1405"
         case .hafs_1440: return "hafs_1440"
         case .hafs_1421: return "hafs_1421"
+        case .hafs_1439: return "hafs_1439"
+        case .hafs_1441: return "hafs_1441"
         case .tajweed: return "tajweed"
         }
     }

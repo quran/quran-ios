@@ -21,7 +21,8 @@ class QuranAudioDownloaderTests: XCTestCase {
 
     override func setUp() async throws {
         fileSystem = FileSystemFake()
-        (batchDownloader, session) = await BatchDownloaderFake.makeDownloader()
+        testContext = BatchDownloaderFake.makeContext()
+        (batchDownloader, session) = await testContext.makeDownloader()
         downloader = QuranAudioDownloader(
             baseURL: Self.baseURL,
             downloader: batchDownloader,
@@ -30,7 +31,8 @@ class QuranAudioDownloaderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        BatchDownloaderFake.tearDown()
+        testContext.tearDown()
+        testContext = nil
         Reciter.cleanUpAudio()
         batchDownloader = nil
         downloader = nil
@@ -186,6 +188,7 @@ class QuranAudioDownloaderTests: XCTestCase {
     private var batchDownloader: DownloadManager!
     private var session: NetworkSessionFake!
     private var fileSystem: FileSystemFake!
+    private var testContext: BatchDownloaderTestContext!
 
     private let quran = Quran.hafsMadani1405
     private let suras = Quran.hafsMadani1405.suras

@@ -69,7 +69,7 @@ class DatabaseConnectionTests: XCTestCase {
         expectedNames = ["Alice"]
         let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
         assertExpectation = expectation1
-        try await connection.insertNames()
+        try await connection.insert(name: "Alice")
         await fulfillment(of: [expectation1], timeout: 2)
 
         // Add more
@@ -124,17 +124,18 @@ class DatabaseConnectionTests: XCTestCase {
 }
 
 private extension DatabaseConnection {
-    func insertNames() async throws {
+    func createNamesTable() async throws {
         try await write { db in
-            try self.createNamesTable(in: db)
-            try db.execute(sql: "INSERT INTO test (name) VALUES (?)", arguments: ["Alice"])
+            try db.create(table: "test") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("name", .text)
+            }
         }
     }
 
-    func createNamesTable() async throws {
-        try await write { db in
-            try self.createNamesTable(in: db)
-        }
+    func insertNames() async throws {
+        try await createNamesTable()
+        try await insert(name: "Alice")
     }
 
     func insert(name: String) async throws {

@@ -35,43 +35,31 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Public
 
     public var body: some View {
-        GeometryReader { geometry in
-            scrollView {
-                VStack(spacing: 0) {
-                    header
-                        .onSizeChange { headerSize = $0 }
-
-                    Group {
-                        if let image {
-                            QuranThemedImage(image: image, renderingMode: renderingMode)
-                                .background(
-                                    ImageDecorationsView(
-                                        imageSize: image.size,
-                                        decorations: decorations,
-                                        onScaleChange: onScaleChange,
-                                        onGlobalFrameChange: onGlobalFrameChange
-                                    )
-                                )
-                        } else {
-                            Color.clear
-                        }
-                    }
-                    .readableInsetsPadding(.horizontal)
-                    .frame(height: imageHeight(geometry: geometry))
-
-                    footer
-                        .onSizeChange { footerSize = $0 }
+        AdaptiveQuranScrollView {
+            header
+        } footer: {
+            footer
+        } content: { availableContentSize in
+            Group {
+                if let image {
+                    QuranThemedImage(image: image, renderingMode: renderingMode)
+                        .background(
+                            ImageDecorationsView(
+                                imageSize: image.size,
+                                decorations: decorations,
+                                onScaleChange: onScaleChange,
+                                onGlobalFrameChange: onGlobalFrameChange
+                            )
+                        )
+                } else {
+                    Color.clear
                 }
             }
+            .frame(height: imageHeight(for: availableContentSize))
         }
-        .onReadableInsetsChange { readableInsets = $0 }
     }
 
     // MARK: Private
-
-    @State private var headerSize: CGSize = .zero
-    @State private var footerSize: CGSize = .zero
-    @State private var readableInsets: EdgeInsets = .zero
 
     private let header: Header
     private let footer: Footer
@@ -81,29 +69,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
 
-    @ViewBuilder
-    private func scrollView(@ViewBuilder content: () -> some View) -> some View {
-        if #available(iOS 16.4, *) {
-            ScrollView(content: content)
-                .scrollBounceBehavior(.basedOnSize)
+    private func imageHeight(for availableContentSize: CGSize) -> CGFloat {
+        if let imageSize = image?.size, availableContentSize.width > availableContentSize.height {
+            return availableContentSize.width * (imageSize.height / imageSize.width)
         } else {
-            ScrollView(content: content)
-        }
-    }
-
-    private func imageGeometrySize(from geometry: GeometryProxy) -> CGSize {
-        CGSize(
-            width: geometry.size.width - readableInsets.leading - readableInsets.trailing,
-            height: geometry.size.height - headerSize.height - footerSize.height
-        )
-    }
-
-    private func imageHeight(geometry: GeometryProxy) -> CGFloat {
-        let imageGeometry = imageGeometrySize(from: geometry)
-        if let imageSize = image?.size, imageGeometry.width > imageGeometry.height {
-            return imageGeometry.width * (imageSize.height / imageSize.width)
-        } else {
-            return imageGeometry.height
+            return availableContentSize.height
         }
     }
 }

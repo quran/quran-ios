@@ -290,6 +290,13 @@ private func dataTargets() -> [[Target]] {
             "QuranGeometry",
         ]),
 
+        target(type, name: "LinePagePersistence", dependencies: [
+            "SQLitePersistence",
+            "QuranKit",
+        ], testResources: [
+            .process("Resources"),
+        ]),
+
         target(type, name: "WordTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",
@@ -474,6 +481,8 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "ImageService", dependencies: [
             "WordFrameService",
+            "LinePagePersistence",
+            "SystemDependencies",
         ], testDependencies: [
             "ReadingService",
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
@@ -631,6 +640,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "NoorUI",
             "ImageService",
+            "LinePagePersistence",
             "ReadingService",
             "QuranPagesFeature",
             "QuranTextKit",
@@ -640,6 +650,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "ReadingService",
+            "ImageService",
             "NoorUI",
         ]),
 

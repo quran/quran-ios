@@ -51,7 +51,7 @@ class ContentImageViewModel: ObservableObject {
     @Published var imageFrame: CGRect = .zero
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
-        [.tajweed, .hafs_1440].contains(reading) ? .invertInDarkMode : .tinted
+        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
     }
 
     var decorations: ImageDecorations {

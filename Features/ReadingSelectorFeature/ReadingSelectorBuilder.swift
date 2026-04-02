@@ -7,6 +7,7 @@
 //
 
 import AppDependencies
+import ReadingService
 import UIKit
 
 @MainActor
@@ -20,9 +21,7 @@ public struct ReadingSelectorBuilder {
     // MARK: Public
 
     public func build() -> UIViewController {
-        let viewModel = ReadingSelectorViewModel(
-            resources: container.readingResources
-        )
+        let viewModel = ReadingSelectorViewModel(resources: container.readingResources)
         return ReadingSelectorViewController(viewModel: viewModel)
     }
 

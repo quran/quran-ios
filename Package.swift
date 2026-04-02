@@ -12,7 +12,14 @@ let swiftConcurrencySettings: [SwiftSetting] = [
     ]),
 ]
 
-let settings = enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []
+let quranSyncValue = ProcessInfo.processInfo.environment["QURAN_SYNC"]?
+    .trimmingCharacters(in: .whitespacesAndNewlines)
+let quranSyncEnabled = quranSyncValue != nil && quranSyncValue != "0" && quranSyncValue != ""
+let quranSyncSettings: [SwiftSetting] = quranSyncEnabled ? [
+    .define("QURAN_SYNC"),
+] : []
+
+let settings = (enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []) + quranSyncSettings
 
 let targets = [
     coreTargets(),
@@ -59,6 +66,9 @@ let package = Package(
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
+
+        // Sync
+        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.5"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -205,6 +215,8 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -342,6 +354,7 @@ private func dataTargets() -> [[Target]] {
             "SecurePersistence",
             "OAuthServiceAppAuthImpl",
             .product(name: "AppAuth", package: "AppAuth-iOS"),
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
     ]
 }
@@ -510,7 +523,7 @@ private func domainTargets() -> [[Target]] {
 
         ]),
 
-        target(type, name: "QuranProfileService", hasTests: false, dependencies: [
+        target(type, name: "QuranProfileService", dependencies: [
             "AuthenticationClient",
         ]),
     ]
@@ -611,7 +624,9 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
             "AnnotationsService",
             "NoorUI",
+            "Preferences",
             "ReadingService",
+            "QuranProfileService",
         ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [

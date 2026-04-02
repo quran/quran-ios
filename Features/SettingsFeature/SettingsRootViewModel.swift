@@ -67,6 +67,8 @@ final class SettingsRootViewModel: ObservableObject {
     weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
+    @Published var error: Error? = nil
+    @Published var isAuthenticated: Bool = false
 
     @Published var appearanceMode: AppearanceMode {
         didSet {
@@ -140,6 +142,10 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    func refreshAuthenticationState() async {
+        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
+    }
+
     func loginToQuranCom() async {
         logger.info("Settings: Login to Quran.com")
         guard let viewController = navigationController else {
@@ -147,10 +153,21 @@ final class SettingsRootViewModel: ObservableObject {
         }
         do {
             try await quranProfileService.login(on: viewController)
-            // TODO: Replace with the needed UI changes.
-            print("Login seems successful")
+            isAuthenticated = true
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
+            self.error = error
+        }
+    }
+
+    func logoutFromQuranCom() async {
+        logger.info("Settings: Logout from Quran.com")
+        do {
+            try await quranProfileService.logout()
+            isAuthenticated = false
+        } catch {
+            logger.error("Failed to logout from Quran.com: \(error)")
+            self.error = error
         }
     }
 

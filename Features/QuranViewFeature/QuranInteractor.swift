@@ -302,7 +302,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                     try await group.waitForAll()
                 }
             }
-
         } catch {
             crasher.recordError(error, reason: "Failed to toggle page bookmark")
         }

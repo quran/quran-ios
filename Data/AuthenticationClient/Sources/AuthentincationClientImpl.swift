@@ -89,6 +89,16 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         return authenticationState
     }
 
+    public func logout() async throws {
+        stateData = nil
+        do {
+            try persistence.clearData(forKey: Self.persistenceKey)
+        } catch {
+            logger.error("Failed to clear authentication state on logout: \(error)")
+            throw AuthenticationClientError.errorAuthenticating(error)
+        }
+    }
+
     public func authenticate(request: URLRequest) async throws -> URLRequest {
         guard authenticationState == .authenticated, let stateData else {
             logger.error("authenticate invoked without client being authenticated")

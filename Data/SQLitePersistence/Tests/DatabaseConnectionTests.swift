@@ -50,20 +50,21 @@ class DatabaseConnectionTests: XCTestCase {
         let connection = DatabaseConnection(url: testURL, readonly: false)
         try await connection.createNamesTable()
         let publisher = try connection.namesPublisher()
-            .catch { _ in Empty<[String], Never>() }
-            .eraseToAnyPublisher()
 
         var assertExpectation: XCTestExpectation?
         var expectedNames: [String]?
-        let cancellable = publisher.sink { names in
-            guard let expected = expectedNames else { return }
+        let cancellable = publisher.sink(
+            receiveCompletion: { _ in },
+            receiveValue: { names in
+                guard let expected = expectedNames else { return }
 
-            if Set(expected) == Set(names) {
-                assertExpectation?.fulfill()
-                assertExpectation = nil
-                expectedNames = nil
+                if Set(expected) == Set(names) {
+                    assertExpectation?.fulfill()
+                    assertExpectation = nil
+                    expectedNames = nil
+                }
             }
-        }
+        )
 
         expectedNames = ["Alice"]
         let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
@@ -158,6 +159,13 @@ private extension DatabaseConnection {
     func readNames() async throws -> [String] {
         try await read { db in
             try String.fetchAll(db, sql: "SELECT name FROM test")
+        }
+    }
+
+    private func createNamesTable(in db: Database) throws {
+        try db.create(table: "test", ifNotExists: true) { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text)
         }
     }
 }

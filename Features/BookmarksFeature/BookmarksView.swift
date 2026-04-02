@@ -12,6 +12,7 @@ import QuranKit
 import SwiftUI
 import UIx
 
+@MainActor
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
 
@@ -20,13 +21,17 @@ struct BookmarksView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             bookmarks: viewModel.bookmarks,
+            shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
-            deleteAction: { await viewModel.deleteItem($0) }
+            deleteAction: { await viewModel.deleteItem($0) },
+            dismissSyncBanner: { viewModel.dismissSyncBanner() },
+            signInAction: { await viewModel.loginToQuranCom() }
         )
     }
 }
 
+@MainActor
 private struct BookmarksViewUI: View {
     // MARK: Internal
 
@@ -34,17 +39,27 @@ private struct BookmarksViewUI: View {
     @Binding var error: Error?
 
     let bookmarks: [PageBookmark]
+    let shouldShowSyncBanner: Bool
 
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
     let deleteAction: AsyncItemAction<PageBookmark>
+    let dismissSyncBanner: () -> Void
+    let signInAction: @MainActor () async -> Void
 
     var body: some View {
         Group {
             if bookmarks.isEmpty {
-                noData
+                emptyState
             } else {
                 NoorList {
+                    #if QURAN_SYNC
+                        if shouldShowSyncBanner {
+                            NoorBasicSection {
+                                syncBanner
+                            }
+                        }
+                    #endif
                     NoorSection(bookmarks) { bookmark in
                         listItem(bookmark)
                     }
@@ -59,11 +74,32 @@ private struct BookmarksViewUI: View {
 
     // MARK: Private
 
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            #if QURAN_SYNC
+                if shouldShowSyncBanner {
+                    syncBanner
+                        .padding(.horizontal)
+                        .padding(.top, 12)
+                }
+            #endif
+
+            noData
+        }
+    }
+
     private var noData: some View {
         DataUnavailableView(
             title: l("bookmarks.no-data.title"),
             text: l("bookmarks.no-data.text"),
             image: .bookmark
+        )
+    }
+
+    private var syncBanner: some View {
+        BookmarksSyncBanner(
+            dismiss: dismissSyncBanner,
+            signInAction: signInAction
         )
     }
 
@@ -77,6 +113,63 @@ private struct BookmarksViewUI: View {
         ) {
             selectAction(bookmark)
         }
+    }
+}
+
+@MainActor
+private struct BookmarksSyncBanner: View {
+    @ScaledMetric private var closeButtonInset = 8.0
+    @ScaledMetric private var containerCornerRadius = Dimensions.cornerRadius
+    @ScaledMetric private var containerPadding = 16.0
+    @ScaledMetric private var contentSpacing = 12.0
+    @ScaledMetric private var titleSpacing = 4.0
+    @ScaledMetric private var trailingSpacing = 8.0
+
+    let dismiss: () -> Void
+    let signInAction: @MainActor () async -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: contentSpacing) {
+            HStack(alignment: .top, spacing: contentSpacing) {
+                NoorSystemImage.bookmark.image
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Color.accentColor)
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: titleSpacing) {
+                    Text(l("bookmarks.sync.title"))
+                        .font(.headline)
+
+                    Text(l("bookmarks.sync.body"))
+                        .font(.subheadline)
+                        .foregroundStyle(Color.secondaryLabel)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: trailingSpacing)
+
+                Button(action: dismiss) {
+                    NoorSystemImage.cancel.image
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(Color.secondaryLabel)
+                        .padding(closeButtonInset)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(lAndroid("cancel"))
+            }
+
+            ProminentRoundedButton(label: l("bookmarks.sync.action")) {
+                await signInAction()
+            }
+        }
+        .padding(containerPadding)
+        .background(Color.secondarySystemBackground)
+        .overlay(
+            RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous)
+                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
+        )
+        .background(Color.accentColor.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
     }
 }
 
@@ -99,11 +192,14 @@ struct BookmarksView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     bookmarks: items,
+                    shouldShowSyncBanner: true,
                     start: {},
                     selectAction: { _ in },
-                    deleteAction: { item in items = items.filter { $0 != item } }
+                    deleteAction: { item in items = items.filter { $0 != item } },
+                    dismissSyncBanner: {},
+                    signInAction: {}
                 )
-                .navigationTitle("Bookmarks")
+                .navigationTitle(lAndroid("menu_bookmarks"))
                 .toolbar {
                     if items.isEmpty {
                         Button("Populate") { items = Self.staticItems }

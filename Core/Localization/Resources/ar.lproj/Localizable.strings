@@ -45,6 +45,12 @@
 "setting.donate" = "تبرع";
 "setting.share_app" = "مشاركة التطبيق...";
 "setting.app_version" = "نسخة التطبيق";
+"setting.quran_account.sign_in" = "تسجيل الدخول";
+"setting.quran_account.profile" = "ملف Quran.com";
+"setting.quran_account.sign_out" = "تسجيل الخروج";
+"setting.quran_account.sync_devices" = "المزامنة عبر جميع الأجهزة";
+"setting.quran_account.custom_collections" = "إنشاء مجموعات مخصصة";
+"setting.quran_account.attach_notes" = "إرفاق الملاحظات بالآيات";
 
 // MARK: - Quran Menu
 

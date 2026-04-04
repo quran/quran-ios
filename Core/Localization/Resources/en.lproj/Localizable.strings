@@ -52,6 +52,12 @@
 "setting.donate" = "Donate";
 "setting.share_app" = "Share the app...";
 "setting.app_version" = "App Version";
+"setting.quran_account.sign_in" = "Sign in";
+"setting.quran_account.profile" = "Quran.com Profile";
+"setting.quran_account.sign_out" = "Sign out";
+"setting.quran_account.sync_devices" = "Sync across all devices";
+"setting.quran_account.custom_collections" = "Create custom collections";
+"setting.quran_account.attach_notes" = "Attach notes to verses";
 
 // MARK: - Quran Menu
 

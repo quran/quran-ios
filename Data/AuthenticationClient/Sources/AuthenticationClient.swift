@@ -63,4 +63,11 @@ public protocol AuthenticationClient {
     func getAuthenticationHeaders() async throws -> [String: String]
 
     var authenticationState: AuthenticationState { get async }
+    var currentUserEmail: String? { get async }
+}
+
+public extension AuthenticationClient {
+    var currentUserEmail: String? {
+        get async { nil }
+    }
 }

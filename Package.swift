@@ -522,10 +522,6 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
 
         ]),
-
-        target(type, name: "QuranProfileService", dependencies: [
-            "AuthenticationClient",
-        ]),
     ]
 }
 
@@ -619,15 +615,35 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
         ]),
 
-        target(type, name: "BookmarksFeature", hasTests: false, dependencies: [
-            "AppDependencies",
-            "FeaturesSupport",
-            "AnnotationsService",
-            "NoorUI",
-            "Preferences",
-            "ReadingService",
-            "QuranProfileService",
-        ]),
+        [
+            .target(
+                name: "BookmarksFeature",
+                dependencies: [
+                    "AppDependencies",
+                    "AuthenticationClient",
+                    "FeaturesSupport",
+                    "AnnotationsService",
+                    "NoorUI",
+                    "Preferences",
+                    "ReadingService",
+                ],
+                path: "Features/BookmarksFeature",
+                exclude: ["Tests"],
+                swiftSettings: settings
+            ),
+            .testTarget(
+                name: "BookmarksFeatureTests",
+                dependencies: [
+                    .init(stringLiteral: "BookmarksFeature"),
+                    .init(stringLiteral: "Analytics"),
+                    .init(stringLiteral: "AnnotationsService"),
+                    .init(stringLiteral: "AuthenticationClient"),
+                    .init(stringLiteral: "PageBookmarkPersistence"),
+                ],
+                path: "Features/BookmarksFeature/Tests",
+                swiftSettings: settings
+            ),
+        ],
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
             "NoorUI",
@@ -719,18 +735,46 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
         ]),
 
-        target(type, name: "SettingsFeature", hasTests: false, dependencies: [
-            "AppDependencies",
-            "SettingsService",
-            "NoorUI",
-            "VLogging",
-            "AudioDownloadsFeature",
-            "TranslationsFeature",
-            "ReadingSelectorFeature",
-            "Preferences",
-            "Zip",
-            "QuranProfileService",
-        ]),
+        [
+            .target(
+                name: "SettingsFeature",
+                dependencies: [
+                    "AppDependencies",
+                    "AuthenticationClient",
+                    "SettingsService",
+                    "NoorUI",
+                    "VLogging",
+                    "AudioDownloadsFeature",
+                    "TranslationsFeature",
+                    "ReadingSelectorFeature",
+                    "Preferences",
+                    "Zip",
+                ],
+                path: "Features/SettingsFeature",
+                exclude: ["Tests"],
+                swiftSettings: settings
+            ),
+            .testTarget(
+                name: "SettingsFeatureTests",
+                dependencies: [
+                    .init(stringLiteral: "SettingsFeature"),
+                    .init(stringLiteral: "Analytics"),
+                    .init(stringLiteral: "AppDependencies"),
+                    .init(stringLiteral: "AudioDownloadsFeature"),
+                    .init(stringLiteral: "AuthenticationClient"),
+                    .init(stringLiteral: "BatchDownloader"),
+                    .init(stringLiteral: "LastPagePersistence"),
+                    .init(stringLiteral: "NotePersistence"),
+                    .init(stringLiteral: "PageBookmarkPersistence"),
+                    .init(stringLiteral: "ReadingSelectorFeature"),
+                    .init(stringLiteral: "ReadingService"),
+                    .init(stringLiteral: "SettingsService"),
+                    .init(stringLiteral: "TranslationsFeature"),
+                ],
+                path: "Features/SettingsFeature/Tests",
+                swiftSettings: settings
+            ),
+        ],
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
             "HomeFeature",

@@ -89,12 +89,13 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertEqual(fileManager.files, [])
     }
 
-    func test_resourceDownloadedAndUnzipped() async throws {
+    func test_resourceDownloadedWhenExtractedVersionFileExists() async throws {
         // Given
         let reading = Reading.tajweed
         let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
         ReadingPreferences.shared.reading = reading
-        fileManager.files.insert(remoteResource.successFilePath.url)
+        let extractedVersionFilePath = try XCTUnwrap(remoteResource.extractedVersionFilePath?.url)
+        fileManager.files = [remoteResource.downloadDestination.url, extractedVersionFilePath]
 
         // Test
         await service.startLoadingResources()
@@ -102,6 +103,8 @@ final class ReadingResourcesServiceTests: XCTestCase {
 
         // Then
         XCTAssertEqual(collector.items, [.ready])
+        XCTAssertFalse(fileManager.removedItems.contains(remoteResource.downloadDestination.url))
+        XCTAssertEqual(zipper.unzippedFiles, [])
     }
 
     func test_remoteResourceIsDownloadedWhenSuccessFileExists() throws {
@@ -109,6 +112,14 @@ final class ReadingResourcesServiceTests: XCTestCase {
         let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
 
         fileManager.files.insert(remoteResource.successFilePath.url)
+
+        XCTAssertTrue(remoteResource.isDownloaded(fileSystem: fileManager))
+    }
+
+    func test_remoteResourceIsDownloadedWhenExtractedVersionFileExists() throws {
+        let reading = Reading.hafs_1441
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        fileManager.files.insert(try XCTUnwrap(remoteResource.extractedVersionFilePath?.url))
 
         XCTAssertTrue(remoteResource.isDownloaded(fileSystem: fileManager))
     }
@@ -171,6 +182,55 @@ final class ReadingResourcesServiceTests: XCTestCase {
         // Then
         try await completeRunningDownload(initial: false)
         XCTAssertEqual(collector.items.last, .ready)
+        try assertDownloadedFiles(reading)
+    }
+
+    func test_downloadUpgrade_skipsRedownloadWhenExtractedVersionFileExists() async throws {
+        // Given
+        let reading = Reading.hafs_1440
+        ReadingPreferences.shared.reading = reading
+        remoteResources.versions[reading] = 1
+        let initialRemoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+
+        fileManager.files.insert(initialRemoteResource.successFilePath.url)
+        await service.startLoadingResources()
+        await finishLoadingNoDownload()
+        XCTAssertEqual(collector.items.last, .ready)
+        collector.items = []
+
+        // Test upgrade
+        remoteResources.versions[reading] = 2
+        let upgradedRemoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        fileManager.files.insert(try XCTUnwrap(upgradedRemoteResource.extractedVersionFilePath?.url))
+        await service.retry()
+        await finishLoadingNoDownload(initial: false)
+
+        // Then
+        XCTAssertEqual(collector.items.last, .ready)
+        XCTAssertFalse(fileManager.removedItems.contains(upgradedRemoteResource.downloadDestination.url))
+        XCTAssertEqual(zipper.unzippedFiles, [])
+    }
+
+    func test_downloadUpgrade_doesNotSkipForWrongExtractedVersionFile() async throws {
+        // Given
+        let reading = Reading.hafs_1440
+        ReadingPreferences.shared.reading = reading
+        remoteResources.versions[reading] = 2
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        let wrongVersionMarker = remoteResource.downloadDestination
+            .appendingPathComponent("images_1352", isDirectory: true)
+            .appendingPathComponent("width_1352", isDirectory: true)
+            .appendingPathComponent(".v1", isDirectory: false)
+        fileManager.files = [remoteResource.downloadDestination.url, wrongVersionMarker.url]
+
+        // Test
+        await service.startLoadingResources()
+        try await completeRunningDownload()
+
+        // Then
+        await waitForReady()
+        XCTAssertEqual(collector.items.last, .ready)
+        XCTAssertEqual(zipper.unzippedFiles, [remoteResource.zipFile.url])
         try assertDownloadedFiles(reading)
     }
 

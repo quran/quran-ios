@@ -5,6 +5,8 @@
 //  Created by Mohamed Afifi on 2023-02-14.
 //
 
+import Foundation
+
 public enum Reading: Int {
     case hafs_1405 = 0
     case hafs_1440 = 1
@@ -51,6 +53,23 @@ public enum Reading: Int {
         }
     }
 
+    public var imageAssetWidth: Int {
+        switch self {
+        case .hafs_1405:
+            return 1920
+        case .hafs_1421:
+            return 1120
+        case .hafs_1440:
+            return 1352
+        case .hafs_1439:
+            return 1080
+        case .hafs_1441:
+            return 1440
+        case .tajweed:
+            return 1280
+        }
+    }
+
     public var usesBlueLinePageChrome: Bool {
         self == .hafs_1439
     }
@@ -62,5 +81,20 @@ public enum Reading: Int {
         case .hafs_1405, .hafs_1421:
             return false
         }
+    }
+
+    public func ayahInfoDatabase(in directory: URL) -> URL {
+        let width = imageAssetWidth
+        return directory
+            .appendingPathComponent("images_\(width)")
+            .appendingPathComponent("databases")
+            .appendingPathComponent("ayahinfo_\(width).db")
+    }
+
+    public func imagesDirectory(in directory: URL) -> URL {
+        let width = imageAssetWidth
+        return directory
+            .appendingPathComponent("images_\(width)")
+            .appendingPathComponent("width_\(width)")
     }
 }

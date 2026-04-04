@@ -114,8 +114,13 @@ public actor ReadingResourcesService {
             return .ready
         }
 
-        if remoteResource.isDownloaded(fileSystem: fileManager) {
+        if remoteResource.hasSuccessFile(fileSystem: fileManager) {
             logger.info("Resources: Reading \(reading) has been downloaded and saved locally before")
+            return .ready
+        }
+
+        if recoverDownloadedResourceIfNeeded(remoteResource) {
+            logger.info("Resources: Reading \(reading) has extracted resources and a previous success marker. Regenerated success marker.")
             return .ready
         }
 
@@ -135,6 +140,22 @@ public actor ReadingResourcesService {
             crasher.recordError(error, reason: "Failed to download \(reading). Error: \(error)")
             return .error(error as NSError)
         }
+    }
+
+    private func recoverDownloadedResourceIfNeeded(_ remoteResource: RemoteResource) -> Bool {
+        guard remoteResource.canRecoverSuccessFile(fileSystem: fileManager) else {
+            return false
+        }
+
+        do {
+            try fileManager.writeToFile(at: remoteResource.successFilePath.url, content: "Downloaded")
+        } catch {
+            crasher.recordError(
+                error,
+                reason: "Cannot write recovered success marker for '\(remoteResource.successFilePath.url)'"
+            )
+        }
+        return true
     }
 
     private func unzipFileIfNeeded(_ remoteResource: RemoteResource) throws {

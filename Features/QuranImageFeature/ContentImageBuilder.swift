@@ -59,7 +59,7 @@ public struct ContentImageBuilder {
         let readingDirectory = Self.readingDirectory(reading, container: container)
         return ImageDataService(
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
-            imagesURL: reading.images(in: readingDirectory)
+            imagesURL: reading.imagesDirectory(in: readingDirectory)
         )
     }
 
@@ -88,40 +88,6 @@ public struct ContentImageBuilder {
 }
 
 private extension Reading {
-    func ayahInfoDatabase(in directory: URL) -> URL {
-        switch self {
-        case .hafs_1405:
-            return directory.appendingPathComponent("images_1920/databases/ayahinfo_1920.db")
-        case .hafs_1421:
-            return directory.appendingPathComponent("images_1120/databases/ayahinfo_1120.db")
-        case .hafs_1440:
-            return directory.appendingPathComponent("images_1352/databases/ayahinfo_1352.db")
-        case .hafs_1439:
-            return directory.appendingPathComponent("images_1080/databases/ayahinfo_1080.db")
-        case .hafs_1441:
-            return directory.appendingPathComponent("images_1440/databases/ayahinfo_1440.db")
-        case .tajweed:
-            return directory.appendingPathComponent("images_1280/databases/ayahinfo_1280.db")
-        }
-    }
-
-    func images(in directory: URL) -> URL {
-        switch self {
-        case .hafs_1405:
-            return directory.appendingPathComponent("images_1920/width_1920")
-        case .hafs_1421:
-            return directory.appendingPathComponent("images_1120/width_1120")
-        case .hafs_1440:
-            return directory.appendingPathComponent("images_1352/width_1352")
-        case .hafs_1439:
-            return directory.appendingPathComponent("images_1080/width_1080")
-        case .hafs_1441:
-            return directory.appendingPathComponent("images_1440/width_1440")
-        case .tajweed:
-            return directory.appendingPathComponent("images_1280/width_1280")
-        }
-    }
-
     // TODO: Add cropInsets back
     var cropInsets: UIEdgeInsets {
         switch self {

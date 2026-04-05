@@ -55,9 +55,9 @@
 "setting.quran_account.sign_in" = "Sign in";
 "setting.quran_account.profile" = "Quran.com Profile";
 "setting.quran_account.sign_out" = "Sign out";
-"setting.quran_account.sync_devices" = "Sync across all devices";
-"setting.quran_account.custom_collections" = "Create custom collections";
-"setting.quran_account.attach_notes" = "Attach notes to verses";
+"setting.quran_account.sync_devices" = "Sync your bookmarks across all devices";
+"setting.quran_account.custom_collections" = "Keep your custom collections in sync";
+"setting.quran_account.attach_notes" = "Keep your verse notes in sync";
 
 // MARK: - Quran Menu
 

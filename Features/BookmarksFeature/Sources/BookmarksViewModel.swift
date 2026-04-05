@@ -50,11 +50,7 @@ final class BookmarksViewModel: ObservableObject {
 
     func start() async {
         if let authenticationClient {
-            do {
-                isAuthenticated = try await authenticationClient.restoreState() == .authenticated
-            } catch {
-                isAuthenticated = await authenticationClient.authenticationState == .authenticated
-            }
+            isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         } else {
             isAuthenticated = false
         }

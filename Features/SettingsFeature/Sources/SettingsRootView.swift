@@ -20,7 +20,7 @@ struct SettingsRootView: View {
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
             isAuthenticated: viewModel.isAuthenticated,
-            currentUserEmail: viewModel.currentUserEmail,
+            loggedInUserEmail: viewModel.currentUserEmail,
             openQuranComProfile: { viewModel.openQuranComProfile() },
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
@@ -46,7 +46,7 @@ private struct SettingsRootViewUI: View {
 
     let audioEnd: String
     let isAuthenticated: Bool
-    let currentUserEmail: String?
+    let loggedInUserEmail: String?
     let openQuranComProfile: AsyncAction
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
@@ -189,7 +189,7 @@ private struct SettingsRootViewUI: View {
         Group {
             NoorListItem(
                 image: .init(.profile, color: .secondaryLabel),
-                title: .text(currentUserEmail ?? l("setting.quran_account.profile")),
+                title: .text(loggedInUserEmail ?? l("setting.quran_account.profile")),
                 accessory: .image(.settings, color: .secondaryLabel),
                 action: openQuranComProfile
             )
@@ -222,7 +222,7 @@ struct SettingsRootView_Previews: PreviewProvider {
                 error: .constant(nil),
                 audioEnd: "Surah",
                 isAuthenticated: false,
-                currentUserEmail: nil,
+                loggedInUserEmail: nil,
                 openQuranComProfile: {},
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},

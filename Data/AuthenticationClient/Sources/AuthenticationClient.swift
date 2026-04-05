@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MobileSync
 import UIKit
 
 public enum AuthenticationClientError: Error {
@@ -22,6 +23,42 @@ public enum AuthenticationState: Equatable {
     case notAuthenticated
 
     case authenticated
+}
+
+public struct LoggedInUser: Equatable, Sendable {
+    public let id: String
+    public let firstName: String?
+    public let lastName: String?
+    public let name: String?
+    public let email: String?
+    public let photoURL: String?
+
+    public init(
+        id: String,
+        firstName: String?,
+        lastName: String?,
+        name: String?,
+        email: String?,
+        photoURL: String?
+    ) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.name = name
+        self.email = email
+        self.photoURL = photoURL
+    }
+
+    init(_ userInfo: UserInfo) {
+        self.init(
+            id: userInfo.id,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            name: userInfo.name,
+            email: userInfo.email,
+            photoURL: userInfo.photoUrl
+        )
+    }
 }
 
 public struct AuthenticationClientConfiguration {
@@ -63,11 +100,15 @@ public protocol AuthenticationClient {
     func getAuthenticationHeaders() async throws -> [String: String]
 
     var authenticationState: AuthenticationState { get async }
-    var currentUserEmail: String? { get async }
+    var loggedInUser: LoggedInUser? { get async }
 }
 
 public extension AuthenticationClient {
-    var currentUserEmail: String? {
-        get async { nil }
+    func safelyRestoreState() async -> AuthenticationState {
+        do {
+            return try await restoreState()
+        } catch {
+            return await authenticationState
+        }
     }
 }

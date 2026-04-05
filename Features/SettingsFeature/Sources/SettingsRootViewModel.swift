@@ -33,6 +33,7 @@ final class SettingsRootViewModel: ObservableObject {
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
         diagnosticsBuilder: DiagnosticsBuilder,
+        quranProfileURL: URL,
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
@@ -44,6 +45,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
+        self.quranProfileURL = quranProfileURL
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
@@ -68,7 +70,11 @@ final class SettingsRootViewModel: ObservableObject {
     @Published var audioEnd: AudioEnd
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
-    @Published var currentUserEmail: String? = nil
+    @Published var loggedInUser: LoggedInUser? = nil
+
+    var currentUserEmail: String? {
+        loggedInUser?.email
+    }
 
     @Published var appearanceMode: AppearanceMode {
         didSet {
@@ -138,8 +144,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     func openQuranComProfile() {
         logger.info("Settings: Open Quran.com profile.")
-        let url = URL(validURL: "https://quran.com/profile")
-        let viewController = SFSafariViewController(url: url)
+        let viewController = SFSafariViewController(url: quranProfileURL)
         navigationController?.present(viewController, animated: true)
     }
 
@@ -152,16 +157,12 @@ final class SettingsRootViewModel: ObservableObject {
     func refreshAuthenticationState() async {
         guard let authenticationClient else {
             isAuthenticated = false
-            currentUserEmail = nil
+            loggedInUser = nil
             return
         }
 
-        do {
-            isAuthenticated = try await authenticationClient.restoreState() == .authenticated
-        } catch {
-            isAuthenticated = await authenticationClient.authenticationState == .authenticated
-        }
-        currentUserEmail = isAuthenticated ? await authenticationClient.currentUserEmail : nil
+        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
     }
 
     func loginToQuranCom() async {
@@ -173,7 +174,7 @@ final class SettingsRootViewModel: ObservableObject {
             let authenticationClient = try requireAuthenticationClient()
             try await authenticationClient.login(on: viewController)
             isAuthenticated = true
-            currentUserEmail = await authenticationClient.currentUserEmail
+            loggedInUser = await authenticationClient.loggedInUser
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
             self.error = error
@@ -185,7 +186,7 @@ final class SettingsRootViewModel: ObservableObject {
             let authenticationClient = try requireAuthenticationClient()
             try await authenticationClient.logout()
             isAuthenticated = false
-            currentUserEmail = nil
+            loggedInUser = nil
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
             self.error = error
@@ -195,6 +196,7 @@ final class SettingsRootViewModel: ObservableObject {
     // MARK: Private
 
     private let authenticationClient: (any AuthenticationClient)?
+    private let quranProfileURL: URL
 
     private func requireAuthenticationClient() throws -> any AuthenticationClient {
         guard let authenticationClient else {

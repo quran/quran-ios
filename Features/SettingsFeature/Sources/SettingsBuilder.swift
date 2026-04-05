@@ -34,6 +34,7 @@ public struct SettingsBuilder {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
         let view = SettingsRootView(viewModel: viewModel)

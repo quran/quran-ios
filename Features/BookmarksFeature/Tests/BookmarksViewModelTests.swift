@@ -40,9 +40,9 @@ final class BookmarksViewModelTests: XCTestCase {
         let sut = makeSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
-        await waitUntil { client.authenticationStateReads == 1 }
-        XCTAssertTrue(sut.isAuthenticated)
+        await waitUntil { sut.isAuthenticated }
         XCTAssertEqual(client.restoreStateCallCount, 1)
+        XCTAssertEqual(client.authenticationStateReads, 1)
         task.cancel()
     }
 
@@ -131,7 +131,7 @@ private final class AuthenticationClientSpy: AuthenticationClient {
         }
     }
 
-    var currentUserEmail: String? {
+    var loggedInUser: LoggedInUser? {
         get async { nil }
     }
 

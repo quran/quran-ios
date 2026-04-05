@@ -16,8 +16,8 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         authService.isLoggedIn() ? .authenticated : .notAuthenticated
     }
 
-    public var currentUserEmail: String? {
-        (authService.authState as? AuthState.Success)?.userInfo.email
+    public var loggedInUser: LoggedInUser? {
+        authService.loggedInUser.map(LoggedInUser.init)
     }
 
     public func login(on _: UIViewController) async throws {

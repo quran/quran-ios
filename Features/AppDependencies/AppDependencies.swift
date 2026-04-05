@@ -23,6 +23,7 @@ public protocol AppDependencies {
     var wordsDatabase: URL { get }
     var appHost: URL { get }
     var filesAppHost: URL { get }
+    var quranProfileURL: URL { get }
     var logsDirectory: URL { get }
     var databasesDirectory: URL { get }
 

@@ -68,7 +68,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
         // Sync
-        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.5"),
+        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.6"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -615,35 +615,20 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
         ]),
 
-        [
-            .target(
-                name: "BookmarksFeature",
-                dependencies: [
-                    "AppDependencies",
-                    "AuthenticationClient",
-                    "FeaturesSupport",
-                    "AnnotationsService",
-                    "NoorUI",
-                    "Preferences",
-                    "ReadingService",
-                ],
-                path: "Features/BookmarksFeature",
-                exclude: ["Tests"],
-                swiftSettings: settings
-            ),
-            .testTarget(
-                name: "BookmarksFeatureTests",
-                dependencies: [
-                    .init(stringLiteral: "BookmarksFeature"),
-                    .init(stringLiteral: "Analytics"),
-                    .init(stringLiteral: "AnnotationsService"),
-                    .init(stringLiteral: "AuthenticationClient"),
-                    .init(stringLiteral: "PageBookmarkPersistence"),
-                ],
-                path: "Features/BookmarksFeature/Tests",
-                swiftSettings: settings
-            ),
-        ],
+        target(type, name: "BookmarksFeature", dependencies: [
+            "AppDependencies",
+            "AuthenticationClient",
+            "FeaturesSupport",
+            "AnnotationsService",
+            "NoorUI",
+            "Preferences",
+            "ReadingService",
+        ], testDependencies: [
+            "Analytics",
+            "AnnotationsService",
+            "AuthenticationClient",
+            "PageBookmarkPersistence",
+        ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
             "NoorUI",
@@ -735,46 +720,31 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
         ]),
 
-        [
-            .target(
-                name: "SettingsFeature",
-                dependencies: [
-                    "AppDependencies",
-                    "AuthenticationClient",
-                    "SettingsService",
-                    "NoorUI",
-                    "VLogging",
-                    "AudioDownloadsFeature",
-                    "TranslationsFeature",
-                    "ReadingSelectorFeature",
-                    "Preferences",
-                    "Zip",
-                ],
-                path: "Features/SettingsFeature",
-                exclude: ["Tests"],
-                swiftSettings: settings
-            ),
-            .testTarget(
-                name: "SettingsFeatureTests",
-                dependencies: [
-                    .init(stringLiteral: "SettingsFeature"),
-                    .init(stringLiteral: "Analytics"),
-                    .init(stringLiteral: "AppDependencies"),
-                    .init(stringLiteral: "AudioDownloadsFeature"),
-                    .init(stringLiteral: "AuthenticationClient"),
-                    .init(stringLiteral: "BatchDownloader"),
-                    .init(stringLiteral: "LastPagePersistence"),
-                    .init(stringLiteral: "NotePersistence"),
-                    .init(stringLiteral: "PageBookmarkPersistence"),
-                    .init(stringLiteral: "ReadingSelectorFeature"),
-                    .init(stringLiteral: "ReadingService"),
-                    .init(stringLiteral: "SettingsService"),
-                    .init(stringLiteral: "TranslationsFeature"),
-                ],
-                path: "Features/SettingsFeature/Tests",
-                swiftSettings: settings
-            ),
-        ],
+        target(type, name: "SettingsFeature", dependencies: [
+            "AppDependencies",
+            "AuthenticationClient",
+            "SettingsService",
+            "NoorUI",
+            "VLogging",
+            "AudioDownloadsFeature",
+            "TranslationsFeature",
+            "ReadingSelectorFeature",
+            "Preferences",
+            "Zip",
+        ], testDependencies: [
+            "Analytics",
+            "AppDependencies",
+            "AudioDownloadsFeature",
+            "AuthenticationClient",
+            "BatchDownloader",
+            "LastPagePersistence",
+            "NotePersistence",
+            "PageBookmarkPersistence",
+            "ReadingSelectorFeature",
+            "ReadingService",
+            "SettingsService",
+            "TranslationsFeature",
+        ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
             "HomeFeature",

@@ -31,7 +31,7 @@ final class SettingsRootViewModelTests: XCTestCase {
     func test_refreshAuthenticationState_returnsRestoredState_whenRestoreSucceeds() async {
         let client = AuthenticationClientSpy()
         client.restoreStateResult = .authenticated
-        client.currentUserEmailValue = "user@example.com"
+        client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
 
         await sut.refreshAuthenticationState()
@@ -46,7 +46,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         let client = AuthenticationClientSpy()
         client.restoreStateError = NSError(domain: "test", code: 1)
         client.authenticationStateValue = .authenticated
-        client.currentUserEmailValue = "user@example.com"
+        client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
 
         await sut.refreshAuthenticationState()
@@ -59,7 +59,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_login_updatesAuthenticationStateAndEmail() async {
         let client = AuthenticationClientSpy()
-        client.currentUserEmailValue = "user@example.com"
+        client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
         let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
 
@@ -83,10 +83,10 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_logout_clearsAuthenticationStateAndEmail() async {
         let client = AuthenticationClientSpy()
-        client.currentUserEmailValue = "user@example.com"
+        client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
         sut.isAuthenticated = true
-        sut.currentUserEmail = "user@example.com"
+        sut.loggedInUser = makeUser(email: "user@example.com")
 
         await sut.logoutFromQuranCom()
 
@@ -119,6 +119,7 @@ final class SettingsRootViewModelTests: XCTestCase {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
     }
@@ -141,6 +142,7 @@ private struct AppDependenciesStub: AppDependencies {
     var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }
     var appHost: URL { URL(string: "https://quran.com")! }
     var filesAppHost: URL { URL(string: "https://files.quran.com")! }
+    var quranProfileURL: URL { URL(string: "https://quran.com/profile")! }
     var logsDirectory: URL { URL(fileURLWithPath: "/tmp/logs") }
     var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
     var supportsCloudKit: Bool { false }
@@ -153,11 +155,22 @@ private struct AppDependenciesStub: AppDependencies {
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
 }
 
+private func makeUser(email: String?) -> LoggedInUser {
+    LoggedInUser(
+        id: "1",
+        firstName: "Test",
+        lastName: "User",
+        name: "Test User",
+        email: email,
+        photoURL: nil
+    )
+}
+
 private final class AuthenticationClientSpy: AuthenticationClient {
     var restoreStateResult: AuthenticationState = .notAuthenticated
     var restoreStateError: Error?
     var authenticationStateValue: AuthenticationState = .notAuthenticated
-    var currentUserEmailValue: String?
+    var loggedInUserValue: LoggedInUser?
     var loginError: Error?
     var logoutError: Error?
     var loginCallCount = 0
@@ -173,8 +186,8 @@ private final class AuthenticationClientSpy: AuthenticationClient {
         }
     }
 
-    var currentUserEmail: String? {
-        get async { currentUserEmailValue }
+    var loggedInUser: LoggedInUser? {
+        get async { loggedInUserValue }
     }
 
     func login(on viewController: UIViewController) async throws {

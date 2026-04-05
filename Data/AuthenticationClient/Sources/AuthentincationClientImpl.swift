@@ -35,6 +35,10 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
+    public var loggedInUser: LoggedInUser? {
+        nil
+    }
+
     public func login(on viewController: UIViewController) async throws {
         do {
             try persistence.clearData(forKey: Self.persistenceKey)

@@ -28,11 +28,8 @@ final class BookmarksViewModelTests: XCTestCase {
         let sut = makeSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
-        await Task.yield()
-        await Task.yield()
-
+        await waitUntil { client.restoreStateCallCount == 1 }
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.restoreStateCallCount, 1)
         task.cancel()
     }
 
@@ -43,12 +40,9 @@ final class BookmarksViewModelTests: XCTestCase {
         let sut = makeSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
-        await Task.yield()
-        await Task.yield()
-
+        await waitUntil { client.authenticationStateReads == 1 }
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(client.restoreStateCallCount, 1)
-        XCTAssertEqual(client.authenticationStateReads, 1)
         task.cancel()
     }
 
@@ -68,7 +62,8 @@ final class BookmarksViewModelTests: XCTestCase {
 
     func test_loginToQuranCom_setsError_whenClientIsMissing() async {
         let sut = makeSUT(authenticationClient: nil)
-        sut.presenter = UIViewController()
+        let presenter = UIViewController()
+        sut.presenter = presenter
 
         await sut.loginToQuranCom()
 
@@ -87,6 +82,21 @@ final class BookmarksViewModelTests: XCTestCase {
             authenticationClient: authenticationClient,
             navigateTo: { _ in }
         )
+    }
+
+    private func waitUntil(
+        timeoutIterations: Int = 100,
+        condition: @escaping @MainActor () -> Bool,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        for _ in 0 ..< timeoutIterations {
+            if condition() {
+                return
+            }
+            await Task.yield()
+        }
+        XCTFail("Condition was not met in time", file: file, line: line)
     }
 }
 

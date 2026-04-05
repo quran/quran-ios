@@ -22,17 +22,17 @@
 		<key>category</key>
 		<string>arabic</string>
 		<key>databaseName</key>
-		<string>mishari_alafasy</string>
+		<string>husary</string>
 		<key>hasGaplessAlternative</key>
 		<false/>
 		<key>id</key>
-		<integer>41</integer>
+		<integer>1</integer>
 		<key>name</key>
-		<string>qari_afasy_gapless</string>
+		<string>qari_husary_gapless</string>
 		<key>path</key>
-		<string>mishari_alafasy</string>
+		<string>husary</string>
 		<key>url</key>
-		<string>https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/</string>
+		<string>https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/</string>
 	</dict>
 	<dict>
 		<key>category</key>

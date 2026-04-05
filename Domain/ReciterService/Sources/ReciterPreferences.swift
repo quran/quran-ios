@@ -30,7 +30,7 @@ public class ReciterPreferences {
 
     // MARK: Private
 
-    private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 41)
+    private static let lastSelectedReciterId = PreferenceKey<Int>(key: "LastSelectedQariId", defaultValue: 1)
     private static let recentReciterIds = PreferenceKey<[Int]>(key: "recentRecitersIdsKey", defaultValue: [])
     private static let recentReciterIdsTransfomer = PreferenceTransformer<[Int], OrderedSet<Int>>(
         rawToValue: { OrderedSet($0) },

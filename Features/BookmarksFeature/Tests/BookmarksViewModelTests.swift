@@ -3,6 +3,7 @@ import AnnotationsService
 import AuthenticationClient
 import Combine
 import Foundation
+import MobileSync
 import PageBookmarkPersistence
 import UIKit
 import XCTest
@@ -131,7 +132,7 @@ private final class AuthenticationClientSpy: AuthenticationClient {
         }
     }
 
-    var loggedInUser: LoggedInUser? {
+    var loggedInUser: UserInfo? {
         get async { nil }
     }
 

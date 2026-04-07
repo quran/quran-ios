@@ -627,6 +627,7 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnnotationsService",
             "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
         ]),
 
@@ -723,6 +724,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
             "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "SettingsService",
             "NoorUI",
             "VLogging",
@@ -736,6 +738,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "AudioDownloadsFeature",
             "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "BatchDownloader",
             "LastPagePersistence",
             "NotePersistence",

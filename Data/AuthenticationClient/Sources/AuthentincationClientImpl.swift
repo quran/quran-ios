@@ -8,6 +8,7 @@
 import AppAuth
 import Combine
 import Foundation
+import MobileSync
 import OAuthService
 import OAuthServiceAppAuthImpl
 import SecurePersistence
@@ -35,7 +36,7 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
         stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
     }
 
-    public var loggedInUser: LoggedInUser? {
+    public var loggedInUser: UserInfo? {
         nil
     }
 

@@ -5,6 +5,7 @@ import AuthenticationClient
 import BatchDownloader
 import Foundation
 import LastPagePersistence
+import MobileSync
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingSelectorFeature
@@ -155,14 +156,14 @@ private struct AppDependenciesStub: AppDependencies {
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
 }
 
-private func makeUser(email: String?) -> LoggedInUser {
-    LoggedInUser(
+private func makeUser(email: String?) -> UserInfo {
+    UserInfo(
         id: "1",
         firstName: "Test",
         lastName: "User",
         name: "Test User",
         email: email,
-        photoURL: nil
+        photoUrl: nil
     )
 }
 
@@ -170,7 +171,7 @@ private final class AuthenticationClientSpy: AuthenticationClient {
     var restoreStateResult: AuthenticationState = .notAuthenticated
     var restoreStateError: Error?
     var authenticationStateValue: AuthenticationState = .notAuthenticated
-    var loggedInUserValue: LoggedInUser?
+    var loggedInUserValue: UserInfo?
     var loginError: Error?
     var logoutError: Error?
     var loginCallCount = 0
@@ -186,7 +187,7 @@ private final class AuthenticationClientSpy: AuthenticationClient {
         }
     }
 
-    var loggedInUser: LoggedInUser? {
+    var loggedInUser: UserInfo? {
         get async { loggedInUserValue }
     }
 

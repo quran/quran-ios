@@ -10,6 +10,7 @@ import AudioDownloadsFeature
 import AuthenticationClient
 import Combine
 import Localization
+import MobileSync
 import NoorUI
 import QuranAudio
 import QuranAudioKit
@@ -70,7 +71,7 @@ final class SettingsRootViewModel: ObservableObject {
     @Published var audioEnd: AudioEnd
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
-    @Published var loggedInUser: LoggedInUser? = nil
+    @Published var loggedInUser: UserInfo? = nil
 
     var currentUserEmail: String? {
         loggedInUser?.email

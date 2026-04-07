@@ -74,6 +74,7 @@ class Container: AppDependencies {
     var databasesURL: URL { Constant.databasesURL }
     var wordsDatabase: URL { Constant.wordsDatabase }
     var filesAppHost: URL { Constant.filesAppHost }
+    var quranProfileURL: URL { Self.quranProfileURL() }
     var appHost: URL { Constant.appHost }
     var databasesDirectory: URL { Constant.databasesURL }
     var logsDirectory: URL { FileManager.documentsURL.appendingPathComponent("logs") }
@@ -213,6 +214,13 @@ class Container: AppDependencies {
             return nil
         }
         return value
+    }
+
+    private static func quranProfileURL() -> URL {
+        let url = usePreProductionSyncEnvironment()
+            ? "https://prelive.quran.com/profile"
+            : "https://quran.com/profile"
+        return URL(validURL: url)
     }
 
     private static func usePreProductionSyncEnvironment() -> Bool {

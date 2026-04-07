@@ -7,12 +7,13 @@
 
 import Analytics
 import AudioDownloadsFeature
+import AuthenticationClient
 import Combine
 import Localization
+import MobileSync
 import NoorUI
 import QuranAudio
 import QuranAudioKit
-import QuranProfileService
 import ReadingSelectorFeature
 import SafariServices
 import SettingsService
@@ -28,22 +29,24 @@ final class SettingsRootViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
-        quranProfileService: QuranProfileService,
+        authenticationClient: (any AuthenticationClient)?,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
         diagnosticsBuilder: DiagnosticsBuilder,
+        quranProfileURL: URL,
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
         self.analytics = analytics
         self.reviewService = reviewService
-        self.quranProfileService = quranProfileService
+        self.authenticationClient = authenticationClient
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
+        self.quranProfileURL = quranProfileURL
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
@@ -54,7 +57,6 @@ final class SettingsRootViewModel: ObservableObject {
 
     let analytics: AnalyticsLibrary
     let reviewService: ReviewService
-    let quranProfileService: QuranProfileService
     let audioDownloadsBuilder: AudioDownloadsBuilder
     let translationsListBuilder: TranslationsListBuilder
     let readingSelectorBuilder: ReadingSelectorBuilder
@@ -69,6 +71,11 @@ final class SettingsRootViewModel: ObservableObject {
     @Published var audioEnd: AudioEnd
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
+    @Published var loggedInUser: UserInfo? = nil
+
+    var currentUserEmail: String? {
+        loggedInUser?.email
+    }
 
     @Published var appearanceMode: AppearanceMode {
         didSet {
@@ -136,6 +143,12 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.present(viewController, animated: true)
     }
 
+    func openQuranComProfile() {
+        logger.info("Settings: Open Quran.com profile.")
+        let viewController = SFSafariViewController(url: quranProfileURL)
+        navigationController?.present(viewController, animated: true)
+    }
+
     func navigateToDiagnotics() {
         logger.info("Settings: navigateToDiagnotics")
         let viewController = diagnosticsBuilder.build(navigationController: navigationController)
@@ -143,17 +156,26 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func refreshAuthenticationState() async {
-        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
+        guard let authenticationClient else {
+            isAuthenticated = false
+            loggedInUser = nil
+            return
+        }
+
+        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
     }
 
     func loginToQuranCom() async {
-        logger.info("Settings: Login to Quran.com")
         guard let viewController = navigationController else {
             return
         }
+
         do {
-            try await quranProfileService.login(on: viewController)
+            let authenticationClient = try requireAuthenticationClient()
+            try await authenticationClient.login(on: viewController)
             isAuthenticated = true
+            loggedInUser = await authenticationClient.loggedInUser
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
             self.error = error
@@ -161,10 +183,11 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func logoutFromQuranCom() async {
-        logger.info("Settings: Logout from Quran.com")
         do {
-            try await quranProfileService.logout()
+            let authenticationClient = try requireAuthenticationClient()
+            try await authenticationClient.logout()
             isAuthenticated = false
+            loggedInUser = nil
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
             self.error = error
@@ -172,6 +195,16 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     // MARK: Private
+
+    private let authenticationClient: (any AuthenticationClient)?
+    private let quranProfileURL: URL
+
+    private func requireAuthenticationClient() throws -> any AuthenticationClient {
+        guard let authenticationClient else {
+            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
+        }
+        return authenticationClient
+    }
 
     private func showSingleChoiceSelector<T: Hashable>(
         title: String,

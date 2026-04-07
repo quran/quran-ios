@@ -16,6 +16,10 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         authService.isLoggedIn() ? .authenticated : .notAuthenticated
     }
 
+    public var loggedInUser: UserInfo? {
+        authService.loggedInUser
+    }
+
     public func login(on _: UIViewController) async throws {
         do {
             try await authService.signIn()

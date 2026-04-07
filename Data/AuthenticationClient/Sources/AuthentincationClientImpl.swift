@@ -8,6 +8,7 @@
 import AppAuth
 import Combine
 import Foundation
+import MobileSync
 import OAuthService
 import OAuthServiceAppAuthImpl
 import SecurePersistence
@@ -33,6 +34,10 @@ public final actor AuthenticationClientImpl: AuthenticationClient {
 
     public var authenticationState: AuthenticationState {
         stateData?.isAuthorized == true ? .authenticated : .notAuthenticated
+    }
+
+    public var loggedInUser: UserInfo? {
+        nil
     }
 
     public func login(on viewController: UIViewController) async throws {

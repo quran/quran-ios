@@ -68,7 +68,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
         // Sync
-        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.5"),
+        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.6"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -522,10 +522,6 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
 
         ]),
-
-        target(type, name: "QuranProfileService", dependencies: [
-            "AuthenticationClient",
-        ]),
     ]
 }
 
@@ -619,14 +615,20 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
         ]),
 
-        target(type, name: "BookmarksFeature", hasTests: false, dependencies: [
+        target(type, name: "BookmarksFeature", dependencies: [
             "AppDependencies",
+            "AuthenticationClient",
             "FeaturesSupport",
             "AnnotationsService",
             "NoorUI",
             "Preferences",
             "ReadingService",
-            "QuranProfileService",
+        ], testDependencies: [
+            "Analytics",
+            "AnnotationsService",
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            "PageBookmarkPersistence",
         ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
@@ -719,8 +721,10 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
         ]),
 
-        target(type, name: "SettingsFeature", hasTests: false, dependencies: [
+        target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "SettingsService",
             "NoorUI",
             "VLogging",
@@ -729,7 +733,20 @@ private func featuresTargets() -> [[Target]] {
             "ReadingSelectorFeature",
             "Preferences",
             "Zip",
-            "QuranProfileService",
+        ], testDependencies: [
+            "Analytics",
+            "AppDependencies",
+            "AudioDownloadsFeature",
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            "BatchDownloader",
+            "LastPagePersistence",
+            "NotePersistence",
+            "PageBookmarkPersistence",
+            "ReadingSelectorFeature",
+            "ReadingService",
+            "SettingsService",
+            "TranslationsFeature",
         ]),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [

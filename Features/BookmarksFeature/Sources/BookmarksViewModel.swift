@@ -7,11 +7,11 @@
 
 import Analytics
 import AnnotationsService
+import AuthenticationClient
 import Combine
 import FeaturesSupport
 import QuranAnnotations
 import QuranKit
-import QuranProfileService
 import ReadingService
 import SwiftUI
 import UIKit
@@ -24,12 +24,12 @@ final class BookmarksViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         service: PageBookmarkService,
-        quranProfileService: QuranProfileService,
+        authenticationClient: (any AuthenticationClient)?,
         navigateTo: @escaping (Page) -> Void
     ) {
         self.analytics = analytics
         self.service = service
-        self.quranProfileService = quranProfileService
+        self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
@@ -49,7 +49,12 @@ final class BookmarksViewModel: ObservableObject {
     }
 
     func start() async {
-        isAuthenticated = await quranProfileService.refreshAuthenticationState() == .authenticated
+        if let authenticationClient {
+            isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        } else {
+            isAuthenticated = false
+        }
+
         let bookmarksSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .map { [service] reading in
@@ -100,7 +105,8 @@ final class BookmarksViewModel: ObservableObject {
         }
 
         do {
-            try await quranProfileService.login(on: presenter)
+            let authenticationClient = try requireAuthenticationClient()
+            try await authenticationClient.login(on: presenter)
             isAuthenticated = true
         } catch {
             logger.error("Failed to login to Quran.com from bookmarks: \(error)")
@@ -113,7 +119,14 @@ final class BookmarksViewModel: ObservableObject {
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
-    private let quranProfileService: QuranProfileService
+    private let authenticationClient: (any AuthenticationClient)?
     private let readingPreferences = ReadingPreferences.shared
     private let preferences = BookmarksPreferences.shared
+
+    private func requireAuthenticationClient() throws -> any AuthenticationClient {
+        guard let authenticationClient else {
+            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
+        }
+        return authenticationClient
+    }
 }

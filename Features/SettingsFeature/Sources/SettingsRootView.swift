@@ -20,6 +20,8 @@ struct SettingsRootView: View {
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
             isAuthenticated: viewModel.isAuthenticated,
+            loggedInUserEmail: viewModel.currentUserEmail,
+            openQuranComProfile: { viewModel.openQuranComProfile() },
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
@@ -37,11 +39,15 @@ struct SettingsRootView: View {
 }
 
 private struct SettingsRootViewUI: View {
+    // MARK: Internal
+
     @Binding var appearanceMode: AppearanceMode
     @Binding var error: Error?
 
     let audioEnd: String
     let isAuthenticated: Bool
+    let loggedInUserEmail: String?
+    let openQuranComProfile: AsyncAction
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
     let navigateToTranslationsList: AsyncAction
@@ -57,6 +63,16 @@ private struct SettingsRootViewUI: View {
 
     var body: some View {
         NoorList {
+            #if QURAN_SYNC
+                NoorBasicSection {
+                    if isAuthenticated {
+                        authenticatedQuranComSection
+                    } else {
+                        unauthenticatedQuranComSection
+                    }
+                }
+            #endif
+
             NoorBasicSection {
                 VStack {
                     AppearanceModeSelector(appearanceMode: $appearanceMode)
@@ -128,23 +144,6 @@ private struct SettingsRootViewUI: View {
                 )
             }
 
-            #if QURAN_SYNC
-                // TODO: Pending translations, and hiding if OAuth is not configured.
-                NoorBasicSection {
-                    if isAuthenticated {
-                        NoorListItem(
-                            title: .text("Logout from Quran.com"),
-                            action: logoutAction
-                        )
-                    } else {
-                        NoorListItem(
-                            title: .text("Login with Quran.com"),
-                            action: loginAction
-                        )
-                    }
-                }
-            #endif
-
             NoorBasicSection {
                 NoorListItem(
                     image: .init(.debug),
@@ -156,6 +155,60 @@ private struct SettingsRootViewUI: View {
         }
         .task { await refreshAuthenticationState() }
         .errorAlert(error: $error)
+    }
+
+    // MARK: Private
+
+    private var unauthenticatedQuranComSection: some View {
+        Group {
+            NoorListItem(
+                image: .init(.profile, color: .secondaryLabel),
+                title: styledText(l("setting.quran_account.sign_in"), fontWeight: .semibold),
+                accessory: .disclosureIndicator,
+                action: loginAction
+            )
+
+            NoorListItem(
+                image: .init(.checkmark, color: .accentColor),
+                title: .text(l("setting.quran_account.sync_devices"))
+            )
+
+            NoorListItem(
+                image: .init(.checkmark, color: .accentColor),
+                title: .text(l("setting.quran_account.custom_collections"))
+            )
+
+            NoorListItem(
+                image: .init(.checkmark, color: .accentColor),
+                title: .text(l("setting.quran_account.attach_notes"))
+            )
+        }
+    }
+
+    private var authenticatedQuranComSection: some View {
+        Group {
+            NoorListItem(
+                image: .init(.profile, color: .secondaryLabel),
+                title: .text(loggedInUserEmail ?? l("setting.quran_account.profile")),
+                accessory: .image(.settings, color: .secondaryLabel),
+                action: openQuranComProfile
+            )
+
+            NoorListItem(
+                image: .init(.signOut, color: .secondaryLabel),
+                title: styledText(l("setting.quran_account.sign_out"), foregroundColor: .red),
+                action: logoutAction
+            )
+        }
+    }
+
+    private func styledText(
+        _ text: String,
+        foregroundColor: Color? = nil,
+        fontWeight: Font.Weight? = nil
+    ) -> MultipartText {
+        let range = text.startIndex ..< text.endIndex
+        return "\(text, highlighting: [HighlightingRange(range, foregroundColor: foregroundColor, fontWeight: fontWeight)])"
     }
 }
 
@@ -169,6 +222,8 @@ struct SettingsRootView_Previews: PreviewProvider {
                 error: .constant(nil),
                 audioEnd: "Surah",
                 isAuthenticated: false,
+                loggedInUserEmail: nil,
+                openQuranComProfile: {},
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MobileSync
 import UIKit
 
 public enum AuthenticationClientError: Error {
@@ -63,4 +64,15 @@ public protocol AuthenticationClient {
     func getAuthenticationHeaders() async throws -> [String: String]
 
     var authenticationState: AuthenticationState { get async }
+    var loggedInUser: UserInfo? { get async }
+}
+
+public extension AuthenticationClient {
+    func safelyRestoreState() async -> AuthenticationState {
+        do {
+            return try await restoreState()
+        } catch {
+            return await authenticationState
+        }
+    }
 }

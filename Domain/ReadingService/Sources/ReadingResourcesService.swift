@@ -114,7 +114,7 @@ public actor ReadingResourcesService {
             return .ready
         }
 
-        if fileManager.fileExists(at: remoteResource.successFilePath) {
+        if remoteResource.isDownloaded(fileSystem: fileManager) {
             logger.info("Resources: Reading \(reading) has been downloaded and saved locally before")
             return .ready
         }

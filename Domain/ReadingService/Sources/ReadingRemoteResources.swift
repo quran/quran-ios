@@ -19,6 +19,7 @@ public struct RemoteResource {
 
     public init(url: URL, reading: Reading, version: Int) {
         self.url = url
+        self.reading = reading
         self.version = version
         downloadDestination = Reading.readingsPath.appendingPathComponent(reading.localPath, isDirectory: true)
     }
@@ -30,6 +31,7 @@ public struct RemoteResource {
     // MARK: Internal
 
     let url: URL
+    let reading: Reading
     let version: Int
 
     var zipFile: RelativeFilePath {
@@ -40,8 +42,19 @@ public struct RemoteResource {
         downloadDestination.appendingPathComponent("success-v\(version).txt", isDirectory: false)
     }
 
+    var extractedVersionFilePath: RelativeFilePath? {
+        guard let width = reading.imageAssetWidth else {
+            return nil
+        }
+        return downloadDestination
+            .appendingPathComponent("images_\(width)", isDirectory: true)
+            .appendingPathComponent("width_\(width)", isDirectory: true)
+            .appendingPathComponent(".v\(version)", isDirectory: false)
+    }
+
     public func isDownloaded(fileSystem: FileSystem = DefaultFileSystem()) -> Bool {
-        fileSystem.fileExists(at: successFilePath)
+        fileSystem.fileExists(at: successFilePath) ||
+            extractedVersionFilePath.map { fileSystem.fileExists(at: $0) } == true
     }
 }
 
@@ -50,6 +63,23 @@ private extension Reading {
 }
 
 extension Reading {
+    var imageAssetWidth: Int? {
+        switch self {
+        case .hafs_1421:
+            return 1120
+        case .hafs_1440:
+            return 1352
+        case .hafs_1439:
+            return 1080
+        case .hafs_1441:
+            return 1440
+        case .tajweed:
+            return 1280
+        case .hafs_1405:
+            return nil
+        }
+    }
+
     public var localPath: String {
         switch self {
         case .hafs_1405: return "hafs_1405"

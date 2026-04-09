@@ -173,6 +173,7 @@ public actor ReadingResourcesService {
             try fileManager.writeToFile(at: remoteResource.successFilePath.url, content: "Downloaded")
         } catch {
             crasher.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(destination)'")
+            try? fileManager.removeItem(at: destination)
             throw error
         }
     }

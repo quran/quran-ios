@@ -309,7 +309,10 @@ final class ReadingResourcesServiceTests: XCTestCase {
         ReadingPreferences.shared.reading = reading
         let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
         let error = FileSystemError.noDiskSpace
-        zipper.failures = [error]
+        let partiallyExtractedFiles = zipper.zipContents(remoteResource.zipFile.url)
+            .sorted { $0.path < $1.path }
+            .prefix(2)
+        zipper.partialFailure = .init(error: error, writtenFiles: partiallyExtractedFiles.count)
 
         // Test
         await service.startLoadingResources()
@@ -318,6 +321,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         // Then
         XCTAssertEqual(collector.items.last, .error(error as NSError))
         XCTAssertEqual(fileManager.files, [remoteResource.downloadDestination.url])
+        XCTAssertTrue(partiallyExtractedFiles.allSatisfy { !fileManager.files.contains($0) })
 
         // Retry should fix it
         await service.retry()

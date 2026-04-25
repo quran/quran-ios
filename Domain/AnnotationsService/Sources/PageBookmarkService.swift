@@ -14,24 +14,36 @@ import QuranKit
 public struct PageBookmarkService {
     // MARK: Lifecycle
 
-    public init(persistence: PageBookmarkPersistence) {
+    public init(persistence: PageBookmarkPersistence, storedPageQuran: Quran = .hafsMadani1405) {
         self.persistence = persistence
+        self.storedPageQuran = storedPageQuran
     }
 
     // MARK: Public
 
     public func pageBookmarks(quran: Quran) -> AnyPublisher<[PageBookmark], Never> {
-        persistence.pageBookmarks()
-            .map { bookmarks in bookmarks.map { PageBookmark(quran: quran, $0) } }
+        let mapper = QuranPageMapper(destination: quran)
+        return persistence.pageBookmarks()
+            .map { bookmarks in
+                bookmarks.compactMap { bookmark in
+                    Page(quran: storedPageQuran, pageNumber: bookmark.page)
+                        .flatMap(mapper.mapPage)
+                        .map {
+                            PageBookmark(page: $0, creationDate: bookmark.creationDate)
+                        }
+                }
+            }
             .eraseToAnyPublisher()
     }
 
     public func insertPageBookmark(_ page: Page) async throws {
-        try await persistence.insertPageBookmark(page.pageNumber)
+        let storedPage = try storedPage(for: page)
+        try await persistence.insertPageBookmark(storedPage.pageNumber)
     }
 
     public func removePageBookmark(_ page: Page) async throws {
-        try await persistence.removePageBookmark(page.pageNumber)
+        let storedPage = try storedPage(for: page)
+        try await persistence.removePageBookmark(storedPage.pageNumber)
     }
 
     public func removeAllPageBookmarks() async throws {
@@ -41,13 +53,19 @@ public struct PageBookmarkService {
     // MARK: Internal
 
     let persistence: PageBookmarkPersistence
-}
+    let storedPageQuran: Quran
 
-private extension PageBookmark {
-    init(quran: Quran, _ other: PageBookmarkPersistenceModel) {
-        self.init(
-            page: Page(quran: quran, pageNumber: Int(other.page))!,
-            creationDate: other.creationDate
-        )
+    // MARK: Private
+
+    private func storedPage(for page: Page) throws -> Page {
+        guard let storedPage = QuranPageMapper(destination: storedPageQuran).mapPage(page) else {
+            throw PageMappingError.unableToMapPage(
+                pageNumber: page.pageNumber,
+                source: page.quran,
+                destination: storedPageQuran
+            )
+        }
+
+        return storedPage
     }
 }

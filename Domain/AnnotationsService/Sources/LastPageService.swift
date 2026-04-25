@@ -14,42 +14,78 @@ import QuranKit
 public struct LastPageService {
     // MARK: Lifecycle
 
-    public init(persistence: LastPagePersistence) {
+    public init(persistence: LastPagePersistence, storedPageQuran: Quran = .hafsMadani1405) {
         self.persistence = persistence
+        self.storedPageQuran = storedPageQuran
     }
 
     // MARK: Public
 
     public func lastPages(quran: Quran) -> AnyPublisher<[LastPage], Never> {
-        persistence.lastPages()
-            .map { lastPages in lastPages.map { LastPage(quran: quran, $0) } }
+        let mapper = QuranPageMapper(destination: quran)
+        return persistence.lastPages()
+            .map { lastPages in
+                lastPages.compactMap { lastPage in
+                    Page(quran: storedPageQuran, pageNumber: lastPage.page)
+                        .flatMap(mapper.mapPage)
+                        .map {
+                            LastPage(page: $0, createdOn: lastPage.createdOn, modifiedOn: lastPage.modifiedOn)
+                        }
+                }
+            }
             .eraseToAnyPublisher()
     }
 
     // MARK: Internal
 
     let persistence: LastPagePersistence
+    let storedPageQuran: Quran
 
     func add(page: Page) async throws -> LastPage {
-        let persistenceModel = try await persistence.add(page: page.pageNumber)
-        return LastPage(quran: page.quran, persistenceModel)
+        let storedPage = try storedPage(for: page)
+        let persistenceModel = try await persistence.add(page: storedPage.pageNumber)
+        return try lastPage(quran: page.quran, persistenceModel)
     }
 
     func update(page: Page, toPage: Page) async throws -> LastPage {
+        let currentStoredPage = try storedPage(for: page)
+        let storedToPage = try storedPage(for: toPage)
         let persistenceModel = try await persistence.update(
-            page: page.pageNumber,
-            toPage: toPage.pageNumber
+            page: currentStoredPage.pageNumber,
+            toPage: storedToPage.pageNumber
         )
-        return LastPage(quran: toPage.quran, persistenceModel)
+        return try lastPage(quran: toPage.quran, persistenceModel)
     }
-}
 
-private extension LastPage {
-    init(quran: Quran, _ other: LastPagePersistenceModel) {
-        self.init(
-            page: Page(quran: quran, pageNumber: Int(other.page))!,
-            createdOn: other.createdOn,
-            modifiedOn: other.modifiedOn
+    // MARK: Private
+
+    private func storedPage(for page: Page) throws -> Page {
+        guard let storedPage = QuranPageMapper(destination: storedPageQuran).mapPage(page) else {
+            throw PageMappingError.unableToMapPage(
+                pageNumber: page.pageNumber,
+                source: page.quran,
+                destination: storedPageQuran
+            )
+        }
+
+        return storedPage
+    }
+
+    private func lastPage(quran: Quran, _ persistenceModel: LastPagePersistenceModel) throws -> LastPage {
+        guard let storedPage = Page(quran: storedPageQuran, pageNumber: persistenceModel.page),
+              let page = QuranPageMapper(destination: quran).mapPage(storedPage)
+        else {
+            throw PageMappingError.unableToMapPage(
+                pageNumber: persistenceModel.page,
+                source: storedPageQuran,
+                destination: quran
+            )
+        }
+
+        return LastPage(
+            page: page,
+            createdOn: persistenceModel.createdOn,
+            modifiedOn: persistenceModel.modifiedOn
         )
     }
 }

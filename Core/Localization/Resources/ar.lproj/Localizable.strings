@@ -120,6 +120,14 @@
 "notes.verses-count" = "(+%d آيات)";
 "notes.delete.alert.title" = "حذف الإشارة المرجعية";
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
+"highlights.title" = "التحديدات";
+"highlights.no-data.title" = "لا توجد تحديدات بعد";
+"highlights.no-data.text" = "قم بتحديد آية لتظهر هنا.";
+"highlights.color.red" = "أحمر";
+"highlights.color.green" = "أخضر";
+"highlights.color.blue" = "أزرق";
+"highlights.color.yellow" = "أصفر";
+"highlights.color.purple" = "بنفسجي";
 "notes.icloud.alert.title" = "مزامنة iCloud";
 "notes.icloud.alert.body" = "يستخدم التطبيق iCloud لمزامنة الإشارات المرجعية والملاحظات عبر أجهزتك. يمكنك تعطيله من جهازك من خلال إعدادات iCloud.";
 

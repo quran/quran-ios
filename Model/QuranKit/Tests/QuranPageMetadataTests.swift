@@ -69,6 +69,7 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(quran.pages.count, 604)
         XCTAssertEqual(quran.pages.first?.pageNumber, 2)
         XCTAssertEqual(quran.pages.last?.pageNumber, 605)
+        XCTAssertEqual(quran.pages.prefix(4).map(\.pageNumber), [2, 3, 4, 5])
 
         XCTAssertNil(Page(quran: quran, pageNumber: 1))
         XCTAssertNotNil(Page(quran: quran, pageNumber: 2))
@@ -86,5 +87,16 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(quran.juzs.first?.page.pageNumber, 2)
         XCTAssertEqual(quran.juzs.last?.page.pageNumber, 583)
         XCTAssertEqual(quran.juzs.map(\.page), quran.juzs.map(\.firstVerse.page))
+    }
+
+    func testPageSideUsesVisiblePagePosition() {
+        let madaniQuran = Quran.hafsMadani1405
+        XCTAssertTrue(madaniQuran.pages[0].isRightSide)
+        XCTAssertFalse(madaniQuran.pages[1].isRightSide)
+
+        let skippedQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        XCTAssertEqual(skippedQuran.pages[0].pageNumber, 2)
+        XCTAssertTrue(skippedQuran.pages[0].isRightSide)
+        XCTAssertFalse(skippedQuran.pages[1].isRightSide)
     }
 }

@@ -173,7 +173,7 @@ private struct QuranSinglePaginationView<Content: View>: View {
     }
 
     private func isRightSide(_ page: Page) -> Bool {
-        page.pageNumber % 2 == 1
+        page.isRightSide
     }
 }
 

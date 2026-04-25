@@ -229,6 +229,11 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
         ]),
 
+        target(type, name: "MobileSyncSupport", hasTests: false, dependencies: [
+            "QuranKit",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+        ]),
+
         // MARK: - Core Data
 
         target(type, name: "LastPagePersistence", dependencies: [
@@ -538,6 +543,8 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
+            "MobileSyncSupport",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [

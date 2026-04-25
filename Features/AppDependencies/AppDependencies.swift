@@ -45,6 +45,7 @@ public protocol AppDependencies {
     #if QURAN_SYNC
         var syncService: SyncService? { get }
         var bookmarkCollectionService: BookmarkCollectionService? { get }
+        var notesSyncService: NotesSyncService? { get }
     #endif
 
     var authenticationClient: (any AuthenticationClient)? { get }
@@ -65,6 +66,9 @@ extension AppDependencies {
             syncService.map { BookmarkCollectionService(syncService: $0) }
         }
 
+        public var notesSyncService: NotesSyncService? {
+            syncService.map { NotesSyncService(syncService: $0) }
+        }
     #endif
 
     public func noteService() -> NoteService {

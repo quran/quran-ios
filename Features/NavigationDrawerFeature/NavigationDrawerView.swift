@@ -147,6 +147,14 @@ private struct SurahListView: View {
 
 // MARK: - Juz list (quarters grouped by juz, matching the home page style)
 
+/// Quarter doesn't conform to Identifiable in QuranKit, so we wrap it for use
+/// with NoorSection / SwiftUI.ForEach. Mirrors the QuarterItem pattern in
+/// HomeFeature.
+private struct DrawerQuarterItem: Identifiable {
+    let quarter: Quarter
+    var id: Quarter { quarter }
+}
+
 private struct JuzListView: View {
     @ObservedObject var viewModel: NavigationDrawerViewModel
 
@@ -166,9 +174,11 @@ private struct JuzListView: View {
         let grouped = Dictionary(grouping: quarters, by: { $0.juz })
         let juzs = grouped.keys.sorted { $0.juzNumber < $1.juzNumber }
         ForEach(juzs) { juz in
-            let items = (grouped[juz] ?? []).sorted { $0.quarterNumber < $1.quarterNumber }
-            NoorSection(title: juz.localizedName, items) { quarter in
-                quarterRow(quarter: quarter)
+            let items = (grouped[juz] ?? [])
+                .sorted { $0.quarterNumber < $1.quarterNumber }
+                .map(DrawerQuarterItem.init)
+            NoorSection(title: juz.localizedName, items) { item in
+                quarterRow(quarter: item.quarter)
             }
         }
     }

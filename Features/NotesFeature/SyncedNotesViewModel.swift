@@ -1,7 +1,6 @@
 #if QURAN_SYNC
     import AsyncAlgorithms
     import Combine
-    import Crashing
     import FeaturesSupport
     import Foundation
     import MobileSync
@@ -21,12 +20,14 @@
         init(
             notesSyncService: NotesSyncService?,
             syncService: SyncService?,
-            textRetriever: ShareableVerseTextRetriever,
+            displayTextRetriever: DisplayVerseTextRetriever,
+            shareableTextRetriever: ShareableVerseTextRetriever,
             navigateTo: @escaping (AyahNumber) -> Void
         ) {
             self.notesSyncService = notesSyncService
             self.syncService = syncService
-            self.textRetriever = textRetriever
+            self.displayTextRetriever = displayTextRetriever
+            self.shareableTextRetriever = shareableTextRetriever
             self.navigateTo = navigateTo
         }
 
@@ -79,31 +80,30 @@
         }
 
         func prepareNotesForSharing() async throws -> String {
-            try await crasher.recordError("Failed to share sync notes") {
-                var notesText = [String]()
-                let notes: [SyncedNoteItem] = await self.notes
-                for (index, note) in notes.enumerated() {
-                    let title = note.note.body.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !title.isEmpty {
-                        notesText.append(contentsOf: [title, ""])
-                    }
-
-                    let verses = try await textRetriever.textForVerses(note.note.verses)
-                    notesText.append(contentsOf: verses)
-
-                    if index != notes.count - 1 {
-                        notesText.append(contentsOf: ["", "", ""])
-                    }
+            var notesText = [String]()
+            let notes: [SyncedNoteItem] = await notes
+            for (index, note) in notes.enumerated() {
+                let title = note.note.body.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !title.isEmpty {
+                    notesText.append(contentsOf: [title, ""])
                 }
-                return notesText.joined(separator: "\n")
+
+                let verses = try await shareableTextRetriever.textForVerses(note.note.verses)
+                notesText.append(contentsOf: verses)
+
+                if index != notes.count - 1 {
+                    notesText.append(contentsOf: ["", "", ""])
+                }
             }
+            return notesText.joined(separator: "\n")
         }
 
         // MARK: Private
 
         private let notesSyncService: NotesSyncService?
         private let syncService: SyncService?
-        private let textRetriever: ShareableVerseTextRetriever
+        private let displayTextRetriever: DisplayVerseTextRetriever
+        private let shareableTextRetriever: ShareableVerseTextRetriever
         private let navigateTo: (AyahNumber) -> Void
         private let readingPreferences = ReadingPreferences.shared
 
@@ -115,14 +115,13 @@
                 for note in notes {
                     group.addTask {
                         do {
-                            let verseText = try await self.textRetriever.textForVerses(note.verses)
+                            let verseText = try await self.displayTextRetriever.textForVerses(note.verses)
                             return SyncedNoteItem(
                                 note: note,
-                                verseText: verseText.joined(separator: "\n"),
+                                verseText: verseText,
                                 highlightColor: note.highlightColor(in: highlightColorsByVerse)
                             )
                         } catch {
-                            crasher.recordError(error, reason: "SyncedNotes.textForVerses")
                             let verseText = note.firstVerse?.localizedName ?? ""
                             return SyncedNoteItem(
                                 note: note,

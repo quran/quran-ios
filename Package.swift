@@ -557,6 +557,7 @@ private func featuresTargets() -> [[Target]] {
             "MobileSyncSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "NoorUI",
+            "QuranTextKit",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [

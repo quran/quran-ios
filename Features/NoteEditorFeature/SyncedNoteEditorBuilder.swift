@@ -1,7 +1,6 @@
 #if QURAN_SYNC
     import AppDependencies
     import FeaturesSupport
-    import QuranTextKit
     import UIKit
 
     @MainActor
@@ -11,14 +10,13 @@
         }
 
         public func build(withListener listener: NoteEditorListener, note: SyncedNoteReference) -> UIViewController {
-            let textRetriever = ShareableVerseTextRetriever(
+            let displayTextRetriever = DisplayVerseTextRetriever(
                 databasesURL: container.databasesURL,
                 quranFileURL: container.quranUthmaniV2Database
             )
-            let guardService = container.notesSyncService
             let viewModel = SyncedNoteEditorInteractor(
-                notesSyncService: guardService,
-                textRetriever: textRetriever,
+                notesSyncService: container.notesSyncService,
+                textRetriever: displayTextRetriever,
                 note: note
             )
             let viewController = SyncedNoteEditorViewController(viewModel: viewModel)

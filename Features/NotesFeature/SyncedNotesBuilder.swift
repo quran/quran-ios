@@ -12,7 +12,11 @@
         }
 
         public func build(withListener listener: QuranNavigator) -> UIViewController {
-            let textRetriever = ShareableVerseTextRetriever(
+            let displayTextRetriever = DisplayVerseTextRetriever(
+                databasesURL: container.databasesURL,
+                quranFileURL: container.quranUthmaniV2Database
+            )
+            let shareableTextRetriever = ShareableVerseTextRetriever(
                 databasesURL: container.databasesURL,
                 quranFileURL: container.quranUthmaniV2Database
             )
@@ -20,7 +24,8 @@
             let viewModel = SyncedNotesViewModel(
                 notesSyncService: container.notesSyncService,
                 syncService: container.syncService,
-                textRetriever: textRetriever,
+                displayTextRetriever: displayTextRetriever,
+                shareableTextRetriever: shareableTextRetriever,
                 navigateTo: { [weak listener] verse in
                     listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
                 }

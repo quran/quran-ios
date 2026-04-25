@@ -1,11 +1,8 @@
 #if QURAN_SYNC
-    import Crashing
     import FeaturesSupport
     import Foundation
     import MobileSyncSupport
     import NoorUI
-    import QuranAnnotations
-    import QuranTextKit
     import VLogging
 
     @MainActor
@@ -14,7 +11,7 @@
 
         init(
             notesSyncService: NotesSyncService?,
-            textRetriever: ShareableVerseTextRetriever,
+            textRetriever: DisplayVerseTextRetriever,
             note: SyncedNoteReference
         ) {
             self.notesSyncService = notesSyncService
@@ -35,59 +32,51 @@
         }
 
         func fetchNote() async throws -> EditableNote {
-            do {
-                let versesText = try await textRetriever.textForVerses(note.verses)
-                let editableNote = EditableNote(
-                    ayahText: versesText.joined(separator: "\n"),
-                    modifiedSince: note.modifiedDate.timeAgo(),
-                    selectedColor: .red,
-                    note: note.body
-                )
-                self.editableNote = editableNote
-                logger.info("SyncedNoteEditor: note loaded")
-                return editableNote
-            } catch {
-                crasher.recordError(error, reason: "Failed to retrieve sync note text")
-                throw error
-            }
+            let versesText = try await textRetriever.textForVerses(note.verses)
+            let editableNote = EditableNote(
+                ayahText: versesText,
+                modifiedSince: note.modifiedDate.timeAgo(),
+                selectedColor: .red,
+                note: note.body
+            )
+            self.editableNote = editableNote
+            logger.info("SyncedNoteEditor: note loaded")
+            return editableNote
         }
 
-        func commitEditsAndExist() async {
+        func commitEditsAndExit() async throws {
             logger.info("SyncedNoteEditor: done tapped")
             let body = (editableNote?.note ?? note.body).trimmingCharacters(in: .whitespacesAndNewlines)
-            do {
-                if body.isEmpty {
-                    if let localId = note.localId {
-                        try await notesSyncService?.removeNote(localId: localId)
-                    }
-                } else if let localId = note.localId {
-                    try await notesSyncService?.updateNote(localId: localId, body: body, verses: note.versesSet)
-                } else {
-                    try await notesSyncService?.createNote(body: body, verses: note.versesSet)
-                }
-                logger.info("SyncedNoteEditor: note saved")
-                listener?.dismissNoteEditor()
-            } catch {
-                crasher.recordError(error, reason: "Failed to save sync note")
-            }
-        }
-
-        func forceDelete() async {
-            logger.info("SyncedNoteEditor: force delete note")
-            do {
+            if body.isEmpty {
                 if let localId = note.localId {
                     try await notesSyncService?.removeNote(localId: localId)
                 }
-                listener?.dismissNoteEditor()
-            } catch {
-                crasher.recordError(error, reason: "Failed to delete sync note")
+            } else if let localId = note.localId {
+                if let startVerse = note.verses.first, let endVerse = note.verses.last {
+                    try await notesSyncService?.updateNote(localId: localId, body: body, startVerse: startVerse, endVerse: endVerse)
+                }
+            } else {
+                if let startVerse = note.verses.first, let endVerse = note.verses.last {
+                    try await notesSyncService?.createNote(body: body, startVerse: startVerse, endVerse: endVerse)
+                }
             }
+
+            logger.info("SyncedNoteEditor: note saved")
+            listener?.dismissNoteEditor()
+        }
+
+        func forceDelete() async throws {
+            logger.info("SyncedNoteEditor: force delete note")
+            if let localId = note.localId {
+                try await notesSyncService?.removeNote(localId: localId)
+            }
+            listener?.dismissNoteEditor()
         }
 
         // MARK: Private
 
         private let notesSyncService: NotesSyncService?
-        private let textRetriever: ShareableVerseTextRetriever
+        private let textRetriever: DisplayVerseTextRetriever
         private let note: SyncedNoteReference
 
         private var editableNote: EditableNote?

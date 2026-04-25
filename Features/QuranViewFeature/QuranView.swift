@@ -92,14 +92,18 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == tapGesture {
-            // Don't intercept taps that land on the visible navigation bar —
-            // its titleView (or any bar button items) need to receive them.
-            let location = gestureRecognizer.location(in: self)
-            if !navigationBar.isHidden, navigationBar.alpha > 0, navigationBar.frame.contains(location) {
-                return false
-            }
-            return !isFirstResponder // dismiss bars only if not first responder
+        gestureRecognizer != tapGesture || !isFirstResponder // dismiss bars only if not first responder
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // Don't deliver taps on the visible navigation bar to the bar-toggle
+        // recognizer — the title view (and bar button items) need them.
+        if gestureRecognizer == tapGesture,
+           !navigationBar.isHidden,
+           navigationBar.alpha > 0,
+           navigationBar.frame.contains(touch.location(in: self))
+        {
+            return false
         }
         return true
     }

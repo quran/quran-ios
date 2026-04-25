@@ -74,6 +74,7 @@ public class TwoLineNavigationTitleView: UIView {
             addGestureRecognizer(gesture)
             isUserInteractionEnabled = true
             tapGesture = gesture
+            print("[NavDrawer] TwoLineNavigationTitleView tap gesture installed; isUserInteractionEnabled=\(isUserInteractionEnabled)")
         } else if onTap == nil, let tapGesture {
             removeGestureRecognizer(tapGesture)
             self.tapGesture = nil
@@ -82,6 +83,7 @@ public class TwoLineNavigationTitleView: UIView {
 
     @objc
     private func handleTap() {
+        print("[NavDrawer] TwoLineNavigationTitleView.handleTap fired; onTap=\(onTap != nil ? "set" : "nil")")
         onTap?()
     }
 

@@ -15,6 +15,8 @@
     @MainActor
     public protocol SyncedAyahMenuListener: AyahMenuListener {
         func deleteSyncHighlights(_ verses: [AyahNumber]) async
+        func deleteSyncedNotes(_ notes: [SyncedNoteReference], verses: [AyahNumber]) async
+        func editSyncedNote(_ note: SyncedNoteReference)
     }
 
     @MainActor
@@ -23,7 +25,7 @@
             let sourceView: UIView
             let pointInView: CGPoint
             let verses: [AyahNumber]
-            let notes: [QuranAnnotations.Note]
+            let notes: [SyncedNoteReference]
             let syncHighlightColor: HighlightColor?
             let hasSyncHighlight: Bool
             let syncService: SyncService?
@@ -74,7 +76,7 @@
         }
 
         var hasNoteText: Bool {
-            deps.notes.contains { !(($0.note ?? "").isEmpty) }
+            deps.notes.contains { !$0.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         }
 
         var canDeleteHighlight: Bool {
@@ -111,15 +113,15 @@
         func deleteNote() async {
             logger.info("AyahMenu: delete note. Verses: \(deps.verses)")
             listener?.dismissAyahMenu()
-            await listener?.deleteNotes(deps.notes, verses: deps.verses)
+            await listener?.deleteSyncedNotes(deps.notes, verses: deps.verses)
         }
 
         func editNote() async {
             logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
-            if let note = deps.notes.first(where: { !(($0.note ?? "").isEmpty) }) {
-                listener?.editNote(note)
+            if let note = deps.notes.first(where: { !$0.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
+                listener?.editSyncedNote(note)
             } else {
-                listener?.editNote(newLocalNoteDraft())
+                listener?.editSyncedNote(newSyncedNoteDraft())
             }
         }
 
@@ -172,23 +174,13 @@
         private let audioPreferences = AudioPreferences.shared
         private let deps: Deps
 
-        private func newLocalNoteDraft() -> QuranAnnotations.Note {
-            QuranAnnotations.Note(
-                verses: Set(deps.verses),
-                modifiedDate: Date(),
-                note: nil,
-                color: noteColor(from: highlightingColor)
+        private func newSyncedNoteDraft() -> SyncedNoteReference {
+            SyncedNoteReference(
+                localId: nil,
+                body: "",
+                verses: deps.verses,
+                modifiedDate: Date()
             )
-        }
-
-        private func noteColor(from color: HighlightColor) -> QuranAnnotations.Note.Color {
-            switch color {
-            case .red: .red
-            case .green: .green
-            case .blue: .blue
-            case .yellow: .yellow
-            case .purple: .purple
-            }
         }
 
         private func retrieveSelectedAyahText() async throws -> [String] {

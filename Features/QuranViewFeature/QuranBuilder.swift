@@ -47,6 +47,7 @@ public struct QuranBuilder {
                 audioBannerBuilder: AudioBannerBuilder(container: container),
                 wordPointerBuilder: WordPointerBuilder(container: container),
                 noteEditorBuilder: NoteEditorBuilder(container: container),
+                syncedNoteEditorBuilder: container.notesSyncService.map { _ in SyncedNoteEditorBuilder(container: container) },
                 contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),

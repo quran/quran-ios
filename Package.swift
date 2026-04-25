@@ -626,7 +626,10 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "NoteEditorFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "AnnotationsService",
+            "FeaturesSupport",
+            "MobileSyncSupport",
             "NoorUI",
+            "QuranTextKit",
         ]),
 
         target(type, name: "BookmarksFeature", dependencies: [
@@ -698,7 +701,10 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "FeaturesSupport",
             "ReadingService",
+            "MobileSyncSupport",
             "NoorUI",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [

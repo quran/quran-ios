@@ -98,6 +98,16 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     var visiblePages: [Page] { contentViewModel?.visiblePages ?? [] }
 
+    // MARK: - Navigation drawer
+
+    var quran: Quran { deps.quran }
+    var allNotes: [Note] { notes }
+    var allPageBookmarks: [PageBookmark] { pageBookmarks }
+
+    func navigateToPage(_ page: Page) {
+        contentViewModel?.visiblePages = [page]
+    }
+
     func start() {
         deps.noteService.notes(quran: deps.quran)
             .receive(on: DispatchQueue.main)

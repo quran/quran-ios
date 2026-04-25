@@ -317,3 +317,22 @@
 "new.library_navigation" = "Библиотека и навигация:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Сортируйте суры и джузы на главном экране и показывайте номера сур, чтобы быстрее перейти к нужному - спасибо @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Навигация";
+"navigation_drawer.search_placeholder" = "Поиск";
+"navigation_drawer.tab.surah" = "Сура";
+"navigation_drawer.tab.juz" = "Джуз";
+"navigation_drawer.tab.notes" = "Заметки";
+"navigation_drawer.tab.bookmarks" = "Закладки";
+"navigation_drawer.surah.makki" = "Мекканская";
+"navigation_drawer.surah.madani" = "Мединская";
+"navigation_drawer.note.untitled" = "Заметка без названия";
+"navigation_drawer.bookmark.page" = "Страница %d";
+"navigation_drawer.empty.no_results" = "Нет результатов";
+"navigation_drawer.empty.no_notes" = "Заметок ещё нет";
+"navigation_drawer.empty.no_matching_notes" = "Нет совпадающих заметок";
+"navigation_drawer.empty.no_bookmarks" = "Закладок ещё нет";
+"navigation_drawer.empty.no_matching_bookmarks" = "Нет совпадающих закладок";
+"navigation_drawer.close" = "Закрыть";

@@ -20,6 +20,7 @@
 
 import Combine
 import Localization
+import NavigationDrawerFeature
 import NoorUI
 import QuranKit
 import QuranTextKit
@@ -82,10 +83,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.delegate = self
 
         // set the custom title view
-        quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
+        let titleView = TwoLineNavigationTitleView(
             firstLineFont: .boldSystemFont(ofSize: 15),
             secondLineFont: .systemFont(ofSize: 15, weight: .light)
         )
+        titleView.onTap = { [weak self] in self?.presentNavigationDrawer() }
+        quranView?.navigationItem.titleView = titleView
 
         let backImage: UIImage?
         backImage = UIImage(systemName: "chevron.backward")
@@ -386,5 +389,19 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     @objc
     private func onMoreBarButtonTapped(_ barButton: UIBarButtonItem) {
         interactor.onMoreBarButtonTapped()
+    }
+
+    private func presentNavigationDrawer() {
+        guard let currentPage = interactor.visiblePages.first else { return }
+        let drawer = NavigationDrawerBuilder().build(
+            quran: interactor.quran,
+            currentPage: currentPage,
+            notes: interactor.allNotes,
+            pageBookmarks: interactor.allPageBookmarks,
+            onSelectPage: { [weak self] page in
+                self?.interactor.navigateToPage(page)
+            }
+        )
+        present(drawer, animated: true)
     }
 }

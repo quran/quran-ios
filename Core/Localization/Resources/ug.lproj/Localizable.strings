@@ -320,3 +320,22 @@
 "new.library_navigation" = "كىتەپخانا ۋە يولباشچىلىق:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* باش بەتتە سۈرە ۋە جۇزلارنى تەرتىپلەپ، سۈرە نومۇرلىرىنى كۆرسىتىڭ، شۇنداق قىلىپ لازىملىق بەتكە تېز يېتىڭ - @yismailuofa غا رەھمەت.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "يول باشلىغۇچ";
+"navigation_drawer.search_placeholder" = "ئىزدەش";
+"navigation_drawer.tab.surah" = "سۈرە";
+"navigation_drawer.tab.juz" = "جۈز";
+"navigation_drawer.tab.notes" = "خاتىرە";
+"navigation_drawer.tab.bookmarks" = "خەتكۈچ";
+"navigation_drawer.surah.makki" = "مەككى";
+"navigation_drawer.surah.madani" = "مەدىنى";
+"navigation_drawer.note.untitled" = "ئىسىمسىز خاتىرە";
+"navigation_drawer.bookmark.page" = "%d-بەت";
+"navigation_drawer.empty.no_results" = "نەتىجە يوق";
+"navigation_drawer.empty.no_notes" = "تېخى خاتىرە يوق";
+"navigation_drawer.empty.no_matching_notes" = "ماس خاتىرە يوق";
+"navigation_drawer.empty.no_bookmarks" = "تېخى خەتكۈچ يوق";
+"navigation_drawer.empty.no_matching_bookmarks" = "ماس خەتكۈچ يوق";
+"navigation_drawer.close" = "تاقاش";

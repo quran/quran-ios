@@ -318,3 +318,22 @@
 "new.library_navigation" = "书库与导航:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* 在主页排序苏拉和朱兹并显示苏拉编号，帮助你更快跳转到所需内容 - 感谢 @yismailuofa。";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "导航";
+"navigation_drawer.search_placeholder" = "搜索";
+"navigation_drawer.tab.surah" = "章";
+"navigation_drawer.tab.juz" = "卷";
+"navigation_drawer.tab.notes" = "笔记";
+"navigation_drawer.tab.bookmarks" = "书签";
+"navigation_drawer.surah.makki" = "麦加章";
+"navigation_drawer.surah.madani" = "麦地那章";
+"navigation_drawer.note.untitled" = "无标题笔记";
+"navigation_drawer.bookmark.page" = "第 %d 页";
+"navigation_drawer.empty.no_results" = "没有结果";
+"navigation_drawer.empty.no_notes" = "暂无笔记";
+"navigation_drawer.empty.no_matching_notes" = "没有匹配的笔记";
+"navigation_drawer.empty.no_bookmarks" = "暂无书签";
+"navigation_drawer.empty.no_matching_bookmarks" = "没有匹配的书签";
+"navigation_drawer.close" = "关闭";

@@ -32,6 +32,11 @@ public class TwoLineNavigationTitleView: UIView {
         didSet { updateAttributedText() }
     }
 
+    /// Called when the title is tapped. Setting this enables a tap gesture; clearing it removes it.
+    public var onTap: (() -> Void)? {
+        didSet { updateTapGesture() }
+    }
+
     override public var intrinsicContentSize: CGSize {
         label.attributedText?.size() ?? .zero
     }
@@ -52,6 +57,8 @@ public class TwoLineNavigationTitleView: UIView {
         didSet { updateAttributedText() }
     }
 
+    private var tapGesture: UITapGestureRecognizer?
+
     private func setUp() {
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -59,6 +66,23 @@ public class TwoLineNavigationTitleView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         addAutoLayoutSubview(label)
         label.vc.center()
+    }
+
+    private func updateTapGesture() {
+        if onTap != nil, tapGesture == nil {
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+            addGestureRecognizer(gesture)
+            isUserInteractionEnabled = true
+            tapGesture = gesture
+        } else if onTap == nil, let tapGesture {
+            removeGestureRecognizer(tapGesture)
+            self.tapGesture = nil
+        }
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     private func updateIsCompressed(_ size: CGSize? = nil) {

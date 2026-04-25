@@ -258,3 +258,22 @@
 "new.library_navigation" = "Kütüphane ve Gezinme:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Ana Sayfa'da sureleri ve cüzleri sıralayın ve sure numaralarını gösterin, böylece ihtiyacınız olana daha hızlı ulaşabilirsiniz - @yismailuofa sayesinde.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Gezinme";
+"navigation_drawer.search_placeholder" = "Ara";
+"navigation_drawer.tab.surah" = "Sure";
+"navigation_drawer.tab.juz" = "Cüz";
+"navigation_drawer.tab.notes" = "Notlar";
+"navigation_drawer.tab.bookmarks" = "Yer İmleri";
+"navigation_drawer.surah.makki" = "Mekkî";
+"navigation_drawer.surah.madani" = "Medenî";
+"navigation_drawer.note.untitled" = "Başlıksız not";
+"navigation_drawer.bookmark.page" = "Sayfa %d";
+"navigation_drawer.empty.no_results" = "Sonuç yok";
+"navigation_drawer.empty.no_notes" = "Henüz not yok";
+"navigation_drawer.empty.no_matching_notes" = "Eşleşen not yok";
+"navigation_drawer.empty.no_bookmarks" = "Henüz yer imi yok";
+"navigation_drawer.empty.no_matching_bookmarks" = "Eşleşen yer imi yok";
+"navigation_drawer.close" = "Kapat";

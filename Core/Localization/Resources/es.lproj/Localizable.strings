@@ -317,3 +317,22 @@
 "new.library_navigation" = "Biblioteca y navegación:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Ordena suras y juz en Inicio y muestra los números de sura para que puedas acceder a lo que necesitas más rápido - gracias a @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navegación";
+"navigation_drawer.search_placeholder" = "Buscar";
+"navigation_drawer.tab.surah" = "Sura";
+"navigation_drawer.tab.juz" = "Yuz";
+"navigation_drawer.tab.notes" = "Notas";
+"navigation_drawer.tab.bookmarks" = "Marcadores";
+"navigation_drawer.surah.makki" = "Mecana";
+"navigation_drawer.surah.madani" = "Medinense";
+"navigation_drawer.note.untitled" = "Nota sin título";
+"navigation_drawer.bookmark.page" = "Página %d";
+"navigation_drawer.empty.no_results" = "Sin resultados";
+"navigation_drawer.empty.no_notes" = "Aún no hay notas";
+"navigation_drawer.empty.no_matching_notes" = "No hay notas coincidentes";
+"navigation_drawer.empty.no_bookmarks" = "Aún no hay marcadores";
+"navigation_drawer.empty.no_matching_bookmarks" = "No hay marcadores coincidentes";
+"navigation_drawer.close" = "Cerrar";

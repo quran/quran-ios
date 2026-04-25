@@ -15,6 +15,7 @@ import SwiftUI
 
 struct NavigationDrawerView: View {
     @ObservedObject var viewModel: NavigationDrawerViewModel
+    @FocusState private var searchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,18 +43,26 @@ struct NavigationDrawerView: View {
                 .textFieldStyle(.plain)
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
+                .submitLabel(.search)
+                .focused($searchFocused)
             if !viewModel.searchText.isEmpty {
-                Button(action: { viewModel.searchText = "" }) {
+                Button(action: {
+                    viewModel.searchText = ""
+                    searchFocused = false
+                }) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .contentShape(Rectangle())
+        .onTapGesture { searchFocused = true }
     }
 
     // MARK: - Header

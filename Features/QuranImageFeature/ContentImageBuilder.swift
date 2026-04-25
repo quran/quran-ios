@@ -38,7 +38,8 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 linePageAssetService: linePageAssetService,
-                highlightsService: highlightsService
+                highlightsService: highlightsService,
+                showLineDividers: false
             )
             ContentLineView(viewModel: viewModel)
         } else {

@@ -123,6 +123,7 @@ struct ContentLineViewBody: View {
                 scrollAnchors(layout)
 
                 lineImages(layout)
+                lineDividers(layout)
 
                 ForEach(layout.sidelinePlacements, id: \.self) { placement in
                     if let image = imageForSideline(placement.sideline.id) {
@@ -220,6 +221,14 @@ struct ContentLineViewBody: View {
             height: layout.contentSize.height,
             alignment: .topLeading
         )
+    }
+
+    private func lineDividers(_ layout: LinePageLayout) -> some View {
+        ForEach(layout.lineDividers, id: \.self) { divider in
+            Color.primary
+                .frame(width: divider.frame.width, height: divider.frame.height)
+                .offset(x: divider.frame.minX, y: divider.frame.minY)
+        }
     }
 }
 

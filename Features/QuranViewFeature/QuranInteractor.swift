@@ -104,6 +104,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     var allNotes: [Note] { notes }
     var allPageBookmarks: [PageBookmark] { pageBookmarks }
 
+    /// The page to highlight in the drawer. Falls back to the input's initial
+    /// page when `visiblePages` hasn't propagated yet (e.g. user opens drawer
+    /// immediately after entering from a recent).
+    var drawerCurrentPage: Page {
+        visiblePages.first ?? input.initialPage
+    }
+
     func navigateToPage(_ page: Page) {
         contentViewModel?.visiblePages = [page]
     }

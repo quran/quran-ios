@@ -392,10 +392,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     private func presentNavigationDrawer() {
-        guard let currentPage = interactor.visiblePages.first else { return }
         let drawer = NavigationDrawerBuilder().build(
             quran: interactor.quran,
-            currentPage: currentPage,
+            currentPage: interactor.drawerCurrentPage,
             notes: interactor.allNotes,
             pageBookmarks: interactor.allPageBookmarks,
             onSelectPage: { [weak self] page in

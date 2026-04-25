@@ -711,6 +711,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "NavigationDrawerFeature", hasTests: false, dependencies: [
             "Localization",
+            "NoorUI",
             "QuranKit",
             "QuranAnnotations",
             "QuranTextKit",

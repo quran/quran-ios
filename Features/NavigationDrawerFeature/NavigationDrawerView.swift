@@ -7,6 +7,7 @@
 //
 
 import Localization
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -113,95 +114,74 @@ private struct SurahListView: View {
         if suras.isEmpty {
             EmptySearchPlaceholder()
         } else {
-            List {
-                ForEach(suras) { sura in
-                    Button {
-                        viewModel.selectPage(sura.page)
-                    } label: {
-                        DrawerRow(
-                            leading: "\(sura.suraNumber)",
-                            title: sura.localizedName(withPrefix: false),
-                            subtitle: sura.isMakki
-                                ? l("navigation_drawer.surah.makki")
-                                : l("navigation_drawer.surah.madani"),
-                            isCurrent: sura.page == viewModel.currentPage
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
+            NoorList {
+                surahSections(suras: suras)
             }
-            .listStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private func surahSections(suras: [Sura]) -> some View {
+        let grouped = Dictionary(grouping: suras, by: { $0.page.startJuz })
+        let juzs = grouped.keys.sorted { $0.juzNumber < $1.juzNumber }
+        ForEach(juzs) { juz in
+            let items = (grouped[juz] ?? []).sorted { $0.suraNumber < $1.suraNumber }
+            NoorSection(title: juz.localizedName, items) { sura in
+                surahRow(sura: sura)
+            }
+        }
+    }
+
+    private func surahRow(sura: Sura) -> some View {
+        let ayahsString = lFormat("verses", table: .android, sura.verses.count)
+        let suraType = sura.isMakki ? lAndroid("makki") : lAndroid("madani")
+        return NoorListItem(
+            title: "\(sura.localizedName(withNumber: true)) \(sura: sura.arabicSuraName)",
+            subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
+            accessory: .text(NumberFormatter.shared.format(sura.page.pageNumber))
+        ) {
+            viewModel.selectPage(sura.page)
         }
     }
 }
 
-// MARK: - Juz list
+// MARK: - Juz list (quarters grouped by juz, matching the home page style)
 
 private struct JuzListView: View {
     @ObservedObject var viewModel: NavigationDrawerViewModel
 
     var body: some View {
-        let juzs = viewModel.filteredJuzs
-        if juzs.isEmpty {
+        let quarters = viewModel.filteredQuarters
+        if quarters.isEmpty {
             EmptySearchPlaceholder()
         } else {
-            List {
-                ForEach(juzs) { juz in
-                    Button {
-                        viewModel.selectPage(juz.page)
-                    } label: {
-                        DrawerRow(
-                            leading: "\(juz.juzNumber)",
-                            title: juz.localizedName,
-                            subtitle: nil,
-                            isCurrent: juz.page == viewModel.currentPage
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
+            NoorList {
+                quarterSections(quarters: quarters)
             }
-            .listStyle(.plain)
         }
     }
-}
 
-// MARK: - Row
-
-private struct DrawerRow: View {
-    let leading: String
-    let title: String
-    let subtitle: String?
-    let isCurrent: Bool
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Text(leading)
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                .foregroundColor(.secondary)
-                .frame(width: 32, alignment: .center)
-                .padding(.vertical, 4)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.primary)
-                if let subtitle {
-                    Text(subtitle)
-                        .font(.system(size: 12))
-                        .foregroundColor(.secondary)
-                }
-            }
-            Spacer()
-            if isCurrent {
-                Image(systemName: "location.fill")
-                    .font(.system(size: 12))
-                    .foregroundColor(.accentColor)
+    @ViewBuilder
+    private func quarterSections(quarters: [Quarter]) -> some View {
+        let grouped = Dictionary(grouping: quarters, by: { $0.juz })
+        let juzs = grouped.keys.sorted { $0.juzNumber < $1.juzNumber }
+        ForEach(juzs) { juz in
+            let items = (grouped[juz] ?? []).sorted { $0.quarterNumber < $1.quarterNumber }
+            NoorSection(title: juz.localizedName, items) { quarter in
+                quarterRow(quarter: quarter)
             }
         }
-        .contentShape(Rectangle())
-        .padding(.vertical, 4)
+    }
+
+    private func quarterRow(quarter: Quarter) -> some View {
+        let ayah = quarter.firstVerse
+        let title: MultipartText = "\(quarter.localizedName) - \(ayah.localizedName) \(sura: ayah.sura.arabicSuraName)"
+        return NoorListItem(
+            title: title,
+            accessory: .text(NumberFormatter.shared.format(ayah.page.pageNumber))
+        ) {
+            viewModel.selectPage(ayah.page)
+        }
     }
 }
 
@@ -284,22 +264,23 @@ private struct BookmarksListView: View {
                     : l("navigation_drawer.empty.no_matching_bookmarks")
             )
         } else {
-            List {
-                ForEach(bookmarks) { bookmark in
-                    Button {
-                        viewModel.selectPage(bookmark.page)
-                    } label: {
-                        DrawerRow(
-                            leading: "\(bookmark.page.pageNumber)",
-                            title: bookmark.page.startSura.localizedName(withPrefix: false),
-                            subtitle: lFormat("navigation_drawer.bookmark.page", bookmark.page.pageNumber),
-                            isCurrent: bookmark.page == viewModel.currentPage
-                        )
+            NoorList {
+                NoorBasicSection {
+                    ForEach(bookmarks) { bookmark in
+                        let sura = bookmark.page.startSura
+                        NoorListItem(
+                            title: "\(sura.localizedName(withNumber: true)) \(sura: sura.arabicSuraName)",
+                            subtitle: .init(
+                                text: lFormat("navigation_drawer.bookmark.page", bookmark.page.pageNumber),
+                                location: .bottom
+                            ),
+                            accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
+                        ) {
+                            viewModel.selectPage(bookmark.page)
+                        }
                     }
-                    .buttonStyle(.plain)
                 }
             }
-            .listStyle(.plain)
         }
     }
 }

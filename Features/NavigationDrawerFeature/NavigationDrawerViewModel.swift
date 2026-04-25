@@ -62,14 +62,17 @@ final class NavigationDrawerViewModel: ObservableObject {
         }
     }
 
-    /// Returns the juzs filtered by `searchText`. Matches against the
-    /// localized name and the juz number.
-    var filteredJuzs: [Juz] {
+    /// Returns the quarters filtered by `searchText`. Matches against the
+    /// quarter's localized name (e.g. "Hizb 1, 1/4"), the parent juz number,
+    /// the starting sura's localized name, and the page number.
+    var filteredQuarters: [Quarter] {
         let query = searchText.trimmingCharacters(in: .whitespaces).lowercased()
-        guard !query.isEmpty else { return quran.juzs }
-        return quran.juzs.filter { juz in
-            juz.localizedName.lowercased().contains(query)
-                || String(juz.juzNumber).contains(query)
+        guard !query.isEmpty else { return quran.quarters }
+        return quran.quarters.filter { quarter in
+            quarter.localizedName.lowercased().contains(query)
+                || quarter.firstVerse.sura.localizedName(withPrefix: false).lowercased().contains(query)
+                || String(quarter.juz.juzNumber).contains(query)
+                || String(quarter.firstVerse.page.pageNumber).contains(query)
         }
     }
 

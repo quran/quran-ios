@@ -64,12 +64,13 @@ public struct ContentImageBuilder {
     }
 
     static func buildLinePageAssetService(reading: Reading, container: AppDependencies) -> LinePageAssetService {
-        guard let widthParameter = reading.linePageAssetWidth else {
+        guard let metrics = reading.linePageMetrics else {
             preconditionFailure("Attempted to build line-page assets for non-line-page reading \(reading)")
         }
         return LinePageAssetService(
             readingDirectory: Self.readingDirectory(reading, container: container),
-            widthParameter: widthParameter
+            metrics: metrics,
+            quran: reading.quran
         )
     }
 

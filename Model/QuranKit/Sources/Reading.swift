@@ -39,18 +39,22 @@ public enum Reading: Int {
     }
 
     public var usesLinePages: Bool {
-        linePageAssetWidth != nil
+        linePageMetrics != nil
     }
 
-    public var linePageAssetWidth: Int? {
+    public var linePageMetrics: LinePageMetrics? {
         switch self {
         case .hafs_1439:
-            return 1080
+            return .madaniLinePages(widthParameter: 1080)
         case .hafs_1441:
-            return 1440
+            return .madaniLinePages(widthParameter: 1440)
         default:
             return nil
         }
+    }
+
+    public var linePageAssetWidth: Int? {
+        linePageMetrics?.widthParameter
     }
 
     public var imageAssetWidth: Int {

@@ -59,19 +59,22 @@ public struct LinePageGeometryData: Sendable {
     }
 
     public init(
-        lineCount: Int = 15,
+        metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
+        lineCount: Int? = nil,
         highlightSpans: [LinePageHighlightSpan],
         ayahMarkers: [LinePageAyahMarker],
         suraHeaders: [LinePageSuraHeader],
         sidelines: [Sideline]
     ) {
-        self.lineCount = lineCount
+        self.metrics = metrics
+        self.lineCount = lineCount ?? metrics.lineCount
         self.highlightSpans = highlightSpans
         self.ayahMarkers = ayahMarkers
         self.suraHeaders = suraHeaders
         self.sidelines = sidelines
     }
 
+    public let metrics: LinePageMetrics
     public let lineCount: Int
     public let highlightSpans: [LinePageHighlightSpan]
     public let ayahMarkers: [LinePageAyahMarker]
@@ -326,39 +329,40 @@ public struct LinePageGeometryEngine {
             nil
         }
 
-        let lineFrames = lineFrames(in: pageFrame, lineCount: input.data.lineCount)
+        let lineFrames = lineFrames(in: pageFrame, data: input.data)
         let versesByLine = Dictionary(grouping: input.data.highlightSpans, by: \.line)
 
         let highlightRects = highlightRects(
             for: input.highlights.highlightedVerses,
             spans: input.data.highlightSpans,
             in: pageFrame,
-            lineCount: input.data.lineCount
+            data: input.data
         )
         let ayahMarkerPlacements = ayahMarkerPlacements(
             markers: input.data.ayahMarkers,
             in: pageFrame,
-            lineCount: input.data.lineCount
+            data: input.data
         )
         let suraHeaderPlacements = suraHeaderPlacements(
             headers: input.data.suraHeaders,
             in: pageFrame,
-            lineCount: input.data.lineCount,
+            data: input.data,
             aspectRatio: input.suraHeaderAspectRatio
         )
         let sidelinePlacements = sidelinePlacements(
             for: input.data.sidelines,
             in: sidelineFrame,
-            parity: input.pageParity
+            parity: input.pageParity,
+            data: input.data
         )
         let selectionAnchorsByAyah = selectionAnchors(
             for: input.data.highlightSpans,
             in: pageFrame,
-            lineCount: input.data.lineCount
+            data: input.data
         )
         let selectionLineRanges = selectionLineRanges(
             in: pageFrame,
-            lineCount: input.data.lineCount
+            data: input.data
         )
 
         return LinePageLayout(
@@ -384,6 +388,7 @@ public struct LinePageGeometryEngine {
         let availableWidth = input.availableSize.width
         let availableHeight = input.availableSize.height
         let effectiveHeaderFooterHeightRatio = input.displaySettings.showHeaderFooter ? headerFooterHeightRatio : 0
+        let minimumPageWidthToHeightRatio = 1 / minimumPageHeightToWidthRatio(data: input.data)
 
         let sidelineWidth = input.displaySettings.showSidelines
             ? floor(availableWidth * sidelineWidthRatio)
@@ -394,7 +399,7 @@ public struct LinePageGeometryEngine {
         case .portrait:
             let initialHeaderFooterHeight = floor(effectiveHeaderFooterHeightRatio * availableHeight)
             let initialPageHeight = availableHeight - (2 * initialHeaderFooterHeight)
-            let computedWidth = floor(initialPageHeight * pageMinWidthToHeightRatio)
+            let computedWidth = floor(initialPageHeight * minimumPageWidthToHeightRatio)
             let pageWidth = min(layoutWidth, computedWidth)
             let maxPageHeight = round(pageWidth / pageMaxWidthToHeightRatio)
 
@@ -418,7 +423,7 @@ public struct LinePageGeometryEngine {
             )
         case .landscape:
             let pageWidth = min(scrollableMaximumPageWidth, round(layoutWidth * scrollablePageWidthRatio))
-            let pageHeight = ceil(pageWidth * scrollablePageHeightToWidthRatio)
+            let pageHeight = ceil(pageWidth * scrollablePageHeightToWidthRatio(data: input.data))
             let headerFooterHeight = floor(pageWidth * effectiveHeaderFooterHeightRatio)
             let headerMargin = floor(pageWidth * headerFooterMarginRatio)
 
@@ -452,35 +457,33 @@ public struct LinePageGeometryEngine {
         }
     }
 
-    private func lineFrames(in pageFrame: CGRect, lineCount: Int) -> [LinePageLineFrame] {
-        let ranges = selectionLineRanges(in: pageFrame, lineCount: lineCount)
-        let imageLineHeight = pageFrame.width * lineHeightRatio
-        let lastLineIndex = CGFloat(max(lineCount - 1, 1))
-
-        return (0 ..< lineCount).map { lineIndex in
-            let imageY = floor((pageFrame.height - imageLineHeight) / lastLineIndex * CGFloat(lineIndex))
-            return LinePageLineFrame(
+    private func lineFrames(in pageFrame: CGRect, data: LinePageGeometryData) -> [LinePageLineFrame] {
+        let ranges = selectionLineRanges(in: pageFrame, data: data)
+        return (0 ..< data.lineCount).map { lineIndex in
+            LinePageLineFrame(
                 lineNumber: lineIndex + 1,
-                imageFrame: CGRect(
-                    x: pageFrame.minX,
-                    y: pageFrame.minY + imageY,
-                    width: pageFrame.width,
-                    height: imageLineHeight
-                ),
+                imageFrame: lineImageFrame(in: pageFrame, lineIndex: lineIndex, data: data),
                 hitFrame: ranges[lineIndex].hitFrame
             )
         }
     }
 
-    private func selectionLineRanges(in pageFrame: CGRect, lineCount: Int) -> [SelectionLineRange] {
+    private func selectionLineRanges(in pageFrame: CGRect, data: LinePageGeometryData) -> [SelectionLineRange] {
+        if data.metrics.allowLineOverlap {
+            return overlappingSelectionLineRanges(in: pageFrame, data: data)
+        }
+        return nonOverlappingSelectionLineRanges(in: pageFrame, data: data)
+    }
+
+    private func overlappingSelectionLineRanges(in pageFrame: CGRect, data: LinePageGeometryData) -> [SelectionLineRange] {
         let width = Int(pageFrame.width)
         let height = Int(pageFrame.height)
-        let lineHeight = Int(CGFloat(width) * lineHeightRatio)
-        let lastLineIndex = max(lineCount - 1, 1)
+        let lineHeight = Int(lineImageHeight(in: pageFrame, metrics: data.metrics))
+        let lastLineIndex = max(data.lineCount - 1, 1)
         let lineHeightWithoutOverlap = (height - lineHeight) / lastLineIndex
         let offset = (lineHeight - lineHeightWithoutOverlap) / 2
 
-        return (0 ..< lineCount).map { lineIndex in
+        return (0 ..< data.lineCount).map { lineIndex in
             let fullLineStart = Int(floor(Double(height - lineHeight) / Double(lastLineIndex) * Double(lineIndex)))
             let hitY = fullLineStart + offset
             return SelectionLineRange(
@@ -496,18 +499,116 @@ public struct LinePageGeometryEngine {
         }
     }
 
+    private func nonOverlappingSelectionLineRanges(in pageFrame: CGRect, data: LinePageGeometryData) -> [SelectionLineRange] {
+        let slotHeight = lineSlotHeight(in: pageFrame, lineCount: data.lineCount)
+
+        return (0 ..< data.lineCount).map { lineIndex in
+            let lineStart = slotHeight * CGFloat(lineIndex)
+            return SelectionLineRange(
+                lineNumber: lineIndex,
+                fullLineRange: lineStart ... (lineStart + slotHeight),
+                hitFrame: CGRect(
+                    x: pageFrame.minX,
+                    y: pageFrame.minY + lineStart,
+                    width: pageFrame.width,
+                    height: slotHeight
+                )
+            )
+        }
+    }
+
+    private func lineImageFrame(in pageFrame: CGRect, lineIndex: Int, data: LinePageGeometryData) -> CGRect {
+        let imageLineHeight = lineImageHeight(in: pageFrame, metrics: data.metrics)
+        let imageY: CGFloat
+
+        if data.metrics.allowLineOverlap {
+            let lastLineIndex = CGFloat(max(data.lineCount - 1, 1))
+            imageY = floor((pageFrame.height - imageLineHeight) / lastLineIndex * CGFloat(lineIndex))
+        } else {
+            let slotHeight = lineSlotHeight(in: pageFrame, lineCount: data.lineCount)
+            imageY = (slotHeight * CGFloat(lineIndex)) + ((slotHeight - imageLineHeight) / 2)
+        }
+
+        return CGRect(
+            x: pageFrame.minX,
+            y: pageFrame.minY + imageY,
+            width: pageFrame.width,
+            height: imageLineHeight
+        )
+    }
+
+    private func lineContentFrame(in pageFrame: CGRect, lineIndex: Int, data: LinePageGeometryData) -> CGRect {
+        guard data.metrics.allowLineOverlap else {
+            return lineImageFrame(in: pageFrame, lineIndex: lineIndex, data: data)
+        }
+
+        let imageLineHeight = lineImageHeight(in: pageFrame, metrics: data.metrics)
+        let lastLineIndex = CGFloat(max(data.lineCount - 1, 1))
+        let imageY = ((pageFrame.height - imageLineHeight) / lastLineIndex) * CGFloat(lineIndex)
+        return CGRect(
+            x: pageFrame.minX,
+            y: pageFrame.minY + imageY,
+            width: pageFrame.width,
+            height: imageLineHeight
+        )
+    }
+
+    private func lineImageHeight(in pageFrame: CGRect, metrics: LinePageMetrics) -> CGFloat {
+        pageFrame.width * CGFloat(metrics.lineHeightRatio)
+    }
+
+    private func lineSlotHeight(in pageFrame: CGRect, lineCount: Int) -> CGFloat {
+        pageFrame.height / CGFloat(max(lineCount, 1))
+    }
+
     private func highlightRects(
         for highlightedVerses: Set<AyahNumber>,
         spans: [LinePageHighlightSpan],
         in pageFrame: CGRect,
-        lineCount: Int
+        data: LinePageGeometryData
     ) -> [LinePageHighlightRect] {
         guard !highlightedVerses.isEmpty else {
             return []
         }
 
-        let drawLineHeight = pageFrame.width * lineHeightRatio
-        let lastLineIndex = CGFloat(max(lineCount - 1, 1))
+        if data.metrics.allowLineOverlap {
+            return overlappingHighlightRects(
+                for: highlightedVerses,
+                spans: spans,
+                in: pageFrame,
+                data: data
+            )
+        }
+
+        let lineRanges = Dictionary(uniqueKeysWithValues: selectionLineRanges(in: pageFrame, data: data).map {
+            ($0.lineNumber, $0.hitFrame)
+        })
+
+        return spans.compactMap { span in
+            guard highlightedVerses.contains(span.ayah) else {
+                return nil
+            }
+            guard let hitFrame = lineRanges[span.line] else {
+                return nil
+            }
+
+            let x = hitFrame.minX + (span.left * pageFrame.width)
+            let width = ceil((span.right - span.left) * pageFrame.width)
+            return LinePageHighlightRect(
+                ayah: span.ayah,
+                rect: CGRect(x: x, y: hitFrame.minY, width: width, height: hitFrame.height)
+            )
+        }
+    }
+
+    private func overlappingHighlightRects(
+        for highlightedVerses: Set<AyahNumber>,
+        spans: [LinePageHighlightSpan],
+        in pageFrame: CGRect,
+        data: LinePageGeometryData
+    ) -> [LinePageHighlightRect] {
+        let drawLineHeight = lineImageHeight(in: pageFrame, metrics: data.metrics)
+        let lastLineIndex = CGFloat(max(data.lineCount - 1, 1))
         let lineHeightWithoutOverlap = (pageFrame.height - drawLineHeight) / lastLineIndex
         let yStart = (drawLineHeight - lineHeightWithoutOverlap) / 2
 
@@ -530,17 +631,14 @@ public struct LinePageGeometryEngine {
     private func ayahMarkerPlacements(
         markers: [LinePageAyahMarker],
         in pageFrame: CGRect,
-        lineCount: Int
+        data: LinePageGeometryData
     ) -> [LinePageAyahMarkerPlacement] {
-        let lastLineIndex = CGFloat(max(lineCount - 1, 1))
-        let lineHeight = pageFrame.width * lineHeightRatio
         let markerDimension = 0.05 * pageFrame.width
 
         return markers.map { marker in
-            let lineIndex = CGFloat(marker.line)
+            let contentFrame = lineContentFrame(in: pageFrame, lineIndex: marker.line, data: data)
             let x = pageFrame.minX + ((marker.centerX * pageFrame.width) - (markerDimension / 2))
-            let yStart = ((pageFrame.height - lineHeight) / lastLineIndex) * lineIndex
-            let y = pageFrame.minY + yStart + (marker.centerY * lineHeight) - (markerDimension / 2)
+            let y = contentFrame.minY + (marker.centerY * contentFrame.height) - (markerDimension / 2)
 
             return LinePageAyahMarkerPlacement(
                 marker: marker,
@@ -552,19 +650,16 @@ public struct LinePageGeometryEngine {
     private func suraHeaderPlacements(
         headers: [LinePageSuraHeader],
         in pageFrame: CGRect,
-        lineCount: Int,
+        data: LinePageGeometryData,
         aspectRatio: CGFloat
     ) -> [LinePageSuraHeaderPlacement] {
-        let lastLineIndex = CGFloat(max(lineCount - 1, 1))
-        let lineHeight = pageFrame.width * lineHeightRatio
         let width = pageFrame.width * suraHeaderWidthRatio
         let height = width * aspectRatio
 
         return headers.map { header in
-            let lineIndex = CGFloat(header.line)
+            let contentFrame = lineContentFrame(in: pageFrame, lineIndex: header.line, data: data)
             let x = pageFrame.minX + ((header.centerX * pageFrame.width) - (width / 2))
-            let yStart = ((pageFrame.height - lineHeight) / lastLineIndex) * lineIndex
-            let y = pageFrame.minY + yStart + (header.centerY * lineHeight) - (height / 2)
+            let y = contentFrame.minY + (header.centerY * contentFrame.height) - (height / 2)
 
             return LinePageSuraHeaderPlacement(
                 header: header,
@@ -576,7 +671,8 @@ public struct LinePageGeometryEngine {
     private func sidelinePlacements(
         for sidelines: [LinePageGeometryData.Sideline],
         in sidelineFrame: CGRect?,
-        parity: LinePageParity
+        parity: LinePageParity,
+        data: LinePageGeometryData
     ) -> [LinePageSidelinePlacement] {
         guard let sidelineFrame else {
             return []
@@ -588,7 +684,7 @@ public struct LinePageGeometryEngine {
             }
             return lhs.targetLine < rhs.targetLine
         }
-        let lineHeight = sidelineFrame.height / 15
+        let lineHeight = sidelineFrame.height / CGFloat(max(data.lineCount, 1))
 
         let locations = sortedSidelines.map { sideline -> ClosedRange<CGFloat> in
             let targetLineTop = lineHeight * CGFloat(sideline.targetLine - 1)
@@ -610,7 +706,8 @@ public struct LinePageGeometryEngine {
                 sortedSidelines: sortedSidelines,
                 locations: locations,
                 containerWidth: sidelineFrame.width,
-                lineHeight: lineHeight
+                lineHeight: lineHeight,
+                metrics: data.metrics
             )
 
             let y: CGFloat
@@ -647,13 +744,14 @@ public struct LinePageGeometryEngine {
         sortedSidelines: [LinePageGeometryData.Sideline],
         locations: [ClosedRange<CGFloat>],
         containerWidth: CGFloat,
-        lineHeight: CGFloat
+        lineHeight: CGFloat,
+        metrics: LinePageMetrics
     ) -> CGSize {
         let intrinsic = sideline.intrinsicSize
         let overlapsNext = locations.count > index + 1 && locations[index + 1].lowerBound < locations[index].upperBound
 
         if overlapsNext {
-            let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * intrinsicLineHeight)))
+            let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight))))
             let nextUsedLine: Int = if sideline.direction == .up {
                 (sortedSidelines.filter { $0.targetLine < sideline.targetLine }
                     .map(\.targetLine)
@@ -682,7 +780,7 @@ public struct LinePageGeometryEngine {
             )
         }
 
-        let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * intrinsicLineHeight)))
+        let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight))))
         let originalTargetHeight = CGFloat(originalLinesSpanned) * lineHeight
         let targetHeight = abs(intrinsic.height + originalTargetHeight) / 2
         return CGSize(
@@ -694,9 +792,9 @@ public struct LinePageGeometryEngine {
     private func selectionAnchors(
         for spans: [LinePageHighlightSpan],
         in pageFrame: CGRect,
-        lineCount: Int
+        data: LinePageGeometryData
     ) -> [AyahNumber: LinePageSelectionAnchors] {
-        let lineRanges = Dictionary(uniqueKeysWithValues: selectionLineRanges(in: pageFrame, lineCount: lineCount).map {
+        let lineRanges = Dictionary(uniqueKeysWithValues: selectionLineRanges(in: pageFrame, data: data).map {
             ($0.lineNumber, $0.hitFrame)
         })
 
@@ -729,6 +827,24 @@ public struct LinePageGeometryEngine {
             height: hitFrame.height
         )
     }
+
+    private func minimumPageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
+        guard !data.metrics.allowLineOverlap else {
+            return overlappingPageMinimumHeightToWidthRatio
+        }
+
+        return max(
+            overlappingPageMinimumHeightToWidthRatio,
+            CGFloat(data.lineCount) * CGFloat(data.metrics.lineHeightRatio)
+        )
+    }
+
+    private func scrollablePageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
+        max(
+            scrollableOverlappingPageHeightToWidthRatio,
+            minimumPageHeightToWidthRatio(data: data)
+        )
+    }
 }
 
 private struct SelectionLineRange: Sendable {
@@ -738,13 +854,11 @@ private struct SelectionLineRange: Sendable {
 }
 
 private let headerFooterHeightRatio: CGFloat = 0.04
-private let pageMinWidthToHeightRatio: CGFloat = 1 / 1.60
+private let overlappingPageMinimumHeightToWidthRatio: CGFloat = 1.60
 private let pageMaxWidthToHeightRatio: CGFloat = 1 / 1.84
 private let headerFooterMarginRatio: CGFloat = 0.027
 private let scrollablePageWidthRatio: CGFloat = 0.97
 private let scrollableMaximumPageWidth: CGFloat = 1080
-private let scrollablePageHeightToWidthRatio: CGFloat = 1.76
+private let scrollableOverlappingPageHeightToWidthRatio: CGFloat = 1.76
 private let sidelineWidthRatio: CGFloat = 0.1
-private let lineHeightRatio: CGFloat = 174 / 1080
 private let suraHeaderWidthRatio: CGFloat = 1038 / 1080
-private let intrinsicLineHeight: CGFloat = 174

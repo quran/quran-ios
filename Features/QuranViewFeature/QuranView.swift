@@ -85,7 +85,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     @objc
     func onViewTapped(_ sender: UITapGestureRecognizer) {
-        print("[NavDrawer] QuranView.onViewTapped fired (this should NOT happen for taps on the title)")
         if let audioView, audioView.bounds.contains(sender.location(in: audioView)), audioView.isUserInteractionEnabled {
             return
         }
@@ -99,11 +98,12 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         // Don't deliver taps on the visible navigation bar to the bar-toggle
         // recognizer — the title view (and bar button items) need them.
-        if gestureRecognizer == tapGesture {
-            let loc = touch.location(in: self)
-            let inBar = !navigationBar.isHidden && navigationBar.alpha > 0 && navigationBar.frame.contains(loc)
-            print("[NavDrawer] QuranView.shouldReceive touch loc=\(loc) navBar.frame=\(navigationBar.frame) hidden=\(navigationBar.isHidden) alpha=\(navigationBar.alpha) inBar=\(inBar) -> \(inBar ? "REJECT" : "accept")")
-            if inBar { return false }
+        if gestureRecognizer == tapGesture,
+           !navigationBar.isHidden,
+           navigationBar.alpha > 0,
+           navigationBar.frame.contains(touch.location(in: self))
+        {
+            return false
         }
         return true
     }

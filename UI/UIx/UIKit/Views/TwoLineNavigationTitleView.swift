@@ -46,6 +46,17 @@ public class TwoLineNavigationTitleView: UIView {
         updateIsCompressed()
     }
 
+    override public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        // When a tap handler is set, expand the hit area so taps reliably
+        // register even if the navigation bar lays this view out tighter than
+        // its visible label.
+        if onTap != nil {
+            let expanded = bounds.insetBy(dx: -60, dy: -12)
+            if expanded.contains(point) { return true }
+        }
+        return super.point(inside: point, with: event)
+    }
+
     // MARK: Private
 
     private let label = UILabel()
@@ -58,6 +69,7 @@ public class TwoLineNavigationTitleView: UIView {
     }
 
     private var tapGesture: UITapGestureRecognizer?
+    private var didInvalidateOnFirstNonEmptyText = false
 
     private func setUp() {
         label.numberOfLines = 0
@@ -74,7 +86,6 @@ public class TwoLineNavigationTitleView: UIView {
             addGestureRecognizer(gesture)
             isUserInteractionEnabled = true
             tapGesture = gesture
-            print("[NavDrawer] TwoLineNavigationTitleView tap gesture installed; isUserInteractionEnabled=\(isUserInteractionEnabled)")
         } else if onTap == nil, let tapGesture {
             removeGestureRecognizer(tapGesture)
             self.tapGesture = nil
@@ -83,7 +94,6 @@ public class TwoLineNavigationTitleView: UIView {
 
     @objc
     private func handleTap() {
-        print("[NavDrawer] TwoLineNavigationTitleView.handleTap fired; onTap=\(onTap != nil ? "set" : "nil")")
         onTap?()
     }
 
@@ -106,6 +116,15 @@ public class TwoLineNavigationTitleView: UIView {
             .font: secondLineFont,
         ]))
         label.attributedText = string
+        // Invalidate ONCE, the first time the text becomes non-empty. Without
+        // this, the navigation bar keeps the zero-sized layout it computed
+        // when this view was instantiated with empty text, and hit-testing
+        // misses the title view. Skipping subsequent invalidations keeps
+        // page-changes cheap (no UINavigationBar relayout per swipe).
+        if !didInvalidateOnFirstNonEmptyText, !firstLine.isEmpty || !secondLine.isEmpty {
+            didInvalidateOnFirstNonEmptyText = true
+            invalidateIntrinsicContentSize()
+        }
     }
 }
 

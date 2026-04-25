@@ -87,12 +87,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             firstLineFont: .boldSystemFont(ofSize: 15),
             secondLineFont: .systemFont(ofSize: 15, weight: .light)
         )
-        titleView.onTap = { [weak self] in
-            print("[NavDrawer] titleView.onTap closure fired")
-            self?.presentNavigationDrawer()
-        }
+        titleView.onTap = { [weak self] in self?.presentNavigationDrawer() }
         quranView?.navigationItem.titleView = titleView
-        print("[NavDrawer] QuranViewController viewDidLoad: titleView installed at \(titleView)")
 
         let backImage: UIImage?
         backImage = UIImage(systemName: "chevron.backward")
@@ -396,7 +392,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     private func presentNavigationDrawer() {
-        print("[NavDrawer] presentNavigationDrawer called; visiblePages=\(interactor.visiblePages.map(\.pageNumber)) drawerCurrentPage=\(interactor.drawerCurrentPage.pageNumber)")
         let drawer = NavigationDrawerBuilder().build(
             quran: interactor.quran,
             currentPage: interactor.drawerCurrentPage,
@@ -406,8 +401,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
                 self?.interactor.navigateToPage(page)
             }
         )
-        present(drawer, animated: true) {
-            print("[NavDrawer] drawer presented")
-        }
+        present(drawer, animated: true)
     }
 }

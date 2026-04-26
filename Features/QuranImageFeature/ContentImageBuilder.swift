@@ -39,8 +39,8 @@ public struct ContentImageBuilder {
                 page: page,
                 linePageAssetService: linePageAssetService,
                 highlightsService: highlightsService,
-                showSidelines: false,
-                showLineDividers: false
+                showSidelines: reading.usesLinePageSidelines,
+                showLineDividers: reading.usesLinePageDividers
             )
             ContentLineView(viewModel: viewModel)
         } else {
@@ -105,6 +105,8 @@ private extension Reading {
         case .hafs_1441:
             return .zero
         case .tajweed:
+            return .zero
+        case .naskh:
             return .zero
         }
     }

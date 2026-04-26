@@ -24,6 +24,7 @@ public final class Quran: Hashable, @unchecked Sendable {
 
     public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())
     public static let hafsMadani1440 = Quran(raw: Madani1440QuranReadingInfoRawData())
+    public static let hafsNaskh = Quran(raw: NaskhQuranReadingInfoRawData())
 
     public var arabicBesmAllah: String {
         raw.arabicBesmAllah

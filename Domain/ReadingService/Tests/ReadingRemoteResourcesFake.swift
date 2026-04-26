@@ -27,6 +27,8 @@ final class ReadingRemoteResourcesFake: ReadingRemoteResources {
                 return "https://quran.com/hafs_1441.zip"
             case .tajweed:
                 return "https://quran.com/tajweed.zip"
+            case .naskh:
+                return "https://quran.com/naskh.zip"
             }
         }()
 

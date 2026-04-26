@@ -153,6 +153,22 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertFalse(remoteResource.isDownloaded(fileSystem: fileManager))
     }
 
+    func test_naskhRemoteResourceUsesNaskhPathAndImageWidth() throws {
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: .naskh))
+
+        XCTAssertEqual(remoteResource.downloadDestination.url.lastPathComponent, "naskh")
+        XCTAssertEqual(remoteResource.zipFile.url.lastPathComponent, "naskh.zip")
+        XCTAssertEqual(remoteResource.extractedVersionFileURL.lastPathComponent, ".v0")
+        XCTAssertEqual(remoteResource.extractedVersionFileURL.deletingLastPathComponent().lastPathComponent, "width_1342")
+        XCTAssertEqual(
+            remoteResource.extractedVersionFileURL
+                .deletingLastPathComponent()
+                .deletingLastPathComponent()
+                .lastPathComponent,
+            "images_1342"
+        )
+    }
+
     func test_downloadResourceSuccessfully() async throws {
         // Given
         let reading = Reading.hafs_1440

@@ -19,17 +19,22 @@
 
         // MARK: Public
 
-        public func createNote(body: String, verses: Set<AyahNumber>) async throws {
-            guard let range = Self.ayahIdRange(for: verses) else {
-                return
+        public func createNote(body: String, startVerse: AyahNumber, endVerse: AyahNumber) async throws {
+            let range = Self.ayahIdRange(startVerse: startVerse, endVerse: endVerse)
+
+            do {
+                try await syncService.createNote(body: body, startAyahId: range.start, endAyahId: range.end)
+            } catch {
+                guard Self.isExpectedNoteAfterInsert(error),
+                      try await noteExists(body: body, range: range)
+                else {
+                    throw error
+                }
             }
-            try await syncService.createNote(body: body, startAyahId: range.start, endAyahId: range.end)
         }
 
-        public func updateNote(localId: String, body: String, verses: Set<AyahNumber>) async throws {
-            guard let range = Self.ayahIdRange(for: verses) else {
-                return
-            }
+        public func updateNote(localId: String, body: String, startVerse: AyahNumber, endVerse: AyahNumber) async throws {
+            let range = Self.ayahIdRange(startVerse: startVerse, endVerse: endVerse)
             try await syncService.updateNote(
                 localId: localId,
                 body: body,
@@ -53,15 +58,32 @@
 
         private let syncService: SyncService
 
-        private static func ayahIdRange(for verses: Set<AyahNumber>) -> (start: Int64, end: Int64)? {
-            guard let startVerse = verses.min(), let endVerse = verses.max() else {
-                return nil
-            }
-            return (start: ayahId(for: startVerse), end: ayahId(for: endVerse))
+        private static func ayahIdRange(startVerse: AyahNumber, endVerse: AyahNumber) -> (start: Int64, end: Int64) {
+            (start: ayahId(for: startVerse), end: ayahId(for: endVerse))
         }
 
         private static func ayahId(for verse: AyahNumber) -> Int64 {
             Int64(QuranData.shared.getAyahId(sura: Int32(verse.sura.suraNumber), ayah: Int32(verse.ayah)))
+        }
+
+        private static func isExpectedNoteAfterInsert(_ error: Error) -> Bool {
+            let description = String(describing: error)
+            return description.contains("Expected note after insert.")
+        }
+
+        private func noteExists(body: String, range: (start: Int64, end: Int64)) async throws -> Bool {
+            for attempt in 0 ..< 3 {
+                let notes = try await snapshot()
+                if notes.contains(where: {
+                    $0.body == body && $0.startAyahId == range.start && $0.endAyahId == range.end
+                }) {
+                    return true
+                }
+                if attempt < 2 {
+                    try? await Task.sleep(nanoseconds: 100_000_000)
+                }
+            }
+            return false
         }
     }
 

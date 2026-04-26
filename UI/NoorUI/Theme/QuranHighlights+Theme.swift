@@ -42,6 +42,10 @@ extension QuranHighlights {
             versesByHighlights[verse] = note.color.uiColor.withAlphaComponent(Self.opacity)
         }
 
+        for (verse, color) in highlightColorsByVerse {
+            versesByHighlights[verse] = color.uiColor.withAlphaComponent(Self.opacity)
+        }
+
         func add(verses: [AyahNumber], color: UIColor) {
             for verse in verses {
                 versesByHighlights[verse] = color

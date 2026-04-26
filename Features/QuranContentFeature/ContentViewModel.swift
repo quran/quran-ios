@@ -10,7 +10,11 @@ import Analytics
 import AnnotationsService
 import Combine
 import Crashing
+import FeaturesSupport
 import QuranAnnotations
+#if QURAN_SYNC
+    import MobileSync
+#endif
 import QuranImageFeature
 import QuranKit
 import QuranPagesFeature
@@ -24,7 +28,14 @@ import VLogging
 @MainActor
 public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
-    func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
+    func presentAyahMenu(
+        in sourceView: UIView,
+        at point: CGPoint,
+        verses: [AyahNumber],
+        notes: [QuranAnnotations.Note],
+        syncHighlightColor: HighlightColor?,
+        hasSyncHighlight: Bool
+    )
 }
 
 @MainActor
@@ -37,6 +48,9 @@ public final class ContentViewModel: ObservableObject {
         let noteService: NoteService
         let lastPageUpdater: LastPageUpdater
         let quran: Quran
+        #if QURAN_SYNC
+            let syncService: SyncService?
+        #endif
 
         let highlightsService: QuranHighlightsService
 
@@ -150,16 +164,37 @@ public final class ContentViewModel: ObservableObject {
         guard let longPressData, let selectedVerses else {
             return
         }
+        let syncHighlight = selectedSyncHighlight(in: selectedVerses)
         listener?.presentAyahMenu(
             in: longPressData.sourceView,
             at: longPressData.startPosition,
-            verses: selectedVerses
+            verses: selectedVerses,
+            notes: selectedNotes(in: selectedVerses),
+            syncHighlightColor: syncHighlight.color,
+            hasSyncHighlight: syncHighlight.hasHighlight
         )
     }
 
     func onViewLongPressCancelled() {
         longPressData = nil
     }
+
+    #if QURAN_SYNC
+        func observeSyncHighlightsIfNeeded() async {
+            guard let syncService = deps.syncService else {
+                return
+            }
+
+            do {
+                for try await collections in HighlightCollection.updates(from: syncService) {
+                    highlights.highlightColorsByVerse = HighlightCollection.highlightColorsByVerse(in: collections, quran: deps.quran)
+                }
+            } catch is CancellationError {
+            } catch {
+                crasher.recordError(error, reason: "Failed to observe synced highlights")
+            }
+        }
+    #endif
 
     // MARK: Private
 
@@ -191,6 +226,29 @@ public final class ContentViewModel: ObservableObject {
             dict[element.0] = element.1
         }
         return dict
+    }
+
+    private func selectedNotes(in verses: [AyahNumber]) -> [QuranAnnotations.Note] {
+        var notes: [QuranAnnotations.Note] = []
+        for verse in verses {
+            guard let note = highlights.noteVerses[verse], !notes.contains(note) else {
+                continue
+            }
+            notes.append(note)
+        }
+        return notes
+    }
+
+    private func selectedSyncHighlight(in verses: [AyahNumber]) -> (hasHighlight: Bool, color: HighlightColor?) {
+        let colors = verses.compactMap { highlights.highlightColorsByVerse[$0] }
+        let uniqueColors = Array(Set(colors))
+        if uniqueColors.isEmpty {
+            return (false, nil)
+        }
+        if uniqueColors.count == 1 {
+            return (true, uniqueColors[0])
+        }
+        return (true, nil)
     }
 
     private func configureInitialPage() {
@@ -225,7 +283,19 @@ public final class ContentViewModel: ObservableObject {
 
     private func loadNotes() {
         deps.noteService.notes(quran: deps.quran)
-            .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
+            .map { [deps] notes in
+                let visibleNotes: [QuranAnnotations.Note]
+                #if QURAN_SYNC
+                    if deps.syncService != nil {
+                        visibleNotes = notes.filter { !(($0.note ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) }
+                    } else {
+                        visibleNotes = notes
+                    }
+                #else
+                    visibleNotes = notes
+                #endif
+                return visibleNotes.flatMap { note in note.verses.map { ($0, note) } }
+            }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
             .store(in: &cancellables)

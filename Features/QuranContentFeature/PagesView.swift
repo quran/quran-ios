@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2024-10-06.
 //
 
+import AnnotationsService
 import QuranPagesFeature
 import QuranTextKit
 import SwiftUI
@@ -32,6 +33,9 @@ struct PagesView: View {
             .id(viewModel.quranMode)
         }
         .collectGeometryActions($viewModel.geometryActions)
+        #if QURAN_SYNC
+            .task { await viewModel.observeSyncHighlightsIfNeeded() }
+        #endif
     }
 
     private func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {

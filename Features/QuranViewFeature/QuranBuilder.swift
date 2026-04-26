@@ -35,21 +35,42 @@ public struct QuranBuilder {
 
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let interactorDeps = QuranInteractor.Deps(
-            quran: quran,
-            analytics: container.analytics,
-            pageBookmarkService: pageBookmarkService,
-            noteService: container.noteService(),
-            ayahMenuBuilder: AyahMenuBuilder(container: container),
-            moreMenuBuilder: MoreMenuBuilder(),
-            audioBannerBuilder: AudioBannerBuilder(container: container),
-            wordPointerBuilder: WordPointerBuilder(container: container),
-            noteEditorBuilder: NoteEditorBuilder(container: container),
-            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
-            translationsSelectionBuilder: TranslationsListBuilder(container: container),
-            translationVerseBuilder: TranslationVerseBuilder(container: container),
-            resources: container.readingResources
-        )
+        #if QURAN_SYNC
+            let interactorDeps = QuranInteractor.Deps(
+                quran: quran,
+                analytics: container.analytics,
+                pageBookmarkService: pageBookmarkService,
+                noteService: container.noteService(),
+                ayahMenuBuilder: AyahMenuBuilder(container: container),
+                syncedAyahMenuBuilder: SyncedAyahMenuBuilder(container: container),
+                moreMenuBuilder: MoreMenuBuilder(),
+                audioBannerBuilder: AudioBannerBuilder(container: container),
+                wordPointerBuilder: WordPointerBuilder(container: container),
+                noteEditorBuilder: NoteEditorBuilder(container: container),
+                contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+                translationsSelectionBuilder: TranslationsListBuilder(container: container),
+                translationVerseBuilder: TranslationVerseBuilder(container: container),
+                resources: container.readingResources,
+                syncService: container.syncService,
+                bookmarkCollectionService: container.bookmarkCollectionService
+            )
+        #else
+            let interactorDeps = QuranInteractor.Deps(
+                quran: quran,
+                analytics: container.analytics,
+                pageBookmarkService: pageBookmarkService,
+                noteService: container.noteService(),
+                ayahMenuBuilder: AyahMenuBuilder(container: container),
+                moreMenuBuilder: MoreMenuBuilder(),
+                audioBannerBuilder: AudioBannerBuilder(container: container),
+                wordPointerBuilder: WordPointerBuilder(container: container),
+                noteEditorBuilder: NoteEditorBuilder(container: container),
+                contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+                translationsSelectionBuilder: TranslationsListBuilder(container: container),
+                translationVerseBuilder: TranslationVerseBuilder(container: container),
+                resources: container.readingResources
+            )
+        #endif
         let interactor = QuranInteractor(deps: interactorDeps, input: input)
         let viewController = QuranViewController(interactor: interactor)
         return viewController

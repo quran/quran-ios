@@ -129,6 +129,14 @@
 "notes.verses-count" = "(+%d ayat)";
 "notes.delete.alert.title" = "Delete Highlight";
 "notes.delete.alert.body" = "The associated note will also be deleted.";
+"highlights.title" = "Highlights";
+"highlights.no-data.title" = "No Highlights Yet";
+"highlights.no-data.text" = "Highlight an ayah to see it here.";
+"highlights.color.red" = "Red";
+"highlights.color.green" = "Green";
+"highlights.color.blue" = "Blue";
+"highlights.color.yellow" = "Yellow";
+"highlights.color.purple" = "Purple";
 "notes.icloud.alert.title" = "iCloud Sync";
 "notes.icloud.alert.body" = "The app uses iCloud to sync bookmarks & notes across your devices. You can disable it from your device's iCloud settings.";
 

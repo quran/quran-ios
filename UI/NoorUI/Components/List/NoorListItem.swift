@@ -44,6 +44,7 @@ public struct NoorListItem: View {
 
     public init(
         leadingEdgeLineColor: Color? = nil,
+        leadingView: AnyView? = nil,
         image: ItemImage? = nil,
         heading: String? = nil,
         subheading: MultipartText? = nil,
@@ -55,6 +56,7 @@ public struct NoorListItem: View {
         action: AsyncAction? = nil
     ) {
         self.leadingEdgeLineColor = leadingEdgeLineColor
+        self.leadingView = leadingView
         self.image = image
         self.heading = heading
         self.subheading = subheading
@@ -75,6 +77,7 @@ public struct NoorListItem: View {
 
     public enum Accessory {
         case text(String)
+        case textWithDisclosureIndicator(String)
         case disclosureIndicator
         case download(DownloadType, action: AsyncAction)
         case image(NoorSystemImage, color: Color? = nil)
@@ -83,7 +86,7 @@ public struct NoorListItem: View {
 
         var actionable: Bool {
             switch self {
-            case .text: return false
+            case .text, .textWithDisclosureIndicator: return false
             case .download: return true
             case .disclosureIndicator: return false
             case .image: return false
@@ -110,6 +113,7 @@ public struct NoorListItem: View {
     // MARK: Internal
 
     let leadingEdgeLineColor: Color?
+    let leadingView: AnyView?
     let image: ItemImage?
     let heading: String?
     let subheading: MultipartText?
@@ -148,7 +152,9 @@ public struct NoorListItem: View {
                     .frame(width: 4)
             }
 
-            if let image {
+            if let leadingView {
+                leadingView
+            } else if let image {
                 if let color = image.color {
                     image.image.image
                         .foregroundColor(color)
@@ -205,6 +211,13 @@ public struct NoorListItem: View {
                         Text(text)
                             .foregroundColor(.secondaryLabel)
                             .fontWeight(.light)
+                    case .textWithDisclosureIndicator(let text):
+                        HStack(spacing: ContentDimension.interSpacing) {
+                            Text(text)
+                                .foregroundColor(.secondaryLabel)
+                                .fontWeight(.light)
+                            DisclosureIndicator()
+                        }
                     case .disclosureIndicator:
                         DisclosureIndicator()
                     case let .download(type, action):

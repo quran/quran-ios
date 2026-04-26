@@ -61,6 +61,7 @@ public struct LinePageGeometryData: Sendable {
         public let id: String
         public let targetLine: Int
         public let direction: LinePageAssets.SidelineDirection
+        /// Size in source asset pixels for the reading's width parameter.
         public let intrinsicSize: CGSize
     }
 
@@ -375,6 +376,7 @@ public struct LinePageGeometryEngine {
         let sidelinePlacements = sidelinePlacements(
             for: input.data.sidelines,
             in: sidelineFrame,
+            pageFrame: pageFrame,
             parity: input.pageParity,
             data: input.data
         )
@@ -500,7 +502,6 @@ public struct LinePageGeometryEngine {
     }
 
     private func overlappingSelectionLineRanges(in pageFrame: CGRect, data: LinePageGeometryData) -> [SelectionLineRange] {
-        let width = Int(pageFrame.width)
         let height = Int(pageFrame.height)
         let lineHeight = Int(lineImageHeight(in: pageFrame, metrics: data.metrics))
         let lastLineIndex = max(data.lineCount - 1, 1)
@@ -716,6 +717,7 @@ public struct LinePageGeometryEngine {
     private func sidelinePlacements(
         for sidelines: [LinePageGeometryData.Sideline],
         in sidelineFrame: CGRect?,
+        pageFrame: CGRect,
         parity: LinePageParity,
         data: LinePageGeometryData
     ) -> [LinePageSidelinePlacement] {
@@ -729,16 +731,22 @@ public struct LinePageGeometryEngine {
             }
             return lhs.targetLine < rhs.targetLine
         }
+        let intrinsicScale = sidelineIntrinsicScale(in: pageFrame, metrics: data.metrics)
+        let renderedIntrinsicSizes = sortedSidelines.map {
+            renderedSidelineSize(for: $0, scale: intrinsicScale)
+        }
         let lineHeight = sidelineFrame.height / CGFloat(max(data.lineCount, 1))
 
-        let locations = sortedSidelines.map { sideline -> ClosedRange<CGFloat> in
+        let locations = sortedSidelines.enumerated().map { item -> ClosedRange<CGFloat> in
+            let sideline = item.element
+            let intrinsicSize = renderedIntrinsicSizes[item.offset]
             let targetLineTop = lineHeight * CGFloat(sideline.targetLine - 1)
             let y = if sideline.direction == .up {
-                max(CGFloat.zero, targetLineTop + lineHeight - sideline.intrinsicSize.height)
+                max(CGFloat.zero, targetLineTop + lineHeight - intrinsicSize.height)
             } else {
                 targetLineTop
             }
-            return y ... (y + sideline.intrinsicSize.height)
+            return y ... (y + intrinsicSize.height)
         }
 
         return sortedSidelines.enumerated().map { item in
@@ -753,6 +761,8 @@ public struct LinePageGeometryEngine {
                 containerWidth: sidelineFrame.width,
                 lineHeight: lineHeight,
                 lineCount: data.lineCount,
+                renderedIntrinsicSize: renderedIntrinsicSizes[index],
+                intrinsicScale: intrinsicScale,
                 metrics: data.metrics
             )
 
@@ -792,13 +802,20 @@ public struct LinePageGeometryEngine {
         containerWidth: CGFloat,
         lineHeight: CGFloat,
         lineCount: Int,
+        renderedIntrinsicSize: CGSize,
+        intrinsicScale: CGFloat,
         metrics: LinePageMetrics
     ) -> CGSize {
         let intrinsic = sideline.intrinsicSize
+        let renderedIntrinsic = renderedIntrinsicSize
+        guard intrinsic.height > 0, renderedIntrinsic.height > 0 else {
+            return .zero
+        }
+
         let overlapsNext = locations.count > index + 1 && locations[index + 1].lowerBound < locations[index].upperBound
 
         if overlapsNext {
-            let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight))))
+            let originalLinesSpanned = originalLinesSpanned(for: intrinsic, metrics: metrics)
             let nextUsedLine: Int = if sideline.direction == .up {
                 (sortedSidelines.filter { $0.targetLine < sideline.targetLine }
                     .map(\.targetLine)
@@ -811,29 +828,53 @@ public struct LinePageGeometryEngine {
 
             let targetLinesToSpan = max(originalLinesSpanned, abs(nextUsedLine - sideline.targetLine))
             let targetHeight = CGFloat(targetLinesToSpan) * lineHeight
-            if intrinsic.height - targetHeight < 25 {
-                return intrinsic
+            if renderedIntrinsic.height - targetHeight < (sidelineResizeThreshold * intrinsicScale) {
+                return renderedIntrinsic
             }
             return CGSize(
-                width: (targetHeight / intrinsic.height) * intrinsic.width,
+                width: (targetHeight / renderedIntrinsic.height) * renderedIntrinsic.width,
                 height: targetHeight
             )
         }
 
-        if intrinsic.width > containerWidth {
+        if renderedIntrinsic.width > containerWidth {
             return CGSize(
                 width: containerWidth,
-                height: (containerWidth / intrinsic.width) * intrinsic.height
+                height: (containerWidth / renderedIntrinsic.width) * renderedIntrinsic.height
             )
         }
 
-        let originalLinesSpanned = Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight))))
+        let originalLinesSpanned = originalLinesSpanned(for: intrinsic, metrics: metrics)
         let originalTargetHeight = CGFloat(originalLinesSpanned) * lineHeight
-        let targetHeight = abs(intrinsic.height + originalTargetHeight) / 2
+        let targetHeight = abs(renderedIntrinsic.height + originalTargetHeight) / 2
         return CGSize(
-            width: (targetHeight / intrinsic.height) * intrinsic.width,
+            width: (targetHeight / renderedIntrinsic.height) * renderedIntrinsic.width,
             height: targetHeight
         )
+    }
+
+    private func sidelineIntrinsicScale(in pageFrame: CGRect, metrics: LinePageMetrics) -> CGFloat {
+        guard metrics.widthParameter > 0 else {
+            return 1
+        }
+        return pageFrame.width / CGFloat(metrics.widthParameter)
+    }
+
+    private func renderedSidelineSize(
+        for sideline: LinePageGeometryData.Sideline,
+        scale: CGFloat
+    ) -> CGSize {
+        CGSize(
+            width: sideline.intrinsicSize.width * scale,
+            height: sideline.intrinsicSize.height * scale
+        )
+    }
+
+    private func originalLinesSpanned(for intrinsic: CGSize, metrics: LinePageMetrics) -> Int {
+        guard metrics.intrinsicLineHeight > 0 else {
+            return 1
+        }
+        return max(Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight)))), 1)
     }
 
     private func selectionAnchors(
@@ -908,5 +949,6 @@ private let lineDividerHeight: CGFloat = 1
 private let scrollablePageWidthRatio: CGFloat = 0.97
 private let scrollableMaximumPageWidth: CGFloat = 1080
 private let scrollableOverlappingPageHeightToWidthRatio: CGFloat = 1.76
+private let sidelineResizeThreshold: CGFloat = 25
 private let sidelineWidthRatio: CGFloat = 0.1
 private let suraHeaderWidthRatio: CGFloat = 1038 / 1080

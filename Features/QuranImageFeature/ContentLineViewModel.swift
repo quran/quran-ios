@@ -25,11 +25,13 @@ final class ContentLineViewModel: ObservableObject {
         page: Page,
         linePageAssetService: LinePageAssetService,
         highlightsService: QuranHighlightsService,
+        showSidelines: Bool = false,
         showLineDividers: Bool = false
     ) {
         self.reading = reading
         self.page = page
         self.linePageAssetService = linePageAssetService
+        self.showSidelines = showSidelines
         self.showLineDividers = showLineDividers
         linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
         highlights = highlightsService.highlights
@@ -142,7 +144,7 @@ final class ContentLineViewModel: ObservableObject {
                 pageParity: page.pageNumber.isMultiple(of: 2) ? .even : .odd,
                 displaySettings: LinePageDisplaySettings(
                     showHeaderFooter: showHeaderFooter,
-                    showSidelines: !geometryData.sidelines.isEmpty,
+                    showSidelines: showSidelines && !geometryData.sidelines.isEmpty,
                     showLineDividers: showLineDividers && page.pageNumber > 3
                 ),
                 data: LinePageGeometryData(
@@ -191,6 +193,7 @@ final class ContentLineViewModel: ObservableObject {
     private let reading: Reading
     private let linePageAssetService: LinePageAssetService
     private let linePageMetrics: LinePageMetrics
+    private let showSidelines: Bool
     private let showLineDividers: Bool
     private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
@@ -209,9 +212,19 @@ final class ContentLineViewModel: ObservableObject {
                 id: $0.imageURL.lastPathComponent,
                 targetLine: $0.targetLine,
                 direction: $0.direction,
-                intrinsicSize: $0.image.size
+                intrinsicSize: imagePixelSize($0.image)
             )
         }
+    }
+
+    private func imagePixelSize(_ image: UIImage) -> CGSize {
+        if let cgImage = image.cgImage {
+            return CGSize(width: CGFloat(cgImage.width), height: CGFloat(cgImage.height))
+        }
+        return CGSize(
+            width: image.size.width * image.scale,
+            height: image.size.height * image.scale
+        )
     }
 
     private func scrollToVerseIfNeededSynchronously() {

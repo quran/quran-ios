@@ -57,10 +57,10 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertEqual(layout.contentSize.height, 1501)
 
         let sideline = try XCTUnwrap(layout.sidelinePlacements.first)
-        XCTAssertEqual(sideline.frame.minX, 53.46666666666667, accuracy: 0.001)
-        XCTAssertEqual(sideline.frame.minY, 127.8, accuracy: 0.001)
-        XCTAssertEqual(sideline.frame.width, 36.53333333333333, accuracy: 0.001)
-        XCTAssertEqual(sideline.frame.height, 146.13333333333333, accuracy: 0.001)
+        XCTAssertEqual(sideline.frame.minX, 60.272222222222226, accuracy: 0.001)
+        XCTAssertEqual(sideline.frame.minY, 182.24444444444447, accuracy: 0.001)
+        XCTAssertEqual(sideline.frame.width, 29.72777777777777, accuracy: 0.001)
+        XCTAssertEqual(sideline.frame.height, 118.9111111111111, accuracy: 0.001)
     }
 
     func testHighlightsMarkersAndHeadersUseSharedGeometry() throws {
@@ -292,6 +292,37 @@ final class LinePageGeometryTests: XCTestCase {
 
         let firstSideline = try XCTUnwrap(layout.sidelinePlacements.first)
         XCTAssertLessThan(firstSideline.frame.height, 500)
+    }
+
+    func testSidelineSizingScalesSourcePixelsToRenderedPageWidth() throws {
+        let metrics = LinePageMetrics.naskhLinePages
+        let rawSidelineSize = CGSize(width: 80, height: 600)
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 400, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: true),
+                data: makeData(
+                    metrics: metrics,
+                    sidelines: [
+                        .init(targetLine: 5, direction: .down, intrinsicSize: rawSidelineSize),
+                    ]
+                ),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        let sideline = try XCTUnwrap(layout.sidelinePlacements.first)
+        let scale = layout.pageFrame.width / CGFloat(metrics.widthParameter)
+        let renderedIntrinsicHeight = rawSidelineSize.height * scale
+        let originalLinesSpanned = ceil(rawSidelineSize.height / (1.35 * CGFloat(metrics.intrinsicLineHeight)))
+        let sidelineFrameHeight = try XCTUnwrap(layout.sidelineFrame?.height)
+        let slotHeight = sidelineFrameHeight / CGFloat(metrics.lineCount)
+        let expectedHeight = (renderedIntrinsicHeight + (originalLinesSpanned * slotHeight)) / 2
+
+        XCTAssertEqual(sideline.frame.height, expectedHeight, accuracy: 0.001)
+        XCTAssertLessThan(sideline.frame.height, rawSidelineSize.height / 2)
     }
 
     // MARK: Private

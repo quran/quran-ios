@@ -66,6 +66,10 @@
             Int64(QuranData.shared.getAyahId(sura: Int32(verse.sura.suraNumber), ayah: Int32(verse.ayah)))
         }
 
+        // TODO: Remove/Revisit this workaround once Mobile Sync stops throwing
+        // "Expected note after insert." for notes that were actually persisted.
+        // Today note creation can succeed in the sync store but still surface that
+        // false-negative error, so we verify the inserted note exists before failing.
         private static func isExpectedNoteAfterInsert(_ error: Error) -> Bool {
             let description = String(describing: error)
             return description.contains("Expected note after insert.")

@@ -15,7 +15,7 @@
             sourceView: UIView,
             pointInView: CGPoint,
             verses: [AyahNumber],
-            notes: [QuranAnnotations.Note],
+            notes: [SyncedNoteReference],
             syncHighlightColor: HighlightColor?,
             hasSyncHighlight: Bool
         ) {
@@ -32,7 +32,7 @@
         let sourceView: UIView
         let pointInView: CGPoint
         let verses: [AyahNumber]
-        let notes: [QuranAnnotations.Note]
+        let notes: [SyncedNoteReference]
         let syncHighlightColor: HighlightColor?
         let hasSyncHighlight: Bool
     }

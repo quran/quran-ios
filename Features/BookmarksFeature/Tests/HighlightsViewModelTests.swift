@@ -77,7 +77,7 @@ final class HighlightsViewModelTests: XCTestCase {
             navigateTo: { _ in }
         )
         let item = HighlightsColorViewModel.Item(
-            ayah: AyahNumber(quran: .hafs_1421, sura: 1, ayah: 1)!,
+            ayah: AyahNumber(quran: Reading.hafs_1421.quran, sura: 1, ayah: 1)!,
             modifiedDate: Date(),
             verseText: "text"
         )

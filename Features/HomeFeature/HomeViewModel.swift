@@ -64,6 +64,19 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
+    var hasAnyJuzCollapsed: Bool {
+        !collapsedJuzs.isEmpty
+    }
+
+    func toggleCollapseAllJuzs() {
+        if hasAnyJuzCollapsed {
+            collapsedJuzs.removeAll()
+        } else {
+            let quran = readingPreferences.reading.quran
+            collapsedJuzs = Set(quran.juzs.map(\.juzNumber))
+        }
+    }
+
     func isJuzExpanded(_ juzNumber: Int) -> Bool {
         !collapsedJuzs.contains(juzNumber)
     }

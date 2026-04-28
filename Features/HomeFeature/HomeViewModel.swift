@@ -56,9 +56,23 @@ final class HomeViewModel: ObservableObject {
 
     @Published var surahSortOrder: SurahSortOrder = HomePreferences.shared.surahSortOrder
 
+    @Published var collapsedJuzs: Set<Int> = []
+
     @Published var type = HomeViewType.suras {
         didSet {
             logger.info("Home: \(type) selected")
+        }
+    }
+
+    func isJuzExpanded(_ juzNumber: Int) -> Bool {
+        !collapsedJuzs.contains(juzNumber)
+    }
+
+    func setJuz(_ juzNumber: Int, expanded: Bool) {
+        if expanded {
+            collapsedJuzs.remove(juzNumber)
+        } else {
+            collapsedJuzs.insert(juzNumber)
         }
     }
 

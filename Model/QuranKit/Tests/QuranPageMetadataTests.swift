@@ -99,4 +99,39 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertTrue(skippedQuran.pages[0].isRightSide)
         XCTAssertFalse(skippedQuran.pages[1].isRightSide)
     }
+
+    func testPageMapperKeepsSameQuranPageNumber() {
+        let quran = Quran.hafsMadani1405
+        let mapper = QuranPageMapper(destination: quran)
+
+        XCTAssertEqual(mapper.mapPage(quran.pages[0])?.pageNumber, 1)
+        XCTAssertEqual(mapper.mapPage(quran.pages[1])?.pageNumber, 2)
+        XCTAssertEqual(mapper.mapPage(quran.pages[603])?.pageNumber, 604)
+    }
+
+    func testPageMapperMapsSourcePageFirstVerseToDestinationPage() {
+        let sourceQuran = Quran.hafsMadani1405
+        let destinationQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let mapper = QuranPageMapper(destination: destinationQuran)
+
+        let sourcePage = sourceQuran.pages[1]
+        let mappedPage = mapper.mapPage(sourcePage)
+        let mappedAyah = mapper.mapAyah(sourcePage.firstVerse)
+
+        XCTAssertEqual(sourcePage.pageNumber, 2)
+        XCTAssertEqual(mappedPage?.pageNumber, 3)
+        XCTAssertEqual(mappedPage, mappedAyah?.page)
+    }
+
+    func testPageMapperMapsAyahBackedStateToDestinationAyah() {
+        let sourceQuran = Quran.hafsMadani1405
+        let destinationQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let mapper = QuranPageMapper(destination: destinationQuran)
+
+        let firstAyah = AyahNumber(quran: sourceQuran, sura: 1, ayah: 1)!
+        let secondSuraFirstAyah = AyahNumber(quran: sourceQuran, sura: 2, ayah: 1)!
+
+        XCTAssertEqual(mapper.mapAyah(firstAyah)?.page.pageNumber, 2)
+        XCTAssertEqual(mapper.mapAyah(secondSuraFirstAyah)?.page.pageNumber, 3)
+    }
 }

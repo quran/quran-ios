@@ -56,7 +56,7 @@ final class HomeViewModel: ObservableObject {
 
     @Published var surahSortOrder: SurahSortOrder = HomePreferences.shared.surahSortOrder
 
-    @Published var collapsedJuzs: Set<Int> = []
+    @Published var collapsedJuzs: Set<Juz> = []
 
     @Published var type = HomeViewType.suras {
         didSet {
@@ -72,20 +72,19 @@ final class HomeViewModel: ObservableObject {
         if hasAnyJuzCollapsed {
             collapsedJuzs.removeAll()
         } else {
-            let quran = readingPreferences.reading.quran
-            collapsedJuzs = Set(quran.juzs.map(\.juzNumber))
+            collapsedJuzs = Set(readingPreferences.reading.quran.juzs)
         }
     }
 
-    func isJuzExpanded(_ juzNumber: Int) -> Bool {
-        !collapsedJuzs.contains(juzNumber)
+    func isJuzExpanded(_ juz: Juz) -> Bool {
+        !collapsedJuzs.contains(juz)
     }
 
-    func setJuz(_ juzNumber: Int, expanded: Bool) {
+    func setJuz(_ juz: Juz, expanded: Bool) {
         if expanded {
-            collapsedJuzs.remove(juzNumber)
+            collapsedJuzs.remove(juz)
         } else {
-            collapsedJuzs.insert(juzNumber)
+            collapsedJuzs.insert(juz)
         }
     }
 

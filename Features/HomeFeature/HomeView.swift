@@ -44,8 +44,8 @@ private struct HomeViewUI: View {
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let surahSortOrder: SurahSortOrder
-    let isJuzExpanded: (Int) -> Bool
-    let setJuzExpanded: (Int, Bool) -> Void
+    let isJuzExpanded: (Juz) -> Bool
+    let setJuzExpanded: (Juz, Bool) -> Void
 
     var body: some View {
         NoorList {
@@ -132,12 +132,11 @@ private struct HomeViewUI: View {
                     false
                 }
             }
-            let juzNumber = juz.juzNumber
             let isExpanded = Binding(
-                get: { isJuzExpanded(juzNumber) },
-                set: { setJuzExpanded(juzNumber, $0) }
+                get: { isJuzExpanded(juz) },
+                set: { setJuzExpanded(juz, $0) }
             )
-            NoorCollapsibleSection(title: juz.localizedName, isExpanded: isExpanded, items) { item in
+            NoorSection(title: juz.localizedName, isExpanded: isExpanded, items) { item in
                 listItem(item)
             }
         }
@@ -163,7 +162,7 @@ struct HomeView_Previews: PreviewProvider {
 
         @State var lastPages: [LastPage] = staticLastPages
         @State var type: HomeViewType = .juzs
-        @State var collapsedJuzs: Set<Int> = []
+        @State var collapsedJuzs: Set<Juz> = []
 
         var body: some View {
             NavigationView {
@@ -178,8 +177,8 @@ struct HomeView_Previews: PreviewProvider {
                     selectQuarter: { _ in },
                     surahSortOrder: .ascending,
                     isJuzExpanded: { !collapsedJuzs.contains($0) },
-                    setJuzExpanded: { juzNumber, expanded in
-                        if expanded { collapsedJuzs.remove(juzNumber) } else { collapsedJuzs.insert(juzNumber) }
+                    setJuzExpanded: { juz, expanded in
+                        if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
                     }
                 )
                 .navigationTitle("Home")

@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2023-07-16.
 //
 
-import Combine
 import Localization
 import ReadingSelectorFeature
 import SwiftUI
@@ -33,18 +32,10 @@ final class HomeViewController: UIHostingController<HomeView> {
     private let viewModel: HomeViewModel
     private let readingSelectorBuilder: ReadingSelectorBuilder
     private lazy var segmentedControl = UISegmentedControl(frame: .zero)
-    private lazy var collapseAllButton = UIBarButtonItem(
-        image: UIImage.symbol("chevron.up.chevron.down"),
-        style: .plain,
-        target: self,
-        action: #selector(toggleCollapseAllJuzs)
-    )
-    private var cancellables: Set<AnyCancellable> = []
 
     private func initialize() {
         configureSegmentedControl()
         configureNavigationBarButtons()
-        observeCollapseState()
     }
 
     private func configureSegmentedControl() {
@@ -63,8 +54,7 @@ final class HomeViewController: UIHostingController<HomeView> {
                 style: .plain,
                 target: self,
                 action: #selector(openReadingSelectors)
-            ),
-            collapseAllButton,
+            )
         ]
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -75,29 +65,9 @@ final class HomeViewController: UIHostingController<HomeView> {
         )
     }
 
-    private func observeCollapseState() {
-        viewModel.$collapsedJuzs
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] collapsed in
-                self?.updateCollapseAllButton(hasAnyCollapsed: !collapsed.isEmpty)
-            }
-            .store(in: &cancellables)
-    }
-
-    private func updateCollapseAllButton(hasAnyCollapsed: Bool) {
-        let symbolName = hasAnyCollapsed ? "rectangle.expand.vertical" : "rectangle.compress.vertical"
-        collapseAllButton.image = UIImage.symbol(symbolName)
-        collapseAllButton.accessibilityLabel = hasAnyCollapsed ? "Expand all" : "Collapse all"
-    }
-
     @objc
     private func toggleSort() {
         viewModel.toggleSurahSortOrder()
-    }
-
-    @objc
-    private func toggleCollapseAllJuzs() {
-        viewModel.toggleCollapseAllJuzs()
     }
 
     @objc

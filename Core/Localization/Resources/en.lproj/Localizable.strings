@@ -159,6 +159,7 @@
 "reading.selector.selection-description" = "Tap on a Mushaf for more information.";
 "reading.selector.property.hafs" = "Hafs Mushaf";
 "reading.selector.property.pages.604" = "604 pages";
+"reading.selector.property.pages.611" = "611 pages";
 "reading.selector.property.lines.15" = "15-line page";
 "reading.selector.property.word-translation.supported" = "Word-by-word translation";
 "reading.selector.property.word-translation.not-supported" = "No Word-by-word translation";
@@ -191,6 +192,10 @@
 // Hafs Tajweed
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "The tajweed hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
+
+// Hafs Naskh
+"reading.naskh.title" = "Naskh Script";
+"reading.naskh.description" = "These images were taken from the King Fahd Quran Complex.";
 
 // MARK: - Diagnostics
 

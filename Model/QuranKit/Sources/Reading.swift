@@ -14,11 +14,12 @@ public enum Reading: Int {
     case hafs_1421 = 3
     case hafs_1441 = 4
     case hafs_1439 = 5
+    case naskh = 6
 
     // MARK: Public
 
     public static let allReadings: [Reading] = [
-        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1439, .hafs_1441,
+        .hafs_1405, .tajweed, .hafs_1421, .hafs_1440, .hafs_1439, .hafs_1441, .naskh,
     ]
 
     public var quran: Quran {
@@ -35,6 +36,8 @@ public enum Reading: Int {
             return .hafsMadani1440
         case .tajweed:
             return .hafsMadani1405
+        case .naskh:
+            return .hafsNaskh
         }
     }
 
@@ -48,6 +51,8 @@ public enum Reading: Int {
             return .madaniLinePages(widthParameter: 1080)
         case .hafs_1441:
             return .madaniLinePages(widthParameter: 1440)
+        case .naskh:
+            return .naskhLinePages
         default:
             return nil
         }
@@ -71,6 +76,8 @@ public enum Reading: Int {
             return 1440
         case .tajweed:
             return 1280
+        case .naskh:
+            return 1342
         }
     }
 
@@ -78,9 +85,17 @@ public enum Reading: Int {
         self == .hafs_1439
     }
 
+    public var usesLinePageDividers: Bool {
+        self == .naskh
+    }
+
+    public var usesLinePageSidelines: Bool {
+        self == .naskh
+    }
+
     public var usesInvertedQuranImageRenderingInDarkMode: Bool {
         switch self {
-        case .hafs_1440, .hafs_1439, .hafs_1441, .tajweed:
+        case .hafs_1440, .hafs_1439, .hafs_1441, .tajweed, .naskh:
             return true
         case .hafs_1405, .hafs_1421:
             return false

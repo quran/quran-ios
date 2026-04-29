@@ -29,6 +29,14 @@ public final class Quran: Hashable, @unchecked Sendable {
         raw.arabicBesmAllah
     }
 
+    public var numberOfPages: Int {
+        raw.numberOfPages
+    }
+
+    public var pagesToSkip: Int {
+        raw.pagesToSkip
+    }
+
     public var suras: [Sura] {
         lazySuras()
     }
@@ -78,7 +86,7 @@ public final class Quran: Hashable, @unchecked Sendable {
 
 extension Quran {
     var pagesRange: ClosedRange<Int> {
-        1 ... raw.startSuraOfPage.count
+        (raw.pagesToSkip + 1) ... raw.numberOfPages
     }
 }
 

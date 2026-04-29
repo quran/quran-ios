@@ -11,16 +11,28 @@ import UIx
 public struct NoorBasicSection<Content: View>: View {
     // MARK: Lifecycle
 
-    public init(title: String? = nil, footer: String? = nil, @ViewBuilder content: () -> Content) {
+    public init(
+        title: String? = nil,
+        footer: String? = nil,
+        isExpanded: Binding<Bool>? = nil,
+        @ViewBuilder content: () -> Content
+    ) {
         self.title = title
         self.footer = footer
+        self.isExpanded = isExpanded
         self.content = content()
     }
 
     // MARK: Public
 
     public var body: some View {
-        if let footer {
+        if let isExpanded, #available(iOS 17.0, *) {
+            Section(isExpanded: isExpanded) {
+                content
+            } header: {
+                collapsibleHeader(isExpanded: isExpanded)
+            }
+        } else if let footer {
             if let title {
                 Section {
                     content
@@ -53,7 +65,31 @@ public struct NoorBasicSection<Content: View>: View {
 
     let title: String?
     let footer: String?
+    let isExpanded: Binding<Bool>?
     let content: Content
+
+    @ViewBuilder
+    private func collapsibleHeader(isExpanded: Binding<Bool>) -> some View {
+        Button {
+            withAnimation {
+                isExpanded.wrappedValue.toggle()
+            }
+        } label: {
+            HStack {
+                if let title {
+                    Text(title)
+                }
+                Spacer()
+                Image(systemName: "chevron.down")
+                    .font(.footnote.weight(.semibold))
+                    .rotationEffect(.degrees(isExpanded.wrappedValue ? 0 : -90))
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title ?? "")
+        .accessibilityHint(isExpanded.wrappedValue ? "Collapse section" : "Expand section")
+    }
 }
 
 public struct SelfIdentifiable<T: Hashable>: Identifiable {
@@ -93,12 +129,8 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
 
     public var body: some View {
         if !items.isEmpty {
-            if let isExpanded {
-                collapsibleSection(isExpanded: isExpanded)
-            } else {
-                NoorBasicSection(title: title) {
-                    rows
-                }
+            NoorBasicSection(title: title, isExpanded: isExpanded) {
+                rows
             }
         }
     }
@@ -132,34 +164,6 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         .onMove(perform: onMove)
     }
 
-    @ViewBuilder
-    private func collapsibleSection(isExpanded: Binding<Bool>) -> some View {
-        Section {
-            if isExpanded.wrappedValue {
-                rows
-            }
-        } header: {
-            Button {
-                withAnimation {
-                    isExpanded.wrappedValue.toggle()
-                }
-            } label: {
-                HStack {
-                    if let title {
-                        Text(title)
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.down")
-                        .font(.footnote.weight(.semibold))
-                        .rotationEffect(.degrees(isExpanded.wrappedValue ? 0 : -90))
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(title ?? "")
-            .accessibilityHint(isExpanded.wrappedValue ? "Collapse section" : "Expand section")
-        }
-    }
 }
 
 extension NoorSection {

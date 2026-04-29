@@ -29,7 +29,16 @@ final class ContentLineViewModel: ObservableObject {
         self.reading = reading
         self.page = page
         self.linePageAssetService = linePageAssetService
+        linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
         highlights = highlightsService.highlights
+
+        geometryData = LinePageGeometryData(
+            metrics: linePageMetrics,
+            highlightSpans: [],
+            ayahMarkers: [],
+            suraHeaders: [],
+            sidelines: []
+        )
 
         highlightsService.$highlights
             .sink { [weak self] in self?.highlights = $0 }
@@ -47,12 +56,7 @@ final class ContentLineViewModel: ObservableObject {
     let page: Page
 
     @Published var assets: LinePageAssets?
-    @Published private(set) var geometryData = LinePageGeometryData(
-        highlightSpans: [],
-        ayahMarkers: [],
-        suraHeaders: [],
-        sidelines: []
-    )
+    @Published private(set) var geometryData: LinePageGeometryData
     @Published var highlights: QuranHighlights
     @Published var scrollToVerse: AyahNumber?
 
@@ -72,6 +76,7 @@ final class ContentLineViewModel: ObservableObject {
         wordFrameAdapter.wordFrames(
             from: geometryData.highlightSpans,
             quran: page.quran,
+            metrics: linePageMetrics,
             lineCount: geometryData.lineCount
         )
     }
@@ -87,6 +92,7 @@ final class ContentLineViewModel: ObservableObject {
             let persistence = GRDBLinePagePersistence(fileURL: assets.ayahInfoDatabaseURL)
             self.assets = assets
             geometryData = LinePageGeometryData(
+                metrics: linePageMetrics,
                 lineCount: assets.lines.count,
                 highlightSpans: [],
                 ayahMarkers: [],
@@ -103,6 +109,7 @@ final class ContentLineViewModel: ObservableObject {
                 let loadedSuraHeaders = try await suraHeaders
 
                 geometryData = LinePageGeometryData(
+                    metrics: linePageMetrics,
                     lineCount: assets.lines.count,
                     highlightSpans: loadedHighlightSpans,
                     ayahMarkers: loadedAyahMarkers,
@@ -136,6 +143,7 @@ final class ContentLineViewModel: ObservableObject {
                     showSidelines: !geometryData.sidelines.isEmpty
                 ),
                 data: LinePageGeometryData(
+                    metrics: linePageMetrics,
                     lineCount: assets.lines.count,
                     highlightSpans: geometryData.highlightSpans,
                     ayahMarkers: geometryData.ayahMarkers,
@@ -179,6 +187,7 @@ final class ContentLineViewModel: ObservableObject {
 
     private let reading: Reading
     private let linePageAssetService: LinePageAssetService
+    private let linePageMetrics: LinePageMetrics
     private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
     private var cancellables: Set<AnyCancellable> = []

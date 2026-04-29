@@ -69,18 +69,27 @@ public struct LinePageAssets {
 public struct LinePageAssetService {
     // MARK: Lifecycle
 
+    public init(readingDirectory: URL?, metrics: LinePageMetrics, quran: Quran, fileSystem: FileSystem = DefaultFileSystem()) {
+        self.init(
+            readingDirectory: readingDirectory,
+            metrics: metrics,
+            requiredPageNumbers: quran.pages.map(\.pageNumber),
+            fileSystem: fileSystem
+        )
+    }
+
     public init(readingDirectory: URL?, widthParameter: Int, fileSystem: FileSystem = DefaultFileSystem()) {
         self.init(
             readingDirectory: readingDirectory,
-            widthParameter: widthParameter,
+            metrics: .madaniLinePages(widthParameter: widthParameter),
             requiredPageNumbers: Quran.hafsMadani1440.pages.map(\.pageNumber),
             fileSystem: fileSystem
         )
     }
 
-    init(readingDirectory: URL?, widthParameter: Int, requiredPageNumbers: [Int], fileSystem: FileSystem) {
+    init(readingDirectory: URL?, metrics: LinePageMetrics, requiredPageNumbers: [Int], fileSystem: FileSystem) {
         self.readingDirectory = readingDirectory
-        self.widthParameter = widthParameter
+        self.metrics = metrics
         self.requiredPageNumbers = requiredPageNumbers
         self.fileSystem = fileSystem
     }
@@ -115,11 +124,9 @@ public struct LinePageAssetService {
     // MARK: Private
 
     private let readingDirectory: URL?
-    private let widthParameter: Int
+    private let metrics: LinePageMetrics
     private let requiredPageNumbers: [Int]
     private let fileSystem: FileSystem
-
-    private let lineCount = 15
 
     private func loadAssetsForPage(_ page: Page) -> LinePageAssetsResult {
         guard let readingDirectory else {
@@ -135,7 +142,7 @@ public struct LinePageAssetService {
         }
 
         var lines: [LinePageAssets.LineImage] = []
-        for lineNumber in 1 ... lineCount {
+        for lineNumber in 1 ... metrics.lineCount {
             let imageURL = lineImageURL(pageNumber: page.pageNumber, lineNumber: lineNumber, in: readingDirectory)
             guard let image = UIImage(contentsOfFile: imageURL.path) else {
                 return .unavailable
@@ -155,15 +162,15 @@ public struct LinePageAssetService {
 
     private func ayahInfoDatabaseURL(in readingDirectory: URL) -> URL {
         readingDirectory
-            .appendingPathComponent("images_\(widthParameter)")
+            .appendingPathComponent("images_\(metrics.widthParameter)")
             .appendingPathComponent("databases")
-            .appendingPathComponent("ayahinfo_\(widthParameter).db")
+            .appendingPathComponent("ayahinfo_\(metrics.widthParameter).db")
     }
 
     private func imagesURL(in readingDirectory: URL) -> URL {
         readingDirectory
-            .appendingPathComponent("images_\(widthParameter)")
-            .appendingPathComponent("width_\(widthParameter)")
+            .appendingPathComponent("images_\(metrics.widthParameter)")
+            .appendingPathComponent("width_\(metrics.widthParameter)")
     }
 
     private func lineImageURL(pageNumber: Int, lineNumber: Int, in readingDirectory: URL) -> URL {

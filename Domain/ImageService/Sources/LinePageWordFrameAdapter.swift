@@ -21,6 +21,7 @@ public struct LinePageWordFrameAdapter {
     public func wordFrames(
         from highlightSpans: [LinePageHighlightSpan],
         quran: Quran,
+        metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
         lineCount: Int
     ) -> WordFrameCollection {
         guard !highlightSpans.isEmpty else {
@@ -33,7 +34,13 @@ public struct LinePageWordFrameAdapter {
         let frames = orderedSpans.map { span in
             let segmentNumber = nextSegmentByAyah[span.ayah, default: 0] + 1
             nextSegmentByAyah[span.ayah] = segmentNumber
-            return syntheticWordFrame(for: span, quran: quran, lineCount: lineCount, segmentNumber: segmentNumber)
+            return syntheticWordFrame(
+                for: span,
+                quran: quran,
+                metrics: metrics,
+                lineCount: lineCount,
+                segmentNumber: segmentNumber
+            )
         }
 
         return processor.processWordFrames(frames)
@@ -41,9 +48,7 @@ public struct LinePageWordFrameAdapter {
 
     // MARK: Private
 
-    private static let pageWidth: CGFloat = 1080
-    private static let pageHeightToWidthRatio: CGFloat = 1.76
-    private static let lineHeightRatio: CGFloat = 174 / 1080
+    private static let overlappingPageHeightToWidthRatio: CGFloat = 1.76
 
     private let processor = WordFrameProcessor()
 
@@ -61,12 +66,14 @@ public struct LinePageWordFrameAdapter {
     private func syntheticWordFrame(
         for span: LinePageHighlightSpan,
         quran: Quran,
+        metrics: LinePageMetrics,
         lineCount: Int,
         segmentNumber: Int
     ) -> WordFrame {
-        let lineFrame = canonicalLineFrame(for: span.line, lineCount: lineCount)
-        let minX = Int(floor(span.left * Self.pageWidth))
-        let maxX = Int(ceil(span.right * Self.pageWidth))
+        let pageWidth = canonicalPageWidth(metrics: metrics)
+        let lineFrame = canonicalLineFrame(for: span.line, metrics: metrics, lineCount: lineCount)
+        let minX = Int(floor(span.left * pageWidth))
+        let maxX = Int(ceil(span.right * pageWidth))
         let minY = Int(floor(lineFrame.minY))
         let maxY = Int(ceil(lineFrame.maxY))
 
@@ -80,11 +87,35 @@ public struct LinePageWordFrameAdapter {
         )
     }
 
-    private func canonicalLineFrame(for lineIndex: Int, lineCount: Int) -> CGRect {
-        let imageLineHeight = Self.pageWidth * Self.lineHeightRatio
-        let pageHeight = Self.pageWidth * Self.pageHeightToWidthRatio
-        let lastLineIndex = CGFloat(max(lineCount - 1, 1))
-        let imageY = floor((pageHeight - imageLineHeight) / lastLineIndex * CGFloat(lineIndex))
-        return CGRect(x: 0, y: imageY, width: Self.pageWidth, height: imageLineHeight)
+    private func canonicalLineFrame(for lineIndex: Int, metrics: LinePageMetrics, lineCount: Int) -> CGRect {
+        let pageWidth = canonicalPageWidth(metrics: metrics)
+        let pageHeight = canonicalPageHeight(metrics: metrics, lineCount: lineCount)
+        let imageLineHeight = CGFloat(metrics.intrinsicLineHeight)
+        let imageY: CGFloat
+
+        if metrics.allowLineOverlap {
+            let lastLineIndex = CGFloat(max(lineCount - 1, 1))
+            imageY = floor((pageHeight - imageLineHeight) / lastLineIndex * CGFloat(lineIndex))
+        } else {
+            let slotHeight = pageHeight / CGFloat(max(lineCount, 1))
+            imageY = (slotHeight * CGFloat(lineIndex)) + ((slotHeight - imageLineHeight) / 2)
+        }
+
+        return CGRect(x: 0, y: imageY, width: pageWidth, height: imageLineHeight)
+    }
+
+    private func canonicalPageWidth(metrics: LinePageMetrics) -> CGFloat {
+        CGFloat(metrics.intrinsicLineHeight / metrics.lineHeightRatio)
+    }
+
+    private func canonicalPageHeight(metrics: LinePageMetrics, lineCount: Int) -> CGFloat {
+        let pageWidth = canonicalPageWidth(metrics: metrics)
+        let minimumHeightToWidthRatio: CGFloat = metrics.allowLineOverlap
+            ? Self.overlappingPageHeightToWidthRatio
+            : max(
+                Self.overlappingPageHeightToWidthRatio,
+                CGFloat(lineCount) * CGFloat(metrics.lineHeightRatio)
+            )
+        return pageWidth * minimumHeightToWidthRatio
     }
 }

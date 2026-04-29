@@ -200,6 +200,38 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertNil(layout.sidelineFrame)
     }
 
+    func testNonOverlappingMetricsPlaceLinesInEvenSlots() throws {
+        let metrics = LinePageMetrics.naskhLinePages
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 400, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
+                data: makeData(metrics: metrics),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        let slotHeight = layout.pageFrame.height / CGFloat(metrics.lineCount)
+        let imageLineHeight = layout.pageFrame.width * CGFloat(metrics.lineHeightRatio)
+        let expectedFirstImageY = layout.pageFrame.minY + ((slotHeight - imageLineHeight) / 2)
+
+        assertEqual(
+            layout.lineFrames[0].hitFrame,
+            CGRect(x: layout.pageFrame.minX, y: layout.pageFrame.minY, width: layout.pageFrame.width, height: slotHeight)
+        )
+        XCTAssertEqual(layout.lineFrames[0].imageFrame.minY, expectedFirstImageY, accuracy: 0.001)
+        XCTAssertEqual(layout.lineFrames[0].imageFrame.height, imageLineHeight, accuracy: 0.001)
+
+        for lineIndex in 0 ..< layout.lineFrames.count - 1 {
+            XCTAssertLessThanOrEqual(
+                layout.lineFrames[lineIndex].imageFrame.maxY,
+                layout.lineFrames[lineIndex + 1].imageFrame.minY
+            )
+        }
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
@@ -211,9 +243,11 @@ final class LinePageGeometryTests: XCTestCase {
     }
 
     private func makeData(
+        metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
         sidelines: [LinePageGeometryData.Sideline] = []
     ) -> LinePageGeometryData {
         LinePageGeometryData(
+            metrics: metrics,
             highlightSpans: [
                 .init(ayah: try! ayah(1, 1), line: 5, left: 0.2445, right: 0.7555),
                 .init(ayah: try! ayah(1, 2), line: 6, left: 0.156, right: 0.844),

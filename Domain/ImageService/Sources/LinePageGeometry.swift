@@ -21,13 +21,19 @@ public enum LinePageParity: Sendable {
 }
 
 public struct LinePageDisplaySettings: Sendable {
-    public init(showHeaderFooter: Bool = true, showSidelines: Bool = false) {
+    public init(
+        showHeaderFooter: Bool = true,
+        showSidelines: Bool = false,
+        showLineDividers: Bool = false
+    ) {
         self.showHeaderFooter = showHeaderFooter
         self.showSidelines = showSidelines
+        self.showLineDividers = showLineDividers
     }
 
     public let showHeaderFooter: Bool
     public let showSidelines: Bool
+    public let showLineDividers: Bool
 }
 
 public struct LinePageHighlightState: Sendable {
@@ -165,6 +171,16 @@ public struct LinePageSidelinePlacement: Hashable, Sendable {
     public let frame: CGRect
 }
 
+public struct LinePageLineDivider: Hashable, Sendable {
+    public init(lineNumber: Int, frame: CGRect) {
+        self.lineNumber = lineNumber
+        self.frame = frame
+    }
+
+    public let lineNumber: Int
+    public let frame: CGRect
+}
+
 public struct LinePageSelectionAnchors: Hashable, Sendable {
     public init(start: CGRect, end: CGRect) {
         self.start = start
@@ -189,6 +205,7 @@ public struct LinePageLayout: Sendable {
         ayahMarkerPlacements: [LinePageAyahMarkerPlacement],
         suraHeaderPlacements: [LinePageSuraHeaderPlacement],
         sidelinePlacements: [LinePageSidelinePlacement],
+        lineDividers: [LinePageLineDivider],
         versesByLine: [Int: [LinePageHighlightSpan]],
         selectionLineRanges: [SelectionLineRange],
         selectionAnchorsByAyah: [AyahNumber: LinePageSelectionAnchors]
@@ -203,6 +220,7 @@ public struct LinePageLayout: Sendable {
         self.ayahMarkerPlacements = ayahMarkerPlacements
         self.suraHeaderPlacements = suraHeaderPlacements
         self.sidelinePlacements = sidelinePlacements
+        self.lineDividers = lineDividers
         self.versesByLine = versesByLine
         self.selectionLineRanges = selectionLineRanges
         self.selectionAnchorsByAyah = selectionAnchorsByAyah
@@ -220,6 +238,7 @@ public struct LinePageLayout: Sendable {
     public let ayahMarkerPlacements: [LinePageAyahMarkerPlacement]
     public let suraHeaderPlacements: [LinePageSuraHeaderPlacement]
     public let sidelinePlacements: [LinePageSidelinePlacement]
+    public let lineDividers: [LinePageLineDivider]
 
     public func verse(at point: CGPoint) -> AyahNumber? {
         guard pageFrame.contains(point) else {
@@ -330,6 +349,10 @@ public struct LinePageGeometryEngine {
         }
 
         let lineFrames = lineFrames(in: pageFrame, data: input.data)
+        let lineDividers = lineDividers(
+            for: lineFrames,
+            enabled: input.displaySettings.showLineDividers
+        )
         let versesByLine = Dictionary(grouping: input.data.highlightSpans, by: \.line)
 
         let highlightRects = highlightRects(
@@ -376,6 +399,7 @@ public struct LinePageGeometryEngine {
             ayahMarkerPlacements: ayahMarkerPlacements,
             suraHeaderPlacements: suraHeaderPlacements,
             sidelinePlacements: sidelinePlacements,
+            lineDividers: lineDividers,
             versesByLine: versesByLine,
             selectionLineRanges: selectionLineRanges,
             selectionAnchorsByAyah: selectionAnchorsByAyah
@@ -561,6 +585,27 @@ public struct LinePageGeometryEngine {
         pageFrame.height / CGFloat(max(lineCount, 1))
     }
 
+    private func lineDividers(for lineFrames: [LinePageLineFrame], enabled: Bool) -> [LinePageLineDivider] {
+        guard enabled else {
+            return []
+        }
+
+        return lineFrames.compactMap { lineFrame in
+            guard lineFrame.lineNumber > 1 else {
+                return nil
+            }
+            return LinePageLineDivider(
+                lineNumber: lineFrame.lineNumber,
+                frame: CGRect(
+                    x: lineFrame.imageFrame.minX,
+                    y: lineFrame.imageFrame.minY,
+                    width: lineFrame.imageFrame.width,
+                    height: lineDividerHeight
+                )
+            )
+        }
+    }
+
     private func highlightRects(
         for highlightedVerses: Set<AyahNumber>,
         spans: [LinePageHighlightSpan],
@@ -707,6 +752,7 @@ public struct LinePageGeometryEngine {
                 locations: locations,
                 containerWidth: sidelineFrame.width,
                 lineHeight: lineHeight,
+                lineCount: data.lineCount,
                 metrics: data.metrics
             )
 
@@ -745,6 +791,7 @@ public struct LinePageGeometryEngine {
         locations: [ClosedRange<CGFloat>],
         containerWidth: CGFloat,
         lineHeight: CGFloat,
+        lineCount: Int,
         metrics: LinePageMetrics
     ) -> CGSize {
         let intrinsic = sideline.intrinsicSize
@@ -759,7 +806,7 @@ public struct LinePageGeometryEngine {
             } else {
                 (sortedSidelines.filter { $0.targetLine > sideline.targetLine }
                     .map(\.targetLine)
-                    .min() ?? 16) - 1
+                    .min() ?? (lineCount + 1)) - 1
             }
 
             let targetLinesToSpan = max(originalLinesSpanned, abs(nextUsedLine - sideline.targetLine))
@@ -857,6 +904,7 @@ private let headerFooterHeightRatio: CGFloat = 0.04
 private let overlappingPageMinimumHeightToWidthRatio: CGFloat = 1.60
 private let pageMaxWidthToHeightRatio: CGFloat = 1 / 1.84
 private let headerFooterMarginRatio: CGFloat = 0.027
+private let lineDividerHeight: CGFloat = 1
 private let scrollablePageWidthRatio: CGFloat = 0.97
 private let scrollableMaximumPageWidth: CGFloat = 1080
 private let scrollableOverlappingPageHeightToWidthRatio: CGFloat = 1.76

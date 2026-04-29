@@ -24,11 +24,13 @@ final class ContentLineViewModel: ObservableObject {
         reading: Reading,
         page: Page,
         linePageAssetService: LinePageAssetService,
-        highlightsService: QuranHighlightsService
+        highlightsService: QuranHighlightsService,
+        showLineDividers: Bool = false
     ) {
         self.reading = reading
         self.page = page
         self.linePageAssetService = linePageAssetService
+        self.showLineDividers = showLineDividers
         linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
         highlights = highlightsService.highlights
 
@@ -140,7 +142,8 @@ final class ContentLineViewModel: ObservableObject {
                 pageParity: page.pageNumber.isMultiple(of: 2) ? .even : .odd,
                 displaySettings: LinePageDisplaySettings(
                     showHeaderFooter: showHeaderFooter,
-                    showSidelines: !geometryData.sidelines.isEmpty
+                    showSidelines: !geometryData.sidelines.isEmpty,
+                    showLineDividers: showLineDividers && page.pageNumber > 3
                 ),
                 data: LinePageGeometryData(
                     metrics: linePageMetrics,
@@ -188,6 +191,7 @@ final class ContentLineViewModel: ObservableObject {
     private let reading: Reading
     private let linePageAssetService: LinePageAssetService
     private let linePageMetrics: LinePageMetrics
+    private let showLineDividers: Bool
     private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
     private var cancellables: Set<AnyCancellable> = []

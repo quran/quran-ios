@@ -232,6 +232,68 @@ final class LinePageGeometryTests: XCTestCase {
         }
     }
 
+    func testLineDividersAreOptInAndSkipFirstLine() throws {
+        let hiddenLayout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 400, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
+                data: makeData(metrics: .naskhLinePages),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+        XCTAssertTrue(hiddenLayout.lineDividers.isEmpty)
+
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 400, height: 800),
+                orientation: .portrait,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(
+                    showHeaderFooter: true,
+                    showSidelines: false,
+                    showLineDividers: true
+                ),
+                data: makeData(metrics: .naskhLinePages),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        XCTAssertEqual(layout.lineDividers.map(\.lineNumber), Array(2 ... 15))
+        XCTAssertEqual(layout.lineDividers.count, layout.lineFrames.count - 1)
+
+        let firstDivider = try XCTUnwrap(layout.lineDividers.first)
+        let secondLine = layout.lineFrames[1]
+        XCTAssertEqual(firstDivider.frame.minX, secondLine.imageFrame.minX)
+        XCTAssertEqual(firstDivider.frame.minY, secondLine.imageFrame.minY)
+        XCTAssertEqual(firstDivider.frame.width, secondLine.imageFrame.width)
+        XCTAssertEqual(firstDivider.frame.height, 1)
+    }
+
+    func testSidelineSizingUsesConfiguredLineCountForTrailingOverlap() throws {
+        let layout = makeEngine().layout(
+            LinePageGeometryInput(
+                availableSize: CGSize(width: 900, height: 400),
+                orientation: .landscape,
+                verticalPadding: 20,
+                pageParity: .odd,
+                displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: true),
+                data: makeData(
+                    lineCount: 10,
+                    sidelines: [
+                        .init(targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 100, height: 500)),
+                        .init(targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 120, height: 520)),
+                    ]
+                ),
+                suraHeaderAspectRatio: 0.25
+            )
+        )
+
+        let firstSideline = try XCTUnwrap(layout.sidelinePlacements.first)
+        XCTAssertLessThan(firstSideline.frame.height, 500)
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
@@ -244,10 +306,12 @@ final class LinePageGeometryTests: XCTestCase {
 
     private func makeData(
         metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
+        lineCount: Int? = nil,
         sidelines: [LinePageGeometryData.Sideline] = []
     ) -> LinePageGeometryData {
         LinePageGeometryData(
             metrics: metrics,
+            lineCount: lineCount,
             highlightSpans: [
                 .init(ayah: try! ayah(1, 1), line: 5, left: 0.2445, right: 0.7555),
                 .init(ayah: try! ayah(1, 2), line: 6, left: 0.156, right: 0.844),

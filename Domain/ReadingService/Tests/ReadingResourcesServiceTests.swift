@@ -427,7 +427,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         await service.startLoadingResources()
         let firstDownload = try await runningDownload()
 
-        // Given: Switch to bundled
+        // Given: Switch to remote
         let secondReading = Reading.tajweed
         ReadingPreferences.shared.reading = secondReading
 
@@ -435,9 +435,96 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await completeRunningDownload(initial: false)
 
         // Then
-        XCTAssertTrue(firstDownload.isCancelled)
+        await waitForCancelled(firstDownload)
         await waitForReady()
         try assertDownloadedFiles(secondReading)
+    }
+
+    func test_download_reusesRunningReadingDownload() async throws {
+        // Given
+        let reading = Reading.tajweed
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        _ = try await downloader.download(DownloadBatchRequest(requests: [
+            DownloadRequest(url: remoteResource.url, destination: remoteResource.zipFile),
+        ]))
+        let firstDownload = try XCTUnwrap(session.downloads.first)
+
+        // Test
+        let resourceDownloader = ReadingResourceDownloader(
+            downloader: downloader,
+            remoteResources: remoteResources
+        )
+        let progressObserved = AsyncChannel<Void>()
+        let downloadTask = Task {
+            try await resourceDownloader.download(reading) { _ in
+                Task {
+                    await progressObserved.send(())
+                }
+            }
+        }
+        _ = await progressObserved.next()
+
+        // Then
+        guard session.downloads == [firstDownload] else {
+            downloadTask.cancel()
+            XCTFail("Expected to reuse the running reading download")
+            return
+        }
+
+        fileManager.files.insert(downloadURL)
+        await session.completeDownloadTask(
+            firstDownload,
+            location: downloadURL,
+            totalBytes: 100,
+            progressLoops: 1
+        )
+        try await downloadTask.value
+    }
+
+    func test_download_reusesRunningReadingDownloadWhenURLChangesButDestinationMatches() async throws {
+        // Given
+        let reading = Reading.tajweed
+        let firstRemoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        _ = try await downloader.download(DownloadBatchRequest(requests: [
+            DownloadRequest(url: firstRemoteResource.url, destination: firstRemoteResource.zipFile),
+        ]))
+        let firstDownload = try XCTUnwrap(session.downloads.first)
+
+        remoteResources.urls[reading] = "https://static.quran.com/resources/tajweed.zip"
+        let secondRemoteResource = try XCTUnwrap(remoteResources.resource(for: reading))
+        XCTAssertNotEqual(firstRemoteResource.url, secondRemoteResource.url)
+        XCTAssertEqual(firstRemoteResource.zipFile, secondRemoteResource.zipFile)
+
+        // Test
+        let resourceDownloader = ReadingResourceDownloader(
+            downloader: downloader,
+            remoteResources: remoteResources
+        )
+        let progressObserved = AsyncChannel<Void>()
+        let downloadTask = Task {
+            try await resourceDownloader.download(reading) { _ in
+                Task {
+                    await progressObserved.send(())
+                }
+            }
+        }
+        _ = await progressObserved.next()
+
+        // Then
+        guard session.downloads == [firstDownload] else {
+            downloadTask.cancel()
+            XCTFail("Expected to reuse the running reading download")
+            return
+        }
+
+        fileManager.files.insert(downloadURL)
+        await session.completeDownloadTask(
+            firstDownload,
+            location: downloadURL,
+            totalBytes: 100,
+            progressLoops: 1
+        )
+        try await downloadTask.value
     }
 
     // MARK: Private
@@ -516,5 +603,15 @@ final class ReadingResourcesServiceTests: XCTestCase {
             await Task.megaYield()
         }
         XCTAssertEqual(collector.items.last, .ready, file: file, line: line)
+    }
+
+    private func waitForCancelled(_ download: SessionTask, file: StaticString = #filePath, line: UInt = #line) async {
+        for _ in 0 ..< 10 {
+            if download.isCancelled {
+                return
+            }
+            await Task.megaYield()
+        }
+        XCTAssertTrue(download.isCancelled, file: file, line: line)
     }
 }

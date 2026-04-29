@@ -11,9 +11,10 @@ import ReadingService
 
 final class ReadingRemoteResourcesFake: ReadingRemoteResources {
     var versions: [Reading: Int] = [:]
+    var urls: [Reading: String] = [:]
 
     func resource(for reading: Reading) -> RemoteResource? {
-        let url: String? = {
+        let defaultURL: String? = {
             switch reading {
             case .hafs_1405:
                 return nil
@@ -32,6 +33,7 @@ final class ReadingRemoteResourcesFake: ReadingRemoteResources {
             }
         }()
 
+        let url = urls[reading] ?? defaultURL
         let version = versions[reading] ?? 0
         return url.map { RemoteResource(url: URL(validURL: $0), reading: reading, version: version) }
     }

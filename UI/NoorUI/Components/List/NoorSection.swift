@@ -68,6 +68,8 @@ public struct NoorBasicSection<Content: View>: View {
     let isExpanded: Binding<Bool>?
     let content: Content
 
+    // MARK: Private
+
     @ViewBuilder
     private func collapsibleHeader(isExpanded: Binding<Bool>) -> some View {
         Button {
@@ -163,7 +165,6 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         })
         .onMove(perform: onMove)
     }
-
 }
 
 extension NoorSection {

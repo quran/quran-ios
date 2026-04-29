@@ -54,7 +54,7 @@ final class HomeViewController: UIHostingController<HomeView> {
                 style: .plain,
                 target: self,
                 action: #selector(openReadingSelectors)
-            )
+            ),
         ]
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(

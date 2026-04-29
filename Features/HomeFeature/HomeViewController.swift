@@ -48,12 +48,14 @@ final class HomeViewController: UIHostingController<HomeView> {
     }
 
     private func configureNavigationBarButtons() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage.symbol("books.vertical.fill"),
-            style: .plain,
-            target: self,
-            action: #selector(openReadingSelectors)
-        )
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(
+                image: UIImage.symbol("books.vertical.fill"),
+                style: .plain,
+                target: self,
+                action: #selector(openReadingSelectors)
+            ),
+        ]
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage.symbol("arrow.up.arrow.down"),

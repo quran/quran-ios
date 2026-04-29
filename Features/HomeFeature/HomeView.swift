@@ -25,7 +25,9 @@ struct HomeView: View {
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
-            surahSortOrder: viewModel.surahSortOrder
+            surahSortOrder: viewModel.surahSortOrder,
+            isJuzExpanded: { viewModel.isJuzExpanded($0) },
+            setJuzExpanded: { viewModel.setJuz($0, expanded: $1) }
         )
     }
 }
@@ -42,6 +44,8 @@ private struct HomeViewUI: View {
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let surahSortOrder: SurahSortOrder
+    let isJuzExpanded: (Juz) -> Bool
+    let setJuzExpanded: (Juz, Bool) -> Void
 
     var body: some View {
         NoorList {
@@ -128,7 +132,11 @@ private struct HomeViewUI: View {
                     false
                 }
             }
-            NoorSection(title: juz.localizedName, items) { item in
+            let isExpanded = Binding(
+                get: { isJuzExpanded(juz) },
+                set: { setJuzExpanded(juz, $0) }
+            )
+            NoorSection(title: juz.localizedName, isExpanded: isExpanded, items) { item in
                 listItem(item)
             }
         }
@@ -154,6 +162,7 @@ struct HomeView_Previews: PreviewProvider {
 
         @State var lastPages: [LastPage] = staticLastPages
         @State var type: HomeViewType = .juzs
+        @State var collapsedJuzs: Set<Juz> = []
 
         var body: some View {
             NavigationView {
@@ -166,7 +175,11 @@ struct HomeView_Previews: PreviewProvider {
                     selectLastPage: { _ in },
                     selectSura: { _ in },
                     selectQuarter: { _ in },
-                    surahSortOrder: .ascending
+                    surahSortOrder: .ascending,
+                    isJuzExpanded: { !collapsedJuzs.contains($0) },
+                    setJuzExpanded: { juz, expanded in
+                        if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
+                    }
                 )
                 .navigationTitle("Home")
                 .toolbar {

@@ -39,6 +39,10 @@ public struct Page: QuranValueGroup {
         storage.quran
     }
 
+    public var isRightSide: Bool {
+        (pageNumber - quran.pagesToSkip) % 2 == 1
+    }
+
     public var firstVerse: AyahNumber {
         AyahNumber(sura: startSura, ayah: quran.raw.startAyahOfPage[pageNumber - 1])!
     }

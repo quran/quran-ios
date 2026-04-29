@@ -123,6 +123,14 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(mappedPage, mappedAyah?.page)
     }
 
+    func testPageMapperMapsSkippedPageBackToCanonicalPage() {
+        let sourceQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let mapper = QuranPageMapper(destination: .hafsMadani1405)
+
+        XCTAssertEqual(mapper.mapPage(sourceQuran.pages[0])?.pageNumber, 1)
+        XCTAssertEqual(mapper.mapPage(sourceQuran.pages[1])?.pageNumber, 2)
+    }
+
     func testPageMapperMapsAyahBackedStateToDestinationAyah() {
         let sourceQuran = Quran.hafsMadani1405
         let destinationQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())

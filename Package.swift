@@ -514,6 +514,9 @@ private func domainTargets() -> [[Target]] {
             "Localization",
             "Analytics",
         ], testDependencies: [
+            "LastPagePersistence",
+            "PageBookmarkPersistence",
+            "QuranKit",
         ]),
 
         target(type, name: "SettingsService", hasTests: false, dependencies: [

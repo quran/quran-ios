@@ -10,6 +10,7 @@ import Combine
 import NoorUI
 import QueuePlayer
 import QuranAudio
+import QuranAudioKit
 import QuranKit
 import QuranTextKit
 import ReciterListFeature
@@ -36,9 +37,15 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         toVerse = options.end
         verseRuns = options.verseRuns
         listRuns = options.listRuns
+        playbackRate = AudioPreferences.shared.playbackRate
+        endAt = Self.deduceEndAt(from: options.start, to: options.end)
+
+        AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
     }
 
     // MARK: Internal
+
+    static let supportedPlaybackRates: [Float] = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
     weak var listener: AdvancedAudioOptionsListener?
 
@@ -47,6 +54,8 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var verseRuns: Runs
     @Published var listRuns: Runs
     @Published var reciter: Reciter
+    @Published var endAt: EndAtChoice
+    @Published var playbackRate: Float
 
     var suras: [Sura] {
         options.start.quran.suras
@@ -61,12 +70,14 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         listener?.dismissAudioOptions()
     }
 
-    // MARK: - Updating Last Ayah
+    // MARK: - Updating Range
 
     func updateFromVerseTo(_ from: AyahNumber) {
         fromVerse = from
-        if toVerse < from {
-            toVerse = from
+        if endAt == .custom {
+            if toVerse < from { toVerse = from }
+        } else {
+            applyEndAt()
         }
     }
 
@@ -75,26 +86,18 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         if to < fromVerse {
             fromVerse = to
         }
+        endAt = .custom
     }
 
-    func setLastVerseInPage() {
-        setLastVerse(using: PageBasedLastAyahFinder())
+    func setEndAt(_ choice: EndAtChoice) {
+        endAt = choice
+        applyEndAt()
     }
 
-    func setLastVerseInJuz() {
-        setLastVerse(using: JuzBasedLastAyahFinder())
-    }
+    // MARK: - Updating Playback Rate
 
-    func setLastVerseInSura() {
-        for sura in suras {
-            if sura.verses.contains(fromVerse) {
-                updateToVerseTo(sura.verses.last!)
-            }
-        }
-    }
-
-    func setLastVerseInQuran() {
-        setLastVerse(using: QuranBasedLastAyahFinder())
+    func updatePlaybackRate(to rate: Float) {
+        AudioPreferences.shared.playbackRate = rate
     }
 
     // MARK: Private
@@ -102,9 +105,23 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     private let options: AdvancedAudioOptions
     private let reciterListBuilder: ReciterListBuilder
 
-    private func setLastVerse(using finder: LastAyahFinder) {
-        let verse = finder.findLastAyah(startAyah: fromVerse)
-        updateToVerseTo(verse)
+    // An end ayah can coincide with multiple boundaries (end of Al-Fatihah is
+    // also end of page 1). We prefer surah → juz → page → quran to match how
+    // users mentally pick a range.
+    private static func deduceEndAt(from start: AyahNumber, to end: AyahNumber) -> EndAtChoice {
+        let priority: [EndAtChoice] = [.surah, .juz, .page, .quran]
+        for choice in priority {
+            guard let audioEnd = choice.audioEnd else { continue }
+            if audioEnd.lastAyahFinder.findLastAyah(startAyah: start) == end {
+                return choice
+            }
+        }
+        return .custom
+    }
+
+    private func applyEndAt() {
+        guard let audioEnd = endAt.audioEnd else { return }
+        toVerse = audioEnd.lastAyahFinder.findLastAyah(startAyah: fromVerse)
     }
 
     private func currentOptions() -> AdvancedAudioOptions {
@@ -125,5 +142,16 @@ extension AdvancedAudioOptionsViewModel: ReciterListListener {
 
     func onSelectedReciterChanged(to reciter: Reciter) {
         self.reciter = reciter
+    }
+}
+
+extension AudioEnd {
+    var lastAyahFinder: any LastAyahFinder {
+        switch self {
+        case .page: return PageBasedLastAyahFinder()
+        case .juz: return JuzBasedLastAyahFinder()
+        case .quran: return QuranBasedLastAyahFinder()
+        case .sura: return SuraBasedLastAyahFinder()
+        }
     }
 }

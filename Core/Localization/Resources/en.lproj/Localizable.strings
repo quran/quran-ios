@@ -108,6 +108,11 @@
 "audio.select-start-verse" = "Select Starting Verse";
 "audio.select-end-verse" = "Select Ending Verse";
 
+"audio.playback-ayah-range" = "Playback ayah range";
+"audio.playback-speed" = "Playback Speed";
+"audio.end-at" = "End at";
+"audio.end-at.custom" = "Custom";
+
 "audio.download-play-amount" = "Download/Play up to";
 "audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 

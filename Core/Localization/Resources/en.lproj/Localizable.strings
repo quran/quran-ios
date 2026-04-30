@@ -131,6 +131,9 @@
 "notes.delete.alert.body" = "The associated note will also be deleted.";
 "notes.icloud.alert.title" = "iCloud Sync";
 "notes.icloud.alert.body" = "The app uses iCloud to sync bookmarks & notes across your devices. You can disable it from your device's iCloud settings.";
+"notes.search.placeholder.text" = "Search your notes";
+"notes.search.no-results.title" = "No notes match \"%@\"";
+"notes.search.no-results.text" = "Try a different word from a note you saved or a sura name.";
 
 // MARK: - Ayah Menu
 

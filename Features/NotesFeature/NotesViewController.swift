@@ -5,11 +5,13 @@
 //  Created by Mohamed Afifi on 2023-07-16.
 //
 
+import Combine
 import Localization
 import SwiftUI
 import UIx
+import VLogging
 
-final class NotesViewController: UIHostingController<NotesView> {
+final class NotesViewController: UIHostingController<NotesView>, UISearchBarDelegate {
     // MARK: Lifecycle
 
     init(viewModel: NotesViewModel) {
@@ -25,10 +27,48 @@ final class NotesViewController: UIHostingController<NotesView> {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Internal
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = l("notes.search.placeholder.text")
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
+        definesPresentationContext = true
+
+        viewModel.$searchTerm
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] term in
+                guard let bar = self?.searchController.searchBar else { return }
+                if bar.text != term {
+                    bar.text = term
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Search delegate
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        logger.info("[Notes] search textDidChange to \(searchText)")
+        viewModel.searchTerm = searchText
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        logger.info("[Notes] search cancel")
+        viewModel.searchTerm = ""
+    }
+
     // MARK: Private
 
     private var editController: EditController?
     private let viewModel: NotesViewModel
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var cancellables: Set<AnyCancellable> = []
 
     private var currentEditMode: EditMode? {
         if viewModel.notes.isEmpty {

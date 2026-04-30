@@ -583,7 +583,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
         ]),
 
-        target(type, name: "AdvancedAudioOptionsFeature", hasTests: false, dependencies: [
+        target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
             "ReciterListFeature",
             "QuranAudioKit",
         ]),

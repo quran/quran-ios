@@ -120,6 +120,9 @@
 "notes.delete.alert.body" = "De bijbehorende notitie zal ook worden verwijderd.";
 "notes.icloud.alert.title" = "iCloud-synchronisatie";
 "notes.icloud.alert.body" = "De app gebruikt iCloud om bladwijzers en notities op al je apparaten te synchroniseren. U kunt het uitschakelen via de iCloud-instellingen van uw apparaat.";
+"notes.search.placeholder.text" = "Doorzoek je notities";
+"notes.search.no-results.title" = "Geen notities komen overeen met \"%@\"";
+"notes.search.no-results.text" = "Probeer een ander woord uit een opgeslagen notitie of een soeranaam.";
 
 // MARK: - Ayah Menu
 

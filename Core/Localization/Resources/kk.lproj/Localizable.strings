@@ -165,6 +165,9 @@
 "notes.icloud.alert.title" = "iCloud синхрондауы";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "Бағдарлама сіздің құрылғыларыңызда бетбелгілер мен жазбаларды синхрондау үшін iCloud қолданады. Сіз оны құрылғыңыздың iCloud параметрлерінен өшіре аласыз.";
+"notes.search.placeholder.text" = "Жазбаларыңыздан іздеу";
+"notes.search.no-results.title" = "\"%@\" сәйкес келетін жазба жоқ";
+"notes.search.no-results.text" = "Сақтаған жазбадан басқа сөзді немесе сүре атауын қолданып көріңіз.";
 
 // MARK: - Ayah Menu
 

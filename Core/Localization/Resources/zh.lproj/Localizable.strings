@@ -179,6 +179,9 @@
 "notes.icloud.alert.title" = "iCloud 同步";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "该应用使用iCloud同步您设备上的书签和笔记。您可以在设备的iCloud设置中禁用它。";
+"notes.search.placeholder.text" = "搜索您的笔记";
+"notes.search.no-results.title" = "没有笔记与 \"%@\" 匹配";
+"notes.search.no-results.text" = "请尝试您保存的笔记中的其他词或章节名称。";
 
 // MARK: - Ayah Menu
 

@@ -129,6 +129,9 @@
 "notes.delete.alert.body" = "İlgili not silinecek.";
 "notes.icloud.alert.title" = "iCloud Senkronizasyonu";
 "notes.icloud.alert.body" = "Uygulama ayraçları ve notlarınızı farklı cihazlarınız arasında kullanabilmeniz için iCloud senkronizasyonunu kullanmaktadır. Bu özelliği cihazınızın iCloud ayarlarından kapatabilirsiniz.";
+"notes.search.placeholder.text" = "Notlarınızda arayın";
+"notes.search.no-results.title" = "\"%@\" ile eşleşen not yok";
+"notes.search.no-results.text" = "Kaydettiğiniz bir nottan başka bir kelime veya sure adı deneyin.";
 
 // MARK: - Ayah Menu
 

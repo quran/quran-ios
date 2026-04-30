@@ -179,6 +179,9 @@
 "notes.icloud.alert.title" = "Синхронизация iCloud";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "Приложение использует iCloud для синхронизации закладок и заметок на ваших устройствах. Вы можете отключить это в настройках iCloud вашего устройства.";
+"notes.search.placeholder.text" = "Поиск по заметкам";
+"notes.search.no-results.title" = "Нет заметок, соответствующих \"%@\"";
+"notes.search.no-results.text" = "Попробуйте другое слово из сохранённой заметки или название суры.";
 
 // MARK: - Ayah Menu
 

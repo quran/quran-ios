@@ -120,6 +120,9 @@
 "notes.delete.alert.body" = "Ghi chú liên quan cũng sẽ bị xóa.";
 "notes.icloud.alert.title" = "Đồng bộ iCloud";
 "notes.icloud.alert.body" = "Ứng dụng sử dụng iCloud để đồng bộ hóa dấu trang và ghi chú trên các thiết bị của bạn. Bạn có thể tắt nó từ cài đặt iCloud của thiết bị.";
+"notes.search.placeholder.text" = "Tìm kiếm ghi chú của bạn";
+"notes.search.no-results.title" = "Không có ghi chú nào khớp với \"%@\"";
+"notes.search.no-results.text" = "Hãy thử một từ khác từ ghi chú bạn đã lưu hoặc tên sura.";
 
 // MARK: - Ayah Menu
 

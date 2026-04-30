@@ -179,6 +179,9 @@
 "notes.icloud.alert.title" = "iCloud sinxronizatsiyasi";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "Ushbu ilova qurilmalaringizda xatcho'plar va eslatmalar sinxronlash uchun iCloud'dan foydalanadi. Uni qurilmangizning iCloud sozlamalaridan o'chirib qo'yishingiz mumkin.";
+"notes.search.placeholder.text" = "Eslatmalaringizdan qidiring";
+"notes.search.no-results.title" = "\"%@\" ga mos keluvchi eslatma yo'q";
+"notes.search.no-results.text" = "Saqlangan eslatmadan boshqa so'z yoki sura nomini sinab ko'ring.";
 
 // MARK: - Ayah Menu
 

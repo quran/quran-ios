@@ -82,6 +82,6 @@ private extension RemoteResource {
     }
 
     func matches(_ request: DownloadRequest) -> Bool {
-        request.destination == downloadDestination
+        request.destination == zipFile
     }
 }

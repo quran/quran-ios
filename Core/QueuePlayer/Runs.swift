@@ -23,6 +23,7 @@ public enum Runs: Hashable, Sendable {
     case two
     case three
     case four
+    case five
     case indefinite
 
     // MARK: Internal
@@ -33,6 +34,7 @@ public enum Runs: Hashable, Sendable {
         case .two: return 2
         case .three: return 3
         case .four: return 4
+        case .five: return 5
         case .indefinite: return .max
         }
     }

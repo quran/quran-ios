@@ -79,21 +79,6 @@ public struct AudioBannerViewUI: View {
     }
 }
 
-private let speedValues: [Float] = [0.5, 0.75, 1.0, 1.25, 1.5]
-
-private let speedFormatter: NumberFormatter = {
-    let nf = NumberFormatter()
-    nf.locale = Locale.current.fixedLocaleNumbers()
-    nf.minimumFractionDigits = 0
-    nf.maximumFractionDigits = 2
-    return nf
-}()
-
-private func formattedSpeed(_ rate: Float) -> String {
-    // TODO: Localize this
-    return speedFormatter.format(rate) + "×"
-}
-
 private struct AudioPlaying: View {
     let paused: Bool
     let currentRate: Float
@@ -107,11 +92,11 @@ private struct AudioPlaying: View {
             }
 
             Menu {
-                ForEach(speedValues, id: \.self) { value in
-                    Button(formattedSpeed(value)) { actions.setPlaybackRate(value) }
+                ForEach(PlaybackSpeed.supportedRates, id: \.self) { value in
+                    Button(PlaybackSpeed.formatted(value)) { actions.setPlaybackRate(value) }
                 }
             } label: {
-                Text(formattedSpeed(currentRate))
+                Text(PlaybackSpeed.formatted(currentRate))
                     .font(.footnote)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)

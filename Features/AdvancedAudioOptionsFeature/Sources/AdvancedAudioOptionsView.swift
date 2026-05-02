@@ -157,9 +157,9 @@ private struct PlaybackSpeedSection: View {
         Section(header: Text(l("audio.playback-speed"))) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(AdvancedAudioOptionsViewModel.supportedPlaybackRates, id: \.self) { value in
+                    ForEach(PlaybackSpeed.supportedRates, id: \.self) { value in
                         SpeedPill(
-                            label: formattedSpeed(value),
+                            label: PlaybackSpeed.formatted(value),
                             isSelected: value == rate
                         ) {
                             onSelect(value)
@@ -270,18 +270,4 @@ private struct SpeedPill: View {
         }
         .buttonStyle(.plain)
     }
-}
-
-// MARK: - Speed formatting
-
-private let speedFormatter: NumberFormatter = {
-    let nf = NumberFormatter()
-    nf.locale = Locale.current.fixedLocaleNumbers()
-    nf.minimumFractionDigits = 0
-    nf.maximumFractionDigits = 2
-    return nf
-}()
-
-private func formattedSpeed(_ rate: Float) -> String {
-    speedFormatter.format(rate) + "×"
 }

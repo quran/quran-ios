@@ -136,7 +136,7 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(Runs.sorted, [.one, .two, .three, .four, .five, .indefinite])
     }
 
-    func test_runsLocalizedDescription_numericValuesUseMultiplicationSign() {
+    func test_runsLocalizedDescription_finiteValuesFormatLocalizedNumbersWithMultiplicationSign() {
         XCTAssertEqual(Runs.one.localizedDescription, "1×")
         XCTAssertEqual(Runs.two.localizedDescription, "2×")
         XCTAssertEqual(Runs.three.localizedDescription, "3×")

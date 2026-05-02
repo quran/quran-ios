@@ -156,7 +156,7 @@ private struct PlaybackSpeedSection: View {
     var body: some View {
         Section(header: Text(l("audio.playback-speed"))) {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack {
                     ForEach(AdvancedAudioOptionsViewModel.supportedPlaybackRates, id: \.self) { value in
                         SpeedPill(
                             label: formattedSpeed(value),
@@ -166,10 +166,7 @@ private struct PlaybackSpeedSection: View {
                         }
                     }
                 }
-                .padding(.vertical, 6)
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
         }
     }
 }
@@ -256,13 +253,16 @@ private struct SpeedPill: View {
     let isSelected: Bool
     let action: () -> Void
 
+    @ScaledMetric private var verticalPadding: CGFloat = 8
+    @ScaledMetric private var horizontalPadding: CGFloat = 16
+
     var body: some View {
         Button(action: action) {
             Text(label)
                 .font(.subheadline.weight(.medium))
                 .foregroundColor(isSelected ? .white : .primary)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 16)
+                .padding(.vertical, verticalPadding)
+                .padding(.horizontal, horizontalPadding)
                 .background(
                     Capsule(style: .continuous)
                         .fill(isSelected ? Color.appIdentity.opacity(0.85) : Color(.secondarySystemFill))

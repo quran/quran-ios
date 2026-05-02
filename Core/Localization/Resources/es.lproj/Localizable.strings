@@ -179,6 +179,12 @@
 "notes.icloud.alert.title" = "Sincronización de iCloud";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "La aplicación utiliza iCloud para sincronizar marcadores y notas en tus dispositivos. Puedes desactivarlo desde los ajustes de iCloud de tu dispositivo.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.placeholder.text" = "Busca en tus notas";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.no-results.title" = "No hay notas que coincidan con \"%@\"";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.no-results.text" = "Prueba con otra palabra de una nota guardada o el nombre de una sura.";
 
 // MARK: - Ayah Menu
 

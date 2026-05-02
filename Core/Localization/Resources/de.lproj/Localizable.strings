@@ -179,6 +179,12 @@
 "notes.icloud.alert.title" = "iCloud-Synchronisation";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "Die App verwendet iCloud, um Lesezeichen und Notizen auf Ihren Geräten zu synchronisieren. Sie können es in den iCloud-Einstellungen Ihres Geräts deaktivieren.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.placeholder.text" = "Notizen durchsuchen";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.no-results.title" = "Keine Notizen passen zu \"%@\"";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.search.no-results.text" = "Versuchen Sie ein anderes Wort aus einer gespeicherten Notiz oder einen Surennamen.";
 
 // MARK: - Ayah Menu
 

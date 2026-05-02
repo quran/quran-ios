@@ -40,6 +40,21 @@ final class NotesViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
     @Published var notes: [NoteItem] = []
+    @Published var searchTerm: String = ""
+
+    var filteredNotes: [NoteItem] {
+        let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !term.isEmpty else {
+            return notes
+        }
+        return notes.filter { item in
+            if item.note.note?.range(of: term, options: .caseInsensitive) != nil {
+                return true
+            }
+            let suraName = item.note.firstVerse.sura.localizedName()
+            return suraName.range(of: term, options: .caseInsensitive) != nil
+        }
+    }
 
     func start() async {
         let notesSequence = readingPreferences.$reading

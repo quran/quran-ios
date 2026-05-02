@@ -122,6 +122,9 @@
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
 "notes.icloud.alert.title" = "مزامنة iCloud";
 "notes.icloud.alert.body" = "يستخدم التطبيق iCloud لمزامنة الإشارات المرجعية والملاحظات عبر أجهزتك. يمكنك تعطيله من جهازك من خلال إعدادات iCloud.";
+"notes.search.placeholder.text" = "ابحث في ملاحظاتك";
+"notes.search.no-results.title" = "لا توجد ملاحظات تطابق \"%@\"";
+"notes.search.no-results.text" = "جرب كلمة مختلفة من ملاحظة قمت بحفظها أو اسم سورة.";
 
 // MARK: - Ayah Menu
 

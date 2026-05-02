@@ -6,6 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import Foundation
 import Localization
 import QueuePlayer
 

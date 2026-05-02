@@ -179,8 +179,11 @@
 "notes.icloud.alert.title" = "همگام‌سازی iCloud";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "این برنامه از iCloud برای همگام سازی نشانک ها و یادداشت ها در دستگاه های شما استفاده می کند. شما می توانید آن را از تنظیمات iCloud دستگاه خود غیرفعال کنید.";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.placeholder.text" = "در یادداشت‌های خود جستجو کنید";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.title" = "هیچ یادداشتی با \"%@\" مطابقت ندارد";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "کلمه دیگری را از یادداشتی که ذخیره کرده‌اید یا نام سوره امتحان کنید.";
 
 // MARK: - Ayah Menu

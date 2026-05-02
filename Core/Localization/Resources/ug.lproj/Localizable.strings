@@ -179,8 +179,11 @@
 "notes.icloud.alert.title" = "iCloud مۇۋاپىقىيەتلىشىش";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "بۇ ئەپ iCloudنى ئىشلىتىپ، قۇرۇلمىلار ئارا بەلگە ۋە يازمىلارنى ماسلاشتۇرىدۇ. سىز ئۇنى قۇرۇلمىڭىزنىڭ iCloud تەڭشەكلىرىدىن ئۆچۈرەلەيسىز.";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.placeholder.text" = "خاتىرىلىرىڭىزدىن ئىزدەش";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.title" = "\"%@\" گە ماس كېلىدىغان خاتىرە يوق";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "ساقلىغان خاتىرىڭىزدىكى باشقا سۆزنى ياكى سۈرە نامىنى سىناپ كۆرۈڭ.";
 
 // MARK: - Ayah Menu

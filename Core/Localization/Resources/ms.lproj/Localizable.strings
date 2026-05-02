@@ -162,8 +162,11 @@
 "notes.icloud.alert.title" = "Penyegerakan iCloud";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.icloud.alert.body" = "Aplikasi ini menggunakan iCloud untuk menyelaraskan penanda buku & nota di seluruh peranti anda. Anda boleh mematikannya dari tetapan iCloud peranti anda.";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.placeholder.text" = "Cari nota anda";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.title" = "Tiada nota yang sepadan dengan \"%@\"";
+// Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Cuba perkataan lain daripada nota yang anda simpan atau nama surah.";
 
 // MARK: - Ayah Menu

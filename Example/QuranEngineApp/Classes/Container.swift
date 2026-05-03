@@ -47,6 +47,10 @@ class Container: AppDependencies {
     }()
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+    #if QURAN_SYNC
+        private(set) lazy var syncService: SyncService? = mobileSyncServices?.syncService
+    #endif
+
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
         #if QURAN_SYNC
             if let authService = mobileSyncServices?.authService {

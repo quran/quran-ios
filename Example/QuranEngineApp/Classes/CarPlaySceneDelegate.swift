@@ -961,7 +961,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             return
         }
 
-        let action = CPAlertAction(title: "OK", style: .default) { _ in }
+        let action = CPAlertAction(title: "OK", style: .default) { [weak interfaceController] _ in
+            interfaceController?.dismissTemplate(animated: true, completion: nil)
+        }
         let template = CPAlertTemplate(
             titleVariants: [
                 "Could not play audio. Check the download and try again.",

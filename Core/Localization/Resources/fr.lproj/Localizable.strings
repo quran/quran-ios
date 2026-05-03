@@ -323,3 +323,22 @@
 "new.library_navigation" = "Bibliothèque et navigation:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Triez les sourates et les juz sur Accueil et affichez les numéros de sourate pour accéder plus rapidement à ce dont vous avez besoin - merci à @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navigation";
+"navigation_drawer.search_placeholder" = "Rechercher";
+"navigation_drawer.tab.surah" = "Sourate";
+"navigation_drawer.tab.juz" = "Juz";
+"navigation_drawer.tab.notes" = "Notes";
+"navigation_drawer.tab.bookmarks" = "Signets";
+"navigation_drawer.surah.makki" = "Mecquoise";
+"navigation_drawer.surah.madani" = "Médinoise";
+"navigation_drawer.note.untitled" = "Note sans titre";
+"navigation_drawer.bookmark.page" = "Page %d";
+"navigation_drawer.empty.no_results" = "Aucun résultat";
+"navigation_drawer.empty.no_notes" = "Aucune note";
+"navigation_drawer.empty.no_matching_notes" = "Aucune note correspondante";
+"navigation_drawer.empty.no_bookmarks" = "Aucun signet";
+"navigation_drawer.empty.no_matching_bookmarks" = "Aucun signet correspondant";
+"navigation_drawer.close" = "Fermer";

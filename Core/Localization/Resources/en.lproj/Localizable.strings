@@ -243,3 +243,22 @@
 // Library & Navigation
 "new.library_navigation" = "Library & Navigation:";
 "new.library_navigation.details" = "* Sort surahs and juz on Home, and display surah numbers so you can jump to what you need faster - thanks to @yismailuofa.";
+
+// MARK: - Navigation Drawer
+
+"navigation_drawer.title" = "Navigation";
+"navigation_drawer.search_placeholder" = "Search";
+"navigation_drawer.tab.surah" = "Surah";
+"navigation_drawer.tab.juz" = "Juz";
+"navigation_drawer.tab.notes" = "Notes";
+"navigation_drawer.tab.bookmarks" = "Bookmarks";
+"navigation_drawer.surah.makki" = "Makki";
+"navigation_drawer.surah.madani" = "Madani";
+"navigation_drawer.note.untitled" = "Untitled note";
+"navigation_drawer.bookmark.page" = "Page %d";
+"navigation_drawer.empty.no_results" = "No results";
+"navigation_drawer.empty.no_notes" = "No notes yet";
+"navigation_drawer.empty.no_matching_notes" = "No matching notes";
+"navigation_drawer.empty.no_bookmarks" = "No bookmarks yet";
+"navigation_drawer.empty.no_matching_bookmarks" = "No matching bookmarks";
+"navigation_drawer.close" = "Close";

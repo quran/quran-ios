@@ -230,3 +230,22 @@
 "new.library_navigation" = "Thư viện & Điều hướng:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Sắp xếp surah và juz trên Trang chủ và hiển thị số surah để bạn đến nội dung cần nhanh hơn - nhờ @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Điều hướng";
+"navigation_drawer.search_placeholder" = "Tìm kiếm";
+"navigation_drawer.tab.surah" = "Sura";
+"navigation_drawer.tab.juz" = "Juz";
+"navigation_drawer.tab.notes" = "Ghi chú";
+"navigation_drawer.tab.bookmarks" = "Đánh dấu";
+"navigation_drawer.surah.makki" = "Mecca";
+"navigation_drawer.surah.madani" = "Medina";
+"navigation_drawer.note.untitled" = "Ghi chú không tiêu đề";
+"navigation_drawer.bookmark.page" = "Trang %d";
+"navigation_drawer.empty.no_results" = "Không có kết quả";
+"navigation_drawer.empty.no_notes" = "Chưa có ghi chú";
+"navigation_drawer.empty.no_matching_notes" = "Không có ghi chú phù hợp";
+"navigation_drawer.empty.no_bookmarks" = "Chưa có đánh dấu";
+"navigation_drawer.empty.no_matching_bookmarks" = "Không có đánh dấu phù hợp";
+"navigation_drawer.close" = "Đóng";

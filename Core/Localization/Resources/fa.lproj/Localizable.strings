@@ -325,3 +325,22 @@
 "new.library_navigation" = "کتابخانه و پیمایش:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* سوره‌ها و جزءها را در صفحه اصلی مرتب کنید و شماره سوره‌ها را نمایش دهید تا سریع‌تر به آنچه نیاز دارید برسید - با تشکر از @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "ناوبری";
+"navigation_drawer.search_placeholder" = "جستجو";
+"navigation_drawer.tab.surah" = "سوره";
+"navigation_drawer.tab.juz" = "جزء";
+"navigation_drawer.tab.notes" = "یادداشت‌ها";
+"navigation_drawer.tab.bookmarks" = "نشانه‌ها";
+"navigation_drawer.surah.makki" = "مکی";
+"navigation_drawer.surah.madani" = "مدنی";
+"navigation_drawer.note.untitled" = "یادداشت بدون عنوان";
+"navigation_drawer.bookmark.page" = "صفحه %d";
+"navigation_drawer.empty.no_results" = "بدون نتیجه";
+"navigation_drawer.empty.no_notes" = "هنوز یادداشتی نیست";
+"navigation_drawer.empty.no_matching_notes" = "یادداشت مطابق پیدا نشد";
+"navigation_drawer.empty.no_bookmarks" = "هنوز نشانه‌ای نیست";
+"navigation_drawer.empty.no_matching_bookmarks" = "نشانه مطابق پیدا نشد";
+"navigation_drawer.close" = "بستن";

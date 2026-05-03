@@ -323,3 +323,22 @@
 "new.library_navigation" = "Bibliothek & Navigation:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Sortieren Sie Suren und Juz auf der Startseite und zeigen Sie Surennummern an, damit Sie schneller zu dem gelangen, was Sie brauchen - danke an @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navigation";
+"navigation_drawer.search_placeholder" = "Suchen";
+"navigation_drawer.tab.surah" = "Sure";
+"navigation_drawer.tab.juz" = "Dschuz";
+"navigation_drawer.tab.notes" = "Notizen";
+"navigation_drawer.tab.bookmarks" = "Lesezeichen";
+"navigation_drawer.surah.makki" = "Makkanisch";
+"navigation_drawer.surah.madani" = "Medinensisch";
+"navigation_drawer.note.untitled" = "Notiz ohne Titel";
+"navigation_drawer.bookmark.page" = "Seite %d";
+"navigation_drawer.empty.no_results" = "Keine Ergebnisse";
+"navigation_drawer.empty.no_notes" = "Noch keine Notizen";
+"navigation_drawer.empty.no_matching_notes" = "Keine passenden Notizen";
+"navigation_drawer.empty.no_bookmarks" = "Noch keine Lesezeichen";
+"navigation_drawer.empty.no_matching_bookmarks" = "Keine passenden Lesezeichen";
+"navigation_drawer.close" = "Schließen";

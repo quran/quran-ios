@@ -233,3 +233,22 @@
 "new.library_navigation" = "Bibliotheek & Navigatie:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Sorteer soera's en juz op het Startscherm en toon soeranummers zodat je sneller gaat naar wat je nodig hebt - dankzij @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navigatie";
+"navigation_drawer.search_placeholder" = "Zoeken";
+"navigation_drawer.tab.surah" = "Soera";
+"navigation_drawer.tab.juz" = "Djoez";
+"navigation_drawer.tab.notes" = "Notities";
+"navigation_drawer.tab.bookmarks" = "Bladwijzers";
+"navigation_drawer.surah.makki" = "Mekkaans";
+"navigation_drawer.surah.madani" = "Medinees";
+"navigation_drawer.note.untitled" = "Naamloze notitie";
+"navigation_drawer.bookmark.page" = "Pagina %d";
+"navigation_drawer.empty.no_results" = "Geen resultaten";
+"navigation_drawer.empty.no_notes" = "Nog geen notities";
+"navigation_drawer.empty.no_matching_notes" = "Geen overeenkomende notities";
+"navigation_drawer.empty.no_bookmarks" = "Nog geen bladwijzers";
+"navigation_drawer.empty.no_matching_bookmarks" = "Geen overeenkomende bladwijzers";
+"navigation_drawer.close" = "Sluiten";

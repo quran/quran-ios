@@ -305,3 +305,22 @@
 "new.library_navigation" = "Кітапхана және навигация:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Үй бетінде сүрелер мен жүздерді сұрыптап, сүре нөмірлерін көрсетіңіз, сонда қажет нәрсеге тезірек жете аласыз - @yismailuofa-ға рахмет.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Шарлау";
+"navigation_drawer.search_placeholder" = "Іздеу";
+"navigation_drawer.tab.surah" = "Сүре";
+"navigation_drawer.tab.juz" = "Жүз";
+"navigation_drawer.tab.notes" = "Жазбалар";
+"navigation_drawer.tab.bookmarks" = "Бетбелгілер";
+"navigation_drawer.surah.makki" = "Меккелік";
+"navigation_drawer.surah.madani" = "Мединалық";
+"navigation_drawer.note.untitled" = "Атаусыз жазба";
+"navigation_drawer.bookmark.page" = "%d-бет";
+"navigation_drawer.empty.no_results" = "Нәтиже жоқ";
+"navigation_drawer.empty.no_notes" = "Жазбалар жоқ";
+"navigation_drawer.empty.no_matching_notes" = "Сәйкес жазба жоқ";
+"navigation_drawer.empty.no_bookmarks" = "Бетбелгілер жоқ";
+"navigation_drawer.empty.no_matching_bookmarks" = "Сәйкес бетбелгі жоқ";
+"navigation_drawer.close" = "Жабу";

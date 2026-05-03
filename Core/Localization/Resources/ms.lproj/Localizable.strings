@@ -306,3 +306,22 @@
 "new.library_navigation" = "Perpustakaan & Navigasi:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Susun surah dan juz di Halaman Utama serta paparkan nombor surah supaya anda boleh pergi ke yang diperlukan dengan lebih pantas - terima kasih kepada @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navigasi";
+"navigation_drawer.search_placeholder" = "Cari";
+"navigation_drawer.tab.surah" = "Surah";
+"navigation_drawer.tab.juz" = "Juzuk";
+"navigation_drawer.tab.notes" = "Nota";
+"navigation_drawer.tab.bookmarks" = "Tanda buku";
+"navigation_drawer.surah.makki" = "Makkiyyah";
+"navigation_drawer.surah.madani" = "Madaniyyah";
+"navigation_drawer.note.untitled" = "Nota tanpa tajuk";
+"navigation_drawer.bookmark.page" = "Halaman %d";
+"navigation_drawer.empty.no_results" = "Tiada hasil";
+"navigation_drawer.empty.no_notes" = "Tiada nota lagi";
+"navigation_drawer.empty.no_matching_notes" = "Tiada nota yang sepadan";
+"navigation_drawer.empty.no_bookmarks" = "Tiada tanda buku lagi";
+"navigation_drawer.empty.no_matching_bookmarks" = "Tiada tanda buku yang sepadan";
+"navigation_drawer.close" = "Tutup";

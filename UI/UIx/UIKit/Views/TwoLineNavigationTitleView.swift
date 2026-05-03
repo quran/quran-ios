@@ -32,6 +32,11 @@ public class TwoLineNavigationTitleView: UIView {
         didSet { updateAttributedText() }
     }
 
+    /// Called when the title is tapped. Setting this enables a tap gesture; clearing it removes it.
+    public var onTap: (() -> Void)? {
+        didSet { updateTapGesture() }
+    }
+
     override public var intrinsicContentSize: CGSize {
         label.attributedText?.size() ?? .zero
     }
@@ -39,6 +44,17 @@ public class TwoLineNavigationTitleView: UIView {
     override public func layoutSubviews() {
         super.layoutSubviews()
         updateIsCompressed()
+    }
+
+    override public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        // When a tap handler is set, expand the hit area so taps reliably
+        // register even if the navigation bar lays this view out tighter than
+        // its visible label.
+        if onTap != nil {
+            let expanded = bounds.insetBy(dx: -60, dy: -12)
+            if expanded.contains(point) { return true }
+        }
+        return super.point(inside: point, with: event)
     }
 
     // MARK: Private
@@ -52,6 +68,9 @@ public class TwoLineNavigationTitleView: UIView {
         didSet { updateAttributedText() }
     }
 
+    private var tapGesture: UITapGestureRecognizer?
+    private var didInvalidateOnFirstNonEmptyText = false
+
     private func setUp() {
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -59,6 +78,23 @@ public class TwoLineNavigationTitleView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         addAutoLayoutSubview(label)
         label.vc.center()
+    }
+
+    private func updateTapGesture() {
+        if onTap != nil, tapGesture == nil {
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+            addGestureRecognizer(gesture)
+            isUserInteractionEnabled = true
+            tapGesture = gesture
+        } else if onTap == nil, let tapGesture {
+            removeGestureRecognizer(tapGesture)
+            self.tapGesture = nil
+        }
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     private func updateIsCompressed(_ size: CGSize? = nil) {
@@ -80,6 +116,15 @@ public class TwoLineNavigationTitleView: UIView {
             .font: secondLineFont,
         ]))
         label.attributedText = string
+        // Invalidate ONCE, the first time the text becomes non-empty. Without
+        // this, the navigation bar keeps the zero-sized layout it computed
+        // when this view was instantiated with empty text, and hit-testing
+        // misses the title view. Skipping subsequent invalidations keeps
+        // page-changes cheap (no UINavigationBar relayout per swipe).
+        if !didInvalidateOnFirstNonEmptyText, !firstLine.isEmpty || !secondLine.isEmpty {
+            didInvalidateOnFirstNonEmptyText = true
+            invalidateIntrinsicContentSize()
+        }
     }
 }
 

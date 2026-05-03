@@ -325,3 +325,22 @@
 "new.library_navigation" = "Kutubxona va navigatsiya:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Bosh sahifada suralar va juzlarni tartiblang hamda sura raqamlarini ko'rsating, shunda kerakli joyga tezroq o'tasiz - @yismailuofa ga rahmat.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "Navigatsiya";
+"navigation_drawer.search_placeholder" = "Qidirish";
+"navigation_drawer.tab.surah" = "Sura";
+"navigation_drawer.tab.juz" = "Juz";
+"navigation_drawer.tab.notes" = "Eslatmalar";
+"navigation_drawer.tab.bookmarks" = "Xatcho'plar";
+"navigation_drawer.surah.makki" = "Makka";
+"navigation_drawer.surah.madani" = "Madina";
+"navigation_drawer.note.untitled" = "Nomsiz eslatma";
+"navigation_drawer.bookmark.page" = "%d-bet";
+"navigation_drawer.empty.no_results" = "Natija yo'q";
+"navigation_drawer.empty.no_notes" = "Hali eslatma yo'q";
+"navigation_drawer.empty.no_matching_notes" = "Mos eslatma topilmadi";
+"navigation_drawer.empty.no_bookmarks" = "Hali xatcho'p yo'q";
+"navigation_drawer.empty.no_matching_bookmarks" = "Mos xatcho'p topilmadi";
+"navigation_drawer.close" = "Yopish";

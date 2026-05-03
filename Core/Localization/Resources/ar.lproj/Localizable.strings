@@ -227,3 +227,22 @@
 "new.library_navigation" = "التنقل:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* قم بترتيب السور والأجزاء على الصفحة الرئيسية، وعرض أرقام السور حتى تتمكن من الانتقال إلى ما تحتاجه بشكل أسرع - بفضل @yismailuofa.";
+
+// MARK: - Navigation Drawer
+// Metadata: Translated by AI; human review required.
+"navigation_drawer.title" = "التنقل";
+"navigation_drawer.search_placeholder" = "بحث";
+"navigation_drawer.tab.surah" = "السور";
+"navigation_drawer.tab.juz" = "الأجزاء";
+"navigation_drawer.tab.notes" = "الملاحظات";
+"navigation_drawer.tab.bookmarks" = "الإشارات المرجعية";
+"navigation_drawer.surah.makki" = "مكية";
+"navigation_drawer.surah.madani" = "مدنية";
+"navigation_drawer.note.untitled" = "ملاحظة بدون عنوان";
+"navigation_drawer.bookmark.page" = "صفحة %d";
+"navigation_drawer.empty.no_results" = "لا توجد نتائج";
+"navigation_drawer.empty.no_notes" = "لا توجد ملاحظات بعد";
+"navigation_drawer.empty.no_matching_notes" = "لا توجد ملاحظات مطابقة";
+"navigation_drawer.empty.no_bookmarks" = "لا توجد إشارات مرجعية بعد";
+"navigation_drawer.empty.no_matching_bookmarks" = "لا توجد إشارات مرجعية مطابقة";
+"navigation_drawer.close" = "إغلاق";

@@ -38,12 +38,7 @@ class Container: AppDependencies {
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
-        #if QURAN_SYNC
-            if let syncService = mobileSyncServices?.syncService {
-                return MobileSyncPageBookmarkPersistence(syncService: syncService)
-            }
-        #endif
-        return CoreDataPageBookmarkPersistence(stack: coreDataStack)
+        CoreDataPageBookmarkPersistence(stack: coreDataStack)
     }()
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
@@ -139,10 +134,13 @@ class Container: AppDependencies {
                 logger: logger
             )
             let authService = AuthService(authRepository: authRepository)
+            let database = PersistenceModule.companion.provideQuranDatabase(driverFactory: driverFactory)
+            let persistenceResetRepository: PersistenceResetRepository = PersistenceResetRepositoryImpl(database: database)
             let syncService = SyncService(
                 authService: authService,
                 pipeline: graph.syncService.pipelineForIos,
                 environment: synchronizationEnvironment,
+                persistenceResetRepository: persistenceResetRepository,
                 settings: SyncServiceKt.makeSettings()
             )
 

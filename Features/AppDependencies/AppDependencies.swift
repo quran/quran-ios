@@ -13,7 +13,6 @@ import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
     import MobileSync
-    import MobileSyncSupport
 #endif
 import NotePersistence
 import PageBookmarkPersistence
@@ -44,7 +43,6 @@ public protocol AppDependencies {
 
     #if QURAN_SYNC
         var syncService: SyncService? { get }
-        var bookmarkCollectionService: BookmarkCollectionService? { get }
     #endif
 
     var authenticationClient: (any AuthenticationClient)? { get }
@@ -59,13 +57,6 @@ extension AppDependencies {
             quranFileURL: quranUthmaniV2Database
         )
     }
-
-    #if QURAN_SYNC
-        public var bookmarkCollectionService: BookmarkCollectionService? {
-            syncService.map { BookmarkCollectionService(syncService: $0) }
-        }
-
-    #endif
 
     public func noteService() -> NoteService {
         NoteService(

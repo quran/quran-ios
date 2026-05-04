@@ -6,8 +6,9 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(authService: AuthService) {
+    public init(authService: AuthService, syncService: SyncService) {
         self.authService = authService
+        self.syncService = syncService
     }
 
     // MARK: Public
@@ -22,7 +23,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func login(on _: UIViewController) async throws {
         do {
-            try await authService.signIn()
+            try await authService.signInWithReauthentication()
         } catch {
             logger.error("Failed to login via mobile sync: \(error)")
             throw AuthenticationClientError.errorAuthenticating(error)
@@ -41,7 +42,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func logout() async throws {
         do {
-            try await authService.signOut()
+            try await syncService.logout(clearLocalData: true)
         } catch {
             logger.error("Failed to logout via mobile sync: \(error)")
             throw AuthenticationClientError.errorAuthenticating(error)
@@ -68,4 +69,5 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Private
 
     private let authService: AuthService
+    private let syncService: SyncService
 }

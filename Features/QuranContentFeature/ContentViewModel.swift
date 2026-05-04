@@ -10,6 +10,7 @@ import Analytics
 import AnnotationsService
 import Combine
 import Crashing
+import MobileSync
 import QuranAnnotations
 import QuranImageFeature
 import QuranKit
@@ -37,6 +38,9 @@ public final class ContentViewModel: ObservableObject {
         let noteService: NoteService
         let lastPageUpdater: LastPageUpdater
         let quran: Quran
+        #if QURAN_SYNC
+            let syncService: SyncService?
+        #endif
 
         let highlightsService: QuranHighlightsService
 
@@ -220,6 +224,26 @@ public final class ContentViewModel: ObservableObject {
     }
 
     private func updateLastPageTo(_ pages: [Page]) {
+        #if QURAN_SYNC
+            if let syncService = deps.syncService {
+                guard let page = pages.min() else {
+                    return
+                }
+
+                let firstVerse = page.firstVerse
+                Task {
+                    do {
+                        _ = try await syncService.addReadingSession(
+                            sura: Int32(firstVerse.sura.suraNumber),
+                            ayah: Int32(firstVerse.ayah)
+                        )
+                    } catch {
+                        crasher.recordError(error, reason: "Failed to add reading session")
+                    }
+                }
+                return
+            }
+        #endif
         deps.lastPageUpdater.updateTo(pages: pages)
     }
 

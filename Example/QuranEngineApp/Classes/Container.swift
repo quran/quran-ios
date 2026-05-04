@@ -46,8 +46,10 @@ class Container: AppDependencies {
 
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
         #if QURAN_SYNC
-            if let authService = mobileSyncServices?.authService {
-                return AuthenticationClientMobileSyncImpl(authService: authService)
+            if let authService = mobileSyncServices?.authService,
+               let syncService = mobileSyncServices?.syncService
+            {
+                return AuthenticationClientMobileSyncImpl(authService: authService, syncService: syncService)
             }
         #endif
 

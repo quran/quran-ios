@@ -68,7 +68,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
         // Sync
-        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.0.6"),
+        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.0"),
 
     ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
@@ -215,8 +215,6 @@ private func dataTargets() -> [[Target]] {
             "CoreDataModel",
             "CoreDataPersistence",
             "QuranKit",
-            "AuthenticationClient",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",
@@ -541,6 +539,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [

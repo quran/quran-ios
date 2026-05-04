@@ -37,9 +37,7 @@ class Container: AppDependencies {
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = {
-        CoreDataPageBookmarkPersistence(stack: coreDataStack)
-    }()
+    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     #if QURAN_SYNC

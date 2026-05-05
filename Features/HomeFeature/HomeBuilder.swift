@@ -24,42 +24,23 @@ public struct HomeBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let lastPageService = LastPageService(persistence: container.lastPagePersistence)
         let textRetriever = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
-
-        #if QURAN_SYNC
-            let viewModel = HomeViewModel(
-                lastPageService: lastPageService,
-                textRetriever: textRetriever,
-                navigateToPage: { [weak listener] lastPage in
-                    listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)
-                },
-                navigateToSura: { [weak listener] sura in
-                    listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
-                },
-                navigateToQuarter: { [weak listener] quarter in
-                    listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
-                },
-                syncService: container.syncService
-            )
-        #else
-            let viewModel = HomeViewModel(
-                lastPageService: lastPageService,
-                textRetriever: textRetriever,
-                navigateToPage: { [weak listener] lastPage in
-                    listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)
-                },
-                navigateToSura: { [weak listener] sura in
-                    listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
-                },
-                navigateToQuarter: { [weak listener] quarter in
-                    listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
-                }
-            )
-        #endif
+        let viewModel = HomeViewModel(
+            lastPageService: container.lastPageService(),
+            textRetriever: textRetriever,
+            navigateToPage: { [weak listener] lastPage in
+                listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)
+            },
+            navigateToSura: { [weak listener] sura in
+                listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
+            },
+            navigateToQuarter: { [weak listener] quarter in
+                listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
+            }
+        )
         let viewController = HomeViewController(
             viewModel: viewModel,
             readingSelectorBuilder: ReadingSelectorBuilder(container: container)

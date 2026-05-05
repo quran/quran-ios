@@ -9,7 +9,6 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
-import MobileSync
 import Preferences
 import QuranAnnotations
 import QuranKit
@@ -32,43 +31,22 @@ enum HomeViewType: Int {
 final class HomeViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    #if QURAN_SYNC
-        init(
-            lastPageService: LastPageService,
-            textRetriever: QuranTextDataService,
-            navigateToPage: @escaping (Page) -> Void,
-            navigateToSura: @escaping (Sura) -> Void,
-            navigateToQuarter: @escaping (Quarter) -> Void,
-            syncService: SyncService? = nil
-        ) {
-            self.lastPageService = lastPageService
-            self.textRetriever = textRetriever
-            self.navigateToPage = navigateToPage
-            self.navigateToSura = navigateToSura
-            self.navigateToQuarter = navigateToQuarter
-            self.syncService = syncService
+    init(
+        lastPageService: any LastPageService,
+        textRetriever: QuranTextDataService,
+        navigateToPage: @escaping (Page) -> Void,
+        navigateToSura: @escaping (Sura) -> Void,
+        navigateToQuarter: @escaping (Quarter) -> Void
+    ) {
+        self.lastPageService = lastPageService
+        self.textRetriever = textRetriever
+        self.navigateToPage = navigateToPage
+        self.navigateToSura = navigateToSura
+        self.navigateToQuarter = navigateToQuarter
 
-            HomePreferences.shared.$surahSortOrder
-                .assign(to: &$surahSortOrder)
-        }
-    #else
-        init(
-            lastPageService: LastPageService,
-            textRetriever: QuranTextDataService,
-            navigateToPage: @escaping (Page) -> Void,
-            navigateToSura: @escaping (Sura) -> Void,
-            navigateToQuarter: @escaping (Quarter) -> Void
-        ) {
-            self.lastPageService = lastPageService
-            self.textRetriever = textRetriever
-            self.navigateToPage = navigateToPage
-            self.navigateToSura = navigateToSura
-            self.navigateToQuarter = navigateToQuarter
-
-            HomePreferences.shared.$surahSortOrder
-                .assign(to: &$surahSortOrder)
-        }
-    #endif
+        HomePreferences.shared.$surahSortOrder
+            .assign(to: &$surahSortOrder)
+    }
 
     // MARK: Internal
 
@@ -123,24 +101,14 @@ final class HomeViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let lastPageService: LastPageService
+    private let lastPageService: any LastPageService
     private let textRetriever: QuranTextDataService
     private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
     private let readingPreferences = ReadingPreferences.shared
-    #if QURAN_SYNC
-        private let syncService: SyncService?
-    #endif
 
     private func loadLastPages() async {
-        #if QURAN_SYNC
-            if let syncService {
-                await loadReadingSessions(syncService: syncService)
-                return
-            }
-        #endif
-
         let lastPagesSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .map { [lastPageService] reading in
@@ -153,45 +121,6 @@ final class HomeViewModel: ObservableObject {
             self.lastPages = lastPages
         }
     }
-
-    #if QURAN_SYNC
-        private func loadReadingSessions(syncService: SyncService) async {
-            do {
-                let sequence = syncService.readingSessionsSequence()
-                for try await sessions in sequence {
-                    let mapped = sessions.compactMap { session -> LastPage? in
-                        let targetQuran = readingPreferences.reading.quran
-
-                        // Try to build an AyahNumber from the stored session values
-                        guard let sourceAyah = AyahNumber(quran: targetQuran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
-                            // If we can't create an AyahNumber for the target quran,
-                            // you could try resolving a different source quran here (if session includes it).
-                            return nil
-                        }
-
-                        // If the source ayah already belongs to the target quran, use its page directly.
-                        // Otherwise map it to the target quran.
-                        let page: Page
-                        if sourceAyah.quran === targetQuran {
-                            page = sourceAyah.page
-                        } else {
-                            let mapper = QuranPageMapper(destination: targetQuran)
-                            guard let mappedAyah = mapper.mapAyah(sourceAyah) else { return nil }
-                            page = mappedAyah.page
-                        }
-
-                        let createdOn = session.lastUpdated
-                        return LastPage(page: page, createdOn: createdOn, modifiedOn: createdOn)
-                    }
-
-                    let sorted = mapped.sorted { $0.createdOn > $1.createdOn }
-                    lastPages = Array(sorted.prefix(3))
-                }
-            } catch {
-                crasher.recordError(error, reason: "Failed to load reading sessions")
-            }
-        }
-    #endif
 
     private func loadSuras() async {
         let readings = readingPreferences.$reading

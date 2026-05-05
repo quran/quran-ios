@@ -51,6 +51,15 @@ public protocol AppDependencies {
 extension AppDependencies {
     public var quranUthmaniV2Database: URL { QuranResources.quranUthmaniV2Database }
 
+    public func lastPageService() -> any LastPageService {
+        #if QURAN_SYNC
+            if let syncService {
+                return MobileSyncLastPageService(syncService: syncService)
+            }
+        #endif
+        return PersistenceLastPageService(persistence: lastPagePersistence)
+    }
+
     public func textDataService() -> QuranTextDataService {
         QuranTextDataService(
             databasesURL: databasesURL,

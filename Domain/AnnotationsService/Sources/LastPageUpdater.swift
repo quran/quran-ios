@@ -25,7 +25,7 @@ import QuranKit
 public final class LastPageUpdater {
     // MARK: Lifecycle
 
-    public init(service: LastPageService) {
+    public init(service: any LastPageService) {
         self.service = service
     }
 
@@ -55,7 +55,7 @@ public final class LastPageUpdater {
 
     // MARK: Private
 
-    private let service: LastPageService
+    private let service: any LastPageService
 
     private func updateTo(page: Page, lastPage: Page) {
         self.lastPage = page

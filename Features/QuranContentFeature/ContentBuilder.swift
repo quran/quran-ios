@@ -26,30 +26,16 @@ public struct ContentBuilder {
     public func build(withListener listener: ContentListener, input: QuranInput) -> (ContentViewController, ContentViewModel) {
         let quran = ReadingPreferences.shared.reading.quran
         let noteService = container.noteService()
-        let lastPageService = LastPageService(persistence: container.lastPagePersistence)
-        let lastPageUpdater = LastPageUpdater(service: lastPageService)
-        #if QURAN_SYNC
-            let interactorDeps = ContentViewModel.Deps(
-                analytics: container.analytics,
-                noteService: noteService,
-                lastPageUpdater: lastPageUpdater,
-                quran: quran,
-                syncService: container.syncService,
-                highlightsService: highlightsService,
-                imageDataSourceBuilder: ContentImageBuilder(container: container, highlightsService: highlightsService),
-                translationDataSourceBuilder: ContentTranslationBuilder(container: container, highlightsService: highlightsService)
-            )
-        #else
-            let interactorDeps = ContentViewModel.Deps(
-                analytics: container.analytics,
-                noteService: noteService,
-                lastPageUpdater: lastPageUpdater,
-                quran: quran,
-                highlightsService: highlightsService,
-                imageDataSourceBuilder: ContentImageBuilder(container: container, highlightsService: highlightsService),
-                translationDataSourceBuilder: ContentTranslationBuilder(container: container, highlightsService: highlightsService)
-            )
-        #endif
+        let lastPageUpdater = LastPageUpdater(service: container.lastPageService())
+        let interactorDeps = ContentViewModel.Deps(
+            analytics: container.analytics,
+            noteService: noteService,
+            lastPageUpdater: lastPageUpdater,
+            quran: quran,
+            highlightsService: highlightsService,
+            imageDataSourceBuilder: ContentImageBuilder(container: container, highlightsService: highlightsService),
+            translationDataSourceBuilder: ContentTranslationBuilder(container: container, highlightsService: highlightsService)
+        )
         let viewModel = ContentViewModel(deps: interactorDeps, input: input)
 
         let viewController = ContentViewController(viewModel: viewModel)

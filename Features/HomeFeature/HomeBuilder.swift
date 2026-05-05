@@ -24,14 +24,12 @@ public struct HomeBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let lastPageService = LastPageService(persistence: container.lastPagePersistence)
         let textRetriever = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
-
         let viewModel = HomeViewModel(
-            lastPageService: lastPageService,
+            lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
             navigateToPage: { [weak listener] lastPage in
                 listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)

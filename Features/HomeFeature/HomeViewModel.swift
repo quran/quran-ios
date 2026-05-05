@@ -32,7 +32,7 @@ final class HomeViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
-        lastPageService: LastPageService,
+        lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
         navigateToPage: @escaping (Page) -> Void,
         navigateToSura: @escaping (Sura) -> Void,
@@ -101,7 +101,7 @@ final class HomeViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let lastPageService: LastPageService
+    private let lastPageService: any LastPageService
     private let textRetriever: QuranTextDataService
     private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void

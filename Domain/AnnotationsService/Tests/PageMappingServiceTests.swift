@@ -10,6 +10,7 @@ import XCTest
 @testable import AnnotationsService
 @testable import LastPagePersistence
 @testable import PageBookmarkPersistence
+@testable import QuranAnnotations
 @testable import QuranKit
 
 final class PageMappingServiceTests: XCTestCase {
@@ -90,7 +91,7 @@ final class PageMappingServiceTests: XCTestCase {
         let persistence = LastPagePersistenceFake(lastPages: [
             LastPagePersistenceModel(page: 1, createdOn: date, modifiedOn: laterDate),
         ])
-        let service = LastPageService(persistence: persistence)
+        let service = PersistenceLastPageService(persistence: persistence)
 
         let lastPages = value(from: service.lastPages(quran: skippedPageQuran()))
 
@@ -101,7 +102,7 @@ final class PageMappingServiceTests: XCTestCase {
 
     func testAddLastPageStoresCanonicalPageAndReturnsRequestedQuranPage() async throws {
         let persistence = LastPagePersistenceFake()
-        let service = LastPageService(persistence: persistence)
+        let service = PersistenceLastPageService(persistence: persistence)
 
         let lastPage = try await service.add(page: skippedPageQuran().pages[0])
 
@@ -111,7 +112,7 @@ final class PageMappingServiceTests: XCTestCase {
 
     func testUpdateLastPageStoresCanonicalPagesAndReturnsRequestedQuranPage() async throws {
         let persistence = LastPagePersistenceFake()
-        let service = LastPageService(persistence: persistence)
+        let service = PersistenceLastPageService(persistence: persistence)
         let quran = skippedPageQuran()
 
         let lastPage = try await service.update(page: quran.pages[0], toPage: quran.pages[1])

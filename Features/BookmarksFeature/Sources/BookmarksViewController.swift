@@ -26,6 +26,10 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Internal
+
+    var onOpenCollections: (() -> Void)?
+
     // MARK: Private
 
     private var editController: EditController?
@@ -42,6 +46,14 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
     private func initialize() {
         title = lAndroid("menu_bookmarks")
         viewModel.presenter = self
+        #if QURAN_SYNC
+            rootView = BookmarksView(
+                viewModel: viewModel,
+                showCollectionsAction: { [weak self] in
+                    self?.onOpenCollections?()
+                }
+            )
+        #endif
 
         editController = EditController(
             navigationItem: navigationItem,

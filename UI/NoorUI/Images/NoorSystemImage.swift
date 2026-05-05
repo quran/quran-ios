@@ -14,6 +14,7 @@ public enum NoorSystemImage: String {
     case translation = "globe"
     case heart = "heart.fill"
     case share = "square.and.arrow.up"
+    case folder = "folder.fill"
     case star
     case mail = "envelope"
     case checkmark_checked = "checkmark.circle.fill"
@@ -34,6 +35,8 @@ public enum NoorSystemImage: String {
     case more = "ellipsis.circle"
     case backward = "backward.fill"
     case forward = "forward.fill"
+    case chevronRight = "chevron.right"
+    case chevronDown = "chevron.down"
     case cancel = "xmark"
 
     // MARK: Public

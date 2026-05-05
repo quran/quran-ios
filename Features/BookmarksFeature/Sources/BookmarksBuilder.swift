@@ -32,6 +32,16 @@ public struct BookmarksBuilder {
             }
         )
         let viewController = BookmarksViewController(viewModel: viewModel)
+        #if QURAN_SYNC
+            let collectionsBuilder = CollectionsBuilder(container: container)
+            viewController.onOpenCollections = { [weak viewController, weak listener] in
+                guard let listener else {
+                    return
+                }
+                let collectionsViewController = collectionsBuilder.build(withListener: listener)
+                viewController?.navigationController?.pushViewController(collectionsViewController, animated: true)
+            }
+        #endif
         return viewController
     }
 

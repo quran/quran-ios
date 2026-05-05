@@ -185,6 +185,7 @@ sure you want to use the external SD card?";
 "menu_bookmarks" = "Bookmarks";
 "menu_bookmarks_ayah" = "Ayah Bookmarks";
 "menu_bookmarks_page" = "Page Bookmarks";
+"bookmarks.collections" = "Collections";
 "menu_get_translations" = "Get Translations";
 "menu_help" = "Help";
 "menu_jump" = "Go to page";

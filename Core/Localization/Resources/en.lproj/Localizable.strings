@@ -122,6 +122,7 @@
 "bookmarks.no-data.text" = "When you're reading the Quran, tap the Bookmark button to mark the current page.";
 "bookmarks.collections" = "Collections";
 "bookmarks.collections.add" = "Add Collection";
+"bookmarks.collections.edit" = "Edit Collections";
 "bookmarks.collections.new.placeholder" = "Collection name";
 "bookmarks.collections.no-data.title" = "No collections yet";
 "bookmarks.collections.no-data.text" = "Create a collection to organize ayah bookmarks.";

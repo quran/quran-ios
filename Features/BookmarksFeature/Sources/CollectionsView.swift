@@ -19,13 +19,15 @@
 
         var body: some View {
             CollectionsViewUI(
+                editMode: $viewModel.editMode,
                 error: $viewModel.error,
                 collections: viewModel.collections,
                 isCollectionExpanded: { viewModel.isCollectionExpanded($0) },
                 setCollectionExpanded: { viewModel.setCollection($0, expanded: $1) },
                 start: { await viewModel.start() },
                 selectBookmark: { viewModel.navigateTo($0) },
-                deleteAction: { await viewModel.deleteItem($0) }
+                deleteCollectionAction: { await viewModel.deleteCollection($0) },
+                deleteBookmarkAction: { await viewModel.deleteBookmark($0) }
             )
         }
     }
@@ -34,6 +36,7 @@
     private struct CollectionsViewUI: View {
         // MARK: Internal
 
+        @Binding var editMode: EditMode
         @Binding var error: Error?
 
         let collections: [CollectionWithAyahBookmarks]
@@ -41,7 +44,8 @@
         let setCollectionExpanded: (CollectionWithAyahBookmarks, Bool) -> Void
         let start: AsyncAction
         let selectBookmark: ItemAction<CollectionAyahBookmark>
-        let deleteAction: AsyncItemAction<CollectionWithAyahBookmarks>
+        let deleteCollectionAction: AsyncItemAction<CollectionWithAyahBookmarks>
+        let deleteBookmarkAction: AsyncItemAction<CollectionAyahBookmark>
 
         var body: some View {
             Group {
@@ -50,21 +54,29 @@
                 } else {
                     NoorList {
                         ForEach(collections) { collection in
-                            NoorBasicSection {
-                                collectionItem(collection)
-
-                                if isCollectionExpanded(collection) {
-                                    ForEach(collection.bookmarks) { bookmark in
-                                        bookmarkItem(bookmark)
-                                    }
-                                }
+                            let isExpanded = Binding(
+                                get: { isCollectionExpanded(collection) },
+                                set: { setCollectionExpanded(collection, $0) }
+                            )
+                            NoorSection(
+                                title: collection.collection.name,
+                                isExpanded: isExpanded,
+                                collection.bookmarks
+                            ) { bookmark in
+                                bookmarkItem(bookmark)
                             }
+                            .onHeaderDelete {
+                                await deleteCollectionAction(collection)
+                            }
+                            .headerActions(headerActions(for: collection))
+                            .onDelete(action: deleteBookmarkAction)
                         }
                     }
                 }
             }
             .task { await start() }
             .errorAlert(error: $error)
+            .environment(\.editMode, $editMode)
         }
 
         // MARK: Private
@@ -77,27 +89,15 @@
             )
         }
 
-        private func collectionItem(_ collection: CollectionWithAyahBookmarks) -> some View {
-            NoorListItem(
-                image: .init(.folder, color: .accentColor),
-                title: .text(collection.collection.name),
-                subtitle: .init(
-                    text: lFormat("bookmarks.collections.ayah-count", collection.bookmarks.count),
-                    location: .bottom
-                ),
-                accessory: .image(isCollectionExpanded(collection) ? .chevronDown : .chevronRight)
-            ) {
-                setCollectionExpanded(collection, !isCollectionExpanded(collection))
+        private func headerActions(for collection: CollectionWithAyahBookmarks) -> [NoorSectionHeaderAction] {
+            guard editMode.isEditing else {
+                return []
             }
-            .swipeActions {
-                Button(role: .destructive) {
-                    Task {
-                        await deleteAction(collection)
-                    }
-                } label: {
-                    Label(l("button.delete"), systemImage: "trash")
-                }
-            }
+            return [
+                NoorSectionHeaderAction(image: .delete, tintColor: .red) {
+                    await deleteCollectionAction(collection)
+                },
+            ]
         }
 
         @ViewBuilder

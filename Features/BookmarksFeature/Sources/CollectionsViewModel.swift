@@ -14,12 +14,17 @@
 
     @MainActor
     final class CollectionsViewModel: ObservableObject {
+        // MARK: Lifecycle
+
         init(syncService: SyncService, navigateToPage: @escaping (Page) -> Void) {
             self.syncService = syncService
             self.navigateToPage = navigateToPage
         }
 
+        // MARK: Internal
+
         @Published var error: Error?
+        @Published var editMode: EditMode = .inactive
         @Published var collections: [CollectionWithAyahBookmarks] = []
         @Published var collapsedCollectionIDs: Set<String> = []
 
@@ -68,13 +73,32 @@
             }
         }
 
-        func deleteItem(_ collection: CollectionWithAyahBookmarks) async {
+        func deleteCollection(_ collection: CollectionWithAyahBookmarks) async {
             do {
                 try await syncService.removeCollection(localId: collection.collection.localId)
             } catch {
                 self.error = error
             }
         }
+
+        func deleteBookmark(_ bookmark: CollectionAyahBookmark) async {
+            do {
+                let ayahBookmark = AyahBookmark(
+                    sura: bookmark.sura,
+                    ayah: bookmark.ayah,
+                    lastUpdated: bookmark.lastUpdated,
+                    localId: bookmark.bookmarkLocalId
+                )
+                try await syncService.removeBookmarkFromCollection(
+                    collectionLocalId: bookmark.collectionLocalId,
+                    bookmark: ayahBookmark
+                )
+            } catch {
+                self.error = error
+            }
+        }
+
+        // MARK: Private
 
         private let syncService: SyncService
         private let navigateToPage: (Page) -> Void

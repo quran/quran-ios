@@ -6,12 +6,14 @@
     //
 
     import Localization
-    import MobileSync
+    import NoorUI
     import SwiftUI
     import UIKit
     import UIx
 
     final class CollectionsViewController: UIHostingController<CollectionsView> {
+        // MARK: Lifecycle
+
         init(viewModel: CollectionsViewModel) {
             self.viewModel = viewModel
             super.init(rootView: CollectionsView(viewModel: viewModel))
@@ -24,18 +26,39 @@
             fatalError("init(coder:) has not been implemented")
         }
 
+        // MARK: Private
+
         private let viewModel: CollectionsViewModel
 
         private func initialize() {
             title = l("bookmarks.collections")
+            updateMenuButton()
+        }
+
+        private func updateMenuButton() {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                barButtonSystemItem: .add,
-                target: self,
-                action: #selector(addCollection)
+                image: UIImage(systemName: NoorSystemImage.more.rawValue),
+                menu: UIMenu(children: [
+                    UIAction(title: l("bookmarks.collections.add"), image: UIImage(systemName: NoorSystemImage.add.rawValue)) { [weak self] _ in
+                        self?.addCollection()
+                    },
+                    UIAction(
+                        title: viewModel.editMode.isEditing ? l("button.done") : l("bookmarks.collections.edit"),
+                        image: UIImage(systemName: viewModel.editMode.isEditing ? NoorSystemImage.checkmark.rawValue : NoorSystemImage.edit.rawValue)
+                    ) { [weak self] _ in
+                        self?.toggleEditing()
+                    },
+                ])
             )
         }
 
-        @objc
+        private func toggleEditing() {
+            withAnimation {
+                viewModel.editMode = viewModel.editMode.isEditing ? .inactive : .active
+            }
+            updateMenuButton()
+        }
+
         private func addCollection() {
             let alert = UIAlertController(
                 title: l("bookmarks.collections.add"),

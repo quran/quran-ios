@@ -16,24 +16,22 @@ import UIKit
 
 @MainActor
 public struct AudioBannerBuilder {
-    // MARK: Lifecycle
-
     public init(container: AppDependencies) {
         self.container = container
     }
-
-    // MARK: Public
-
     public func build(withListener listener: AudioBannerListener) -> (UIViewController, AudioBannerViewModel) {
+        AudioPlaybackControllerStore.setUpIfNeeded(container: container)
+        let playbackController = AudioPlaybackControllerStore.shared!
+
+        let reciterRetriever = ReciterDataRetriever()
+        let recentRecitersService = RecentRecitersService()
+
         let viewModel = AudioBannerViewModel(
             analytics: container.analytics,
-            reciterRetreiver: ReciterDataRetriever(),
-            recentRecitersService: RecentRecitersService(),
-            audioPlayer: QuranAudioPlayer(),
-            downloader: QuranAudioDownloader(
-                baseURL: container.filesAppHost,
-                downloader: container.downloadManager
-            ),
+            reciterRetreiver: reciterRetriever,
+            recentRecitersService: recentRecitersService,
+            downloader: playbackController.audioDownloader,
+            playbackController: playbackController,
             reciterListBuilder: ReciterListBuilder(),
             advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
         )
@@ -45,8 +43,5 @@ public struct AudioBannerBuilder {
         viewModel.listener = listener
         return (viewController, viewModel)
     }
-
-    // MARK: Internal
-
     let container: AppDependencies
 }

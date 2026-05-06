@@ -1,10 +1,5 @@
-//
-//  AppDelegate.swift
-//  QuranEngineApp
-//
-//  Created by Mohamed Afifi on 2023-06-24.
-//
-
+import AudioBannerFeature
+import CarPlay
 import AppStructureFeature
 import Logging
 import NoorFont
@@ -20,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         FontName.registerFonts()
         LoggingSystem.bootstrap(StreamLogHandler.standardError)
+        AudioPlaybackControllerStore.setUpIfNeeded(container: container)
 
         Task {
             // Eagerly load download manager to handle any background downloads.
@@ -34,8 +30,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: UISceneSession Lifecycle
 
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        switch connectingSceneSession.role {
+        case .carTemplateApplication:
+            UISceneConfiguration(
+                name: "CarPlay Configuration",
+                sessionRole: connectingSceneSession.role
+            )
+        default:
+            UISceneConfiguration(
+                name: "Default Configuration",
+                sessionRole: connectingSceneSession.role
+            )
+        }
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {

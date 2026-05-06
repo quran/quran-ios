@@ -17,6 +17,9 @@
 		D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */ = {isa = PBXBuildFile; fileRef = D975EDE92A4799A2009DE942 /* reciters.plist */; };
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; };
 		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
+		F12C1AE42F57E6CB00BA3E4E /* CarPlayTemplateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C1AE22F57E6CB00BA3E4E /* CarPlayTemplateBuilder.swift */; };
+		F12C1AE52F57E6CB00BA3E4E /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C1AE12F57E6CB00BA3E4E /* CarPlaySceneDelegate.swift */; };
+		F2B000012F6A000100000001 /* AudioBannerFeature in Frameworks */ = {isa = PBXBuildFile; productRef = F2B000022F6A000100000001 /* AudioBannerFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,8 @@
 		D98543D22A47C88700F477A2 /* hafs_1405 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hafs_1405; sourceTree = "<group>"; };
 		D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuranEngineApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
+		F12C1AE12F57E6CB00BA3E4E /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		F12C1AE22F57E6CB00BA3E4E /* CarPlayTemplateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayTemplateBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2B000012F6A000100000001 /* AudioBannerFeature in Frameworks */,
 				D975EDE22A4795BD009DE942 /* AppStructureFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +84,8 @@
 			isa = PBXGroup;
 			children = (
 				D975EDC52A4791D6009DE942 /* AppDelegate.swift */,
+				F12C1AE12F57E6CB00BA3E4E /* CarPlaySceneDelegate.swift */,
+				F12C1AE22F57E6CB00BA3E4E /* CarPlayTemplateBuilder.swift */,
 				D975EDC72A4791D6009DE942 /* SceneDelegate.swift */,
 				D975EDE42A47960D009DE942 /* Container.swift */,
 				D975EDE62A4796AA009DE942 /* Analytics.swift */,
@@ -123,6 +131,7 @@
 			);
 			name = QuranEngineApp;
 			packageProductDependencies = (
+				F2B000022F6A000100000001 /* AudioBannerFeature */,
 				D975EDE12A4795BD009DE942 /* AppStructureFeature */,
 			);
 			productName = QuranEngineApp;
@@ -181,12 +190,14 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-		/* Begin PBXSourcesBuildPhase section */
+/* Begin PBXSourcesBuildPhase section */
 		D975EDBE2A4791D6009DE942 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */,
+				F12C1AE42F57E6CB00BA3E4E /* CarPlayTemplateBuilder.swift in Sources */,
+				F12C1AE52F57E6CB00BA3E4E /* CarPlaySceneDelegate.swift in Sources */,
 				D975EDE52A47960D009DE942 /* Container.swift in Sources */,
 				D975EDE72A4796AA009DE942 /* Analytics.swift in Sources */,
 				D975EDC82A4791D6009DE942 /* SceneDelegate.swift in Sources */,
@@ -423,6 +434,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D975EDEB2A479A50009DE942 /* XCLocalSwiftPackageReference ".." */;
 			productName = AppStructureFeature;
+		};
+		F2B000022F6A000100000001 /* AudioBannerFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D975EDEB2A479A50009DE942 /* XCLocalSwiftPackageReference ".." */;
+			productName = AudioBannerFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -23,18 +23,25 @@
         // MARK: Lifecycle
 
         init(readingPreferences: ReadingPreferences = .shared) {
+            self.init(syncService: nil, readingPreferences: readingPreferences)
+        }
+
+        init(
+            syncService: SyncService?,
+            readingPreferences: ReadingPreferences = .shared
+        ) {
+            self.syncService = syncService
             self.readingPreferences = readingPreferences
         }
 
         // MARK: Internal
 
-        func collectionsSequence<S: AsyncSequence>(_ sequence: S) -> AsyncThrowingStream<[AyahBookmarkCollection], Error>
-            where S.Element == [CollectionWithAyahBookmarks]
-        {
+        func collectionsSequence() -> AsyncThrowingStream<[AyahBookmarkCollection], Error> {
             AsyncThrowingStream { continuation in
                 let task = Task {
                     do {
-                        for try await collections in sequence {
+                        let syncService = try requireSyncService()
+                        for try await collections in syncService.collectionsWithBookmarksSequence() {
                             continuation.yield(self.collections(from: collections))
                         }
                         continuation.finish()
@@ -44,6 +51,31 @@
                 }
                 continuation.onTermination = { _ in task.cancel() }
             }
+        }
+
+        func createCollection(named name: String) async throws {
+            let syncService = try requireSyncService()
+            try await syncService.createCollection(named: name)
+        }
+
+        func removeCollection(localId: String) async throws {
+            let syncService = try requireSyncService()
+            try await syncService.removeCollection(localId: localId)
+        }
+
+        // TODO: Move this conversion to mobile-sync-spm once it supports deleting
+        // collection bookmarks directly without converting to AyahBookmark first.
+        func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
+            let syncService = try requireSyncService()
+            try await syncService.removeBookmarkFromCollection(
+                collectionLocalId: bookmark.bookmark.collectionLocalId,
+                bookmark: AyahBookmark(
+                    sura: bookmark.bookmark.sura,
+                    ayah: bookmark.bookmark.ayah,
+                    lastUpdated: bookmark.bookmark.lastUpdated,
+                    localId: bookmark.bookmark.bookmarkLocalId
+                )
+            )
         }
 
         func collections(from collections: [CollectionWithAyahBookmarks]) -> [AyahBookmarkCollection] {
@@ -61,7 +93,15 @@
 
         // MARK: Private
 
+        private let syncService: SyncService?
         private let readingPreferences: ReadingPreferences
+
+        private func requireSyncService() throws -> SyncService {
+            guard let syncService else {
+                throw AyahBookmarkCollectionServiceError.missingSyncService
+            }
+            return syncService
+        }
 
         private func bookmark(for bookmark: CollectionAyahBookmark) -> AyahCollectionBookmark? {
             guard let ayah = AyahNumber(
@@ -75,17 +115,7 @@
         }
     }
 
-    extension SyncService {
-        func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
-            try await removeBookmarkFromCollection(
-                collectionLocalId: bookmark.bookmark.collectionLocalId,
-                bookmark: AyahBookmark(
-                    sura: bookmark.bookmark.sura,
-                    ayah: bookmark.bookmark.ayah,
-                    lastUpdated: bookmark.bookmark.lastUpdated,
-                    localId: bookmark.bookmark.bookmarkLocalId
-                )
-            )
-        }
+    private enum AyahBookmarkCollectionServiceError: Error {
+        case missingSyncService
     }
 #endif

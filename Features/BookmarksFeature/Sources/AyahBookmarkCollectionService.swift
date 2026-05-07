@@ -75,10 +75,6 @@
         }
     }
 
-    // TODO: Move this extension to mobile-sync repository in a follow-up PR.
-    // This is a temporary workaround to support CollectionAyahBookmark directly.
-    // The mobile-sync API should be enhanced to accept CollectionAyahBookmark
-    // instead of requiring conversion to AyahBookmark.
     extension SyncService {
         func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
             try await removeBookmarkFromCollection(

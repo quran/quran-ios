@@ -9,113 +9,106 @@
     import QuranKit
     import ReadingService
 
-    struct AyahBookmarkCollection {
-        let collection: Collection_
-        let bookmarks: [AyahCollectionBookmark]
+    public struct AyahBookmarkCollection {
+        public let collection: Collection_
+        public let bookmarks: [AyahCollectionBookmark]
     }
 
-    struct AyahCollectionBookmark {
-        let bookmark: CollectionAyahBookmark
-        let ayah: AyahNumber
+    public struct AyahCollectionBookmark {
+        public let bookmark: CollectionAyahBookmark
+        public let ayah: AyahNumber
     }
 
-    struct AyahBookmarkCollectionService {
+    public struct AyahBookmarkCollectionService {
         // MARK: Lifecycle
 
-        init(readingPreferences: ReadingPreferences = .shared) {
-            self.init(syncService: nil, readingPreferences: readingPreferences)
-        }
-
-        init(
-            syncService: SyncService?,
+        public init(
+            syncService: SyncService,
             readingPreferences: ReadingPreferences = .shared
         ) {
             self.syncService = syncService
             self.readingPreferences = readingPreferences
         }
 
-        // MARK: Internal
+        // MARK: Public
 
-        func collectionsSequence() -> AsyncThrowingStream<[AyahBookmarkCollection], Error> {
-            AsyncThrowingStream { continuation in
-                let task = Task {
-                    do {
-                        let syncService = try requireSyncService()
-                        for try await collections in syncService.collectionsWithBookmarksSequence() {
-                            continuation.yield(self.collections(from: collections))
-                        }
-                        continuation.finish()
-                    } catch {
-                        continuation.finish(throwing: error)
-                    }
+        public func observeCollections(_ handler: ([AyahBookmarkCollection]) -> Void) async throws {
+            let sequence = syncService.collectionsWithBookmarksSequence()
+                .map { collections in
+                    self.collections(from: collections)
                 }
-                continuation.onTermination = { _ in task.cancel() }
+            for try await collections in sequence {
+                handler(collections)
             }
         }
 
-        func createCollection(named name: String) async throws {
-            let syncService = try requireSyncService()
+        public func collectionsSnapshot() async throws -> [AyahBookmarkCollection] {
+            let sequence = syncService.collectionsWithBookmarksSequence()
+                .map { collections in
+                    self.collections(from: collections)
+                }
+            var iterator = sequence.makeAsyncIterator()
+            return try await iterator.next() ?? []
+        }
+
+        public func createCollection(named name: String) async throws {
             try await syncService.createCollection(named: name)
         }
 
-        func removeCollection(localId: String) async throws {
-            let syncService = try requireSyncService()
-            try await syncService.removeCollection(localId: localId)
-        }
-
-        // TODO: Move this conversion to mobile-sync-spm once it supports deleting
-        // collection bookmarks directly without converting to AyahBookmark first.
-        func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
-            let syncService = try requireSyncService()
-            try await syncService.removeBookmarkFromCollection(
-                collectionLocalId: bookmark.bookmark.collectionLocalId,
-                bookmark: AyahBookmark(
-                    sura: bookmark.bookmark.sura,
-                    ayah: bookmark.bookmark.ayah,
-                    lastUpdated: bookmark.bookmark.lastUpdated,
-                    localId: bookmark.bookmark.bookmarkLocalId
-                )
+        public func addAyahBookmarkToCollection(collectionLocalId: String, ayah: AyahNumber) async throws {
+            _ = try await syncService.addAyahBookmarkToCollection(
+                collectionLocalId: collectionLocalId,
+                sura: Int32(ayah.sura.suraNumber),
+                ayah: Int32(ayah.ayah)
             )
         }
 
-        func collections(from collections: [CollectionWithAyahBookmarks]) -> [AyahBookmarkCollection] {
+        public func removeCollection(localId: String) async throws {
+            try await syncService.removeCollection(localId: localId)
+        }
+
+        public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
+            try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
+        }
+
+        // MARK: Internal
+
+        static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
             collections.map { collection in
                 AyahBookmarkCollection(
                     collection: collection.collection,
-                    bookmarks: collection.bookmarks.compactMap(bookmark)
+                    bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
                 )
             }
         }
 
-        func page(for bookmark: AyahCollectionBookmark) -> Page {
-            bookmark.ayah.page
+        func collectionsSequence() -> some AsyncSequence {
+            syncService.collectionsWithBookmarksSequence()
+                .map { collections in
+                    self.collections(from: collections)
+                }
         }
 
         // MARK: Private
 
-        private let syncService: SyncService?
+        private let syncService: SyncService
         private let readingPreferences: ReadingPreferences
 
-        private func requireSyncService() throws -> SyncService {
-            guard let syncService else {
-                throw AyahBookmarkCollectionServiceError.missingSyncService
-            }
-            return syncService
-        }
-
-        private func bookmark(for bookmark: CollectionAyahBookmark) -> AyahCollectionBookmark? {
+        private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
             guard let ayah = AyahNumber(
-                quran: readingPreferences.reading.quran,
+                quran: quran,
                 sura: Int(bookmark.sura),
                 ayah: Int(bookmark.ayah)
             ) else {
                 return nil
             }
+
             return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
+        }
+
+        private func collections(from collections: [CollectionWithAyahBookmarks]) -> [AyahBookmarkCollection] {
+            Self.collections(from: collections, quran: readingPreferences.reading.quran)
         }
     }
 
-    private enum AyahBookmarkCollectionServiceError: Error {
-        case missingSyncService
-    }
 #endif

@@ -6,16 +6,14 @@
 
     final class AyahBookmarkCollectionServiceTests: XCTestCase {
         func test_collections_mapsAyahNumbers() {
-            let service = AyahBookmarkCollectionService()
-
-            let collections = service.collections(from: [
+            let collections = AyahBookmarkCollectionService.collections(from: [
                 Self.collection(
                     name: "Favorites",
                     bookmarks: [
                         Self.bookmark(collectionLocalId: "favorites", sura: 1, ayah: 1),
                     ]
                 ),
-            ])
+            ], quran: .hafsMadani1405)
 
             XCTAssertEqual(collections.count, 1)
             XCTAssertEqual(collections[0].collection.name, "Favorites")
@@ -24,16 +22,14 @@
         }
 
         func test_collections_skipsInvalidAyahs() {
-            let service = AyahBookmarkCollectionService()
-
-            let collections = service.collections(from: [
+            let collections = AyahBookmarkCollectionService.collections(from: [
                 Self.collection(
                     name: "Favorites",
                     bookmarks: [
                         Self.bookmark(collectionLocalId: "favorites", sura: 999, ayah: 1),
                     ]
                 ),
-            ])
+            ], quran: .hafsMadani1405)
 
             XCTAssertEqual(collections.count, 1)
             XCTAssertTrue(collections[0].bookmarks.isEmpty)

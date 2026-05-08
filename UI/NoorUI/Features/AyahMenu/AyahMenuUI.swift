@@ -15,7 +15,7 @@ public enum AyahMenuUI {
         public init(
             play: @escaping AsyncAction,
             repeatVerses: @escaping AsyncAction,
-            highlight: @Sendable @escaping (Note.Color) async -> Void,
+            highlight: @Sendable @escaping (HighlightColor) async -> Void,
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
@@ -36,7 +36,7 @@ public enum AyahMenuUI {
 
         let play: AsyncAction
         let repeatVerses: AsyncAction
-        let highlight: @Sendable (Note.Color) async -> Void
+        let highlight: @Sendable (HighlightColor) async -> Void
         let addNote: AsyncAction
         let deleteNote: AsyncAction
         let showTranslation: AsyncAction
@@ -48,7 +48,7 @@ public enum AyahMenuUI {
         // MARK: Lifecycle
 
         public init(
-            highlightingColor: Note.Color,
+            highlightingColor: HighlightColor,
             state: NoteState,
             playSubtitle: String,
             repeatSubtitle: String,
@@ -65,7 +65,7 @@ public enum AyahMenuUI {
 
         // MARK: Internal
 
-        let highlightingColor: Note.Color
+        let highlightingColor: HighlightColor
         let state: NoteState
         let actions: Actions
         let playSubtitle: String

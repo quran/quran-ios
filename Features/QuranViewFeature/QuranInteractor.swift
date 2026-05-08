@@ -63,6 +63,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
         let noteService: NoteService
+        let highlightsService: QuranHighlightsService
         let ayahMenuBuilder: AyahMenuBuilder
         let moreMenuBuilder: MoreMenuBuilder
         let audioBannerBuilder: AudioBannerBuilder
@@ -72,6 +73,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationsSelectionBuilder: TranslationsListBuilder
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
+        #if QURAN_SYNC
+            let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
+        #endif
     }
 
     // MARK: Lifecycle
@@ -99,6 +103,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     var visiblePages: [Page] { contentViewModel?.visiblePages ?? [] }
 
     func start() {
+        #if QURAN_SYNC
+            deps.syncedHighlightsObserver?.start()
+        #endif
+
         deps.noteService.notes(quran: deps.quran)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.notes = $0 }
@@ -238,7 +246,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            notes: notes
+            notes: notes,
+            highlightColor: highlightColor(for: verses)
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
@@ -373,6 +382,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
         let selectedVerses = Set(verses)
         return notes.filter { !selectedVerses.isDisjoint(with: $0.verses) }
+    }
+
+    private func highlightColor(for verses: [AyahNumber]) -> HighlightColor? {
+        let colors = verses.compactMap { deps.highlightsService.highlights.highlightVerses[$0] }
+        guard colors.count == verses.count else {
+            return nil
+        }
+        let uniqueColors = Set(colors)
+        return uniqueColors.count == 1 ? uniqueColors.first : nil
     }
 
     private func dismissWordPointer() {

@@ -244,3 +244,8 @@
 "bookmarks.collections.new.placeholder" = "اسم المجموعة";
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم إشاراتك المرجعية للآيات.";
+"highlight.color.red" = "أحمر";
+"highlight.color.green" = "أخضر";
+"highlight.color.blue" = "أزرق";
+"highlight.color.yellow" = "أصفر";
+"highlight.color.purple" = "بنفسجي";

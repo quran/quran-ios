@@ -250,5 +250,10 @@
 "bookmarks.collections.new.placeholder" = "Collection name";
 "bookmarks.collections.no-data.title" = "No collections yet";
 "bookmarks.collections.no-data.text" = "Create a collection to organize your ayah bookmarks.";
-
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
+
+"highlight.color.red" = "Red";
+"highlight.color.green" = "Green";
+"highlight.color.blue" = "Blue";
+"highlight.color.yellow" = "Yellow";
+"highlight.color.purple" = "Purple";

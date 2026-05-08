@@ -8,7 +8,7 @@
 
 import AppDependencies
 #if QURAN_SYNC
-    import MobileSync
+    import BookmarksFeature
 #endif
 import QuranAnnotations
 import QuranKit
@@ -66,7 +66,7 @@ public struct AyahMenuBuilder {
                 noteService: noteService,
                 textRetriever: textRetriever,
                 highlightColor: input.highlightColor,
-                syncService: container.syncService
+                ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) }
             )
         #else
             let deps = AyahMenuViewModel.Deps(

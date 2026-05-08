@@ -10,4 +10,12 @@ public enum HighlightColor: String, CaseIterable, Equatable, Hashable {
     case blue
     case yellow
     case purple
+
+    public init?(collectionName: String) {
+        self.init(rawValue: collectionName)
+    }
+
+    public var collectionName: String {
+        rawValue
+    }
 }

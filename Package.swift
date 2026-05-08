@@ -548,7 +548,6 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "QuranAnnotations",
             "NoorUI",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
@@ -561,9 +560,8 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
-            "FeaturesSupport",
+            "BookmarksFeature",
             "NoorUI",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
@@ -632,7 +630,6 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnnotationsService",
             "AuthenticationClient",
-            "FeaturesSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
         ]),
@@ -725,7 +722,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
+            "BookmarksFeature",
         ]),
 
         target(type, name: "SettingsFeature", dependencies: [

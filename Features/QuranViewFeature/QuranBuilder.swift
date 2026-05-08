@@ -10,6 +10,9 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature
@@ -37,7 +40,7 @@ public struct QuranBuilder {
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
             let syncedHighlightsObserver = container.syncService.map {
-                QuranSyncedHighlightsObserver(syncService: $0, highlightsService: highlightsService, quran: quran)
+                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
             }
         #endif
         #if QURAN_SYNC

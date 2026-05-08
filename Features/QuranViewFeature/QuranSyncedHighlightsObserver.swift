@@ -6,8 +6,7 @@
     //
 
     import AnnotationsService
-    import FeaturesSupport
-    import MobileSync
+    import BookmarksFeature
     import QuranAnnotations
     import QuranKit
     import VLogging
@@ -16,10 +15,9 @@
     final class QuranSyncedHighlightsObserver {
         // MARK: Lifecycle
 
-        init(syncService: SyncService, highlightsService: QuranHighlightsService, quran: Quran) {
-            self.syncService = syncService
+        init(ayahBookmarkCollectionService: AyahBookmarkCollectionService, highlightsService: QuranHighlightsService) {
+            self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
             self.highlightsService = highlightsService
-            self.quran = quran
         }
 
         deinit {
@@ -32,14 +30,13 @@
             guard task == nil else {
                 return
             }
-            let syncService = syncService
+            let ayahBookmarkCollectionService = ayahBookmarkCollectionService
             let highlightsService = highlightsService
-            let quran = quran
             task = Task {
                 do {
-                    for try await collections in syncService.collectionsWithBookmarksSequence() {
+                    try await ayahBookmarkCollectionService.observeCollections { collections in
                         var highlights = highlightsService.highlights
-                        highlights.highlightVerses = collections.highlightedAyahs(quran: quran)
+                        highlights.highlightVerses = highlightedAyahs(from: collections)
                         highlightsService.highlights = highlights
                     }
                 } catch {
@@ -48,11 +45,23 @@
             }
         }
 
+        private func highlightedAyahs(from collections: [AyahBookmarkCollection]) -> [AyahNumber: HighlightColor] {
+            var highlights: [AyahNumber: HighlightColor] = [:]
+            for collection in collections {
+                guard let color = HighlightColor(collectionName: collection.collection.name) else {
+                    continue
+                }
+                for bookmark in collection.bookmarks {
+                    highlights[bookmark.ayah] = color
+                }
+            }
+            return highlights
+        }
+
         // MARK: Private
 
-        private let syncService: SyncService
+        private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         private let highlightsService: QuranHighlightsService
-        private let quran: Quran
         private var task: Task<Void, Never>?
     }
 #endif

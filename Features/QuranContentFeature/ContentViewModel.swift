@@ -74,9 +74,7 @@ public final class ContentViewModel: ObservableObject {
             .sink { [weak self] in self?.quranMode = $0 }
             .store(in: &cancellables)
 
-        #if !QURAN_SYNC
-            loadNotes()
-        #endif
+        loadNotes()
         configureInitialPage()
     }
 

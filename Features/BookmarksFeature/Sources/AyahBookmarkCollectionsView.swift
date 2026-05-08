@@ -7,6 +7,7 @@
 
     import Localization
     import NoorUI
+    import QuranAnnotations
     import SwiftUI
     import UIx
 
@@ -82,12 +83,15 @@
                 set: { viewModel.setCollection(collection, expanded: $0) }
             )
 
+            let highlightColor = HighlightColor(rawValue: collection.collection.name)
+            let allowsCollectionDeletion = allowsCollectionManagement && highlightColor == nil
+
             NoorEditableCollapsibleSection(
-                title: collection.collection.name,
+                title: highlightColor?.localizedName ?? collection.collection.name,
                 isExpanded: isExpanded,
                 collection.bookmarks,
-                showsHeaderDeleteAction: allowsCollectionManagement && viewModel.editMode.isEditing,
-                headerDeleteAction: deleteCollectionAction(for: collection)
+                showsHeaderDeleteAction: allowsCollectionDeletion && viewModel.editMode.isEditing,
+                headerDeleteAction: allowsCollectionDeletion ? deleteCollectionAction(for: collection) : nil
             ) { bookmark in
                 bookmarkItem(bookmark)
             }

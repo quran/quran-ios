@@ -10,6 +10,9 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature
@@ -45,7 +48,7 @@ public struct QuranBuilder {
                 )
             }
             let syncedHighlightsObserver = container.syncService.map {
-                QuranSyncedHighlightsObserver(syncService: $0, highlightsService: highlightsService, quran: quran)
+                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
             }
             let interactorDeps = QuranInteractor.Deps(
                 quran: quran,

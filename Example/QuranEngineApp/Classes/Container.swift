@@ -136,11 +136,13 @@ class Container: AppDependencies {
             let authService = AuthService(authRepository: authRepository)
             let database = PersistenceModule.companion.provideQuranDatabase(driverFactory: driverFactory)
             let persistenceResetRepository: PersistenceResetRepository = PersistenceResetRepositoryImpl(database: database)
+            let persistenceImportRepository: PersistenceImportRepository = PersistenceImportRepositoryImpl(database: database)
             let syncService = SyncService(
                 authService: authService,
                 pipeline: graph.syncService.pipelineForIos,
                 environment: synchronizationEnvironment,
                 persistenceResetRepository: persistenceResetRepository,
+                persistenceImportRepository: persistenceImportRepository,
                 settings: SyncServiceKt.makeSettings()
             )
 

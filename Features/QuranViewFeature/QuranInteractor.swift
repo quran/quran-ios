@@ -63,6 +63,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
         let noteService: NoteService
+        let highlightsService: QuranHighlightsService
         let ayahMenuBuilder: AyahMenuBuilder
         let moreMenuBuilder: MoreMenuBuilder
         let audioBannerBuilder: AudioBannerBuilder
@@ -75,6 +76,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #if QURAN_SYNC
             let syncedNoteService: MobileSyncNoteService?
             let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
+            let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
         #endif
     }
 
@@ -110,6 +112,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func start() {
         #if QURAN_SYNC
+            deps.syncedHighlightsObserver?.start()
             if let syncedNoteService = deps.syncedNoteService {
                 startSyncedNotesObservation(syncedNoteService)
             } else {
@@ -267,7 +270,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             pointInView: point,
             verses: verses,
             notes: notes,
-            noteCount: syncedNoteCount(interacting: verses)
+            noteCount: syncedNoteCount(interacting: verses),
+            highlightColor: highlightColor(for: verses)
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
@@ -441,6 +445,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #else
             return 0
         #endif
+    }
+
+    private func highlightColor(for verses: [AyahNumber]) -> HighlightColor? {
+        let colors = verses.compactMap { deps.highlightsService.highlights.highlightVerses[$0] }
+        guard colors.count == verses.count else {
+            return nil
+        }
+        let uniqueColors = Set(colors)
+        return uniqueColors.count == 1 ? uniqueColors.first : nil
     }
 
     private func dismissWordPointer() {

@@ -38,6 +38,10 @@ extension QuranHighlights {
         // Sort order: share, reading, search, .note
         var versesByHighlights: [AyahNumber: UIColor] = [:]
 
+        for (verse, color) in highlightVerses {
+            versesByHighlights[verse] = color.uiColor.withAlphaComponent(Self.opacity)
+        }
+
         for (verse, note) in noteVerses {
             versesByHighlights[verse] = note.color.uiColor.withAlphaComponent(Self.opacity)
         }

@@ -7,6 +7,9 @@
 //
 
 import AppDependencies
+#if QURAN_SYNC
+    import MobileSync
+#endif
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -15,12 +18,20 @@ import UIKit
 public struct AyahMenuInput {
     // MARK: Lifecycle
 
-    public init(sourceView: UIView, pointInView: CGPoint, verses: [AyahNumber], notes: [Note], noteCount: Int = 0) {
+    public init(
+        sourceView: UIView,
+        pointInView: CGPoint,
+        verses: [AyahNumber],
+        notes: [QuranAnnotations.Note],
+        noteCount: Int = 0,
+        highlightColor: HighlightColor? = nil
+    ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
         self.noteCount = noteCount
+        self.highlightColor = highlightColor
     }
 
     // MARK: Internal
@@ -28,8 +39,9 @@ public struct AyahMenuInput {
     let sourceView: UIView
     let pointInView: CGPoint
     let verses: [AyahNumber]
-    let notes: [Note]
+    let notes: [QuranAnnotations.Note]
     let noteCount: Int
+    let highlightColor: HighlightColor?
 }
 
 @MainActor
@@ -48,16 +60,31 @@ public struct AyahMenuBuilder {
             quranFileURL: container.quranUthmaniV2Database
         )
         let noteService = container.noteService()
-        let viewModel = AyahMenuViewModel(deps: AyahMenuViewModel.Deps(
-            sourceView: input.sourceView,
-            pointInView: input.pointInView,
-            verses: input.verses,
-            notes: input.notes,
-            noteService: noteService,
-            textRetriever: textRetriever,
-            usesSyncedNotes: usesSyncedNotes,
-            noteCount: input.noteCount
-        ))
+        #if QURAN_SYNC
+            let deps = AyahMenuViewModel.Deps(
+                sourceView: input.sourceView,
+                pointInView: input.pointInView,
+                verses: input.verses,
+                notes: input.notes,
+                noteService: noteService,
+                textRetriever: textRetriever,
+                highlightColor: input.highlightColor,
+                usesSyncedNotes: usesSyncedNotes,
+                noteCount: input.noteCount,
+                syncService: container.syncService
+            )
+        #else
+            let deps = AyahMenuViewModel.Deps(
+                sourceView: input.sourceView,
+                pointInView: input.pointInView,
+                verses: input.verses,
+                notes: input.notes,
+                noteService: noteService,
+                textRetriever: textRetriever,
+                highlightColor: input.highlightColor
+            )
+        #endif
+        let viewModel = AyahMenuViewModel(deps: deps)
         viewModel.listener = listener
         return AyahMenuViewController(viewModel: viewModel)
     }

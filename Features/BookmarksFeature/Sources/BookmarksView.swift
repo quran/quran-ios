@@ -16,10 +16,16 @@ import UIx
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
     let showCollectionsAction: AsyncAction?
+    let showOldPageBookmarksAction: AsyncAction?
 
-    init(viewModel: BookmarksViewModel, showCollectionsAction: AsyncAction? = nil) {
+    init(
+        viewModel: BookmarksViewModel,
+        showCollectionsAction: AsyncAction? = nil,
+        showOldPageBookmarksAction: AsyncAction? = nil
+    ) {
         _viewModel = StateObject(wrappedValue: viewModel)
         self.showCollectionsAction = showCollectionsAction
+        self.showOldPageBookmarksAction = showOldPageBookmarksAction
     }
 
     var body: some View {
@@ -27,8 +33,12 @@ struct BookmarksView: View {
             let resolvedShowCollectionsAction: AsyncAction? = showCollectionsAction ?? (viewModel.canShowCollections ? {
                 await viewModel.showCollections()
             } : nil)
+            let resolvedShowOldPageBookmarksAction: AsyncAction? = showOldPageBookmarksAction ?? (viewModel.canShowOldPageBookmarks ? {
+                await viewModel.showOldPageBookmarks()
+            } : nil)
         #else
             let resolvedShowCollectionsAction = showCollectionsAction
+            let resolvedShowOldPageBookmarksAction = showOldPageBookmarksAction
         #endif
 
         BookmarksViewUI(
@@ -41,7 +51,8 @@ struct BookmarksView: View {
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
-            showCollectionsAction: resolvedShowCollectionsAction
+            showCollectionsAction: resolvedShowCollectionsAction,
+            showOldPageBookmarksAction: resolvedShowOldPageBookmarksAction
         )
     }
 }
@@ -62,6 +73,7 @@ private struct BookmarksViewUI: View {
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
     let showCollectionsAction: AsyncAction?
+    let showOldPageBookmarksAction: AsyncAction?
 
     var body: some View {
         Group {
@@ -73,7 +85,9 @@ private struct BookmarksViewUI: View {
                 }
             }
         }
-        .task { await start() }
+        .task {
+            await start()
+        }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -107,6 +121,16 @@ private struct BookmarksViewUI: View {
     }
 
     #if QURAN_SYNC
+        private var oldPageBookmarksRow: some View {
+            NoorListItem(
+                image: .init(.bookmark, color: .secondary),
+                title: .text(l("bookmarks.old-page-bookmarks")),
+                subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
+                accessory: .disclosureIndicator,
+                action: showOldPageBookmarksAction
+            )
+        }
+
         private var collectionsRow: some View {
             NoorListItem(
                 image: .init(.folder, color: .accentColor),
@@ -123,6 +147,12 @@ private struct BookmarksViewUI: View {
             if shouldShowSyncBanner {
                 NoorBasicSection {
                     syncBanner
+                }
+            }
+
+            if showOldPageBookmarksAction != nil {
+                NoorBasicSection {
+                    oldPageBookmarksRow
                 }
             }
 
@@ -237,7 +267,8 @@ struct BookmarksView_Previews: PreviewProvider {
                     deleteAction: { item in items = items.filter { $0 != item } },
                     dismissSyncBanner: {},
                     signInAction: {},
-                    showCollectionsAction: showCollectionsAction
+                    showCollectionsAction: showCollectionsAction,
+                    showOldPageBookmarksAction: {}
                 )
                 .navigationTitle(lAndroid("menu_bookmarks"))
                 .toolbar {

@@ -25,9 +25,11 @@ public struct BookmarksBuilder {
         let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
             let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
+            let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
             if let syncService = container.syncService {
+                let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: syncService)
                 let collectionsBuilder = AyahBookmarkCollectionsBuilder(
-                    ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: syncService),
+                    ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                     navigateToPage: { [weak listener] page in
                         listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                     }
@@ -39,8 +41,16 @@ public struct BookmarksBuilder {
                     let collectionsViewController = collectionsBuilder.build()
                     navigationController.pushViewController(collectionsViewController, animated: true)
                 }
+                showOldPageBookmarksAction = { presenter in
+                    guard let navigationController = presenter.navigationController else {
+                        return
+                    }
+                    let oldPageBookmarksViewController = collectionsBuilder.buildOldPageBookmarks()
+                    navigationController.pushViewController(oldPageBookmarksViewController, animated: true)
+                }
             } else {
                 showCollectionsAction = nil
+                showOldPageBookmarksAction = nil
             }
             let viewModel = BookmarksViewModel(
                 analytics: container.analytics,
@@ -49,7 +59,8 @@ public struct BookmarksBuilder {
                 navigateTo: { [weak listener] page in
                     listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                 },
-                showCollectionsAction: showCollectionsAction
+                showCollectionsAction: showCollectionsAction,
+                showOldPageBookmarksAction: showOldPageBookmarksAction
             )
         #else
             let viewModel = BookmarksViewModel(

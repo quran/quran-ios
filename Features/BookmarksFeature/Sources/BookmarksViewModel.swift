@@ -26,13 +26,15 @@ final class BookmarksViewModel: ObservableObject {
         service: PageBookmarkService,
         authenticationClient: (any AuthenticationClient)?,
         navigateTo: @escaping (Page) -> Void,
-        showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil
+        showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil,
+        showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)? = nil
     ) {
         self.analytics = analytics
         self.service = service
         self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
         self.showCollectionsAction = showCollectionsAction
+        self.showOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
@@ -52,6 +54,10 @@ final class BookmarksViewModel: ObservableObject {
 
     var canShowCollections: Bool {
         showCollectionsAction != nil
+    }
+
+    var canShowOldPageBookmarks: Bool {
+        showOldPageBookmarksAction != nil
     }
 
     func start() async {
@@ -127,6 +133,13 @@ final class BookmarksViewModel: ObservableObject {
         await showCollectionsAction?(presenter)
     }
 
+    func showOldPageBookmarks() async {
+        guard let presenter else {
+            return
+        }
+        await showOldPageBookmarksAction?(presenter)
+    }
+
     // MARK: Private
 
     private let navigateTo: (Page) -> Void
@@ -134,6 +147,7 @@ final class BookmarksViewModel: ObservableObject {
     private let service: PageBookmarkService
     private let authenticationClient: (any AuthenticationClient)?
     private let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
+    private let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared
     private let preferences = BookmarksPreferences.shared
 

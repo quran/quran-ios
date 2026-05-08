@@ -137,6 +137,16 @@
 "bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";
 "bookmarks.sync.action" = "تسجيل الدخول";
 
+"bookmarks.collections" = "المجموعات";
+"bookmarks.collections.add" = "إضافة مجموعة";
+"bookmarks.collections.edit" = "تحرير المجموعات";
+"bookmarks.collections.new.placeholder" = "اسم المجموعة";
+"bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
+"bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم إشاراتك المرجعية للآيات.";
+"bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";
+"bookmarks.collections.ayahs.no-data.title" = "لا توجد إشارات مرجعية في هذه المجموعة";
+"bookmarks.collections.ayahs.no-data.text" = "أضف إشارات مرجعية للآيات لرؤيتها هنا.";
+
 // MARK: - Notes
 
 "notes.no-data.title" = "إضافة آيات مرجعية...";
@@ -169,6 +179,14 @@
 "ayah.menu.edit-note" = "تحرير الملاحظة";
 "ayah.menu.delete-note" = "حذف الملاحظة";
 "ayah.menu.delete-highlight" = "حذف التحديد";
+
+// MARK: - Highlights
+
+"highlight.color.red" = "أحمر";
+"highlight.color.green" = "أخضر";
+"highlight.color.blue" = "أزرق";
+"highlight.color.yellow" = "أصفر";
+"highlight.color.purple" = "بنفسجي";
 
 // MARK: - Reading Selector
 

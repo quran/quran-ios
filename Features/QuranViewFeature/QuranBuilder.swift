@@ -44,11 +44,15 @@ public struct QuranBuilder {
                     analytics: container.analytics
                 )
             }
+            let syncedHighlightsObserver = container.syncService.map {
+                QuranSyncedHighlightsObserver(syncService: $0, highlightsService: highlightsService, quran: quran)
+            }
             let interactorDeps = QuranInteractor.Deps(
                 quran: quran,
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
                 noteService: container.noteService(),
+                highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),
@@ -59,7 +63,8 @@ public struct QuranBuilder {
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
                 resources: container.readingResources,
                 syncedNoteService: syncedNoteService,
-                syncedNoteEditorBuilder: syncedNoteEditorBuilder
+                syncedNoteEditorBuilder: syncedNoteEditorBuilder,
+                syncedHighlightsObserver: syncedHighlightsObserver
             )
         #else
             let interactorDeps = QuranInteractor.Deps(
@@ -67,6 +72,7 @@ public struct QuranBuilder {
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
                 noteService: container.noteService(),
+                highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),

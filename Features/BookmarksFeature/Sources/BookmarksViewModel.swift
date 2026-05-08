@@ -50,6 +50,10 @@ final class BookmarksViewModel: ObservableObject {
         !isAuthenticated && !isSyncBannerDismissed
     }
 
+    var canShowCollections: Bool {
+        showCollectionsAction != nil
+    }
+
     func start() async {
         if let authenticationClient {
             isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated

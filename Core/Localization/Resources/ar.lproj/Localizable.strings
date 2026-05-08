@@ -227,3 +227,10 @@
 "new.library_navigation" = "التنقل:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* قم بترتيب السور والأجزاء على الصفحة الرئيسية، وعرض أرقام السور حتى تتمكن من الانتقال إلى ما تحتاجه بشكل أسرع - بفضل @yismailuofa.";
+
+"bookmarks.collections" = "المجموعات";
+"bookmarks.collections.add" = "إضافة مجموعة";
+"bookmarks.collections.edit" = "تحرير المجموعات";
+"bookmarks.collections.new.placeholder" = "اسم المجموعة";
+"bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
+"bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم إشاراتك المرجعية للآيات.";

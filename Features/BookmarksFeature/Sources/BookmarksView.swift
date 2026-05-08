@@ -24,9 +24,9 @@ struct BookmarksView: View {
 
     var body: some View {
         #if QURAN_SYNC
-            let resolvedShowCollectionsAction = showCollectionsAction ?? {
+            let resolvedShowCollectionsAction: AsyncAction? = showCollectionsAction ?? (viewModel.canShowCollections ? {
                 await viewModel.showCollections()
-            }
+            } : nil)
         #else
             let resolvedShowCollectionsAction = showCollectionsAction
         #endif
@@ -126,8 +126,10 @@ private struct BookmarksViewUI: View {
                 }
             }
 
-            NoorBasicSection {
-                collectionsRow
+            if showCollectionsAction != nil {
+                NoorBasicSection {
+                    collectionsRow
+                }
             }
         #endif
 

@@ -23,15 +23,47 @@ public struct BookmarksBuilder {
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let viewModel = BookmarksViewModel(
-            analytics: container.analytics,
-            service: service,
-            authenticationClient: container.authenticationClient,
-            navigateTo: { [weak listener] page in
-                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+        #if QURAN_SYNC
+            guard let syncService = container.syncService else {
+                fatalError("Expected sync service when QURAN_SYNC is enabled")
             }
-        )
-        let viewController = BookmarksViewController(viewModel: viewModel)
+            let collectionsBuilder = AyahBookmarkCollectionsBuilder(
+                ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: syncService),
+                navigateToPage: { [weak listener] page in
+                    listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+                }
+            )
+            let viewModel = BookmarksViewModel(
+                analytics: container.analytics,
+                service: service,
+                authenticationClient: container.authenticationClient,
+                navigateTo: { [weak listener] page in
+                    listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+                },
+                showCollectionsAction: { presenter in
+                    guard let navigationController = presenter.navigationController else {
+                        return
+                    }
+                    let collectionsViewController = collectionsBuilder.build()
+                    navigationController.pushViewController(collectionsViewController, animated: true)
+                }
+            )
+        #else
+            let viewModel = BookmarksViewModel(
+                analytics: container.analytics,
+                service: service,
+                authenticationClient: container.authenticationClient,
+                navigateTo: { [weak listener] page in
+                    listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+                }
+            )
+        #endif
+
+        #if QURAN_SYNC
+            let viewController = BookmarksViewController(viewModel: viewModel)
+        #else
+            let viewController = BookmarksViewController(viewModel: viewModel)
+        #endif
         return viewController
     }
 

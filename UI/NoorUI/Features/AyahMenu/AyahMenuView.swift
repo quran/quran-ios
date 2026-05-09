@@ -127,29 +127,37 @@ private struct AyahMenuViewList: View {
             MenuGroup {
                 Divider()
 
-                if dataObject.state == .noHighlight {
+                if dataObject.usesCollectionBookmarks {
+                    Row(title: l("ayah-bookmark.save-verse"), action: dataObject.actions.saveVerse) {
+                        NoorSystemImage.bookmark.image
+                    }
+                    Divider()
+                        .padding(.leading)
+                } else {
+                    if dataObject.state == .noHighlight {
+                        Row(
+                            title: l("ayah.menu.highlight"),
+                            action: {
+                                Task {
+                                    await dataObject.actions.highlight(dataObject.highlightingColor)
+                                }
+                            }
+                        ) {
+                            IconCircle(color: dataObject.highlightingColor)
+                        }
+                        Divider()
+                            .padding(.leading)
+                    }
                     Row(
                         title: l("ayah.menu.highlight"),
-                        action: {
-                            Task {
-                                await dataObject.actions.highlight(dataObject.highlightingColor)
-                            }
-                        }
+                        subtitle: l("ayah.menu.highlight-select-color"),
+                        action: showHighlights
                     ) {
-                        IconCircle(color: dataObject.highlightingColor)
+                        IconCircles()
                     }
                     Divider()
                         .padding(.leading)
                 }
-                Row(
-                    title: l("ayah.menu.highlight"),
-                    subtitle: l("ayah.menu.highlight-select-color"),
-                    action: showHighlights
-                ) {
-                    IconCircles()
-                }
-                Divider()
-                    .padding(.leading)
 
                 switch dataObject.state {
                 case .noHighlight, .highlighted:
@@ -304,6 +312,7 @@ struct AyahMenuView_Previews: PreviewProvider {
         play: {},
         repeatVerses: {},
         highlight: { _ in },
+        saveVerse: {},
         addNote: {},
         deleteNote: {},
         showTranslation: {},

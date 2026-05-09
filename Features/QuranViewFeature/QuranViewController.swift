@@ -290,6 +290,15 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             quranView?.hideReadingBookmarkNudgeView()
             readingBookmarkNudgeController = nil
         }
+
+        func presentAyahBookmarkCollectionPicker(_ viewController: UIViewController) {
+            let navigationController = UINavigationController(rootViewController: viewController)
+            if let sheet = navigationController.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.prefersGrabberVisible = true
+            }
+            present(navigationController, animated: true)
+        }
     #endif
 
     // MARK: Private

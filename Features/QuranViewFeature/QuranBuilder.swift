@@ -36,11 +36,22 @@ public struct QuranBuilder {
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
-            let syncedHighlightsObserver = container.syncService.map {
-                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
+            let ayahBookmarkCollectionService = container.syncService.map {
+                AyahBookmarkCollectionService(syncService: $0)
+            }
+            let syncedHighlightsObserver = ayahBookmarkCollectionService.map {
+                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: $0, highlightsService: highlightsService)
             }
             let readingBookmarkService = container.syncService.map {
                 ReadingBookmarkService(syncService: $0)
+            }
+            let ayahBookmarkCollectionPickerBuilder: AyahBookmarkCollectionPickerBuilder? = if let ayahBookmarkCollectionService, let readingBookmarkService {
+                AyahBookmarkCollectionPickerBuilder(
+                    ayahBookmarkCollectionService: ayahBookmarkCollectionService,
+                    readingBookmarkService: readingBookmarkService
+                )
+            } else {
+                nil
             }
         #endif
         #if QURAN_SYNC
@@ -60,7 +71,8 @@ public struct QuranBuilder {
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
                 resources: container.readingResources,
                 syncedHighlightsObserver: syncedHighlightsObserver,
-                readingBookmarkService: readingBookmarkService
+                readingBookmarkService: readingBookmarkService,
+                ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder
             )
         #else
             let interactorDeps = QuranInteractor.Deps(

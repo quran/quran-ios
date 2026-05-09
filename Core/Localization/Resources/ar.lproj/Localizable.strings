@@ -264,3 +264,10 @@
 "reading-bookmark.education.undo" = "تراجع";
 "reading-bookmark.title" = "علامة القراءة";
 "reading-bookmark.my-title" = "علامة القراءة الخاصة بي";
+
+// MARK: - Ayah Bookmarks
+"ayah-bookmark.save-verse" = "حفظ الآية";
+"ayah-bookmark.save-to-collection" = "حفظ في مجموعة";
+"ayah-bookmark.save-reading-bookmark" = "حفظ كعلامة قراءة";
+"ayah-bookmark.collection-picker.no-data.title" = "لا توجد مجموعات بعد";
+"ayah-bookmark.collection-picker.no-data.text" = "أضف مجموعة لحفظ هذه الآية.";

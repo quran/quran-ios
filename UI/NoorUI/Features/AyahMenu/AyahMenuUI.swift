@@ -16,6 +16,7 @@ public enum AyahMenuUI {
             play: @escaping AsyncAction,
             repeatVerses: @escaping AsyncAction,
             highlight: @Sendable @escaping (HighlightColor) async -> Void,
+            saveVerse: @escaping AsyncAction,
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
@@ -25,6 +26,7 @@ public enum AyahMenuUI {
             self.play = play
             self.repeatVerses = repeatVerses
             self.highlight = highlight
+            self.saveVerse = saveVerse
             self.addNote = addNote
             self.deleteNote = deleteNote
             self.showTranslation = showTranslation
@@ -37,6 +39,7 @@ public enum AyahMenuUI {
         let play: AsyncAction
         let repeatVerses: AsyncAction
         let highlight: @Sendable (HighlightColor) async -> Void
+        let saveVerse: AsyncAction
         let addNote: AsyncAction
         let deleteNote: AsyncAction
         let showTranslation: AsyncAction
@@ -53,7 +56,8 @@ public enum AyahMenuUI {
             playSubtitle: String,
             repeatSubtitle: String,
             actions: Actions,
-            isTranslationView: Bool
+            isTranslationView: Bool,
+            usesCollectionBookmarks: Bool = false
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
@@ -61,6 +65,7 @@ public enum AyahMenuUI {
             self.repeatSubtitle = repeatSubtitle
             self.actions = actions
             self.isTranslationView = isTranslationView
+            self.usesCollectionBookmarks = usesCollectionBookmarks
         }
 
         // MARK: Internal
@@ -71,6 +76,7 @@ public enum AyahMenuUI {
         let playSubtitle: String
         let repeatSubtitle: String
         let isTranslationView: Bool
+        let usesCollectionBookmarks: Bool
     }
 
     // MARK: Public

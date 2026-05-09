@@ -32,6 +32,8 @@ public struct NoorEducationNudge: View {
             HStack(spacing: ContentDimension.interSpacing) {
                 Button(action: { isExpanded.toggle() }) {
                     title
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
                 }
                 .buttonStyle(.plain)
 

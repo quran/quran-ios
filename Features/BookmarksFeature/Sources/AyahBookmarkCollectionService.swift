@@ -32,13 +32,13 @@
 
         // MARK: Public
 
-        public func observeCollections(_ handler: ([AyahBookmarkCollection]) -> Void) async throws {
+        public func observeCollections(_ handler: @MainActor ([AyahBookmarkCollection]) -> Void) async throws {
             let sequence = syncService.collectionsWithBookmarksSequence()
                 .map { collections in
                     self.collections(from: collections)
                 }
             for try await collections in sequence {
-                handler(collections)
+                await handler(collections)
             }
         }
 

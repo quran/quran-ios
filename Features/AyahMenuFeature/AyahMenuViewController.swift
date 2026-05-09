@@ -39,6 +39,7 @@ final class AyahMenuViewController: UIViewController {
             play: { [weak self] in self?.viewModel.play() },
             repeatVerses: { [weak self] in self?.viewModel.repeatVerses() },
             highlight: { [weak self] color in await self?.viewModel.updateHighlight(color: color) },
+            saveVerse: { [weak self] in self?.viewModel.saveVerse() },
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
@@ -54,7 +55,8 @@ final class AyahMenuViewController: UIViewController {
             actions: actions,
             isTranslationView: viewModel.isTranslationView,
             usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon,
-            noteCount: viewModel.noteCount
+            noteCount: viewModel.noteCount,
+            usesCollectionBookmarks: viewModel.usesCollectionBookmarks
         )
         showAyahMenu(dataObject)
     }

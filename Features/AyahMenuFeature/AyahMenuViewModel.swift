@@ -33,6 +33,7 @@ public protocol AyahMenuListener: AnyObject {
 
     #if QURAN_SYNC
         func addSyncedNote(verses: [AyahNumber])
+        func saveVersesAsBookmark(_ verses: [AyahNumber])
     #endif
 
     func editNote(_ note: QuranAnnotations.Note)
@@ -106,6 +107,14 @@ final class AyahMenuViewModel {
     var usesSyncedNotesIcon: Bool {
         #if QURAN_SYNC
             return deps.usesSyncedNotes
+        #else
+            return false
+        #endif
+    }
+
+    var usesCollectionBookmarks: Bool {
+        #if QURAN_SYNC
+            return deps.ayahBookmarkCollectionService != nil
         #else
             return false
         #endif
@@ -195,6 +204,13 @@ final class AyahMenuViewModel {
     func showTranslation() {
         logger.info("AyahMenu: showTranslation. Verses: \(deps.verses)")
         listener?.showTranslation(deps.verses)
+    }
+
+    func saveVerse() {
+        #if QURAN_SYNC
+            logger.info("AyahMenu: save verse. Verses: \(deps.verses)")
+            listener?.saveVersesAsBookmark(deps.verses)
+        #endif
     }
 
     func copy() {

@@ -1,0 +1,36 @@
+#if QURAN_SYNC
+    import MobileSync
+    import QuranKit
+    import XCTest
+    @testable import BookmarksFeature
+
+    final class AyahBookmarkCollectionPickerViewModelTests: XCTestCase {
+        func test_bookmarksToAdd_skipsExistingBookmarks() {
+            let existingAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+            let newAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2)!
+            let collection = AyahBookmarkCollection(
+                collection: Collection_(name: "Favorites", lastUpdated: .distantPast, localId: "favorites"),
+                bookmarks: [
+                    AyahCollectionBookmark(
+                        bookmark: CollectionAyahBookmark(
+                            collectionLocalId: "favorites",
+                            collectionRemoteId: nil,
+                            bookmarkLocalId: "bookmark-1",
+                            bookmarkRemoteId: nil,
+                            sura: 1,
+                            ayah: 1,
+                            lastUpdated: .distantPast,
+                            localId: "collection-bookmark-1"
+                        ),
+                        ayah: existingAyah
+                    ),
+                ]
+            )
+
+            XCTAssertEqual(
+                AyahBookmarkCollectionPickerViewModel.bookmarksToAdd(to: collection, verses: [existingAyah, newAyah]),
+                [newAyah]
+            )
+        }
+    }
+#endif

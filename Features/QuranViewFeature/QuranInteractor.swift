@@ -56,6 +56,7 @@ protocol QuranPresentable: UIViewController {
     #if QURAN_SYNC
         func showReadingBookmarkNudge(expanded: Bool, undo: @escaping () async -> Void)
         func hideReadingBookmarkNudge()
+        func presentAyahBookmarkCollectionPicker(_ viewController: UIViewController)
     #endif
 }
 
@@ -83,6 +84,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
             let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
             let readingBookmarkService: ReadingBookmarkService?
+            let ayahBookmarkCollectionPickerBuilder: AyahBookmarkCollectionPickerBuilder?
         #endif
     }
 
@@ -255,6 +257,32 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: dismiss note editor")
         presenter?.dismiss(animated: true)
     }
+
+    #if QURAN_SYNC
+        func saveVersesAsBookmark(_ verses: [AyahNumber]) {
+            guard let ayahBookmarkCollectionPickerBuilder = deps.ayahBookmarkCollectionPickerBuilder else {
+                return
+            }
+
+            contentViewModel?.removeAyahMenuHighlight()
+            presenter?.dismissPresentedViewController { [weak self] in
+                guard let self else { return }
+                let viewController = ayahBookmarkCollectionPickerBuilder.build(
+                    verses: verses,
+                    didSaveReadingBookmark: { [weak self] in
+                        guard let self, let readingBookmarkService = deps.readingBookmarkService else {
+                            return
+                        }
+                        showReadingBookmarkNudge(using: readingBookmarkService)
+                    },
+                    didFinish: { [weak self] in
+                        self?.presenter?.dismissPresentedViewController(completion: nil)
+                    }
+                )
+                presenter?.presentAyahBookmarkCollectionPicker(viewController)
+            }
+        }
+    #endif
 
     func showTranslation(_ verses: [AyahNumber]) {
         guard let verse = verses.first else {

@@ -289,3 +289,10 @@
 "reading-bookmark.education.undo" = "Undo";
 "reading-bookmark.title" = "Reading Bookmark";
 "reading-bookmark.my-title" = "My Reading Bookmark";
+
+// MARK: - Ayah Bookmarks
+"ayah-bookmark.save-verse" = "Save Verse";
+"ayah-bookmark.save-to-collection" = "Save to Collection";
+"ayah-bookmark.save-reading-bookmark" = "Save as Reading Bookmark";
+"ayah-bookmark.collection-picker.no-data.title" = "No collections yet";
+"ayah-bookmark.collection-picker.no-data.text" = "Add a collection to save this verse.";

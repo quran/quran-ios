@@ -715,6 +715,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "FeaturesSupport",
             "Preferences",
+            "BookmarksFeature",
         ]),
 
         target(type, name: "QuranViewFeature", hasTests: false, dependencies: [

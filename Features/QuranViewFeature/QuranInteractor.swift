@@ -556,8 +556,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                     presenter?.hideReadingBookmarkNudge()
                 } else {
                     deps.analytics.bookmarkPage(page)
-                    try await service.addReadingBookmark(page: page)
-                    readingBookmark = .page(page)
+                    readingBookmark = try await service.addReadingBookmark(page: page)
                     showReadingBookmarkNudge(using: service)
                 }
             } catch {
@@ -566,7 +565,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
 
         private func showReadingBookmarkNudge(using service: ReadingBookmarkService) {
-            presenter?.showReadingBookmarkNudge(expanded: service.nextEducationPresentationIsExpanded()) { [weak self] in
+            let isExpanded = service.nextEducationPresentationIsExpanded()
+            presenter?.showReadingBookmarkNudge(expanded: isExpanded) { [weak self] in
                 await self?.removeReadingBookmark(using: service)
             }
         }
@@ -604,10 +604,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
         private func readingBookmarked(_ pages: [Page]) -> Bool {
-            guard case .page(let page) = readingBookmark else {
-                return false
-            }
-            return pages.contains(page)
+            readingBookmark?.isPageBookmark(for: pages) ?? false
         }
     #endif
 

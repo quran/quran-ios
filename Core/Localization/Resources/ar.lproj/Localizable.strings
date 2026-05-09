@@ -279,3 +279,4 @@
 "reading-bookmark.education.title.link" = "علامة قراءة متنقلة";
 "reading-bookmark.education.body" = "حفظ علامة قراءة سيستبدل علامة القراءة القديمة. لحفظ عدة آيات، استخدم ميزة التمييز.";
 "reading-bookmark.education.undo" = "تراجع";
+"reading-bookmark.title" = "علامة القراءة";

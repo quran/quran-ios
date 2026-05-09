@@ -8,6 +8,7 @@
 
 import AnnotationsService
 import AppDependencies
+import BookmarksFeature
 import FeaturesSupport
 import QuranTextKit
 import ReadingSelectorFeature
@@ -31,6 +32,7 @@ public struct HomeBuilder {
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
+            readingBookmarkService: readingBookmarkService(),
             navigateToPage: { [weak listener] lastPage in
                 listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)
             },
@@ -51,4 +53,14 @@ public struct HomeBuilder {
     // MARK: Internal
 
     let container: AppDependencies
+
+    // MARK: Private
+
+    private func readingBookmarkService() -> ReadingBookmarkService? {
+        #if QURAN_SYNC
+            container.syncService.map { ReadingBookmarkService(syncService: $0) }
+        #else
+            nil
+        #endif
+    }
 }

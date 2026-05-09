@@ -28,7 +28,9 @@ public struct BookmarksBuilder {
         #if QURAN_SYNC
             let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
+            let readingBookmarkService: ReadingBookmarkService?
             if let syncService = container.syncService {
+                readingBookmarkService = ReadingBookmarkService(syncService: syncService)
                 let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: syncService)
                 let prepareHighlightCollections: ([AyahBookmarkCollection]) async throws -> Void = { collections in
                     try await HighlightBookmarkCollections.ensure(in: collections, using: ayahBookmarkCollectionService)
@@ -56,6 +58,7 @@ public struct BookmarksBuilder {
                     navigationController.pushViewController(oldPageBookmarksViewController, animated: true)
                 }
             } else {
+                readingBookmarkService = nil
                 showCollectionsAction = nil
                 showOldPageBookmarksAction = nil
             }
@@ -66,6 +69,7 @@ public struct BookmarksBuilder {
                 navigateTo: { [weak listener] page in
                     listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                 },
+                readingBookmarkService: readingBookmarkService,
                 showCollectionsAction: showCollectionsAction,
                 showOldPageBookmarksAction: showOldPageBookmarksAction
             )

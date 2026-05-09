@@ -34,7 +34,8 @@
             let highlightsService = highlightsService
             task = Task {
                 do {
-                    try await ayahBookmarkCollectionService.observeCollections { collections in
+                    let sequence = ayahBookmarkCollectionService.collectionsSequence()
+                    for try await collections in sequence {
                         var highlights = highlightsService.highlights
                         highlights.highlightVerses = highlightedAyahs(from: collections)
                         highlightsService.highlights = highlights

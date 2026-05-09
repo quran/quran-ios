@@ -281,3 +281,9 @@
 "highlight.color.blue" = "Blue";
 "highlight.color.yellow" = "Yellow";
 "highlight.color.purple" = "Purple";
+
+// MARK: - Reading Bookmark
+"reading-bookmark.education.title.prefix" = "This is a movable ";
+"reading-bookmark.education.title.link" = "reading bookmark";
+"reading-bookmark.education.body" = "Saving a reading bookmark will now replace your old reading bookmark. To save multiple verses, please use the highlight feature.";
+"reading-bookmark.education.undo" = "Undo";

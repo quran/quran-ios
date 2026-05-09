@@ -111,6 +111,10 @@
         private let navigateToPage: (Page) -> Void
         private var didEnsureHighlightCollections = false
 
+        private var shouldEnsureHighlightCollections: Bool {
+            includedCollectionNames == nil || includedCollectionNames == Set(HighlightBookmarkCollections.names)
+        }
+
         private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
             guard let color = HighlightColor(collectionName: collection.collection.name) else {
                 return nil
@@ -129,7 +133,7 @@
         }
 
         private func ensureHighlightCollections(_ collections: [AyahBookmarkCollection]) async throws {
-            guard !didEnsureHighlightCollections, includedCollectionNames == nil else {
+            guard !didEnsureHighlightCollections, shouldEnsureHighlightCollections else {
                 return
             }
             didEnsureHighlightCollections = true

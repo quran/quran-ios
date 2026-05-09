@@ -286,5 +286,7 @@
 "ayah-bookmark.save-verse" = "حفظ الآية";
 "ayah-bookmark.save-to-collection" = "حفظ في مجموعة";
 "ayah-bookmark.save-reading-bookmark" = "حفظ كعلامة قراءة";
+"ayah-bookmark.save-to-highlight" = "حفظ كتمييز";
+"ayah-bookmark.remove-reading-bookmark" = "إزالة علامة القراءة";
 "ayah-bookmark.collection-picker.no-data.title" = "لا توجد مجموعات بعد";
 "ayah-bookmark.collection-picker.no-data.text" = "أضف مجموعة لحفظ هذه الآية.";

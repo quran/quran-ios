@@ -15,11 +15,15 @@
 
         init(viewModel: AyahBookmarkCollectionPickerViewModel) {
             self.viewModel = viewModel
-            super.init(rootView: AyahBookmarkCollectionPickerView(viewModel: viewModel, addCollection: {}))
-            rootView = AyahBookmarkCollectionPickerView(viewModel: viewModel, addCollection: { [weak self] in
-                self?.addCollection()
-            })
+            super.init(rootView: AyahBookmarkCollectionPickerView(viewModel: viewModel))
             title = l("ayah-bookmark.save-verse")
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "plus"),
+                primaryAction: UIAction { [weak self] _ in
+                    self?.addCollection()
+                }
+            )
+            navigationItem.leftBarButtonItem?.accessibilityLabel = l("bookmarks.collections.add")
             navigationItem.rightBarButtonItem = UIBarButtonItem(
                 title: l("button.done"),
                 primaryAction: UIAction { [weak self] _ in

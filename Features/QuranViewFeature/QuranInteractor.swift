@@ -269,11 +269,16 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 guard let self else { return }
                 let viewController = ayahBookmarkCollectionPickerBuilder.build(
                     verses: verses,
-                    didSaveReadingBookmark: { [weak self] in
-                        guard let self, let readingBookmarkService = deps.readingBookmarkService else {
+                    didUpdateReadingBookmark: { [weak self] bookmark in
+                        guard let self else {
                             return
                         }
-                        showReadingBookmarkNudge(using: readingBookmarkService)
+                        readingBookmark = bookmark
+                        if bookmark != nil, let readingBookmarkService = deps.readingBookmarkService {
+                            showReadingBookmarkNudge(using: readingBookmarkService)
+                        } else {
+                            presenter?.hideReadingBookmarkNudge()
+                        }
                     },
                     didFinish: { [weak self] in
                         self?.presenter?.dismissPresentedViewController(completion: nil)

@@ -35,7 +35,8 @@
 
         func start() async {
             do {
-                try await ayahBookmarkCollectionService.observeCollections { collections in
+                let sequence = ayahBookmarkCollectionService.collectionsSequence()
+                for try await collections in sequence {
                     self.collections = filtered(collections).sorted {
                         $0.collection.name.localizedCaseInsensitiveCompare($1.collection.name) == .orderedAscending
                     }

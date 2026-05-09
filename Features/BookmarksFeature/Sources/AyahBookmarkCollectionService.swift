@@ -19,6 +19,37 @@
         public let ayah: AyahNumber
     }
 
+    public struct AyahBookmarkCollectionsSequence: AsyncSequence {
+        public typealias Element = [AyahBookmarkCollection]
+
+        public struct AsyncIterator: AsyncIteratorProtocol {
+            init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
+                var iterator = sequence.makeAsyncIterator()
+                nextValue = {
+                    try await iterator.next()
+                }
+            }
+
+            public mutating func next() async throws -> Element? {
+                try await nextValue()
+            }
+
+            private let nextValue: () async throws -> Element?
+        }
+
+        init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
+            makeIterator = {
+                AsyncIterator(sequence)
+            }
+        }
+
+        public func makeAsyncIterator() -> AsyncIterator {
+            makeIterator()
+        }
+
+        private let makeIterator: () -> AsyncIterator
+    }
+
     public struct AyahBookmarkCollectionService {
         // MARK: Lifecycle
 
@@ -31,25 +62,6 @@
         }
 
         // MARK: Public
-
-        public func observeCollections(_ handler: @MainActor ([AyahBookmarkCollection]) -> Void) async throws {
-            let sequence = syncService.collectionsWithBookmarksSequence()
-                .map { collections in
-                    self.collections(from: collections)
-                }
-            for try await collections in sequence {
-                await handler(collections)
-            }
-        }
-
-        public func collectionsSnapshot() async throws -> [AyahBookmarkCollection] {
-            let sequence = syncService.collectionsWithBookmarksSequence()
-                .map { collections in
-                    self.collections(from: collections)
-                }
-            var iterator = sequence.makeAsyncIterator()
-            return try await iterator.next() ?? []
-        }
 
         public func createCollection(named name: String) async throws {
             try await syncService.createCollection(named: name)
@@ -71,6 +83,14 @@
             try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
         }
 
+        public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
+            let sequence = syncService.collectionsWithBookmarksSequence()
+                .map { collections in
+                    self.collections(from: collections)
+                }
+            return AyahBookmarkCollectionsSequence(sequence)
+        }
+
         // MARK: Internal
 
         static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
@@ -80,13 +100,6 @@
                     bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
                 )
             }
-        }
-
-        func collectionsSequence() -> some AsyncSequence {
-            syncService.collectionsWithBookmarksSequence()
-                .map { collections in
-                    self.collections(from: collections)
-                }
         }
 
         // MARK: Private

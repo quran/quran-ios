@@ -15,40 +15,36 @@
     struct AyahBookmarkCollectionPickerView: View {
         // MARK: Lifecycle
 
-        init(viewModel: AyahBookmarkCollectionPickerViewModel, addCollection: @escaping AsyncAction) {
+        init(viewModel: AyahBookmarkCollectionPickerViewModel) {
             _viewModel = StateObject(wrappedValue: viewModel)
-            self.addCollection = addCollection
         }
 
         // MARK: Internal
 
         @StateObject var viewModel: AyahBookmarkCollectionPickerViewModel
-        let addCollection: AsyncAction
 
         var body: some View {
             NoorList {
                 Section {
-                    NoorListItem(
-                        image: .init(.bookmark, color: .red),
-                        title: .text(l("ayah-bookmark.save-reading-bookmark")),
-                        action: { await viewModel.saveReadingBookmark() }
-                    )
+                    readingBookmarkItem
                 }
 
-                Section(header: Text(l("ayah-bookmark.save-to-collection"))) {
-                    if viewModel.collections.isEmpty {
-                        emptyCollectionsItem
-                    } else {
-                        ForEach(viewModel.collections) { collection in
+                if !viewModel.highlightCollections.isEmpty {
+                    Section(header: Text(l("ayah-bookmark.save-to-highlight"))) {
+                        ForEach(viewModel.highlightCollections) { collection in
                             collectionItem(collection)
                         }
                     }
+                }
 
-                    NoorListItem(
-                        image: .init(.folder),
-                        title: .text(l("bookmarks.collections.add")),
-                        action: addCollection
-                    )
+                Section(header: Text(l("ayah-bookmark.save-to-collection"))) {
+                    if viewModel.bookmarkCollections.isEmpty {
+                        emptyCollectionsItem
+                    } else {
+                        ForEach(viewModel.bookmarkCollections) { collection in
+                            collectionItem(collection)
+                        }
+                    }
                 }
             }
             .task { await viewModel.start() }
@@ -56,6 +52,21 @@
         }
 
         // MARK: Private
+
+        private var readingBookmarkItem: some View {
+            NoorListItem(
+                image: .init(
+                    viewModel.isSelectedVerseReadingBookmark ? .bookmark : .bookmarkOutline,
+                    color: viewModel.isSelectedVerseReadingBookmark ? .red : nil
+                ),
+                title: .text(
+                    viewModel.isSelectedVerseReadingBookmark
+                        ? l("ayah-bookmark.remove-reading-bookmark")
+                        : l("ayah-bookmark.save-reading-bookmark")
+                ),
+                action: { await viewModel.toggleReadingBookmark() }
+            )
+        }
 
         private var emptyCollectionsItem: some View {
             NoorListItem(
@@ -66,7 +77,7 @@
         }
 
         private func collectionItem(_ collection: AyahBookmarkCollection) -> some View {
-            let highlightColor = HighlightColor(collectionName: collection.collection.name)
+            let highlightColor = AyahBookmarkCollectionPickerViewModel.highlightColor(for: collection)
             return NoorListItem(
                 image: .init(.folder, color: highlightColor?.color),
                 title: .text(highlightColor?.localizedName ?? collection.collection.name),

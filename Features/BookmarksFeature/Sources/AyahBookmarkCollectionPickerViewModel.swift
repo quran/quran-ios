@@ -6,6 +6,7 @@
     //
 
     import Foundation
+    import QuranAnnotations
     import QuranKit
     import VLogging
 
@@ -17,13 +18,13 @@
             ayahBookmarkCollectionService: AyahBookmarkCollectionService,
             readingBookmarkService: ReadingBookmarkService,
             verses: [AyahNumber],
-            didSaveReadingBookmark: @escaping () -> Void,
+            didUpdateReadingBookmark: @escaping (QuranReadingBookmark?) -> Void,
             didFinish: @escaping () -> Void
         ) {
             self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
             self.readingBookmarkService = readingBookmarkService
             self.verses = verses
-            self.didSaveReadingBookmark = didSaveReadingBookmark
+            self.didUpdateReadingBookmark = didUpdateReadingBookmark
             self.didFinish = didFinish
         }
 
@@ -31,10 +32,27 @@
 
         @Published var collections: [AyahBookmarkCollection] = []
         @Published var selectedCollectionIDs: Set<String> = []
+        @Published var selectedHighlightCollectionID: String?
+        @Published var readingBookmark: QuranReadingBookmark?
         @Published var error: Error?
 
         var hasSelectedCollections: Bool {
-            !selectedCollectionIDs.isEmpty
+            !selectedCollectionIDs.isEmpty || selectedHighlightCollectionID != nil
+        }
+
+        var bookmarkCollections: [AyahBookmarkCollection] {
+            collections.filter { Self.highlightColor(for: $0) == nil }
+        }
+
+        var highlightCollections: [AyahBookmarkCollection] {
+            collections.filter { Self.highlightColor(for: $0) != nil }
+        }
+
+        var isSelectedVerseReadingBookmark: Bool {
+            guard let firstVerse = verses.first else {
+                return false
+            }
+            return readingBookmark?.isAyahBookmark(for: firstVerse) == true
         }
 
         nonisolated static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -46,20 +64,21 @@
             return verses.filter { !existingAyahs.contains(AyahKey($0)) }
         }
 
+        nonisolated static func highlightColor(for collection: AyahBookmarkCollection) -> HighlightColor? {
+            HighlightColor(collectionName: collection.collection.name)
+        }
+
         func start() async {
-            do {
-                let sequence = ayahBookmarkCollectionService.collectionsSequence()
-                for try await collections in sequence {
-                    self.collections = Self.sorted(collections)
-                }
-            } catch {
-                self.error = error
-            }
+            async let collections: () = loadCollections()
+            async let readingBookmark: () = loadReadingBookmark()
+            _ = await [collections, readingBookmark]
         }
 
         func toggleSelection(for collection: AyahBookmarkCollection) {
             let id = collection.collection.localId
-            if selectedCollectionIDs.contains(id) {
+            if Self.highlightColor(for: collection) != nil {
+                selectedHighlightCollectionID = selectedHighlightCollectionID == id ? nil : id
+            } else if selectedCollectionIDs.contains(id) {
                 selectedCollectionIDs.remove(id)
             } else {
                 selectedCollectionIDs.insert(id)
@@ -67,7 +86,11 @@
         }
 
         func isSelected(_ collection: AyahBookmarkCollection) -> Bool {
-            selectedCollectionIDs.contains(collection.collection.localId)
+            let id = collection.collection.localId
+            if Self.highlightColor(for: collection) != nil {
+                return selectedHighlightCollectionID == id
+            }
+            return selectedCollectionIDs.contains(id)
         }
 
         func createCollection(name: String) async {
@@ -80,7 +103,8 @@
 
         func saveSelectedCollections() async {
             do {
-                for collection in collections where selectedCollectionIDs.contains(collection.collection.localId) {
+                try await saveSelectedHighlight()
+                for collection in bookmarkCollections where selectedCollectionIDs.contains(collection.collection.localId) {
                     for verse in Self.bookmarksToAdd(to: collection, verses: verses) {
                         try await ayahBookmarkCollectionService.addAyahBookmarkToCollection(
                             collectionLocalId: collection.collection.localId,
@@ -94,14 +118,21 @@
             }
         }
 
-        func saveReadingBookmark() async {
+        func toggleReadingBookmark() async {
             guard let firstVerse = verses.first else {
                 return
             }
 
             do {
-                try await readingBookmarkService.addReadingBookmark(ayah: firstVerse)
-                didSaveReadingBookmark()
+                if isSelectedVerseReadingBookmark {
+                    try await readingBookmarkService.removeReadingBookmark()
+                    readingBookmark = nil
+                    didUpdateReadingBookmark(nil)
+                } else {
+                    let bookmark = try await readingBookmarkService.addReadingBookmark(ayah: firstVerse)
+                    readingBookmark = bookmark
+                    didUpdateReadingBookmark(bookmark)
+                }
                 didFinish()
             } catch {
                 self.error = error
@@ -113,8 +144,57 @@
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         private let readingBookmarkService: ReadingBookmarkService
         private let verses: [AyahNumber]
-        private let didSaveReadingBookmark: () -> Void
+        private let didUpdateReadingBookmark: (QuranReadingBookmark?) -> Void
         private let didFinish: () -> Void
+
+        private func loadCollections() async {
+            do {
+                let sequence = ayahBookmarkCollectionService.collectionsSequence()
+                for try await collections in sequence {
+                    self.collections = Self.sorted(collections)
+                }
+            } catch {
+                self.error = error
+            }
+        }
+
+        private func loadReadingBookmark() async {
+            do {
+                let sequence = readingBookmarkService.readingBookmarkSequence()
+                for try await bookmark in sequence {
+                    readingBookmark = bookmark
+                }
+            } catch {
+                self.error = error
+            }
+        }
+
+        private func saveSelectedHighlight() async throws {
+            guard let selectedHighlightCollectionID else {
+                return
+            }
+
+            let selectedAyahs = Set(verses.map(AyahKey.init))
+            var targetAyahs = Set<AyahKey>()
+
+            for collection in highlightCollections {
+                let isTarget = collection.collection.localId == selectedHighlightCollectionID
+                for bookmark in collection.bookmarks where selectedAyahs.contains(AyahKey(bookmark.ayah)) {
+                    if isTarget {
+                        targetAyahs.insert(AyahKey(bookmark.ayah))
+                    } else {
+                        try await ayahBookmarkCollectionService.removeBookmarkFromCollection(bookmark)
+                    }
+                }
+            }
+
+            for verse in verses where !targetAyahs.contains(AyahKey(verse)) {
+                try await ayahBookmarkCollectionService.addAyahBookmarkToCollection(
+                    collectionLocalId: selectedHighlightCollectionID,
+                    ayah: verse
+                )
+            }
+        }
     }
 
     private struct AyahKey: Hashable {

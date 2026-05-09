@@ -24,14 +24,14 @@
 
         public func build(
             verses: [AyahNumber],
-            didSaveReadingBookmark: @escaping () -> Void,
+            didUpdateReadingBookmark: @escaping (QuranReadingBookmark?) -> Void,
             didFinish: @escaping () -> Void
         ) -> UIViewController {
             let viewModel = AyahBookmarkCollectionPickerViewModel(
                 ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                 readingBookmarkService: readingBookmarkService,
                 verses: verses,
-                didSaveReadingBookmark: didSaveReadingBookmark,
+                didUpdateReadingBookmark: didUpdateReadingBookmark,
                 didFinish: didFinish
             )
             return AyahBookmarkCollectionPickerViewController(viewModel: viewModel)

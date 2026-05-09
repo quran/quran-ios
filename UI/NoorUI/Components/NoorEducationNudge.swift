@@ -1,7 +1,7 @@
 //
 //  NoorEducationNudge.swift
 //
-//  Created by OpenAI on 2026-05-09.
+//  Created by Ahmed Nabil on 2026-05-09.
 //
 
 import SwiftUI
@@ -43,7 +43,7 @@ public struct NoorEducationNudge: View {
                     }
                 }
                 .font(.body.weight(.semibold))
-                .foregroundColor(Color.accentColor)
+                .foregroundColor(Color.appIdentity)
             }
 
             if isExpanded {

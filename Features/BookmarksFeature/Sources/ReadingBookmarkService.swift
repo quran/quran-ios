@@ -42,6 +42,15 @@ public enum QuranReadingBookmark: Equatable {
         return bookmarkedAyah == ayah
     }
 
+    public func isReadingBookmark(for ayah: AyahNumber) -> Bool {
+        switch self {
+        case .ayah(let bookmarkedAyah, _):
+            return bookmarkedAyah == ayah
+        case .page(let page, _):
+            return page == ayah.page
+        }
+    }
+
     public func isPageBookmark(for pages: [Page]) -> Bool {
         pages.contains(page)
     }

@@ -42,6 +42,9 @@ public struct QuranBuilder {
             let syncedHighlightsObserver = container.syncService.map {
                 QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
             }
+            let readingBookmarkService = container.syncService.map {
+                ReadingBookmarkService(syncService: $0)
+            }
         #endif
         #if QURAN_SYNC
             let interactorDeps = QuranInteractor.Deps(
@@ -59,7 +62,8 @@ public struct QuranBuilder {
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
                 resources: container.readingResources,
-                syncedHighlightsObserver: syncedHighlightsObserver
+                syncedHighlightsObserver: syncedHighlightsObserver,
+                readingBookmarkService: readingBookmarkService
             )
         #else
             let interactorDeps = QuranInteractor.Deps(

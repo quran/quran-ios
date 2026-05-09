@@ -114,6 +114,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.isIdleTimerDisabled = false
+        #if QURAN_SYNC
+            hideReadingBookmarkNudge()
+        #endif
     }
 
     // MARK: - Content Status
@@ -248,11 +251,56 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         updateRightBarItems(animated: false, isBookmarked: isBookmarked)
     }
 
+    #if QURAN_SYNC
+        func showReadingBookmarkNudge(expanded: Bool, undo: @escaping () async -> Void) {
+            hideReadingBookmarkNudge()
+            let nudge = NoorEducationNudge(
+                titlePrefix: l("reading-bookmark.education.title.prefix"),
+                titleLink: l("reading-bookmark.education.title.link"),
+                message: l("reading-bookmark.education.body"),
+                actionTitle: l("reading-bookmark.education.undo"),
+                initiallyExpanded: expanded,
+                action: { [weak self] in
+                    await undo()
+                    self?.hideReadingBookmarkNudge()
+                }
+            )
+            let viewController = UIHostingController(rootView: nudge)
+            viewController.view.backgroundColor = .clear
+
+            readingBookmarkNudgeController = viewController
+            addChild(viewController)
+            quranView?.showReadingBookmarkNudgeView(viewController.view)
+            viewController.didMove(toParent: self)
+
+            readingBookmarkNudgeHideTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 5_000_000_000)
+                await MainActor.run {
+                    self?.hideReadingBookmarkNudge()
+                }
+            }
+        }
+
+        func hideReadingBookmarkNudge() {
+            readingBookmarkNudgeHideTask?.cancel()
+            readingBookmarkNudgeHideTask = nil
+            if let readingBookmarkNudgeController {
+                removeChild(readingBookmarkNudgeController)
+            }
+            quranView?.hideReadingBookmarkNudgeView()
+            readingBookmarkNudgeController = nil
+        }
+    #endif
+
     // MARK: Private
 
     private class TranslationsSelectionNavigationController: BaseNavigationController {}
 
     private var contentStatusView: UIHostingController<ContentStatusView>?
+    #if QURAN_SYNC
+        private var readingBookmarkNudgeController: UIHostingController<NoorEducationNudge>?
+        private var readingBookmarkNudgeHideTask: Task<Void, Never>?
+    #endif
 
     private var cancellables: Set<AnyCancellable> = []
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)

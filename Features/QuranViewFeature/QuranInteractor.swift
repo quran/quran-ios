@@ -10,6 +10,9 @@ import Analytics
 import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import Combine
 import Crashing
 import FeaturesSupport
@@ -52,6 +55,11 @@ protocol QuranPresentable: UIViewController {
 
     func dismissWordPointer(_ viewController: UIViewController)
     func dismissPresentedViewController(completion: (() -> Void)?)
+
+    #if QURAN_SYNC
+        func showReadingBookmarkNudge(expanded: Bool, undo: @escaping () async -> Void)
+        func hideReadingBookmarkNudge()
+    #endif
 }
 
 @MainActor
@@ -75,6 +83,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let resources: ReadingResourcesService
         #if QURAN_SYNC
             let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
+            let readingBookmarkService: ReadingBookmarkService?
         #endif
     }
 
@@ -84,6 +93,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         self.deps = deps
         self.input = input
         logger.info("Quran: opening quran \(input)")
+    }
+
+    deinit {
+        #if QURAN_SYNC
+            readingBookmarkTask?.cancel()
+        #endif
     }
 
     // MARK: Internal
@@ -112,10 +127,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             .sink { [weak self] in self?.notes = $0 }
             .store(in: &cancellables)
 
-        deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.pageBookmarks = $0 }
-            .store(in: &cancellables)
+        #if QURAN_SYNC
+            if let readingBookmarkService = deps.readingBookmarkService {
+                startReadingBookmarkObservation(readingBookmarkService)
+            } else {
+                startPageBookmarkObservation()
+            }
+        #else
+            startPageBookmarkObservation()
+        #endif
 
         contentStatePreferences.$quranMode
             .sink { [weak self] _ in self?.onQuranModeUpdated() }
@@ -291,6 +311,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func toogleBookmark() async {
         logger.info("Quran: onBookmarkBarButtonTapped")
+        #if QURAN_SYNC
+            if let readingBookmarkService = deps.readingBookmarkService {
+                await toggleReadingBookmark(using: readingBookmarkService)
+                return
+            }
+        #endif
+
         let pages = visiblePages
         let wasBookmarked = bookmarked(pages)
 
@@ -335,6 +362,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private var contentViewController: ContentViewController?
 
+    #if QURAN_SYNC
+        private var readingBookmarkTask: Task<Void, Never>?
+        private var readingBookmark: QuranReadingBookmark? {
+            didSet {
+                reloadPageBookmark()
+            }
+        }
+    #endif
+
     private var contentViewModel: ContentViewModel? {
         didSet {
             visiblePageCancellable = contentViewModel?.$visiblePages
@@ -347,6 +383,31 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             reloadPageBookmark()
         }
     }
+
+    private func startPageBookmarkObservation() {
+        deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.pageBookmarks = $0 }
+            .store(in: &cancellables)
+    }
+
+    #if QURAN_SYNC
+        private func startReadingBookmarkObservation(_ service: ReadingBookmarkService) {
+            readingBookmarkTask?.cancel()
+            readingBookmarkTask = Task { [weak self] in
+                do {
+                    let sequence = service.readingBookmarkSequence()
+                    for try await bookmark in sequence {
+                        await MainActor.run {
+                            self?.readingBookmark = bookmark
+                        }
+                    }
+                } catch {
+                    crasher.recordError(error, reason: "Failed to observe reading bookmark")
+                }
+            }
+        }
+    #endif
 
     private func setVisiblePages(_ pages: [Page]) {
         logger.info("Quran: set visible pages \(pages)")
@@ -430,6 +491,41 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         return (viewController, contentViewModel)
     }
 
+    #if QURAN_SYNC
+        private func toggleReadingBookmark(using service: ReadingBookmarkService) async {
+            let pages = visiblePages
+            guard let page = pages.first else {
+                return
+            }
+
+            do {
+                if readingBookmarked(pages) {
+                    deps.analytics.removeBookmarkPage(page)
+                    try await service.removeReadingBookmark()
+                    presenter?.hideReadingBookmarkNudge()
+                } else {
+                    deps.analytics.bookmarkPage(page)
+                    try await service.addReadingBookmark(page: page)
+                    let isExpanded = service.nextEducationPresentationIsExpanded()
+                    presenter?.showReadingBookmarkNudge(expanded: isExpanded) { [weak self] in
+                        await self?.removeReadingBookmark(using: service)
+                    }
+                }
+            } catch {
+                crasher.recordError(error, reason: "Failed to toggle reading bookmark")
+            }
+        }
+
+        private func removeReadingBookmark(using service: ReadingBookmarkService) async {
+            do {
+                try await service.removeReadingBookmark()
+                presenter?.hideReadingBookmarkNudge()
+            } catch {
+                crasher.recordError(error, reason: "Failed to remove reading bookmark")
+            }
+        }
+    #endif
+
     // MARK: - Page Bookmark
 
     private func reloadPageBookmark() {
@@ -440,9 +536,24 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func bookmarked(_ pages: [Page]) -> Bool {
+        #if QURAN_SYNC
+            if deps.readingBookmarkService != nil {
+                return readingBookmarked(pages)
+            }
+        #endif
+
         let visibleBookmarks = pageBookmarks.filter { pages.contains($0.page) }
         return !visibleBookmarks.isEmpty
     }
+
+    #if QURAN_SYNC
+        private func readingBookmarked(_ pages: [Page]) -> Bool {
+            guard let readingBookmark else {
+                return false
+            }
+            return pages.contains(readingBookmark.page)
+        }
+    #endif
 
     private func showPageBookmarkIfNeeded(for pages: [Page]) {
         presenter?.updateBookmark(bookmarked(pages))

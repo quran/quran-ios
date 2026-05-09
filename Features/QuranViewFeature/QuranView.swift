@@ -17,6 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import NoorUI
 import UIKit
 import ViewConstrainer
 
@@ -70,6 +71,26 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         sendSubviewToBack(contentView)
     }
 
+    #if QURAN_SYNC
+        func showReadingBookmarkNudgeView(_ nudgeView: UIView) {
+            hideReadingBookmarkNudgeView()
+            readingBookmarkNudgeView = nudgeView
+            addAutoLayoutSubview(nudgeView)
+
+            let horizontalInset = ContentDimension.interSpacing * 5
+            NSLayoutConstraint.activate([
+                nudgeView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalInset),
+                trailingAnchor.constraint(equalTo: nudgeView.trailingAnchor, constant: horizontalInset),
+                nudgeView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: ContentDimension.interSpacing * 2),
+            ])
+        }
+
+        func hideReadingBookmarkNudgeView() {
+            readingBookmarkNudgeView?.removeFromSuperview()
+            readingBookmarkNudgeView = nil
+        }
+    #endif
+
     func addAudioBannerView(_ audioBannerView: UIView) {
         audioView = audioBannerView
         addAutoLayoutSubview(audioBannerView)
@@ -99,6 +120,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private let tapGesture = UITapGestureRecognizer()
     private var audioView: UIView?
+    #if QURAN_SYNC
+        private var readingBookmarkNudgeView: UIView?
+    #endif
 
     private func setUp() {
         clipsToBounds = true

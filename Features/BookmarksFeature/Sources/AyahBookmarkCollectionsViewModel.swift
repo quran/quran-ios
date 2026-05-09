@@ -36,7 +36,7 @@
         @Published var collections: [AyahBookmarkCollection] = []
         @Published var collapsedCollectionIDs: Set<String> = []
 
-        static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
+        nonisolated static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
             collections.sorted { lhs, rhs in
                 switch (highlightSortIndex(lhs), highlightSortIndex(rhs)) {
                 case let (lhsIndex?, rhsIndex?):
@@ -114,7 +114,7 @@
         private let navigateToPage: (Page) -> Void
         private var didPrepareCollections = false
 
-        private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
+        private nonisolated static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
             guard let color = HighlightColor(collectionName: collection.collection.name) else {
                 return nil
             }

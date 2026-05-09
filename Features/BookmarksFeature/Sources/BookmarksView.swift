@@ -7,7 +7,6 @@
 
 import Localization
 import NoorUI
-import QuranAnnotations
 import QuranKit
 import SwiftUI
 import UIx
@@ -31,6 +30,7 @@ struct BookmarksView: View {
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
+            showHighlightsAction: viewModel.showHighlightsAction,
             showCollectionsAction: viewModel.showCollectionsAction,
             showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
         )
@@ -52,6 +52,7 @@ private struct BookmarksViewUI: View {
     let deleteAction: AsyncItemAction<PageBookmark>
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
+    let showHighlightsAction: AsyncAction?
     let showCollectionsAction: AsyncAction?
     let showOldPageBookmarksAction: AsyncAction?
 
@@ -111,6 +112,15 @@ private struct BookmarksViewUI: View {
             )
         }
 
+        private var highlightsRow: some View {
+            NoorListItem(
+                image: .init { HighlightPaletteIcon() },
+                title: .text(l("bookmarks.highlights")),
+                accessory: .disclosureIndicator,
+                action: showHighlightsAction
+            )
+        }
+
         private var collectionsRow: some View {
             NoorListItem(
                 image: .init(.folder, color: .accentColor),
@@ -136,9 +146,14 @@ private struct BookmarksViewUI: View {
                 }
             }
 
-            if showCollectionsAction != nil {
+            if showHighlightsAction != nil || showCollectionsAction != nil {
                 NoorBasicSection {
-                    collectionsRow
+                    if showHighlightsAction != nil {
+                        highlightsRow
+                    }
+                    if showCollectionsAction != nil {
+                        collectionsRow
+                    }
                 }
             }
         #endif
@@ -247,6 +262,7 @@ struct BookmarksView_Previews: PreviewProvider {
                     deleteAction: { item in items = items.filter { $0 != item } },
                     dismissSyncBanner: {},
                     signInAction: {},
+                    showHighlightsAction: {},
                     showCollectionsAction: showCollectionsAction,
                     showOldPageBookmarksAction: {}
                 )

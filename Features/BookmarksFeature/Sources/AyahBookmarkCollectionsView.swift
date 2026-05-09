@@ -83,7 +83,7 @@
                 set: { viewModel.setCollection(collection, expanded: $0) }
             )
 
-            let highlightColor = HighlightColor(rawValue: collection.collection.name)
+            let highlightColor = HighlightColor(collectionName: collection.collection.name)
             let allowsCollectionDeletion = allowsCollectionManagement && highlightColor == nil
 
             NoorEditableCollapsibleSection(

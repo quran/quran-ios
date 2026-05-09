@@ -10,7 +10,6 @@ import AnnotationsService
 import AuthenticationClient
 import Combine
 import FeaturesSupport
-import QuranAnnotations
 import QuranKit
 import ReadingService
 import SwiftUI
@@ -26,6 +25,7 @@ final class BookmarksViewModel: ObservableObject {
         service: PageBookmarkService,
         authenticationClient: (any AuthenticationClient)?,
         navigateTo: @escaping (Page) -> Void,
+        showHighlightsAction: (@MainActor (UIViewController) async -> Void)? = nil,
         showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil,
         showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)? = nil
     ) {
@@ -33,6 +33,7 @@ final class BookmarksViewModel: ObservableObject {
         self.service = service
         self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
+        presentHighlightsAction = showHighlightsAction
         presentCollectionsAction = showCollectionsAction
         presentOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
@@ -50,6 +51,15 @@ final class BookmarksViewModel: ObservableObject {
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
+    }
+
+    var showHighlightsAction: (@MainActor @Sendable () async -> Void)? {
+        guard presentHighlightsAction != nil else {
+            return nil
+        }
+        return { [weak self] in
+            await self?.showHighlights()
+        }
     }
 
     var showCollectionsAction: (@MainActor @Sendable () async -> Void)? {
@@ -136,6 +146,13 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func showHighlights() async {
+        guard let presenter else {
+            return
+        }
+        await presentHighlightsAction?(presenter)
+    }
+
     func showCollections() async {
         guard let presenter else {
             return
@@ -156,6 +173,7 @@ final class BookmarksViewModel: ObservableObject {
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let authenticationClient: (any AuthenticationClient)?
+    private let presentHighlightsAction: (@MainActor (UIViewController) async -> Void)?
     private let presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
     private let presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared

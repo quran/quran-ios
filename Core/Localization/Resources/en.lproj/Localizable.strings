@@ -150,6 +150,7 @@
 "bookmarks.collections.ayah-count" = "%d ayah bookmarks";
 "bookmarks.collections.ayahs.no-data.title" = "No bookmarks in this collection";
 "bookmarks.collections.ayahs.no-data.text" = "Add ayah bookmarks to see them here.";
+"bookmarks.highlights" = "Highlights";
 
 // MARK: - Notes
 

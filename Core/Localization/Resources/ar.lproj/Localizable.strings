@@ -146,6 +146,7 @@
 "bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";
 "bookmarks.collections.ayahs.no-data.title" = "لا توجد إشارات مرجعية في هذه المجموعة";
 "bookmarks.collections.ayahs.no-data.text" = "أضف إشارات مرجعية للآيات لرؤيتها هنا.";
+"bookmarks.highlights" = "التمييزات";
 
 // MARK: - Notes
 

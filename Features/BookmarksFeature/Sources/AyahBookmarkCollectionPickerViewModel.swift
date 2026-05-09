@@ -52,7 +52,7 @@
             guard let firstVerse = verses.first else {
                 return false
             }
-            return readingBookmark?.isAyahBookmark(for: firstVerse) == true
+            return readingBookmark?.isReadingBookmark(for: firstVerse) == true
         }
 
         nonisolated static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -146,16 +146,26 @@
         private let verses: [AyahNumber]
         private let didUpdateReadingBookmark: (QuranReadingBookmark?) -> Void
         private let didFinish: () -> Void
+        private var didEnsureHighlightCollections = false
 
         private func loadCollections() async {
             do {
                 let sequence = ayahBookmarkCollectionService.collectionsSequence()
                 for try await collections in sequence {
                     self.collections = Self.sorted(collections)
+                    try await ensureHighlightCollections(collections)
                 }
             } catch {
                 self.error = error
             }
+        }
+
+        private func ensureHighlightCollections(_ collections: [AyahBookmarkCollection]) async throws {
+            guard !didEnsureHighlightCollections else {
+                return
+            }
+            didEnsureHighlightCollections = true
+            try await HighlightBookmarkCollections.ensure(in: collections, using: ayahBookmarkCollectionService)
         }
 
         private func loadReadingBookmark() async {

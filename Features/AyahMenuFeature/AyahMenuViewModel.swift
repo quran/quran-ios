@@ -287,7 +287,7 @@ final class AyahMenuViewModel {
                 return
             }
             let selectedAyahs = Set(deps.verses.map(AyahKey.init))
-            for collection in try await ayahBookmarkCollectionService.collectionsSnapshot() where collection.highlightColor != nil {
+            for collection in try await ayahBookmarkCollectionService.collectionsFirstValue() where collection.highlightColor != nil {
                 for bookmark in collection.bookmarks where selectedAyahs.contains(AyahKey(bookmark)) {
                     try await ayahBookmarkCollectionService.removeBookmarkFromCollection(bookmark)
                 }
@@ -298,13 +298,13 @@ final class AyahMenuViewModel {
             for color: HighlightColor,
             using ayahBookmarkCollectionService: AyahBookmarkCollectionService
         ) async throws -> (AyahBookmarkCollection, [AyahBookmarkCollection]) {
-            let collections = try await ayahBookmarkCollectionService.collectionsSnapshot()
+            let collections = try await ayahBookmarkCollectionService.collectionsFirstValue()
             if let collection = collections.first(where: { $0.collection.name == color.collectionName }) {
                 return (collection, collections)
             }
 
             try await ayahBookmarkCollectionService.createCollection(named: color.collectionName)
-            let updatedCollections = try await ayahBookmarkCollectionService.collectionsSnapshot()
+            let updatedCollections = try await ayahBookmarkCollectionService.collectionsFirstValue()
             guard let collection = updatedCollections.first(where: { $0.collection.name == color.collectionName }) else {
                 throw SyncedHighlightCollectionError.collectionUnavailable
             }
@@ -314,6 +314,13 @@ final class AyahMenuViewModel {
 }
 
 #if QURAN_SYNC
+
+    private extension AyahBookmarkCollectionService {
+        func collectionsFirstValue() async throws -> [AyahBookmarkCollection] {
+            var iterator = collectionsSequence().makeAsyncIterator()
+            return try await iterator.next() ?? []
+        }
+    }
 
     private extension AyahBookmarkCollection {
         var highlightColor: HighlightColor? {

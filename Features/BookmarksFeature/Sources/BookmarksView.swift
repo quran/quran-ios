@@ -155,7 +155,7 @@ private struct BookmarksViewUI: View {
             }
 
             if let readingBookmark {
-                NoorBasicSection {
+                NoorBasicSection(title: l("reading-bookmark.my-title")) {
                     readingBookmarkItem(readingBookmark)
                 }
             }

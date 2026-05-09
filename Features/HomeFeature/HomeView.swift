@@ -56,7 +56,7 @@ private struct HomeViewUI: View {
         NoorList {
             #if QURAN_SYNC
                 if let readingBookmark {
-                    NoorBasicSection {
+                    NoorBasicSection(title: l("reading-bookmark.my-title")) {
                         readingBookmarkView(readingBookmark)
                     }
                 }

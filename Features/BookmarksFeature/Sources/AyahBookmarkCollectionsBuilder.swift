@@ -13,19 +13,33 @@
     struct AyahBookmarkCollectionsBuilder {
         init(
             ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-            navigateToPage: @escaping (Page) -> Void
+            includedCollectionNames: Set<String>? = nil,
+            navigateToPage: @escaping (Page) -> Void,
+            title: String = l("bookmarks.collections"),
+            allowsCollectionManagement: Bool = true,
+            allowsBookmarkDeletion: Bool = true
         ) {
             self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+            self.includedCollectionNames = includedCollectionNames
             self.navigateToPage = navigateToPage
+            self.title = title
+            self.allowsCollectionManagement = allowsCollectionManagement
+            self.allowsBookmarkDeletion = allowsBookmarkDeletion
         }
 
         func build() -> UIViewController {
             let viewModel = AyahBookmarkCollectionsViewModel(
                 ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-                excludedCollectionNames: [Self.oldPageBookmarksCollectionName],
+                includedCollectionNames: includedCollectionNames,
+                excludedCollectionNames: includedCollectionNames == nil ? [Self.oldPageBookmarksCollectionName] : [],
                 navigateToPage: navigateToPage
             )
-            return AyahBookmarkCollectionsViewController(viewModel: viewModel)
+            return AyahBookmarkCollectionsViewController(
+                viewModel: viewModel,
+                title: title,
+                allowsCollectionManagement: allowsCollectionManagement,
+                allowsBookmarkDeletion: allowsBookmarkDeletion
+            )
         }
 
         func buildOldPageBookmarks() -> UIViewController {
@@ -45,6 +59,10 @@
         private static let oldPageBookmarksCollectionName = "Old Page Bookmarks"
 
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+        private let includedCollectionNames: Set<String>?
         private let navigateToPage: (Page) -> Void
+        private let title: String
+        private let allowsCollectionManagement: Bool
+        private let allowsBookmarkDeletion: Bool
     }
 #endif

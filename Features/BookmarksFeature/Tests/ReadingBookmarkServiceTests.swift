@@ -32,6 +32,20 @@
             )
         }
 
+        func test_isReadingBookmark_matchesPageBookmarkAyah() {
+            let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+            let bookmark = QuranReadingBookmark.page(ayah.page, .distantPast)
+
+            XCTAssertTrue(bookmark.isReadingBookmark(for: ayah))
+        }
+
+        func test_isPageBookmark_matchesAyahBookmarkPage() {
+            let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+            let bookmark = QuranReadingBookmark.ayah(ayah, .distantPast)
+
+            XCTAssertTrue(bookmark.isPageBookmark(for: [ayah.page]))
+        }
+
         func test_bookmark_skipsInvalidAyah() {
             let bookmark = AyahReadingBookmark(
                 sura: 999,

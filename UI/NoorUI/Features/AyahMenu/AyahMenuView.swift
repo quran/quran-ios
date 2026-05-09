@@ -322,22 +322,8 @@ private struct MenuGroup<Content: View>: View {
 }
 
 private struct IconCircles: View {
-    @ScaledMetric var trailingPadding = 8
-    @ScaledMetric var purpleOffset = 8
-    @ScaledMetric var blueOffset = 4
-    @ScaledMetric var radius = 1
-
     var body: some View {
-        ZStack {
-            IconCircle(color: .purple)
-                .offset(x: purpleOffset)
-            IconCircle(color: .blue)
-                .offset(x: blueOffset)
-            IconCircle(color: .green)
-        }
-        .compositingGroup()
-        .shadow(color: Color.tertiarySystemGroupedBackground, radius: radius)
-        .padding(.trailing, trailingPadding)
+        HighlightPaletteIcon()
     }
 }
 

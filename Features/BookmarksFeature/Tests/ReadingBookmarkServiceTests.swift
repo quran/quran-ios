@@ -15,7 +15,7 @@
 
             XCTAssertEqual(
                 ReadingBookmarkService.bookmark(from: bookmark, quran: .hafsMadani1405),
-                .ayah(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!)
+                .ayah(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!, .distantPast)
             )
         }
 
@@ -28,7 +28,7 @@
 
             XCTAssertEqual(
                 ReadingBookmarkService.bookmark(from: bookmark, quran: .hafsMadani1405),
-                .page(Page(quran: .hafsMadani1405, pageNumber: 1)!)
+                .page(Page(quran: .hafsMadani1405, pageNumber: 1)!, .distantPast)
             )
         }
 

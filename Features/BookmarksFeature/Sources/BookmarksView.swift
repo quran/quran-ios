@@ -25,9 +25,11 @@ struct BookmarksView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             bookmarks: viewModel.bookmarks,
+            readingBookmark: viewModel.readingBookmark,
             shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
+            selectReadingBookmark: { viewModel.navigateToReadingBookmark() },
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
@@ -45,10 +47,12 @@ private struct BookmarksViewUI: View {
     @Binding var error: Error?
 
     let bookmarks: [PageBookmark]
+    let readingBookmark: QuranReadingBookmark?
     let shouldShowSyncBanner: Bool
 
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
+    let selectReadingBookmark: () -> Void
     let deleteAction: AsyncItemAction<PageBookmark>
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
@@ -57,11 +61,11 @@ private struct BookmarksViewUI: View {
 
     var body: some View {
         Group {
-            if bookmarks.isEmpty {
+            if showsEmptyState {
                 emptyState
             } else {
                 NoorList {
-                    listSections(includeBookmarks: true)
+                    listSections(includeBookmarks: !bookmarks.isEmpty)
                 }
             }
         }
@@ -73,6 +77,14 @@ private struct BookmarksViewUI: View {
     }
 
     // MARK: Private
+
+    private var showsEmptyState: Bool {
+        #if QURAN_SYNC
+            bookmarks.isEmpty && readingBookmark == nil
+        #else
+            bookmarks.isEmpty
+        #endif
+    }
 
     private var emptyState: some View {
         VStack(spacing: 16) {
@@ -141,6 +153,12 @@ private struct BookmarksViewUI: View {
                     collectionsRow
                 }
             }
+
+            if let readingBookmark {
+                NoorBasicSection {
+                    readingBookmarkItem(readingBookmark)
+                }
+            }
         #endif
 
         if includeBookmarks {
@@ -150,6 +168,20 @@ private struct BookmarksViewUI: View {
             .onDelete(action: deleteAction)
         }
     }
+
+    #if QURAN_SYNC
+        private func readingBookmarkItem(_ bookmark: QuranReadingBookmark) -> some View {
+            let ayah = bookmark.ayah
+            return NoorListItem(
+                image: .init(.bookmark, color: .red),
+                title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
+                subtitle: .init(text: bookmark.lastUpdated.timeAgo(), location: .bottom),
+                accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
+            ) {
+                selectReadingBookmark()
+            }
+        }
+    #endif
 
     private func listItem(_ bookmark: PageBookmark) -> some View {
         let ayah = bookmark.page.firstVerse
@@ -241,9 +273,11 @@ struct BookmarksView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     bookmarks: items,
+                    readingBookmark: .page(Quran.hafsMadani1405.pages[0], .distantPast),
                     shouldShowSyncBanner: true,
                     start: {},
                     selectAction: { _ in },
+                    selectReadingBookmark: {},
                     deleteAction: { item in items = items.filter { $0 != item } },
                     dismissSyncBanner: {},
                     signInAction: {},

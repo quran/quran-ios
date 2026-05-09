@@ -1,26 +1,53 @@
+//
+//  ReadingBookmarkService.swift
+//
+//  Created by Ahmed Nabil on 2026-05-09.
+//
+
+import Foundation
 #if QURAN_SYNC
-    //
-    //  ReadingBookmarkService.swift
-    //
-    //  Created by OpenAI on 2026-05-09.
-    //
-
     import MobileSync
-    import QuranKit
     import ReadingService
+#endif
+import QuranKit
 
-    public enum QuranReadingBookmark: Equatable {
-        case ayah(AyahNumber)
-        case page(Page)
+public enum QuranReadingBookmark: Equatable {
+    case ayah(AyahNumber, Date)
+    case page(Page, Date)
 
-        public var page: Page {
-            switch self {
-            case .ayah(let ayah): ayah.page
-            case .page(let page): page
-            }
+    public var ayah: AyahNumber {
+        switch self {
+        case .ayah(let ayah, _): ayah
+        case .page(let page, _): page.firstVerse
         }
     }
 
+    public var page: Page {
+        switch self {
+        case .ayah(let ayah, _): ayah.page
+        case .page(let page, _): page
+        }
+    }
+
+    public var lastUpdated: Date {
+        switch self {
+        case .ayah(_, let lastUpdated), .page(_, let lastUpdated): lastUpdated
+        }
+    }
+
+    public func isAyahBookmark(for ayah: AyahNumber) -> Bool {
+        guard case .ayah(let bookmarkedAyah, _) = self else {
+            return false
+        }
+        return bookmarkedAyah == ayah
+    }
+
+    public func isPageBookmark(for pages: [Page]) -> Bool {
+        pages.contains(page)
+    }
+}
+
+#if QURAN_SYNC
     public struct ReadingBookmarkSequence: AsyncSequence {
         public typealias Element = QuranReadingBookmark?
 
@@ -76,15 +103,19 @@
             return ReadingBookmarkSequence(sequence)
         }
 
-        public func addReadingBookmark(page: Page) async throws {
-            _ = try await syncService.addPageReadingBookmark(page: Int32(page.pageNumber))
+        @discardableResult
+        public func addReadingBookmark(page: Page) async throws -> QuranReadingBookmark {
+            let bookmark = try await syncService.addPageReadingBookmark(page: Int32(page.pageNumber))
+            return .page(page, bookmark.lastUpdated)
         }
 
-        public func addReadingBookmark(ayah: AyahNumber) async throws {
-            _ = try await syncService.addAyahReadingBookmark(
+        @discardableResult
+        public func addReadingBookmark(ayah: AyahNumber) async throws -> QuranReadingBookmark {
+            let bookmark = try await syncService.addAyahReadingBookmark(
                 sura: Int32(ayah.sura.suraNumber),
                 ayah: Int32(ayah.ayah)
             )
+            return .ayah(ayah, bookmark.lastUpdated)
         }
 
         public func removeReadingBookmark() async throws {
@@ -94,9 +125,13 @@
         public static func bookmark(from bookmark: (any ReadingBookmark)?, quran: Quran) -> QuranReadingBookmark? {
             switch bookmark {
             case let bookmark as AyahReadingBookmark:
-                return AyahNumber(quran: quran, sura: Int(bookmark.sura), ayah: Int(bookmark.ayah)).map(QuranReadingBookmark.ayah)
+                return AyahNumber(quran: quran, sura: Int(bookmark.sura), ayah: Int(bookmark.ayah)).map {
+                    QuranReadingBookmark.ayah($0, bookmark.lastUpdated)
+                }
             case let bookmark as PageReadingBookmark:
-                return Page(quran: quran, pageNumber: Int(bookmark.page)).map(QuranReadingBookmark.page)
+                return Page(quran: quran, pageNumber: Int(bookmark.page)).map {
+                    QuranReadingBookmark.page($0, bookmark.lastUpdated)
+                }
             default:
                 return nil
             }
@@ -107,4 +142,6 @@
         private let syncService: SyncService
         private let readingPreferences: ReadingPreferences
     }
+#else
+    public struct ReadingBookmarkService {}
 #endif

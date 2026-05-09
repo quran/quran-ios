@@ -502,23 +502,29 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 if readingBookmarked(pages) {
                     deps.analytics.removeBookmarkPage(page)
                     try await service.removeReadingBookmark()
+                    readingBookmark = nil
                     presenter?.hideReadingBookmarkNudge()
                 } else {
                     deps.analytics.bookmarkPage(page)
-                    try await service.addReadingBookmark(page: page)
-                    let isExpanded = service.nextEducationPresentationIsExpanded()
-                    presenter?.showReadingBookmarkNudge(expanded: isExpanded) { [weak self] in
-                        await self?.removeReadingBookmark(using: service)
-                    }
+                    readingBookmark = try await service.addReadingBookmark(page: page)
+                    showReadingBookmarkNudge(using: service)
                 }
             } catch {
                 crasher.recordError(error, reason: "Failed to toggle reading bookmark")
             }
         }
 
+        private func showReadingBookmarkNudge(using service: ReadingBookmarkService) {
+            let isExpanded = service.nextEducationPresentationIsExpanded()
+            presenter?.showReadingBookmarkNudge(expanded: isExpanded) { [weak self] in
+                await self?.removeReadingBookmark(using: service)
+            }
+        }
+
         private func removeReadingBookmark(using service: ReadingBookmarkService) async {
             do {
                 try await service.removeReadingBookmark()
+                readingBookmark = nil
                 presenter?.hideReadingBookmarkNudge()
             } catch {
                 crasher.recordError(error, reason: "Failed to remove reading bookmark")
@@ -548,10 +554,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
         private func readingBookmarked(_ pages: [Page]) -> Bool {
-            guard let readingBookmark else {
-                return false
-            }
-            return pages.contains(readingBookmark.page)
+            readingBookmark?.isPageBookmark(for: pages) ?? false
         }
     #endif
 

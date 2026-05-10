@@ -10,6 +10,9 @@ import Analytics
 import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import Combine
 import Crashing
 import FeaturesSupport

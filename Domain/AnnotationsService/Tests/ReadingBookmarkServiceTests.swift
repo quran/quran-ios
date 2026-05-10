@@ -2,7 +2,7 @@
     import MobileSync
     import QuranKit
     import XCTest
-    @testable import BookmarksFeature
+    @testable import AnnotationsService
 
     final class ReadingBookmarkServiceTests: XCTestCase {
         func test_bookmark_mapsAyahReadingBookmark() {

@@ -565,7 +565,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
 
         private func showReadingBookmarkNudge(using service: ReadingBookmarkService) {
-            let isExpanded = service.nextEducationPresentationIsExpanded()
+            let isExpanded = !ReadingBookmarkPreferences.shared.isEducationShown
+            ReadingBookmarkPreferences.shared.isEducationShown = true
             presenter?.showReadingBookmarkNudge(expanded: isExpanded) { [weak self] in
                 await self?.removeReadingBookmark(using: service)
             }

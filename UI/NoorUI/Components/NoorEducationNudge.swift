@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import UIx
 
 public struct NoorEducationNudge: View {
     // MARK: Lifecycle
@@ -39,13 +40,11 @@ public struct NoorEducationNudge: View {
 
                 Spacer(minLength: ContentDimension.interSpacing)
 
-                Button(actionTitle) {
-                    Task {
-                        await action()
-                    }
+                AsyncButton(action: action) {
+                    Text(actionTitle)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color.appIdentity)
                 }
-                .font(.body.weight(.semibold))
-                .foregroundColor(Color.appIdentity)
             }
 
             if isExpanded {

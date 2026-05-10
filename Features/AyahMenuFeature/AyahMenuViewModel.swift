@@ -33,6 +33,7 @@ public protocol AyahMenuListener: AnyObject {
 
     #if QURAN_SYNC
         func saveVersesAsBookmark(_ verses: [AyahNumber])
+        func removeVersesFromBookmarkCollections(_ verses: [AyahNumber]) async
     #endif
 
     func editNote(_ note: QuranAnnotations.Note)
@@ -50,6 +51,7 @@ final class AyahMenuViewModel {
         let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
         let highlightColor: HighlightColor?
+        let isCollectionBookmarked: Bool
         #if QURAN_SYNC
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
         #endif
@@ -104,6 +106,14 @@ final class AyahMenuViewModel {
     var usesCollectionBookmarks: Bool {
         #if QURAN_SYNC
             return deps.ayahBookmarkCollectionService != nil
+        #else
+            return false
+        #endif
+    }
+
+    var isCollectionBookmarked: Bool {
+        #if QURAN_SYNC
+            return usesCollectionBookmarks && deps.isCollectionBookmarked
         #else
             return false
         #endif
@@ -176,10 +186,15 @@ final class AyahMenuViewModel {
         listener?.showTranslation(deps.verses)
     }
 
-    func saveVerse() {
+    func saveVerse() async {
         #if QURAN_SYNC
-            logger.info("AyahMenu: save verse. Verses: \(deps.verses)")
-            listener?.saveVersesAsBookmark(deps.verses)
+            if isCollectionBookmarked {
+                logger.info("AyahMenu: remove verse bookmark. Verses: \(deps.verses)")
+                await listener?.removeVersesFromBookmarkCollections(deps.verses)
+            } else {
+                logger.info("AyahMenu: save verse. Verses: \(deps.verses)")
+                listener?.saveVersesAsBookmark(deps.verses)
+            }
         #endif
     }
 

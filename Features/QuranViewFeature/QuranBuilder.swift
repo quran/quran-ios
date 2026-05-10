@@ -75,6 +75,7 @@ public struct QuranBuilder {
                 resources: container.readingResources,
                 syncedHighlightsObserver: syncedHighlightsObserver,
                 readingBookmarkService: readingBookmarkService,
+                ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                 ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder
             )
         #else

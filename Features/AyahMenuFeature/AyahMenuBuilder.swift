@@ -23,13 +23,15 @@ public struct AyahMenuInput {
         pointInView: CGPoint,
         verses: [AyahNumber],
         notes: [QuranAnnotations.Note],
-        highlightColor: HighlightColor? = nil
+        highlightColor: HighlightColor? = nil,
+        isCollectionBookmarked: Bool = false
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
         self.highlightColor = highlightColor
+        self.isCollectionBookmarked = isCollectionBookmarked
     }
 
     // MARK: Internal
@@ -39,6 +41,7 @@ public struct AyahMenuInput {
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
     let highlightColor: HighlightColor?
+    let isCollectionBookmarked: Bool
 }
 
 @MainActor
@@ -66,6 +69,7 @@ public struct AyahMenuBuilder {
                 noteService: noteService,
                 textRetriever: textRetriever,
                 highlightColor: input.highlightColor,
+                isCollectionBookmarked: input.isCollectionBookmarked,
                 ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) }
             )
         #else
@@ -76,7 +80,8 @@ public struct AyahMenuBuilder {
                 notes: input.notes,
                 noteService: noteService,
                 textRetriever: textRetriever,
-                highlightColor: input.highlightColor
+                highlightColor: input.highlightColor,
+                isCollectionBookmarked: input.isCollectionBookmarked
             )
         #endif
         let viewModel = AyahMenuViewModel(deps: deps)

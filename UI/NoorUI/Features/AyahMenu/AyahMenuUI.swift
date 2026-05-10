@@ -57,7 +57,8 @@ public enum AyahMenuUI {
             repeatSubtitle: String,
             actions: Actions,
             isTranslationView: Bool,
-            usesCollectionBookmarks: Bool = false
+            usesCollectionBookmarks: Bool = false,
+            isCollectionBookmarked: Bool = false
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
@@ -66,6 +67,7 @@ public enum AyahMenuUI {
             self.actions = actions
             self.isTranslationView = isTranslationView
             self.usesCollectionBookmarks = usesCollectionBookmarks
+            self.isCollectionBookmarked = isCollectionBookmarked
         }
 
         // MARK: Internal
@@ -77,6 +79,7 @@ public enum AyahMenuUI {
         let repeatSubtitle: String
         let isTranslationView: Bool
         let usesCollectionBookmarks: Bool
+        let isCollectionBookmarked: Bool
     }
 
     // MARK: Public

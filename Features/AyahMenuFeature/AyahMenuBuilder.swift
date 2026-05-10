@@ -24,7 +24,8 @@ public struct AyahMenuInput {
         verses: [AyahNumber],
         notes: [QuranAnnotations.Note],
         noteCount: Int = 0,
-        highlightColor: HighlightColor? = nil
+        highlightColor: HighlightColor? = nil,
+        isCollectionBookmarked: Bool = false
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
@@ -32,6 +33,7 @@ public struct AyahMenuInput {
         self.notes = notes
         self.noteCount = noteCount
         self.highlightColor = highlightColor
+        self.isCollectionBookmarked = isCollectionBookmarked
     }
 
     // MARK: Internal
@@ -42,6 +44,7 @@ public struct AyahMenuInput {
     let notes: [QuranAnnotations.Note]
     let noteCount: Int
     let highlightColor: HighlightColor?
+    let isCollectionBookmarked: Bool
 }
 
 @MainActor
@@ -71,6 +74,7 @@ public struct AyahMenuBuilder {
                 highlightColor: input.highlightColor,
                 usesSyncedNotes: usesSyncedNotes,
                 noteCount: input.noteCount,
+                isCollectionBookmarked: input.isCollectionBookmarked,
                 ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) }
             )
         #else

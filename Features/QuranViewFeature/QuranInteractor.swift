@@ -87,6 +87,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
             let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
             let readingBookmarkService: ReadingBookmarkService?
+            let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
             let ayahBookmarkCollectionPickerBuilder: AyahBookmarkCollectionPickerBuilder?
         #endif
     }
@@ -103,6 +104,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #if QURAN_SYNC
             syncedNotesObservationTask?.cancel()
             readingBookmarkTask?.cancel()
+            ayahBookmarkCollectionsTask?.cancel()
         #endif
     }
 
@@ -125,6 +127,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func start() {
         #if QURAN_SYNC
             deps.syncedHighlightsObserver?.start()
+            if let ayahBookmarkCollectionService = deps.ayahBookmarkCollectionService {
+                startAyahBookmarkCollectionsObservation(ayahBookmarkCollectionService)
+            }
             if let syncedNoteService = deps.syncedNoteService {
                 startSyncedNotesObservation(syncedNoteService)
             } else {
@@ -290,6 +295,26 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 presenter?.presentAyahBookmarkCollectionPicker(viewController)
             }
         }
+
+        func removeVersesFromBookmarkCollections(_ verses: [AyahNumber]) async {
+            guard let ayahBookmarkCollectionService = deps.ayahBookmarkCollectionService else {
+                return
+            }
+
+            contentViewModel?.removeAyahMenuHighlight()
+            dismissAyahMenu()
+
+            let selectedVerses = Set(verses)
+            do {
+                for collection in ayahBookmarkCollections where HighlightColor(collectionName: collection.collection.name) == nil {
+                    for bookmark in collection.bookmarks where selectedVerses.contains(bookmark.ayah) {
+                        try await ayahBookmarkCollectionService.removeBookmarkFromCollection(bookmark)
+                    }
+                }
+            } catch {
+                crasher.recordError(error, reason: "Failed to remove ayah bookmark from collections")
+            }
+        }
     #endif
 
     func showTranslation(_ verses: [AyahNumber]) {
@@ -319,7 +344,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             verses: verses,
             notes: notes,
             noteCount: syncedNoteCount(interacting: verses),
-            highlightColor: highlightColor(for: verses)
+            highlightColor: highlightColor(for: verses),
+            isCollectionBookmarked: collectionBookmarked(verses)
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
@@ -406,6 +432,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         private var syncedNotes: [SyncedNote] = []
         private var syncedNotesObservationTask: Task<Void, Never>?
         private var readingBookmarkTask: Task<Void, Never>?
+        private var ayahBookmarkCollectionsTask: Task<Void, Never>?
+        private var ayahBookmarkCollections: [AyahBookmarkCollection] = []
         private var readingBookmark: QuranReadingBookmark? {
             didSet {
                 reloadPageBookmark()
@@ -485,6 +513,22 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 }
             }
         }
+
+        private func startAyahBookmarkCollectionsObservation(_ service: AyahBookmarkCollectionService) {
+            ayahBookmarkCollectionsTask?.cancel()
+            ayahBookmarkCollectionsTask = Task { [weak self] in
+                do {
+                    let sequence = service.collectionsSequence()
+                    for try await collections in sequence {
+                        await MainActor.run {
+                            self?.ayahBookmarkCollections = collections
+                        }
+                    }
+                } catch {
+                    crasher.recordError(error, reason: "Failed to observe ayah bookmark collections")
+                }
+            }
+        }
     #endif
 
     private func setVisiblePages(_ pages: [Page]) {
@@ -528,6 +572,20 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             return SyncedNoteCounter.count(syncedNotes, interacting: verses)
         #else
             return 0
+        #endif
+    }
+
+    private func collectionBookmarked(_ verses: [AyahNumber]) -> Bool {
+        #if QURAN_SYNC
+            let selectedVerses = Set(verses)
+            return ayahBookmarkCollections.contains { collection in
+                guard HighlightColor(collectionName: collection.collection.name) == nil else {
+                    return false
+                }
+                return collection.bookmarks.contains { selectedVerses.contains($0.ayah) }
+            }
+        #else
+            return false
         #endif
     }
 

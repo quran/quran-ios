@@ -132,7 +132,10 @@ private struct AyahMenuViewList: View {
                 Divider()
 
                 if dataObject.usesCollectionBookmarks {
-                    Row(title: l("ayah-bookmark.save-verse"), action: dataObject.actions.saveVerse) {
+                    Row(
+                        title: dataObject.isCollectionBookmarked ? l("ayah-bookmark.remove-verse") : l("ayah-bookmark.save-verse"),
+                        action: dataObject.actions.saveVerse
+                    ) {
                         NoorSystemImage.bookmark.image
                     }
                     Divider()

@@ -291,6 +291,7 @@
 
 // MARK: - Ayah Bookmarks
 "ayah-bookmark.save-verse" = "Save Verse";
+"ayah-bookmark.remove-verse" = "Remove Bookmark";
 "ayah-bookmark.save-to-collection" = "Save to Collection";
 "ayah-bookmark.save-reading-bookmark" = "Save as Reading Bookmark";
 "ayah-bookmark.save-to-highlight" = "Save to Highlight";

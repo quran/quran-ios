@@ -83,6 +83,7 @@ public struct QuranBuilder {
                 syncedNoteEditorBuilder: syncedNoteEditorBuilder,
                 syncedHighlightsObserver: syncedHighlightsObserver,
                 readingBookmarkService: readingBookmarkService,
+                ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                 ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder
             )
         #else

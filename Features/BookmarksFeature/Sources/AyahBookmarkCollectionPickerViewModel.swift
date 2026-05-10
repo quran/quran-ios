@@ -82,6 +82,7 @@
 
         func toggleSelection(for collection: AyahBookmarkCollection) {
             let id = collection.collection.localId
+            didUpdateSelection = true
             if Self.highlightColor(for: collection) != nil {
                 selectedHighlightCollectionID = selectedHighlightCollectionID == id ? nil : id
             } else if selectedCollectionIDs.contains(id) {
@@ -146,7 +147,7 @@
         private let didUpdateReadingBookmark: (QuranReadingBookmark?) -> Void
         private let didFinish: () -> Void
         private var didEnsureHighlightCollections = false
-        private var didSelectExistingBookmarks = false
+        private var didUpdateSelection = false
 
         private func loadCollections() async {
             do {
@@ -170,10 +171,9 @@
         }
 
         private func selectExistingBookmarksIfNeeded(in collections: [AyahBookmarkCollection]) {
-            guard !didSelectExistingBookmarks else {
+            guard !didUpdateSelection else {
                 return
             }
-            didSelectExistingBookmarks = true
 
             for collection in collections where Self.containsAnyBookmark(in: collection, verses: verses) {
                 if Self.highlightColor(for: collection) != nil {

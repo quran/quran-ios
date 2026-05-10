@@ -283,6 +283,7 @@
 
 // MARK: - Ayah Bookmarks
 "ayah-bookmark.save-verse" = "حفظ الآية";
+"ayah-bookmark.remove-verse" = "إزالة الإشارة المرجعية";
 "ayah-bookmark.save-to-collection" = "حفظ في مجموعة";
 "ayah-bookmark.save-reading-bookmark" = "حفظ كعلامة قراءة";
 "ayah-bookmark.save-to-highlight" = "حفظ كتمييز";

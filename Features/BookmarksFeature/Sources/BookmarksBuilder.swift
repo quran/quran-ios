@@ -31,18 +31,23 @@ public struct BookmarksBuilder {
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
             if let syncService = container.syncService {
                 let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: syncService)
+                let prepareHighlightCollections: ([AyahBookmarkCollection]) async throws -> Void = { collections in
+                    try await HighlightBookmarkCollections.ensure(in: collections, using: ayahBookmarkCollectionService)
+                }
                 let navigateToPage: (Page) -> Void = { [weak listener] page in
                     listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                 }
                 let highlightsBuilder = AyahBookmarkCollectionsBuilder(
                     ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                     includedCollectionNames: Set(HighlightBookmarkCollections.names),
+                    prepareCollections: prepareHighlightCollections,
                     navigateToPage: navigateToPage,
                     title: l("bookmarks.highlights"),
                     allowsCollectionManagement: false
                 )
                 let collectionsBuilder = AyahBookmarkCollectionsBuilder(
                     ayahBookmarkCollectionService: ayahBookmarkCollectionService,
+                    prepareCollections: prepareHighlightCollections,
                     navigateToPage: navigateToPage
                 )
                 showHighlightsAction = { presenter in

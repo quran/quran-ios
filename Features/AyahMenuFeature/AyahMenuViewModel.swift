@@ -51,8 +51,8 @@ final class AyahMenuViewModel {
         let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
         let highlightColor: HighlightColor?
-        let isCollectionBookmarked: Bool
         #if QURAN_SYNC
+            let isCollectionBookmarked: Bool
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared

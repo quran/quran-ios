@@ -2,8 +2,6 @@
     //
     //  ReadingBookmarkPreferences.swift
     //
-    //  Created by OpenAI on 2026-05-09.
-    //
 
     import Preferences
 

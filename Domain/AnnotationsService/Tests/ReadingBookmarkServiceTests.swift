@@ -39,11 +39,11 @@
             XCTAssertTrue(bookmark.isReadingBookmark(for: ayah))
         }
 
-        func test_isPageBookmark_matchesAyahBookmarkPage() {
+        func test_isPageBookmark_doesNotMatchAyahBookmarkPage() {
             let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
             let bookmark = QuranReadingBookmark.ayah(ayah, .distantPast)
 
-            XCTAssertTrue(bookmark.isPageBookmark(for: [ayah.page]))
+            XCTAssertFalse(bookmark.isPageBookmark(for: [ayah.page]))
         }
 
         func test_bookmark_skipsInvalidAyah() {

@@ -143,6 +143,12 @@ private struct BookmarksViewUI: View {
                 }
             }
 
+            if let readingBookmark {
+                NoorBasicSection(title: l("reading-bookmark.my-title")) {
+                    readingBookmarkItem(readingBookmark)
+                }
+            }
+
             if showOldPageBookmarksAction != nil {
                 NoorBasicSection {
                     oldPageBookmarksRow
@@ -152,12 +158,6 @@ private struct BookmarksViewUI: View {
             if showCollectionsAction != nil {
                 NoorBasicSection {
                     collectionsRow
-                }
-            }
-
-            if let readingBookmark {
-                NoorBasicSection(title: l("reading-bookmark.my-title")) {
-                    readingBookmarkItem(readingBookmark)
                 }
             }
         #endif

@@ -52,7 +52,10 @@ public enum QuranReadingBookmark: Equatable {
     }
 
     public func isPageBookmark(for pages: [Page]) -> Bool {
-        pages.contains(page)
+        guard case .page(let page, _) = self else {
+            return false
+        }
+        return pages.contains(page)
     }
 }
 

@@ -338,15 +338,25 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
         let notes = notesInteractingVerses(verses)
-        let input = AyahMenuInput(
-            sourceView: sourceView,
-            pointInView: point,
-            verses: verses,
-            notes: notes,
-            noteCount: syncedNoteCount(interacting: verses),
-            highlightColor: highlightColor(for: verses),
-            isCollectionBookmarked: collectionBookmarked(verses)
-        )
+        #if QURAN_SYNC
+            let input = AyahMenuInput(
+                sourceView: sourceView,
+                pointInView: point,
+                verses: verses,
+                notes: notes,
+                noteCount: syncedNoteCount(interacting: verses),
+                highlightColor: highlightColor(for: verses),
+                isCollectionBookmarked: collectionBookmarked(verses)
+            )
+        #else
+            let input = AyahMenuInput(
+                sourceView: sourceView,
+                pointInView: point,
+                verses: verses,
+                notes: notes,
+                highlightColor: highlightColor(for: verses)
+            )
+        #endif
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
     }

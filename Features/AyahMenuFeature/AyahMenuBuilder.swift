@@ -24,8 +24,7 @@ public struct AyahMenuInput {
         verses: [AyahNumber],
         notes: [QuranAnnotations.Note],
         noteCount: Int = 0,
-        highlightColor: HighlightColor? = nil,
-        isCollectionBookmarked: Bool = false
+        highlightColor: HighlightColor? = nil
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
@@ -33,8 +32,30 @@ public struct AyahMenuInput {
         self.notes = notes
         self.noteCount = noteCount
         self.highlightColor = highlightColor
-        self.isCollectionBookmarked = isCollectionBookmarked
+        #if QURAN_SYNC
+            isCollectionBookmarked = false
+        #endif
     }
+
+    #if QURAN_SYNC
+        public init(
+            sourceView: UIView,
+            pointInView: CGPoint,
+            verses: [AyahNumber],
+            notes: [QuranAnnotations.Note],
+            noteCount: Int = 0,
+            highlightColor: HighlightColor? = nil,
+            isCollectionBookmarked: Bool
+        ) {
+            self.sourceView = sourceView
+            self.pointInView = pointInView
+            self.verses = verses
+            self.notes = notes
+            self.noteCount = noteCount
+            self.highlightColor = highlightColor
+            self.isCollectionBookmarked = isCollectionBookmarked
+        }
+    #endif
 
     // MARK: Internal
 
@@ -44,7 +65,9 @@ public struct AyahMenuInput {
     let notes: [QuranAnnotations.Note]
     let noteCount: Int
     let highlightColor: HighlightColor?
-    let isCollectionBookmarked: Bool
+    #if QURAN_SYNC
+        let isCollectionBookmarked: Bool
+    #endif
 }
 
 @MainActor

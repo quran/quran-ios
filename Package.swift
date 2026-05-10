@@ -161,7 +161,6 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "QuranKit"),
         target(type, name: "QuranGeometry", hasTests: false, dependencies: [
             "QuranKit",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
         target(type, name: "QuranAudio", hasTests: false, dependencies: [
             "Utilities",

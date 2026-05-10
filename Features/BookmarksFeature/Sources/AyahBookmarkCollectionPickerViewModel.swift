@@ -37,10 +37,6 @@
         @Published var readingBookmark: QuranReadingBookmark?
         @Published var error: Error?
 
-        var hasSelectedCollections: Bool {
-            !selectedCollectionIDs.isEmpty || selectedHighlightCollectionID != nil
-        }
-
         var bookmarkCollections: [AyahBookmarkCollection] {
             collections.filter { Self.highlightColor(for: $0) == nil }
         }
@@ -53,7 +49,7 @@
             guard let firstVerse = verses.first else {
                 return false
             }
-            return readingBookmark?.isReadingBookmark(for: firstVerse) == true
+            return readingBookmark?.isAyahBookmark(for: firstVerse) == true
         }
 
         nonisolated static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {

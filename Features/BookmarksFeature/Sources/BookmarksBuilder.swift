@@ -26,7 +26,6 @@ public struct BookmarksBuilder {
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
-            let showHighlightsAction: (@MainActor (UIViewController) async -> Void)?
             let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
             if let syncService = container.syncService {
@@ -37,26 +36,11 @@ public struct BookmarksBuilder {
                 let navigateToPage: (Page) -> Void = { [weak listener] page in
                     listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                 }
-                let highlightsBuilder = AyahBookmarkCollectionsBuilder(
-                    ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-                    includedCollectionNames: Set(HighlightBookmarkCollections.names),
-                    prepareCollections: prepareHighlightCollections,
-                    navigateToPage: navigateToPage,
-                    title: l("bookmarks.highlights"),
-                    allowsCollectionManagement: false
-                )
                 let collectionsBuilder = AyahBookmarkCollectionsBuilder(
                     ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                     prepareCollections: prepareHighlightCollections,
                     navigateToPage: navigateToPage
                 )
-                showHighlightsAction = { presenter in
-                    guard let navigationController = presenter.navigationController else {
-                        return
-                    }
-                    let highlightsViewController = highlightsBuilder.build()
-                    navigationController.pushViewController(highlightsViewController, animated: true)
-                }
                 showCollectionsAction = { presenter in
                     guard let navigationController = presenter.navigationController else {
                         return
@@ -72,7 +56,6 @@ public struct BookmarksBuilder {
                     navigationController.pushViewController(oldPageBookmarksViewController, animated: true)
                 }
             } else {
-                showHighlightsAction = nil
                 showCollectionsAction = nil
                 showOldPageBookmarksAction = nil
             }
@@ -83,7 +66,6 @@ public struct BookmarksBuilder {
                 navigateTo: { [weak listener] page in
                     listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
                 },
-                showHighlightsAction: showHighlightsAction,
                 showCollectionsAction: showCollectionsAction,
                 showOldPageBookmarksAction: showOldPageBookmarksAction
             )

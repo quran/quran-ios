@@ -8,7 +8,6 @@
 
 import AnnotationsService
 import AppDependencies
-import BookmarksFeature
 import FeaturesSupport
 import QuranTextKit
 import ReadingSelectorFeature

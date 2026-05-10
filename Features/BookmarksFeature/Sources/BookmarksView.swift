@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-13.
 //
 
+import AnnotationsService
 import Localization
 import NoorUI
 import QuranAnnotations

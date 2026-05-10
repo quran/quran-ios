@@ -98,12 +98,6 @@ public enum QuranReadingBookmark: Equatable {
 
         // MARK: Public
 
-        public func nextEducationPresentationIsExpanded() -> Bool {
-            let isExpanded = !ReadingBookmarkPreferences.shared.isEducationShown
-            ReadingBookmarkPreferences.shared.isEducationShown = true
-            return isExpanded
-        }
-
         public func readingBookmarkSequence() -> ReadingBookmarkSequence {
             let sequence = syncService.readingBookmarkSequence()
                 .map { bookmark in

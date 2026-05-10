@@ -6,7 +6,6 @@
 //
 
 import AnnotationsService
-import BookmarksFeature
 import Combine
 import Crashing
 import Foundation

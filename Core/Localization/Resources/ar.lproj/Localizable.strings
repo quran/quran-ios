@@ -108,6 +108,16 @@
 
 "bookmarks.no-data.title" = "إضافة الإشارات المرجعية...";
 "bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
+"bookmarks.collections" = "المجموعات";
+"bookmarks.collections.add" = "إضافة مجموعة";
+"bookmarks.collections.edit" = "تحرير المجموعات";
+"bookmarks.collections.new.placeholder" = "اسم المجموعة";
+"bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
+"bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم إشاراتك المرجعية للآيات.";
+"bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";
+"bookmarks.collections.ayahs.no-data.title" = "لا توجد إشارات مرجعية في هذه المجموعة";
+"bookmarks.collections.ayahs.no-data.text" = "أضف إشارات مرجعية للآيات لرؤيتها هنا.";
+"bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 
 "bookmarks.sync.title" = "زامن العلامات المرجعية";
 "bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";

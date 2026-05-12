@@ -31,7 +31,8 @@ struct BookmarksView: View {
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
-            showCollectionsAction: viewModel.showCollectionsAction
+            showCollectionsAction: viewModel.showCollectionsAction,
+            showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
         )
     }
 }
@@ -52,6 +53,7 @@ private struct BookmarksViewUI: View {
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
     let showCollectionsAction: AsyncAction?
+    let showOldPageBookmarksAction: AsyncAction?
 
     var body: some View {
         Group {
@@ -63,7 +65,9 @@ private struct BookmarksViewUI: View {
                 }
             }
         }
-        .task { await start() }
+        .task {
+            await start()
+        }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -97,6 +101,16 @@ private struct BookmarksViewUI: View {
     }
 
     #if QURAN_SYNC
+        private var oldPageBookmarksRow: some View {
+            NoorListItem(
+                image: .init(.bookmark, color: .secondary),
+                title: .text(l("bookmarks.old-page-bookmarks")),
+                subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
+                accessory: .disclosureIndicator,
+                action: showOldPageBookmarksAction
+            )
+        }
+
         private var collectionsRow: some View {
             NoorListItem(
                 image: .init(.folder, color: .accentColor),
@@ -113,6 +127,12 @@ private struct BookmarksViewUI: View {
             if shouldShowSyncBanner {
                 NoorBasicSection {
                     syncBanner
+                }
+            }
+
+            if showOldPageBookmarksAction != nil {
+                NoorBasicSection {
+                    oldPageBookmarksRow
                 }
             }
 
@@ -227,7 +247,8 @@ struct BookmarksView_Previews: PreviewProvider {
                     deleteAction: { item in items = items.filter { $0 != item } },
                     dismissSyncBanner: {},
                     signInAction: {},
-                    showCollectionsAction: showCollectionsAction
+                    showCollectionsAction: showCollectionsAction,
+                    showOldPageBookmarksAction: {}
                 )
                 .navigationTitle(lAndroid("menu_bookmarks"))
                 .toolbar {

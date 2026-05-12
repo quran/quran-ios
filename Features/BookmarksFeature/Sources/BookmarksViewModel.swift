@@ -26,13 +26,15 @@ final class BookmarksViewModel: ObservableObject {
         service: PageBookmarkService,
         authenticationClient: (any AuthenticationClient)?,
         navigateTo: @escaping (Page) -> Void,
-        showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil
+        showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil,
+        showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)? = nil
     ) {
         self.analytics = analytics
         self.service = service
         self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
         presentCollectionsAction = showCollectionsAction
+        presentOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
@@ -56,6 +58,15 @@ final class BookmarksViewModel: ObservableObject {
         }
         return { [weak self] in
             await self?.showCollections()
+        }
+    }
+
+    var showOldPageBookmarksAction: (@MainActor @Sendable () async -> Void)? {
+        guard presentOldPageBookmarksAction != nil else {
+            return nil
+        }
+        return { [weak self] in
+            await self?.showOldPageBookmarks()
         }
     }
 
@@ -132,6 +143,13 @@ final class BookmarksViewModel: ObservableObject {
         await presentCollectionsAction?(presenter)
     }
 
+    func showOldPageBookmarks() async {
+        guard let presenter else {
+            return
+        }
+        await presentOldPageBookmarksAction?(presenter)
+    }
+
     // MARK: Private
 
     private let navigateTo: (Page) -> Void
@@ -139,6 +157,7 @@ final class BookmarksViewModel: ObservableObject {
     private let service: PageBookmarkService
     private let authenticationClient: (any AuthenticationClient)?
     private let presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
+    private let presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared
     private let preferences = BookmarksPreferences.shared
 

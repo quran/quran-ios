@@ -15,22 +15,12 @@ import UIx
 @MainActor
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
-    let showCollectionsAction: AsyncAction?
 
-    init(viewModel: BookmarksViewModel, showCollectionsAction: AsyncAction? = nil) {
+    init(viewModel: BookmarksViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.showCollectionsAction = showCollectionsAction
     }
 
     var body: some View {
-        #if QURAN_SYNC
-            let resolvedShowCollectionsAction: AsyncAction? = showCollectionsAction ?? (viewModel.canShowCollections ? {
-                await viewModel.showCollections()
-            } : nil)
-        #else
-            let resolvedShowCollectionsAction = showCollectionsAction
-        #endif
-
         BookmarksViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
@@ -41,7 +31,7 @@ struct BookmarksView: View {
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
-            showCollectionsAction: resolvedShowCollectionsAction
+            showCollectionsAction: viewModel.showCollectionsAction
         )
     }
 }

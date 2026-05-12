@@ -16,12 +16,10 @@
 
         init(
             ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-            includedCollectionNames: Set<String>? = nil,
             excludedCollectionNames: Set<String> = [],
             navigateToPage: @escaping (Page) -> Void
         ) {
             self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
-            self.includedCollectionNames = includedCollectionNames
             self.excludedCollectionNames = excludedCollectionNames
             self.navigateToPage = navigateToPage
         }
@@ -91,16 +89,12 @@
         // MARK: Private
 
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
-        private let includedCollectionNames: Set<String>?
         private let excludedCollectionNames: Set<String>
         private let navigateToPage: (Page) -> Void
 
         private func filtered(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
             collections.filter { collection in
                 let name = collection.collection.name
-                if let includedCollectionNames {
-                    return includedCollectionNames.contains(name)
-                }
                 return !excludedCollectionNames.contains(name)
             }
         }

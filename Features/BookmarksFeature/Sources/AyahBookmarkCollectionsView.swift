@@ -14,21 +14,13 @@
     struct AyahBookmarkCollectionsView: View {
         // MARK: Lifecycle
 
-        init(
-            viewModel: AyahBookmarkCollectionsViewModel,
-            allowsCollectionManagement: Bool = true,
-            allowsBookmarkDeletion: Bool = true
-        ) {
+        init(viewModel: AyahBookmarkCollectionsViewModel) {
             _viewModel = StateObject(wrappedValue: viewModel)
-            self.allowsCollectionManagement = allowsCollectionManagement
-            self.allowsBookmarkDeletion = allowsBookmarkDeletion
         }
 
         // MARK: Internal
 
         @StateObject var viewModel: AyahBookmarkCollectionsViewModel
-        let allowsCollectionManagement: Bool
-        let allowsBookmarkDeletion: Bool
 
         var body: some View {
             Group {
@@ -67,28 +59,24 @@
             NoorBasicSection(title: collection.collection.name, isExpanded: isExpanded) {
                 ForEach(collection.bookmarks) { bookmark in
                     bookmarkItem(bookmark)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: allowsBookmarkDeletion) {
-                            if allowsBookmarkDeletion {
-                                Button(role: .destructive) {
-                                    Task {
-                                        await viewModel.deleteBookmark(bookmark)
-                                    }
-                                } label: {
-                                    Label(lAndroid("delete"), systemImage: "trash")
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                Task {
+                                    await viewModel.deleteBookmark(bookmark)
                                 }
+                            } label: {
+                                Label(lAndroid("delete"), systemImage: "trash")
                             }
                         }
                 }
             }
-            .swipeActions(edge: .trailing, allowsFullSwipe: allowsCollectionManagement) {
-                if allowsCollectionManagement {
-                    Button(role: .destructive) {
-                        Task {
-                            await viewModel.deleteCollection(collection)
-                        }
-                    } label: {
-                        Label(lAndroid("delete"), systemImage: "trash")
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive) {
+                    Task {
+                        await viewModel.deleteCollection(collection)
                     }
+                } label: {
+                    Label(lAndroid("delete"), systemImage: "trash")
                 }
             }
         }

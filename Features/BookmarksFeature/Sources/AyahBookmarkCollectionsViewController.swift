@@ -16,19 +16,10 @@
 
         init(
             viewModel: AyahBookmarkCollectionsViewModel,
-            title: String = l("bookmarks.collections"),
-            allowsCollectionManagement: Bool = true,
-            allowsBookmarkDeletion: Bool = true
+            title: String = l("bookmarks.collections")
         ) {
             self.viewModel = viewModel
-            self.allowsCollectionManagement = allowsCollectionManagement
-            super.init(
-                rootView: AyahBookmarkCollectionsView(
-                    viewModel: viewModel,
-                    allowsCollectionManagement: allowsCollectionManagement,
-                    allowsBookmarkDeletion: allowsBookmarkDeletion
-                )
-            )
+            super.init(rootView: AyahBookmarkCollectionsView(viewModel: viewModel))
             self.title = title
             initialize()
         }
@@ -42,14 +33,9 @@
         // MARK: Private
 
         private let viewModel: AyahBookmarkCollectionsViewModel
-        private let allowsCollectionManagement: Bool
         private var cancellables: Set<AnyCancellable> = []
 
         private func initialize() {
-            guard allowsCollectionManagement else {
-                return
-            }
-
             updateMenuButton()
 
             viewModel.objectWillChange

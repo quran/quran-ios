@@ -57,6 +57,24 @@
             )
         }
 
+        private var deleteBookmarkAction: AsyncItemAction<AyahCollectionBookmark>? {
+            guard allowsBookmarkDeletion else {
+                return nil
+            }
+            return { bookmark in
+                await viewModel.deleteBookmark(bookmark)
+            }
+        }
+
+        private func deleteCollectionAction(for collection: AyahBookmarkCollection) -> AsyncAction? {
+            guard allowsCollectionManagement else {
+                return nil
+            }
+            return {
+                await viewModel.deleteCollection(collection)
+            }
+        }
+
         @ViewBuilder
         private func section(for collection: AyahBookmarkCollection) -> some View {
             let isExpanded = Binding(
@@ -64,33 +82,16 @@
                 set: { viewModel.setCollection(collection, expanded: $0) }
             )
 
-            NoorBasicSection(title: collection.collection.name, isExpanded: isExpanded) {
-                ForEach(collection.bookmarks) { bookmark in
-                    bookmarkItem(bookmark)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: allowsBookmarkDeletion) {
-                            if allowsBookmarkDeletion {
-                                Button(role: .destructive) {
-                                    Task {
-                                        await viewModel.deleteBookmark(bookmark)
-                                    }
-                                } label: {
-                                    Label(lAndroid("delete"), systemImage: "trash")
-                                }
-                            }
-                        }
-                }
+            NoorEditableCollapsibleSection(
+                title: collection.collection.name,
+                isExpanded: isExpanded,
+                collection.bookmarks,
+                showsHeaderDeleteAction: allowsCollectionManagement && viewModel.editMode.isEditing,
+                headerDeleteAction: deleteCollectionAction(for: collection)
+            ) { bookmark in
+                bookmarkItem(bookmark)
             }
-            .swipeActions(edge: .trailing, allowsFullSwipe: allowsCollectionManagement) {
-                if allowsCollectionManagement {
-                    Button(role: .destructive) {
-                        Task {
-                            await viewModel.deleteCollection(collection)
-                        }
-                    } label: {
-                        Label(lAndroid("delete"), systemImage: "trash")
-                    }
-                }
-            }
+            .onDelete(action: deleteBookmarkAction)
         }
 
         private func bookmarkItem(_ bookmark: AyahCollectionBookmark) -> some View {

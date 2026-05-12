@@ -15,32 +15,12 @@ import UIx
 @MainActor
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
-    let showCollectionsAction: AsyncAction?
-    let showOldPageBookmarksAction: AsyncAction?
 
-    init(
-        viewModel: BookmarksViewModel,
-        showCollectionsAction: AsyncAction? = nil,
-        showOldPageBookmarksAction: AsyncAction? = nil
-    ) {
+    init(viewModel: BookmarksViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.showCollectionsAction = showCollectionsAction
-        self.showOldPageBookmarksAction = showOldPageBookmarksAction
     }
 
     var body: some View {
-        #if QURAN_SYNC
-            let resolvedShowCollectionsAction: AsyncAction? = showCollectionsAction ?? (viewModel.canShowCollections ? {
-                await viewModel.showCollections()
-            } : nil)
-            let resolvedShowOldPageBookmarksAction: AsyncAction? = showOldPageBookmarksAction ?? (viewModel.canShowOldPageBookmarks ? {
-                await viewModel.showOldPageBookmarks()
-            } : nil)
-        #else
-            let resolvedShowCollectionsAction = showCollectionsAction
-            let resolvedShowOldPageBookmarksAction = showOldPageBookmarksAction
-        #endif
-
         BookmarksViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
@@ -51,8 +31,8 @@ struct BookmarksView: View {
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
-            showCollectionsAction: resolvedShowCollectionsAction,
-            showOldPageBookmarksAction: resolvedShowOldPageBookmarksAction
+            showCollectionsAction: viewModel.showCollectionsAction,
+            showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
         )
     }
 }

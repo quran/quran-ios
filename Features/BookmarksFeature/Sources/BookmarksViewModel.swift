@@ -33,8 +33,8 @@ final class BookmarksViewModel: ObservableObject {
         self.service = service
         self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
-        self.showCollectionsAction = showCollectionsAction
-        self.showOldPageBookmarksAction = showOldPageBookmarksAction
+        presentCollectionsAction = showCollectionsAction
+        presentOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
@@ -52,12 +52,22 @@ final class BookmarksViewModel: ObservableObject {
         !isAuthenticated && !isSyncBannerDismissed
     }
 
-    var canShowCollections: Bool {
-        showCollectionsAction != nil
+    var showCollectionsAction: (@MainActor @Sendable () async -> Void)? {
+        guard presentCollectionsAction != nil else {
+            return nil
+        }
+        return { [weak self] in
+            await self?.showCollections()
+        }
     }
 
-    var canShowOldPageBookmarks: Bool {
-        showOldPageBookmarksAction != nil
+    var showOldPageBookmarksAction: (@MainActor @Sendable () async -> Void)? {
+        guard presentOldPageBookmarksAction != nil else {
+            return nil
+        }
+        return { [weak self] in
+            await self?.showOldPageBookmarks()
+        }
     }
 
     func start() async {
@@ -130,14 +140,14 @@ final class BookmarksViewModel: ObservableObject {
         guard let presenter else {
             return
         }
-        await showCollectionsAction?(presenter)
+        await presentCollectionsAction?(presenter)
     }
 
     func showOldPageBookmarks() async {
         guard let presenter else {
             return
         }
-        await showOldPageBookmarksAction?(presenter)
+        await presentOldPageBookmarksAction?(presenter)
     }
 
     // MARK: Private
@@ -146,8 +156,8 @@ final class BookmarksViewModel: ObservableObject {
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let authenticationClient: (any AuthenticationClient)?
-    private let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
-    private let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
+    private let presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
+    private let presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared
     private let preferences = BookmarksPreferences.shared
 

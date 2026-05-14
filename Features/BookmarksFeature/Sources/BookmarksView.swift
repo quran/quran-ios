@@ -16,6 +16,10 @@ import UIx
 struct BookmarksView: View {
     @StateObject var viewModel: BookmarksViewModel
 
+    init(viewModel: BookmarksViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     var body: some View {
         BookmarksViewUI(
             editMode: $viewModel.editMode,
@@ -26,7 +30,9 @@ struct BookmarksView: View {
             selectAction: { viewModel.navigateTo($0) },
             deleteAction: { await viewModel.deleteItem($0) },
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
-            signInAction: { await viewModel.loginToQuranCom() }
+            signInAction: { await viewModel.loginToQuranCom() },
+            showCollectionsAction: viewModel.showCollectionsAction,
+            showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
         )
     }
 }
@@ -46,6 +52,8 @@ private struct BookmarksViewUI: View {
     let deleteAction: AsyncItemAction<PageBookmark>
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
+    let showCollectionsAction: AsyncAction?
+    let showOldPageBookmarksAction: AsyncAction?
 
     var body: some View {
         Group {
@@ -53,21 +61,13 @@ private struct BookmarksViewUI: View {
                 emptyState
             } else {
                 NoorList {
-                    #if QURAN_SYNC
-                        if shouldShowSyncBanner {
-                            NoorBasicSection {
-                                syncBanner
-                            }
-                        }
-                    #endif
-                    NoorSection(bookmarks) { bookmark in
-                        listItem(bookmark)
-                    }
-                    .onDelete(action: deleteAction)
+                    listSections(includeBookmarks: true)
                 }
             }
         }
-        .task { await start() }
+        .task {
+            await start()
+        }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
     }
@@ -77,13 +77,10 @@ private struct BookmarksViewUI: View {
     private var emptyState: some View {
         VStack(spacing: 16) {
             #if QURAN_SYNC
-                if shouldShowSyncBanner {
-                    syncBanner
-                        .padding(.horizontal)
-                        .padding(.top, 12)
+                NoorList {
+                    listSections(includeBookmarks: false)
                 }
             #endif
-
             noData
         }
     }
@@ -101,6 +98,57 @@ private struct BookmarksViewUI: View {
             dismiss: dismissSyncBanner,
             signInAction: signInAction
         )
+    }
+
+    #if QURAN_SYNC
+        private var oldPageBookmarksRow: some View {
+            NoorListItem(
+                image: .init(.bookmark, color: .secondary),
+                title: .text(l("bookmarks.old-page-bookmarks")),
+                subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
+                accessory: .disclosureIndicator,
+                action: showOldPageBookmarksAction
+            )
+        }
+
+        private var collectionsRow: some View {
+            NoorListItem(
+                image: .init(.folder, color: .accentColor),
+                title: .text(l("bookmarks.collections")),
+                accessory: .disclosureIndicator,
+                action: showCollectionsAction
+            )
+        }
+    #endif
+
+    @ViewBuilder
+    private func listSections(includeBookmarks: Bool) -> some View {
+        #if QURAN_SYNC
+            if shouldShowSyncBanner {
+                NoorBasicSection {
+                    syncBanner
+                }
+            }
+
+            if showOldPageBookmarksAction != nil {
+                NoorBasicSection {
+                    oldPageBookmarksRow
+                }
+            }
+
+            if showCollectionsAction != nil {
+                NoorBasicSection {
+                    collectionsRow
+                }
+            }
+        #endif
+
+        if includeBookmarks {
+            NoorSection(bookmarks) { bookmark in
+                listItem(bookmark)
+            }
+            .onDelete(action: deleteAction)
+        }
     }
 
     private func listItem(_ bookmark: PageBookmark) -> some View {
@@ -187,6 +235,7 @@ struct BookmarksView_Previews: PreviewProvider {
         @State var error: Error? = nil
 
         var body: some View {
+            let showCollectionsAction: AsyncAction? = {}
             NavigationView {
                 BookmarksViewUI(
                     editMode: $editMode,
@@ -197,7 +246,9 @@ struct BookmarksView_Previews: PreviewProvider {
                     selectAction: { _ in },
                     deleteAction: { item in items = items.filter { $0 != item } },
                     dismissSyncBanner: {},
-                    signInAction: {}
+                    signInAction: {},
+                    showCollectionsAction: showCollectionsAction,
+                    showOldPageBookmarksAction: {}
                 )
                 .navigationTitle(lAndroid("menu_bookmarks"))
                 .toolbar {

@@ -10,6 +10,7 @@ import AnnotationsService
 import AppDependencies
 import FeaturesSupport
 import Localization
+import QuranKit
 import UIKit
 
 @MainActor

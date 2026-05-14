@@ -7,6 +7,7 @@
 
 import Localization
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import SwiftUI
 import UIx

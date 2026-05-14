@@ -10,6 +10,7 @@ import AnnotationsService
 import AuthenticationClient
 import Combine
 import FeaturesSupport
+import QuranAnnotations
 import QuranKit
 import ReadingService
 import SwiftUI

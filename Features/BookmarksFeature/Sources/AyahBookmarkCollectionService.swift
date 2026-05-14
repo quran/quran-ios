@@ -84,9 +84,13 @@
         }
 
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
+            let readingPreferences = readingPreferences
             let sequence = syncService.collectionsWithBookmarksSequence()
                 .map { collections in
-                    self.collections(from: collections)
+                    Self.collections(
+                        from: collections,
+                        quran: readingPreferences.reading.quran
+                    )
                 }
             return AyahBookmarkCollectionsSequence(sequence)
         }
@@ -117,10 +121,6 @@
             }
 
             return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
-        }
-
-        private func collections(from collections: [CollectionWithAyahBookmarks]) -> [AyahBookmarkCollection] {
-            Self.collections(from: collections, quran: readingPreferences.reading.quran)
         }
     }
 

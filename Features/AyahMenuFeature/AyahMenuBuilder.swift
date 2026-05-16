@@ -52,7 +52,8 @@ public struct AyahMenuBuilder {
             verses: input.verses,
             notes: input.notes,
             noteService: noteService,
-            textRetriever: textRetriever
+            textRetriever: textRetriever,
+            usesSyncedNotes: usesSyncedNotes
         ))
         viewModel.listener = listener
         return AyahMenuViewController(viewModel: viewModel)
@@ -61,4 +62,12 @@ public struct AyahMenuBuilder {
     // MARK: Private
 
     private let container: AppDependencies
+
+    private var usesSyncedNotes: Bool {
+        #if QURAN_SYNC
+            return container.mobileSyncNoteService() != nil
+        #else
+            return false
+        #endif
+    }
 }

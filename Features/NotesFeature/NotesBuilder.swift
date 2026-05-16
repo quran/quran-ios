@@ -8,6 +8,9 @@
 
 import AppDependencies
 import FeaturesSupport
+#if QURAN_SYNC
+    import NoteEditorFeature
+#endif
 import QuranKit
 import QuranTextKit
 import UIKit
@@ -23,6 +26,22 @@ public struct NotesBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
+        #if QURAN_SYNC
+            if let noteService = container.mobileSyncNoteService() {
+                let textService = container.textDataService()
+                let viewModel = SyncedNotesViewModel(noteService: noteService, textService: textService)
+                let viewController = SyncedNotesViewController(
+                    viewModel: viewModel,
+                    noteEditorBuilder: SyncedNoteEditorBuilder(
+                        noteService: noteService,
+                        textService: textService,
+                        analytics: container.analytics
+                    )
+                )
+                return viewController
+            }
+        #endif
+
         let textRetriever = ShareableVerseTextRetriever(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database

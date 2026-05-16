@@ -28,6 +28,10 @@ public protocol AyahMenuListener: AnyObject {
     func deleteNotes(_ notes: [Note], verses: [AyahNumber]) async
     func showTranslation(_ verses: [AyahNumber])
 
+    #if QURAN_SYNC
+        func addSyncedNote(verses: [AyahNumber])
+    #endif
+
     func editNote(_ note: Note)
 }
 
@@ -42,6 +46,7 @@ final class AyahMenuViewModel {
         let notes: [Note]
         let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
+        let usesSyncedNotes: Bool
         let quranContentStatePreferences = QuranContentStatePreferences.shared
     }
 
@@ -81,6 +86,11 @@ final class AyahMenuViewModel {
     }
 
     var noteState: AyahMenuUI.NoteState {
+        #if QURAN_SYNC
+            if deps.usesSyncedNotes {
+                return .noHighlight
+            }
+        #endif
         if deps.notes.isEmpty {
             return .noHighlight
         } else if containsText(deps.notes) {
@@ -116,6 +126,12 @@ final class AyahMenuViewModel {
 
     func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
+        #if QURAN_SYNC
+            if deps.usesSyncedNotes {
+                listener?.addSyncedNote(verses: deps.verses)
+                return
+            }
+        #endif
         let notes = deps.notes
         let color = deps.noteService.color(from: notes)
         if let note = await _updateHighlight(color: color) {

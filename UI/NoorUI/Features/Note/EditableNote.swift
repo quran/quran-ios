@@ -26,6 +26,10 @@ public class EditableNote: ObservableObject {
     @Published public internal(set) var selectedColor: Note.Color
     @Published public internal(set) var note: String
 
+    public var notePublisher: AnyPublisher<String, Never> {
+        $note.eraseToAnyPublisher()
+    }
+
     // MARK: Internal
 
     @Published var editing: Bool

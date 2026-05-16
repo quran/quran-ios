@@ -252,3 +252,6 @@
 "bookmarks.collections.no-data.text" = "Create a collection to organize your ayah bookmarks.";
 
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
+
+"notes.minimum-length.alert.title" = "Note is too short";
+"notes.minimum-length.alert.body" = "Notes must be at least %d characters.";

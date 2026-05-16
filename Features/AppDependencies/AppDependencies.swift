@@ -74,4 +74,12 @@ extension AppDependencies {
             analytics: analytics
         )
     }
+
+    #if QURAN_SYNC
+        public func mobileSyncNoteService() -> MobileSyncNoteService? {
+            syncService.map {
+                MobileSyncNoteService(syncService: $0)
+            }
+        }
+    #endif
 }

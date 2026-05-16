@@ -7,6 +7,7 @@
 
     import AnnotationsService
     import Foundation
+    import Localization
     import QuranAnnotations
     import QuranKit
     import VLogging
@@ -75,9 +76,10 @@
         }
 
         func start() async {
-            async let collections: () = loadCollections()
-            async let readingBookmark: () = loadReadingBookmark()
-            _ = await [collections, readingBookmark]
+            async let collections: Void = loadCollections()
+            async let bookmarks: Void = loadBookmarks()
+            async let readingBookmark: Void = loadReadingBookmark()
+            _ = await [collections, bookmarks, readingBookmark]
         }
 
         func toggleSelection(for collection: AyahBookmarkCollection) {
@@ -147,18 +149,46 @@
         private let didFinish: () -> Void
         private var didEnsureHighlightCollections = false
         private var didUpdateSelection = false
+        private var syncedCollections: [AyahBookmarkCollection] = []
+        private var directBookmarks: [AyahCollectionBookmark] = []
 
         private func loadCollections() async {
             do {
                 let sequence = ayahBookmarkCollectionService.collectionsSequence()
                 for try await collections in sequence {
-                    self.collections = Self.sorted(collections)
-                    selectExistingBookmarksIfNeeded(in: self.collections)
+                    syncedCollections = collections
+                    refreshCollections()
                     try await ensureHighlightCollections(collections)
                 }
             } catch {
                 self.error = error
             }
+        }
+
+        private func loadBookmarks() async {
+            do {
+                let sequence = ayahBookmarkCollectionService.bookmarksSequence()
+                for try await bookmarks in sequence {
+                    directBookmarks = bookmarks
+                    refreshCollections()
+                }
+            } catch {
+                self.error = error
+            }
+        }
+
+        private func refreshCollections() {
+            let collections = syncedCollections + [favouritesCollection()]
+            self.collections = Self.sorted(collections)
+            selectExistingBookmarksIfNeeded(in: self.collections)
+        }
+
+        private func favouritesCollection() -> AyahBookmarkCollection {
+            FavouritesBookmarkCollection.make(
+                name: l("bookmarks.collections.favourites"),
+                bookmarks: directBookmarks,
+                collections: syncedCollections
+            )
         }
 
         private func ensureHighlightCollections(_ collections: [AyahBookmarkCollection]) async throws {
@@ -225,10 +255,14 @@
             for collection in bookmarkCollections {
                 if selectedCollectionIDs.contains(collection.collection.localId) {
                     for verse in Self.bookmarksToAdd(to: collection, verses: verses) {
-                        try await ayahBookmarkCollectionService.addAyahBookmarkToCollection(
-                            collectionLocalId: collection.collection.localId,
-                            ayah: verse
-                        )
+                        if collection.isLocalOnly {
+                            try await ayahBookmarkCollectionService.addAyahBookmark(verse)
+                        } else {
+                            try await ayahBookmarkCollectionService.addAyahBookmarkToCollection(
+                                collectionLocalId: collection.collection.localId,
+                                ayah: verse
+                            )
+                        }
                     }
                 } else {
                     for bookmark in Self.bookmarksToRemove(from: collection, verses: verses) {

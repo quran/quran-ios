@@ -84,7 +84,7 @@
             )
 
             let highlightColor = HighlightColor(collectionName: collection.collection.name)
-            let allowsCollectionDeletion = allowsCollectionManagement && highlightColor == nil
+            let allowsCollectionDeletion = allowsCollectionManagement && highlightColor == nil && !collection.isLocalOnly
 
             NoorEditableCollapsibleSection(
                 title: highlightColor?.localizedName ?? collection.collection.name,

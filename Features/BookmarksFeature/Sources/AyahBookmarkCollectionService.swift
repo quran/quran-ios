@@ -12,15 +12,68 @@
     public struct AyahBookmarkCollection {
         public let collection: Collection_
         public let bookmarks: [AyahCollectionBookmark]
+        public let isLocalOnly: Bool
+
+        public init(collection: Collection_, bookmarks: [AyahCollectionBookmark], isLocalOnly: Bool = false) {
+            self.collection = collection
+            self.bookmarks = bookmarks
+            self.isLocalOnly = isLocalOnly
+        }
     }
 
     public struct AyahCollectionBookmark {
-        public let bookmark: CollectionAyahBookmark
+        public enum Bookmark {
+            case collection(CollectionAyahBookmark)
+            case ayah(AyahBookmark)
+        }
+
+        public let bookmark: Bookmark
         public let ayah: AyahNumber
+
+        public init(bookmark: CollectionAyahBookmark, ayah: AyahNumber) {
+            self.bookmark = .collection(bookmark)
+            self.ayah = ayah
+        }
+
+        public init(bookmark: AyahBookmark, ayah: AyahNumber) {
+            self.bookmark = .ayah(bookmark)
+            self.ayah = ayah
+        }
     }
 
     public struct AyahBookmarkCollectionsSequence: AsyncSequence {
         public typealias Element = [AyahBookmarkCollection]
+
+        public struct AsyncIterator: AsyncIteratorProtocol {
+            init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
+                var iterator = sequence.makeAsyncIterator()
+                nextValue = {
+                    try await iterator.next()
+                }
+            }
+
+            public mutating func next() async throws -> Element? {
+                try await nextValue()
+            }
+
+            private let nextValue: () async throws -> Element?
+        }
+
+        init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
+            makeIterator = {
+                AsyncIterator(sequence)
+            }
+        }
+
+        public func makeAsyncIterator() -> AsyncIterator {
+            makeIterator()
+        }
+
+        private let makeIterator: () -> AsyncIterator
+    }
+
+    public struct AyahBookmarksSequence: AsyncSequence {
+        public typealias Element = [AyahCollectionBookmark]
 
         public struct AsyncIterator: AsyncIteratorProtocol {
             init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
@@ -67,6 +120,13 @@
             try await syncService.createCollection(named: name)
         }
 
+        public func addAyahBookmark(_ ayah: AyahNumber) async throws {
+            _ = try await syncService.addAyahBookmark(
+                sura: Int32(ayah.sura.suraNumber),
+                ayah: Int32(ayah.ayah)
+            )
+        }
+
         public func addAyahBookmarkToCollection(collectionLocalId: String, ayah: AyahNumber) async throws {
             _ = try await syncService.addAyahBookmarkToCollection(
                 collectionLocalId: collectionLocalId,
@@ -80,7 +140,12 @@
         }
 
         public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
-            try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
+            switch bookmark.bookmark {
+            case .collection(let bookmark):
+                try await syncService.removeAyahBookmarkFromCollection(bookmark)
+            case .ayah(let bookmark):
+                try await syncService.removeBookmark(bookmark)
+            }
         }
 
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
@@ -95,6 +160,15 @@
             return AyahBookmarkCollectionsSequence(sequence)
         }
 
+        public func bookmarksSequence() -> AyahBookmarksSequence {
+            let readingPreferences = readingPreferences
+            let sequence = syncService.bookmarksSequence()
+                .map { bookmarks in
+                    Self.bookmarks(from: bookmarks, quran: readingPreferences.reading.quran)
+                }
+            return AyahBookmarksSequence(sequence)
+        }
+
         // MARK: Internal
 
         static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
@@ -106,12 +180,28 @@
             }
         }
 
+        static func bookmarks(from bookmarks: [AyahBookmark], quran: Quran) -> [AyahCollectionBookmark] {
+            bookmarks.compactMap { bookmark(for: $0, quran: quran) }
+        }
+
         // MARK: Private
 
         private let syncService: SyncService
         private let readingPreferences: ReadingPreferences
 
         private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
+            guard let ayah = AyahNumber(
+                quran: quran,
+                sura: Int(bookmark.sura),
+                ayah: Int(bookmark.ayah)
+            ) else {
+                return nil
+            }
+
+            return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
+        }
+
+        private static func bookmark(for bookmark: AyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
             guard let ayah = AyahNumber(
                 quran: quran,
                 sura: Int(bookmark.sura),

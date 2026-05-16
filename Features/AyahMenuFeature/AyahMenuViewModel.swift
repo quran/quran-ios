@@ -34,6 +34,7 @@ public protocol AyahMenuListener: AnyObject {
     #if QURAN_SYNC
         func saveVersesAsBookmark(_ verses: [AyahNumber])
         func removeVersesFromBookmarkCollections(_ verses: [AyahNumber]) async
+        func addSyncedNote(verses: [AyahNumber])
     #endif
 
     func editNote(_ note: QuranAnnotations.Note)
@@ -54,6 +55,7 @@ final class AyahMenuViewModel {
         #if QURAN_SYNC
             let isCollectionBookmarked: Bool
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
+            let usesSyncedNotes: Bool
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
     }
@@ -120,6 +122,11 @@ final class AyahMenuViewModel {
     }
 
     var noteState: AyahMenuUI.NoteState {
+        #if QURAN_SYNC
+            if deps.usesSyncedNotes {
+                return .noHighlight
+            }
+        #endif
         if deps.highlightColor != nil {
             return containsText(deps.notes) ? .noted : .highlighted
         }
@@ -168,6 +175,12 @@ final class AyahMenuViewModel {
 
     func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
+        #if QURAN_SYNC
+            if deps.usesSyncedNotes {
+                listener?.addSyncedNote(verses: deps.verses)
+                return
+            }
+        #endif
         let notes = deps.notes
         let color = highlightColor(for: deps.noteService.color(from: notes))
         if let note = await updateLegacyHighlight(color: color) {

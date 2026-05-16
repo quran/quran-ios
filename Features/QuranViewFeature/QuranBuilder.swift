@@ -56,6 +56,8 @@ public struct QuranBuilder {
             } else {
                 nil
             }
+            let syncedNoteService = container.mobileSyncNoteService()
+            let syncedNoteEditorBuilder = syncedNoteService.map { SyncedNoteEditorBuilder(noteService: $0) }
         #endif
         #if QURAN_SYNC
             let interactorDeps = QuranInteractor.Deps(
@@ -76,7 +78,9 @@ public struct QuranBuilder {
                 syncedHighlightsObserver: syncedHighlightsObserver,
                 readingBookmarkService: readingBookmarkService,
                 ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-                ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder
+                ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder,
+                syncedNoteService: syncedNoteService,
+                syncedNoteEditorBuilder: syncedNoteEditorBuilder
             )
         #else
             let interactorDeps = QuranInteractor.Deps(

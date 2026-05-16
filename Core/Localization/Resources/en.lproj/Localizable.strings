@@ -293,3 +293,5 @@
 "ayah-bookmark.remove-reading-bookmark" = "Remove Reading Bookmark";
 "ayah-bookmark.collection-picker.no-data.title" = "No collections yet";
 "ayah-bookmark.collection-picker.no-data.text" = "Add a collection to save this verse.";
+"notes.minimum-length.alert.title" = "Note is too short";
+"notes.minimum-length.alert.body" = "Notes must be at least %d characters.";

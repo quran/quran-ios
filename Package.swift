@@ -688,6 +688,7 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
             "ReadingService",
             "NoorUI",
+            "NoteEditorFeature",
         ]),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [

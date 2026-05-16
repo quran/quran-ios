@@ -273,3 +273,5 @@
 "ayah-bookmark.remove-reading-bookmark" = "إزالة علامة القراءة";
 "ayah-bookmark.collection-picker.no-data.title" = "لا توجد مجموعات بعد";
 "ayah-bookmark.collection-picker.no-data.text" = "أضف مجموعة لحفظ هذه الآية.";
+"notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";
+"notes.minimum-length.alert.body" = "يجب أن تكون الملاحظة %d أحرف على الأقل.";

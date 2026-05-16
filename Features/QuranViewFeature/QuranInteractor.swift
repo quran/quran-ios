@@ -87,6 +87,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let readingBookmarkService: ReadingBookmarkService?
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
             let ayahBookmarkCollectionPickerBuilder: AyahBookmarkCollectionPickerBuilder?
+            let syncedNoteService: MobileSyncNoteService?
+            let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
         #endif
     }
 
@@ -129,10 +131,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             }
         #endif
 
-        deps.noteService.notes(quran: deps.quran)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.notes = $0 }
-            .store(in: &cancellables)
+        #if QURAN_SYNC
+            if deps.syncedNoteService == nil {
+                startLegacyNotesObservation()
+            }
+        #else
+            startLegacyNotesObservation()
+        #endif
 
         #if QURAN_SYNC
             if let readingBookmarkService = deps.readingBookmarkService {
@@ -242,6 +247,19 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
         presenter?.present(viewController, animated: true)
     }
+
+    #if QURAN_SYNC
+        func addSyncedNote(verses: [AyahNumber]) {
+            guard let syncedNoteEditorBuilder = deps.syncedNoteEditorBuilder else {
+                return
+            }
+
+            dismissAyahMenu()
+            presenter?.rotateToPortraitIfPhone()
+            let viewController = syncedNoteEditorBuilder.build(withListener: self, verses: verses)
+            presenter?.present(viewController, animated: true)
+        }
+    #endif
 
     func dismissNoteEditor() {
         logger.info("Quran: dismiss note editor")
@@ -454,6 +472,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         didSet {
             reloadPageBookmark()
         }
+    }
+
+    private func startLegacyNotesObservation() {
+        deps.noteService.notes(quran: deps.quran)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.notes = $0 }
+            .store(in: &cancellables)
     }
 
     private func startPageBookmarkObservation() {

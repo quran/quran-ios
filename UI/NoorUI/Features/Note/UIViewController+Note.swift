@@ -26,6 +26,16 @@ extension UIViewController {
         present(alert, animated: true)
     }
 
+    public func showNoteMinimumLengthAlert(minimumLength: Int) {
+        let alert = UIAlertController(
+            title: l("notes.minimum-length.alert.title"),
+            message: lFormat("notes.minimum-length.alert.body", minimumLength),
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: lAndroid("dialog_ok"), style: .default, handler: nil))
+        present(alert, animated: true)
+    }
+
     public func addCloudSyncInfo() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: .symbol("link.icloud.fill"),

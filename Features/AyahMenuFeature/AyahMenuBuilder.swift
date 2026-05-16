@@ -91,7 +91,8 @@ public struct AyahMenuBuilder {
                 textRetriever: textRetriever,
                 highlightColor: input.highlightColor,
                 isCollectionBookmarked: input.isCollectionBookmarked,
-                ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) }
+                ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) },
+                usesSyncedNotes: container.mobileSyncNoteService() != nil
             )
         #else
             let deps = AyahMenuViewModel.Deps(

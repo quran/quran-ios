@@ -13,7 +13,7 @@ final class LastPageUpdaterTests: XCTestCase {
 
         sut.configure(initialPage: quran.pages[0], lastPage: nil)
 
-        await waitUntil { service.addCallCount == 1 }
+        await waitUntil { service.addPages == [self.quran.pages[0]] }
         XCTAssertEqual(service.addPages, [quran.pages[0]])
         XCTAssertEqual(service.updateCallCount, 0)
     }
@@ -24,7 +24,7 @@ final class LastPageUpdaterTests: XCTestCase {
 
         sut.configure(initialPage: quran.pages[1], lastPage: quran.pages[0])
 
-        await waitUntil { service.updateCallCount == 1 }
+        await waitUntil { service.updateCalls.first?.page == self.quran.pages[0] }
         XCTAssertEqual(service.updateCalls.first?.page, quran.pages[0])
         XCTAssertEqual(service.updateCalls.first?.toPage, quran.pages[1])
         XCTAssertEqual(service.addCallCount, 0)

@@ -58,7 +58,8 @@ public enum AyahMenuUI {
             actions: Actions,
             isTranslationView: Bool,
             usesCollectionBookmarks: Bool = false,
-            isCollectionBookmarked: Bool = false
+            isCollectionBookmarked: Bool = false,
+            usesSyncedNotesIcon: Bool = false
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
@@ -68,6 +69,7 @@ public enum AyahMenuUI {
             self.isTranslationView = isTranslationView
             self.usesCollectionBookmarks = usesCollectionBookmarks
             self.isCollectionBookmarked = isCollectionBookmarked
+            self.usesSyncedNotesIcon = usesSyncedNotesIcon
         }
 
         // MARK: Internal
@@ -80,6 +82,7 @@ public enum AyahMenuUI {
         let isTranslationView: Bool
         let usesCollectionBookmarks: Bool
         let isCollectionBookmarked: Bool
+        let usesSyncedNotesIcon: Bool
     }
 
     // MARK: Public

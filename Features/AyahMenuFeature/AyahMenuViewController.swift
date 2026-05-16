@@ -55,7 +55,8 @@ final class AyahMenuViewController: UIViewController {
             actions: actions,
             isTranslationView: viewModel.isTranslationView,
             usesCollectionBookmarks: viewModel.usesCollectionBookmarks,
-            isCollectionBookmarked: viewModel.isCollectionBookmarked
+            isCollectionBookmarked: viewModel.isCollectionBookmarked,
+            usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon
         )
         showAyahMenu(dataObject)
     }

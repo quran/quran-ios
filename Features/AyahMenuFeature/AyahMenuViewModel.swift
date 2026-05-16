@@ -85,6 +85,14 @@ final class AyahMenuViewModel {
         return l("ayah.menu.selected-verses")
     }
 
+    var usesSyncedNotesIcon: Bool {
+        #if QURAN_SYNC
+            return deps.usesSyncedNotes
+        #else
+            return false
+        #endif
+    }
+
     var noteState: AyahMenuUI.NoteState {
         #if QURAN_SYNC
             if deps.usesSyncedNotes {

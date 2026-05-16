@@ -65,6 +65,8 @@ public struct AyahMenuView: View {
 }
 
 private struct AyahMenuViewList: View {
+    // MARK: Internal
+
     let dataObject: AyahMenuUI.DataObject
     let showHighlights: AsyncAction
 
@@ -81,15 +83,13 @@ private struct AyahMenuViewList: View {
 
     var editNote: some View {
         Row(title: l("ayah.menu.edit-note"), action: dataObject.actions.addNote) {
-            Image(systemName: "text.bubble.fill")
-                .foregroundColor(dataObject.highlightingColor.color)
+            noteIcon(legacySystemName: "text.bubble.fill")
         }
     }
 
     var addNote: some View {
         Row(title: l("ayah.menu.add-note"), action: dataObject.actions.addNote) {
-            Image(systemName: "plus.bubble.fill")
-                .foregroundColor(dataObject.highlightingColor.color)
+            noteIcon(legacySystemName: "plus.bubble.fill")
         }
     }
 
@@ -189,6 +189,19 @@ private struct AyahMenuViewList: View {
             }
         }
         .fixedSize(horizontal: true, vertical: false)
+    }
+
+    // MARK: Private
+
+    private func noteIcon(legacySystemName: String) -> some View {
+        Group {
+            if dataObject.usesSyncedNotesIcon {
+                NoorSystemImage.note.image
+            } else {
+                Image(systemName: legacySystemName)
+                    .foregroundColor(dataObject.highlightingColor.color)
+            }
+        }
     }
 }
 

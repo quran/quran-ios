@@ -53,56 +53,27 @@
                 ayah: Int32(firstVerse.ayah),
                 timestamp: Date()
             )
-            updateState.setActive(localId: session.localId, page: page)
-            return LastPage(page: page, createdOn: session.lastUpdated, modifiedOn: session.lastUpdated)
+            return lastPage(page: page, for: session)
         }
 
-        public func update(page: Page, toPage: Page) async throws -> LastPage {
-            let sessions = try await readingSessions()
-            guard let session = readingSessionToUpdate(from: sessions, page: page) else {
+        public func update(lastPage: LastPage, toPage: Page) async throws -> LastPage {
+            guard let localId = lastPage.localId else {
                 return try await add(page: toPage)
-            }
-
-            if let targetSession = readingSession(for: toPage, in: sessions), targetSession.localId != session.localId {
-                updateState.setActive(localId: session.localId, page: toPage)
-                return LastPage(page: toPage, createdOn: session.lastUpdated, modifiedOn: session.lastUpdated)
             }
 
             let firstVerse = toPage.firstVerse
             let updatedSession = try await syncService.updateReadingSession(
-                localId: session.localId,
+                localId: localId,
                 sura: Int32(firstVerse.sura.suraNumber),
                 ayah: Int32(firstVerse.ayah),
                 timestamp: Date()
             )
-            updateState.setActive(localId: updatedSession.localId, page: toPage)
-            return LastPage(page: toPage, createdOn: updatedSession.lastUpdated, modifiedOn: updatedSession.lastUpdated)
+            return self.lastPage(page: toPage, for: updatedSession)
         }
 
         // MARK: Private
 
         private let syncService: SyncService
-        private let updateState = ReadingSessionUpdateState()
-
-        private func readingSessions() async throws -> [ReadingSession] {
-            var iterator = syncService.readingSessionsSequence().makeAsyncIterator()
-            return try await iterator.next() ?? []
-        }
-
-        private func readingSessionToUpdate(from sessions: [ReadingSession], page: Page) -> ReadingSession? {
-            if let activeLocalId = updateState.activeLocalId(for: page),
-               let activeSession = sessions.first(where: { $0.localId == activeLocalId })
-            {
-                return activeSession
-            }
-            return readingSession(for: page, in: sessions)
-        }
-
-        private func readingSession(for page: Page, in sessions: [ReadingSession]) -> ReadingSession? {
-            sessions.first { session in
-                lastPage(for: session, quran: page.quran)?.page == page
-            }
-        }
 
         private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
             guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
@@ -120,26 +91,16 @@
                 page = mappedAyah.page
             }
 
-            return LastPage(page: page, createdOn: session.lastUpdated, modifiedOn: session.lastUpdated)
-        }
-    }
-
-    private final class ReadingSessionUpdateState: @unchecked Sendable {
-        func activeLocalId(for page: Page) -> String? {
-            lock.withLock {
-                activePage == page ? activeLocalId : nil
-            }
+            return lastPage(page: page, for: session)
         }
 
-        func setActive(localId: String, page: Page) {
-            lock.withLock {
-                activeLocalId = localId
-                activePage = page
-            }
+        private func lastPage(page: Page, for session: ReadingSession) -> LastPage {
+            LastPage(
+                page: page,
+                createdOn: session.lastUpdated,
+                modifiedOn: session.lastUpdated,
+                localId: session.localId
+            )
         }
-
-        private let lock = NSLock()
-        private var activeLocalId: String?
-        private var activePage: Page?
     }
 #endif

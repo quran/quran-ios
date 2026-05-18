@@ -115,7 +115,8 @@ final class PageMappingServiceTests: XCTestCase {
         let service = PersistenceLastPageService(persistence: persistence)
         let quran = skippedPageQuran()
 
-        let lastPage = try await service.update(page: quran.pages[0], toPage: quran.pages[1])
+        let currentLastPage = LastPage(page: quran.pages[0], createdOn: date, modifiedOn: date)
+        let lastPage = try await service.update(lastPage: currentLastPage, toPage: quran.pages[1])
 
         XCTAssertEqual(persistence.updates, [LastPagePersistenceFake.Update(page: 1, toPage: 2)])
         XCTAssertEqual(lastPage.page.pageNumber, 3)

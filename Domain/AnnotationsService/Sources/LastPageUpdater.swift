@@ -19,6 +19,7 @@
 //
 
 import Crashing
+import QuranAnnotations
 import QuranKit
 
 @MainActor
@@ -31,9 +32,9 @@ public final class LastPageUpdater {
 
     // MARK: Public
 
-    public private(set) var lastPage: Page?
+    public private(set) var lastPage: LastPage?
 
-    public func configure(initialPage: Page, lastPage: Page?) {
+    public func configure(initialPage: Page, lastPage: LastPage?) {
         self.lastPage = lastPage
 
         if let lastPage {
@@ -48,7 +49,7 @@ public final class LastPageUpdater {
             return
         }
         // don't update if it's the same page
-        guard let lastPage, page != lastPage else { return }
+        guard let lastPage, page != lastPage.page else { return }
 
         updateTo(page: page, lastPage: lastPage)
     }
@@ -57,11 +58,10 @@ public final class LastPageUpdater {
 
     private let service: any LastPageService
 
-    private func updateTo(page: Page, lastPage: Page) {
-        self.lastPage = page
+    private func updateTo(page: Page, lastPage: LastPage) {
         Task {
             do {
-                _ = try await service.update(page: lastPage, toPage: page)
+                self.lastPage = try await service.update(lastPage: lastPage, toPage: page)
             } catch {
                 crasher.recordError(error, reason: "Failed to update last page")
             }
@@ -69,10 +69,9 @@ public final class LastPageUpdater {
     }
 
     private func create(page: Page) {
-        lastPage = page
         Task {
             do {
-                _ = try await service.add(page: page)
+                lastPage = try await service.add(page: page)
             } catch {
                 crasher.recordError(error, reason: "Failed to create a last page")
             }

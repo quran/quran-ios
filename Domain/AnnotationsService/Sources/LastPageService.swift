@@ -15,5 +15,5 @@ public protocol LastPageService {
 
     func add(page: Page) async throws -> LastPage
 
-    func update(page: Page, toPage: Page) async throws -> LastPage
+    func update(lastPage: LastPage, toPage: Page) async throws -> LastPage
 }

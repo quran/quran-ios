@@ -22,7 +22,9 @@ final class LastPageUpdaterTests: XCTestCase {
         let service = LastPageServiceSpy()
         let sut = LastPageUpdater(service: service)
 
-        sut.configure(initialPage: quran.pages[1], lastPage: quran.pages[0])
+        let lastPage = LastPage(page: quran.pages[0], createdOn: Date(), modifiedOn: Date())
+
+        sut.configure(initialPage: quran.pages[1], lastPage: lastPage)
 
         await waitUntil { service.updateCalls.first?.page == self.quran.pages[0] }
         XCTAssertEqual(service.updateCalls.first?.page, quran.pages[0])
@@ -69,9 +71,9 @@ private final class LastPageServiceSpy: LastPageService {
         return LastPage(page: page, createdOn: Date(), modifiedOn: Date())
     }
 
-    func update(page: Page, toPage: Page) async throws -> LastPage {
+    func update(lastPage: LastPage, toPage: Page) async throws -> LastPage {
         updateCallCount += 1
-        updateCalls.append(UpdateCall(page: page, toPage: toPage))
+        updateCalls.append(UpdateCall(page: lastPage.page, toPage: toPage))
         return LastPage(page: toPage, createdOn: Date(), modifiedOn: Date())
     }
 }

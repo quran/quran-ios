@@ -107,46 +107,15 @@ class Container: AppDependencies {
             AuthFlowFactoryProvider.shared.doInitialize()
 
             let driverFactory = DriverFactory()
+            let storage = AppleMobileSyncStorageFactory.shared.create()
             let graph = SharedDependencyGraph.shared.doInit(
                 driverFactory: driverFactory,
+                storage: storage,
                 environment: synchronizationEnvironment,
-                authEnvironment: authConfig.environment
+                authConfig: authConfig
             )
 
-            let json = AuthModule.companion.provideJson()
-            let settings = AuthModule.companion.provideSettings()
-            let httpClient = AuthModule.companion.provideHttpClient(json: json, config: authConfig)
-            let oidcClient = AuthModule.companion.provideOpenIdConnectClient(
-                config: authConfig,
-                httpClient: httpClient
-            )
-            let authStorage = AuthStorage(settings: settings, json: json)
-            let authNetworkDataSource = AuthNetworkDataSource(
-                authConfig: authConfig,
-                httpClient: httpClient
-            )
-            let logger = KermitLogger.companion.withTag(tag: "quran-ios")
-            let authRepository = OidcAuthRepository(
-                authConfig: authConfig,
-                authStorage: authStorage,
-                oidcClient: oidcClient,
-                networkDataSource: authNetworkDataSource,
-                logger: logger
-            )
-            let authService = AuthService(authRepository: authRepository)
-            let database = PersistenceModule.companion.provideQuranDatabase(driverFactory: driverFactory)
-            let persistenceResetRepository: PersistenceResetRepository = PersistenceResetRepositoryImpl(database: database)
-            let persistenceImportRepository: PersistenceImportRepository = PersistenceImportRepositoryImpl(database: database)
-            let syncService = SyncService(
-                authService: authService,
-                pipeline: graph.syncService.pipelineForIos,
-                environment: synchronizationEnvironment,
-                persistenceResetRepository: persistenceResetRepository,
-                persistenceImportRepository: persistenceImportRepository,
-                settings: SyncServiceKt.makeSettings()
-            )
-
-            return (authService, syncService)
+            return (graph.authService, graph.syncService)
         }()
 
         private static func mobileSyncAuthConfiguration() -> AuthConfig? {

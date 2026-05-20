@@ -503,6 +503,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AnnotationsService", dependencies: [
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "QuranAnnotations",
             "LastPagePersistence",
             "NotePersistence",

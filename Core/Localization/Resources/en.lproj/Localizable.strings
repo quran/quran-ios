@@ -134,6 +134,8 @@
 "notes.verses-count" = "(+%d ayat)";
 "notes.delete.alert.title" = "Delete Highlight";
 "notes.delete.alert.body" = "The associated note will also be deleted.";
+"notes.delete-note.alert.title" = "Delete Note";
+"notes.delete-note.alert.body" = "This note will be deleted.";
 "notes.icloud.alert.title" = "iCloud Sync";
 "notes.icloud.alert.body" = "The app uses iCloud to sync bookmarks & notes across your devices. You can disable it from your device's iCloud settings.";
 "notes.search.placeholder.text" = "Search your notes";

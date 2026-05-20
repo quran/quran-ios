@@ -112,7 +112,7 @@
             case .create(let verses):
                 return verses
             case .edit(let note):
-                return note.verses
+                return note.startAyah.array(to: note.endAyah)
             }
         }
 

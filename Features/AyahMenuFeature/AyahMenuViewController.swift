@@ -53,7 +53,8 @@ final class AyahMenuViewController: UIViewController {
             repeatSubtitle: viewModel.repeatSubtitle,
             actions: actions,
             isTranslationView: viewModel.isTranslationView,
-            usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon
+            usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon,
+            noteCount: viewModel.noteCount
         )
         showAyahMenu(dataObject)
     }

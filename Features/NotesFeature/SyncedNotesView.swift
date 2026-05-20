@@ -86,9 +86,9 @@
 
         private func listItem(_ item: SyncedNoteItem) -> some View {
             let note = item.note
-            let ayah = note.firstVerse
+            let ayah = note.startAyah
             let page = ayah.page
-            let ayahCount = note.verses.count
+            let ayahCount = note.startAyah.array(to: note.endAyah).count
             let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
             return NoorListItem(
                 subheading: subheadingText(

@@ -26,6 +26,21 @@ extension UIViewController {
         present(alert, animated: true)
     }
 
+    public func confirmSyncedNoteDelete(delete: @escaping AsyncAction, cancel: @escaping () -> Void) {
+        let alert = UIAlertController(
+            title: l("notes.delete-note.alert.title"),
+            message: l("notes.delete-note.alert.body"),
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: lAndroid("cancel"), style: .cancel) { _ in cancel() })
+        alert.addAction(UIAlertAction(title: l("button.delete"), style: .destructive) { _ in
+            Task {
+                await delete()
+            }
+        })
+        present(alert, animated: true)
+    }
+
     public func showNoteMinimumLengthAlert(minimumLength: Int) {
         let alert = UIAlertController(
             title: l("notes.minimum-length.alert.title"),

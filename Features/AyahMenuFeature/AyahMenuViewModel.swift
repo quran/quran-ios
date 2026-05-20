@@ -47,6 +47,7 @@ final class AyahMenuViewModel {
         let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
         let usesSyncedNotes: Bool
+        let noteCount: Int
         let quranContentStatePreferences = QuranContentStatePreferences.shared
     }
 
@@ -90,6 +91,14 @@ final class AyahMenuViewModel {
             return deps.usesSyncedNotes
         #else
             return false
+        #endif
+    }
+
+    var noteCount: Int {
+        #if QURAN_SYNC
+            return deps.usesSyncedNotes ? deps.noteCount : 0
+        #else
+            return 0
         #endif
     }
 

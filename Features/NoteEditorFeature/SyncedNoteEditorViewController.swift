@@ -106,7 +106,7 @@
         private func delete() async {
             logger.info("SyncedNoteEditor: delete note")
             if viewModel.isEditedNote {
-                confirmNoteDelete(
+                confirmSyncedNoteDelete(
                     delete: { await self.viewModel.forceDelete() },
                     cancel: { }
                 )

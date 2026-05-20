@@ -54,7 +54,8 @@ public enum AyahMenuUI {
             repeatSubtitle: String,
             actions: Actions,
             isTranslationView: Bool,
-            usesSyncedNotesIcon: Bool = false
+            usesSyncedNotesIcon: Bool = false,
+            noteCount: Int = 0
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
@@ -63,6 +64,7 @@ public enum AyahMenuUI {
             self.actions = actions
             self.isTranslationView = isTranslationView
             self.usesSyncedNotesIcon = usesSyncedNotesIcon
+            self.noteCount = noteCount
         }
 
         // MARK: Internal
@@ -74,6 +76,7 @@ public enum AyahMenuUI {
         let repeatSubtitle: String
         let isTranslationView: Bool
         let usesSyncedNotesIcon: Bool
+        let noteCount: Int
     }
 
     // MARK: Public

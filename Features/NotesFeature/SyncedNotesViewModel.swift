@@ -41,7 +41,7 @@
                 if item.note.body.range(of: term, options: .caseInsensitive) != nil {
                     return true
                 }
-                let suraName = item.note.firstVerse.sura.localizedName()
+                let suraName = item.note.startAyah.sura.localizedName()
                 return suraName.range(of: term, options: .caseInsensitive) != nil
             }
         }
@@ -71,7 +71,7 @@
                 let notes: [SyncedNoteItem] = await self.notes
                 for (index, note) in notes.enumerated() {
                     notesText.append(contentsOf: [note.note.body.trimmingCharacters(in: .newlines), ""])
-                    let verses = try await textForVerses(note.note.verses)
+                    let verses = try await textForVerses(note.note.startAyah.array(to: note.note.endAyah))
                     notesText.append(verses)
                     if index != notes.count - 1 {
                         notesText.append(contentsOf: ["", "", ""])
@@ -88,20 +88,22 @@
         private let readingPreferences = ReadingPreferences.shared
 
         private nonisolated func noteItems(with notes: [SyncedNote]) async -> [SyncedNoteItem] {
-            await withTaskGroup(of: SyncedNoteItem.self) { group in
-                for note in notes {
+            await withTaskGroup(of: (Int, SyncedNoteItem).self) { group in
+                for (index, note) in notes.enumerated() {
                     group.addTask {
                         do {
-                            let verseText = try await self.textForVerses(note.verses)
-                            return SyncedNoteItem(note: note, verseText: verseText)
+                            let verseText = try await self.textForVerses(note.startAyah.array(to: note.endAyah))
+                            return (index, SyncedNoteItem(note: note, verseText: verseText))
                         } catch {
                             crasher.recordError(error, reason: "SyncedNotesViewModel.textForVerses")
-                            return SyncedNoteItem(note: note, verseText: note.firstVerse.localizedName)
+                            return (index, SyncedNoteItem(note: note, verseText: note.startAyah.localizedName))
                         }
                     }
                 }
 
                 return await group.collect()
+                    .sorted { $0.0 < $1.0 }
+                    .map(\.1)
             }
         }
 

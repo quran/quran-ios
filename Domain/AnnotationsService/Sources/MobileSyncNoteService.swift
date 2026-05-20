@@ -17,12 +17,6 @@
         public let modifiedDate: Date
 
         public var id: String { localId }
-
-        public var firstVerse: AyahNumber { startAyah }
-
-        public var verses: [AyahNumber] {
-            startAyah.array(to: endAyah)
-        }
     }
 
     public struct SyncedNotesSequence: AsyncSequence {
@@ -56,7 +50,7 @@
         private let makeIterator: () -> AsyncIterator
     }
 
-    public struct MobileSyncNoteService: @unchecked Sendable {
+    public struct MobileSyncNoteService {
         // MARK: Lifecycle
 
         public init(syncService: SyncService) {

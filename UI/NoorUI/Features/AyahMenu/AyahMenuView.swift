@@ -65,6 +65,8 @@ public struct AyahMenuView: View {
 }
 
 private struct AyahMenuViewList: View {
+    // MARK: Internal
+
     let dataObject: AyahMenuUI.DataObject
     let showHighlights: AsyncAction
 
@@ -81,15 +83,17 @@ private struct AyahMenuViewList: View {
 
     var editNote: some View {
         Row(title: l("ayah.menu.edit-note"), action: dataObject.actions.addNote) {
-            Image(systemName: "text.bubble.fill")
-                .foregroundColor(dataObject.highlightingColor.color)
+            noteIcon(legacySystemName: "text.bubble.fill")
         }
     }
 
     var addNote: some View {
         Row(title: l("ayah.menu.add-note"), action: dataObject.actions.addNote) {
-            Image(systemName: "plus.bubble.fill")
-                .foregroundColor(dataObject.highlightingColor.color)
+            noteIcon(legacySystemName: "plus.bubble.fill")
+        } accessory: {
+            if dataObject.noteCount > 0 {
+                NoteCountBadge(count: dataObject.noteCount)
+            }
         }
     }
 
@@ -190,9 +194,38 @@ private struct AyahMenuViewList: View {
         }
         .fixedSize(horizontal: true, vertical: false)
     }
+
+    // MARK: Private
+
+    private func noteIcon(legacySystemName: String) -> some View {
+        Group {
+            if dataObject.usesSyncedNotesIcon {
+                NoorSystemImage.note.image
+            } else {
+                Image(systemName: legacySystemName)
+                    .foregroundColor(dataObject.highlightingColor.color)
+            }
+        }
+    }
 }
 
-private struct Row<Symbol: View>: View {
+private struct NoteCountBadge: View {
+    let count: Int
+
+    @ScaledMetric private var horizontalPadding = ContentDimension.interPageSpacing
+    @ScaledMetric private var verticalPadding = ContentDimension.interSpacing
+
+    var body: some View {
+        Text(NumberFormatter.shared.format(count))
+            .font(.footnote)
+            .foregroundColor(Color.label)
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
+            .background(Capsule().fill(Color(.secondarySystemFill)))
+    }
+}
+
+private struct Row<Symbol: View, Accessory: View>: View {
     // MARK: Lifecycle
 
     init(
@@ -200,19 +233,38 @@ private struct Row<Symbol: View>: View {
         subtitle: String? = nil,
         action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol
-    ) {
+    ) where Accessory == EmptyView {
         self.symbol = symbol()
+        accessory = EmptyView()
         self.title = title
         self.subtitle = subtitle
         self.action = action
+        hasAccessory = false
+    }
+
+    init(
+        title: String,
+        subtitle: String? = nil,
+        action: @Sendable @escaping () async -> Void,
+        @ViewBuilder symbol: () -> Symbol,
+        @ViewBuilder accessory: () -> Accessory
+    ) {
+        self.symbol = symbol()
+        self.accessory = accessory()
+        self.title = title
+        self.subtitle = subtitle
+        self.action = action
+        hasAccessory = true
     }
 
     // MARK: Internal
 
     let symbol: Symbol
+    let accessory: Accessory
     let title: String
     let subtitle: String?
     let action: @Sendable () async -> Void
+    let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
 
     var body: some View {
@@ -235,6 +287,10 @@ private struct Row<Symbol: View>: View {
                         .font(.footnote)
                         .foregroundColor(.secondaryLabel)
                     }
+                }
+                if hasAccessory {
+                    Spacer(minLength: 12)
+                    accessory
                 }
             }
             .padding(.horizontal)

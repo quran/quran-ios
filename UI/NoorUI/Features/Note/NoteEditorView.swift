@@ -13,8 +13,14 @@ import UIx
 public struct NoteEditorView: View {
     // MARK: Lifecycle
 
-    public init(note: EditableNote, done: @escaping () -> Void, delete: @Sendable @escaping () async -> Void) {
+    public init(
+        note: EditableNote,
+        showsColors: Bool = true,
+        done: @escaping () -> Void,
+        delete: @Sendable @escaping () async -> Void
+    ) {
         _note = ObservedObject(initialValue: note)
+        self.showsColors = showsColors
         self.done = done
         self.delete = delete
     }
@@ -26,11 +32,13 @@ public struct NoteEditorView: View {
             ZStack(alignment: .leading) {
                 HStack {
                     Spacer()
-                    ForEach(Note.Color.sortedColors, id: \.self) { color in
-                        Button(
-                            action: { note.selectedColor = color },
-                            label: { NoteCircle(color: color.color, selected: color == note.selectedColor) }
-                        )
+                    if showsColors {
+                        ForEach(Note.Color.sortedColors, id: \.self) { color in
+                            Button(
+                                action: { note.selectedColor = color },
+                                label: { NoteCircle(color: color.color, selected: color == note.selectedColor) }
+                            )
+                        }
                     }
                     Spacer()
                 }
@@ -57,8 +65,10 @@ public struct NoteEditorView: View {
                     .font(.quran(ofSize: .small))
                     .padding(.leading)
                     .overlay(HStack {
-                        Rectangle().fill(note.selectedColor.color)
-                            .frame(width: 4)
+                        if showsColors {
+                            Rectangle().fill(note.selectedColor.color)
+                                .frame(width: 4)
+                        }
                         Spacer()
                     })
                     .environment(\.layoutDirection, .rightToLeft)
@@ -84,6 +94,7 @@ public struct NoteEditorView: View {
 
     @ObservedObject var note: EditableNote
 
+    let showsColors: Bool
     let done: () -> Void
     let delete: @Sendable () async -> Void
 }

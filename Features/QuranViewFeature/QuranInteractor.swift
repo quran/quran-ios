@@ -72,6 +72,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationsSelectionBuilder: TranslationsListBuilder
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
+        #if QURAN_SYNC
+            let syncedNoteService: MobileSyncNoteService?
+            let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
+        #endif
     }
 
     // MARK: Lifecycle
@@ -80,6 +84,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         self.deps = deps
         self.input = input
         logger.info("Quran: opening quran \(input)")
+    }
+
+    deinit {
+        #if QURAN_SYNC
+            syncedNotesObservationTask?.cancel()
+        #endif
     }
 
     // MARK: Internal
@@ -99,10 +109,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     var visiblePages: [Page] { contentViewModel?.visiblePages ?? [] }
 
     func start() {
-        deps.noteService.notes(quran: deps.quran)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.notes = $0 }
-            .store(in: &cancellables)
+        #if QURAN_SYNC
+            if let syncedNoteService = deps.syncedNoteService {
+                startSyncedNotesObservation(syncedNoteService)
+            } else {
+                startLegacyNotesObservation()
+            }
+        #else
+            startLegacyNotesObservation()
+        #endif
 
         deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
             .receive(on: DispatchQueue.main)
@@ -208,6 +223,19 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.present(viewController, animated: true)
     }
 
+    #if QURAN_SYNC
+        func addSyncedNote(verses: [AyahNumber]) {
+            guard let syncedNoteEditorBuilder = deps.syncedNoteEditorBuilder else {
+                return
+            }
+
+            dismissAyahMenu()
+            presenter?.rotateToPortraitIfPhone()
+            let viewController = syncedNoteEditorBuilder.build(withListener: self, verses: verses)
+            presenter?.present(viewController, animated: true)
+        }
+    #endif
+
     func dismissNoteEditor() {
         logger.info("Quran: dismiss note editor")
         presenter?.dismiss(animated: true)
@@ -238,7 +266,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            notes: notes
+            notes: notes,
+            noteCount: syncedNoteCount(interacting: verses)
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
@@ -314,6 +343,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     private var notes: [Note] = []
+    #if QURAN_SYNC
+        private var syncedNotes: [SyncedNote] = []
+        private var syncedNotesObservationTask: Task<Void, Never>?
+    #endif
 
     private var deps: Deps
     private let input: QuranInput
@@ -338,6 +371,33 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             reloadPageBookmark()
         }
     }
+
+    private func startLegacyNotesObservation() {
+        deps.noteService.notes(quran: deps.quran)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.notes = $0 }
+            .store(in: &cancellables)
+    }
+
+    #if QURAN_SYNC
+        private func startSyncedNotesObservation(_ noteService: MobileSyncNoteService) {
+            let quran = deps.quran
+            syncedNotesObservationTask?.cancel()
+            syncedNotesObservationTask = Task {
+                do {
+                    let sequence = noteService.notesSequence(quran: quran)
+                    for try await notes in sequence {
+                        await MainActor.run { [weak self] in
+                            self?.syncedNotes = notes
+                        }
+                    }
+                } catch is CancellationError {
+                } catch {
+                    crasher.recordError(error, reason: "Failed to observe synced notes")
+                }
+            }
+        }
+    #endif
 
     private func setVisiblePages(_ pages: [Page]) {
         logger.info("Quran: set visible pages \(pages)")
@@ -373,6 +433,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
         let selectedVerses = Set(verses)
         return notes.filter { !selectedVerses.isDisjoint(with: $0.verses) }
+    }
+
+    private func syncedNoteCount(interacting verses: [AyahNumber]) -> Int {
+        #if QURAN_SYNC
+            return SyncedNoteCounter.count(syncedNotes, interacting: verses)
+        #else
+            return 0
+        #endif
     }
 
     private func dismissWordPointer() {

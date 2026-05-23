@@ -47,11 +47,22 @@ public struct QuranBuilder {
                     analytics: container.analytics
                 )
             }
-            let syncedHighlightsObserver = container.syncService.map {
-                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
+            let ayahBookmarkCollectionService = container.syncService.map {
+                AyahBookmarkCollectionService(syncService: $0)
+            }
+            let syncedHighlightsObserver = ayahBookmarkCollectionService.map {
+                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: $0, highlightsService: highlightsService)
             }
             let readingBookmarkService = container.syncService.map {
                 ReadingBookmarkService(syncService: $0)
+            }
+            let ayahBookmarkCollectionPickerBuilder: AyahBookmarkCollectionPickerBuilder? = if let ayahBookmarkCollectionService, let readingBookmarkService {
+                AyahBookmarkCollectionPickerBuilder(
+                    ayahBookmarkCollectionService: ayahBookmarkCollectionService,
+                    readingBookmarkService: readingBookmarkService
+                )
+            } else {
+                nil
             }
             let interactorDeps = QuranInteractor.Deps(
                 quran: quran,
@@ -71,7 +82,9 @@ public struct QuranBuilder {
                 syncedNoteService: syncedNoteService,
                 syncedNoteEditorBuilder: syncedNoteEditorBuilder,
                 syncedHighlightsObserver: syncedHighlightsObserver,
-                readingBookmarkService: readingBookmarkService
+                readingBookmarkService: readingBookmarkService,
+                ayahBookmarkCollectionService: ayahBookmarkCollectionService,
+                ayahBookmarkCollectionPickerBuilder: ayahBookmarkCollectionPickerBuilder
             )
         #else
             let interactorDeps = QuranInteractor.Deps(

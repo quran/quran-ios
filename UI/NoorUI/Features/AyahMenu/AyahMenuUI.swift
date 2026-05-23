@@ -16,6 +16,7 @@ public enum AyahMenuUI {
             play: @escaping AsyncAction,
             repeatVerses: @escaping AsyncAction,
             highlight: @Sendable @escaping (HighlightColor) async -> Void,
+            saveVerse: @escaping AsyncAction,
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
@@ -25,6 +26,7 @@ public enum AyahMenuUI {
             self.play = play
             self.repeatVerses = repeatVerses
             self.highlight = highlight
+            self.saveVerse = saveVerse
             self.addNote = addNote
             self.deleteNote = deleteNote
             self.showTranslation = showTranslation
@@ -37,6 +39,7 @@ public enum AyahMenuUI {
         let play: AsyncAction
         let repeatVerses: AsyncAction
         let highlight: @Sendable (HighlightColor) async -> Void
+        let saveVerse: AsyncAction
         let addNote: AsyncAction
         let deleteNote: AsyncAction
         let showTranslation: AsyncAction
@@ -55,7 +58,9 @@ public enum AyahMenuUI {
             actions: Actions,
             isTranslationView: Bool,
             usesSyncedNotesIcon: Bool = false,
-            noteCount: Int = 0
+            noteCount: Int = 0,
+            usesCollectionBookmarks: Bool = false,
+            isCollectionBookmarked: Bool = false
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
@@ -65,6 +70,8 @@ public enum AyahMenuUI {
             self.isTranslationView = isTranslationView
             self.usesSyncedNotesIcon = usesSyncedNotesIcon
             self.noteCount = noteCount
+            self.usesCollectionBookmarks = usesCollectionBookmarks
+            self.isCollectionBookmarked = isCollectionBookmarked
         }
 
         // MARK: Internal
@@ -77,6 +84,8 @@ public enum AyahMenuUI {
         let isTranslationView: Bool
         let usesSyncedNotesIcon: Bool
         let noteCount: Int
+        let usesCollectionBookmarks: Bool
+        let isCollectionBookmarked: Bool
     }
 
     // MARK: Public

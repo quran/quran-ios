@@ -10,6 +10,9 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature

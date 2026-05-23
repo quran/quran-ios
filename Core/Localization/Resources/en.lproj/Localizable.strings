@@ -298,3 +298,4 @@
 "ayah-bookmark.remove-reading-bookmark" = "Remove Reading Bookmark";
 "ayah-bookmark.collection-picker.no-data.title" = "No collections yet";
 "ayah-bookmark.collection-picker.no-data.text" = "Add a collection to save this verse.";
+"bookmarks.collections.favourites" = "Favourites";

@@ -6,6 +6,7 @@
     //
 
     import Foundation
+    import Localization
     import QuranAnnotations
     import QuranKit
     import SwiftUI
@@ -52,15 +53,9 @@
         }
 
         func start() async {
-            do {
-                let sequence = ayahBookmarkCollectionService.collectionsSequence()
-                for try await collections in sequence {
-                    self.collections = Self.sorted(filtered(collections))
-                    try await prepareCollectionsIfNeeded(collections)
-                }
-            } catch {
-                self.error = error
-            }
+            async let collections: Void = observeCollections()
+            async let bookmarks: Void = observeBookmarks()
+            _ = await [collections, bookmarks]
         }
 
         func isCollectionExpanded(_ collection: AyahBookmarkCollection) -> Bool {
@@ -90,6 +85,10 @@
         }
 
         func deleteCollection(_ collection: AyahBookmarkCollection) async {
+            guard !collection.isLocalOnly else {
+                return
+            }
+
             do {
                 try await ayahBookmarkCollectionService.removeCollection(localId: collection.collection.localId)
             } catch {
@@ -113,12 +112,51 @@
         private let prepareCollections: ([AyahBookmarkCollection]) async throws -> Void
         private let navigateToPage: (Page) -> Void
         private var didPrepareCollections = false
+        private var syncedCollections: [AyahBookmarkCollection] = []
+        private var directBookmarks: [AyahCollectionBookmark] = []
 
         private nonisolated static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
             guard let color = HighlightColor(collectionName: collection.collection.name) else {
                 return nil
             }
             return HighlightColor.allCases.firstIndex(of: color)
+        }
+
+        private func observeCollections() async {
+            do {
+                let sequence = ayahBookmarkCollectionService.collectionsSequence()
+                for try await collections in sequence {
+                    syncedCollections = collections
+                    refreshCollections()
+                    try await prepareCollectionsIfNeeded(collections)
+                }
+            } catch {
+                self.error = error
+            }
+        }
+
+        private func observeBookmarks() async {
+            do {
+                let sequence = ayahBookmarkCollectionService.bookmarksSequence()
+                for try await bookmarks in sequence {
+                    directBookmarks = bookmarks
+                    refreshCollections()
+                }
+            } catch {
+                self.error = error
+            }
+        }
+
+        private func refreshCollections() {
+            collections = Self.sorted(filtered(syncedCollections + [favouritesCollection()]))
+        }
+
+        private func favouritesCollection() -> AyahBookmarkCollection {
+            FavouritesBookmarkCollection.make(
+                name: l("bookmarks.collections.favourites"),
+                bookmarks: directBookmarks,
+                collections: syncedCollections
+            )
         }
 
         private func filtered(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {

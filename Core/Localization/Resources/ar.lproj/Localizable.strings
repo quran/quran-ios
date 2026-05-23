@@ -290,3 +290,4 @@
 "ayah-bookmark.remove-reading-bookmark" = "إزالة علامة القراءة";
 "ayah-bookmark.collection-picker.no-data.title" = "لا توجد مجموعات بعد";
 "ayah-bookmark.collection-picker.no-data.text" = "أضف مجموعة لحفظ هذه الآية.";
+"bookmarks.collections.favourites" = "المفضلة";

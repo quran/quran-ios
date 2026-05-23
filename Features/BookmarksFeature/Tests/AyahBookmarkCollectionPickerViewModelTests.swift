@@ -60,7 +60,7 @@
                 verses: [existingAyah, newAyah]
             )
 
-            XCTAssertEqual(bookmarks.map(\.bookmark.localId), ["collection-bookmark-1"])
+            XCTAssertEqual(bookmarks.map(\.id), ["collection-bookmark-1"])
         }
 
         func test_containsAnyBookmark_detectsExistingBookmark() {

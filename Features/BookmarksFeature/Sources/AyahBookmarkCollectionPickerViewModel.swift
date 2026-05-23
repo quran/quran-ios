@@ -133,7 +133,6 @@
                     readingBookmark = bookmark
                     didUpdateReadingBookmark(bookmark)
                 }
-                didFinish()
             } catch {
                 self.error = error
             }

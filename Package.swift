@@ -512,10 +512,13 @@ private func domainTargets() -> [[Target]] {
             "QuranTextKit",
             "Localization",
             "Analytics",
+            "ReadingService",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ], testDependencies: [
             "LastPagePersistence",
             "PageBookmarkPersistence",
             "QuranKit",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "SettingsService", hasTests: false, dependencies: [

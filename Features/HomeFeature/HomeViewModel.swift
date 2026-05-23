@@ -34,12 +34,14 @@ final class HomeViewModel: ObservableObject {
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
+        readingBookmarkService: ReadingBookmarkService? = nil,
         navigateToPage: @escaping (Page) -> Void,
         navigateToSura: @escaping (Sura) -> Void,
         navigateToQuarter: @escaping (Quarter) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
+        self.readingBookmarkService = readingBookmarkService
         self.navigateToPage = navigateToPage
         self.navigateToSura = navigateToSura
         self.navigateToQuarter = navigateToQuarter
@@ -53,6 +55,7 @@ final class HomeViewModel: ObservableObject {
     @Published var suras: [Sura] = []
     @Published var quarters: [QuarterItem] = []
     @Published var lastPages: [LastPage] = []
+    @Published var readingBookmark: QuranReadingBookmark?
 
     @Published var surahSortOrder: SurahSortOrder = HomePreferences.shared.surahSortOrder
 
@@ -80,11 +83,23 @@ final class HomeViewModel: ObservableObject {
         async let lastPages: () = loadLastPages()
         async let suras: () = loadSuras()
         async let quarters: () = loadQuarters()
-        _ = await [lastPages, suras, quarters]
+        #if QURAN_SYNC
+            async let readingBookmark: () = loadReadingBookmark()
+            _ = await [lastPages, suras, quarters, readingBookmark]
+        #else
+            _ = await [lastPages, suras, quarters]
+        #endif
     }
 
     func navigateTo(_ lastPage: Page) {
         navigateToPage(lastPage)
+    }
+
+    func navigateToReadingBookmark() {
+        guard let readingBookmark else {
+            return
+        }
+        navigateToPage(readingBookmark.page)
     }
 
     func navigateTo(_ sura: Sura) {
@@ -103,6 +118,7 @@ final class HomeViewModel: ObservableObject {
 
     private let lastPageService: any LastPageService
     private let textRetriever: QuranTextDataService
+    private let readingBookmarkService: ReadingBookmarkService?
     private let navigateToPage: (Page) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
@@ -121,6 +137,23 @@ final class HomeViewModel: ObservableObject {
             self.lastPages = lastPages
         }
     }
+
+    #if QURAN_SYNC
+        private func loadReadingBookmark() async {
+            guard let readingBookmarkService else {
+                return
+            }
+
+            do {
+                let sequence = readingBookmarkService.readingBookmarkSequence()
+                for try await bookmark in sequence {
+                    readingBookmark = bookmark
+                }
+            } catch {
+                crasher.recordError(error, reason: "Failed to load reading bookmark")
+            }
+        }
+    #endif
 
     private func loadSuras() async {
         let readings = readingPreferences.$reading

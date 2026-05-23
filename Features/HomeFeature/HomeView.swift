@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-16.
 //
 
+import AnnotationsService
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -19,10 +20,12 @@ struct HomeView: View {
         HomeViewUI(
             type: viewModel.type,
             lastPages: viewModel.lastPages,
+            readingBookmark: viewModel.readingBookmark,
             suras: viewModel.suras,
             quarters: viewModel.quarters,
             start: { await viewModel.start() },
             selectLastPage: { viewModel.navigateTo($0) },
+            selectReadingBookmark: { viewModel.navigateToReadingBookmark() },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
             surahSortOrder: viewModel.surahSortOrder,
@@ -35,12 +38,14 @@ struct HomeView: View {
 private struct HomeViewUI: View {
     let type: HomeViewType
     let lastPages: [LastPage]
+    let readingBookmark: QuranReadingBookmark?
     let suras: [Sura]
     let quarters: [QuarterItem]
 
     let start: AsyncAction
 
     let selectLastPage: ItemAction<Page>
+    let selectReadingBookmark: () -> Void
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let surahSortOrder: SurahSortOrder
@@ -49,6 +54,14 @@ private struct HomeViewUI: View {
 
     var body: some View {
         NoorList {
+            #if QURAN_SYNC
+                if let readingBookmark {
+                    NoorBasicSection(title: l("reading-bookmark.my-title")) {
+                        readingBookmarkView(readingBookmark)
+                    }
+                }
+            #endif
+
             NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
                 lastPageView(lastPage)
             }
@@ -66,6 +79,20 @@ private struct HomeViewUI: View {
         }
         .task { await start() }
     }
+
+    #if QURAN_SYNC
+        func readingBookmarkView(_ bookmark: QuranReadingBookmark) -> some View {
+            let ayah = bookmark.ayah
+            return NoorListItem(
+                image: .init(.bookmark, color: .red),
+                title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
+                subtitle: .init(text: bookmark.lastUpdated.timeAgo(), location: .bottom),
+                accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
+            ) {
+                selectReadingBookmark()
+            }
+        }
+    #endif
 
     func lastPageView(_ lastPage: LastPage) -> some View {
         let ayah = lastPage.page.firstVerse
@@ -169,10 +196,12 @@ struct HomeView_Previews: PreviewProvider {
                 HomeViewUI(
                     type: type,
                     lastPages: lastPages,
+                    readingBookmark: .page(Quran.hafsMadani1405.pages[0], .distantPast),
                     suras: quran.suras,
                     quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
                     start: {},
                     selectLastPage: { _ in },
+                    selectReadingBookmark: {},
                     selectSura: { _ in },
                     selectQuarter: { _ in },
                     surahSortOrder: .ascending,

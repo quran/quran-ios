@@ -26,6 +26,7 @@ final class BookmarksViewModel: ObservableObject {
         service: PageBookmarkService,
         authenticationClient: (any AuthenticationClient)?,
         navigateTo: @escaping (Page) -> Void,
+        readingBookmarkService: ReadingBookmarkService? = nil,
         showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil,
         showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)? = nil
     ) {
@@ -33,6 +34,7 @@ final class BookmarksViewModel: ObservableObject {
         self.service = service
         self.authenticationClient = authenticationClient
         self.navigateTo = navigateTo
+        self.readingBookmarkService = readingBookmarkService
         presentCollectionsAction = showCollectionsAction
         presentOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
@@ -43,6 +45,7 @@ final class BookmarksViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
     @Published var bookmarks: [PageBookmark] = []
+    @Published var readingBookmark: QuranReadingBookmark?
     @Published var isAuthenticated: Bool = false
     @Published var isSyncBannerDismissed: Bool
 
@@ -77,18 +80,22 @@ final class BookmarksViewModel: ObservableObject {
             isAuthenticated = false
         }
 
-        let bookmarksSequence = readingPreferences.$reading
-            .prepend(readingPreferences.reading)
-            .map { [service] reading in
-                service.pageBookmarks(quran: reading.quran)
-            }
-            .switchToLatest()
-            .values()
+        #if QURAN_SYNC
+            async let readingBookmark: () = loadReadingBookmark()
+            await loadBookmarks()
+            _ = await readingBookmark
+        #else
+            await loadBookmarks()
+        #endif
+    }
 
-        for await bookmarks in bookmarksSequence {
-            self.bookmarks = bookmarks
-                .sorted { $0.creationDate > $1.creationDate }
+    func navigateToReadingBookmark() {
+        guard let readingBookmark else {
+            return
         }
+        logger.info("Bookmarks: select reading bookmark at \(readingBookmark.page)")
+        analytics.openingQuran(from: .bookmarks)
+        navigateTo(readingBookmark.page)
     }
 
     func navigateTo(_ item: PageBookmark) {
@@ -155,11 +162,44 @@ final class BookmarksViewModel: ObservableObject {
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
+    private let readingBookmarkService: ReadingBookmarkService?
     private let authenticationClient: (any AuthenticationClient)?
     private let presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
     private let presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared
     private let preferences = BookmarksPreferences.shared
+
+    private func loadBookmarks() async {
+        let bookmarksSequence = readingPreferences.$reading
+            .prepend(readingPreferences.reading)
+            .map { [service] reading in
+                service.pageBookmarks(quran: reading.quran)
+            }
+            .switchToLatest()
+            .values()
+
+        for await bookmarks in bookmarksSequence {
+            self.bookmarks = bookmarks
+                .sorted { $0.creationDate > $1.creationDate }
+        }
+    }
+
+    #if QURAN_SYNC
+        private func loadReadingBookmark() async {
+            guard let readingBookmarkService else {
+                return
+            }
+
+            do {
+                let sequence = readingBookmarkService.readingBookmarkSequence()
+                for try await bookmark in sequence {
+                    readingBookmark = bookmark
+                }
+            } catch {
+                self.error = error
+            }
+        }
+    #endif
 
     private func requireAuthenticationClient() throws -> any AuthenticationClient {
         guard let authenticationClient else {

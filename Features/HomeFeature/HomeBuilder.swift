@@ -32,7 +32,7 @@ public struct HomeBuilder {
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
             navigateToPage: { [weak listener] lastPage in
-                listener?.navigateTo(page: lastPage, lastPage: lastPage, highlightingSearchAyah: nil)
+                listener?.navigateTo(page: lastPage.page, lastPage: lastPage, highlightingSearchAyah: nil)
             },
             navigateToSura: { [weak listener] sura in
                 listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)

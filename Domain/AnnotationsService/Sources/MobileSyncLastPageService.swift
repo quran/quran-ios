@@ -8,6 +8,7 @@
 
 #if QURAN_SYNC
     import Combine
+    import Foundation
     @preconcurrency import MobileSync
     import QuranAnnotations
     import QuranKit
@@ -29,27 +30,8 @@
                         if Task.isCancelled {
                             break
                         }
-                        let mapped = sessions.compactMap { session -> LastPage? in
-                            // Try to build an AyahNumber from the stored session values
-                            guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
-                                return nil
-                            }
-
-                            // If the source ayah already belongs to the target quran, use its page directly.
-                            // Otherwise map it to the target quran.
-                            let page: Page
-                            if sourceAyah.quran === quran {
-                                page = sourceAyah.page
-                            } else {
-                                let mapper = QuranPageMapper(destination: quran)
-                                guard let mappedAyah = mapper.mapAyah(sourceAyah) else {
-                                    return nil
-                                }
-                                page = mappedAyah.page
-                            }
-
-                            let createdOn = session.lastUpdated
-                            return LastPage(page: page, createdOn: createdOn, modifiedOn: createdOn)
+                        let mapped = sessions.compactMap { session in
+                            lastPage(for: session, quran: quran)
                         }
 
                         let sorted = mapped.sorted { $0.createdOn > $1.createdOn }
@@ -68,17 +50,57 @@
             let firstVerse = page.firstVerse
             let session = try await syncService.addReadingSession(
                 sura: Int32(firstVerse.sura.suraNumber),
-                ayah: Int32(firstVerse.ayah)
+                ayah: Int32(firstVerse.ayah),
+                timestamp: Date()
             )
-            return LastPage(page: page, createdOn: session.lastUpdated, modifiedOn: session.lastUpdated)
+            return lastPage(page: page, for: session)
         }
 
-        public func update(page: Page, toPage: Page) async throws -> LastPage {
-            try await add(page: toPage)
+        public func update(lastPage: LastPage, toPage: Page) async throws -> LastPage {
+            guard let localId = lastPage.localId else {
+                return try await add(page: toPage)
+            }
+
+            let firstVerse = toPage.firstVerse
+            let updatedSession = try await syncService.updateReadingSession(
+                localId: localId,
+                sura: Int32(firstVerse.sura.suraNumber),
+                ayah: Int32(firstVerse.ayah),
+                timestamp: Date()
+            )
+            return self.lastPage(page: toPage, for: updatedSession)
         }
 
         // MARK: Private
 
         private let syncService: SyncService
+
+        private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
+            guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
+                return nil
+            }
+
+            let page: Page
+            if sourceAyah.quran === quran {
+                page = sourceAyah.page
+            } else {
+                let mapper = QuranPageMapper(destination: quran)
+                guard let mappedAyah = mapper.mapAyah(sourceAyah) else {
+                    return nil
+                }
+                page = mappedAyah.page
+            }
+
+            return lastPage(page: page, for: session)
+        }
+
+        private func lastPage(page: Page, for session: ReadingSession) -> LastPage {
+            LastPage(
+                page: page,
+                createdOn: session.lastUpdated,
+                modifiedOn: session.lastUpdated,
+                localId: session.localId
+            )
+        }
     }
 #endif

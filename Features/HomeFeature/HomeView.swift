@@ -40,7 +40,7 @@ private struct HomeViewUI: View {
 
     let start: AsyncAction
 
-    let selectLastPage: ItemAction<Page>
+    let selectLastPage: ItemAction<LastPage>
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let surahSortOrder: SurahSortOrder
@@ -75,7 +75,7 @@ private struct HomeViewUI: View {
             subtitle: .init(text: lastPage.createdOn.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(lastPage.page.pageNumber))
         ) {
-            selectLastPage(lastPage.page)
+            selectLastPage(lastPage)
         }
     }
 

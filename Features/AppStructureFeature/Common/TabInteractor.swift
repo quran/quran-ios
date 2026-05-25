@@ -7,6 +7,7 @@
 //
 
 import FeaturesSupport
+import QuranAnnotations
 import QuranContentFeature
 import QuranKit
 import QuranViewFeature
@@ -26,7 +27,7 @@ class TabInteractor: QuranNavigator {
 
     weak var presenter: TabPresenter?
 
-    func navigateTo(page: Page, lastPage: Page?, highlightingSearchAyah: AyahNumber?) {
+    func navigateTo(page: Page, lastPage: LastPage?, highlightingSearchAyah: AyahNumber?) {
         let input = QuranInput(initialPage: page, lastPage: lastPage, highlightingSearchAyah: highlightingSearchAyah)
         let viewController = quranBuilder.build(input: input)
         presenter?.pushViewController(viewController, animated: true)

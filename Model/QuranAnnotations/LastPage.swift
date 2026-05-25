@@ -11,10 +11,11 @@ import QuranKit
 public struct LastPage: Equatable, Identifiable {
     // MARK: Lifecycle
 
-    public init(page: Page, createdOn: Date, modifiedOn: Date) {
+    public init(page: Page, createdOn: Date, modifiedOn: Date, localId: String? = nil) {
         self.page = page
         self.createdOn = createdOn
         self.modifiedOn = modifiedOn
+        self.localId = localId
     }
 
     // MARK: Public
@@ -22,6 +23,7 @@ public struct LastPage: Equatable, Identifiable {
     public var page: Page
     public var createdOn: Date
     public var modifiedOn: Date
+    public var localId: String?
 
     public var id: Page { page }
 }

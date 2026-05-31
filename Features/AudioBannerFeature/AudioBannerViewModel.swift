@@ -223,11 +223,12 @@ public final class AudioBannerViewModel: ObservableObject {
 
                 if streaming {
                     // For gapless streaming, the timing database must still be available locally.
+                    // We download it silently (no "downloading audio" toast) since it's small metadata.
                     if case .gapless = selectedReciter.audioType {
                         let dbReady = self?.downloader.databaseDownloaded(reciter: selectedReciter) ?? true
                         logger.info("AudioBanner: streaming gapless – database ready? \(dbReady)")
                         if !dbReady {
-                            self?.startDownloading()
+                            self?.playingState = .downloading(progress: 0)
                             let download = try await self?.downloader.downloadDatabase(reciter: selectedReciter)
                             guard let download else {
                                 logger.info("AudioBanner: couldn't create database download request")

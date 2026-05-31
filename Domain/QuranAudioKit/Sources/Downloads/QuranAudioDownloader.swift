@@ -57,6 +57,23 @@ public struct QuranAudioDownloader: Sendable {
         await downloader.cancel(downloads: downloads)
     }
 
+    public func databaseDownloaded(reciter: Reciter) -> Bool {
+        guard let dbPath = reciter.localDatabasePath, let zipPath = reciter.localZipPath else {
+            return true
+        }
+        return fileSystem.fileExists(at: dbPath) || fileSystem.fileExists(at: zipPath)
+    }
+
+    public func downloadDatabase(reciter: Reciter) async throws -> DownloadBatchResponse {
+        guard let remoteURL = reciter.databaseRemoteURL(baseURL: baseURL),
+              let localPath = reciter.localZipPath
+        else {
+            fatalError("downloadDatabase called on a non-gapless reciter")
+        }
+        let request = DownloadBatchRequest(requests: [DownloadRequest(url: remoteURL, destination: localPath)])
+        return try await downloader.download(request)
+    }
+
     public func runningAudioDownloads() async -> [DownloadBatchResponse] {
         let batches = await downloader.getOnGoingDownloads()
         let responses = batches.filter(\.isAudio)

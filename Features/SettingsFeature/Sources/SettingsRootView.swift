@@ -17,6 +17,7 @@ struct SettingsRootView: View {
     var body: some View {
         SettingsRootViewUI(
             appearanceMode: $viewModel.appearanceMode,
+            streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
             isAuthenticated: viewModel.isAuthenticated,
@@ -42,6 +43,7 @@ private struct SettingsRootViewUI: View {
     // MARK: Internal
 
     @Binding var appearanceMode: AppearanceMode
+    @Binding var streamingEnabled: Bool
     @Binding var error: Error?
 
     let audioEnd: String
@@ -96,6 +98,22 @@ private struct SettingsRootViewUI: View {
                     accessory: .disclosureIndicator,
                     action: navigateToAudioEndSelector
                 )
+
+                HStack {
+                    Image(systemName: "dot.radiowaves.left.and.right")
+                        .foregroundStyle(Color.accentColor)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(l("audio.streaming.title"))
+                        Text(l("audio.streaming.description"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Toggle(l("audio.streaming.title"), isOn: $streamingEnabled)
+                        .labelsHidden()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 6)
 
                 NoorListItem(
                     image: .init(.downloads),
@@ -215,10 +233,12 @@ private struct SettingsRootViewUI: View {
 struct SettingsRootView_Previews: PreviewProvider {
     struct Container: View {
         @State var appearanceMode: AppearanceMode
+        @State var streamingEnabled = false
 
         var body: some View {
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
+                streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
                 audioEnd: "Surah",
                 isAuthenticated: false,

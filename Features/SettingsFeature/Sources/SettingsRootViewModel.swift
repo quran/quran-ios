@@ -39,6 +39,7 @@ final class SettingsRootViewModel: ObservableObject {
     ) {
         appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
+        streamingEnabled = audioPreferences.streamingEnabled
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
@@ -51,6 +52,7 @@ final class SettingsRootViewModel: ObservableObject {
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
+        audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
     }
 
     // MARK: Internal
@@ -69,6 +71,11 @@ final class SettingsRootViewModel: ObservableObject {
     weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
+    @Published var streamingEnabled: Bool {
+        didSet {
+            audioPreferences.streamingEnabled = streamingEnabled
+        }
+    }
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: UserInfo? = nil

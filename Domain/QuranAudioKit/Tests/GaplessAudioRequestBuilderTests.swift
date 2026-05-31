@@ -33,10 +33,11 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
             from: from,
             to: to,
             frameRuns: .one,
-            requestRuns: .one
+            requestRuns: .one,
+            streaming: false
         )
         let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
-        XCTAssertEqual(firstFrame.startTime, .zero)
+        XCTAssertEqual(firstFrame.startTime, 0)
     }
 
     func testAudioFrameIsNotStartingFromZeroSecondsWhenThePlaybackIsRepeated() async throws {
@@ -48,10 +49,11 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
             from: from,
             to: to,
             frameRuns: .one,
-            requestRuns: .indefinite
+            requestRuns: .indefinite,
+            streaming: false
         )
         let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
-        XCTAssertNotEqual(firstFrame.startTime, .zero)
+        XCTAssertNotEqual(firstFrame.startTime, 0)
     }
 
     // MARK: Private

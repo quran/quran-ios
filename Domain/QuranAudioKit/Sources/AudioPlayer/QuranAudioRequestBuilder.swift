@@ -23,6 +23,7 @@ protocol QuranAudioRequestBuilder {
         from start: AyahNumber,
         to end: AyahNumber,
         frameRuns: Runs,
-        requestRuns: Runs
+        requestRuns: Runs,
+        streaming: Bool
     ) async throws -> QuranAudioRequest
 }

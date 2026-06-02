@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import Foundation
 import QueuePlayer
 import QuranAudio
 import QuranKit
@@ -42,11 +43,12 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
         from start: AyahNumber,
         to end: AyahNumber,
         frameRuns: Runs,
-        requestRuns: Runs
+        requestRuns: Runs,
+        streaming: Bool
     ) async throws -> QuranAudioRequest {
-        let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns)
+        let (urls, ayahs) = urlsToPlay(reciter: reciter, from: start, to: end, requestRuns: requestRuns, streaming: streaming)
         let files = urls.map {
-            AudioFile(url: $0.url, frames: [AudioFrame(startTime: 0, endTime: nil)])
+            AudioFile(url: $0, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
         let request = AudioRequest(files: files, endTime: nil, frameRuns: frameRuns, requestRuns: requestRuns)
         let quranRequest = GappedAudioRequest(request: request, ayahs: ayahs, reciter: reciter)
@@ -55,12 +57,12 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
 
     // MARK: Private
 
-    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs) -> (urls: [RelativeFilePath], ayahs: [AyahNumber]) {
+    private func urlsToPlay(reciter: Reciter, from start: AyahNumber, to end: AyahNumber, requestRuns: Runs, streaming: Bool) -> (urls: [URL], ayahs: [AyahNumber]) {
         guard case AudioType.gapped = reciter.audioType else {
             fatalError("Unsupported reciter type gapless. Only gapless reciters can be downloaded here.")
         }
 
-        var urls: [RelativeFilePath] = []
+        var urls: [URL] = []
         var ayahs: [AyahNumber] = []
         let verses = start.array(to: end)
         let surasDictionary = Dictionary(grouping: verses, by: { $0.sura })
@@ -70,11 +72,13 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
             if (requestRuns == .one || !ayahs.isEmpty) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
-                urls.append(reciter.localURL(ayah: start.quran.firstVerse))
+                let url = streaming ? reciter.remoteURL(ayah: start.quran.firstVerse) : reciter.localURL(ayah: start.quran.firstVerse).url
+                urls.append(url)
                 ayahs.append(verses[0])
             }
             for verse in verses {
-                urls.append(reciter.localURL(ayah: verse))
+                let url = streaming ? reciter.remoteURL(ayah: verse) : reciter.localURL(ayah: verse).url
+                urls.append(url)
                 ayahs.append(verse)
             }
         }

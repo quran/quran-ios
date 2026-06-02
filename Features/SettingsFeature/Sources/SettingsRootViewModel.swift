@@ -52,6 +52,7 @@ final class SettingsRootViewModel: ObservableObject {
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
+        audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
     }
 
     // MARK: Internal

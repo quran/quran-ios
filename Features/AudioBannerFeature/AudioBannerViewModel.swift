@@ -222,7 +222,21 @@ public final class AudioBannerViewModel: ObservableObject {
                 let streaming = AudioPreferences.shared.streamingEnabled
 
                 if streaming {
-                    // gapped reciters stream directly with no download needed
+                    // For gapless streaming, the timing database must still be available locally.
+                    if case .gapless = selectedReciter.audioType {
+                        let dbReady = self?.downloader.databaseDownloaded(reciter: selectedReciter) ?? true
+                        logger.info("AudioBanner: streaming gapless – database ready? \(dbReady)")
+                        if !dbReady {
+                            self?.playingState = .downloading(progress: 0)
+                            let download = try await self?.downloader.downloadDatabase(reciter: selectedReciter)
+                            guard let download else {
+                                logger.info("AudioBanner: couldn't create database download request")
+                                return
+                            }
+                            for try await _ in download.progress { }
+                            logger.info("AudioBanner: database download completed")
+                        }
+                    }
                 } else {
                     let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
                     logger.info("AudioBanner: reciter downloaded? \(downloaded)")

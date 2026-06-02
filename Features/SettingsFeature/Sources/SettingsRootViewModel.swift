@@ -71,7 +71,12 @@ final class SettingsRootViewModel: ObservableObject {
     weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
-    @Published var streamingEnabled: Bool
+    @Published var streamingEnabled: Bool {
+        didSet {
+            guard streamingEnabled != audioPreferences.streamingEnabled else { return }
+            audioPreferences.streamingEnabled = streamingEnabled
+        }
+    }
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: UserInfo? = nil

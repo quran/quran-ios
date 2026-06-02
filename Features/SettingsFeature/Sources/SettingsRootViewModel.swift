@@ -39,6 +39,7 @@ final class SettingsRootViewModel: ObservableObject {
     ) {
         appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
+        streamingEnabled = audioPreferences.streamingEnabled
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
@@ -69,6 +70,7 @@ final class SettingsRootViewModel: ObservableObject {
     weak var navigationController: UINavigationController?
 
     @Published var audioEnd: AudioEnd
+    @Published var streamingEnabled: Bool
     @Published var error: Error? = nil
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: UserInfo? = nil

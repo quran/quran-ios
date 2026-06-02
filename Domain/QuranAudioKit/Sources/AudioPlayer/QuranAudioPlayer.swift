@@ -106,7 +106,7 @@ public class QuranAudioPlayer {
         try await unzipper.unzip(reciter: reciter)
 
         let builder = getAudioRequestBuilder(for: reciter)
-        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
+        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
         let request = audioRequest.getRequest()
         willPlay(request)
         self.audioRequest = audioRequest

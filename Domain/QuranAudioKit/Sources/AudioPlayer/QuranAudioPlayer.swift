@@ -100,6 +100,7 @@ public class QuranAudioPlayer {
             "reciter": reciter,
             "verseRuns": verseRuns,
             "listRuns": listRuns,
+            "streaming": streaming,
         ]
         logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
         try await unzipper.unzip(reciter: reciter)

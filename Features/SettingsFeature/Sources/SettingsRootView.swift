@@ -17,6 +17,7 @@ struct SettingsRootView: View {
     var body: some View {
         SettingsRootViewUI(
             appearanceMode: $viewModel.appearanceMode,
+            streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
             isAuthenticated: viewModel.isAuthenticated,
@@ -42,6 +43,7 @@ private struct SettingsRootViewUI: View {
     // MARK: Internal
 
     @Binding var appearanceMode: AppearanceMode
+    @Binding var streamingEnabled: Bool
     @Binding var error: Error?
 
     let audioEnd: String

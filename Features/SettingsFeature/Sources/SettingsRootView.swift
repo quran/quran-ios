@@ -99,6 +99,22 @@ private struct SettingsRootViewUI: View {
                     action: navigateToAudioEndSelector
                 )
 
+                HStack {
+                    Image(systemName: "dot.radiowaves.left.and.right")
+                        .foregroundStyle(Color.accentColor)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(l("audio.streaming.title"))
+                        Text(l("audio.streaming.description"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Toggle(l("audio.streaming.title"), isOn: $streamingEnabled)
+                        .labelsHidden()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 6)
+
                 NoorListItem(
                     image: .init(.downloads),
                     title: .text(lAndroid("audio_manager")),

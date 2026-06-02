@@ -270,6 +270,8 @@ public final class AudioBannerViewModel: ObservableObject {
                     streaming: streaming
                 )
                 playingStarted()
+            } catch is CancellationError {
+                // User cancelled the download; cancelDownload() already reset state.
             } catch {
                 self?.playbackFailed(error)
             }

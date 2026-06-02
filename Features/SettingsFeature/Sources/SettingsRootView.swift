@@ -233,10 +233,12 @@ private struct SettingsRootViewUI: View {
 struct SettingsRootView_Previews: PreviewProvider {
     struct Container: View {
         @State var appearanceMode: AppearanceMode
+        @State var streamingEnabled = false
 
         var body: some View {
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
+                streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
                 audioEnd: "Surah",
                 isAuthenticated: false,

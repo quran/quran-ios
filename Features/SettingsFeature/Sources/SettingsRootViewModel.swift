@@ -73,6 +73,7 @@ final class SettingsRootViewModel: ObservableObject {
     @Published var audioEnd: AudioEnd
     @Published var streamingEnabled: Bool {
         didSet {
+            guard streamingEnabled != audioPreferences.streamingEnabled else { return }
             audioPreferences.streamingEnabled = streamingEnabled
         }
     }

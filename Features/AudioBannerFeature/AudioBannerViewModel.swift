@@ -234,7 +234,9 @@ public final class AudioBannerViewModel: ObservableObject {
                                 logger.info("AudioBanner: couldn't create database download request")
                                 return
                             }
-                            for try await _ in download.progress { }
+                            for try await _ in download.progress {
+                                await self?.updateDownloadProgress()
+                            }
                             logger.info("AudioBanner: database download completed")
                         }
                     }
@@ -269,6 +271,8 @@ public final class AudioBannerViewModel: ObservableObject {
                     streaming: streaming
                 )
                 playingStarted()
+            } catch is CancellationError {
+                // User cancelled the download; cancelDownload() already reset state.
             } catch {
                 self?.playbackFailed(error)
             }

@@ -58,10 +58,12 @@ public struct QuranAudioDownloader: Sendable {
     }
 
     public func databaseDownloaded(reciter: Reciter) -> Bool {
-        guard let dbPath = reciter.localDatabasePath, let zipPath = reciter.localZipPath else {
+        guard let dbPath = reciter.localDatabasePath else {
             return true
         }
-        return fileSystem.fileExists(at: dbPath) || fileSystem.fileExists(at: zipPath)
+        // Only the extracted .db counts as ready; a partial/corrupt .zip is not sufficient
+        // and would cause unzip to fail. AudioUnzipper handles .zip → .db extraction.
+        return fileSystem.fileExists(at: dbPath)
     }
 
     public func downloadDatabase(reciter: Reciter) async throws -> DownloadBatchResponse {

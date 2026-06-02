@@ -91,7 +91,8 @@ public class QuranAudioPlayer {
         from start: AyahNumber,
         to end: AyahNumber,
         verseRuns: Runs,
-        listRuns: Runs
+        listRuns: Runs,
+        streaming: Bool = false
     ) async throws {
         let details: [String: Any] = [
             "startAyah": start,

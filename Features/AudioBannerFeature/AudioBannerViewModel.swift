@@ -266,7 +266,8 @@ public final class AudioBannerViewModel: ObservableObject {
                     reciter: selectedReciter,
                     rate: playbackRate,
                     from: from, to: end,
-                    verseRuns: verseRuns, listRuns: listRuns
+                    verseRuns: verseRuns, listRuns: listRuns,
+                    streaming: streaming
                 )
                 playingStarted()
             } catch {

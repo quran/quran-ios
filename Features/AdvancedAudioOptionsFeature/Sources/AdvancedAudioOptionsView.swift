@@ -189,16 +189,12 @@ private struct RunsChoicesSection: View {
 
     var body: some View {
         Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(Runs.sorted, id: \.self) { option in
-                        SpeedPill(
-                            label: option.localizedDescription,
-                            isSelected: runs == option
-                        ) {
-                            runs = option
-                        }
-                    }
+            HStack {
+                SpeedPill(
+                    label: lAndroid("repeatValues[3]"),
+                    isSelected: runs == .indefinite
+                ) {
+                    runs = .indefinite
                 }
             }
             Stepper(

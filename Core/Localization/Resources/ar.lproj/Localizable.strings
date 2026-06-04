@@ -105,6 +105,7 @@
 "audio.streaming.title" = "تشغيل الصوت عبر الإنترنت";
 "audio.streaming.description" = "يوفر مساحة التخزين ببث الصوت، لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
+"audio.repetition-count" = "عدد مخصص";
 
 // MARK: - Bookmarks
 

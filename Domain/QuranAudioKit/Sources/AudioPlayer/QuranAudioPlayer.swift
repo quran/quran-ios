@@ -91,7 +91,8 @@ public class QuranAudioPlayer {
         from start: AyahNumber,
         to end: AyahNumber,
         verseRuns: Runs,
-        listRuns: Runs
+        listRuns: Runs,
+        streaming: Bool = false
     ) async throws {
         let details: [String: Any] = [
             "startAyah": start,
@@ -99,12 +100,13 @@ public class QuranAudioPlayer {
             "reciter": reciter,
             "verseRuns": verseRuns,
             "listRuns": listRuns,
+            "streaming": streaming,
         ]
         logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
         try await unzipper.unzip(reciter: reciter)
 
         let builder = getAudioRequestBuilder(for: reciter)
-        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns)
+        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
         let request = audioRequest.getRequest()
         willPlay(request)
         self.audioRequest = audioRequest

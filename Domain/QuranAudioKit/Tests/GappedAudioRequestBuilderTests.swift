@@ -33,7 +33,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             from: from,
             to: to,
             frameRuns: .one,
-            requestRuns: .one
+            requestRuns: .one,
+            streaming: false
         )
         let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
         let bismillahFile = audioRequest.files.first { audioFile in
@@ -51,7 +52,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             from: from,
             to: to,
             frameRuns: .one,
-            requestRuns: .indefinite
+            requestRuns: .indefinite,
+            streaming: false
         )
         let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
         let bismillahFile = audioRequest.files.first { audioFile in
@@ -69,7 +71,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             from: from,
             to: to,
             frameRuns: .one,
-            requestRuns: .indefinite
+            requestRuns: .indefinite,
+            streaming: false
         )
         let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
         let bismillahFile = audioRequest.files.first { audioFile in

@@ -57,6 +57,25 @@ public struct QuranAudioDownloader: Sendable {
         await downloader.cancel(downloads: downloads)
     }
 
+    public func databaseDownloaded(reciter: Reciter) -> Bool {
+        guard let dbPath = reciter.localDatabasePath else {
+            return true
+        }
+        // Only the extracted .db counts as ready; a partial/corrupt .zip is not sufficient
+        // and would cause unzip to fail. AudioUnzipper handles .zip → .db extraction.
+        return fileSystem.fileExists(at: dbPath)
+    }
+
+    public func downloadDatabase(reciter: Reciter) async throws -> DownloadBatchResponse {
+        guard let remoteURL = reciter.databaseRemoteURL(baseURL: baseURL),
+              let localPath = reciter.localZipPath
+        else {
+            fatalError("downloadDatabase called on a non-gapless reciter")
+        }
+        let request = DownloadBatchRequest(requests: [DownloadRequest(url: remoteURL, destination: localPath)])
+        return try await downloader.download(request)
+    }
+
     public func runningAudioDownloads() async -> [DownloadBatchResponse] {
         let batches = await downloader.getOnGoingDownloads()
         let responses = batches.filter(\.isAudio)

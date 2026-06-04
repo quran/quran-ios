@@ -219,21 +219,41 @@ public final class AudioBannerViewModel: ObservableObject {
 
         cancellableTasks.task { [weak self] in
             do {
-                let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
-                logger.info("AudioBanner: reciter downloaded? \(downloaded)")
-                if !downloaded {
-                    self?.startDownloading()
-                    let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
-                    guard let download else {
-                        logger.info("AudioBanner: couldn't create a download request")
-                        return
+                let streaming = AudioPreferences.shared.streamingEnabled
+
+                if streaming {
+                    // For gapless streaming, the timing database must still be available locally.
+                    if case .gapless = selectedReciter.audioType {
+                        let dbReady = self?.downloader.databaseDownloaded(reciter: selectedReciter) ?? true
+                        logger.info("AudioBanner: streaming gapless – database ready? \(dbReady)")
+                        if !dbReady {
+                            self?.playingState = .downloading(progress: 0)
+                            let download = try await self?.downloader.downloadDatabase(reciter: selectedReciter)
+                            guard let download else {
+                                logger.info("AudioBanner: couldn't create database download request")
+                                return
+                            }
+                            await self?.observe([download])
+                            logger.info("AudioBanner: database download completed")
+                        }
                     }
+                } else {
+                    let downloaded = await self?.downloader.downloaded(reciter: selectedReciter, from: from, to: end) ?? true
+                    logger.info("AudioBanner: reciter downloaded? \(downloaded)")
+                    if !downloaded {
+                        self?.startDownloading()
+                        let download = try await self?.downloader.download(from: from, to: end, reciter: selectedReciter)
+                        guard let download else {
+                            logger.info("AudioBanner: couldn't create a download request")
+                            return
+                        }
 
-                    await self?.observe([download])
+                        await self?.observe([download])
 
-                    for try await _ in download.progress { }
+                        for try await _ in download.progress { }
 
-                    logger.info("AudioBanner: download completed")
+                        logger.info("AudioBanner: download completed")
+                    }
                 }
 
                 guard let self else {
@@ -244,7 +264,8 @@ public final class AudioBannerViewModel: ObservableObject {
                     reciter: selectedReciter,
                     rate: playbackRate,
                     from: from, to: end,
-                    verseRuns: verseRuns, listRuns: listRuns
+                    verseRuns: verseRuns, listRuns: listRuns,
+                    streaming: streaming
                 )
                 playingStarted()
             } catch {

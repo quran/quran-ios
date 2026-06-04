@@ -23,8 +23,12 @@ public class AudioPreferences {
     @Preference(audioPlaybackRateKey)
     public var playbackRate: Float
 
+    @Preference(audioStreamingEnabledKey)
+    public var streamingEnabled: Bool
+
     // MARK: Private
 
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
     private static let audioPlaybackRateKey = PreferenceKey<Float>(key: "audioPlaybackRate", defaultValue: 1.0)
+    private static let audioStreamingEnabledKey = PreferenceKey<Bool>(key: "audioStreamingEnabled", defaultValue: false)
 }

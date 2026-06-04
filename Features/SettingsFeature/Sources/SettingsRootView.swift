@@ -101,7 +101,6 @@ private struct SettingsRootViewUI: View {
 
                 HStack {
                     Image(systemName: "dot.radiowaves.left.and.right")
-                        .foregroundStyle(Color.accentColor)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(l("audio.streaming.title"))
                         Text(l("audio.streaming.description"))
@@ -112,7 +111,6 @@ private struct SettingsRootViewUI: View {
                     Toggle(l("audio.streaming.title"), isOn: $streamingEnabled)
                         .labelsHidden()
                 }
-                .padding(.horizontal)
                 .padding(.vertical, 6)
 
                 NoorListItem(

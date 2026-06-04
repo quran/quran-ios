@@ -25,6 +25,7 @@ public enum Runs: Hashable, Sendable {
     case four
     case five
     case indefinite
+    case custom(Int)
 
     // MARK: Internal
 
@@ -36,6 +37,7 @@ public enum Runs: Hashable, Sendable {
         case .four: return 4
         case .five: return 5
         case .indefinite: return .max
+        case .custom(let n): return n
         }
     }
 }

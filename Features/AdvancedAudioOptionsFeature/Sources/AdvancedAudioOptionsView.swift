@@ -175,10 +175,35 @@ private struct RunsChoicesSection: View {
     let title: String
     @Binding var runs: Runs
 
+    private var customCount: Int {
+        switch runs {
+        case .custom(let n): return n
+        default: return runs.maxRuns == .max ? 1 : runs.maxRuns
+        }
+    }
+
     var body: some View {
         Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $runs) {
-                $0.localizedDescription
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(Runs.sorted, id: \.self) { option in
+                        SpeedPill(
+                            label: option.localizedDescription,
+                            isSelected: runs == option
+                        ) {
+                            runs = option
+                        }
+                    }
+                }
+            }
+            Stepper(
+                value: Binding(
+                    get: { customCount },
+                    set: { runs = .custom($0) }
+                ),
+                in: 1 ... 100
+            ) {
+                Text(l("audio.repetition-count") + ": " + NumberFormatter.shared.format(customCount) + "×")
             }
         }
     }

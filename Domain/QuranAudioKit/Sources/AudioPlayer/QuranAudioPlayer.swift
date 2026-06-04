@@ -92,6 +92,7 @@ public class QuranAudioPlayer {
         to end: AyahNumber,
         verseRuns: Runs,
         listRuns: Runs,
+        repetitionDelay: RepetitionDelay = .none,
         streaming: Bool = false
     ) async throws {
         let details: [String: Any] = [
@@ -106,7 +107,8 @@ public class QuranAudioPlayer {
         try await unzipper.unzip(reciter: reciter)
 
         let builder = getAudioRequestBuilder(for: reciter)
-        let audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
+        var audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
+        audioRequest = audioRequest.withRepetitionDelay(repetitionDelay)
         let request = audioRequest.getRequest()
         willPlay(request)
         self.audioRequest = audioRequest

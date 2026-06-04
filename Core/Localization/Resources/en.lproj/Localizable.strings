@@ -118,6 +118,13 @@
 "audio.streaming.description" = "Saves disk space by streaming audio, but requires an internet connection.";
 "audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 
+"audio.repetition-delay" = "Delay Between Repetitions";
+"audio.repetition-delay.none" = "No delay";
+"audio.repetition-delay.1s" = "1s";
+"audio.repetition-delay.2s" = "2s";
+"audio.repetition-delay.3s" = "3s";
+"audio.repetition-delay.4s" = "4s";
+
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Adding Bookmarks...";

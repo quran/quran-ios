@@ -52,11 +52,13 @@ class AudioPlayer {
     }
 
     func pause() {
+        delayTask = nil
         timer?.pause()
         player.pause()
     }
 
     func stop() {
+        delayTask = nil
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -109,6 +111,10 @@ class AudioPlayer {
     }
 
     private var timer: Timing.Timer? {
+        didSet { oldValue?.cancel() }
+    }
+
+    private var delayTask: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
     }
 
@@ -175,7 +181,16 @@ class AudioPlayer {
                     // start a new run
                     audioPlaying.incrementRequestPlays()
                     audioPlaying.resetFramePlays()
-                    play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+                    let delay = request.repetitionDelay
+                    if delay != .none {
+                        delayTask = Task { [weak self] in
+                            try? await Task.sleep(nanoseconds: UInt64(delay.seconds * 1_000_000_000))
+                            guard !Task.isCancelled else { return }
+                            self?.play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+                        }
+                    } else {
+                        play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+                    }
                 }
             }
         } else {

@@ -37,6 +37,7 @@ private struct AdvancedAudioOptionsRootView: View {
             endAt: $viewModel.endAt,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
+            repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
             dismiss: { viewModel.dismiss() },
             play: { viewModel.play() },
@@ -58,6 +59,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var endAt: EndAtChoice
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
+    @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
     let dismiss: @MainActor @Sendable () -> Void
     let play: @MainActor @Sendable () -> Void
@@ -102,6 +104,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
 
             RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
             RunsChoicesSection(title: lAndroid("play_verses_range"), runs: $listRuns)
+            DelayChoicesSection(repetitionDelay: $repetitionDelay)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -178,6 +181,18 @@ private struct RunsChoicesSection: View {
     var body: some View {
         Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
             ChoicesView(items: Runs.sorted, selection: $runs) {
+                $0.localizedDescription
+            }
+        }
+    }
+}
+
+private struct DelayChoicesSection: View {
+    @Binding var repetitionDelay: RepetitionDelay
+
+    var body: some View {
+        Section(header: Text(l("audio.repetition-delay"))) {
+            ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                 $0.localizedDescription
             }
         }

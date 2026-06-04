@@ -178,7 +178,12 @@ private struct RunsChoicesSection: View {
     private var customCount: Int {
         switch runs {
         case .custom(let n): return n
-        default: return runs.maxRuns == .max ? 1 : runs.maxRuns
+        case .one: return 1
+        case .two: return 2
+        case .three: return 3
+        case .four: return 4
+        case .five: return 5
+        case .indefinite: return 1
         }
     }
 

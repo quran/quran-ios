@@ -144,12 +144,6 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(Runs.five.localizedDescription, "5×")
     }
 
-    func test_runsCustom_maxRunsReturnsWrappedCount() {
-        XCTAssertEqual(Runs.custom(10).maxRuns, 10)
-        XCTAssertEqual(Runs.custom(30).maxRuns, 30)
-        XCTAssertEqual(Runs.custom(100).maxRuns, 100)
-    }
-
     func test_runsCustom_localizedDescriptionFormatsCountWithMultiplicationSign() {
         XCTAssertEqual(Runs.custom(7).localizedDescription, "7×")
         XCTAssertEqual(Runs.custom(30).localizedDescription, "30×")

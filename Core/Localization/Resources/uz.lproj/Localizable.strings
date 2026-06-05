@@ -156,6 +156,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "Audio o'ynatilganda oxirigacha o'ynatiladi";
 
+"audio.verse-delay" = "Oyatlar orasidagi kechikish";
+"audio.verse-delay.none" = "Kechikishsiz";
+"audio.verse-delay.description" = "Keyingi oyatni ijro etishdan oldin hozirgina o'qilgan oyat uzunligining bir qismini kutadi. Yodlash uchun foydali.";
+
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

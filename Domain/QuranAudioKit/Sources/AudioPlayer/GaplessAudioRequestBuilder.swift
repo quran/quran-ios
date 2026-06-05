@@ -34,6 +34,17 @@ struct GaplessAudioRequest: QuranAudioRequest {
             image: nil
         )
     }
+
+    func withVerseDelay(_ delay: VerseDelay) -> any QuranAudioRequest {
+        let updatedRequest = AudioRequest(
+            files: request.files,
+            endTime: request.endTime,
+            frameRuns: request.frameRuns,
+            requestRuns: request.requestRuns,
+            verseDelay: delay
+        )
+        return GaplessAudioRequest(request: updatedRequest, ayahs: ayahs, reciter: reciter)
+    }
 }
 
 struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {

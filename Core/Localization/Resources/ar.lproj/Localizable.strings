@@ -106,6 +106,10 @@
 "audio.streaming.description" = "يوفر مساحة التخزين ببث الصوت، لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
 
+"audio.verse-delay" = "التأخير بين الآيات";
+"audio.verse-delay.none" = "بدون تأخير";
+"audio.verse-delay.description" = "الانتظار جزءًا من مدة كل آية قبل تشغيل الآية التالية، بما يتناسب مع الآية التي تُليت للتو. مفيد للحفظ.";
+
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "إضافة الإشارات المرجعية...";

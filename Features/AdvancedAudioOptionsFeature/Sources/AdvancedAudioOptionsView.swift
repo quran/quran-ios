@@ -37,6 +37,7 @@ private struct AdvancedAudioOptionsRootView: View {
             endAt: $viewModel.endAt,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
+            verseDelay: $viewModel.verseDelay,
             playbackRate: viewModel.playbackRate,
             dismiss: { viewModel.dismiss() },
             play: { viewModel.play() },
@@ -58,6 +59,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var endAt: EndAtChoice
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
+    @Binding var verseDelay: VerseDelay
     let playbackRate: Float
     let dismiss: @MainActor @Sendable () -> Void
     let play: @MainActor @Sendable () -> Void
@@ -102,6 +104,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
 
             RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
             RunsChoicesSection(title: lAndroid("play_verses_range"), runs: $listRuns)
+            VerseDelaySection(verseDelay: $verseDelay)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -179,6 +182,30 @@ private struct RunsChoicesSection: View {
         Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
             ChoicesView(items: Runs.sorted, selection: $runs) {
                 $0.localizedDescription
+            }
+        }
+    }
+}
+
+private struct VerseDelaySection: View {
+    @Binding var verseDelay: VerseDelay
+
+    var body: some View {
+        Section(
+            header: Text(l("audio.verse-delay")),
+            footer: Text(l("audio.verse-delay.description"))
+        ) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(VerseDelay.sorted, id: \.self) { delay in
+                        SpeedPill(
+                            label: delay.localizedDescription,
+                            isSelected: delay == verseDelay
+                        ) {
+                            verseDelay = delay
+                        }
+                    }
+                }
             }
         }
     }

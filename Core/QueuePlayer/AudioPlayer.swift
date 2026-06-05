@@ -52,11 +52,13 @@ class AudioPlayer {
     }
 
     func pause() {
+        cancelVerseDelay()
         timer?.pause()
         player.pause()
     }
 
     func stop() {
+        cancelVerseDelay()
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -100,6 +102,9 @@ class AudioPlayer {
     private var audioPlaying: AudioPlaying
     private var playbackRate: Float
 
+    // True while waiting out a between-verse delay (player paused, no frame playing).
+    private var isDelaying = false
+
     private var player: Player {
         didSet {
             player.onRateChanged = { [weak self] in
@@ -109,6 +114,10 @@ class AudioPlayer {
     }
 
     private var timer: Timing.Timer? {
+        didSet { oldValue?.cancel() }
+    }
+
+    private var delayTask: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
     }
 
@@ -162,11 +171,20 @@ class AudioPlayer {
         //   1.1.2 else Repeat the request
         //  1.2 else Run next frame
         // 2. else Repeat the frame
+        // Delay before the next playback, scaled by the verse that just finished.
+        let delay = verseDelayDuration()
+
         if audioPlaying.isLastPlayForCurrentFrame() {
             if let next = audioPlaying.nextFrame() {
                 // move to next frame
                 audioPlaying.resetFramePlays()
-                play(fileIndex: next.fileIndex, frameIndex: next.frameIndex, forceSeek: false)
+                // With no delay, keep the original continuous (no-seek) advance so
+                // gapless playback stays seamless. A delay pauses the player off the
+                // frame boundary, so we must re-seek when resuming.
+                let forceSeek = delay > 0
+                playAfterVerseDelay(delay) { [weak self] in
+                    self?.play(fileIndex: next.fileIndex, frameIndex: next.frameIndex, forceSeek: forceSeek)
+                }
             } else { // last frame
                 if audioPlaying.isLastRun() {
                     // stop
@@ -175,18 +193,59 @@ class AudioPlayer {
                     // start a new run
                     audioPlaying.incrementRequestPlays()
                     audioPlaying.resetFramePlays()
-                    play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+                    playAfterVerseDelay(delay) { [weak self] in
+                        self?.play(fileIndex: 0, frameIndex: 0, forceSeek: true)
+                    }
                 }
             }
         } else {
             // repeat frame
             audioPlaying.incrementFramePlays()
-            play(
-                fileIndex: audioPlaying.filePlaying.fileIndex,
-                frameIndex: audioPlaying.framePlaying.frameIndex,
-                forceSeek: true
-            )
+            let fileIndex = audioPlaying.filePlaying.fileIndex
+            let frameIndex = audioPlaying.framePlaying.frameIndex
+            playAfterVerseDelay(delay) { [weak self] in
+                self?.play(fileIndex: fileIndex, frameIndex: frameIndex, forceSeek: true)
+            }
         }
+    }
+
+    /// Duration to wait before the next playback, computed from the verse that
+    /// just finished: its recited (wall-clock) length times the selected
+    /// multiplier. Returns 0 when no delay is configured.
+    private func verseDelayDuration() -> TimeInterval {
+        let multiplier = request.verseDelay.multiplier
+        guard multiplier > 0 else {
+            return 0
+        }
+        let frameStart = audioPlaying.frame.startTime
+        let frameEnd = audioPlaying.frameEndTime ?? player.duration
+        let recitedMediaDuration = max(0, frameEnd - frameStart)
+        // Convert media duration to wall-clock recited time before scaling.
+        return recitedMediaDuration / Double(playbackRate) * multiplier
+    }
+
+    /// Runs `action` after pausing for `delay` wall-clock seconds. With no delay
+    /// the action runs immediately, preserving the original gapless playback.
+    private func playAfterVerseDelay(_ delay: TimeInterval, _ action: @escaping @MainActor () -> Void) {
+        guard delay > 0 else {
+            action()
+            return
+        }
+        isDelaying = true
+        player.pause()
+        delayTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            isDelaying = false
+            action()
+        }
+    }
+
+    private func cancelVerseDelay() {
+        isDelaying = false
+        delayTask = nil
     }
 
     private func waitUntilFrameEnds(currentTime: TimeInterval? = nil) {
@@ -207,6 +266,10 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func rateChanged(to rate: Float) {
+        // Ignore the pause/resume we trigger ourselves while waiting out a delay.
+        guard !isDelaying else {
+            return
+        }
         actions?.playbackRateChanged(rate)
     }
 

@@ -139,6 +139,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "Ketika memainkan audio, ia akan dimainkan hingga akhir";
 
+"audio.verse-delay" = "Lengah Antara Ayat";
+"audio.verse-delay.none" = "Tiada lengah";
+"audio.verse-delay.description" = "Menunggu sebahagian daripada tempoh setiap ayat sebelum memainkan ayat seterusnya, mengikut ayat yang baru dibaca. Berguna untuk menghafal.";
+
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

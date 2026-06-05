@@ -13,12 +13,13 @@ import QuranKit
 public struct AdvancedAudioOptions {
     // MARK: Lifecycle
 
-    public init(reciter: Reciter, start: AyahNumber, end: AyahNumber, verseRuns: Runs, listRuns: Runs) {
+    public init(reciter: Reciter, start: AyahNumber, end: AyahNumber, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = .none) {
         self.reciter = reciter
         self.start = start
         self.end = end
         self.verseRuns = verseRuns
         self.listRuns = listRuns
+        self.verseDelay = verseDelay
     }
 
     // MARK: Public
@@ -28,4 +29,5 @@ public struct AdvancedAudioOptions {
     public var end: AyahNumber
     public var verseRuns: Runs
     public var listRuns: Runs
+    public var verseDelay: VerseDelay
 }

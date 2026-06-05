@@ -106,6 +106,10 @@
 "audio.download-play-amount" = "Tải xuống/Phát đến";
 "audio.download-play-amount.description" = "Khi phát âm thanh, nó sẽ phát đến cuối của";
 
+"audio.verse-delay" = "Độ trễ giữa các câu";
+"audio.verse-delay.none" = "Không trễ";
+"audio.verse-delay.description" = "Chờ một phần thời lượng của mỗi câu trước khi phát câu tiếp theo, theo câu vừa được đọc. Hữu ích cho việc ghi nhớ.";
+
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Thêm Đánh dấu...";

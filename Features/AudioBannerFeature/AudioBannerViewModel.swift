@@ -143,6 +143,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     private var verseRuns: Runs = .one
     private var listRuns: Runs = .one
+    private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
 
@@ -205,7 +206,7 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
     }
 
-    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs) {
+    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = .none) {
         guard let selectedReciter else {
             return
         }
@@ -214,6 +215,7 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
         self.verseRuns = verseRuns
         self.listRuns = listRuns
+        self.verseDelay = verseDelay
 
         recentRecitersService.updateRecentRecitersList(selectedReciter)
 
@@ -265,6 +267,7 @@ public final class AudioBannerViewModel: ObservableObject {
                     rate: playbackRate,
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns,
+                    verseDelay: verseDelay,
                     streaming: streaming
                 )
                 playingStarted()
@@ -519,7 +522,8 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             start: audioRange.start,
             end: audioRange.end,
             verseRuns: verseRuns,
-            listRuns: listRuns
+            listRuns: listRuns,
+            verseDelay: verseDelay
         )
     }
 
@@ -539,7 +543,14 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
     public func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
         logger.info("AudioBanner: playing advanced audio options \(newOptions)")
         selectReciter(newOptions.reciter)
-        play(from: newOptions.start, to: newOptions.end, verseRuns: newOptions.verseRuns, listRuns: newOptions.listRuns)
+        AudioPreferences.shared.verseDelay = newOptions.verseDelay
+        play(
+            from: newOptions.start,
+            to: newOptions.end,
+            verseRuns: newOptions.verseRuns,
+            listRuns: newOptions.listRuns,
+            verseDelay: newOptions.verseDelay
+        )
     }
 
     public func dismissAudioOptions() {

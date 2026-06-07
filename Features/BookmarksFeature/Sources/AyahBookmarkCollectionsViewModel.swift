@@ -19,13 +19,13 @@
             ayahBookmarkCollectionService: AyahBookmarkCollectionService,
             includedCollectionNames: Set<String>? = nil,
             excludedCollectionNames: Set<String> = [],
-            prepareCollections: @escaping ([AyahBookmarkCollection]) async throws -> Void = { _ in },
+            ensuresHighlightCollections: Bool = false,
             navigateToPage: @escaping (Page) -> Void
         ) {
             self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
             self.includedCollectionNames = includedCollectionNames
             self.excludedCollectionNames = excludedCollectionNames
-            self.prepareCollections = prepareCollections
+            self.ensuresHighlightCollections = ensuresHighlightCollections
             self.navigateToPage = navigateToPage
         }
 
@@ -39,13 +39,13 @@
         static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
             collections.sorted { lhs, rhs in
                 switch (highlightSortIndex(lhs), highlightSortIndex(rhs)) {
-                case let (lhsIndex?, rhsIndex?):
+                case let (.some(lhsIndex), .some(rhsIndex)):
                     return lhsIndex < rhsIndex
-                case (_?, nil):
+                case (.some, .none):
                     return true
-                case (nil, _?):
+                case (.none, .some):
                     return false
-                case (nil, nil):
+                case (.none, .none):
                     return lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
                 }
             }
@@ -56,7 +56,7 @@
                 let sequence = ayahBookmarkCollectionService.collectionsSequence()
                 for try await collections in sequence {
                     self.collections = Self.sorted(filtered(collections))
-                    try await prepareCollectionsIfNeeded(collections)
+                    try await ensureHighlightCollectionsIfNeeded(collections)
                 }
             } catch {
                 self.error = error
@@ -110,7 +110,7 @@
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         private let includedCollectionNames: Set<String>?
         private let excludedCollectionNames: Set<String>
-        private let prepareCollections: ([AyahBookmarkCollection]) async throws -> Void
+        private let ensuresHighlightCollections: Bool
         private let navigateToPage: (Page) -> Void
         private var didPrepareCollections = false
 
@@ -118,7 +118,7 @@
             guard let color = HighlightColor(collectionName: collection.collection.name) else {
                 return nil
             }
-            return HighlightColor.allCases.firstIndex(of: color)
+            return HighlightColor.sortedColors.firstIndex(of: color)
         }
 
         private func filtered(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -131,12 +131,15 @@
             }
         }
 
-        private func prepareCollectionsIfNeeded(_ collections: [AyahBookmarkCollection]) async throws {
-            guard !didPrepareCollections else {
+        private func ensureHighlightCollectionsIfNeeded(_ collections: [AyahBookmarkCollection]) async throws {
+            guard ensuresHighlightCollections, !didPrepareCollections else {
                 return
             }
             didPrepareCollections = true
-            try await prepareCollections(collections)
+            let existingNames = Set(collections.map(\.collection.name))
+            for name in HighlightColor.sortedColors.map(\.collectionName) where !existingNames.contains(name) {
+                try await ayahBookmarkCollectionService.createCollection(named: name)
+            }
         }
     }
 #endif

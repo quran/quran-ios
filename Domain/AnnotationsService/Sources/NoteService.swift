@@ -28,11 +28,11 @@ public struct NoteService {
 
     // MARK: Public
 
-    public func color(from notes: [Note]) -> Note.Color {
+    public func color(from notes: [Note]) -> HighlightColor {
         notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
     }
 
-    public func updateHighlight(verses: [AyahNumber], color: Note.Color, quran: Quran) async throws -> Note {
+    public func updateHighlight(verses: [AyahNumber], color: HighlightColor, quran: Quran) async throws -> Note {
         // update last used highlight color
         lastUsedHighlightColor = color
 
@@ -42,7 +42,7 @@ public struct NoteService {
         return Note(quran: quran, persistenceModel)
     }
 
-    public func setNote(_ note: String, verses: Set<AyahNumber>, color: Note.Color) async throws {
+    public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
         // update last used highlight color
         lastUsedHighlightColor = color
 
@@ -80,14 +80,14 @@ public struct NoteService {
 
     // MARK: Private
 
-    private static let defaultLastUsedNoteHighlightColor = Note.Color.red
+    private static let defaultLastUsedNoteHighlightColor = HighlightColor.red
     private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
         key: "lastUsedNoteHighlightColor",
         defaultValue: defaultLastUsedNoteHighlightColor.rawValue
     )
 
     @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
-    private var lastUsedHighlightColor: Note.Color
+    private var lastUsedHighlightColor: HighlightColor
 
     private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
         let verseTexts = try await textService.textForVerses(verses, translations: [])
@@ -101,7 +101,7 @@ private extension Note {
             verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
             modifiedDate: note.modifiedDate,
             note: note.note,
-            color: Note.Color(rawValue: note.color) ?? .red
+            color: HighlightColor(rawValue: note.color) ?? .red
         )
     }
 }

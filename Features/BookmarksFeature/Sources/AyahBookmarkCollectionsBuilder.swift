@@ -14,7 +14,6 @@
         init(
             ayahBookmarkCollectionService: AyahBookmarkCollectionService,
             includedCollectionNames: Set<String>? = nil,
-            prepareCollections: @escaping ([AyahBookmarkCollection]) async throws -> Void = { _ in },
             navigateToPage: @escaping (Page) -> Void,
             title: String = l("bookmarks.collections"),
             allowsCollectionManagement: Bool = true,
@@ -22,7 +21,6 @@
         ) {
             self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
             self.includedCollectionNames = includedCollectionNames
-            self.prepareCollections = prepareCollections
             self.navigateToPage = navigateToPage
             self.title = title
             self.allowsCollectionManagement = allowsCollectionManagement
@@ -34,7 +32,7 @@
                 ayahBookmarkCollectionService: ayahBookmarkCollectionService,
                 includedCollectionNames: includedCollectionNames,
                 excludedCollectionNames: includedCollectionNames == nil ? [Self.oldPageBookmarksCollectionName] : [],
-                prepareCollections: prepareCollections,
+                ensuresHighlightCollections: true,
                 navigateToPage: navigateToPage
             )
             return AyahBookmarkCollectionsViewController(
@@ -63,7 +61,6 @@
 
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         private let includedCollectionNames: Set<String>?
-        private let prepareCollections: ([AyahBookmarkCollection]) async throws -> Void
         private let navigateToPage: (Page) -> Void
         private let title: String
         private let allowsCollectionManagement: Bool

@@ -35,7 +35,9 @@ public protocol AyahMenuListener: AnyObject {
         func addSyncedNote(verses: [AyahNumber])
     #endif
 
-    func editNote(_ note: QuranAnnotations.Note)
+    #if !QURAN_SYNC
+        func editNote(_ note: QuranAnnotations.Note)
+    #endif
 }
 
 // MARK: - ViewModel
@@ -47,13 +49,14 @@ final class AyahMenuViewModel {
         let pointInView: CGPoint
         let verses: [AyahNumber]
         let notes: [QuranAnnotations.Note]
-        let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
-        let highlightColor: HighlightColor?
         #if QURAN_SYNC
-            let usesSyncedNotes: Bool
+            let highlightVerses: [AyahNumber: HighlightColor]
+            let highlightCollections: [AyahBookmarkCollection]
             let noteCount: Int
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
+        #else
+            let noteService: NoteService
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
     }
@@ -74,14 +77,10 @@ final class AyahMenuViewModel {
 
     var highlightingColor: HighlightColor {
         #if QURAN_SYNC
-            if deps.ayahBookmarkCollectionService != nil {
-                return deps.highlightColor ?? .yellow
-            }
+            return selectedHighlightColor ?? .red
+        #else
+            return deps.noteService.color(from: deps.notes)
         #endif
-        if let highlightColor = deps.highlightColor {
-            return highlightColor
-        }
-        return highlightColor(for: deps.noteService.color(from: deps.notes))
     }
 
     var playSubtitle: String {
@@ -105,7 +104,7 @@ final class AyahMenuViewModel {
 
     var usesSyncedNotesIcon: Bool {
         #if QURAN_SYNC
-            return deps.usesSyncedNotes
+            return true
         #else
             return false
         #endif
@@ -113,7 +112,7 @@ final class AyahMenuViewModel {
 
     var noteCount: Int {
         #if QURAN_SYNC
-            return deps.usesSyncedNotes ? deps.noteCount : 0
+            return deps.noteCount
         #else
             return 0
         #endif
@@ -121,19 +120,15 @@ final class AyahMenuViewModel {
 
     var noteState: AyahMenuUI.NoteState {
         #if QURAN_SYNC
-            if deps.usesSyncedNotes {
-                return deps.highlightColor == nil ? .noHighlight : .highlighted
+            return noteCount > 0 ? .noted : .noHighlight
+        #else
+            if deps.notes.isEmpty {
+                return .noHighlight
+            } else if containsText(deps.notes) {
+                return .noted
             }
+            return .highlighted
         #endif
-        if deps.highlightColor != nil {
-            return containsText(deps.notes) ? .noted : .highlighted
-        }
-        if deps.notes.isEmpty {
-            return .noHighlight
-        } else if containsText(deps.notes) {
-            return .noted
-        }
-        return .highlighted
     }
 
     // MARK: - Items & Actions
@@ -158,32 +153,20 @@ final class AyahMenuViewModel {
     func deleteNotes() async {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
-        #if QURAN_SYNC
-            if deps.highlightColor != nil, !containsText(deps.notes), deps.ayahBookmarkCollectionService != nil {
-                do {
-                    try await removeSyncedHighlights()
-                } catch {
-                    crasher.recordError(error, reason: "Failed to remove synced highlights")
-                }
-                return
-            }
-        #endif
         await listener?.deleteNotes(deps.notes, verses: deps.verses)
     }
 
     func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
         #if QURAN_SYNC
-            if deps.usesSyncedNotes {
-                listener?.addSyncedNote(verses: deps.verses)
-                return
+            listener?.addSyncedNote(verses: deps.verses)
+        #else
+            let notes = deps.notes
+            let color = deps.noteService.color(from: notes)
+            if let note = await updateLegacyHighlight(color: color) {
+                listener?.editNote(note)
             }
         #endif
-        let notes = deps.notes
-        let color = highlightColor(for: deps.noteService.color(from: notes))
-        if let note = await updateLegacyHighlight(color: color) {
-            listener?.editNote(note)
-        }
     }
 
     func updateHighlight(color: HighlightColor) async {
@@ -224,43 +207,56 @@ final class AyahMenuViewModel {
 
     private let deps: Deps
 
+    #if QURAN_SYNC
+        private var selectedHighlightColor: HighlightColor? {
+            let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
+            guard colors.count == deps.verses.count else {
+                return nil
+            }
+            let uniqueColors = Set(colors)
+            return uniqueColors.count == 1 ? uniqueColors.first : nil
+        }
+    #endif
+
     // MARK: - Helper
 
-    private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {
-        notes.contains { note in
-            !(note.note ?? "").isEmpty
+    #if !QURAN_SYNC
+        private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {
+            notes.contains { note in
+                !(note.note ?? "").isEmpty
+            }
         }
-    }
+    #endif
 
     private func _updateHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
         #if QURAN_SYNC
-            if deps.ayahBookmarkCollectionService != nil {
-                do {
-                    try await updateSyncedHighlight(color: color)
-                    return nil
-                } catch {
-                    crasher.recordError(error, reason: "Failed to update synced highlights")
-                    return nil
-                }
+            do {
+                try await updateSyncedHighlight(color: color)
+                return nil
+            } catch {
+                crasher.recordError(error, reason: "Failed to update synced highlights")
+                return nil
             }
+        #else
+            return await updateLegacyHighlight(color: color)
         #endif
-
-        return await updateLegacyHighlight(color: color)
     }
 
-    private func updateLegacyHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
-        let quran = ReadingPreferences.shared.reading.quran
-        do {
-            let updatedNote = try await deps.noteService.updateHighlight(
-                verses: deps.verses, color: legacyColor(for: color), quran: quran
-            )
-            logger.info("AyahMenu: notes updated")
-            return updatedNote
-        } catch {
-            crasher.recordError(error, reason: "Failed to update highlights")
-            return nil
+    #if !QURAN_SYNC
+        private func updateLegacyHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
+            let quran = ReadingPreferences.shared.reading.quran
+            do {
+                let updatedNote = try await deps.noteService.updateHighlight(
+                    verses: deps.verses, color: color, quran: quran
+                )
+                logger.info("AyahMenu: notes updated")
+                return updatedNote
+            } catch {
+                crasher.recordError(error, reason: "Failed to update highlights")
+                return nil
+            }
         }
-    }
+    #endif
 
     private func retrieveSelectedAyahText() async throws -> [String] {
         try await crasher.recordError("Failed to update highlights") {
@@ -268,115 +264,27 @@ final class AyahMenuViewModel {
         }
     }
 
-    private func highlightColor(for color: QuranAnnotations.Note.Color) -> HighlightColor {
-        switch color {
-        case .red: return .red
-        case .green: return .green
-        case .blue: return .blue
-        case .yellow: return .yellow
-        case .purple: return .purple
-        }
-    }
-
-    private func legacyColor(for color: HighlightColor) -> QuranAnnotations.Note.Color {
-        switch color {
-        case .red: return .red
-        case .green: return .green
-        case .blue: return .blue
-        case .yellow: return .yellow
-        case .purple: return .purple
-        }
-    }
-
     #if QURAN_SYNC
         private func updateSyncedHighlight(color: HighlightColor) async throws {
-            guard let ayahBookmarkCollectionService = deps.ayahBookmarkCollectionService else {
-                return
+            let collections = deps.highlightCollections.filter {
+                HighlightColor(collectionName: $0.collection.name) != nil
             }
-            let (targetCollection, collections) = try await highlightCollection(for: color, using: ayahBookmarkCollectionService)
-            let selectedAyahs = Set(deps.verses.map(AyahKey.init))
-            var targetAyahs = Set<AyahKey>()
-
-            for collection in collections where collection.highlightColor != nil {
-                for bookmark in collection.bookmarks where selectedAyahs.contains(AyahKey(bookmark)) {
-                    if collection.collection.localId == targetCollection.collection.localId {
-                        targetAyahs.insert(AyahKey(bookmark))
-                    } else {
-                        try await ayahBookmarkCollectionService.removeBookmarkFromCollection(bookmark)
-                    }
-                }
+            guard let targetCollection = collections.first(where: {
+                $0.collection.name == color.collectionName
+            }), let service = deps.ayahBookmarkCollectionService else {
+                throw AyahMenuError.highlightCollectionUnavailable
             }
-
-            for verse in deps.verses where !targetAyahs.contains(AyahKey(verse)) {
-                try await ayahBookmarkCollectionService.addAyahBookmarkToCollection(
-                    collectionLocalId: targetCollection.collection.localId,
-                    ayah: verse
-                )
-            }
-        }
-
-        private func removeSyncedHighlights() async throws {
-            guard let ayahBookmarkCollectionService = deps.ayahBookmarkCollectionService else {
-                return
-            }
-            let selectedAyahs = Set(deps.verses.map(AyahKey.init))
-            for collection in try await ayahBookmarkCollectionService.collectionsFirstValue() where collection.highlightColor != nil {
-                for bookmark in collection.bookmarks where selectedAyahs.contains(AyahKey(bookmark)) {
-                    try await ayahBookmarkCollectionService.removeBookmarkFromCollection(bookmark)
-                }
-            }
-        }
-
-        private func highlightCollection(
-            for color: HighlightColor,
-            using ayahBookmarkCollectionService: AyahBookmarkCollectionService
-        ) async throws -> (AyahBookmarkCollection, [AyahBookmarkCollection]) {
-            let collections = try await ayahBookmarkCollectionService.collectionsFirstValue()
-            if let collection = collections.first(where: { $0.collection.name == color.collectionName }) {
-                return (collection, collections)
-            }
-
-            try await ayahBookmarkCollectionService.createCollection(named: color.collectionName)
-            let updatedCollections = try await ayahBookmarkCollectionService.collectionsFirstValue()
-            guard let collection = updatedCollections.first(where: { $0.collection.name == color.collectionName }) else {
-                throw SyncedHighlightCollectionError.collectionUnavailable
-            }
-            return (collection, updatedCollections)
+            try await service.setAyahBookmarks(
+                deps.verses,
+                to: targetCollection,
+                removingFrom: collections
+            )
         }
     #endif
 }
 
 #if QURAN_SYNC
-
-    private extension AyahBookmarkCollectionService {
-        func collectionsFirstValue() async throws -> [AyahBookmarkCollection] {
-            var iterator = collectionsSequence().makeAsyncIterator()
-            return try await iterator.next() ?? []
-        }
-    }
-
-    private extension AyahBookmarkCollection {
-        var highlightColor: HighlightColor? {
-            HighlightColor(collectionName: collection.name)
-        }
-    }
-
-    private struct AyahKey: Hashable {
-        init(_ bookmark: AyahCollectionBookmark) {
-            sura = Int32(bookmark.ayah.sura.suraNumber)
-            ayah = Int32(bookmark.ayah.ayah)
-        }
-
-        init(_ ayahNumber: AyahNumber) {
-            sura = Int32(ayahNumber.sura.suraNumber)
-            ayah = Int32(ayahNumber.ayah)
-        }
-
-        let sura: Int32
-        let ayah: Int32
-    }
-
-    private enum SyncedHighlightCollectionError: Error {
-        case collectionUnavailable
+    private enum AyahMenuError: Error {
+        case highlightCollectionUnavailable
     }
 #endif

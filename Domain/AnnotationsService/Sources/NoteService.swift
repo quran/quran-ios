@@ -28,40 +28,42 @@ public struct NoteService {
 
     // MARK: Public
 
-    public func color(from notes: [Note]) -> Note.Color {
-        notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
-    }
+    #if !QURAN_SYNC
+        public func color(from notes: [Note]) -> HighlightColor {
+            notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
+        }
 
-    public func updateHighlight(verses: [AyahNumber], color: Note.Color, quran: Quran) async throws -> Note {
-        // update last used highlight color
-        lastUsedHighlightColor = color
+        public func updateHighlight(verses: [AyahNumber], color: HighlightColor, quran: Quran) async throws -> Note {
+            // update last used highlight color
+            lastUsedHighlightColor = color
 
-        analytics.highlight(verses: verses)
-        let verses = verses.map(VersePersistenceModel.init)
-        let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
-        return Note(quran: quran, persistenceModel)
-    }
+            analytics.highlight(verses: verses)
+            let verses = verses.map(VersePersistenceModel.init)
+            let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
+            return Note(quran: quran, persistenceModel)
+        }
 
-    public func setNote(_ note: String, verses: Set<AyahNumber>, color: Note.Color) async throws {
-        // update last used highlight color
-        lastUsedHighlightColor = color
+        public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
+            // update last used highlight color
+            lastUsedHighlightColor = color
 
-        analytics.updateNote(verses: verses)
-        let verses = verses.map(VersePersistenceModel.init)
-        _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
-    }
+            analytics.updateNote(verses: verses)
+            let verses = verses.map(VersePersistenceModel.init)
+            _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
+        }
 
-    public func removeNotes(with verses: [AyahNumber]) async throws {
-        analytics.unhighlight(verses: verses)
-        let verses = verses.map(VersePersistenceModel.init)
-        _ = try await persistence.removeNotes(with: verses)
-    }
+        public func removeNotes(with verses: [AyahNumber]) async throws {
+            analytics.unhighlight(verses: verses)
+            let verses = verses.map(VersePersistenceModel.init)
+            _ = try await persistence.removeNotes(with: verses)
+        }
 
-    public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {
-        persistence.notes()
-            .map { notes in notes.map { Note(quran: quran, $0) } }
-            .eraseToAnyPublisher()
-    }
+        public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {
+            persistence.notes()
+                .map { notes in notes.map { Note(quran: quran, $0) } }
+                .eraseToAnyPublisher()
+        }
+    #endif
 
     public func textForVerses(_ verses: [AyahNumber]) async throws -> String {
         let versesWithText = try await textDictionaryForVerses(verses)
@@ -80,14 +82,16 @@ public struct NoteService {
 
     // MARK: Private
 
-    private static let defaultLastUsedNoteHighlightColor = Note.Color.red
-    private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
-        key: "lastUsedNoteHighlightColor",
-        defaultValue: defaultLastUsedNoteHighlightColor.rawValue
-    )
+    #if !QURAN_SYNC
+        private static let defaultLastUsedNoteHighlightColor = HighlightColor.red
+        private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
+            key: "lastUsedNoteHighlightColor",
+            defaultValue: defaultLastUsedNoteHighlightColor.rawValue
+        )
 
-    @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
-    private var lastUsedHighlightColor: Note.Color
+        @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
+        private var lastUsedHighlightColor: HighlightColor
+    #endif
 
     private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
         let verseTexts = try await textService.textForVerses(verses, translations: [])
@@ -97,12 +101,20 @@ public struct NoteService {
 
 private extension Note {
     init(quran: Quran, _ note: NotePersistenceModel) {
-        self.init(
-            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
-            modifiedDate: note.modifiedDate,
-            note: note.note,
-            color: Note.Color(rawValue: note.color) ?? .red
-        )
+        #if QURAN_SYNC
+            self.init(
+                verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+                modifiedDate: note.modifiedDate,
+                note: note.note ?? ""
+            )
+        #else
+            self.init(
+                verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+                modifiedDate: note.modifiedDate,
+                note: note.note,
+                color: HighlightColor(rawValue: note.color) ?? .red
+            )
+        #endif
     }
 }
 

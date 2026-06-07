@@ -26,6 +26,8 @@
 
         // MARK: Internal
 
+        private(set) var collections: [AyahBookmarkCollection] = []
+
         func start() {
             guard task == nil else {
                 return
@@ -36,9 +38,11 @@
                 do {
                     let sequence = ayahBookmarkCollectionService.collectionsSequence()
                     for try await collections in sequence {
+                        self.collections = collections
                         var highlights = highlightsService.highlights
                         highlights.highlightVerses = highlightedAyahs(from: collections)
                         highlightsService.highlights = highlights
+                        try await ensureHighlightCollectionsIfNeeded(collections)
                     }
                 } catch {
                     logger.error("Failed to observe synced highlights: \(error)")
@@ -59,10 +63,22 @@
             return highlights
         }
 
+        private func ensureHighlightCollectionsIfNeeded(_ collections: [AyahBookmarkCollection]) async throws {
+            guard !didPrepareCollections else {
+                return
+            }
+            didPrepareCollections = true
+            let existingNames = Set(collections.map(\.collection.name))
+            for name in HighlightColor.sortedColors.map(\.collectionName) where !existingNames.contains(name) {
+                try await ayahBookmarkCollectionService.createCollection(named: name)
+            }
+        }
+
         // MARK: Private
 
         private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         private let highlightsService: QuranHighlightsService
         private var task: Task<Void, Never>?
+        private var didPrepareCollections = false
     }
 #endif

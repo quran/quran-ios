@@ -93,14 +93,14 @@
                 showsHeaderDeleteAction: allowsCollectionDeletion && viewModel.editMode.isEditing,
                 headerDeleteAction: allowsCollectionDeletion ? deleteCollectionAction(for: collection) : nil
             ) { bookmark in
-                bookmarkItem(bookmark)
+                bookmarkItem(bookmark, iconColor: highlightColor?.color)
             }
             .onDelete(action: deleteBookmarkAction)
         }
 
-        private func bookmarkItem(_ bookmark: AyahCollectionBookmark) -> some View {
+        private func bookmarkItem(_ bookmark: AyahCollectionBookmark, iconColor: Color?) -> some View {
             NoorListItem(
-                image: .init(.bookmark, color: .red),
+                image: .init(.bookmark, color: iconColor ?? .red),
                 title: "\(bookmark.ayah.sura.localizedName()) \(sura: bookmark.ayah.sura.arabicSuraName)",
                 subtitle: .init(text: bookmark.ayah.localizedName, location: .bottom),
                 accessory: .text(NumberFormatter.shared.format(bookmark.ayah.page.pageNumber))

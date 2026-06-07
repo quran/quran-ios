@@ -11,27 +11,31 @@ import QuranKit
 public struct Note: Equatable {
     // MARK: Lifecycle
 
-    public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: Color) {
-        self.verses = verses
-        self.modifiedDate = modifiedDate
-        self.color = color
-        self.note = note
-    }
+    #if QURAN_SYNC
+        public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String) {
+            self.verses = verses
+            self.modifiedDate = modifiedDate
+            self.note = note
+        }
+    #else
+        public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: HighlightColor) {
+            self.verses = verses
+            self.modifiedDate = modifiedDate
+            self.color = color
+            self.note = note
+        }
+    #endif
 
     // MARK: Public
 
-    public enum Color: Int {
-        case red
-        case green
-        case blue
-        case yellow
-        case purple
-    }
-
     public let verses: Set<AyahNumber>
     public let modifiedDate: Date
-    public let color: Color
-    public let note: String?
+    #if QURAN_SYNC
+        public let note: String
+    #else
+        public let color: HighlightColor
+        public let note: String?
+    #endif
 
     public var firstVerse: AyahNumber {
         verses.sorted()[0]

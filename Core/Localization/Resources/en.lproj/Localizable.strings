@@ -279,19 +279,7 @@
 "new.library_navigation" = "Library & Navigation:";
 "new.library_navigation.details" = "* Sort surahs and juz on Home, and display surah numbers so you can jump to what you need faster - thanks to @yismailuofa.";
 
-"bookmarks.collections" = "Collections";
-"bookmarks.collections.add" = "Add Collection";
-"bookmarks.collections.edit" = "Edit Collections";
-"bookmarks.collections.new.placeholder" = "Collection name";
-"bookmarks.collections.no-data.title" = "No collections yet";
-"bookmarks.collections.no-data.text" = "Create a collection to organize your ayah bookmarks.";
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
 
 "notes.minimum-length.alert.title" = "Note is too short";
 "notes.minimum-length.alert.body" = "Notes must be at least %d characters.";
-
-"highlight.color.red" = "Red";
-"highlight.color.green" = "Green";
-"highlight.color.blue" = "Blue";
-"highlight.color.yellow" = "Yellow";
-"highlight.color.purple" = "Purple";

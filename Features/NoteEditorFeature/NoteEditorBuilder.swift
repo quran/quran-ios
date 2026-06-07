@@ -14,28 +14,30 @@ import QuranKit
 import QuranTextKit
 import UIKit
 
-@MainActor
-public struct NoteEditorBuilder {
-    // MARK: Lifecycle
+#if !QURAN_SYNC
+    @MainActor
+    public struct NoteEditorBuilder {
+        // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
-        self.container = container
+        public init(container: AppDependencies) {
+            self.container = container
+        }
+
+        // MARK: Public
+
+        public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
+            let noteService = container.noteService()
+            let viewModel = NoteEditorInteractor(noteService: noteService, note: note)
+            let viewController = NoteEditorViewController(viewModel: viewModel)
+            viewModel.listener = listener
+            return viewController
+        }
+
+        // MARK: Internal
+
+        let container: AppDependencies
     }
-
-    // MARK: Public
-
-    public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
-        let noteService = container.noteService()
-        let viewModel = NoteEditorInteractor(noteService: noteService, note: note)
-        let viewController = NoteEditorViewController(viewModel: viewModel)
-        viewModel.listener = listener
-        return viewController
-    }
-
-    // MARK: Internal
-
-    let container: AppDependencies
-}
+#endif
 
 #if QURAN_SYNC
     @MainActor

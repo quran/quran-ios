@@ -343,7 +343,7 @@ private struct NoteCircles: View {
 
     var body: some View {
         HStack {
-            ForEach(HighlightColor.allCases, id: \.self) { color in
+            ForEach(HighlightColor.sortedColors, id: \.self) { color in
                 AsyncButton(
                     action: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }

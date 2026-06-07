@@ -54,13 +54,11 @@ public struct QuranBuilder {
                 quran: quran,
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
-                noteService: container.noteService(),
                 highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),
                 wordPointerBuilder: WordPointerBuilder(container: container),
-                noteEditorBuilder: NoteEditorBuilder(container: container),
                 contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
@@ -74,17 +72,17 @@ public struct QuranBuilder {
                 quran: quran,
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
-                noteService: container.noteService(),
                 highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),
                 wordPointerBuilder: WordPointerBuilder(container: container),
-                noteEditorBuilder: NoteEditorBuilder(container: container),
                 contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
-                resources: container.readingResources
+                resources: container.readingResources,
+                noteService: container.noteService(),
+                noteEditorBuilder: NoteEditorBuilder(container: container)
             )
         #endif
         let interactor = QuranInteractor(deps: interactorDeps, input: input)

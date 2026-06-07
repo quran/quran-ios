@@ -83,6 +83,33 @@
             try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
         }
 
+        public func setAyahBookmarks(
+            _ ayahs: [AyahNumber],
+            to targetCollection: AyahBookmarkCollection,
+            removingFrom collections: [AyahBookmarkCollection]
+        ) async throws {
+            let targetAyahs = Set(
+                targetCollection.bookmarks
+                    .filter { ayahs.contains($0.ayah) }
+                    .map(\.ayah)
+            )
+
+            for collection in collections {
+                for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
+                    if collection.collection.localId != targetCollection.collection.localId {
+                        try await removeBookmarkFromCollection(bookmark)
+                    }
+                }
+            }
+
+            for ayah in ayahs where !targetAyahs.contains(ayah) {
+                try await addAyahBookmarkToCollection(
+                    collectionLocalId: targetCollection.collection.localId,
+                    ayah: ayah
+                )
+            }
+        }
+
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
             let readingPreferences = readingPreferences
             let sequence = syncService.collectionsWithBookmarksSequence()

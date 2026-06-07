@@ -30,19 +30,14 @@ public struct NoorListItem: View {
         // MARK: Lifecycle
 
         public init(_ image: NoorSystemImage, color: Color? = nil) {
-            content = AnyView(
-                image.image
-                    .foregroundColor(color)
-            )
-        }
-
-        public init(@ViewBuilder content: () -> some View) {
-            self.content = AnyView(content())
+            self.image = image
+            self.color = color
         }
 
         // MARK: Internal
 
-        let content: AnyView
+        let image: NoorSystemImage
+        let color: Color?
     }
 
     // MARK: Lifecycle
@@ -154,7 +149,12 @@ public struct NoorListItem: View {
             }
 
             if let image {
-                image.content
+                if let color = image.color {
+                    image.image.image
+                        .foregroundColor(color)
+                } else {
+                    image.image.image
+                }
             }
 
             VStack(alignment: .leading) {

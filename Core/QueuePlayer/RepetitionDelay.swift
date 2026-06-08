@@ -8,7 +8,8 @@ public enum RepetitionDelay: Int, Hashable, Sendable, CaseIterable {
     case oneSecond
     case twoSeconds
     case threeSeconds
-    case fourSeconds
+    case fiveSeconds
+    case tenSeconds
 
     // MARK: Public
 
@@ -18,7 +19,8 @@ public enum RepetitionDelay: Int, Hashable, Sendable, CaseIterable {
         case .oneSecond: return 1
         case .twoSeconds: return 2
         case .threeSeconds: return 3
-        case .fourSeconds: return 4
+        case .fiveSeconds: return 5
+        case .tenSeconds: return 10
         }
     }
 }

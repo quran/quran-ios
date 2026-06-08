@@ -123,7 +123,8 @@
 "audio.repetition-delay.1s" = "1s";
 "audio.repetition-delay.2s" = "2s";
 "audio.repetition-delay.3s" = "3s";
-"audio.repetition-delay.4s" = "4s";
+"audio.repetition-delay.5s" = "5s";
+"audio.repetition-delay.10s" = "10s";
 
 // MARK: - Bookmarks
 

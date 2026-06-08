@@ -103,8 +103,10 @@ struct AdvancedAudioOptionsRootViewUI: View {
             )
 
             RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
-            RunsChoicesSection(title: lAndroid("play_verses_range"), runs: $listRuns)
-            DelayChoicesSection(repetitionDelay: $repetitionDelay)
+            PlaySetChoicesSection(
+                listRuns: $listRuns,
+                repetitionDelay: $repetitionDelay
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -187,14 +189,27 @@ private struct RunsChoicesSection: View {
     }
 }
 
-private struct DelayChoicesSection: View {
+private struct PlaySetChoicesSection: View {
+    @Binding var listRuns: Runs
     @Binding var repetitionDelay: RepetitionDelay
 
     var body: some View {
-        Section(header: Text(l("audio.repetition-delay"))) {
-            ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+        Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
+            ChoicesView(items: Runs.sorted, selection: $listRuns) {
                 $0.localizedDescription
             }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(l("audio.repetition-delay"))
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+                    $0.localizedDescription
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 6)
         }
     }
 }

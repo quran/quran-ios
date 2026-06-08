@@ -105,8 +105,8 @@
 "audio.streaming.title" = "تشغيل الصوت عبر الإنترنت";
 "audio.streaming.description" = "يوفر مساحة التخزين ببث الصوت، لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
-"audio.repetition-delay" = "التأخير بين التكرارات";
-"audio.repetition-delay.none" = "بدون تأخير";
+"audio.repetition-delay" = "إيقاف مؤقت بين التكرارات";
+"audio.repetition-delay.none" = "٠ث";
 "audio.repetition-delay.1s" = "١ث";
 "audio.repetition-delay.2s" = "٢ث";
 "audio.repetition-delay.3s" = "٣ث";

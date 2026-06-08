@@ -118,7 +118,7 @@
 "audio.streaming.description" = "Saves disk space by streaming audio, but requires an internet connection.";
 "audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 
-"audio.repetition-delay" = "Pause Between Repetitions";
+"audio.repetition-delay" = "Pause Between Repetitions (seconds)";
 "audio.repetition-delay.none" = "0s";
 "audio.repetition-delay.1s" = "1s";
 "audio.repetition-delay.2s" = "2s";

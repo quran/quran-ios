@@ -207,7 +207,7 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
     }
 
-    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = .none, repetitionDelay: RepetitionDelay = .oneSecond) {
+    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = AudioPreferences.shared.verseDelay, repetitionDelay: RepetitionDelay = .oneSecond) {
         guard let selectedReciter else {
             return
         }

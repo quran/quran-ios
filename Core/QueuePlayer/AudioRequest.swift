@@ -11,12 +11,13 @@ import Foundation
 public struct AudioRequest: Equatable, Sendable {
     // MARK: Lifecycle
 
-    public init(files: [AudioFile], endTime: TimeInterval?, frameRuns: Runs, requestRuns: Runs, verseDelay: VerseDelay = .none) {
+    public init(files: [AudioFile], endTime: TimeInterval?, frameRuns: Runs, requestRuns: Runs, verseDelay: VerseDelay = .none, repetitionDelay: RepetitionDelay = .none) {
         self.files = files
         self.endTime = endTime
         self.frameRuns = frameRuns
         self.requestRuns = requestRuns
         self.verseDelay = verseDelay
+        self.repetitionDelay = repetitionDelay
     }
 
     // MARK: Public
@@ -26,6 +27,7 @@ public struct AudioRequest: Equatable, Sendable {
     public let frameRuns: Runs
     public let requestRuns: Runs
     public let verseDelay: VerseDelay
+    public let repetitionDelay: RepetitionDelay
 }
 
 public struct AudioFile: Equatable, Sendable {

@@ -93,6 +93,7 @@ public class QuranAudioPlayer {
         verseRuns: Runs,
         listRuns: Runs,
         verseDelay: VerseDelay = .none,
+        repetitionDelay: RepetitionDelay = .none,
         streaming: Bool = false
     ) async throws {
         let details: [String: Any] = [
@@ -102,6 +103,7 @@ public class QuranAudioPlayer {
             "verseRuns": verseRuns,
             "listRuns": listRuns,
             "verseDelay": verseDelay,
+            "repetitionDelay": repetitionDelay,
             "streaming": streaming,
         ]
         logger.notice("Playing \(details.map { "\($0): \($1)" }.joined(separator: ", "))")
@@ -110,6 +112,7 @@ public class QuranAudioPlayer {
         let builder = getAudioRequestBuilder(for: reciter)
         var audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
         audioRequest = audioRequest.withVerseDelay(verseDelay)
+        audioRequest = audioRequest.withRepetitionDelay(repetitionDelay)
         let request = audioRequest.getRequest()
         willPlay(request)
         self.audioRequest = audioRequest

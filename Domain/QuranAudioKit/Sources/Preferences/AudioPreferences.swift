@@ -30,10 +30,14 @@ public class AudioPreferences {
     @TransformedPreference(audioVerseDelayKey, transformer: .rawRepresentable(defaultValue: VerseDelay.none))
     public var verseDelay: VerseDelay
 
+    @TransformedPreference(audioRepetitionDelayKey, transformer: .rawRepresentable(defaultValue: .oneSecond))
+    public var repetitionDelay: RepetitionDelay
+
     // MARK: Private
 
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
     private static let audioPlaybackRateKey = PreferenceKey<Float>(key: "audioPlaybackRate", defaultValue: 1.0)
     private static let audioStreamingEnabledKey = PreferenceKey<Bool>(key: "audioStreamingEnabled", defaultValue: false)
     private static let audioVerseDelayKey = PreferenceKey<Int>(key: "audioVerseDelay", defaultValue: VerseDelay.none.rawValue)
+    private static let audioRepetitionDelayKey = PreferenceKey<Int>(key: "audioRepetitionDelay", defaultValue: RepetitionDelay.oneSecond.rawValue)
 }

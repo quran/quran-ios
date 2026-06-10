@@ -16,6 +16,7 @@ protocol QuranAudioRequest: Sendable {
     func getAyahNumberFrom(fileIndex: Int, frameIndex: Int) -> AyahNumber
     func getPlayerInfo(for fileIndex: Int) -> PlayerItemInfo
     func withVerseDelay(_ delay: VerseDelay) -> any QuranAudioRequest
+    func withRepetitionDelay(_ delay: RepetitionDelay) -> any QuranAudioRequest
 }
 
 protocol QuranAudioRequestBuilder {

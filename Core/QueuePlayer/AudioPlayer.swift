@@ -193,7 +193,10 @@ class AudioPlayer {
                     // start a new run
                     audioPlaying.incrementRequestPlays()
                     audioPlaying.resetFramePlays()
-                    playAfterVerseDelay(delay) { [weak self] in
+                    // At the repeat boundary, wait the between-verse delay for the
+                    // verse that just finished plus the fixed between-repetition pause.
+                    let repeatDelay = delay + request.repetitionDelay.seconds
+                    playAfterVerseDelay(repeatDelay) { [weak self] in
                         self?.play(fileIndex: 0, frameIndex: 0, forceSeek: true)
                     }
                 }

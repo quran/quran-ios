@@ -144,6 +144,7 @@ public final class AudioBannerViewModel: ObservableObject {
     private var verseRuns: Runs = .one
     private var listRuns: Runs = .one
     private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
+    private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
 
@@ -206,7 +207,7 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
     }
 
-    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = .none) {
+    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = .none, repetitionDelay: RepetitionDelay = .oneSecond) {
         guard let selectedReciter else {
             return
         }
@@ -216,6 +217,7 @@ public final class AudioBannerViewModel: ObservableObject {
         self.verseRuns = verseRuns
         self.listRuns = listRuns
         self.verseDelay = verseDelay
+        self.repetitionDelay = repetitionDelay
 
         recentRecitersService.updateRecentRecitersList(selectedReciter)
 
@@ -268,6 +270,7 @@ public final class AudioBannerViewModel: ObservableObject {
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns,
                     verseDelay: verseDelay,
+                    repetitionDelay: repetitionDelay,
                     streaming: streaming
                 )
                 playingStarted()
@@ -523,7 +526,8 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             end: audioRange.end,
             verseRuns: verseRuns,
             listRuns: listRuns,
-            verseDelay: verseDelay
+            verseDelay: verseDelay,
+            repetitionDelay: repetitionDelay
         )
     }
 
@@ -544,12 +548,14 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
         logger.info("AudioBanner: playing advanced audio options \(newOptions)")
         selectReciter(newOptions.reciter)
         AudioPreferences.shared.verseDelay = newOptions.verseDelay
+        AudioPreferences.shared.repetitionDelay = newOptions.repetitionDelay
         play(
             from: newOptions.start,
             to: newOptions.end,
             verseRuns: newOptions.verseRuns,
             listRuns: newOptions.listRuns,
-            verseDelay: newOptions.verseDelay
+            verseDelay: newOptions.verseDelay,
+            repetitionDelay: newOptions.repetitionDelay
         )
     }
 

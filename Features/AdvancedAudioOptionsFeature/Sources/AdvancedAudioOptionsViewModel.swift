@@ -38,6 +38,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         verseRuns = options.verseRuns
         listRuns = options.listRuns
         verseDelay = options.verseDelay
+        repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
         endAt = Self.deduceEndAt(from: options.start, to: options.end)
 
@@ -53,6 +54,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var verseRuns: Runs
     @Published var listRuns: Runs
     @Published var verseDelay: VerseDelay
+    @Published var repetitionDelay: RepetitionDelay
     @Published var reciter: Reciter
     @Published var endAt: EndAtChoice
     @Published var playbackRate: Float
@@ -131,7 +133,8 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
             end: toVerse,
             verseRuns: verseRuns,
             listRuns: listRuns,
-            verseDelay: verseDelay
+            verseDelay: verseDelay,
+            repetitionDelay: repetitionDelay
         )
     }
 }

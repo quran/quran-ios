@@ -180,37 +180,9 @@ private struct RunsChoicesSection: View {
     let title: String
     @Binding var runs: Runs
 
-    private var customCount: Int {
-        switch runs {
-        case .custom(let n): return n
-        case .one: return 1
-        case .two: return 2
-        case .three: return 3
-        case .four: return 4
-        case .five: return 5
-        case .indefinite: return 1
-        }
-    }
-
     var body: some View {
         Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
-            HStack {
-                SpeedPill(
-                    label: lAndroid("repeatValues[3]"),
-                    isSelected: runs == .indefinite
-                ) {
-                    runs = .indefinite
-                }
-            }
-            Stepper(
-                value: Binding(
-                    get: { customCount },
-                    set: { runs = .custom($0) }
-                ),
-                in: 1 ... 100
-            ) {
-                Text(l("audio.repetition-count") + ": " + NumberFormatter.shared.format(customCount) + "×")
-            }
+            RunsPicker(runs: $runs)
         }
     }
 }
@@ -221,9 +193,7 @@ private struct PlaySetChoicesSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $listRuns) {
-                $0.localizedDescription
-            }
+            RunsPicker(runs: $listRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.repetition-delay"))
@@ -236,6 +206,118 @@ private struct PlaySetChoicesSection: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)
+        }
+    }
+}
+
+/// Shows the 1×–5× presets alongside a "Custom" choice. Picking "Custom" reveals a wheel
+/// picker for any count from 1 to 100, with "Loop" repeated at both ends so it stays
+/// reachable without scrolling through the whole range.
+private struct RunsPicker: View {
+    // MARK: Lifecycle
+
+    init(runs: Binding<Runs>) {
+        _runs = runs
+        if case .custom(let n) = runs.wrappedValue {
+            _customRunsIndex = State(initialValue: n)
+        } else {
+            _customRunsIndex = State(initialValue: Self.loopTopIndex)
+        }
+    }
+
+    // MARK: Internal
+
+    @Binding var runs: Runs
+
+    var body: some View {
+        ChoicesView(items: RunsPreset.allCases, selection: presetSelection) {
+            $0.localizedDescription
+        }
+
+        if presetSelection.wrappedValue == .custom {
+            Picker(l("audio.repetition-count"), selection: customRunsSelection) {
+                ForEach(Self.customIndices, id: \.self) { index in
+                    Text(Self.label(forCustomIndex: index))
+                }
+            }
+            .pickerStyle(.wheel)
+            .labelsHidden()
+        }
+    }
+
+    // MARK: Private
+
+    private static let loopTopIndex = 0
+    private static let loopBottomIndex = 101
+    private static let customIndices = Array(loopTopIndex ... loopBottomIndex)
+
+    @State private var customRunsIndex: Int
+
+    private var presetSelection: Binding<RunsPreset> {
+        Binding(
+            get: { RunsPreset(runs) },
+            set: { preset in
+                switch preset {
+                case .one: runs = .one
+                case .two: runs = .two
+                case .three: runs = .three
+                case .four: runs = .four
+                case .five: runs = .five
+                case .custom:
+                    if RunsPreset(runs) != .custom {
+                        customRunsIndex = Self.loopTopIndex
+                        runs = .indefinite
+                    }
+                }
+            }
+        )
+    }
+
+    private var customRunsSelection: Binding<Int> {
+        Binding(
+            get: { customRunsIndex },
+            set: { index in
+                customRunsIndex = index
+                runs = (index == Self.loopTopIndex || index == Self.loopBottomIndex) ? .indefinite : .custom(index)
+            }
+        )
+    }
+
+    private static func label(forCustomIndex index: Int) -> String {
+        switch index {
+        case loopTopIndex, loopBottomIndex: return lAndroid("repeatValues[3]")
+        default: return Runs.custom(index).localizedDescription
+        }
+    }
+}
+
+private enum RunsPreset: Hashable, CaseIterable {
+    case one
+    case two
+    case three
+    case four
+    case five
+    case custom
+
+    init(_ runs: Runs) {
+        switch runs {
+        case .one: self = .one
+        case .two: self = .two
+        case .three: self = .three
+        case .four: self = .four
+        case .five: self = .five
+        case .indefinite, .custom: self = .custom
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .one: return Runs.one.localizedDescription
+        case .two: return Runs.two.localizedDescription
+        case .three: return Runs.three.localizedDescription
+        case .four: return Runs.four.localizedDescription
+        case .five: return Runs.five.localizedDescription
+        case .custom: return l("audio.repetition-count")
         }
     }
 }

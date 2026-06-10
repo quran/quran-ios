@@ -11,10 +11,6 @@ import Localization
 import QueuePlayer
 
 extension Runs {
-    static var sorted: [Runs] {
-        [.one, .two, .three, .four, .five, .indefinite]
-    }
-
     var localizedDescription: String {
         switch self {
         case .one, .two, .three, .four, .five: return NumberFormatter.shared.format(count) + "×"

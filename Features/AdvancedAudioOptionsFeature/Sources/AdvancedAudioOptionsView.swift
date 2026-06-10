@@ -163,7 +163,7 @@ private struct PlaybackSpeedSection: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(PlaybackSpeed.supportedRates, id: \.self) { value in
-                        SpeedPill(
+                        ChoicePill(
                             label: PlaybackSpeed.formatted(value),
                             isSelected: value == rate
                         ) {
@@ -200,7 +200,7 @@ private struct PlaySetChoicesSection: View {
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+                PillChoicesRow(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                     $0.localizedDescription
                 }
             }
@@ -230,7 +230,7 @@ private struct RunsPicker: View {
     @Binding var runs: Runs
 
     var body: some View {
-        ChoicesView(items: RunsPreset.allCases, selection: presetSelection) {
+        PillChoicesRow(items: RunsPreset.allCases, selection: presetSelection) {
             $0.localizedDescription
         }
 
@@ -386,7 +386,25 @@ private struct EndAtRow: View {
 
 // MARK: - Pills
 
-private struct SpeedPill: View {
+private struct PillChoicesRow<Item: Hashable>: View {
+    let items: [Item]
+    @Binding var selection: Item
+    let label: (Item) -> String
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(items, id: \.self) { item in
+                    ChoicePill(label: label(item), isSelected: item == selection) {
+                        selection = item
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct ChoicePill: View {
     let label: String
     let isSelected: Bool
     let action: () -> Void

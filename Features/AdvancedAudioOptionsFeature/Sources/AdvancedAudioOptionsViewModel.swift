@@ -53,7 +53,10 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var toVerse: AyahNumber
     @Published var verseRuns: Runs
     @Published var listRuns: Runs
-    @Published var verseDelay: VerseDelay
+    @Published var verseDelay: VerseDelay {
+        didSet { AudioPreferences.shared.verseDelay = verseDelay }
+    }
+
     @Published var repetitionDelay: RepetitionDelay
     @Published var reciter: Reciter
     @Published var endAt: EndAtChoice

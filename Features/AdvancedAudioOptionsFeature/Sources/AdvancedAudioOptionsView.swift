@@ -37,6 +37,7 @@ private struct AdvancedAudioOptionsRootView: View {
             endAt: $viewModel.endAt,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
+            repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
             dismiss: { viewModel.dismiss() },
             play: { viewModel.play() },
@@ -58,6 +59,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var endAt: EndAtChoice
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
+    @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
     let dismiss: @MainActor @Sendable () -> Void
     let play: @MainActor @Sendable () -> Void
@@ -101,7 +103,10 @@ struct AdvancedAudioOptionsRootViewUI: View {
             )
 
             RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
-            RunsChoicesSection(title: lAndroid("play_verses_range"), runs: $listRuns)
+            PlaySetChoicesSection(
+                listRuns: $listRuns,
+                repetitionDelay: $repetitionDelay
+            )
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -206,6 +211,31 @@ private struct RunsChoicesSection: View {
             ) {
                 Text(l("audio.repetition-count") + ": " + NumberFormatter.shared.format(customCount) + "×")
             }
+        }
+    }
+}
+
+private struct PlaySetChoicesSection: View {
+    @Binding var listRuns: Runs
+    @Binding var repetitionDelay: RepetitionDelay
+
+    var body: some View {
+        Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
+            ChoicesView(items: Runs.sorted, selection: $listRuns) {
+                $0.localizedDescription
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(l("audio.repetition-delay"))
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+                    $0.localizedDescription
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 6)
         }
     }
 }

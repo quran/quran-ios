@@ -31,7 +31,9 @@ public struct AyahMenuInput {
         self.verses = verses
         self.notes = notes
         self.noteCount = noteCount
-        self.highlightVerses = highlightVerses
+        #if QURAN_SYNC
+            self.highlightVerses = highlightVerses
+        #endif
     }
 
     // MARK: Internal
@@ -41,7 +43,9 @@ public struct AyahMenuInput {
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
     let noteCount: Int
-    let highlightVerses: [AyahNumber: HighlightColor]
+    #if QURAN_SYNC
+        let highlightVerses: [AyahNumber: HighlightColor]
+    #endif
 }
 
 @MainActor
@@ -80,8 +84,7 @@ public struct AyahMenuBuilder {
                 verses: input.verses,
                 notes: input.notes,
                 noteService: noteService,
-                textRetriever: textRetriever,
-                highlightVerses: input.highlightVerses
+                textRetriever: textRetriever
             )
         #endif
         let viewModel = AyahMenuViewModel(deps: deps)

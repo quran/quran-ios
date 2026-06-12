@@ -49,8 +49,8 @@ final class AyahMenuViewModel {
         let notes: [QuranAnnotations.Note]
         let noteService: NoteService
         let textRetriever: ShareableVerseTextRetriever
-        let highlightVerses: [AyahNumber: HighlightColor]
         #if QURAN_SYNC
+            let highlightVerses: [AyahNumber: HighlightColor]
             let usesSyncedNotes: Bool
             let noteCount: Int
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
@@ -73,10 +73,11 @@ final class AyahMenuViewModel {
     }
 
     var highlightingColor: HighlightColor {
-        if let highlightColor = selectedHighlightColor {
-            return highlightColor
-        }
-        return deps.noteService.color(from: deps.notes)
+        #if QURAN_SYNC
+            return selectedHighlightColor ?? deps.noteService.color(from: deps.notes)
+        #else
+            return deps.noteService.color(from: deps.notes)
+        #endif
     }
 
     var playSubtitle: String {
@@ -119,10 +120,10 @@ final class AyahMenuViewModel {
             if deps.usesSyncedNotes {
                 return selectedHighlightColor == nil ? .noHighlight : .highlighted
             }
+            if selectedHighlightColor != nil {
+                return containsText(deps.notes) ? .noted : .highlighted
+            }
         #endif
-        if selectedHighlightColor != nil {
-            return containsText(deps.notes) ? .noted : .highlighted
-        }
         if deps.notes.isEmpty {
             return .noHighlight
         } else if containsText(deps.notes) {
@@ -173,12 +174,13 @@ final class AyahMenuViewModel {
                 listener?.addSyncedNote(verses: deps.verses)
                 return
             }
+        #else
+            let notes = deps.notes
+            let color = deps.noteService.color(from: notes)
+            if let note = await updateLegacyHighlight(color: color) {
+                listener?.editNote(note)
+            }
         #endif
-        let notes = deps.notes
-        let color = deps.noteService.color(from: notes)
-        if let note = await updateLegacyHighlight(color: color) {
-            listener?.editNote(note)
-        }
     }
 
     func updateHighlight(color: HighlightColor) async {
@@ -219,14 +221,16 @@ final class AyahMenuViewModel {
 
     private let deps: Deps
 
-    private var selectedHighlightColor: HighlightColor? {
-        let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
-        guard colors.count == deps.verses.count else {
-            return nil
+    #if QURAN_SYNC
+        private var selectedHighlightColor: HighlightColor? {
+            let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
+            guard colors.count == deps.verses.count else {
+                return nil
+            }
+            let uniqueColors = Set(colors)
+            return uniqueColors.count == 1 ? uniqueColors.first : nil
         }
-        let uniqueColors = Set(colors)
-        return uniqueColors.count == 1 ? uniqueColors.first : nil
-    }
+    #endif
 
     // MARK: - Helper
 
@@ -238,18 +242,16 @@ final class AyahMenuViewModel {
 
     private func _updateHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
         #if QURAN_SYNC
-            if deps.ayahBookmarkCollectionService != nil {
-                do {
-                    try await updateSyncedHighlight(color: color)
-                    return nil
-                } catch {
-                    crasher.recordError(error, reason: "Failed to update synced highlights")
-                    return nil
-                }
+            do {
+                try await updateSyncedHighlight(color: color)
+                return nil
+            } catch {
+                crasher.recordError(error, reason: "Failed to update synced highlights")
+                return nil
             }
+        #else
+            return await updateLegacyHighlight(color: color)
         #endif
-
-        return await updateLegacyHighlight(color: color)
     }
 
     private func updateLegacyHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {

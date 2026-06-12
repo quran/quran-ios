@@ -219,8 +219,6 @@ final class AyahMenuViewModel {
 
     private let deps: Deps
 
-    // TODO: remove these after we use just a single color enum
-
     private var selectedHighlightColor: HighlightColor? {
         let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
         guard colors.count == deps.verses.count else {

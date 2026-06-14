@@ -132,16 +132,17 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     // MARK: - Runs
 
-    func test_runsSorted_matchesExpectedOrder() {
-        XCTAssertEqual(Runs.sorted, [.one, .two, .three, .four, .five, .indefinite])
-    }
-
     func test_runsLocalizedDescription_finiteValuesFormatLocalizedNumbersWithMultiplicationSign() {
         XCTAssertEqual(Runs.one.localizedDescription, "1×")
         XCTAssertEqual(Runs.two.localizedDescription, "2×")
         XCTAssertEqual(Runs.three.localizedDescription, "3×")
         XCTAssertEqual(Runs.four.localizedDescription, "4×")
         XCTAssertEqual(Runs.five.localizedDescription, "5×")
+    }
+
+    func test_runsCustom_localizedDescriptionFormatsCountWithMultiplicationSign() {
+        XCTAssertEqual(Runs.custom(7).localizedDescription, "7×")
+        XCTAssertEqual(Runs.custom(30).localizedDescription, "30×")
     }
 
     // MARK: - RepetitionDelay

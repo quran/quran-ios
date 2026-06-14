@@ -11,14 +11,11 @@ import Localization
 import QueuePlayer
 
 extension Runs {
-    static var sorted: [Runs] {
-        [.one, .two, .three, .four, .five, .indefinite]
-    }
-
     var localizedDescription: String {
         switch self {
         case .one, .two, .three, .four, .five: return NumberFormatter.shared.format(count) + "×"
         case .indefinite: return lAndroid("repeatValues[3]")
+        case .custom(let n): return NumberFormatter.shared.format(n) + "×"
         }
     }
 
@@ -30,6 +27,7 @@ extension Runs {
         case .four: return 4
         case .five: return 5
         case .indefinite: preconditionFailure("Indefinite runs do not have a finite count.")
+        case .custom(let n): return n
         }
     }
 }

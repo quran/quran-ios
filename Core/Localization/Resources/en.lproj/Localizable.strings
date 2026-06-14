@@ -116,6 +116,7 @@
 "audio.download-play-amount" = "Download/Play up to";
 "audio.streaming.title" = "Stream Audio";
 "audio.streaming.description" = "Saves disk space by streaming audio, but requires an internet connection.";
+"audio.repetition-count" = "Custom";
 "audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 
 "audio.repetition-delay" = "Pause Between Repetitions (seconds)";

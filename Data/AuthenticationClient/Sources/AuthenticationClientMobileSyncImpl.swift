@@ -6,7 +6,7 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(authService: AuthService, syncService: SyncService) {
+    public init(authService: SyncAuthService, syncService: SyncService) {
         self.authService = authService
         self.syncService = syncService
     }
@@ -68,6 +68,6 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     // MARK: Private
 
-    private let authService: AuthService
+    private let authService: SyncAuthService
     private let syncService: SyncService
 }

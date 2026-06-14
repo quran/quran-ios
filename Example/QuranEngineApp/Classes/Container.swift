@@ -97,7 +97,7 @@ class Container: AppDependencies {
             "note",
         ]
 
-        private lazy var mobileSyncServices: (authService: AuthService, syncService: SyncService)? = {
+        private lazy var mobileSyncServices: (authService: SyncAuthService, syncService: SyncService)? = {
             guard let authConfig = Self.mobileSyncAuthConfiguration() else {
                 return nil
             }

@@ -561,6 +561,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
+            "BookmarksFeature",
             "NoorUI",
         ]),
 
@@ -725,6 +726,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",
+            "BookmarksFeature",
         ]),
 
         target(type, name: "SettingsFeature", dependencies: [

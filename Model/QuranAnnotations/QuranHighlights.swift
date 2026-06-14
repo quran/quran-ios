@@ -17,6 +17,9 @@ public struct QuranHighlights: Equatable {
     public var readingVerses: [AyahNumber] = []
     public var shareVerses: [AyahNumber] = []
     public var searchVerses: [AyahNumber] = []
+    #if QURAN_SYNC
+        public var highlightVerses: [AyahNumber: HighlightColor] = [:]
+    #endif
     public var noteVerses: [AyahNumber: Note] = [:]
 
     public var pointedWord: Word?

@@ -9,6 +9,8 @@
 import AnnotationsService
 import AppDependencies
 import FeaturesSupport
+import Localization
+import QuranKit
 import UIKit
 
 @MainActor
@@ -28,11 +30,12 @@ public struct BookmarksBuilder {
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
             if let syncService = container.syncService {
                 let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: syncService)
+                let navigateToPage: (Page) -> Void = { [weak listener] page in
+                    listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+                }
                 let collectionsBuilder = AyahBookmarkCollectionsBuilder(
                     ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-                    navigateToPage: { [weak listener] page in
-                        listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
-                    }
+                    navigateToPage: navigateToPage
                 )
                 showCollectionsAction = { presenter in
                     guard let navigationController = presenter.navigationController else {

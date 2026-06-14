@@ -132,6 +132,8 @@
 "bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";
 "bookmarks.sync.action" = "تسجيل الدخول";
 
+"bookmarks.highlights" = "التمييزات";
+
 // MARK: - Notes
 
 "notes.no-data.title" = "إضافة آيات مرجعية...";
@@ -164,6 +166,14 @@
 "ayah.menu.edit-note" = "تحرير الملاحظة";
 "ayah.menu.delete-note" = "حذف الملاحظة";
 "ayah.menu.delete-highlight" = "حذف التحديد";
+
+// MARK: - Highlights
+
+"highlight.color.red" = "أحمر";
+"highlight.color.green" = "أخضر";
+"highlight.color.blue" = "أزرق";
+"highlight.color.yellow" = "أصفر";
+"highlight.color.purple" = "بنفسجي";
 
 // MARK: - Reading Selector
 
@@ -248,13 +258,6 @@
 "new.library_navigation" = "التنقل:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* قم بترتيب السور والأجزاء على الصفحة الرئيسية، وعرض أرقام السور حتى تتمكن من الانتقال إلى ما تحتاجه بشكل أسرع - بفضل @yismailuofa.";
-
-"bookmarks.collections" = "المجموعات";
-"bookmarks.collections.add" = "إضافة مجموعة";
-"bookmarks.collections.edit" = "تحرير المجموعات";
-"bookmarks.collections.new.placeholder" = "اسم المجموعة";
-"bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
-"bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم إشاراتك المرجعية للآيات.";
 
 "notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";
 "notes.minimum-length.alert.body" = "يجب أن تكون الملاحظة %d أحرف على الأقل.";

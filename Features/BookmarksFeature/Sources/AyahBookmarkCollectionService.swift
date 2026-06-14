@@ -83,6 +83,48 @@
             try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
         }
 
+        public func setAyahBookmarks(
+            _ ayahs: [AyahNumber],
+            toCollectionNamed targetCollectionName: String,
+            removingFromCollectionNames collectionNames: [String]
+        ) async throws {
+            let collections = try await collectionsFirstValue()
+            let targetCollection = try await collection(named: targetCollectionName, in: collections)
+
+            let targetAyahs = Set(
+                targetCollection.bookmarks
+                    .filter { ayahs.contains($0.ayah) }
+                    .map(\.ayah)
+            )
+
+            for collection in collections where collectionNames.contains(collection.collection.name) {
+                for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
+                    if collection.collection.localId != targetCollection.collection.localId {
+                        try await removeBookmarkFromCollection(bookmark)
+                    }
+                }
+            }
+
+            for ayah in ayahs where !targetAyahs.contains(ayah) {
+                try await addAyahBookmarkToCollection(
+                    collectionLocalId: targetCollection.collection.localId,
+                    ayah: ayah
+                )
+            }
+        }
+
+        public func removeAyahBookmarks(
+            _ ayahs: [AyahNumber],
+            fromCollectionNames collectionNames: [String]
+        ) async throws {
+            let collections = try await collectionsFirstValue()
+            for collection in collections where collectionNames.contains(collection.collection.name) {
+                for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
+                    try await removeBookmarkFromCollection(bookmark)
+                }
+            }
+        }
+
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
             let readingPreferences = readingPreferences
             let sequence = syncService.collectionsWithBookmarksSequence()
@@ -122,6 +164,29 @@
 
             return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
         }
+
+        private func collectionsFirstValue() async throws -> [AyahBookmarkCollection] {
+            var iterator = collectionsSequence().makeAsyncIterator()
+            return try await iterator.next() ?? []
+        }
+
+        private func collection(named name: String, in collections: [AyahBookmarkCollection]) async throws -> AyahBookmarkCollection {
+            if let collection = collections.first(where: { $0.collection.name == name }) {
+                return collection
+            }
+
+            try await createCollection(named: name)
+
+            let updatedCollections = try await collectionsFirstValue()
+            guard let collection = updatedCollections.first(where: { $0.collection.name == name }) else {
+                throw AyahBookmarkCollectionServiceError.collectionUnavailable
+            }
+            return collection
+        }
+    }
+
+    private enum AyahBookmarkCollectionServiceError: Error {
+        case collectionUnavailable
     }
 
 #endif

@@ -11,7 +11,7 @@ import QuranKit
 public struct Note: Equatable {
     // MARK: Lifecycle
 
-    public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: Color) {
+    public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: HighlightColor) {
         self.verses = verses
         self.modifiedDate = modifiedDate
         self.color = color
@@ -20,17 +20,9 @@ public struct Note: Equatable {
 
     // MARK: Public
 
-    public enum Color: Int {
-        case red
-        case green
-        case blue
-        case yellow
-        case purple
-    }
-
     public let verses: Set<AyahNumber>
     public let modifiedDate: Date
-    public let color: Color
+    public let color: HighlightColor
     public let note: String?
 
     public var firstVerse: AyahNumber {

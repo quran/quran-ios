@@ -113,6 +113,10 @@
 "audio.repetition-delay.5s" = "٥ث";
 "audio.repetition-delay.10s" = "١٠ث";
 
+"audio.verse-delay" = "التأخير بين الآيات";
+"audio.verse-delay.none" = "بدون تأخير";
+"audio.verse-delay.description" = "الانتظار جزءًا من مدة كل آية قبل تشغيل الآية التالية، بما يتناسب مع الآية التي تُليت للتو. مفيد للحفظ.";
+
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "إضافة الإشارات المرجعية...";

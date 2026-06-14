@@ -118,6 +118,9 @@
 "audio.streaming.description" = "Saves disk space by streaming audio, but requires an internet connection.";
 "audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
 
+"audio.verse-delay" = "Delay Between Verses";
+"audio.verse-delay.none" = "No delay";
+"audio.verse-delay.description" = "Wait a portion of each verse's length before playing the next one, based on the verse just recited. Helpful for memorization.";
 "audio.repetition-delay" = "Pause Between Repetitions (seconds)";
 "audio.repetition-delay.none" = "0s";
 "audio.repetition-delay.1s" = "1s";

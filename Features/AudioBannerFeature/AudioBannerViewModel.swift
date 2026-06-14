@@ -66,6 +66,7 @@ public final class AudioBannerViewModel: ObservableObject {
         setUpRemoteCommandHandler()
 
         AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
+        AudioPreferences.shared.$verseDelay.assign(to: &$verseDelay)
     }
 
     // MARK: Public
@@ -143,6 +144,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     private var verseRuns: Runs = .one
     private var listRuns: Runs = .one
+    @Published private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
@@ -206,7 +208,7 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
     }
 
-    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, repetitionDelay: RepetitionDelay = .oneSecond) {
+    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = AudioPreferences.shared.verseDelay, repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay) {
         guard let selectedReciter else {
             return
         }
@@ -267,6 +269,7 @@ public final class AudioBannerViewModel: ObservableObject {
                     rate: playbackRate,
                     from: from, to: end,
                     verseRuns: verseRuns, listRuns: listRuns,
+                    verseDelay: verseDelay,
                     repetitionDelay: repetitionDelay,
                     streaming: streaming
                 )
@@ -523,6 +526,7 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             end: audioRange.end,
             verseRuns: verseRuns,
             listRuns: listRuns,
+            verseDelay: verseDelay,
             repetitionDelay: repetitionDelay
         )
     }
@@ -543,8 +547,16 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
     public func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
         logger.info("AudioBanner: playing advanced audio options \(newOptions)")
         selectReciter(newOptions.reciter)
+        AudioPreferences.shared.verseDelay = newOptions.verseDelay
         AudioPreferences.shared.repetitionDelay = newOptions.repetitionDelay
-        play(from: newOptions.start, to: newOptions.end, verseRuns: newOptions.verseRuns, listRuns: newOptions.listRuns, repetitionDelay: newOptions.repetitionDelay)
+        play(
+            from: newOptions.start,
+            to: newOptions.end,
+            verseRuns: newOptions.verseRuns,
+            listRuns: newOptions.listRuns,
+            verseDelay: newOptions.verseDelay,
+            repetitionDelay: newOptions.repetitionDelay
+        )
     }
 
     public func dismissAudioOptions() {

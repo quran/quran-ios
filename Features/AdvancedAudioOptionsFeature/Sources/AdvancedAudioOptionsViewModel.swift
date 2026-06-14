@@ -37,6 +37,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         toVerse = options.end
         verseRuns = options.verseRuns
         listRuns = options.listRuns
+        verseDelay = options.verseDelay
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
         endAt = Self.deduceEndAt(from: options.start, to: options.end)
@@ -56,6 +57,10 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var reciter: Reciter
     @Published var endAt: EndAtChoice
     @Published var playbackRate: Float
+
+    @Published var verseDelay: VerseDelay {
+        didSet { AudioPreferences.shared.verseDelay = verseDelay }
+    }
 
     var suras: [Sura] {
         options.start.quran.suras
@@ -131,6 +136,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
             end: toVerse,
             verseRuns: verseRuns,
             listRuns: listRuns,
+            verseDelay: verseDelay,
             repetitionDelay: repetitionDelay
         )
     }

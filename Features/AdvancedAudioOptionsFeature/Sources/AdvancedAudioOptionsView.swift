@@ -37,6 +37,7 @@ private struct AdvancedAudioOptionsRootView: View {
             endAt: $viewModel.endAt,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
+            verseDelay: $viewModel.verseDelay,
             repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
             dismiss: { viewModel.dismiss() },
@@ -59,6 +60,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var endAt: EndAtChoice
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
+    @Binding var verseDelay: VerseDelay
     @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
     let dismiss: @MainActor @Sendable () -> Void
@@ -107,6 +109,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 listRuns: $listRuns,
                 repetitionDelay: $repetitionDelay
             )
+            VerseDelaySection(verseDelay: $verseDelay)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -210,6 +213,30 @@ private struct PlaySetChoicesSection: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)
+        }
+    }
+}
+
+private struct VerseDelaySection: View {
+    @Binding var verseDelay: VerseDelay
+
+    var body: some View {
+        Section(
+            header: Text(l("audio.verse-delay")),
+            footer: Text(l("audio.verse-delay.description"))
+        ) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(VerseDelay.sorted, id: \.self) { delay in
+                        SpeedPill(
+                            label: delay.localizedDescription,
+                            isSelected: delay == verseDelay
+                        ) {
+                            verseDelay = delay
+                        }
+                    }
+                }
+            }
         }
     }
 }

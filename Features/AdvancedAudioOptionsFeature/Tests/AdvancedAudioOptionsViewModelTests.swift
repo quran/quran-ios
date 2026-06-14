@@ -144,6 +144,34 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(Runs.five.localizedDescription, "5×")
     }
 
+    // MARK: - Verse delay
+
+    func test_init_seedsVerseDelay_fromOptions() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse, verseDelay: .half)
+
+        XCTAssertEqual(sut.verseDelay, .half)
+    }
+
+    func test_init_defaultsVerseDelay_toNone() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        XCTAssertEqual(sut.verseDelay, .none)
+    }
+
+    func test_play_propagatesSelectedVerseDelay_toListener() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+        let listener = ListenerSpy()
+        sut.listener = listener
+
+        sut.verseDelay = .threeQuarters
+        sut.play()
+
+        XCTAssertEqual(listener.updatedOptions?.verseDelay, .threeQuarters)
+    }
+
     // MARK: - RepetitionDelay
 
     func test_repetitionDelaySorted_matchesExpectedOrder() {
@@ -173,14 +201,15 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     private let quran = Quran.hafsMadani1405
 
-    private func makeSUT(start: AyahNumber, end: AyahNumber) -> AdvancedAudioOptionsViewModel {
+    private func makeSUT(start: AyahNumber, end: AyahNumber, verseDelay: VerseDelay = .none) -> AdvancedAudioOptionsViewModel {
         AdvancedAudioOptionsViewModel(
             options: AdvancedAudioOptions(
                 reciter: stubReciter(),
                 start: start,
                 end: end,
                 verseRuns: .one,
-                listRuns: .one
+                listRuns: .one,
+                verseDelay: verseDelay
             ),
             reciterListBuilder: ReciterListBuilder()
         )
@@ -196,5 +225,19 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
             hasGaplessAlternative: false,
             category: .arabic
         )
+    }
+}
+
+@MainActor
+private final class ListenerSpy: AdvancedAudioOptionsListener {
+    private(set) var updatedOptions: AdvancedAudioOptions?
+    private(set) var didDismiss = false
+
+    func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        updatedOptions = newOptions
+    }
+
+    func dismissAudioOptions() {
+        didDismiss = true
     }
 }

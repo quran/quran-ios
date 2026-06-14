@@ -156,6 +156,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "ئاۋاز قويۇش ۋاقتىدا ئاخىرىغىچە قويۇلىدۇ";
 
+"audio.verse-delay" = "ئايەتلەر ئارىسىدىكى كېچىكىش";
+"audio.verse-delay.none" = "كېچىكىش يوق";
+"audio.verse-delay.description" = "كېيىنكى ئايەتنى قويۇشتىن ئاۋۋال، يېڭى ئوقۇلغان ئايەتنىڭ ئۇزۇنلۇقىنىڭ بىر قىسمى كۈتىدۇ. ياد ئېلىشقا پايدىلىق.";
+
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

@@ -1,0 +1,53 @@
+//
+//  VerseDelay.swift
+//  QueuePlayer
+//
+//  Created by Abdirizak Hassan on 6/5/26.
+//  Copyright © 2026 Abdirizak Hassan. All rights reserved.
+//
+
+/// A delay inserted between verse playbacks, expressed as a multiplier of the
+/// duration of the verse that was just recited.
+///
+/// e.g. if a verse took 8 seconds to recite and `.half` (0.5×) is selected, the
+/// player waits 4 seconds before starting the next verse. The delay is applied
+/// between every verse, including repeated playbacks of the same verse.
+// NOTE: Raw values are persisted in preferences, so only ever append new cases
+// at the end — never reorder or renumber existing ones. Cases are declared in
+// ascending multiplier order, which `sorted` relies on for display.
+public enum VerseDelay: Int, Hashable, Sendable, CaseIterable {
+    case none
+    case quarter
+    case half
+    case threeQuarters
+    case full
+    case oneAndQuarter
+    case oneAndHalf
+    case oneAndThreeQuarters
+    case double
+    case twoAndQuarter
+    case twoAndHalf
+    case twoAndThreeQuarters
+    case triple
+
+    // MARK: Public
+
+    /// The multiplier applied to the recited verse's duration to get the delay.
+    public var multiplier: Double {
+        switch self {
+        case .none: return 0
+        case .quarter: return 0.25
+        case .half: return 0.5
+        case .threeQuarters: return 0.75
+        case .full: return 1
+        case .oneAndQuarter: return 1.25
+        case .oneAndHalf: return 1.5
+        case .oneAndThreeQuarters: return 1.75
+        case .double: return 2
+        case .twoAndQuarter: return 2.25
+        case .twoAndHalf: return 2.5
+        case .twoAndThreeQuarters: return 2.75
+        case .triple: return 3
+        }
+    }
+}

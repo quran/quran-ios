@@ -20,10 +20,6 @@ final class VerseDelayTests: XCTestCase {
         XCTAssertEqual(VerseDelay.oneAndHalf.multiplier, 1.5)
         XCTAssertEqual(VerseDelay.oneAndThreeQuarters.multiplier, 1.75)
         XCTAssertEqual(VerseDelay.double.multiplier, 2)
-        XCTAssertEqual(VerseDelay.twoAndQuarter.multiplier, 2.25)
-        XCTAssertEqual(VerseDelay.twoAndHalf.multiplier, 2.5)
-        XCTAssertEqual(VerseDelay.twoAndThreeQuarters.multiplier, 2.75)
-        XCTAssertEqual(VerseDelay.triple.multiplier, 3)
     }
 
     func test_none_isTheDefaultAndHasNoDelay() {
@@ -35,5 +31,10 @@ final class VerseDelayTests: XCTestCase {
     func test_allCases_areOrderedByIncreasingMultiplier() {
         let multipliers = VerseDelay.allCases.map(\.multiplier)
         XCTAssertEqual(multipliers, multipliers.sorted())
+    }
+
+    func test_allCases_areCappedAtDoubleDelay() {
+        XCTAssertEqual(VerseDelay.allCases.last, .double)
+        XCTAssertTrue(VerseDelay.allCases.allSatisfy { $0.multiplier <= 2 })
     }
 }

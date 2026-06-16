@@ -9,7 +9,7 @@ import QueuePlayer
 
 extension RepetitionDelay {
     static var sorted: [RepetitionDelay] {
-        [.none, .oneSecond, .twoSeconds, .threeSeconds, .fiveSeconds, .tenSeconds]
+        RepetitionDelay.allCases.sorted()
     }
 
     var localizedDescription: String {

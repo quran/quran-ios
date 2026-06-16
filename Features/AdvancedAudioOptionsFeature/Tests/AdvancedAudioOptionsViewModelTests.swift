@@ -182,6 +182,13 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(RepetitionDelay.sorted, [.none, .oneSecond, .twoSeconds, .threeSeconds, .fiveSeconds, .tenSeconds])
     }
 
+    func test_repetitionDelayComparable_sortsByIncreasingSeconds() {
+        let unorderedDelays: [RepetitionDelay] = [.fiveSeconds, .none, .tenSeconds, .twoSeconds, .oneSecond, .threeSeconds]
+        let seconds = unorderedDelays.sorted().map(\.seconds)
+
+        XCTAssertEqual(seconds, seconds.sorted())
+    }
+
     func test_repetitionDelaySeconds_matchesExpectedValues() {
         XCTAssertEqual(RepetitionDelay.none.seconds, 0)
         XCTAssertEqual(RepetitionDelay.oneSecond.seconds, 1)

@@ -253,7 +253,7 @@ private struct RunsMenuPicker: View {
         } label: {
             HStack {
                 Text(l("audio.repeat-count"))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Color(.label))
                 Spacer()
                 Text(runs.localizedDescription)
                     .foregroundStyle(.secondary)

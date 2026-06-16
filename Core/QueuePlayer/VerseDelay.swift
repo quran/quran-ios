@@ -14,8 +14,9 @@
 /// between every verse, including repeated playbacks of the same verse.
 // NOTE: Raw values are persisted in preferences, so only ever append new cases
 // at the end — never reorder or renumber existing ones. Cases are declared in
-// ascending multiplier order, which `sorted` relies on for display.
-public enum VerseDelay: Int, Hashable, Sendable, CaseIterable {
+// ascending multiplier order for readability, but display sorting should use
+// `Comparable` so future appended cases can still appear in multiplier order.
+public enum VerseDelay: Int, Hashable, Sendable, CaseIterable, Comparable {
     case none
     case quarter
     case half
@@ -41,5 +42,13 @@ public enum VerseDelay: Int, Hashable, Sendable, CaseIterable {
         case .oneAndThreeQuarters: return 1.75
         case .double: return 2
         }
+    }
+
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        if lhs.multiplier == rhs.multiplier {
+            return lhs.rawValue < rhs.rawValue
+        }
+
+        return lhs.multiplier < rhs.multiplier
     }
 }

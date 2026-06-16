@@ -12,7 +12,7 @@ import QueuePlayer
 
 extension VerseDelay {
     static var sorted: [VerseDelay] {
-        VerseDelay.allCases
+        VerseDelay.allCases.sorted()
     }
 
     var localizedDescription: String {

@@ -28,8 +28,10 @@ final class VerseDelayTests: XCTestCase {
         XCTAssertEqual(VerseDelay.none.rawValue, 0)
     }
 
-    func test_allCases_areOrderedByIncreasingMultiplier() {
-        let multipliers = VerseDelay.allCases.map(\.multiplier)
+    func test_comparable_sortsByIncreasingMultiplier() {
+        let unorderedDelays: [VerseDelay] = [.full, .none, .double, .half, .quarter, .oneAndHalf, .threeQuarters, .oneAndQuarter, .oneAndThreeQuarters]
+        let multipliers = unorderedDelays.sorted().map(\.multiplier)
+
         XCTAssertEqual(multipliers, multipliers.sorted())
     }
 

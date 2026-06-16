@@ -107,6 +107,7 @@
 "audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
 "audio.delay.off" = "إيقاف";
 "audio.repetition-delay" = "مدة الإيقاف بين التكرارات (بالثواني)";
+"audio.repetition-delay.description" = "يحدد مدة التوقف قبل بدء التكرار التالي.";
 "audio.repetition-delay.1s" = "١ث";
 "audio.repetition-delay.2s" = "٢ث";
 "audio.repetition-delay.3s" = "٣ث";

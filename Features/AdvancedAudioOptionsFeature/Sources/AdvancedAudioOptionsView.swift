@@ -228,6 +228,10 @@ private struct PlaySetChoicesSection: View {
                 ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                     $0.localizedDescription
                 }
+
+                Text(l("audio.repetition-delay.description"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)

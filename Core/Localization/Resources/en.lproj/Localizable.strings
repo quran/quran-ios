@@ -122,6 +122,7 @@
 "audio.verse-delay" = "Pause After Each Verse";
 "audio.verse-delay.description" = "Choose how long to pause after each verse. 1× waits about as long as the verse took to play, giving you time to repeat or memorize before continuing.";
 "audio.repetition-delay" = "Pause Between Repetitions (seconds)";
+"audio.repetition-delay.description" = "Sets how long to pause before the next repetition starts.";
 "audio.repetition-delay.1s" = "1s";
 "audio.repetition-delay.2s" = "2s";
 "audio.repetition-delay.3s" = "3s";

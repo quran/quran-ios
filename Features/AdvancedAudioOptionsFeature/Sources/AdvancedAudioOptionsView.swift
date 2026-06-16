@@ -251,11 +251,11 @@ private struct RunsMenuPicker: View {
 
             Divider()
 
-            ForEach(RunsMenuOption.finiteOptions, id: \.self) { option in
+            ForEach(1 ... 100, id: \.self) { count in
                 Button {
-                    runs = option.runs
+                    runs = .finite(count)
                 } label: {
-                    Text(option.localizedDescription)
+                    Text(Runs.finite(count).localizedDescription)
                 }
             }
         } label: {
@@ -270,26 +270,6 @@ private struct RunsMenuPicker: View {
                     .foregroundStyle(.tertiary)
             }
             .contentShape(Rectangle())
-        }
-    }
-}
-
-private enum RunsMenuOption: Hashable {
-    case finite(Int)
-
-    static var finiteOptions: [RunsMenuOption] {
-        (1 ... 100).map(RunsMenuOption.finite)
-    }
-
-    var runs: Runs {
-        switch self {
-        case .finite(let count): return .finite(count)
-        }
-    }
-
-    var localizedDescription: String {
-        switch self {
-        case .finite(let count): return Runs.finite(count).localizedDescription
         }
     }
 }

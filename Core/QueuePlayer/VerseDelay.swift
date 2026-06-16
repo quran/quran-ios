@@ -22,9 +22,6 @@ public enum VerseDelay: Int, Hashable, Sendable, CaseIterable, Comparable {
     case half
     case threeQuarters
     case full
-    case oneAndQuarter
-    case oneAndHalf
-    case oneAndThreeQuarters
     case double
 
     // MARK: Public
@@ -37,9 +34,6 @@ public enum VerseDelay: Int, Hashable, Sendable, CaseIterable, Comparable {
         case .half: return 0.5
         case .threeQuarters: return 0.75
         case .full: return 1
-        case .oneAndQuarter: return 1.25
-        case .oneAndHalf: return 1.5
-        case .oneAndThreeQuarters: return 1.75
         case .double: return 2
         }
     }

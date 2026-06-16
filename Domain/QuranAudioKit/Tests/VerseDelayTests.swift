@@ -16,9 +16,6 @@ final class VerseDelayTests: XCTestCase {
         XCTAssertEqual(VerseDelay.half.multiplier, 0.5)
         XCTAssertEqual(VerseDelay.threeQuarters.multiplier, 0.75)
         XCTAssertEqual(VerseDelay.full.multiplier, 1)
-        XCTAssertEqual(VerseDelay.oneAndQuarter.multiplier, 1.25)
-        XCTAssertEqual(VerseDelay.oneAndHalf.multiplier, 1.5)
-        XCTAssertEqual(VerseDelay.oneAndThreeQuarters.multiplier, 1.75)
         XCTAssertEqual(VerseDelay.double.multiplier, 2)
     }
 
@@ -29,7 +26,7 @@ final class VerseDelayTests: XCTestCase {
     }
 
     func test_comparable_sortsByIncreasingMultiplier() {
-        let unorderedDelays: [VerseDelay] = [.full, .none, .double, .half, .quarter, .oneAndHalf, .threeQuarters, .oneAndQuarter, .oneAndThreeQuarters]
+        let unorderedDelays: [VerseDelay] = [.full, .none, .double, .half, .quarter, .threeQuarters]
         let multipliers = unorderedDelays.sorted().map(\.multiplier)
 
         XCTAssertEqual(multipliers, multipliers.sorted())

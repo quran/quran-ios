@@ -243,7 +243,15 @@ private struct RunsMenuPicker: View {
 
     var body: some View {
         Menu {
-            ForEach(RunsMenuOption.allCases, id: \.self) { option in
+            Button {
+                runs = .indefinite
+            } label: {
+                Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
+            }
+
+            Divider()
+
+            ForEach(RunsMenuOption.finiteOptions, id: \.self) { option in
                 Button {
                     runs = option.runs
                 } label: {
@@ -283,16 +291,14 @@ private struct SegmentedChoicesPicker<Item: Hashable>: View {
 }
 
 private enum RunsMenuOption: Hashable {
-    case loop
     case finite(Int)
 
-    static var allCases: [RunsMenuOption] {
-        [.loop] + (1 ... 100).map(RunsMenuOption.finite)
+    static var finiteOptions: [RunsMenuOption] {
+        (1 ... 100).map(RunsMenuOption.finite)
     }
 
     var runs: Runs {
         switch self {
-        case .loop: return .indefinite
         case .finite(1): return .one
         case .finite(2): return .two
         case .finite(3): return .three
@@ -304,7 +310,6 @@ private enum RunsMenuOption: Hashable {
 
     var localizedDescription: String {
         switch self {
-        case .loop: return Runs.indefinite.localizedDescription
         case .finite(let n): return Runs.custom(n).localizedDescription
         }
     }

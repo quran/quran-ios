@@ -194,7 +194,7 @@ private struct PlayEachVerseSection: View {
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                PillChoicesRow(items: VerseDelay.sorted, selection: $verseDelay) {
+                SegmentedChoicesPicker(title: l("audio.verse-delay"), items: VerseDelay.sorted, selection: $verseDelay) {
                     $0.localizedDescription
                 }
 
@@ -221,7 +221,7 @@ private struct PlaySetChoicesSection: View {
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                PillChoicesRow(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+                SegmentedChoicesPicker(title: l("audio.repetition-delay"), items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                     $0.localizedDescription
                 }
 
@@ -263,6 +263,22 @@ private struct RunsMenuPicker: View {
             }
             .contentShape(Rectangle())
         }
+    }
+}
+
+private struct SegmentedChoicesPicker<Item: Hashable>: View {
+    let title: String
+    let items: [Item]
+    @Binding var selection: Item
+    let label: (Item) -> String
+
+    var body: some View {
+        Picker(title, selection: $selection) {
+            ForEach(items, id: \.self) { item in
+                Text(label(item)).tag(item)
+            }
+        }
+        .pickerStyle(.segmented)
     }
 }
 

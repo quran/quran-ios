@@ -66,7 +66,6 @@ public final class AudioBannerViewModel: ObservableObject {
         setUpRemoteCommandHandler()
 
         AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
-        AudioPreferences.shared.$verseDelay.assign(to: &$verseDelay)
     }
 
     // MARK: Public
@@ -74,7 +73,15 @@ public final class AudioBannerViewModel: ObservableObject {
     public func play(from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {
         logger.info("AudioBanner: playing from \(from) to \(String(describing: to))")
         analytics.playFrom(menu: true)
-        play(from: from, to: to, verseRuns: .one, listRuns: repeatVerses ? .indefinite : .one)
+        play(
+            from: from,
+            to: to,
+            verseRuns: .one,
+            listRuns: repeatVerses ? .indefinite : .one,
+            playbackRate: playbackRate,
+            verseDelay: AudioPreferences.shared.verseDelay,
+            repetitionDelay: AudioPreferences.shared.repetitionDelay
+        )
     }
 
     // MARK: Internal
@@ -144,7 +151,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     private var verseRuns: Runs = .one
     private var listRuns: Runs = .one
-    @Published private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
+    private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
@@ -198,7 +205,15 @@ public final class AudioBannerViewModel: ObservableObject {
 
         // start downloading & playing
         analytics.playFrom(menu: false)
-        play(from: currentPage.firstVerse, to: nil, verseRuns: .one, listRuns: .one)
+        play(
+            from: currentPage.firstVerse,
+            to: nil,
+            verseRuns: .one,
+            listRuns: .one,
+            playbackRate: playbackRate,
+            verseDelay: AudioPreferences.shared.verseDelay,
+            repetitionDelay: AudioPreferences.shared.repetitionDelay
+        )
     }
 
     private func setAudioRangeForCurrentPage() {
@@ -208,7 +223,15 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
     }
 
-    private func play(from: AyahNumber, to: AyahNumber?, verseRuns: Runs, listRuns: Runs, verseDelay: VerseDelay = AudioPreferences.shared.verseDelay, repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay) {
+    private func play(
+        from: AyahNumber,
+        to: AyahNumber?,
+        verseRuns: Runs,
+        listRuns: Runs,
+        playbackRate: Float,
+        verseDelay: VerseDelay,
+        repetitionDelay: RepetitionDelay
+    ) {
         guard let selectedReciter else {
             return
         }
@@ -217,6 +240,8 @@ public final class AudioBannerViewModel: ObservableObject {
         audioRange = (start: from, end: end)
         self.verseRuns = verseRuns
         self.listRuns = listRuns
+        self.playbackRate = playbackRate
+        self.verseDelay = verseDelay
         self.repetitionDelay = repetitionDelay
 
         recentRecitersService.updateRecentRecitersList(selectedReciter)
@@ -554,6 +579,7 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             to: newOptions.end,
             verseRuns: newOptions.verseRuns,
             listRuns: newOptions.listRuns,
+            playbackRate: playbackRate,
             verseDelay: newOptions.verseDelay,
             repetitionDelay: newOptions.repetitionDelay
         )

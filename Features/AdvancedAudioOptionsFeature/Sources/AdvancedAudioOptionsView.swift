@@ -274,22 +274,6 @@ private struct RunsMenuPicker: View {
     }
 }
 
-private struct SegmentedChoicesPicker<Item: Hashable>: View {
-    let title: String
-    let items: [Item]
-    @Binding var selection: Item
-    let label: (Item) -> String
-
-    var body: some View {
-        Picker(title, selection: $selection) {
-            ForEach(items, id: \.self) { item in
-                Text(label(item)).tag(item)
-            }
-        }
-        .pickerStyle(.segmented)
-    }
-}
-
 private enum RunsMenuOption: Hashable {
     case finite(Int)
 

@@ -104,12 +104,14 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 onSelect: updatePlaybackRate
             )
 
-            RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
+            PlayEachVerseSection(
+                verseRuns: $verseRuns,
+                verseDelay: $verseDelay
+            )
             PlaySetChoicesSection(
                 listRuns: $listRuns,
                 repetitionDelay: $repetitionDelay
             )
-            VerseDelaySection(verseDelay: $verseDelay)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -179,15 +181,31 @@ private struct PlaybackSpeedSection: View {
     }
 }
 
-private struct RunsChoicesSection: View {
-    let title: String
-    @Binding var runs: Runs
+private struct PlayEachVerseSection: View {
+    @Binding var verseRuns: Runs
+    @Binding var verseDelay: VerseDelay
 
     var body: some View {
-        Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $runs) {
+        Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
+            ChoicesView(items: Runs.sorted, selection: $verseRuns) {
                 $0.localizedDescription
             }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(l("audio.verse-delay"))
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                ChoicesView(items: VerseDelay.sorted, selection: $verseDelay) {
+                    $0.localizedDescription
+                }
+
+                Text(l("audio.verse-delay.description"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 6)
         }
     }
 }
@@ -213,30 +231,6 @@ private struct PlaySetChoicesSection: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)
-        }
-    }
-}
-
-private struct VerseDelaySection: View {
-    @Binding var verseDelay: VerseDelay
-
-    var body: some View {
-        Section(
-            header: Text(l("audio.verse-delay")),
-            footer: Text(l("audio.verse-delay.description"))
-        ) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(VerseDelay.sorted, id: \.self) { delay in
-                        SpeedPill(
-                            label: delay.localizedDescription,
-                            isSelected: delay == verseDelay
-                        ) {
-                            verseDelay = delay
-                        }
-                    }
-                }
-            }
         }
     }
 }

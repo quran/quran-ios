@@ -14,7 +14,7 @@ extension RepetitionDelay {
 
     var localizedDescription: String {
         switch self {
-        case .none: return l("audio.repetition-delay.none")
+        case .none: return l("audio.delay.off")
         case .oneSecond: return l("audio.repetition-delay.1s")
         case .twoSeconds: return l("audio.repetition-delay.2s")
         case .threeSeconds: return l("audio.repetition-delay.3s")

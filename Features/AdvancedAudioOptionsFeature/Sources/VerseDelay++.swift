@@ -18,7 +18,7 @@ extension VerseDelay {
     var localizedDescription: String {
         switch self {
         case .none:
-            return l("audio.verse-delay.none")
+            return l("audio.delay.off")
         default:
             return Self.multiplierFormatter.format(multiplier) + "×"
         }

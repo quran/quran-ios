@@ -177,7 +177,7 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
     }
 
     func test_verseDelaySorted_matchesExpectedOrder() {
-        XCTAssertEqual(VerseDelay.sorted, [.none, .quarter, .half, .threeQuarters, .full, .oneAndQuarter, .oneAndHalf, .oneAndThreeQuarters, .double])
+        XCTAssertEqual(VerseDelay.sorted, [.none, .quarter, .half, .threeQuarters, .full, .double])
     }
 
     // MARK: - RepetitionDelay

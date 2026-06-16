@@ -92,7 +92,7 @@ struct GaplessAudioRequestBuilder: QuranAudioRequestBuilder {
                 var startTimeSeconds = verse.time.seconds
 
                 // Do not include the basmalah when the first verse is repeated
-                if offset == 0 && verse.ayah.ayah == 1 && (requestRuns == .one || !ayahs.isEmpty) {
+                if offset == 0 && verse.ayah.ayah == 1 && (requestRuns == .finite(1) || !ayahs.isEmpty) {
                     startTimeSeconds = 0
                 }
 

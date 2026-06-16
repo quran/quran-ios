@@ -18,23 +18,15 @@
 //  GNU General Public License for more details.
 //
 
-public enum Runs: Hashable, Sendable, CaseIterable, Comparable {
-    case one
-    case two
-    case three
-    case four
-    case five
+public enum Runs: Hashable, Sendable, Comparable {
+    case finite(Int)
     case indefinite
 
     // MARK: Internal
 
     var maxRuns: Int {
         switch self {
-        case .one: return 1
-        case .two: return 2
-        case .three: return 3
-        case .four: return 4
-        case .five: return 5
+        case .finite(let count): return count
         case .indefinite: return .max
         }
     }

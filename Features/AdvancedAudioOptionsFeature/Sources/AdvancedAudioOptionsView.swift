@@ -168,7 +168,7 @@ private struct PlaybackSpeedSection: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(PlaybackSpeed.supportedRates, id: \.self) { value in
-                        SpeedPill(
+                        ChoicePill(
                             label: PlaybackSpeed.formatted(value),
                             isSelected: value == rate
                         ) {
@@ -187,16 +187,14 @@ private struct PlayEachVerseSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $verseRuns) {
-                $0.localizedDescription
-            }
+            RunsMenuPicker(runs: $verseRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.verse-delay"))
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                ChoicesView(items: VerseDelay.sorted, selection: $verseDelay) {
+                SegmentedChoicesPicker(title: l("audio.verse-delay"), items: VerseDelay.sorted, selection: $verseDelay) {
                     $0.localizedDescription
                 }
 
@@ -216,16 +214,14 @@ private struct PlaySetChoicesSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $listRuns) {
-                $0.localizedDescription
-            }
+            RunsMenuPicker(runs: $listRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.repetition-delay"))
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
 
-                ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
+                SegmentedChoicesPicker(title: l("audio.repetition-delay"), items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                     $0.localizedDescription
                 }
 
@@ -235,6 +231,45 @@ private struct PlaySetChoicesSection: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)
+        }
+    }
+}
+
+/// Keeps repeat counts compact in the form while still exposing every supported count.
+private struct RunsMenuPicker: View {
+    // MARK: Internal
+
+    @Binding var runs: Runs
+
+    var body: some View {
+        Menu {
+            Button {
+                runs = .indefinite
+            } label: {
+                Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
+            }
+
+            Divider()
+
+            ForEach(1 ... 100, id: \.self) { count in
+                Button {
+                    runs = .finite(count)
+                } label: {
+                    Text(Runs.finite(count).localizedDescription)
+                }
+            }
+        } label: {
+            HStack {
+                Text(l("audio.repeat-count"))
+                    .foregroundStyle(Color(.label))
+                Spacer()
+                Text(runs.localizedDescription)
+                    .foregroundStyle(.secondary)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .contentShape(Rectangle())
         }
     }
 }
@@ -303,7 +338,25 @@ private struct EndAtRow: View {
 
 // MARK: - Pills
 
-private struct SpeedPill: View {
+private struct PillChoicesRow<Item: Hashable>: View {
+    let items: [Item]
+    @Binding var selection: Item
+    let label: (Item) -> String
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(items, id: \.self) { item in
+                    ChoicePill(label: label(item), isSelected: item == selection) {
+                        selection = item
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct ChoicePill: View {
     let label: String
     let isSelected: Bool
     let action: () -> Void

@@ -106,6 +106,7 @@
 "audio.streaming.description" = "يوفر مساحة التخزين ببث الصوت، لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.download-play-amount.description" = "عند بدء تشغيل الصوت، سيتوقف مع نهاية";
 "audio.delay.off" = "إيقاف";
+"audio.repeat-count" = "عدد مرات التكرار";
 "audio.repetition-delay" = "مدة الإيقاف بين التكرارات (بالثواني)";
 "audio.repetition-delay.description" = "يحدد مدة التوقف قبل بدء التكرار التالي.";
 "audio.repetition-delay.1s" = "١ث";

@@ -132,20 +132,18 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     // MARK: - Runs
 
-    func test_runsSorted_matchesExpectedOrder() {
-        XCTAssertEqual(Runs.sorted, [.one, .two, .three, .four, .five, .indefinite])
-    }
-
     func test_runsComparable_sortsByIncreasingMaxRuns() {
-        XCTAssertEqual([Runs.indefinite, .three, .one, .five, .two, .four].sorted(), [.one, .two, .three, .four, .five, .indefinite])
+        XCTAssertEqual([Runs.indefinite, .finite(3), .finite(1), .finite(5), .finite(2), .finite(4)].sorted(), [.finite(1), .finite(2), .finite(3), .finite(4), .finite(5), .indefinite])
     }
 
     func test_runsLocalizedDescription_finiteValuesFormatLocalizedNumbersWithMultiplicationSign() {
-        XCTAssertEqual(Runs.one.localizedDescription, "1×")
-        XCTAssertEqual(Runs.two.localizedDescription, "2×")
-        XCTAssertEqual(Runs.three.localizedDescription, "3×")
-        XCTAssertEqual(Runs.four.localizedDescription, "4×")
-        XCTAssertEqual(Runs.five.localizedDescription, "5×")
+        XCTAssertEqual(Runs.finite(1).localizedDescription, "1×")
+        XCTAssertEqual(Runs.finite(2).localizedDescription, "2×")
+        XCTAssertEqual(Runs.finite(3).localizedDescription, "3×")
+        XCTAssertEqual(Runs.finite(4).localizedDescription, "4×")
+        XCTAssertEqual(Runs.finite(5).localizedDescription, "5×")
+        XCTAssertEqual(Runs.finite(7).localizedDescription, "7×")
+        XCTAssertEqual(Runs.finite(30).localizedDescription, "30×")
     }
 
     // MARK: - Verse delay
@@ -222,8 +220,8 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
                 reciter: stubReciter(),
                 start: start,
                 end: end,
-                verseRuns: .one,
-                listRuns: .one,
+                verseRuns: .finite(1),
+                listRuns: .finite(1),
                 verseDelay: verseDelay
             ),
             reciterListBuilder: ReciterListBuilder()

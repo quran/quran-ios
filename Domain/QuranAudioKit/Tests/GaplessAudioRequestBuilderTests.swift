@@ -32,8 +32,8 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
             with: reciter,
             from: from,
             to: to,
-            frameRuns: .one,
-            requestRuns: .one,
+            frameRuns: .finite(1),
+            requestRuns: .finite(1),
             streaming: false
         )
         let firstFrame = try XCTUnwrap(audioRequest.getRequest().files.first?.frames.first)
@@ -48,7 +48,7 @@ class GaplessAudioRequestBuilderTests: XCTestCase {
             with: reciter,
             from: from,
             to: to,
-            frameRuns: .one,
+            frameRuns: .finite(1),
             requestRuns: .indefinite,
             streaming: false
         )

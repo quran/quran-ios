@@ -32,8 +32,8 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             with: reciter,
             from: from,
             to: to,
-            frameRuns: .one,
-            requestRuns: .one,
+            frameRuns: .finite(1),
+            requestRuns: .finite(1),
             streaming: false
         )
         let audioRequest = try XCTUnwrap(request as? GappedAudioRequest).request
@@ -51,7 +51,7 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             with: reciter,
             from: from,
             to: to,
-            frameRuns: .one,
+            frameRuns: .finite(1),
             requestRuns: .indefinite,
             streaming: false
         )
@@ -70,7 +70,7 @@ class GappedAudioRequestBuilderTests: XCTestCase {
             with: reciter,
             from: from,
             to: to,
-            frameRuns: .one,
+            frameRuns: .finite(1),
             requestRuns: .indefinite,
             streaming: false
         )

@@ -156,10 +156,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "Ao reproduzir áudio, ele tocará até o final do";
 
-"audio.verse-delay" = "Atraso entre versículos";
-"audio.verse-delay.none" = "Sem atraso";
-"audio.verse-delay.description" = "Aguarda uma fração da duração de cada versículo antes de reproduzir o próximo, com base no versículo recém-recitado. Útil para memorização.";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

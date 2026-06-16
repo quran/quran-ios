@@ -142,10 +142,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "Аудио ойнатқанда соңына дейін ойнатылады";
 
-"audio.verse-delay" = "Аяттар арасындағы кідіріс";
-"audio.verse-delay.none" = "Кідіріссіз";
-"audio.verse-delay.description" = "Келесі аятты ойнатпас бұрын жаңа оқылған аяттың ұзақтығының бір бөлігіне күтеді. Жаттауға пайдалы.";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

@@ -156,10 +156,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "播放音频时，将播放至";
 
-"audio.verse-delay" = "经文之间的延迟";
-"audio.verse-delay.none" = "无延迟";
-"audio.verse-delay.description" = "在播放下一节经文前，按刚诵读的经文时长的一定比例等待。有助于记忆。";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

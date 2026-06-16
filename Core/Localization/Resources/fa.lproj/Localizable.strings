@@ -156,10 +156,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "هنگام پخش صوت، تا انتهای";
 
-"audio.verse-delay" = "تأخیر بین آیات";
-"audio.verse-delay.none" = "بدون تأخیر";
-"audio.verse-delay.description" = "پیش از پخش آیه بعدی، بخشی از مدت هر آیه بر اساس آیه‌ای که هم‌اکنون خوانده شد صبر می‌کند. برای حفظ کردن مفید است.";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

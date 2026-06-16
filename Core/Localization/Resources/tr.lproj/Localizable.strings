@@ -115,10 +115,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "Ses oynatılırken, sonuna kadar oynatılacak";
 
-"audio.verse-delay" = "Ayetler Arası Gecikme";
-"audio.verse-delay.none" = "Gecikme yok";
-"audio.verse-delay.description" = "Bir sonraki ayeti çalmadan önce, az önce okunan ayetin süresinin bir bölümü kadar bekler. Ezberlemek için faydalıdır.";
-
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Ayraçlar ekleniyor...";

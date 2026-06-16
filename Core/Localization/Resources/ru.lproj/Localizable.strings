@@ -156,10 +156,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.download-play-amount.description" = "При воспроизведении аудио оно будет играть до конца";
 
-"audio.verse-delay" = "Задержка между аятами";
-"audio.verse-delay.none" = "Без задержки";
-"audio.verse-delay.description" = "Ждёт часть длительности каждого аята перед воспроизведением следующего, в зависимости от только что прочитанного аята. Полезно для заучивания.";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.

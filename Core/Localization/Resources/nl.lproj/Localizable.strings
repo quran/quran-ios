@@ -106,10 +106,6 @@
 "audio.download-play-amount" = "Downloaden/Afspelen tot";
 "audio.download-play-amount.description" = "Bij het afspelen van audio wordt deze afgespeeld tot het einde van de";
 
-"audio.verse-delay" = "Vertraging tussen verzen";
-"audio.verse-delay.none" = "Geen vertraging";
-"audio.verse-delay.description" = "Wacht een deel van de lengte van elk vers voordat het volgende wordt afgespeeld, gebaseerd op het zojuist gereciteerde vers. Handig voor het memoriseren.";
-
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Bladwijzers toevoegen...";

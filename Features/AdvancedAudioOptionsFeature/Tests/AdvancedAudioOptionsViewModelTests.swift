@@ -136,6 +136,10 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(Runs.sorted, [.one, .two, .three, .four, .five, .indefinite])
     }
 
+    func test_runsComparable_sortsByIncreasingMaxRuns() {
+        XCTAssertEqual([Runs.indefinite, .three, .one, .five, .two, .four].sorted(), [.one, .two, .three, .four, .five, .indefinite])
+    }
+
     func test_runsLocalizedDescription_finiteValuesFormatLocalizedNumbersWithMultiplicationSign() {
         XCTAssertEqual(Runs.one.localizedDescription, "1×")
         XCTAssertEqual(Runs.two.localizedDescription, "2×")
@@ -144,10 +148,49 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(Runs.five.localizedDescription, "5×")
     }
 
+    // MARK: - Verse delay
+
+    func test_init_seedsVerseDelay_fromOptions() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse, verseDelay: .half)
+
+        XCTAssertEqual(sut.verseDelay, .half)
+    }
+
+    func test_init_defaultsVerseDelay_toNone() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        XCTAssertEqual(sut.verseDelay, .none)
+    }
+
+    func test_play_propagatesSelectedVerseDelay_toListener() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+        let listener = ListenerSpy()
+        sut.listener = listener
+
+        sut.verseDelay = .threeQuarters
+        sut.play()
+
+        XCTAssertEqual(listener.updatedOptions?.verseDelay, .threeQuarters)
+    }
+
+    func test_verseDelaySorted_matchesExpectedOrder() {
+        XCTAssertEqual(VerseDelay.sorted, [.none, .quarter, .half, .threeQuarters, .full, .double])
+    }
+
     // MARK: - RepetitionDelay
 
     func test_repetitionDelaySorted_matchesExpectedOrder() {
         XCTAssertEqual(RepetitionDelay.sorted, [.none, .oneSecond, .twoSeconds, .threeSeconds, .fiveSeconds, .tenSeconds])
+    }
+
+    func test_repetitionDelayComparable_sortsByIncreasingSeconds() {
+        let unorderedDelays: [RepetitionDelay] = [.fiveSeconds, .none, .tenSeconds, .twoSeconds, .oneSecond, .threeSeconds]
+        let seconds = unorderedDelays.sorted().map(\.seconds)
+
+        XCTAssertEqual(seconds, seconds.sorted())
     }
 
     func test_repetitionDelaySeconds_matchesExpectedValues() {
@@ -173,14 +216,15 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     private let quran = Quran.hafsMadani1405
 
-    private func makeSUT(start: AyahNumber, end: AyahNumber) -> AdvancedAudioOptionsViewModel {
+    private func makeSUT(start: AyahNumber, end: AyahNumber, verseDelay: VerseDelay = .none) -> AdvancedAudioOptionsViewModel {
         AdvancedAudioOptionsViewModel(
             options: AdvancedAudioOptions(
                 reciter: stubReciter(),
                 start: start,
                 end: end,
                 verseRuns: .one,
-                listRuns: .one
+                listRuns: .one,
+                verseDelay: verseDelay
             ),
             reciterListBuilder: ReciterListBuilder()
         )
@@ -196,5 +240,19 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
             hasGaplessAlternative: false,
             category: .arabic
         )
+    }
+}
+
+@MainActor
+private final class ListenerSpy: AdvancedAudioOptionsListener {
+    private(set) var updatedOptions: AdvancedAudioOptions?
+    private(set) var didDismiss = false
+
+    func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        updatedOptions = newOptions
+    }
+
+    func dismissAudioOptions() {
+        didDismiss = true
     }
 }

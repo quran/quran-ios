@@ -37,6 +37,7 @@ private struct AdvancedAudioOptionsRootView: View {
             endAt: $viewModel.endAt,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
+            verseDelay: $viewModel.verseDelay,
             repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
             dismiss: { viewModel.dismiss() },
@@ -59,6 +60,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var endAt: EndAtChoice
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
+    @Binding var verseDelay: VerseDelay
     @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
     let dismiss: @MainActor @Sendable () -> Void
@@ -102,7 +104,10 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 onSelect: updatePlaybackRate
             )
 
-            RunsChoicesSection(title: lAndroid("play_each_verse"), runs: $verseRuns)
+            PlayEachVerseSection(
+                verseRuns: $verseRuns,
+                verseDelay: $verseDelay
+            )
             PlaySetChoicesSection(
                 listRuns: $listRuns,
                 repetitionDelay: $repetitionDelay
@@ -176,15 +181,31 @@ private struct PlaybackSpeedSection: View {
     }
 }
 
-private struct RunsChoicesSection: View {
-    let title: String
-    @Binding var runs: Runs
+private struct PlayEachVerseSection: View {
+    @Binding var verseRuns: Runs
+    @Binding var verseDelay: VerseDelay
 
     var body: some View {
-        Section(header: Text(title.replacingOccurrences(of: ":", with: ""))) {
-            ChoicesView(items: Runs.sorted, selection: $runs) {
+        Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
+            ChoicesView(items: Runs.sorted, selection: $verseRuns) {
                 $0.localizedDescription
             }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(l("audio.verse-delay"))
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                ChoicesView(items: VerseDelay.sorted, selection: $verseDelay) {
+                    $0.localizedDescription
+                }
+
+                Text(l("audio.verse-delay.description"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 6)
         }
     }
 }
@@ -207,6 +228,10 @@ private struct PlaySetChoicesSection: View {
                 ChoicesView(items: RepetitionDelay.sorted, selection: $repetitionDelay) {
                     $0.localizedDescription
                 }
+
+                Text(l("audio.repetition-delay.description"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 6)

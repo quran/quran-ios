@@ -3,7 +3,7 @@
 //  QueuePlayer
 //
 
-public enum RepetitionDelay: Int, Hashable, Sendable, CaseIterable {
+public enum RepetitionDelay: Int, Hashable, Sendable, CaseIterable, Comparable {
     case none
     case oneSecond
     case twoSeconds
@@ -22,5 +22,13 @@ public enum RepetitionDelay: Int, Hashable, Sendable, CaseIterable {
         case .fiveSeconds: return 5
         case .tenSeconds: return 10
         }
+    }
+
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        if lhs.seconds == rhs.seconds {
+            return lhs.rawValue < rhs.rawValue
+        }
+
+        return lhs.seconds < rhs.seconds
     }
 }

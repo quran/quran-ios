@@ -113,7 +113,7 @@
 "audio.repetition-delay.5s" = "٥ث";
 "audio.repetition-delay.10s" = "١٠ث";
 
-"audio.verse-delay" = "التأخير بين الآيات";
+"audio.verse-delay" = "التوقف بعد كل آية";
 "audio.verse-delay.description" = "اختر مدة التوقف بعد كل آية. عند ١×، يتوقف التشغيل تقريبًا بقدر مدة الآية، مما يمنحك وقتًا للتكرار أو الحفظ قبل المتابعة.";
 
 // MARK: - Bookmarks

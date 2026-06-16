@@ -95,7 +95,7 @@ final class GappedAudioRequestBuilder: QuranAudioRequestBuilder {
             let verses = surasDictionary[sura] ?? []
 
             // add besm Allah for all except Al-Fatihah and At-Tawbah
-            if (requestRuns == .one || !ayahs.isEmpty) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
+            if (requestRuns == .finite(1) || !ayahs.isEmpty) && sura.startsWithBesmAllah && verses[0] == sura.firstVerse {
                 let url = streaming ? reciter.remoteURL(ayah: start.quran.firstVerse) : reciter.localURL(ayah: start.quran.firstVerse).url
                 urls.append(url)
                 ayahs.append(verses[0])

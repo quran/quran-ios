@@ -13,21 +13,8 @@ import QueuePlayer
 extension Runs {
     var localizedDescription: String {
         switch self {
-        case .one, .two, .three, .four, .five: return NumberFormatter.shared.format(count) + "×"
+        case .finite(let count): return NumberFormatter.shared.format(count) + "×"
         case .indefinite: return lAndroid("repeatValues[3]")
-        case .custom(let n): return NumberFormatter.shared.format(n) + "×"
-        }
-    }
-
-    private var count: Int {
-        switch self {
-        case .one: return 1
-        case .two: return 2
-        case .three: return 3
-        case .four: return 4
-        case .five: return 5
-        case .indefinite: preconditionFailure("Indefinite runs do not have a finite count.")
-        case .custom(let n): return n
         }
     }
 }

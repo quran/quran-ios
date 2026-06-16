@@ -299,18 +299,13 @@ private enum RunsMenuOption: Hashable {
 
     var runs: Runs {
         switch self {
-        case .finite(1): return .one
-        case .finite(2): return .two
-        case .finite(3): return .three
-        case .finite(4): return .four
-        case .finite(5): return .five
-        case .finite(let n): return .custom(n)
+        case .finite(let count): return .finite(count)
         }
     }
 
     var localizedDescription: String {
         switch self {
-        case .finite(let n): return Runs.custom(n).localizedDescription
+        case .finite(let count): return Runs.finite(count).localizedDescription
         }
     }
 }

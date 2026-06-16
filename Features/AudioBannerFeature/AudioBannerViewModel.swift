@@ -76,8 +76,8 @@ public final class AudioBannerViewModel: ObservableObject {
         play(
             from: from,
             to: to,
-            verseRuns: .one,
-            listRuns: repeatVerses ? .indefinite : .one,
+            verseRuns: .finite(1),
+            listRuns: repeatVerses ? .indefinite : .finite(1),
             playbackRate: playbackRate,
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay
@@ -149,8 +149,8 @@ public final class AudioBannerViewModel: ObservableObject {
     private let reciterListBuilder: ReciterListBuilder
     private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
 
-    private var verseRuns: Runs = .one
-    private var listRuns: Runs = .one
+    private var verseRuns: Runs = .finite(1)
+    private var listRuns: Runs = .finite(1)
     private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []
@@ -208,8 +208,8 @@ public final class AudioBannerViewModel: ObservableObject {
         play(
             from: currentPage.firstVerse,
             to: nil,
-            verseRuns: .one,
-            listRuns: .one,
+            verseRuns: .finite(1),
+            listRuns: .finite(1),
             playbackRate: playbackRate,
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay

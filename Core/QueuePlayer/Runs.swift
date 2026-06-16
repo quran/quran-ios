@@ -19,25 +19,15 @@
 //
 
 public enum Runs: Hashable, Sendable, Comparable {
-    case one
-    case two
-    case three
-    case four
-    case five
+    case finite(Int)
     case indefinite
-    case custom(Int)
 
     // MARK: Internal
 
     var maxRuns: Int {
         switch self {
-        case .one: return 1
-        case .two: return 2
-        case .three: return 3
-        case .four: return 4
-        case .five: return 5
+        case .finite(let count): return count
         case .indefinite: return .max
-        case .custom(let n): return n
         }
     }
 

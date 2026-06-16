@@ -12,7 +12,7 @@ import QueuePlayer
 
 extension Runs {
     static var sorted: [Runs] {
-        [.one, .two, .three, .four, .five, .indefinite]
+        Runs.allCases.sorted()
     }
 
     var localizedDescription: String {

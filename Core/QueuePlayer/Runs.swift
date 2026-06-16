@@ -18,7 +18,7 @@
 //  GNU General Public License for more details.
 //
 
-public enum Runs: Hashable, Sendable {
+public enum Runs: Hashable, Sendable, CaseIterable, Comparable {
     case one
     case two
     case three
@@ -37,5 +37,9 @@ public enum Runs: Hashable, Sendable {
         case .five: return 5
         case .indefinite: return .max
         }
+    }
+
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.maxRuns < rhs.maxRuns
     }
 }

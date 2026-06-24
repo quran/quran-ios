@@ -54,7 +54,7 @@ public struct AyahMenuView: View {
 
     @State private var state: MenuState = .list
 
-    private var existingHighlightedColor: Note.Color? {
+    private var existingHighlightedColor: HighlightColor? {
         switch dataObject.state {
         case .highlighted, .noted:
             return dataObject.highlightingColor
@@ -322,29 +322,15 @@ private struct MenuGroup<Content: View>: View {
 }
 
 private struct IconCircles: View {
-    @ScaledMetric var trailingPadding = 8
-    @ScaledMetric var purpleOffset = 8
-    @ScaledMetric var blueOffset = 4
-    @ScaledMetric var radius = 1
-
     var body: some View {
-        ZStack {
-            IconCircle(color: .purple)
-                .offset(x: purpleOffset)
-            IconCircle(color: .blue)
-                .offset(x: blueOffset)
-            IconCircle(color: .green)
-        }
-        .compositingGroup()
-        .shadow(color: Color.tertiarySystemGroupedBackground, radius: radius)
-        .padding(.trailing, trailingPadding)
+        HighlightPaletteIcon()
     }
 }
 
 private struct IconCircle: View {
     @ScaledMetric var minLength = 20
 
-    var color: Note.Color
+    var color: HighlightColor
 
     var body: some View {
         ColoredCircle(color: color.color, selected: false, minLength: minLength)
@@ -352,12 +338,12 @@ private struct IconCircle: View {
 }
 
 private struct NoteCircles: View {
-    let selectedColor: Note.Color?
-    let tapped: @Sendable (Note.Color) async -> Void
+    let selectedColor: HighlightColor?
+    let tapped: @Sendable (HighlightColor) async -> Void
 
     var body: some View {
         HStack {
-            ForEach(Note.Color.sortedColors, id: \.self) { color in
+            ForEach(HighlightColor.sortedColors, id: \.self) { color in
                 AsyncButton(
                     action: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }

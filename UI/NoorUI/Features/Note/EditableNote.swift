@@ -11,7 +11,7 @@ import QuranAnnotations
 public class EditableNote: ObservableObject {
     // MARK: Lifecycle
 
-    public init(ayahText: String, modifiedSince: String, selectedColor: Note.Color, note: String) {
+    public init(ayahText: String, modifiedSince: String, selectedColor: HighlightColor, note: String) {
         self.ayahText = ayahText
         self.modifiedSince = modifiedSince
         self.selectedColor = selectedColor
@@ -23,7 +23,7 @@ public class EditableNote: ObservableObject {
 
     public let ayahText: String
     public let modifiedSince: String
-    @Published public internal(set) var selectedColor: Note.Color
+    @Published public internal(set) var selectedColor: HighlightColor
     @Published public internal(set) var note: String
 
     public var notePublisher: AnyPublisher<String, Never> {

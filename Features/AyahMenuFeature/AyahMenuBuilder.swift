@@ -7,6 +7,9 @@
 //
 
 import AppDependencies
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -15,12 +18,22 @@ import UIKit
 public struct AyahMenuInput {
     // MARK: Lifecycle
 
-    public init(sourceView: UIView, pointInView: CGPoint, verses: [AyahNumber], notes: [Note], noteCount: Int = 0) {
+    public init(
+        sourceView: UIView,
+        pointInView: CGPoint,
+        verses: [AyahNumber],
+        notes: [QuranAnnotations.Note],
+        noteCount: Int = 0,
+        highlightVerses: [AyahNumber: HighlightColor] = [:]
+    ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
         self.noteCount = noteCount
+        #if QURAN_SYNC
+            self.highlightVerses = highlightVerses
+        #endif
     }
 
     // MARK: Internal
@@ -28,8 +41,11 @@ public struct AyahMenuInput {
     let sourceView: UIView
     let pointInView: CGPoint
     let verses: [AyahNumber]
-    let notes: [Note]
+    let notes: [QuranAnnotations.Note]
     let noteCount: Int
+    #if QURAN_SYNC
+        let highlightVerses: [AyahNumber: HighlightColor]
+    #endif
 }
 
 @MainActor
@@ -48,16 +64,30 @@ public struct AyahMenuBuilder {
             quranFileURL: container.quranUthmaniV2Database
         )
         let noteService = container.noteService()
-        let viewModel = AyahMenuViewModel(deps: AyahMenuViewModel.Deps(
-            sourceView: input.sourceView,
-            pointInView: input.pointInView,
-            verses: input.verses,
-            notes: input.notes,
-            noteService: noteService,
-            textRetriever: textRetriever,
-            usesSyncedNotes: usesSyncedNotes,
-            noteCount: input.noteCount
-        ))
+        #if QURAN_SYNC
+            let deps = AyahMenuViewModel.Deps(
+                sourceView: input.sourceView,
+                pointInView: input.pointInView,
+                verses: input.verses,
+                notes: input.notes,
+                noteService: noteService,
+                textRetriever: textRetriever,
+                highlightVerses: input.highlightVerses,
+                usesSyncedNotes: usesSyncedNotes,
+                noteCount: input.noteCount,
+                ayahBookmarkCollectionService: container.syncService.map { AyahBookmarkCollectionService(syncService: $0) }
+            )
+        #else
+            let deps = AyahMenuViewModel.Deps(
+                sourceView: input.sourceView,
+                pointInView: input.pointInView,
+                verses: input.verses,
+                notes: input.notes,
+                noteService: noteService,
+                textRetriever: textRetriever
+            )
+        #endif
+        let viewModel = AyahMenuViewModel(deps: deps)
         viewModel.listener = listener
         return AyahMenuViewController(viewModel: viewModel)
     }

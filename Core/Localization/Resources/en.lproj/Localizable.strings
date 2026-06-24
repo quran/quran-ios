@@ -141,6 +141,17 @@
 "bookmarks.sync.body" = "Sign in to Quran.com to keep your bookmarks available across devices.";
 "bookmarks.sync.action" = "Sign In";
 
+"bookmarks.collections" = "Collections";
+"bookmarks.collections.add" = "Add Collection";
+"bookmarks.collections.edit" = "Edit Collections";
+"bookmarks.collections.new.placeholder" = "Collection name";
+"bookmarks.collections.no-data.title" = "No collections yet";
+"bookmarks.collections.no-data.text" = "Create a collection to organize ayah bookmarks.";
+"bookmarks.collections.ayah-count" = "%d ayah bookmarks";
+"bookmarks.collections.ayahs.no-data.title" = "No bookmarks in this collection";
+"bookmarks.collections.ayahs.no-data.text" = "Add ayah bookmarks to see them here.";
+"bookmarks.highlights" = "Highlights";
+
 // MARK: - Notes
 
 "notes.no-data.title" = "Adding Ayah Highlights...";
@@ -173,6 +184,14 @@
 "ayah.menu.edit-note" = "Edit Note";
 "ayah.menu.delete-note" = "Delete Note";
 "ayah.menu.delete-highlight" = "Delete Highlight";
+
+// MARK: - Highlights
+
+"highlight.color.red" = "Red";
+"highlight.color.green" = "Green";
+"highlight.color.blue" = "Blue";
+"highlight.color.yellow" = "Yellow";
+"highlight.color.purple" = "Purple";
 
 // MARK: - Reading Selector
 
@@ -259,13 +278,6 @@
 // Library & Navigation
 "new.library_navigation" = "Library & Navigation:";
 "new.library_navigation.details" = "* Sort surahs and juz on Home, and display surah numbers so you can jump to what you need faster - thanks to @yismailuofa.";
-
-"bookmarks.collections" = "Collections";
-"bookmarks.collections.add" = "Add Collection";
-"bookmarks.collections.edit" = "Edit Collections";
-"bookmarks.collections.new.placeholder" = "Collection name";
-"bookmarks.collections.no-data.title" = "No collections yet";
-"bookmarks.collections.no-data.text" = "Create a collection to organize your ayah bookmarks.";
 
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
 

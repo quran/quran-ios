@@ -222,13 +222,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selectMushaf.short" = "Выбрать";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.selector.selectMushaf.long" = "Установить как текущий Мушаф";
+"reading.selector.selectMushaf.long" = "Установить как текущий Мусхаф";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.selector.title" = "Выбрать Мушаф";
+"reading.selector.title" = "Выбрать Мусхаф";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.selector.selection-description" = "Нажмите на Мушаф для получения дополнительной информации.";
+"reading.selector.selection-description" = "Нажмите на Мусхаф для получения дополнительной информации.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.selector.property.hafs" = "Мушаф Хафс";
+"reading.selector.property.hafs" = "Мусхаф Хафс";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.604" = "604 страницы";
 // Metadata: Translated by ChatGPT; human review required.
@@ -242,7 +242,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1405.title" = "Хафс, классическая Медина, 1405 AH";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.hafs-1405.description" = "Классический Мушаф Хафс, выпущенный в Медине в 1405 Хиджри. Приложение долгое время предлагало эту версию.\nИз Королевского комплекса печати Корана Фахда.";
+"reading.hafs-1405.description" = "Классический Мусхаф Хафс, выпущенный в Медине в 1405 Хиджри. Приложение долгое время предлагало эту версию.\nИз Королевского комплекса печати Корана Фахда.";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1405.issue" = "Выпущен в 1405 Хиджри";
 
@@ -250,7 +250,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1421.title" = "Хафс, Медина, 1421 AH";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.hafs-1421.description" = "Мушаф Хафс, выпущенный в Медине в 1421 Хиджри. Из Королевского комплекса печати Корана Фахда.";
+"reading.hafs-1421.description" = "Мусхаф Хафс, выпущенный в Медине в 1421 Хиджри. Из Королевского комплекса печати Корана Фахда.";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1421.issue" = "Выпущен в 1421 Хиджри";
 
@@ -258,7 +258,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1440.title" = "Хафс, Медина, 1440 AH";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.hafs-1440.description" = "Мушаф Хафс, выпущенный в Медине в 1440 Хиджри. Из Королевского комплекса печати Корана Фахда.";
+"reading.hafs-1440.description" = "Мусхаф Хафс, выпущенный в Медине в 1440 Хиджри. Из Королевского комплекса печати Корана Фахда.";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1440.issue" = "Выпущен в 1440 Хиджри";
 
@@ -266,7 +266,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.tajweed.title" = "Хафс, Таджвид";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.tajweed.description" = "Мушаф Хафс Таджвид. Аль-Куран Аль-Карим - Издание Дар аль-Марефа.";
+"reading.tajweed.description" = "Мусхаф Хафс Таджвид. Аль-Куран Аль-Карим - Издание Дар аль-Марефа.";
 
 // MARK: - Diagnostics
 
@@ -292,9 +292,9 @@
 
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Новые Мушафы:";
+"new.mushafs" = "Новые Мусхафы:";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "Да облегчит Аллах угнетение наших братьев и сестер в Газе.\n\n* Таджвид Хафс Мушаф: Аль-Куран Аль-Карим - Издание Дар аль-Марефа.\n* Мединский Мушаф 1421 хиджри.\n* Мединский Мушаф 1440 хиджри.\n* Кроме того, продолжайте наслаждаться классической версией 1405 хиджри.";
+"new.mushafs.details" = "Да облегчит Аллах угнетение наших братьев и сестер в Газе.\n\n* Таджвид Хафс Мусхаф: Аль-Куран Аль-Карим - Издание Дар аль-Марефа.\n* Мединский Мусхаф 1421 хиджри.\n* Мединский Мусхаф 1440 хиджри.\n* Кроме того, продолжайте наслаждаться классической версией 1405 хиджри.";
 
 // Reciters
 // Metadata: Translated by ChatGPT; human review required.

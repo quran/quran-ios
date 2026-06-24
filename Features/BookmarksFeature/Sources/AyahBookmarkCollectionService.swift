@@ -54,7 +54,7 @@
         // MARK: Lifecycle
 
         public init(
-            syncService: SyncService,
+            syncService: QuranDataService,
             readingPreferences: ReadingPreferences = .shared
         ) {
             self.syncService = syncService
@@ -108,7 +108,7 @@
 
         // MARK: Private
 
-        private let syncService: SyncService
+        private let syncService: QuranDataService
         private let readingPreferences: ReadingPreferences
 
         private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {

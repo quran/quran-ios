@@ -53,7 +53,7 @@
     public struct MobileSyncNoteService {
         // MARK: Lifecycle
 
-        public init(syncService: SyncService) {
+        public init(syncService: QuranDataService) {
             self.syncService = syncService
         }
 
@@ -122,6 +122,6 @@
 
         // MARK: Private
 
-        private let syncService: SyncService
+        private let syncService: QuranDataService
     }
 #endif

@@ -155,7 +155,7 @@ private struct AppDependenciesStub: AppDependencies {
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
     #if QURAN_SYNC
-        var syncService: SyncService? { nil }
+        var syncService: QuranDataService? { nil }
     #endif
 }
 

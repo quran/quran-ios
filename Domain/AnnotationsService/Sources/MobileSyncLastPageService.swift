@@ -16,7 +16,7 @@
     public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
         // MARK: Lifecycle
 
-        public init(syncService: SyncService) {
+        public init(syncService: QuranDataService) {
             self.syncService = syncService
         }
 
@@ -73,7 +73,7 @@
 
         // MARK: Private
 
-        private let syncService: SyncService
+        private let syncService: QuranDataService
 
         private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
             guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {

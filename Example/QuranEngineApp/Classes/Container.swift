@@ -41,7 +41,7 @@ class Container: AppDependencies {
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     #if QURAN_SYNC
-        private(set) lazy var syncService: SyncService? = mobileSyncServices?.syncService
+        private(set) lazy var syncService: QuranDataService? = mobileSyncServices?.syncService
     #endif
 
     private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
@@ -97,7 +97,7 @@ class Container: AppDependencies {
             "note",
         ]
 
-        private lazy var mobileSyncServices: (authService: SyncAuthService, syncService: SyncService)? = {
+        private lazy var mobileSyncServices: (authService: SyncAuthService, syncService: QuranDataService)? = {
             guard let authConfig = Self.mobileSyncAuthConfiguration() else {
                 return nil
             }
@@ -115,7 +115,7 @@ class Container: AppDependencies {
                 authConfig: authConfig
             )
 
-            return (graph.authService, graph.syncService)
+            return (graph.authService, graph.quranDataService)
         }()
 
         private static func mobileSyncAuthConfiguration() -> AuthConfig? {

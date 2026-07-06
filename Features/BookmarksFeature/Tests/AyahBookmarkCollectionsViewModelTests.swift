@@ -4,6 +4,7 @@
     @testable import BookmarksFeature
 
     final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
+        @MainActor
         func test_sorted_groupsHighlightCollectionsBeforeUserCollections() {
             let collections = AyahBookmarkCollectionsViewModel.sorted([
                 collection(name: "Z Collection"),
@@ -13,8 +14,8 @@
             ])
 
             XCTAssertEqual(collections.map(\.collection.name), [
-                "red",
                 "blue",
+                "red",
                 "A Collection",
                 "Z Collection",
             ])

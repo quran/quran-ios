@@ -5,6 +5,8 @@
     @testable import BookmarksFeature
 
     final class AyahBookmarkCollectionServiceTests: XCTestCase {
+        // MARK: Internal
+
         func test_collections_mapsAyahNumbers() {
             let collections = AyahBookmarkCollectionService.collections(from: [
                 Self.collection(
@@ -34,6 +36,47 @@
             XCTAssertEqual(collections.count, 1)
             XCTAssertTrue(collections[0].bookmarks.isEmpty)
         }
+
+        func test_highlightCollectionCreationPlanner_reservesMultipleMissingCollections() async {
+            let sut = HighlightCollectionCreationPlanner()
+
+            let names = await sut.reserveMissingCollectionNames(from: [
+                Self.ayahBookmarkCollection(name: "yellow"),
+                Self.ayahBookmarkCollection(name: "Favorites"),
+            ])
+
+            XCTAssertEqual(names, ["green", "blue", "red", "purple"])
+        }
+
+        func test_highlightCollectionCreationPlanner_doesNotDuplicateReservedCollectionsForStaleEmissions() async {
+            let sut = HighlightCollectionCreationPlanner()
+
+            let initialNames = await sut.reserveMissingCollectionNames(from: [
+                Self.ayahBookmarkCollection(name: "Favorites"),
+            ])
+            let staleNames = await sut.reserveMissingCollectionNames(from: [
+                Self.ayahBookmarkCollection(name: "yellow"),
+            ])
+
+            XCTAssertEqual(initialNames, ["yellow", "green", "blue", "red", "purple"])
+            XCTAssertEqual(staleNames, [])
+        }
+
+        func test_highlightCollectionCreationPlanner_releasesOnlyFailedReservations() async {
+            let sut = HighlightCollectionCreationPlanner()
+
+            let initialNames = await sut.reserveMissingCollectionNames(from: [
+                Self.ayahBookmarkCollection(name: "Favorites"),
+            ])
+            await sut.releaseCollectionNames([initialNames[1]])
+            let retryNames = await sut.reserveMissingCollectionNames(from: [
+                Self.ayahBookmarkCollection(name: "yellow"),
+            ])
+
+            XCTAssertEqual(retryNames, ["green"])
+        }
+
+        // MARK: Private
 
         private static func collection(
             localId: String? = nil,
@@ -65,6 +108,17 @@
                 ayah: ayah,
                 lastUpdated: .distantPast,
                 localId: "\(collectionLocalId)-collection-\(sura)-\(ayah)"
+            )
+        }
+
+        private static func ayahBookmarkCollection(name: String) -> AyahBookmarkCollection {
+            AyahBookmarkCollection(
+                collection: Collection_(
+                    name: name,
+                    lastUpdated: .distantPast,
+                    localId: name
+                ),
+                bookmarks: []
             )
         }
     }

@@ -6,8 +6,10 @@
     //
 
     import MobileSync
+    import QuranAnnotations
     import QuranKit
     import ReadingService
+    import VLogging
 
     public struct AyahBookmarkCollection {
         public let collection: Collection_
@@ -111,13 +113,16 @@
         }
 
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
+            let syncService = syncService
             let readingPreferences = readingPreferences
             let sequence = syncService.collectionsWithBookmarksSequence()
                 .map { collections in
-                    Self.collections(
+                    let collections = Self.collections(
                         from: collections,
                         quran: readingPreferences.reading.quran
                     )
+                    await syncService.createHighlightCollectionsIfNeeded(collections)
+                    return collections
                 }
             return AyahBookmarkCollectionsSequence(sequence)
         }
@@ -149,6 +154,76 @@
 
             return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
         }
+    }
+
+    actor HighlightCollectionCreationPlanner {
+        func reserveMissingCollectionNames(from collections: [AyahBookmarkCollection]) -> [String] {
+            let existingNames = Set(collections.map(\.collection.name))
+            reservedCollectionNames.formUnion(existingNames)
+
+            let missingCollectionNames = HighlightColor.sortedColors
+                .map(\.collectionName)
+                .filter { !existingNames.contains($0) && !reservedCollectionNames.contains($0) }
+
+            reservedCollectionNames.formUnion(missingCollectionNames)
+            return missingCollectionNames
+        }
+
+        func releaseCollectionNames(_ names: some Sequence<String>) {
+            reservedCollectionNames.subtract(names)
+        }
+
+        private var reservedCollectionNames: Set<String> = []
+    }
+
+    private extension QuranDataService {
+        func createHighlightCollectionsIfNeeded(_ collections: [AyahBookmarkCollection]) async {
+            let planner = await highlightCollectionCreationPlanners.planner(for: self)
+            let missingCollectionNames = await planner.reserveMissingCollectionNames(from: collections)
+
+            let failedCollections = await createHighlightCollections(named: missingCollectionNames)
+            if !failedCollections.isEmpty {
+                await planner.releaseCollectionNames(failedCollections)
+            }
+        }
+
+        private func createHighlightCollections(named names: [String]) async -> [String] {
+            await withTaskGroup(of: String?.self) { group in
+                for name in names {
+                    group.addTask {
+                        do {
+                            try await self.createCollection(named: name)
+                            return nil
+                        } catch {
+                            logger.error("Bookmarks: failed to create highlight collection '\(name)': \(error)")
+                            return name
+                        }
+                    }
+                }
+
+                var failures: [String] = []
+                for await name in group {
+                    if let name {
+                        failures.append(name)
+                    }
+                }
+
+                return failures
+            }
+        }
+    }
+
+    private let highlightCollectionCreationPlanners = HighlightCollectionCreationPlanners()
+
+    private actor HighlightCollectionCreationPlanners {
+        func planner(for syncService: QuranDataService) -> HighlightCollectionCreationPlanner {
+            let id = ObjectIdentifier(syncService)
+            let planner = planners[id] ?? HighlightCollectionCreationPlanner()
+            planners[id] = planner
+            return planner
+        }
+
+        private var planners: [ObjectIdentifier: HighlightCollectionCreationPlanner] = [:]
     }
 
 #endif

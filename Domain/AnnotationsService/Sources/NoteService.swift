@@ -11,7 +11,6 @@ import Combine
 import Foundation
 import Localization
 import NotePersistence
-import Preferences
 import QuranAnnotations
 import QuranKit
 import QuranText
@@ -30,12 +29,12 @@ public struct NoteService {
 
     #if !QURAN_SYNC
         public func color(from notes: [Note]) -> HighlightColor {
-            notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? lastUsedHighlightColor
+            notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? HighlightPreferences.shared.lastUsedHighlightColor
         }
 
         public func updateHighlight(verses: [AyahNumber], color: HighlightColor, quran: Quran) async throws -> Note {
             // update last used highlight color
-            lastUsedHighlightColor = color
+            HighlightPreferences.shared.lastUsedHighlightColor = color
 
             analytics.highlight(verses: verses)
             let verses = verses.map(VersePersistenceModel.init)
@@ -45,7 +44,7 @@ public struct NoteService {
 
         public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
             // update last used highlight color
-            lastUsedHighlightColor = color
+            HighlightPreferences.shared.lastUsedHighlightColor = color
 
             analytics.updateNote(verses: verses)
             let verses = verses.map(VersePersistenceModel.init)
@@ -79,19 +78,6 @@ public struct NoteService {
     let persistence: NotePersistence
     let textService: QuranTextDataService
     let analytics: AnalyticsLibrary
-
-    // MARK: Private
-
-    #if !QURAN_SYNC
-        private static let defaultLastUsedNoteHighlightColor = HighlightColor.red
-        private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
-            key: "lastUsedNoteHighlightColor",
-            defaultValue: defaultLastUsedNoteHighlightColor.rawValue
-        )
-
-        @TransformedPreference(lastUsedNoteHighlightColorKey, transformer: .rawRepresentable(defaultValue: defaultLastUsedNoteHighlightColor))
-        private var lastUsedHighlightColor: HighlightColor
-    #endif
 
     private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
         let verseTexts = try await textService.textForVerses(verses, translations: [])

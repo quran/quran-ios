@@ -78,7 +78,7 @@ final class AyahMenuViewModel {
 
     var highlightingColor: HighlightColor {
         #if QURAN_SYNC
-            return selectedHighlightColor ?? .red
+            return selectedHighlightColor ?? HighlightPreferences.shared.lastUsedHighlightColor
         #else
             return deps.noteService.color(from: deps.notes)
         #endif
@@ -271,6 +271,8 @@ final class AyahMenuViewModel {
 
     #if QURAN_SYNC
         private func updateSyncedHighlight(color: HighlightColor) async throws {
+            HighlightPreferences.shared.lastUsedHighlightColor = color
+
             let collections = deps.highlightCollections.filter {
                 HighlightColor(collectionName: $0.collection.name) != nil
             }

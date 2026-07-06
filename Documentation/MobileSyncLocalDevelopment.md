@@ -15,10 +15,28 @@ SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) QURAN_SYNC
 Swift package targets also read `QURAN_SYNC` from `Package.swift`, so launch Xcode with the environment variable set when you want the package feature modules to compile with sync enabled:
 
 ```bash
-QURAN_SYNC=1 open Example/QuranEngineApp.xcodeproj
+launchctl setenv QURAN_SYNC 1
+
+osascript -e 'quit app "Xcode"'
+pkill -x SWBBuildService 2>/dev/null || true
+pkill -x XCBBuildService 2>/dev/null || true
+
+open -a /Applications/Xcode.app Example/QuranEngineApp.xcodeproj
 ```
 
-Clean the build folder before the first run after toggling the flag.
+`launchctl setenv` makes `QURAN_SYNC` visible to Xcode and its build services. A shell-scoped environment variable, for example `QURAN_SYNC=1 open ...`, may not propagate to Swift package manifest evaluation.
+
+After toggling the flag:
+
+1. Use **File > Packages > Reset Package Caches**.
+2. Use **Product > Clean Build Folder**.
+3. Build or run the example app.
+
+To disable sync for later Xcode sessions:
+
+```bash
+launchctl unsetenv QURAN_SYNC
+```
 
 ### From the command line
 

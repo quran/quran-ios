@@ -1,15 +1,9 @@
-//
-//  Note.Color++.swift
-//
-//
-//  Created by Afifi, Mohamed on 10/25/21.
-//
-
+import Localization
 import QuranAnnotations
 import SwiftUI
 import UIKit
 
-extension Note.Color {
+extension HighlightColor {
     // MARK: Public
 
     public var uiColor: UIColor {
@@ -22,13 +16,17 @@ extension Note.Color {
         }
     }
 
-    // MARK: Internal
-
-    static var sortedColors: [Self] {
-        [.yellow, .green, .blue, .red, .purple]
-    }
-
     public var color: SwiftUI.Color {
         SwiftUI.Color(uiColor)
+    }
+
+    public var localizedName: String {
+        switch self {
+        case .red: return l("highlight.color.red")
+        case .green: return l("highlight.color.green")
+        case .blue: return l("highlight.color.blue")
+        case .yellow: return l("highlight.color.yellow")
+        case .purple: return l("highlight.color.purple")
+        }
     }
 }

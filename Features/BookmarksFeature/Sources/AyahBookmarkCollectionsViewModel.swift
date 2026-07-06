@@ -6,6 +6,7 @@
     //
 
     import Foundation
+    import QuranAnnotations
     import QuranKit
     import SwiftUI
     import VLogging
@@ -33,13 +34,26 @@
         @Published var collections: [AyahBookmarkCollection] = []
         @Published var collapsedCollectionIDs: Set<String> = []
 
+        static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
+            collections.sorted { lhs, rhs in
+                switch (highlightSortIndex(lhs), highlightSortIndex(rhs)) {
+                case let (.some(lhsIndex), .some(rhsIndex)):
+                    return lhsIndex < rhsIndex
+                case (.some, .none):
+                    return true
+                case (.none, .some):
+                    return false
+                case (.none, .none):
+                    return lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
+                }
+            }
+        }
+
         func start() async {
             do {
                 let sequence = ayahBookmarkCollectionService.collectionsSequence()
                 for try await collections in sequence {
-                    self.collections = filtered(collections).sorted {
-                        $0.collection.name.localizedCaseInsensitiveCompare($1.collection.name) == .orderedAscending
-                    }
+                    self.collections = Self.sorted(filtered(collections))
                 }
             } catch {
                 self.error = error
@@ -94,6 +108,13 @@
         private let includedCollectionNames: Set<String>?
         private let excludedCollectionNames: Set<String>
         private let navigateToPage: (Page) -> Void
+
+        private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
+            guard let color = HighlightColor(collectionName: collection.collection.name) else {
+                return nil
+            }
+            return HighlightColor.sortedColors.firstIndex(of: color)
+        }
 
         private func filtered(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
             collections.filter { collection in

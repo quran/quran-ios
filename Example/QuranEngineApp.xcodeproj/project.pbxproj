@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -182,7 +182,7 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-		/* Begin PBXSourcesBuildPhase section */
+/* Begin PBXSourcesBuildPhase section */
 		D975EDBE2A4791D6009DE942 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;

@@ -74,7 +74,9 @@ public final class ContentViewModel: ObservableObject {
             .sink { [weak self] in self?.quranMode = $0 }
             .store(in: &cancellables)
 
-        loadNotes()
+        #if !QURAN_SYNC
+            loadNotes()
+        #endif
         configureInitialPage()
     }
 
@@ -223,13 +225,15 @@ public final class ContentViewModel: ObservableObject {
         deps.lastPageUpdater.updateTo(pages: pages)
     }
 
-    private func loadNotes() {
-        deps.noteService.notes(quran: deps.quran)
-            .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
-            .store(in: &cancellables)
-    }
+    #if !QURAN_SYNC
+        private func loadNotes() {
+            deps.noteService.notes(quran: deps.quran)
+                .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
+                .store(in: &cancellables)
+        }
+    #endif
 }
 
 private extension CrasherKeyBase {

@@ -10,6 +10,9 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
+    import BookmarksFeature
+#endif
 import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature
@@ -44,38 +47,42 @@ public struct QuranBuilder {
                     analytics: container.analytics
                 )
             }
+            let syncedHighlightsObserver = container.syncService.map {
+                QuranSyncedHighlightsObserver(ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: $0), highlightsService: highlightsService)
+            }
             let interactorDeps = QuranInteractor.Deps(
                 quran: quran,
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
-                noteService: container.noteService(),
+                highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),
                 wordPointerBuilder: WordPointerBuilder(container: container),
-                noteEditorBuilder: NoteEditorBuilder(container: container),
                 contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
                 resources: container.readingResources,
                 syncedNoteService: syncedNoteService,
-                syncedNoteEditorBuilder: syncedNoteEditorBuilder
+                syncedNoteEditorBuilder: syncedNoteEditorBuilder,
+                syncedHighlightsObserver: syncedHighlightsObserver
             )
         #else
             let interactorDeps = QuranInteractor.Deps(
                 quran: quran,
                 analytics: container.analytics,
                 pageBookmarkService: pageBookmarkService,
-                noteService: container.noteService(),
+                highlightsService: highlightsService,
                 ayahMenuBuilder: AyahMenuBuilder(container: container),
                 moreMenuBuilder: MoreMenuBuilder(),
                 audioBannerBuilder: AudioBannerBuilder(container: container),
                 wordPointerBuilder: WordPointerBuilder(container: container),
-                noteEditorBuilder: NoteEditorBuilder(container: container),
                 contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
                 translationsSelectionBuilder: TranslationsListBuilder(container: container),
                 translationVerseBuilder: TranslationVerseBuilder(container: container),
-                resources: container.readingResources
+                resources: container.readingResources,
+                noteService: container.noteService(),
+                noteEditorBuilder: NoteEditorBuilder(container: container)
             )
         #endif
         let interactor = QuranInteractor(deps: interactorDeps, input: input)

@@ -33,7 +33,7 @@ public struct NoteEditorView: View {
                 HStack {
                     Spacer()
                     if showsColors {
-                        ForEach(Note.Color.sortedColors, id: \.self) { color in
+                        ForEach(HighlightColor.sortedColors, id: \.self) { color in
                             Button(
                                 action: { note.selectedColor = color },
                                 label: { NoteCircle(color: color.color, selected: color == note.selectedColor) }

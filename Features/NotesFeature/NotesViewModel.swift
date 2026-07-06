@@ -43,40 +43,32 @@ final class NotesViewModel: ObservableObject {
     @Published var searchTerm: String = ""
 
     var filteredNotes: [NoteItem] {
-        #if QURAN_SYNC
-            return []
-        #else
-            let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !term.isEmpty else {
-                return notes
+        let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !term.isEmpty else {
+            return notes
+        }
+        return notes.filter { item in
+            if item.note.note?.range(of: term, options: .caseInsensitive) != nil {
+                return true
             }
-            return notes.filter { item in
-                if item.note.note?.range(of: term, options: .caseInsensitive) != nil {
-                    return true
-                }
-                let suraName = item.note.firstVerse.sura.localizedName()
-                return suraName.range(of: term, options: .caseInsensitive) != nil
-            }
-        #endif
+            let suraName = item.note.firstVerse.sura.localizedName()
+            return suraName.range(of: term, options: .caseInsensitive) != nil
+        }
     }
 
     func start() async {
-        #if QURAN_SYNC
-            return
-        #else
-            let notesSequence = readingPreferences.$reading
-                .prepend(readingPreferences.reading)
-                .map { [noteService] reading in
-                    noteService.notes(quran: reading.quran)
-                }
-                .switchToLatest()
-                .values()
-
-            for await notes in notesSequence {
-                self.notes = await noteItems(with: notes)
-                    .sorted { $0.note.modifiedDate > $1.note.modifiedDate }
+        let notesSequence = readingPreferences.$reading
+            .prepend(readingPreferences.reading)
+            .map { [noteService] reading in
+                noteService.notes(quran: reading.quran)
             }
-        #endif
+            .switchToLatest()
+            .values()
+
+        for await notes in notesSequence {
+            self.notes = await noteItems(with: notes)
+                .sorted { $0.note.modifiedDate > $1.note.modifiedDate }
+        }
     }
 
     func navigateTo(_ item: NoteItem) {
@@ -85,43 +77,35 @@ final class NotesViewModel: ObservableObject {
     }
 
     func deleteItem(_ item: NoteItem) async {
-        #if QURAN_SYNC
-            return
-        #else
-            logger.info("Notes: delete note at \(item.note.firstVerse)")
-            do {
-                try await noteService.removeNotes(with: Array(item.note.verses))
-            } catch {
-                self.error = error
-            }
-        #endif
+        logger.info("Notes: delete note at \(item.note.firstVerse)")
+        do {
+            try await noteService.removeNotes(with: Array(item.note.verses))
+        } catch {
+            self.error = error
+        }
     }
 
     func prepareNotesForSharing() async throws -> String {
-        #if QURAN_SYNC
-            return ""
-        #else
-            return try await crasher.recordError("Failed to share notes") {
-                var notesText = [String]()
-                let notes: [NoteItem] = await self.notes
-                for (index, note) in notes.enumerated() {
-                    let title: [String] = if let noteContent = note.note.note, noteContent != "" {
-                        [
-                            "\(noteContent.trimmingCharacters(in: .newlines))", "",
-                        ]
-                    } else {
-                        []
-                    }
-                    let verses = try await textRetriever.textForVerses(Array(note.note.verses))
-
-                    notesText.append(contentsOf: title + verses)
-                    if index != notes.count - 1 {
-                        notesText.append(contentsOf: ["", "", ""])
-                    }
+        return try await crasher.recordError("Failed to share notes") {
+            var notesText = [String]()
+            let notes: [NoteItem] = await self.notes
+            for (index, note) in notes.enumerated() {
+                let title: [String] = if let noteContent = note.note.note, noteContent != "" {
+                    [
+                        "\(noteContent.trimmingCharacters(in: .newlines))", "",
+                    ]
+                } else {
+                    []
                 }
-                return notesText.joined(separator: "\n")
+                let verses = try await textRetriever.textForVerses(Array(note.note.verses))
+
+                notesText.append(contentsOf: title + verses)
+                if index != notes.count - 1 {
+                    notesText.append(contentsOf: ["", "", ""])
+                }
             }
-        #endif
+            return notesText.joined(separator: "\n")
+        }
     }
 
     // MARK: Private

@@ -86,28 +86,24 @@ private struct NotesViewUI: View {
     }
 
     private func listItem(_ item: NoteItem) -> some View {
-        #if QURAN_SYNC
-            EmptyView()
-        #else
-            let note = item.note
-            let ayah = note.firstVerse
-            let page = ayah.page
-            let localizedVerse = note.firstVerse.localizedName
-            let arabicSuraName = note.firstVerse.sura.arabicSuraName
-            let ayahCount = note.verses.count
-            let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
-            let color = note.color.color.opacity(QuranHighlights.opacity)
-            let noteText = note.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            return NoorListItem(
-                subheading: subheadingText(localizedVerse: localizedVerse, arabicSuraName: arabicSuraName, numberOfAyahs: numberOfAyahs),
-                rightPretitle: "\(verse: item.verseText, color: color, lineLimit: 2)",
-                title: titleText(for: noteText),
-                subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
-                accessory: .text(NumberFormatter.shared.format(page.pageNumber))
-            ) {
-                selectAction(item)
-            }
-        #endif
+        let note = item.note
+        let ayah = note.firstVerse
+        let page = ayah.page
+        let localizedVerse = note.firstVerse.localizedName
+        let arabicSuraName = note.firstVerse.sura.arabicSuraName
+        let ayahCount = note.verses.count
+        let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
+        let color = note.color.color.opacity(QuranHighlights.opacity)
+        let noteText = note.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return NoorListItem(
+            subheading: subheadingText(localizedVerse: localizedVerse, arabicSuraName: arabicSuraName, numberOfAyahs: numberOfAyahs),
+            rightPretitle: "\(verse: item.verseText, color: color, lineLimit: 2)",
+            title: titleText(for: noteText),
+            subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
+            accessory: .text(NumberFormatter.shared.format(page.pageNumber))
+        ) {
+            selectAction(item)
+        }
     }
 
     private func highlightRanges(in text: String) -> [HighlightingRange] {
@@ -143,30 +139,26 @@ struct NotesView_Previews: PreviewProvider {
         static let quran = Quran.hafsMadani1405
 
         static var staticItems: [NoteItem] {
-            #if QURAN_SYNC
-                []
-            #else
-                [
-                    NoteItem(
-                        note: Note(
-                            verses: [quran.suras[2].verses[3]],
-                            modifiedDate: Date(),
-                            note: nil,
-                            color: .purple
-                        ),
-                        verseText: ayahText
+            [
+                NoteItem(
+                    note: Note(
+                        verses: [quran.suras[2].verses[3]],
+                        modifiedDate: Date(),
+                        note: nil,
+                        color: .purple
                     ),
-                    NoteItem(
-                        note: Note(
-                            verses: Set(quran.suras[2].verses),
-                            modifiedDate: Date().addingTimeInterval(-24 * 60),
-                            note: "Remind myself to memorize it",
-                            color: .green
-                        ),
-                        verseText: ayahText
+                    verseText: ayahText
+                ),
+                NoteItem(
+                    note: Note(
+                        verses: Set(quran.suras[2].verses),
+                        modifiedDate: Date().addingTimeInterval(-24 * 60),
+                        note: "Remind myself to memorize it",
+                        color: .green
                     ),
-                ]
-            #endif
+                    verseText: ayahText
+                ),
+            ]
         }
 
         @State var items: [NoteItem] = staticItems

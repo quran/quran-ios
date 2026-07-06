@@ -85,30 +85,27 @@
             try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
         }
 
-        public func setAyahBookmarks(
+        public func addAyahBookmarksIfNeeded(
             _ ayahs: [AyahNumber],
-            to targetCollection: AyahBookmarkCollection,
-            removingFrom collections: [AyahBookmarkCollection]
+            to collection: AyahBookmarkCollection
         ) async throws {
-            let targetAyahs = Set(
-                targetCollection.bookmarks
-                    .filter { ayahs.contains($0.ayah) }
-                    .map(\.ayah)
-            )
-
-            for collection in collections {
-                for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
-                    if collection.collection.localId != targetCollection.collection.localId {
-                        try await removeBookmarkFromCollection(bookmark)
-                    }
-                }
-            }
-
-            for ayah in ayahs where !targetAyahs.contains(ayah) {
+            for ayah in Self.ayahsToAdd(ayahs, to: collection) {
                 try await addAyahBookmarkToCollection(
-                    collectionLocalId: targetCollection.collection.localId,
+                    collectionLocalId: collection.collection.localId,
                     ayah: ayah
                 )
+            }
+        }
+
+        public func removeAyahBookmarksIfNeeded(
+            _ ayahs: [AyahNumber],
+            from collections: [AyahBookmarkCollection]
+        ) async throws {
+            let ayahs = Set(ayahs)
+            for collection in collections {
+                for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
+                    try await removeBookmarkFromCollection(bookmark)
+                }
             }
         }
 
@@ -135,6 +132,19 @@
                     collection: collection.collection,
                     bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
                 )
+            }
+        }
+
+        static func ayahsToAdd(_ ayahs: [AyahNumber], to collection: AyahBookmarkCollection) -> [AyahNumber] {
+            let existingAyahs = Set(collection.bookmarks.map(\.ayah))
+            var seenAyahs = Set<AyahNumber>()
+
+            return ayahs.filter { ayah in
+                guard !existingAyahs.contains(ayah), !seenAyahs.contains(ayah) else {
+                    return false
+                }
+                seenAyahs.insert(ayah)
+                return true
             }
         }
 

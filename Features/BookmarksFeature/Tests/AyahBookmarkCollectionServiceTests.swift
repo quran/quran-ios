@@ -37,6 +37,37 @@
             XCTAssertTrue(collections[0].bookmarks.isEmpty)
         }
 
+        func test_ayahsToAdd_skipsExistingBookmarks() {
+            let existingAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+            let missingAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2)!
+            let collection = Self.ayahBookmarkCollection(
+                name: "Favorites",
+                bookmarks: [
+                    Self.ayahCollectionBookmark(collectionLocalId: "Favorites", ayah: existingAyah),
+                ]
+            )
+
+            let ayahsToAdd = AyahBookmarkCollectionService.ayahsToAdd(
+                [existingAyah, missingAyah],
+                to: collection
+            )
+
+            XCTAssertEqual(ayahsToAdd, [missingAyah])
+        }
+
+        func test_ayahsToAdd_deduplicatesInputAyahs() {
+            let firstAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+            let secondAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2)!
+            let collection = Self.ayahBookmarkCollection(name: "Favorites")
+
+            let ayahsToAdd = AyahBookmarkCollectionService.ayahsToAdd(
+                [firstAyah, firstAyah, secondAyah, firstAyah],
+                to: collection
+            )
+
+            XCTAssertEqual(ayahsToAdd, [firstAyah, secondAyah])
+        }
+
         func test_highlightCollectionCreationPlanner_reservesMultipleMissingCollections() async {
             let sut = HighlightCollectionCreationPlanner()
 
@@ -111,14 +142,31 @@
             )
         }
 
-        private static func ayahBookmarkCollection(name: String) -> AyahBookmarkCollection {
+        private static func ayahBookmarkCollection(
+            name: String,
+            bookmarks: [AyahCollectionBookmark] = []
+        ) -> AyahBookmarkCollection {
             AyahBookmarkCollection(
                 collection: Collection_(
                     name: name,
                     lastUpdated: .distantPast,
                     localId: name
                 ),
-                bookmarks: []
+                bookmarks: bookmarks
+            )
+        }
+
+        private static func ayahCollectionBookmark(
+            collectionLocalId: String,
+            ayah: AyahNumber
+        ) -> AyahCollectionBookmark {
+            AyahCollectionBookmark(
+                bookmark: bookmark(
+                    collectionLocalId: collectionLocalId,
+                    sura: Int32(ayah.sura.suraNumber),
+                    ayah: Int32(ayah.ayah)
+                ),
+                ayah: ayah
             )
         }
     }

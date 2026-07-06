@@ -281,10 +281,16 @@ final class AyahMenuViewModel {
             }), let service = deps.ayahBookmarkCollectionService else {
                 throw AyahMenuError.highlightCollectionUnavailable
             }
-            try await service.setAyahBookmarks(
+            let otherCollections = collections.filter {
+                $0.collection.localId != targetCollection.collection.localId
+            }
+            try await service.addAyahBookmarksIfNeeded(
                 deps.verses,
-                to: targetCollection,
-                removingFrom: collections
+                to: targetCollection
+            )
+            try await service.removeAyahBookmarksIfNeeded(
+                deps.verses,
+                from: otherCollections
             )
         }
     #endif

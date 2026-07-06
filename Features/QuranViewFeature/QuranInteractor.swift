@@ -196,8 +196,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    func deleteNotes(_ notes: [Note], verses: [AyahNumber]) async {
-        #if QURAN_SYNC
+    #if QURAN_SYNC
+        func deleteNotes(in verses: [AyahNumber]) async {
             guard let syncedNoteService = deps.syncedNoteService else {
                 return
             }
@@ -217,7 +217,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                     cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
                 )
             }
-        #else
+        }
+    #else
+        func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async {
             let containsText = notes.contains { note in
                 !(note.note ?? "").isEmpty
             }
@@ -231,8 +233,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 // delete highlight
                 await forceDeleteNotes(notes, verses: verses)
             }
-        #endif
-    }
+        }
+    #endif
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {
         logger.info("Quran: share text")
@@ -288,12 +290,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
         #if QURAN_SYNC
-            let notes: [Note] = []
             let input = AyahMenuInput(
                 sourceView: sourceView,
                 pointInView: point,
                 verses: verses,
-                notes: notes,
                 noteCount: syncedNoteCount(interacting: verses),
                 highlightVerses: deps.highlightsService.highlights.highlightVerses,
                 highlightCollections: deps.syncedHighlightsObserver?.collections ?? []

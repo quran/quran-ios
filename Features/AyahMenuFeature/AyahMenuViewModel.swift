@@ -28,15 +28,16 @@ public protocol AyahMenuListener: AnyObject {
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool)
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
-    func deleteNotes(_ notes: [QuranAnnotations.Note], verses: [AyahNumber]) async
     func showTranslation(_ verses: [AyahNumber])
 
     #if QURAN_SYNC
         func addSyncedNote(verses: [AyahNumber])
+        func deleteNotes(in verses: [AyahNumber]) async
     #endif
 
     #if !QURAN_SYNC
         func editNote(_ note: QuranAnnotations.Note)
+        func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async
     #endif
 }
 
@@ -48,7 +49,6 @@ final class AyahMenuViewModel {
         let sourceView: UIView
         let pointInView: CGPoint
         let verses: [AyahNumber]
-        let notes: [QuranAnnotations.Note]
         let textRetriever: ShareableVerseTextRetriever
         #if QURAN_SYNC
             let highlightVerses: [AyahNumber: HighlightColor]
@@ -56,6 +56,7 @@ final class AyahMenuViewModel {
             let noteCount: Int
             let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
         #else
+            let notes: [QuranAnnotations.Note]
             let noteService: NoteService
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
@@ -153,7 +154,11 @@ final class AyahMenuViewModel {
     func deleteNotes() async {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
-        await listener?.deleteNotes(deps.notes, verses: deps.verses)
+        #if QURAN_SYNC
+            await listener?.deleteNotes(in: deps.verses)
+        #else
+            await listener?.deleteNotes(deps.notes, in: deps.verses)
+        #endif
     }
 
     func editNote() async {

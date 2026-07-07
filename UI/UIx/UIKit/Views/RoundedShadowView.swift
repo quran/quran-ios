@@ -53,7 +53,7 @@ public class RoundedShadowView: UIView {
         }
     }
 
-    public var shadowOffset: CGSize = CGSize(width: 0, height: 3) {
+    public var shadowOffset: CGSize = .init(width: 0, height: 3) {
         didSet {
             updateLayerUI()
         }

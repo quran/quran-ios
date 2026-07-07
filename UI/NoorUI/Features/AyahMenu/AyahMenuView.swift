@@ -303,15 +303,9 @@ private struct Row<Symbol: View, Accessory: View>: View {
 }
 
 private struct MenuGroup<Content: View>: View {
-    // MARK: Lifecycle
-
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-
     // MARK: Internal
 
-    let content: Content
+    @ViewBuilder let content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

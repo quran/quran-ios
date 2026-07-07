@@ -40,7 +40,7 @@ class TranslationsDownloaderTests: XCTestCase {
         XCTAssertEqual(response.destinations, [translation.localPath])
     }
 
-    func test_runningDownloads_empty() async throws {
+    func test_runningDownloads_empty() async {
         let downloads = await downloader.runningTranslationDownloads()
         XCTAssertEqual(downloads, [])
     }

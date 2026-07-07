@@ -28,7 +28,7 @@ public struct TextView: View {
 
     // MARK: Private
 
-    private var font: UIFont = UIFont.preferredFont(forTextStyle: .body)
+    private var font: UIFont = .preferredFont(forTextStyle: .body)
 }
 
 extension TextView {

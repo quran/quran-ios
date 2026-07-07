@@ -22,7 +22,7 @@ public class ScrollViewController: UIViewController {
 
     // MARK: Public
 
-    public private(set) lazy var scrollView: UIScrollView = UIScrollView()
+    public private(set) lazy var scrollView: UIScrollView = .init()
 
     override public func loadView() {
         scrollView.backgroundColor = .clear

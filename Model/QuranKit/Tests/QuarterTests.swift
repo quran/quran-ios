@@ -11,7 +11,7 @@ import XCTest
 final class QuarterTests: XCTestCase {
     // MARK: Internal
 
-    func testQuarters() throws {
+    func testQuarters() {
         let quarters = quran.quarters
         XCTAssertEqual(quarters.count, 240)
         XCTAssertEqual(quarters.first!.quarterNumber, 1)

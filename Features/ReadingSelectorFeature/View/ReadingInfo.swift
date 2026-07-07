@@ -9,15 +9,6 @@ import Localization
 import QuranKit
 
 struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
-    // MARK: Lifecycle
-
-    init(value: Value, title: String, description: String, properties: [Reading.Property]) {
-        self.value = value
-        self.title = title
-        self.description = description
-        self.properties = properties
-    }
-
     // MARK: Internal
 
     let value: Value

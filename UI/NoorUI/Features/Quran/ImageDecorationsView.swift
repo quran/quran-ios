@@ -111,7 +111,7 @@ struct ImageDecorationsView: View {
 
     // MARK: Private
 
-    @State private var sizeInfo: SizeInfo = SizeInfo(imageSize: .zero, viewSize: .zero)
+    @State private var sizeInfo: SizeInfo = .init(imageSize: .zero, viewSize: .zero)
 }
 
 public struct SuraHeaderView: View {

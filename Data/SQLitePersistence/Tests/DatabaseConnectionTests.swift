@@ -25,7 +25,7 @@ class DatabaseConnectionTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_creation() throws {
+    func test_creation() {
         let connection = DatabaseConnection(url: testURL)
         XCTAssertNotNil(connection)
         // Initially database file is not created.
@@ -98,7 +98,7 @@ class DatabaseConnectionTests: XCTestCase {
         XCTAssertEqual(names, ["Alice"])
     }
 
-    func test_release() throws {
+    func test_release() {
         var connection: DatabaseConnection? = DatabaseConnection(url: testURL)
         weak var weakConnection = connection
         connection = nil // should call deinit

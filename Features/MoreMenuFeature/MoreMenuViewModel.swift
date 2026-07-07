@@ -105,7 +105,7 @@ final class MoreMenuViewModel: ObservableObject {
 
     // MARK: Public
 
-    @Published public var mode: QuranMode {
+    @Published var mode: QuranMode {
         didSet {
             if mode == .translation {
                 wordPointerEnabled = false

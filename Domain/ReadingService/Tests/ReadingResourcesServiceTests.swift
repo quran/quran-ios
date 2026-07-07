@@ -57,7 +57,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         service = nil
     }
 
-    func test_bundledResource() async throws {
+    func test_bundledResource() async {
         // Given
         ReadingPreferences.shared.reading = .hafs_1405
         // Assume all reading directories exist.

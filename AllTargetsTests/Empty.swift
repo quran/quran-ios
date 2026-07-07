@@ -11,6 +11,6 @@ import XCTest
 ///
 /// AllTargetsTests is a test target to link all other targets to ensure we produce coverage info for all code.
 final class Empty: XCTestCase {
-    func testEmpty() throws {
+    func testEmpty() {
     }
 }

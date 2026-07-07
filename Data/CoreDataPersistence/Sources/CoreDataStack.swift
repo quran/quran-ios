@@ -87,7 +87,7 @@ public class CoreDataStack {
     private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
     private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
 
-    private lazy var historyProcessor: CoreDataPersistentHistoryProcessor = CoreDataPersistentHistoryProcessor(name: name, uniquifiers: uniquifiers)
+    private lazy var historyProcessor: CoreDataPersistentHistoryProcessor = .init(name: name, uniquifiers: uniquifiers)
 
     /// An operation queue for handling history processing tasks: watching changes, deduplicating entities, and triggering UI updates if needed.
     private lazy var historyQueue: OperationQueue = {

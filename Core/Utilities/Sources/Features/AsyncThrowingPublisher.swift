@@ -37,7 +37,6 @@ public struct AsyncThrowingPublisher<Element>: AsyncSequence {
         // the iterator.
         var cancellable: AnyCancellable?
         let stream = AsyncThrowingStream(Element.self, bufferingPolicy: bufferingPolicy) { continuation in
-
             cancellable = publisher.sink { completion in
                 switch completion {
                 case .finished:
@@ -78,7 +77,8 @@ public struct AsyncThrowingPublisher<Element>: AsyncSequence {
 
 public extension Publisher {
     func values(
-        bufferingPolicy: AsyncThrowingPublisher<Output>.BufferingPolicy = .unbounded)
+        bufferingPolicy: AsyncThrowingPublisher<Output>.BufferingPolicy = .unbounded
+    )
         -> AsyncThrowingPublisher<Output>
     {
         AsyncThrowingPublisher(

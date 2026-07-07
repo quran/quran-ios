@@ -14,12 +14,6 @@ struct FramePlaying {
 }
 
 struct FilePlaying {
-    // MARK: Lifecycle
-
-    init(fileIndex: Int) {
-        self.fileIndex = fileIndex
-    }
-
     // MARK: Internal
 
     let fileIndex: Int

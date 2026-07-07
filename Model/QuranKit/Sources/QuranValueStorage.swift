@@ -8,7 +8,7 @@
 struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable, @unchecked Sendable {
     // MARK: Public
 
-    public var next: T? {
+    var next: T? {
         let values = quran[keyPath: keyPath]
         if self == values.last?.storage {
             return nil
@@ -16,7 +16,7 @@ struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable, @unchecked S
         return T(QuranValueStorage(quran: quran, value: value + 1, keyPath: keyPath))
     }
 
-    public var previous: T? {
+    var previous: T? {
         let values = quran[keyPath: keyPath]
         if self == values.first?.storage {
             return nil
@@ -24,7 +24,7 @@ struct QuranValueStorage<T: QuranValueGroup>: Hashable, Comparable, @unchecked S
         return T(QuranValueStorage(quran: quran, value: value - 1, keyPath: keyPath))
     }
 
-    public static func < (lhs: Self, rhs: Self) -> Bool {
+    static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.value < rhs.value
     }
 

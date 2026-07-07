@@ -26,8 +26,8 @@ public struct PageGeometryActions: Equatable {
 }
 
 private struct PageGeometryActionsPreferenceKey: PreferenceKey {
-    public static var defaultValue: [PageGeometryActions] = []
-    public static func reduce(value: inout [PageGeometryActions], nextValue: () -> [PageGeometryActions]) {
+    static var defaultValue: [PageGeometryActions] = []
+    static func reduce(value: inout [PageGeometryActions], nextValue: () -> [PageGeometryActions]) {
         value.append(contentsOf: nextValue())
     }
 }

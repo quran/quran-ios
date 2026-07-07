@@ -11,7 +11,7 @@ import XCTest
 final class HizbTests: XCTestCase {
     // MARK: Internal
 
-    func testHizbs() throws {
+    func testHizbs() {
         let hizbs = quran.hizbs
         XCTAssertEqual(hizbs.count, 60)
         XCTAssertEqual(hizbs.first!.hizbNumber, 1)

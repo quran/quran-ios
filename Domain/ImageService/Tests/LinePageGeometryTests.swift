@@ -13,7 +13,7 @@ import XCTest
 final class LinePageGeometryTests: XCTestCase {
     // MARK: Internal
 
-    func testPortraitLayoutMatchesSizingRules() throws {
+    func testPortraitLayoutMatchesSizingRules() {
         let layout = makeEngine().layout(
             LinePageGeometryInput(
                 availableSize: CGSize(width: 400, height: 800),
@@ -180,7 +180,7 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertEqual(layout.verse(at: point), lastAyah)
     }
 
-    func testHiddenHeaderFooterDoesNotReserveChromeSpace() throws {
+    func testHiddenHeaderFooterDoesNotReserveChromeSpace() {
         let layout = makeEngine().layout(
             LinePageGeometryInput(
                 availableSize: CGSize(width: 600, height: 800),
@@ -200,7 +200,7 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertNil(layout.sidelineFrame)
     }
 
-    func testNonOverlappingMetricsPlaceLinesInEvenSlots() throws {
+    func testNonOverlappingMetricsPlaceLinesInEvenSlots() {
         let metrics = LinePageMetrics.naskhLinePages
         let layout = makeEngine().layout(
             LinePageGeometryInput(

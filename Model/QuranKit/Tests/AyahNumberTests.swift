@@ -11,7 +11,7 @@ import XCTest
 final class AyahNumberTests: XCTestCase {
     // MARK: Internal
 
-    func testVerses() throws {
+    func testVerses() {
         let verses = quran.verses
         XCTAssertEqual(verses.count, 6236)
         XCTAssertEqual(verses.first!.sura.suraNumber, 1)

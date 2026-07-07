@@ -160,10 +160,10 @@ class Container: AppDependencies {
     }
 
     private static func usePreProductionSyncEnvironment() -> Bool {
-        guard let issuer = nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL")?.lowercased() else {
-            return false
+        guard let environment = nonEmptyEnvironmentValue("QURAN_OAUTH_ENVIRONMENT") else {
+            return true
         }
-        return issuer.contains("staging") || issuer.contains("preprod") || issuer.contains("prelive") || issuer.contains("dev")
+        return environment.lowercased() != "production"
     }
 }
 

@@ -9,7 +9,7 @@
 import AnnotationsService
 import Crashing
 #if QURAN_SYNC
-    import BookmarksFeature
+import BookmarksFeature
 #endif
 import Localization
 import NoorUI
@@ -31,13 +31,13 @@ public protocol AyahMenuListener: AnyObject {
     func showTranslation(_ verses: [AyahNumber])
 
     #if QURAN_SYNC
-        func addSyncedNote(verses: [AyahNumber])
-        func deleteNotes(in verses: [AyahNumber]) async
+    func addSyncedNote(verses: [AyahNumber])
+    func deleteNotes(in verses: [AyahNumber]) async
     #endif
 
     #if !QURAN_SYNC
-        func editNote(_ note: QuranAnnotations.Note)
-        func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async
+    func editNote(_ note: QuranAnnotations.Note)
+    func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async
     #endif
 }
 
@@ -51,13 +51,13 @@ final class AyahMenuViewModel {
         let verses: [AyahNumber]
         let textRetriever: ShareableVerseTextRetriever
         #if QURAN_SYNC
-            let highlightVerses: [AyahNumber: HighlightColor]
-            let highlightCollections: [AyahBookmarkCollection]
-            let noteCount: Int
-            let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+        let highlightVerses: [AyahNumber: HighlightColor]
+        let highlightCollections: [AyahBookmarkCollection]
+        let noteCount: Int
+        let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         #else
-            let notes: [QuranAnnotations.Note]
-            let noteService: NoteService
+        let notes: [QuranAnnotations.Note]
+        let noteService: NoteService
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
     }
@@ -78,9 +78,9 @@ final class AyahMenuViewModel {
 
     var highlightingColor: HighlightColor {
         #if QURAN_SYNC
-            return selectedHighlightColor ?? HighlightPreferences.shared.lastUsedHighlightColor
+        return selectedHighlightColor ?? HighlightPreferences.shared.lastUsedHighlightColor
         #else
-            return deps.noteService.color(from: deps.notes)
+        return deps.noteService.color(from: deps.notes)
         #endif
     }
 
@@ -105,30 +105,30 @@ final class AyahMenuViewModel {
 
     var usesSyncedNotesIcon: Bool {
         #if QURAN_SYNC
-            return true
+        return true
         #else
-            return false
+        return false
         #endif
     }
 
     var noteCount: Int {
         #if QURAN_SYNC
-            return deps.noteCount
+        return deps.noteCount
         #else
-            return 0
+        return 0
         #endif
     }
 
     var noteState: AyahMenuUI.NoteState {
         #if QURAN_SYNC
-            return noteCount > 0 ? .noted : .noHighlight
+        return noteCount > 0 ? .noted : .noHighlight
         #else
-            if deps.notes.isEmpty {
-                return .noHighlight
-            } else if containsText(deps.notes) {
-                return .noted
-            }
-            return .highlighted
+        if deps.notes.isEmpty {
+            return .noHighlight
+        } else if containsText(deps.notes) {
+            return .noted
+        }
+        return .highlighted
         #endif
     }
 
@@ -155,22 +155,22 @@ final class AyahMenuViewModel {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
         #if QURAN_SYNC
-            await listener?.deleteNotes(in: deps.verses)
+        await listener?.deleteNotes(in: deps.verses)
         #else
-            await listener?.deleteNotes(deps.notes, in: deps.verses)
+        await listener?.deleteNotes(deps.notes, in: deps.verses)
         #endif
     }
 
     func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
         #if QURAN_SYNC
-            listener?.addSyncedNote(verses: deps.verses)
+        listener?.addSyncedNote(verses: deps.verses)
         #else
-            let notes = deps.notes
-            let color = deps.noteService.color(from: notes)
-            if let note = await updateLegacyHighlight(color: color) {
-                listener?.editNote(note)
-            }
+        let notes = deps.notes
+        let color = deps.noteService.color(from: notes)
+        if let note = await updateLegacyHighlight(color: color) {
+            listener?.editNote(note)
+        }
         #endif
     }
 
@@ -213,54 +213,54 @@ final class AyahMenuViewModel {
     private let deps: Deps
 
     #if QURAN_SYNC
-        private var selectedHighlightColor: HighlightColor? {
-            let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
-            guard colors.count == deps.verses.count else {
-                return nil
-            }
-            let uniqueColors = Set(colors)
-            return uniqueColors.count == 1 ? uniqueColors.first : nil
+    private var selectedHighlightColor: HighlightColor? {
+        let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
+        guard colors.count == deps.verses.count else {
+            return nil
         }
+        let uniqueColors = Set(colors)
+        return uniqueColors.count == 1 ? uniqueColors.first : nil
+    }
     #endif
 
     // MARK: - Helper
 
     #if !QURAN_SYNC
-        private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {
-            notes.contains { note in
-                !(note.note ?? "").isEmpty
-            }
+    private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {
+        notes.contains { note in
+            !(note.note ?? "").isEmpty
         }
+    }
     #endif
 
     private func _updateHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
         #if QURAN_SYNC
-            do {
-                try await updateSyncedHighlight(color: color)
-                return nil
-            } catch {
-                crasher.recordError(error, reason: "Failed to update synced highlights")
-                return nil
-            }
+        do {
+            try await updateSyncedHighlight(color: color)
+            return nil
+        } catch {
+            crasher.recordError(error, reason: "Failed to update synced highlights")
+            return nil
+        }
         #else
-            return await updateLegacyHighlight(color: color)
+        return await updateLegacyHighlight(color: color)
         #endif
     }
 
     #if !QURAN_SYNC
-        private func updateLegacyHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
-            let quran = ReadingPreferences.shared.reading.quran
-            do {
-                let updatedNote = try await deps.noteService.updateHighlight(
-                    verses: deps.verses, color: color, quran: quran
-                )
-                logger.info("AyahMenu: notes updated")
-                return updatedNote
-            } catch {
-                crasher.recordError(error, reason: "Failed to update highlights")
-                return nil
-            }
+    private func updateLegacyHighlight(color: HighlightColor) async -> QuranAnnotations.Note? {
+        let quran = ReadingPreferences.shared.reading.quran
+        do {
+            let updatedNote = try await deps.noteService.updateHighlight(
+                verses: deps.verses, color: color, quran: quran
+            )
+            logger.info("AyahMenu: notes updated")
+            return updatedNote
+        } catch {
+            crasher.recordError(error, reason: "Failed to update highlights")
+            return nil
         }
+    }
     #endif
 
     private func retrieveSelectedAyahText() async throws -> [String] {
@@ -270,35 +270,35 @@ final class AyahMenuViewModel {
     }
 
     #if QURAN_SYNC
-        private func updateSyncedHighlight(color: HighlightColor) async throws {
-            HighlightPreferences.shared.lastUsedHighlightColor = color
+    private func updateSyncedHighlight(color: HighlightColor) async throws {
+        HighlightPreferences.shared.lastUsedHighlightColor = color
 
-            let collections = deps.highlightCollections.filter {
-                HighlightColor(collectionName: $0.collection.name) != nil
-            }
-            guard let targetCollection = collections.first(where: {
-                $0.collection.name == color.collectionName
-            }) else {
-                throw AyahMenuError.highlightCollectionUnavailable
-            }
-            let service = deps.ayahBookmarkCollectionService
-            let otherCollections = collections.filter {
-                $0.collection.localId != targetCollection.collection.localId
-            }
-            try await service.addAyahBookmarksIfNeeded(
-                deps.verses,
-                to: targetCollection
-            )
-            try await service.removeAyahBookmarksIfNeeded(
-                deps.verses,
-                from: otherCollections
-            )
+        let collections = deps.highlightCollections.filter {
+            HighlightColor(collectionName: $0.collection.name) != nil
         }
+        guard let targetCollection = collections.first(where: {
+            $0.collection.name == color.collectionName
+        }) else {
+            throw AyahMenuError.highlightCollectionUnavailable
+        }
+        let service = deps.ayahBookmarkCollectionService
+        let otherCollections = collections.filter {
+            $0.collection.localId != targetCollection.collection.localId
+        }
+        try await service.addAyahBookmarksIfNeeded(
+            deps.verses,
+            to: targetCollection
+        )
+        try await service.removeAyahBookmarksIfNeeded(
+            deps.verses,
+            from: otherCollections
+        )
+    }
     #endif
 }
 
 #if QURAN_SYNC
-    private enum AyahMenuError: Error {
-        case highlightCollectionUnavailable
-    }
+private enum AyahMenuError: Error {
+    case highlightCollectionUnavailable
+}
 #endif

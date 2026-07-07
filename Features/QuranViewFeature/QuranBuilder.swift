@@ -11,7 +11,7 @@ import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
 #if QURAN_SYNC
-    import BookmarksFeature
+import BookmarksFeature
 #endif
 import MoreMenuFeature
 import NoteEditorFeature
@@ -39,50 +39,50 @@ public struct QuranBuilder {
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
-            let syncedNoteService = container.mobileSyncNoteService()
-            let syncedNoteEditorBuilder = SyncedNoteEditorBuilder(
-                noteService: syncedNoteService,
-                textService: container.textDataService(),
-                analytics: container.analytics
-            )
-            let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
-                ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
-                highlightsService: highlightsService
-            )
-            let interactorDeps = QuranInteractor.Deps(
-                quran: quran,
-                analytics: container.analytics,
-                pageBookmarkService: pageBookmarkService,
-                highlightsService: highlightsService,
-                ayahMenuBuilder: AyahMenuBuilder(container: container),
-                moreMenuBuilder: MoreMenuBuilder(),
-                audioBannerBuilder: AudioBannerBuilder(container: container),
-                wordPointerBuilder: WordPointerBuilder(container: container),
-                contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
-                translationsSelectionBuilder: TranslationsListBuilder(container: container),
-                translationVerseBuilder: TranslationVerseBuilder(container: container),
-                resources: container.readingResources,
-                syncedNoteService: syncedNoteService,
-                syncedNoteEditorBuilder: syncedNoteEditorBuilder,
-                syncedHighlightsObserver: syncedHighlightsObserver
-            )
+        let syncedNoteService = container.mobileSyncNoteService()
+        let syncedNoteEditorBuilder = SyncedNoteEditorBuilder(
+            noteService: syncedNoteService,
+            textService: container.textDataService(),
+            analytics: container.analytics
+        )
+        let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
+            ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
+            highlightsService: highlightsService
+        )
+        let interactorDeps = QuranInteractor.Deps(
+            quran: quran,
+            analytics: container.analytics,
+            pageBookmarkService: pageBookmarkService,
+            highlightsService: highlightsService,
+            ayahMenuBuilder: AyahMenuBuilder(container: container),
+            moreMenuBuilder: MoreMenuBuilder(),
+            audioBannerBuilder: AudioBannerBuilder(container: container),
+            wordPointerBuilder: WordPointerBuilder(container: container),
+            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+            translationsSelectionBuilder: TranslationsListBuilder(container: container),
+            translationVerseBuilder: TranslationVerseBuilder(container: container),
+            resources: container.readingResources,
+            syncedNoteService: syncedNoteService,
+            syncedNoteEditorBuilder: syncedNoteEditorBuilder,
+            syncedHighlightsObserver: syncedHighlightsObserver
+        )
         #else
-            let interactorDeps = QuranInteractor.Deps(
-                quran: quran,
-                analytics: container.analytics,
-                pageBookmarkService: pageBookmarkService,
-                highlightsService: highlightsService,
-                ayahMenuBuilder: AyahMenuBuilder(container: container),
-                moreMenuBuilder: MoreMenuBuilder(),
-                audioBannerBuilder: AudioBannerBuilder(container: container),
-                wordPointerBuilder: WordPointerBuilder(container: container),
-                contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
-                translationsSelectionBuilder: TranslationsListBuilder(container: container),
-                translationVerseBuilder: TranslationVerseBuilder(container: container),
-                resources: container.readingResources,
-                noteService: container.noteService(),
-                noteEditorBuilder: NoteEditorBuilder(container: container)
-            )
+        let interactorDeps = QuranInteractor.Deps(
+            quran: quran,
+            analytics: container.analytics,
+            pageBookmarkService: pageBookmarkService,
+            highlightsService: highlightsService,
+            ayahMenuBuilder: AyahMenuBuilder(container: container),
+            moreMenuBuilder: MoreMenuBuilder(),
+            audioBannerBuilder: AudioBannerBuilder(container: container),
+            wordPointerBuilder: WordPointerBuilder(container: container),
+            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+            translationsSelectionBuilder: TranslationsListBuilder(container: container),
+            translationVerseBuilder: TranslationVerseBuilder(container: container),
+            resources: container.readingResources,
+            noteService: container.noteService(),
+            noteEditorBuilder: NoteEditorBuilder(container: container)
+        )
         #endif
         let interactor = QuranInteractor(deps: interactorDeps, input: input)
         let viewController = QuranViewController(interactor: interactor)

@@ -72,12 +72,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
         #if QURAN_SYNC
-            let syncedNoteService: MobileSyncNoteService
-            let syncedNoteEditorBuilder: SyncedNoteEditorBuilder
-            let syncedHighlightsObserver: QuranSyncedHighlightsObserver
+        let syncedNoteService: MobileSyncNoteService
+        let syncedNoteEditorBuilder: SyncedNoteEditorBuilder
+        let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         #else
-            let noteService: NoteService
-            let noteEditorBuilder: NoteEditorBuilder
+        let noteService: NoteService
+        let noteEditorBuilder: NoteEditorBuilder
         #endif
     }
 
@@ -91,7 +91,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     deinit {
         #if QURAN_SYNC
-            syncedNotesObservationTask?.cancel()
+        syncedNotesObservationTask?.cancel()
         #endif
     }
 
@@ -113,10 +113,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func start() {
         #if QURAN_SYNC
-            deps.syncedHighlightsObserver.start()
-            startSyncedNotesObservation(deps.syncedNoteService)
+        deps.syncedHighlightsObserver.start()
+        startSyncedNotesObservation(deps.syncedNoteService)
         #else
-            startLegacyNotesObservation()
+        startLegacyNotesObservation()
         #endif
 
         deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
@@ -195,41 +195,41 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if QURAN_SYNC
-        func deleteNotes(in verses: [AyahNumber]) async {
-            let syncedNoteService = deps.syncedNoteService
-            let notesToDelete = syncedNotes(interacting: verses)
-            if !notesToDelete.isEmpty {
-                presenter?.confirmNoteDelete(
-                    delete: { [weak self] in
-                        do {
-                            self?.contentViewModel?.removeAyahMenuHighlight()
-                            for note in notesToDelete {
-                                try await syncedNoteService.removeNote(note)
-                            }
-                        } catch {
-                            crasher.recordError(error, reason: "Failed to delete synced notes")
+    func deleteNotes(in verses: [AyahNumber]) async {
+        let syncedNoteService = deps.syncedNoteService
+        let notesToDelete = syncedNotes(interacting: verses)
+        if !notesToDelete.isEmpty {
+            presenter?.confirmNoteDelete(
+                delete: { [weak self] in
+                    do {
+                        self?.contentViewModel?.removeAyahMenuHighlight()
+                        for note in notesToDelete {
+                            try await syncedNoteService.removeNote(note)
                         }
-                    },
-                    cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
-                )
-            }
+                    } catch {
+                        crasher.recordError(error, reason: "Failed to delete synced notes")
+                    }
+                },
+                cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
+            )
         }
+    }
     #else
-        func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async {
-            let containsText = notes.contains { note in
-                !(note.note ?? "").isEmpty
-            }
-            if containsText {
-                // confirm deletion first if there is text
-                presenter?.confirmNoteDelete(
-                    delete: { await self.forceDeleteNotes(notes, verses: verses) },
-                    cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
-                )
-            } else {
-                // delete highlight
-                await forceDeleteNotes(notes, verses: verses)
-            }
+    func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async {
+        let containsText = notes.contains { note in
+            !(note.note ?? "").isEmpty
         }
+        if containsText {
+            // confirm deletion first if there is text
+            presenter?.confirmNoteDelete(
+                delete: { await self.forceDeleteNotes(notes, verses: verses) },
+                cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
+            )
+        } else {
+            // delete highlight
+            await forceDeleteNotes(notes, verses: verses)
+        }
+    }
     #endif
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {
@@ -239,21 +239,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if !QURAN_SYNC
-        func editNote(_ note: Note) {
-            dismissAyahMenu()
-            presenter?.rotateToPortraitIfPhone()
-            let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
-            presenter?.present(viewController, animated: true)
-        }
+    func editNote(_ note: Note) {
+        dismissAyahMenu()
+        presenter?.rotateToPortraitIfPhone()
+        let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
+        presenter?.present(viewController, animated: true)
+    }
     #endif
 
     #if QURAN_SYNC
-        func addSyncedNote(verses: [AyahNumber]) {
-            dismissAyahMenu()
-            presenter?.rotateToPortraitIfPhone()
-            let viewController = deps.syncedNoteEditorBuilder.build(withListener: self, verses: verses)
-            presenter?.present(viewController, animated: true)
-        }
+    func addSyncedNote(verses: [AyahNumber]) {
+        dismissAyahMenu()
+        presenter?.rotateToPortraitIfPhone()
+        let viewController = deps.syncedNoteEditorBuilder.build(withListener: self, verses: verses)
+        presenter?.present(viewController, animated: true)
+    }
     #endif
 
     func dismissNoteEditor() {
@@ -282,21 +282,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
         #if QURAN_SYNC
-            let input = AyahMenuInput(
-                sourceView: sourceView,
-                pointInView: point,
-                verses: verses,
-                noteCount: syncedNoteCount(interacting: verses),
-                highlightVerses: deps.highlightsService.highlights.highlightVerses,
-                highlightCollections: deps.syncedHighlightsObserver.collections
-            )
+        let input = AyahMenuInput(
+            sourceView: sourceView,
+            pointInView: point,
+            verses: verses,
+            noteCount: syncedNoteCount(interacting: verses),
+            highlightVerses: deps.highlightsService.highlights.highlightVerses,
+            highlightCollections: deps.syncedHighlightsObserver.collections
+        )
         #else
-            let input = AyahMenuInput(
-                sourceView: sourceView,
-                pointInView: point,
-                verses: verses,
-                notes: notesInteractingVerses(verses)
-            )
+        let input = AyahMenuInput(
+            sourceView: sourceView,
+            pointInView: point,
+            verses: verses,
+            notes: notesInteractingVerses(verses)
+        )
         #endif
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
@@ -372,10 +372,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     #if QURAN_SYNC
-        private var syncedNotes: [SyncedNote] = []
-        private var syncedNotesObservationTask: Task<Void, Never>?
+    private var syncedNotes: [SyncedNote] = []
+    private var syncedNotesObservationTask: Task<Void, Never>?
     #else
-        private var notes: [Note] = []
+    private var notes: [Note] = []
     #endif
 
     private var deps: Deps
@@ -403,32 +403,32 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if !QURAN_SYNC
-        private func startLegacyNotesObservation() {
-            deps.noteService.notes(quran: deps.quran)
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in self?.notes = $0 }
-                .store(in: &cancellables)
-        }
+    private func startLegacyNotesObservation() {
+        deps.noteService.notes(quran: deps.quran)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.notes = $0 }
+            .store(in: &cancellables)
+    }
     #endif
 
     #if QURAN_SYNC
-        private func startSyncedNotesObservation(_ noteService: MobileSyncNoteService) {
-            let quran = deps.quran
-            syncedNotesObservationTask?.cancel()
-            syncedNotesObservationTask = Task {
-                do {
-                    let sequence = noteService.notesSequence(quran: quran)
-                    for try await notes in sequence {
-                        await MainActor.run { [weak self] in
-                            self?.syncedNotes = notes
-                        }
+    private func startSyncedNotesObservation(_ noteService: MobileSyncNoteService) {
+        let quran = deps.quran
+        syncedNotesObservationTask?.cancel()
+        syncedNotesObservationTask = Task {
+            do {
+                let sequence = noteService.notesSequence(quran: quran)
+                for try await notes in sequence {
+                    await MainActor.run { [weak self] in
+                        self?.syncedNotes = notes
                     }
-                } catch is CancellationError {
-                } catch {
-                    crasher.recordError(error, reason: "Failed to observe synced notes")
                 }
+            } catch is CancellationError {
+            } catch {
+                crasher.recordError(error, reason: "Failed to observe synced notes")
             }
         }
+    }
     #endif
 
     private func setVisiblePages(_ pages: [Page]) {
@@ -454,39 +454,39 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if !QURAN_SYNC
-        private func forceDeleteNotes(_ notes: [Note], verses: [AyahNumber]) async {
-            contentViewModel?.removeAyahMenuHighlight()
-            do {
-                try await deps.noteService.removeNotes(with: verses)
-            } catch {
-                crasher.recordError(error, reason: "Failed to remove notes")
-            }
+    private func forceDeleteNotes(_ notes: [Note], verses: [AyahNumber]) async {
+        contentViewModel?.removeAyahMenuHighlight()
+        do {
+            try await deps.noteService.removeNotes(with: verses)
+        } catch {
+            crasher.recordError(error, reason: "Failed to remove notes")
         }
+    }
 
-        private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
-            let selectedVerses = Set(verses)
-            return notes.filter { !selectedVerses.isDisjoint(with: $0.verses) }
-        }
+    private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
+        let selectedVerses = Set(verses)
+        return notes.filter { !selectedVerses.isDisjoint(with: $0.verses) }
+    }
     #endif
 
     private func syncedNoteCount(interacting verses: [AyahNumber]) -> Int {
         #if QURAN_SYNC
-            return SyncedNoteCounter.count(syncedNotes, interacting: verses)
+        return SyncedNoteCounter.count(syncedNotes, interacting: verses)
         #else
-            return 0
+        return 0
         #endif
     }
 
     #if QURAN_SYNC
-        private func syncedNotes(interacting verses: [AyahNumber]) -> [SyncedNote] {
-            let selectedVerses = Set(verses)
-            return syncedNotes.filter { note in
-                guard note.endAyah >= note.startAyah else {
-                    return false
-                }
-                return !selectedVerses.isDisjoint(with: note.startAyah.array(to: note.endAyah))
+    private func syncedNotes(interacting verses: [AyahNumber]) -> [SyncedNote] {
+        let selectedVerses = Set(verses)
+        return syncedNotes.filter { note in
+            guard note.endAyah >= note.startAyah else {
+                return false
             }
+            return !selectedVerses.isDisjoint(with: note.startAyah.array(to: note.endAyah))
         }
+    }
     #endif
 
     private func dismissWordPointer() {

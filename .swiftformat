@@ -8,6 +8,7 @@
 --wrap-parameters before-first # wrapArguments
 --func-attributes prev-line # wrapAttributes
 --type-attributes prev-line # wrapAttributes
+--ifdef no-indent # indent
 
 # Disabled
 

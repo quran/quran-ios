@@ -12,7 +12,7 @@ import BatchDownloader
 import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
-    import MobileSync
+import MobileSync
 #endif
 import NotePersistence
 import PageBookmarkPersistence
@@ -43,7 +43,7 @@ public protocol AppDependencies {
     var authenticationClient: (any AuthenticationClient)? { get }
 
     #if QURAN_SYNC
-        var quranDataService: QuranDataService { get }
+    var quranDataService: QuranDataService { get }
     #endif
 }
 
@@ -52,9 +52,9 @@ extension AppDependencies {
 
     public func lastPageService() -> any LastPageService {
         #if QURAN_SYNC
-            return MobileSyncLastPageService(quranDataService: quranDataService)
+        return MobileSyncLastPageService(quranDataService: quranDataService)
         #else
-            return PersistenceLastPageService(persistence: lastPagePersistence)
+        return PersistenceLastPageService(persistence: lastPagePersistence)
         #endif
     }
 
@@ -74,8 +74,8 @@ extension AppDependencies {
     }
 
     #if QURAN_SYNC
-        public func mobileSyncNoteService() -> MobileSyncNoteService {
-            MobileSyncNoteService(quranDataService: quranDataService)
-        }
+    public func mobileSyncNoteService() -> MobileSyncNoteService {
+        MobileSyncNoteService(quranDataService: quranDataService)
+    }
     #endif
 }

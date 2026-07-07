@@ -14,7 +14,7 @@ import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
-    import MobileSync
+import MobileSync
 #endif
 import NotePersistence
 import PageBookmarkPersistence
@@ -42,15 +42,15 @@ class Container: AppDependencies {
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     #if QURAN_SYNC
-        private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
+    private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
 
-        private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
-            let authService = syncAppGraph.authService
-            let quranDataService = syncAppGraph.quranDataService
-            return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)
-        }()
+    private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
+        let authService = syncAppGraph.authService
+        let quranDataService = syncAppGraph.quranDataService
+        return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)
+    }()
     #else
-        let authenticationClient: (any AuthenticationClient)? = nil
+    let authenticationClient: (any AuthenticationClient)? = nil
     #endif
 
     private(set) lazy var downloadManager: DownloadManager = {
@@ -76,63 +76,63 @@ class Container: AppDependencies {
     // MARK: Private
 
     #if QURAN_SYNC
-        private static let mobileSyncRedirectURI = "com.quran.oauth://callback"
-        private static let mobileSyncScopes = [
-            "openid",
-            "offline_access",
-            "content",
-            "user",
-            "bookmark",
-            "sync",
-            "collection",
-            "reading_session",
-            "preference",
-            "note",
-        ]
+    private static let mobileSyncRedirectURI = "com.quran.oauth://callback"
+    private static let mobileSyncScopes = [
+        "openid",
+        "offline_access",
+        "content",
+        "user",
+        "bookmark",
+        "sync",
+        "collection",
+        "reading_session",
+        "preference",
+        "note",
+    ]
 
-        private lazy var syncAppGraph: AppGraph = {
-            let authConfig = Self.mobileSyncAuthConfiguration()
-            let synchronizationEnvironment = Self.makeSynchronizationEnvironment(usePreProduction: Self.usePreProductionSyncEnvironment())
+    private lazy var syncAppGraph: AppGraph = {
+        let authConfig = Self.mobileSyncAuthConfiguration()
+        let synchronizationEnvironment = Self.makeSynchronizationEnvironment(usePreProduction: Self.usePreProductionSyncEnvironment())
 
-            AuthFlowFactoryProvider.shared.doInitialize()
+        AuthFlowFactoryProvider.shared.doInitialize()
 
-            let driverFactory = DriverFactory()
-            let storage = AppleMobileSyncStorageFactory.shared.create()
-            let graph = SharedDependencyGraph.shared.doInit(
-                driverFactory: driverFactory,
-                storage: storage,
-                environment: synchronizationEnvironment,
-                authConfig: authConfig
-            )
+        let driverFactory = DriverFactory()
+        let storage = AppleMobileSyncStorageFactory.shared.create()
+        let graph = SharedDependencyGraph.shared.doInit(
+            driverFactory: driverFactory,
+            storage: storage,
+            environment: synchronizationEnvironment,
+            authConfig: authConfig
+        )
 
-            return graph
-        }()
+        return graph
+    }()
 
-        private static func mobileSyncAuthConfiguration() -> AuthConfig {
-            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") ?? "stub-value"
-            if clientID == "stub-value" {
-                logger.info("Using stubbed client ID for sync")
-            }
-
-            let usePreProduction = usePreProductionSyncEnvironment()
-            let authEnvironment: AuthEnvironment = usePreProduction ? .prelive : .production
-
-            return AuthConfig(
-                environment: authEnvironment,
-                clientId: clientID,
-                clientSecret: nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET"),
-                redirectUri: mobileSyncRedirectURI,
-                postLogoutRedirectUri: mobileSyncRedirectURI,
-                scopes: mobileSyncScopes
-            )
+    private static func mobileSyncAuthConfiguration() -> AuthConfig {
+        let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") ?? "stub-value"
+        if clientID == "stub-value" {
+            logger.info("Using stubbed client ID for sync")
         }
 
-        private static func makeSynchronizationEnvironment(usePreProduction: Bool) -> SynchronizationEnvironment {
-            let endpoint = usePreProduction
-                ? "https://apis-prelive.quran.foundation/auth"
-                : "https://apis.quran.foundation/auth"
-            return SynchronizationEnvironment(endPointURL: endpoint)
-        }
+        let usePreProduction = usePreProductionSyncEnvironment()
+        let authEnvironment: AuthEnvironment = usePreProduction ? .prelive : .production
+
+        return AuthConfig(
+            environment: authEnvironment,
+            clientId: clientID,
+            clientSecret: nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET"),
+            redirectUri: mobileSyncRedirectURI,
+            postLogoutRedirectUri: mobileSyncRedirectURI,
+            scopes: mobileSyncScopes
+        )
+    }
+
+    private static func makeSynchronizationEnvironment(usePreProduction: Bool) -> SynchronizationEnvironment {
+        let endpoint = usePreProduction
+            ? "https://apis-prelive.quran.foundation/auth"
+            : "https://apis.quran.foundation/auth"
+        return SynchronizationEnvironment(endPointURL: endpoint)
+    }
     #endif
 
     private lazy var coreDataStack: CoreDataStack = {

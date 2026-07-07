@@ -77,9 +77,9 @@ private struct BookmarksViewUI: View {
     private var emptyState: some View {
         VStack(spacing: 16) {
             #if QURAN_SYNC
-                NoorList {
-                    listSections(includeBookmarks: false)
-                }
+            NoorList {
+                listSections(includeBookmarks: false)
+            }
             #endif
             noData
         }
@@ -101,46 +101,46 @@ private struct BookmarksViewUI: View {
     }
 
     #if QURAN_SYNC
-        private var oldPageBookmarksRow: some View {
-            NoorListItem(
-                image: .init(.bookmark, color: .secondary),
-                title: .text(l("bookmarks.old-page-bookmarks")),
-                subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
-                accessory: .disclosureIndicator,
-                action: showOldPageBookmarksAction
-            )
-        }
+    private var oldPageBookmarksRow: some View {
+        NoorListItem(
+            image: .init(.bookmark, color: .secondary),
+            title: .text(l("bookmarks.old-page-bookmarks")),
+            subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
+            accessory: .disclosureIndicator,
+            action: showOldPageBookmarksAction
+        )
+    }
 
-        private var collectionsRow: some View {
-            NoorListItem(
-                image: .init(.folder, color: .accentColor),
-                title: .text(l("bookmarks.collections")),
-                accessory: .disclosureIndicator,
-                action: showCollectionsAction
-            )
-        }
+    private var collectionsRow: some View {
+        NoorListItem(
+            image: .init(.folder, color: .accentColor),
+            title: .text(l("bookmarks.collections")),
+            accessory: .disclosureIndicator,
+            action: showCollectionsAction
+        )
+    }
     #endif
 
     @ViewBuilder
     private func listSections(includeBookmarks: Bool) -> some View {
         #if QURAN_SYNC
-            if shouldShowSyncBanner {
-                NoorBasicSection {
-                    syncBanner
-                }
+        if shouldShowSyncBanner {
+            NoorBasicSection {
+                syncBanner
             }
+        }
 
-            if showOldPageBookmarksAction != nil {
-                NoorBasicSection {
-                    oldPageBookmarksRow
-                }
+        if showOldPageBookmarksAction != nil {
+            NoorBasicSection {
+                oldPageBookmarksRow
             }
+        }
 
-            if showCollectionsAction != nil {
-                NoorBasicSection {
-                    collectionsRow
-                }
+        if showCollectionsAction != nil {
+            NoorBasicSection {
+                collectionsRow
             }
+        }
         #endif
 
         if includeBookmarks {

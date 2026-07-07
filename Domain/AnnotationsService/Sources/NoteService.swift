@@ -28,40 +28,40 @@ public struct NoteService {
     // MARK: Public
 
     #if !QURAN_SYNC
-        public func color(from notes: [Note]) -> HighlightColor {
-            notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? HighlightPreferences.shared.lastUsedHighlightColor
-        }
+    public func color(from notes: [Note]) -> HighlightColor {
+        notes.max { $0.modifiedDate < $1.modifiedDate }?.color ?? HighlightPreferences.shared.lastUsedHighlightColor
+    }
 
-        public func updateHighlight(verses: [AyahNumber], color: HighlightColor, quran: Quran) async throws -> Note {
-            // update last used highlight color
-            HighlightPreferences.shared.lastUsedHighlightColor = color
+    public func updateHighlight(verses: [AyahNumber], color: HighlightColor, quran: Quran) async throws -> Note {
+        // update last used highlight color
+        HighlightPreferences.shared.lastUsedHighlightColor = color
 
-            analytics.highlight(verses: verses)
-            let verses = verses.map(VersePersistenceModel.init)
-            let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
-            return Note(quran: quran, persistenceModel)
-        }
+        analytics.highlight(verses: verses)
+        let verses = verses.map(VersePersistenceModel.init)
+        let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
+        return Note(quran: quran, persistenceModel)
+    }
 
-        public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
-            // update last used highlight color
-            HighlightPreferences.shared.lastUsedHighlightColor = color
+    public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
+        // update last used highlight color
+        HighlightPreferences.shared.lastUsedHighlightColor = color
 
-            analytics.updateNote(verses: verses)
-            let verses = verses.map(VersePersistenceModel.init)
-            _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
-        }
+        analytics.updateNote(verses: verses)
+        let verses = verses.map(VersePersistenceModel.init)
+        _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
+    }
 
-        public func removeNotes(with verses: [AyahNumber]) async throws {
-            analytics.unhighlight(verses: verses)
-            let verses = verses.map(VersePersistenceModel.init)
-            _ = try await persistence.removeNotes(with: verses)
-        }
+    public func removeNotes(with verses: [AyahNumber]) async throws {
+        analytics.unhighlight(verses: verses)
+        let verses = verses.map(VersePersistenceModel.init)
+        _ = try await persistence.removeNotes(with: verses)
+    }
 
-        public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {
-            persistence.notes()
-                .map { notes in notes.map { Note(quran: quran, $0) } }
-                .eraseToAnyPublisher()
-        }
+    public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {
+        persistence.notes()
+            .map { notes in notes.map { Note(quran: quran, $0) } }
+            .eraseToAnyPublisher()
+    }
     #endif
 
     public func textForVerses(_ verses: [AyahNumber]) async throws -> String {
@@ -88,18 +88,18 @@ public struct NoteService {
 private extension Note {
     init(quran: Quran, _ note: NotePersistenceModel) {
         #if QURAN_SYNC
-            self.init(
-                verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
-                modifiedDate: note.modifiedDate,
-                note: note.note ?? ""
-            )
+        self.init(
+            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+            modifiedDate: note.modifiedDate,
+            note: note.note ?? ""
+        )
         #else
-            self.init(
-                verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
-                modifiedDate: note.modifiedDate,
-                note: note.note,
-                color: HighlightColor(rawValue: note.color) ?? .red
-            )
+        self.init(
+            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+            modifiedDate: note.modifiedDate,
+            note: note.note,
+            color: HighlightColor(rawValue: note.color) ?? .red
+        )
         #endif
     }
 }

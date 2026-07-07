@@ -16,17 +16,46 @@ SWIFT_FORMAT_DIR=$(BUILD_TOOLS_DIR)/SwiftFormat
 SWIFT_FORMAT_BIN=$(SWIFT_FORMAT_DIR)/.build/release/swiftformat
 
 CURRENT_TARGET=$(if $(TARGET),$(TARGET),$(PACKAGE_SCHEME))
+WITHOUT_QURAN_SYNC=env -u QURAN_SYNC
+WITH_QURAN_SYNC=env QURAN_SYNC=1
 
-.PHONY: test build build-example clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect install-swiftlint build-for-analyzer swiftlint-analyzer
+.PHONY: test test-no-sync test-sync test-without-sync test-with-sync build build-no-sync build-sync build-without-sync build-with-sync build-example build-example-no-sync build-example-sync build-example-without-sync build-example-with-sync clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect install-swiftlint build-for-analyzer swiftlint-analyzer
 
-test:
-	set -o pipefail; xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+test: test-no-sync
 
-build:
-	set -o pipefail; xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcbeautify --renderer github-actions
+test-no-sync: test-without-sync
 
-build-example:
-	set -o pipefail; xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcbeautify --renderer github-actions
+test-sync: test-with-sync
+
+test-without-sync:
+	set -o pipefail; $(WITHOUT_QURAN_SYNC) xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+
+test-with-sync:
+	set -o pipefail; $(WITH_QURAN_SYNC) xcrun xcodebuild build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+
+build: build-no-sync
+
+build-no-sync: build-without-sync
+
+build-sync: build-with-sync
+
+build-without-sync:
+	set -o pipefail; $(WITHOUT_QURAN_SYNC) xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcbeautify --renderer github-actions
+
+build-with-sync:
+	set -o pipefail; $(WITH_QURAN_SYNC) xcrun xcodebuild build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" | xcbeautify --renderer github-actions
+
+build-example: build-example-no-sync
+
+build-example-no-sync: build-example-without-sync
+
+build-example-sync: build-example-with-sync
+
+build-example-without-sync:
+	set -o pipefail; $(WITHOUT_QURAN_SYNC) xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcbeautify --renderer github-actions
+
+build-example-with-sync:
+	set -o pipefail; $(WITH_QURAN_SYNC) xcrun xcodebuild build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcbeautify --renderer github-actions
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

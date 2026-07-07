@@ -20,11 +20,26 @@ jobs:
       run: brew install xcbeautify
 
     - name: Run tests
-      run: make test
+      run: make test-no-sync
 
     - uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+  PackageSync:
+    runs-on: macos-26
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setting up Xcode
+      run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
+
+    - name: Install xcbeautify
+      run: brew install xcbeautify
+
+    - name: Run tests
+      run: make test-sync
 
   ExampleApp:
     runs-on: macos-26
@@ -39,7 +54,22 @@ jobs:
         run: brew install xcbeautify
       
       - name: Build
-        run: make build-example
+        run: make build-example-no-sync
+
+  ExampleAppSync:
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
+
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+      
+      - name: Build
+        run: make build-example-sync
 
   SwiftFormat:
     runs-on: macos-26

@@ -21,7 +21,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         authService.loggedInUser
     }
 
-    public func login(on _: UIViewController) async throws {
+    public func login(on _: UIViewController) async throws(AuthenticationClientError) {
         do {
             try await authService.signInWithReauthentication()
         } catch {
@@ -30,7 +30,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         }
     }
 
-    public func restoreState() async throws -> AuthenticationState {
+    public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
         do {
             _ = try await authService.refreshAuthentication()
             return authenticationState
@@ -40,7 +40,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         }
     }
 
-    public func logout() async throws {
+    public func logout() async throws(AuthenticationClientError) {
         do {
             try await syncService.logout(clearLocalData: true)
         } catch {
@@ -49,7 +49,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         }
     }
 
-    public func authenticate(request: URLRequest) async throws -> URLRequest {
+    public func authenticate(request: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
         let headers = try await getAuthenticationHeaders()
         var request = request
         for (field, value) in headers {
@@ -58,7 +58,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
         return request
     }
 
-    public func getAuthenticationHeaders() async throws -> [String: String] {
+    public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
         do {
             return try await authService.authenticationHeaders()
         } catch {

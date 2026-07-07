@@ -28,32 +28,27 @@ public struct BookmarksBuilder {
         #if QURAN_SYNC
             let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
-            if let syncService = container.syncService {
-                let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: syncService)
-                let navigateToPage: (Page) -> Void = { [weak listener] page in
-                    listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+            let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: container.syncService)
+            let navigateToPage: (Page) -> Void = { [weak listener] page in
+                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+            }
+            let collectionsBuilder = AyahBookmarkCollectionsBuilder(
+                ayahBookmarkCollectionService: ayahBookmarkCollectionService,
+                navigateToPage: navigateToPage
+            )
+            showCollectionsAction = { presenter in
+                guard let navigationController = presenter.navigationController else {
+                    return
                 }
-                let collectionsBuilder = AyahBookmarkCollectionsBuilder(
-                    ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-                    navigateToPage: navigateToPage
-                )
-                showCollectionsAction = { presenter in
-                    guard let navigationController = presenter.navigationController else {
-                        return
-                    }
-                    let collectionsViewController = collectionsBuilder.build()
-                    navigationController.pushViewController(collectionsViewController, animated: true)
+                let collectionsViewController = collectionsBuilder.build()
+                navigationController.pushViewController(collectionsViewController, animated: true)
+            }
+            showOldPageBookmarksAction = { presenter in
+                guard let navigationController = presenter.navigationController else {
+                    return
                 }
-                showOldPageBookmarksAction = { presenter in
-                    guard let navigationController = presenter.navigationController else {
-                        return
-                    }
-                    let oldPageBookmarksViewController = collectionsBuilder.buildOldPageBookmarks()
-                    navigationController.pushViewController(oldPageBookmarksViewController, animated: true)
-                }
-            } else {
-                showCollectionsAction = nil
-                showOldPageBookmarksAction = nil
+                let oldPageBookmarksViewController = collectionsBuilder.buildOldPageBookmarks()
+                navigationController.pushViewController(oldPageBookmarksViewController, animated: true)
             }
             let viewModel = BookmarksViewModel(
                 analytics: container.analytics,

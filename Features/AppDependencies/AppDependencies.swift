@@ -40,12 +40,11 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+    var authenticationClient: (any AuthenticationClient)? { get }
 
     #if QURAN_SYNC
-        var syncService: QuranDataService? { get }
+        var syncService: QuranDataService { get }
     #endif
-
-    var authenticationClient: (any AuthenticationClient)? { get }
 }
 
 extension AppDependencies {
@@ -53,11 +52,10 @@ extension AppDependencies {
 
     public func lastPageService() -> any LastPageService {
         #if QURAN_SYNC
-            if let syncService {
-                return MobileSyncLastPageService(syncService: syncService)
-            }
+            return MobileSyncLastPageService(syncService: syncService)
+        #else
+            return PersistenceLastPageService(persistence: lastPagePersistence)
         #endif
-        return PersistenceLastPageService(persistence: lastPagePersistence)
     }
 
     public func textDataService() -> QuranTextDataService {
@@ -76,10 +74,8 @@ extension AppDependencies {
     }
 
     #if QURAN_SYNC
-        public func mobileSyncNoteService() -> MobileSyncNoteService? {
-            syncService.map {
-                MobileSyncNoteService(syncService: $0)
-            }
+        public func mobileSyncNoteService() -> MobileSyncNoteService {
+            MobileSyncNoteService(syncService: syncService)
         }
     #endif
 }

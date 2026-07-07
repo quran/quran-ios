@@ -72,9 +72,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
         #if QURAN_SYNC
-            let syncedNoteService: MobileSyncNoteService?
-            let syncedNoteEditorBuilder: SyncedNoteEditorBuilder?
-            let syncedHighlightsObserver: QuranSyncedHighlightsObserver?
+            let syncedNoteService: MobileSyncNoteService
+            let syncedNoteEditorBuilder: SyncedNoteEditorBuilder
+            let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         #else
             let noteService: NoteService
             let noteEditorBuilder: NoteEditorBuilder
@@ -113,10 +113,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func start() {
         #if QURAN_SYNC
-            deps.syncedHighlightsObserver?.start()
-            if let syncedNoteService = deps.syncedNoteService {
-                startSyncedNotesObservation(syncedNoteService)
-            }
+            deps.syncedHighlightsObserver.start()
+            startSyncedNotesObservation(deps.syncedNoteService)
         #else
             startLegacyNotesObservation()
         #endif
@@ -198,9 +196,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
         func deleteNotes(in verses: [AyahNumber]) async {
-            guard let syncedNoteService = deps.syncedNoteService else {
-                return
-            }
+            let syncedNoteService = deps.syncedNoteService
             let notesToDelete = syncedNotes(interacting: verses)
             if !notesToDelete.isEmpty {
                 presenter?.confirmNoteDelete(
@@ -253,13 +249,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
         func addSyncedNote(verses: [AyahNumber]) {
-            guard let syncedNoteEditorBuilder = deps.syncedNoteEditorBuilder else {
-                return
-            }
-
             dismissAyahMenu()
             presenter?.rotateToPortraitIfPhone()
-            let viewController = syncedNoteEditorBuilder.build(withListener: self, verses: verses)
+            let viewController = deps.syncedNoteEditorBuilder.build(withListener: self, verses: verses)
             presenter?.present(viewController, animated: true)
         }
     #endif
@@ -296,7 +288,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 verses: verses,
                 noteCount: syncedNoteCount(interacting: verses),
                 highlightVerses: deps.highlightsService.highlights.highlightVerses,
-                highlightCollections: deps.syncedHighlightsObserver?.collections ?? []
+                highlightCollections: deps.syncedHighlightsObserver.collections
             )
         #else
             let input = AyahMenuInput(

@@ -1,9 +1,9 @@
 import Analytics
 import AnnotationsService
 import AuthenticationClient
+import AuthenticationClientFake
 import Combine
 import Foundation
-import MobileSync
 import PageBookmarkPersistence
 import UIKit
 import XCTest
@@ -24,32 +24,31 @@ final class BookmarksViewModelTests: XCTestCase {
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
-        let client = AuthenticationClientSpy()
-        client.restoreStateResult = .authenticated
+        let client = AuthenticationClientFake()
+        client.restoreStateResult = .success(.authenticated)
         let sut = makeSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
         await waitUntil { sut.isAuthenticated }
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.restoreStateCallCount, 1)
+        XCTAssertEqual(client.events, [.restoreState])
         task.cancel()
     }
 
     func test_start_fallsBackToCurrentState_whenRestoreFails() async {
-        let client = AuthenticationClientSpy()
-        client.restoreStateError = NSError(domain: "test", code: 1)
+        let client = AuthenticationClientFake()
+        client.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
         client.authenticationStateValue = .authenticated
         let sut = makeSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
         await waitUntil { sut.isAuthenticated }
-        XCTAssertEqual(client.restoreStateCallCount, 1)
-        XCTAssertEqual(client.authenticationStateReads, 1)
+        XCTAssertEqual(client.events, [.restoreState, .readAuthenticationState])
         task.cancel()
     }
 
     func test_loginToQuranCom_setsAuthenticated_whenLoginSucceeds() async {
-        let client = AuthenticationClientSpy()
+        let client = AuthenticationClientFake()
         let sut = makeSUT(authenticationClient: client)
         let presenter = UIViewController()
         sut.presenter = presenter
@@ -57,8 +56,7 @@ final class BookmarksViewModelTests: XCTestCase {
         await sut.loginToQuranCom()
 
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.loginCallCount, 1)
-        XCTAssertTrue(client.lastLoginViewController === presenter)
+        XCTAssertEqual(client.events, [.login])
         XCTAssertNil(sut.error)
     }
 
@@ -114,52 +112,4 @@ private struct PageBookmarkPersistenceSpy: PageBookmarkPersistence {
     func insertPageBookmark(_: Int) async throws {}
     func removePageBookmark(_: Int) async throws {}
     func removeAllPageBookmarks() async throws {}
-}
-
-private final class AuthenticationClientSpy: AuthenticationClient {
-    var restoreStateResult: AuthenticationState = .notAuthenticated
-    var restoreStateError: Error?
-    var authenticationStateValue: AuthenticationState = .notAuthenticated
-    var loginError: Error?
-    var restoreStateCallCount = 0
-    var authenticationStateReads = 0
-    var loginCallCount = 0
-    weak var lastLoginViewController: UIViewController?
-
-    var authenticationState: AuthenticationState {
-        get async {
-            authenticationStateReads += 1
-            return authenticationStateValue
-        }
-    }
-
-    var loggedInUser: UserInfo? {
-        get async { nil }
-    }
-
-    func login(on viewController: UIViewController) async throws {
-        loginCallCount += 1
-        lastLoginViewController = viewController
-        if let loginError {
-            throw loginError
-        }
-    }
-
-    func restoreState() async throws -> AuthenticationState {
-        restoreStateCallCount += 1
-        if let restoreStateError {
-            throw restoreStateError
-        }
-        return restoreStateResult
-    }
-
-    func logout() async throws {}
-
-    func authenticate(request: URLRequest) async throws -> URLRequest {
-        request
-    }
-
-    func getAuthenticationHeaders() async throws -> [String: String] {
-        [:]
-    }
 }

@@ -55,9 +55,6 @@ let package = Package(
         // Async
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
 
-        // OAuth
-        .package(url: "https://github.com/openid/AppAuth-iOS", .upToNextMajor(from: "1.3.0")),
-
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.3"),
         .package(url: "https://github.com/SvenTiigi/WhatsNewKit", from: "1.3.7"),
@@ -138,20 +135,6 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
-
-        target(type, name: "OAuthService", hasTests: false, dependencies: []),
-
-        target(type, name: "SecurePersistence", hasTests: false, dependencies: [
-            "SystemDependencies",
-            "VLogging",
-        ]),
-
-        target(type, name: "OAuthServiceAppAuthImpl", hasTests: false, dependencies: [
-            "OAuthService", "VLogging",
-            .product(name: "AppAuth", package: "AppAuth-iOS"),
-        ]),
-
-        target(type, name: "OAuthServiceFake", hasTests: false, dependencies: ["OAuthService"]),
     ]
 }
 
@@ -345,15 +328,18 @@ private func dataTargets() -> [[Target]] {
 
         // MARK: - Quran.com OAuth
 
-        target(type, name: "AuthenticationClient", hasTests: true, dependencies: [
-            "OAuthService",
+        target(type, name: "AuthenticationClient", dependencies: [
             "VLogging",
-            "SystemDependencies",
-            "SecurePersistence",
-            "OAuthServiceAppAuthImpl",
-            .product(name: "AppAuth", package: "AppAuth-iOS"),
             .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ], testDependencies: ["AsyncUtilitiesForTesting", "SystemDependenciesFake", "OAuthServiceFake"]),
+        ], testDependencies: [
+            "AuthenticationClientFake",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+        ]),
+
+        target(type, name: "AuthenticationClientFake", hasTests: false, dependencies: [
+            "AuthenticationClient",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+        ]),
     ]
 }
 
@@ -633,6 +619,7 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnnotationsService",
             "AuthenticationClient",
+            "AuthenticationClientFake",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
         ]),
@@ -746,6 +733,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "AudioDownloadsFeature",
             "AuthenticationClient",
+            "AuthenticationClientFake",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "BatchDownloader",
             "LastPagePersistence",

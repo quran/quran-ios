@@ -20,6 +20,7 @@ import NotePersistence
 import PageBookmarkPersistence
 import ReadingService
 import UIKit
+import VLogging
 
 /// Hosts singleton dependencies
 class Container: AppDependencies {
@@ -41,24 +42,16 @@ class Container: AppDependencies {
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     #if QURAN_SYNC
-        private(set) lazy var syncService: QuranDataService? = mobileSyncServices?.syncService
+        private(set) lazy var syncService: QuranDataService = syncAppGraph.quranDataService
+
+        private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
+            let authService = syncAppGraph.authService
+            let syncService = syncAppGraph.quranDataService
+            return AuthenticationClientMobileSyncImpl(authService: authService, syncService: syncService)
+        }()
+    #else
+        let authenticationClient: (any AuthenticationClient)? = nil
     #endif
-
-    private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
-        #if QURAN_SYNC
-            if let authService = mobileSyncServices?.authService,
-               let syncService = mobileSyncServices?.syncService
-            {
-                return AuthenticationClientMobileSyncImpl(authService: authService, syncService: syncService)
-            }
-        #endif
-
-        guard let configurations = Self.quranOAuthConfiguration() else {
-            return nil
-        }
-
-        return AuthenticationClientImpl(configurations: configurations)
-    }()
 
     private(set) lazy var downloadManager: DownloadManager = {
         let configuration = URLSessionConfiguration.background(withIdentifier: "DownloadsBackgroundIdentifier")
@@ -97,11 +90,8 @@ class Container: AppDependencies {
             "note",
         ]
 
-        private lazy var mobileSyncServices: (authService: SyncAuthService, syncService: QuranDataService)? = {
-            guard let authConfig = Self.mobileSyncAuthConfiguration() else {
-                return nil
-            }
-
+        private lazy var syncAppGraph: AppGraph = {
+            let authConfig = Self.mobileSyncAuthConfiguration()
             let synchronizationEnvironment = Self.makeSynchronizationEnvironment(usePreProduction: Self.usePreProductionSyncEnvironment())
 
             AuthFlowFactoryProvider.shared.doInitialize()
@@ -115,12 +105,13 @@ class Container: AppDependencies {
                 authConfig: authConfig
             )
 
-            return (graph.authService, graph.quranDataService)
+            return graph
         }()
 
-        private static func mobileSyncAuthConfiguration() -> AuthConfig? {
-            guard let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") else {
-                return nil
+        private static func mobileSyncAuthConfiguration() -> AuthConfig {
+            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") ?? "stub-value"
+            if clientID == "stub-value" {
+                logger.info("Using stubbed client ID for sync")
             }
 
             let usePreProduction = usePreProductionSyncEnvironment()
@@ -153,34 +144,6 @@ class Container: AppDependencies {
         }
         return stack
     }()
-
-    private static func quranOAuthConfiguration() -> AuthenticationClientConfiguration? {
-        guard
-            let clientID = nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID"),
-            let issuerURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_ISSUER_URL") ?? ""),
-            let redirectURL = URL(string: nonEmptyEnvironmentValue("QURAN_OAUTH_REDIRECT_URL") ?? ""),
-            let scopesValue = nonEmptyEnvironmentValue("QURAN_OAUTH_SCOPES")
-        else {
-            return nil
-        }
-
-        let scopes = scopesValue
-            .split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-
-        guard !scopes.isEmpty else {
-            return nil
-        }
-
-        return AuthenticationClientConfiguration(
-            clientID: clientID,
-            clientSecret: nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET") ?? "",
-            redirectURL: redirectURL,
-            scopes: scopes,
-            authorizationIssuerURL: issuerURL
-        )
-    }
 
     private static func nonEmptyEnvironmentValue(_ key: String) -> String? {
         guard let value = ProcessInfo.processInfo.environment[key]?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {

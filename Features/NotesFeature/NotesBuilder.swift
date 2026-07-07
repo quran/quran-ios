@@ -27,9 +27,7 @@ public struct NotesBuilder {
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         #if QURAN_SYNC
-            guard let noteService = container.mobileSyncNoteService() else {
-                preconditionFailure("Expected Mobile Sync note service when QURAN_SYNC is enabled")
-            }
+            let noteService = container.mobileSyncNoteService()
             let textService = container.textDataService()
             let viewModel = SyncedNotesViewModel(noteService: noteService, textService: textService)
             return SyncedNotesViewController(

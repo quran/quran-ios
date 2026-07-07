@@ -28,7 +28,7 @@ public struct BookmarksBuilder {
         #if QURAN_SYNC
             let showCollectionsAction: (@MainActor (UIViewController) async -> Void)?
             let showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
-            let ayahBookmarkCollectionService = AyahBookmarkCollectionService(syncService: container.syncService)
+            let ayahBookmarkCollectionService = AyahBookmarkCollectionService(quranDataService: container.quranDataService)
             let navigateToPage: (Page) -> Void = { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }

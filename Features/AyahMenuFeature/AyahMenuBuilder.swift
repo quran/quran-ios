@@ -86,7 +86,7 @@ public struct AyahMenuBuilder {
                 highlightVerses: input.highlightVerses,
                 highlightCollections: input.highlightCollections,
                 noteCount: input.noteCount,
-                ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: container.syncService)
+                ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService)
             )
         #else
             let deps = AyahMenuViewModel.Deps(

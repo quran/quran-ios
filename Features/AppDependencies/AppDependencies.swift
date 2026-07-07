@@ -43,7 +43,7 @@ public protocol AppDependencies {
     var authenticationClient: (any AuthenticationClient)? { get }
 
     #if QURAN_SYNC
-        var syncService: QuranDataService { get }
+        var quranDataService: QuranDataService { get }
     #endif
 }
 
@@ -52,7 +52,7 @@ extension AppDependencies {
 
     public func lastPageService() -> any LastPageService {
         #if QURAN_SYNC
-            return MobileSyncLastPageService(syncService: syncService)
+            return MobileSyncLastPageService(quranDataService: quranDataService)
         #else
             return PersistenceLastPageService(persistence: lastPagePersistence)
         #endif
@@ -75,7 +75,7 @@ extension AppDependencies {
 
     #if QURAN_SYNC
         public func mobileSyncNoteService() -> MobileSyncNoteService {
-            MobileSyncNoteService(syncService: syncService)
+            MobileSyncNoteService(quranDataService: quranDataService)
         }
     #endif
 }

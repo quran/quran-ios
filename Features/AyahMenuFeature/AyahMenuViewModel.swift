@@ -54,7 +54,7 @@ final class AyahMenuViewModel {
             let highlightVerses: [AyahNumber: HighlightColor]
             let highlightCollections: [AyahBookmarkCollection]
             let noteCount: Int
-            let ayahBookmarkCollectionService: AyahBookmarkCollectionService?
+            let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         #else
             let notes: [QuranAnnotations.Note]
             let noteService: NoteService
@@ -278,9 +278,10 @@ final class AyahMenuViewModel {
             }
             guard let targetCollection = collections.first(where: {
                 $0.collection.name == color.collectionName
-            }), let service = deps.ayahBookmarkCollectionService else {
+            }) else {
                 throw AyahMenuError.highlightCollectionUnavailable
             }
+            let service = deps.ayahBookmarkCollectionService
             let otherCollections = collections.filter {
                 $0.collection.localId != targetCollection.collection.localId
             }

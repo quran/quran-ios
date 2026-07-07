@@ -2,6 +2,7 @@ import Analytics
 import AppDependencies
 import AudioDownloadsFeature
 import AuthenticationClient
+import AuthenticationClientFake
 import BatchDownloader
 import Foundation
 import LastPagePersistence
@@ -30,8 +31,8 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     func test_refreshAuthenticationState_returnsRestoredState_whenRestoreSucceeds() async {
-        let client = AuthenticationClientSpy()
-        client.restoreStateResult = .authenticated
+        let client = AuthenticationClientFake()
+        client.restoreStateResult = .success(.authenticated)
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
 
@@ -39,13 +40,12 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.restoreStateCallCount, 1)
-        XCTAssertEqual(client.authenticationStateReads, 0)
+        XCTAssertEqual(client.events, [.restoreState, .readLoggedInUser])
     }
 
     func test_refreshAuthenticationState_fallsBackToCurrentState_whenRestoreFails() async {
-        let client = AuthenticationClientSpy()
-        client.restoreStateError = NSError(domain: "test", code: 1)
+        let client = AuthenticationClientFake()
+        client.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
         client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
@@ -54,12 +54,11 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.restoreStateCallCount, 1)
-        XCTAssertEqual(client.authenticationStateReads, 1)
+        XCTAssertEqual(client.events, [.restoreState, .readAuthenticationState, .readLoggedInUser])
     }
 
     func test_login_updatesAuthenticationStateAndEmail() async {
-        let client = AuthenticationClientSpy()
+        let client = AuthenticationClientFake()
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
         let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
@@ -68,8 +67,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.loginCallCount, 1)
-        XCTAssertTrue(client.lastLoginViewController === navigationController)
+        XCTAssertEqual(client.events, [.login, .readLoggedInUser])
         XCTAssertNil(sut.error)
     }
 
@@ -83,7 +81,7 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     func test_logout_clearsAuthenticationStateAndEmail() async {
-        let client = AuthenticationClientSpy()
+        let client = AuthenticationClientFake()
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
         sut.isAuthenticated = true
@@ -93,7 +91,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
-        XCTAssertEqual(client.logoutCallCount, 1)
+        XCTAssertEqual(client.events, [.logout])
         XCTAssertNil(sut.error)
     }
 
@@ -109,9 +107,10 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     private func makeSUT(
         authenticationClient: (any AuthenticationClient)?,
-        navigationController: UINavigationController = UINavigationController()
+        navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
-        let container = AppDependenciesStub(authenticationClient: authenticationClient)
+        let navigationController = navigationController ?? UINavigationController()
+        let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
             analytics: AnalyticsSpy(),
             reviewService: ReviewService(analytics: AnalyticsSpy()),
@@ -137,7 +136,7 @@ private struct AnalyticsSpy: AnalyticsLibrary {
 }
 
 private struct AppDependenciesStub: AppDependencies {
-    let authenticationClient: (any AuthenticationClient)?
+    let authenticationClient: any AuthenticationClient
 
     var databasesURL: URL { URL(fileURLWithPath: "/tmp") }
     var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }
@@ -155,7 +154,7 @@ private struct AppDependenciesStub: AppDependencies {
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
     #if QURAN_SYNC
-        var syncService: QuranDataService? { nil }
+        var syncService: QuranDataService { fatalError("Unused in tests") }
     #endif
 }
 
@@ -168,60 +167,4 @@ private func makeUser(email: String?) -> UserInfo {
         email: email,
         photoUrl: nil
     )
-}
-
-private final class AuthenticationClientSpy: AuthenticationClient {
-    var restoreStateResult: AuthenticationState = .notAuthenticated
-    var restoreStateError: Error?
-    var authenticationStateValue: AuthenticationState = .notAuthenticated
-    var loggedInUserValue: UserInfo?
-    var loginError: Error?
-    var logoutError: Error?
-    var loginCallCount = 0
-    var logoutCallCount = 0
-    var restoreStateCallCount = 0
-    var authenticationStateReads = 0
-    weak var lastLoginViewController: UIViewController?
-
-    var authenticationState: AuthenticationState {
-        get async {
-            authenticationStateReads += 1
-            return authenticationStateValue
-        }
-    }
-
-    var loggedInUser: UserInfo? {
-        get async { loggedInUserValue }
-    }
-
-    func login(on viewController: UIViewController) async throws {
-        loginCallCount += 1
-        lastLoginViewController = viewController
-        if let loginError {
-            throw loginError
-        }
-    }
-
-    func restoreState() async throws -> AuthenticationState {
-        restoreStateCallCount += 1
-        if let restoreStateError {
-            throw restoreStateError
-        }
-        return restoreStateResult
-    }
-
-    func logout() async throws {
-        logoutCallCount += 1
-        if let logoutError {
-            throw logoutError
-        }
-    }
-
-    func authenticate(request: URLRequest) async throws -> URLRequest {
-        request
-    }
-
-    func getAuthenticationHeaders() async throws -> [String: String] {
-        [:]
-    }
 }

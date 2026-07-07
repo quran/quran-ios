@@ -6,9 +6,9 @@
 //
 
 #if DEBUG
-    private enum Statics {
-        static var registeredKeys = Set<String>()
-    }
+private enum Statics {
+    static var registeredKeys = Set<String>()
+}
 #endif
 
 public final class PreferenceKey<Type> {
@@ -19,10 +19,10 @@ public final class PreferenceKey<Type> {
         self.defaultValue = defaultValue
 
         #if DEBUG
-            if Statics.registeredKeys.contains(key) {
-                fatalError("PersistenceKey '\(key)' is registered multiple times")
-            }
-            Statics.registeredKeys.insert(key)
+        if Statics.registeredKeys.contains(key) {
+            fatalError("PersistenceKey '\(key)' is registered multiple times")
+        }
+        Statics.registeredKeys.insert(key)
         #endif
     }
 

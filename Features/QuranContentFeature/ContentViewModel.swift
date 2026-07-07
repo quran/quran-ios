@@ -75,7 +75,7 @@ public final class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
 
         #if !QURAN_SYNC
-            loadNotes()
+        loadNotes()
         #endif
         configureInitialPage()
     }
@@ -226,13 +226,13 @@ public final class ContentViewModel: ObservableObject {
     }
 
     #if !QURAN_SYNC
-        private func loadNotes() {
-            deps.noteService.notes(quran: deps.quran)
-                .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
-                .store(in: &cancellables)
-        }
+    private func loadNotes() {
+        deps.noteService.notes(quran: deps.quran)
+            .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
+            .store(in: &cancellables)
+    }
     #endif
 }
 

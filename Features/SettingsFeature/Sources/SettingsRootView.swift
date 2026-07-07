@@ -66,13 +66,13 @@ private struct SettingsRootViewUI: View {
     var body: some View {
         NoorList {
             #if QURAN_SYNC
-                NoorBasicSection {
-                    if isAuthenticated {
-                        authenticatedQuranComSection
-                    } else {
-                        unauthenticatedQuranComSection
-                    }
+            NoorBasicSection {
+                if isAuthenticated {
+                    authenticatedQuranComSection
+                } else {
+                    unauthenticatedQuranComSection
                 }
+            }
             #endif
 
             NoorBasicSection {

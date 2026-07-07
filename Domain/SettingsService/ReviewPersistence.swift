@@ -16,7 +16,7 @@ final class ReviewPersistence {
 
     // MARK: Public
 
-    public static let shared = ReviewPersistence()
+    static let shared = ReviewPersistence()
 
     // MARK: Internal
 

@@ -8,6 +8,6 @@
 import XCTest
 
 final class EmptyTests: XCTestCase {
-    func test_empty() throws {
+    func test_empty() {
     }
 }

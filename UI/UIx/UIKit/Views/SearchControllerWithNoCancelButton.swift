@@ -35,5 +35,5 @@ open class SearchControllerWithNoCancelButton: UISearchController {
 
     // MARK: Private
 
-    private lazy var _searchBar: SearchBarWithNoCancelButton = SearchBarWithNoCancelButton()
+    private lazy var _searchBar: SearchBarWithNoCancelButton = .init()
 }

@@ -11,7 +11,7 @@ import XCTest
 final class SuraTests: XCTestCase {
     // MARK: Internal
 
-    func testSuras() throws {
+    func testSuras() {
         let suras = quran.suras
         XCTAssertEqual(suras.count, 114)
         XCTAssertEqual(suras.first!.suraNumber, 1)

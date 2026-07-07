@@ -41,13 +41,13 @@ open class CircleView: UIView {
         }
     }
 
-    @IBInspectable open var emptyColor: UIColor = UIColor.red {
+    @IBInspectable open var emptyColor: UIColor = .red {
         didSet {
             updateLayers()
         }
     }
 
-    @IBInspectable open var fillColor: UIColor = UIColor.green {
+    @IBInspectable open var fillColor: UIColor = .green {
         didSet {
             updateLayers()
         }

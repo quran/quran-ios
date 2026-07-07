@@ -163,8 +163,8 @@ public struct QuranTextDataService {
         let footnoteTextRanges = originalString.ranges(of: Self.footnotesRegex)
         let footnotes = footnoteTextRanges.map { originalString[$0] }
         let (string, footnoteRanges) = originalString.replacing(
-            sortedRanges: footnoteTextRanges)
-        { _, index -> String in
+            sortedRanges: footnoteTextRanges
+        ) { _, index -> String in
             lFormat("translation.text.footnote-number", index + 1)
         }
 

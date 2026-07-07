@@ -77,8 +77,6 @@ opt_in_rules:
   #NOT NEEDED - multiline_literal_brackets
   - multiline_parameters
   #NOT NEEDED - multiline_parameters_brackets
-  - multiple_closures_with_trailing_closure
-  - nesting
   - nimble_operator
   #NOT NEEDED - no_extension_access_modifier
   #NOT NEEDED - no_grouping_extension
@@ -119,7 +117,6 @@ opt_in_rules:
   - strict_fileprivate
   #NOT NEEDED - strong_iboutlet
   #NOT NEEDED - switch_case_on_newline
-  - syntactic_sugar
   #NOT NEEDED - test_case_accessibility
   #NOT NEEDED - toggle_bool
   #NOT NEEDED - trailing_closure

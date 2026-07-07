@@ -25,7 +25,7 @@ final class AyahMenuViewController: UIViewController {
 
     // MARK: Public
 
-    override public func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+    override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         preferredContentSize = container.preferredContentSize
     }

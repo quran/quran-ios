@@ -129,7 +129,7 @@ public final class WordPointerViewController: UIViewController {
     private let viewModel: WordPointerViewModel
 
     // For word translation
-    private lazy var popover: PopoverView = PopoverView(view: container)
+    private lazy var popover: PopoverView = .init(view: container)
 
     private var pointerTop: NSLayoutConstraint!
     private var pointerLeft: NSLayoutConstraint!

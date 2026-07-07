@@ -9,7 +9,7 @@ import XCTest
 @testable import QuranTextKit
 
 class TwoPagesUtilsTests: XCTestCase {
-    func testHasEnoughHorizontalSpace() throws {
+    func testHasEnoughHorizontalSpace() {
         let hasEnoughSpace = TwoPagesUtils.hasEnoughHorizontalSpace()
         if UIScreen.main.bounds.width > 900 {
             XCTAssertTrue(hasEnoughSpace)

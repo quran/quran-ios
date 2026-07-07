@@ -11,9 +11,10 @@ EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
 
 SWIFT_FORMAT_REPO=https://github.com/nicklockwood/SwiftFormat
-SWIFT_FORMAT_VERSION=0.54.3
+SWIFT_FORMAT_VERSION=0.62.1
 SWIFT_FORMAT_DIR=$(BUILD_TOOLS_DIR)/SwiftFormat
 SWIFT_FORMAT_BIN=$(SWIFT_FORMAT_DIR)/.build/release/swiftformat
+SWIFT_FORMAT_VERSION_FILE=$(abspath $(SWIFT_FORMAT_DIR))/.swiftformat-version
 
 CURRENT_TARGET=$(if $(TARGET),$(TARGET),$(PACKAGE_SCHEME))
 WITHOUT_QURAN_SYNC=env -u QURAN_SYNC
@@ -63,13 +64,15 @@ clone-swiftformat:
 		echo "Cloning SwiftFormat repository..."; \
 		git clone --branch $(SWIFT_FORMAT_VERSION) --depth 1 $(SWIFT_FORMAT_REPO) $(SWIFT_FORMAT_DIR); \
 	else \
-		echo "SwiftFormat repository already exists."; \
+		echo "SwiftFormat repository already exists. Checking out $(SWIFT_FORMAT_VERSION)."; \
+		cd $(SWIFT_FORMAT_DIR) && git fetch --depth 1 origin tag $(SWIFT_FORMAT_VERSION) && git checkout $(SWIFT_FORMAT_VERSION); \
 	fi
 
 build-swiftformat: clone-swiftformat
-	@if [ ! -f $(SWIFT_FORMAT_BIN) ]; then \
+	@if [ ! -f $(SWIFT_FORMAT_BIN) ] || [ "$$(cat $(SWIFT_FORMAT_VERSION_FILE) 2>/dev/null)" != "$(SWIFT_FORMAT_VERSION)" ]; then \
 		echo "Building swiftformat in $(SWIFT_FORMAT_DIR)"; \
 		cd $(SWIFT_FORMAT_DIR) && swift build -c release; \
+		echo "$(SWIFT_FORMAT_VERSION)" > $(SWIFT_FORMAT_VERSION_FILE); \
 	else \
 		echo "SwiftFormat binary already exists."; \
 	fi
@@ -77,6 +80,7 @@ build-swiftformat: clone-swiftformat
 force-build-swiftformat: clone-swiftformat
 	@echo "Force building swiftformat in $(SWIFT_FORMAT_DIR)"
 	cd $(SWIFT_FORMAT_DIR) && swift build -c release
+	@echo "$(SWIFT_FORMAT_VERSION)" > $(SWIFT_FORMAT_VERSION_FILE)
 
 clean-swiftformat:
 	@rm -rf $(SWIFT_FORMAT_DIR)/.build

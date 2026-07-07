@@ -13,7 +13,7 @@ import WhatsNewKit
 final class AppWhatsNewVersionStore: WhatsNewVersionStore {
     // MARK: Public
 
-    public func has(version: WhatsNew.Version) -> Bool {
+    func has(version: WhatsNew.Version) -> Bool {
         false
     }
 

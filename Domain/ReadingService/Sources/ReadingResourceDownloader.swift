@@ -9,13 +9,6 @@ import BatchDownloader
 import QuranKit
 
 struct ReadingResourceDownloader {
-    // MARK: Lifecycle
-
-    init(downloader: DownloadManager, remoteResources: ReadingRemoteResources?) {
-        self.downloader = downloader
-        self.remoteResources = remoteResources
-    }
-
     // MARK: Internal
 
     let downloader: DownloadManager

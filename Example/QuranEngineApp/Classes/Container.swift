@@ -171,9 +171,9 @@ private enum Constant {
     static let wordsDatabase = Bundle.main
         .url(forResource: "words", withExtension: "db")!
 
-    static let appHost: URL = URL(validURL: "https://quran.app/")
+    static let appHost: URL = .init(validURL: "https://quran.app/")
 
-    static let filesAppHost: URL = URL(validURL: "https://files.quran.app/")
+    static let filesAppHost: URL = .init(validURL: "https://files.quran.app/")
 
     static let databasesURL = FileManager.documentsURL
         .appendingPathComponent("databases", isDirectory: true)

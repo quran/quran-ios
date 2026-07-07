@@ -34,7 +34,8 @@ class TranslationsRepositoryTests: XCTestCase {
 
     func test_firstTimeDownload() async throws {
         try nextResponse(TranslationsResponse(
-            data: translations.map { TranslationResponse($0) }))
+            data: translations.map { TranslationResponse($0) }
+        ))
 
         try await service.downloadAndSyncTranslations()
 

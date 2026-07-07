@@ -41,7 +41,7 @@ class AsyncThrowingPublisherTests: XCTestCase {
         values = Values()
     }
 
-    func test_passThroughSubject_failure() async throws {
+    func test_passThroughSubject_failure() async {
         let asyncPublisher = subject.values()
 
         Task {
@@ -67,7 +67,7 @@ class AsyncThrowingPublisherTests: XCTestCase {
         await AsyncAssertEqual(await values.error as? PublishingError, PublishingError.invalid)
     }
 
-    func test_passThroughSubject_subjectCancellation() async throws {
+    func test_passThroughSubject_subjectCancellation() async {
         let prefix = 2
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
@@ -94,7 +94,7 @@ class AsyncThrowingPublisherTests: XCTestCase {
         await AsyncAssertEqual(await values.results, Array(numbers.prefix(2)))
     }
 
-    func test_passThroughSubject_taskCancellation() async throws {
+    func test_passThroughSubject_taskCancellation() async {
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
         let task = Task {

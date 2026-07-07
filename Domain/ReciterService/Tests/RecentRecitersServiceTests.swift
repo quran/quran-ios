@@ -68,7 +68,7 @@ class RecentRecitersServiceTests: XCTestCase {
     }
 
     private func createReciter(id: Int) -> Reciter {
-        let name: String = "reciter" + String(id)
+        let name = "reciter" + String(id)
         return Reciter(
             id: id,
             nameKey: name,

@@ -98,7 +98,8 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(
-                                colors: [Color.appIdentity, Color.appIdentity.opacity(0.7)]),
+                                colors: [Color.appIdentity, Color.appIdentity.opacity(0.7)]
+                            ),
                             startPoint: .leading,
                             endPoint: .trailing
                         )

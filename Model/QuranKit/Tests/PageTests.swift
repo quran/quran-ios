@@ -11,7 +11,7 @@ import XCTest
 final class PageTests: XCTestCase {
     // MARK: Internal
 
-    func testPages() throws {
+    func testPages() {
         let pages = quran.pages
         XCTAssertEqual(pages.count, 604)
         XCTAssertEqual(pages.first!.pageNumber, 1)

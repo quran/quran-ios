@@ -37,7 +37,6 @@ public struct AsyncPublisher<Element>: AsyncSequence {
         // the iterator.
         var cancellable: AnyCancellable?
         let stream = AsyncStream(Element.self, bufferingPolicy: bufferingPolicy) { continuation in
-
             cancellable = publisher.sink { completion in
                 continuation.finish()
             } receiveValue: { [weak cancellable] value in

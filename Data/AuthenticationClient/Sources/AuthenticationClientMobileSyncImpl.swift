@@ -6,9 +6,9 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(authService: SyncAuthService, syncService: QuranDataService) {
+    public init(authService: SyncAuthService, quranDataService: QuranDataService) {
         self.authService = authService
-        self.syncService = syncService
+        self.quranDataService = quranDataService
     }
 
     // MARK: Public
@@ -42,7 +42,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func logout() async throws(AuthenticationClientError) {
         do {
-            try await syncService.logout(clearLocalData: true)
+            try await quranDataService.logout(clearLocalData: true)
         } catch {
             logger.error("Failed to logout via mobile sync: \(error)")
             throw AuthenticationClientError.errorAuthenticating(error)
@@ -69,5 +69,5 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Private
 
     private let authService: SyncAuthService
-    private let syncService: QuranDataService
+    private let quranDataService: QuranDataService
 }

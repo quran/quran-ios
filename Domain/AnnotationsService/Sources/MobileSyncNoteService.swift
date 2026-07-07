@@ -53,14 +53,14 @@
     public struct MobileSyncNoteService {
         // MARK: Lifecycle
 
-        public init(syncService: QuranDataService) {
-            self.syncService = syncService
+        public init(quranDataService: QuranDataService) {
+            self.quranDataService = quranDataService
         }
 
         // MARK: Public
 
         public func notesSequence(quran: Quran) -> SyncedNotesSequence {
-            let sequence = syncService.notesSequence()
+            let sequence = quranDataService.notesSequence()
                 .map { notes in
                     Self.notes(from: notes, quran: quran)
                 }
@@ -68,7 +68,7 @@
         }
 
         public func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-            try await syncService.createNote(
+            try await quranDataService.createNote(
                 body: body,
                 startSura: Int32(startAyah.sura.suraNumber),
                 startAyah: Int32(startAyah.ayah),
@@ -82,7 +82,7 @@
         }
 
         public func updateNote(_ note: SyncedNote, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-            try await syncService.updateNote(
+            try await quranDataService.updateNote(
                 localId: note.localId,
                 body: body,
                 startSura: Int32(startAyah.sura.suraNumber),
@@ -93,7 +93,7 @@
         }
 
         public func removeNote(_ note: SyncedNote) async throws {
-            try await syncService.removeNote(localId: note.localId)
+            try await quranDataService.removeNote(localId: note.localId)
         }
 
         // MARK: Internal
@@ -122,6 +122,6 @@
 
         // MARK: Private
 
-        private let syncService: QuranDataService
+        private let quranDataService: QuranDataService
     }
 #endif

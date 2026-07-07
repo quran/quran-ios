@@ -46,7 +46,7 @@ public struct QuranBuilder {
                 analytics: container.analytics
             )
             let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
-                ayahBookmarkCollectionService: AyahBookmarkCollectionService(syncService: container.syncService),
+                ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
                 highlightsService: highlightsService
             )
             let interactorDeps = QuranInteractor.Deps(

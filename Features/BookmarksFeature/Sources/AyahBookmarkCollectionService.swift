@@ -56,21 +56,21 @@
         // MARK: Lifecycle
 
         public init(
-            syncService: QuranDataService,
+            quranDataService: QuranDataService,
             readingPreferences: ReadingPreferences = .shared
         ) {
-            self.syncService = syncService
+            self.quranDataService = quranDataService
             self.readingPreferences = readingPreferences
         }
 
         // MARK: Public
 
         public func createCollection(named name: String) async throws {
-            try await syncService.createCollection(named: name)
+            try await quranDataService.createCollection(named: name)
         }
 
         public func addAyahBookmarkToCollection(collectionLocalId: String, ayah: AyahNumber) async throws {
-            _ = try await syncService.addAyahBookmarkToCollection(
+            _ = try await quranDataService.addAyahBookmarkToCollection(
                 collectionLocalId: collectionLocalId,
                 sura: Int32(ayah.sura.suraNumber),
                 ayah: Int32(ayah.ayah)
@@ -78,11 +78,11 @@
         }
 
         public func removeCollection(localId: String) async throws {
-            try await syncService.removeCollection(localId: localId)
+            try await quranDataService.removeCollection(localId: localId)
         }
 
         public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
-            try await syncService.removeAyahBookmarkFromCollection(bookmark.bookmark)
+            try await quranDataService.removeAyahBookmarkFromCollection(bookmark.bookmark)
         }
 
         public func addAyahBookmarksIfNeeded(
@@ -110,15 +110,15 @@
         }
 
         public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
-            let syncService = syncService
+            let quranDataService = quranDataService
             let readingPreferences = readingPreferences
-            let sequence = syncService.collectionsWithBookmarksSequence()
+            let sequence = quranDataService.collectionsWithBookmarksSequence()
                 .map { collections in
                     let collections = Self.collections(
                         from: collections,
                         quran: readingPreferences.reading.quran
                     )
-                    await syncService.createHighlightCollectionsIfNeeded(collections)
+                    await quranDataService.createHighlightCollectionsIfNeeded(collections)
                     return collections
                 }
             return AyahBookmarkCollectionsSequence(sequence)
@@ -150,7 +150,7 @@
 
         // MARK: Private
 
-        private let syncService: QuranDataService
+        private let quranDataService: QuranDataService
         private let readingPreferences: ReadingPreferences
 
         private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
@@ -226,8 +226,8 @@
     private let highlightCollectionCreationPlanners = HighlightCollectionCreationPlanners()
 
     private actor HighlightCollectionCreationPlanners {
-        func planner(for syncService: QuranDataService) -> HighlightCollectionCreationPlanner {
-            let id = ObjectIdentifier(syncService)
+        func planner(for quranDataService: QuranDataService) -> HighlightCollectionCreationPlanner {
+            let id = ObjectIdentifier(quranDataService)
             let planner = planners[id] ?? HighlightCollectionCreationPlanner()
             planners[id] = planner
             return planner

@@ -16,8 +16,8 @@
     public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
         // MARK: Lifecycle
 
-        public init(syncService: QuranDataService) {
-            self.syncService = syncService
+        public init(quranDataService: QuranDataService) {
+            self.quranDataService = quranDataService
         }
 
         // MARK: Public
@@ -26,7 +26,7 @@
             let subject = CurrentValueSubject<[LastPage], Never>([])
             let task = Task {
                 do {
-                    for try await sessions in syncService.readingSessionsSequence() {
+                    for try await sessions in quranDataService.readingSessionsSequence() {
                         if Task.isCancelled {
                             break
                         }
@@ -48,7 +48,7 @@
 
         public func add(page: Page) async throws -> LastPage {
             let firstVerse = page.firstVerse
-            let session = try await syncService.addReadingSession(
+            let session = try await quranDataService.addReadingSession(
                 sura: Int32(firstVerse.sura.suraNumber),
                 ayah: Int32(firstVerse.ayah),
                 timestamp: Date()
@@ -62,7 +62,7 @@
             }
 
             let firstVerse = toPage.firstVerse
-            let updatedSession = try await syncService.updateReadingSession(
+            let updatedSession = try await quranDataService.updateReadingSession(
                 localId: localId,
                 sura: Int32(firstVerse.sura.suraNumber),
                 ayah: Int32(firstVerse.ayah),
@@ -73,7 +73,7 @@
 
         // MARK: Private
 
-        private let syncService: QuranDataService
+        private let quranDataService: QuranDataService
 
         private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
             guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {

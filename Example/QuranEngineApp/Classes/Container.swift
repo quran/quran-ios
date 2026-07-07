@@ -42,12 +42,12 @@ class Container: AppDependencies {
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
     #if QURAN_SYNC
-        private(set) lazy var syncService: QuranDataService = syncAppGraph.quranDataService
+        private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
 
         private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
             let authService = syncAppGraph.authService
-            let syncService = syncAppGraph.quranDataService
-            return AuthenticationClientMobileSyncImpl(authService: authService, syncService: syncService)
+            let quranDataService = syncAppGraph.quranDataService
+            return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)
         }()
     #else
         let authenticationClient: (any AuthenticationClient)? = nil

@@ -136,7 +136,7 @@ private struct AnalyticsSpy: AnalyticsLibrary {
 }
 
 private struct AppDependenciesStub: AppDependencies {
-    let authenticationClient: any AuthenticationClient
+    let authenticationClient: (any AuthenticationClient)?
 
     var databasesURL: URL { URL(fileURLWithPath: "/tmp") }
     var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }

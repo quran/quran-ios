@@ -44,11 +44,13 @@ class Container: AppDependencies {
     #if QURAN_SYNC
         private(set) lazy var syncService: QuranDataService = syncAppGraph.quranDataService
 
-        private(set) lazy var authenticationClient: any AuthenticationClient = {
+        private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
             let authService = syncAppGraph.authService
             let syncService = syncAppGraph.quranDataService
             return AuthenticationClientMobileSyncImpl(authService: authService, syncService: syncService)
         }()
+    #else
+        let authenticationClient: (any AuthenticationClient)? = nil
     #endif
 
     private(set) lazy var downloadManager: DownloadManager = {

@@ -7,13 +7,13 @@
 
 import Analytics
 import AppDependencies
-import AuthenticationClient
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
+import AuthenticationClient
 import MobileSync
 #endif
 import NotePersistence
@@ -41,6 +41,7 @@ class Container: AppDependencies {
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+
     #if QURAN_SYNC
     private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
 
@@ -49,8 +50,6 @@ class Container: AppDependencies {
         let quranDataService = syncAppGraph.quranDataService
         return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)
     }()
-    #else
-    let authenticationClient: (any AuthenticationClient)? = nil
     #endif
 
     private(set) lazy var downloadManager: DownloadManager = {

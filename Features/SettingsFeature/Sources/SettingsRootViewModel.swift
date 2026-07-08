@@ -7,10 +7,12 @@
 
 import Analytics
 import AudioDownloadsFeature
-import AuthenticationClient
 import Combine
 import Localization
+#if QURAN_SYNC
+import AuthenticationClient
 import MobileSync
+#endif
 import NoorUI
 import QuranAudio
 import QuranAudioKit
@@ -26,6 +28,7 @@ import VLogging
 final class SettingsRootViewModel: ObservableObject {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
     init(
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
@@ -54,6 +57,32 @@ final class SettingsRootViewModel: ObservableObject {
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
         audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
     }
+    #else
+    init(
+        analytics: AnalyticsLibrary,
+        reviewService: ReviewService,
+        audioDownloadsBuilder: AudioDownloadsBuilder,
+        translationsListBuilder: TranslationsListBuilder,
+        readingSelectorBuilder: ReadingSelectorBuilder,
+        diagnosticsBuilder: DiagnosticsBuilder,
+        navigationController: UINavigationController
+    ) {
+        appearanceMode = themeService.appearanceMode
+        audioEnd = audioPreferences.audioEnd
+        streamingEnabled = audioPreferences.streamingEnabled
+        self.analytics = analytics
+        self.reviewService = reviewService
+        self.audioDownloadsBuilder = audioDownloadsBuilder
+        self.translationsListBuilder = translationsListBuilder
+        self.readingSelectorBuilder = readingSelectorBuilder
+        self.diagnosticsBuilder = diagnosticsBuilder
+        self.navigationController = navigationController
+
+        themeService.appearanceModePublisher.assign(to: &$appearanceMode)
+        audioPreferences.$audioEnd.assign(to: &$audioEnd)
+        audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
+    }
+    #endif
 
     // MARK: Internal
 
@@ -72,18 +101,16 @@ final class SettingsRootViewModel: ObservableObject {
 
     @Published var audioEnd: AudioEnd
     @Published var error: Error? = nil
+    #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: UserInfo? = nil
+    #endif
 
     @Published var streamingEnabled: Bool {
         didSet {
             guard streamingEnabled != audioPreferences.streamingEnabled else { return }
             audioPreferences.streamingEnabled = streamingEnabled
         }
-    }
-
-    var currentUserEmail: String? {
-        loggedInUser?.email
     }
 
     @Published var appearanceMode: AppearanceMode {
@@ -152,11 +179,17 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.present(viewController, animated: true)
     }
 
+    #if QURAN_SYNC
+    var currentUserEmail: String? {
+        loggedInUser?.email
+    }
+
     func openQuranComProfile() {
         logger.info("Settings: Open Quran.com profile.")
         let viewController = SFSafariViewController(url: quranProfileURL)
         navigationController?.present(viewController, animated: true)
     }
+    #endif
 
     func navigateToDiagnotics() {
         logger.info("Settings: navigateToDiagnotics")
@@ -164,6 +197,7 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
+    #if QURAN_SYNC
     func refreshAuthenticationState() async {
         guard let authenticationClient else {
             isAuthenticated = false
@@ -202,11 +236,13 @@ final class SettingsRootViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 
     // MARK: Private
 
-    private let authenticationClient: (any AuthenticationClient)?
+    #if QURAN_SYNC
     private let quranProfileURL: URL
+    private var authenticationClient: (any AuthenticationClient)?
 
     private func requireAuthenticationClient() throws -> any AuthenticationClient {
         guard let authenticationClient else {
@@ -214,6 +250,7 @@ final class SettingsRootViewModel: ObservableObject {
         }
         return authenticationClient
     }
+    #endif
 
     private func showSingleChoiceSelector<T: Hashable>(
         title: String,

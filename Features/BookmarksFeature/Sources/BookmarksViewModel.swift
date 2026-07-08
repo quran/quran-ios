@@ -7,7 +7,9 @@
 
 import Analytics
 import AnnotationsService
+#if QURAN_SYNC
 import AuthenticationClient
+#endif
 import Combine
 import FeaturesSupport
 import QuranAnnotations
@@ -21,6 +23,7 @@ import VLogging
 final class BookmarksViewModel: ObservableObject {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
     init(
         analytics: AnalyticsLibrary,
         service: PageBookmarkService,
@@ -37,12 +40,24 @@ final class BookmarksViewModel: ObservableObject {
         presentOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
+    #else
+    init(
+        analytics: AnalyticsLibrary,
+        service: PageBookmarkService,
+        navigateTo: @escaping (Page) -> Void
+    ) {
+        self.analytics = analytics
+        self.service = service
+        self.navigateTo = navigateTo
+    }
+    #endif
 
     // MARK: Internal
 
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
     @Published var bookmarks: [PageBookmark] = []
+    #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
     @Published var isSyncBannerDismissed: Bool
 
@@ -69,13 +84,16 @@ final class BookmarksViewModel: ObservableObject {
             await self?.showOldPageBookmarks()
         }
     }
+    #endif
 
     func start() async {
+        #if QURAN_SYNC
         if let authenticationClient {
             isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         } else {
             isAuthenticated = false
         }
+        #endif
 
         let bookmarksSequence = readingPreferences.$reading
             .prepend(readingPreferences.reading)
@@ -116,11 +134,7 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
-    func dismissSyncBanner() {
-        isSyncBannerDismissed = true
-        preferences.isSyncBannerDismissed = true
-    }
-
+    #if QURAN_SYNC
     func loginToQuranCom() async {
         guard let presenter else {
             return
@@ -136,6 +150,11 @@ final class BookmarksViewModel: ObservableObject {
         }
     }
 
+    func dismissSyncBanner() {
+        isSyncBannerDismissed = true
+        preferences.isSyncBannerDismissed = true
+    }
+
     func showCollections() async {
         guard let presenter else {
             return
@@ -149,16 +168,18 @@ final class BookmarksViewModel: ObservableObject {
         }
         await presentOldPageBookmarksAction?(presenter)
     }
+    #endif
 
     // MARK: Private
 
     private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
-    private let authenticationClient: (any AuthenticationClient)?
-    private let presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
-    private let presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let readingPreferences = ReadingPreferences.shared
+    #if QURAN_SYNC
+    private var authenticationClient: (any AuthenticationClient)?
+    private var presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
+    private var presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let preferences = BookmarksPreferences.shared
 
     private func requireAuthenticationClient() throws -> any AuthenticationClient {
@@ -167,4 +188,5 @@ final class BookmarksViewModel: ObservableObject {
         }
         return authenticationClient
     }
+    #endif
 }

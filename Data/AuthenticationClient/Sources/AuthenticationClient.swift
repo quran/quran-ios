@@ -5,6 +5,8 @@
 //  Created by Mohannad Hassan on 19/12/2024.
 //
 
+#if QURAN_SYNC
+
 import Foundation
 import MobileSync
 import UIKit
@@ -56,3 +58,5 @@ public extension AuthenticationClient {
         }
     }
 }
+
+#endif

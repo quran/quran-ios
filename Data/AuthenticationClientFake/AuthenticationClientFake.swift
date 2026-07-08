@@ -1,3 +1,5 @@
+#if QURAN_SYNC
+
 import AuthenticationClient
 import Foundation
 import MobileSync
@@ -95,3 +97,5 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
         throw .clientIsNotAuthenticated(nil)
     }
 }
+
+#endif

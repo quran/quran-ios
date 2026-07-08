@@ -15,14 +15,12 @@ struct SettingsRootView: View {
     @StateObject var viewModel: SettingsRootViewModel
 
     var body: some View {
+        #if QURAN_SYNC
         SettingsRootViewUI(
             appearanceMode: $viewModel.appearanceMode,
             streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
-            isAuthenticated: viewModel.isAuthenticated,
-            loggedInUserEmail: viewModel.currentUserEmail,
-            openQuranComProfile: { viewModel.openQuranComProfile() },
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
@@ -32,10 +30,30 @@ struct SettingsRootView: View {
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
+            isAuthenticated: viewModel.isAuthenticated,
+            loggedInUserEmail: viewModel.currentUserEmail,
+            openQuranComProfile: { viewModel.openQuranComProfile() },
             refreshAuthenticationState: { await viewModel.refreshAuthenticationState() },
             loginAction: { await viewModel.loginToQuranCom() },
             logoutAction: { await viewModel.logoutFromQuranCom() }
         )
+        #else
+        SettingsRootViewUI(
+            appearanceMode: $viewModel.appearanceMode,
+            streamingEnabled: $viewModel.streamingEnabled,
+            error: $viewModel.error,
+            audioEnd: viewModel.audioEnd.name,
+            navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
+            navigateToAudioManager: { viewModel.navigateToAudioManager() },
+            navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
+            navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
+            donate: { viewModel.donate() },
+            shareApp: { viewModel.shareApp() },
+            writeReview: { viewModel.writeReview() },
+            contactUs: { viewModel.contactUs() },
+            navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
+        )
+        #endif
     }
 }
 
@@ -47,9 +65,6 @@ private struct SettingsRootViewUI: View {
     @Binding var error: Error?
 
     let audioEnd: String
-    let isAuthenticated: Bool
-    let loggedInUserEmail: String?
-    let openQuranComProfile: AsyncAction
     let navigateToAudioEndSelector: AsyncAction
     let navigateToAudioManager: AsyncAction
     let navigateToTranslationsList: AsyncAction
@@ -59,9 +74,15 @@ private struct SettingsRootViewUI: View {
     let writeReview: AsyncAction
     let contactUs: AsyncAction
     let navigateToDiagnotics: AsyncAction
+
+    #if QURAN_SYNC
+    let isAuthenticated: Bool
+    let loggedInUserEmail: String?
+    let openQuranComProfile: AsyncAction
     let refreshAuthenticationState: AsyncAction
     let loginAction: AsyncAction
     let logoutAction: AsyncAction
+    #endif
 
     var body: some View {
         NoorList {
@@ -169,12 +190,15 @@ private struct SettingsRootViewUI: View {
                 )
             }
         }
+        #if QURAN_SYNC
         .task { await refreshAuthenticationState() }
+        #endif
         .errorAlert(error: $error)
     }
 
     // MARK: Private
 
+    #if QURAN_SYNC
     private var unauthenticatedQuranComSection: some View {
         Group {
             NoorListItem(
@@ -226,6 +250,7 @@ private struct SettingsRootViewUI: View {
         let range = text.startIndex ..< text.endIndex
         return "\(text, highlighting: [HighlightingRange(range, foregroundColor: foregroundColor, fontWeight: fontWeight)])"
     }
+    #endif
 }
 
 struct SettingsRootView_Previews: PreviewProvider {
@@ -234,14 +259,12 @@ struct SettingsRootView_Previews: PreviewProvider {
         @State var streamingEnabled = false
 
         var body: some View {
+            #if QURAN_SYNC
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
                 streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
                 audioEnd: "Surah",
-                isAuthenticated: false,
-                loggedInUserEmail: nil,
-                openQuranComProfile: {},
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
@@ -251,10 +274,30 @@ struct SettingsRootView_Previews: PreviewProvider {
                 writeReview: {},
                 contactUs: {},
                 navigateToDiagnotics: {},
+                isAuthenticated: false,
+                loggedInUserEmail: nil,
+                openQuranComProfile: {},
                 refreshAuthenticationState: {},
                 loginAction: {},
                 logoutAction: {}
             )
+            #else
+            SettingsRootViewUI(
+                appearanceMode: $appearanceMode,
+                streamingEnabled: $streamingEnabled,
+                error: .constant(nil),
+                audioEnd: "Surah",
+                navigateToAudioEndSelector: {},
+                navigateToAudioManager: {},
+                navigateToTranslationsList: {},
+                navigateToReadingSelector: {},
+                donate: {},
+                shareApp: {},
+                writeReview: {},
+                contactUs: {},
+                navigateToDiagnotics: {}
+            )
+            #endif
         }
     }
 

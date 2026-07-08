@@ -1,3 +1,5 @@
+#if QURAN_SYNC
+
 import Foundation
 import MobileSync
 import UIKit
@@ -71,3 +73,5 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     private let authService: SyncAuthService
     private let quranDataService: QuranDataService
 }
+
+#endif

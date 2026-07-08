@@ -41,7 +41,9 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     private func initialize() {
         title = lAndroid("menu_bookmarks")
+        #if QURAN_SYNC
         viewModel.presenter = self
+        #endif
 
         editController = EditController(
             navigationItem: navigationItem,

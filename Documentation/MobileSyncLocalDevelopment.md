@@ -4,48 +4,48 @@ This project keeps the mobile sync integration behind the `QURAN_SYNC` compilati
 
 ## Enable the feature
 
-### From Xcode
+### Build flags
 
-Set `QURAN_SYNC` directly in the example app target build settings:
-
-```text
-SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) QURAN_SYNC
-```
-
-Swift package targets also read `QURAN_SYNC` from `Package.swift`, so launch Xcode with the environment variable set when you want the package feature modules to compile with sync enabled:
+Package targets read `QURAN_SYNC` from the process environment in `Package.swift`. Any non-empty value other than `0` enables package sync support. Use `1` by convention:
 
 ```bash
-launchctl setenv QURAN_SYNC 1
-
-osascript -e 'quit app "Xcode"'
-pkill -x SWBBuildService 2>/dev/null || true
-pkill -x XCBBuildService 2>/dev/null || true
-
-open -a /Applications/Xcode.app Example/QuranEngineApp.xcodeproj
+QURAN_SYNC=1
 ```
 
-`launchctl setenv` makes `QURAN_SYNC` visible to Xcode and its build services. A shell-scoped environment variable, for example `QURAN_SYNC=1 open ...`, may not propagate to Swift package manifest evaluation.
-
-After toggling the flag:
-
-1. Use **File > Packages > Reset Package Caches**.
-2. Use **Product > Clean Build Folder**.
-3. Build or run the example app.
-
-To disable sync for later Xcode sessions:
+Use an empty, unset, or `0` value for the no-sync path:
 
 ```bash
-launchctl unsetenv QURAN_SYNC
+QURAN_SYNC=
+# or
+QURAN_SYNC=0
 ```
+
+The environment value only affects Swift Package evaluation. To compile app or project code guarded by `#if QURAN_SYNC`, add `QURAN_SYNC` to the target's `SWIFT_ACTIVE_COMPILATION_CONDITIONS` / "Active Compilation Conditions" build setting, or pass `-D QURAN_SYNC` through `OTHER_SWIFT_FLAGS`.
+
+When switching modes outside the Makefile, use separate DerivedData paths or **Product > Clean Build Folder** so Xcode does not reuse build products from the other mode.
 
 ### From the command line
 
+Use the Makefile targets for local verification:
+
 ```bash
-QURAN_SYNC=1 xcrun xcodebuild build \
+make build-example-no-sync
+make build-example-sync
+```
+
+These targets use separate DerivedData paths under `.build/DerivedData/no-sync` and `.build/DerivedData/sync`, so switching sync modes does not reuse stale build products and each mode still gets incremental builds. No package-cache reset is needed.
+
+The sync target sets `QURAN_SYNC` for `Package.swift` and passes `-D QURAN_SYNC` only to the Example app target:
+
+```bash
+QURAN_SYNC=1 xcrun xcodebuild \
+  -derivedDataPath .build/DerivedData/sync \
+  build \
   -project Example/QuranEngineApp.xcodeproj \
   -scheme QuranEngineApp \
   -sdk iphonesimulator \
-  -destination 'generic/platform=iOS'
+  -destination 'generic/platform=iOS' \
+  'OTHER_SWIFT_FLAGS=$(inherited) -D QURAN_SYNC'
 ```
 
 ## Required runtime environment variables

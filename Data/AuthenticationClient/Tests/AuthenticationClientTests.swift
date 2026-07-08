@@ -1,3 +1,5 @@
+#if QURAN_SYNC
+
 import AuthenticationClientFake
 import XCTest
 @testable import AuthenticationClient
@@ -24,3 +26,5 @@ final class AuthenticationClientTests: XCTestCase {
         XCTAssertEqual(sut.events, [.restoreState, .readAuthenticationState])
     }
 }
+
+#endif

@@ -21,19 +21,30 @@ struct BookmarksView: View {
     }
 
     var body: some View {
+        #if QURAN_SYNC
         BookmarksViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             bookmarks: viewModel.bookmarks,
-            shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             deleteAction: { await viewModel.deleteItem($0) },
+            shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
             dismissSyncBanner: { viewModel.dismissSyncBanner() },
             signInAction: { await viewModel.loginToQuranCom() },
             showCollectionsAction: viewModel.showCollectionsAction,
             showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
         )
+        #else
+        BookmarksViewUI(
+            editMode: $viewModel.editMode,
+            error: $viewModel.error,
+            bookmarks: viewModel.bookmarks,
+            start: { await viewModel.start() },
+            selectAction: { viewModel.navigateTo($0) },
+            deleteAction: { await viewModel.deleteItem($0) }
+        )
+        #endif
     }
 }
 
@@ -45,15 +56,17 @@ private struct BookmarksViewUI: View {
     @Binding var error: Error?
 
     let bookmarks: [PageBookmark]
-    let shouldShowSyncBanner: Bool
-
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
     let deleteAction: AsyncItemAction<PageBookmark>
+
+    #if QURAN_SYNC
+    let shouldShowSyncBanner: Bool
     let dismissSyncBanner: () -> Void
     let signInAction: @MainActor () async -> Void
     let showCollectionsAction: AsyncAction?
     let showOldPageBookmarksAction: AsyncAction?
+    #endif
 
     var body: some View {
         Group {
@@ -93,6 +106,7 @@ private struct BookmarksViewUI: View {
         )
     }
 
+    #if QURAN_SYNC
     private var syncBanner: some View {
         BookmarksSyncBanner(
             dismiss: dismissSyncBanner,
@@ -100,7 +114,6 @@ private struct BookmarksViewUI: View {
         )
     }
 
-    #if QURAN_SYNC
     private var oldPageBookmarksRow: some View {
         NoorListItem(
             image: .init(.bookmark, color: .secondary),
@@ -164,6 +177,7 @@ private struct BookmarksViewUI: View {
     }
 }
 
+#if QURAN_SYNC
 @MainActor
 private struct BookmarksSyncBanner: View {
     @ScaledMetric private var closeButtonInset = 8.0
@@ -220,6 +234,7 @@ private struct BookmarksSyncBanner: View {
         .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
     }
 }
+#endif
 
 struct BookmarksView_Previews: PreviewProvider {
     struct Preview: View {
@@ -235,16 +250,17 @@ struct BookmarksView_Previews: PreviewProvider {
         @State var error: Error? = nil
 
         var body: some View {
+            #if QURAN_SYNC
             let showCollectionsAction: AsyncAction? = {}
             NavigationView {
                 BookmarksViewUI(
                     editMode: $editMode,
                     error: $error,
                     bookmarks: items,
-                    shouldShowSyncBanner: true,
                     start: {},
                     selectAction: { _ in },
                     deleteAction: { item in items = items.filter { $0 != item } },
+                    shouldShowSyncBanner: true,
                     dismissSyncBanner: {},
                     signInAction: {},
                     showCollectionsAction: showCollectionsAction,
@@ -267,6 +283,34 @@ struct BookmarksView_Previews: PreviewProvider {
                     }
                 }
             }
+            #else
+            NavigationView {
+                BookmarksViewUI(
+                    editMode: $editMode,
+                    error: $error,
+                    bookmarks: items,
+                    start: {},
+                    selectAction: { _ in },
+                    deleteAction: { item in items = items.filter { $0 != item } }
+                )
+                .navigationTitle(lAndroid("menu_bookmarks"))
+                .toolbar {
+                    if items.isEmpty {
+                        Button("Populate") { items = Self.staticItems }
+                    } else {
+                        Button("Empty") { items = [] }
+                    }
+
+                    if error == nil {
+                        Button("Error") { error = URLError(.notConnectedToInternet) }
+                    }
+
+                    Button(editMode == .inactive ? "Edit" : "Done") {
+                        withAnimation { editMode = editMode == .inactive ? .active : .inactive }
+                    }
+                }
+            }
+            #endif
         }
     }
 

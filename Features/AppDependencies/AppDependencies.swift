@@ -40,9 +40,9 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
-    var authenticationClient: (any AuthenticationClient)? { get }
 
     #if QURAN_SYNC
+    var authenticationClient: (any AuthenticationClient)? { get }
     var quranDataService: QuranDataService { get }
     #endif
 }

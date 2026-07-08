@@ -1,11 +1,17 @@
 import Analytics
 import AnnotationsService
+#if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
+#endif
 import Combine
 import Foundation
 import PageBookmarkPersistence
+import QuranAnnotations
+import QuranKit
+#if QURAN_SYNC
 import UIKit
+#endif
 import XCTest
 @testable import BookmarksFeature
 
@@ -13,6 +19,7 @@ import XCTest
 final class BookmarksViewModelTests: XCTestCase {
     // MARK: Internal
 
+    #if QURAN_SYNC
     override func setUp() {
         super.setUp()
         BookmarksPreferences.shared.isSyncBannerDismissed = false
@@ -22,11 +29,24 @@ final class BookmarksViewModelTests: XCTestCase {
         BookmarksPreferences.shared.isSyncBannerDismissed = false
         super.tearDown()
     }
+    #endif
 
+    func test_deleteItem_removesBookmarkPage() async {
+        let persistence = PageBookmarkPersistenceSpy()
+        let sut = makeSUT(persistence: persistence)
+        let bookmark = PageBookmark(page: Quran.hafsMadani1405.pages[0], creationDate: Date())
+
+        await sut.deleteItem(bookmark)
+
+        XCTAssertEqual(persistence.removedPages, [bookmark.page.pageNumber])
+        XCTAssertNil(sut.error)
+    }
+
+    #if QURAN_SYNC
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
         let client = AuthenticationClientFake()
         client.restoreStateResult = .success(.authenticated)
-        let sut = makeSUT(authenticationClient: client)
+        let sut = makeSyncSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
         await waitUntil { sut.isAuthenticated }
@@ -39,7 +59,7 @@ final class BookmarksViewModelTests: XCTestCase {
         let client = AuthenticationClientFake()
         client.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
         client.authenticationStateValue = .authenticated
-        let sut = makeSUT(authenticationClient: client)
+        let sut = makeSyncSUT(authenticationClient: client)
 
         let task = Task { await sut.start() }
         await waitUntil { sut.isAuthenticated }
@@ -49,7 +69,7 @@ final class BookmarksViewModelTests: XCTestCase {
 
     func test_loginToQuranCom_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
-        let sut = makeSUT(authenticationClient: client)
+        let sut = makeSyncSUT(authenticationClient: client)
         let presenter = UIViewController()
         sut.presenter = presenter
 
@@ -61,7 +81,7 @@ final class BookmarksViewModelTests: XCTestCase {
     }
 
     func test_loginToQuranCom_setsError_whenClientIsMissing() async {
-        let sut = makeSUT(authenticationClient: nil)
+        let sut = makeSyncSUT(authenticationClient: nil)
         let presenter = UIViewController()
         sut.presenter = presenter
 
@@ -71,10 +91,30 @@ final class BookmarksViewModelTests: XCTestCase {
             return XCTFail("Expected clientIsNotAuthenticated, got \(String(describing: sut.error))")
         }
     }
+    #endif
 
     // MARK: Private
 
-    private func makeSUT(authenticationClient: (any AuthenticationClient)?) -> BookmarksViewModel {
+    private func makeSUT(persistence: PageBookmarkPersistenceSpy = PageBookmarkPersistenceSpy()) -> BookmarksViewModel {
+        let service = PageBookmarkService(persistence: persistence)
+        #if QURAN_SYNC
+        return BookmarksViewModel(
+            analytics: AnalyticsSpy(),
+            service: service,
+            authenticationClient: UnavailableAuthenticationClient(),
+            navigateTo: { _ in }
+        )
+        #else
+        return BookmarksViewModel(
+            analytics: AnalyticsSpy(),
+            service: service,
+            navigateTo: { _ in }
+        )
+        #endif
+    }
+
+    #if QURAN_SYNC
+    private func makeSyncSUT(authenticationClient: (any AuthenticationClient)?) -> BookmarksViewModel {
         let service = PageBookmarkService(persistence: PageBookmarkPersistenceSpy())
         return BookmarksViewModel(
             analytics: AnalyticsSpy(),
@@ -98,18 +138,24 @@ final class BookmarksViewModelTests: XCTestCase {
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }
+    #endif
 }
 
 private struct AnalyticsSpy: AnalyticsLibrary {
     func logEvent(_: String, value _: String) {}
 }
 
-private struct PageBookmarkPersistenceSpy: PageBookmarkPersistence {
+private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
+    var removedPages: [Int] = []
+
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         Just([]).eraseToAnyPublisher()
     }
 
     func insertPageBookmark(_: Int) async throws {}
-    func removePageBookmark(_: Int) async throws {}
+    func removePageBookmark(_ page: Int) async throws {
+        removedPages.append(page)
+    }
+
     func removeAllPageBookmarks() async throws {}
 }

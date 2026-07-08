@@ -64,7 +64,6 @@ public struct BookmarksBuilder {
         let viewModel = BookmarksViewModel(
             analytics: container.analytics,
             service: service,
-            authenticationClient: container.authenticationClient,
             navigateTo: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }

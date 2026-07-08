@@ -1,3 +1,5 @@
+#if QURAN_SYNC
+
 import Analytics
 import AppDependencies
 import AudioDownloadsFeature
@@ -168,3 +170,5 @@ private func makeUser(email: String?) -> UserInfo {
         photoUrl: nil
     )
 }
+
+#endif

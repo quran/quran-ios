@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import MobileSync
+import QuranAnnotations
 import QuranKit
 import XCTest
 @testable import AnnotationsService
@@ -20,7 +21,7 @@ final class MobileSyncNoteServiceTests: XCTestCase {
 
         XCTAssertEqual(notes.count, 1)
         XCTAssertEqual(notes[0].localId, "note-1")
-        XCTAssertEqual(notes[0].body, "Remember this")
+        XCTAssertEqual(notes[0].note, "Remember this")
         XCTAssertEqual(notes[0].startAyah, AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
         XCTAssertEqual(notes[0].endAyah, AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2))
     }

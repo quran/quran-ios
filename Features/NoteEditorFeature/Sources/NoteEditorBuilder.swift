@@ -24,7 +24,7 @@ public struct NoteEditorBuilder {
     // MARK: Public
 
     #if QURAN_SYNC
-    public func build(withListener listener: NoteEditorListener, note: SyncedNote) -> UIViewController {
+    public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
         build(withListener: listener, mode: .edit(note))
     }
 

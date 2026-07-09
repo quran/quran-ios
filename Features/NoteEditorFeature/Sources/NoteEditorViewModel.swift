@@ -48,7 +48,7 @@ final class NoteEditorViewModel {
     #if QURAN_SYNC
     enum Mode {
         case create(verses: [AyahNumber])
-        case edit(SyncedNote)
+        case edit(Note)
     }
     #endif
 
@@ -236,7 +236,7 @@ final class NoteEditorViewModel {
         case .create:
             return ""
         case .edit(let note):
-            return note.body
+            return note.note
         }
         #else
         return note.note ?? ""
@@ -270,14 +270,14 @@ final class NoteEditorViewModel {
 // NoteEditorViewModelTests can use the real service with an in-memory database.
 protocol NoteEditorSyncServicing {
     func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws
-    func updateNote(_ note: SyncedNote, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws
-    func removeNote(_ note: SyncedNote) async throws
+    func updateNote(_ note: Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws
+    func removeNote(_ note: Note) async throws
 }
 
 extension MobileSyncNoteService: NoteEditorSyncServicing {}
 #else
 protocol NoteEditorLegacyServicing {
-    func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws
+    func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws
     func removeNotes(with verses: [AyahNumber]) async throws
     func textForVerses(_ verses: [AyahNumber]) async throws -> String
 }

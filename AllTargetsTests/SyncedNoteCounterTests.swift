@@ -9,6 +9,7 @@
 import QuranKit
 import XCTest
 @testable import AnnotationsService
+@testable import QuranAnnotations
 @testable import QuranViewFeature
 
 final class SyncedNoteCounterTests: XCTestCase {
@@ -34,10 +35,10 @@ final class SyncedNoteCounterTests: XCTestCase {
         XCTAssertEqual(SyncedNoteCounter.count(notes, interacting: [ayah(3)]), 0)
     }
 
-    private func note(id: String = "note", start: AyahNumber, end: AyahNumber? = nil) -> SyncedNote {
-        SyncedNote(
+    private func note(id: String = "note", start: AyahNumber, end: AyahNumber? = nil) -> Note {
+        Note(
             localId: id,
-            body: "Note body",
+            note: "Note body",
             startAyah: start,
             endAyah: end ?? start,
             modifiedDate: Date()

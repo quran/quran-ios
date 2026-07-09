@@ -89,10 +89,10 @@ private struct NotesViewUI: View {
 
     private func listItem(_ item: NoteItem) -> some View {
         let note = item.note
-        let ayah = note.firstVerse
+        let ayah = note.startAyah
         let page = ayah.page
-        let localizedVerse = note.firstVerse.localizedName
-        let arabicSuraName = note.firstVerse.sura.arabicSuraName
+        let localizedVerse = note.startAyah.localizedName
+        let arabicSuraName = note.startAyah.sura.arabicSuraName
         let ayahCount = note.verses.count
         let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
         let color = note.color.color.opacity(QuranHighlights.opacity)

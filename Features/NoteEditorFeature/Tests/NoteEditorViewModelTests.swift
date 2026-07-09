@@ -229,6 +229,18 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertEqual(sut.noteService.removedVerses, [[ayah(1), ayah(2)]])
         XCTAssertTrue(sut.listener.didDismiss)
     }
+
+    func test_legacyNote_derivesStartAndEndAyahFromPersistedVerses() {
+        let note = Note(
+            verses: [ayah(3), ayah(1)],
+            modifiedDate: Date(timeIntervalSince1970: 1),
+            note: "Stored note",
+            color: .red
+        )
+
+        XCTAssertEqual(note.startAyah, ayah(1))
+        XCTAssertEqual(note.endAyah, ayah(3))
+    }
     #endif
 
     private static let quran = Quran.hafsMadani1405
@@ -253,7 +265,7 @@ final class NoteEditorViewModelTests: XCTestCase {
             noteService: noteService,
             analytics: analytics,
             mode: mode,
-            textForVerses: { _ in text }
+            textForVerses: { _, _ in text }
         )
         viewModel.listener = listener
         return (viewModel, noteService, analytics, listener)
@@ -264,10 +276,10 @@ final class NoteEditorViewModelTests: XCTestCase {
         body: String,
         startAyah: AyahNumber? = nil,
         endAyah: AyahNumber? = nil
-    ) -> SyncedNote {
-        SyncedNote(
+    ) -> Note {
+        Note(
             localId: localId,
-            body: body,
+            note: body,
             startAyah: startAyah ?? ayah(1),
             endAyah: endAyah ?? ayah(2),
             modifiedDate: Date(timeIntervalSince1970: 1)
@@ -329,11 +341,11 @@ private final class SyncNoteServiceFake: NoteEditorSyncServicing {
         events.append(.create(body: body, startAyah: startAyah, endAyah: endAyah))
     }
 
-    func updateNote(_ note: SyncedNote, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
+    func updateNote(_ note: Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
         events.append(.update(localId: note.localId, body: body, startAyah: startAyah, endAyah: endAyah))
     }
 
-    func removeNote(_ note: SyncedNote) async throws {
+    func removeNote(_ note: Note) async throws {
         events.append(.remove(localId: note.localId))
     }
 }

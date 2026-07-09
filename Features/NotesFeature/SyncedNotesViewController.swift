@@ -5,10 +5,10 @@
 //  Created by Ahmed Nabil on 2026-05-16.
 //
 
-import AnnotationsService
 import Combine
 import Localization
 import NoteEditorFeature
+import QuranAnnotations
 import SwiftUI
 import UIx
 import VLogging
@@ -104,7 +104,7 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
         )
     }
 
-    private func editNote(_ note: SyncedNote) {
+    private func editNote(_ note: Note) {
         let viewController = noteEditorBuilder.build(withListener: self, note: note)
         present(viewController, animated: true)
     }

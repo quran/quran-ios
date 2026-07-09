@@ -53,7 +53,7 @@ final class NotesViewModel: ObservableObject {
             if item.note.note?.range(of: term, options: .caseInsensitive) != nil {
                 return true
             }
-            let suraName = item.note.firstVerse.sura.localizedName()
+            let suraName = item.note.startAyah.sura.localizedName()
             return suraName.range(of: term, options: .caseInsensitive) != nil
         }
     }
@@ -74,12 +74,12 @@ final class NotesViewModel: ObservableObject {
     }
 
     func navigateTo(_ item: NoteItem) {
-        logger.info("Notes: select note at \(item.note.firstVerse)")
-        navigateTo(item.note.firstVerse)
+        logger.info("Notes: select note at \(item.note.startAyah)")
+        navigateTo(item.note.startAyah)
     }
 
     func deleteItem(_ item: NoteItem) async {
-        logger.info("Notes: delete note at \(item.note.firstVerse)")
+        logger.info("Notes: delete note at \(item.note.startAyah)")
         do {
             try await noteService.removeNotes(with: Array(item.note.verses))
         } catch {
@@ -127,7 +127,7 @@ final class NotesViewModel: ObservableObject {
                         return NoteItem(note: note, verseText: verseText)
                     } catch {
                         crasher.recordError(error, reason: "NoteService.textForVerses")
-                        return NoteItem(note: note, verseText: note.firstVerse.localizedName)
+                        return NoteItem(note: note, verseText: note.startAyah.localizedName)
                     }
                 }
             }

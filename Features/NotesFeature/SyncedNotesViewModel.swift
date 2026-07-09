@@ -9,6 +9,7 @@ import AnnotationsService
 import Crashing
 import Foundation
 import Localization
+import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import ReadingService
@@ -38,7 +39,7 @@ final class SyncedNotesViewModel: ObservableObject {
             return notes
         }
         return notes.filter { item in
-            if item.note.body.range(of: term, options: .caseInsensitive) != nil {
+            if item.note.note.range(of: term, options: .caseInsensitive) != nil {
                 return true
             }
             let suraName = item.note.startAyah.sura.localizedName()
@@ -70,7 +71,7 @@ final class SyncedNotesViewModel: ObservableObject {
             var notesText = [String]()
             let notes: [SyncedNoteItem] = await self.notes
             for (index, note) in notes.enumerated() {
-                notesText.append(contentsOf: [note.note.body.trimmingCharacters(in: .newlines), ""])
+                notesText.append(contentsOf: [note.note.note.trimmingCharacters(in: .newlines), ""])
                 let verses = try await textForVerses(note.note.startAyah.array(to: note.note.endAyah))
                 notesText.append(verses)
                 if index != notes.count - 1 {
@@ -87,7 +88,7 @@ final class SyncedNotesViewModel: ObservableObject {
     private let textService: QuranTextDataService
     private let readingPreferences = ReadingPreferences.shared
 
-    private nonisolated func noteItems(with notes: [SyncedNote]) async -> [SyncedNoteItem] {
+    private nonisolated func noteItems(with notes: [Note]) async -> [SyncedNoteItem] {
         await withTaskGroup(of: (Int, SyncedNoteItem).self) { group in
             for (index, note) in notes.enumerated() {
                 group.addTask {

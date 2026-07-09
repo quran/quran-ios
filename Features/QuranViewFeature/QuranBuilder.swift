@@ -40,11 +40,6 @@ public struct QuranBuilder {
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
         let syncedNoteService = container.mobileSyncNoteService()
-        let syncedNoteEditorBuilder = SyncedNoteEditorBuilder(
-            noteService: syncedNoteService,
-            textService: container.textDataService(),
-            analytics: container.analytics
-        )
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
             ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
             highlightsService: highlightsService
@@ -63,7 +58,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             syncedNoteService: syncedNoteService,
-            syncedNoteEditorBuilder: syncedNoteEditorBuilder,
+            noteEditorBuilder: NoteEditorBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver
         )
         #else

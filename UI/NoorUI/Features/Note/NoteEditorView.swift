@@ -19,7 +19,7 @@ public struct NoteEditorView: View {
         done: @escaping () -> Void,
         delete: @Sendable @escaping () async -> Void
     ) {
-        _note = ObservedObject(initialValue: note)
+        _note = StateObject(wrappedValue: note)
         self.showsColors = showsColors
         self.done = done
         self.delete = delete
@@ -92,7 +92,7 @@ public struct NoteEditorView: View {
 
     // MARK: Internal
 
-    @ObservedObject var note: EditableNote
+    @StateObject var note: EditableNote
 
     let showsColors: Bool
     let done: () -> Void

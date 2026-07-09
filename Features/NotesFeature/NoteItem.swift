@@ -6,12 +6,26 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import Foundation
 import QuranAnnotations
-import QuranKit
 
 struct NoteItem: Equatable, Identifiable {
     let note: Note
     let verseText: String
 
-    var id: Set<AyahNumber> { note.verses }
+    var id: String {
+        #if QURAN_SYNC
+        note.id
+        #else
+        note.verses.description
+        #endif
+    }
+
+    private var noteText: String {
+        #if QURAN_SYNC
+        note.note
+        #else
+        note.note ?? ""
+        #endif
+    }
 }

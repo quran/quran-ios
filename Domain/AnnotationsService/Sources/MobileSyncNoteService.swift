@@ -7,20 +7,11 @@
 
 import Foundation
 @preconcurrency import MobileSync
+import QuranAnnotations
 import QuranKit
 
-public struct SyncedNote: Equatable, Identifiable, Sendable {
-    public let localId: String
-    public let body: String
-    public let startAyah: AyahNumber
-    public let endAyah: AyahNumber
-    public let modifiedDate: Date
-
-    public var id: String { localId }
-}
-
 public struct SyncedNotesSequence: AsyncSequence {
-    public typealias Element = [SyncedNote]
+    public typealias Element = [QuranAnnotations.Note]
 
     public struct AsyncIterator: AsyncIteratorProtocol {
         init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
@@ -77,13 +68,13 @@ public struct MobileSyncNoteService {
         )
     }
 
-    public func updateNote(_ note: SyncedNote, body: String) async throws {
+    public func updateNote(_ note: QuranAnnotations.Note, body: String) async throws {
         try await updateNote(note, body: body, startAyah: note.startAyah, endAyah: note.endAyah)
     }
 
-    public func updateNote(_ note: SyncedNote, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
+    public func updateNote(_ note: QuranAnnotations.Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
         try await quranDataService.updateNote(
-            localId: note.localId,
+            localId: note.id,
             body: body,
             startSura: Int32(startAyah.sura.suraNumber),
             startAyah: Int32(startAyah.ayah),
@@ -92,18 +83,18 @@ public struct MobileSyncNoteService {
         )
     }
 
-    public func removeNote(_ note: SyncedNote) async throws {
-        try await quranDataService.removeNote(localId: note.localId)
+    public func removeNote(_ note: QuranAnnotations.Note) async throws {
+        try await quranDataService.removeNote(localId: note.id)
     }
 
     // MARK: Internal
 
-    static func notes(from notes: [Note_], quran: Quran) -> [SyncedNote] {
+    static func notes(from notes: [Note_], quran: Quran) -> [QuranAnnotations.Note] {
         notes.compactMap { note(from: $0, quran: quran) }
             .sorted { $0.modifiedDate > $1.modifiedDate }
     }
 
-    static func note(from note: Note_, quran: Quran) -> SyncedNote? {
+    static func note(from note: Note_, quran: Quran) -> QuranAnnotations.Note? {
         guard let start = AyahNumber(quran: quran, sura: Int(note.startSura), ayah: Int(note.startAyah)),
               let end = AyahNumber(quran: quran, sura: Int(note.endSura), ayah: Int(note.endAyah)),
               start <= end
@@ -111,9 +102,9 @@ public struct MobileSyncNoteService {
             return nil
         }
 
-        return SyncedNote(
-            localId: note.localId,
-            body: note.body,
+        return QuranAnnotations.Note(
+            id: note.localId,
+            note: note.body,
             startAyah: start,
             endAyah: end,
             modifiedDate: note.lastUpdated

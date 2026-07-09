@@ -42,11 +42,11 @@ public struct NoteService {
         return Note(quran: quran, persistenceModel)
     }
 
-    public func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
+    public func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws {
         // update last used highlight color
         HighlightPreferences.shared.lastUsedHighlightColor = color
 
-        analytics.updateNote(verses: verses)
+        analytics.updateNote(verses: Set(verses))
         let verses = verses.map(VersePersistenceModel.init)
         _ = try await persistence.setNote(note, verses: Array(verses), color: color.rawValue)
     }
@@ -85,22 +85,15 @@ public struct NoteService {
     }
 }
 
+#if !QURAN_SYNC
 private extension Note {
     init(quran: Quran, _ note: NotePersistenceModel) {
-        #if QURAN_SYNC
-        self.init(
-            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
-            modifiedDate: note.modifiedDate,
-            note: note.note ?? ""
-        )
-        #else
         self.init(
             verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
             modifiedDate: note.modifiedDate,
             note: note.note,
             color: HighlightColor(rawValue: note.color) ?? .red
         )
-        #endif
     }
 }
 
@@ -115,3 +108,4 @@ private extension VersePersistenceModel {
         self.init(ayah: verse.ayah, sura: verse.sura.suraNumber)
     }
 }
+#endif

@@ -71,7 +71,7 @@ final class NoteEditorViewModelTests: XCTestCase {
 
         XCTAssertTrue(didSave)
         XCTAssertEqual(sut.noteService.events, [
-            .update(localId: note.localId, body: "Updated note", startAyah: note.startAyah, endAyah: note.endAyah),
+            .update(localId: note.id, body: "Updated note", startAyah: note.startAyah, endAyah: note.endAyah),
         ])
         XCTAssertEqual(sut.analytics.events, [.init(name: "UpdateNoteVersesNum", value: "2")])
         XCTAssertTrue(sut.listener.didDismiss)
@@ -107,7 +107,7 @@ final class NoteEditorViewModelTests: XCTestCase {
 
         await sut.viewModel.forceDelete()
 
-        XCTAssertEqual(sut.noteService.events, [.remove(localId: note.localId)])
+        XCTAssertEqual(sut.noteService.events, [.remove(localId: note.id)])
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
@@ -136,7 +136,7 @@ final class NoteEditorViewModelTests: XCTestCase {
 
         XCTAssertTrue(didSave)
         XCTAssertEqual(sut.noteService.events, [
-            .update(localId: note.localId, body: "Updated note", startAyah: ayah(1), endAyah: ayah(3)),
+            .update(localId: note.id, body: "Updated note", startAyah: ayah(1), endAyah: ayah(3)),
         ])
         XCTAssertEqual(sut.analytics.events, [.init(name: "UpdateNoteVersesNum", value: "3")])
     }
@@ -229,6 +229,18 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertEqual(sut.noteService.removedVerses, [[ayah(1), ayah(2)]])
         XCTAssertTrue(sut.listener.didDismiss)
     }
+
+    func test_legacyNote_derivesStartAndEndAyahFromPersistedVerses() {
+        let note = Note(
+            verses: [ayah(3), ayah(1)],
+            modifiedDate: Date(timeIntervalSince1970: 1),
+            note: "Stored note",
+            color: .red
+        )
+
+        XCTAssertEqual(note.startAyah, ayah(1))
+        XCTAssertEqual(note.endAyah, ayah(3))
+    }
     #endif
 
     private static let quran = Quran.hafsMadani1405
@@ -264,10 +276,10 @@ final class NoteEditorViewModelTests: XCTestCase {
         body: String,
         startAyah: AyahNumber? = nil,
         endAyah: AyahNumber? = nil
-    ) -> SyncedNote {
-        SyncedNote(
-            localId: localId,
-            body: body,
+    ) -> Note {
+        Note(
+            id: localId,
+            note: body,
             startAyah: startAyah ?? ayah(1),
             endAyah: endAyah ?? ayah(2),
             modifiedDate: Date(timeIntervalSince1970: 1)
@@ -329,19 +341,19 @@ private final class SyncNoteServiceFake: NoteEditorSyncServicing {
         events.append(.create(body: body, startAyah: startAyah, endAyah: endAyah))
     }
 
-    func updateNote(_ note: SyncedNote, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-        events.append(.update(localId: note.localId, body: body, startAyah: startAyah, endAyah: endAyah))
+    func updateNote(_ note: Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
+        events.append(.update(localId: note.id, body: body, startAyah: startAyah, endAyah: endAyah))
     }
 
-    func removeNote(_ note: SyncedNote) async throws {
-        events.append(.remove(localId: note.localId))
+    func removeNote(_ note: Note) async throws {
+        events.append(.remove(localId: note.id))
     }
 }
 #else
 private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
     struct SetNoteCall: Equatable {
         let note: String
-        let verses: Set<AyahNumber>
+        let verses: [AyahNumber]
         let color: HighlightColor
     }
 
@@ -353,7 +365,7 @@ private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
     private(set) var setNoteCalls: [SetNoteCall] = []
     private(set) var removedVerses: [[AyahNumber]] = []
 
-    func setNote(_ note: String, verses: Set<AyahNumber>, color: HighlightColor) async throws {
+    func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws {
         setNoteCalls.append(.init(note: note, verses: verses, color: color))
     }
 

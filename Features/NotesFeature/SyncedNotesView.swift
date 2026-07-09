@@ -88,7 +88,7 @@ private struct SyncedNotesViewUI: View {
         let note = item.note
         let ayah = note.startAyah
         let page = ayah.page
-        let ayahCount = note.startAyah.array(to: note.endAyah).count
+        let ayahCount = note.verses.count
         let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
         return NoorListItem(
             subheading: subheadingText(
@@ -97,7 +97,7 @@ private struct SyncedNotesViewUI: View {
                 numberOfAyahs: numberOfAyahs
             ),
             rightPretitle: "\(verse: item.verseText, color: Color.clear, lineLimit: 2)",
-            title: titleText(for: note.body.trimmingCharacters(in: .whitespacesAndNewlines)),
+            title: titleText(for: note.note.trimmingCharacters(in: .whitespacesAndNewlines)),
             subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(page.pageNumber))
         ) {

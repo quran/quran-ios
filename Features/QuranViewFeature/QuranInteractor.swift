@@ -372,7 +372,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     #if QURAN_SYNC
-    private var syncedNotes: [SyncedNote] = []
+    private var syncedNotes: [Note] = []
     private var syncedNotesObservationTask: Task<Void, Never>?
     #else
     private var notes: [Note] = []
@@ -464,28 +464,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
-        let selectedVerses = Set(verses)
-        return notes.filter { !selectedVerses.isDisjoint(with: $0.verses) }
+        notes.filter { $0.intersects(verses: verses) }
     }
     #endif
 
     private func syncedNoteCount(interacting verses: [AyahNumber]) -> Int {
         #if QURAN_SYNC
-        return SyncedNoteCounter.count(syncedNotes, interacting: verses)
+        syncedNotes.filter { $0.intersects(verses: verses) }.count
         #else
         return 0
         #endif
     }
 
     #if QURAN_SYNC
-    private func syncedNotes(interacting verses: [AyahNumber]) -> [SyncedNote] {
-        let selectedVerses = Set(verses)
-        return syncedNotes.filter { note in
-            guard note.endAyah >= note.startAyah else {
-                return false
-            }
-            return !selectedVerses.isDisjoint(with: note.startAyah.array(to: note.endAyah))
-        }
+    private func syncedNotes(interacting verses: [AyahNumber]) -> [Note] {
+        syncedNotes.filter { $0.intersects(verses: verses) }
     }
     #endif
 

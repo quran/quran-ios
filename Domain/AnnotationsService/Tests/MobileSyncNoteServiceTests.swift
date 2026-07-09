@@ -20,7 +20,7 @@ final class MobileSyncNoteServiceTests: XCTestCase {
         ], quran: .hafsMadani1405)
 
         XCTAssertEqual(notes.count, 1)
-        XCTAssertEqual(notes[0].localId, "note-1")
+        XCTAssertEqual(notes[0].id, "note-1")
         XCTAssertEqual(notes[0].note, "Remember this")
         XCTAssertEqual(notes[0].startAyah, AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
         XCTAssertEqual(notes[0].endAyah, AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2))
@@ -32,7 +32,7 @@ final class MobileSyncNoteServiceTests: XCTestCase {
             Self.note(localId: "note-2", body: "Second"),
         ], quran: .hafsMadani1405)
 
-        XCTAssertEqual(Set(notes.map { note in note.localId }), ["note-1", "note-2"])
+        XCTAssertEqual(Set(notes.map { note in note.id }), ["note-1", "note-2"])
     }
 
     func test_notes_sortsByLatestUpdatedDate() {
@@ -41,7 +41,7 @@ final class MobileSyncNoteServiceTests: XCTestCase {
             Self.note(localId: "newer", body: "Newer", lastUpdated: Date(timeIntervalSince1970: 2)),
         ], quran: .hafsMadani1405)
 
-        XCTAssertEqual(notes.map(\.localId), ["newer", "older"])
+        XCTAssertEqual(notes.map(\.id), ["newer", "older"])
     }
 
     private static func note(localId: String, body: String, lastUpdated: Date = .distantPast) -> Note_ {

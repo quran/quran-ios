@@ -16,7 +16,7 @@ import VLogging
 final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UISearchBarDelegate, NoteEditorListener {
     // MARK: Lifecycle
 
-    init(viewModel: SyncedNotesViewModel, noteEditorBuilder: SyncedNoteEditorBuilder) {
+    init(viewModel: SyncedNotesViewModel, noteEditorBuilder: NoteEditorBuilder) {
         self.viewModel = viewModel
         self.noteEditorBuilder = noteEditorBuilder
         super.init(rootView: SyncedNotesView(viewModel: viewModel, selectAction: { _ in }))
@@ -72,7 +72,7 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
 
     private var editController: EditController?
     private let viewModel: SyncedNotesViewModel
-    private let noteEditorBuilder: SyncedNoteEditorBuilder
+    private let noteEditorBuilder: NoteEditorBuilder
     private let searchController = UISearchController(searchResultsController: nil)
     private var cancellables: Set<AnyCancellable> = []
 

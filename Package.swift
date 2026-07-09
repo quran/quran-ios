@@ -599,12 +599,18 @@ private func featuresTargets() -> [[Target]] {
             "WordTextService",
         ]),
 
-        target(type, name: "NoteEditorFeature", hasTests: false, dependencies: [
+        target(type, name: "NoteEditorFeature", dependencies: [
             "Analytics",
             "AppDependencies",
             "AnnotationsService",
             "NoorUI",
             "QuranTextKit",
+        ], testDependencies: [
+            "Analytics",
+            "AnnotationsService",
+            "NoorUI",
+            "QuranAnnotations",
+            "QuranKit",
         ]),
 
         target(type, name: "BookmarksFeature", dependencies: [

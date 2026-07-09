@@ -73,7 +73,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let resources: ReadingResourcesService
         #if QURAN_SYNC
         let syncedNoteService: MobileSyncNoteService
-        let syncedNoteEditorBuilder: SyncedNoteEditorBuilder
+        let noteEditorBuilder: NoteEditorBuilder
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         #else
         let noteService: NoteService
@@ -251,7 +251,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func addSyncedNote(verses: [AyahNumber]) {
         dismissAyahMenu()
         presenter?.rotateToPortraitIfPhone()
-        let viewController = deps.syncedNoteEditorBuilder.build(withListener: self, verses: verses)
+        let viewController = deps.noteEditorBuilder.build(withListener: self, verses: verses)
         presenter?.present(viewController, animated: true)
     }
     #endif

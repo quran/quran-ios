@@ -32,11 +32,7 @@ public struct NotesBuilder {
         let viewModel = SyncedNotesViewModel(noteService: noteService, textService: textService)
         return SyncedNotesViewController(
             viewModel: viewModel,
-            noteEditorBuilder: SyncedNoteEditorBuilder(
-                noteService: noteService,
-                textService: textService,
-                analytics: container.analytics
-            )
+            noteEditorBuilder: NoteEditorBuilder(container: container)
         )
         #else
         let textRetriever = ShareableVerseTextRetriever(

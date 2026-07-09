@@ -11,11 +11,10 @@ import SwiftUI
 import UIKit
 import VLogging
 
-#if !QURAN_SYNC
 final class NoteEditorViewController: BaseViewController, UIAdaptivePresentationControllerDelegate {
     // MARK: Lifecycle
 
-    init(viewModel: NoteEditorInteractor) {
+    init(viewModel: NoteEditorViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,22 +40,38 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
                 let note = try await viewModel.fetchNote()
                 setNote(note)
             } catch {
-                // TODO: should show error to the user
+                showErrorAlert(error: error)
             }
         }
     }
 
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        viewModel.canDismissNote
+    }
+
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        showMinimumLengthAlert()
+    }
+
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        done()
+        guard !suppressesDismissalAutoSave, viewModel.shouldAutoSaveOnDismiss else {
+            return
+        }
+
+        Task {
+            await viewModel.commitEditsAndExit(dismissOnSave: false)
+        }
     }
 
     // MARK: Private
 
-    private let viewModel: NoteEditorInteractor
+    private let viewModel: NoteEditorViewModel
+    private var suppressesDismissalAutoSave = false
 
     private func setNote(_ note: EditableNote) {
         let noteEditor = NoteEditorView(
             note: note,
+            showsColors: viewModel.showsColors,
             done: { [weak self] in self?.done() },
             delete: { [weak self] in await self?.delete() }
         )
@@ -84,23 +99,46 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     private func done() {
+        guard viewModel.canDismissNote else {
+            showMinimumLengthAlert()
+            return
+        }
+
+        suppressesDismissalAutoSave = true
         Task {
-            await viewModel.commitEditsAndExist()
+            let didSave = await viewModel.commitEditsAndExit(dismissOnSave: true)
+            if !didSave {
+                suppressesDismissalAutoSave = false
+            }
         }
     }
 
     private func delete() async {
         logger.info("NoteEditor: delete note")
-        if viewModel.isEditedNote {
+        if viewModel.hasNoteText {
             logger.info("NoteEditor: confirm note deletion")
-            confirmNoteDelete(
-                delete: { await self.viewModel.forceDelete() },
-                cancel: { }
-            )
+            confirmDeleteNote()
         } else {
             // delete highlight
+            suppressesDismissalAutoSave = true
             await viewModel.forceDelete()
         }
     }
+
+    private func confirmDeleteNote() {
+        let delete = {
+            self.suppressesDismissalAutoSave = true
+            await self.viewModel.forceDelete()
+        }
+        switch viewModel.deleteConfirmationStyle {
+        case .note:
+            confirmNoteDelete(delete: delete, cancel: { })
+        case .syncedNote:
+            confirmSyncedNoteDelete(delete: delete, cancel: { })
+        }
+    }
+
+    private func showMinimumLengthAlert() {
+        showNoteMinimumLengthAlert(minimumLength: viewModel.minimumNoteBodyLength)
+    }
 }
-#endif

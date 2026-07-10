@@ -31,9 +31,11 @@ Use the Makefile targets for local verification:
 ```bash
 make build-example-no-sync
 make build-example-sync
+make run-example-no-sync
+make run-example-sync
 ```
 
-These targets use separate DerivedData paths under `.build/DerivedData/no-sync` and `.build/DerivedData/sync`, so switching sync modes does not reuse stale build products and each mode still gets incremental builds. No package-cache reset is needed.
+These targets use separate DerivedData paths under `.build/DerivedData/no-sync` and `.build/DerivedData/sync`, so switching sync modes does not reuse stale build products and each mode still gets incremental builds. The run targets build, boot their configured simulator, install, and launch the Example app. No package-cache reset is needed.
 
 The sync target sets `QURAN_SYNC` for `Package.swift` and passes `-D QURAN_SYNC` only to the Example app target:
 

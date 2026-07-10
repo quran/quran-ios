@@ -2,17 +2,13 @@
 
 ## Make commands
 
-The Makefile exposes a few helpful commands:
+The Makefile exposes explicit targets for each sync mode:
 
-1. Use `make build` to compile `QuranEngine-Package` with `QURAN_SYNC` disabled (or override with `make build TARGET=NoorUI`).
-2. Use `make test` for package tests with `QURAN_SYNC` disabled, also honoring `TARGET` to point at another scheme/target.
-3. Use `make build-example` to build the Example app with `QURAN_SYNC` disabled.
-4. Run `make format-lint` for SwiftFormat checks.
+- no sync: `make build-no-sync`, `make test-no-sync`, `make build-example-no-sync`, `make run-example-no-sync`
+- sync enabled: `make build-sync`, `make test-sync`, `make build-example-sync`, `make run-example-sync`
+- SwiftFormat: `make format-lint`
 
-Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so use explicit targets when sync state matters:
-
-- no sync: `make build-no-sync`, `make test-no-sync`, `make build-example-no-sync`
-- sync enabled: `make build-sync`, `make test-sync`, `make build-example-sync`
+Package build and test targets honor `TARGET` to select another scheme or target, such as `make build-no-sync TARGET=NoorUI`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
 
 Keeping these commands green locally should keep the CI workflow green as well.
 

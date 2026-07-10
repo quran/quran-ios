@@ -9,6 +9,9 @@ EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
+EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
+EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17,26.1
+EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro,26.1
 DERIVED_DATA_DIR ?= .build/DerivedData
 
 SWIFT_FORMAT_REPO=https://github.com/nicklockwood/SwiftFormat
@@ -23,44 +26,59 @@ WITH_QURAN_SYNC=set -o pipefail; env QURAN_SYNC=QURAN_SYNC
 WITHOUT_QURAN_SYNC_DERIVED_DATA=$(DERIVED_DATA_DIR)/no-sync
 WITH_QURAN_SYNC_DERIVED_DATA=$(DERIVED_DATA_DIR)/sync
 WITH_QURAN_SYNC_APP_SWIFT_FLAGS='OTHER_SWIFT_FLAGS=$$(inherited) -D QURAN_SYNC'
+comma := ,
+simulator-os = $(lastword $(subst $(comma), ,$(1)))
+simulator-name = $(subst $(comma)$(call simulator-os,$(1)),,$(1))
+simulator-destination = platform=iOS Simulator,name=$(call simulator-name,$(1)),OS=$(call simulator-os,$(1))
 
-.PHONY: test test-no-sync test-sync test-without-sync test-with-sync build build-no-sync build-sync build-without-sync build-with-sync build-example build-example-no-sync build-example-sync build-example-without-sync build-example-with-sync clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect install-swiftlint build-for-analyzer swiftlint-analyzer
+define run-example-app
+	@simulator="$$(xcrun simctl list devices "iOS $(call simulator-os,$(1))" | grep -F "    $(call simulator-name,$(1)) (" | sed -nE 's/.*\(([[:xdigit:]-]{36})\).*/\1/p' | head -n 1)"; \
+	if [ -z "$$simulator" ]; then \
+		echo "$(call simulator-name,$(1)) with iOS $(call simulator-os,$(1)) is not available." >&2; \
+		exit 1; \
+	fi; \
+	if ! xcrun simctl list devices booted | grep -Fq "$$simulator"; then \
+		xcrun simctl boot "$$simulator"; \
+	fi; \
+	open -a Simulator --args -CurrentDeviceUDID "$$simulator"; \
+	xcrun simctl bootstatus "$$simulator" -b; \
+	xcrun simctl install "$$simulator" "$(2)/Build/Products/Debug-iphonesimulator/$(EXAMPLE_SCHEME).app"; \
+	xcrun simctl launch "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)"
+endef
 
-test: test-no-sync
+.PHONY: test-no-sync test-sync
+.PHONY: build-no-sync build-sync
+.PHONY: build-example-no-sync build-example-sync
+.PHONY: run-example-no-sync run-example-sync
+.PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect
+.PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 
-test-no-sync: test-without-sync
-
-test-sync: test-with-sync
-
-test-without-sync:
+test-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
-test-with-sync:
+test-sync:
 	$(WITH_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_QURAN_SYNC_DERIVED_DATA)" build test -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
-build: build-no-sync
-
-build-no-sync: build-without-sync
-
-build-sync: build-with-sync
-
-build-without-sync:
+build-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
-build-with-sync:
+build-sync:
 	$(WITH_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_QURAN_SYNC_DERIVED_DATA)" build -scheme $(CURRENT_TARGET) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
-build-example: build-example-no-sync
-
-build-example-no-sync: build-example-without-sync
-
-build-example-sync: build-example-with-sync
-
-build-example-without-sync:
+build-example-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 2>&1 | xcbeautify --renderer github-actions
 
-build-example-with-sync:
+build-example-sync:
 	$(WITH_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_QURAN_SYNC_DERIVED_DATA)" build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO $(WITH_QURAN_SYNC_APP_SWIFT_FLAGS) 2>&1 | xcbeautify --renderer github-actions
+
+run-example-no-sync: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_NO_SYNC_SIMULATOR))
+run-example-sync: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_SYNC_SIMULATOR))
+
+run-example-no-sync: build-example-no-sync
+	$(call run-example-app,$(EXAMPLE_NO_SYNC_SIMULATOR),$(WITHOUT_QURAN_SYNC_DERIVED_DATA))
+
+run-example-sync: build-example-sync
+	$(call run-example-app,$(EXAMPLE_SYNC_SIMULATOR),$(WITH_QURAN_SYNC_DERIVED_DATA))
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

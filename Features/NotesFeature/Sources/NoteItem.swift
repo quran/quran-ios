@@ -23,9 +23,9 @@ struct NoteItem: Equatable, Identifiable {
 
     var noteText: String {
         #if QURAN_SYNC
-        note.note
+        note.text
         #else
-        note.note ?? ""
+        note.text ?? ""
         #endif
     }
 }

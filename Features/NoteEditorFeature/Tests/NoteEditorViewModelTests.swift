@@ -234,7 +234,7 @@ final class NoteEditorViewModelTests: XCTestCase {
         let note = Note(
             verses: [ayah(3), ayah(1)],
             modifiedDate: Date(timeIntervalSince1970: 1),
-            note: "Stored note",
+            text: "Stored note",
             color: .red
         )
 
@@ -279,7 +279,7 @@ final class NoteEditorViewModelTests: XCTestCase {
     ) -> Note {
         Note(
             id: localId,
-            note: body,
+            text: body,
             startAyah: startAyah ?? ayah(1),
             endAyah: endAyah ?? ayah(2),
             modifiedDate: Date(timeIntervalSince1970: 1)
@@ -296,7 +296,7 @@ final class NoteEditorViewModelTests: XCTestCase {
         let note = Note(
             verses: [ayah(2), ayah(1)],
             modifiedDate: Date(timeIntervalSince1970: 1),
-            note: noteBody,
+            text: noteBody,
             color: color
         )
         let viewModel = NoteEditorViewModel(noteService: noteService, note: note)

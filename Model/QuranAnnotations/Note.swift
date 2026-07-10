@@ -12,9 +12,9 @@ public struct Note: Equatable {
     // MARK: Lifecycle
 
     #if QURAN_SYNC
-    public init(id: String, note: String, startAyah: AyahNumber, endAyah: AyahNumber, modifiedDate: Date) {
+    public init(id: String, text: String, startAyah: AyahNumber, endAyah: AyahNumber, modifiedDate: Date) {
         self.id = id
-        self.note = note
+        self.text = text
         if startAyah <= endAyah {
             self.startAyah = startAyah
             self.endAyah = endAyah
@@ -25,13 +25,13 @@ public struct Note: Equatable {
         self.modifiedDate = modifiedDate
     }
     #else
-    public init(verses: Set<AyahNumber>, modifiedDate: Date, note: String?, color: HighlightColor) {
+    public init(verses: Set<AyahNumber>, modifiedDate: Date, text: String?, color: HighlightColor) {
         let sortedVerses = verses.sorted()
         startAyah = sortedVerses[0]
         endAyah = sortedVerses[sortedVerses.count - 1]
         self.modifiedDate = modifiedDate
         self.color = color
-        self.note = note
+        self.text = text
     }
     #endif
 
@@ -47,10 +47,10 @@ public struct Note: Equatable {
 
     #if QURAN_SYNC
     public let id: String
-    public let note: String
+    public let text: String
     #else
     public let color: HighlightColor
-    public let note: String?
+    public let text: String?
     #endif
 
     public var verses: [AyahNumber] {

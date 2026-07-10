@@ -236,10 +236,10 @@ final class NoteEditorViewModel {
         case .create:
             return ""
         case .edit(let note):
-            return note.note
+            return note.text
         }
         #else
-        return note.note ?? ""
+        return note.text ?? ""
         #endif
     }
 

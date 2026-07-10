@@ -49,7 +49,7 @@ final class NoteItemTests: XCTestCase {
     private func note(id: String, body: String) -> Note {
         Note(
             id: id,
-            note: body,
+            text: body,
             startAyah: ayah,
             endAyah: ayah,
             modifiedDate: Date()
@@ -60,7 +60,7 @@ final class NoteItemTests: XCTestCase {
         Note(
             verses: [ayah],
             modifiedDate: Date(),
-            note: body,
+            text: body,
             color: .red
         )
     }

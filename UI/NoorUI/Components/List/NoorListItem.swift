@@ -47,6 +47,7 @@ public struct NoorListItem: View {
         image: ItemImage? = nil,
         heading: String? = nil,
         subheading: MultipartText? = nil,
+        headerAccessory: Accessory? = nil,
         rightPretitle: MultipartText? = nil,
         title: MultipartText,
         rightSubtitle: MultipartText? = nil,
@@ -58,6 +59,7 @@ public struct NoorListItem: View {
         self.image = image
         self.heading = heading
         self.subheading = subheading
+        self.headerAccessory = headerAccessory
         self.rightPretitle = rightPretitle
         self.title = title
         self.rightSubtitle = rightSubtitle
@@ -78,6 +80,13 @@ public struct NoorListItem: View {
         case disclosureIndicator
         case download(DownloadType, action: AsyncAction)
         case image(NoorSystemImage, color: Color? = nil)
+        case button(
+            text: String? = nil,
+            image: NoorSystemImage,
+            color: Color? = nil,
+            accessibilityLabel: String,
+            action: AsyncAction
+        )
 
         // MARK: Internal
 
@@ -87,13 +96,14 @@ public struct NoorListItem: View {
             case .download: return true
             case .disclosureIndicator: return false
             case .image: return false
+            case .button: return true
             }
         }
     }
 
     public var body: some View {
         if let action {
-            if let accessory, accessory.actionable {
+            if hasActionableAccessory {
                 // Use Tap gesture since tapping accessory button will also trigger the whole cell selection.
                 content
                     .onAsyncTapGesture(asyncAction: action)
@@ -113,6 +123,7 @@ public struct NoorListItem: View {
     let image: ItemImage?
     let heading: String?
     let subheading: MultipartText?
+    let headerAccessory: Accessory?
     let rightPretitle: MultipartText?
     let title: MultipartText
     let rightSubtitle: MultipartText?
@@ -121,6 +132,10 @@ public struct NoorListItem: View {
     let _action: AsyncAction?
 
     // MARK: Private
+
+    private var hasActionableAccessory: Bool {
+        headerAccessory?.actionable == true || accessory?.actionable == true
+    }
 
     private var action: AsyncAction? {
         guard let _action else {
@@ -158,14 +173,25 @@ public struct NoorListItem: View {
             }
 
             VStack(alignment: .leading) {
-                if let heading {
-                    Text(heading)
-                        .foregroundColor(.accentColor)
-                }
+                if heading != nil || subheading != nil || headerAccessory != nil {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            if let heading {
+                                Text(heading)
+                                    .foregroundColor(.accentColor)
+                            }
 
-                if let subheading {
-                    subheading.view(ofSize: .caption)
-                        .foregroundColor(Color.secondaryLabel)
+                            if let subheading {
+                                subheading.view(ofSize: .caption)
+                                    .foregroundColor(Color.secondaryLabel)
+                            }
+                        }
+
+                        if let headerAccessory {
+                            Spacer()
+                            accessoryView(headerAccessory)
+                        }
+                    }
                 }
 
                 if let rightPretitle {
@@ -200,28 +226,49 @@ public struct NoorListItem: View {
                 }
 
                 if let accessory {
-                    switch accessory {
-                    case .text(let text):
-                        Text(text)
-                            .foregroundColor(.secondaryLabel)
-                            .fontWeight(.light)
-                    case .disclosureIndicator:
-                        DisclosureIndicator()
-                    case let .download(type, action):
-                        AppStoreDownloadButton(type: type, action: action)
-                    case let .image(image, color):
-                        if let color {
-                            image.image
-                                .foregroundColor(color)
-                        } else {
-                            image.image
-                        }
-                    }
+                    accessoryView(accessory)
                 }
             }
         }
         .foregroundColor(.primary)
         .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private func accessoryView(_ accessory: Accessory) -> some View {
+        switch accessory {
+        case .text(let text):
+            Text(text)
+                .foregroundColor(.secondaryLabel)
+                .fontWeight(.light)
+        case .disclosureIndicator:
+            DisclosureIndicator()
+        case let .download(type, action):
+            AppStoreDownloadButton(type: type, action: action)
+        case let .image(image, color):
+            if let color {
+                image.image
+                    .foregroundColor(color)
+            } else {
+                image.image
+            }
+        case let .button(text, image, color, accessibilityLabel, action):
+            HStack(spacing: 8) {
+                if let text {
+                    Text(text)
+                        .foregroundColor(.secondaryLabel)
+                        .fontWeight(.light)
+                }
+                AsyncButton(action: action) {
+                    image.image
+                        .foregroundColor(color ?? .accentColor)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel(accessibilityLabel)
+            }
+        }
     }
 
     @ViewBuilder

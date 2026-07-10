@@ -5,8 +5,6 @@
 //  Created by Mohamed Afifi on 2023-07-15.
 //
 
-#if !QURAN_SYNC
-
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -25,6 +23,7 @@ struct NotesView: View {
             searchTerm: viewModel.searchTerm,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
+            editAction: { viewModel.editNote($0) },
             deleteAction: { await viewModel.deleteItem($0) }
         )
     }
@@ -41,6 +40,7 @@ private struct NotesViewUI: View {
 
     let start: AsyncAction
     let selectAction: ItemAction<NoteItem>
+    let editAction: ItemAction<NoteItem>
     let deleteAction: AsyncItemAction<NoteItem>
 
     var body: some View {
@@ -95,10 +95,19 @@ private struct NotesViewUI: View {
         let arabicSuraName = note.startAyah.sura.arabicSuraName
         let ayahCount = note.verses.count
         let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
+        #if QURAN_SYNC
+        let color = Color.clear
+        #else
         let color = note.color.color.opacity(QuranHighlights.opacity)
-        let noteText = note.note?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        #endif
+        let noteText = item.noteText.trimmingCharacters(in: .whitespacesAndNewlines)
         return NoorListItem(
             subheading: subheadingText(localizedVerse: localizedVerse, arabicSuraName: arabicSuraName, numberOfAyahs: numberOfAyahs),
+            headerAccessory: .button(
+                image: .edit,
+                accessibilityLabel: l("ayah.menu.edit-note"),
+                action: { editAction(item) }
+            ),
             rightPretitle: "\(verse: item.verseText, color: color, lineLimit: 2)",
             title: titleText(for: noteText),
             subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
@@ -135,6 +144,7 @@ private struct NotesViewUI: View {
     }
 }
 
+#if !QURAN_SYNC
 struct NotesView_Previews: PreviewProvider {
     struct Preview: View {
         static let ayahText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
@@ -177,6 +187,7 @@ struct NotesView_Previews: PreviewProvider {
                     searchTerm: searchTerm,
                     start: {},
                     selectAction: { _ in },
+                    editAction: { _ in },
                     deleteAction: { item in items = items.filter { $0 != item } }
                 )
                 .navigationTitle("Notes")
@@ -207,5 +218,4 @@ struct NotesView_Previews: PreviewProvider {
         }
     }
 }
-
 #endif

@@ -21,7 +21,7 @@ struct NoteItem: Equatable, Identifiable {
         #endif
     }
 
-    private var noteText: String {
+    var noteText: String {
         #if QURAN_SYNC
         note.note
         #else
@@ -29,3 +29,7 @@ struct NoteItem: Equatable, Identifiable {
         #endif
     }
 }
+
+#if QURAN_SYNC
+extension NoteItem: Sendable {}
+#endif

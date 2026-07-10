@@ -104,7 +104,7 @@ public struct MobileSyncNoteService {
 
         return QuranAnnotations.Note(
             id: note.localId,
-            note: note.body,
+            text: note.body,
             startAyah: start,
             endAyah: end,
             modifiedDate: note.lastUpdated

@@ -156,7 +156,7 @@ struct NotesView_Previews: PreviewProvider {
                     note: Note(
                         verses: [quran.suras[2].verses[3]],
                         modifiedDate: Date(),
-                        note: nil,
+                        text: nil,
                         color: .purple
                     ),
                     verseText: ayahText
@@ -165,7 +165,7 @@ struct NotesView_Previews: PreviewProvider {
                     note: Note(
                         verses: Set(quran.suras[2].verses),
                         modifiedDate: Date().addingTimeInterval(-24 * 60),
-                        note: "Remind myself to memorize it",
+                        text: "Remind myself to memorize it",
                         color: .green
                     ),
                     verseText: ayahText

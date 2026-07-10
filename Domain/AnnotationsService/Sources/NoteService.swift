@@ -91,7 +91,7 @@ private extension Note {
         self.init(
             verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
             modifiedDate: note.modifiedDate,
-            note: note.note,
+            text: note.note,
             color: HighlightColor(rawValue: note.color) ?? .red
         )
     }

@@ -228,7 +228,7 @@ final class AyahMenuViewModel {
     #if !QURAN_SYNC
     private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {
         notes.contains { note in
-            !(note.note ?? "").isEmpty
+            !(note.text ?? "").isEmpty
         }
     }
     #endif

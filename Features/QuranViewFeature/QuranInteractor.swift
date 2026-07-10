@@ -217,7 +217,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     #else
     func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async {
         let containsText = notes.contains { note in
-            !(note.note ?? "").isEmpty
+            !(note.text ?? "").isEmpty
         }
         if containsText {
             // confirm deletion first if there is text

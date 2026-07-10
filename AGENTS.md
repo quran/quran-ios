@@ -24,6 +24,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 
 - `ViewModel`, builder, and UIKit/SwiftUI presentation code should be `@MainActor` when touching UI state.
 - Keep navigation through listener/navigator protocols already used by the feature.
+- Do not introduce new listener or delegate patterns unless extending an existing one; prefer closure-based callbacks for new interaction seams.
 - Views should stay mostly declarative; business logic belongs in view models/interactors/services.
 - Reuse NoorUI/UIx components before adding one-off controls.
 - Preserve localized strings; do not hardcode user-facing text unless existing nearby code does.
@@ -62,6 +63,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 
 ## Testing guidance
 
+- Keep tests in their owning module's `Tests` target. `AllTargetsTests` exists only to link otherwise-untested targets for coverage; do not add behavioral tests there without explicit confirmation.
 - Prefer real objects whenever practical. Use real model types, services, persistence stacks, parsers, mappers, builders, and value objects instead of test doubles.
 - Use fakes only at process or platform boundaries: filesystem, network/session, clock/time, bundle/resources, keychain, OAuth/auth SDK, MobileSync/external SDKs, UIKit navigation/presentation seams.
 - Do not add mocks or a mocking framework. Avoid generated mocks.

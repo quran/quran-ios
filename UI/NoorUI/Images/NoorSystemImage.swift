@@ -33,6 +33,7 @@ public enum NoorSystemImage: String {
     case stop = "stop.fill"
     case pause = "pause.fill"
     case more = "ellipsis.circle"
+    case edit = "pencil"
     case backward = "backward.fill"
     case forward = "forward.fill"
     case cancel = "xmark"

@@ -1,8 +1,8 @@
-#if QURAN_SYNC
 //
-//  SyncedNotesViewController.swift
+//  NotesViewController.swift
 //
-//  Created by Ahmed Nabil on 2026-05-16.
+//
+//  Created by Mohamed Afifi on 2023-07-16.
 //
 
 import Combine
@@ -13,14 +13,14 @@ import SwiftUI
 import UIx
 import VLogging
 
-final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UISearchBarDelegate, NoteEditorListener {
+final class NotesViewController: UIHostingController<NotesView>, UISearchBarDelegate {
     // MARK: Lifecycle
 
-    init(viewModel: SyncedNotesViewModel, noteEditorBuilder: NoteEditorBuilder) {
+    init(viewModel: NotesViewModel, noteEditorBuilder: NoteEditorBuilder) {
         self.viewModel = viewModel
         self.noteEditorBuilder = noteEditorBuilder
-        super.init(rootView: SyncedNotesView(viewModel: viewModel, selectAction: { _ in }))
-        rootView = SyncedNotesView(viewModel: viewModel, selectAction: { [weak self] item in self?.editNote(item.note) })
+        super.init(rootView: NotesView(viewModel: viewModel))
+
         initialize()
     }
 
@@ -64,14 +64,15 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
         viewModel.searchTerm = ""
     }
 
-    func dismissNoteEditor() {
-        dismiss(animated: true)
+    func editNote(_ note: Note) {
+        let viewController = noteEditorBuilder.build(withListener: self, note: note)
+        present(viewController, animated: true)
     }
 
     // MARK: Private
 
     private var editController: EditController?
-    private let viewModel: SyncedNotesViewModel
+    private let viewModel: NotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
     private let searchController = UISearchController(searchResultsController: nil)
     private var cancellables: Set<AnyCancellable> = []
@@ -85,6 +86,9 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
 
     private func initialize() {
         title = l("tab.notes")
+        #if !QURAN_SYNC
+        addCloudSyncInfo()
+        #endif
 
         editController = EditController(
             navigationItem: navigationItem,
@@ -104,23 +108,22 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
         )
     }
 
-    private func editNote(_ note: Note) {
-        let viewController = noteEditorBuilder.build(withListener: self, note: note)
-        present(viewController, animated: true)
-    }
-
     @objc
     private func shareAllNotes() {
         Task {
             do {
                 let notesText = try await viewModel.prepareNotesForSharing()
+
                 let activityViewController = UIActivityViewController(activityItems: [notesText], applicationActivities: nil)
+
+                // iPad support
                 let view = navigationController?.view
                 let viewBound = view.map { CGRect(x: $0.bounds.midX, y: $0.bounds.midY, width: 0, height: 0) }
                 activityViewController.modalPresentationStyle = .formSheet
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
                 activityViewController.popoverPresentationController?.sourceView = view
                 activityViewController.popoverPresentationController?.sourceRect = viewBound ?? .zero
+
                 present(activityViewController, animated: true)
             } catch {
                 showErrorAlert(error: error)
@@ -128,4 +131,9 @@ final class SyncedNotesViewController: UIHostingController<SyncedNotesView>, UIS
         }
     }
 }
-#endif
+
+extension NotesViewController: NoteEditorListener {
+    func dismissNoteEditor() {
+        dismiss(animated: true)
+    }
+}

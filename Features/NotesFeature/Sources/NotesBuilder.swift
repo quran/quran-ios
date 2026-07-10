@@ -8,9 +8,8 @@
 
 import AppDependencies
 import FeaturesSupport
-#if QURAN_SYNC
 import NoteEditorFeature
-#endif
+import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import UIKit
@@ -26,13 +25,21 @@ public struct NotesBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
+        let viewControllerReference = NotesViewControllerReference()
+        let editNote: (Note) -> Void = { [viewControllerReference] note in
+            viewControllerReference.value?.editNote(note)
+        }
+
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let textService = container.textDataService()
-        let viewModel = SyncedNotesViewModel(noteService: noteService, textService: textService)
-        return SyncedNotesViewController(
-            viewModel: viewModel,
-            noteEditorBuilder: NoteEditorBuilder(container: container)
+        let viewModel = NotesViewModel(
+            noteService: noteService,
+            textService: textService,
+            navigateTo: { [weak listener] verse in
+                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
+            },
+            editNote: editNote
         )
         #else
         let textRetriever = ShareableVerseTextRetriever(
@@ -46,13 +53,25 @@ public struct NotesBuilder {
             textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
-            }
+            },
+            editNote: editNote
         )
-        return NotesViewController(viewModel: viewModel)
         #endif
+
+        let viewController = NotesViewController(
+            viewModel: viewModel,
+            noteEditorBuilder: NoteEditorBuilder(container: container)
+        )
+        viewControllerReference.value = viewController
+        return viewController
     }
 
     // MARK: Internal
 
     let container: AppDependencies
+}
+
+@MainActor
+private final class NotesViewControllerReference {
+    weak var value: NotesViewController?
 }

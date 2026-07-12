@@ -90,10 +90,6 @@ private struct AyahMenuViewList: View {
     var addNote: some View {
         Row(title: l("ayah.menu.add-note"), action: dataObject.actions.addNote) {
             noteIcon(legacySystemName: "plus.bubble.fill")
-        } accessory: {
-            if dataObject.noteCount > 0 {
-                NoteCountBadge(count: dataObject.noteCount)
-            }
         }
     }
 
@@ -206,22 +202,6 @@ private struct AyahMenuViewList: View {
                     .foregroundColor(dataObject.highlightingColor.color)
             }
         }
-    }
-}
-
-private struct NoteCountBadge: View {
-    let count: Int
-
-    @ScaledMetric private var horizontalPadding = ContentDimension.interPageSpacing
-    @ScaledMetric private var verticalPadding = ContentDimension.interSpacing
-
-    var body: some View {
-        Text(NumberFormatter.shared.format(count))
-            .font(.footnote)
-            .foregroundColor(Color.label)
-            .padding(.horizontal, horizontalPadding)
-            .padding(.vertical, verticalPadding)
-            .background(Capsule().fill(Color(.secondarySystemFill)))
     }
 }
 

@@ -282,7 +282,7 @@ final class NoteEditorViewModelTests: XCTestCase {
 
     #if QURAN_SYNC
     private func makeSyncSUT(
-        mode: NoteEditorViewModel.Mode,
+        mode: NoteEditorMode,
         text: String = "ayah text"
     ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsSpy, listener: ListenerSpy) {
         let noteService = MobileSyncNoteService(quranDataService: database.quranDataService)

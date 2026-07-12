@@ -188,10 +188,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    #if QURAN_SYNC
     func deleteNotes(in verses: [AyahNumber]) async {
+        #if QURAN_SYNC
         let syncedNotesObserver = deps.syncedNotesObserver
-        let notesToDelete = syncedNotesObserver.notes(interacting: verses)
+        let notesToDelete = notesInteractingVerses(verses)
         if !notesToDelete.isEmpty {
             presenter?.confirmNoteDelete(
                 delete: { [weak self] in
@@ -207,9 +207,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
             )
         }
-    }
-    #else
-    func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async {
+        #else
+        let notes = notesInteractingVerses(verses)
         let containsText = notes.contains { note in
             !(note.text ?? "").isEmpty
         }
@@ -223,8 +222,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             // delete highlight
             await forceDeleteNotes(notes, verses: verses)
         }
+        #endif
     }
-    #endif
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {
         logger.info("Quran: share text")
@@ -232,23 +231,33 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.shareText(lines, in: sourceView, at: point, completion: {})
     }
 
-    #if !QURAN_SYNC
-    func editNote(_ note: Note) {
-        dismissAyahMenu()
-        presenter?.rotateToPortraitIfPhone()
-        let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
-        presenter?.present(viewController, animated: true)
+    func showNoteEditor(for verses: [AyahNumber]) async {
+        let notes = notesInteractingVerses(verses)
+        #if QURAN_SYNC
+        let mode: NoteEditorMode = if let note = notes.first {
+            .edit(note)
+        } else {
+            .create(verses: verses)
+        }
+        presentNoteEditor(mode: mode)
+        #else
+        if let note = notes.first {
+            presentNoteEditor(note: note)
+            return
+        }
+        let color = deps.noteService.color(from: notes)
+        do {
+            let note = try await deps.noteService.updateHighlight(
+                verses: verses,
+                color: color,
+                quran: deps.quran
+            )
+            presentNoteEditor(note: note)
+        } catch {
+            crasher.recordError(error, reason: "Failed to prepare note editor")
+        }
+        #endif
     }
-    #endif
-
-    #if QURAN_SYNC
-    func addSyncedNote(verses: [AyahNumber]) {
-        dismissAyahMenu()
-        presenter?.rotateToPortraitIfPhone()
-        let viewController = deps.noteEditorBuilder.build(withListener: self, verses: verses)
-        presenter?.present(viewController, animated: true)
-    }
-    #endif
 
     func dismissNoteEditor() {
         logger.info("Quran: dismiss note editor")
@@ -280,7 +289,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            noteCount: syncedNoteCount(interacting: verses),
+            notes: notesInteractingVerses(verses),
             highlightVerses: deps.highlightsService.highlights.highlightVerses,
             highlightCollections: deps.syncedHighlightsObserver.collections
         )
@@ -433,19 +442,31 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             crasher.recordError(error, reason: "Failed to remove notes")
         }
     }
-
-    private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
-        notes.filter { $0.intersects(verses: verses) }
-    }
     #endif
 
-    private func syncedNoteCount(interacting verses: [AyahNumber]) -> Int {
+    private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
         #if QURAN_SYNC
-        deps.syncedNotesObserver.notes(interacting: verses).count
+        deps.syncedNotesObserver.notes(interacting: verses)
         #else
-        return 0
+        notes.filter { $0.intersects(verses: verses) }
         #endif
     }
+
+    #if QURAN_SYNC
+    private func presentNoteEditor(mode: NoteEditorMode) {
+        dismissAyahMenu()
+        presenter?.rotateToPortraitIfPhone()
+        let viewController = deps.noteEditorBuilder.build(withListener: self, mode: mode)
+        presenter?.present(viewController, animated: true)
+    }
+    #else
+    private func presentNoteEditor(note: Note) {
+        dismissAyahMenu()
+        presenter?.rotateToPortraitIfPhone()
+        let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
+        presenter?.present(viewController, animated: true)
+    }
+    #endif
 
     private func dismissWordPointer() {
         logger.info("Quran: dismiss word pointer")

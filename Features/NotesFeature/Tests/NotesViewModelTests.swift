@@ -34,9 +34,11 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
             noteService: noteService,
-            textService: QuranTextDataService(
-                databasesURL: unavailableDatabase,
-                quranFileURL: unavailableDatabase
+            noteVerseTextService: NoteVerseTextService(
+                textService: QuranTextDataService(
+                    databasesURL: unavailableDatabase,
+                    quranFileURL: unavailableDatabase
+                )
             ),
             navigateTo: { _ in },
             editNote: { _ in }
@@ -55,9 +57,11 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
             noteService: noteService,
-            textService: QuranTextDataService(
-                databasesURL: unavailableDatabase,
-                quranFileURL: unavailableDatabase
+            noteVerseTextService: NoteVerseTextService(
+                textService: QuranTextDataService(
+                    databasesURL: unavailableDatabase,
+                    quranFileURL: unavailableDatabase
+                )
             ),
             navigateTo: { _ in },
             editNote: { _ in }

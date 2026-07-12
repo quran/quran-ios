@@ -28,12 +28,12 @@ final class NotesViewModel: ObservableObject {
     #if QURAN_SYNC
     init(
         noteService: MobileSyncNoteService,
-        textService: QuranTextDataService,
+        noteVerseTextService: NoteVerseTextService,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
         self.noteService = noteService
-        self.textService = textService
+        self.noteVerseTextService = noteVerseTextService
         self.navigateTo = navigateTo
         editNoteAction = editNote
     }
@@ -42,12 +42,14 @@ final class NotesViewModel: ObservableObject {
         analytics: AnalyticsLibrary,
         noteService: NoteService,
         textRetriever: ShareableVerseTextRetriever,
+        noteVerseTextService: NoteVerseTextService,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
         self.analytics = analytics
         self.noteService = noteService
         self.textRetriever = textRetriever
+        self.noteVerseTextService = noteVerseTextService
         self.navigateTo = navigateTo
         editNoteAction = editNote
     }
@@ -164,12 +166,12 @@ final class NotesViewModel: ObservableObject {
 
     #if QURAN_SYNC
     private let noteService: MobileSyncNoteService
-    private let textService: QuranTextDataService
     #else
     private let analytics: AnalyticsLibrary
     private let noteService: NoteService
     private let textRetriever: ShareableVerseTextRetriever
     #endif
+    private let noteVerseTextService: NoteVerseTextService
     private let navigateTo: (AyahNumber) -> Void
     private let editNoteAction: (Note) -> Void
     private let readingPreferences = ReadingPreferences.shared
@@ -205,25 +207,12 @@ final class NotesViewModel: ObservableObject {
             let verseText = try await textForVerses(note.verses)
             return NoteItem(note: note, verseText: verseText)
         } catch {
-            #if QURAN_SYNC
-            crasher.recordError(error, reason: "SyncedNotesViewModel.textForVerses")
-            #else
-            crasher.recordError(error, reason: "NoteService.textForVerses")
-            #endif
+            crasher.recordError(error, reason: "NotesViewModel.textForVerses")
             return NoteItem(note: note, verseText: note.startAyah.localizedName)
         }
     }
 
     private nonisolated func textForVerses(_ verses: [AyahNumber]) async throws -> String {
-        #if QURAN_SYNC
-        let verseTexts = try await textService.textForVerses(verses, translations: [])
-        return verses.sorted()
-            .compactMap { verse in
-                verseTexts[verse].map { $0.arabicText + " \(NumberFormatter.arabicNumberFormatter.format(verse.ayah))" }
-            }
-            .joined(separator: " ")
-        #else
-        return try await noteService.textForVerses(verses)
-        #endif
+        try await noteVerseTextService.textForVerses(verses)
     }
 }

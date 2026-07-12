@@ -29,13 +29,13 @@ public struct NotesBuilder {
         let editNote: (Note) -> Void = { [viewControllerReference] note in
             viewControllerReference.value?.editNote(note)
         }
+        let noteVerseTextService = container.noteVerseTextService()
 
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
-        let textService = container.textDataService()
         let viewModel = NotesViewModel(
             noteService: noteService,
-            textService: textService,
+            noteVerseTextService: noteVerseTextService,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
             },
@@ -51,6 +51,7 @@ public struct NotesBuilder {
             analytics: container.analytics,
             noteService: container.noteService(),
             textRetriever: textRetriever,
+            noteVerseTextService: noteVerseTextService,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
             },

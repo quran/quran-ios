@@ -9,19 +9,15 @@
 import Analytics
 import Combine
 import Foundation
-import Localization
 import NotePersistence
 import QuranAnnotations
 import QuranKit
-import QuranText
-import QuranTextKit
 
 public struct NoteService {
     // MARK: Lifecycle
 
-    public init(persistence: NotePersistence, textService: QuranTextDataService, analytics: AnalyticsLibrary) {
+    public init(persistence: NotePersistence, analytics: AnalyticsLibrary) {
         self.persistence = persistence
-        self.textService = textService
         self.analytics = analytics
     }
 
@@ -64,25 +60,10 @@ public struct NoteService {
     }
     #endif
 
-    public func textForVerses(_ verses: [AyahNumber]) async throws -> String {
-        let versesWithText = try await textDictionaryForVerses(verses)
-        let sortedVerses = verses.sorted()
-        let versesText = sortedVerses.compactMap { verse in versesWithText[verse].map { (verse, $0) } }
-        let combinedVersesText = versesText.map { $0.1 + " \(NumberFormatter.arabicNumberFormatter.format($0.0.ayah))" }
-            .joined(separator: " ")
-        return combinedVersesText
-    }
-
     // MARK: Internal
 
     let persistence: NotePersistence
-    let textService: QuranTextDataService
     let analytics: AnalyticsLibrary
-
-    private func textDictionaryForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
-        let verseTexts = try await textService.textForVerses(verses, translations: [])
-        return verseTexts.mapValues(\.arabicText)
-    }
 }
 
 #if !QURAN_SYNC

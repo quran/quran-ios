@@ -8,7 +8,7 @@ import XCTest
 @testable import QuranViewFeature
 
 @MainActor
-final class QuranSyncedNotesObserverTests: XCTestCase {
+final class QuranNotesObserverTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
     private var noteService: MobileSyncNoteService!
 
@@ -26,7 +26,7 @@ final class QuranSyncedNotesObserverTests: XCTestCase {
 
     func test_start_observesPersistedNotesFromMobileSyncDatabase() async throws {
         try await noteService.createNote(body: "Stored note", startAyah: ayah(1), endAyah: ayah(2))
-        let sut = QuranSyncedNotesObserver(noteService: noteService, quran: .hafsMadani1405)
+        let sut = QuranNotesObserver(noteService: noteService, quran: .hafsMadani1405)
         let observed = expectation(description: "Observes persisted note")
         let observation = sut.$notes.sink { notes in
             if notes.map(\.text) == ["Stored note"] {
@@ -46,7 +46,7 @@ final class QuranSyncedNotesObserverTests: XCTestCase {
         try await noteService.createNote(body: "Delete me", startAyah: ayah(1), endAyah: ayah(1))
         let notes = try await storedNotes()
         let note = try XCTUnwrap(notes.first)
-        let sut = QuranSyncedNotesObserver(noteService: noteService, quran: .hafsMadani1405)
+        let sut = QuranNotesObserver(noteService: noteService, quran: .hafsMadani1405)
 
         try await sut.remove(note)
 

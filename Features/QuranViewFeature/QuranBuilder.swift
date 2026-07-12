@@ -39,8 +39,7 @@ public struct QuranBuilder {
         let quran = ReadingPreferences.shared.reading.quran
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
-        let syncedNoteService = container.mobileSyncNoteService()
-        let syncedNotesObserver = QuranSyncedNotesObserver(noteService: syncedNoteService, quran: quran)
+        let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
             ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
             highlightsService: highlightsService
@@ -58,11 +57,13 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
-            syncedNotesObserver: syncedNotesObserver,
+            notesObserver: notesObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver
         )
         #else
+        let noteService = container.noteService()
+        let notesObserver = QuranNotesObserver(noteService: noteService, quran: quran)
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
             analytics: container.analytics,
@@ -76,8 +77,9 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
-            noteService: container.noteService(),
-            noteEditorBuilder: NoteEditorBuilder(container: container)
+            notesObserver: notesObserver,
+            noteEditorBuilder: NoteEditorBuilder(container: container),
+            noteService: noteService
         )
         #endif
         let interactor = QuranInteractor(deps: interactorDeps, input: input)

@@ -25,19 +25,11 @@ public struct NoteEditorBuilder {
 
     #if QURAN_SYNC
     public func build(withListener listener: NoteEditorListener, mode: NoteEditorMode) -> UIViewController {
-        let textService = container.textDataService()
         let viewModel = NoteEditorViewModel(
             noteService: container.mobileSyncNoteService(),
             analytics: container.analytics,
             mode: mode,
-            textForVerses: { verses in
-                let verseTexts = try await textService.textForVerses(verses, translations: [])
-                return verses.sorted()
-                    .compactMap { verse in
-                        verseTexts[verse].map { $0.arabicText + " \(NumberFormatter.arabicNumberFormatter.format(verse.ayah))" }
-                    }
-                    .joined(separator: " ")
-            }
+            textForVerses: textForVerses
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -45,7 +37,11 @@ public struct NoteEditorBuilder {
     }
     #else
     public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
-        let viewModel = NoteEditorViewModel(noteService: container.noteService(), note: note)
+        let viewModel = NoteEditorViewModel(
+            noteService: container.noteService(),
+            note: note,
+            textForVerses: textForVerses
+        )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
         return viewController
@@ -55,4 +51,9 @@ public struct NoteEditorBuilder {
     // MARK: Internal
 
     let container: AppDependencies
+
+    private var textForVerses: ([AyahNumber]) async throws -> String {
+        let service = container.noteVerseTextService()
+        return service.textForVerses
+    }
 }

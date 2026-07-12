@@ -339,7 +339,7 @@ final class NoteEditorViewModelTests: XCTestCase {
         color: HighlightColor = .red,
         text: String = "ayah text"
     ) -> (viewModel: NoteEditorViewModel, noteService: LegacyNoteServiceFake, listener: ListenerSpy) {
-        let noteService = LegacyNoteServiceFake(text: text)
+        let noteService = LegacyNoteServiceFake()
         let listener = ListenerSpy()
         let note = Note(
             verses: [ayah(2), ayah(1)],
@@ -347,7 +347,11 @@ final class NoteEditorViewModelTests: XCTestCase {
             text: noteBody,
             color: color
         )
-        let viewModel = NoteEditorViewModel(noteService: noteService, note: note)
+        let viewModel = NoteEditorViewModel(
+            noteService: noteService,
+            note: note,
+            textForVerses: { _ in text }
+        )
         viewModel.listener = listener
         return (viewModel, noteService, listener)
     }
@@ -384,11 +388,6 @@ private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
         let color: HighlightColor
     }
 
-    init(text: String) {
-        self.text = text
-    }
-
-    private let text: String
     private(set) var setNoteCalls: [SetNoteCall] = []
     private(set) var removedVerses: [[AyahNumber]] = []
 
@@ -398,10 +397,6 @@ private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
 
     func removeNotes(with verses: [AyahNumber]) async throws {
         removedVerses.append(verses.sorted())
-    }
-
-    func textForVerses(_ verses: [AyahNumber]) async throws -> String {
-        text
     }
 }
 #endif

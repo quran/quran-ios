@@ -37,9 +37,14 @@ final class NoteEditorViewModel {
         self.textForVerses = textForVerses
     }
     #else
-    init(noteService: NoteEditorLegacyServicing, note: Note) {
+    init(
+        noteService: NoteEditorLegacyServicing,
+        note: Note,
+        textForVerses: @escaping ([AyahNumber]) async throws -> String
+    ) {
         self.note = note
         self.noteService = noteService
+        self.textForVerses = textForVerses
     }
     #endif
 
@@ -178,11 +183,11 @@ final class NoteEditorViewModel {
     private let noteService: MobileSyncNoteService
     private let analytics: AnalyticsLibrary
     private let mode: NoteEditorMode
-    private let textForVerses: ([AyahNumber]) async throws -> String
     #else
     private let noteService: NoteEditorLegacyServicing
     private let note: Note
     #endif
+    private let textForVerses: ([AyahNumber]) async throws -> String
 
     private var editableNote: EditableNote?
 
@@ -250,11 +255,7 @@ final class NoteEditorViewModel {
     }
 
     private func getTextForVerses(_ verses: [AyahNumber]) async throws -> String {
-        #if QURAN_SYNC
-        return try await textForVerses(verses)
-        #else
-        return try await noteService.textForVerses(verses)
-        #endif
+        try await textForVerses(verses)
     }
 }
 
@@ -262,7 +263,6 @@ final class NoteEditorViewModel {
 protocol NoteEditorLegacyServicing {
     func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws
     func removeNotes(with verses: [AyahNumber]) async throws
-    func textForVerses(_ verses: [AyahNumber]) async throws -> String
 }
 
 extension NoteService: NoteEditorLegacyServicing {}

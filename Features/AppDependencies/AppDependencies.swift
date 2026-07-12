@@ -68,9 +68,12 @@ extension AppDependencies {
     public func noteService() -> NoteService {
         NoteService(
             persistence: notePersistence,
-            textService: textDataService(),
             analytics: analytics
         )
+    }
+
+    public func noteVerseTextService() -> NoteVerseTextService {
+        NoteVerseTextService(textService: textDataService())
     }
 
     #if QURAN_SYNC

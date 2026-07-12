@@ -192,6 +192,10 @@ private func uiTargets() -> [[Target]] {
 private func dataTargets() -> [[Target]] {
     let type = TargetType.data
     return [
+        target(type, name: "MobileSyncTestSupport", hasTests: false, dependencies: [
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
+        ]),
+
         // MARK: - Page Bookmarks
 
         target(type, name: "PageBookmarkPersistence", dependencies: [
@@ -333,6 +337,7 @@ private func dataTargets() -> [[Target]] {
             .product(name: "MobileSync", package: "mobile-sync-spm"),
         ], testDependencies: [
             "AuthenticationClientFake",
+            "MobileSyncTestSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
@@ -500,6 +505,7 @@ private func domainTargets() -> [[Target]] {
             "Analytics",
         ], testDependencies: [
             "LastPagePersistence",
+            "MobileSyncTestSupport",
             "PageBookmarkPersistence",
             "QuranKit",
         ]),
@@ -543,12 +549,15 @@ private func featuresTargets() -> [[Target]] {
             "ReciterService",
         ]),
 
-        target(type, name: "AyahMenuFeature", hasTests: false, dependencies: [
+        target(type, name: "AyahMenuFeature", sourcesInRoot: true, dependencies: [
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
             "BookmarksFeature",
             "NoorUI",
+        ], testDependencies: [
+            "MobileSyncTestSupport",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
@@ -608,6 +617,7 @@ private func featuresTargets() -> [[Target]] {
         ], testDependencies: [
             "Analytics",
             "AnnotationsService",
+            "MobileSyncTestSupport",
             "NoorUI",
             "QuranAnnotations",
             "QuranKit",
@@ -626,6 +636,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "AuthenticationClient",
             "AuthenticationClientFake",
+            "MobileSyncTestSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
         ]),
@@ -682,6 +693,8 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "NoorUI",
             "NoteEditorFeature",
+        ], testDependencies: [
+            "MobileSyncTestSupport",
         ]),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
@@ -709,7 +722,7 @@ private func featuresTargets() -> [[Target]] {
             "Preferences",
         ]),
 
-        target(type, name: "QuranViewFeature", hasTests: false, dependencies: [
+        target(type, name: "QuranViewFeature", sourcesInRoot: true, dependencies: [
             "AudioBannerFeature",
             "QuranContentFeature",
             "AyahMenuFeature",
@@ -720,6 +733,9 @@ private func featuresTargets() -> [[Target]] {
             "TranslationVerseFeature",
             "FeaturesSupport",
             "BookmarksFeature",
+        ], testDependencies: [
+            "MobileSyncTestSupport",
+            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "SettingsFeature", dependencies: [
@@ -740,6 +756,7 @@ private func featuresTargets() -> [[Target]] {
             "AudioDownloadsFeature",
             "AuthenticationClient",
             "AuthenticationClientFake",
+            "MobileSyncTestSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "BatchDownloader",
             "LastPagePersistence",
@@ -793,6 +810,7 @@ func target(
     _ type: TargetType,
     name: String,
     hasTests: Bool = true,
+    sourcesInRoot: Bool = false,
     otherSettings: [SwiftSetting] = [],
     dependencies: [Target.Dependency] = [],
     resources: [Resource]? = nil,
@@ -804,7 +822,8 @@ func target(
         .target(
             name: name,
             dependencies: dependencies,
-            path: type.rawValue + "/" + name + (hasTests ? "/Sources" : ""),
+            path: type.rawValue + "/" + name + (hasTests && !sourcesInRoot ? "/Sources" : ""),
+            exclude: hasTests && sourcesInRoot ? ["Tests"] : [],
             resources: resources,
             swiftSettings: settings + otherSettings
         ),

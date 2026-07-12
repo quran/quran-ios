@@ -26,7 +26,7 @@ final class NoteEditorViewModel {
 
     #if QURAN_SYNC
     init(
-        noteService: NoteEditorSyncServicing,
+        noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
         mode: Mode,
         textForVerses: @escaping ([AyahNumber]) async throws -> String
@@ -182,7 +182,7 @@ final class NoteEditorViewModel {
     // MARK: Private
 
     #if QURAN_SYNC
-    private let noteService: NoteEditorSyncServicing
+    private let noteService: MobileSyncNoteService
     private let analytics: AnalyticsLibrary
     private let mode: Mode
     private let textForVerses: ([AyahNumber]) async throws -> String
@@ -265,17 +265,7 @@ final class NoteEditorViewModel {
     }
 }
 
-#if QURAN_SYNC
-// TODO: This is a narrow test seam around MobileSyncNoteService. Prefer removing it once
-// NoteEditorViewModelTests can use the real service with an in-memory database.
-protocol NoteEditorSyncServicing {
-    func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws
-    func updateNote(_ note: Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws
-    func removeNote(_ note: Note) async throws
-}
-
-extension MobileSyncNoteService: NoteEditorSyncServicing {}
-#else
+#if !QURAN_SYNC
 protocol NoteEditorLegacyServicing {
     func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws
     func removeNotes(with verses: [AyahNumber]) async throws

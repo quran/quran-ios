@@ -65,7 +65,9 @@ Keeping these commands green locally should keep the CI workflow green as well.
 
 - Keep tests in their owning module's `Tests` target. `AllTargetsTests` exists only to link otherwise-untested targets for coverage; do not add behavioral tests there without explicit confirmation.
 - Prefer real objects whenever practical. Use real model types, services, persistence stacks, parsers, mappers, builders, and value objects instead of test doubles.
-- Use fakes only at process or platform boundaries: filesystem, network/session, clock/time, bundle/resources, keychain, OAuth/auth SDK, MobileSync/external SDKs, UIKit navigation/presentation seams.
+- Use fakes only at process or platform boundaries: filesystem, network/session, clock/time, bundle/resources, keychain, OAuth/auth SDK, external SDKs, UIKit navigation/presentation seams.
+- For `QURAN_SYNC` persistence behavior, always use the real MobileSync database through `MobileSyncTestDatabase` from `MobileSyncTestSupport`; never fake `QuranDataService`, `MobileSyncNoteService`, or another sync persistence service.
+- Use `Domain/AnnotationsService/Tests/MobileSyncNoteServiceTests.swift` as the reference pattern: `override func setUp() async throws { try await database.reset() }` (and the same reset in `tearDown`), then exercise the production service and assert database-observable state.
 - Do not add mocks or a mocking framework. Avoid generated mocks.
 - Do not introduce protocols only to make something mockable. Protocols should represent real architectural boundaries already useful in production.
 - If a fake is reused across modules, put it in a dedicated `*Fake` target next to the boundary module, like `SystemDependenciesFake`, `NetworkSupportFake`, or `AuthenticationClientFake`.

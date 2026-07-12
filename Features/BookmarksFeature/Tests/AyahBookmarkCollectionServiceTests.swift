@@ -1,173 +1,133 @@
 #if QURAN_SYNC
 import MobileSync
+import MobileSyncTestSupport
+import QuranAnnotations
 import QuranKit
 import XCTest
 @testable import BookmarksFeature
 
 final class AyahBookmarkCollectionServiceTests: XCTestCase {
-    // MARK: Internal
+    private let database = MobileSyncTestDatabase.shared
+    private var service: AyahBookmarkCollectionService!
 
-    func test_collections_mapsAyahNumbers() {
-        let collections = AyahBookmarkCollectionService.collections(from: [
-            Self.collection(
-                name: "Favorites",
-                bookmarks: [
-                    Self.bookmark(collectionLocalId: "favorites", sura: 1, ayah: 1),
-                ]
-            ),
-        ], quran: .hafsMadani1405)
-
-        XCTAssertEqual(collections.count, 1)
-        XCTAssertEqual(collections[0].collection.name, "Favorites")
-        XCTAssertEqual(collections[0].bookmarks.count, 1)
-        XCTAssertEqual(collections[0].bookmarks[0].ayah, AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
+    override func setUp() async throws {
+        try await super.setUp()
+        try await database.reset()
+        service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
     }
 
-    func test_collections_skipsInvalidAyahs() {
-        let collections = AyahBookmarkCollectionService.collections(from: [
-            Self.collection(
-                name: "Favorites",
-                bookmarks: [
-                    Self.bookmark(collectionLocalId: "favorites", sura: 999, ayah: 1),
-                ]
-            ),
-        ], quran: .hafsMadani1405)
-
-        XCTAssertEqual(collections.count, 1)
-        XCTAssertTrue(collections[0].bookmarks.isEmpty)
+    override func tearDown() async throws {
+        try await database.reset()
+        service = nil
+        try await super.tearDown()
     }
 
-    func test_ayahsToAdd_skipsExistingBookmarks() {
-        let existingAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
-        let missingAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2)!
-        let collection = Self.ayahBookmarkCollection(
-            name: "Favorites",
-            bookmarks: [
-                Self.ayahCollectionBookmark(collectionLocalId: "Favorites", ayah: existingAyah),
-            ]
+    func test_createCollection_persistsCollection() async throws {
+        try await service.createCollection(named: "Favorites")
+
+        let collections = try await storedCollections { collections in
+            collections.contains { $0.collection.name == "Favorites" }
+        }
+        XCTAssertEqual(collections.map(\.collection.name), ["Favorites"])
+    }
+
+    func test_removeCollection_deletesPersistedCollection() async throws {
+        try await service.createCollection(named: "Favorites")
+        let collection = try await storedCollection(named: "Favorites")
+
+        try await service.removeCollection(localId: collection.collection.localId)
+
+        let collections = try await storedCollections { $0.isEmpty }
+        XCTAssertTrue(collections.isEmpty)
+    }
+
+    func test_addAndRemoveAyahBookmark_persistsCollectionMembership() async throws {
+        try await service.createCollection(named: "Favorites")
+        let collection = try await storedCollection(named: "Favorites")
+
+        try await service.addAyahBookmarkToCollection(
+            collectionLocalId: collection.collection.localId,
+            ayah: ayah(1)
         )
 
-        let ayahsToAdd = AyahBookmarkCollectionService.ayahsToAdd(
-            [existingAyah, missingAyah],
-            to: collection
+        let stored = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 1 }
+        XCTAssertEqual(stored.bookmarks.first?.sura, 1)
+        XCTAssertEqual(stored.bookmarks.first?.ayah, 1)
+
+        let bookmark = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: [stored], quran: .hafsMadani1405)
+                .first?.bookmarks.first
+        )
+        try await service.removeBookmarkFromCollection(bookmark)
+
+        let emptied = try await storedCollection(named: "Favorites") { $0.bookmarks.isEmpty }
+        XCTAssertTrue(emptied.bookmarks.isEmpty)
+    }
+
+    func test_addAyahBookmarksIfNeeded_persistsOnlyMissingUniqueAyahs() async throws {
+        try await service.createCollection(named: "Favorites")
+        let stored = try await storedCollection(named: "Favorites")
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: [stored], quran: .hafsMadani1405).first
         )
 
-        XCTAssertEqual(ayahsToAdd, [missingAyah])
+        try await service.addAyahBookmarksIfNeeded([ayah(1), ayah(1), ayah(2)], to: collection)
+
+        let updated = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 2 }
+        XCTAssertEqual(Set(updated.bookmarks.map { "\($0.sura):\($0.ayah)" }), ["1:1", "1:2"])
     }
 
-    func test_ayahsToAdd_deduplicatesInputAyahs() {
-        let firstAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
-        let secondAyah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2)!
-        let collection = Self.ayahBookmarkCollection(name: "Favorites")
+    func test_collectionsSequence_createsAllMissingHighlightCollectionsInDatabase() async throws {
+        var iterator = service.collectionsSequence().makeAsyncIterator()
+        let expectedNames = Set(HighlightColor.sortedColors.map(\.collectionName))
 
-        let ayahsToAdd = AyahBookmarkCollectionService.ayahsToAdd(
-            [firstAyah, firstAyah, secondAyah, firstAyah],
-            to: collection
-        )
+        let collections = try await nextCollections(from: &iterator) { collections in
+            expectedNames.isSubset(of: Set(collections.map(\.collection.name)))
+        }
 
-        XCTAssertEqual(ayahsToAdd, [firstAyah, secondAyah])
+        XCTAssertTrue(expectedNames.isSubset(of: Set(collections.map(\.collection.name))))
     }
 
-    func test_highlightCollectionCreationPlanner_reservesMultipleMissingCollections() async {
-        let sut = HighlightCollectionCreationPlanner()
-
-        let names = await sut.reserveMissingCollectionNames(from: [
-            Self.ayahBookmarkCollection(name: "yellow"),
-            Self.ayahBookmarkCollection(name: "Favorites"),
-        ])
-
-        XCTAssertEqual(names, ["green", "blue", "red", "purple"])
+    private func storedCollection(
+        named name: String,
+        where predicate: (CollectionWithAyahBookmarks) -> Bool = { _ in true }
+    ) async throws -> CollectionWithAyahBookmarks {
+        let collections = try await storedCollections { collections in
+            collections.contains { $0.collection.name == name && predicate($0) }
+        }
+        return try XCTUnwrap(collections.first { $0.collection.name == name })
     }
 
-    func test_highlightCollectionCreationPlanner_doesNotDuplicateReservedCollectionsForStaleEmissions() async {
-        let sut = HighlightCollectionCreationPlanner()
-
-        let initialNames = await sut.reserveMissingCollectionNames(from: [
-            Self.ayahBookmarkCollection(name: "Favorites"),
-        ])
-        let staleNames = await sut.reserveMissingCollectionNames(from: [
-            Self.ayahBookmarkCollection(name: "yellow"),
-        ])
-
-        XCTAssertEqual(initialNames, ["yellow", "green", "blue", "red", "purple"])
-        XCTAssertEqual(staleNames, [])
+    private func storedCollections(
+        where predicate: ([CollectionWithAyahBookmarks]) -> Bool
+    ) async throws -> [CollectionWithAyahBookmarks] {
+        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
+        while let collections = try await iterator.next() {
+            if predicate(collections) {
+                return collections
+            }
+        }
+        throw TestError.expectedDatabaseStateNotObserved
     }
 
-    func test_highlightCollectionCreationPlanner_releasesOnlyFailedReservations() async {
-        let sut = HighlightCollectionCreationPlanner()
-
-        let initialNames = await sut.reserveMissingCollectionNames(from: [
-            Self.ayahBookmarkCollection(name: "Favorites"),
-        ])
-        await sut.releaseCollectionNames([initialNames[1]])
-        let retryNames = await sut.reserveMissingCollectionNames(from: [
-            Self.ayahBookmarkCollection(name: "yellow"),
-        ])
-
-        XCTAssertEqual(retryNames, ["green"])
+    private func nextCollections(
+        from iterator: inout AyahBookmarkCollectionsSequence.AsyncIterator,
+        where predicate: ([AyahBookmarkCollection]) -> Bool
+    ) async throws -> [AyahBookmarkCollection] {
+        while let collections = try await iterator.next() {
+            if predicate(collections) {
+                return collections
+            }
+        }
+        throw TestError.expectedDatabaseStateNotObserved
     }
 
-    // MARK: Private
-
-    private static func collection(
-        localId: String? = nil,
-        name: String,
-        bookmarks: [CollectionAyahBookmark]
-    ) -> CollectionWithAyahBookmarks {
-        CollectionWithAyahBookmarks(
-            collection: Collection_(
-                name: name,
-                lastUpdated: .distantPast,
-                localId: localId ?? name
-            ),
-            bookmarks: bookmarks
-        )
+    private func ayah(_ number: Int) -> AyahNumber {
+        AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: number)!
     }
+}
 
-    private static func bookmark(
-        collectionLocalId: String,
-        bookmarkLocalId: String? = nil,
-        sura: Int32,
-        ayah: Int32
-    ) -> CollectionAyahBookmark {
-        CollectionAyahBookmark(
-            collectionLocalId: collectionLocalId,
-            collectionRemoteId: nil,
-            bookmarkLocalId: bookmarkLocalId ?? "\(collectionLocalId)-\(sura)-\(ayah)",
-            bookmarkRemoteId: nil,
-            sura: sura,
-            ayah: ayah,
-            lastUpdated: .distantPast,
-            localId: "\(collectionLocalId)-collection-\(sura)-\(ayah)"
-        )
-    }
-
-    private static func ayahBookmarkCollection(
-        name: String,
-        bookmarks: [AyahCollectionBookmark] = []
-    ) -> AyahBookmarkCollection {
-        AyahBookmarkCollection(
-            collection: Collection_(
-                name: name,
-                lastUpdated: .distantPast,
-                localId: name
-            ),
-            bookmarks: bookmarks
-        )
-    }
-
-    private static func ayahCollectionBookmark(
-        collectionLocalId: String,
-        ayah: AyahNumber
-    ) -> AyahCollectionBookmark {
-        AyahCollectionBookmark(
-            bookmark: bookmark(
-                collectionLocalId: collectionLocalId,
-                sura: Int32(ayah.sura.suraNumber),
-                ayah: Int32(ayah.ayah)
-            ),
-            ayah: ayah
-        )
-    }
+private enum TestError: Error {
+    case expectedDatabaseStateNotObserved
 }
 #endif

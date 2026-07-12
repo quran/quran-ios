@@ -72,7 +72,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
         #if QURAN_SYNC
-        let syncedNoteService: MobileSyncNoteService
+        let syncedNotesObserver: QuranSyncedNotesObserver
         let noteEditorBuilder: NoteEditorBuilder
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         #else
@@ -87,12 +87,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         self.deps = deps
         self.input = input
         logger.info("Quran: opening quran \(input)")
-    }
-
-    deinit {
-        #if QURAN_SYNC
-        syncedNotesObservationTask?.cancel()
-        #endif
     }
 
     // MARK: Internal
@@ -114,7 +108,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func start() {
         #if QURAN_SYNC
         deps.syncedHighlightsObserver.start()
-        startSyncedNotesObservation(deps.syncedNoteService)
+        deps.syncedNotesObserver.start()
         #else
         startLegacyNotesObservation()
         #endif
@@ -196,15 +190,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
     func deleteNotes(in verses: [AyahNumber]) async {
-        let syncedNoteService = deps.syncedNoteService
-        let notesToDelete = syncedNotes(interacting: verses)
+        let syncedNotesObserver = deps.syncedNotesObserver
+        let notesToDelete = syncedNotesObserver.notes(interacting: verses)
         if !notesToDelete.isEmpty {
             presenter?.confirmNoteDelete(
                 delete: { [weak self] in
                     do {
                         self?.contentViewModel?.removeAyahMenuHighlight()
                         for note in notesToDelete {
-                            try await syncedNoteService.removeNote(note)
+                            try await syncedNotesObserver.remove(note)
                         }
                     } catch {
                         crasher.recordError(error, reason: "Failed to delete synced notes")
@@ -371,10 +365,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
-    #if QURAN_SYNC
-    private var syncedNotes: [Note] = []
-    private var syncedNotesObservationTask: Task<Void, Never>?
-    #else
+    #if !QURAN_SYNC
     private var notes: [Note] = []
     #endif
 
@@ -408,26 +399,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.notes = $0 }
             .store(in: &cancellables)
-    }
-    #endif
-
-    #if QURAN_SYNC
-    private func startSyncedNotesObservation(_ noteService: MobileSyncNoteService) {
-        let quran = deps.quran
-        syncedNotesObservationTask?.cancel()
-        syncedNotesObservationTask = Task {
-            do {
-                let sequence = noteService.notesSequence(quran: quran)
-                for try await notes in sequence {
-                    await MainActor.run { [weak self] in
-                        self?.syncedNotes = notes
-                    }
-                }
-            } catch is CancellationError {
-            } catch {
-                crasher.recordError(error, reason: "Failed to observe synced notes")
-            }
-        }
     }
     #endif
 
@@ -470,17 +441,11 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private func syncedNoteCount(interacting verses: [AyahNumber]) -> Int {
         #if QURAN_SYNC
-        syncedNotes.filter { $0.intersects(verses: verses) }.count
+        deps.syncedNotesObserver.notes(interacting: verses).count
         #else
         return 0
         #endif
     }
-
-    #if QURAN_SYNC
-    private func syncedNotes(interacting verses: [AyahNumber]) -> [Note] {
-        syncedNotes.filter { $0.intersects(verses: verses) }
-    }
-    #endif
 
     private func dismissWordPointer() {
         logger.info("Quran: dismiss word pointer")

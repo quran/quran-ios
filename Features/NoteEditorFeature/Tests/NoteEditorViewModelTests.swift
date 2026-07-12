@@ -1,4 +1,7 @@
 import Analytics
+#if QURAN_SYNC
+import MobileSyncTestSupport
+#endif
 import QuranAnnotations
 import QuranKit
 import XCTest
@@ -9,6 +12,18 @@ import XCTest
 @MainActor
 final class NoteEditorViewModelTests: XCTestCase {
     #if QURAN_SYNC
+    private let database = MobileSyncTestDatabase.shared
+
+    override func setUp() async throws {
+        try await super.setUp()
+        try await database.reset()
+    }
+
+    override func tearDown() async throws {
+        try await database.reset()
+        try await super.tearDown()
+    }
+
     func test_fetchNote_mapsSyncedEditNote() async throws {
         let note = syncedNote(body: "Stored note")
         let sut = makeSyncSUT(mode: .edit(note), text: "ayah text")
@@ -33,7 +48,8 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(sut.viewModel.canDismissNote)
         XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
         XCTAssertFalse(didSave)
-        XCTAssertTrue(sut.noteService.events.isEmpty)
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
@@ -46,7 +62,8 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(sut.viewModel.canDismissNote)
         XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
         XCTAssertTrue(didFinish)
-        XCTAssertTrue(sut.noteService.events.isEmpty)
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
@@ -57,12 +74,13 @@ final class NoteEditorViewModelTests: XCTestCase {
         let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: false)
 
         XCTAssertFalse(didFinish)
-        XCTAssertTrue(sut.noteService.events.isEmpty)
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
     func test_validDoneSave_updatesSyncedNoteAndDismisses() async throws {
-        let note = syncedNote(body: "Stored note")
+        let note = try await createStoredNote(body: "Stored note")
         let sut = makeSyncSUT(mode: .edit(note))
         let editableNote = try await sut.viewModel.fetchNote()
         editableNote.note = "Updated note"
@@ -70,15 +88,16 @@ final class NoteEditorViewModelTests: XCTestCase {
         let didSave = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
 
         XCTAssertTrue(didSave)
-        XCTAssertEqual(sut.noteService.events, [
-            .update(localId: note.id, body: "Updated note", startAyah: note.startAyah, endAyah: note.endAyah),
-        ])
+        let notes = try await storedNotes()
+        let stored = try XCTUnwrap(notes.first)
+        XCTAssertEqual(stored.id, note.id)
+        XCTAssertEqual(stored.text, "Updated note")
         XCTAssertEqual(sut.analytics.events, [.init(name: "UpdateNoteVersesNum", value: "2")])
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
     func test_validAutoSave_updatesSyncedNoteWithoutDismissing() async throws {
-        let note = syncedNote(body: "Stored note")
+        let note = try await createStoredNote(body: "Stored note")
         let sut = makeSyncSUT(mode: .edit(note))
         let editableNote = try await sut.viewModel.fetchNote()
         editableNote.note = "Updated note"
@@ -88,26 +107,29 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(didSave)
         XCTAssertTrue(sut.viewModel.canDismissNote)
         XCTAssertTrue(sut.viewModel.shouldAutoSaveOnDismiss)
-        XCTAssertEqual(sut.noteService.events.count, 1)
+        let notes = try await storedNotes()
+        XCTAssertEqual(notes.map(\.text), ["Updated note"])
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
-    func test_createDelete_dismissesWithoutRemovingSyncedNote() async {
+    func test_createDelete_dismissesWithoutRemovingSyncedNote() async throws {
         let sut = makeSyncSUT(mode: .create(verses: [ayah(1)]))
 
         await sut.viewModel.forceDelete()
 
-        XCTAssertTrue(sut.noteService.events.isEmpty)
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
-    func test_editDelete_removesSyncedNoteAndDismisses() async {
-        let note = syncedNote(body: "Stored note")
+    func test_editDelete_removesSyncedNoteAndDismisses() async throws {
+        let note = try await createStoredNote(body: "Stored note")
         let sut = makeSyncSUT(mode: .edit(note))
 
         await sut.viewModel.forceDelete()
 
-        XCTAssertEqual(sut.noteService.events, [.remove(localId: note.id)])
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
@@ -119,15 +141,17 @@ final class NoteEditorViewModelTests: XCTestCase {
         let didSave = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
 
         XCTAssertTrue(didSave)
-        XCTAssertEqual(sut.noteService.events, [
-            .create(body: "Created note", startAyah: ayah(1), endAyah: ayah(3)),
-        ])
+        let notes = try await storedNotes()
+        let stored = try XCTUnwrap(notes.first)
+        XCTAssertEqual(stored.text, "Created note")
+        XCTAssertEqual(stored.startAyah, ayah(1))
+        XCTAssertEqual(stored.endAyah, ayah(3))
         XCTAssertEqual(sut.analytics.events, [.init(name: "UpdateNoteVersesNum", value: "2")])
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
     func test_editSave_usesSyncedNoteVerseRangeAndLogsRangeVerseCount() async throws {
-        let note = syncedNote(body: "Stored note", startAyah: ayah(1), endAyah: ayah(3))
+        let note = try await createStoredNote(body: "Stored note", startAyah: ayah(1), endAyah: ayah(3))
         let sut = makeSyncSUT(mode: .edit(note))
         let editableNote = try await sut.viewModel.fetchNote()
         editableNote.note = "Updated note"
@@ -135,9 +159,12 @@ final class NoteEditorViewModelTests: XCTestCase {
         let didSave = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
 
         XCTAssertTrue(didSave)
-        XCTAssertEqual(sut.noteService.events, [
-            .update(localId: note.id, body: "Updated note", startAyah: ayah(1), endAyah: ayah(3)),
-        ])
+        let notes = try await storedNotes()
+        let stored = try XCTUnwrap(notes.first)
+        XCTAssertEqual(stored.id, note.id)
+        XCTAssertEqual(stored.text, "Updated note")
+        XCTAssertEqual(stored.startAyah, ayah(1))
+        XCTAssertEqual(stored.endAyah, ayah(3))
         XCTAssertEqual(sut.analytics.events, [.init(name: "UpdateNoteVersesNum", value: "3")])
     }
     #else
@@ -257,8 +284,8 @@ final class NoteEditorViewModelTests: XCTestCase {
     private func makeSyncSUT(
         mode: NoteEditorViewModel.Mode,
         text: String = "ayah text"
-    ) -> (viewModel: NoteEditorViewModel, noteService: SyncNoteServiceFake, analytics: AnalyticsSpy, listener: ListenerSpy) {
-        let noteService = SyncNoteServiceFake()
+    ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsSpy, listener: ListenerSpy) {
+        let noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
         let analytics = AnalyticsSpy()
         let listener = ListenerSpy()
         let viewModel = NoteEditorViewModel(
@@ -284,6 +311,27 @@ final class NoteEditorViewModelTests: XCTestCase {
             endAyah: endAyah ?? ayah(2),
             modifiedDate: Date(timeIntervalSince1970: 1)
         )
+    }
+
+    private func createStoredNote(
+        body: String,
+        startAyah: AyahNumber? = nil,
+        endAyah: AyahNumber? = nil
+    ) async throws -> Note {
+        let service = MobileSyncNoteService(quranDataService: database.quranDataService)
+        try await service.createNote(
+            body: body,
+            startAyah: startAyah ?? ayah(1),
+            endAyah: endAyah ?? ayah(2)
+        )
+        let notes = try await storedNotes()
+        return try XCTUnwrap(notes.first)
+    }
+
+    private func storedNotes() async throws -> [Note] {
+        let service = MobileSyncNoteService(quranDataService: database.quranDataService)
+        var iterator = service.notesSequence(quran: Self.quran).makeAsyncIterator()
+        return try await iterator.next() ?? []
     }
     #else
     private func makeLegacySUT(
@@ -328,27 +376,6 @@ private final class AnalyticsSpy: AnalyticsLibrary, @unchecked Sendable {
     }
 }
 
-private final class SyncNoteServiceFake: NoteEditorSyncServicing {
-    enum Event: Equatable {
-        case create(body: String, startAyah: AyahNumber, endAyah: AyahNumber)
-        case update(localId: String, body: String, startAyah: AyahNumber, endAyah: AyahNumber)
-        case remove(localId: String)
-    }
-
-    private(set) var events: [Event] = []
-
-    func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-        events.append(.create(body: body, startAyah: startAyah, endAyah: endAyah))
-    }
-
-    func updateNote(_ note: Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-        events.append(.update(localId: note.id, body: body, startAyah: startAyah, endAyah: endAyah))
-    }
-
-    func removeNote(_ note: Note) async throws {
-        events.append(.remove(localId: note.id))
-    }
-}
 #else
 private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
     struct SetNoteCall: Equatable {

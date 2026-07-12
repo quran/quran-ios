@@ -9,6 +9,7 @@ import BatchDownloader
 import Foundation
 import LastPagePersistence
 import MobileSync
+import MobileSyncTestSupport
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingSelectorFeature
@@ -156,7 +157,7 @@ private struct AppDependenciesStub: AppDependencies {
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
     #if QURAN_SYNC
-    var quranDataService: QuranDataService { fatalError("Unused in tests") }
+    var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
     #endif
 }
 

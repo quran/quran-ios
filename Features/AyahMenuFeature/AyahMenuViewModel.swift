@@ -29,16 +29,8 @@ public protocol AyahMenuListener: AnyObject {
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
     func showTranslation(_ verses: [AyahNumber])
-
-    #if QURAN_SYNC
-    func addSyncedNote(verses: [AyahNumber])
+    func showNoteEditor(for verses: [AyahNumber]) async
     func deleteNotes(in verses: [AyahNumber]) async
-    #endif
-
-    #if !QURAN_SYNC
-    func editNote(_ note: QuranAnnotations.Note)
-    func deleteNotes(_ notes: [QuranAnnotations.Note], in verses: [AyahNumber]) async
-    #endif
 }
 
 // MARK: - ViewModel
@@ -50,13 +42,12 @@ final class AyahMenuViewModel {
         let pointInView: CGPoint
         let verses: [AyahNumber]
         let textRetriever: ShareableVerseTextRetriever
+        let notes: [QuranAnnotations.Note]
         #if QURAN_SYNC
         let highlightVerses: [AyahNumber: HighlightColor]
         let highlightCollections: [AyahBookmarkCollection]
-        let noteCount: Int
         let ayahBookmarkCollectionService: AyahBookmarkCollectionService
         #else
-        let notes: [QuranAnnotations.Note]
         let noteService: NoteService
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
@@ -111,17 +102,9 @@ final class AyahMenuViewModel {
         #endif
     }
 
-    var noteCount: Int {
-        #if QURAN_SYNC
-        return deps.noteCount
-        #else
-        return 0
-        #endif
-    }
-
     var noteState: AyahMenuUI.NoteState {
         #if QURAN_SYNC
-        return noteCount > 0 ? .noted : .noHighlight
+        return deps.notes.isEmpty ? .noHighlight : .noted
         #else
         if deps.notes.isEmpty {
             return .noHighlight
@@ -154,24 +137,12 @@ final class AyahMenuViewModel {
     func deleteNotes() async {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
         listener?.dismissAyahMenu()
-        #if QURAN_SYNC
         await listener?.deleteNotes(in: deps.verses)
-        #else
-        await listener?.deleteNotes(deps.notes, in: deps.verses)
-        #endif
     }
 
     func editNote() async {
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
-        #if QURAN_SYNC
-        listener?.addSyncedNote(verses: deps.verses)
-        #else
-        let notes = deps.notes
-        let color = deps.noteService.color(from: notes)
-        if let note = await updateLegacyHighlight(color: color) {
-            listener?.editNote(note)
-        }
-        #endif
+        await listener?.showNoteEditor(for: deps.verses)
     }
 
     func updateHighlight(color: HighlightColor) async {

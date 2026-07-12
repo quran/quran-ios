@@ -24,28 +24,7 @@ public struct NoteEditorBuilder {
     // MARK: Public
 
     #if QURAN_SYNC
-    public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
-        build(withListener: listener, mode: .edit(note))
-    }
-
-    public func build(withListener listener: NoteEditorListener, verses: [AyahNumber]) -> UIViewController {
-        build(withListener: listener, mode: .create(verses: verses))
-    }
-    #else
-    public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
-        let viewModel = NoteEditorViewModel(noteService: container.noteService(), note: note)
-        let viewController = NoteEditorViewController(viewModel: viewModel)
-        viewModel.listener = listener
-        return viewController
-    }
-    #endif
-
-    // MARK: Internal
-
-    let container: AppDependencies
-
-    #if QURAN_SYNC
-    private func build(withListener listener: NoteEditorListener, mode: NoteEditorViewModel.Mode) -> UIViewController {
+    public func build(withListener listener: NoteEditorListener, mode: NoteEditorMode) -> UIViewController {
         let textService = container.textDataService()
         let viewModel = NoteEditorViewModel(
             noteService: container.mobileSyncNoteService(),
@@ -64,5 +43,16 @@ public struct NoteEditorBuilder {
         viewModel.listener = listener
         return viewController
     }
+    #else
+    public func build(withListener listener: NoteEditorListener, note: Note) -> UIViewController {
+        let viewModel = NoteEditorViewModel(noteService: container.noteService(), note: note)
+        let viewController = NoteEditorViewController(viewModel: viewModel)
+        viewModel.listener = listener
+        return viewController
+    }
     #endif
+
+    // MARK: Internal
+
+    let container: AppDependencies
 }

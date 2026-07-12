@@ -28,7 +28,7 @@ final class NoteEditorViewModel {
     init(
         noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
-        mode: Mode,
+        mode: NoteEditorMode,
         textForVerses: @escaping ([AyahNumber]) async throws -> String
     ) {
         self.noteService = noteService
@@ -44,13 +44,6 @@ final class NoteEditorViewModel {
     #endif
 
     // MARK: Internal
-
-    #if QURAN_SYNC
-    enum Mode {
-        case create(verses: [AyahNumber])
-        case edit(Note)
-    }
-    #endif
 
     enum DeleteConfirmationStyle: Equatable {
         case note
@@ -184,7 +177,7 @@ final class NoteEditorViewModel {
     #if QURAN_SYNC
     private let noteService: MobileSyncNoteService
     private let analytics: AnalyticsLibrary
-    private let mode: Mode
+    private let mode: NoteEditorMode
     private let textForVerses: ([AyahNumber]) async throws -> String
     #else
     private let noteService: NoteEditorLegacyServicing

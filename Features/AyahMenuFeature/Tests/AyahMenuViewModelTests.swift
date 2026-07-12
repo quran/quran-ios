@@ -47,9 +47,9 @@ final class AyahMenuViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
+            notes: [],
             highlightVerses: [ayah: .red],
             highlightCollections: populatedCollections,
-            noteCount: 0,
             ayahBookmarkCollectionService: service
         ))
 

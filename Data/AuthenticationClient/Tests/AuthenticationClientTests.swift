@@ -17,7 +17,7 @@ final class AuthenticationClientTests: XCTestCase {
 
     func testSafelyRestoreStateReturnsCurrentStateOnFailure() async {
         let sut = AuthenticationClientFake()
-        sut.restoreStateResult = .failure(.clientIsNotAuthenticated(nil))
+        sut.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
         sut.authenticationStateValue = .authenticated
 
         let state = await sut.safelyRestoreState()

@@ -25,7 +25,7 @@ public struct BookmarksBuilder {
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
         #if QURAN_SYNC
-        return BookmarkCollectionsLandingBuilder(container: container).build(withListener: listener)
+        return BookmarkCollectionsBuilder(container: container).build(withListener: listener)
         #else
         let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         let viewModel = BookmarksViewModel(

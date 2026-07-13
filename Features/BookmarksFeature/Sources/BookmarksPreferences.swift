@@ -2,14 +2,14 @@
 import Foundation
 import Preferences
 
-struct BookmarkCollectionsLandingPreferences {
+struct BookmarkCollectionsPreferences {
     // MARK: Lifecycle
 
     private init() {}
 
     // MARK: Internal
 
-    static let shared = BookmarkCollectionsLandingPreferences()
+    static let shared = BookmarkCollectionsPreferences()
 
     @Preference(syncBannerDismissed)
     var isSyncBannerDismissed: Bool

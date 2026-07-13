@@ -31,6 +31,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     @Published var error: Error?
     @Published var editMode: EditMode = .inactive
+    @Published private(set) var allCollections: [AyahBookmarkCollection] = []
     @Published var collections: [AyahBookmarkCollection] = []
     @Published var collapsedCollectionIDs: Set<String> = []
 
@@ -53,7 +54,8 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         do {
             let sequence = ayahBookmarkCollectionService.collectionsSequence()
             for try await collections in sequence {
-                self.collections = Self.sorted(filtered(collections))
+                allCollections = Self.sorted(collections)
+                self.collections = filtered(allCollections)
             }
         } catch {
             self.error = error

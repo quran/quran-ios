@@ -1,6 +1,6 @@
 #if QURAN_SYNC
 //
-//  BookmarkCollectionsLandingBuilder.swift
+//  BookmarkCollectionsBuilder.swift
 //
 
 import AppDependencies
@@ -9,11 +9,11 @@ import QuranKit
 import UIKit
 
 @MainActor
-struct BookmarkCollectionsLandingBuilder {
+struct BookmarkCollectionsBuilder {
     let container: AppDependencies
 
     func build(withListener listener: QuranNavigator) -> UIViewController {
-        let viewControllerReference = BookmarkCollectionsLandingViewControllerReference()
+        let viewControllerReference = BookmarkCollectionsViewControllerReference()
         let collectionService = AyahBookmarkCollectionService(quranDataService: container.quranDataService)
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
@@ -21,20 +21,21 @@ struct BookmarkCollectionsLandingBuilder {
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }
         )
-        let viewModel = BookmarkCollectionsLandingViewModel(
+        let collectionsViewModel = AyahBookmarkCollectionsViewModel(
+            ayahBookmarkCollectionService: collectionService,
+            excludedCollectionNames: [AyahBookmarkCollectionName.oldPageBookmarks],
+            navigateToPage: { [weak listener] page in
+                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+            }
+        )
+        let viewModel = BookmarkCollectionsViewModel(
             authenticationClient: container.authenticationClient,
-            collectionService: collectionService,
+            collectionsViewModel: collectionsViewModel,
             loginAction: { [viewControllerReference, authenticationClient = container.authenticationClient] in
                 guard let viewController = viewControllerReference.value else {
                     return
                 }
                 try await authenticationClient.login(on: viewController)
-            },
-            showCollectionsAction: { [viewControllerReference, collectionsBuilder] in
-                guard let navigationController = viewControllerReference.value?.navigationController else {
-                    return
-                }
-                navigationController.pushViewController(collectionsBuilder.build(), animated: true)
             },
             showOldPageBookmarksAction: { [viewControllerReference, collectionsBuilder] in
                 guard let navigationController = viewControllerReference.value?.navigationController else {
@@ -43,14 +44,14 @@ struct BookmarkCollectionsLandingBuilder {
                 navigationController.pushViewController(collectionsBuilder.buildOldPageBookmarks(), animated: true)
             }
         )
-        let viewController = BookmarkCollectionsLandingViewController(viewModel: viewModel)
+        let viewController = BookmarkCollectionsViewController(viewModel: viewModel)
         viewControllerReference.value = viewController
         return viewController
     }
 }
 
 @MainActor
-private final class BookmarkCollectionsLandingViewControllerReference {
-    weak var value: BookmarkCollectionsLandingViewController?
+private final class BookmarkCollectionsViewControllerReference {
+    weak var value: BookmarkCollectionsViewController?
 }
 #endif

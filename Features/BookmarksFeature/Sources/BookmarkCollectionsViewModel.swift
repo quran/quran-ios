@@ -1,6 +1,6 @@
 #if QURAN_SYNC
 //
-//  BookmarkCollectionsLandingViewModel.swift
+//  BookmarkCollectionsViewModel.swift
 //
 
 import AuthenticationClient
@@ -9,20 +9,18 @@ import Foundation
 import VLogging
 
 @MainActor
-final class BookmarkCollectionsLandingViewModel: ObservableObject {
+final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
         authenticationClient: any AuthenticationClient,
-        collectionService: AyahBookmarkCollectionService,
+        collectionsViewModel: AyahBookmarkCollectionsViewModel,
         loginAction: @escaping () async throws -> Void,
-        showCollectionsAction: @escaping () -> Void,
         showOldPageBookmarksAction: @escaping () -> Void
     ) {
         self.authenticationClient = authenticationClient
-        self.collectionService = collectionService
+        self.collectionsViewModel = collectionsViewModel
         self.loginAction = loginAction
-        self.showCollectionsAction = showCollectionsAction
         self.showOldPageBookmarksAction = showOldPageBookmarksAction
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
@@ -32,24 +30,23 @@ final class BookmarkCollectionsLandingViewModel: ObservableObject {
     @Published var error: Error?
     @Published var isAuthenticated = false
     @Published var isSyncBannerDismissed: Bool
-    @Published var oldPageBookmarksCount = 0
+
+    let collectionsViewModel: AyahBookmarkCollectionsViewModel
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
     }
 
-    func start() async {
-        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+    var oldPageBookmarksCount: Int {
+        collectionsViewModel.allCollections
+            .first { $0.collection.name == AyahBookmarkCollectionName.oldPageBookmarks }?
+            .bookmarks.count ?? 0
+    }
 
-        do {
-            for try await collections in collectionService.collectionsSequence() {
-                oldPageBookmarksCount = collections
-                    .first { $0.collection.name == AyahBookmarkCollectionName.oldPageBookmarks }?
-                    .bookmarks.count ?? 0
-            }
-        } catch {
-            self.error = error
-        }
+    func start() async {
+        async let startCollections: Void = collectionsViewModel.start()
+        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        await startCollections
     }
 
     func loginToQuranCom() async {
@@ -67,10 +64,6 @@ final class BookmarkCollectionsLandingViewModel: ObservableObject {
         preferences.isSyncBannerDismissed = true
     }
 
-    func showCollections() {
-        showCollectionsAction()
-    }
-
     func showOldPageBookmarks() {
         showOldPageBookmarksAction()
     }
@@ -78,10 +71,8 @@ final class BookmarkCollectionsLandingViewModel: ObservableObject {
     // MARK: Private
 
     private let authenticationClient: any AuthenticationClient
-    private let collectionService: AyahBookmarkCollectionService
     private let loginAction: () async throws -> Void
-    private let showCollectionsAction: () -> Void
     private let showOldPageBookmarksAction: () -> Void
-    private let preferences = BookmarkCollectionsLandingPreferences.shared
+    private let preferences = BookmarkCollectionsPreferences.shared
 }
 #endif

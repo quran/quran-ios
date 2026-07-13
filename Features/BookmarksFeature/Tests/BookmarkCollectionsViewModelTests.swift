@@ -10,17 +10,17 @@ import XCTest
 @testable import BookmarksFeature
 
 @MainActor
-final class BookmarkCollectionsLandingViewModelTests: XCTestCase {
+final class BookmarkCollectionsViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
 
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        BookmarkCollectionsLandingPreferences.shared.isSyncBannerDismissed = false
+        BookmarkCollectionsPreferences.shared.isSyncBannerDismissed = false
     }
 
     override func tearDown() async throws {
-        BookmarkCollectionsLandingPreferences.shared.isSyncBannerDismissed = false
+        BookmarkCollectionsPreferences.shared.isSyncBannerDismissed = false
         try await database.reset()
         try await super.tearDown()
     }
@@ -80,7 +80,7 @@ final class BookmarkCollectionsLandingViewModelTests: XCTestCase {
         sut.dismissSyncBanner()
 
         XCTAssertTrue(sut.isSyncBannerDismissed)
-        XCTAssertTrue(BookmarkCollectionsLandingPreferences.shared.isSyncBannerDismissed)
+        XCTAssertTrue(BookmarkCollectionsPreferences.shared.isSyncBannerDismissed)
         XCTAssertFalse(sut.shouldShowSyncBanner)
     }
 
@@ -118,18 +118,14 @@ final class BookmarkCollectionsLandingViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_navigationActions_invokeInjectedActions() {
-        var shownCollections = false
+    func test_showOldPageBookmarks_invokesInjectedAction() {
         var shownOldPageBookmarks = false
         let sut = makeSUT(
-            showCollectionsAction: { shownCollections = true },
             showOldPageBookmarksAction: { shownOldPageBookmarks = true }
         )
 
-        sut.showCollections()
         sut.showOldPageBookmarks()
 
-        XCTAssertTrue(shownCollections)
         XCTAssertTrue(shownOldPageBookmarks)
     }
 
@@ -137,14 +133,18 @@ final class BookmarkCollectionsLandingViewModelTests: XCTestCase {
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
         collectionService: AyahBookmarkCollectionService? = nil,
         loginAction: @escaping () async throws -> Void = {},
-        showCollectionsAction: @escaping () -> Void = {},
         showOldPageBookmarksAction: @escaping () -> Void = {}
-    ) -> BookmarkCollectionsLandingViewModel {
-        BookmarkCollectionsLandingViewModel(
+    ) -> BookmarkCollectionsViewModel {
+        let collectionService = collectionService ?? makeService()
+        let collectionsViewModel = AyahBookmarkCollectionsViewModel(
+            ayahBookmarkCollectionService: collectionService,
+            excludedCollectionNames: [AyahBookmarkCollectionName.oldPageBookmarks],
+            navigateToPage: { _ in }
+        )
+        return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
-            collectionService: collectionService ?? makeService(),
+            collectionsViewModel: collectionsViewModel,
             loginAction: loginAction,
-            showCollectionsAction: showCollectionsAction,
             showOldPageBookmarksAction: showOldPageBookmarksAction
         )
     }

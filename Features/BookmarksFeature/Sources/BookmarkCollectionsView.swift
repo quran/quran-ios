@@ -1,6 +1,6 @@
 #if QURAN_SYNC
 //
-//  BookmarkCollectionsLandingView.swift
+//  BookmarkCollectionsView.swift
 //
 
 import Localization
@@ -9,12 +9,25 @@ import SwiftUI
 import UIx
 
 @MainActor
-struct BookmarkCollectionsLandingView: View {
-    @StateObject var viewModel: BookmarkCollectionsLandingViewModel
+struct BookmarkCollectionsView: View {
+    @StateObject var viewModel: BookmarkCollectionsViewModel
 
-    init(viewModel: BookmarkCollectionsLandingViewModel) {
+    init(viewModel: BookmarkCollectionsViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
+
+    var body: some View {
+        BookmarkCollectionsContent(
+            viewModel: viewModel,
+            collectionsViewModel: viewModel.collectionsViewModel
+        )
+    }
+}
+
+@MainActor
+private struct BookmarkCollectionsContent: View {
+    @ObservedObject var viewModel: BookmarkCollectionsViewModel
+    @ObservedObject var collectionsViewModel: AyahBookmarkCollectionsViewModel
 
     var body: some View {
         NoorList {
@@ -40,17 +53,16 @@ struct BookmarkCollectionsLandingView: View {
                 )
             }
 
-            NoorBasicSection {
-                NoorListItem(
-                    image: .init(.folder, color: .accentColor),
-                    title: .text(l("bookmarks.collections")),
-                    accessory: .disclosureIndicator,
-                    action: { viewModel.showCollections() }
-                )
-            }
+            AyahBookmarkCollectionsContent(
+                viewModel: collectionsViewModel,
+                allowsCollectionManagement: true,
+                allowsBookmarkDeletion: true
+            )
         }
         .task { await viewModel.start() }
         .errorAlert(error: $viewModel.error)
+        .errorAlert(error: $collectionsViewModel.error)
+        .environment(\.editMode, $collectionsViewModel.editMode)
     }
 }
 

@@ -21,8 +21,41 @@ public struct AyahCollectionBookmark {
     public let ayah: AyahNumber
 }
 
-enum AyahBookmarkCollectionName {
+private enum AyahBookmarkCollectionName {
     static let oldPageBookmarks = "Old Page Bookmarks"
+}
+
+enum AyahBookmarkCollectionKind: Equatable {
+    case oldPageBookmarks
+    case colored(HighlightColor)
+    case user
+
+    fileprivate init(collection: Collection_) {
+        if collection.name == AyahBookmarkCollectionName.oldPageBookmarks {
+            self = .oldPageBookmarks
+        } else if let color = HighlightColor(collectionName: collection.name) {
+            self = .colored(color)
+        } else {
+            self = .user
+        }
+    }
+
+    var highlightColor: HighlightColor? {
+        guard case .colored(let color) = self else {
+            return nil
+        }
+        return color
+    }
+
+    var isOldPageBookmarks: Bool {
+        self == .oldPageBookmarks
+    }
+}
+
+extension AyahBookmarkCollection {
+    var kind: AyahBookmarkCollectionKind {
+        AyahBookmarkCollectionKind(collection: collection)
+    }
 }
 
 public struct AyahBookmarkCollectionsSequence: AsyncSequence {

@@ -21,8 +21,7 @@ struct AyahBookmarkCollectionsBuilder {
     }
 
     func buildCollection(_ collection: AyahBookmarkCollection) -> UIViewController {
-        let highlightColor = HighlightColor(collectionName: collection.collection.name)
-        let isOldPageBookmarks = collection.collection.name == AyahBookmarkCollectionName.oldPageBookmarks
+        let kind = collection.kind
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
             collectionLocalID: collection.collection.localId,
@@ -30,8 +29,7 @@ struct AyahBookmarkCollectionsBuilder {
         )
         return AyahBookmarkCollectionsViewController(
             viewModel: viewModel,
-            title: highlightColor?.localizedName ?? collection.collection.name,
-            allowsBookmarkDeletion: !isOldPageBookmarks
+            title: kind.highlightColor?.localizedName ?? collection.collection.name
         )
     }
 

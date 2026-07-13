@@ -9,6 +9,7 @@ import XCTest
 @MainActor
 final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
+    private let oldPageBookmarksCollectionName = "Old Page Bookmarks"
 
     override func setUp() async throws {
         try await super.setUp()
@@ -41,6 +42,32 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
+    }
+
+    func test_deleteBookmark_removesOldPageBookmarkFromMobileSyncDatabase() async throws {
+        let service = makeService()
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
+        var stored = try await storedCollections()
+        let storedCollection = try XCTUnwrap(stored.first)
+        try await service.addAyahBookmarkToCollection(
+            collectionLocalId: storedCollection.collection.localId,
+            ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+        )
+        stored = try await storedCollections()
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService
+                .collections(from: stored, quran: .hafsMadani1405)
+                .first
+        )
+        let bookmark = try XCTUnwrap(collection.bookmarks.first)
+        let sut = makeSUT(collectionLocalID: collection.collection.localId, service: service)
+
+        await sut.deleteBookmark(bookmark)
+
+        stored = try await storedCollections()
+        let updatedCollection = try XCTUnwrap(stored.first)
+        XCTAssertTrue(updatedCollection.bookmarks.isEmpty)
+        XCTAssertNil(sut.error)
     }
 
     private func makeSUT(

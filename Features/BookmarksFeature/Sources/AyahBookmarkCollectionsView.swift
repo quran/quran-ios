@@ -15,25 +15,17 @@ import UIx
 struct AyahBookmarkCollectionsView: View {
     // MARK: Lifecycle
 
-    init(
-        viewModel: AyahBookmarkCollectionsViewModel,
-        allowsBookmarkDeletion: Bool = true
-    ) {
+    init(viewModel: AyahBookmarkCollectionsViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.allowsBookmarkDeletion = allowsBookmarkDeletion
     }
 
     // MARK: Internal
 
     @StateObject var viewModel: AyahBookmarkCollectionsViewModel
-    let allowsBookmarkDeletion: Bool
 
     var body: some View {
         NoorList {
-            AyahBookmarkCollectionsContent(
-                viewModel: viewModel,
-                allowsBookmarkDeletion: allowsBookmarkDeletion
-            )
+            AyahBookmarkCollectionsContent(viewModel: viewModel)
         }
         .task { await viewModel.start() }
         .errorAlert(error: $viewModel.error)
@@ -43,7 +35,6 @@ struct AyahBookmarkCollectionsView: View {
 @MainActor
 struct AyahBookmarkCollectionsContent: View {
     @ObservedObject var viewModel: AyahBookmarkCollectionsViewModel
-    let allowsBookmarkDeletion: Bool
     @State private var isExpanded = true
 
     var body: some View {
@@ -66,18 +57,9 @@ struct AyahBookmarkCollectionsContent: View {
         )
     }
 
-    private var deleteBookmarkAction: AsyncItemAction<AyahCollectionBookmark>? {
-        guard allowsBookmarkDeletion else {
-            return nil
-        }
-        return { bookmark in
-            await viewModel.deleteBookmark(bookmark)
-        }
-    }
-
     @ViewBuilder
     private func section(for collection: AyahBookmarkCollection) -> some View {
-        let highlightColor = HighlightColor(collectionName: collection.collection.name)
+        let highlightColor = collection.kind.highlightColor
 
         NoorEditableCollapsibleSection(
             title: highlightColor?.localizedName ?? collection.collection.name,
@@ -88,7 +70,9 @@ struct AyahBookmarkCollectionsContent: View {
         ) { bookmark in
             bookmarkItem(bookmark, iconColor: highlightColor?.color)
         }
-        .onDelete(action: deleteBookmarkAction)
+        .onDelete { bookmark in
+            await viewModel.deleteBookmark(bookmark)
+        }
     }
 
     private func bookmarkItem(_ bookmark: AyahCollectionBookmark, iconColor: Color?) -> some View {

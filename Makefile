@@ -50,7 +50,7 @@ endef
 .PHONY: build-no-sync build-sync
 .PHONY: build-example-no-sync build-example-sync
 .PHONY: run-example-no-sync run-example-sync
-.PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect
+.PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 
 test-no-sync:
@@ -107,7 +107,16 @@ force-build-swiftformat: clone-swiftformat
 clean-swiftformat:
 	@rm -rf $(SWIFT_FORMAT_DIR)/.build
 
-format-lint: $(SWIFT_FORMAT_BIN)
+lint-no-kotlin-interop:
+	@matches="$$(git grep --line-number --extended-regexp '(^|[[:space:]])import[[:space:]]+KMPNativeCoroutines|(^|[^[:alnum:]_])(asyncFunction|asyncSequence)[[:space:]]*\(' -- '*.swift' || true)"; \
+	if [ -n "$$matches" ]; then \
+		echo "$$matches"; \
+		echo "error: Direct Kotlin coroutine interop is forbidden in QuranEngine Swift sources." >&2; \
+		echo "Use the Swift-native async APIs exposed by MobileSync; add missing wrappers upstream." >&2; \
+		exit 1; \
+	fi
+
+format-lint: lint-no-kotlin-interop $(SWIFT_FORMAT_BIN)
 	$(SWIFT_FORMAT_BIN) --lint .
 
 format-autocorrect: $(SWIFT_FORMAT_BIN)

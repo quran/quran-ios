@@ -25,13 +25,27 @@ private enum AyahBookmarkCollectionName {
     static let oldPageBookmarks = "Old Page Bookmarks"
 }
 
-enum AyahBookmarkCollectionKind: Equatable {
+private extension HighlightColor {
+    init?(collectionName: String) {
+        switch collectionName.lowercased() {
+        case "red": self = .red
+        case "green": self = .green
+        case "blue": self = .blue
+        case "yellow": self = .yellow
+        case "purple": self = .purple
+        default: return nil
+        }
+    }
+}
+
+public enum AyahBookmarkCollectionKind: Equatable {
     case oldPageBookmarks
     case colored(HighlightColor)
     case user
 
     fileprivate init(collection: Collection_) {
-        if collection.name == AyahBookmarkCollectionName.oldPageBookmarks {
+        let normalizedName = collection.name.lowercased()
+        if normalizedName == AyahBookmarkCollectionName.oldPageBookmarks.lowercased() {
             self = .oldPageBookmarks
         } else if let color = HighlightColor(collectionName: collection.name) {
             self = .colored(color)
@@ -53,7 +67,7 @@ enum AyahBookmarkCollectionKind: Equatable {
 }
 
 extension AyahBookmarkCollection {
-    var kind: AyahBookmarkCollectionKind {
+    public var kind: AyahBookmarkCollectionKind {
         AyahBookmarkCollectionKind(collection: collection)
     }
 }

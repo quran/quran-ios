@@ -11,17 +11,6 @@ public enum HighlightColor: Int, CaseIterable, Equatable, Hashable {
     case yellow = 3
     case purple = 4
 
-    public init?(collectionName: String) {
-        switch collectionName {
-        case "red": self = .red
-        case "green": self = .green
-        case "blue": self = .blue
-        case "yellow": self = .yellow
-        case "purple": self = .purple
-        default: return nil
-        }
-    }
-
     public var collectionName: String {
         switch self {
         case .red: return "red"

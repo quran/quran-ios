@@ -4,6 +4,7 @@ import Combine
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
+import QuranResources
 import QuranTextKit
 import XCTest
 @testable import NotesFeature
@@ -34,11 +35,13 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
             noteService: noteService,
-            noteVerseTextService: NoteVerseTextService(
-                textService: QuranTextDataService(
-                    databasesURL: unavailableDatabase,
-                    quranFileURL: unavailableDatabase
-                )
+            textService: QuranTextDataService(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
+            ),
+            textRetriever: ShareableVerseTextRetriever(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
             ),
             navigateTo: { _ in },
             editNote: { _ in }
@@ -57,11 +60,13 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
             noteService: noteService,
-            noteVerseTextService: NoteVerseTextService(
-                textService: QuranTextDataService(
-                    databasesURL: unavailableDatabase,
-                    quranFileURL: unavailableDatabase
-                )
+            textService: QuranTextDataService(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
+            ),
+            textRetriever: ShareableVerseTextRetriever(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
             ),
             navigateTo: { _ in },
             editNote: { _ in }
@@ -79,6 +84,39 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
+    }
+
+    func test_prepareNotesForSharing_usesShareableVerseText() async throws {
+        let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+        let note = QuranAnnotations.Note(
+            id: "note",
+            text: "My note",
+            startAyah: ayah,
+            endAyah: ayah,
+            modifiedDate: Date()
+        )
+        let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-translations-database")
+        let sut = NotesViewModel(
+            noteService: noteService,
+            textService: QuranTextDataService(
+                databasesURL: unavailableDatabase,
+                quranFileURL: QuranResources.quranUthmaniV2Database
+            ),
+            textRetriever: ShareableVerseTextRetriever(
+                databasesURL: unavailableDatabase,
+                quranFileURL: QuranResources.quranUthmaniV2Database
+            ),
+            navigateTo: { _ in },
+            editNote: { _ in }
+        )
+        sut.notes = [NoteItem(note: note, verseText: "Verse")]
+        QuranContentStatePreferences.shared.quranMode = .arabic
+
+        let text = try await sut.prepareNotesForSharing()
+
+        XCTAssertTrue(text.hasPrefix("My note\n\n"))
+        XCTAssertTrue(text.contains("﴿ ١ ﴾"))
+        XCTAssertTrue(text.hasSuffix("Al-Fātihah, Ayah 1"))
     }
 
     private func storedNotes() async throws -> [QuranAnnotations.Note] {

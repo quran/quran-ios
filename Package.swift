@@ -621,6 +621,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranAnnotations",
             "QuranKit",
+            "QuranResources",
         ]),
 
         target(type, name: "BookmarksFeature", dependencies: [
@@ -695,6 +696,7 @@ private func featuresTargets() -> [[Target]] {
             "NoteEditorFeature",
         ], testDependencies: [
             "MobileSyncTestSupport",
+            "QuranResources",
         ]),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [

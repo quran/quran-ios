@@ -47,6 +47,17 @@ public struct QuranTextDataService {
         return Dictionary(uniqueKeysWithValues: (0 ..< verses.count).map { i in (verses[i], translatedVerses.verses[i]) })
     }
 
+    public func numberedArabicText(for verses: [AyahNumber]) async throws -> String {
+        let verseTexts = try await textForVerses(verses, translations: [])
+        return verses.sorted()
+            .compactMap { verse in
+                verseTexts[verse].map {
+                    $0.arabicText + " \(NumberFormatter.arabicNumberFormatter.format(verse.ayah))"
+                }
+            }
+            .joined(separator: " ")
+    }
+
     // MARK: Internal
 
     // regex to detect quran text in translation text

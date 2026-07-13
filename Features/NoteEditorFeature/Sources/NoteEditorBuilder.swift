@@ -11,6 +11,7 @@ import AppDependencies
 import Foundation
 import QuranAnnotations
 import QuranKit
+import QuranTextKit
 import UIKit
 
 @MainActor
@@ -29,7 +30,7 @@ public struct NoteEditorBuilder {
             noteService: container.mobileSyncNoteService(),
             analytics: container.analytics,
             mode: mode,
-            textForVerses: textForVerses
+            textService: container.textDataService()
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -40,7 +41,7 @@ public struct NoteEditorBuilder {
         let viewModel = NoteEditorViewModel(
             noteService: container.noteService(),
             note: note,
-            textForVerses: textForVerses
+            textService: container.textDataService()
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -51,9 +52,4 @@ public struct NoteEditorBuilder {
     // MARK: Internal
 
     let container: AppDependencies
-
-    private var textForVerses: ([AyahNumber]) async throws -> String {
-        let service = container.noteVerseTextService()
-        return service.textForVerses
-    }
 }

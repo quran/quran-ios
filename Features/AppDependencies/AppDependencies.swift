@@ -72,10 +72,6 @@ extension AppDependencies {
         )
     }
 
-    public func noteVerseTextService() -> NoteVerseTextService {
-        NoteVerseTextService(textService: textDataService())
-    }
-
     #if QURAN_SYNC
     public func mobileSyncNoteService() -> MobileSyncNoteService {
         MobileSyncNoteService(quranDataService: quranDataService)

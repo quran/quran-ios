@@ -24,11 +24,27 @@ struct AyahBookmarkCollectionsView: View {
     @StateObject var viewModel: AyahBookmarkCollectionsViewModel
 
     var body: some View {
-        NoorList {
-            AyahBookmarkCollectionsContent(viewModel: viewModel)
+        Group {
+            if viewModel.collection?.bookmarks.isEmpty == true {
+                emptyCollection
+            } else {
+                NoorList {
+                    AyahBookmarkCollectionsContent(viewModel: viewModel)
+                }
+            }
         }
         .task { await viewModel.start() }
+        .renameCollectionAlert(viewModel: viewModel)
         .errorAlert(error: $viewModel.error)
+        .environment(\.editMode, $viewModel.editMode)
+    }
+
+    private var emptyCollection: some View {
+        DataUnavailableView(
+            title: l("bookmarks.collections.ayahs.no-data.title"),
+            text: l("bookmarks.collections.ayahs.no-data.text"),
+            image: .bookmark
+        )
     }
 }
 
@@ -83,6 +99,31 @@ struct AyahBookmarkCollectionsContent: View {
             accessory: .text(NumberFormatter.shared.format(bookmark.ayah.page.pageNumber))
         ) {
             viewModel.navigateTo(bookmark)
+        }
+    }
+}
+
+private extension View {
+    @MainActor
+    func renameCollectionAlert(viewModel: AyahBookmarkCollectionsViewModel) -> some View {
+        alert(
+            l("bookmarks.collections.rename"),
+            isPresented: Binding(
+                get: { viewModel.isPresentingRenameCollection },
+                set: { viewModel.isPresentingRenameCollection = $0 }
+            )
+        ) {
+            TextField(
+                l("bookmarks.collections.new.placeholder"),
+                text: Binding(
+                    get: { viewModel.pendingCollectionName },
+                    set: { viewModel.pendingCollectionName = $0 }
+                )
+            )
+            Button(lAndroid("cancel"), role: .cancel) {}
+            Button(l("bookmarks.collections.rename")) {
+                Task { await viewModel.renamePendingCollection() }
+            }
         }
     }
 }

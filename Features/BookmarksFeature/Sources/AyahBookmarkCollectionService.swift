@@ -5,6 +5,7 @@
 //  Created by Ahmed Nabil on 2026-05-06.
 //
 
+import KMPNativeCoroutinesAsync
 import MobileSync
 import QuranAnnotations
 import QuranKit
@@ -66,6 +67,14 @@ public enum AyahBookmarkCollectionKind: Equatable {
 
     var isOldPageBookmarks: Bool {
         self == .oldPageBookmarks
+    }
+
+    public var canDelete: Bool {
+        highlightColor == nil && self != .defaultBookmarks
+    }
+
+    public var canRename: Bool {
+        highlightColor == nil && self != .defaultBookmarks
     }
 }
 
@@ -133,6 +142,12 @@ public struct AyahBookmarkCollectionService {
 
     public func removeCollection(id: String) async throws {
         _ = try await quranDataService.removeCollection(id: id)
+    }
+
+    public func renameCollection(id: String, to name: String) async throws {
+        _ = try await asyncFunction(
+            for: quranDataService.updateCollection(id: id, name: name)
+        )
     }
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {

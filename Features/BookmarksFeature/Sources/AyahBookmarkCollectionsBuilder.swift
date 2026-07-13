@@ -20,12 +20,16 @@ struct AyahBookmarkCollectionsBuilder {
         self.navigateToPage = navigateToPage
     }
 
-    func buildCollection(_ collection: AyahBookmarkCollection) -> UIViewController {
+    func buildCollection(
+        _ collection: AyahBookmarkCollection,
+        collectionDeleted: @escaping () -> Void
+    ) -> UIViewController {
         let kind = collection.kind
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-            collectionID: collection.collection.id,
-            navigateToPage: navigateToPage
+            collection: collection,
+            navigateToPage: navigateToPage,
+            collectionDeleted: collectionDeleted
         )
         return AyahBookmarkCollectionsViewController(
             viewModel: viewModel,

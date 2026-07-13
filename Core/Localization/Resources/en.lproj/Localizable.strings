@@ -148,6 +148,7 @@
 "bookmarks.collections.mine" = "My Collections";
 "bookmarks.collections.new" = "New Collection...";
 "bookmarks.collections.new.placeholder" = "Collection name";
+"bookmarks.collections.rename" = "Rename";
 "bookmarks.collections.no-data.title" = "No collections yet";
 "bookmarks.collections.no-data.text" = "Create a collection to organize ayahs by theme, dua, or memorization plan.";
 "bookmarks.collections.ayah-count" = "%d ayah bookmarks";

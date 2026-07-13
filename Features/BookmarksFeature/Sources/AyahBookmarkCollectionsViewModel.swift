@@ -8,6 +8,7 @@
 import Combine
 import QuranAnnotations
 import QuranKit
+import SwiftUI
 import VLogging
 
 @MainActor
@@ -16,18 +17,24 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-        collectionID: String,
-        navigateToPage: @escaping (Page) -> Void
+        collection: AyahBookmarkCollection,
+        navigateToPage: @escaping (Page) -> Void,
+        collectionDeleted: @escaping () -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
-        self.collectionID = collectionID
+        self.collection = collection
+        collectionID = collection.collection.id
         self.navigateToPage = navigateToPage
+        self.collectionDeleted = collectionDeleted
     }
 
     // MARK: Internal
 
     @Published private(set) var collection: AyahBookmarkCollection?
+    @Published var editMode: EditMode = .inactive
     @Published var error: Error?
+    @Published var isPresentingRenameCollection = false
+    @Published var pendingCollectionName = ""
 
     func start() async {
         do {
@@ -55,10 +62,53 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    func presentRenameCollection() {
+        guard let collection, collection.kind.canRename else {
+            return
+        }
+        pendingCollectionName = collection.collection.name
+        isPresentingRenameCollection = true
+    }
+
+    func renamePendingCollection() async {
+        guard let collection, collection.kind.canRename else {
+            return
+        }
+        let name = pendingCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else {
+            return
+        }
+
+        do {
+            try await ayahBookmarkCollectionService.renameCollection(
+                id: collection.collection.id,
+                to: name
+            )
+        } catch {
+            self.error = error
+        }
+    }
+
+    func deleteCollection() async {
+        guard let collection, collection.kind.canDelete else {
+            return
+        }
+
+        do {
+            try await ayahBookmarkCollectionService.removeCollection(
+                id: collection.collection.id
+            )
+            collectionDeleted()
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: Private
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let collectionID: String
     private let navigateToPage: (Page) -> Void
+    private let collectionDeleted: () -> Void
 }
 #endif

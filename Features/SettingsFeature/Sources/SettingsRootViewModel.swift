@@ -32,7 +32,7 @@ final class SettingsRootViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
-        authenticationClient: (any AuthenticationClient)?,
+        authenticationClient: any AuthenticationClient,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
@@ -199,12 +199,6 @@ final class SettingsRootViewModel: ObservableObject {
 
     #if QURAN_SYNC
     func refreshAuthenticationState() async {
-        guard let authenticationClient else {
-            isAuthenticated = false
-            loggedInUser = nil
-            return
-        }
-
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
     }
@@ -215,7 +209,6 @@ final class SettingsRootViewModel: ObservableObject {
         }
 
         do {
-            let authenticationClient = try requireAuthenticationClient()
             try await authenticationClient.login(on: viewController)
             isAuthenticated = true
             loggedInUser = await authenticationClient.loggedInUser
@@ -227,7 +220,6 @@ final class SettingsRootViewModel: ObservableObject {
 
     func logoutFromQuranCom() async {
         do {
-            let authenticationClient = try requireAuthenticationClient()
             try await authenticationClient.logout()
             isAuthenticated = false
             loggedInUser = nil
@@ -242,14 +234,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     #if QURAN_SYNC
     private let quranProfileURL: URL
-    private var authenticationClient: (any AuthenticationClient)?
-
-    private func requireAuthenticationClient() throws -> any AuthenticationClient {
-        guard let authenticationClient else {
-            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
-        }
-        return authenticationClient
-    }
+    private var authenticationClient: any AuthenticationClient
     #endif
 
     private func showSingleChoiceSelector<T: Hashable>(

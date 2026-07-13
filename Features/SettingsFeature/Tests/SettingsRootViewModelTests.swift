@@ -117,7 +117,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         return SettingsRootViewModel(
             analytics: AnalyticsSpy(),
             reviewService: ReviewService(analytics: AnalyticsSpy()),
-            authenticationClient: authenticationClient,
+            authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
@@ -139,7 +139,7 @@ private struct AnalyticsSpy: AnalyticsLibrary {
 }
 
 private struct AppDependenciesStub: AppDependencies {
-    let authenticationClient: (any AuthenticationClient)?
+    let authenticationClient: any AuthenticationClient
 
     var databasesURL: URL { URL(fileURLWithPath: "/tmp") }
     var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }

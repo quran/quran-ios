@@ -12,11 +12,11 @@ import MobileSync
 import UIKit
 
 public enum AuthenticationClientError: Error {
-    case errorAuthenticating(Error?)
+    case errorAuthenticating(Error)
 
     /// Thrown when an operation, that needs authentication, is attempted while the client
     /// hasn't been authenticated or if the client's access has been revoked.
-    case clientIsNotAuthenticated(Error?)
+    case clientIsNotAuthenticated(Error)
 }
 
 public enum AuthenticationState: Equatable {

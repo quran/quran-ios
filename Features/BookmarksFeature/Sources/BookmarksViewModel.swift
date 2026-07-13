@@ -27,7 +27,7 @@ final class BookmarksViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         service: PageBookmarkService,
-        authenticationClient: (any AuthenticationClient)?,
+        authenticationClient: any AuthenticationClient,
         navigateTo: @escaping (Page) -> Void,
         showCollectionsAction: (@MainActor (UIViewController) async -> Void)? = nil,
         showOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)? = nil
@@ -88,11 +88,7 @@ final class BookmarksViewModel: ObservableObject {
 
     func start() async {
         #if QURAN_SYNC
-        if let authenticationClient {
-            isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
-        } else {
-            isAuthenticated = false
-        }
+        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         #endif
 
         let bookmarksSequence = readingPreferences.$reading
@@ -141,7 +137,6 @@ final class BookmarksViewModel: ObservableObject {
         }
 
         do {
-            let authenticationClient = try requireAuthenticationClient()
             try await authenticationClient.login(on: presenter)
             isAuthenticated = true
         } catch {
@@ -177,16 +172,9 @@ final class BookmarksViewModel: ObservableObject {
     private let service: PageBookmarkService
     private let readingPreferences = ReadingPreferences.shared
     #if QURAN_SYNC
-    private var authenticationClient: (any AuthenticationClient)?
+    private var authenticationClient: any AuthenticationClient
     private var presentCollectionsAction: (@MainActor (UIViewController) async -> Void)?
     private var presentOldPageBookmarksAction: (@MainActor (UIViewController) async -> Void)?
     private let preferences = BookmarksPreferences.shared
-
-    private func requireAuthenticationClient() throws -> any AuthenticationClient {
-        guard let authenticationClient else {
-            throw AuthenticationClientError.clientIsNotAuthenticated(nil)
-        }
-        return authenticationClient
-    }
     #endif
 }

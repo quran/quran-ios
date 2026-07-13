@@ -80,17 +80,6 @@ final class BookmarksViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_loginToQuranCom_setsError_whenClientIsMissing() async {
-        let sut = makeSyncSUT(authenticationClient: nil)
-        let presenter = UIViewController()
-        sut.presenter = presenter
-
-        await sut.loginToQuranCom()
-
-        guard case .clientIsNotAuthenticated = sut.error as? AuthenticationClientError else {
-            return XCTFail("Expected clientIsNotAuthenticated, got \(String(describing: sut.error))")
-        }
-    }
     #endif
 
     // MARK: Private
@@ -114,7 +103,7 @@ final class BookmarksViewModelTests: XCTestCase {
     }
 
     #if QURAN_SYNC
-    private func makeSyncSUT(authenticationClient: (any AuthenticationClient)?) -> BookmarksViewModel {
+    private func makeSyncSUT(authenticationClient: any AuthenticationClient) -> BookmarksViewModel {
         let service = PageBookmarkService(persistence: PageBookmarkPersistenceSpy())
         return BookmarksViewModel(
             analytics: AnalyticsSpy(),

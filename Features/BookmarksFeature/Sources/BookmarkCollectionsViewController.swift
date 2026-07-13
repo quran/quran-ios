@@ -33,9 +33,19 @@ private final class BookmarkCollectionsMenuController {
         self.viewController = viewController
         self.viewModel = viewModel
 
-        updateMenuButton(editMode: viewModel.editMode)
-        viewModel.$editMode
-            .sink { [weak self] editMode in self?.updateMenuButton(editMode: editMode) }
+        updateMenuButton(
+            editMode: viewModel.editMode,
+            hasDeletableCollections: viewModel.hasDeletableCollections
+        )
+        Publishers.CombineLatest(viewModel.$editMode, viewModel.$collections)
+            .sink { [weak self] editMode, collections in
+                self?.updateMenuButton(
+                    editMode: editMode,
+                    hasDeletableCollections: !BookmarkCollectionsViewModel
+                        .deletableCollections(from: collections)
+                        .isEmpty
+                )
+            }
             .store(in: &cancellables)
     }
 
@@ -43,7 +53,7 @@ private final class BookmarkCollectionsMenuController {
     private let viewModel: BookmarkCollectionsViewModel
     private var cancellables: Set<AnyCancellable> = []
 
-    private func updateMenuButton(editMode: EditMode) {
+    private func updateMenuButton(editMode: EditMode, hasDeletableCollections: Bool) {
         guard let viewController else {
             return
         }
@@ -66,7 +76,7 @@ private final class BookmarkCollectionsMenuController {
             )
             doneButton.tintColor = .appIdentity
             viewController.navigationItem.leftBarButtonItem = doneButton
-        } else {
+        } else if hasDeletableCollections {
             let editButton = UIBarButtonItem(
                 title: l("bookmarks.collections.edit.action"),
                 primaryAction: UIAction { [weak self] _ in
@@ -75,6 +85,8 @@ private final class BookmarkCollectionsMenuController {
             )
             editButton.tintColor = .appIdentity
             viewController.navigationItem.leftBarButtonItem = editButton
+        } else {
+            viewController.navigationItem.leftBarButtonItem = nil
         }
     }
 }

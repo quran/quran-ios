@@ -49,17 +49,7 @@ private struct BookmarkCollectionsContent: View {
             }
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
-                if let collection = viewModel.oldPageBookmarksCollection {
-                    collectionRow(
-                        title: l("bookmarks.old-page-bookmarks"),
-                        image: .book,
-                        imageColor: .secondaryLabel,
-                        collection: collection
-                    )
-                    .deleteDisabled(true)
-                }
-
-                if userCollections.isEmpty, viewModel.oldPageBookmarksCollection == nil {
+                if viewModel.deletableCollections.isEmpty {
                     NoorListEmptyState(
                         title: l("bookmarks.collections.no-data.title"),
                         text: l("bookmarks.collections.no-data.text"),
@@ -67,16 +57,16 @@ private struct BookmarkCollectionsContent: View {
                     )
                 }
 
-                ForEach(userCollections) { collection in
+                ForEach(viewModel.deletableCollections) { collection in
                     collectionRow(
-                        title: collection.collection.name,
-                        image: .folder,
-                        imageColor: .appIdentity,
+                        title: collectionTitle(collection),
+                        image: collectionImage(collection),
+                        imageColor: collectionImageColor(collection),
                         collection: collection
                     )
                 }
                 .onDelete { offsets in
-                    let collections = offsets.map { userCollections[$0] }
+                    let collections = offsets.map { viewModel.deletableCollections[$0] }
                     Task {
                         for collection in collections {
                             await viewModel.deleteCollection(collection)
@@ -99,16 +89,23 @@ private struct BookmarkCollectionsContent: View {
         .environment(\.editMode, $viewModel.editMode)
     }
 
-    private var userCollections: [AyahBookmarkCollection] {
-        viewModel.collections.filter {
-            $0.collection.name != AyahBookmarkCollectionName.oldPageBookmarks &&
-                HighlightColor(collectionName: $0.collection.name) == nil
-        }
+    private func collectionTitle(_ collection: AyahBookmarkCollection) -> String {
+        collection.kind.isOldPageBookmarks
+            ? l("bookmarks.old-page-bookmarks")
+            : collection.collection.name
+    }
+
+    private func collectionImage(_ collection: AyahBookmarkCollection) -> NoorSystemImage {
+        collection.kind.isOldPageBookmarks ? .book : .folder
+    }
+
+    private func collectionImageColor(_ collection: AyahBookmarkCollection) -> Color {
+        collection.kind.isOldPageBookmarks ? .secondaryLabel : .appIdentity
     }
 
     private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {
         viewModel.collections.first {
-            $0.collection.name == color.collectionName
+            $0.kind == .colored(color)
         }
     }
 

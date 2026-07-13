@@ -12,6 +12,7 @@ import XCTest
 @MainActor
 final class BookmarkCollectionsViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
+    private let oldPageBookmarksCollectionName = "Old Page Bookmarks"
 
     override func setUp() async throws {
         try await super.setUp()
@@ -39,6 +40,47 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             "A Collection",
             "Z Collection",
         ])
+    }
+
+    func test_deletableCollections_includesOldPageBookmarksAndUserCollections() {
+        let collections = BookmarkCollectionsViewModel.deletableCollections(from: [
+            collection(name: "red"),
+            collection(name: "Favorites"),
+            collection(name: oldPageBookmarksCollectionName),
+        ])
+
+        XCTAssertEqual(collections.map(\.collection.name), [
+            oldPageBookmarksCollectionName,
+            "Favorites",
+        ])
+    }
+
+    func test_collectionKind_classifiesOldColoredAndUserCollections() {
+        XCTAssertEqual(
+            collection(name: oldPageBookmarksCollectionName).kind,
+            .oldPageBookmarks
+        )
+        XCTAssertEqual(collection(name: "red").kind, .colored(.red))
+        XCTAssertEqual(collection(name: "Favorites").kind, .user)
+    }
+
+    func test_collectionsViewController_hidesEditButtonWithoutDeletableCollections() {
+        let viewController = BookmarkCollectionsViewController(viewModel: makeSUT())
+
+        XCTAssertNil(viewController.navigationItem.leftBarButtonItem)
+    }
+
+    func test_collectionsViewController_showsEditButtonForOldPageBookmarks() async throws {
+        let service = makeService()
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
+        let sut = makeSUT(collectionService: service)
+        let viewController = BookmarkCollectionsViewController(viewModel: sut)
+
+        let task = Task { await sut.start() }
+        await waitUntil { viewController.navigationItem.leftBarButtonItem != nil }
+
+        XCTAssertNotNil(viewController.navigationItem.leftBarButtonItem)
+        task.cancel()
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
@@ -131,7 +173,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_start_readsOldPageBookmarkCountFromMobileSync() async throws {
         let service = makeService()
-        try await service.createCollection(named: AyahBookmarkCollectionName.oldPageBookmarks)
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
         let collection = try await storedOldPageBookmarksCollection()
         try await service.addAyahBookmarkToCollection(
             collectionLocalId: collection.collection.localId,
@@ -148,7 +190,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_start_updatesOldPageBookmarkCount_whenMobileSyncChanges() async throws {
         let service = makeService()
-        try await service.createCollection(named: AyahBookmarkCollectionName.oldPageBookmarks)
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
         let collection = try await storedOldPageBookmarksCollection()
         let sut = makeSUT(collectionService: service)
         let task = Task { await sut.start() }
@@ -209,7 +251,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         while let collections = try await iterator.next() {
             if let collection = collections.first(where: {
-                $0.collection.name == AyahBookmarkCollectionName.oldPageBookmarks
+                $0.collection.name == oldPageBookmarksCollectionName
             }) {
                 return collection
             }

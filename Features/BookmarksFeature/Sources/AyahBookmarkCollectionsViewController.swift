@@ -14,15 +14,9 @@ final class AyahBookmarkCollectionsViewController: UIHostingController<AyahBookm
 
     init(
         viewModel: AyahBookmarkCollectionsViewModel,
-        title: String = l("bookmarks.collections"),
-        allowsBookmarkDeletion: Bool = true
+        title: String = l("bookmarks.collections")
     ) {
-        super.init(
-            rootView: AyahBookmarkCollectionsView(
-                viewModel: viewModel,
-                allowsBookmarkDeletion: allowsBookmarkDeletion
-            )
-        )
+        super.init(rootView: AyahBookmarkCollectionsView(viewModel: viewModel))
         self.title = title
     }
 

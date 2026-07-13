@@ -44,8 +44,16 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     var oldPageBookmarksCollection: AyahBookmarkCollection? {
         collections.first {
-            $0.collection.name == AyahBookmarkCollectionName.oldPageBookmarks
+            $0.kind.isOldPageBookmarks
         }
+    }
+
+    var deletableCollections: [AyahBookmarkCollection] {
+        Self.deletableCollections(from: collections)
+    }
+
+    var hasDeletableCollections: Bool {
+        !deletableCollections.isEmpty
     }
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -61,6 +69,14 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                 return lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
             }
         }
+    }
+
+    static func deletableCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
+        let oldPageBookmarks = collections.filter(\.kind.isOldPageBookmarks)
+        let userCollections = collections.filter {
+            $0.kind == .user
+        }
+        return oldPageBookmarks + userCollections
     }
 
     func start() async {
@@ -130,7 +146,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private weak var navigationController: UINavigationController?
 
     private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
-        guard let color = HighlightColor(collectionName: collection.collection.name) else {
+        guard let color = collection.kind.highlightColor else {
             return nil
         }
         return HighlightColor.sortedColors.firstIndex(of: color)
@@ -139,7 +155,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private func observeCollections() async {
         do {
             for try await collections in ayahBookmarkCollectionService.collectionsSequence() {
-                self.collections = Self.sorted(collections)
+                let collections = Self.sorted(collections)
+                self.collections = collections
+                if Self.deletableCollections(from: collections).isEmpty {
+                    editMode = .inactive
+                }
             }
         } catch {
             self.error = error

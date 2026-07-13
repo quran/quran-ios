@@ -5,7 +5,8 @@
 //  Created by Ahmed Nabil on 2026-05-05.
 //
 
-import Localization
+import NoorUI
+import QuranAnnotations
 import QuranKit
 import UIKit
 
@@ -13,54 +14,28 @@ import UIKit
 struct AyahBookmarkCollectionsBuilder {
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-        includedCollectionNames: Set<String>? = nil,
-        navigateToPage: @escaping (Page) -> Void,
-        title: String = l("bookmarks.collections"),
-        allowsCollectionManagement: Bool = true,
-        allowsBookmarkDeletion: Bool = true
+        navigateToPage: @escaping (Page) -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
-        self.includedCollectionNames = includedCollectionNames
         self.navigateToPage = navigateToPage
-        self.title = title
-        self.allowsCollectionManagement = allowsCollectionManagement
-        self.allowsBookmarkDeletion = allowsBookmarkDeletion
     }
 
-    func build() -> UIViewController {
+    func buildCollection(_ collection: AyahBookmarkCollection) -> UIViewController {
+        let highlightColor = HighlightColor(collectionName: collection.collection.name)
+        let isOldPageBookmarks = collection.collection.name == AyahBookmarkCollectionName.oldPageBookmarks
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-            includedCollectionNames: includedCollectionNames,
-            excludedCollectionNames: includedCollectionNames == nil ? [AyahBookmarkCollectionName.oldPageBookmarks] : [],
+            collectionLocalID: collection.collection.localId,
             navigateToPage: navigateToPage
         )
         return AyahBookmarkCollectionsViewController(
             viewModel: viewModel,
-            title: title,
-            allowsCollectionManagement: allowsCollectionManagement,
-            allowsBookmarkDeletion: allowsBookmarkDeletion
-        )
-    }
-
-    func buildOldPageBookmarks() -> UIViewController {
-        let viewModel = AyahBookmarkCollectionsViewModel(
-            ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-            includedCollectionNames: [AyahBookmarkCollectionName.oldPageBookmarks],
-            navigateToPage: navigateToPage
-        )
-        return AyahBookmarkCollectionsViewController(
-            viewModel: viewModel,
-            title: l("bookmarks.old-page-bookmarks"),
-            allowsCollectionManagement: false,
-            allowsBookmarkDeletion: false
+            title: highlightColor?.localizedName ?? collection.collection.name,
+            allowsBookmarkDeletion: !isOldPageBookmarks
         )
     }
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
-    private let includedCollectionNames: Set<String>?
     private let navigateToPage: (Page) -> Void
-    private let title: String
-    private let allowsCollectionManagement: Bool
-    private let allowsBookmarkDeletion: Bool
 }
 #endif

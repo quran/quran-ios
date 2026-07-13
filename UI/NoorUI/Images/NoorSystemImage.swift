@@ -20,7 +20,10 @@ public enum NoorSystemImage: String {
     case checkmark_unchecked = "circle"
     case checkmark
     case bookmark = "bookmark.fill"
+    case book
     case folder = "folder.fill"
+    case folderOutline = "folder"
+    case plusCircle = "plus.circle"
     case note = "text.badge.star"
     case lastPage = "clock"
     case profile = "person.crop.circle"

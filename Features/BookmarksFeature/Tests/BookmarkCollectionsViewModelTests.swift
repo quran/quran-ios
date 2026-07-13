@@ -25,6 +25,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func test_sorted_groupsHighlightCollectionsBeforeUserCollections() {
+        let collections = BookmarkCollectionsViewModel.sorted([
+            collection(name: "Z Collection"),
+            collection(name: "blue"),
+            collection(name: "A Collection"),
+            collection(name: "red"),
+        ])
+
+        XCTAssertEqual(collections.map(\.collection.name), [
+            "blue",
+            "red",
+            "A Collection",
+            "Z Collection",
+        ])
+    }
+
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
         let client = AuthenticationClientFake()
         client.restoreStateResult = .success(.authenticated)
@@ -50,12 +66,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_login_setsAuthenticated_whenActionSucceeds() async {
+    func test_login_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
-        let sut = makeSUT(
-            authenticationClient: client,
-            loginAction: { try await client.login(on: UIViewController()) }
-        )
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
 
         await sut.loginToQuranCom()
 
@@ -64,14 +78,18 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_login_setsError_whenActionFails() async {
-        let expectedError = TestError.loginFailed
-        let sut = makeSUT(loginAction: { throw expectedError })
+    func test_login_setsError_whenLoginFails() async {
+        let client = AuthenticationClientFake()
+        client.loginResult = .failure(.clientIsNotAuthenticated(TestError.loginFailed))
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
 
         await sut.loginToQuranCom()
 
         XCTAssertFalse(sut.isAuthenticated)
-        XCTAssertEqual(sut.error as? TestError, expectedError)
+        guard case .clientIsNotAuthenticated = sut.error as? AuthenticationClientError else {
+            return XCTFail("Expected clientIsNotAuthenticated, got \(String(describing: sut.error))")
+        }
     }
 
     func test_dismissSyncBanner_persistsDismissal() {
@@ -82,6 +100,33 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertTrue(sut.isSyncBannerDismissed)
         XCTAssertTrue(BookmarkCollectionsPreferences.shared.isSyncBannerDismissed)
         XCTAssertFalse(sut.shouldShowSyncBanner)
+    }
+
+    func test_createPendingCollection_persistsThroughRealMobileSyncDatabase() async throws {
+        let sut = makeSUT()
+        sut.newCollectionName = " Favorites "
+
+        await sut.createPendingCollection()
+
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.map(\.collection.name), ["Favorites"])
+        XCTAssertNil(sut.error)
+    }
+
+    func test_deleteCollection_removesFromRealMobileSyncDatabase() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let stored = try await storedCollections()
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first
+        )
+        let sut = makeSUT(collectionService: service)
+
+        await sut.deleteCollection(collection)
+
+        let collections = try await storedCollections()
+        XCTAssertTrue(collections.isEmpty)
+        XCTAssertNil(sut.error)
     }
 
     func test_start_readsOldPageBookmarkCountFromMobileSync() async throws {
@@ -95,9 +140,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(collectionService: service)
 
         let task = Task { await sut.start() }
-        await waitUntil { sut.oldPageBookmarksCount == 1 }
+        await waitUntil { sut.oldPageBookmarksCollection?.bookmarks.count == 1 }
 
-        XCTAssertEqual(sut.oldPageBookmarksCount, 1)
+        XCTAssertEqual(sut.oldPageBookmarksCollection?.bookmarks.count, 1)
         task.cancel()
     }
 
@@ -112,40 +157,47 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collectionLocalId: collection.collection.localId,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
-        await waitUntil { sut.oldPageBookmarksCount == 1 }
+        await waitUntil { sut.oldPageBookmarksCollection?.bookmarks.count == 1 }
 
-        XCTAssertEqual(sut.oldPageBookmarksCount, 1)
+        XCTAssertEqual(sut.oldPageBookmarksCollection?.bookmarks.count, 1)
         task.cancel()
     }
 
-    func test_showOldPageBookmarks_invokesInjectedAction() {
-        var shownOldPageBookmarks = false
+    func test_showCollection_pushesCollectionViewController() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let stored = try await storedCollections()
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first
+        )
+        let navigationController = UINavigationController()
         let sut = makeSUT(
-            showOldPageBookmarksAction: { shownOldPageBookmarks = true }
+            collectionService: service,
+            navigationController: navigationController
         )
 
-        sut.showOldPageBookmarks()
+        sut.showCollection(collection)
 
-        XCTAssertTrue(shownOldPageBookmarks)
+        XCTAssertTrue(navigationController.topViewController is AyahBookmarkCollectionsViewController)
+        XCTAssertEqual(navigationController.topViewController?.title, collection.collection.name)
     }
 
     private func makeSUT(
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
         collectionService: AyahBookmarkCollectionService? = nil,
-        loginAction: @escaping () async throws -> Void = {},
-        showOldPageBookmarksAction: @escaping () -> Void = {}
+        navigationController: UINavigationController? = nil
     ) -> BookmarkCollectionsViewModel {
         let collectionService = collectionService ?? makeService()
-        let collectionsViewModel = AyahBookmarkCollectionsViewModel(
+        let navigationController = navigationController ?? UINavigationController()
+        let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
-            excludedCollectionNames: [AyahBookmarkCollectionName.oldPageBookmarks],
             navigateToPage: { _ in }
         )
         return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
-            collectionsViewModel: collectionsViewModel,
-            loginAction: loginAction,
-            showOldPageBookmarksAction: showOldPageBookmarksAction
+            ayahBookmarkCollectionService: collectionService,
+            collectionsBuilder: collectionsBuilder,
+            navigationController: navigationController
         )
     }
 
@@ -163,6 +215,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             }
         }
         throw TestError.collectionNotFound
+    }
+
+    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
+        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
+        return try await iterator.next() ?? []
+    }
+
+    private func collection(name: String) -> AyahBookmarkCollection {
+        AyahBookmarkCollection(
+            collection: Collection_(
+                name: name,
+                lastUpdated: .distantPast,
+                localId: name
+            ),
+            bookmarks: []
+        )
     }
 
     private func waitUntil(

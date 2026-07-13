@@ -143,10 +143,13 @@
 
 "bookmarks.collections" = "Collections";
 "bookmarks.collections.add" = "Add Collection";
-"bookmarks.collections.edit" = "Edit Collections";
+"bookmarks.collections.edit.action" = "Edit";
+"bookmarks.collections.colored" = "Colored Bookmarks";
+"bookmarks.collections.mine" = "My Collections";
+"bookmarks.collections.new" = "New Collection...";
 "bookmarks.collections.new.placeholder" = "Collection name";
 "bookmarks.collections.no-data.title" = "No collections yet";
-"bookmarks.collections.no-data.text" = "Create a collection to organize ayah bookmarks.";
+"bookmarks.collections.no-data.text" = "Create a collection to organize ayahs by theme, dua, or memorization plan.";
 "bookmarks.collections.ayah-count" = "%d ayah bookmarks";
 "bookmarks.collections.ayahs.no-data.title" = "No bookmarks in this collection";
 "bookmarks.collections.ayahs.no-data.text" = "Add ayah bookmarks to see them here.";

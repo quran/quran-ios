@@ -37,8 +37,14 @@ private final class BookmarksTabInteractor: TabInteractor {
     // MARK: Internal
 
     override func start() {
-        let rootViewController = bookmarksBuilder.build(withListener: self)
-        presenter?.setViewControllers([rootViewController], animated: false)
+        guard let presenter else {
+            return
+        }
+        let rootViewController = bookmarksBuilder.build(
+            withListener: self,
+            navigationController: presenter
+        )
+        presenter.setViewControllers([rootViewController], animated: false)
     }
 
     // MARK: Private
@@ -48,8 +54,13 @@ private final class BookmarksTabInteractor: TabInteractor {
 
 private class BookmarksTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
-        UITabBarItem(
-            title: lAndroid("menu_bookmarks"),
+        #if QURAN_SYNC
+        let title = l("bookmarks.collections")
+        #else
+        let title = lAndroid("menu_bookmarks")
+        #endif
+        return UITabBarItem(
+            title: title,
             image: .symbol("bookmark"),
             selectedImage: .symbol("bookmark.fill")
         )

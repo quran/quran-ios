@@ -50,6 +50,7 @@ public struct NoorListItem: View {
         headerAccessory: Accessory? = nil,
         rightPretitle: MultipartText? = nil,
         title: MultipartText,
+        titleColor: Color? = nil,
         rightSubtitle: MultipartText? = nil,
         subtitle: Subtitle? = nil,
         accessory: Accessory? = nil,
@@ -62,6 +63,7 @@ public struct NoorListItem: View {
         self.headerAccessory = headerAccessory
         self.rightPretitle = rightPretitle
         self.title = title
+        self.titleColor = titleColor
         self.rightSubtitle = rightSubtitle
         self.subtitle = subtitle
         self.accessory = accessory
@@ -126,6 +128,7 @@ public struct NoorListItem: View {
     let headerAccessory: Accessory?
     let rightPretitle: MultipartText?
     let title: MultipartText
+    let titleColor: Color?
     let rightSubtitle: MultipartText?
     let subtitle: Subtitle?
     let accessory: Accessory?
@@ -203,6 +206,7 @@ public struct NoorListItem: View {
                 }
 
                 title.view(ofSize: .body)
+                    .foregroundColor(titleColor ?? .primary)
 
                 if let rightSubtitle {
                     HStack {

@@ -58,8 +58,8 @@ public extension Locale {
     func fixedLocaleNumbers() -> Locale {
         let latinSuffix = "@numbers=latn"
         if identifier.hasSuffix(latinSuffix) {
-            let localId = identifier.replacingOccurrences(of: latinSuffix, with: "")
-            return Locale(identifier: localId)
+            let localeIdentifier = identifier.replacingOccurrences(of: latinSuffix, with: "")
+            return Locale(identifier: localeIdentifier)
         } else {
             return self
         }

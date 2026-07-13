@@ -74,7 +74,7 @@ public struct MobileSyncNoteService {
 
     public func updateNote(_ note: QuranAnnotations.Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
         try await quranDataService.updateNote(
-            localId: note.id,
+            id: note.id,
             body: body,
             startSura: Int32(startAyah.sura.suraNumber),
             startAyah: Int32(startAyah.ayah),
@@ -84,7 +84,7 @@ public struct MobileSyncNoteService {
     }
 
     public func removeNote(_ note: QuranAnnotations.Note) async throws {
-        try await quranDataService.removeNote(localId: note.id)
+        try await quranDataService.removeNote(id: note.id)
     }
 
     // MARK: Internal
@@ -103,7 +103,7 @@ public struct MobileSyncNoteService {
         }
 
         return QuranAnnotations.Note(
-            id: note.localId,
+            id: note.id,
             text: note.body,
             startAyah: start,
             endAyah: end,

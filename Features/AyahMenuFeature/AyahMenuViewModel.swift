@@ -257,7 +257,7 @@ final class AyahMenuViewModel {
         }
         let service = deps.ayahBookmarkCollectionService
         let otherCollections = collections.filter {
-            $0.collection.localId != targetCollection.collection.localId
+            $0.collection.id != targetCollection.collection.id
         }
         try await service.addAyahBookmarksIfNeeded(
             deps.verses,

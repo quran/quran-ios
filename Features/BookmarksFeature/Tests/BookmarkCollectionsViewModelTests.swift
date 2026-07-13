@@ -67,6 +67,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
                 .colored(color)
             )
         }
+        XCTAssertEqual(collection(name: "Default", id: "__default__").kind, .defaultBookmarks)
         XCTAssertEqual(collection(name: "Favorites").kind, .user)
     }
 
@@ -156,8 +157,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         await sut.createPendingCollection()
 
-        let collections = try await storedCollections()
-        XCTAssertEqual(collections.map(\.collection.name), ["Favorites"])
+        let collections = try await storedCollections {
+            $0.contains { $0.collection.name == "Favorites" }
+        }
+        XCTAssertEqual(collections.map(\.collection.name), ["Default", "Favorites"])
         XCTAssertNil(sut.error)
     }
 
@@ -166,14 +169,18 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.createCollection(named: "Favorites")
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
-            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { !$0.collection.isDefault }
         )
         let sut = makeSUT(collectionService: service)
 
         await sut.deleteCollection(collection)
 
-        let collections = try await storedCollections()
-        XCTAssertTrue(collections.isEmpty)
+        let collections = try await storedCollections {
+            $0.count == 1 && $0[0].collection.isDefault
+        }
+        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
+        XCTAssertTrue(collections[0].collection.isDefault)
         XCTAssertNil(sut.error)
     }
 
@@ -182,7 +189,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         let collection = try await storedOldPageBookmarksCollection()
         try await service.addAyahBookmarkToCollection(
-            collectionLocalId: collection.collection.localId,
+            collectionId: collection.collection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
         let sut = makeSUT(collectionService: service)
@@ -202,7 +209,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let task = Task { await sut.start() }
 
         try await service.addAyahBookmarkToCollection(
-            collectionLocalId: collection.collection.localId,
+            collectionId: collection.collection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
         await waitUntil { sut.oldPageBookmarksCollection?.bookmarks.count == 1 }
@@ -216,7 +223,8 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.createCollection(named: "Favorites")
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
-            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { !$0.collection.isDefault }
         )
         let navigationController = UINavigationController()
         let sut = makeSUT(
@@ -265,17 +273,24 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         throw TestError.collectionNotFound
     }
 
-    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
+    private func storedCollections(
+        where predicate: ([CollectionWithAyahBookmarks]) -> Bool = { _ in true }
+    ) async throws -> [CollectionWithAyahBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        return try await iterator.next() ?? []
+        while let collections = try await iterator.next() {
+            if predicate(collections) {
+                return collections
+            }
+        }
+        throw TestError.collectionNotFound
     }
 
-    private func collection(name: String) -> AyahBookmarkCollection {
+    private func collection(name: String, id: String? = nil) -> AyahBookmarkCollection {
         AyahBookmarkCollection(
             collection: Collection_(
                 name: name,
                 lastUpdated: .distantPast,
-                localId: name
+                id: id ?? name
             ),
             bookmarks: []
         )

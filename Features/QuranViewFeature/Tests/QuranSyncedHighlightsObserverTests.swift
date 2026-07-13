@@ -31,10 +31,10 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
             AyahBookmarkCollectionService.collections(
                 from: stored,
                 quran: .hafsMadani1405
-            ).first
+            ).first { $0.kind == .colored(.green) }
         )
         try await collectionService.addAyahBookmarkToCollection(
-            collectionLocalId: collection.collection.localId,
+            collectionId: collection.collection.id,
             ayah: ayah
         )
         let highlightsService = QuranHighlightsService()
@@ -53,7 +53,10 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
         await fulfillment(of: [applied], timeout: 2)
 
         XCTAssertEqual(highlightsService.highlights.highlightVerses[ayah], .green)
-        XCTAssertEqual(observer.collections.first?.bookmarks.first?.ayah, ayah)
+        XCTAssertEqual(
+            observer.collections.first { $0.kind == .colored(.green) }?.bookmarks.first?.ayah,
+            ayah
+        )
         observation.cancel()
         withExtendedLifetime(observer) {}
     }

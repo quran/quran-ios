@@ -31,7 +31,7 @@ final class AyahMenuViewModelTests: XCTestCase {
         let mapped = AyahBookmarkCollectionService.collections(from: collections, quran: .hafsMadani1405)
         let red = try XCTUnwrap(mapped.first { $0.kind == .colored(.red) })
         try await service.addAyahBookmarkToCollection(
-            collectionLocalId: red.collection.localId,
+            collectionId: red.collection.id,
             ayah: ayah
         )
         let populatedCollections = AyahBookmarkCollectionService.collections(

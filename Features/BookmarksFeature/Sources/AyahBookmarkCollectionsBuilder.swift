@@ -24,7 +24,7 @@ struct AyahBookmarkCollectionsBuilder {
         let kind = collection.kind
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-            collectionLocalID: collection.collection.localId,
+            collectionID: collection.collection.id,
             navigateToPage: navigateToPage
         )
         return AyahBookmarkCollectionsViewController(

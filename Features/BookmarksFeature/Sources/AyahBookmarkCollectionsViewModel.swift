@@ -16,11 +16,11 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-        collectionLocalID: String,
+        collectionID: String,
         navigateToPage: @escaping (Page) -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
-        self.collectionLocalID = collectionLocalID
+        self.collectionID = collectionID
         self.navigateToPage = navigateToPage
     }
 
@@ -34,7 +34,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
             let sequence = ayahBookmarkCollectionService.collectionsSequence()
             for try await collections in sequence {
                 collection = collections.first {
-                    $0.collection.localId == collectionLocalID
+                    $0.collection.id == collectionID
                 }
             }
         } catch {
@@ -58,7 +58,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     // MARK: Private
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
-    private let collectionLocalID: String
+    private let collectionID: String
     private let navigateToPage: (Page) -> Void
 }
 #endif

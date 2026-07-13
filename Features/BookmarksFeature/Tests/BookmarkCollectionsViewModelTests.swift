@@ -4,6 +4,7 @@ import AuthenticationClientFake
 import Combine
 import MobileSync
 import MobileSyncTestSupport
+import QuranAnnotations
 import QuranKit
 import UIKit
 import XCTest
@@ -55,12 +56,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         ])
     }
 
-    func test_collectionKind_classifiesOldColoredAndUserCollections() {
+    func test_collectionKind_classifiesCollectionNamesCaseInsensitively() {
         XCTAssertEqual(
-            collection(name: oldPageBookmarksCollectionName).kind,
+            collection(name: oldPageBookmarksCollectionName.uppercased()).kind,
             .oldPageBookmarks
         )
-        XCTAssertEqual(collection(name: "red").kind, .colored(.red))
+        for color in HighlightColor.allCases {
+            XCTAssertEqual(
+                collection(name: color.collectionName.uppercased()).kind,
+                .colored(color)
+            )
+        }
         XCTAssertEqual(collection(name: "Favorites").kind, .user)
     }
 

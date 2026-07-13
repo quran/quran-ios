@@ -25,11 +25,11 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     func test_updateHighlight_movesAyahBetweenCollectionsInMobileSyncDatabase() async throws {
         let service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-        try await service.createCollection(named: HighlightColor.red.collectionName)
-        try await service.createCollection(named: HighlightColor.blue.collectionName)
+        try await service.createCollection(named: HighlightColor.red.collectionName.uppercased())
+        try await service.createCollection(named: HighlightColor.blue.collectionName.uppercased())
         let collections = try await storedCollections()
         let mapped = AyahBookmarkCollectionService.collections(from: collections, quran: .hafsMadani1405)
-        let red = try XCTUnwrap(mapped.first { $0.collection.name == HighlightColor.red.collectionName })
+        let red = try XCTUnwrap(mapped.first { $0.kind == .colored(.red) })
         try await service.addAyahBookmarkToCollection(
             collectionLocalId: red.collection.localId,
             ayah: ayah
@@ -56,8 +56,12 @@ final class AyahMenuViewModelTests: XCTestCase {
         await sut.updateHighlight(color: .blue)
 
         let updated = try await storedCollections()
-        let redBookmarks = updated.first { $0.collection.name == HighlightColor.red.collectionName }?.bookmarks
-        let blueBookmarks = updated.first { $0.collection.name == HighlightColor.blue.collectionName }?.bookmarks
+        let redBookmarks = updated.first {
+            $0.collection.name == HighlightColor.red.collectionName.uppercased()
+        }?.bookmarks
+        let blueBookmarks = updated.first {
+            $0.collection.name == HighlightColor.blue.collectionName.uppercased()
+        }?.bookmarks
         XCTAssertTrue(redBookmarks?.isEmpty == true)
         XCTAssertEqual(blueBookmarks?.count, 1)
         XCTAssertEqual(blueBookmarks?.first?.sura, 1)

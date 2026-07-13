@@ -52,7 +52,7 @@ final class QuranSyncedHighlightsObserver {
     private func highlightedAyahs(from collections: [AyahBookmarkCollection]) -> [AyahNumber: HighlightColor] {
         var highlights: [AyahNumber: HighlightColor] = [:]
         for collection in collections {
-            guard let color = HighlightColor(collectionName: collection.collection.name) else {
+            guard case .colored(let color) = collection.kind else {
                 continue
             }
             for bookmark in collection.bookmarks {

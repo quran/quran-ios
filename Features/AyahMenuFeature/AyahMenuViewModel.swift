@@ -245,10 +245,13 @@ final class AyahMenuViewModel {
         HighlightPreferences.shared.lastUsedHighlightColor = color
 
         let collections = deps.highlightCollections.filter {
-            HighlightColor(collectionName: $0.collection.name) != nil
+            if case .colored = $0.kind {
+                return true
+            }
+            return false
         }
         guard let targetCollection = collections.first(where: {
-            $0.collection.name == color.collectionName
+            $0.kind == .colored(color)
         }) else {
             throw AyahMenuError.highlightCollectionUnavailable
         }

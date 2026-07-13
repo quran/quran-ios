@@ -25,7 +25,7 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
 
     func test_start_appliesPersistedMobileSyncBookmarksToHighlights() async throws {
         let collectionService = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-        try await collectionService.createCollection(named: HighlightColor.green.collectionName)
+        try await collectionService.createCollection(named: HighlightColor.green.collectionName.uppercased())
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(

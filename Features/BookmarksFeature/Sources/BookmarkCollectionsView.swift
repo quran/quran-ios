@@ -5,6 +5,7 @@
 
 import Localization
 import NoorUI
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -17,17 +18,13 @@ struct BookmarkCollectionsView: View {
     }
 
     var body: some View {
-        BookmarkCollectionsContent(
-            viewModel: viewModel,
-            collectionsViewModel: viewModel.collectionsViewModel
-        )
+        BookmarkCollectionsContent(viewModel: viewModel)
     }
 }
 
 @MainActor
 private struct BookmarkCollectionsContent: View {
     @ObservedObject var viewModel: BookmarkCollectionsViewModel
-    @ObservedObject var collectionsViewModel: AyahBookmarkCollectionsViewModel
 
     var body: some View {
         NoorList {
@@ -40,29 +37,129 @@ private struct BookmarkCollectionsContent: View {
                 }
             }
 
-            NoorBasicSection {
-                NoorListItem(
-                    image: .init(.bookmark, color: .secondary),
-                    title: .text(l("bookmarks.old-page-bookmarks")),
-                    subtitle: .init(
-                        text: NumberFormatter.shared.format(viewModel.oldPageBookmarksCount),
-                        location: .trailing
-                    ),
-                    accessory: .disclosureIndicator,
-                    action: { viewModel.showOldPageBookmarks() }
-                )
+            NoorBasicSection(title: l("bookmarks.collections.colored")) {
+                ForEach(HighlightColor.sortedColors, id: \.self) { color in
+                    collectionRow(
+                        title: color.localizedName,
+                        image: .bookmark,
+                        imageColor: color.color,
+                        collection: highlightCollection(for: color)
+                    )
+                }
             }
 
-            AyahBookmarkCollectionsContent(
-                viewModel: collectionsViewModel,
-                allowsCollectionManagement: true,
-                allowsBookmarkDeletion: true
-            )
+            NoorBasicSection(title: l("bookmarks.collections.mine")) {
+                if let collection = viewModel.oldPageBookmarksCollection {
+                    collectionRow(
+                        title: l("bookmarks.old-page-bookmarks"),
+                        image: .book,
+                        imageColor: .secondaryLabel,
+                        collection: collection
+                    )
+                    .deleteDisabled(true)
+                }
+
+                if userCollections.isEmpty, viewModel.oldPageBookmarksCollection == nil {
+                    NoorListEmptyState(
+                        title: l("bookmarks.collections.no-data.title"),
+                        text: l("bookmarks.collections.no-data.text"),
+                        image: .folderOutline
+                    )
+                }
+
+                ForEach(userCollections) { collection in
+                    collectionRow(
+                        title: collection.collection.name,
+                        image: .folder,
+                        imageColor: .appIdentity,
+                        collection: collection
+                    )
+                }
+                .onDelete { offsets in
+                    let collections = offsets.map { userCollections[$0] }
+                    Task {
+                        for collection in collections {
+                            await viewModel.deleteCollection(collection)
+                        }
+                    }
+                }
+
+                NoorListItem(
+                    image: .init(.plusCircle, color: .appIdentity),
+                    title: .text(l("bookmarks.collections.new")),
+                    titleColor: .appIdentity,
+                    action: { viewModel.presentAddCollection() }
+                )
+                .deleteDisabled(true)
+            }
         }
         .task { await viewModel.start() }
+        .addCollectionAlert(viewModel: viewModel)
         .errorAlert(error: $viewModel.error)
-        .errorAlert(error: $collectionsViewModel.error)
-        .environment(\.editMode, $collectionsViewModel.editMode)
+        .environment(\.editMode, $viewModel.editMode)
+    }
+
+    private var userCollections: [AyahBookmarkCollection] {
+        viewModel.collections.filter {
+            $0.collection.name != AyahBookmarkCollectionName.oldPageBookmarks &&
+                HighlightColor(collectionName: $0.collection.name) == nil
+        }
+    }
+
+    private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {
+        viewModel.collections.first {
+            $0.collection.name == color.collectionName
+        }
+    }
+
+    private func collectionRow(
+        title: String,
+        image: NoorSystemImage,
+        imageColor: Color,
+        collection: AyahBookmarkCollection?
+    ) -> some View {
+        NoorListItem(
+            image: .init(image, color: imageColor),
+            title: .text(title),
+            subtitle: .init(
+                text: NumberFormatter.shared.format(collection?.bookmarks.count ?? 0),
+                location: .trailing
+            ),
+            accessory: .disclosureIndicator,
+            action: collectionAction(for: collection)
+        )
+    }
+
+    private func collectionAction(for collection: AyahBookmarkCollection?) -> AsyncAction? {
+        guard let collection else {
+            return nil
+        }
+        return { viewModel.showCollection(collection) }
+    }
+}
+
+private extension View {
+    @MainActor
+    func addCollectionAlert(viewModel: BookmarkCollectionsViewModel) -> some View {
+        alert(
+            l("bookmarks.collections.add"),
+            isPresented: Binding(
+                get: { viewModel.isPresentingAddCollection },
+                set: { viewModel.isPresentingAddCollection = $0 }
+            )
+        ) {
+            TextField(
+                l("bookmarks.collections.new.placeholder"),
+                text: Binding(
+                    get: { viewModel.newCollectionName },
+                    set: { viewModel.newCollectionName = $0 }
+                )
+            )
+            Button(lAndroid("cancel"), role: .cancel) {}
+            Button(l("bookmarks.collections.add")) {
+                Task { await viewModel.createPendingCollection() }
+            }
+        }
     }
 }
 

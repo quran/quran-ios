@@ -17,48 +17,41 @@ struct AyahBookmarkCollectionsView: View {
 
     init(
         viewModel: AyahBookmarkCollectionsViewModel,
-        allowsCollectionManagement: Bool = true,
         allowsBookmarkDeletion: Bool = true
     ) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.allowsCollectionManagement = allowsCollectionManagement
         self.allowsBookmarkDeletion = allowsBookmarkDeletion
     }
 
     // MARK: Internal
 
     @StateObject var viewModel: AyahBookmarkCollectionsViewModel
-    let allowsCollectionManagement: Bool
     let allowsBookmarkDeletion: Bool
 
     var body: some View {
         NoorList {
             AyahBookmarkCollectionsContent(
                 viewModel: viewModel,
-                allowsCollectionManagement: allowsCollectionManagement,
                 allowsBookmarkDeletion: allowsBookmarkDeletion
             )
         }
         .task { await viewModel.start() }
         .errorAlert(error: $viewModel.error)
-        .environment(\.editMode, $viewModel.editMode)
     }
 }
 
 @MainActor
 struct AyahBookmarkCollectionsContent: View {
     @ObservedObject var viewModel: AyahBookmarkCollectionsViewModel
-    let allowsCollectionManagement: Bool
     let allowsBookmarkDeletion: Bool
+    @State private var isExpanded = true
 
     var body: some View {
         Group {
-            if viewModel.collections.isEmpty {
-                noData
+            if let collection = viewModel.collection {
+                section(for: collection)
             } else {
-                ForEach(viewModel.collections) { collection in
-                    section(for: collection)
-                }
+                noData
             }
         }
     }
@@ -82,31 +75,16 @@ struct AyahBookmarkCollectionsContent: View {
         }
     }
 
-    private func deleteCollectionAction(for collection: AyahBookmarkCollection) -> AsyncAction? {
-        guard allowsCollectionManagement else {
-            return nil
-        }
-        return {
-            await viewModel.deleteCollection(collection)
-        }
-    }
-
     @ViewBuilder
     private func section(for collection: AyahBookmarkCollection) -> some View {
-        let isExpanded = Binding(
-            get: { viewModel.isCollectionExpanded(collection) },
-            set: { viewModel.setCollection(collection, expanded: $0) }
-        )
-
         let highlightColor = HighlightColor(collectionName: collection.collection.name)
-        let allowsCollectionDeletion = allowsCollectionManagement && highlightColor == nil
 
         NoorEditableCollapsibleSection(
             title: highlightColor?.localizedName ?? collection.collection.name,
-            isExpanded: isExpanded,
+            isExpanded: $isExpanded,
             collection.bookmarks,
-            showsHeaderDeleteAction: allowsCollectionDeletion && viewModel.editMode.isEditing,
-            headerDeleteAction: allowsCollectionDeletion ? deleteCollectionAction(for: collection) : nil
+            showsHeaderDeleteAction: false,
+            headerDeleteAction: nil
         ) { bookmark in
             bookmarkItem(bookmark, iconColor: highlightColor?.color)
         }

@@ -3,16 +3,18 @@
 //  BookmarkCollectionsViewController.swift
 //
 
+import Combine
 import Localization
+import NoorUI
 import SwiftUI
 
 final class BookmarkCollectionsViewController: UIHostingController<BookmarkCollectionsView> {
     init(viewModel: BookmarkCollectionsViewModel) {
         super.init(rootView: BookmarkCollectionsView(viewModel: viewModel))
         title = l("bookmarks.collections")
-        menuController = AyahBookmarkCollectionsMenuController(
+        menuController = BookmarkCollectionsMenuController(
             viewController: self,
-            viewModel: viewModel.collectionsViewModel
+            viewModel: viewModel
         )
     }
 
@@ -22,6 +24,58 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var menuController: AyahBookmarkCollectionsMenuController?
+    private var menuController: BookmarkCollectionsMenuController?
+}
+
+@MainActor
+private final class BookmarkCollectionsMenuController {
+    init(viewController: UIViewController, viewModel: BookmarkCollectionsViewModel) {
+        self.viewController = viewController
+        self.viewModel = viewModel
+
+        updateMenuButton(editMode: viewModel.editMode)
+        viewModel.$editMode
+            .sink { [weak self] editMode in self?.updateMenuButton(editMode: editMode) }
+            .store(in: &cancellables)
+    }
+
+    private weak var viewController: UIViewController?
+    private let viewModel: BookmarkCollectionsViewModel
+    private var cancellables: Set<AnyCancellable> = []
+
+    private func updateMenuButton(editMode: EditMode) {
+        guard let viewController else {
+            return
+        }
+
+        let addButton = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            primaryAction: UIAction { [weak self] _ in
+                self?.viewModel.presentAddCollection()
+            }
+        )
+        addButton.tintColor = .appIdentity
+        viewController.navigationItem.rightBarButtonItem = addButton
+
+        if editMode.isEditing {
+            let doneButton = UIBarButtonItem(
+                title: l("button.done"),
+                primaryAction: UIAction { [weak self] _ in
+                    self?.viewModel.editMode = .inactive
+                }
+            )
+            doneButton.tintColor = .appIdentity
+            viewController.navigationItem.leftBarButtonItem = doneButton
+        } else {
+            let editButton = UIBarButtonItem(
+                title: l("bookmarks.collections.edit.action"),
+                primaryAction: UIAction { [weak self] _ in
+                    self?.viewModel.editMode = .active
+                }
+            )
+            editButton.tintColor = .appIdentity
+            viewController.navigationItem.leftBarButtonItem = editButton
+        }
+    }
 }
 #endif

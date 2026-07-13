@@ -5,7 +5,6 @@
 //  Created by Ahmed Nabil on 2026-05-06.
 //
 
-import KMPNativeCoroutinesAsync
 import MobileSync
 import QuranAnnotations
 import QuranKit
@@ -145,9 +144,7 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func renameCollection(id: String, to name: String) async throws {
-        _ = try await asyncFunction(
-            for: quranDataService.updateCollection(id: id, name: name)
-        )
+        _ = try await quranDataService.updateCollection(id: id, name: name)
     }
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {

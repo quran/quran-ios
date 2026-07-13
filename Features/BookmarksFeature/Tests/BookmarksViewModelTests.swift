@@ -1,35 +1,17 @@
+#if !QURAN_SYNC
 import Analytics
 import AnnotationsService
-#if QURAN_SYNC
-import AuthenticationClient
-import AuthenticationClientFake
-#endif
 import Combine
 import Foundation
 import PageBookmarkPersistence
 import QuranAnnotations
 import QuranKit
-#if QURAN_SYNC
-import UIKit
-#endif
 import XCTest
 @testable import BookmarksFeature
 
 @MainActor
 final class BookmarksViewModelTests: XCTestCase {
     // MARK: Internal
-
-    #if QURAN_SYNC
-    override func setUp() {
-        super.setUp()
-        BookmarksPreferences.shared.isSyncBannerDismissed = false
-    }
-
-    override func tearDown() {
-        BookmarksPreferences.shared.isSyncBannerDismissed = false
-        super.tearDown()
-    }
-    #endif
 
     func test_deleteItem_removesBookmarkPage() async {
         let persistence = PageBookmarkPersistenceSpy()
@@ -42,92 +24,16 @@ final class BookmarksViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    #if QURAN_SYNC
-    func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
-        let client = AuthenticationClientFake()
-        client.restoreStateResult = .success(.authenticated)
-        let sut = makeSyncSUT(authenticationClient: client)
-
-        let task = Task { await sut.start() }
-        await waitUntil { sut.isAuthenticated }
-        XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.restoreState])
-        task.cancel()
-    }
-
-    func test_start_fallsBackToCurrentState_whenRestoreFails() async {
-        let client = AuthenticationClientFake()
-        client.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
-        client.authenticationStateValue = .authenticated
-        let sut = makeSyncSUT(authenticationClient: client)
-
-        let task = Task { await sut.start() }
-        await waitUntil { sut.isAuthenticated }
-        XCTAssertEqual(client.events, [.restoreState, .readAuthenticationState])
-        task.cancel()
-    }
-
-    func test_loginToQuranCom_setsAuthenticated_whenLoginSucceeds() async {
-        let client = AuthenticationClientFake()
-        let sut = makeSyncSUT(authenticationClient: client)
-        let presenter = UIViewController()
-        sut.presenter = presenter
-
-        await sut.loginToQuranCom()
-
-        XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login])
-        XCTAssertNil(sut.error)
-    }
-
-    #endif
-
     // MARK: Private
 
     private func makeSUT(persistence: PageBookmarkPersistenceSpy = PageBookmarkPersistenceSpy()) -> BookmarksViewModel {
         let service = PageBookmarkService(persistence: persistence)
-        #if QURAN_SYNC
-        return BookmarksViewModel(
-            analytics: AnalyticsSpy(),
-            service: service,
-            authenticationClient: UnavailableAuthenticationClient(),
-            navigateTo: { _ in }
-        )
-        #else
         return BookmarksViewModel(
             analytics: AnalyticsSpy(),
             service: service,
             navigateTo: { _ in }
         )
-        #endif
     }
-
-    #if QURAN_SYNC
-    private func makeSyncSUT(authenticationClient: any AuthenticationClient) -> BookmarksViewModel {
-        let service = PageBookmarkService(persistence: PageBookmarkPersistenceSpy())
-        return BookmarksViewModel(
-            analytics: AnalyticsSpy(),
-            service: service,
-            authenticationClient: authenticationClient,
-            navigateTo: { _ in }
-        )
-    }
-
-    private func waitUntil(
-        timeoutIterations: Int = 100,
-        condition: @escaping @MainActor () -> Bool,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        for _ in 0 ..< timeoutIterations {
-            if condition() {
-                return
-            }
-            await Task.yield()
-        }
-        XCTFail("Condition was not met in time", file: file, line: line)
-    }
-    #endif
 }
 
 private struct AnalyticsSpy: AnalyticsLibrary {
@@ -148,3 +54,4 @@ private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
 
     func removeAllPageBookmarks() async throws {}
 }
+#endif

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-13.
 //
 
+#if !QURAN_SYNC
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -21,21 +22,6 @@ struct BookmarksView: View {
     }
 
     var body: some View {
-        #if QURAN_SYNC
-        BookmarksViewUI(
-            editMode: $viewModel.editMode,
-            error: $viewModel.error,
-            bookmarks: viewModel.bookmarks,
-            start: { await viewModel.start() },
-            selectAction: { viewModel.navigateTo($0) },
-            deleteAction: { await viewModel.deleteItem($0) },
-            shouldShowSyncBanner: viewModel.shouldShowSyncBanner,
-            dismissSyncBanner: { viewModel.dismissSyncBanner() },
-            signInAction: { await viewModel.loginToQuranCom() },
-            showCollectionsAction: viewModel.showCollectionsAction,
-            showOldPageBookmarksAction: viewModel.showOldPageBookmarksAction
-        )
-        #else
         BookmarksViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
@@ -44,7 +30,6 @@ struct BookmarksView: View {
             selectAction: { viewModel.navigateTo($0) },
             deleteAction: { await viewModel.deleteItem($0) }
         )
-        #endif
     }
 }
 
@@ -60,21 +45,16 @@ private struct BookmarksViewUI: View {
     let selectAction: ItemAction<PageBookmark>
     let deleteAction: AsyncItemAction<PageBookmark>
 
-    #if QURAN_SYNC
-    let shouldShowSyncBanner: Bool
-    let dismissSyncBanner: () -> Void
-    let signInAction: @MainActor () async -> Void
-    let showCollectionsAction: AsyncAction?
-    let showOldPageBookmarksAction: AsyncAction?
-    #endif
-
     var body: some View {
         Group {
             if bookmarks.isEmpty {
-                emptyState
+                noData
             } else {
                 NoorList {
-                    listSections(includeBookmarks: true)
+                    NoorSection(bookmarks) { bookmark in
+                        listItem(bookmark)
+                    }
+                    .onDelete(action: deleteAction)
                 }
             }
         }
@@ -87,81 +67,12 @@ private struct BookmarksViewUI: View {
 
     // MARK: Private
 
-    private var emptyState: some View {
-        VStack(spacing: 16) {
-            #if QURAN_SYNC
-            NoorList {
-                listSections(includeBookmarks: false)
-            }
-            #endif
-            noData
-        }
-    }
-
     private var noData: some View {
         DataUnavailableView(
             title: l("bookmarks.no-data.title"),
             text: l("bookmarks.no-data.text"),
             image: .bookmark
         )
-    }
-
-    #if QURAN_SYNC
-    private var syncBanner: some View {
-        BookmarksSyncBanner(
-            dismiss: dismissSyncBanner,
-            signInAction: signInAction
-        )
-    }
-
-    private var oldPageBookmarksRow: some View {
-        NoorListItem(
-            image: .init(.bookmark, color: .secondary),
-            title: .text(l("bookmarks.old-page-bookmarks")),
-            subtitle: .init(text: NumberFormatter.shared.format(bookmarks.count), location: .trailing),
-            accessory: .disclosureIndicator,
-            action: showOldPageBookmarksAction
-        )
-    }
-
-    private var collectionsRow: some View {
-        NoorListItem(
-            image: .init(.folder, color: .accentColor),
-            title: .text(l("bookmarks.collections")),
-            accessory: .disclosureIndicator,
-            action: showCollectionsAction
-        )
-    }
-    #endif
-
-    @ViewBuilder
-    private func listSections(includeBookmarks: Bool) -> some View {
-        #if QURAN_SYNC
-        if shouldShowSyncBanner {
-            NoorBasicSection {
-                syncBanner
-            }
-        }
-
-        if showOldPageBookmarksAction != nil {
-            NoorBasicSection {
-                oldPageBookmarksRow
-            }
-        }
-
-        if showCollectionsAction != nil {
-            NoorBasicSection {
-                collectionsRow
-            }
-        }
-        #endif
-
-        if includeBookmarks {
-            NoorSection(bookmarks) { bookmark in
-                listItem(bookmark)
-            }
-            .onDelete(action: deleteAction)
-        }
     }
 
     private func listItem(_ bookmark: PageBookmark) -> some View {
@@ -177,65 +88,6 @@ private struct BookmarksViewUI: View {
     }
 }
 
-#if QURAN_SYNC
-@MainActor
-private struct BookmarksSyncBanner: View {
-    @ScaledMetric private var closeButtonInset = 8.0
-    @ScaledMetric private var containerCornerRadius = Dimensions.cornerRadius
-    @ScaledMetric private var containerPadding = 16.0
-    @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric private var titleSpacing = 4.0
-    @ScaledMetric private var trailingSpacing = 8.0
-
-    let dismiss: () -> Void
-    let signInAction: @MainActor () async -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: contentSpacing) {
-            HStack(alignment: .top, spacing: contentSpacing) {
-                NoorSystemImage.bookmark.image
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: titleSpacing) {
-                    Text(l("bookmarks.sync.title"))
-                        .font(.headline)
-
-                    Text(l("bookmarks.sync.body"))
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                Spacer(minLength: trailingSpacing)
-
-                Button(action: dismiss) {
-                    NoorSystemImage.cancel.image
-                        .font(.footnote.weight(.bold))
-                        .foregroundStyle(Color.secondaryLabel)
-                        .padding(closeButtonInset)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(lAndroid("cancel"))
-            }
-
-            ProminentRoundedButton(label: l("bookmarks.sync.action")) {
-                await signInAction()
-            }
-        }
-        .padding(containerPadding)
-        .background(Color.secondarySystemBackground)
-        .overlay(
-            RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous)
-                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
-        )
-        .background(Color.accentColor.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
-    }
-}
-#endif
-
 struct BookmarksView_Previews: PreviewProvider {
     struct Preview: View {
         static var staticItems: [PageBookmark] {
@@ -250,40 +102,6 @@ struct BookmarksView_Previews: PreviewProvider {
         @State var error: Error? = nil
 
         var body: some View {
-            #if QURAN_SYNC
-            let showCollectionsAction: AsyncAction? = {}
-            NavigationView {
-                BookmarksViewUI(
-                    editMode: $editMode,
-                    error: $error,
-                    bookmarks: items,
-                    start: {},
-                    selectAction: { _ in },
-                    deleteAction: { item in items = items.filter { $0 != item } },
-                    shouldShowSyncBanner: true,
-                    dismissSyncBanner: {},
-                    signInAction: {},
-                    showCollectionsAction: showCollectionsAction,
-                    showOldPageBookmarksAction: {}
-                )
-                .navigationTitle(lAndroid("menu_bookmarks"))
-                .toolbar {
-                    if items.isEmpty {
-                        Button("Populate") { items = Self.staticItems }
-                    } else {
-                        Button("Empty") { items = [] }
-                    }
-
-                    if error == nil {
-                        Button("Error") { error = URLError(.notConnectedToInternet) }
-                    }
-
-                    Button(editMode == .inactive ? "Edit" : "Done") {
-                        withAnimation { editMode = editMode == .inactive ? .active : .inactive }
-                    }
-                }
-            }
-            #else
             NavigationView {
                 BookmarksViewUI(
                     editMode: $editMode,
@@ -310,7 +128,6 @@ struct BookmarksView_Previews: PreviewProvider {
                     }
                 }
             }
-            #endif
         }
     }
 
@@ -322,3 +139,4 @@ struct BookmarksView_Previews: PreviewProvider {
         }
     }
 }
+#endif

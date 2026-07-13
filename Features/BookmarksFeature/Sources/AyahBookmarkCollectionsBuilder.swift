@@ -31,7 +31,7 @@ struct AyahBookmarkCollectionsBuilder {
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
             includedCollectionNames: includedCollectionNames,
-            excludedCollectionNames: includedCollectionNames == nil ? [Self.oldPageBookmarksCollectionName] : [],
+            excludedCollectionNames: includedCollectionNames == nil ? [AyahBookmarkCollectionName.oldPageBookmarks] : [],
             navigateToPage: navigateToPage
         )
         return AyahBookmarkCollectionsViewController(
@@ -45,7 +45,7 @@ struct AyahBookmarkCollectionsBuilder {
     func buildOldPageBookmarks() -> UIViewController {
         let viewModel = AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
-            includedCollectionNames: [Self.oldPageBookmarksCollectionName],
+            includedCollectionNames: [AyahBookmarkCollectionName.oldPageBookmarks],
             navigateToPage: navigateToPage
         )
         return AyahBookmarkCollectionsViewController(
@@ -55,8 +55,6 @@ struct AyahBookmarkCollectionsBuilder {
             allowsBookmarkDeletion: false
         )
     }
-
-    private static let oldPageBookmarksCollectionName = "Old Page Bookmarks"
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let includedCollectionNames: Set<String>?

@@ -1,14 +1,15 @@
+#if QURAN_SYNC
 import Foundation
 import Preferences
 
-struct BookmarksPreferences {
+struct BookmarkCollectionsLandingPreferences {
     // MARK: Lifecycle
 
     private init() {}
 
     // MARK: Internal
 
-    static let shared = BookmarksPreferences()
+    static let shared = BookmarkCollectionsLandingPreferences()
 
     @Preference(syncBannerDismissed)
     var isSyncBannerDismissed: Bool
@@ -20,3 +21,4 @@ struct BookmarksPreferences {
         defaultValue: false
     )
 }
+#endif

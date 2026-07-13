@@ -21,6 +21,10 @@ public struct AyahCollectionBookmark {
     public let ayah: AyahNumber
 }
 
+enum AyahBookmarkCollectionName {
+    static let oldPageBookmarks = "Old Page Bookmarks"
+}
+
 public struct AyahBookmarkCollectionsSequence: AsyncSequence {
     public typealias Element = [AyahBookmarkCollection]
 

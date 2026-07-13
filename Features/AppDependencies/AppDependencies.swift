@@ -42,7 +42,7 @@ public protocol AppDependencies {
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
 
     #if QURAN_SYNC
-    var authenticationClient: (any AuthenticationClient)? { get }
+    var authenticationClient: any AuthenticationClient { get }
     var quranDataService: QuranDataService { get }
     #endif
 }

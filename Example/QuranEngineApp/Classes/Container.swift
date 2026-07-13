@@ -45,7 +45,7 @@ class Container: AppDependencies {
     #if QURAN_SYNC
     private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
 
-    private(set) lazy var authenticationClient: (any AuthenticationClient)? = {
+    private(set) lazy var authenticationClient: any AuthenticationClient = {
         let authService = syncAppGraph.authService
         let quranDataService = syncAppGraph.quranDataService
         return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)

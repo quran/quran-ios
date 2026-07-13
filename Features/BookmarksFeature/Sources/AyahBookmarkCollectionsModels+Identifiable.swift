@@ -2,10 +2,10 @@
 import MobileSync
 
 extension AyahBookmarkCollection: Identifiable {
-    public var id: String { collection.localId }
+    public var id: String { collection.id }
 }
 
 extension AyahCollectionBookmark: Identifiable {
-    public var id: String { bookmark.localId }
+    public var id: String { bookmark.bookmarkId }
 }
 #endif

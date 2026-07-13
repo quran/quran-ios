@@ -63,7 +63,7 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
 
         let firstVerse = toPage.firstVerse
         let updatedSession = try await quranDataService.updateReadingSession(
-            localId: localId,
+            id: localId,
             sura: Int32(firstVerse.sura.suraNumber),
             ayah: Int32(firstVerse.ayah),
             timestamp: Date()
@@ -99,7 +99,7 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
             page: page,
             createdOn: session.lastUpdated,
             modifiedOn: session.lastUpdated,
-            localId: session.localId
+            localId: session.id
         )
     }
 }

@@ -124,7 +124,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func deleteCollection(_ collection: AyahBookmarkCollection) async {
         do {
-            try await ayahBookmarkCollectionService.removeCollection(localId: collection.collection.localId)
+            try await ayahBookmarkCollectionService.removeCollection(id: collection.collection.id)
         } catch {
             self.error = error
         }

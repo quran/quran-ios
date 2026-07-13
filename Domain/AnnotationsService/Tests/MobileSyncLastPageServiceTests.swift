@@ -50,7 +50,7 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let sessions = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
         let storedSessions = try await sessions.next()
         XCTAssertEqual(storedSessions?.count, 1)
-        XCTAssertEqual(storedSessions?.first?.localId, original.localId)
+        XCTAssertEqual(storedSessions?.first?.id, original.localId)
         XCTAssertEqual(storedSessions?.first?.sura, Int32(quran.pages[20].firstVerse.sura.suraNumber))
         XCTAssertEqual(storedSessions?.first?.ayah, Int32(quran.pages[20].firstVerse.ayah))
     }

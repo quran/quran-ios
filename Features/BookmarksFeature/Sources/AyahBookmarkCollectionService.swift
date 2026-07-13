@@ -39,13 +39,16 @@ private extension HighlightColor {
 }
 
 public enum AyahBookmarkCollectionKind: Equatable {
+    case defaultBookmarks
     case oldPageBookmarks
     case colored(HighlightColor)
     case user
 
     fileprivate init(collection: Collection_) {
         let normalizedName = collection.name.lowercased()
-        if normalizedName == AyahBookmarkCollectionName.oldPageBookmarks.lowercased() {
+        if collection.isDefault {
+            self = .defaultBookmarks
+        } else if normalizedName == AyahBookmarkCollectionName.oldPageBookmarks.lowercased() {
             self = .oldPageBookmarks
         } else if let color = HighlightColor(collectionName: collection.name) {
             self = .colored(color)
@@ -117,19 +120,19 @@ public struct AyahBookmarkCollectionService {
     // MARK: Public
 
     public func createCollection(named name: String) async throws {
-        try await quranDataService.createCollection(named: name)
+        _ = try await quranDataService.createCollection(named: name)
     }
 
-    public func addAyahBookmarkToCollection(collectionLocalId: String, ayah: AyahNumber) async throws {
+    public func addAyahBookmarkToCollection(collectionId: String, ayah: AyahNumber) async throws {
         _ = try await quranDataService.addAyahBookmarkToCollection(
-            collectionLocalId: collectionLocalId,
+            collectionId: collectionId,
             sura: Int32(ayah.sura.suraNumber),
             ayah: Int32(ayah.ayah)
         )
     }
 
-    public func removeCollection(localId: String) async throws {
-        try await quranDataService.removeCollection(localId: localId)
+    public func removeCollection(id: String) async throws {
+        _ = try await quranDataService.removeCollection(id: id)
     }
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
@@ -142,7 +145,7 @@ public struct AyahBookmarkCollectionService {
     ) async throws {
         for ayah in Self.ayahsToAdd(ayahs, to: collection) {
             try await addAyahBookmarkToCollection(
-                collectionLocalId: collection.collection.localId,
+                collectionId: collection.collection.id,
                 ayah: ayah
             )
         }
@@ -253,7 +256,7 @@ private extension QuranDataService {
             for name in names {
                 group.addTask {
                     do {
-                        try await self.createCollection(named: name)
+                        _ = try await self.createCollection(named: name)
                         return nil
                     } catch {
                         logger.error("Bookmarks: failed to create highlight collection '\(name)': \(error)")

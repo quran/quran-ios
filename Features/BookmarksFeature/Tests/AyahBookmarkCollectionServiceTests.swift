@@ -28,17 +28,19 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         let collections = try await storedCollections { collections in
             collections.contains { $0.collection.name == "Favorites" }
         }
-        XCTAssertEqual(collections.map(\.collection.name), ["Favorites"])
+        XCTAssertEqual(collections.map(\.collection.name), ["Default", "Favorites"])
     }
 
     func test_removeCollection_deletesPersistedCollection() async throws {
         try await service.createCollection(named: "Favorites")
         let collection = try await storedCollection(named: "Favorites")
 
-        try await service.removeCollection(localId: collection.collection.localId)
+        try await service.removeCollection(id: collection.collection.id)
 
-        let collections = try await storedCollections { $0.isEmpty }
-        XCTAssertTrue(collections.isEmpty)
+        let collections = try await storedCollections {
+            $0.count == 1 && $0.first?.collection.isDefault == true
+        }
+        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
     }
 
     func test_addAndRemoveAyahBookmark_persistsCollectionMembership() async throws {
@@ -46,7 +48,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         let collection = try await storedCollection(named: "Favorites")
 
         try await service.addAyahBookmarkToCollection(
-            collectionLocalId: collection.collection.localId,
+            collectionId: collection.collection.id,
             ayah: ayah(1)
         )
 
@@ -86,6 +88,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         }
 
         XCTAssertTrue(expectedNames.isSubset(of: Set(collections.map(\.collection.name))))
+        XCTAssertTrue(collections.first?.collection.isDefault == true)
     }
 
     private func storedCollection(

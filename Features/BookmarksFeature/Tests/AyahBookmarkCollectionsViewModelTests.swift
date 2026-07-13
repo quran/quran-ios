@@ -24,11 +24,14 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
     func test_start_observesCollectionsFromMobileSyncDatabase() async throws {
         let service = makeService()
         try await service.createCollection(named: "Favorites")
-        let stored = try await storedCollections()
+        let stored = try await storedCollections {
+            $0.contains { !$0.collection.isDefault }
+        }
         let collection = try XCTUnwrap(
-            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { !$0.collection.isDefault }
         )
-        let sut = makeSUT(collectionLocalID: collection.collection.localId, service: service)
+        let sut = makeSUT(collectionID: collection.collection.id, service: service)
         let observed = expectation(description: "Observes persisted collection")
         let observation = sut.$collection.sink { collection in
             if collection?.collection.name == "Favorites" {
@@ -48,35 +51,43 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         let service = makeService()
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         var stored = try await storedCollections()
-        let storedCollection = try XCTUnwrap(stored.first)
+        let storedCollection = try XCTUnwrap(
+            stored.first { $0.collection.name == oldPageBookmarksCollectionName }
+        )
         try await service.addAyahBookmarkToCollection(
-            collectionLocalId: storedCollection.collection.localId,
+            collectionId: storedCollection.collection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
-        stored = try await storedCollections()
+        stored = try await storedCollections {
+            $0.first { $0.collection.name == oldPageBookmarksCollectionName }?.bookmarks.count == 1
+        }
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService
                 .collections(from: stored, quran: .hafsMadani1405)
-                .first
+                .first { $0.collection.name == oldPageBookmarksCollectionName }
         )
         let bookmark = try XCTUnwrap(collection.bookmarks.first)
-        let sut = makeSUT(collectionLocalID: collection.collection.localId, service: service)
+        let sut = makeSUT(collectionID: collection.collection.id, service: service)
 
         await sut.deleteBookmark(bookmark)
 
-        stored = try await storedCollections()
-        let updatedCollection = try XCTUnwrap(stored.first)
+        stored = try await storedCollections {
+            $0.first { $0.collection.name == oldPageBookmarksCollectionName }?.bookmarks.isEmpty == true
+        }
+        let updatedCollection = try XCTUnwrap(
+            stored.first { $0.collection.name == oldPageBookmarksCollectionName }
+        )
         XCTAssertTrue(updatedCollection.bookmarks.isEmpty)
         XCTAssertNil(sut.error)
     }
 
     private func makeSUT(
-        collectionLocalID: String,
+        collectionID: String,
         service: AyahBookmarkCollectionService? = nil
     ) -> AyahBookmarkCollectionsViewModel {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: service ?? makeService(),
-            collectionLocalID: collectionLocalID,
+            collectionID: collectionID,
             navigateToPage: { _ in }
         )
     }
@@ -85,9 +96,20 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         AyahBookmarkCollectionService(quranDataService: database.quranDataService)
     }
 
-    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
+    private func storedCollections(
+        where predicate: ([CollectionWithAyahBookmarks]) -> Bool = { _ in true }
+    ) async throws -> [CollectionWithAyahBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        return try await iterator.next() ?? []
+        while let collections = try await iterator.next() {
+            if predicate(collections) {
+                return collections
+            }
+        }
+        throw TestError.expectedDatabaseStateNotObserved
     }
+}
+
+private enum TestError: Error {
+    case expectedDatabaseStateNotObserved
 }
 #endif

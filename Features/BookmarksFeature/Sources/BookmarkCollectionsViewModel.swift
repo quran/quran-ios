@@ -72,11 +72,10 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     static func deletableCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
-        let oldPageBookmarks = collections.filter(\.kind.isOldPageBookmarks)
-        let userCollections = collections.filter {
-            $0.kind == .user
-        }
-        return oldPageBookmarks + userCollections
+        let deletableCollections = collections.filter(\.kind.canDelete)
+        let oldPageBookmarks = deletableCollections.filter(\.kind.isOldPageBookmarks)
+        let remainingCollections = deletableCollections.filter { !$0.kind.isOldPageBookmarks }
+        return oldPageBookmarks + remainingCollections
     }
 
     func start() async {
@@ -123,6 +122,9 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     func deleteCollection(_ collection: AyahBookmarkCollection) async {
+        guard collection.kind.canDelete else {
+            return
+        }
         do {
             try await ayahBookmarkCollectionService.removeCollection(id: collection.collection.id)
         } catch {
@@ -132,7 +134,12 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func showCollection(_ collection: AyahBookmarkCollection) {
         navigationController?.pushViewController(
-            collectionsBuilder.buildCollection(collection),
+            collectionsBuilder.buildCollection(
+                collection,
+                collectionDeleted: { [weak navigationController] in
+                    navigationController?.popViewController(animated: true)
+                }
+            ),
             animated: true
         )
     }

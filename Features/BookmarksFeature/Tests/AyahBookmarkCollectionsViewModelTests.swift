@@ -31,13 +31,12 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
                 .first { !$0.collection.isDefault }
         )
-        let sut = makeSUT(collectionID: collection.collection.id, service: service)
+        let sut = makeSUT(collection: collection, service: service)
         let observed = expectation(description: "Observes persisted collection")
-        let observation = sut.$collection.sink { collection in
-            if collection?.collection.name == "Favorites" {
-                observed.fulfill()
-            }
-        }
+        let observation = sut.$collection
+            .filter { $0?.collection.name == "Favorites" }
+            .prefix(1)
+            .sink { _ in observed.fulfill() }
 
         let task = Task { await sut.start() }
         await fulfillment(of: [observed], timeout: 2)
@@ -67,7 +66,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
                 .first { $0.collection.name == oldPageBookmarksCollectionName }
         )
         let bookmark = try XCTUnwrap(collection.bookmarks.first)
-        let sut = makeSUT(collectionID: collection.collection.id, service: service)
+        let sut = makeSUT(collection: collection, service: service)
 
         await sut.deleteBookmark(bookmark)
 
@@ -81,14 +80,73 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_renamePendingCollection_updatesRealMobileSyncDatabase() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let collection = try await firstCollection()
+        let sut = makeSUT(collection: collection, service: service)
+        sut.pendingCollectionName = " Duas "
+
+        await sut.renamePendingCollection()
+
+        let renamedCollection = try await firstCollection()
+        XCTAssertEqual(renamedCollection.collection.name, "Duas")
+        XCTAssertNil(sut.error)
+    }
+
+    func test_deleteCollection_removesCollectionAndNotifiesListener() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let collection = try await firstCollection()
+        var didDeleteCollection = false
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            collectionDeleted: { didDeleteCollection = true }
+        )
+
+        await sut.deleteCollection()
+
+        let stored = try await storedCollections {
+            $0.count == 1 && $0[0].collection.isDefault
+        }
+        XCTAssertEqual(stored.map(\.collection.name), ["Default"])
+        XCTAssertTrue(stored[0].collection.isDefault)
+        XCTAssertTrue(didDeleteCollection)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_highlightCollectionCannotBeRenamedOrDeleted() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Red")
+        let collection = try await firstCollection()
+        var didDeleteCollection = false
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            collectionDeleted: { didDeleteCollection = true }
+        )
+        sut.pendingCollectionName = "Renamed"
+
+        await sut.renamePendingCollection()
+        await sut.deleteCollection()
+
+        let storedCollection = try await firstCollection()
+        XCTAssertEqual(storedCollection.collection.name, "Red")
+        XCTAssertFalse(didDeleteCollection)
+        XCTAssertNil(sut.error)
+    }
+
     private func makeSUT(
-        collectionID: String,
-        service: AyahBookmarkCollectionService? = nil
+        collection: AyahBookmarkCollection,
+        service: AyahBookmarkCollectionService? = nil,
+        collectionDeleted: @escaping () -> Void = {}
     ) -> AyahBookmarkCollectionsViewModel {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: service ?? makeService(),
-            collectionID: collectionID,
-            navigateToPage: { _ in }
+            collection: collection,
+            navigateToPage: { _ in },
+            collectionDeleted: collectionDeleted
         )
     }
 
@@ -106,6 +164,16 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
             }
         }
         throw TestError.expectedDatabaseStateNotObserved
+    }
+
+    private func firstCollection() async throws -> AyahBookmarkCollection {
+        let stored = try await storedCollections {
+            $0.contains { !$0.collection.isDefault }
+        }
+        return try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { !$0.collection.isDefault }
+        )
     }
 }
 

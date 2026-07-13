@@ -2,6 +2,7 @@
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
+import Localization
 import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
@@ -69,6 +70,56 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         }
         XCTAssertEqual(collection(name: "Default", id: "__default__").kind, .defaultBookmarks)
         XCTAssertEqual(collection(name: "Favorites").kind, .user)
+    }
+
+    func test_collectionCapabilities_protectSystemCollections() {
+        let defaultBookmarks = collection(name: "Default", id: "__default__")
+        let highlight = collection(name: "Red")
+        let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
+        let user = collection(name: "Favorites")
+
+        XCTAssertFalse(defaultBookmarks.kind.canRename)
+        XCTAssertFalse(defaultBookmarks.kind.canDelete)
+        XCTAssertFalse(highlight.kind.canRename)
+        XCTAssertFalse(highlight.kind.canDelete)
+        XCTAssertTrue(oldPageBookmarks.kind.canRename)
+        XCTAssertTrue(oldPageBookmarks.kind.canDelete)
+        XCTAssertTrue(user.kind.canRename)
+        XCTAssertTrue(user.kind.canDelete)
+    }
+
+    func test_collectionDetailsMenu_onlyShowsEditForHighlightCollection() {
+        let collection = collection(name: "Red")
+        let viewModel = makeCollectionDetailsViewModel(collection: collection)
+        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+
+        let titles = viewController.navigationItem.rightBarButtonItem?.menu?.children.map(\.title)
+
+        XCTAssertEqual(titles, [l("bookmarks.collections.edit.action")])
+    }
+
+    func test_collectionDetailsMenu_showsAllActionsForUserCollection() {
+        let collection = collection(name: "Favorites")
+        let viewModel = makeCollectionDetailsViewModel(collection: collection)
+        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+
+        let titles = viewController.navigationItem.rightBarButtonItem?.menu?.children.map(\.title)
+
+        XCTAssertEqual(titles, [
+            l("bookmarks.collections.edit.action"),
+            l("bookmarks.collections.rename"),
+            l("button.delete"),
+        ])
+    }
+
+    func test_collectionDetailsController_showsDoneButtonInEditMode() {
+        let collection = collection(name: "Favorites")
+        let viewModel = makeCollectionDetailsViewModel(collection: collection)
+        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+
+        viewModel.editMode = .active
+
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItem?.title, l("button.done"))
     }
 
     func test_collectionsViewController_hidesEditButtonWithoutDeletableCollections() {
@@ -259,6 +310,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     private func makeService() -> AyahBookmarkCollectionService {
         AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+    }
+
+    private func makeCollectionDetailsViewModel(
+        collection: AyahBookmarkCollection
+    ) -> AyahBookmarkCollectionsViewModel {
+        AyahBookmarkCollectionsViewModel(
+            ayahBookmarkCollectionService: makeService(),
+            collection: collection,
+            navigateToPage: { _ in },
+            collectionDeleted: {}
+        )
     }
 
     private func storedOldPageBookmarksCollection() async throws -> CollectionWithAyahBookmarks {

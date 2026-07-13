@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-13.
 //
 
+#if !QURAN_SYNC
 import Combine
 import Localization
 import SwiftUI
@@ -41,10 +42,6 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     private func initialize() {
         title = lAndroid("menu_bookmarks")
-        #if QURAN_SYNC
-        viewModel.presenter = self
-        #endif
-
         editController = EditController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
@@ -88,3 +85,4 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
         present(alert, animated: true)
     }
 }
+#endif

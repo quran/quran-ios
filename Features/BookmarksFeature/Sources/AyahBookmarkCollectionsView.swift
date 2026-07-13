@@ -32,20 +32,35 @@ struct AyahBookmarkCollectionsView: View {
     let allowsBookmarkDeletion: Bool
 
     var body: some View {
-        Group {
-            if viewModel.collections.isEmpty {
-                noData
-            } else {
-                NoorList {
-                    ForEach(viewModel.collections) { collection in
-                        section(for: collection)
-                    }
-                }
-            }
+        NoorList {
+            AyahBookmarkCollectionsContent(
+                viewModel: viewModel,
+                allowsCollectionManagement: allowsCollectionManagement,
+                allowsBookmarkDeletion: allowsBookmarkDeletion
+            )
         }
         .task { await viewModel.start() }
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
+    }
+}
+
+@MainActor
+struct AyahBookmarkCollectionsContent: View {
+    @ObservedObject var viewModel: AyahBookmarkCollectionsViewModel
+    let allowsCollectionManagement: Bool
+    let allowsBookmarkDeletion: Bool
+
+    var body: some View {
+        Group {
+            if viewModel.collections.isEmpty {
+                noData
+            } else {
+                ForEach(viewModel.collections) { collection in
+                    section(for: collection)
+                }
+            }
+        }
     }
 
     // MARK: Private

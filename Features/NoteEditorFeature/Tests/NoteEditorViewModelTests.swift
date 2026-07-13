@@ -4,6 +4,8 @@ import MobileSyncTestSupport
 #endif
 import QuranAnnotations
 import QuranKit
+import QuranResources
+import QuranTextKit
 import XCTest
 @testable import AnnotationsService
 @testable import NoorUI
@@ -26,11 +28,12 @@ final class NoteEditorViewModelTests: XCTestCase {
 
     func test_fetchNote_mapsSyncedEditNote() async throws {
         let note = syncedNote(body: "Stored note")
-        let sut = makeSyncSUT(mode: .edit(note), text: "ayah text")
+        let sut = makeSyncSUT(mode: .edit(note))
 
         let editableNote = try await sut.viewModel.fetchNote()
 
-        XCTAssertEqual(editableNote.ayahText, "ayah text")
+        XCTAssertFalse(editableNote.ayahText.isEmpty)
+        XCTAssertTrue(editableNote.ayahText.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .red)
         XCTAssertFalse(editableNote.modifiedSince.isEmpty)
@@ -169,11 +172,12 @@ final class NoteEditorViewModelTests: XCTestCase {
     }
     #else
     func test_fetchNote_mapsLegacyNote() async throws {
-        let sut = makeLegacySUT(noteBody: "Stored note", color: .blue, text: "ayah text")
+        let sut = makeLegacySUT(noteBody: "Stored note", color: .blue)
 
         let editableNote = try await sut.viewModel.fetchNote()
 
-        XCTAssertEqual(editableNote.ayahText, "ayah text")
+        XCTAssertFalse(editableNote.ayahText.isEmpty)
+        XCTAssertTrue(editableNote.ayahText.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .blue)
         XCTAssertFalse(editableNote.modifiedSince.isEmpty)
@@ -282,8 +286,7 @@ final class NoteEditorViewModelTests: XCTestCase {
 
     #if QURAN_SYNC
     private func makeSyncSUT(
-        mode: NoteEditorMode,
-        text: String = "ayah text"
+        mode: NoteEditorMode
     ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsSpy, listener: ListenerSpy) {
         let noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
         let analytics = AnalyticsSpy()
@@ -292,7 +295,7 @@ final class NoteEditorViewModelTests: XCTestCase {
             noteService: noteService,
             analytics: analytics,
             mode: mode,
-            textForVerses: { _ in text }
+            textService: textService
         )
         viewModel.listener = listener
         return (viewModel, noteService, analytics, listener)
@@ -336,8 +339,7 @@ final class NoteEditorViewModelTests: XCTestCase {
     #else
     private func makeLegacySUT(
         noteBody: String,
-        color: HighlightColor = .red,
-        text: String = "ayah text"
+        color: HighlightColor = .red
     ) -> (viewModel: NoteEditorViewModel, noteService: LegacyNoteServiceFake, listener: ListenerSpy) {
         let noteService = LegacyNoteServiceFake()
         let listener = ListenerSpy()
@@ -350,12 +352,19 @@ final class NoteEditorViewModelTests: XCTestCase {
         let viewModel = NoteEditorViewModel(
             noteService: noteService,
             note: note,
-            textForVerses: { _ in text }
+            textService: textService
         )
         viewModel.listener = listener
         return (viewModel, noteService, listener)
     }
     #endif
+
+    private var textService: QuranTextDataService {
+        QuranTextDataService(
+            databasesURL: URL(fileURLWithPath: "/tmp/unavailable-translations-database"),
+            quranFileURL: QuranResources.quranUthmaniV2Database
+        )
+    }
 }
 
 private final class ListenerSpy: NoteEditorListener {

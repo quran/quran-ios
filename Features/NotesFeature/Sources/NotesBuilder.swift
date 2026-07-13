@@ -29,29 +29,29 @@ public struct NotesBuilder {
         let editNote: (Note) -> Void = { [viewControllerReference] note in
             viewControllerReference.value?.editNote(note)
         }
-        let noteVerseTextService = container.noteVerseTextService()
+        let textService = container.textDataService()
+        let textRetriever = ShareableVerseTextRetriever(
+            databasesURL: container.databasesURL,
+            quranFileURL: container.quranUthmaniV2Database
+        )
 
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let viewModel = NotesViewModel(
             noteService: noteService,
-            noteVerseTextService: noteVerseTextService,
+            textService: textService,
+            textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
             },
             editNote: editNote
         )
         #else
-        let textRetriever = ShareableVerseTextRetriever(
-            databasesURL: container.databasesURL,
-            quranFileURL: container.quranUthmaniV2Database
-        )
-
         let viewModel = NotesViewModel(
             analytics: container.analytics,
             noteService: container.noteService(),
             textRetriever: textRetriever,
-            noteVerseTextService: noteVerseTextService,
+            textService: textService,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
             },

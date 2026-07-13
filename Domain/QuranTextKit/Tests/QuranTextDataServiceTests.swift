@@ -121,6 +121,24 @@ final class QuranTextDataServiceTests: XCTestCase {
         XCTAssertEqual(expected, versesText)
     }
 
+    func testNumberedArabicTextSortsAndFormatsVerses() async throws {
+        let first = quran.suras[0].verses[0]
+        let second = quran.suras[0].verses[1]
+
+        let text = try await textService.numberedArabicText(for: [second, first])
+
+        XCTAssertEqual(
+            text,
+            "\(TestData.quranTextAt(first)) ١ \(TestData.quranTextAt(second)) ٢"
+        )
+    }
+
+    func testNumberedArabicTextReturnsEmptyTextForEmptyVerses() async throws {
+        let text = try await textService.numberedArabicText(for: [])
+
+        XCTAssertEqual(text, "")
+    }
+
     // MARK: Private
 
     private var textService: QuranTextDataService!

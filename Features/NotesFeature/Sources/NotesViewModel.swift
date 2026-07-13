@@ -28,12 +28,14 @@ final class NotesViewModel: ObservableObject {
     #if QURAN_SYNC
     init(
         noteService: MobileSyncNoteService,
-        noteVerseTextService: NoteVerseTextService,
+        textService: QuranTextDataService,
+        textRetriever: ShareableVerseTextRetriever,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
         self.noteService = noteService
-        self.noteVerseTextService = noteVerseTextService
+        self.textService = textService
+        self.textRetriever = textRetriever
         self.navigateTo = navigateTo
         editNoteAction = editNote
     }
@@ -42,14 +44,14 @@ final class NotesViewModel: ObservableObject {
         analytics: AnalyticsLibrary,
         noteService: NoteService,
         textRetriever: ShareableVerseTextRetriever,
-        noteVerseTextService: NoteVerseTextService,
+        textService: QuranTextDataService,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
         self.analytics = analytics
         self.noteService = noteService
         self.textRetriever = textRetriever
-        self.noteVerseTextService = noteVerseTextService
+        self.textService = textService
         self.navigateTo = navigateTo
         editNoteAction = editNote
     }
@@ -141,7 +143,6 @@ final class NotesViewModel: ObservableObject {
             for (index, note) in notes.enumerated() {
                 #if QURAN_SYNC
                 let title = [note.noteText.trimmingCharacters(in: .newlines), ""]
-                let verses = [try await textForVerses(note.note.verses)]
                 #else
                 let title: [String] = if !note.noteText.isEmpty {
                     [
@@ -150,8 +151,8 @@ final class NotesViewModel: ObservableObject {
                 } else {
                     []
                 }
-                let verses = try await textRetriever.textForVerses(Array(note.note.verses))
                 #endif
+                let verses = try await textRetriever.textForVerses(note.note.verses)
 
                 notesText.append(contentsOf: title + verses)
                 if index != notes.count - 1 {
@@ -169,9 +170,9 @@ final class NotesViewModel: ObservableObject {
     #else
     private let analytics: AnalyticsLibrary
     private let noteService: NoteService
-    private let textRetriever: ShareableVerseTextRetriever
     #endif
-    private let noteVerseTextService: NoteVerseTextService
+    private let textService: QuranTextDataService
+    private let textRetriever: ShareableVerseTextRetriever
     private let navigateTo: (AyahNumber) -> Void
     private let editNoteAction: (Note) -> Void
     private let readingPreferences = ReadingPreferences.shared
@@ -213,6 +214,6 @@ final class NotesViewModel: ObservableObject {
     }
 
     private nonisolated func textForVerses(_ verses: [AyahNumber]) async throws -> String {
-        try await noteVerseTextService.textForVerses(verses)
+        try await textService.numberedArabicText(for: verses)
     }
 }

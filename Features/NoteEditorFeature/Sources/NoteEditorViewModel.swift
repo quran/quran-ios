@@ -13,6 +13,7 @@ import Foundation
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import QuranTextKit
 import VLogging
 
 @MainActor
@@ -29,22 +30,22 @@ final class NoteEditorViewModel {
         noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
         mode: NoteEditorMode,
-        textForVerses: @escaping ([AyahNumber]) async throws -> String
+        textService: QuranTextDataService
     ) {
         self.noteService = noteService
         self.analytics = analytics
         self.mode = mode
-        self.textForVerses = textForVerses
+        self.textService = textService
     }
     #else
     init(
         noteService: NoteEditorLegacyServicing,
         note: Note,
-        textForVerses: @escaping ([AyahNumber]) async throws -> String
+        textService: QuranTextDataService
     ) {
         self.note = note
         self.noteService = noteService
-        self.textForVerses = textForVerses
+        self.textService = textService
     }
     #endif
 
@@ -187,7 +188,7 @@ final class NoteEditorViewModel {
     private let noteService: NoteEditorLegacyServicing
     private let note: Note
     #endif
-    private let textForVerses: ([AyahNumber]) async throws -> String
+    private let textService: QuranTextDataService
 
     private var editableNote: EditableNote?
 
@@ -255,7 +256,7 @@ final class NoteEditorViewModel {
     }
 
     private func getTextForVerses(_ verses: [AyahNumber]) async throws -> String {
-        try await textForVerses(verses)
+        try await textService.numberedArabicText(for: verses)
     }
 }
 

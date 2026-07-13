@@ -205,15 +205,11 @@ final class NotesViewModel: ObservableObject {
 
     private nonisolated func noteItem(with note: Note) async -> NoteItem {
         do {
-            let verseText = try await textForVerses(note.verses)
+            let verseText = try await textService.numberedArabicText(for: note.verses)
             return NoteItem(note: note, verseText: verseText)
         } catch {
             crasher.recordError(error, reason: "NotesViewModel.textForVerses")
             return NoteItem(note: note, verseText: note.startAyah.localizedName)
         }
-    }
-
-    private nonisolated func textForVerses(_ verses: [AyahNumber]) async throws -> String {
-        try await textService.numberedArabicText(for: verses)
     }
 }

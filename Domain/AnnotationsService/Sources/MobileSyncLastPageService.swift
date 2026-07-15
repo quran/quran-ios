@@ -12,7 +12,7 @@ import Foundation
 import QuranAnnotations
 import QuranKit
 
-public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
+public struct MobileSyncLastPageService: LastPageService {
     // MARK: Lifecycle
 
     public init(quranDataService: QuranDataService) {
@@ -63,14 +63,14 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
 
     private let quranDataService: QuranDataService
 
-    private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
+    private nonisolated func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
         guard let ayah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
             return nil
         }
         return lastPage(page: ayah.page, for: session)
     }
 
-    private func lastPage(page: Page, for session: ReadingSession) -> LastPage {
+    private nonisolated func lastPage(page: Page, for session: ReadingSession) -> LastPage {
         LastPage(
             id: session.id,
             page: page,

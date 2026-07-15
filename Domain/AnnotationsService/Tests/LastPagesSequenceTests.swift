@@ -1,6 +1,8 @@
+import Foundation
 import XCTest
 @testable import AnnotationsService
 @testable import QuranAnnotations
+@testable import QuranKit
 
 final class LastPagesSequenceTests: XCTestCase {
     func test_forwardsValuesAndCompletion() async throws {
@@ -68,6 +70,34 @@ final class LastPagesSequenceTests: XCTestCase {
         XCTAssertEqual(secondValue, [])
         XCTAssertNil(firstCompletion)
         XCTAssertNil(secondCompletion)
+    }
+
+    func test_lastPageCanCrossTaskBoundaries() async {
+        let lastPage = makeLastPage()
+        requireSendable(lastPage)
+
+        let received = await Task.detached { lastPage }.value
+
+        XCTAssertEqual(received, lastPage)
+    }
+
+    private func requireSendable(_: some Sendable) {}
+
+    private func makeLastPage() -> LastPage {
+        let page = Quran.hafsMadani1405.pages[10]
+        #if QURAN_SYNC
+        return LastPage(
+            id: "last-page",
+            page: page,
+            modifiedOn: Date(timeIntervalSince1970: 2)
+        )
+        #else
+        return LastPage(
+            page: page,
+            createdOn: Date(timeIntervalSince1970: 1),
+            modifiedOn: Date(timeIntervalSince1970: 2)
+        )
+        #endif
     }
 }
 

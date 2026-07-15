@@ -4,6 +4,7 @@ import QuranKit
 import XCTest
 @testable import AnnotationsService
 
+@MainActor
 final class MobileSyncLastPageServiceTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
     private var service: MobileSyncLastPageService!

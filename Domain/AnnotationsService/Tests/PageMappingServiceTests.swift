@@ -13,6 +13,7 @@ import XCTest
 @testable import QuranAnnotations
 @testable import QuranKit
 
+@MainActor
 final class PageMappingServiceTests: XCTestCase {
     private struct SkippedFirstPageReadingInfoRawData: QuranReadingInfoRawData {
         // MARK: Internal

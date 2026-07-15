@@ -64,22 +64,10 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
     private let quranDataService: QuranDataService
 
     private func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
-        guard let sourceAyah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
+        guard let ayah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
             return nil
         }
-
-        let page: Page
-        if sourceAyah.quran === quran {
-            page = sourceAyah.page
-        } else {
-            let mapper = QuranPageMapper(destination: quran)
-            guard let mappedAyah = mapper.mapAyah(sourceAyah) else {
-                return nil
-            }
-            page = mappedAyah.page
-        }
-
-        return lastPage(page: page, for: session)
+        return lastPage(page: ayah.page, for: session)
     }
 
     private func lastPage(page: Page, for session: ReadingSession) -> LastPage {

@@ -7,6 +7,8 @@ import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
+import QuranResources
+import QuranTextKit
 import UIKit
 import XCTest
 @testable import BookmarksFeature
@@ -98,6 +100,41 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(button?.title, l("bookmarks.collections.edit.action"))
         XCTAssertNotNil(button?.primaryAction)
         XCTAssertNil(button?.menu)
+    }
+
+    func test_collectionDetailsController_usesNativeTitleAndSubtitle() throws {
+        let collection = collection(name: "Red")
+        let viewModel = makeCollectionDetailsViewModel(collection: collection)
+        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+        let title = try XCTUnwrap(collection.kind.highlightColor?.localizedName)
+        let subtitle = lFormat("bookmarks.collections.ayahs.count", 0)
+
+        if #available(iOS 26.0, *) {
+            XCTAssertEqual(viewController.navigationItem.largeTitleDisplayMode, .always)
+            XCTAssertEqual(viewController.title, title)
+            XCTAssertEqual(viewController.navigationItem.subtitle, subtitle)
+            XCTAssertEqual(viewController.navigationItem.largeTitle, title)
+            XCTAssertEqual(viewController.navigationItem.largeSubtitle, subtitle)
+        } else {
+            XCTAssertEqual(viewController.title, "\(title) (\(subtitle))")
+        }
+    }
+
+    func test_bookmarkCountLocalization_usesLocalePluralRules() {
+        XCTAssertEqual(lFormat("bookmarks.collections.ayahs.count", language: .english, 0), "0 bookmarks")
+        XCTAssertEqual(lFormat("bookmarks.collections.ayahs.count", language: .english, 1), "1 bookmark")
+        XCTAssertEqual(lFormat("bookmarks.collections.ayahs.count", language: .english, 2), "2 bookmarks")
+
+        let arabicFormat = l("bookmarks.collections.ayahs.count", language: .arabic)
+        let arabicCount: (Int) -> String = {
+            String(format: arabicFormat, locale: Locale(identifier: "ar"), arguments: [$0])
+        }
+        XCTAssertEqual(arabicCount(0), "لا توجد إشارات مرجعية")
+        XCTAssertEqual(arabicCount(1), "إشارة مرجعية واحدة")
+        XCTAssertEqual(arabicCount(2), "إشارتان مرجعيتان")
+        XCTAssertEqual(arabicCount(3), "3 إشارات مرجعية")
+        XCTAssertEqual(arabicCount(11), "11 إشارة مرجعية")
+        XCTAssertEqual(arabicCount(100), "100 إشارة مرجعية")
     }
 
     func test_collectionDetailsMenu_showsAllActionsForUserCollection() {
@@ -300,6 +337,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let navigationController = navigationController ?? UINavigationController()
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
+            quranTextDataService: makeQuranTextDataService(),
             navigateToPage: { _ in }
         )
         return BookmarkCollectionsViewModel(
@@ -320,8 +358,16 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: makeService(),
             collection: collection,
+            quranTextDataService: makeQuranTextDataService(),
             navigateToPage: { _ in },
             collectionDeleted: {}
+        )
+    }
+
+    private func makeQuranTextDataService() -> QuranTextDataService {
+        QuranTextDataService(
+            databasesURL: URL(fileURLWithPath: "/tmp/unavailable-translations-database"),
+            quranFileURL: QuranResources.quranUthmaniV2Database
         )
     }
 

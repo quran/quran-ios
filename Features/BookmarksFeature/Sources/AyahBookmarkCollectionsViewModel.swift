@@ -8,6 +8,7 @@
 import Combine
 import QuranAnnotations
 import QuranKit
+import QuranTextKit
 import SwiftUI
 import VLogging
 
@@ -18,19 +19,22 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         collection: AyahBookmarkCollection,
+        quranTextDataService: QuranTextDataService,
         navigateToPage: @escaping (Page) -> Void,
         collectionDeleted: @escaping () -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.collection = collection
         collectionID = collection.collection.id
+        self.quranTextDataService = quranTextDataService
         self.navigateToPage = navigateToPage
         self.collectionDeleted = collectionDeleted
     }
 
     // MARK: Internal
 
-    @Published private(set) var collection: AyahBookmarkCollection?
+    @Published private(set) var collection: AyahBookmarkCollection
+    @Published private(set) var ayahTexts: [AyahNumber: String] = [:]
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingRenameCollection = false
@@ -40,8 +44,11 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         do {
             let sequence = ayahBookmarkCollectionService.collectionsSequence()
             for try await collections in sequence {
-                collection = collections.first {
+                if let collection = collections.first(where: {
                     $0.collection.id == collectionID
+                }) {
+                    self.collection = collection
+                    try await loadAyahTexts(for: collection)
                 }
             }
         } catch {
@@ -63,7 +70,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     }
 
     func presentRenameCollection() {
-        guard let collection, collection.kind.canRename else {
+        guard collection.kind.canRename else {
             return
         }
         pendingCollectionName = collection.collection.name
@@ -71,7 +78,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     }
 
     func renamePendingCollection() async {
-        guard let collection, collection.kind.canRename else {
+        guard collection.kind.canRename else {
             return
         }
         let name = pendingCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -90,7 +97,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     }
 
     func deleteCollection() async {
-        guard let collection, collection.kind.canDelete else {
+        guard collection.kind.canDelete else {
             return
         }
 
@@ -107,8 +114,24 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     // MARK: Private
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let quranTextDataService: QuranTextDataService
     private let collectionID: String
     private let navigateToPage: (Page) -> Void
     private let collectionDeleted: () -> Void
+
+    private func loadAyahTexts(for collection: AyahBookmarkCollection?) async throws {
+        guard let collection else {
+            ayahTexts = [:]
+            return
+        }
+
+        let ayahs = collection.bookmarks.map(\.ayah)
+        guard Set(ayahTexts.keys) != Set(ayahs) else {
+            return
+        }
+        ayahTexts = try await quranTextDataService
+            .textForVerses(ayahs, translations: [])
+            .mapValues(\.arabicText)
+    }
 }
 #endif

@@ -27,6 +27,14 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Do not introduce new listener or delegate patterns unless extending an existing one; prefer closure-based callbacks for new interaction seams.
 - Views should stay mostly declarative; business logic belongs in view models/interactors/services.
 - Reuse NoorUI/UIx components before adding one-off controls.
+- Put new reusable UI components in NoorUI; avoid feature-local component duplicates.
+- Match established layouts in analogous features before introducing a new visual pattern.
+- Render Quran Arabic with NoorUI's Quran text APIs and Quran font; never use a system font.
+- Render sura names with NoorUI's locale-aware `MultipartText` sura interpolation: localized plus decorated Arabic outside Arabic locales, localized Arabic only in Arabic locales.
+- Prefer native `UINavigationItem` title, subtitle, and attributed-title APIs; use a custom `titleView` only when native APIs cannot meet the requirement. For pre-iOS 26 fallback, combine title and subtitle as `Title (Subtitle)`.
+- Inject concrete data services through builders and view models; do not wrap them in closure-based adapters.
+- Use `@ScaledMetric` for explicit UI dimensions that should scale with Dynamic Type; avoid fixed numeric layout metrics.
+- Prefer default `.padding()` spacing; specify edges or values only when the design requires custom spacing.
 - Preserve localized strings; do not hardcode user-facing text unless existing nearby code does.
 
 ## Concurrency

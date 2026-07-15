@@ -24,82 +24,96 @@ struct AyahBookmarkCollectionsView: View {
     @StateObject var viewModel: AyahBookmarkCollectionsViewModel
 
     var body: some View {
-        Group {
-            if viewModel.collection?.bookmarks.isEmpty == true {
-                emptyCollection
-            } else {
-                NoorList {
-                    AyahBookmarkCollectionsContent(viewModel: viewModel)
-                }
-            }
-        }
-        .task { await viewModel.start() }
-        .renameCollectionAlert(viewModel: viewModel)
-        .errorAlert(error: $viewModel.error)
-        .environment(\.editMode, $viewModel.editMode)
-    }
-
-    private var emptyCollection: some View {
-        DataUnavailableView(
-            title: l("bookmarks.collections.ayahs.no-data.title"),
-            text: l("bookmarks.collections.ayahs.no-data.text"),
-            image: .bookmark
-        )
+        AyahBookmarkCollectionDetails(viewModel: viewModel, collection: viewModel.collection)
+            .task { await viewModel.start() }
+            .renameCollectionAlert(viewModel: viewModel)
+            .errorAlert(error: $viewModel.error)
+            .environment(\.editMode, $viewModel.editMode)
     }
 }
 
 @MainActor
-struct AyahBookmarkCollectionsContent: View {
+private struct AyahBookmarkCollectionDetails: View {
     @ObservedObject var viewModel: AyahBookmarkCollectionsViewModel
-    @State private var isExpanded = true
+    let collection: AyahBookmarkCollection
 
     var body: some View {
-        Group {
-            if let collection = viewModel.collection {
-                section(for: collection)
+        VStack {
+            if collection.bookmarks.isEmpty {
+                emptyCollection
             } else {
-                noData
+                filledCollection
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.systemGroupedBackground)
     }
 
     // MARK: Private
 
-    private var noData: some View {
-        DataUnavailableView(
-            title: l("bookmarks.collections.no-data.title"),
-            text: l("bookmarks.collections.no-data.text"),
-            image: .bookmark
+    private var highlightColor: HighlightColor? {
+        collection.kind.highlightColor
+    }
+
+    private var filledCollection: some View {
+        NoorList {
+            Section {
+                ForEach(collection.bookmarks) { bookmark in
+                    bookmarkRow(bookmark)
+                }
+                .onDelete { offsets in
+                    let bookmarks = offsets.map { collection.bookmarks[$0] }
+                    Task {
+                        for bookmark in bookmarks {
+                            await viewModel.deleteBookmark(bookmark)
+                        }
+                    }
+                }
+            } footer: {
+                Text(l("bookmarks.collections.ayahs.delete-hint"))
+                    .font(.body)
+                    .foregroundStyle(Color.tertiaryLabel)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top)
+                    .textCase(nil)
+            }
+        }
+    }
+
+    private var emptyCollection: some View {
+        NoorListEmptyState(
+            title: lAndroid("bookmarks_list_empty"),
+            text: emptyStateText,
+            image: .bookmark,
+            style: .prominent(
+                imageColor: highlightColor?.color ?? Color.appIdentity
+            )
         )
     }
 
-    @ViewBuilder
-    private func section(for collection: AyahBookmarkCollection) -> some View {
-        let highlightColor = collection.kind.highlightColor
-
-        NoorEditableCollapsibleSection(
-            title: highlightColor?.localizedName ?? collection.collection.name,
-            isExpanded: $isExpanded,
-            collection.bookmarks,
-            showsHeaderDeleteAction: false,
-            headerDeleteAction: nil
-        ) { bookmark in
-            bookmarkItem(bookmark, iconColor: highlightColor?.color)
+    private var emptyStateText: String {
+        if let highlightColor {
+            return lFormat(
+                "bookmarks.collections.ayahs.no-data.colored.text",
+                highlightColor.localizedName.lowercased()
+            )
         }
-        .onDelete { bookmark in
-            await viewModel.deleteBookmark(bookmark)
-        }
+        return l("bookmarks.collections.ayahs.no-data.text")
     }
 
-    private func bookmarkItem(_ bookmark: AyahCollectionBookmark, iconColor: Color?) -> some View {
+    private func bookmarkRow(_ bookmark: AyahCollectionBookmark) -> some View {
         NoorListItem(
-            image: .init(.bookmark, color: iconColor ?? .red),
-            title: "\(bookmark.ayah.sura.localizedName()) \(sura: bookmark.ayah.sura.arabicSuraName)",
-            subtitle: .init(text: bookmark.ayah.localizedName, location: .bottom),
-            accessory: .text(NumberFormatter.shared.format(bookmark.ayah.page.pageNumber))
-        ) {
-            viewModel.navigateTo(bookmark)
-        }
+            rightPretitle: "\(verse: viewModel.ayahTexts[bookmark.ayah] ?? " ", color: .clear, lineLimit: 2)",
+            title: bookmarkLocation(bookmark),
+            titleColor: .secondaryLabel,
+            action: { viewModel.navigateTo(bookmark) }
+        )
+        .accessibilityHint(l("bookmarks.collections.ayahs.open-hint"))
+    }
+
+    private func bookmarkLocation(_ bookmark: AyahCollectionBookmark) -> MultipartText {
+        let ayah = bookmark.ayah
+        return "\(ayah.localizedNameWithSuraNumber) \(sura: ayah.sura.arabicSuraName) · \(ayah.page.localizedName)"
     }
 }
 

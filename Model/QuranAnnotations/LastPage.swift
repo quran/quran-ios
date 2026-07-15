@@ -8,7 +8,7 @@
 import Foundation
 import QuranKit
 
-public struct LastPage: Equatable, Identifiable {
+public struct LastPage: Equatable, Identifiable, Sendable {
     // MARK: Lifecycle
 
     #if QURAN_SYNC

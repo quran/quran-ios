@@ -37,15 +37,15 @@ final class LastPageUpdaterTests: XCTestCase {
         let sut = LastPageUpdater(service: service)
 
         sut.configure(initialPage: quran.pages[0], lastPage: nil)
-        await waitUntil { await service.addPages == [self.quran.pages[0]] }
+        await waitUntil { service.addPages == [self.quran.pages[0]] }
         sut.updateTo(pages: [quran.pages[1]])
 
-        await service.completeNextAdd()
-        await waitUntil { await service.updateCalls.count == 1 }
-        let updateCalls = await service.updateCalls
+        service.completeNextAdd()
+        await waitUntil { service.updateCalls.count == 1 }
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls.first?.page, quran.pages[0])
         XCTAssertEqual(updateCalls.first?.toPage, quran.pages[1])
-        await service.completeNextUpdate()
+        service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[1] }
         assertIdentity(sut.lastPage, syncID: "created-last-page", noSyncPage: quran.pages[1])
     }
@@ -56,18 +56,18 @@ final class LastPageUpdaterTests: XCTestCase {
         let lastPage = makeLastPage(page: quran.pages[0])
 
         sut.configure(initialPage: quran.pages[1], lastPage: lastPage)
-        await waitUntil { await service.updateCalls.count == 1 }
+        await waitUntil { service.updateCalls.count == 1 }
         sut.updateTo(pages: [quran.pages[2]])
         sut.updateTo(pages: [quran.pages[3]])
-        let callsWhileFirstUpdateIsPending = await service.updateCalls
+        let callsWhileFirstUpdateIsPending = service.updateCalls
         XCTAssertEqual(callsWhileFirstUpdateIsPending.count, 1)
 
-        await service.completeNextUpdate()
-        await waitUntil { await service.updateCalls.count == 2 }
-        let updateCalls = await service.updateCalls
+        service.completeNextUpdate()
+        await waitUntil { service.updateCalls.count == 2 }
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls[1].page, quran.pages[1])
         XCTAssertEqual(updateCalls[1].toPage, quran.pages[3])
-        await service.completeNextUpdate()
+        service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[3] }
         assertIdentity(sut.lastPage, syncID: "last-page", noSyncPage: quran.pages[3])
     }
@@ -78,16 +78,16 @@ final class LastPageUpdaterTests: XCTestCase {
         let lastPage = makeLastPage(page: quran.pages[0])
 
         sut.configure(initialPage: quran.pages[1], lastPage: lastPage)
-        await waitUntil { await service.updateCalls.count == 1 }
+        await waitUntil { service.updateCalls.count == 1 }
         sut.updateTo(pages: [quran.pages[2]])
         sut.updateTo(pages: [quran.pages[1]])
 
-        await service.completeNextUpdate()
+        service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[1] }
         for _ in 0 ..< 10 {
             await Task.yield()
         }
-        let updateCalls = await service.updateCalls
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls.count, 1)
     }
 
@@ -99,8 +99,8 @@ final class LastPageUpdaterTests: XCTestCase {
         sut.configure(initialPage: quran.pages[0], lastPage: lastPage)
         sut.updateTo(pages: [quran.pages[0]])
 
-        await waitUntil { await service.updateCalls.count == 1 }
-        let updateCalls = await service.updateCalls
+        await waitUntil { service.updateCalls.count == 1 }
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls.first?.page, quran.pages[0])
         XCTAssertEqual(updateCalls.first?.toPage, quran.pages[0])
     }
@@ -111,16 +111,16 @@ final class LastPageUpdaterTests: XCTestCase {
         let lastPage = makeLastPage(page: quran.pages[0])
 
         sut.configure(initialPage: quran.pages[1], lastPage: lastPage)
-        await waitUntil { await service.updateCalls.count == 1 }
+        await waitUntil { service.updateCalls.count == 1 }
         sut.updateTo(pages: [quran.pages[0]])
 
-        await service.completeNextUpdate()
-        await waitUntil { await service.updateCalls.count == 2 }
-        let updateCalls = await service.updateCalls
+        service.completeNextUpdate()
+        await waitUntil { service.updateCalls.count == 2 }
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls[1].page, quran.pages[1])
         XCTAssertEqual(updateCalls[1].toPage, quran.pages[0])
 
-        await service.completeNextUpdate()
+        service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[0] }
     }
 
@@ -129,19 +129,19 @@ final class LastPageUpdaterTests: XCTestCase {
         let sut = LastPageUpdater(service: service)
 
         sut.configure(initialPage: quran.pages[1], lastPage: makeLastPage(page: quran.pages[0], id: "old-session"))
-        await waitUntil { await service.updateCalls.count == 1 }
+        await waitUntil { service.updateCalls.count == 1 }
         sut.configure(initialPage: quran.pages[11], lastPage: makeLastPage(page: quran.pages[10], id: "new-session"))
-        let callsWhileFirstUpdateIsPending = await service.updateCalls
+        let callsWhileFirstUpdateIsPending = service.updateCalls
         XCTAssertEqual(callsWhileFirstUpdateIsPending.count, 1)
 
-        await service.completeNextUpdate()
-        await waitUntil { await service.updateCalls.count == 2 }
-        let updateCalls = await service.updateCalls
+        service.completeNextUpdate()
+        await waitUntil { service.updateCalls.count == 2 }
+        let updateCalls = service.updateCalls
         XCTAssertEqual(updateCalls[1].page, quran.pages[10])
         XCTAssertEqual(updateCalls[1].toPage, quran.pages[11])
         XCTAssertEqual(sut.lastPage?.page, quran.pages[10])
         assertIdentity(sut.lastPage, syncID: "new-session", noSyncPage: quran.pages[10])
-        await service.completeNextUpdate()
+        service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[11] }
         assertIdentity(sut.lastPage, syncID: "new-session", noSyncPage: quran.pages[11])
     }
@@ -154,11 +154,11 @@ final class LastPageUpdaterTests: XCTestCase {
             let sut = LastPageUpdater(service: service)
             weakSUT = sut
             sut.configure(initialPage: quran.pages[0], lastPage: nil)
-            await waitUntil { await service.addPages.count == 1 }
+            await waitUntil { service.addPages.count == 1 }
         }
 
         await waitUntil { weakSUT == nil }
-        await waitUntil { await service.cancellationCount == 1 }
+        await waitUntil { service.cancellationCount == 1 }
     }
 
     private let quran = Quran(raw: Madani1405QuranReadingInfoRawData())
@@ -183,7 +183,8 @@ final class LastPageUpdaterTests: XCTestCase {
     }
 }
 
-private actor ControllableLastPageService: LastPageService {
+@MainActor
+private final class ControllableLastPageService: LastPageService {
     struct UpdateCall: Equatable {
         let page: Page
         let toPage: Page
@@ -193,7 +194,7 @@ private actor ControllableLastPageService: LastPageService {
     private(set) var updateCalls: [UpdateCall] = []
     private(set) var cancellationCount = 0
 
-    nonisolated func lastPages(quran _: Quran) -> LastPagesSequence {
+    func lastPages(quran _: Quran) -> LastPagesSequence {
         LastPagesSequence(Just<[LastPage]>([]).values)
     }
 
@@ -204,7 +205,9 @@ private actor ControllableLastPageService: LastPageService {
                 pendingAdds.append((page, continuation))
             }
         } onCancel: {
-            Task { await self.cancelPendingOperation() }
+            Task { @MainActor in
+                self.cancelPendingOperation()
+            }
         }
     }
 
@@ -215,7 +218,9 @@ private actor ControllableLastPageService: LastPageService {
                 pendingUpdates.append((lastPage, toPage, continuation))
             }
         } onCancel: {
-            Task { await self.cancelPendingOperation() }
+            Task { @MainActor in
+                self.cancelPendingOperation()
+            }
         }
     }
 
@@ -252,6 +257,7 @@ private actor ControllableLastPageService: LastPageService {
     }
 }
 
+@MainActor
 private final class LastPageServiceSpy: LastPageService {
     struct UpdateCall: Equatable {
         let page: Page

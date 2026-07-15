@@ -40,6 +40,7 @@ public struct LastPagesSequence: AsyncSequence {
     private let makeIterator: () -> AsyncIterator
 }
 
+@MainActor
 public protocol LastPageService {
     func lastPages(quran: Quran) -> LastPagesSequence
 

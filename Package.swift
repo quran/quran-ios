@@ -631,6 +631,7 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "NoorUI",
             "Preferences",
+            "QuranTextKit",
             "ReadingService",
         ], testDependencies: [
             "Analytics",
@@ -640,6 +641,7 @@ private func featuresTargets() -> [[Target]] {
             "MobileSyncTestSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
+            "QuranResources",
         ]),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [

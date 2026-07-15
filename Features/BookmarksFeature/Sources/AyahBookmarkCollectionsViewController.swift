@@ -8,22 +8,30 @@
 import Combine
 import Localization
 import NoorUI
+import QuranAnnotations
 import SwiftUI
 import UIKit
 
 final class AyahBookmarkCollectionsViewController: UIHostingController<AyahBookmarkCollectionsView> {
     // MARK: Lifecycle
 
-    init(
-        viewModel: AyahBookmarkCollectionsViewModel,
-        title: String = l("bookmarks.collections")
-    ) {
+    init(viewModel: AyahBookmarkCollectionsViewModel) {
         super.init(rootView: AyahBookmarkCollectionsView(viewModel: viewModel))
-        self.title = title
+        navigationItem.largeTitleDisplayMode = .always
         menuController = AyahBookmarkCollectionMenuController(
             viewController: self,
             viewModel: viewModel
         )
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.sizeToFit()
     }
 
     @available(*, unavailable)
@@ -53,12 +61,12 @@ private final class AyahBookmarkCollectionMenuController {
     private let viewModel: AyahBookmarkCollectionsViewModel
     private var cancellables: Set<AnyCancellable> = []
 
-    private func updateNavigationItem(editMode: EditMode, collection: AyahBookmarkCollection?) {
-        guard let viewController, let collection else {
+    private func updateNavigationItem(editMode: EditMode, collection: AyahBookmarkCollection) {
+        guard let viewController else {
             return
         }
 
-        viewController.title = collection.kind.highlightColor?.localizedName ?? collection.collection.name
+        updateTitle(for: collection, in: viewController)
         if editMode.isEditing {
             let doneButton = UIBarButtonItem(
                 title: l("button.done"),
@@ -84,6 +92,24 @@ private final class AyahBookmarkCollectionMenuController {
             button.tintColor = .appIdentity
             viewController.navigationItem.rightBarButtonItem = button
         }
+    }
+
+    private func updateTitle(for collection: AyahBookmarkCollection, in viewController: UIViewController) {
+        let title = collection.kind.highlightColor?.localizedName ?? collection.collection.name
+        let subtitle = bookmarkCountText(collection.bookmarks.count)
+
+        if #available(iOS 26.0, *) {
+            viewController.title = title
+            viewController.navigationItem.subtitle = subtitle
+            viewController.navigationItem.largeTitle = title
+            viewController.navigationItem.largeSubtitle = subtitle
+        } else {
+            viewController.title = "\(title) (\(subtitle))"
+        }
+    }
+
+    private func bookmarkCountText(_ count: Int) -> String {
+        lFormat("bookmarks.collections.ayahs.count", count)
     }
 
     private func actions(for collection: AyahBookmarkCollection) -> [UIAction] {

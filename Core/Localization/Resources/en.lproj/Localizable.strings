@@ -152,8 +152,10 @@
 "bookmarks.collections.no-data.title" = "No collections yet";
 "bookmarks.collections.no-data.text" = "Create a collection to organize ayahs by theme, dua, or memorization plan.";
 "bookmarks.collections.ayah-count" = "%d ayah bookmarks";
-"bookmarks.collections.ayahs.no-data.title" = "No bookmarks in this collection";
-"bookmarks.collections.ayahs.no-data.text" = "Add ayah bookmarks to see them here.";
+"bookmarks.collections.ayahs.delete-hint" = "Swipe a bookmark to delete it.";
+"bookmarks.collections.ayahs.open-hint" = "Opens this ayah in the Quran.";
+"bookmarks.collections.ayahs.no-data.text" = "Ayahs you bookmark while reading will appear here.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs you highlight with a %@ bookmark while reading will appear here.";
 "bookmarks.highlights" = "Highlights";
 
 // MARK: - Notes

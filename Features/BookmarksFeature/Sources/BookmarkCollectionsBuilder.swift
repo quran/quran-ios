@@ -19,6 +19,7 @@ struct BookmarkCollectionsBuilder {
         let collectionService = AyahBookmarkCollectionService(quranDataService: container.quranDataService)
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
+            quranTextDataService: container.textDataService(),
             navigateToPage: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
             }

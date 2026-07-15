@@ -133,8 +133,10 @@
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم الآيات حسب الموضوع أو الدعاء أو خطة الحفظ.";
 "bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";
-"bookmarks.collections.ayahs.no-data.title" = "لا توجد إشارات مرجعية في هذه المجموعة";
-"bookmarks.collections.ayahs.no-data.text" = "أضف إشارات مرجعية للآيات لرؤيتها هنا.";
+"bookmarks.collections.ayahs.delete-hint" = "اسحب الإشارة المرجعية لحذفها.";
+"bookmarks.collections.ayahs.open-hint" = "يفتح هذه الآية في القرآن.";
+"bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها أثناء القراءة بإشارة مرجعية باللون %@.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 
 "bookmarks.sync.title" = "زامن العلامات المرجعية";

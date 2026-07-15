@@ -3,6 +3,8 @@ import Combine
 import MobileSync
 import MobileSyncTestSupport
 import QuranKit
+import QuranResources
+import QuranTextKit
 import XCTest
 @testable import BookmarksFeature
 
@@ -34,13 +36,39 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(collection: collection, service: service)
         let observed = expectation(description: "Observes persisted collection")
         let observation = sut.$collection
-            .filter { $0?.collection.name == "Favorites" }
+            .filter { $0.collection.name == "Favorites" }
             .prefix(1)
             .sink { _ in observed.fulfill() }
 
         let task = Task { await sut.start() }
         await fulfillment(of: [observed], timeout: 2)
 
+        XCTAssertNil(sut.error)
+        task.cancel()
+        observation.cancel()
+    }
+
+    func test_start_loadsArabicTextForCollectionBookmarks() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let storedCollection = try await firstCollection()
+        let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: ayah
+        )
+        let collection = try await firstCollection()
+        let sut = makeSUT(collection: collection, service: service)
+        let retrieved = expectation(description: "Retrieves Arabic text")
+        let observation = sut.$ayahTexts
+            .filter { $0[ayah]?.isEmpty == false }
+            .prefix(1)
+            .sink { _ in retrieved.fulfill() }
+
+        let task = Task { await sut.start() }
+        await fulfillment(of: [retrieved], timeout: 2)
+
+        XCTAssertFalse(try XCTUnwrap(sut.ayahTexts[ayah]).isEmpty)
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
@@ -140,11 +168,13 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
     private func makeSUT(
         collection: AyahBookmarkCollection,
         service: AyahBookmarkCollectionService? = nil,
+        quranTextDataService: QuranTextDataService? = nil,
         collectionDeleted: @escaping () -> Void = {}
     ) -> AyahBookmarkCollectionsViewModel {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: service ?? makeService(),
             collection: collection,
+            quranTextDataService: quranTextDataService ?? makeQuranTextDataService(),
             navigateToPage: { _ in },
             collectionDeleted: collectionDeleted
         )
@@ -152,6 +182,13 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
 
     private func makeService() -> AyahBookmarkCollectionService {
         AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+    }
+
+    private func makeQuranTextDataService() -> QuranTextDataService {
+        QuranTextDataService(
+            databasesURL: URL(fileURLWithPath: "/tmp/unavailable-translations-database"),
+            quranFileURL: QuranResources.quranUthmaniV2Database
+        )
     }
 
     private func storedCollections(

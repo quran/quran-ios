@@ -54,5 +54,25 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         XCTAssertEqual(storedSessions?.first?.sura, Int32(quran.pages[20].firstVerse.sura.suraNumber))
         XCTAssertEqual(storedSessions?.first?.ayah, Int32(quran.pages[20].firstVerse.ayah))
     }
+
+    func test_updateCollisionPreservesBothReadingSessions() async throws {
+        let quran = Quran.hafsMadani1405
+        let source = try await service.add(page: quran.pages[10])
+        let destination = try await service.add(page: quran.pages[20])
+        let sourceID = try XCTUnwrap(source.localId)
+        let destinationID = try XCTUnwrap(destination.localId)
+
+        do {
+            _ = try await service.update(lastPage: source, toPage: quran.pages[20])
+            XCTFail("Expected the MobileSync collision error")
+        } catch is CancellationError {
+            XCTFail("Unexpected cancellation")
+        } catch {}
+
+        let iterator = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
+        let value = try await iterator.next()
+        let storedSessions = try XCTUnwrap(value)
+        XCTAssertEqual(Set(storedSessions.map(\.id)), Set([sourceID, destinationID]))
+    }
 }
 #endif

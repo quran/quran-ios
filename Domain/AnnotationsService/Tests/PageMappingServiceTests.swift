@@ -87,16 +87,19 @@ final class PageMappingServiceTests: XCTestCase {
         XCTAssertEqual(bookmarks.map(\.page.pageNumber), [2])
     }
 
+    #if !QURAN_SYNC
     func testLastPagesMapStoredCanonicalPagesToRequestedQuran() async throws {
+        let quran = skippedPageQuran()
         let persistence = LastPagePersistenceFake(lastPages: [
             LastPagePersistenceModel(page: 1, createdOn: date, modifiedOn: laterDate),
         ])
         let service = PersistenceLastPageService(persistence: persistence)
 
-        var iterator = service.lastPages(quran: skippedPageQuran()).makeAsyncIterator()
+        var iterator = service.lastPages(quran: quran).makeAsyncIterator()
         let nextLastPages = try await iterator.next()
         let lastPages = try XCTUnwrap(nextLastPages)
 
+        XCTAssertEqual(lastPages.map(\.id), [quran.pages[0]])
         XCTAssertEqual(lastPages.map(\.page.pageNumber), [2])
         XCTAssertEqual(lastPages.map(\.createdOn), [date])
         XCTAssertEqual(lastPages.map(\.modifiedOn), [laterDate])
@@ -105,24 +108,34 @@ final class PageMappingServiceTests: XCTestCase {
     func testAddLastPageStoresCanonicalPageAndReturnsRequestedQuranPage() async throws {
         let persistence = LastPagePersistenceFake()
         let service = PersistenceLastPageService(persistence: persistence)
+        let quran = skippedPageQuran()
 
-        let lastPage = try await service.add(page: skippedPageQuran().pages[0])
+        let lastPage = try await service.add(page: quran.pages[0])
 
         XCTAssertEqual(persistence.addedPages, [1])
+        XCTAssertEqual(lastPage.id, quran.pages[0])
         XCTAssertEqual(lastPage.page.pageNumber, 2)
     }
 
     func testUpdateLastPageStoresCanonicalPagesAndReturnsRequestedQuranPage() async throws {
-        let persistence = LastPagePersistenceFake()
+        let persistence = LastPagePersistenceFake(lastPages: [
+            LastPagePersistenceModel(page: 1, createdOn: date, modifiedOn: laterDate),
+        ])
         let service = PersistenceLastPageService(persistence: persistence)
         let quran = skippedPageQuran()
 
-        let currentLastPage = LastPage(page: quran.pages[0], createdOn: date, modifiedOn: date)
+        let currentLastPage = LastPage(
+            page: quran.pages[0],
+            createdOn: date,
+            modifiedOn: date
+        )
         let lastPage = try await service.update(lastPage: currentLastPage, toPage: quran.pages[1])
 
         XCTAssertEqual(persistence.updates, [LastPagePersistenceFake.Update(page: 1, toPage: 2)])
+        XCTAssertEqual(lastPage.id, quran.pages[1])
         XCTAssertEqual(lastPage.page.pageNumber, 3)
     }
+    #endif
 
     // MARK: Private
 
@@ -171,6 +184,7 @@ private final class PageBookmarkPersistenceFake: PageBookmarkPersistence {
     }
 }
 
+#if !QURAN_SYNC
 private final class LastPagePersistenceFake: LastPagePersistence, @unchecked Sendable {
     struct Update: Equatable {
         let page: Int
@@ -219,3 +233,4 @@ private final class LastPagePersistenceFake: LastPagePersistence, @unchecked Sen
         return model
     }
 }
+#endif

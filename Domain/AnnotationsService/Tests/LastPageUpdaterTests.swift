@@ -189,8 +189,8 @@ private actor ControllableLastPageService: LastPageService {
     private(set) var updateCalls: [UpdateCall] = []
     private(set) var cancellationCount = 0
 
-    nonisolated func lastPages(quran _: Quran) -> AnyPublisher<[LastPage], Never> {
-        Just([]).eraseToAnyPublisher()
+    nonisolated func lastPages(quran _: Quran) -> LastPagesSequence {
+        LastPagesSequence(Just<[LastPage]>([]).values)
     }
 
     func add(page: Page) async throws -> LastPage {
@@ -258,8 +258,8 @@ private final class LastPageServiceSpy: LastPageService {
     private(set) var addPages: [Page] = []
     private(set) var updateCalls: [UpdateCall] = []
 
-    func lastPages(quran _: Quran) -> AnyPublisher<[LastPage], Never> {
-        Just([]).eraseToAnyPublisher()
+    func lastPages(quran _: Quran) -> LastPagesSequence {
+        LastPagesSequence(Just<[LastPage]>([]).values)
     }
 
     func add(page: Page) async throws -> LastPage {

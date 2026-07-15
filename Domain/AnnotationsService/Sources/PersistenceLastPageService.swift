@@ -21,9 +21,9 @@ public struct PersistenceLastPageService: LastPageService {
 
     // MARK: Public
 
-    public func lastPages(quran: Quran) -> AnyPublisher<[LastPage], Never> {
+    public func lastPages(quran: Quran) -> LastPagesSequence {
         let mapper = QuranPageMapper(destination: quran)
-        return persistence.lastPages()
+        let sequence = persistence.lastPages()
             .map { lastPages in
                 lastPages.compactMap { lastPage in
                     Page(quran: storedPageQuran, pageNumber: lastPage.page)
@@ -33,7 +33,8 @@ public struct PersistenceLastPageService: LastPageService {
                         }
                 }
             }
-            .eraseToAnyPublisher()
+            .values()
+        return LastPagesSequence(sequence)
     }
 
     public func add(page: Page) async throws -> LastPage {

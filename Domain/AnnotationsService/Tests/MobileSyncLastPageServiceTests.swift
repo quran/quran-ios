@@ -175,6 +175,41 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         XCTAssertEqual(Set(lastPages?.map(\.id) ?? []), Set([first.id, second.id]))
     }
 
+    func test_lastPagesMapsCoordinatesInRequestedQuran() async throws {
+        let sura: Int32 = 2
+        let ayah: Int32 = 255
+        let session = try await database.quranDataService.addReadingSession(
+            sura: sura,
+            ayah: ayah,
+            timestamp: Date(timeIntervalSince1970: 1)
+        )
+
+        for quran in [Quran.hafsMadani1405, .hafsMadani1440, .hafsNaskh] {
+            var iterator = service.lastPages(quran: quran).makeAsyncIterator()
+
+            let lastPages = try await iterator.next()
+            let expectedAyah = try XCTUnwrap(
+                AyahNumber(quran: quran, sura: Int(sura), ayah: Int(ayah))
+            )
+
+            XCTAssertEqual(lastPages?.map(\.id), [session.id])
+            XCTAssertEqual(lastPages?.map(\.page), [expectedAyah.page])
+        }
+    }
+
+    func test_lastPagesFiltersInvalidCoordinates() async throws {
+        _ = try await database.quranDataService.addReadingSession(
+            sura: 999,
+            ayah: 999,
+            timestamp: Date(timeIntervalSince1970: 1)
+        )
+        var iterator = service.lastPages(quran: .hafsMadani1405).makeAsyncIterator()
+
+        let lastPages = try await iterator.next()
+
+        XCTAssertEqual(lastPages, [])
+    }
+
     func test_lastPagesSortsByModificationTimeThenIdentityAndLimitsToThree() async throws {
         let quran = Quran.hafsMadani1405
         let pages = [10, 20, 30, 40].map { quran.pages[$0] }

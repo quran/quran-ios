@@ -7,7 +7,6 @@
 //
 
 #if QURAN_SYNC
-import Foundation
 @preconcurrency import MobileSync
 import QuranAnnotations
 import QuranKit
@@ -42,8 +41,7 @@ public struct MobileSyncLastPageService: LastPageService {
         let firstVerse = page.firstVerse
         let session = try await quranDataService.addReadingSession(
             sura: Int32(firstVerse.sura.suraNumber),
-            ayah: Int32(firstVerse.ayah),
-            timestamp: Date()
+            ayah: Int32(firstVerse.ayah)
         )
         return lastPage(page: page, for: session)
     }
@@ -53,8 +51,7 @@ public struct MobileSyncLastPageService: LastPageService {
         let updatedSession = try await quranDataService.updateReadingSession(
             id: lastPage.id,
             sura: Int32(firstVerse.sura.suraNumber),
-            ayah: Int32(firstVerse.ayah),
-            timestamp: Date()
+            ayah: Int32(firstVerse.ayah)
         )
         return self.lastPage(page: toPage, for: updatedSession)
     }

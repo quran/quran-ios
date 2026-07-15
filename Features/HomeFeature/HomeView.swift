@@ -72,7 +72,7 @@ private struct HomeViewUI: View {
         return NoorListItem(
             image: .init(.lastPage, color: .secondaryLabel),
             title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
-            subtitle: .init(text: lastPage.createdOn.timeAgo(), location: .bottom),
+            subtitle: .init(text: lastPage.modifiedOn.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(lastPage.page.pageNumber))
         ) {
             selectLastPage(lastPage)
@@ -150,11 +150,19 @@ struct HomeView_Previews: PreviewProvider {
         static var staticLastPages: [LastPage] {
             let pages = Quran.hafsMadani1405.pages.shuffled()
             return (0 ..< 3).map { i in
+                #if QURAN_SYNC
+                LastPage(
+                    id: "preview-\(i)",
+                    page: pages[i],
+                    modifiedOn: Date(timeIntervalSince1970: Double(i) * 60 * -3)
+                )
+                #else
                 LastPage(
                     page: pages[i],
                     createdOn: Date(timeIntervalSince1970: Double(i) * 60 * -3),
                     modifiedOn: Date(timeIntervalSince1970: Double(i) * 60 * -3)
                 )
+                #endif
             }
         }
 

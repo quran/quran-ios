@@ -22,7 +22,7 @@ final class LastPageUpdaterTests: XCTestCase {
         let service = LastPageServiceSpy()
         let sut = LastPageUpdater(service: service)
 
-        let lastPage = LastPage(page: quran.pages[0], createdOn: Date(), modifiedOn: Date())
+        let lastPage = makeLastPage(page: quran.pages[0])
 
         sut.configure(initialPage: quran.pages[1], lastPage: lastPage)
 
@@ -47,6 +47,7 @@ final class LastPageUpdaterTests: XCTestCase {
         XCTAssertEqual(updateCalls.first?.toPage, quran.pages[1])
         await service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[1] }
+        assertIdentity(sut.lastPage, syncID: "created-last-page", noSyncPage: quran.pages[1])
     }
 
     func test_rapidScrolling_serializesWritesAndCoalescesLatestPage() async {
@@ -68,6 +69,7 @@ final class LastPageUpdaterTests: XCTestCase {
         XCTAssertEqual(updateCalls[1].toPage, quran.pages[3])
         await service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[3] }
+        assertIdentity(sut.lastPage, syncID: "last-page", noSyncPage: quran.pages[3])
     }
 
     func test_scrollBackToInFlightPage_doesNotCreateRedundantWrite() async {
@@ -126,9 +128,9 @@ final class LastPageUpdaterTests: XCTestCase {
         let service = ControllableLastPageService()
         let sut = LastPageUpdater(service: service)
 
-        sut.configure(initialPage: quran.pages[1], lastPage: makeLastPage(page: quran.pages[0]))
+        sut.configure(initialPage: quran.pages[1], lastPage: makeLastPage(page: quran.pages[0], id: "old-session"))
         await waitUntil { await service.updateCalls.count == 1 }
-        sut.configure(initialPage: quran.pages[11], lastPage: makeLastPage(page: quran.pages[10]))
+        sut.configure(initialPage: quran.pages[11], lastPage: makeLastPage(page: quran.pages[10], id: "new-session"))
         let callsWhileFirstUpdateIsPending = await service.updateCalls
         XCTAssertEqual(callsWhileFirstUpdateIsPending.count, 1)
 
@@ -138,8 +140,10 @@ final class LastPageUpdaterTests: XCTestCase {
         XCTAssertEqual(updateCalls[1].page, quran.pages[10])
         XCTAssertEqual(updateCalls[1].toPage, quran.pages[11])
         XCTAssertEqual(sut.lastPage?.page, quran.pages[10])
+        assertIdentity(sut.lastPage, syncID: "new-session", noSyncPage: quran.pages[10])
         await service.completeNextUpdate()
         await waitUntil { sut.lastPage?.page == self.quran.pages[11] }
+        assertIdentity(sut.lastPage, syncID: "new-session", noSyncPage: quran.pages[11])
     }
 
     func test_deinit_cancelsInFlightWrite() async {
@@ -159,8 +163,8 @@ final class LastPageUpdaterTests: XCTestCase {
 
     private let quran = Quran(raw: Madani1405QuranReadingInfoRawData())
 
-    private func makeLastPage(page: Page) -> LastPage {
-        LastPage(page: page, createdOn: Date(), modifiedOn: Date())
+    private func makeLastPage(page: Page, id: String = "last-page") -> LastPage {
+        makeTestLastPage(page: page, syncID: id)
     }
 
     private func waitUntil(
@@ -208,7 +212,7 @@ private actor ControllableLastPageService: LastPageService {
         updateCalls.append(UpdateCall(page: lastPage.page, toPage: toPage))
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { continuation in
-                pendingUpdates.append((toPage, continuation))
+                pendingUpdates.append((lastPage, toPage, continuation))
             }
         } onCancel: {
             Task { await self.cancelPendingOperation() }
@@ -217,21 +221,26 @@ private actor ControllableLastPageService: LastPageService {
 
     func completeNextAdd() {
         let pending = pendingAdds.removeFirst()
-        pending.continuation.resume(returning: makeLastPage(page: pending.page))
+        pending.continuation.resume(returning: makeTestLastPage(page: pending.page, syncID: "created-last-page"))
     }
 
     func completeNextUpdate() {
         let pending = pendingUpdates.removeFirst()
-        pending.continuation.resume(returning: makeLastPage(page: pending.page))
+        pending.continuation.resume(returning: updatedLastPage(pending.lastPage, page: pending.page))
     }
 
-    private typealias PendingOperation = (
+    private typealias PendingAdd = (
+        page: Page,
+        continuation: CheckedContinuation<LastPage, Error>
+    )
+    private typealias PendingUpdate = (
+        lastPage: LastPage,
         page: Page,
         continuation: CheckedContinuation<LastPage, Error>
     )
 
-    private var pendingAdds: [PendingOperation] = []
-    private var pendingUpdates: [PendingOperation] = []
+    private var pendingAdds: [PendingAdd] = []
+    private var pendingUpdates: [PendingUpdate] = []
 
     private func cancelPendingOperation() {
         cancellationCount += 1
@@ -240,10 +249,6 @@ private actor ControllableLastPageService: LastPageService {
         } else if !pendingUpdates.isEmpty {
             pendingUpdates.removeFirst().continuation.resume(throwing: CancellationError())
         }
-    }
-
-    private func makeLastPage(page: Page) -> LastPage {
-        LastPage(page: page, createdOn: Date(), modifiedOn: Date())
     }
 }
 
@@ -265,12 +270,42 @@ private final class LastPageServiceSpy: LastPageService {
     func add(page: Page) async throws -> LastPage {
         addCallCount += 1
         addPages.append(page)
-        return LastPage(page: page, createdOn: Date(), modifiedOn: Date())
+        return makeTestLastPage(page: page, syncID: "created-last-page")
     }
 
     func update(lastPage: LastPage, toPage: Page) async throws -> LastPage {
         updateCallCount += 1
         updateCalls.append(UpdateCall(page: lastPage.page, toPage: toPage))
-        return LastPage(page: toPage, createdOn: Date(), modifiedOn: Date())
+        return updatedLastPage(lastPage, page: toPage)
     }
+}
+
+private func makeTestLastPage(page: Page, syncID: String) -> LastPage {
+    #if QURAN_SYNC
+    LastPage(id: syncID, page: page, modifiedOn: Date())
+    #else
+    LastPage(page: page, createdOn: Date(), modifiedOn: Date())
+    #endif
+}
+
+private func updatedLastPage(_ lastPage: LastPage, page: Page) -> LastPage {
+    #if QURAN_SYNC
+    LastPage(id: lastPage.id, page: page, modifiedOn: Date())
+    #else
+    LastPage(page: page, createdOn: lastPage.createdOn, modifiedOn: Date())
+    #endif
+}
+
+private func assertIdentity(
+    _ lastPage: LastPage?,
+    syncID: String,
+    noSyncPage: Page,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) {
+    #if QURAN_SYNC
+    XCTAssertEqual(lastPage?.id, syncID, file: file, line: line)
+    #else
+    XCTAssertEqual(lastPage?.id, noSyncPage, file: file, line: line)
+    #endif
 }

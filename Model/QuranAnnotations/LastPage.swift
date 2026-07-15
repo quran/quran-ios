@@ -11,19 +11,29 @@ import QuranKit
 public struct LastPage: Equatable, Identifiable {
     // MARK: Lifecycle
 
-    public init(page: Page, createdOn: Date, modifiedOn: Date, localId: String? = nil) {
+    #if QURAN_SYNC
+    public init(id: String, page: Page, modifiedOn: Date) {
+        self.id = id
+        self.page = page
+        self.modifiedOn = modifiedOn
+    }
+    #else
+    public init(page: Page, createdOn: Date, modifiedOn: Date) {
         self.page = page
         self.createdOn = createdOn
         self.modifiedOn = modifiedOn
-        self.localId = localId
     }
+    #endif
 
     // MARK: Public
 
-    public var page: Page
-    public var createdOn: Date
-    public var modifiedOn: Date
-    public var localId: String?
-
+    #if QURAN_SYNC
+    public let id: String
+    #else
     public var id: Page { page }
+    public var createdOn: Date
+    #endif
+
+    public var page: Page
+    public var modifiedOn: Date
 }

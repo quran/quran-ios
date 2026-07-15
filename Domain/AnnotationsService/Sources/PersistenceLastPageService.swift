@@ -6,6 +6,7 @@
 //  Copyright © 2023 Quran.com. All rights reserved.
 //
 
+#if !QURAN_SYNC
 import Combine
 import LastPagePersistence
 import QuranAnnotations
@@ -90,3 +91,4 @@ public struct PersistenceLastPageService: LastPageService {
         )
     }
 }
+#endif

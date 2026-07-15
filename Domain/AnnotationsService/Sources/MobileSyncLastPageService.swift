@@ -27,7 +27,12 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
                 let mapped = sessions.compactMap { session in
                     lastPage(for: session, quran: quran)
                 }
-                let sorted = mapped.sorted { $0.createdOn > $1.createdOn }
+                let sorted = mapped.sorted {
+                    if $0.modifiedOn == $1.modifiedOn {
+                        return $0.id < $1.id
+                    }
+                    return $0.modifiedOn > $1.modifiedOn
+                }
                 return Array(sorted.prefix(3))
             }
         return LastPagesSequence(sequence)
@@ -44,13 +49,9 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
     }
 
     public func update(lastPage: LastPage, toPage: Page) async throws -> LastPage {
-        guard let localId = lastPage.localId else {
-            return try await add(page: toPage)
-        }
-
         let firstVerse = toPage.firstVerse
         let updatedSession = try await quranDataService.updateReadingSession(
-            id: localId,
+            id: lastPage.id,
             sura: Int32(firstVerse.sura.suraNumber),
             ayah: Int32(firstVerse.ayah),
             timestamp: Date()
@@ -83,10 +84,9 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
 
     private func lastPage(page: Page, for session: ReadingSession) -> LastPage {
         LastPage(
+            id: session.id,
             page: page,
-            createdOn: session.lastUpdated,
-            modifiedOn: session.lastUpdated,
-            localId: session.id
+            modifiedOn: session.lastUpdated
         )
     }
 }

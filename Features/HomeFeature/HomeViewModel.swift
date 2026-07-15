@@ -109,16 +109,28 @@ final class HomeViewModel: ObservableObject {
     private let readingPreferences = ReadingPreferences.shared
 
     private func loadLastPages() async {
-        let lastPagesSequence = readingPreferences.$reading
+        let readings = readingPreferences.$reading
             .prepend(readingPreferences.reading)
-            .map { [lastPageService] reading in
-                lastPageService.lastPages(quran: reading.quran)
-            }
-            .switchToLatest()
             .values()
+        var observationTask: Task<Void, Never>?
+        defer { observationTask?.cancel() }
 
-        for await lastPages in lastPagesSequence {
-            self.lastPages = lastPages
+        for await reading in readings {
+            observationTask?.cancel()
+            let sequence = lastPageService.lastPages(quran: reading.quran)
+            observationTask = Task { [weak self] in
+                do {
+                    for try await lastPages in sequence {
+                        guard !Task.isCancelled else { return }
+                        self?.lastPages = lastPages
+                    }
+                } catch is CancellationError {
+                    return
+                } catch {
+                    guard !Task.isCancelled else { return }
+                    crasher.recordError(error, reason: "Failed to load last pages")
+                }
+            }
         }
     }
 

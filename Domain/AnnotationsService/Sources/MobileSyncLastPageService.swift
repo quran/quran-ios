@@ -7,7 +7,6 @@
 //
 
 #if QURAN_SYNC
-import Combine
 import Foundation
 @preconcurrency import MobileSync
 import QuranAnnotations
@@ -22,28 +21,16 @@ public struct MobileSyncLastPageService: LastPageService, @unchecked Sendable {
 
     // MARK: Public
 
-    public func lastPages(quran: Quran) -> AnyPublisher<[LastPage], Never> {
-        let subject = CurrentValueSubject<[LastPage], Never>([])
-        let task = Task {
-            do {
-                for try await sessions in quranDataService.readingSessionsSequence() {
-                    if Task.isCancelled {
-                        break
-                    }
-                    let mapped = sessions.compactMap { session in
-                        lastPage(for: session, quran: quran)
-                    }
-
-                    let sorted = mapped.sorted { $0.createdOn > $1.createdOn }
-                    subject.send(Array(sorted.prefix(3)))
+    public func lastPages(quran: Quran) -> LastPagesSequence {
+        let sequence = quranDataService.readingSessionsSequence()
+            .map { sessions in
+                let mapped = sessions.compactMap { session in
+                    lastPage(for: session, quran: quran)
                 }
-            } catch {
-                // ignore errors
+                let sorted = mapped.sorted { $0.createdOn > $1.createdOn }
+                return Array(sorted.prefix(3))
             }
-        }
-        return subject
-            .handleEvents(receiveCancel: { task.cancel() })
-            .eraseToAnyPublisher()
+        return LastPagesSequence(sequence)
     }
 
     public func add(page: Page) async throws -> LastPage {

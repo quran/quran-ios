@@ -87,13 +87,15 @@ final class PageMappingServiceTests: XCTestCase {
         XCTAssertEqual(bookmarks.map(\.page.pageNumber), [2])
     }
 
-    func testLastPagesMapStoredCanonicalPagesToRequestedQuran() {
+    func testLastPagesMapStoredCanonicalPagesToRequestedQuran() async throws {
         let persistence = LastPagePersistenceFake(lastPages: [
             LastPagePersistenceModel(page: 1, createdOn: date, modifiedOn: laterDate),
         ])
         let service = PersistenceLastPageService(persistence: persistence)
 
-        let lastPages = value(from: service.lastPages(quran: skippedPageQuran()))
+        var iterator = service.lastPages(quran: skippedPageQuran()).makeAsyncIterator()
+        let nextLastPages = try await iterator.next()
+        let lastPages = try XCTUnwrap(nextLastPages)
 
         XCTAssertEqual(lastPages.map(\.page.pageNumber), [2])
         XCTAssertEqual(lastPages.map(\.createdOn), [date])

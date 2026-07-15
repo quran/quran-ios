@@ -69,16 +69,24 @@ private final class AyahBookmarkCollectionMenuController {
             doneButton.tintColor = .appIdentity
             viewController.navigationItem.rightBarButtonItem = doneButton
         } else {
-            let moreButton = UIBarButtonItem(
-                image: UIImage(systemName: "ellipsis.circle"),
-                menu: menu(for: collection)
-            )
-            moreButton.tintColor = .appIdentity
-            viewController.navigationItem.rightBarButtonItem = moreButton
+            let actions = actions(for: collection)
+            let button = if let singleAction = actions.first, actions.count == 1 {
+                UIBarButtonItem(
+                    title: singleAction.title,
+                    primaryAction: singleAction
+                )
+            } else {
+                UIBarButtonItem(
+                    image: UIImage(systemName: "ellipsis.circle"),
+                    menu: UIMenu(children: actions)
+                )
+            }
+            button.tintColor = .appIdentity
+            viewController.navigationItem.rightBarButtonItem = button
         }
     }
 
-    private func menu(for collection: AyahBookmarkCollection) -> UIMenu {
+    private func actions(for collection: AyahBookmarkCollection) -> [UIAction] {
         var actions = [
             UIAction(
                 title: l("bookmarks.collections.edit.action"),
@@ -114,7 +122,7 @@ private final class AyahBookmarkCollectionMenuController {
             )
         }
 
-        return UIMenu(children: actions)
+        return actions
     }
 }
 #endif

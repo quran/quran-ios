@@ -88,14 +88,16 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertTrue(user.kind.canDelete)
     }
 
-    func test_collectionDetailsMenu_onlyShowsEditForHighlightCollection() {
+    func test_collectionDetailsController_showsDirectEditButtonForHighlightCollection() {
         let collection = collection(name: "Red")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
 
-        let titles = viewController.navigationItem.rightBarButtonItem?.menu?.children.map(\.title)
+        let button = viewController.navigationItem.rightBarButtonItem
 
-        XCTAssertEqual(titles, [l("bookmarks.collections.edit.action")])
+        XCTAssertEqual(button?.title, l("bookmarks.collections.edit.action"))
+        XCTAssertNotNil(button?.primaryAction)
+        XCTAssertNil(button?.menu)
     }
 
     func test_collectionDetailsMenu_showsAllActionsForUserCollection() {

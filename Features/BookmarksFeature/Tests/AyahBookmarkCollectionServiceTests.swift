@@ -66,17 +66,54 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertTrue(emptied.bookmarks.isEmpty)
     }
 
-    func test_addAyahBookmarksIfNeeded_persistsOnlyMissingUniqueAyahs() async throws {
+    func test_addAyahs_persistsOnlyMissingUniqueAyahs() async throws {
         try await service.createCollection(named: "Favorites")
         let stored = try await storedCollection(named: "Favorites")
-        let collection = try XCTUnwrap(
-            AyahBookmarkCollectionService.collections(from: [stored], quran: .hafsMadani1405).first
-        )
 
-        try await service.addAyahBookmarksIfNeeded([ayah(1), ayah(1), ayah(2)], to: collection)
+        try await service.addAyahs(
+            [ayah(1), ayah(1), ayah(2)],
+            toCollectionWithID: stored.collection.id
+        )
 
         let updated = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 2 }
         XCTAssertEqual(Set(updated.bookmarks.map { "\($0.sura):\($0.ayah)" }), ["1:1", "1:2"])
+    }
+
+    func test_removeAyahs_removesOnlyRequestedCollectionMemberships() async throws {
+        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Study")
+        let favorites = try await storedCollection(named: "Favorites")
+        let study = try await storedCollection(named: "Study")
+        for number in [1, 2] {
+            try await service.addAyahBookmarkToCollection(collectionId: favorites.collection.id, ayah: ayah(number))
+            try await service.addAyahBookmarkToCollection(collectionId: study.collection.id, ayah: ayah(number))
+        }
+
+        try await service.removeAyahs([ayah(1)], fromCollectionWithID: favorites.collection.id)
+
+        let updatedFavorites = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 1 }
+        let updatedStudy = try await storedCollection(named: "Study") { $0.bookmarks.count == 2 }
+        XCTAssertEqual(updatedFavorites.bookmarks.map(\.ayah), [2])
+        XCTAssertEqual(Set(updatedStudy.bookmarks.map(\.ayah)), [1, 2])
+    }
+
+    func test_setHighlight_replacesExistingHighlightAcrossCollections() async throws {
+        try await service.createCollection(named: HighlightColor.red.collectionName)
+        try await service.createCollection(named: HighlightColor.green.collectionName)
+        let red = try await storedCollection(named: HighlightColor.red.collectionName)
+        try await service.addAyahBookmarkToCollection(collectionId: red.collection.id, ayah: ayah(1))
+        try await service.addAyahBookmarkToCollection(collectionId: red.collection.id, ayah: ayah(2))
+
+        try await service.setHighlight(.green, for: [ayah(1), ayah(2)])
+
+        let updatedRed = try await storedCollection(named: HighlightColor.red.collectionName) {
+            $0.bookmarks.isEmpty
+        }
+        let updatedGreen = try await storedCollection(named: HighlightColor.green.collectionName) {
+            $0.bookmarks.count == 2
+        }
+        XCTAssertTrue(updatedRed.bookmarks.isEmpty)
+        XCTAssertEqual(Set(updatedGreen.bookmarks.map(\.ayah)), [1, 2])
     }
 
     func test_collectionsSequence_createsAllMissingHighlightCollectionsInDatabase() async throws {

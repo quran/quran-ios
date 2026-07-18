@@ -553,11 +553,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
-            "BookmarksFeature",
             "NoorUI",
-        ], testDependencies: [
-            "MobileSyncTestSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [

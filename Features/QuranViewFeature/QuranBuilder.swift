@@ -10,9 +10,7 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
-#if QURAN_SYNC
 import BookmarksFeature
-#endif
 import MoreMenuFeature
 import NoteEditorFeature
 import QuranContentFeature
@@ -50,6 +48,7 @@ public struct QuranBuilder {
             pageBookmarkService: pageBookmarkService,
             highlightsService: highlightsService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
+            bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),
             audioBannerBuilder: AudioBannerBuilder(container: container),
             wordPointerBuilder: WordPointerBuilder(container: container),
@@ -70,6 +69,7 @@ public struct QuranBuilder {
             pageBookmarkService: pageBookmarkService,
             highlightsService: highlightsService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
+            bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),
             audioBannerBuilder: AudioBannerBuilder(container: container),
             wordPointerBuilder: WordPointerBuilder(container: container),

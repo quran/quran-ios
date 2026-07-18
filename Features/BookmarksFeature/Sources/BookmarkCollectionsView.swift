@@ -61,7 +61,7 @@ private struct BookmarkCollectionsContent: View {
                     collectionRow(
                         title: collection.displayName,
                         image: collection.displayImage,
-                        imageColor: collectionImageColor(collection),
+                        imageColor: collection.displayImageColor,
                         collection: collection
                     )
                     .deleteDisabled(!collection.kind.canDelete)
@@ -88,17 +88,6 @@ private struct BookmarkCollectionsContent: View {
         .addCollectionAlert(viewModel: viewModel)
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
-    }
-
-    private func collectionImageColor(_ collection: AyahBookmarkCollection) -> Color {
-        switch collection.kind {
-        case .defaultBookmarks:
-            Color(uiColor: .systemYellow)
-        case .oldPageBookmarks:
-            .secondaryLabel
-        case .colored, .user:
-            .appIdentity
-        }
     }
 
     private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {

@@ -7,9 +7,6 @@
 //
 
 import AppDependencies
-#if QURAN_SYNC
-import BookmarksFeature
-#endif
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -18,23 +15,6 @@ import UIKit
 public struct AyahMenuInput {
     // MARK: Lifecycle
 
-    #if QURAN_SYNC
-    public init(
-        sourceView: UIView,
-        pointInView: CGPoint,
-        verses: [AyahNumber],
-        notes: [QuranAnnotations.Note],
-        highlightVerses: [AyahNumber: HighlightColor],
-        highlightCollections: [AyahBookmarkCollection]
-    ) {
-        self.sourceView = sourceView
-        self.pointInView = pointInView
-        self.verses = verses
-        self.notes = notes
-        self.highlightVerses = highlightVerses
-        self.highlightCollections = highlightCollections
-    }
-    #else
     public init(
         sourceView: UIView,
         pointInView: CGPoint,
@@ -46,7 +26,6 @@ public struct AyahMenuInput {
         self.verses = verses
         self.notes = notes
     }
-    #endif
 
     // MARK: Internal
 
@@ -54,10 +33,6 @@ public struct AyahMenuInput {
     let pointInView: CGPoint
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
-    #if QURAN_SYNC
-    let highlightVerses: [AyahNumber: HighlightColor]
-    let highlightCollections: [AyahBookmarkCollection]
-    #endif
 }
 
 @MainActor
@@ -81,10 +56,7 @@ public struct AyahMenuBuilder {
             pointInView: input.pointInView,
             verses: input.verses,
             textRetriever: textRetriever,
-            notes: input.notes,
-            highlightVerses: input.highlightVerses,
-            highlightCollections: input.highlightCollections,
-            ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService)
+            notes: input.notes
         )
         #else
         let deps = AyahMenuViewModel.Deps(

@@ -145,6 +145,10 @@
 "bookmarks.sync.action" = "تسجيل الدخول";
 
 "bookmarks.highlights" = "التمييزات";
+"bookmarks.editor.collection.unselected" = "غير محددة";
+"bookmarks.editor.collection.mixed" = "محددة جزئيًا";
+"bookmarks.editor.collection.selected" = "محددة";
+"bookmarks.editor.error.highlight-unavailable" = "لا تزال ألوان التمييز قيد التحميل. حاول مرة أخرى.";
 
 // MARK: - Notes
 

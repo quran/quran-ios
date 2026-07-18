@@ -4,7 +4,7 @@
 //  Created by Ahmed Nabil on 2026-05-06.
 //
 
-public enum HighlightColor: Int, CaseIterable, Equatable, Hashable {
+public enum HighlightColor: Int, CaseIterable, Equatable, Hashable, Sendable {
     case red = 0
     case green = 1
     case blue = 2

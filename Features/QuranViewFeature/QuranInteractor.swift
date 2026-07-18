@@ -10,6 +10,7 @@ import Analytics
 import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
+import BookmarksFeature
 import Combine
 import Crashing
 import FeaturesSupport
@@ -44,6 +45,7 @@ protocol QuranPresentable: UIViewController {
 
     func presentMoreMenu(_ viewController: UIViewController)
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
+    func presentBookmarkAyahs(_ viewController: UIViewController)
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
@@ -64,6 +66,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let pageBookmarkService: PageBookmarkService
         let highlightsService: QuranHighlightsService
         let ayahMenuBuilder: AyahMenuBuilder
+        let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let moreMenuBuilder: MoreMenuBuilder
         let audioBannerBuilder: AudioBannerBuilder
         let wordPointerBuilder: WordPointerBuilder
@@ -251,6 +254,28 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #endif
     }
 
+    func showBookmarkEditor(for verses: [AyahNumber]) {
+        logger.info("Quran: show bookmark editor. Verses: \(verses)")
+        contentViewModel?.removeAyahMenuHighlight()
+        presenter?.dismissPresentedViewController { [weak self] in
+            guard let self else {
+                return
+            }
+            #if QURAN_SYNC
+            let viewController = deps.bookmarkAyahsBuilder.build(
+                verses: verses,
+                collections: deps.syncedHighlightsObserver.collections
+            )
+            #else
+            let viewController = deps.bookmarkAyahsBuilder.build(
+                verses: verses,
+                notes: notesInteractingVerses(verses)
+            )
+            #endif
+            presenter?.presentBookmarkAyahs(viewController)
+        }
+    }
+
     func dismissNoteEditor() {
         logger.info("Quran: dismiss note editor")
         presenter?.dismiss(animated: true)
@@ -276,23 +301,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
-        #if QURAN_SYNC
-        let input = AyahMenuInput(
-            sourceView: sourceView,
-            pointInView: point,
-            verses: verses,
-            notes: notesInteractingVerses(verses),
-            highlightVerses: deps.highlightsService.highlights.highlightVerses,
-            highlightCollections: deps.syncedHighlightsObserver.collections
-        )
-        #else
         let input = AyahMenuInput(
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
             notes: notesInteractingVerses(verses)
         )
-        #endif
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
     }

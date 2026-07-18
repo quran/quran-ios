@@ -158,6 +158,10 @@
 "bookmarks.collections.ayahs.no-data.text" = "Ayahs you bookmark while reading will appear here.";
 "bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs you highlight with a %@ bookmark while reading will appear here.";
 "bookmarks.highlights" = "Highlights";
+"bookmarks.editor.collection.unselected" = "Not selected";
+"bookmarks.editor.collection.mixed" = "Partially selected";
+"bookmarks.editor.collection.selected" = "Selected";
+"bookmarks.editor.error.highlight-unavailable" = "Highlight colors are still loading. Please try again.";
 
 // MARK: - Notes
 

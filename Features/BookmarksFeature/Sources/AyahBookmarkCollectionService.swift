@@ -5,6 +5,8 @@
 //  Created by Ahmed Nabil on 2026-05-06.
 //
 
+import Foundation
+import Localization
 import MobileSync
 import QuranAnnotations
 import QuranKit
@@ -151,28 +153,42 @@ public struct AyahBookmarkCollectionService {
         try await quranDataService.removeAyahBookmarkFromCollection(bookmark.bookmark)
     }
 
-    public func addAyahBookmarksIfNeeded(
-        _ ayahs: [AyahNumber],
-        to collection: AyahBookmarkCollection
-    ) async throws {
-        for ayah in Self.ayahsToAdd(ayahs, to: collection) {
-            try await addAyahBookmarkToCollection(
-                collectionId: collection.collection.id,
-                ayah: ayah
-            )
+    public func setHighlight(_ color: HighlightColor?, for ayahs: [AyahNumber]) async throws {
+        let collections = try await loadStoredCollections()
+        let coloredCollections = collections.filter { $0.kind.highlightColor != nil }
+
+        guard let color else {
+            try await removeAyahs(ayahs, from: coloredCollections)
+            return
         }
+
+        guard let targetCollection = coloredCollections.first(where: { $0.kind == .colored(color) }) else {
+            throw AyahBookmarkCollectionServiceError.highlightCollectionUnavailable
+        }
+
+        try await addAyahsIfNeeded(ayahs, to: targetCollection)
+        try await removeAyahs(
+            ayahs,
+            from: coloredCollections.filter { $0.collection.id != targetCollection.collection.id }
+        )
     }
 
-    public func removeAyahBookmarksIfNeeded(
-        _ ayahs: [AyahNumber],
-        from collections: [AyahBookmarkCollection]
-    ) async throws {
-        let ayahs = Set(ayahs)
-        for collection in collections {
-            for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
-                try await removeBookmarkFromCollection(bookmark)
-            }
+    public func addAyahs(_ ayahs: [AyahNumber], toCollectionWithID collectionID: String) async throws {
+        let collections = try await loadStoredCollections()
+        guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
+            return
         }
+
+        try await addAyahsIfNeeded(ayahs, to: collection)
+    }
+
+    public func removeAyahs(_ ayahs: [AyahNumber], fromCollectionWithID collectionID: String) async throws {
+        let collections = try await loadStoredCollections()
+        guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
+            return
+        }
+
+        try await removeAyahs(ayahs, from: [collection])
     }
 
     public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
@@ -219,6 +235,36 @@ public struct AyahBookmarkCollectionService {
     private let quranDataService: QuranDataService
     private let readingPreferences: ReadingPreferences
 
+    private func loadStoredCollections() async throws -> [AyahBookmarkCollection] {
+        let iterator = quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
+        let collections = try await iterator.next() ?? []
+        return Self.collections(from: collections, quran: readingPreferences.reading.quran)
+    }
+
+    private func addAyahsIfNeeded(
+        _ ayahs: [AyahNumber],
+        to collection: AyahBookmarkCollection
+    ) async throws {
+        for ayah in Self.ayahsToAdd(ayahs, to: collection) {
+            try await addAyahBookmarkToCollection(
+                collectionId: collection.collection.id,
+                ayah: ayah
+            )
+        }
+    }
+
+    private func removeAyahs(
+        _ ayahs: [AyahNumber],
+        from collections: [AyahBookmarkCollection]
+    ) async throws {
+        let ayahs = Set(ayahs)
+        for collection in collections {
+            for bookmark in collection.bookmarks where ayahs.contains(bookmark.ayah) {
+                try await removeBookmarkFromCollection(bookmark)
+            }
+        }
+    }
+
     private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
         guard let ayah = AyahNumber(
             quran: quran,
@@ -229,6 +275,14 @@ public struct AyahBookmarkCollectionService {
         }
 
         return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
+    }
+}
+
+private enum AyahBookmarkCollectionServiceError: LocalizedError {
+    case highlightCollectionUnavailable
+
+    var errorDescription: String? {
+        l("bookmarks.editor.error.highlight-unavailable")
     }
 }
 

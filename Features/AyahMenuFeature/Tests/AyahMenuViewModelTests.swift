@@ -1,80 +1,51 @@
 #if QURAN_SYNC
-import MobileSync
-import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import UIKit
 import XCTest
 @testable import AyahMenuFeature
-@testable import BookmarksFeature
 
 @MainActor
 final class AyahMenuViewModelTests: XCTestCase {
-    private let database = MobileSyncTestDatabase.shared
-
-    override func setUp() async throws {
-        try await super.setUp()
-        try await database.reset()
-    }
-
-    override func tearDown() async throws {
-        try await database.reset()
-        try await super.tearDown()
-    }
-
-    func test_updateHighlight_movesAyahBetweenCollectionsInMobileSyncDatabase() async throws {
-        let service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-        try await service.createCollection(named: HighlightColor.red.collectionName.uppercased())
-        try await service.createCollection(named: HighlightColor.blue.collectionName.uppercased())
-        let collections = try await storedCollections()
-        let mapped = AyahBookmarkCollectionService.collections(from: collections, quran: .hafsMadani1405)
-        let red = try XCTUnwrap(mapped.first { $0.kind == .colored(.red) })
-        try await service.addAyahBookmarkToCollection(
-            collectionId: red.collection.id,
-            ayah: ayah
-        )
-        let populatedCollections = AyahBookmarkCollectionService.collections(
-            from: try await storedCollections(),
-            quran: .hafsMadani1405
-        )
+    func test_bookmark_requestsEditorForCrossSuraSelection() throws {
+        let verses = [
+            try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)),
+            try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)),
+        ]
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = AyahMenuViewModel(deps: .init(
             sourceView: UIView(),
             pointInView: .zero,
-            verses: [ayah],
+            verses: verses,
             textRetriever: ShareableVerseTextRetriever(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
-            notes: [],
-            highlightVerses: [ayah: .red],
-            highlightCollections: populatedCollections,
-            ayahBookmarkCollectionService: service
+            notes: []
         ))
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
 
-        await sut.updateHighlight(color: .blue)
+        sut.bookmark()
 
-        let updated = try await storedCollections()
-        let redBookmarks = updated.first {
-            $0.collection.name == HighlightColor.red.collectionName.uppercased()
-        }?.bookmarks
-        let blueBookmarks = updated.first {
-            $0.collection.name == HighlightColor.blue.collectionName.uppercased()
-        }?.bookmarks
-        XCTAssertTrue(redBookmarks?.isEmpty == true)
-        XCTAssertEqual(blueBookmarks?.count, 1)
-        XCTAssertEqual(blueBookmarks?.first?.sura, 1)
-        XCTAssertEqual(blueBookmarks?.first?.ayah, 1)
+        XCTAssertEqual(listener.bookmarkedVerses, verses)
     }
+}
 
-    private var ayah: AyahNumber {
-        AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
-    }
+@MainActor
+private final class BookmarkListenerSpy: AyahMenuListener {
+    private(set) var bookmarkedVerses: [AyahNumber]?
 
-    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
-        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        return try await iterator.next() ?? []
+    func dismissAyahMenu() {}
+    func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {}
+    func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {}
+    func showTranslation(_ verses: [AyahNumber]) {}
+    func showNoteEditor(for verses: [AyahNumber]) async {}
+    func deleteNotes(in verses: [AyahNumber]) async {}
+
+    func showBookmarkEditor(for verses: [AyahNumber]) {
+        bookmarkedVerses = verses
     }
 }
 #endif

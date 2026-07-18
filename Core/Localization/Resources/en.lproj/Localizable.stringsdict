@@ -18,5 +18,21 @@
             <string>%d bookmarks</string>
         </dict>
     </dict>
+    <key>bookmarks.editor.title</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@ayahs@</string>
+        <key>ayahs</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>Bookmark Ayah</string>
+            <key>other</key>
+            <string>Bookmark %d Ayahs</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

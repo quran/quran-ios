@@ -7,14 +7,8 @@
 //
 
 import Localization
-import QuranAnnotations
 import SwiftUI
 import UIx
-
-private enum MenuState {
-    case list
-    case highlights
-}
 
 public struct AyahMenuView: View {
     // MARK: Lifecycle
@@ -26,49 +20,21 @@ public struct AyahMenuView: View {
     // MARK: Public
 
     public var body: some View {
-        switch state {
-        case .list:
-            ScrollView {
-                AyahMenuViewList(dataObject: dataObject) {
-                    withAnimation {
-                        state = .highlights
-                    }
-                }
-            }
-            .preferredContentSizeMatchesScrollView()
-            .transition(.opacity)
-        case .highlights:
-            ScrollView {
-                NoteCircles(selectedColor: existingHighlightedColor, tapped: dataObject.actions.highlight)
-            }
-            .preferredContentSizeMatchesScrollView()
-            .transition(AnyTransition.scale(scale: 2.0).combined(with: .opacity))
+        ScrollView {
+            AyahMenuViewList(dataObject: dataObject)
         }
+        .preferredContentSizeMatchesScrollView()
     }
 
     // MARK: Internal
 
     let dataObject: AyahMenuUI.DataObject
-
-    // MARK: Private
-
-    @State private var state: MenuState = .list
-
-    private var existingHighlightedColor: HighlightColor? {
-        switch dataObject.state {
-        case .highlighted, .noted:
-            return dataObject.highlightingColor
-        case .noHighlight:
-            return nil
-        }
-    }
 }
 
 private struct AyahMenuViewList: View {
     // MARK: Internal
 
     let dataObject: AyahMenuUI.DataObject
-    let showHighlights: AsyncAction
 
     var noteDeleteText: String {
         switch dataObject.state {
@@ -126,27 +92,8 @@ private struct AyahMenuViewList: View {
 
             MenuGroup {
                 Divider()
-
-                if dataObject.state == .noHighlight {
-                    Row(
-                        title: l("ayah.menu.highlight"),
-                        action: {
-                            Task {
-                                await dataObject.actions.highlight(dataObject.highlightingColor)
-                            }
-                        }
-                    ) {
-                        IconCircle(color: dataObject.highlightingColor)
-                    }
-                    Divider()
-                        .padding(.leading)
-                }
-                Row(
-                    title: l("ayah.menu.highlight"),
-                    subtitle: l("ayah.menu.highlight-select-color"),
-                    action: showHighlights
-                ) {
-                    IconCircles()
+                Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
+                    NoorSystemImage.bookmark.image
                 }
                 Divider()
                     .padding(.leading)
@@ -251,7 +198,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
         AsyncButton(action: action) {
             HStack {
                 ZStack {
-                    IconCircles()
+                    HighlightPaletteIcon()
                         .hidden()
                     symbol
                         .foregroundColor(Color.label)
@@ -295,45 +242,11 @@ private struct MenuGroup<Content: View>: View {
     }
 }
 
-private struct IconCircles: View {
-    var body: some View {
-        HighlightPaletteIcon()
-    }
-}
-
-private struct IconCircle: View {
-    @ScaledMetric var minLength = 20
-
-    var color: HighlightColor
-
-    var body: some View {
-        ColoredCircle(color: color.color, selected: false, minLength: minLength)
-    }
-}
-
-private struct NoteCircles: View {
-    let selectedColor: HighlightColor?
-    let tapped: @Sendable (HighlightColor) async -> Void
-
-    var body: some View {
-        HStack {
-            ForEach(HighlightColor.sortedColors, id: \.self) { color in
-                AsyncButton(
-                    action: { await tapped(color) },
-                    label: { NoteCircle(color: color.color, selected: color == selectedColor) }
-                )
-                .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)
-            }
-        }
-        .padding()
-    }
-}
-
 struct AyahMenuView_Previews: PreviewProvider {
     static let actions = AyahMenuUI.Actions(
         play: {},
         repeatVerses: {},
-        highlight: { _ in },
+        bookmark: {},
         addNote: {},
         deleteNote: {},
         showTranslation: {},
@@ -348,6 +261,7 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .green,
                     state: .noted,
+                    bookmarkTitle: "Bookmark Ayah",
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,
@@ -362,6 +276,7 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .red,
                     state: .highlighted,
+                    bookmarkTitle: "Bookmark 3 Ayahs",
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,
@@ -377,6 +292,7 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .green,
                     state: .noHighlight,
+                    bookmarkTitle: "Bookmark Ayah",
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,

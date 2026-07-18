@@ -202,6 +202,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
     }
 
+    func presentBookmarkAyahs(_ viewController: UIViewController) {
+        if let sheet = viewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(viewController, animated: true)
+    }
+
     func presentQuranContent(_ viewController: UIViewController) {
         addContent(viewController)
     }

@@ -38,7 +38,7 @@ final class AyahMenuViewController: UIViewController {
         let actions = AyahMenuUI.Actions(
             play: { [weak self] in self?.viewModel.play() },
             repeatVerses: { [weak self] in self?.viewModel.repeatVerses() },
-            highlight: { [weak self] color in await self?.viewModel.updateHighlight(color: color) },
+            bookmark: { [weak self] in self?.viewModel.bookmark() },
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
@@ -49,6 +49,7 @@ final class AyahMenuViewController: UIViewController {
         let dataObject = AyahMenuUI.DataObject(
             highlightingColor: highlightingColor,
             state: viewModel.noteState,
+            bookmarkTitle: viewModel.bookmarkTitle,
             playSubtitle: viewModel.playSubtitle,
             repeatSubtitle: viewModel.repeatSubtitle,
             actions: actions,

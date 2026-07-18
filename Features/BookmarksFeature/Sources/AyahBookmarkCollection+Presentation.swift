@@ -2,6 +2,7 @@
 import Localization
 import NoorUI
 import QuranAnnotations
+import SwiftUI
 
 extension AyahBookmarkCollection {
     var displayName: String {
@@ -27,6 +28,17 @@ extension AyahBookmarkCollection {
             .bookmark
         case .user:
             .folder
+        }
+    }
+
+    var displayImageColor: Color {
+        switch kind {
+        case .defaultBookmarks:
+            Color(uiColor: .systemYellow)
+        case .oldPageBookmarks:
+            .secondaryLabel
+        case .colored, .user:
+            .appIdentity
         }
     }
 }

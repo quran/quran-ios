@@ -80,13 +80,27 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             collections: try await mappedCollections(),
             ayahBookmarkCollectionService: fixture.service
         )
-        XCTAssertEqual(sut.highlightSelection, .mixed)
+        XCTAssertEqual(sut.highlightSelection, .mixed([.red]))
+        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red])
 
         await sut.selectHighlight(nil)
 
         let stored = try await storedCollections()
         XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.red.collectionName), [])
         XCTAssertEqual(sut.highlightSelection, .none)
+    }
+
+    func test_mixedHighlightSelectionExposesEveryPartiallySelectedColor() async throws {
+        let fixture = try await makeFixture()
+        try await fixture.service.setHighlight(.green, for: [verses[1]])
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: try await mappedCollections(),
+            ayahBookmarkCollectionService: fixture.service
+        )
+
+        XCTAssertEqual(sut.highlightSelection, .mixed([.red, .green]))
+        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red, .green])
     }
 
     private var verses: [AyahNumber] {

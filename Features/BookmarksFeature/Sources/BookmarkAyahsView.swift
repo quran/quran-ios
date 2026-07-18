@@ -18,6 +18,7 @@ struct BookmarkAyahsView: View {
                 #if QURAN_SYNC
                 HighlightColorPicker(
                     selectedColor: viewModel.selectedHighlightColor,
+                    partiallySelectedColors: viewModel.partiallySelectedHighlightColors,
                     onSelect: { await viewModel.selectHighlight($0) },
                     onRemove: viewModel.highlightSelection == .none
                         ? nil

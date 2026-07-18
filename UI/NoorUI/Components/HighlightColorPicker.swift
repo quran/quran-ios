@@ -14,10 +14,12 @@ public struct HighlightColorPicker: View {
 
     public init(
         selectedColor: HighlightColor?,
+        partiallySelectedColors: Set<HighlightColor> = [],
         onSelect: @escaping AsyncItemAction<HighlightColor>,
         onRemove: AsyncAction? = nil
     ) {
         self.selectedColor = selectedColor
+        self.partiallySelectedColors = partiallySelectedColors
         self.onSelect = onSelect
         self.onRemove = onRemove
     }
@@ -32,6 +34,7 @@ public struct HighlightColorPicker: View {
                         colorButton(
                             color: color,
                             isSelected: selectedColor == color,
+                            isPartiallySelected: partiallySelectedColors.contains(color),
                             accessibilityLabel: color.localizedName
                         )
                     }
@@ -75,12 +78,14 @@ public struct HighlightColorPicker: View {
     @ScaledMetric private var spacing = 8.0
 
     private let selectedColor: HighlightColor?
+    private let partiallySelectedColors: Set<HighlightColor>
     private let onSelect: AsyncItemAction<HighlightColor>
     private let onRemove: AsyncAction?
 
     private func colorButton(
         color: HighlightColor,
         isSelected: Bool,
+        isPartiallySelected: Bool,
         accessibilityLabel: String
     ) -> some View {
         AsyncButton {
@@ -95,12 +100,22 @@ public struct HighlightColorPicker: View {
                 if isSelected {
                     NoorSystemImage.checkmark.image
                         .font(.body.weight(.bold))
-                        .foregroundStyle(Color.label.opacity(0.72))
+                        .foregroundStyle(selectionColor)
                 }
 
                 if isSelected {
                     Circle()
-                        .stroke(Color.appIdentity, lineWidth: selectedStrokeWidth)
+                        .stroke(selectionColor, lineWidth: selectedStrokeWidth)
+                } else if isPartiallySelected {
+                    Circle()
+                        .strokeBorder(
+                            selectionColor,
+                            style: StrokeStyle(
+                                lineWidth: selectedStrokeWidth,
+                                lineCap: .round,
+                                dash: [selectedStrokeWidth * 1.5]
+                            )
+                        )
                 }
             }
             .frame(width: circleLength, height: circleLength)
@@ -109,7 +124,11 @@ public struct HighlightColorPicker: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityAddTraits(isSelected || isPartiallySelected ? .isSelected : [])
+    }
+
+    private var selectionColor: Color {
+        Color.label.opacity(0.72)
     }
 }
 
@@ -118,6 +137,7 @@ struct HighlightColorPicker_Previews: PreviewProvider {
         Group {
             HighlightColorPicker(
                 selectedColor: .blue,
+                partiallySelectedColors: [.red, .green],
                 onSelect: { _ in },
                 onRemove: {}
             )

@@ -19,12 +19,14 @@ public struct AyahMenuInput {
         sourceView: UIView,
         pointInView: CGPoint,
         verses: [AyahNumber],
-        notes: [QuranAnnotations.Note]
+        notes: [QuranAnnotations.Note],
+        highlightVerses: [AyahNumber: HighlightColor] = [:]
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
+        self.highlightVerses = highlightVerses
     }
 
     // MARK: Internal
@@ -33,6 +35,7 @@ public struct AyahMenuInput {
     let pointInView: CGPoint
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
+    let highlightVerses: [AyahNumber: HighlightColor]
 }
 
 @MainActor
@@ -56,7 +59,8 @@ public struct AyahMenuBuilder {
             pointInView: input.pointInView,
             verses: input.verses,
             textRetriever: textRetriever,
-            notes: input.notes
+            notes: input.notes,
+            highlightVerses: input.highlightVerses
         )
         #else
         let deps = AyahMenuViewModel.Deps(
@@ -65,6 +69,7 @@ public struct AyahMenuBuilder {
             verses: input.verses,
             textRetriever: textRetriever,
             notes: input.notes,
+            highlightVerses: input.highlightVerses,
             noteService: container.noteService()
         )
         #endif

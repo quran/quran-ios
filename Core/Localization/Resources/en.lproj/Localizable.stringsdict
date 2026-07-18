@@ -29,9 +29,9 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>Bookmark Ayah</string>
+            <string>Save Ayah...</string>
             <key>other</key>
-            <string>Bookmark %d Ayahs</string>
+            <string>Save Ayahs...</string>
         </dict>
     </dict>
 </dict>

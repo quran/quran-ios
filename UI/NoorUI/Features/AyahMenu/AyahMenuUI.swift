@@ -51,6 +51,7 @@ public enum AyahMenuUI {
             highlightingColor: HighlightColor,
             state: NoteState,
             bookmarkTitle: String,
+            bookmarkState: BookmarkState = .unhighlighted,
             playSubtitle: String,
             repeatSubtitle: String,
             actions: Actions,
@@ -60,6 +61,7 @@ public enum AyahMenuUI {
             self.highlightingColor = highlightingColor
             self.state = state
             self.bookmarkTitle = bookmarkTitle
+            self.bookmarkState = bookmarkState
             self.playSubtitle = playSubtitle
             self.repeatSubtitle = repeatSubtitle
             self.actions = actions
@@ -73,6 +75,7 @@ public enum AyahMenuUI {
         let state: NoteState
         let actions: Actions
         let bookmarkTitle: String
+        let bookmarkState: BookmarkState
         let playSubtitle: String
         let repeatSubtitle: String
         let isTranslationView: Bool
@@ -85,5 +88,11 @@ public enum AyahMenuUI {
         case noHighlight
         case highlighted
         case noted
+    }
+
+    public enum BookmarkState: Equatable {
+        case unhighlighted
+        case partiallyHighlighted
+        case highlighted(HighlightColor)
     }
 }

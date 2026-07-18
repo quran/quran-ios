@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import Localization
 import NoorUI
+import QuranAnnotations
 
 extension AyahBookmarkCollection {
     var displayName: String {
@@ -26,6 +27,14 @@ extension AyahBookmarkCollection {
             .bookmark
         case .user:
             .folder
+        }
+    }
+}
+
+extension HighlightColor {
+    static var alphabeticallySortedColors: [Self] {
+        allCases.sorted {
+            $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
         }
     }
 }

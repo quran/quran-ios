@@ -38,7 +38,7 @@ private struct BookmarkCollectionsContent: View {
             }
 
             NoorBasicSection(title: l("bookmarks.collections.colored")) {
-                ForEach(HighlightColor.sortedColors, id: \.self) { color in
+                ForEach(HighlightColor.alphabeticallySortedColors, id: \.self) { color in
                     collectionRow(
                         title: color.localizedName,
                         image: .bookmark,

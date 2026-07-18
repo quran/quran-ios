@@ -59,19 +59,33 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         ])
     }
 
-    func test_displayedCollections_includesDefaultAndExcludesHighlights() {
+    func test_displayedCollections_sortsDefaultThenOldPageBookmarksThenCustomCollections() {
         let collections = BookmarkCollectionsViewModel.displayedCollections(from: [
-            collection(name: "Default", id: "__default__"),
+            collection(name: "Z Collection"),
             collection(name: "red"),
-            collection(name: "Favorites"),
             collection(name: oldPageBookmarksCollectionName),
+            collection(name: "A Collection"),
+            collection(name: "Default", id: "__default__"),
         ])
 
         XCTAssertEqual(collections.map(\.collection.name), [
             "Default",
-            "Favorites",
             oldPageBookmarksCollectionName,
+            "A Collection",
+            "Z Collection",
         ])
+    }
+
+    func test_alphabeticallySortedColors_sortsLocalizedNames() {
+        let colors = HighlightColor.alphabeticallySortedColors
+
+        XCTAssertEqual(Set(colors), Set(HighlightColor.allCases))
+        XCTAssertEqual(
+            colors.map(\.localizedName),
+            HighlightColor.allCases.map(\.localizedName).sorted {
+                $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
+            }
+        )
     }
 
     func test_collectionKind_classifiesCollectionNamesCaseInsensitively() {

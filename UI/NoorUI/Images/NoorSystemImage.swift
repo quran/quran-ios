@@ -15,6 +15,7 @@ public enum NoorSystemImage: String {
     case heart = "heart.fill"
     case share = "square.and.arrow.up"
     case star
+    case starFilled = "star.fill"
     case mail = "envelope"
     case checkmark_checked = "checkmark.circle.fill"
     case checkmark_unchecked = "circle"

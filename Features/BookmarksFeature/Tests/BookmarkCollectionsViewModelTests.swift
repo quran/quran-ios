@@ -59,6 +59,21 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         ])
     }
 
+    func test_displayedCollections_includesDefaultAndExcludesHighlights() {
+        let collections = BookmarkCollectionsViewModel.displayedCollections(from: [
+            collection(name: "Default", id: "__default__"),
+            collection(name: "red"),
+            collection(name: "Favorites"),
+            collection(name: oldPageBookmarksCollectionName),
+        ])
+
+        XCTAssertEqual(collections.map(\.collection.name), [
+            "Default",
+            "Favorites",
+            oldPageBookmarksCollectionName,
+        ])
+    }
+
     func test_collectionKind_classifiesCollectionNamesCaseInsensitively() {
         XCTAssertEqual(
             collection(name: oldPageBookmarksCollectionName.uppercased()).kind,
@@ -90,6 +105,13 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertTrue(user.kind.canDelete)
     }
 
+    func test_defaultCollectionPresentation_usesLocalizedFavoritesNameAndFilledStarIcon() {
+        let collection = collection(name: "Default", id: "__default__")
+
+        XCTAssertEqual(collection.displayName, l("bookmarks.collections.favorites"))
+        XCTAssertEqual(collection.displayImage, .starFilled)
+    }
+
     func test_collectionDetailsController_showsDirectEditButtonForHighlightCollection() {
         let collection = collection(name: "Red")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
@@ -102,11 +124,11 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(button?.menu)
     }
 
-    func test_collectionDetailsController_usesNativeTitleAndSubtitle() throws {
+    func test_collectionDetailsController_usesNativeTitleAndSubtitle() {
         let collection = collection(name: "Red")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
-        let title = try XCTUnwrap(collection.kind.highlightColor?.localizedName)
+        let title = collection.displayName
         let subtitle = lFormat("bookmarks.collections.ayahs.count", 0)
 
         if #available(iOS 26.0, *) {

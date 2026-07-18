@@ -145,6 +145,7 @@
 "bookmarks.collections.add" = "Add Collection";
 "bookmarks.collections.edit.action" = "Edit";
 "bookmarks.collections.colored" = "Colored Bookmarks";
+"bookmarks.collections.favorites" = "Favorites";
 "bookmarks.collections.mine" = "My Collections";
 "bookmarks.collections.new" = "New Collection...";
 "bookmarks.collections.new.placeholder" = "Collection name";

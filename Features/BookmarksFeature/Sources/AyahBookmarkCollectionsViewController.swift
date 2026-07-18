@@ -95,7 +95,7 @@ private final class AyahBookmarkCollectionMenuController {
     }
 
     private func updateTitle(for collection: AyahBookmarkCollection, in viewController: UIViewController) {
-        let title = collection.kind.highlightColor?.localizedName ?? collection.collection.name
+        let title = collection.displayName
         let subtitle = bookmarkCountText(collection.bookmarks.count)
 
         if #available(iOS 26.0, *) {

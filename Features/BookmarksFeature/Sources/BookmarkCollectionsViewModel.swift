@@ -83,7 +83,16 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     static func displayedCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
-        collections.filter { $0.kind.highlightColor == nil }
+        collections
+            .filter { $0.kind.highlightColor == nil }
+            .sorted { lhs, rhs in
+                let lhsIndex = displayedCollectionSortIndex(lhs)
+                let rhsIndex = displayedCollectionSortIndex(rhs)
+                if lhsIndex != rhsIndex {
+                    return lhsIndex < rhsIndex
+                }
+                return lhs.displayName.localizedCaseInsensitiveCompare(rhs.displayName) == .orderedAscending
+            }
     }
 
     func start() async {
@@ -164,7 +173,20 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         guard let color = collection.kind.highlightColor else {
             return nil
         }
-        return HighlightColor.sortedColors.firstIndex(of: color)
+        return HighlightColor.alphabeticallySortedColors.firstIndex(of: color)
+    }
+
+    private static func displayedCollectionSortIndex(_ collection: AyahBookmarkCollection) -> Int {
+        switch collection.kind {
+        case .defaultBookmarks:
+            0
+        case .oldPageBookmarks:
+            1
+        case .user:
+            2
+        case .colored:
+            3
+        }
     }
 
     private func observeCollections() async {

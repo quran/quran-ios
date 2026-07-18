@@ -144,7 +144,7 @@ private struct AyahMenuViewList: View {
         switch dataObject.bookmarkState {
         case .unhighlighted:
             NoorSystemImage.bookmarkOutline.image
-        case .partiallyHighlighted:
+        case .bookmarked, .partiallyHighlighted:
             NoorSystemImage.bookmark.image
         case .highlighted(let color):
             NoorSystemImage.bookmark.image

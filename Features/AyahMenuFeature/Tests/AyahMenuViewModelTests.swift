@@ -25,6 +25,19 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(sut.bookmarkState, .unhighlighted)
     }
 
+    func test_bookmarkState_isBookmarkedWhenAnySelectedAyahBelongsToACollection() {
+        let sut = makeSUT(bookmarkedVerses: [verses[0]])
+
+        XCTAssertEqual(sut.bookmarkState, .bookmarked)
+    }
+
+    func test_bookmarkState_isUnhighlightedWhenOnlyUnselectedAyahsBelongToACollection() {
+        let otherVerse = AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 2)!
+        let sut = makeSUT(bookmarkedVerses: [otherVerse])
+
+        XCTAssertEqual(sut.bookmarkState, .unhighlighted)
+    }
+
     func test_bookmarkState_usesHighlightColorWhenEverySelectedAyahHasTheSameColor() {
         let sut = makeSUT(highlightVerses: Dictionary(uniqueKeysWithValues: verses.map { ($0, .green) }))
 
@@ -56,7 +69,8 @@ final class AyahMenuViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
-        highlightVerses: [AyahNumber: HighlightColor] = [:]
+        highlightVerses: [AyahNumber: HighlightColor] = [:],
+        bookmarkedVerses: Set<AyahNumber> = []
     ) -> AyahMenuViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return AyahMenuViewModel(deps: .init(
@@ -68,7 +82,8 @@ final class AyahMenuViewModelTests: XCTestCase {
                 quranFileURL: unavailableDatabase
             ),
             notes: [],
-            highlightVerses: highlightVerses
+            highlightVerses: highlightVerses,
+            bookmarkedVerses: bookmarkedVerses
         ))
     }
 }

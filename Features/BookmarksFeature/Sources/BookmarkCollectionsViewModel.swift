@@ -48,6 +48,10 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    var displayedCollections: [AyahBookmarkCollection] {
+        Self.displayedCollections(from: collections)
+    }
+
     var deletableCollections: [AyahBookmarkCollection] {
         Self.deletableCollections(from: collections)
     }
@@ -76,6 +80,10 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         let oldPageBookmarks = deletableCollections.filter(\.kind.isOldPageBookmarks)
         let remainingCollections = deletableCollections.filter { !$0.kind.isOldPageBookmarks }
         return oldPageBookmarks + remainingCollections
+    }
+
+    static func displayedCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
+        collections.filter { $0.kind.highlightColor == nil }
     }
 
     func start() async {

@@ -49,7 +49,7 @@ private struct BookmarkCollectionsContent: View {
             }
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
-                if viewModel.deletableCollections.isEmpty {
+                if viewModel.displayedCollections.isEmpty {
                     NoorListEmptyState(
                         title: l("bookmarks.collections.no-data.title"),
                         text: l("bookmarks.collections.no-data.text"),
@@ -57,16 +57,17 @@ private struct BookmarkCollectionsContent: View {
                     )
                 }
 
-                ForEach(viewModel.deletableCollections) { collection in
+                ForEach(viewModel.displayedCollections) { collection in
                     collectionRow(
-                        title: collectionTitle(collection),
-                        image: collectionImage(collection),
+                        title: collection.displayName,
+                        image: collection.displayImage,
                         imageColor: collectionImageColor(collection),
                         collection: collection
                     )
+                    .deleteDisabled(!collection.kind.canDelete)
                 }
                 .onDelete { offsets in
-                    let collections = offsets.map { viewModel.deletableCollections[$0] }
+                    let collections = offsets.map { viewModel.displayedCollections[$0] }
                     Task {
                         for collection in collections {
                             await viewModel.deleteCollection(collection)
@@ -89,18 +90,15 @@ private struct BookmarkCollectionsContent: View {
         .environment(\.editMode, $viewModel.editMode)
     }
 
-    private func collectionTitle(_ collection: AyahBookmarkCollection) -> String {
-        collection.kind.isOldPageBookmarks
-            ? l("bookmarks.old-page-bookmarks")
-            : collection.collection.name
-    }
-
-    private func collectionImage(_ collection: AyahBookmarkCollection) -> NoorSystemImage {
-        collection.kind.isOldPageBookmarks ? .book : .folder
-    }
-
     private func collectionImageColor(_ collection: AyahBookmarkCollection) -> Color {
-        collection.kind.isOldPageBookmarks ? .secondaryLabel : .appIdentity
+        switch collection.kind {
+        case .defaultBookmarks:
+            Color(uiColor: .systemYellow)
+        case .oldPageBookmarks:
+            .secondaryLabel
+        case .colored, .user:
+            .appIdentity
+        }
     }
 
     private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {

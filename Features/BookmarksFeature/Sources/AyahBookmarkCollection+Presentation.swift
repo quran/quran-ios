@@ -27,7 +27,7 @@ extension AyahBookmarkCollection {
         case .colored:
             .bookmark
         case .user:
-            .folder
+            .folderOutline
         }
     }
 
@@ -38,7 +38,7 @@ extension AyahBookmarkCollection {
         case .oldPageBookmarks:
             .secondaryLabel
         case .colored, .user:
-            .appIdentity
+            .label
         }
     }
 }

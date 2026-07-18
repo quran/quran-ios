@@ -16,7 +16,7 @@ import VLogging
 final class BookmarkAyahsViewModel: ObservableObject {
     enum HighlightSelection: Equatable {
         case none
-        case mixed
+        case mixed(Set<HighlightColor>)
         case color(HighlightColor)
     }
 
@@ -62,6 +62,13 @@ final class BookmarkAyahsViewModel: ObservableObject {
             return nil
         }
         return color
+    }
+
+    var partiallySelectedHighlightColors: Set<HighlightColor> {
+        guard case .mixed(let colors) = highlightSelection else {
+            return []
+        }
+        return colors
     }
 
     func start() async {
@@ -205,7 +212,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             return .none
         }
         guard colors.dropFirst().allSatisfy({ $0 == firstColor }) else {
-            return .mixed
+            return .mixed(Set(colors.compactMap { $0 }))
         }
         if let firstColor {
             return .color(firstColor)

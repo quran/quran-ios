@@ -93,7 +93,7 @@ private struct AyahMenuViewList: View {
             MenuGroup {
                 Divider()
                 Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
-                    NoorSystemImage.bookmark.image
+                    bookmarkIcon
                 }
                 Divider()
                     .padding(.leading)
@@ -139,6 +139,18 @@ private struct AyahMenuViewList: View {
     }
 
     // MARK: Private
+
+    @ViewBuilder private var bookmarkIcon: some View {
+        switch dataObject.bookmarkState {
+        case .unhighlighted:
+            NoorSystemImage.bookmarkOutline.image
+        case .partiallyHighlighted:
+            NoorSystemImage.bookmark.image
+        case .highlighted(let color):
+            NoorSystemImage.bookmark.image
+                .foregroundColor(color.color)
+        }
+    }
 
     private func noteIcon(legacySystemName: String) -> some View {
         Group {
@@ -261,7 +273,8 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .green,
                     state: .noted,
-                    bookmarkTitle: "Bookmark Ayah",
+                    bookmarkTitle: "Save Ayah...",
+                    bookmarkState: .highlighted(.green),
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,
@@ -276,7 +289,8 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .red,
                     state: .highlighted,
-                    bookmarkTitle: "Bookmark 3 Ayahs",
+                    bookmarkTitle: "Save Ayahs...",
+                    bookmarkState: .partiallyHighlighted,
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,
@@ -292,7 +306,8 @@ struct AyahMenuView_Previews: PreviewProvider {
                 AyahMenuView(dataObject: AyahMenuUI.DataObject(
                     highlightingColor: .green,
                     state: .noHighlight,
-                    bookmarkTitle: "Bookmark Ayah",
+                    bookmarkTitle: "Save Ayah...",
+                    bookmarkState: .unhighlighted,
                     playSubtitle: "To the end of Juz'",
                     repeatSubtitle: "selected verses",
                     actions: actions,

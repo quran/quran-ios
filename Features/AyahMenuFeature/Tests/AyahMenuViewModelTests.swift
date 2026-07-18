@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Localization
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -8,13 +9,57 @@ import XCTest
 
 @MainActor
 final class AyahMenuViewModelTests: XCTestCase {
-    func test_bookmark_requestsEditorForCrossSuraSelection() throws {
-        let verses = [
-            try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)),
-            try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)),
+    func test_bookmark_requestsEditorForCrossSuraSelection() {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        sut.bookmark()
+
+        XCTAssertEqual(listener.bookmarkedVerses, verses)
+    }
+
+    func test_bookmarkState_isUnhighlightedWhenNoSelectedAyahIsHighlighted() {
+        let sut = makeSUT()
+
+        XCTAssertEqual(sut.bookmarkState, .unhighlighted)
+    }
+
+    func test_bookmarkState_usesHighlightColorWhenEverySelectedAyahHasTheSameColor() {
+        let sut = makeSUT(highlightVerses: Dictionary(uniqueKeysWithValues: verses.map { ($0, .green) }))
+
+        XCTAssertEqual(sut.bookmarkState, .highlighted(.green))
+    }
+
+    func test_bookmarkState_isPartialWhenOnlySomeSelectedAyahsAreHighlighted() {
+        let sut = makeSUT(highlightVerses: [verses[0]: .red])
+
+        XCTAssertEqual(sut.bookmarkState, .partiallyHighlighted)
+    }
+
+    func test_bookmarkState_isPartialWhenSelectedAyahsHaveDifferentHighlightColors() {
+        let sut = makeSUT(highlightVerses: [verses[0]: .red, verses[1]: .green])
+
+        XCTAssertEqual(sut.bookmarkState, .partiallyHighlighted)
+    }
+
+    func test_bookmarkTitle_usesSaveAyahSingularAndPluralCopy() {
+        XCTAssertEqual(lFormat("bookmarks.editor.title", language: .english, 1), "Save Ayah...")
+        XCTAssertEqual(lFormat("bookmarks.editor.title", language: .english, 2), "Save Ayahs...")
+    }
+
+    private var verses: [AyahNumber] {
+        [
+            AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
+            AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)!,
         ]
+    }
+
+    private func makeSUT(
+        highlightVerses: [AyahNumber: HighlightColor] = [:]
+    ) -> AyahMenuViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
-        let sut = AyahMenuViewModel(deps: .init(
+        return AyahMenuViewModel(deps: .init(
             sourceView: UIView(),
             pointInView: .zero,
             verses: verses,
@@ -22,14 +67,9 @@ final class AyahMenuViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
-            notes: []
+            notes: [],
+            highlightVerses: highlightVerses
         ))
-        let listener = BookmarkListenerSpy()
-        sut.listener = listener
-
-        sut.bookmark()
-
-        XCTAssertEqual(listener.bookmarkedVerses, verses)
     }
 }
 

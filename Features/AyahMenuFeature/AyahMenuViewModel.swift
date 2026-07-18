@@ -41,6 +41,7 @@ final class AyahMenuViewModel {
         let verses: [AyahNumber]
         let textRetriever: ShareableVerseTextRetriever
         let notes: [QuranAnnotations.Note]
+        let highlightVerses: [AyahNumber: HighlightColor]
         #if !QURAN_SYNC
         let noteService: NoteService
         #endif
@@ -83,6 +84,17 @@ final class AyahMenuViewModel {
 
     var bookmarkTitle: String {
         lFormat("bookmarks.editor.title", deps.verses.count)
+    }
+
+    var bookmarkState: AyahMenuUI.BookmarkState {
+        let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
+        guard !colors.isEmpty else {
+            return .unhighlighted
+        }
+        guard colors.count == deps.verses.count, Set(colors).count == 1, let color = colors.first else {
+            return .partiallyHighlighted
+        }
+        return .highlighted(color)
     }
 
     var repeatSubtitle: String {

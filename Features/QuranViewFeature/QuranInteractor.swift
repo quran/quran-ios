@@ -301,11 +301,17 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses)")
+        #if QURAN_SYNC
+        let highlightVerses = deps.highlightsService.highlights.highlightVerses
+        #else
+        let highlightVerses = deps.highlightsService.highlights.noteVerses.mapValues(\.color)
+        #endif
         let input = AyahMenuInput(
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            notes: notesInteractingVerses(verses)
+            notes: notesInteractingVerses(verses),
+            highlightVerses: highlightVerses
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)

@@ -50,6 +50,7 @@ final class AyahMenuViewController: UIViewController {
             highlightingColor: highlightingColor,
             state: viewModel.noteState,
             bookmarkTitle: viewModel.bookmarkTitle,
+            bookmarkState: viewModel.bookmarkState,
             playSubtitle: viewModel.playSubtitle,
             repeatSubtitle: viewModel.repeatSubtitle,
             actions: actions,

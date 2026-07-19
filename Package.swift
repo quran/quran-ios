@@ -549,7 +549,7 @@ private func featuresTargets() -> [[Target]] {
             "ReciterService",
         ]),
 
-        target(type, name: "AyahMenuFeature", sourcesInRoot: true, dependencies: [
+        target(type, name: "AyahMenuFeature", dependencies: [
             "AppDependencies",
             "QuranAudioKit",
             "AnnotationsService",
@@ -722,7 +722,7 @@ private func featuresTargets() -> [[Target]] {
             "Preferences",
         ]),
 
-        target(type, name: "QuranViewFeature", sourcesInRoot: true, dependencies: [
+        target(type, name: "QuranViewFeature", dependencies: [
             "AudioBannerFeature",
             "QuranContentFeature",
             "AyahMenuFeature",
@@ -810,7 +810,6 @@ func target(
     _ type: TargetType,
     name: String,
     hasTests: Bool = true,
-    sourcesInRoot: Bool = false,
     otherSettings: [SwiftSetting] = [],
     dependencies: [Target.Dependency] = [],
     resources: [Resource]? = nil,
@@ -822,8 +821,7 @@ func target(
         .target(
             name: name,
             dependencies: dependencies,
-            path: type.rawValue + "/" + name + (hasTests && !sourcesInRoot ? "/Sources" : ""),
-            exclude: hasTests && sourcesInRoot ? ["Tests"] : [],
+            path: type.rawValue + "/" + name + "/Sources",
             resources: resources,
             swiftSettings: settings + otherSettings
         ),

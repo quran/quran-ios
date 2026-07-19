@@ -164,6 +164,76 @@
         "identifier" : "AppMigratorTests",
         "name" : "AppMigratorTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AdvancedAudioOptionsFeatureTests",
+        "name" : "AdvancedAudioOptionsFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AuthenticationClientTests",
+        "name" : "AuthenticationClientTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AyahMenuFeatureTests",
+        "name" : "AyahMenuFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "BookmarksFeatureTests",
+        "name" : "BookmarksFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LinePagePersistenceTests",
+        "name" : "LinePagePersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NoteEditorFeatureTests",
+        "name" : "NoteEditorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NotesFeatureTests",
+        "name" : "NotesFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranViewFeatureTests",
+        "name" : "QuranViewFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SettingsFeatureTests",
+        "name" : "SettingsFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SyncedPageBookmarkPersistenceTests",
+        "name" : "SyncedPageBookmarkPersistenceTests"
+      }
     }
   ],
   "version" : 1

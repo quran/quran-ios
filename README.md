@@ -26,6 +26,26 @@ Then use one or more of the available targets as dependency. All targets are ava
 
 > :warning: Please note that we do not support CocoaPods or Carthage, and we do not plan to support these in the future.
 
+## Building and Testing
+
+Use the Makefile targets so `QURAN_SYNC` is always set explicitly:
+
+```sh
+# Build the package, or one scheme
+make build-no-sync
+make build-sync TARGET=NoorUI
+
+# Run the complete package test plan
+make test-no-sync
+make test-sync
+
+# Run one test target through the package test scheme
+make test-no-sync TARGET=AyahMenuFeature
+make test-sync TARGET=AyahMenuFeatureTests
+```
+
+For test commands, `TARGET` accepts either the production target or its `Tests` target. Both focused examples above select `AyahMenuFeatureTests`. New test targets must also be added to `QuranEngine-Package.xctestplan`.
+
 ## Repository Structure and Architecture
 
 The library consists of 6 top-level directories:
@@ -42,7 +62,7 @@ The library consists of 6 top-level directories:
 
 * **Features**: Comprises the screens making up the app. They rely on all other components to create our Quran apps. Features can encompass other features to create higher-level features. For example, `AppStructureFeature` hosts all other features to create the app.
 
-> :warning: UI and Features do not yet contain tests, and makes up around 50% of the source code. We are keen on adding tests to them in the future inshaa'Allah.
+> :warning: UI and Features still have less test coverage than the foundational layers. New behavior should include focused tests where practical.
 
 Here is a visual representation of the architecture:
 

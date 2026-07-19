@@ -171,7 +171,7 @@ private func uiTargets() -> [[Target]] {
         target(type, name: "NoorFont", hasTests: false, resources: [
             .process("Resources"),
         ]),
-        target(type, name: "NoorUI", hasTests: false, dependencies: [
+        target(type, name: "NoorUI", dependencies: [
             "UIx",
             "Crashing",
             "Localization",
@@ -185,6 +185,8 @@ private func uiTargets() -> [[Target]] {
         ], resources: [
             .process("Colors/Colors.xcassets"),
             .process("Images/Images.xcassets"),
+        ], testDependencies: [
+            "Localization",
         ]),
     ]
 }

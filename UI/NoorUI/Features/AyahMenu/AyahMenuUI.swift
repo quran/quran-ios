@@ -92,6 +92,7 @@ public enum AyahMenuUI {
 
     public enum BookmarkState: Equatable {
         case unhighlighted
+        case bookmarked
         case partiallyHighlighted
         case highlighted(HighlightColor)
     }

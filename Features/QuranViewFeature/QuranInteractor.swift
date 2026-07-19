@@ -303,15 +303,20 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: present ayah menu, verses: \(verses)")
         #if QURAN_SYNC
         let highlightVerses = deps.highlightsService.highlights.highlightVerses
+        let bookmarkedVerses = Set(deps.syncedHighlightsObserver.collections.flatMap { collection in
+            collection.bookmarks.map(\.ayah)
+        })
         #else
         let highlightVerses = deps.highlightsService.highlights.noteVerses.mapValues(\.color)
+        let bookmarkedVerses: Set<AyahNumber> = []
         #endif
         let input = AyahMenuInput(
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
             notes: notesInteractingVerses(verses),
-            highlightVerses: highlightVerses
+            highlightVerses: highlightVerses,
+            bookmarkedVerses: bookmarkedVerses
         )
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)

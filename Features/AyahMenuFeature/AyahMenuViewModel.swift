@@ -42,6 +42,7 @@ final class AyahMenuViewModel {
         let textRetriever: ShareableVerseTextRetriever
         let notes: [QuranAnnotations.Note]
         let highlightVerses: [AyahNumber: HighlightColor]
+        let bookmarkedVerses: Set<AyahNumber>
         #if !QURAN_SYNC
         let noteService: NoteService
         #endif
@@ -89,7 +90,8 @@ final class AyahMenuViewModel {
     var bookmarkState: AyahMenuUI.BookmarkState {
         let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
         guard !colors.isEmpty else {
-            return .unhighlighted
+            let selectedVerses = Set(deps.verses)
+            return selectedVerses.isDisjoint(with: deps.bookmarkedVerses) ? .unhighlighted : .bookmarked
         }
         guard colors.count == deps.verses.count, Set(colors).count == 1, let color = colors.first else {
             return .partiallyHighlighted

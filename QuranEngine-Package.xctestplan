@@ -234,6 +234,13 @@
         "identifier" : "SyncedPageBookmarkPersistenceTests",
         "name" : "SyncedPageBookmarkPersistenceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NoorUITests",
+        "name" : "NoorUITests"
+      }
     }
   ],
   "version" : 1

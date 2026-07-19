@@ -1,5 +1,5 @@
 # Don't format
---exclude .build,UI/UIx/SwiftUI/Epoxy,BuildTools
+--exclude .build,UI/UIx/Sources/SwiftUI/Epoxy,BuildTools
 
 # Options
 

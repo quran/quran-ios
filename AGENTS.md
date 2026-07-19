@@ -8,7 +8,7 @@ The Makefile exposes explicit targets for each sync mode:
 - sync enabled: `make build-sync`, `make test-sync`, `make build-example-sync`, `make run-example-sync`
 - SwiftFormat: `make format-lint`
 
-Package build and test targets honor `TARGET` to select another scheme or target, such as `make build-no-sync TARGET=NoorUI`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
+Package build targets honor `TARGET` as a scheme override, such as `make build-no-sync TARGET=NoorUI`. Package test targets always use the `QuranEngine-Package` scheme. Omit `TARGET` to run its full test plan, or set a production or test target to filter the run, such as `make test-sync TARGET=AyahMenuFeature` or `make test-sync TARGET=AyahMenuFeatureTests`. Keep every package test target in `QuranEngine-Package.xctestplan`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
 
 Keeping these commands green locally should keep the CI workflow green as well.
 

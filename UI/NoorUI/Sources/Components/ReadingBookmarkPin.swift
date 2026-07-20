@@ -3,6 +3,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 public struct ReadingBookmarkPin: View {
     // MARK: Lifecycle
@@ -16,6 +17,29 @@ public struct ReadingBookmarkPin: View {
     public enum Style {
         case outline
         case filled
+    }
+
+    public static func image(style: Style) -> UIImage {
+        let size = CGSize(width: defaultSize, height: defaultSize)
+        let bounds = CGRect(origin: .zero, size: size)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { context in
+            let context = context.cgContext
+            context.addPath(ReadingBookmarkPinShape().path(in: bounds).cgPath)
+            context.setFillColor(UIColor.black.cgColor)
+            context.setStrokeColor(UIColor.black.cgColor)
+
+            switch style {
+            case .outline:
+                context.setLineWidth(defaultLineWidth)
+                context.setLineCap(.round)
+                context.setLineJoin(.round)
+                context.strokePath()
+            case .filled:
+                context.drawPath(using: .eoFill)
+            }
+        }
+        return image.withRenderingMode(.alwaysTemplate)
     }
 
     public var body: some View {
@@ -35,8 +59,10 @@ public struct ReadingBookmarkPin: View {
     // MARK: Private
 
     private let style: Style
-    @ScaledMetric private var lineWidth = 1.8
-    @ScaledMetric private var size = 24.0
+    private static let defaultLineWidth: CGFloat = 1.8
+    private static let defaultSize: CGFloat = 24
+    @ScaledMetric private var lineWidth = defaultLineWidth
+    @ScaledMetric private var size = defaultSize
 }
 
 private struct ReadingBookmarkPinShape: Shape {

@@ -30,8 +30,8 @@ public protocol AyahMenuListener: AnyObject {
     func showNoteEditor(for verses: [AyahNumber]) async
     func deleteNotes(in verses: [AyahNumber]) async
     #if QURAN_SYNC
-    func moveReadingBookmark(to ayah: AyahNumber, from bookmark: ReadingPositionBookmark?) async
-    func deleteReadingBookmark(_ bookmark: ReadingPositionBookmark) async
+    func setReadingBookmark(at ayah: AyahNumber, replacing bookmark: ReadingPositionBookmark?) async
+    func removeReadingBookmark(_ bookmark: ReadingPositionBookmark) async
     #endif
 }
 
@@ -173,15 +173,15 @@ final class AyahMenuViewModel {
     }
 
     #if QURAN_SYNC
-    func moveReadingBookmark() async {
+    func setReadingBookmark() async {
         guard deps.verses.count == 1, let ayah = deps.verses.first else {
             return
         }
-        logger.info("AyahMenu: move reading bookmark. Ayah: \(ayah)")
-        await listener?.moveReadingBookmark(to: ayah, from: deps.readingBookmark)
+        logger.info("AyahMenu: set reading bookmark. Ayah: \(ayah)")
+        await listener?.setReadingBookmark(at: ayah, replacing: deps.readingBookmark)
     }
 
-    func deleteReadingBookmark() async {
+    func removeReadingBookmark() async {
         guard deps.verses.count == 1,
               let ayah = deps.verses.first,
               let readingBookmark = deps.readingBookmark,
@@ -189,8 +189,8 @@ final class AyahMenuViewModel {
         else {
             return
         }
-        logger.info("AyahMenu: delete reading bookmark. Bookmark: \(readingBookmark)")
-        await listener?.deleteReadingBookmark(readingBookmark)
+        logger.info("AyahMenu: remove reading bookmark. Bookmark: \(readingBookmark)")
+        await listener?.removeReadingBookmark(readingBookmark)
     }
     #endif
 

@@ -178,8 +178,12 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         parts.append(contentsOf: other.parts)
     }
 
-    public func view(ofSize size: FontSize, alignment: Alignment = .leading) -> some View {
-        MultiPartTextView(text: self, size: size, alignment: alignment)
+    public func view(
+        ofSize size: FontSize,
+        alignment: Alignment = .leading,
+        allowsWrapping: Bool = true
+    ) -> some View {
+        MultiPartTextView(text: self, size: size, alignment: alignment, allowsWrapping: allowsWrapping)
     }
 
     // MARK: Internal
@@ -205,6 +209,7 @@ private struct MultiPartTextView: View {
     let text: MultipartText
     let size: MultipartText.FontSize
     let alignment: Alignment
+    let allowsWrapping: Bool
 
     var body: some View {
         wrap {
@@ -216,7 +221,12 @@ private struct MultiPartTextView: View {
 
     @ViewBuilder
     private func wrap(@ViewBuilder content: () -> some View) -> some View {
-        if #available(iOS 16.0, *) {
+        if !allowsWrapping {
+            HStack(spacing: 0) {
+                content()
+            }
+            .lineLimit(1)
+        } else if #available(iOS 16.0, *) {
             WrappingHStack(alignment: alignment, horizontalSpacing: 0, fitContentWidth: true) {
                 content()
             }

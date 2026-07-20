@@ -321,7 +321,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
                     .foregroundColor(primaryColor)
                 if let subtitle {
                     Text(" ")
-                    subtitle.view(ofSize: .footnote)
+                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
                         .foregroundColor(secondaryColor)
                         .lineLimit(1)
                         .truncationMode(.tail)
@@ -332,7 +332,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
                 Text(title)
                     .foregroundColor(primaryColor)
                 if let subtitle {
-                    subtitle.view(ofSize: .footnote)
+                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
                         .foregroundColor(secondaryColor)
                         .lineLimit(1)
                         .truncationMode(.tail)

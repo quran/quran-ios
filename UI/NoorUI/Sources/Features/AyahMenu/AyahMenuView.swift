@@ -200,7 +200,7 @@ private struct AyahMenuViewList: View {
                 action: dataObject.actions.deleteReadingBookmark
             ) {
                 ReadingBookmarkPin(style: .filled)
-                    .foregroundColor(.appIdentity)
+                    .foregroundColor(.label)
             } accessory: {
                 NoorSystemImage.checkmark.image
                     .foregroundColor(.appIdentity)
